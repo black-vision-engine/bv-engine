@@ -18,16 +18,13 @@
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
-#include "Engine/Models/BoundingVolume.h"
-
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h" // just for BuildComponentFromBox, maybe this should be somewhere else
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h" // see above
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h" // see above
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h" // see above
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+
+#include "Engine/Models/BoundingVolume.h"
 
 namespace bv {
 
@@ -82,6 +79,28 @@ SceneNode *         BVProjectTools::BuildEngineSceneNode                  ( mode
 
 // *******************************
 //
+RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc )
+{
+    auto attrChan = cc->GetAttributeChannels()[ 0 ];
+
+    auto compDesc = Cast< const model::AttributeChannelDescriptor * >( attrChan->GetDescriptor() );
+
+    auto vaDesc = new model::VertexAttributesChannelDescriptor();
+    vaDesc->AddAttrChannelDesc( compDesc );
+
+    std::vector< model::IConnectedComponentPtr > components; components.push_back( cc );
+
+    RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataArrays( components, vaDesc, false );
+
+    assert( radasvb );
+
+    return new TriangleStrip( radasvb, nullptr, nullptr );
+}
+
+
+
+// *******************************
+//
 void                BVProjectTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
@@ -124,52 +143,6 @@ SceneNode *         BVProjectTools::BuildSingleEngineNode                 ( mode
     return node;
 }
 
-namespace {
-
-model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box * box )
-{
-    auto comp = model::ConnectedComponent::Create();
-
-    auto * compVertDesc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-
-    auto vertArrtF3 = std::make_shared< model::Float3AttributeChannel >( compVertDesc, "boundingBox", false );
-
-    comp->AddAttributeChannel( vertArrtF3 );
-
-    vertArrtF3->AddAttribute( glm::vec3( box->xmin, box->ymin, box->zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmin, box->ymax, box->zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmax, box->ymin, box->zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmax, box->ymax, box->zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmax, box->ymin, box->zmax ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmax, box->ymax, box->zmax ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmin, box->ymin, box->zmax ) );
-    vertArrtF3->AddAttribute( glm::vec3( box->xmin, box->ymax, box->zmax ) );
-
-    return comp;
-}
-
-}
-
-// *******************************
-//
-RenderableEntity *  BVProjectTools::BuildRenderableBoundingBox          ( const mathematics::Box * box )
-{
-    auto component = BuildComponentFromBox( box );
-
-    auto compDesc = Cast< const model::AttributeChannelDescriptor * >( component->GetAttrChannel( AttributeSemantic::AS_POSITION )->GetDescriptor() );
-
-    auto vaDesc = new model::VertexAttributesChannelDescriptor();
-    vaDesc->AddAttrChannelDesc( compDesc );
-
-    std::vector< model::IConnectedComponentPtr > components; components.push_back( component );
-
-    RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataArrays( components, vaDesc, false );
-
-    assert( radasvb );
-
-    return new TriangleStrip( radasvb, nullptr, nullptr );
-}
-
 // *******************************
 //
 RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer )
@@ -195,7 +168,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
                 //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
                 RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip( modelNode, finalizer );
 
-                if( radasvb ) 
+                if( radasvb )
                 {
                     renderable = new TriangleStrip( radasvb, modelNode->GetBoundingVolume()->GetBoundingBox(), effect );
                 }

@@ -18,7 +18,6 @@ class SceneNode;
 class RenderableEntity;
 class RenderableArrayDataArraysSingleVertexBuffer;
 class VertexDescriptor;
-namespace mathematics{ struct Box; }
 
 
 typedef std::vector< model::Transform >                                                    TransformVec;
@@ -56,7 +55,7 @@ public:
     static  void                SyncSingleNode                      ( model::BasicNodePtr modelNode, SceneNode * node );
 
     static  SceneNode *         BuildEngineSceneNode                ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
-    static  RenderableEntity *  BuildRenderableBoundingBox          ( const mathematics::Box * box );
+    static  RenderableEntity *  BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc );
 
     static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
     

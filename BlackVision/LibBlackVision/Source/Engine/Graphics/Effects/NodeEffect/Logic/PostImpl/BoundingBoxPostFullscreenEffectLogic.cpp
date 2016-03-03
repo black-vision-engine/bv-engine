@@ -33,15 +33,17 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
 {
     assert( ctx->GetBoundRenderTarget() != nullptr );
 
-    renderer( ctx )->Enable( m_effect->GetPass( 0 ), static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
+    auto obj = Cast< bv::RenderableEntityWithBoundingBox * >( node->GetTransformable() );
 
-    auto box = static_cast< bv::RenderableEntityWithBoundingBox * >( node->GetTransformable() )->GetBoundingBox();
+    assert( obj );
 
-    auto renderable = BVProjectTools::BuildRenderableBoundingBox( box );
+    //renderer( ctx )->DrawRenderable( obj );
 
-    renderer( ctx )->DrawRenderable( renderable );
+    auto box = obj->GetBoundingBox();
 
-    delete renderable; // FIXME OMG this sucks so much (does it?)
+    renderer( ctx )->Enable( m_effect->GetPass( 0 ), obj );
+
+    renderer( ctx )->DrawRenderable( box );
 }
 
 // *********************************

@@ -5,7 +5,6 @@
 #include "Engine/Graphics/Resources/RenderableArrayData.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
-#include "Mathematics/Box.h"
 
 namespace bv
 {
@@ -13,8 +12,7 @@ namespace bv
 // *********************************
 //
 Triangles::Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect, RenderableType type )
-    : RenderableEntity( type, rad, effect )
-    , m_boundingBox( boundingBox )
+    : RenderableEntityWithBoundingBox( type, rad, boundingBox, effect )
 {
 }
 
@@ -22,13 +20,6 @@ Triangles::Triangles               ( RenderableArrayDataSingleVertexBuffer * rad
 //
 Triangles::~Triangles              ()
 {
-}
-
-// ***********************
-//
-const mathematics::Box *      Triangles::GetBoundingBox  () const
-{
-    return m_boundingBox;
 }
 
 } //bv

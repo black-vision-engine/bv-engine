@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 
 namespace bv {
@@ -8,22 +8,18 @@ namespace bv {
 class RenderableArrayDataArraysSingleVertexBuffer;
 class RenderableEffect;
 
-namespace mathematics {
-struct Box;
-}
+namespace mathematics { struct Box; }
 
-class Triangles : public RenderableEntity
+class Triangles : public RenderableEntityWithBoundingBox
 {
-    const mathematics::Box *        m_boundingBox;
+
 public:
 
-                                    Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
-                                    ~Triangles              ();
+            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            ~Triangles              ();
 
-    virtual int                     NumTriangles    ( unsigned int ccNum ) const = 0;
-    virtual int                     NumVertices     ( unsigned int ccNum ) const = 0;
-
-    virtual const mathematics::Box * GetBoundingBox  () const;
+    virtual int     NumTriangles    ( unsigned int ccNum ) const = 0;
+    virtual int     NumVertices     ( unsigned int ccNum ) const = 0;
 
     //TODO:
     //virtual GetVertex
