@@ -137,4 +137,13 @@ std::vector< IValuePtr > CompositeFullscreenEffect::GetValues       () const
     return std::vector< IValuePtr >( valuesSet.begin(), valuesSet.end() );
 }
 
+// ****************************
+//
+bool            CompositeFullscreenEffect::AddAdditionalPreLogicInputs ( SizeType numAddFSELoginInputs )
+{
+    { numAddFSELoginInputs; }
+    return true;
+    //m_graph->GetSourceNodes()
+}
+
 } //bv

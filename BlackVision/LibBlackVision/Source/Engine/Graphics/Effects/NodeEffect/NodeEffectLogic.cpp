@@ -6,7 +6,6 @@
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
-
 namespace bv {
 
 // *********************************
@@ -135,6 +134,8 @@ void    NodeEffectLogic::SetComponent       ( FullscreenEffectInstance * fse )
 
     m_FSE = fse;
 
+    AddFSEInputs();
+
     RecreateValues( m_values );
 }
 
@@ -204,6 +205,21 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
 
 void            AllocateRenderTargets       ();
 void            FreeRenderTargets           ();
+
+// *********************************
+//
+void            NodeEffectLogic::AddFSEInputs()
+{
+    if( m_preFSELogic != nullptr && m_FSE != nullptr )
+    {
+        auto numLogicOutputs = m_preFSELogic->GetPreferredNumOutputs();
+
+        if( numLogicOutputs > 0 && m_preFSELogic->IsFSERequired() )
+        {
+            m_FSE->AddAdditionalFSELogicInputs( numLogicOutputs );
+        }
+    }
+}
 
 // *********************************
 //

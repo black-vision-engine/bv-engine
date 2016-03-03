@@ -37,6 +37,8 @@ public:
     bool                        SetValue                    ( const std::string & name, int value );
     bool                        SetValue                    ( const std::string & name, float value );
 
+    bool                        AddAdditionalFSELogicInputs ( SizeType numAddInputs );
+
 private:
 
     void                        InitializeGuard             ( RenderLogicContext * ctx );

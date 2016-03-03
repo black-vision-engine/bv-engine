@@ -27,6 +27,8 @@ public:
 
     virtual void            SynchronizeInputData        ( FullscreenEffectContext * ctx ) override;
 
+    bool                    AddAdditionalPreLogicInputs ( SizeType numAddFSELoginInputs );
+
     virtual std::vector< IValuePtr >    GetValues       () const override;
 
 private:

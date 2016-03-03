@@ -5,6 +5,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Types/Values/TypedValues.h"
 
+#include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
 
 namespace bv {
 
@@ -150,6 +151,20 @@ void                        FullscreenEffectInstance::RenderImpl                
 void                        FullscreenEffectInstance::Update                      ()
 {
     m_effect->Update();
+}
+
+// **************************
+//
+bool                        FullscreenEffectInstance::AddAdditionalFSELogicInputs ( SizeType numAddInputs )
+{
+    if( auto compositeEffect = std::dynamic_pointer_cast<  CompositeFullscreenEffect >( m_effect ) )
+    {
+        return compositeEffect->AddAdditionalPreLogicInputs( numAddInputs );
+    }
+    else
+    {
+        return false;
+    }
 }
 
 } //bv

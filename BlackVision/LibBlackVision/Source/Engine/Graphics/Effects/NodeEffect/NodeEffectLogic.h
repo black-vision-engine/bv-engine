@@ -59,6 +59,8 @@ private:
 
     void            RecreateValues              ( std::vector< IValuePtr > & values );
 
+    void            AddFSEInputs                ();
+
 };
 
 } //bv
