@@ -159,12 +159,19 @@ bool                        FullscreenEffectInstance::AddAdditionalFSELogicInput
 {
     if( auto compositeEffect = std::dynamic_pointer_cast<  CompositeFullscreenEffect >( m_effect ) )
     {
-        return compositeEffect->AddAdditionalPreLogicInputs( numAddInputs );
+        if( compositeEffect->AddAdditionalPreLogicInputs( numAddInputs ) )
+        {
+            std::vector< RenderTarget * > additional( numAddInputs );
+
+            m_inputRenderTargets.insert( m_inputRenderTargets.begin(), additional.begin(), additional.end() );
+
+            assert( m_inputRenderTargets.size() == compositeEffect->GetNumInputs() );
+
+            return true;
+        }
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 } //bv

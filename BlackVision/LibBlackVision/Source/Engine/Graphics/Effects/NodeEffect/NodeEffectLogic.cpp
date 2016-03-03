@@ -214,7 +214,7 @@ void            NodeEffectLogic::AddFSEInputs()
     {
         auto numLogicOutputs = m_preFSELogic->GetPreferredNumOutputs();
 
-        if( numLogicOutputs > 0 && m_preFSELogic->IsFSERequired() )
+        if( numLogicOutputs > 0 )
         {
             m_FSE->AddAdditionalFSELogicInputs( numLogicOutputs );
         }

@@ -33,7 +33,7 @@ public:
 
 private:
 
-    void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );
+    void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx );
 
 };
 

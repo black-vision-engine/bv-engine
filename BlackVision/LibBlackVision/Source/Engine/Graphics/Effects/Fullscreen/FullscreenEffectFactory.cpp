@@ -219,7 +219,7 @@ FullscreenEffect *  CreateBlurFSECompositeOne            ( const std::vector< IV
     auto compositeEffect = new CompositeFullscreenEffect( graph );
 
     graph->SetSinkNode( firstPassNode );
-    //graph->MarkSourceNode( firstPassNode );
+    graph->MarkSourceNode( firstPassNode );
 
     return compositeEffect;
 }
