@@ -77,6 +77,10 @@ public:
     // Find node with nodeName in substree
     model::IModelNodePtr	FindNode            ( model::BasicNodePtr node, const std::string & nodeName ) const;
 
+    // Selection and intersection
+    model::IModelNodePtr	FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection );
+    bool                    SelectNode              ( model::BasicNodePtr node );
+
 	/* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
     bool                    DeleteChildNode     ( const std::string & sceneName, const std::string & nodePath );

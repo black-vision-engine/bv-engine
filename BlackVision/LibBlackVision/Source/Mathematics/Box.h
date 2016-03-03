@@ -84,7 +84,7 @@ struct Box
     // Parameter rayDirection should be normalized ray vector
     // Returns distance to intersection point and infinity or -infinity if there's no intersection.
     // If box is behind rayPoint return value is negative.
-    Float32   RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirection )
+    Float32   RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirection ) const
     {
         glm::vec3 inverseRayDir = glm::vec3( 1.0 / rayDirection.x, 1.0 / rayDirection.y, 1.0 / rayDirection.z );
         

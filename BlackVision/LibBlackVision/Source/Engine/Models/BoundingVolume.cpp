@@ -90,7 +90,7 @@ BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac )
     , m_lastTopologyID( 0 )
 {
     m_box = CalculateBoundingBox( m_vac );
-    AddBoxToVAC( m_vac, m_box );
+    //AddBoxToVAC( m_vac, m_box );
     //m_transform *= glm::translate( glm::mat4( 1.0f ), glm::vec3( box.xmin, box.ymin, box.zmin ) );
     //m_transform *= glm::scale( glm::mat4( 1.0f ), glm::vec3( box.xmax - box.xmin, box.ymax - box.ymin, box.zmax - box.zmin ) );
 }
@@ -99,12 +99,12 @@ void                    BoundingVolume::Update                  ()
 {
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {
-        UpdateBoxInVAC( m_vac, m_box );
+        //UpdateBoxInVAC( m_vac, m_box );
     }
     else if( m_lastTopologyID < m_vac->GetTopologyUpdateID() )
     {
         m_box = CalculateBoundingBox( m_vac );
-        AddBoxToVAC( m_vac, m_box );
+        //AddBoxToVAC( m_vac, m_box );
         m_lastTopologyID = m_vac->GetTopologyUpdateID();
         assert( m_lastAttribuetesID == m_vac->GetAttributesUpdateID() );
     }

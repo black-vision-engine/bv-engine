@@ -1213,6 +1213,31 @@ model::IModelNodePtr	BVProjectEditor::FindNode            ( model::BasicNodePtr 
 }
 
 // ***********************
+// If nullptr, there's no intersection.
+model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection )
+{
+    glm::mat4 transform = glm::mat4( 1 );   // Identity
+    auto result = BVProjectTools::NodeIntersection( m_rootNode, transform, rayStart, rayDirection );
+
+    return result.first;
+}
+
+// ***********************
+//
+bool                    BVProjectEditor::SelectNode              ( model::BasicNodePtr node )
+{
+    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+    
+    bool result = SetNodeEffect( node, newEffect );
+    if( !result )
+        return false;
+    
+    model::ModelState::GetInstance().Select( node.get() );
+
+    return true;
+}
+
+// ***********************
 //
 model::ITimeEvaluatorPtr    BVProjectEditor::GetTimeEvaluator           ( const std::string & timelinePath ) const
 {
