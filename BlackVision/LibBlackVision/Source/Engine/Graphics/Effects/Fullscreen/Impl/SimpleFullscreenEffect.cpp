@@ -29,6 +29,8 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat3.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat4.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 namespace  bv {
 
 // **************************
