@@ -33,10 +33,22 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Update                      ()
 {
-    for( auto n : m_graph->GetSourceNodes() )
+	auto sinkNode = m_graph->GetSinkNode();
+
+	for( auto n : sinkNode->GetInputVec() )
     {
-        n->GetEffect()->Update();
+		auto eff = n->GetEffect();
+        if( eff != nullptr )
+		{
+			eff->Update();
+		}
     }
+
+	auto eff = sinkNode->GetEffect();
+	if( eff != nullptr )
+	{
+		eff->Update();
+	}
 }
 
 // ****************************
@@ -66,6 +78,8 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 //
 void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
 {
+	//->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator()
+
     assert( ctx->AccessInputRenderTargets() != nullptr );
     assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
     
@@ -94,14 +108,20 @@ void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffec
 //
 void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx )
 {
-    std::vector< RenderTarget * >   inputResults( node->GetNumInputNodes() );
+	auto renderer = ctx->GetRenderer();
+	auto outputRenderTarget = ctx->GetOutputRenderTarget();
+	auto allocator = ctx->GetRenderTargetAllocator();
+
+    std::vector< RenderTarget * >   inputResults;
 
     for( auto it : node->GetInputVec() )
     {
         if( it->GetEffect() != nullptr )
         {
             auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-            RenderGraphNode( it, renderer, nodeOutRt, allocator );
+			auto inputCtx = FullscreenEffectContext( renderer, nodeOutRt, allocator, 0 );
+			inputCtx.SetInputRenderTargets( ctx->AccessInputRenderTargets() );
+            RenderGraphNode( it, &inputCtx );
         
             inputResults.push_back( nodeOutRt );
 
@@ -109,12 +129,21 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
         }
     }
 
-
-
     auto effect = node->GetEffect();
 
     if( effect != nullptr )
     {
+		if( m_graph->IsSourceNode( node ) )
+		{
+			if( node->GetNumInputNodes() > 0 )
+			{
+				auto ctxInputRenderTargets = ctx->AccessInputRenderTargets();
+				assert( ctxInputRenderTargets->size() == node->GetNumInputNodes() );
+
+				inputResults.insert( inputResults.begin(), ctxInputRenderTargets->begin(), ctxInputRenderTargets->end() );
+			}
+		}
+
         auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator, 0 );
         ctx.SetInputRenderTargets( &inputResults );
 

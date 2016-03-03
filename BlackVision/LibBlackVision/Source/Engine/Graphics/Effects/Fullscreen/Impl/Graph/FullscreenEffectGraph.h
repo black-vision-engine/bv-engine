@@ -31,6 +31,8 @@ public:
 
     const std::vector< FullscreenEffectGraphNodePtr > &     GetSourceNodes  () const;
 
+	bool							IsSourceNode			( FullscreenEffectGraphNodePtr node ) const;
+
 };
 
 } //bv

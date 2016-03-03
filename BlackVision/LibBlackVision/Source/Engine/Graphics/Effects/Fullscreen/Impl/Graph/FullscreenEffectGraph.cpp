@@ -70,4 +70,18 @@ const std::vector< FullscreenEffectGraphNodePtr > &     FullscreenEffectGraph::G
     return m_sourceNodes;
 }
 
+// ****************************
+//
+bool							FullscreenEffectGraph::IsSourceNode ( FullscreenEffectGraphNodePtr node ) const
+{
+	for( auto sn : m_sourceNodes )
+	{
+		if( node == sn )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 } //bv

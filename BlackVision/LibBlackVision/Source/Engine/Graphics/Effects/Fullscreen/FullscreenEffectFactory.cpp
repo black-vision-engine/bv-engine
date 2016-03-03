@@ -234,8 +234,8 @@ FullscreenEffect *  CreateBlurFSEComposite            ( const std::vector< IValu
     assert( values.size() == 2 );
 
     auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
-    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
-    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );
+    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize" );
+    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType" );
 
     fseData.AppendInputTexture( nullptr, "Tex0" );
 
@@ -250,11 +250,27 @@ FullscreenEffect *  CreateBlurFSEComposite            ( const std::vector< IValu
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
 
+	FullscreenEffectData fseData1;
+
+    fseData1.AppendInputTexture( nullptr, "Tex0" );
+
+    AppendValues( &fseData1, values );
+    fseData1.AppendValue( ValuesFactory::CreateValueInt( "vertical", 1 ) );
+    fseData1.AppendValue( normalizeVal );
+    fseData1.AppendValue( blurKernelTypeVal );
+
+    fseData1.SetPixelShaderSource( src );
+
+    fseData1.SetBlendEnabled( false );
+    fseData1.SetCullEnabled( false );
+    fseData1.SetDepthTestEnabled( false );
+
+
     auto firstPass = new SimpleFullscreenEffect( fseData );
 
     auto firstPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( firstPass ) );
 
-    auto secondPass = new SimpleFullscreenEffect( fseData );
+    auto secondPass = new SimpleFullscreenEffect( fseData1 );
 
     auto secondPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( secondPass ) );
 
@@ -287,8 +303,8 @@ FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr >
     assert( values.size() == 2 );
 
     auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
-    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
-    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );
+    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize" );
+    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType" );
 
     fseData.AppendInputTexture( nullptr, "Tex0" );
 
@@ -299,7 +315,7 @@ FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr >
 
     fseData.SetPixelShaderSource( src );
 
-    fseData.SetBlendEnabled( false );
+    fseData.SetBlendEnabled( true );
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
 
@@ -340,8 +356,8 @@ FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType, const 
         }
         case FullscreenEffectType::FET_BLUR:
         {
-            //return CreateBlurFSEComposite( values );
-            return CreateBlurFSECompositeOne( values );
+            return CreateBlurFSEComposite( values );
+            //return CreateBlurFSECompositeOne( values );
             //return CreateBlurFSE( values );
         }        
         default:

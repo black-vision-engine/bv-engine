@@ -29,7 +29,7 @@ float evaluateWeight( float dist )
             return 1.0;
             
         case 1: // Triangle filter
-            return( ( blurSize ) - dist ) / ( blurSize );
+            return max( 0, ( ( blurSize ) - dist ) ) / ( blurSize );
 
         case 2: // Gaussian filter
 
