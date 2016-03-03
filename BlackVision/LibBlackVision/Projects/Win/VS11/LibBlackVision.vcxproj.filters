@@ -1369,6 +1369,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
@@ -3448,6 +3451,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>

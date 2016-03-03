@@ -31,6 +31,7 @@ public:
                     NodeEffectLogic             ();
                     ~NodeEffectLogic            ();
 
+    void            Update                      ();
     void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
 
 private:

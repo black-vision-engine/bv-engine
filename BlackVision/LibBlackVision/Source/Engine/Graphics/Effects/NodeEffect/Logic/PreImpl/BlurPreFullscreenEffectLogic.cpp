@@ -6,12 +6,16 @@
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
+#include "Engine/Types/Values/ValuesFactory.h"
+
 namespace bv {
 
 // *********************************
 //
 BlurPreFullscreenEffectLogic::BlurPreFullscreenEffectLogic              ()
 {
+    m_blurSize      = ValuesFactory::CreateValueFloat( "blurSize", 0.f );
+    m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
 }
 
 // *********************************
@@ -24,57 +28,31 @@ BlurPreFullscreenEffectLogic::~BlurPreFullscreenEffectLogic             ()
 //
 void                        BlurPreFullscreenEffectLogic::RenderImpl    ( SceneNode * node, RenderLogicContext * ctx, std::vector< RenderTarget * > & outputs )
 {
-    auto blurSizeVal = node->GetNodeEffect()->GetValue( "blurSize" );
-    auto normalizeVal = node->GetNodeEffect()->GetValue( "normalize" );
-    auto blurKernelTypeVal = node->GetNodeEffect()->GetValue( "blurKernelType" );
+    assert( outputs.size() == 1 );
+    
+    auto mainRT = disableBoundRT( ctx );
+    auto outRT  = outputs[ 0 ];
 
-//    auto blurKernelTypeValue = QueryTypedValue< ValueIntPtr >( blurKernelTypeVal )->GetValue();
-   auto blurSizeValue = QueryTypedValue< ValueFloatPtr >( blurSizeVal )->GetValue();
- //   auto normalizeFlagValue = QueryTypedValue< ValueIntPtr >( normalizeVal )->GetValue() > 0 ? true : false;
+    enable( ctx, outRT );
+    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-//    auto renderer       = ctx->GetRenderer();
-    auto logic          = ctx->GetRenderLogic();
-        
-    if( blurSizeValue < 1.f )
-    {
-        logic->DrawNode( node, ctx );
-    }
-    else
-    {
-        auto rtAllocator    = ctx->GetRenderTargetAllocator();
+    logic( ctx )->DrawNode( node, ctx );
 
-        auto mainTarget = disableBoundRT( ctx );
+    m_textureSize->SetValue( glm::vec2( outRT->Width(), outRT->Height() ) );
 
-//        auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-        auto hBluredRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+    disableBoundRT( ctx );
 
-        RenderToRenderTarget( ctx, outputs[ 0 ], node );
-
-        enable( ctx, hBluredRenderTarget );
-        clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-
-        //ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, false, normalizeFlagValue, blurKernelTypeValue );
-
-        //rtAllocator->Free();
-        //rtAllocator->Free();
-
-        //disableBoundRT( ctx );
-
-        enable( ctx, mainTarget );
-
-        //ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, true, normalizeFlagValue, blurKernelTypeValue );
-    }
+    enable( ctx, mainRT );
 }
 
 // *********************************
 //
 std::vector< IValuePtr >    BlurPreFullscreenEffectLogic::GetValues     () const
 {
-    std::vector< IValuePtr > res( 4 );
+    std::vector< IValuePtr > res( 2 );
+
     res[ 0 ] = m_blurSize;
-    res[ 1 ] = m_isVertical;
-    res[ 2 ] = m_normalize;
-    res[ 3 ] = m_blurKernelTypeVal;
+    res[ 1 ] = m_textureSize;
 
     return res;
 }

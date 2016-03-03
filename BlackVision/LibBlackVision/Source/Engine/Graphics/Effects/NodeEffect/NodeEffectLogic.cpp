@@ -205,4 +205,11 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
 void            AllocateRenderTargets       ();
 void            FreeRenderTargets           ();
 
+// *********************************
+//
+void            NodeEffectLogic::Update     ()
+{
+    m_FSE->Update();
+}
+
 } //bv

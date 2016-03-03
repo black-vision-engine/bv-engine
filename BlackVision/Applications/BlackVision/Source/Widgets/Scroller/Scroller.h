@@ -133,6 +133,10 @@ public:
 	void		SetInterspace		( Float32 interspace );
     void        SetNodePath         ( std::string nodePath );
     void        SetLowBufferMult    ( Float32 lowBufferVal );
+    void        SetScrollDirection  ( ScrollDirection scrollDirection );
+    void        SetEnableEvents     ( bool enable );
+    bool        SetSmoothTime       ( Float32 time );
+    Float32     GetSmoothTime       () const;
     void        SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior );
 
 	virtual void	Initialize		()				override {}

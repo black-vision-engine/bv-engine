@@ -29,11 +29,11 @@ FullscreenEffectGraphNodePtr    FullscreenEffectGraph::GetSinkNode     ()
 
 // ****************************
 //
-void                            FullscreenEffectGraph::InsertNode      ( FullscreenEffectGraphNodePtr node, const std::vector< FullscreenEffectGraphNodePtr > & predcessors )
+void                            FullscreenEffectGraph::InsertNode      ( FullscreenEffectGraphNodePtr node, const std::vector< FullscreenEffectGraphNodePtr > & predecessors )
 {
     assert( node->GetInputVec().size() == 0 );
 
-    for( auto predcessor : predcessors )
+    for( auto predcessor : predecessors )
     {
         assert( m_nodes.find( predcessor ) != m_nodes.end() );
 

@@ -32,9 +32,9 @@ public:
     void                                                AddInput            ( FullscreenEffect * fullscreenEffect );
     void                                                AddInput            ( FullscreenEffectGraphNodePtr node );
 
-    unsigned int                                        GetNumInputNodes    () const;
+    virtual unsigned int                                GetNumInputNodes    () const;
 
-    const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec         () const; 
+    virtual const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec () const; 
 
 };
 

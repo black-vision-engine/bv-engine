@@ -29,6 +29,7 @@ public:
                     SimpleFullscreenEffect      ( const FullscreenEffectData & inputData );
                     ~SimpleFullscreenEffect     ();
 
+    virtual void                        Update              () override;
     virtual void                        Render              ( FullscreenEffectContext * ctx ) override;
 
     virtual unsigned int                GetNumInputs        () const override;

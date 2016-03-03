@@ -13,6 +13,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/NodeMaskPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/InterlacePreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/RenderOffscreenPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/BlurPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
@@ -119,7 +120,7 @@ NodeEffectPtr       CreateMixchannelsNodeEffect()
 
     return CreateNodeEffect( logic, NodeEffectType::NET_MIX_CHANNELS );
 }
- 
+
 // **************************
 //
 NodeEffectPtr       CreateBoundingBoxNodeEffect()
@@ -134,6 +135,22 @@ NodeEffectPtr       CreateBoundingBoxNodeEffect()
     return CreateNodeEffect( logic, NodeEffectType::NET_BOUNDING_BOX );
 }
 
+// **************************
+//
+NodeEffectPtr       CreateBlurEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new BlurPreFullscreenEffectLogic();
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLUR, pre->GetValues() );
+
+    SetLogicComponents( logic, pre, fse, nullptr );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
+}
+
+
+ 
 } // anonoymnous
 
 
@@ -155,6 +172,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateMixchannelsNodeEffect();
         case NodeEffectType::NET_BOUNDING_BOX:
             return CreateBoundingBoxNodeEffect();
+        case NodeEffectType::NET_BLUR:
+            return CreateBlurEffect();
 
         //Interlace and so on
         default:
