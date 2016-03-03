@@ -225,7 +225,10 @@ void            NodeEffectLogic::AddFSEInputs()
 //
 void            NodeEffectLogic::Update     ()
 {
-    m_FSE->Update();
+    if( m_FSE )
+    {
+        m_FSE->Update();
+    }
 }
 
 } //bv
