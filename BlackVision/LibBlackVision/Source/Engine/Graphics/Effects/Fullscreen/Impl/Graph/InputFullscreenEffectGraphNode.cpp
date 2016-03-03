@@ -27,7 +27,8 @@ unsigned int										InputFullscreenEffectGraphNode::GetNumInputNodes    () con
 //
 const std::vector< FullscreenEffectGraphNodePtr > & InputFullscreenEffectGraphNode::GetInputVec () const
 {
-    return std::vector< FullscreenEffectGraphNodePtr >();
+	static auto ret = std::vector< FullscreenEffectGraphNodePtr >();
+    return ret;
 }
 
 } //bv

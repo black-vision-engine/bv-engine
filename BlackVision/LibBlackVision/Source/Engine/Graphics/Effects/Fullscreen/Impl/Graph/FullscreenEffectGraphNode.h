@@ -27,7 +27,7 @@ public:
                             ~FullscreenEffectGraphNode                      ();
 
 
-    FullscreenEffect *                                  AddInput           ();
+    FullscreenEffect *                                  GetEffect           ();
 
     void                                                AddInput            ( FullscreenEffect * fullscreenEffect );
     void                                                AddInput            ( FullscreenEffectGraphNodePtr node );
