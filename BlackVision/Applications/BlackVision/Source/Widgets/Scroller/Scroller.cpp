@@ -212,19 +212,20 @@ bool		Scroller::AddNext				( const std::string& childNodeName )
 //
 bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
 {
-    if( !m_started )
-	{
-        bool alreadyExists = m_nodesStates.Exist( node.get() );
-        assert( !alreadyExists );
+    bool alreadyExists = m_nodesStates.Exist( node.get() );
+    
+    assert( !alreadyExists );
+    if( alreadyExists )
+        return false;
 
-        if( !alreadyExists )
-        {
-		    m_nodesStates.Add( node.get() );
-            return true;
-        }
+	m_nodesStates.Add( node.get() );
+
+    if( m_started )
+	{
+        ShiftNodeToEnd( node.get() );
 	}
 
-    return false;
+    return true;
 }
 
 // ***********************
@@ -484,19 +485,7 @@ void		Scroller::OnNotifyNodeOffscreen         ( bv::model::BasicNode * n )
 {
     if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_Looping )
     {
-        m_nodesStates.Acivate( n );
-
-        Int32 lastIdx = (Int32)m_nodesStates.ActiveSize() - 1;
-        assert( lastIdx > 0 );
-
-        if( lastIdx > 1 )
-        {
-            Float32 currShift = m_shifts[ m_nodesStates.m_actives[ lastIdx - 1 ] ];
-            currShift += ShiftStep( m_nodesStates.m_actives[ lastIdx - 1 ], m_nodesStates.m_actives[ lastIdx ] );
-		    m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = currShift;
-        }
-        else
-            m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = InitialShift( m_nodesStates.m_actives[ lastIdx ] );
+        ShiftNodeToEnd( n );
     }
     else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_SetNonActive )
     {
@@ -606,16 +595,24 @@ bool        Scroller::CheckLowBuffer      ()
     return false;
 }
 
-// *******************************
-//
-model::BasicNode *	Scroller::GetNonActiveNode()
+// ***********************
+// Avtivate node and send to the end of nodes queue.
+void        Scroller::ShiftNodeToEnd      ( bv::model::BasicNode * n )
 {
-	if ( m_nodesStates.NonActiveSize() > 0 )
-		return m_nodesStates.m_nonActives[ 0 ];
-	else
-		return nullptr;
-}
+    m_nodesStates.Acivate( n );
 
+    Int32 lastIdx = (Int32)m_nodesStates.ActiveSize() - 1;
+    assert( lastIdx > 0 );
+
+    if( lastIdx > 1 )
+    {
+        Float32 currShift = m_shifts[ m_nodesStates.m_actives[ lastIdx - 1 ] ];
+        currShift += ShiftStep( m_nodesStates.m_actives[ lastIdx - 1 ], m_nodesStates.m_actives[ lastIdx ] );
+		m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = currShift;
+    }
+    else
+        m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = InitialShift( m_nodesStates.m_actives[ lastIdx ] );
+}
 
 // ========================================================================= //
 // Serialization and deserialization

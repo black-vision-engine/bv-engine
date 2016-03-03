@@ -106,6 +106,7 @@ private:
 	void		SetActiveNode		( bv::model::BasicNode * );
 	bool		IsActive			( bv::model::BasicNode * );
     bool        CheckLowBuffer      ();
+    void        ShiftNodeToEnd      ( bv::model::BasicNode * n );
 
     void		OnNotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility );
     void		OnNotifyNodeOffscreen           ( bv::model::BasicNode * n );
@@ -126,8 +127,7 @@ public:
 	bool		Finalize			();
     bool        Unfinalize          ();
 
-	model::BasicNode *	GetNonActiveNode();
-	void		EnqueueNode			( model::BasicNode * n);
+
 
 	void		SetSpeed			( Float32 speed );
 	void		SetInterspace		( Float32 interspace );
@@ -139,18 +139,19 @@ public:
     Float32     GetSmoothTime       () const;
     void        SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior );
 
+
+
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
 
-
-	static ScrollerPtr          Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 
     virtual const std::string   GetType         () const override;
     static const std::string    Type            ();
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static ScrollerPtr          Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
+    static ScrollerPtr          Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 
     virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 
