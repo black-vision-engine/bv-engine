@@ -544,7 +544,7 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::TimerTestScene( pluginsManager, timeline );
     }
-    else if( scene == "Scroller_TEST_SCENE" )
+    else if( scene == "SCROLLER_TEST_SCENE" )
     {
         node = TestScenesFactory::ScrollerNodeTestScene( pluginsManager, timeline );
     }
@@ -1232,7 +1232,7 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, -0.5, -4.0 ), "textures/sand.jpg" );
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "textures/water.jpg" );
     auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "textures/sand.jpg" );
@@ -1256,6 +1256,8 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
     node0->AddChildToModelOnly( node9 );
 
     node0->AddChildToModelOnly( node10 );
+
+    //node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
 
     return node0;
 }

@@ -16,6 +16,7 @@ public:
     ~EngineStateHandlers();
 
     void    EngineStateHandler       ( IEventPtr evt );
+    void    MouseInteraction         ( IEventPtr evt );
 };
 
 } //bv

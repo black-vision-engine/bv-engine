@@ -63,6 +63,8 @@ public:
 
     static ParamsOfTimelinesMap GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimeEvaluatorPtr sceneTimeline );
 
+    static  std::pair< model::BasicNodePtr, Float32 >   NodeIntersection    ( model::BasicNodePtr modelNode, glm::mat4 & parentInverseTrans, glm::vec3 & rayPoint, glm::vec3 & rayDir );
+
 private:
 
     static  SceneNode *         BuildSingleEngineNode               ( model::BasicNodePtr modelNode );
