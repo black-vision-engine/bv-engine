@@ -247,7 +247,8 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
                 asset = AssetManager::GetInstance().CreateDesc( deser );
             }
 
-            plugin->LoadResource( asset );
+            if( asset )
+                plugin->LoadResource( asset );
         
             auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
             auto rsm = std::dynamic_pointer_cast< ResourceStateModel >( plugin->GetResourceStateModel( deser.GetAttribute( "name" ) ) );
