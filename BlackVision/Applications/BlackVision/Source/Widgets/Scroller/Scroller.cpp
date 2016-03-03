@@ -637,8 +637,12 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
         {
             SerializationHelper::SerializeRect( ser, m_view );
 
-            ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
-            ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
+            ser.SetAttribute( "Speed", SerializationHelper::T2String( m_speed ) );
+            ser.SetAttribute( "Spacing", SerializationHelper::T2String( m_interspace ) );
+            ser.SetAttribute( "ScrollDirection", SerializationHelper::T2String( m_scrollDirection ) );
+            ser.SetAttribute( "EnableEvents", SerializationHelper::T2String( m_enableEvents ) );
+            ser.SetAttribute( "OffscreenNodeBehavior", SerializationHelper::T2String( m_offscreenNodeBehavior ) );
+            ser.SetAttribute( "SmoothTime", SerializationHelper::T2String( GetSmoothTime() ) );
 
 
             // Node names aren't enough to identify node. Checking children indicies.
@@ -686,16 +690,24 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
 {
     mathematics::RectPtr rect = SerializationHelper::CreateRect( deser );
 
-    float speed = SerializationHelper::String2T( deser.GetAttribute( "speed" ), 0.0f );
-    float interspace = SerializationHelper::String2T( deser.GetAttribute( "interspace" ), 0.0f );
+    float speed = SerializationHelper::String2T( deser.GetAttribute( "Speed" ), 0.0f );
+    float interspace = SerializationHelper::String2T( deser.GetAttribute( "Spacing" ), 0.0f );
+    ScrollDirection scrollDirection = SerializationHelper::String2T( deser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
+    bool enableEvents = SerializationHelper::String2T( deser.GetAttribute( "EnableEvents" ), false );
+    auto offscreenBahavior = SerializationHelper::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
+    float smoothTime = SerializationHelper::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
 
-    auto Scroller = Scroller::Create( parent, rect );
-    Scroller->SetSpeed( speed );
-    Scroller->SetInterspace( interspace );
+    auto scroller = Scroller::Create( parent, rect );
+    scroller->SetSpeed( speed );
+    scroller->SetInterspace( interspace );
+    scroller->SetScrollDirection( scrollDirection );
+    scroller->SetEnableEvents( enableEvents );
+    scroller->SetOffscreenNodeBehavior( offscreenBahavior );
+    scroller->SetSmoothTime( smoothTime );
 
 
     if( !deser.EnterChild( "scrollerNodes" ) )
-        return Scroller;
+        return scroller;
     
     if( deser.EnterChild( "scrollerNode" ) )
     {
@@ -706,16 +718,16 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
             assert( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() );
             if( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() )
             {
-                Scroller->AddNext( nodeIdx );
+                scroller->AddNext( nodeIdx );
             }
 
         } while( deser.NextChild() );
-        deser.ExitChild(); // ScrollerNode
+        deser.ExitChild(); // scrollerNode
     }
 
-    deser.ExitChild(); // ScrollerNodes
+    deser.ExitChild(); // scrollerNodes
 
-    return Scroller;
+    return scroller;
 }
 
 // ========================================================================= //
@@ -827,16 +839,12 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     }
     else if( scrollAction == "SetSmoothTime" )
     {
-        m_smoothTime = (UInt64)SerializationHelper::String2T( eventDeser.GetAttribute( "SmoothTime" ), 1.0f ) * 1000;
-        if( m_smoothTime <= 0 )
-        {
-            m_smoothTime = 1;
-            return false;
-        }
+        auto smoothTime = SerializationHelper::String2T( eventDeser.GetAttribute( "SmoothTime" ), 1.0f );
+        SetSmoothTime( smoothTime );
     }
     else if( scrollAction == "GetSmoothTime" )
     {
-        response.SetAttribute( "SmoothTime", SerializationHelper::T2String( static_cast< UInt64 >( m_smoothTime / 1000 ) ) );
+        response.SetAttribute( "SmoothTime", SerializationHelper::T2String( GetSmoothTime() ) );
     }
 
     return true;
@@ -960,6 +968,38 @@ void		Scroller::SetInterspace		( Float32 interspace )
 void        Scroller::SetNodePath         ( std::string nodePath )
 {
     m_scrollerNodePath = nodePath;
+}
+
+// ***********************
+//
+void        Scroller::SetScrollDirection  ( ScrollDirection scrollDirection )
+{
+    m_scrollDirection = scrollDirection;
+}
+
+// ***********************
+//
+void        Scroller::SetEnableEvents     ( bool enable )
+{
+    m_enableEvents = enable;
+}
+
+// ***********************
+//
+bool        Scroller::SetSmoothTime       ( Float32 time )
+{
+    m_smoothTime = static_cast< UInt64 >( time * 1000 );
+    if( m_smoothTime <= 0 )
+    {
+        m_smoothTime = 1;
+        return false;
+    }
+    return true;
+}
+
+Float32     Scroller::GetSmoothTime       () const
+{
+    return static_cast< Float32 >( m_smoothTime / 1000 ) ;
 }
 
 // ***********************
