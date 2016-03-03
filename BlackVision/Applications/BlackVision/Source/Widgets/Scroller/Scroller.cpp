@@ -183,13 +183,13 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
 //
 void		Scroller::AddNext			( bv::model::BasicNodePtr node )
 {
-	if(! m_isFinalized )
+    if( !m_started )
 	{
 		m_parentNode->AddChildToModelOnly( node );
 		m_nodesStates.Add( node.get() );
 	}
 	else
-		assert(!"Scroller: Cannot add node after finalization!");
+		assert(!"Scroller: Cannot add node while scrolling!");
 }
 
 // ***********************
@@ -212,7 +212,7 @@ bool		Scroller::AddNext				( const std::string& childNodeName )
 //
 bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
 {
-    if(! m_isFinalized )
+    if( !m_started )
 	{
         bool alreadyExists = m_nodesStates.Exist( node.get() );
         assert( !alreadyExists );
@@ -223,8 +223,6 @@ bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
             return true;
         }
 	}
-	else
-		assert(!"Scroller: Cannot add node after finalization!");
 
     return false;
 }
