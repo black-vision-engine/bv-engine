@@ -218,7 +218,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
                 if( radasvb )
                 {
-                    renderable = new TriangleStrip( radasvb, modelNode->GetBoundingVolume()->GetBoundingBox(), effect );
+                    renderable = new TriangleStrip( radasvb, modelNode->GetBoundingVolume().get(), effect );
                 }
                 break;
             }

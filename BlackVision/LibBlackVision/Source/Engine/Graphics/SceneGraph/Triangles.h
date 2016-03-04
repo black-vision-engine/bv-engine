@@ -8,14 +8,14 @@ namespace bv {
 class RenderableArrayDataArraysSingleVertexBuffer;
 class RenderableEffect;
 
-namespace mathematics { struct Box; }
+namespace model { class BoundingVolume; }
 
 class Triangles : public RenderableEntityWithBoundingBox
 {
 
 public:
 
-            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
     virtual int     NumTriangles    ( unsigned int ccNum ) const = 0;

@@ -12,7 +12,7 @@ namespace bv { namespace model {
 //
 bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, bool isCacheable )
 {
-	auto texDesc = TextureAssetDesc::Create( textureFile, isCacheable );
+    auto texDesc = TextureAssetDesc::Create( textureFile, isCacheable );
 
     return plugin->LoadResource( texDesc );
 }
@@ -21,7 +21,7 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, bo
 //
 bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, MipMapFilterType mmFilter, bool isCacheable )
 {
-	auto texDesc = TextureAssetDesc::Create( textureFile, mmFilter, isCacheable );
+    auto texDesc = TextureAssetDesc::Create( textureFile, mmFilter, isCacheable );
 
     return plugin->LoadResource( texDesc );
 }
@@ -30,7 +30,7 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, Mi
 //
 bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, const StringVector & mipmapsFiles, bool isCacheable )
 {
-	auto texDesc = TextureAssetDesc::Create( textureFile, mipmapsFiles, isCacheable );
+    auto texDesc = TextureAssetDesc::Create( textureFile, mipmapsFiles, isCacheable );
 
     return plugin->LoadResource( texDesc );
 }
@@ -53,7 +53,7 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 //
 bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat )
 {
-	auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat );
+    auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat );
 
     if( desc == nullptr )
     {
@@ -67,7 +67,7 @@ bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, Tex
 //
 bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
 {
-	auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat, width, height, frameRate, videoFormat );
+    auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat, width, height, frameRate, videoFormat );
 
     if( desc == nullptr )
     {
@@ -81,7 +81,7 @@ bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, Tex
 //
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
-	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps, SUPPROTED_CHARS_FILE );
+    auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps, SUPPROTED_CHARS_FILE );
 
     return plugin->LoadResource( desc );
 }

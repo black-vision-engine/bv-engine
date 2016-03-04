@@ -11,7 +11,7 @@ namespace bv {
 
 // **************************
 //
-TriangleStrip::TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect )
+TriangleStrip::TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect )
     : Triangles( static_cast< RenderableArrayDataSingleVertexBuffer * >( rad ), boundingBox, effect, RenderableType::RT_TRIANGLE_STRIP )
 {
 }

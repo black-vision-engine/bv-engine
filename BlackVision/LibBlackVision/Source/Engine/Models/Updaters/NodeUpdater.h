@@ -52,7 +52,7 @@ namespace model
     class ITransformChannel;
     class IVertexAttributesChannel;
 
-	class HelperVertexAttributesChannel;
+    class HelperVertexAttributesChannel;
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
@@ -73,6 +73,7 @@ private:
     model::IModelNodeConstPtr                   m_modelNode;
 
     RenderableEntity *                          m_renderable;
+    RenderableEntity *                          m_boundingBox;
     model::ITransformChannelConstPtr            m_transformChannel;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
     
@@ -90,8 +91,8 @@ private:
 
     std::vector< Value2ShaderParam >			m_paramsMappingVec;
 
-	UInt64										m_attributesUpdateID;
-	UInt64										m_topologyUpdateID;
+    UInt64										m_attributesUpdateID;
+    UInt64										m_topologyUpdateID;
 
 
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
@@ -134,18 +135,18 @@ private:
 private:
 
     void            RegisterShaderParams	( IValueSetConstPtr values, Shader * shader );
-	
-	
-	void			UpdateShaderParam		( IValueConstPtr source, GenericShaderParam * dest );
+    
+    
+    void			UpdateShaderParam		( IValueConstPtr source, GenericShaderParam * dest );
 
-	template< typename ValType, typename ShaderParamType >
+    template< typename ValType, typename ShaderParamType >
     void			UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest );
 
 private:
-	
-	void			UpdateValue			( IValueConstPtr source, IValuePtr dest );
+    
+    void			UpdateValue			( IValueConstPtr source, IValuePtr dest );
 
-	template< typename ValType >
+    template< typename ValType >
     void			UpdateTypedValue    ( IValueConstPtr source, IValuePtr dest );
 
 };

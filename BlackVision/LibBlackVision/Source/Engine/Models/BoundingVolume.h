@@ -10,6 +10,9 @@ namespace model {
 
 class VertexAttributesChannel;
 
+class IConnectedComponent;
+DEFINE_PTR_TYPE( IConnectedComponent );
+
 class BoundingVolume {
     mathematics::Box            m_box;
     //glm::mat4               m_transform; // apply unit cube to get bounding box :)
@@ -24,6 +27,8 @@ public:
     //void                        SetVAC                  ( VertexAttributesChannel * vac );
 
     const mathematics::Box *    GetBoundingBox          () const;
+
+    IConnectedComponentPtr      BuildConnectedComponent () const;
 
     void                        Update                  ();
 };

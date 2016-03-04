@@ -48,8 +48,6 @@ public:
     void												SetAttributesUpdateID	( UInt64 updateID );
     void												SetTopologyUpdateID		( UInt64 updateID );
 
-    void                                                UpdateBoundingBox       ();
-
     virtual unsigned int                                TotalNumVertices        () const override;
 
     virtual const IVertexAttributesChannelDescriptor *  GetDescriptor           () const override;

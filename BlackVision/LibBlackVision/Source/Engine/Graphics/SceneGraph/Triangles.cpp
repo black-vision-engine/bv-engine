@@ -11,7 +11,7 @@ namespace bv
 
 // *********************************
 //
-Triangles::Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect, RenderableType type )
+Triangles::Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect, RenderableType type )
     : RenderableEntityWithBoundingBox( type, rad, boundingBox, effect )
 {
 }

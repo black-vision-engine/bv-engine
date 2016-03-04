@@ -41,7 +41,7 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
 
     auto box = obj->GetBoundingBox();
 
-    renderer( ctx )->Enable( m_effect->GetPass( 0 ), obj );
+    renderer( ctx )->Enable( m_effect->GetPass( 0 ), obj ); // FIXME for some reasons box results in bad transformation
 
     renderer( ctx )->DrawRenderable( box );
 }
