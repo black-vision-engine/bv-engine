@@ -111,9 +111,9 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
 
     std::vector< RenderTarget * >   inputResults;
 
-    for( auto it : node->GetInputVec() )
+    for( auto it : node->GetInputVec() ) // Render parents' nodes at first
     {
-        if( it->GetEffect() != nullptr )
+        if( it->GetEffect() != nullptr ) // Effect is null when the node is a special node which means that it's an input from PreLogic.
         {
             auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 			auto inputCtx = FullscreenEffectContext( renderer, nodeOutRt, allocator, 0 );
@@ -128,9 +128,9 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
 
     auto effect = node->GetEffect();
 
-    if( effect != nullptr )
+    if( effect != nullptr ) // Don't render special node which is input form PreLogic (PreLogic output)
     {
-		if( m_graph->IsSourceNode( node ) )
+		if( m_graph->IsSourceNode( node ) ) // For source node expand number of inputs. Additional inputs which are PreLogic outputs
 		{
 			if( node->GetNumInputNodes() > 0 )
 			{

@@ -51,7 +51,8 @@ FullscreenEffect *       ShadowFSECreator::CreateShadowFSE         ( const std::
     fseData.SetDepthTestEnabled( false );
 
     auto shadowEffect = new SimpleFullscreenEffect( fseData );
-    { shadowEffect; }
+
+    // building graph
     auto graph = new FullscreenEffectGraph();
 
     std::vector< FullscreenEffectGraphNodePtr > predecessors;
@@ -62,7 +63,15 @@ FullscreenEffect *       ShadowFSECreator::CreateShadowFSE         ( const std::
 
     predecessors.push_back( blurEffectNode );
 
-    return nullptr;
+    auto shadowEffectNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( shadowEffect ) );
+
+    graph->InsertNode( shadowEffectNode, predecessors );
+
+    graph->MarkSourceNode( blurEffectNode );
+    graph->MarkSourceNode( shadowEffectNode );
+    graph->SetSinkNode( shadowEffectNode );
+
+    return new CompositeFullscreenEffect( graph );
 }
 
 } // bv
