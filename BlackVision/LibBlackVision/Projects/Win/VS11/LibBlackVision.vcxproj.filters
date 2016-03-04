@@ -1342,9 +1342,6 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp">
       <Filter>Assets\VideoStream</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp">
-      <Filter>Mathematics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
@@ -1363,11 +1360,23 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3413,9 +3422,6 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h">
       <Filter>Assets\VideoStream</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
@@ -3437,11 +3443,23 @@
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

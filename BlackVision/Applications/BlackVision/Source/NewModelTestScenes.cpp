@@ -29,6 +29,8 @@
 #include "Engine/Models/ModelSceneEditor.h"
 #include "Engine/Models/BVProject.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
+
 #include "System/Env.h"
 #include "BVConfig.h"
 
@@ -480,7 +482,8 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timeline );
+        //node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timeline );
+        node = TestScenesFactory::CreedPrismTestScene( pluginsManager, timeline );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {
@@ -494,14 +497,14 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
     }
-	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
-	{
-		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timeline );
-	}
-	else if( scene == "BASIC_SHAPES_TEST_SCENE" )
-	{
-		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timeline );
-	}
+    else if( scene == "ALL_BASIC_SHAPES_SHOW" )
+    {
+        node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timeline );
+    }
+    else if( scene == "BASIC_SHAPES_TEST_SCENE" )
+    {
+        node = TestScenesFactory::BasicShapesTest(  pluginsManager, timeline );
+    }
     else if( scene == "INTERPOLATION_TEST_SCENE" )
     {
         node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timeline );
@@ -516,7 +519,7 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     }
     else if( scene == "VIDEO_STREAM_TEST_SCENE" )
     {
- 	    node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
+        node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
     }
     else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
     {
@@ -542,7 +545,7 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::TimerTestScene( pluginsManager, timeline );
     }
-    else if( scene == "Scroller_TEST_SCENE" )
+    else if( scene == "SCROLLER_TEST_SCENE" )
     {
         node = TestScenesFactory::ScrollerNodeTestScene( pluginsManager, timeline );
     }
@@ -575,7 +578,7 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
         node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-	return node;
+    return node;
 }
 
 // *****************************
@@ -878,6 +881,11 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  8.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+    prism->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
+    prism2->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
+    prism3->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
+    prism4->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
 
     root->AddChildToModelOnly( prism );
     root->AddChildToModelOnly( prism2 );
@@ -1230,7 +1238,7 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, -0.5, -4.0 ), "textures/sand.jpg" );
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "textures/water.jpg" );
     auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "textures/sand.jpg" );
@@ -1254,6 +1262,8 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
     node0->AddChildToModelOnly( node9 );
 
     node0->AddChildToModelOnly( node10 );
+
+    //node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
 
     return node0;
 }
@@ -1303,6 +1313,10 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
     auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/water.jpg" );
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Long time ago in a galaxy", "fonts/StarWars.ttf" );
+
+    node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bb", timeEvaluator ) );
+    node1->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bb", timeEvaluator ) );
+    node2->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bb", timeEvaluator ) );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );

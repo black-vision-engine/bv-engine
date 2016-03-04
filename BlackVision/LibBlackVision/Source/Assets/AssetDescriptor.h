@@ -13,20 +13,20 @@ namespace bv
 class AssetDesc : public ISerializable
 {
 protected:
-	virtual VoidConstPtr            QueryThis	() const = 0;
+    virtual VoidConstPtr            QueryThis	() const = 0;
 
 public:
-	virtual const std::string &		GetUID		() const = 0;
+    virtual const std::string &		GetUID		() const = 0;
 
-	virtual bool					IsCacheable	() const = 0;
+    virtual bool					IsCacheable	() const = 0;
 
-	virtual std::string				GetKey		() const;
+    virtual std::string				GetKey		() const;
     virtual std::string             GetProposedShortKey () const;
 
     virtual SizeType                EstimateMemoryUsage () const = 0;
 
-	template< typename DescTypeConstPtr >
-	friend DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc );
+    template< typename DescTypeConstPtr >
+    friend DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc );
 };
 
 // *********************************

@@ -1795,6 +1795,7 @@ void                MouseEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( MouseCommand ) );
     ser.SetAttribute( SerializationHelper::MOUSE_X_STRING, SerializationHelper::T2String( MouseX ) );
     ser.SetAttribute( SerializationHelper::MOUSE_Y_STRING, SerializationHelper::T2String( MouseY ) );
 }
@@ -1805,9 +1806,10 @@ IEventPtr                MouseEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
-        MouseEventPtr newEvent   = std::make_shared<MouseEvent>();
-        newEvent->MouseX    = SerializationHelper::String2T<Int32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1 );
-        newEvent->MouseY    = SerializationHelper::String2T<Int32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1 );
+        MouseEventPtr newEvent      = std::make_shared<MouseEvent>();
+        newEvent->MouseX            = SerializationHelper::String2T<Int32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1 );
+        newEvent->MouseY            = SerializationHelper::String2T<Int32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1 );
+        newEvent->MouseCommand      = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), MouseEvent::Command::Fail );
 
         return newEvent;
     }

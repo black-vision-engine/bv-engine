@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueueConcurrent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostFullScreenEffectLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.cpp" />
@@ -254,6 +256,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.cpp" />
@@ -293,6 +296,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp" />
@@ -434,7 +438,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp" />
@@ -477,6 +480,7 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h" />
@@ -487,12 +491,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenVSShader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraphNode.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
@@ -830,7 +837,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />

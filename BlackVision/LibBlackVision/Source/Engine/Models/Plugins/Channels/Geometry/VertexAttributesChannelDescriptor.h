@@ -24,14 +24,14 @@ private:
 public:
 
                                                         VertexAttributesChannelDescriptor   ();
-														VertexAttributesChannelDescriptor	( const VertexAttributesChannelDescriptor & other );
+                                                        VertexAttributesChannelDescriptor	( const VertexAttributesChannelDescriptor & other );
     virtual										        ~VertexAttributesChannelDescriptor	();
 
     virtual unsigned int								GetNumVertexChannels		()						const;
-	virtual bool								        HasIndexChannel				()						const;
+    virtual bool								        HasIndexChannel				()						const;
 
-	virtual const IAttributeChannelDescriptor *	        GetAttrChannelDescriptor	( int channelIndex )	const;
-	virtual const IIndexChannelDescriptor *		        GetIndexChannelDescriptor	()						const;
+    virtual const IAttributeChannelDescriptor *	        GetAttrChannelDescriptor	( int channelIndex )	const;
+    virtual const IIndexChannelDescriptor *		        GetIndexChannelDescriptor	()						const;
 
     virtual unsigned int                                SingleVertexEntrySize       ()                      const;
     virtual unsigned int                                SingleIndexEntrySize        ()                      const;
@@ -42,8 +42,8 @@ public:
     const IndexChannelDescriptor *                      SetIndexChannelDesc     ( IndexType type );
     void                                                SetIndexChannelDesc     ( IndexChannelDescriptor * desc );
 
-	//@param[ occuranceIdx ] for occuranceIdx < 0 function will return the last attrChannel
-	const AttributeChannelDescriptor *					GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx = 0 ) const;
+    //@param[ occuranceIdx ] for occuranceIdx < 0 function will return the last attrChannel
+    const AttributeChannelDescriptor *					GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx = 0 ) const;
 };
 
 } //model

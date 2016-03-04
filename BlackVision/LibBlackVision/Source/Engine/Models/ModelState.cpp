@@ -230,5 +230,47 @@ std::string                         ModelState::RestoreNodePath ( const IModelNo
     return path;
 }
 
+// ========================================================================= //
+// Node selection
+// ========================================================================= //
+
+// ***********************
+//
+bool    ModelState::IsSelected      ( IModelNode * node )
+{
+    auto iter = m_selectedNodes.find( node );
+    if( iter == m_selectedNodes.end() )
+        return false;
+
+    return true;
+}
+
+// ***********************
+//
+void    ModelState::Select          ( IModelNode * node )
+{
+    m_selectedNodes.insert( node );
+}
+
+// ***********************
+//
+bool    ModelState::Unselect        ( IModelNode * node )
+{
+    auto iter = m_selectedNodes.find( node );
+    
+    if( iter == m_selectedNodes.end() )
+        return false;
+
+    m_selectedNodes.erase( iter );
+    return true;
+}
+
+// ***********************
+//
+void    ModelState::UnselectAll     ()
+{
+    m_selectedNodes.clear();
+}
+
 } // model
 } // bv

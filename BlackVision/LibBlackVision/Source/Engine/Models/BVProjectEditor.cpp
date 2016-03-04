@@ -195,16 +195,16 @@ model::SceneModelPtr    BVProjectEditor::GetScene ( const std::string & sceneNam
 //
 bool    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool visible )
 {
-	auto scene = m_project->GetScene( sceneName );
-	if( scene && scene->GetRootNode() )
-	{
-		auto root = scene->GetRootNode();
+    auto scene = m_project->GetScene( sceneName );
+    if( scene && scene->GetRootNode() )
+    {
+        auto root = scene->GetRootNode();
 
-		root->SetVisible( visible );
-		GetEngineNode( root )->SetVisible( visible );
+        root->SetVisible( visible );
+        GetEngineNode( root )->SetVisible( visible );
 
         return true;
-	}
+    }
 
     return false;
 }
@@ -244,9 +244,9 @@ model::SceneModelPtr	BVProjectEditor::AddSceneCopy		( const std::string & sceneN
 //
 bool	BVProjectEditor::MoveScene				( const std::string & sceneName, UInt32 posIdx )
 {
-	if( DetachScene( sceneName ) )
+    if( DetachScene( sceneName ) )
     {
-	    return AttachScene( sceneName, posIdx );
+        return AttachScene( sceneName, posIdx );
     }
 
     return false;
@@ -354,16 +354,16 @@ bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const 
 {
     if( srcSceneName == destSceneName )
     {
-		if( DetachChildNode( srcSceneName, srcNodePath ) )
-		    return AttachChildNode( destSceneName, destNodePath, destIdx );
+        if( DetachChildNode( srcSceneName, srcNodePath ) )
+            return AttachChildNode( destSceneName, destNodePath, destIdx );
     }
     else
     {
         if( AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath ) )
         {
-			DeleteChildNode( srcSceneName, srcNodePath );
+            DeleteChildNode( srcSceneName, srcNodePath );
             DetachChildNode( destSceneName, destNodePath );
-			return AttachChildNode( destSceneName, destNodePath, destIdx );
+            return AttachChildNode( destSceneName, destNodePath, destIdx );
         }
     }
     return false;
@@ -498,8 +498,8 @@ bool            BVProjectEditor::SetNodeVisible				( const std::string & sceneNa
 //
 bool            BVProjectEditor::RenameNode					( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName )
 {
-	auto node = GetNode( sceneName, nodePath );
-	return RenameNode( node, newNodeName );
+    auto node = GetNode( sceneName, nodePath );
+    return RenameNode( node, newNodeName );
 }
 
 // *******************************
@@ -538,9 +538,9 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
 
     if( srcScene == destScene )
     {
-		if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
+        if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
         {
-		    return AttachChildNode( destScene, destParentNode, destIdx );
+            return AttachChildNode( destScene, destParentNode, destIdx );
         }
     }
     else
@@ -560,7 +560,7 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
 //
 bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 idx )
 {
-	auto scene = m_project->GetScene( sceneName );
+    auto scene = m_project->GetScene( sceneName );
 
     model::ITimeEvaluatorPtr timeEval = nullptr;
 
@@ -850,11 +850,11 @@ bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::
         return false;
     }
 
-	bool success = true;
+    bool success = true;
     if( srcScene == destScene )
     {
         if( DetachPlugin( srcNode, pluginName ) )
-	    {
+        {
             return AttachPlugin( destNode, destIdx );
         }
     }
@@ -862,7 +862,7 @@ bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::
     {
        if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName ) )
        {
-	        return DeletePlugin( srcNode, pluginName );
+            return DeletePlugin( srcNode, pluginName );
        }
     }
 
@@ -890,12 +890,12 @@ bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std
 //
 bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConstPtr assetDesc )
 {
-	if( plugin && assetDesc )
-	{
+    if( plugin && assetDesc )
+    {
         auto success = plugin->LoadResource( assetDesc );
         BVProjectTools::ReleaseUnusedResources( m_project->m_renderer );
         return success;
-	}
+    }
 
     return false;
 }
@@ -907,7 +907,7 @@ bool            BVProjectEditor::SetNodeVisible				( model::IModelNodePtr node, 
     if( node )
     {
         node->SetVisible( visible );
-	    GetEngineNode( node )->SetVisible( visible );
+        GetEngineNode( node )->SetVisible( visible );
         return true;
     }
 
@@ -920,7 +920,7 @@ bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, con
 {
     if( node )
     {
-    	QueryTyped( node )->SetName( newNodeName );
+        QueryTyped( node )->SetName( newNodeName );
         return true;
     }
 
@@ -1122,7 +1122,7 @@ bool						BVProjectEditor::SetTimelineWrapPostBehavior	( const std::string & tim
 void                    BVProjectEditor::RefreshNode        (  model::BasicNodePtr modelNode, SceneNode * sceneNode, Renderer * renderer )
 {
     BVProjectTools::ClearSingleNode( sceneNode, renderer );
-	BVProjectTools::SyncSingleNode( modelNode, sceneNode );
+    BVProjectTools::SyncSingleNode( modelNode, sceneNode );
 }
 
 // *******************************
@@ -1210,6 +1210,31 @@ model::IModelNodePtr	BVProjectEditor::FindNode            ( model::BasicNodePtr 
     }
 
     return nullptr;
+}
+
+// ***********************
+// If nullptr, there's no intersection.
+model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection )
+{
+    glm::mat4 transform = glm::mat4( 1 );   // Identity
+    auto result = BVProjectTools::NodeIntersection( m_rootNode, transform, rayStart, rayDirection );
+
+    return result.first;
+}
+
+// ***********************
+//
+bool                    BVProjectEditor::SelectNode              ( model::BasicNodePtr node )
+{
+    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+    
+    bool result = SetNodeEffect( node, newEffect );
+    if( !result )
+        return false;
+    
+    model::ModelState::GetInstance().Select( node.get() );
+
+    return true;
 }
 
 // ***********************

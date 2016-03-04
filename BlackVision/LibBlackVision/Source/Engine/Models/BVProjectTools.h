@@ -55,12 +55,15 @@ public:
     static  void                SyncSingleNode                      ( model::BasicNodePtr modelNode, SceneNode * node );
 
     static  SceneNode *         BuildEngineSceneNode                ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
+    static  RenderableEntity *  BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc );
 
     static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
     
     static void                 ReleaseUnusedResources              ( Renderer * renderer );
 
     static ParamsOfTimelinesMap GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimeEvaluatorPtr sceneTimeline );
+
+    static  std::pair< model::BasicNodePtr, Float32 >   NodeIntersection    ( model::BasicNodePtr modelNode, glm::mat4 & parentInverseTrans, glm::vec3 & rayPoint, glm::vec3 & rayDir );
 
 private:
 
