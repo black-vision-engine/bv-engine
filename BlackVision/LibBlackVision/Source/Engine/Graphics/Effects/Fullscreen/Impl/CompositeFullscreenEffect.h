@@ -4,6 +4,8 @@
 
 #include "Engine/Graphics/Effects/FullScreen/Impl/Graph/FullscreenEffectGraphNode.h"
 
+#include "Engine/Graphics/Effects/Fullscreen/Impl/Graph/InputFullscreenEffectGraphNode.h"
+
 
 namespace bv {
 
@@ -27,7 +29,7 @@ public:
 
     virtual void            SynchronizeInputData        ( FullscreenEffectContext * ctx ) override;
 
-    bool                    AddAdditionalPreLogicInputs ( SizeType numAddFSELoginInputs );
+    bool                    AddAdditionalPreLogicInputs ( const std::vector< InputFullscreenEffectGraphNodePtr > & additionalNodes );
 
     virtual std::vector< IValuePtr >    GetValues       () const override;
 

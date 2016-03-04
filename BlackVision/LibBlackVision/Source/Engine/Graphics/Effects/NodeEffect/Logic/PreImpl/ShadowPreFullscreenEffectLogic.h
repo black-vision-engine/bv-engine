@@ -2,11 +2,15 @@
 
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreFullScreenEffectLogic.h"
 
+#include "Engine/Types/Values/TypedValues.h"
 
 namespace bv { 
 
 class ShadowPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
+private:
+
+    ValueVec2Ptr    m_textureSize;
 
 public:
                 ShadowPreFullscreenEffectLogic        ();

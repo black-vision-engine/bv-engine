@@ -19,13 +19,11 @@ namespace bv
 //
 FullscreenEffect *       ShadowFSECreator::CreateShadowFSE         ( const std::vector< IValuePtr > & values )
 {
-    auto blurSize = ValuesFactory::CreateValueInt( "blurSize", 0 );
+    auto blurSize = ValuesFactory::CreateValueFloat( "blurSize" );
 
     std::vector< IValuePtr > blurValues;
     blurValues.insert( blurValues.begin(), values.begin(), values.end() );
     blurValues.push_back( blurSize );
-    
-    assert( blurValues.size() == 0 );
 
     auto blurEffect = BlurFSECreator::CreateCompositeFSE( blurValues );
 

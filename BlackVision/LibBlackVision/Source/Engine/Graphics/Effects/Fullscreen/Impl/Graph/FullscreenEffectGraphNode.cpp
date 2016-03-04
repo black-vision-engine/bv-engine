@@ -4,6 +4,8 @@
 
 #include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 
+#include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
+
 
 namespace  bv {
 
@@ -40,6 +42,12 @@ void                                                FullscreenEffectGraphNode::A
 void                                                FullscreenEffectGraphNode::AddInput    ( FullscreenEffectGraphNodePtr node )
 {
     m_inputNodes.push_back( node );
+    if( auto composite = dynamic_cast< CompositeFullscreenEffect * >( m_fullscreenEffect ) )
+    {
+        std::vector< FullscreenEffectGraphNodePtr > v( 1 );
+        v[ 0 ] = node;
+        composite->AddAdditionalPreLogicInputs( v );
+    }
 }
 
 // ****************************

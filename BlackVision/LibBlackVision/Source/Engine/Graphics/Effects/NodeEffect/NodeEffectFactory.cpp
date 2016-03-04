@@ -14,6 +14,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/InterlacePreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/RenderOffscreenPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/BlurPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/ShadowPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
@@ -134,6 +135,20 @@ NodeEffectPtr       CreateBlurEffect()
     return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
 }
 
+// **************************
+//
+NodeEffectPtr       CreateShadowEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new ShadowPreFullscreenEffectLogic();
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SHADOW, pre->GetValues() );
+
+    SetLogicComponents( logic, pre, fse, nullptr );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_SHADOW );
+}
+
 } // anonoymnous
 
 
@@ -155,6 +170,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateMixchannelsNodeEffect();
         case NodeEffectType::NET_BLUR:
             return CreateBlurEffect();
+        case NodeEffectType::NET_SHADOW:
+            return CreateShadowEffect();
 
         //Interlace and so on
         default:

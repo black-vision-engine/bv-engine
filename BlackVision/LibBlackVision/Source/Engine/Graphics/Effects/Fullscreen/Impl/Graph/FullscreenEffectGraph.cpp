@@ -58,7 +58,7 @@ void                            FullscreenEffectGraph::SetSinkNode      ( Fullsc
 void                            FullscreenEffectGraph::MarkSourceNode          ( FullscreenEffectGraphNodePtr node )
 {
     assert( m_nodes.find( node ) != m_nodes.end() );
-    assert( node->GetNumInputNodes() == 0 );
+    // assert( node->GetNumInputNodes() == 0 ); // TODO: add better constraint.
 
     m_sourceNodes.push_back( node );
 }

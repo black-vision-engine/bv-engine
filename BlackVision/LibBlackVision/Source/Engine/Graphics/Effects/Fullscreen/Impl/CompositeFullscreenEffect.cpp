@@ -63,14 +63,29 @@ void    CompositeFullscreenEffect::Render                      ( FullscreenEffec
 //
 unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 {
-    unsigned int sum = 0;
+    std::set< FullscreenEffectGraphNodePtr > differentInputs;
 
     for( auto node : m_graph->GetSourceNodes() )
     {
-        sum += node->GetNumInputNodes();
+        auto nodeInputs = node->GetInputVec();
+        differentInputs.insert( nodeInputs.begin(), nodeInputs.end() );
     }
 
-    return sum;
+    auto it = differentInputs.begin();
+
+    //while( it != differentInputs.end() )
+    //{
+    //    if( ( *it )->GetEffect() != nullptr )
+    //    {
+    //        it = differentInputs.erase( it );
+    //    }
+    //    else
+    //    {
+    //        ++it;
+    //    }
+    //}
+
+    return ( unsigned int ) differentInputs.size();
 }
 
 // ****************************
@@ -90,7 +105,10 @@ void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffec
         {
             for( auto in : node->GetInputVec() )
             {
-                assert( in->GetEffect() == nullptr );
+                if( in->GetEffect() != nullptr )
+                {
+                    //continue;
+                }
             }
         }
         
@@ -184,7 +202,7 @@ std::vector< IValuePtr > CompositeFullscreenEffect::GetValues       () const
 
 // ****************************
 //
-bool            CompositeFullscreenEffect::AddAdditionalPreLogicInputs ( SizeType numAddFSELoginInputs )
+bool            CompositeFullscreenEffect::AddAdditionalPreLogicInputs ( const std::vector< InputFullscreenEffectGraphNodePtr > & additionalNodes )
 {
     auto sourceNodes = m_graph->GetSourceNodes();
 
@@ -192,9 +210,9 @@ bool            CompositeFullscreenEffect::AddAdditionalPreLogicInputs ( SizeTyp
     {
         for( auto sn : m_graph->GetSourceNodes() )
         {
-            for( SizeType i = 0; i < numAddFSELoginInputs; ++i )
+            for( auto n : additionalNodes )
             {
-                sn->AddInput( std::shared_ptr< InputFullscreenEffectGraphNode >( new InputFullscreenEffectGraphNode() ) );
+                sn->AddInput( n );
             }
         }
         

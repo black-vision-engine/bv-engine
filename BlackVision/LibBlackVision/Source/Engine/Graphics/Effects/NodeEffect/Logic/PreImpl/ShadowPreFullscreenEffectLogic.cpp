@@ -2,7 +2,11 @@
 
 #include "ShadowPreFullscreenEffectLogic.h"
 
+#include "Engine/Types/Values/ValuesFactory.h"
+
 #include "PreFullscreenEffectLogicUtils.h"
+
+#include "Engine/Graphics/Resources/RenderTarget.h"
 
 namespace bv {
 
@@ -10,6 +14,7 @@ namespace bv {
 //
 ShadowPreFullscreenEffectLogic::ShadowPreFullscreenEffectLogic              ()
 {
+    m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
 }
 
 // *********************************
@@ -25,13 +30,18 @@ void                        ShadowPreFullscreenEffectLogic::RenderImpl    ( Scen
     assert( outputs.size() == 1 );
     
     PFLogicUtils::RenderSceneNodeToRenderTarget( node, ctx, outputs[ 0 ] );
+
+    m_textureSize->SetValue( glm::vec2( outputs[ 0 ]->Width(), outputs[ 0 ]->Height() ) );
 }
 
 // *********************************
 //
 std::vector< IValuePtr >    ShadowPreFullscreenEffectLogic::GetValues     () const
 {
-    return std::vector< IValuePtr >();
+    std::vector< IValuePtr > res( 1 );
+    res[ 0 ] = m_textureSize;
+
+    return res;
 }
 
 // *********************************
