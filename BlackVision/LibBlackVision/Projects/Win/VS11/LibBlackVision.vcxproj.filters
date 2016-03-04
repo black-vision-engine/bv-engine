@@ -274,6 +274,9 @@
     <Filter Include="Engine\Graphics\Rendering\Logic\OfflineRendering">
       <UniqueIdentifier>{f6868f42-ca33-4cfc-9ac9-dc9299fedeaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\FSECreators">
+      <UniqueIdentifier>{311d9919-a16e-4b3d-8281-d849d00bba2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1368,6 +1371,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\PreFullscreenEffectLogicUtils.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ShadowFSE.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3442,6 +3457,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\PreFullscreenEffectLogicUtils.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ShadowFSE.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

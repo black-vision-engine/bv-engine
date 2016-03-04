@@ -56,7 +56,6 @@ void    CompositeFullscreenEffect::Update                      ()
 void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
 {
     SynchronizeInputData( ctx );
-    //->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator()
     RenderGraphNode( m_graph->GetSinkNode(), ctx );
 }
 
@@ -78,8 +77,6 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 //
 void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
 {
-	//->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator()
-
     assert( ctx->AccessInputRenderTargets() != nullptr );
     assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
     

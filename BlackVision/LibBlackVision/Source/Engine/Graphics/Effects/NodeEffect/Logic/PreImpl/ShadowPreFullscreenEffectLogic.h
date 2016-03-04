@@ -2,21 +2,15 @@
 
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreFullScreenEffectLogic.h"
 
-#include "Engine/Types/Values/TypedValues.h"
-
 
 namespace bv { 
 
-class BlurPreFullscreenEffectLogic : public PreFullscreenEffectLogic
+class ShadowPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
-private:
-
-    ValueFloatPtr   m_blurSize;
-    ValueVec2Ptr    m_textureSize;
 
 public:
-                BlurPreFullscreenEffectLogic        ();
-    virtual     ~BlurPreFullscreenEffectLogic       ();
+                ShadowPreFullscreenEffectLogic        ();
+    virtual     ~ShadowPreFullscreenEffectLogic       ();
 
 protected:
 
