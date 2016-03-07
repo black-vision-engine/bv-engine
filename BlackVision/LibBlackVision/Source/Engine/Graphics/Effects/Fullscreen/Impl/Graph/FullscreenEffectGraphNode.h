@@ -34,8 +34,12 @@ public:
 
     virtual unsigned int                                GetNumInputNodes    () const;
 
-    virtual const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec () const; 
+    virtual const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec () const;
+    std::vector< FullscreenEffectGraphNodePtr > &       GetInputVec         ();
 
+    bool                                                CheckProperSourceNode() const;
+
+    void                                                SwapInput           ( FullscreenEffectGraphNodePtr src, FullscreenEffectGraphNodePtr dst );
 };
 
 } //bv

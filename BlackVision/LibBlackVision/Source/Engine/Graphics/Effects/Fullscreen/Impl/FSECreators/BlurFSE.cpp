@@ -15,7 +15,7 @@ namespace bv
 
 // **************************
 //
-FullscreenEffect *       BlurFSECreator::CreateSimpleFSE         ( const std::vector< IValuePtr > & values )
+SimpleFullscreenEffect *       BlurFSECreator::CreateSimpleFSE         ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );
@@ -44,7 +44,7 @@ FullscreenEffect *       BlurFSECreator::CreateSimpleFSE         ( const std::ve
 
 // **************************
 //
-FullscreenEffect *       BlurFSECreator::CreateCompositeFSE      ( const std::vector< IValuePtr > & values )
+CompositeFullscreenEffect *       BlurFSECreator::CreateCompositeFSE      ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );
@@ -88,31 +88,30 @@ FullscreenEffect *       BlurFSECreator::CreateCompositeFSE      ( const std::ve
 
     auto firstPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( firstPass ) );
 
+    auto sourceNode = std::shared_ptr< FullscreenEffectGraphNode >( new InputFullscreenEffectGraphNode() );
+
     auto secondPass = new SimpleFullscreenEffect( fseData1 );
 
     auto secondPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( secondPass ) );
 
     auto graph = new FullscreenEffectGraph();
 
-    std::vector< FullscreenEffectGraphNodePtr > predecessors;
-
-    graph->InsertNode( firstPassNode, predecessors );
-
-    predecessors.push_back( firstPassNode );
-
-    graph->InsertNode( secondPassNode, predecessors );
-    
     auto compositeEffect = new CompositeFullscreenEffect( graph );
 
+    secondPassNode->AddInput( firstPassNode );
+    firstPassNode->AddInput( sourceNode );
+
+    graph->AddNode( secondPassNode );
+
     graph->SetSinkNode( secondPassNode );
-    graph->MarkSourceNode( firstPassNode );
+    graph->MarkSourceNode( sourceNode );
 
     return compositeEffect;
 }
 
 // **************************
 //
-FullscreenEffect *       BlurFSECreator::CreateCompositeOneFSE   ( const std::vector< IValuePtr > & values )
+CompositeFullscreenEffect *       BlurFSECreator::CreateCompositeOneFSE   ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );

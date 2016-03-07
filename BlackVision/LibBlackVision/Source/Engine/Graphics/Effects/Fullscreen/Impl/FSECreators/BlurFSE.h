@@ -5,14 +5,15 @@
 namespace bv
 {
 
-class FullscreenEffect;
+class SimpleFullscreenEffect;
+class CompositeFullscreenEffect;
 
 class BlurFSECreator
 {
 public: 
-    static FullscreenEffect *       CreateSimpleFSE         ( const std::vector< IValuePtr > & values );
-    static FullscreenEffect *       CreateCompositeFSE      ( const std::vector< IValuePtr > & values );
-    static FullscreenEffect *       CreateCompositeOneFSE   ( const std::vector< IValuePtr > & values );
+    static SimpleFullscreenEffect *     CreateSimpleFSE         ( const std::vector< IValuePtr > & values );
+    static CompositeFullscreenEffect *  CreateCompositeFSE      ( const std::vector< IValuePtr > & values );
+    static CompositeFullscreenEffect *  CreateCompositeOneFSE   ( const std::vector< IValuePtr > & values );
 };
 
 } // bv

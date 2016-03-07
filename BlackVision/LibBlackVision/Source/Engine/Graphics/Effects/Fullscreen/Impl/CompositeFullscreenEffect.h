@@ -33,6 +33,8 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues       () const override;
 
+    FullscreenEffectGraph * GetGraph                    ();
+
 private:
 
     void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx );

@@ -42,12 +42,6 @@ void                                                FullscreenEffectGraphNode::A
 void                                                FullscreenEffectGraphNode::AddInput    ( FullscreenEffectGraphNodePtr node )
 {
     m_inputNodes.push_back( node );
-    if( auto composite = dynamic_cast< CompositeFullscreenEffect * >( m_fullscreenEffect ) )
-    {
-        std::vector< FullscreenEffectGraphNodePtr > v( 1 );
-        v[ 0 ] = node;
-        composite->AddAdditionalPreLogicInputs( v );
-    }
 }
 
 // ****************************
@@ -62,6 +56,45 @@ unsigned int                                        FullscreenEffectGraphNode::G
 const std::vector< FullscreenEffectGraphNodePtr > & FullscreenEffectGraphNode::GetInputVec () const
 {
     return m_inputNodes;
+}
+
+// ****************************
+//
+std::vector< FullscreenEffectGraphNodePtr > &       FullscreenEffectGraphNode::GetInputVec ()
+{
+    return m_inputNodes;
+}
+
+// ****************************
+//
+bool                                                FullscreenEffectGraphNode::CheckProperSourceNode() const
+{
+    for( auto n : GetInputVec() )
+    {
+        if( n->GetEffect() != nullptr )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// ****************************
+//
+void                                                FullscreenEffectGraphNode::SwapInput( FullscreenEffectGraphNodePtr src, FullscreenEffectGraphNodePtr dst )
+{
+    for( auto & n : GetInputVec() )
+    {
+        if( n == src )
+        {
+            n = dst;
+        }
+        else
+        {
+            n->SwapInput( src, dst );
+        }
+    }
 }
 
 } //bv

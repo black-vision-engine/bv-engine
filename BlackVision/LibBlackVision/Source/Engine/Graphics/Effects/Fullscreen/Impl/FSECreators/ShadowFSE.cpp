@@ -36,7 +36,7 @@ FullscreenEffect *       ShadowFSECreator::CreateShadowFSE         ( const std::
     fseData.AppendInputTexture( nullptr, "Tex0" );
     fseData.AppendInputTexture( nullptr, "BluredTex0" );
 
-    fseData.AppendValues( values );
+    fseData.AppendValues( blurValues );
     fseData.AppendValue( colorVal );
     fseData.AppendValue( shiftVal );
     fseData.AppendValue( innerVal );
@@ -53,21 +53,23 @@ FullscreenEffect *       ShadowFSECreator::CreateShadowFSE         ( const std::
     // building graph
     auto graph = new FullscreenEffectGraph();
 
-    std::vector< FullscreenEffectGraphNodePtr > predecessors;
-
     auto blurEffectNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( blurEffect ) );
-
-    graph->InsertNode( blurEffectNode, predecessors );
-
-    predecessors.push_back( blurEffectNode );
 
     auto shadowEffectNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( shadowEffect ) );
 
-    graph->InsertNode( shadowEffectNode, predecessors );
+    shadowEffectNode->AddInput( blurEffectNode );
 
-    graph->MarkSourceNode( blurEffectNode );
-    graph->MarkSourceNode( shadowEffectNode );
+    auto sourceNode = std::shared_ptr< FullscreenEffectGraphNode >( new InputFullscreenEffectGraphNode() );
+
+    shadowEffectNode->AddInput( sourceNode );
+    blurEffectNode->AddInput( sourceNode );
+
+    graph->AddNode( shadowEffectNode );
+
+    graph->MarkSourceNode( sourceNode );
     graph->SetSinkNode( shadowEffectNode );
+
+    graph->FlattenGraph();
 
     return new CompositeFullscreenEffect( graph );
 }
