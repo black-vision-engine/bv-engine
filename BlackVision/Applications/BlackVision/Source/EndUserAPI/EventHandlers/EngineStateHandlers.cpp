@@ -5,6 +5,8 @@
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 
+#include "BVConfig.h"
+
 namespace bv
 {
 
@@ -76,8 +78,8 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         assert( mouseX >= 0 );
         assert( mouseY >= 0 );
 
-        Float32 screenWidth = 1920;
-        Float32 screenHeight = 1080;
+        Float32 screenWidth = (Float32)DefaultConfig.DefaultWidth();
+        Float32 screenHeight = (Float32)DefaultConfig.DefaultHeight();
 
         screenHeight /= 2;
         screenWidth /= 2;
@@ -85,7 +87,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         Float32 normMouseX = ( mouseX - screenWidth ) / screenWidth;
         Float32 normMouseY = ( screenHeight - mouseY ) / screenHeight;
 
-        Float32 fovY = glm::half_pi< float >();
+        Float32 fovY = glm::radians( DefaultConfig.FOV() );
         Float32 aspect = screenWidth / screenHeight;
         Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
         

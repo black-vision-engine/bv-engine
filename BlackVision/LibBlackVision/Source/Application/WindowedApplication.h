@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 #include "ApplicationBase.h"
 #include <string>
 #include "Mathematics/glm_inc.h"
@@ -81,6 +82,7 @@ public:
     virtual void	OnTerminate		();
     virtual void	OnMove			( int x, int y );
     virtual void	OnKey		    ( unsigned char c );
+    virtual void    OnMouse         ( MouseAction action, int posX, int posY );
     virtual void	OnResize		( int w, int h );
 
     virtual bool	OnPrecreate     ();
