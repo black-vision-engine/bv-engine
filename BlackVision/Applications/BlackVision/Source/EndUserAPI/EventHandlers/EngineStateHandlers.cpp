@@ -66,14 +66,34 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
     
     bv::MouseEventPtr mouseEvent  = std::static_pointer_cast<bv::MouseEvent>( evt );
     auto command        = mouseEvent->MouseCommand;
-    //auto mouseX         = mouseEvent->MouseX;
-    //auto mouseY         = mouseEvent->MouseY;
+    auto mouseX         = mouseEvent->MouseX;
+    auto mouseY         = mouseEvent->MouseY;
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == MouseEvent::Command::MouseDown )
     {
-        auto node = editor->FindIntersectingNode( glm::vec3( 0.0, 0.0, 0.0 ), glm::vec3( 0.0, 0.0, -1.0 ) );
+        assert( mouseX >= 0 );
+        assert( mouseY >= 0 );
+
+        Float32 screenWidth = 1920;
+        Float32 screenHeight = 1080;
+
+        screenHeight /= 2;
+        screenWidth /= 2;
+
+        Float32 normMouseX = ( mouseX - screenWidth ) / screenWidth;
+        Float32 normMouseY = ( screenHeight - mouseY ) / screenHeight;
+
+        Float32 fovY = glm::half_pi< float >();
+        Float32 aspect = screenWidth / screenHeight;
+        Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
+        
+        glm::vec3 screenSpaceVec( normMouseX * aspect, normMouseY, 0.0f );
+        glm::vec3 rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );
+
+        auto node = editor->FindIntersectingNode( glm::vec3( 0.0, 0.0, 0.0 ), rayDirection );
+        editor->UnselectNodes();
 
         if( node == nullptr )
         {
