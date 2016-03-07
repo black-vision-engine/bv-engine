@@ -18,6 +18,7 @@ public:
 	static bool							Exists				( const std::string & path );
 	static bool							CreateDir			( const std::string & path, bool createRecusive = false );
     static bool							RemoveDir			( const std::string & path );
+	static bool							RenameDir			( const std::string & path,const std::string & newName );
 };
 
 } //bv

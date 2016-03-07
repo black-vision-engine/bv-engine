@@ -575,6 +575,16 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
+	 else if( command == ProjectEvent::Command::RenameFolder )
+    {
+        auto categoryName = request.GetAttribute( "categoryName" );
+        auto path = request.GetAttribute( "path" );
+		auto path2 = request.GetAttribute( "newName" );
+
+        auto success = pm->RenameAssetDir( categoryName, path,path2 );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, success );
+    }
     else
     {
         SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );

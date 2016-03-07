@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2012 for Windows Desktop
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{7A2AC84D-DA2C-4D5A-BA2B-B5BB25F0BD81}"
@@ -129,7 +129,6 @@ Global
 		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|Win32.ActiveCfg = Release|Win32
 		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|Win32.Build.0 = Release|Win32
 		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|x64.ActiveCfg = Release|x64
-		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|x64.Build.0 = Release|x64
 		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Mixed Platforms.Build.0 = Debug|Win32

@@ -106,6 +106,7 @@ public:
     bool                    CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const;
     bool                    CreateSceneDir      ( const Path & path ) const;
     bool                    RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const;
+	bool                    RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
     bool                    RemoveSceneDir      ( const Path & path ) const;
 
     Path                    ToAbsPath           ( const Path & path ) const;

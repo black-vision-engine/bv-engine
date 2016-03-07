@@ -492,6 +492,7 @@ public:
 
         CreateFolder,
         DeleteFolder,
+		RenameFolder,
 
         AddExistingSceneToProject,
         CreateSceneInProject,

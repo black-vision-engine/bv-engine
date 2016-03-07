@@ -1040,6 +1040,23 @@ bool                        ProjectManagerImpl::RemoveAssetDir      ( const std:
     }
 }
 
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameAssetDir      ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+		auto p2 = p.ParentPath() / Path(newName);
+        return Dir::RenameDir( p.Str(),p2.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
 // ********************************
 //
 bool                        ProjectManagerImpl::RemoveSceneDir      ( const Path & path ) const

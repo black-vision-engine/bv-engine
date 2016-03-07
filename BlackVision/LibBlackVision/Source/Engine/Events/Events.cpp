@@ -264,6 +264,7 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
 
     , std::make_pair( ProjectEvent::Command::CreateFolder, "CreateFolder" )
     , std::make_pair( ProjectEvent::Command::DeleteFolder, "DeleteFolder" )
+	, std::make_pair( ProjectEvent::Command::RenameFolder, "RenameFolder" )
 
     , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" ) 
