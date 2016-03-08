@@ -92,10 +92,6 @@ void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffec
         
         ctx->SetFirstRenderTargetIndex( curIdx );
         curIdx++;
-
-        //effect->SynchronizeInputData( ctx );
-
-        //curIdx += effect->GetNumInputs();
     }
 }
 
