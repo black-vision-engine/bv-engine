@@ -338,7 +338,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateBlurTest               ( model::I
 
     root->AddChildToModelOnly( text );
 
-    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
     return root;
 }

@@ -6,6 +6,7 @@
 #include "Engine/Types/Values/TypedValues.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/Graph/InputFullscreenEffectGraphNode.h"
 
 namespace bv {
 
@@ -159,7 +160,14 @@ bool                        FullscreenEffectInstance::AddAdditionalFSELogicInput
 {
     if( auto compositeEffect = std::dynamic_pointer_cast<  CompositeFullscreenEffect >( m_effect ) )
     {
-        if( compositeEffect->AddAdditionalPreLogicInputs( numAddInputs ) )
+        std::vector< InputFullscreenEffectGraphNodePtr > additionalNodes( numAddInputs );
+
+        for( SizeType i = 0; i < numAddInputs; ++i )
+        {
+            additionalNodes[ i ] = std::shared_ptr< InputFullscreenEffectGraphNode >( new InputFullscreenEffectGraphNode() );
+        }
+
+        if( compositeEffect->AddAdditionalPreLogicInputs( additionalNodes ) )
         {
             std::vector< RenderTarget * > additional( numAddInputs );
 

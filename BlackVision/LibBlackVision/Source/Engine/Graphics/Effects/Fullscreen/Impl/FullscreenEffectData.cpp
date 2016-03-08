@@ -91,6 +91,16 @@ void            FullscreenEffectData::AppendValue               ( IValuePtr val 
 
 // **************************
 //
+void            FullscreenEffectData::AppendValues              ( const std::vector< IValuePtr > & values )
+{
+    for( auto val : values )
+    {
+        this->AppendValue( val );
+    }
+}
+
+// **************************
+//
 IValuePtr       FullscreenEffectData::GetValueAt                ( unsigned int i ) const
 {
     assert( i < m_values.size() );

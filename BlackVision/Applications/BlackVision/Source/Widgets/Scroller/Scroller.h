@@ -161,6 +161,7 @@ public:
 	bool			Stop			    ();
 	bool		    Reset				();
     bool            Pause               ();
+    bool            Clear               ();
 
     bool            SmoothStart         ();
     bool            SmoothPause         ();

@@ -147,7 +147,7 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
     auto innerEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "inner", timeEvaluator );
 
     colorEval->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), 0.f );
-    shiftEval->Parameter()->SetVal( glm::vec2( 0.f, 0.f ), 0.f );
+    shiftEval->Parameter()->SetVal( glm::vec2( 0.1f, 0.1f ), 0.f );
     blurSizeEval->Parameter()->SetVal( 5.5f, 0.f );
     normalizeEval->Parameter()->SetVal( 1, 0.f );
     innerEval->Parameter()->SetVal( 0, 0.f );
