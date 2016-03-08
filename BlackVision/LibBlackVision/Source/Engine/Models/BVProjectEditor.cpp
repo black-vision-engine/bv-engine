@@ -1232,9 +1232,24 @@ bool                    BVProjectEditor::SelectNode              ( model::BasicN
     if( !result )
         return false;
     
-    model::ModelState::GetInstance().Select( node.get() );
+    model::ModelState::GetInstance().Select( node );
 
     return true;
+}
+
+// ***********************
+//
+void                    BVProjectEditor::UnselectNodes           ()
+{
+    auto noEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "no effect", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+    auto & selected = model::ModelState::GetInstance().GetSelectedNodes();
+
+    for( auto node : selected )
+    {
+        SetNodeEffect( node, noEffect );
+    }
+
+    model::ModelState::GetInstance().UnselectAll();
 }
 
 // ***********************

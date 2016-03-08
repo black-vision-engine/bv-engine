@@ -81,6 +81,41 @@ LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wPara
 
             return 0;
         }
+        case WM_LBUTTONDOWN:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::LEFT_DOWN, w, h );
+            return 0;
+        }
+        case WM_LBUTTONUP:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::LEFT_UP, w, h );
+            return 0;
+        }
+        case WM_RBUTTONDOWN:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::RIGHT_DOWN, w, h );
+            return 0;
+        }
+        case WM_RBUTTONUP:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::RIGHT_UP, w, h );
+            return 0;
+        }
+        case WM_MOUSEMOVE:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::MOVE, w, h );
+            return 0;
+        }
         case WM_DESTROY:
         {
             GWindowDestroyed = true;

@@ -28,6 +28,8 @@
 
 namespace bv {
 
+
+
 // *******************************
 // 
 void                BVProjectTools::ClearSingleNode                       ( SceneNode * node, Renderer * renderer )
@@ -143,19 +145,44 @@ SceneNode *         BVProjectTools::BuildSingleEngineNode                 ( mode
     return node;
 }
 
+namespace
+{
+    void    MakeReversible( glm::mat4 & matrix )
+    {
+        // If scale component of matrix is 0, replace it with minimal float number near 0.
+
+        if( matrix[ 0 ][ 0 ] == 0.0 )
+            matrix[ 0 ][ 0 ] = std::numeric_limits< float >::epsilon();
+        if( matrix[ 1 ][ 1 ] == 0.0 )
+            matrix[ 1 ][ 1 ] = std::numeric_limits< float >::epsilon();
+        if( matrix[ 2 ][ 2 ] == 0.0 )
+            matrix[ 2 ][ 2 ] = std::numeric_limits< float >::epsilon();
+    }
+
+}   //  annonymous
+
+
 // ***********************
 //
 std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    ( model::BasicNodePtr modelNode, glm::mat4 & parentInverseTrans, glm::vec3 & rayPoint, glm::vec3 & rayDir )
 {
-    auto transformParam = modelNode->GetFinalizePlugin()->GetParamTransform();
     glm::mat4 transform;
-        
-    if( transformParam != nullptr )
-        transform = transformParam->Evaluate();
-    else
-        transform = glm::mat4( 1 ); //  Identity matrix
+    auto transPlugin = modelNode->GetPlugin( "transform" );
 
-    glm::mat4 inverseTransform = glm::inverse( transform ) * parentInverseTrans;
+    if( transPlugin != nullptr )
+    {
+        auto transformParam = modelNode->GetFinalizePlugin()->GetParamTransform();
+        
+        if( transformParam != nullptr )
+            transform = transformParam->Evaluate();
+        else
+            transform = glm::mat4( 1 ); //  Identity matrix
+    }
+
+    MakeReversible( transform );
+    glm::mat4 inverseTransform = glm::inverse( transform );
+
+    inverseTransform = inverseTransform * parentInverseTrans;
     glm::vec3 rayLocalDir = glm::vec3( inverseTransform * glm::vec4( rayDir, 0.0f ) );
     glm::vec3 rayLocalPos = glm::vec3( inverseTransform * glm::vec4( rayPoint, 1.0f ) );
 

@@ -58,6 +58,7 @@ public:
                     ~BlackVisionApp				();
 
     virtual void    OnKey						( unsigned char c ) override;
+    virtual void    OnMouse                     ( MouseAction action, int posX, int posY ) override;
     virtual void    OnPreidle					() override;
     virtual bool    OnIdle						() override;
     virtual void    OnPreMainLoop				() override;

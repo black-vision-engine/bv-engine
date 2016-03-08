@@ -80,6 +80,7 @@ public:
     // Selection and intersection
     model::IModelNodePtr	FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection );
     bool                    SelectNode              ( model::BasicNodePtr node );
+    void                    UnselectNodes           ();
 
 	/* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );

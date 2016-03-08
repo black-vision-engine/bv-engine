@@ -353,6 +353,13 @@ void BVAppLogic::OnKey           ( unsigned char c )
     m_kbdHandler->HandleKey( c, this );
 }
 
+// ***********************
+//
+void BVAppLogic::OnMouse         ( MouseAction action, int posX, int posY )
+{
+    m_kbdHandler->OnMouse( action, posX, posY, this );
+}
+
 // *********************************
 //
 void BVAppLogic::ChangeState     ( BVAppState state )

@@ -1807,8 +1807,8 @@ IEventPtr                MouseEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         MouseEventPtr newEvent      = std::make_shared<MouseEvent>();
-        newEvent->MouseX            = SerializationHelper::String2T<Int32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1 );
-        newEvent->MouseY            = SerializationHelper::String2T<Int32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1 );
+        newEvent->MouseX            = SerializationHelper::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_X_STRING ), -1.0f );
+        newEvent->MouseY            = SerializationHelper::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1.0f );
         newEvent->MouseCommand      = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), MouseEvent::Command::Fail );
 
         return newEvent;

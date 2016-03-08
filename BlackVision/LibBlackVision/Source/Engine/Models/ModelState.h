@@ -12,6 +12,7 @@ namespace model
 {
 
 class IModelNode;
+DEFINE_PTR_TYPE( IModelNode );
 struct NodeState;
 
 class ModelState
@@ -30,10 +31,11 @@ public:
     bool                                RegisterBVProject ( const BVProject * project );
 
     // Node selection
-    bool                                IsSelected      ( IModelNode * node );
-    void                                Select          ( IModelNode * node );
-    bool                                Unselect        ( IModelNode * node );
+    bool                                IsSelected      ( IModelNodePtr node );
+    void                                Select          ( IModelNodePtr node );
+    bool                                Unselect        ( IModelNodePtr node );
     void                                UnselectAll     ();
+    std::set< IModelNodePtr > &         GetSelectedNodes();
 
 private:
     
@@ -46,7 +48,7 @@ private:
     typedef std::map< const IModelNode *, NodeState * > NodeStatesType;
     NodeStatesType                  m_nodeStates;
     const BVProject *               m_project;
-    std::set< IModelNode * >        m_selectedNodes;
+    std::set< IModelNodePtr >       m_selectedNodes;
 };
 
 } // model
