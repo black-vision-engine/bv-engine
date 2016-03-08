@@ -29,6 +29,7 @@ struct ScrollerNodesStates
     void Deacivate		( bv::model::BasicNode * n );
 	void Visible		( bv::model::BasicNode * n );
 	void NotVisible		( bv::model::BasicNode * n );
+    void Clear          ();
 
 	bool IsVisible		( bv::model::BasicNode * n ) const;
 	bool IsActive		( bv::model::BasicNode * n ) const;

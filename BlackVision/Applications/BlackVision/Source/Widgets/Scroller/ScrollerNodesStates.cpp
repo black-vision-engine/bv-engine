@@ -105,6 +105,17 @@ void ScrollerNodesStates::NotVisible		( bv::model::BasicNode * n )
 	//Deacivate( n );
 }
 
+// ***********************
+//
+void ScrollerNodesStates::Clear          ()
+{
+    m_actives.clear();
+    m_nonActives.clear();
+    m_visibles.clear();
+    
+    m_nodesCount = 0;
+}
+
 // *******************************
 //
 bool ScrollerNodesStates::IsVisible		( bv::model::BasicNode * n ) const
