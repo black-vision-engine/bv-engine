@@ -6,6 +6,8 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "Application/ApplicationContext.h"
 
+#include "Engine/Models/ModelState.h"
+
 #include "BVConfig.h"
 
 namespace bv
@@ -122,9 +124,15 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
 
         bool result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ) );
         
+        std::string nodePath = ModelState::GetInstance().QueryNodePath( node.get() );
+        std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
+
         JsonSerializeObject ser;
         PrepareResponseTemplate( ser, command, mouseEvent->SocketID, result );
-        ser.SetAttribute( "ClickedNode", node->GetName() );
+        ser.SetAttribute( "Scene", nodeScene );
+        ser.SetAttribute( "ClickedNode", nodePath );
+
+        SendResponse( ser, mouseEvent->SocketID, mouseEvent->SocketID );
     }
     else if( command == MouseEvent::Command::MouseUp )
     {
