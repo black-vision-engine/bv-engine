@@ -17,9 +17,9 @@ class ModelState
 {
 public:
 
-    const std::string &                 QueryNodeScene  ( const IModelNode * node ) const;
+    std::string                         QueryNodeScene  ( const IModelNode * node ) const;
     const IModelNode *                  QueryNodeParent ( const IModelNode * node ) const;
-    const std::string &                 QueryNodePath   ( const IModelNode * node ) const;
+    std::string                         QueryNodePath   ( const IModelNode * node ) const;
 
     bool                                RegisterNode    ( const IModelNode * node, const IModelNode * parent );
     bool                                UnregisterNode  ( const IModelNode * node );
@@ -31,6 +31,7 @@ public:
 private:
     
     std::string                         RestoreNodePath ( const IModelNode * node, std::string * sceneName ) const;
+    const NodeState *                   GetNodeState    ( const IModelNode * node ) const;
 
 
     ModelState  ();

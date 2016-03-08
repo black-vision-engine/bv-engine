@@ -500,7 +500,7 @@ unsigned int    BasicNode::GetNumPlugins                    () const
 //
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
-	m_children.push_back( n );
+    AddChildToModelOnly( n, ( UInt32 ) m_children.size() );
 }
 
 // ********************************
