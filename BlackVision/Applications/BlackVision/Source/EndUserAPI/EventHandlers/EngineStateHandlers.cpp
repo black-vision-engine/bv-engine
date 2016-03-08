@@ -93,8 +93,9 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         
         glm::vec3 screenSpaceVec( normMouseX * aspect, normMouseY, 0.0f );
         glm::vec3 rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );
-
-        auto node = editor->FindIntersectingNode( glm::vec3( 0.0, 0.0, 0.0 ), rayDirection );
+        glm::vec3 cameraPos = DefaultConfig.CameraPosition();
+        
+        auto node = editor->FindIntersectingNode( cameraPos, rayDirection );
         editor->UnselectNodes();
 
         if( node == nullptr )
