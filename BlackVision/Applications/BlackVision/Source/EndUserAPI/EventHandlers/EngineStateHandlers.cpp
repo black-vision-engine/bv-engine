@@ -4,6 +4,7 @@
 #include "EventHandlerHelpers.h"
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Application/ApplicationContext.h"
 
 #include "BVConfig.h"
 
@@ -75,11 +76,14 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
 
     if( command == MouseEvent::Command::MouseDown )
     {
+        // Fixme: move this code in different place in future, when camera will be
+        // handle properly.
+
         assert( mouseX >= 0 );
         assert( mouseY >= 0 );
 
-        Float32 screenWidth = (Float32)DefaultConfig.DefaultWidth();
-        Float32 screenHeight = (Float32)DefaultConfig.DefaultHeight();
+        Float32 screenWidth = (Float32)ApplicationContext::Instance().GetWidth();
+        Float32 screenHeight = (Float32)ApplicationContext::Instance().GetHeight();
 
         screenHeight /= 2;
         screenWidth /= 2;
@@ -87,14 +91,26 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         Float32 normMouseX = ( mouseX - screenWidth ) / screenWidth;
         Float32 normMouseY = ( screenHeight - mouseY ) / screenHeight;
 
-        Float32 fovY = glm::radians( DefaultConfig.FOV() );
         Float32 aspect = screenWidth / screenHeight;
-        Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
-        
         glm::vec3 screenSpaceVec( normMouseX * aspect, normMouseY, 0.0f );
-        glm::vec3 rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );
-        glm::vec3 cameraPos = DefaultConfig.CameraPosition();
+
+        glm::vec3 rayDirection;
+        glm::vec3 cameraPos;
         
+        if( DefaultConfig.IsCameraPerspactive() )
+        {
+            Float32 fovY = glm::radians( DefaultConfig.FOV() );
+            Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
+
+            rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );
+            cameraPos = DefaultConfig.CameraPosition();
+        }
+        else
+        {
+            rayDirection = glm::vec3( 0.0, 0.0, -1.0 );
+            cameraPos = DefaultConfig.CameraPosition() + screenSpaceVec;
+        }
+
         auto node = editor->FindIntersectingNode( cameraPos, rayDirection );
         editor->UnselectNodes();
 

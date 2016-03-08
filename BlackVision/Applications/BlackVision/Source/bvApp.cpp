@@ -149,6 +149,14 @@ void BlackVisionApp::OnTerminate        ()
     WindowedApplication::OnTerminate();
 }
 
+// ***********************
+//
+void	BlackVisionApp::OnResize        ( int w, int h )
+{
+    WindowedApplication::OnResize( w, h );
+    ApplicationContext::Instance().SetResolution( w, h );
+}
+
 // *********************************
 //
 void    BlackVisionApp::UpdateSubsystems    ( unsigned long millis )
