@@ -147,13 +147,18 @@ SceneNode *         BVProjectTools::BuildSingleEngineNode                 ( mode
 //
 std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    ( model::BasicNodePtr modelNode, glm::mat4 & parentInverseTrans, glm::vec3 & rayPoint, glm::vec3 & rayDir )
 {
-    auto transformParam = modelNode->GetFinalizePlugin()->GetParamTransform();
     glm::mat4 transform;
+    auto transPlugin = modelNode->GetPlugin( "transform" );
+
+    if( transPlugin != nullptr )
+    {
+        auto transformParam = modelNode->GetFinalizePlugin()->GetParamTransform();
         
-    if( transformParam != nullptr )
-        transform = transformParam->Evaluate();
-    else
-        transform = glm::mat4( 1 ); //  Identity matrix
+        if( transformParam != nullptr )
+            transform = transformParam->Evaluate();
+        else
+            transform = glm::mat4( 1 ); //  Identity matrix
+    }
 
     glm::mat4 inverseTransform = glm::inverse( transform ) * parentInverseTrans;
     glm::vec3 rayLocalDir = glm::vec3( inverseTransform * glm::vec4( rayDir, 0.0f ) );
