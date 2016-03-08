@@ -64,6 +64,7 @@ public:
     virtual void    OnPreMainLoop				() override;
     virtual bool    OnInitialize				() override;
     virtual void    OnTerminate					() override;
+    virtual void	OnResize		            ( int w, int h ) override;
 
 private:
 
