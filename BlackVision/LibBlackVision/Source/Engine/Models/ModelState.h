@@ -22,6 +22,7 @@ public:
     std::string                         QueryNodeScene  ( const IModelNode * node ) const;
     const IModelNode *                  QueryNodeParent ( const IModelNode * node ) const;
     std::string                         QueryNodePath   ( const IModelNode * node ) const;
+    std::string                         BuildIndexPath  ( const IModelNode * node );
 
     bool                                RegisterNode    ( const IModelNode * node, const IModelNode * parent );
     bool                                UnregisterNode  ( const IModelNode * node );

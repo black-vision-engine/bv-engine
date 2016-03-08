@@ -124,7 +124,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
 
         bool result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ) );
         
-        std::string nodePath = ModelState::GetInstance().QueryNodePath( node.get() );
+        std::string nodePath = ModelState::GetInstance().BuildIndexPath( node.get() );
         std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
 
         JsonSerializeObject ser;

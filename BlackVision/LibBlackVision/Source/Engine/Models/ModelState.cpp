@@ -65,6 +65,27 @@ std::string                         ModelState::QueryNodePath   (  const IModelN
     }
 }
 
+// ***********************
+//
+std::string                         ModelState::BuildIndexPath  ( const IModelNode * node )
+{
+    auto parent = static_cast< const BasicNode * >( QueryNodeParent( node ) );
+    if( parent == nullptr )
+        return node->GetName();
+
+    for( UInt32 i = 0; i < parent->GetNumChildren(); ++i )
+    {
+        if( parent->GetChild( i ) == node )
+        {
+            std::string indexPath = BuildIndexPath( parent ) +  "#" + SerializationHelper::T2String( i );
+            return indexPath;
+        }
+    }
+
+    assert( false );
+    return "";
+}
+
 // ********************************
 //
 namespace
