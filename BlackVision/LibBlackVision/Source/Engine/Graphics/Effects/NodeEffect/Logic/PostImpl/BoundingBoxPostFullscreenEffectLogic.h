@@ -26,11 +26,6 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues                           () const override;
 
-private:
-
-    void                                EnableBoundingBoxEffect               ( Renderer * renderer, SceneNode * node );
-    void                                DrawWirefreameNodeOnly              ( Renderer * renderer, SceneNode * node );
-
 };
 
 } //bv

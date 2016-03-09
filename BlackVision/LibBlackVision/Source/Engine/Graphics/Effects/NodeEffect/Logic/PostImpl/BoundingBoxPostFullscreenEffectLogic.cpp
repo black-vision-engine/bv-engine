@@ -53,23 +53,4 @@ std::vector< IValuePtr >    BoundingBoxPostFullscreenEffectLogic::GetValues     
     return std::vector< IValuePtr >();
 }
 
-// *********************************
-//
-void    BoundingBoxPostFullscreenEffectLogic::EnableBoundingBoxEffect               ( Renderer * renderer, SceneNode * node )
-{
-    // FIXME: add IValues to the effect
-    //auto pass = m_effect->GetPass( 0 );
-
-    renderer->Enable( m_effect->GetPass( 0 ), static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
-}
-
-// *********************************
-//
-void    BoundingBoxPostFullscreenEffectLogic::DrawWirefreameNodeOnly              ( Renderer * renderer, SceneNode * node )
-{
-    auto renderable = static_cast< bv::RenderableEntityWithBoundingBox * >( node->GetTransformable() );
-
-    renderer->DrawRenderable( renderable );
-}
-
 } //bv
