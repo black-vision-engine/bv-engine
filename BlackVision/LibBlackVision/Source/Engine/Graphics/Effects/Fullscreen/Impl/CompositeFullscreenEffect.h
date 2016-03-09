@@ -36,10 +36,13 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues       () const override;
 
-    FullscreenEffectGraph * GetGraph                    ();
+    virtual void                        AddTexture      ( const ITextureDescriptorConstPtr & txDesc ) override;
+
+    FullscreenEffectGraph *             GetGraph        ();
 
 private:
 
+    void            AddTexture                  ( FullscreenEffectGraphNodePtr node, const ITextureDescriptorConstPtr & txDesc );
     void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx );
     void            Update                      ( FullscreenEffectGraphNodePtr node );
 

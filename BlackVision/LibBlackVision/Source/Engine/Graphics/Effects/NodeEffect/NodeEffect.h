@@ -2,7 +2,6 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-
 namespace bv {
 
 enum class NodeEffectType : int
@@ -25,6 +24,8 @@ enum class NodeEffectType : int
 class NodeEffectLogic;
 class SceneNode;
 class RenderLogicContext;
+class ITextureDescriptor;
+DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
 
 class NodeEffect
 {
@@ -48,6 +49,7 @@ public:
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
     IValuePtr       GetValue                    ( const std::string & name ) const;
 
+    void            AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
 };
 
 DEFINE_PTR_TYPE(NodeEffect)

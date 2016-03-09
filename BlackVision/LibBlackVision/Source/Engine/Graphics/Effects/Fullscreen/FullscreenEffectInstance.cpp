@@ -156,30 +156,9 @@ void                        FullscreenEffectInstance::Update                    
 
 // **************************
 //
-bool                        FullscreenEffectInstance::AddAdditionalFSELogicInputs ( SizeType numAddInputs )
+void                        FullscreenEffectInstance::AddTexture                  ( const ITextureDescriptorConstPtr & txDesc )
 {
-    if( auto compositeEffect = std::dynamic_pointer_cast<  CompositeFullscreenEffect >( m_effect ) )
-    {
-        std::vector< InputFullscreenEffectGraphNodePtr > additionalNodes( numAddInputs );
-
-        for( SizeType i = 0; i < numAddInputs; ++i )
-        {
-            additionalNodes[ i ] = std::shared_ptr< InputFullscreenEffectGraphNode >( new InputFullscreenEffectGraphNode() );
-        }
-
-        if( compositeEffect->AddAdditionalPreLogicInputs( additionalNodes ) )
-        {
-            std::vector< RenderTarget * > additional( numAddInputs );
-
-            m_inputRenderTargets.insert( m_inputRenderTargets.begin(), additional.begin(), additional.end() );
-
-            assert( m_inputRenderTargets.size() == compositeEffect->GetNumInputs() );
-
-            return true;
-        }
-    }
-
-    return false;
+    m_effect->AddTexture( txDesc );
 }
 
 } //bv

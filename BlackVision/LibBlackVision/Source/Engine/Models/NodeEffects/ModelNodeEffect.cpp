@@ -2,7 +2,7 @@
 
 #include "ModelNodeEffect.h"
 #include "Serialization/SerializationHelper.h"
-
+#include "Assets/Assets.h"
 
 namespace bv { namespace model {
 
@@ -79,6 +79,22 @@ const std::vector< IValueConstPtr > &       ModelNodeEffect::GetValues          
 IModelNodeEffectPtr                         ModelNodeEffect::Create             ( NodeEffectType type )
 {
     return std::make_shared< ModelNodeEffect >( type );
+}
+
+// ********************************
+//
+bool                                        ModelNodeEffect::AddAsset               ( const AssetDescConstPtr & assetDesc )
+{
+    m_assetsDescs.push_back( assetDesc );
+    return true;
+}
+
+
+// ********************************
+//
+AssetDescVec                                ModelNodeEffect::GetAssets          () const
+{
+    return m_assetsDescs;
 }
 
 } // model

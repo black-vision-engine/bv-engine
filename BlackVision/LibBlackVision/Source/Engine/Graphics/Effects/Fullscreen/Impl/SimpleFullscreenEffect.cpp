@@ -29,6 +29,8 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat3.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat4.h"
 
+#include "Engine/Models/Interfaces/ITextureDescriptor.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 namespace  bv {
@@ -331,5 +333,18 @@ void                SimpleFullscreenEffect::Update              ()
     }
 }
 
+// **************************
+//
+void            SimpleFullscreenEffect::AddTexture   ( const ITextureDescriptorConstPtr & txDesc )
+{
+    auto tx2d = std::make_shared< Texture2D >( txDesc->GetFormat(), txDesc->GetWidth(), txDesc->GetHeight(), txDesc->GetSemantic(), txDesc->GetNumLevels() );
+
+    for( UInt32 i = 0; i < txDesc->GetNumLevels(); ++i )
+    {
+        tx2d->SetData( txDesc->GetBits( i ), i );
+    }
+
+    m_data.AppendInputTexture( tx2d, txDesc->GetName() );
+}
 
 } //bv

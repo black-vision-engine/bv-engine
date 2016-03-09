@@ -24,6 +24,8 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+
 #include "Engine/Models/BoundingVolume.h"
 
 namespace bv {
@@ -114,6 +116,8 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     }
 
     node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
+
+    UpdateEffectAssetData( node, modelNode );
 }
 
 // *******************************
@@ -502,5 +506,26 @@ ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model
     return ret;
 }
 
+// ***********************
+//
+void                 BVProjectTools::UpdateEffectAssetData               ( SceneNode * node, model::BasicNodePtr modelNode )
+{
+    auto effect = node->GetNodeEffect();
+    auto modelEffect = modelNode->GetNodeEffect();
+
+    if( modelEffect != nullptr )
+    {
+        for( auto ad : modelEffect->GetAssets() )
+        {
+            if( ad->GetUID() == TextureAssetDesc::UID() )
+            {
+                auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( ad );
+                auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "" );
+
+            
+            }
+        }
+    }
+}
 
 } //bv

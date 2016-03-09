@@ -8,6 +8,9 @@ namespace bv {
 class RenderTarget;
 class RenderLogicContext;
 
+class ITextureDescriptor;
+DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
+
 class FullscreenEffectInstance
 {
 private:
@@ -37,7 +40,7 @@ public:
     bool                        SetValue                    ( const std::string & name, int value );
     bool                        SetValue                    ( const std::string & name, float value );
 
-    bool                        AddAdditionalFSELogicInputs ( SizeType numAddInputs );
+    void                        AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
 
 private:
 

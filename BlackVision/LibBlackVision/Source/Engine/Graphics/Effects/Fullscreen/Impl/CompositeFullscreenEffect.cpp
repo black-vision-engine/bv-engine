@@ -200,4 +200,24 @@ FullscreenEffectGraph * CompositeFullscreenEffect::GetGraph             ()
     return m_graph;
 }
 
+// **************************
+//
+void            CompositeFullscreenEffect::AddTexture   ( const ITextureDescriptorConstPtr & txDesc )
+{
+    AddTexture( m_graph->GetSinkNode(), txDesc );
+}
+
+// **************************
+//
+void            CompositeFullscreenEffect::AddTexture   ( FullscreenEffectGraphNodePtr node, const ITextureDescriptorConstPtr & txDesc )
+{
+    for( auto input : node->GetInputVec() )
+    {
+        AddTexture( input, txDesc );
+    }
+
+    node->GetEffect()->AddTexture( txDesc );
+}
+
+
 } //bv
