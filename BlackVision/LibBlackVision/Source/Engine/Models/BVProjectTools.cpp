@@ -520,9 +520,9 @@ void                 BVProjectTools::UpdateEffectAssetData               ( Scene
             if( ad->GetUID() == TextureAssetDesc::UID() )
             {
                 auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( ad );
-                auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "" );
+                auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "Mask0" );
 
-            
+                effect->AddTexture( defTexDesc );
             }
         }
     }

@@ -40,6 +40,8 @@
 
 #include "BVConfig.h"
 
+#include "ProjectManager.h"
+
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
@@ -370,22 +372,32 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateImageMaskTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
     //bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
     //bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
     //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
-    auto root = bTex.CreateNode( "root", true );
+    //auto image = bTex.CreateNode( "image", true );
+    auto text = CreateTextNode( timeEvaluator, 0, false );
 
-    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "image mask", timeEvaluator ) );
+    auto effect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "image mask", timeEvaluator );
 
-    //auto text = CreateTextNode( timeEvaluator, 0, false );
+    auto pm = ProjectManager::GetInstance();
 
-    //root->AddChildToModelOnly( text );
+    auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
+
+    effect->AddAsset( desc );
+
+    //text->SetNodeEffect( effect );
+
+
+
+
+    //root->AddChildToModelOnly( image );
 
     //text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
     //text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
-    return root;
+    return text;
 }
 
 // *****************************
