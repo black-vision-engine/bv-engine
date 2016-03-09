@@ -167,6 +167,14 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
 
 // **************************
 //
+IModelNodeEffectPtr         CreateImageMaskModelNodeEffect              ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+    { name; }
+    return ModelNodeEffect::Create( NodeEffectType::NET_IMAGE_MASK );
+}
+
+// **************************
+//
 IModelNodeEffectPtr         CreateBoundingBoxModelNodeEffect          ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     { name; }
@@ -197,6 +205,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             return CreateShadowModelNodeEffect( name, timeEvaluator );
         case NodeEffectType::NET_BOUNDING_BOX:
             return CreateBoundingBoxModelNodeEffect( name, timeEvaluator );
+        case NodeEffectType::NET_IMAGE_MASK:
+            return CreateImageMaskModelNodeEffect( name, timeEvaluator );
         default:
             assert( false );
     }

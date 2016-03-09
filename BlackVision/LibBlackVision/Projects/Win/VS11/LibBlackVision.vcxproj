@@ -180,6 +180,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectInstance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\CompositeFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ImageMaskFSE.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ShadowFSE.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenEffectData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.cpp" />
@@ -199,6 +200,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ImageMaskPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\PreFullscreenEffectLogicUtils.cpp" />
@@ -492,6 +494,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectInstance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\CompositeFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ImageMaskFSE.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ShadowFSE.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenEffectData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.h" />
@@ -501,6 +504,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ImageMaskPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\PreFullscreenEffectLogicUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
