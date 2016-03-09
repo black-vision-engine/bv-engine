@@ -8,6 +8,7 @@ namespace bv {
 
 class IDeserializer
 {
+    friend class ISerializer;
 private:
 protected:
 public:
@@ -34,6 +35,9 @@ public:
     virtual bool                ExitChild           () const = 0;
 
     virtual IDeserializer*      DetachBranch        ( const std::string & name ) = 0;
+    virtual bool                AttachBranch        ( const std::string & name, ISerializer * ser ) = 0;
+
+    virtual ISerializer *       CreateSerializer    () const = 0;
 };
 
 

@@ -1000,6 +1000,50 @@ template<> std::string                  SerializationHelper::T2String  ( const M
 DEFINE_PTR_TYPE( MouseEvent )
 
 
+// ************************************* SceneVariableEvent *************************************
+class SceneVariableEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        AddVariable,
+        GetVariable,
+        DeleteVariable,
+        Fail            ///< Wrong command
+    } Command;
+private:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+
+    Command                     VariableCommand;
+    std::string                 SceneName;
+    std::string                 VariableName;
+    IDeserializer *             VariableContent;
+
+public:
+    explicit                        SceneVariableEvent  (){ VariableContent = nullptr; }
+                                    ~SceneVariableEvent (){ delete VariableContent; }
+
+    virtual void                    Serialize           ( ISerializer & ser ) const;
+    static IEventPtr                Create              ( IDeserializer & deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string &            Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> SceneVariableEvent::Command      SerializationHelper::String2T  ( const std::string& s, const SceneVariableEvent::Command& defaultVal );
+template<> std::string                      SerializationHelper::T2String  ( const SceneVariableEvent::Command & t );
+
+DEFINE_PTR_TYPE( SceneVariableEvent )
+
+
+
 // ************************************* HightmapEvent *************************************
 class HightmapEvent : public RemoteEvent
 {

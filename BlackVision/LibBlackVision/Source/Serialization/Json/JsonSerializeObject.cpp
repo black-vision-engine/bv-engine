@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "JsonSerializeObject.h"
+#include "JsonDeserializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
@@ -14,6 +15,15 @@ namespace bv
 JsonSerializeObject::JsonSerializeObject()
     :   m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) ),
         m_root( Json::objectValue )
+{
+    m_currentNode = &m_root;
+}
+
+// ***********************
+//
+JsonSerializeObject::JsonSerializeObject( Json::Value && initValue )
+    :   m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) ),
+        m_root( initValue )
 {
     m_currentNode = &m_root;
 }
@@ -49,7 +59,7 @@ SerializeContext* JsonSerializeObject::GetSerializeContext() const
 
 // ***********************
 //
-Json::Value JsonSerializeObject::GetJson()
+Json::Value JsonSerializeObject::GetJson() const
 {
     return m_root;
 }
@@ -147,6 +157,37 @@ void                JsonSerializeObject::EnterArray          ( const std::string
 
     //(*m_currentNode)[ name ][ size ] = Json::ValueType::objectValue;
     
+}
+
+
+// ***********************
+//
+bool                JsonSerializeObject::AttachBranch        ( const std::string & name, const ISerializer * ser )
+{
+    assert( typeid( *ser ) == typeid( *this ) );
+    auto typedSer = static_cast< const JsonSerializeObject * >( ser );
+
+    assert( m_currentNode->isObject() );
+    assert( (*m_currentNode)[ name ] == Json::Value( Json::nullValue ) );
+
+    (*m_currentNode)[ name ] = typedSer->GetJson();
+
+    return true;
+}
+
+// ***********************
+//
+bool                JsonSerializeObject::AttachBranch        ( const std::string & name, const IDeserializer * ser )
+{
+    assert( typeid( *ser ) == typeid( *this ) );
+    auto typedSer = static_cast< const JsonDeserializeObject * >( ser );
+
+    assert( m_currentNode->isObject() );
+    assert( (*m_currentNode)[ name ] == Json::Value( Json::nullValue ) );
+
+    (*m_currentNode)[ name ] = typedSer->GetJson();
+
+    return true;
 }
 
 // ***********************
