@@ -44,7 +44,7 @@ void    ShaderParameters::AddParameter                      ( GenericShaderParam
 //
 void               ShaderParameters::AddTexture             ( Texture2DPtr texture, SamplerShaderParametersPtr samplerParams )
 {
-	m_textures.push_back( std::make_pair( texture, samplerParams ) );
+    m_textures.push_back( std::make_pair( texture, samplerParams ) );
 }
 
 // ***************************
@@ -52,7 +52,7 @@ void               ShaderParameters::AddTexture             ( Texture2DPtr textu
 void              ShaderParameters::SetTexture              ( unsigned int idx, Texture2DPtr texture )
 {
     assert( idx < m_textures.size() );
-	m_textures[ idx ].first = texture;
+    m_textures[ idx ].first = texture;
 }
 
 // ***************************
@@ -60,7 +60,7 @@ void              ShaderParameters::SetTexture              ( unsigned int idx, 
 void              ShaderParameters::SetSamplerParameters    ( unsigned int idx, SamplerShaderParametersPtr samplerParams )
 {
     assert( idx < m_textures.size() );
-	m_textures[ idx ].second = samplerParams;
+    m_textures[ idx ].second = samplerParams;
 }
 
 } //bv

@@ -14,6 +14,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/InterlacePreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/RenderOffscreenPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/BlurPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/ShadowPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
@@ -21,6 +22,7 @@
 //POST
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/DefaultPostFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/WireframePostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/BoundingBoxPostFullscreenEffectLogic.h"
 
 
 namespace bv {
@@ -119,7 +121,21 @@ NodeEffectPtr       CreateMixchannelsNodeEffect()
 
     return CreateNodeEffect( logic, NodeEffectType::NET_MIX_CHANNELS );
 }
- 
+
+// **************************
+//
+NodeEffectPtr       CreateBoundingBoxNodeEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new DefaultPreFullscreenEffectLogic();
+    auto post = new BoundingBoxPostFullscreenEffectLogic();
+
+    SetLogicComponents( logic, pre, nullptr, post );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_BOUNDING_BOX );
+}
+
 // **************************
 //
 NodeEffectPtr       CreateBlurEffect()
@@ -132,6 +148,20 @@ NodeEffectPtr       CreateBlurEffect()
     SetLogicComponents( logic, pre, fse, nullptr );
 
     return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
+}
+
+// **************************
+//
+NodeEffectPtr       CreateShadowEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new ShadowPreFullscreenEffectLogic();
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SHADOW, pre->GetValues() );
+
+    SetLogicComponents( logic, pre, fse, nullptr );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_SHADOW );
 }
 
 } // anonoymnous
@@ -153,8 +183,12 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateWireframeNodeEffect();
         case NodeEffectType::NET_MIX_CHANNELS:
             return CreateMixchannelsNodeEffect();
+        case NodeEffectType::NET_BOUNDING_BOX:
+            return CreateBoundingBoxNodeEffect();
         case NodeEffectType::NET_BLUR:
             return CreateBlurEffect();
+        case NodeEffectType::NET_SHADOW:
+            return CreateShadowEffect();
 
         //Interlace and so on
         default:

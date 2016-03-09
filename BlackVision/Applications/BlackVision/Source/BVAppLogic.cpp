@@ -105,7 +105,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
-	, m_solution( model::TimelineManager::GetInstance() )
+    , m_solution( model::TimelineManager::GetInstance() )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -154,12 +154,12 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-	m_bvProject->GetProjectEditor()->RemoveAllScenes();
+    m_bvProject->GetProjectEditor()->RemoveAllScenes();
 
     for( auto p : pathVec )
     {
         auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
-		m_bvProject->GetProjectEditor()->AddScene( scene );
+        m_bvProject->GetProjectEditor()->AddScene( scene );
     }
 
     InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
@@ -178,8 +178,8 @@ void BVAppLogic::LoadScene          ( void )
             //m_solution.SetTimeline(m_timelineManager);
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
 
-			auto sceneModel = SceneModel::Create( "root", m_renderer->GetCamera() );
-			projectEditor->AddScene( sceneModel );
+            auto sceneModel = SceneModel::Create( "root", m_renderer->GetCamera() );
+            projectEditor->AddScene( sceneModel );
 
             projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
 
@@ -216,7 +216,7 @@ void BVAppLogic::LoadScene          ( void )
         {
             auto sceneName = "sceneFromEnv: " + GetEnvScene();
 
-	        sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
+            sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
             projectEditor->AddScene( sceneModel );
 
             auto defaultTimeline = projectEditor->GetSceneDefaultTimeline( sceneModel );
@@ -232,7 +232,7 @@ void BVAppLogic::LoadScene          ( void )
 //
 void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 {
-	auto cam = new Camera( DefaultConfig.IsCameraPerspactive() );
+    auto cam = new Camera( DefaultConfig.IsCameraPerspactive() );
 
     cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
     
@@ -245,11 +245,11 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
         cam->SetViewportSize( w, h );
     }
 
-	//FIXME: nobody owns camera right now.. so it will be deleted here instead of scene model
-	if( m_renderer->GetCamera() )
-	{
-		delete m_renderer->GetCamera();
-	}
+    //FIXME: nobody owns camera right now.. so it will be deleted here instead of scene model
+    if( m_renderer->GetCamera() )
+    {
+        delete m_renderer->GetCamera();
+    }
 
     m_renderer->SetCamera( cam );
 
@@ -261,7 +261,7 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
     m_renderMode.SetStartTime( millis );
-	m_bvProject->SetStartTime( millis );
+    m_bvProject->SetStartTime( millis );
 }
 
 // *********************************
@@ -302,26 +302,26 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
             {
                 HPROFILER_SECTION( "Refresh Video Input", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Video input" );
-		        RefreshVideoInputScene();
+                RefreshVideoInputScene();
             }
 
             {
                 static auto last_time = (float) time;
 
-				HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
+                HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
                 m_renderLogic->RenderFrame( renderer, m_bvProject->GetEngineSceneRoot() );
      
-				if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
-				{
-					//printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );
-					auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
-					printf( "DROP: %.4f ms, cur time: %.4f ms, dropped %d frames\n", last_time * 1000.f, time * 1000.f, droppedFrames );
-				}
+                if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
+                {
+                    //printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );
+                    auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
+                    printf( "DROP: %.4f ms, cur time: %.4f ms, dropped %d frames\n", last_time * 1000.f, time * 1000.f, droppedFrames );
+                }
 
-				last_time = time;
+                last_time = time;
 
-			}
+            }
         }
     }
 
@@ -351,6 +351,13 @@ void BVAppLogic::RefreshVideoInputScene()
 void BVAppLogic::OnKey           ( unsigned char c )
 {
     m_kbdHandler->HandleKey( c, this );
+}
+
+// ***********************
+//
+void BVAppLogic::OnMouse         ( MouseAction action, int posX, int posY )
+{
+    m_kbdHandler->OnMouse( action, posX, posY, this );
 }
 
 // *********************************

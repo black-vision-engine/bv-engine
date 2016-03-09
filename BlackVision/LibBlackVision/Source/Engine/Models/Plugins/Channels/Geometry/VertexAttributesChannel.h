@@ -9,7 +9,6 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
-
 namespace bv { namespace model
 {
 
@@ -22,14 +21,14 @@ protected:
 
     VertexAttributesChannelDescriptor               m_desc;
 
-    std::vector< ConnectedComponentPtr >            m_connectedComponents;
     PrimitiveType                                   m_primitiveType;
+    std::vector< ConnectedComponentPtr >            m_connectedComponents;
 
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
 
-	UInt64											m_attributesUpdateID;
-	UInt64											m_topologyUpdateID;
+    UInt64											m_attributesUpdateID;
+    UInt64											m_topologyUpdateID;
 
 public:
                                                         VertexAttributesChannel         ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
@@ -43,12 +42,11 @@ public:
     //IVertexAttributesChannel
     virtual bool                                        IsTimeInvariant         () const override;
 
-	virtual UInt64										GetAttributesUpdateID	() const override;
-	virtual UInt64										GetTopologyUpdateID		() const override;
+    virtual UInt64										GetAttributesUpdateID	() const override;
+    virtual UInt64										GetTopologyUpdateID		() const override;
 
-	void												SetAttributesUpdateID	( UInt64 updateID );
-	void												SetTopologyUpdateID		( UInt64 updateID );
-
+    void												SetAttributesUpdateID	( UInt64 updateID );
+    void												SetTopologyUpdateID		( UInt64 updateID );
 
     virtual unsigned int                                TotalNumVertices        () const override;
 
@@ -69,7 +67,7 @@ public:
 
     void                                                ClearAll                ();
     
-	void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
+    void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
 
 protected:
 

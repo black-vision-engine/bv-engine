@@ -40,8 +40,8 @@ private:
 
     SimpleTimer                 m_timer;
 
-	//pablito
-	bv::videocards::VideoCardManager m_videoCardManager;
+    //pablito
+    bv::videocards::VideoCardManager m_videoCardManager;
 public:
 
     static bool			m_sWindowedApplicationInitialized;
@@ -49,7 +49,7 @@ public:
 public:
 
     static void			StaticInitializer		();
-	static void			LoggerInitializer		();
+    static void			LoggerInitializer		();
     static bool			RegisterInitializer		();
 
 public:
@@ -58,11 +58,13 @@ public:
                     ~BlackVisionApp				();
 
     virtual void    OnKey						( unsigned char c ) override;
+    virtual void    OnMouse                     ( MouseAction action, int posX, int posY ) override;
     virtual void    OnPreidle					() override;
     virtual bool    OnIdle						() override;
     virtual void    OnPreMainLoop				() override;
     virtual bool    OnInitialize				() override;
     virtual void    OnTerminate					() override;
+    virtual void	OnResize		            ( int w, int h ) override;
 
 private:
 
@@ -71,8 +73,8 @@ private:
     void            InitializeConsole			();
     void            InitializeAppLogic			();
     void            InitializeSelfState			();
-	// pablito
-	bool			InitializeLicenses      ();
+    // pablito
+    bool			InitializeLicenses      ();
     void			InitializeConfig        ();
 
     void            PostFrame					( unsigned int millis );

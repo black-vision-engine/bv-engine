@@ -7,8 +7,6 @@
 
 namespace bv { 
 
-class BlurEffect;
-
 class BlurPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
 private:

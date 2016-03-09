@@ -42,6 +42,7 @@ public:
     unsigned int    GetNumTextures              () const;
 
     void            AppendValue                 ( IValuePtr val );
+    void            AppendValues                ( const std::vector< IValuePtr > & values );
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
 
     unsigned int    GetNumValues                () const;

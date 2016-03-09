@@ -2,11 +2,11 @@
 
 #include "BlurPreFullscreenEffectLogic.h"
 
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"
+
+#include "PreFullscreenEffectLogicUtils.h"
 
 namespace bv {
 
@@ -30,19 +30,9 @@ void                        BlurPreFullscreenEffectLogic::RenderImpl    ( SceneN
 {
     assert( outputs.size() == 1 );
     
-    auto mainRT = disableBoundRT( ctx );
-    auto outRT  = outputs[ 0 ];
+    PFLogicUtils::RenderSceneNodeToRenderTarget( node, ctx, outputs[ 0 ] );
 
-    enable( ctx, outRT );
-    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-
-    logic( ctx )->DrawNode( node, ctx );
-
-    m_textureSize->SetValue( glm::vec2( outRT->Width(), outRT->Height() ) );
-
-    disableBoundRT( ctx );
-
-    enable( ctx, mainRT );
+    m_textureSize->SetValue( glm::vec2( outputs[ 0 ]->Width(), outputs[ 0 ]->Height() ) );
 }
 
 // *********************************

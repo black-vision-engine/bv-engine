@@ -26,6 +26,8 @@
 typedef std::shared_ptr< void > VoidPtr;
 typedef std::shared_ptr< const void > VoidConstPtr;
 
+enum MouseAction { RIGHT_DOWN, RIGHT_UP, LEFT_DOWN, LEFT_UP, MOVE };
+
 namespace bv {
 
 typedef float				Float32;
@@ -61,7 +63,7 @@ DestType Cast( SrcType * ptr )
 template< class Type >
 Type * RemoveConst( const Type * ptr )
 {
-    return const_cast< Type * >( DeserializeContext );
+    return const_cast< Type * >( ptr );
 }
 
 } //bv

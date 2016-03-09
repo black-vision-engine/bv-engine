@@ -19,8 +19,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool 
     : m_primitiveType( type )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-	, m_attributesUpdateID( 0 )
-	, m_topologyUpdateID( 0 )
+    , m_attributesUpdateID( 0 )
+    , m_topologyUpdateID( 0 )
 {
 }
 
@@ -31,8 +31,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const
     , m_desc( desc )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-	, m_attributesUpdateID( 0 )
-	, m_topologyUpdateID( 0 )
+    , m_attributesUpdateID( 0 )
+    , m_topologyUpdateID( 0 )
 {
 }
 
@@ -74,28 +74,28 @@ bool                                    VertexAttributesChannel::IsTimeInvariant
 //
 UInt64                                VertexAttributesChannel::GetAttributesUpdateID	() const
 {
-	return m_attributesUpdateID;
+    return m_attributesUpdateID;
 }
 
 // *********************************
 //
 UInt64                                VertexAttributesChannel::GetTopologyUpdateID		() const
 {
-	return m_topologyUpdateID;
+    return m_topologyUpdateID;
 }
 
 // *********************************
 //
 void                                VertexAttributesChannel::SetAttributesUpdateID	( UInt64 updateID )
 {
-	m_attributesUpdateID = updateID;
+    m_attributesUpdateID = updateID;
 }
 
 // *********************************
 //
 void                                VertexAttributesChannel::SetTopologyUpdateID	( UInt64 updateID )
 {
-	m_topologyUpdateID = updateID;
+    m_topologyUpdateID = updateID;
 }
 
 // *********************************

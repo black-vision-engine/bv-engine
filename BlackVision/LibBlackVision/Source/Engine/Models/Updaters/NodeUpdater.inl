@@ -1,3 +1,6 @@
+#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/BoundingVolume.h"
+
 namespace bv {
 
 namespace {
@@ -61,17 +64,17 @@ inline  void    NodeUpdater::UpdateTransform     ()
 //
 inline  void    NodeUpdater::UpdateGeometry      ()
 {
-	if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
-	{
+    if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
+    {
         UpdateTopology();
-		m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
-		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
-	}
-	else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
-	{
+        m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+    }
+    else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
+    {
         UpdatePositions();
-		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
-	}
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+    }
     else
     {
         RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
@@ -100,9 +103,11 @@ inline  void    NodeUpdater::UpdateRendererState ()
     }
 }
 
+namespace {
+
 // *****************************
 //
-inline  void    NodeUpdater::UpdatePositions     ()
+inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
     assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
@@ -116,7 +121,6 @@ inline  void    NodeUpdater::UpdatePositions     ()
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
     // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
-    auto vaChannel  = m_vertexAttributesChannel;
     auto components = vaChannel->GetComponents();
     auto geomDesc   = vaChannel->GetDescriptor();
 
@@ -142,15 +146,33 @@ inline  void    NodeUpdater::UpdatePositions     ()
 
 // *****************************
 //
-inline  void    NodeUpdater::UpdateTopology      ()
+inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
+{
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+
+    RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
+
+    VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
+    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
+
+    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+
+    //This is update only, so the number of vertices must match
+    assert( 8 == vao->GetNumVertices( 0 ) );
+ 
+    WriteVertexDataToVBO( vbData, cc );
+
+    vao->SetNeedsUpdateMemUpload( true );
+}
+
+inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
     //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
 
-    auto vaChannel  = m_vertexAttributesChannel;
     auto components = vaChannel->GetComponents();
     auto geomDesc   = vaChannel->GetDescriptor();
 
@@ -165,7 +187,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)
-    RenderableArrayDataArraysSingleVertexBuffer * radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
+    RenderableArrayDataArraysSingleVertexBuffer * radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
@@ -191,14 +213,38 @@ inline  void    NodeUpdater::UpdateTopology      ()
     vao->SetNeedsUpdateRecreation( true );
 }
 
+} //anonymous
+
+// *****************************
+//
+inline  void    NodeUpdater::UpdatePositions     ()
+{
+    UpdatePositionsImpl( m_renderable, m_vertexAttributesChannel );
+    
+    auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+    UpdateBoxPositions( m_boundingBox, node->GetBoundingVolume()->BuildConnectedComponent() );
+}
+
+// *****************************
+//
+inline  void    NodeUpdater::UpdateTopology      ()
+{
+    UpdateTopologyImpl( m_renderable, m_vertexAttributesChannel );
+    
+    auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+    UpdateBoxPositions( m_boundingBox, node->GetBoundingVolume()->BuildConnectedComponent() );
+}
+
 // *****************************
 //
 inline void     NodeUpdater::UpdateShaderParams				()
 {
-	for( auto & pair : m_paramsMappingVec )
-	{
-		UpdateShaderParam( pair.first, pair.second );
-	}
+    for( auto & pair : m_paramsMappingVec )
+    {
+        UpdateShaderParam( pair.first, pair.second );
+    }
 }
 
 // *****************************
@@ -207,7 +253,7 @@ inline void		NodeUpdater::UpdateTexturesData				()
 {
     for( unsigned int txIdx = 0; txIdx < ( unsigned int )m_texDataMappingVec.size(); ++txIdx )
     {
-		auto txDataPair		= m_texDataMappingVec [ txIdx ];
+        auto txDataPair		= m_texDataMappingVec [ txIdx ];
         auto texData        = txDataPair.first;
         auto shaderParams   = txDataPair.second;
     
@@ -220,9 +266,9 @@ inline void		NodeUpdater::UpdateTexturesData				()
         {
             auto texDesc    = textures[ i ];
 
-			if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
+            if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
-				auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
+                auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
                 if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
                 {
                     auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
@@ -230,21 +276,21 @@ inline void		NodeUpdater::UpdateTexturesData				()
                 }
                 else //Some other texture type which just requires contents to be swapped
                 {
-					tex2D->SetData( texDesc->GetBits(), texDesc->GetFormat(), texDesc->GetWidth(), texDesc->GetHeight(), texDesc->GetNumLevels() );
+                    tex2D->SetData( texDesc->GetBits(), texDesc->GetFormat(), texDesc->GetWidth(), texDesc->GetHeight(), texDesc->GetNumLevels() );
                 }
 
                 m_texDataUpdateID[ txIdx ][ j ] = texDesc->GetUpdateID();
             }
 
-			auto samplerState = texDesc->GetSamplerState();
-			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+            auto samplerState = texDesc->GetSamplerState();
+            auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
 
-			//update sampler values
-			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
-			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
-			shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
-			shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
-			shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
+            //update sampler values
+            shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+            shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
         }
 
 
@@ -253,33 +299,33 @@ inline void		NodeUpdater::UpdateTexturesData				()
             auto tex2D   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
 
-			auto currFrame = animDesc->CurrentFrame();
-			auto numTextures = animDesc->NumTextures();
+            auto currFrame = animDesc->CurrentFrame();
+            auto numTextures = animDesc->NumTextures();
 
             assert( currFrame <= numTextures );
 
-			if( m_texDataUpdateID[ txIdx ][ j ] < animDesc->GetUpdateID() )
-			{
-				if( currFrame < numTextures )
-				{
-					tex2D->SetData( animDesc->GetBits( currFrame ), animDesc->GetFormat(), animDesc->GetWidth(), animDesc->GetHeight() );
-				}
-				else if ( currFrame == numTextures )
-				{
-					tex2D->ForceUpdate();
-				}
+            if( m_texDataUpdateID[ txIdx ][ j ] < animDesc->GetUpdateID() )
+            {
+                if( currFrame < numTextures )
+                {
+                    tex2D->SetData( animDesc->GetBits( currFrame ), animDesc->GetFormat(), animDesc->GetWidth(), animDesc->GetHeight() );
+                }
+                else if ( currFrame == numTextures )
+                {
+                    tex2D->ForceUpdate();
+                }
                 m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
-			}
+            }
 
-			auto samplerState = animDesc->GetSamplerState();
-			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+            auto samplerState = animDesc->GetSamplerState();
+            auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
 
-			//update sampler values
-			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
-			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
-			shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
-			shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
-			shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
+            //update sampler values
+            shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+            shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
         }
     }
 }
@@ -289,7 +335,7 @@ inline void		NodeUpdater::UpdateTexturesData				()
 template< typename ValType, typename ShaderParamType >
 void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
 {
-	static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
 }
 
 // *******************************
@@ -297,7 +343,7 @@ void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShade
 template< typename ValType >
 void	NodeUpdater::UpdateTypedValue   ( IValueConstPtr source, IValuePtr dest )
 {
-	QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+    QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
 }
 
 } //bv

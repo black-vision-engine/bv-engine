@@ -326,7 +326,7 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, ID
 
     auto sns = pm->ListScenesNames( name, path, recursive );
 
-	ser.SetAttribute( "path", path );
+    ser.SetAttribute( "path", path );
     ser.EnterArray( "list" );
     
     for( auto scene : sns )
@@ -363,7 +363,7 @@ void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, I
 
     auto sns = pm->ListPresets( name, path, recursive );
 
-	ser.SetAttribute( "path", path );
+    ser.SetAttribute( "path", path );
     ser.EnterArray( "list" );
     
     for( auto scene : sns )

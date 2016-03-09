@@ -22,7 +22,13 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+
+#include "Engine/Models/BoundingVolume.h"
+
 namespace bv {
+
+
 
 // *******************************
 // 
@@ -75,6 +81,28 @@ SceneNode *         BVProjectTools::BuildEngineSceneNode                  ( mode
 
 // *******************************
 //
+RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc )
+{
+    auto attrChan = cc->GetAttributeChannels()[ 0 ];
+
+    auto compDesc = Cast< const model::AttributeChannelDescriptor * >( attrChan->GetDescriptor() );
+
+    auto vaDesc = new model::VertexAttributesChannelDescriptor();
+    vaDesc->AddAttrChannelDesc( compDesc );
+
+    std::vector< model::IConnectedComponentPtr > components; components.push_back( cc );
+
+    RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataArrays( components, vaDesc, false );
+
+    assert( radasvb );
+
+    return new TriangleStrip( radasvb, nullptr, nullptr );
+}
+
+
+
+// *******************************
+//
 void                BVProjectTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
@@ -117,6 +145,79 @@ SceneNode *         BVProjectTools::BuildSingleEngineNode                 ( mode
     return node;
 }
 
+namespace
+{
+    void    MakeReversible( glm::mat4 & matrix )
+    {
+        // If scale component of matrix is 0, replace it with minimal float number near 0.
+
+        if( matrix[ 0 ][ 0 ] == 0.0 )
+            matrix[ 0 ][ 0 ] = std::numeric_limits< float >::epsilon();
+        if( matrix[ 1 ][ 1 ] == 0.0 )
+            matrix[ 1 ][ 1 ] = std::numeric_limits< float >::epsilon();
+        if( matrix[ 2 ][ 2 ] == 0.0 )
+            matrix[ 2 ][ 2 ] = std::numeric_limits< float >::epsilon();
+    }
+
+}   //  annonymous
+
+
+// ***********************
+//
+std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    ( model::BasicNodePtr modelNode, glm::mat4 & parentInverseTrans, glm::vec3 & rayPoint, glm::vec3 & rayDir )
+{
+    glm::mat4 transform;
+    auto transPlugin = modelNode->GetPlugin( "transform" );
+
+    if( transPlugin != nullptr )
+    {
+        auto transformParam = modelNode->GetFinalizePlugin()->GetParamTransform();
+        
+        if( transformParam != nullptr )
+            transform = transformParam->Evaluate();
+        else
+            transform = glm::mat4( 1 ); //  Identity matrix
+    }
+
+    MakeReversible( transform );
+    glm::mat4 inverseTransform = glm::inverse( transform );
+
+    inverseTransform = inverseTransform * parentInverseTrans;
+    glm::vec3 rayLocalDir = glm::vec3( inverseTransform * glm::vec4( rayDir, 0.0f ) );
+    glm::vec3 rayLocalPos = glm::vec3( inverseTransform * glm::vec4( rayPoint, 1.0f ) );
+
+    std::pair< model::BasicNodePtr, Float32 > result = std::make_pair< model::BasicNodePtr, Float32 >( nullptr, std::numeric_limits< Float32 >::infinity() );
+
+    Float32 distance = -std::numeric_limits< Float32 >::infinity();
+    const mathematics::Box * boundingBox;
+
+    auto boundingVolume = modelNode->GetBoundingVolume();
+    if( boundingVolume != nullptr )
+    {
+        boundingBox = boundingVolume->GetBoundingBox();
+        distance = boundingBox->RayIntersection( rayLocalPos, glm::normalize( rayLocalDir ) );
+    }
+
+    if( distance >= 0.0 )
+    {
+        result.second = distance;
+        result.first = modelNode;
+    }
+
+
+    for( UInt32 i = 0; i < modelNode->GetNumChildren(); ++i )
+    {
+        auto newPair = NodeIntersection( modelNode->GetChild( i ), inverseTransform, rayPoint, rayDir );
+        if( newPair.second < result.second && result.second >= 0 )
+        {
+            result.first = newPair.first;
+            result.second = newPair.second;
+        }
+    }
+
+    return result;
+}
+
 // *******************************
 //
 RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer )
@@ -144,7 +245,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
                 if( radasvb )
                 {
-                    renderable = new TriangleStrip( radasvb, effect );
+                    renderable = new TriangleStrip( radasvb, modelNode->GetBoundingVolume().get(), effect );
                 }
                 break;
             }
@@ -157,7 +258,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
     }
     else
     {
-        renderable = new TriangleStrip( nullptr, nullptr );
+        renderable = new TriangleStrip( nullptr, nullptr, nullptr );
     }
 
 

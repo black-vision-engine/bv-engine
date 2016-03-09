@@ -764,6 +764,10 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     {
         return Pause();
     }
+    else if( scrollAction == "Clear" )
+    {
+        return Clear();
+    }
     else if( scrollAction == "SmoothStart" )
     {
         return SmoothStart();
@@ -880,6 +884,34 @@ bool		Scroller::Stop			()
 bool        Scroller::Pause               ()
 {
     m_paused = true;
+    return true;
+}
+
+// ***********************
+//
+bool       Scroller::Clear               ()
+{
+    auto scene = m_editor->GetScene( m_sceneName );
+
+    for( auto node : m_nodesStates.m_actives )
+    {
+        m_editor->DeleteChildNode( scene, m_parentNode->shared_from_this(), node->shared_from_this() );
+    }
+
+    for( auto node : m_nodesStates.m_nonActives )
+    {
+        m_editor->DeleteChildNode( scene, m_parentNode->shared_from_this(), node->shared_from_this() );
+    }
+
+    m_nodesStates.Clear();
+    m_shifts.clear();
+
+    m_paused = false;
+    m_started = false;
+    m_isFinalized = false;
+    m_smoothStart = false;
+    m_smoothPause = false;
+
     return true;
 }
 

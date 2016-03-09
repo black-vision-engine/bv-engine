@@ -77,6 +77,13 @@ void BlackVisionApp::OnKey( unsigned char c )
     m_app->OnKey( c );
 }
 
+// ***********************
+//
+void BlackVisionApp::OnMouse    ( MouseAction action, int posX, int posY )
+{
+    m_app->OnMouse( action, posX, posY );
+}
+
 // *********************************
 //
 void BlackVisionApp::OnPreidle  ()
@@ -140,6 +147,14 @@ bool BlackVisionApp::OnInitialize       ()
 void BlackVisionApp::OnTerminate        ()
 {
     WindowedApplication::OnTerminate();
+}
+
+// ***********************
+//
+void	BlackVisionApp::OnResize        ( int w, int h )
+{
+    WindowedApplication::OnResize( w, h );
+    ApplicationContext::Instance().SetResolution( w, h );
 }
 
 // *********************************

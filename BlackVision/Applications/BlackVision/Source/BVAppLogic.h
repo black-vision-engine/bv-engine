@@ -96,6 +96,7 @@ public:
 
     virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
+    virtual void    OnMouse         ( MouseAction action, int posX, int posY );
 
     virtual void    ShutDown        ();
 

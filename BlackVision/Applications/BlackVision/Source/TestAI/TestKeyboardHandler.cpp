@@ -80,6 +80,19 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 }
 
 
+void TestKeyboardHandler::OnMouse             ( MouseAction action, int posX, int posY, BVAppLogic * /*logic*/ )
+{
+    if( action == MouseAction::LEFT_DOWN )
+    {
+        MouseEventPtr mouseEvent = std::make_shared< MouseEvent >();
+        mouseEvent->MouseCommand = MouseEvent::Command::MouseDown;
+        mouseEvent->MouseX = (Float32)posX;
+        mouseEvent->MouseY = (Float32)posY;
+
+        GetDefaultEventManager().QueueEvent( mouseEvent );
+    }
+}
+
 namespace
 {
 

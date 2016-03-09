@@ -25,23 +25,65 @@ struct NodeState
 
 // ********************************
 //
-const std::string &                 ModelState::QueryNodeScene  ( const IModelNode * node ) const
+std::string                         ModelState::QueryNodeScene  ( const IModelNode * node ) const
 {
-    return m_nodeStates.at( node )->sceneName;
+    if( auto ns = GetNodeState( node ) )
+    {
+        return ns->sceneName;
+    }
+    else
+    {
+        return "";
+    }
 }
 
 // ********************************
 //
 const IModelNode *                  ModelState::QueryNodeParent ( const IModelNode * node ) const
 {
-    return m_nodeStates.at( node )->parent;
+    if( auto ns = GetNodeState( node ) )
+    {
+        return ns->parent;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 // ********************************
 //
-const std::string &                 ModelState::QueryNodePath   (  const IModelNode * node ) const
+std::string                         ModelState::QueryNodePath   (  const IModelNode * node ) const
 {
-    return m_nodeStates.at( node )->path;
+    if( auto ns = GetNodeState( node ) )
+    {
+        return ns->path;
+    }
+    else
+    {
+        return "";
+    }
+}
+
+// ***********************
+//
+std::string                         ModelState::BuildIndexPath  ( const IModelNode * node )
+{
+    auto parent = static_cast< const BasicNode * >( QueryNodeParent( node ) );
+    if( parent == nullptr )
+        return node->GetName();
+
+    for( UInt32 i = 0; i < parent->GetNumChildren(); ++i )
+    {
+        if( parent->GetChild( i ) == node )
+        {
+            std::string indexPath = BuildIndexPath( parent ) +  "#" + SerializationHelper::T2String( i );
+            return indexPath;
+        }
+    }
+
+    assert( false );
+    return "";
 }
 
 // ********************************
@@ -76,13 +118,14 @@ bool                                ModelState::RegisterNode    ( const IModelNo
     {
         if( m_nodeStates.find( parent ) == m_nodeStates.end() )
         {
-            if( parent->GetName() == "main root" )
-            {
-                return true;
-            }
+            RegisterNode( parent, nullptr );
+    //        if( parent->GetName() == "main root" )
+    //        {
+    //            return true;
+    //        }
 
-            assert( !"Parent must be registered" );
-            return false;
+    //        assert( !"Parent must be registered" );
+    //        return false;
         }
     }
 
@@ -106,18 +149,20 @@ bool                                ModelState::RegisterNode    ( const IModelNo
         if( sceneNode != nullptr )
         {
             m_nodeStates[ node ] = new NodeState( nullptr, sceneNode->GetName(), sceneNode->GetName() );
-            if( parent != nullptr )
-            {
-                assert( !"Scene root node cannnot have parent" );
-                return false;
-            }
+            //if( parent != nullptr )
+            //{
+            //    assert( !"Scene root node cannnot have parent" );
+            //    return false;
+            //}
         }
         else
         {
             std::string parentPath = QueryNodePath( parent );
             std::string parentScene = QueryNodeScene( parent );
 
-            m_nodeStates[ node ] = new NodeState( parent, parentScene, parentPath + "/" + node->GetName() );
+            auto path = parentPath.empty() ? node->GetName() : parentPath + "/" + node->GetName();
+
+            m_nodeStates[ node ] = new NodeState( parent, parentScene, path );
         }
     }
 
@@ -228,6 +273,70 @@ std::string                         ModelState::RestoreNodePath ( const IModelNo
     }
 
     return path;
+}
+
+// ********************************
+//
+const NodeState *                   ModelState::GetNodeState    ( const IModelNode * node ) const
+{
+    auto it = m_nodeStates.find( node );
+    if( it != m_nodeStates.end() )
+    {
+        return it->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+// ========================================================================= //
+// Node selection
+// ========================================================================= //
+
+// ***********************
+//
+bool    ModelState::IsSelected      ( IModelNodePtr node )
+{
+    auto iter = m_selectedNodes.find( node );
+    if( iter == m_selectedNodes.end() )
+        return false;
+
+    return true;
+}
+
+// ***********************
+//
+void    ModelState::Select          ( IModelNodePtr node )
+{
+    m_selectedNodes.insert( node );
+}
+
+// ***********************
+//
+bool    ModelState::Unselect        ( IModelNodePtr node )
+{
+    auto iter = m_selectedNodes.find( node );
+    
+    if( iter == m_selectedNodes.end() )
+        return false;
+
+    m_selectedNodes.erase( iter );
+    return true;
+}
+
+// ***********************
+//
+void    ModelState::UnselectAll     ()
+{
+    m_selectedNodes.clear();
+}
+
+// ***********************
+//
+std::set< IModelNodePtr > &         ModelState::GetSelectedNodes()
+{
+    return m_selectedNodes;
 }
 
 } // model

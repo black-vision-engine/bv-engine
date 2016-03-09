@@ -4,6 +4,8 @@
 
 #include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 
+#include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
+
 
 namespace  bv {
 
@@ -54,6 +56,45 @@ unsigned int                                        FullscreenEffectGraphNode::G
 const std::vector< FullscreenEffectGraphNodePtr > & FullscreenEffectGraphNode::GetInputVec () const
 {
     return m_inputNodes;
+}
+
+// ****************************
+//
+std::vector< FullscreenEffectGraphNodePtr > &       FullscreenEffectGraphNode::GetInputVec ()
+{
+    return m_inputNodes;
+}
+
+// ****************************
+//
+bool                                                FullscreenEffectGraphNode::CheckProperSourceNode() const
+{
+    for( auto n : GetInputVec() )
+    {
+        if( n->GetEffect() != nullptr )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// ****************************
+//
+void                                                FullscreenEffectGraphNode::SwapInput( FullscreenEffectGraphNodePtr src, FullscreenEffectGraphNodePtr dst )
+{
+    for( auto & n : GetInputVec() )
+    {
+        if( n == src )
+        {
+            n = dst;
+        }
+        else
+        {
+            n->SwapInput( src, dst );
+        }
+    }
 }
 
 } //bv

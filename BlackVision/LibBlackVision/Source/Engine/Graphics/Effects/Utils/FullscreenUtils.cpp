@@ -83,7 +83,7 @@ TriangleStrip *                                 FullscreenUtils::CreateFullscree
     float * vbData = CreateFullscreenQuadVBData( numUVChannels );
     
     auto rad = CreateTriStripArrayData( 4, numUVChannels, vbData );
-    auto ret = new TriangleStrip( rad, effect );
+    auto ret = new TriangleStrip( rad, nullptr, effect );
 
     delete[] vbData;
 

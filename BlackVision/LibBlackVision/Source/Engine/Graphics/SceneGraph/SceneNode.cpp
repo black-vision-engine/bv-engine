@@ -51,14 +51,14 @@ void                    SceneNode::AddChildNode         ( SceneNode * child )
 //
 void                    SceneNode::AddChildNode         ( SceneNode * child, UInt32 idx )
 {
-	if( idx < m_sceneNodes.size() )
-	{
-	    m_sceneNodes.insert( m_sceneNodes.begin() + idx, child );
-	}
-	else
-	{
-		m_sceneNodes.push_back( child );
-	}
+    if( idx < m_sceneNodes.size() )
+    {
+        m_sceneNodes.insert( m_sceneNodes.begin() + idx, child );
+    }
+    else
+    {
+        m_sceneNodes.push_back( child );
+    }
 }
 
 // ********************************
