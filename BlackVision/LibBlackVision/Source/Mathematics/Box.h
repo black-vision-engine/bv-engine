@@ -86,6 +86,14 @@ struct Box
     // If box is behind rayPoint return value is negative.
     Float32   RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirection ) const
     {
+        if( rayDirection.x == 0.0 )
+            rayDirection.x = std::numeric_limits< float >::epsilon();
+        if( rayDirection.y == 0.0 )
+            rayDirection.y = std::numeric_limits< float >::epsilon();
+        if( rayDirection.z == 0.0 )
+            rayDirection.z = std::numeric_limits< float >::epsilon();
+
+
         glm::vec3 inverseRayDir = glm::vec3( 1.0 / rayDirection.x, 1.0 / rayDirection.y, 1.0 / rayDirection.z );
         
         // Compute distances from rayPoint to minimal box corner and maximal box corner.
