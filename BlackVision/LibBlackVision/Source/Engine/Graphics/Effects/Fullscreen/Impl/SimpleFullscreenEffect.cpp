@@ -41,7 +41,6 @@ SimpleFullscreenEffect::SimpleFullscreenEffect  ( const FullscreenEffectData & i
     : m_data( inputData )
     , m_fullscreenCamera( nullptr )
     , m_fullscreenQuad( nullptr )
-    , m_numAddedTextures( 0 )
 {
     m_fullscreenCamera = FullscreenUtils::CreateDisplayCamera();
 
@@ -82,7 +81,7 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
 //
 unsigned int    SimpleFullscreenEffect::GetNumInputs    () const
 {
-    return m_data.GetNumTextures();
+    return m_data.GetNumTextures() - m_data.GetNumExternalTextures();
 }
 
 // **************************
@@ -99,7 +98,7 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
 
         if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() || ctx->IsSyncRequired() )
         {
-            assert( m_data.GetNumTextures() - m_numAddedTextures <= (unsigned int) ( rtVec->size() - startIdx ) );
+            assert( GetNumInputs() <= (unsigned int) ( rtVec->size() - startIdx ) );
         
             auto effect = m_fullscreenQuad->GetRenderableEffect();
             auto pass = effect->GetPass( 0 );
@@ -108,7 +107,7 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
 
             unsigned int i = 0;
 
-            for( ; i < m_data.GetNumTextures() - m_numAddedTextures; ++i )
+            for( ; i < GetNumInputs(); ++i )
             {
                 auto texture = (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
 
@@ -119,7 +118,7 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
             for( ; i < m_data.GetNumTextures(); ++i )
             {
                 auto texture = m_data.GetInputTextureAt( i );
-                psParams->AddTexture( texture );
+                psParams->SetTexture( i, texture );
             }
         }
         else
@@ -259,11 +258,11 @@ bool                SimpleFullscreenEffect::DebugVerifyInput        ( const std:
     assert( rtVec != nullptr );
 
     assert( m_data.GetNumInitializedTextures() == m_data.GetNumTextures() );
-    assert( m_data.GetNumTextures() - m_numAddedTextures <= (unsigned int) ( rtVec->size() - startIdx ) );
+    assert( GetNumInputs() <= (unsigned int) ( rtVec->size() - startIdx ) );
 
     bool success = true;
 
-    for( unsigned int i = 0; i < m_data.GetNumTextures() - m_numAddedTextures; ++i )
+    for( unsigned int i = 0; i < GetNumInputs(); ++i )
     {
         success &= m_data.GetInputTextureAt( i ) == (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
     }
@@ -353,15 +352,21 @@ void            SimpleFullscreenEffect::AddTexture   ( const ITextureDescriptorC
         tx2d->SetData( txDesc->GetBits( i ), i );
     }
 
-    m_data.AppendInputTexture( tx2d, txDesc->GetName() );
+    bool success = false;
 
-    auto ps = m_fullscreenQuad->GetRenderableEffect()->GetPass( 0 )->GetPixelShader();
+    for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+    {
+        if( m_data.IsExternal( i ) )
+        {
+            if( m_data.GetInputTextureAt( i ) == nullptr )
+            {
+                m_data.SetInputTexture( tx2d, i );
+                success = true;
+            }
+        }
+    }
 
-    auto sampler = CreateSampler( txDesc->GetName() );
-
-    ps->AddTextureSampler( sampler );
-
-    m_numAddedTextures++;
+    assert( success && "Trying to add more external textures than this effect supports." );
 }
 
 } //bv

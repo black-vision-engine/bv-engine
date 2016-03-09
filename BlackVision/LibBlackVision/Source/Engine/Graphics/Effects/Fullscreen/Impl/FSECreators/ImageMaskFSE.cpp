@@ -22,6 +22,7 @@ FullscreenEffect *       ImageMaskFSECreator::CreateImageMaskFSE    ( const std:
     FullscreenEffectData fseData;
 
     fseData.AppendInputTexture( nullptr, "Tex0" );
+    fseData.AppendInputTexture( nullptr, "Mask0", true );
 
     auto src = FSEShaderSourceProvider->ReadShader( "image_mask.frag" );
     fseData.SetPixelShaderSource( src );
