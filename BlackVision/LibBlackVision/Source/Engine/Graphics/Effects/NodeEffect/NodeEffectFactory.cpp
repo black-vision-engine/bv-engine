@@ -15,6 +15,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/RenderOffscreenPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/BlurPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/ShadowPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/ImageMaskPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
@@ -164,6 +165,20 @@ NodeEffectPtr       CreateShadowEffect()
     return CreateNodeEffect( logic, NodeEffectType::NET_SHADOW );
 }
 
+// **************************
+//
+NodeEffectPtr       CreateImageMaskEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new ImageMaskPreFullscreenEffectLogic();
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_IMAGE_MASK, pre->GetValues() );
+
+    SetLogicComponents( logic, pre, fse, nullptr );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_IMAGE_MASK );
+}
+
 } // anonoymnous
 
 
@@ -189,7 +204,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateBlurEffect();
         case NodeEffectType::NET_SHADOW:
             return CreateShadowEffect();
-
+        case NodeEffectType::NET_IMAGE_MASK:
+            return CreateImageMaskEffect();
         //Interlace and so on
         default:
             assert( false );

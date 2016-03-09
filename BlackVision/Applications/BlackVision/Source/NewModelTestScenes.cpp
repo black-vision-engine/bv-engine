@@ -537,6 +537,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::ShadowEffectTestScene( pluginsManager, timeline );
     }
+    else if( scene == "IMAGE_MASK_EFFECT" )
+    {
+        node = TestScenesFactory::ImageMaskEffectTestScene( pluginsManager, timeline );
+    }
     else if( scene == "MULTI_SHADOW_EFFECT" )
     {
         node = TestScenesFactory::MultiShadowEffectTestScene( pluginsManager, timeline );
@@ -643,6 +647,14 @@ model::BasicNodePtr     TestScenesFactory::ShadowEffectTestScene  ( const model:
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateShadowTest( timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::ImageMaskEffectTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateImageMaskTest( timeEvaluator );
 }
 
 // *****************************
