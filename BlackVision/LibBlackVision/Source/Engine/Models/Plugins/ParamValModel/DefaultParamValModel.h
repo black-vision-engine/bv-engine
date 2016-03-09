@@ -38,7 +38,7 @@ public:
 
     virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
     virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
-    virtual IStatedValuePtr                                   GetState        ( const std::string & name ) override;
+    virtual IStatedValuePtr                             GetState        ( const std::string & name ) override;
 
     virtual void                                        Update          () override;
 

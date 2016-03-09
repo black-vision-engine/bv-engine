@@ -18,6 +18,9 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
+
+#include "Engine/Models/NodeEffects/ModelNodeEffect.h"
+
 #include "Tools/PrefixHelper.h"
 
 #include "Serialization/SerializationHelper.h"
@@ -189,7 +192,22 @@ BasicNodePtr BasicNode::Create( const IDeserializer& deser )
         }
     }
 
-//@todo Deserialize Global effects; use ModelNodeEffectFactory.
+// node effect
+    if( deser.EnterChild( "effect" ) )
+    {
+		auto effect = ModelNodeEffect::CreateTyped( deser );
+		
+		if( effect != nullptr)
+		{
+			node->SetNodeEffect( effect );
+		}
+		else
+		{
+			LOG_MESSAGE( SeverityLevel::warning ) << "node " << name << " cannot deserialize node effect.";
+		}
+
+        deser.ExitChild();  // effect
+    }
 
 // children
     auto children = SerializationHelper::DeserializeArray< BasicNode >( deser, "nodes" );

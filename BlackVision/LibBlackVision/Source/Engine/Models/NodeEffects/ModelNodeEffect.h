@@ -7,6 +7,10 @@
 
 namespace bv { namespace model {
 
+class ModelNodeEffect;
+DEFINE_PTR_TYPE( ModelNodeEffect )
+DEFINE_CONST_PTR_TYPE( ModelNodeEffect )
+
 class ModelNodeEffect : public IModelNodeEffect
 {
 protected:
@@ -37,7 +41,9 @@ public:
     virtual const std::vector< IValueConstPtr > &   GetValues           () const override;
 
 
-    static IModelNodeEffectPtr          Create              ( NodeEffectType type );
+    static ModelNodeEffectPtr						Create              ( NodeEffectType type );
+	static ISerializablePtr							Create              ( const IDeserializer & doc );
+	static ModelNodeEffectPtr						CreateTyped 		( const IDeserializer & deser );
 
 };
 

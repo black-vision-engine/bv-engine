@@ -10,7 +10,7 @@
 
 namespace bv { namespace model {
 
-class IModelNodeEffect : public bv::IUpdatable
+class IModelNodeEffect : public bv::IUpdatable, public bv::ISerializable
 {
 public:
 
