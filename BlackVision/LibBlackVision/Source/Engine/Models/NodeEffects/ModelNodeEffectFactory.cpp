@@ -87,10 +87,9 @@ IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std:
     auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
     auto blurKernelTypeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
     
-    blurSizeEval->Parameter()->SetVal( 190.5f, 0.f );
-    blurSizeEval->Parameter()->SetVal( 1.5f, 19.f );
+    blurSizeEval->Parameter()->SetVal( 10.5f, 0.f );
     normalizeEval->Parameter()->SetVal( 1, 0.f );
-    blurKernelTypeEval->Parameter()->SetVal( 2, 0.f );
+    blurKernelTypeEval->Parameter()->SetVal( 0, 0.f );
 
     effect->RegisterEvaluator( blurSizeEval );
     effect->RegisterEvaluator( normalizeEval );
@@ -145,18 +144,23 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
     auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
     auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
     auto innerEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "inner", timeEvaluator );
+    auto blurKernelTypeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
 
     colorEval->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), 0.f );
-    shiftEval->Parameter()->SetVal( glm::vec2( 0.1f, 0.1f ), 0.f );
+    shiftEval->Parameter()->SetVal( glm::vec2( 0.0f, 0.0f ), 0.f );
     blurSizeEval->Parameter()->SetVal( 5.5f, 0.f );
+    blurSizeEval->Parameter()->SetVal( 205.5f, 5.f );
+    blurSizeEval->Parameter()->SetVal( 5.5f, 10.f );
     normalizeEval->Parameter()->SetVal( 1, 0.f );
     innerEval->Parameter()->SetVal( 0, 0.f );
+    blurKernelTypeEval->Parameter()->SetVal( 0, 0.f );
 
     effect->RegisterEvaluator( colorEval );
     effect->RegisterEvaluator( shiftEval );
     effect->RegisterEvaluator( blurSizeEval );
     effect->RegisterEvaluator( normalizeEval );
     effect->RegisterEvaluator( innerEval );
+    effect->RegisterEvaluator( blurKernelTypeEval );
 
     return effect;
 }

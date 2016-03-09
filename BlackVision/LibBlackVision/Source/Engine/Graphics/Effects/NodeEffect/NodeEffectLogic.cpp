@@ -134,7 +134,7 @@ void    NodeEffectLogic::SetComponent       ( FullscreenEffectInstance * fse )
 
     m_FSE = fse;
 
-    AddFSEInputs();
+    //      AddFSEInputs();
 
     RecreateValues( m_values );
 }
