@@ -66,6 +66,8 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 
 	auto type = SerializationHelper::String2T< int >( typeStr );
 
+	auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+
 	if( type.isValid )
 	{
 		auto ret = ModelNodeEffect::Create( NodeEffectType( type.ham ) );
@@ -91,7 +93,15 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 
 				auto uid = deser.GetAttribute( "uid" );
 
-				auto assetDesc = AssetManager::GetInstance().CreateDesc( deser );
+				AssetDescConstPtr assetDesc;
+				if( uid != "" )
+				{
+					assetDesc = deserContext->GetAssets()->UID2Asset( uid );
+				}
+				else
+				{
+					assetDesc = AssetManager::GetInstance().CreateDesc( deser );
+				}
 
 				if( assetDesc )
 				{
