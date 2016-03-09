@@ -18,6 +18,7 @@ enum FormatStyle
 
 class ISerializer
 {
+    friend class IDeserializer;
 private:
 protected:
 public:
@@ -45,6 +46,9 @@ public:
     
     /**@brief Pop.*/
     virtual bool                ExitChild           () = 0;
+
+    virtual bool                AttachBranch        ( const std::string & name, const ISerializer * ser ) = 0;
+    virtual bool                AttachBranch        ( const std::string & name, const IDeserializer * ser ) = 0;
 };
 
 

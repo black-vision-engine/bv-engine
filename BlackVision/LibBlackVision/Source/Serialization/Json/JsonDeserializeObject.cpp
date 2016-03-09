@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "JsonDeserializeObject.h"
+#include "JsonSerializeObject.h"
 
 #include "../BV/BVDeserializeContext.h"
 
@@ -96,6 +97,13 @@ void JsonDeserializeObject::OnRootInit          ()
     else
         m_root = Json::ValueType::nullValue;
 
+}
+
+// ***********************
+//
+Json::Value JsonDeserializeObject::GetJson() const
+{
+    return m_root;
 }
 
 // ***********************
@@ -208,6 +216,31 @@ IDeserializer*      JsonDeserializeObject::DetachBranch        ( const std::stri
     branch.swap( nullValue );
 
     return new JsonDeserializeObject( std::move( nullValue ) );
+}
+
+// ***********************
+//
+bool                JsonDeserializeObject::AttachBranch        ( const std::string & name, ISerializer * ser )
+{
+    assert( typeid( *ser ) == typeid( *this ) );
+    auto typedSer = static_cast< JsonSerializeObject * >( ser );
+
+    assert( m_currentNode->isObject() );
+    assert( (*m_currentNode)[ name ] == Json::Value( Json::nullValue ) );
+
+    (*m_currentNode)[ name ] = typedSer->GetJson();
+
+    return true;
+}
+
+// ***********************
+//
+ISerializer *       JsonDeserializeObject::CreateSerializer    () const
+{
+    Json::Value copyRoot = m_root;
+    JsonSerializeObject * newSer = new JsonSerializeObject( std::move( copyRoot ) );
+    
+    return newSer;
 }
 
 std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const

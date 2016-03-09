@@ -594,6 +594,65 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
 // ***********************
 //
+void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::SceneVariableEvent::Type() )
+        return;
+
+    SceneVariableEventPtr sceneVarEvent = std::static_pointer_cast< bv::SceneVariableEvent >( evt );
+    std::string & sceneName     = sceneVarEvent->SceneName;
+    std::string & variableName  = sceneVarEvent->VariableName;
+    auto variableContent        = sceneVarEvent->VariableContent;
+    auto command                = sceneVarEvent->VariableCommand;
+
+    auto sceneModel = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    if( sceneModel == nullptr )
+    {
+        SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Scene not found" );
+        return;
+    }
+
+    auto & variablesCollection = sceneModel->GetSceneVariables();
+
+    if( command == SceneVariableEvent::Command::AddVariable )
+    {
+        if( variableContent == nullptr )
+        {
+            SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Wrong VariableContent field" );
+            return;
+        }
+
+        bool result = variablesCollection.AddVariable( variableName, *variableContent );
+        SendSimpleResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, result );
+    }
+    else if( command == SceneVariableEvent::Command::GetVariable )
+    {
+        JsonSerializeObject ser;
+        const ISerializer * varSer = variablesCollection.GetVariable( variableName );
+
+        if( varSer == nullptr )
+        {
+            SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Variable doesn't exists" );
+            return;
+        }
+
+        ser.AttachBranch( "VariableContent", varSer );
+        
+        PrepareResponseTemplate( ser, command, sceneVarEvent->EventID, true );
+        SendResponse( ser, sceneVarEvent->SocketID, sceneVarEvent->EventID );
+    }
+    else if( command == SceneVariableEvent::Command::DeleteVariable )
+    {
+        bool result = variablesCollection.DeleteVariable( variableName );
+        SendSimpleResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, result );
+    }
+    else
+        SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Unknown command" );
+}
+
+
+// ***********************
+//
 void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
 {
     if( evt->GetEventType() != bv::ScreenShotRenderedEvent::Type() )

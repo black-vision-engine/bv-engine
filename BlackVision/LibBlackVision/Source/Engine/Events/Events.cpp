@@ -66,8 +66,8 @@ std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
 const EventType TimerEvent::m_sEventType            = 0x30000010;
 std::string TimerEvent::m_sEventName                = "TimerEvent";
 
-const EventType NodeLogicEvent::m_sEventType           = 0x30000011;
-std::string NodeLogicEvent::m_sEventName               = "NodeLogicEvent";
+const EventType NodeLogicEvent::m_sEventType        = 0x30000011;
+std::string NodeLogicEvent::m_sEventName            = "NodeLogicEvent";
 
 const EventType VideoCardEvent::m_sEventType        = 0x30000005;
 std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
@@ -75,8 +75,8 @@ std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
 const EventType HightmapEvent::m_sEventType         = 0x30000014;
 std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 
-const EventType EngineStateEvent::m_sEventType       = 0x30000016;
-std::string EngineStateEvent::m_sEventName           = "EngineStateEvent";
+const EventType EngineStateEvent::m_sEventType      = 0x30000016;
+std::string EngineStateEvent::m_sEventName          = "EngineStateEvent";
 
 const EventType SceneEvent::m_sEventType			= 0x30000017;
 std::string SceneEvent::m_sEventName				= "SceneEvent";
@@ -93,6 +93,9 @@ std::string TimelineKeyframeEvent::m_sEventName     = "TimelineKeyframeEvent";
 
 const EventType MouseEvent::m_sEventType			= 0x30000021;
 std::string MouseEvent::m_sEventName				= "MouseEvent";
+
+const EventType SceneVariableEvent::m_sEventType    = 0x30000022;
+std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
 
 // ************************************* Events Serialization *****************************************
 
@@ -531,6 +534,23 @@ std::pair< MouseEvent::Command, const char* > MouseEventCommandMapping[] =
 template<> MouseEvent::Command      String2T   ( const std::string & s, const MouseEvent::Command & defaultVal )    { return String2Enum( MouseEventCommandMapping, s, defaultVal ); }
 template<> std::string              T2String   ( const MouseEvent::Command & t )                                    { return Enum2String( MouseEventCommandMapping, t ); }
 
+// ========================================================================= //
+// SceneVariableEvent
+// ========================================================================= //
+
+const std::string SCENE_VARIABLE_NAME_STRING            = "VariableName";
+const std::string SCENE_VARAIBLE_CONTENT_STRING         = "VariableContent";
+
+std::pair< SceneVariableEvent::Command, const char* > SceneVariableEventCommandMapping[] = 
+{
+    std::make_pair( SceneVariableEvent::Command::AddVariable, "AddVariable" )
+    , std::make_pair( SceneVariableEvent::Command::GetVariable, "GetVariable" )
+    , std::make_pair( SceneVariableEvent::Command::DeleteVariable, "DeleteVariable" )
+    , std::make_pair( SceneVariableEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> SceneVariableEvent::Command      SerializationHelper::String2T  ( const std::string& s, const SceneVariableEvent::Command& defaultVal )  { return String2Enum( SceneVariableEventCommandMapping, s, defaultVal ); };
+template<> std::string                      SerializationHelper::T2String  ( const SceneVariableEvent::Command & t )                                { return Enum2String( SceneVariableEventCommandMapping, t ); };
 
 // ========================================================================= //
 // HightmapEvent
@@ -1838,6 +1858,60 @@ const std::string&  MouseEvent::GetName() const
 EventType           MouseEvent::GetEventType() const
 {   return this->m_sEventType; }
 
+//******************* SceneVariableEvent *************
+
+// *************************************
+//
+void                SceneVariableEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( VariableCommand ) );
+    ser.SetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING, SerializationHelper::T2String( VariableName ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+
+    
+    ser.EnterChild( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING );
+    ser.ExitChild();
+}
+
+// *************************************
+//
+IEventPtr           SceneVariableEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        SceneVariableEventPtr newEvent      = std::make_shared<SceneVariableEvent>();
+        newEvent->SceneName                 = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->VariableName              = deser.GetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING );
+        newEvent->VariableContent           = deser.DetachBranch( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING );
+        newEvent->VariableCommand           = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneVariableEvent::Command::Fail );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr           SceneVariableEvent::Clone             () const
+{   return IEventPtr( new SceneVariableEvent( *this ) );  }
+
+// *************************************
+//
+EventType           SceneVariableEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        SceneVariableEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  SceneVariableEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           SceneVariableEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 
 //******************* HightmapEvent *************

@@ -277,6 +277,9 @@
     <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\FSECreators">
       <UniqueIdentifier>{311d9919-a16e-4b3d-8281-d849d00bba2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\EditorVariables">
+      <UniqueIdentifier>{7894fab9-865a-4c07-a90a-ddde56d8a731}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1393,6 +1396,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3488,6 +3492,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

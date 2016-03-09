@@ -60,7 +60,10 @@ public:
     virtual std::wstring		                    GetParentAttribute      ( const std::wstring & parentName, const std::wstring & attName ) const override;
 	bool                                            EnterChild              ( const std::wstring & name ) const override;
 
-    virtual IDeserializer*                          DetachBranch            ( const std::string & /*name*/ ) override { return nullptr; }
+    virtual IDeserializer*                          DetachBranch            ( const std::string & /*name*/ ) override { assert( false ); return nullptr; }
+    virtual bool                                    AttachBranch            ( const std::string & /*name*/, ISerializer * /*ser*/ ) override { assert( false ); return false; };
+
+    virtual ISerializer *                           CreateSerializer        () const override { assert( false ); return nullptr; }
 };
 
 } // bv

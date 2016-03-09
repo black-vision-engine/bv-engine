@@ -172,6 +172,11 @@ ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 	return m_modelSceneEditor;
 }
 
+SceneVariables &            SceneModel::GetSceneVariables   ()
+{
+    return m_sceneVariables;
+}
+
 // *******************************
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
