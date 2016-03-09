@@ -10,5 +10,5 @@ uniform sampler2D       Mask0;
 
 void main()
 {
-    FragColor = texture( Tex0, uvCoord );    
+    FragColor = texture( Mask0, uvCoord ).a * texture( Tex0, uvCoord );    
 }

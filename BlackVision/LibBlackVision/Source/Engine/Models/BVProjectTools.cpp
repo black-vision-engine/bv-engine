@@ -522,6 +522,8 @@ void                 BVProjectTools::UpdateEffectAssetData               ( Scene
                 auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( ad );
                 auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "Mask0" );
 
+                defTexDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
                 effect->AddTexture( defTexDesc );
             }
         }

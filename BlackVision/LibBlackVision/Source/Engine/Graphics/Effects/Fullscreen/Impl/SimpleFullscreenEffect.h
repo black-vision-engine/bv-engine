@@ -23,6 +23,8 @@ private:
     TriangleStrip *         m_fullscreenQuad;
 
     Camera *                m_fullscreenCamera;
+
+    SizeType                m_numAddedTextures;
     
 public:
 

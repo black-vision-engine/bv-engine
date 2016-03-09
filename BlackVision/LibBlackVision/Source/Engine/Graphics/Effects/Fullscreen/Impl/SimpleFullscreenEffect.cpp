@@ -41,6 +41,7 @@ SimpleFullscreenEffect::SimpleFullscreenEffect  ( const FullscreenEffectData & i
     : m_data( inputData )
     , m_fullscreenCamera( nullptr )
     , m_fullscreenQuad( nullptr )
+    , m_numAddedTextures( 0 )
 {
     m_fullscreenCamera = FullscreenUtils::CreateDisplayCamera();
 
@@ -98,19 +99,27 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
 
         if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() || ctx->IsSyncRequired() )
         {
-            assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
+            assert( m_data.GetNumTextures() - m_numAddedTextures <= (unsigned int) ( rtVec->size() - startIdx ) );
         
             auto effect = m_fullscreenQuad->GetRenderableEffect();
             auto pass = effect->GetPass( 0 );
             auto ps = pass->GetPixelShader();
             auto psParams = ps->GetParameters();
 
-            for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+            unsigned int i = 0;
+
+            for( ; i < m_data.GetNumTextures() - m_numAddedTextures; ++i )
             {
                 auto texture = (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
 
                 m_data.SetInputTexture( texture, i );
                 psParams->SetTexture( i, texture );
+            }
+
+            for( ; i < m_data.GetNumTextures(); ++i )
+            {
+                auto texture = m_data.GetInputTextureAt( i );
+                psParams->AddTexture( texture );
             }
         }
         else
@@ -250,11 +259,11 @@ bool                SimpleFullscreenEffect::DebugVerifyInput        ( const std:
     assert( rtVec != nullptr );
 
     assert( m_data.GetNumInitializedTextures() == m_data.GetNumTextures() );
-    assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
+    assert( m_data.GetNumTextures() - m_numAddedTextures <= (unsigned int) ( rtVec->size() - startIdx ) );
 
     bool success = true;
 
-    for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+    for( unsigned int i = 0; i < m_data.GetNumTextures() - m_numAddedTextures; ++i )
     {
         success &= m_data.GetInputTextureAt( i ) == (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
     }
@@ -345,6 +354,14 @@ void            SimpleFullscreenEffect::AddTexture   ( const ITextureDescriptorC
     }
 
     m_data.AppendInputTexture( tx2d, txDesc->GetName() );
+
+    auto ps = m_fullscreenQuad->GetRenderableEffect()->GetPass( 0 )->GetPixelShader();
+
+    auto sampler = CreateSampler( txDesc->GetName() );
+
+    ps->AddTextureSampler( sampler );
+
+    m_numAddedTextures++;
 }
 
 } //bv

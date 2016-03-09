@@ -13,10 +13,8 @@ namespace bv {
 // *********************************
 //
 ImageMaskPreFullscreenEffectLogic::ImageMaskPreFullscreenEffectLogic              ()
-{
-    m_blurSize      = ValuesFactory::CreateValueFloat( "blurSize", 0.f );
-    m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
-}
+    : m_txDesc( nullptr )
+{}
 
 // *********************************
 //
@@ -31,20 +29,13 @@ void                        ImageMaskPreFullscreenEffectLogic::RenderImpl    ( S
     assert( outputs.size() == 1 );
     
     PFLogicUtils::RenderSceneNodeToRenderTarget( node, ctx, outputs[ 0 ] );
-
-    m_textureSize->SetValue( glm::vec2( outputs[ 0 ]->Width(), outputs[ 0 ]->Height() ) );
 }
 
 // *********************************
 //
-std::vector< IValuePtr >    ImageMaskPreFullscreenEffectLogic::GetValues     () const
+std::vector< IValuePtr >    ImageMaskPreFullscreenEffectLogic::GetValues        () const
 {
-    std::vector< IValuePtr > res( 2 );
-
-    res[ 0 ] = m_blurSize;
-    res[ 1 ] = m_textureSize;
-
-    return res;
+    return std::vector< IValuePtr >();
 }
 
 // *********************************
@@ -56,11 +47,16 @@ unsigned int                ImageMaskPreFullscreenEffectLogic::GetPreferredNumOu
 
 // *********************************
 //
-bool                        ImageMaskPreFullscreenEffectLogic::IsFSERequired () const
+void                        ImageMaskPreFullscreenEffectLogic::AddTexture       ( const ITextureDescriptorConstPtr & txDesc )
 {
-    auto bs = m_blurSize->GetValue();
+    m_txDesc = txDesc;
+}
 
-    return bs > 0;
+// *********************************
+//
+bool                        ImageMaskPreFullscreenEffectLogic::IsFSERequired    () const
+{
+    return m_txDesc != nullptr;
 }
 
 } // bv

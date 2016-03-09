@@ -10,9 +10,7 @@ namespace bv {
 class ImageMaskPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
 private:
-
-    ValueFloatPtr   m_blurSize;
-    ValueVec2Ptr    m_textureSize;
+    ITextureDescriptorConstPtr      m_txDesc;
 
 public:
                 ImageMaskPreFullscreenEffectLogic   ();
@@ -29,6 +27,8 @@ public:
     virtual unsigned int                GetPreferredNumOutputs              () const override;
 
     virtual bool                        IsFSERequired                       () const override;
+
+    virtual void                        AddTexture                          ( const ITextureDescriptorConstPtr & ) override;
 
 };
 
