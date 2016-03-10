@@ -15,7 +15,7 @@ class BoundingBoxPostFullscreenEffectLogic : public PostFullscreenEffectLogic
 {
 private:
 
-    BoundingBoxEffect *   m_effect;
+    static BoundingBoxEffect *   m_effect;
 
 public:
 
@@ -25,11 +25,6 @@ public:
     virtual void                        Render                              ( SceneNode * node, RenderLogicContext * ctx );
 
     virtual std::vector< IValuePtr >    GetValues                           () const override;
-
-private:
-
-    void                                EnableBoundingBoxEffect               ( Renderer * renderer, SceneNode * node );
-    void                                DrawWirefreameNodeOnly              ( Renderer * renderer, SceneNode * node );
 
 };
 

@@ -176,16 +176,16 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
         assert( samplers.size() == params->NumTextures() );
         for( unsigned int i = 0; i < samplers.size(); ++i )
         {
-			auto samplerParams = params->GetSamplerParameters( i );
+            auto samplerParams = params->GetSamplerParameters( i );
 
-			if( samplerParams )
-			{
-				samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeX(), SamplerWrapDirection::SWD_S );
-				samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeY(), SamplerWrapDirection::SWD_T );
-				samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeZ(), SamplerWrapDirection::SWD_R );
-				samplers[ i ]->SetFilteringMode( samplerParams->GetFilteringMode() );
-				samplers[ i ]->SetBorderColor( samplerParams->GetBorderColor() );
-			}
+            if( samplerParams )
+            {
+                samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeX(), SamplerWrapDirection::SWD_S );
+                samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeY(), SamplerWrapDirection::SWD_T );
+                samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeZ(), SamplerWrapDirection::SWD_R );
+                samplers[ i ]->SetFilteringMode( samplerParams->GetFilteringMode() );
+                samplers[ i ]->SetBorderColor( samplerParams->GetBorderColor() );
+            }
 
             EnableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ).get(), i + firstAvailableSamplerIndex );
 
@@ -207,8 +207,8 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
     switch( sampler->SamplingMode() )
     {
         case SamplerSamplingMode::SSM_MODE_1D:
-		{
-			renderer->Enable( texture, textureUnit );
+        {
+            renderer->Enable( texture, textureUnit );
 
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
             
@@ -223,8 +223,8 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
             BVGL::bvglTexParameterfv( GL_TEXTURE_1D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
 
-			break;
-		}
+            break;
+        }
         case SamplerSamplingMode::SSM_MODE_2D:
         {
             renderer->Enable( texture, textureUnit );
@@ -256,7 +256,7 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
             GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
-			GLint wrap_r = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_R ) );
+            GLint wrap_r = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_R ) );
             
             //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
             GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );

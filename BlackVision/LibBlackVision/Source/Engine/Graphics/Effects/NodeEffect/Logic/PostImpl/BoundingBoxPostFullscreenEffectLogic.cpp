@@ -13,10 +13,13 @@
 
 namespace bv {
 
+BoundingBoxEffect *   BoundingBoxPostFullscreenEffectLogic::m_effect = new BoundingBoxEffect();
+
+
 // *********************************
 //
 BoundingBoxPostFullscreenEffectLogic::BoundingBoxPostFullscreenEffectLogic          ()
-    : m_effect( new BoundingBoxEffect() )
+    //: m_effect( new BoundingBoxEffect() )
 {
 }
 
@@ -24,7 +27,7 @@ BoundingBoxPostFullscreenEffectLogic::BoundingBoxPostFullscreenEffectLogic      
 //
 BoundingBoxPostFullscreenEffectLogic::~BoundingBoxPostFullscreenEffectLogic         ()
 {
-    delete m_effect;
+    //delete m_effect;
 }
 
 // *********************************
@@ -51,25 +54,6 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
 std::vector< IValuePtr >    BoundingBoxPostFullscreenEffectLogic::GetValues       () const
 {
     return std::vector< IValuePtr >();
-}
-
-// *********************************
-//
-void    BoundingBoxPostFullscreenEffectLogic::EnableBoundingBoxEffect               ( Renderer * renderer, SceneNode * node )
-{
-    // FIXME: add IValues to the effect
-    //auto pass = m_effect->GetPass( 0 );
-
-    renderer->Enable( m_effect->GetPass( 0 ), static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
-}
-
-// *********************************
-//
-void    BoundingBoxPostFullscreenEffectLogic::DrawWirefreameNodeOnly              ( Renderer * renderer, SceneNode * node )
-{
-    auto renderable = static_cast< bv::RenderableEntityWithBoundingBox * >( node->GetTransformable() );
-
-    renderer->DrawRenderable( renderable );
 }
 
 } //bv

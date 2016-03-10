@@ -68,7 +68,7 @@ inline Texture2DPtr                 ShaderParameters::GetTexture        ( unsign
 {
     assert( idx < NumTextures() );
 
-	return m_textures[ idx ].first;
+    return m_textures[ idx ].first;
 }
 
 // ***************************
@@ -77,7 +77,7 @@ inline SamplerShaderParametersPtr	ShaderParameters::GetSamplerParameters        
 {
     assert( idx < NumTextures() );
 
-	return m_textures[ idx ].second;
+    return m_textures[ idx ].second;
 }
 
 } //bv
