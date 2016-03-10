@@ -43,7 +43,7 @@ SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera
 //
 void            SceneModel::Serialize           ( ISerializer & ser) const
 {
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
 
     ser.EnterChild( "scene" );
 
@@ -51,22 +51,25 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
 
         if( context->detailedInfo )
         {
-            auto assets = std::make_shared< AssetDescsWithUIDs >();
-            GetAssetsWithUIDs( *assets, m_sceneRootNode.get() );
-            context->SetAssets( assets );
-
-            assets->Serialize( ser );
-
             ser.EnterArray( "timelines" );
             for( auto timeline : m_timeline->GetChildren() )
                 timeline->Serialize( ser );
             ser.ExitChild(); // timelines
+
+
+            m_sceneVariables.Serialize( ser );
         }
 
         if( m_sceneRootNode )
         {
             m_sceneRootNode->Serialize( ser );
         }
+
+        if( context->detailedInfo )
+        {
+            context->GetAssets()->Serialize( ser );
+        }
+
 
     ser.ExitChild();
 }
@@ -97,6 +100,14 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     }
 
 	bvDeserCo->SetSceneTimeline( sceneTimeline );
+
+// editor scene varables
+
+    if( deser.EnterChild( "sceneVariables" ) )
+    {
+        auto & editorSceneVariables = obj->GetSceneVariables();
+        editorSceneVariables.Deserialize( deser );
+    }
 
 // nodes
     auto node = SerializationHelper::DeserializeObject< model::BasicNode >( deser, "node" );
@@ -170,6 +181,11 @@ Camera *					SceneModel::GetCamera              ()  const
 ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 {
 	return m_modelSceneEditor;
+}
+
+SceneVariables &            SceneModel::GetSceneVariables   ()
+{
+    return m_sceneVariables;
 }
 
 // *******************************

@@ -72,7 +72,7 @@ CompositeFullscreenEffect *       BlurFSECreator::CreateCompositeFSE      ( cons
 
     fseData1.AppendInputTexture( nullptr, "Tex0" );
 
-    fseData.AppendValues( values );
+    fseData1.AppendValues( values );
     fseData1.AppendValue( ValuesFactory::CreateValueInt( "vertical", 1 ) );
     fseData1.AppendValue( normalizeVal );
     fseData1.AppendValue( blurKernelTypeVal );
@@ -105,6 +105,8 @@ CompositeFullscreenEffect *       BlurFSECreator::CreateCompositeFSE      ( cons
 
     graph->SetSinkNode( secondPassNode );
     graph->MarkSourceNode( sourceNode );
+
+    graph->FlattenGraph();
 
     return compositeEffect;
 }

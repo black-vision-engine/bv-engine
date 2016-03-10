@@ -334,6 +334,14 @@ bool                        ProjectManager::RemoveAssetDir      ( const std::str
     return m_impl->RemoveAssetDir( categoryName, path );
 }
 
+
+// ********************************
+//
+bool                        ProjectManager::RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const
+{
+    return m_impl->RenameAssetDir( categoryName, path, newName );
+}
+
 // ********************************
 //
 bool                        ProjectManager::RemoveSceneDir      ( const Path & path ) const

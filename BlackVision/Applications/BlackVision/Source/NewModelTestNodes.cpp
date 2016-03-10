@@ -40,6 +40,8 @@
 
 #include "BVConfig.h"
 
+#include "ProjectManager.h"
+
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
@@ -334,11 +336,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateBlurTest               ( model::I
     //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
     auto root = bTex.CreateNode( "root", true );
 
-    auto text = CreateTextNode( timeEvaluator, 0, false );
+    //auto text = CreateTextNode( timeEvaluator, 0, false );
 
-    root->AddChildToModelOnly( text );
+    //root->AddChildToModelOnly( text );
 
-    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
     return root;
 }
@@ -353,16 +355,36 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
     //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
     auto root = bTex.CreateNode( "root", true );
 
-    
+    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
 
-    auto text = CreateTextNode( timeEvaluator, 0, false );
+    //auto text = CreateTextNode( timeEvaluator, 0, false );
 
-    root->AddChildToModelOnly( text );
+    //root->AddChildToModelOnly( text );
 
-    text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
+    //text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
     //text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
     return root;
+}
+
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateImageMaskTest               ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    auto text = CreateTextNode( timeEvaluator, 0, false );
+
+    auto effect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "image mask", timeEvaluator );
+
+    auto pm = ProjectManager::GetInstance();
+
+    auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
+
+    effect->AddAsset( desc );
+
+    text->SetNodeEffect( effect );
+
+    return text;
 }
 
 // *****************************

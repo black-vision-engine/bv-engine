@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <set>
 
 #include "Engine/Interfaces/IValue.h"
 
@@ -19,9 +20,13 @@ private:
     std::vector< std::string >  m_samplerNames;
     std::vector< IValuePtr >    m_values;
 
+    std::set< unsigned int >    m_externalTexturesIndexes;
+
     std::string                 m_pixelShaderSource;
 
     unsigned int                m_numInitializedTextures;
+
+    unsigned int                m_numExternalTextures;
 
     bool                        m_blendEnabled;
     bool                        m_cullEnabled;
@@ -33,13 +38,15 @@ public:
                     FullscreenEffectData        ();
                     ~FullscreenEffectData       ();
 
-    void            AppendInputTexture          ( Texture2DPtr tex, const std::string & samplerName );
+    void            AppendInputTexture          ( Texture2DPtr tex, const std::string & samplerName, bool external = false );
     void            SetInputTexture             ( Texture2DPtr tex, unsigned int idx );
 
     Texture2DPtr    GetInputTextureAt           ( unsigned int i ) const;
     std::string     GetSamplerNameAt            ( unsigned int i ) const;
 
     unsigned int    GetNumTextures              () const;
+    unsigned int    GetNumExternalTextures      () const;
+    bool            IsExternal                  ( unsigned int i ) const;
 
     void            AppendValue                 ( IValuePtr val );
     void            AppendValues                ( const std::vector< IValuePtr > & values );

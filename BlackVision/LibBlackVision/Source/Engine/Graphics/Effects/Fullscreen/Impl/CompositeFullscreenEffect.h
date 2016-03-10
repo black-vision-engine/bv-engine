@@ -6,16 +6,19 @@
 
 #include "Engine/Graphics/Effects/Fullscreen/Impl/Graph/InputFullscreenEffectGraphNode.h"
 
+#include <vector>
 
 namespace bv {
 
 class FullscreenEffectGraph;
+class RenderTarget;
 
 class CompositeFullscreenEffect : public FullscreenEffect
 {
 private:
 
-   FullscreenEffectGraph *  m_graph; 
+   FullscreenEffectGraph *                  m_graph;
+   std::vector< RenderTarget * >            m_sourceRenderTargets;
 
 public:
 
@@ -33,11 +36,15 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues       () const override;
 
-    FullscreenEffectGraph * GetGraph                    ();
+    virtual void                        AddTexture      ( const ITextureDescriptorConstPtr & txDesc ) override;
+
+    FullscreenEffectGraph *             GetGraph        ();
 
 private:
 
+    void            AddTexture                  ( FullscreenEffectGraphNodePtr node, const ITextureDescriptorConstPtr & txDesc );
     void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx );
+    void            Update                      ( FullscreenEffectGraphNodePtr node );
 
 };
 

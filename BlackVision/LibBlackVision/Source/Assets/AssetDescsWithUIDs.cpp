@@ -51,6 +51,16 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs & map, const model::BasicNode * root,
             }
         }
 
+        auto effect = root->GetNodeEffect();
+
+        if( effect != nullptr )
+        {
+            for( auto ea : effect->GetAssets() )
+            {
+                map.AddAssetDesc( ea );
+            }
+        }
+
         if( recursive )
         {
             for( unsigned int i = 0; i < root->GetNumChildren(); i++ )

@@ -79,6 +79,8 @@ private:
     static unsigned int         TotalNumVertices                    ( const std::vector< model::IConnectedComponentPtr > & ccVec );
     static VertexDescriptor *   CreateVertexDescriptor              ( const model::IVertexAttributesChannelDescriptor * desc );
     static void                 AddVertexDataToVBO                  ( char * data, model::IConnectedComponentPtr cc );
+
+    static void                 UpdateEffectAssetData               ( SceneNode * node, model::BasicNodePtr modelNode );
 };
 
 } // bv

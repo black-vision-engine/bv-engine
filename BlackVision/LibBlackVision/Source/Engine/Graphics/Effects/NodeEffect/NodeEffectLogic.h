@@ -7,18 +7,23 @@
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectInstance.h"
 
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
 namespace bv {
 
 class RenderLogicContext;
 class SceneNode;
-
+class Texture;
+class ITextureDescriptor;
+DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
 
 class NodeEffectLogic
 {
 private:
 
     std::vector< IValuePtr >        m_values;
+
+    std::vector< TextureConstPtr >  m_textures;
 
     PreFullscreenEffectLogic *      m_preFSELogic;
     
@@ -51,6 +56,8 @@ public:
     void            SetComponent                ( PostFullscreenEffectLogic * logic );
     void            SetComponent                ( FullscreenEffectInstance * fse );
 
+    void            AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
+
     unsigned int    GetNumValues                () const;
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
     IValuePtr       GetValue                    ( const std::string & name ) const;
@@ -58,8 +65,6 @@ public:
 private:
 
     void            RecreateValues              ( std::vector< IValuePtr > & values );
-
-    void            AddFSEInputs                ();
 
 };
 

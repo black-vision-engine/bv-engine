@@ -33,19 +33,21 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Update                      ()
 {
-	auto sinkNode = m_graph->GetSinkNode();
+	Update( m_graph->GetSinkNode() );
+}
 
-	for( auto n : sinkNode->GetInputVec() )
+// ****************************
+//
+void    CompositeFullscreenEffect::Update                       ( FullscreenEffectGraphNodePtr node ) 
+{
+    for( auto inputNode : node->GetInputVec() )
     {
-		auto eff = n->GetEffect();
-        if( eff != nullptr )
-		{
-			eff->Update();
-		}
+        Update( inputNode );
     }
-
-	auto eff = sinkNode->GetEffect();
-	if( eff != nullptr )
+    
+    auto eff = node->GetEffect();
+    
+    if( eff != nullptr )
 	{
 		eff->Update();
 	}
@@ -53,7 +55,7 @@ void    CompositeFullscreenEffect::Update                      ()
 
 // ****************************
 //
-void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
+void    CompositeFullscreenEffect::Render                       ( FullscreenEffectContext * ctx )
 {
     SynchronizeInputData( ctx );
     RenderGraphNode( m_graph->GetSinkNode(), ctx );
@@ -67,11 +69,8 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 
     for( auto node : m_graph->GetSourceNodes() )
     {
-        auto nodeInputs = node->GetInputVec();
-        differentInputs.insert( nodeInputs.begin(), nodeInputs.end() );
+        differentInputs.insert( node );
     }
-
-    auto it = differentInputs.begin();
 
     return ( unsigned int ) differentInputs.size();
 }
@@ -81,18 +80,15 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
 {
     assert( ctx->AccessInputRenderTargets() != nullptr );
-    assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
-    
-    auto curIdx     = ctx->GetFirstRenderTargetIndex();
-    auto rtVec      = *ctx->AccessInputRenderTargets();
+    assert( m_graph->GetSourceNodes().size() == ctx->AccessInputRenderTargets()->size() );
 
-    for( auto node : m_graph->GetSourceNodes() )
-    {
-        assert( node->GetEffect() == nullptr );
-        
-        ctx->SetFirstRenderTargetIndex( curIdx );
-        curIdx++;
-    }
+    auto inputRTs = ctx->AccessInputRenderTargets();
+
+    m_sourceRenderTargets.clear();
+
+    m_sourceRenderTargets.insert( m_sourceRenderTargets.begin(), inputRTs->begin(), inputRTs->end() );
+
+    assert( m_sourceRenderTargets.size() == inputRTs->size() );
 }
 
 // ****************************
@@ -107,38 +103,26 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
 
     for( auto it : node->GetInputVec() ) // Render parents' nodes at first
     {
-        if( it->GetEffect() != nullptr ) // Effect is null when the node is a special node which means that it's an input from PreLogic.
+        if( !m_graph->IsSourceNode( it ) ) // Effect is null when the node is a special node which means that it's an input from PreLogic.
         {
             auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 			auto inputCtx = FullscreenEffectContext( renderer, nodeOutRt, allocator, 0 );
-			inputCtx.SetInputRenderTargets( ctx->AccessInputRenderTargets() );
+
             RenderGraphNode( it, &inputCtx );
         
             inputResults.push_back( nodeOutRt );
 
             allocator->Free();
         }
-    }
-
-    auto preInputs = ctx->AccessInputRenderTargets();
-
-    if( preInputs != nullptr )
-    {
-        assert( preInputs->size() == m_graph->GetSourceNodes().size() );
-    }
-
-    std::vector< RenderTarget * > preInputResults;
-
-    for( auto inputNode : node->GetInputVec() )
-    {
-        if( m_graph->IsSourceNode( inputNode ) )
+        else
         {
-            auto idx = m_graph->SourceNodeIndex( inputNode );
-            preInputResults.push_back( ( *preInputs )[ idx ] );
+            auto idx = m_graph->SourceNodeIndex( it );
+
+            assert( idx < m_sourceRenderTargets.size() );
+
+            inputResults.push_back( m_sourceRenderTargets[ idx ] );
         }
     }
-
-    inputResults.insert( inputResults.begin(), preInputResults.begin(), preInputResults.end() );
 
     auto effect = node->GetEffect();
 
@@ -215,5 +199,25 @@ FullscreenEffectGraph * CompositeFullscreenEffect::GetGraph             ()
 {
     return m_graph;
 }
+
+// **************************
+//
+void            CompositeFullscreenEffect::AddTexture   ( const ITextureDescriptorConstPtr & txDesc )
+{
+    AddTexture( m_graph->GetSinkNode(), txDesc );
+}
+
+// **************************
+//
+void            CompositeFullscreenEffect::AddTexture   ( FullscreenEffectGraphNodePtr node, const ITextureDescriptorConstPtr & txDesc )
+{
+    for( auto input : node->GetInputVec() )
+    {
+        AddTexture( input, txDesc );
+    }
+
+    node->GetEffect()->AddTexture( txDesc );
+}
+
 
 } //bv

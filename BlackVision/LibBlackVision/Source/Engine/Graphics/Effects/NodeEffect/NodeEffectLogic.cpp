@@ -134,7 +134,7 @@ void    NodeEffectLogic::SetComponent       ( FullscreenEffectInstance * fse )
 
     m_FSE = fse;
 
-    AddFSEInputs();
+    //      AddFSEInputs();
 
     RecreateValues( m_values );
 }
@@ -208,26 +208,26 @@ void            FreeRenderTargets           ();
 
 // *********************************
 //
-void            NodeEffectLogic::AddFSEInputs()
-{
-    if( m_preFSELogic != nullptr && m_FSE != nullptr )
-    {
-        auto numLogicOutputs = m_preFSELogic->GetPreferredNumOutputs();
-
-        if( numLogicOutputs > 0 )
-        {
-            m_FSE->AddAdditionalFSELogicInputs( numLogicOutputs );
-        }
-    }
-}
-
-// *********************************
-//
 void            NodeEffectLogic::Update     ()
 {
     if( m_FSE )
     {
         m_FSE->Update();
+    }
+}
+
+// *********************************
+//
+void            NodeEffectLogic::AddTexture ( const ITextureDescriptorConstPtr & txDesc )
+{
+    if( m_preFSELogic != nullptr )
+    {
+        m_preFSELogic->AddTexture( txDesc );
+    }
+
+    if( m_FSE != nullptr )
+    {
+        m_FSE->AddTexture( txDesc );
     }
 }
 

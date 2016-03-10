@@ -10,6 +10,9 @@
 
 #include "EventHandlerHelpers.h"
 
+#include "System/Path.h"
+#include "IO/FileIO.h"
+
 #include <limits>
 #undef max
 
@@ -373,47 +376,63 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto saveTo = request.GetAttribute( "saveTo" );
 
-        auto forceSaveStr = request.GetAttribute( "forceSave" );
+        auto fileName = File::GetFileName( saveTo );
 
-        bool forceSave = false;
+        auto ext = File::GetExtension( fileName );
 
-        if( forceSaveStr == "true" )
+        if( ext.empty() || ext != "scn" )
         {
-            forceSave = true;
+            saveTo += ".scn";
         }
 
-        auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
-
-        if( scene )
+        if( saveTo.empty() || Path::IsValisPathName( saveTo ) )
         {
-            if( forceSave )
+            auto forceSaveStr = request.GetAttribute( "forceSave" );
+
+            bool forceSave = false;
+
+            if( forceSaveStr == "true" )
             {
-                if( saveTo.empty() )
+                forceSave = true;
+            }
+
+            auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+
+            if( scene )
+            {
+                if( forceSave )
                 {
-                    pm->AddScene( scene, "", scene->GetName() );
+                    if( saveTo.empty() )
+                    {
+                        pm->AddScene( scene, "", scene->GetName() );
+                    }
+                    else
+                    {
+                        pm->AddScene( scene, "", saveTo );
+                    }
+
+                    SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+                
+                    Path sceneScreenShot( saveTo );
+                    sceneScreenShot = sceneScreenShot / scene->GetName();
+                    sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
+                    m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true ); 
                 }
                 else
                 {
-                    pm->AddScene( scene, "", saveTo );
+                    SendSimpleResponse( command, projectEvent->EventID, senderID, false );
+                    assert( false );
+                    // TODO: Implement
                 }
-
-                SendSimpleResponse( command, projectEvent->EventID, senderID, true );
-                
-                Path sceneScreenShot( saveTo );
-                sceneScreenShot = sceneScreenShot / scene->GetName();
-                sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
-                m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true ); 
             }
             else
             {
-                SendSimpleResponse( command, projectEvent->EventID, senderID, false );
-                assert( false );
-                // TODO: Implement
+                SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
             }
         }
         else
         {
-            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, ( "Scene name '" + saveTo + "' is not valid system path." ).c_str() );
         }
     }
     else if( command == ProjectEvent::Command::LoadScene )
@@ -550,6 +569,34 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Cannot load preset" );
         }
     }
+    else if( command == ProjectEvent::Command::EditPreset )
+    {
+        auto projectName = request.GetAttribute( "ProjectName" );
+        auto path = request.GetAttribute( "Path" );
+
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+        std::string sceneName = File::GetFileName( path );
+        editor->AddScene( sceneName );
+        auto scene = editor->GetScene( sceneName );
+
+        auto timeline = editor->GetTimeEvaluator( sceneName );
+
+        assert( std::dynamic_pointer_cast< model::OffsetTimeEvaluator >( timeline ) );
+        auto offsetTimeline = std::static_pointer_cast< model::OffsetTimeEvaluator >( timeline );
+
+        auto node = pm->LoadPreset( projectName, path, offsetTimeline );
+        if( node != nullptr )
+        {
+            bool result = editor->AddChildNode( scene, scene->GetRootNode(), node );
+            SendSimpleResponse( command, projectEvent->EventID, senderID, result );
+        }
+        else
+        {
+            editor->RemoveScene( scene );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Cannot load preset" );
+        }
+    }
     else if( command == ProjectEvent::Command::CreateFolder )
     {
         auto categoryName = request.GetAttribute( "categoryName" );
@@ -575,12 +622,75 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
+	 else if( command == ProjectEvent::Command::RenameFolder )
+    {
+        auto categoryName = request.GetAttribute( "categoryName" );
+        auto path = request.GetAttribute( "path" );
+		auto path2 = request.GetAttribute( "newName" );
+
+        auto success = pm->RenameAssetDir( categoryName, path,path2 );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, success );
+    }
     else
     {
         SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );
     }
 
 }
+
+// ***********************
+//
+void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::SceneVariableEvent::Type() )
+        return;
+
+    SceneVariableEventPtr sceneVarEvent = std::static_pointer_cast< bv::SceneVariableEvent >( evt );
+    std::string & sceneName         = sceneVarEvent->SceneName;
+    std::string & variableName      = sceneVarEvent->VariableName;
+    std::string & variableContent   = sceneVarEvent->VariableContent;
+    auto command                    = sceneVarEvent->VariableCommand;
+
+    auto sceneModel = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    if( sceneModel == nullptr )
+    {
+        SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Scene not found" );
+        return;
+    }
+
+    auto & variablesCollection = sceneModel->GetSceneVariables();
+
+    if( command == SceneVariableEvent::Command::AddVariable )
+    {
+        bool result = variablesCollection.AddVariable( variableName, variableContent );
+        SendSimpleResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, result );
+    }
+    else if( command == SceneVariableEvent::Command::GetVariable )
+    {
+        JsonSerializeObject ser;
+        Expected< std::string > varContent = variablesCollection.GetVariable( variableName );
+
+        if( !varContent.isValid )
+        {
+            SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Variable not found" );
+            return;
+        }
+
+        ser.SetAttribute( "VariableContent", varContent.ham );
+        
+        PrepareResponseTemplate( ser, command, sceneVarEvent->EventID, true );
+        SendResponse( ser, sceneVarEvent->SocketID, sceneVarEvent->EventID );
+    }
+    else if( command == SceneVariableEvent::Command::DeleteVariable )
+    {
+        bool result = variablesCollection.DeleteVariable( variableName );
+        SendSimpleResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, result );
+    }
+    else
+        SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Unknown command" );
+}
+
 
 // ***********************
 //

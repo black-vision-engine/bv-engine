@@ -13,6 +13,8 @@
 #include "Serialization/SerializationHelper.inl"
 #include "ParameterSerialization.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 namespace bv { 
     
 namespace SerializationHelper {
@@ -117,7 +119,8 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
-        assert( false );
+        LOG_MESSAGE( SeverityLevel::error ) << "Parameter [" << name << "] timeline [" + timeline + "] not found. Setting scene timeline [" + sceneTimeline->GetName() + "]";
+        //assert( false );
         te = sceneTimeline;
     }
 

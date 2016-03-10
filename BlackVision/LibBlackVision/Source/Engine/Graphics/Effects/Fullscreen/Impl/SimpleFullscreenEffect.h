@@ -38,6 +38,8 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues           () const override;
 
+    virtual void                        AddTexture          ( const ITextureDescriptorConstPtr & txDesc ) override;
+
 private:
 
     TriangleStrip *     CreateFullscreenQuad    ( const FullscreenEffectData & inputData ) const;

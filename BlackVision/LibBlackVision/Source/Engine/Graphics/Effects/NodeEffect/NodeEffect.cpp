@@ -65,4 +65,11 @@ void            NodeEffect::Update                      ()
     m_logic->Update();
 }
 
+// *********************************
+//
+void            NodeEffect::AddTexture                  ( const ITextureDescriptorConstPtr & txDesc )
+{
+    m_logic->AddTexture( txDesc );
+}
+
 } //bv

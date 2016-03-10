@@ -29,6 +29,8 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat3.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat4.h"
 
+#include "Engine/Models/Interfaces/ITextureDescriptor.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 namespace  bv {
@@ -79,7 +81,7 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
 //
 unsigned int    SimpleFullscreenEffect::GetNumInputs    () const
 {
-    return m_data.GetNumTextures();
+    return m_data.GetNumTextures() - m_data.GetNumExternalTextures();
 }
 
 // **************************
@@ -96,18 +98,26 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
 
         if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() || ctx->IsSyncRequired() )
         {
-            assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
+            assert( GetNumInputs() <= (unsigned int) ( rtVec->size() - startIdx ) );
         
             auto effect = m_fullscreenQuad->GetRenderableEffect();
             auto pass = effect->GetPass( 0 );
             auto ps = pass->GetPixelShader();
             auto psParams = ps->GetParameters();
 
-            for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+            unsigned int i = 0;
+
+            for( ; i < GetNumInputs(); ++i )
             {
                 auto texture = (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
 
                 m_data.SetInputTexture( texture, i );
+                psParams->SetTexture( i, texture );
+            }
+
+            for( ; i < m_data.GetNumTextures(); ++i )
+            {
+                auto texture = m_data.GetInputTextureAt( i );
                 psParams->SetTexture( i, texture );
             }
         }
@@ -248,11 +258,11 @@ bool                SimpleFullscreenEffect::DebugVerifyInput        ( const std:
     assert( rtVec != nullptr );
 
     assert( m_data.GetNumInitializedTextures() == m_data.GetNumTextures() );
-    assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
+    assert( GetNumInputs() <= (unsigned int) ( rtVec->size() - startIdx ) );
 
     bool success = true;
 
-    for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+    for( unsigned int i = 0; i < GetNumInputs(); ++i )
     {
         success &= m_data.GetInputTextureAt( i ) == (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
     }
@@ -331,5 +341,32 @@ void                SimpleFullscreenEffect::Update              ()
     }
 }
 
+// **************************
+//
+void            SimpleFullscreenEffect::AddTexture   ( const ITextureDescriptorConstPtr & txDesc )
+{
+    auto tx2d = std::make_shared< Texture2D >( txDesc->GetFormat(), txDesc->GetWidth(), txDesc->GetHeight(), txDesc->GetSemantic(), txDesc->GetNumLevels() );
+
+    for( UInt32 i = 0; i < txDesc->GetNumLevels(); ++i )
+    {
+        tx2d->SetData( txDesc->GetBits( i ), i );
+    }
+
+    bool success = false;
+
+    for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+    {
+        if( m_data.IsExternal( i ) )
+        {
+            if( m_data.GetInputTextureAt( i ) == nullptr )
+            {
+                m_data.SetInputTexture( tx2d, i );
+                success = true;
+            }
+        }
+    }
+
+    assert( success && "Trying to add more external textures than this effect supports." );
+}
 
 } //bv

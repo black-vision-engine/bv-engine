@@ -11,6 +11,9 @@ class SceneNode;
 class RenderTarget;
 class RenderLogicContext;
 
+class ITextureDescriptor;
+DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
+
 class PreFullscreenEffectLogic
 {
 private:
@@ -36,6 +39,8 @@ public:
 
     virtual bool                            AllocateOutputRenderTargets ( RenderLogicContext * ctx );
     virtual void                            FreeOutputRenderTargets     ( RenderLogicContext * ctx );
+
+    virtual void                            AddTexture                  ( const ITextureDescriptorConstPtr & ) {};
 
     const std::vector< RenderTarget * > &   GetOutputRenderTargets      () const;
 

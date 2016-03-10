@@ -11,6 +11,7 @@ namespace bv {
 //
 FullscreenEffectData::FullscreenEffectData                      ()
     : m_numInitializedTextures( 0 )
+    , m_numExternalTextures( 0 )
     , m_blendEnabled( false )
     , m_cullEnabled( false )
     , m_depthTestEnabled( false )
@@ -25,15 +26,28 @@ FullscreenEffectData::~FullscreenEffectData                     ()
 
 // **************************
 //
-void    FullscreenEffectData::AppendInputTexture                ( Texture2DPtr tex, const std::string & samplerName )
+void    FullscreenEffectData::AppendInputTexture                ( Texture2DPtr tex, const std::string & samplerName, bool external )
 {
     if( tex )
     {
         m_numInitializedTextures++;
     }
 
+    if( external )
+    {
+        m_externalTexturesIndexes.insert( ( unsigned int ) m_inputTextures.size() );
+        m_numExternalTextures++;
+    }
+
     m_inputTextures.push_back( tex );
     m_samplerNames.push_back( samplerName );
+}
+
+// **************************
+//
+bool            FullscreenEffectData::IsExternal                ( unsigned int i ) const
+{
+    return m_externalTexturesIndexes.find( i ) != m_externalTexturesIndexes.end();
 }
 
 // **************************
@@ -80,6 +94,13 @@ std::string     FullscreenEffectData::GetSamplerNameAt          ( unsigned int i
 unsigned int    FullscreenEffectData::GetNumTextures            () const
 {
     return (unsigned int) m_inputTextures.size();
+}
+
+// **************************
+//
+unsigned int    FullscreenEffectData::GetNumExternalTextures     () const
+{
+    return m_numExternalTextures;
 }
 
 // **************************

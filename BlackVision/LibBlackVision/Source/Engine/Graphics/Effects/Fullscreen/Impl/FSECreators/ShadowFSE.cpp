@@ -33,8 +33,9 @@ FullscreenEffect *       ShadowFSECreator::CreateShadowFSE         ( const std::
 
     FullscreenEffectData fseData;
 
-    fseData.AppendInputTexture( nullptr, "Tex0" );
     fseData.AppendInputTexture( nullptr, "BluredTex0" );
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+    
 
     fseData.AppendValues( blurValues );
     fseData.AppendValue( colorVal );

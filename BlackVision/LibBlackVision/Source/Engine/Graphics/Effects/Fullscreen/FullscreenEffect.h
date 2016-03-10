@@ -11,6 +11,9 @@
 
 namespace bv {
 
+class ITextureDescriptor;
+DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
+
 enum class FullscreenEffectType : int
 {
     FET_SIMPLE_BLIT = 0,
@@ -21,6 +24,7 @@ enum class FullscreenEffectType : int
     FET_VIDEO_OUTPUT,
     FET_BLUR,
     FET_SHADOW,
+    FET_IMAGE_MASK,
     //FET_OUTLINE
     //TODO: and so on
 
@@ -44,6 +48,7 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues               () const                            = 0;
 
+    virtual void                        AddTexture              ( const ITextureDescriptorConstPtr & txDesc ) = 0;
 };
 
 DEFINE_PTR_TYPE(FullscreenEffect)

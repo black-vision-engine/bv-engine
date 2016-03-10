@@ -214,7 +214,7 @@ void BVAppLogic::LoadScene          ( void )
         }
         else
         {
-            auto sceneName = "sceneFromEnv: " + GetEnvScene();
+            auto sceneName = "sceneFromEnv@ " + GetEnvScene();
 
             sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
             projectEditor->AddScene( sceneModel );

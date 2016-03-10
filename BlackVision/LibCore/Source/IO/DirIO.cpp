@@ -135,7 +135,35 @@ bool                    Dir::RemoveDir			( const std::string & path )
         boost::system::error_code ec;
 	    boost::filesystem::path p( path );
 
-        boost::filesystem::remove( path, ec );
+		boost::filesystem::remove_all( path, ec );
+
+		if( ec )
+		{
+			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+    else
+    {
+        return false;
+    }
+}
+
+// *******************************
+//
+bool                    Dir::RenameDir			( const std::string & path,const std::string & newName )
+{
+    if( Exists( path ) )
+	{
+        boost::system::error_code ec;
+	    boost::filesystem::path p( path );
+
+
+		boost::filesystem::rename( path,newName, ec );
 
 		if( ec )
 		{

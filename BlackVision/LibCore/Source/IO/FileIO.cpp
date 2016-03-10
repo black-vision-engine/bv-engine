@@ -451,6 +451,14 @@ std::string  File::GetFileName ( const std::string & path )
 
 // *******************************
 //
+std::string  File::GetExtension( const std::string & path )
+{
+    auto ext = boost::filesystem::extension( path );
+    return ext;
+}
+
+// *******************************
+//
 void         File::Touch       ( const std::string & fileName )
 {
     if( !Path::Exists( fileName ) )

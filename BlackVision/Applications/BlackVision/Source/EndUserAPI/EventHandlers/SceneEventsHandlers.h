@@ -19,6 +19,8 @@ public:
     void        ProjectStructure    ( bv::IEventPtr evt );
     void        SceneStructure	    ( bv::IEventPtr evt );
 
+    void        SceneVariable       ( bv::IEventPtr evt );
+
 private:
     void        ThumbnailRendered   ( bv::IEventPtr evt );
 };

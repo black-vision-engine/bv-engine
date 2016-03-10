@@ -3,6 +3,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Serialization/ISerializable.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
+#include "Engine/Models/EditorVariables/SceneVariables.h"
 
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 
@@ -27,6 +28,7 @@ private:
     Camera *                m_camera; //FIXME: camera model
 
     ModelSceneEditor *		m_modelSceneEditor;
+    SceneVariables          m_sceneVariables;       // Variables can be queried by editor.
 
 public:
                             SceneModel			( const std::string & name, Camera * camera );
@@ -49,6 +51,7 @@ public:
     Camera *                GetCamera           () const;
 
     ModelSceneEditor *		GetModelSceneEditor	() const;
+    SceneVariables &        GetSceneVariables   ();
 
     static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };

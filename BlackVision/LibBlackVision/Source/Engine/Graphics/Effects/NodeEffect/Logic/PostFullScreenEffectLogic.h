@@ -22,7 +22,6 @@ public:
     virtual void                        Render                      ( SceneNode * node, RenderLogicContext * ctx )  = 0;
 
     virtual std::vector< IValuePtr >    GetValues                   () const                                        = 0;
-
 };
 
 } //bv

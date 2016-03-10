@@ -40,7 +40,7 @@ public:
 
 DEFINE_PTR_TYPE( AssetDescsWithUIDs );
 
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, bool recursive = true );
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, bool recursive = false );
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin );
 
 
