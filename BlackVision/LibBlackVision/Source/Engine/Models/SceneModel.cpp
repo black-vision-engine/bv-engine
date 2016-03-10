@@ -55,6 +55,9 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
             for( auto timeline : m_timeline->GetChildren() )
                 timeline->Serialize( ser );
             ser.ExitChild(); // timelines
+
+
+            m_sceneVariables.Serialize( ser );
         }
 
         if( m_sceneRootNode )
@@ -97,6 +100,14 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     }
 
 	bvDeserCo->SetSceneTimeline( sceneTimeline );
+
+// editor scene varables
+
+    if( deser.EnterChild( "sceneVariables" ) )
+    {
+        auto & editorSceneVariables = obj->GetSceneVariables();
+        editorSceneVariables.Deserialize( deser );
+    }
 
 // nodes
     auto node = SerializationHelper::DeserializeObject< model::BasicNode >( deser, "node" );

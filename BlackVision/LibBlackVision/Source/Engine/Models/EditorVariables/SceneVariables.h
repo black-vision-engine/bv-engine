@@ -5,12 +5,13 @@
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/ISerializable.h"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv
 {
 
 
-typedef std::map< std::string, ISerializer * >      SceneVariablesMap;
+typedef std::map< std::string, std::string >      SceneVariablesMap;
 
 class SceneVariables    : public ISerializable
 {
@@ -23,13 +24,13 @@ public:
     ~SceneVariables();
 
     virtual void                Serialize       ( ISerializer & ser ) const override;
-    static ISerializablePtr     Create          ( const IDeserializer & deser );
+    void                        Deserialize     ( const IDeserializer & deser );
 
 
-    bool                        AddVariable     ( const std::string & varName, IDeserializer & deser );
+    bool                        AddVariable     ( const std::string & varName, const std::string & varContent );
     bool                        DeleteVariable  ( const std::string & varName );
     
-    const ISerializer *         GetVariable     ( const std::string & varName ) const;
+    Expected< std::string >     GetVariable     ( const std::string & varName ) const;
 };
 
 

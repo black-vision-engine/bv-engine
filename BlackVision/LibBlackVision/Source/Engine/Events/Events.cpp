@@ -272,9 +272,11 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, "RemoveAsset" ) 
-    , std::make_pair( ProjectEvent::Command::ImportAsset, "ImportAsset" ) 
+    , std::make_pair( ProjectEvent::Command::ImportAsset, "ImportAsset" )
+    
     , std::make_pair( ProjectEvent::Command::SavePreset, "SavePreset" ) 
     , std::make_pair( ProjectEvent::Command::LoadPreset, "LoadPreset" ) 
+    , std::make_pair( ProjectEvent::Command::EditPreset, "EditPreset" ) 
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -1869,10 +1871,7 @@ void                SceneVariableEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( VariableCommand ) );
     ser.SetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING, SerializationHelper::T2String( VariableName ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-
-    
-    ser.EnterChild( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING );
-    ser.ExitChild();
+    ser.SetAttribute( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING, VariableContent );
 }
 
 // *************************************
@@ -1884,7 +1883,7 @@ IEventPtr           SceneVariableEvent::Create          ( IDeserializer& deser )
         SceneVariableEventPtr newEvent      = std::make_shared<SceneVariableEvent>();
         newEvent->SceneName                 = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->VariableName              = deser.GetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING );
-        newEvent->VariableContent           = deser.DetachBranch( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING );
+        newEvent->VariableContent           = deser.GetAttribute( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING );
         newEvent->VariableCommand           = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneVariableEvent::Command::Fail );
 
         return newEvent;

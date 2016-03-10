@@ -505,6 +505,7 @@ public:
 
         SavePreset,
         LoadPreset,
+        EditPreset,
 
         CopyAsset,
         MoveAsset,
@@ -1022,11 +1023,11 @@ public:
     Command                     VariableCommand;
     std::string                 SceneName;
     std::string                 VariableName;
-    IDeserializer *             VariableContent;
+    std::string                 VariableContent;
 
 public:
-    explicit                        SceneVariableEvent  (){ VariableContent = nullptr; }
-                                    ~SceneVariableEvent (){ delete VariableContent; }
+    explicit                        SceneVariableEvent  (){}
+                                    ~SceneVariableEvent (){}
 
     virtual void                    Serialize           ( ISerializer & ser ) const;
     static IEventPtr                Create              ( IDeserializer & deser );
