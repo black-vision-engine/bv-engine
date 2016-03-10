@@ -167,6 +167,7 @@ public:
 	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node ) const;
     bool						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
     bool                        SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName );
+    bool						LoadGlobalEffectAsset( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName, IDeserializer & serializedAssetData  );
 
 /* TIMELINES */
 

@@ -983,6 +983,36 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
 
 // *******************************
 //
+bool						BVProjectEditor::LoadGlobalEffectAsset( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string &, IDeserializer & serializedAssetData )
+{
+    auto scene = GetScene( sceneName );
+
+    model::ITimeEvaluatorPtr timeEval = nullptr;
+    if( timelinePath.empty() )
+    {
+        timeEval = GetSceneDefaultTimeline( scene );
+    }
+    else
+    {
+        timeEval = GetTimeEvaluator( timelinePath );
+    }
+
+    if( timeEval )
+    {
+        auto node = GetNode( sceneName, nodePath );
+        auto modelNode = QueryTyped( node );
+        node->GetNodeEffect()->AddAsset( AssetManager::GetInstance().CreateDesc( serializedAssetData ) );
+
+        BVProjectTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+
+        return true;
+    }
+
+    return false;
+}
+
+// *******************************
+//
 bool						BVProjectEditor::AddTimeline			( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType )
 {
     auto timeline = model::TimelineHelper::CreateTimeEvaluator( timelineName, timelineType );

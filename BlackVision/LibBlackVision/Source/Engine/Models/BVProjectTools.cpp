@@ -527,6 +527,10 @@ void                 BVProjectTools::UpdateEffectAssetData               ( Scene
 
                 effect->AddTexture( defTexDesc );
             }
+            else
+            {
+                assert( !"Only textures assets can be added to FSE." );
+            }
         }
     }
 }

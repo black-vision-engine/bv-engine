@@ -37,7 +37,21 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
         bool result = true;
 
         if( command == GlobalEffectEvent::Command::SetGlobalEffect )
+        {
             result = editor->SetNodeEffect( sceneName, nodePath, timelinePath, effectName );
+        }
+        if( command == GlobalEffectEvent::Command::LoadGlobalEffectAsset )
+        {
+            auto assetData = effectEvent->AssetData;
+            if( assetData != nullptr )
+            {
+                result = editor->LoadGlobalEffectAsset( sceneName, nodePath, timelinePath, effectName, *assetData );
+            }
+            else
+            {
+                result = false;
+            }
+        }
         else
         {
             SendSimpleErrorResponse( command, eventID, socketID, "Unknown command" );
