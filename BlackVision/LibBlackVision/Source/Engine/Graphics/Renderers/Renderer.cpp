@@ -23,6 +23,7 @@
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+#include "Engine/Graphics/SceneGraph/Lines.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Engine/Graphics/Resources/VertexBuffer.h"
@@ -175,6 +176,9 @@ bool    Renderer::DrawRenderable    ( RenderableEntity * ent )
         //FIXME: FIX-1
         //glDrawArrays(ConstantsMapper::GLConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
+    case RenderableEntity::RenderableType::RT_LINES:
+        DrawLines( static_cast< Lines * >( ent ) );
+        break;
     default:
         assert(!"Should not be here");
     }
@@ -190,6 +194,33 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 
     // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
+
+    Enable  ( vao );
+
+    unsigned int firstVertex = 0;
+    auto ccNum = vao->GetNumConnectedComponents();
+    for( unsigned int i = 0; i < ccNum; ++i )
+    {
+        PassCCNumUniform( i, ccNum );
+
+        unsigned int numVertices = vao->GetNumVertices( i );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
+        firstVertex += numVertices;
+    }
+
+    Disable ( vao );
+
+    return true;
+}
+
+// *********************************
+//
+bool     Renderer::DrawLines      ( Lines * lines )
+{
+    static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_LINES );
+
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
+    const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( lines->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
 

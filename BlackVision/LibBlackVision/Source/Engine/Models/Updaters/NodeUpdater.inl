@@ -148,7 +148,7 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 //
 inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
 {
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
 
     RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
 

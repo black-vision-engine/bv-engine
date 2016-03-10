@@ -18,6 +18,7 @@ class Camera;
 
 class RenderableEntity;
 class TriangleStrip;
+class Lines;
 
 class PixelShader;
 class VertexShader;
@@ -94,8 +95,8 @@ private:
 
     PdrDownloadPBO *					m_PdrPBOMemTransferRT;
 
-	bool								m_EnableGLFinish;
-	bool								m_EnableGLFlush;
+    bool								m_EnableGLFinish;
+    bool								m_EnableGLFlush;
 
 public:
 
@@ -123,7 +124,7 @@ public:
     void    NaiveReadback       ( char * buf, int w, int h );
 
     void    SetCamera           ( Camera * cam );
-	Camera * GetCamera          ();
+    Camera * GetCamera          ();
 
     void    SetVSync            ( bool enable, int verticalBufferFrameCount );
     void    SetFlushFinish      ( bool flush, bool finish );
@@ -173,6 +174,7 @@ public:
 
     bool                        DrawRenderable                  ( RenderableEntity * ent );
     bool                        DrawTriangleStrips              ( TriangleStrip * strip );
+    bool                        DrawLines                       ( Lines * lines );
 
 private:
 

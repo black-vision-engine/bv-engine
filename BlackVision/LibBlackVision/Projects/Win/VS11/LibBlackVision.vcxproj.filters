@@ -3509,6 +3509,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h">
       <Filter>Engine\Models\EditorVariables</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
