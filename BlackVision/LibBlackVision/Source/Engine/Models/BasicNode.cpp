@@ -108,6 +108,11 @@ void                            BasicNode::Serialize               ( ISerializer
     if( context->detailedInfo )
         ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
+    if( context->detailedInfo )
+    {
+        GetAssetsWithUIDs( *context->GetAssets(), this );
+    }
+
     if( context->pluginsInfo )
     {
         ser.EnterArray( "plugins" );
@@ -240,7 +245,7 @@ BasicNodePtr					BasicNode::Clone			() const
 {
     auto assets = std::make_shared< AssetDescsWithUIDs >();
     //FIXME: const hack
-    GetAssetsWithUIDs( *assets, this );
+    GetAssetsWithUIDs( *assets, this, true ); // FIXME: Not needed any more. assets are stored in serialization context.
 
     return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, nullptr ) );
 }

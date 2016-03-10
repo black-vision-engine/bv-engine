@@ -10,6 +10,9 @@
 
 #include "EventHandlerHelpers.h"
 
+#include "System/Path.h"
+#include "IO/FileIO.h"
+
 #include <limits>
 #undef max
 
@@ -373,47 +376,63 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto saveTo = request.GetAttribute( "saveTo" );
 
-        auto forceSaveStr = request.GetAttribute( "forceSave" );
+        auto fileName = File::GetFileName( saveTo );
 
-        bool forceSave = false;
+        auto ext = File::GetExtension( fileName );
 
-        if( forceSaveStr == "true" )
+        if( ext.empty() || ext != "scn" )
         {
-            forceSave = true;
+            saveTo += ".scn";
         }
 
-        auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
-
-        if( scene )
+        if( saveTo.empty() || Path::IsValisPathName( saveTo ) )
         {
-            if( forceSave )
+            auto forceSaveStr = request.GetAttribute( "forceSave" );
+
+            bool forceSave = false;
+
+            if( forceSaveStr == "true" )
             {
-                if( saveTo.empty() )
+                forceSave = true;
+            }
+
+            auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+
+            if( scene )
+            {
+                if( forceSave )
                 {
-                    pm->AddScene( scene, "", scene->GetName() );
+                    if( saveTo.empty() )
+                    {
+                        pm->AddScene( scene, "", scene->GetName() );
+                    }
+                    else
+                    {
+                        pm->AddScene( scene, "", saveTo );
+                    }
+
+                    SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+                
+                    Path sceneScreenShot( saveTo );
+                    sceneScreenShot = sceneScreenShot / scene->GetName();
+                    sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
+                    m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true ); 
                 }
                 else
                 {
-                    pm->AddScene( scene, "", saveTo );
+                    SendSimpleResponse( command, projectEvent->EventID, senderID, false );
+                    assert( false );
+                    // TODO: Implement
                 }
-
-                SendSimpleResponse( command, projectEvent->EventID, senderID, true );
-                
-                Path sceneScreenShot( saveTo );
-                sceneScreenShot = sceneScreenShot / scene->GetName();
-                sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
-                m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true ); 
             }
             else
             {
-                SendSimpleResponse( command, projectEvent->EventID, senderID, false );
-                assert( false );
-                // TODO: Implement
+                SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
             }
         }
         else
         {
-            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, ( "Scene name '" + saveTo + "' is not valid system path." ).c_str() );
         }
     }
     else if( command == ProjectEvent::Command::LoadScene )

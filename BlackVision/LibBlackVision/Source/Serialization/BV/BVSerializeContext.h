@@ -16,7 +16,7 @@ private:
 
 public:
     BVSerializeContext()
-        : m_assets( nullptr )
+        : m_assets( std::make_shared< AssetDescsWithUIDs >() )
     {
         recursive = true;
         detailedInfo = true;

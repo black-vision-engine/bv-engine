@@ -43,7 +43,7 @@ SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera
 //
 void            SceneModel::Serialize           ( ISerializer & ser) const
 {
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
 
     ser.EnterChild( "scene" );
 
@@ -51,12 +51,6 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
 
         if( context->detailedInfo )
         {
-            auto assets = std::make_shared< AssetDescsWithUIDs >();
-            GetAssetsWithUIDs( *assets, m_sceneRootNode.get() );
-            context->SetAssets( assets );
-
-            assets->Serialize( ser );
-
             ser.EnterArray( "timelines" );
             for( auto timeline : m_timeline->GetChildren() )
                 timeline->Serialize( ser );
@@ -67,6 +61,12 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
         {
             m_sceneRootNode->Serialize( ser );
         }
+
+        if( context->detailedInfo )
+        {
+            context->GetAssets()->Serialize( ser );
+        }
+
 
     ser.ExitChild();
 }

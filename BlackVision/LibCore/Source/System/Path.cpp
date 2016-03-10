@@ -316,6 +316,13 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 
 // *********************************
 //
+bool            Path::IsValisPathName   ( const std::string & path )
+{
+    return boost::filesystem::windows_name( path );
+}
+
+// *********************************
+//
 StringVector    Path::Split				() const
 {
     StringVector results;

@@ -64,13 +64,13 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 {
 	auto typeStr = deser.GetAttribute( "type" );
 
-	auto type = SerializationHelper::String2T< int >( typeStr );
+	auto type = SerializationHelper::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
 
 	auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 
-	if( type.isValid )
+	if( type != NodeEffectType::NET_DEFAULT )
 	{
-		auto ret = ModelNodeEffect::Create( NodeEffectType( type.ham ) );
+		auto ret = ModelNodeEffect::Create( type );
 
 		// params
 		auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
