@@ -550,6 +550,34 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Cannot load preset" );
         }
     }
+    else if( command == ProjectEvent::Command::EditPreset )
+    {
+        auto projectName = request.GetAttribute( "ProjectName" );
+        auto path = request.GetAttribute( "Path" );
+
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+        std::string sceneName = File::GetFileName( path );
+        editor->AddScene( sceneName );
+        auto scene = editor->GetScene( sceneName );
+
+        auto timeline = editor->GetTimeEvaluator( sceneName );
+
+        assert( std::dynamic_pointer_cast< model::OffsetTimeEvaluator >( timeline ) );
+        auto offsetTimeline = std::static_pointer_cast< model::OffsetTimeEvaluator >( timeline );
+
+        auto node = pm->LoadPreset( projectName, path, offsetTimeline );
+        if( node != nullptr )
+        {
+            bool result = editor->AddChildNode( scene, scene->GetRootNode(), node );
+            SendSimpleResponse( command, projectEvent->EventID, senderID, result );
+        }
+        else
+        {
+            editor->RemoveScene( scene );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Cannot load preset" );
+        }
+    }
     else if( command == ProjectEvent::Command::CreateFolder )
     {
         auto categoryName = request.GetAttribute( "categoryName" );

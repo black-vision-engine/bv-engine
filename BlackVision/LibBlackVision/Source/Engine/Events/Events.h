@@ -505,6 +505,7 @@ public:
 
         SavePreset,
         LoadPreset,
+        EditPreset,
 
         CopyAsset,
         MoveAsset,

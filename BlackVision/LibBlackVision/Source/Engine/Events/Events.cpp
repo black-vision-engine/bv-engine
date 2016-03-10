@@ -272,9 +272,11 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, "RemoveAsset" ) 
-    , std::make_pair( ProjectEvent::Command::ImportAsset, "ImportAsset" ) 
+    , std::make_pair( ProjectEvent::Command::ImportAsset, "ImportAsset" )
+    
     , std::make_pair( ProjectEvent::Command::SavePreset, "SavePreset" ) 
     , std::make_pair( ProjectEvent::Command::LoadPreset, "LoadPreset" ) 
+    , std::make_pair( ProjectEvent::Command::EditPreset, "EditPreset" ) 
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 

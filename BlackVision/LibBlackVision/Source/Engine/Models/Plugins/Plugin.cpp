@@ -193,7 +193,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
 
     if( deserContext == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "plugin " << pluginName << " serilization aborded because of an error";
+        LOG_MESSAGE( SeverityLevel::error ) << "plugin [" << pluginName << "] deserialization aborded because of an error";
         assert( !"Wrong DeserializeContext casting." );
         return nullptr;
     }
@@ -209,7 +209,8 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
     ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
-        assert( false );
+        LOG_MESSAGE( SeverityLevel::error ) << "Plugin [" << pluginName << "] timeline [" + timeline + "] not found. Setting scene timeline [" + sceneTimeline->GetName() + "]";
+        //assert( false );
         te = sceneTimeline;
     }
 
