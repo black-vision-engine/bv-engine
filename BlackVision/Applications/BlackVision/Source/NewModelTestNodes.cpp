@@ -372,7 +372,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateImageMaskTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto text = CreateTextNode( timeEvaluator, 0, false );
+    //auto root = CreateTextNode( timeEvaluator, 0, false );
+
+    auto root = CreateTextureAnimationRectNode( timeEvaluator, false );
 
     auto effect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "image mask", timeEvaluator );
 
@@ -382,9 +384,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateImageMaskTest               ( mod
 
     effect->AddAsset( desc );
 
-    text->SetNodeEffect( effect );
+    root->SetNodeEffect( effect );
 
-    return text;
+    return root;
 }
 
 // *****************************
@@ -1549,7 +1551,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 16.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 100.f );
 
     node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1558,7 +1560,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-    success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", ".*tga" );      // @fixme Set proper regular expression for filter
+    success = model::LoadAnimation( node->GetPlugin( "animation" ), "proj02/FullHD/alfai", ".*tga" );      // @fixme Set proper regular expression for filter
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 

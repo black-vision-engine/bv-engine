@@ -21,6 +21,8 @@ public:
     virtual void                                    Update                  ( TimeType t ) = 0;
     virtual NodeEffectType			                GetType			        () const = 0;
 
+    virtual UInt32                                  NumRequiredAssets       () const = 0;
+    virtual bool                                    RemoveAsset             ( SizeType idx ) = 0;
     virtual bool                                    AddAsset                ( const AssetDescConstPtr & assetDesc ) = 0;
     virtual AssetDescVec                            GetAssets               () const = 0;
     virtual void                                    RegisterEvaluator       ( IParamValEvaluatorPtr paramEval ) = 0;

@@ -10,6 +10,38 @@
 
 namespace bv { namespace model {
 
+// ********************************
+//
+namespace 
+{
+// ********************************
+//
+std::map< NodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
+{
+    std::map< NodeEffectType, UInt32 > m;
+    m[ NodeEffectType::NET_IMAGE_MASK ] = 1;
+
+    return m;
+}
+static std::map< NodeEffectType, UInt32 > effectNumRequiredAssets = EffectNumRequiredAssetsInit();
+
+// ********************************
+//
+UInt32 GetEffectNumRequiredAssets( NodeEffectType effectType)
+{
+    auto it = effectNumRequiredAssets.find( effectType );
+
+    if( it != effectNumRequiredAssets.end() )
+    {
+        return it->second;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+} // anonymous
 
 // ********************************
 //
@@ -184,16 +216,44 @@ ModelNodeEffectPtr                          ModelNodeEffect::Create             
 //
 bool                                        ModelNodeEffect::AddAsset               ( const AssetDescConstPtr & assetDesc )
 {
-    m_assetsDescs.push_back( assetDesc );
-    return true;
+    if( m_assetsDescs.size() < NumRequiredAssets() )
+    {
+        m_assetsDescs.push_back( assetDesc );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
+// ********************************
+//
+bool                                        ModelNodeEffect::RemoveAsset            ( SizeType idx )
+{
+    if( idx < m_assetsDescs.size() )
+    {
+        m_assetsDescs.erase( m_assetsDescs.begin() + idx );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 // ********************************
 //
 AssetDescVec                                ModelNodeEffect::GetAssets          () const
 {
     return m_assetsDescs;
+}
+
+// ********************************
+//
+UInt32                                      ModelNodeEffect::NumRequiredAssets   () const
+{
+    return GetEffectNumRequiredAssets( GetType() );
 }
 
 } // model
