@@ -15,7 +15,7 @@ class BoundingBoxPostFullscreenEffectLogic : public PostFullscreenEffectLogic
 {
 private:
 
-    BoundingBoxEffect *   m_effect;
+    static BoundingBoxEffect *   m_effect;
 
 public:
 

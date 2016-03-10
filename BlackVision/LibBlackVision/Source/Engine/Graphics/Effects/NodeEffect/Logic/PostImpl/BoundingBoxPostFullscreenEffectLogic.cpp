@@ -13,10 +13,13 @@
 
 namespace bv {
 
+BoundingBoxEffect *   BoundingBoxPostFullscreenEffectLogic::m_effect = new BoundingBoxEffect();
+
+
 // *********************************
 //
 BoundingBoxPostFullscreenEffectLogic::BoundingBoxPostFullscreenEffectLogic          ()
-    : m_effect( new BoundingBoxEffect() )
+    //: m_effect( new BoundingBoxEffect() )
 {
 }
 
@@ -24,7 +27,7 @@ BoundingBoxPostFullscreenEffectLogic::BoundingBoxPostFullscreenEffectLogic      
 //
 BoundingBoxPostFullscreenEffectLogic::~BoundingBoxPostFullscreenEffectLogic         ()
 {
-    delete m_effect;
+    //delete m_effect;
 }
 
 // *********************************
