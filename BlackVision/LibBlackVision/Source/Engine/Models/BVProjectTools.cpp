@@ -515,12 +515,13 @@ void                 BVProjectTools::UpdateEffectAssetData               ( Scene
 
     if( modelEffect != nullptr )
     {
+        assert( modelEffect->NumRequiredAssets() == modelEffect->GetAssets().size() );
         for( auto ad : modelEffect->GetAssets() )
         {
             if( ad->GetUID() == TextureAssetDesc::UID() )
             {
                 auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( ad );
-                auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "Mask0" );
+                auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "" );
 
                 defTexDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
