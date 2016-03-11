@@ -47,11 +47,12 @@ private:
 
 private:
 
-    explicit                BVProject             ( Renderer * renderer );
+    explicit                BVProject           ( Renderer * renderer );
 
 	bool                    AddScene            ( model::SceneModelPtr sceneModel );
 	bool                    AddScene            ( model::SceneModelPtr sceneModel, UInt32 idx );
     bool                    RemoveScene         ( model::SceneModelPtr sceneModel );
+    void                    DetachEffect        ( SceneNode * engineNode );
 
 public:
 

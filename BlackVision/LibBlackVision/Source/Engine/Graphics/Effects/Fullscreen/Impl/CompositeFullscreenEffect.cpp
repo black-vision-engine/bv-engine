@@ -219,5 +219,24 @@ void            CompositeFullscreenEffect::AddTexture   ( FullscreenEffectGraphN
     node->GetEffect()->AddTexture( txDesc );
 }
 
+// **************************
+//
+void            CompositeFullscreenEffect::GetRenderPasses( FullscreenEffectGraphNodePtr node, std::set< const RenderablePass * > * passes ) const
+{
+    for( auto input : node->GetInputVec() )
+    {
+        GetRenderPasses( node, passes );
+    }
+
+    node->GetEffect()->GetRenderPasses( passes );
+}
+
+
+// **************************
+//
+void            CompositeFullscreenEffect::GetRenderPasses( std::set< const RenderablePass * > * passes ) const
+{
+    GetRenderPasses( m_graph->GetSinkNode(), passes );
+}
 
 } //bv

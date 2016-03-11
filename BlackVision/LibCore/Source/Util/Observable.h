@@ -10,13 +10,13 @@ namespace bv
 class Observable : public IObservable
 {
 private:
-    std::set< IObserverPtr >    m_observers;
+    std::set< IObserver * >    m_observers;
 
 protected:
 
-    virtual void        NotifyObservers     (  const std::string & arg  ) const override;
-    virtual void        AddObserver         ( const IObserverPtr & observer ) override;
-    virtual void        RemoveObserver      ( const IObserverPtr & observer ) override;
+    virtual void        NotifyObservers     ( const std::string & arg  ) const override;
+    virtual void        AddObserver         ( IObserver * observer ) override;
+    virtual void        RemoveObserver      ( IObserver * observer ) override;
 
 public:
 

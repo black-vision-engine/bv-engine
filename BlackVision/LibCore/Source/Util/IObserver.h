@@ -13,10 +13,7 @@ public:
 
     virtual void        HandleEvent     ( const IObservable * observable, const std::string & arg ) = 0;
 
-    virtual             ~IObserver();
+    virtual             ~IObserver      () {};
 };
-
-DEFINE_CONST_PTR_TYPE( IObserver )
-DEFINE_PTR_TYPE( IObserver )
 
 } // bv

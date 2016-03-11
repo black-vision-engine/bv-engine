@@ -231,4 +231,24 @@ void            NodeEffectLogic::AddTexture ( const ITextureDescriptorConstPtr &
     }
 }
 
+// *********************************
+//
+void            NodeEffectLogic::GetRenderPasses ( std::set< const RenderablePass * > * passes ) const
+{
+    if( m_preFSELogic != nullptr )
+    {
+        m_preFSELogic->GetRenderPasses( passes );
+    }
+
+    if( m_FSE != nullptr )
+    {
+        m_FSE->GetRenderPasses( passes );
+    }
+
+    if( m_postFSELogic != nullptr )
+    {
+        m_postFSELogic->GetRenderPasses( passes );
+    }
+}
+
 } //bv

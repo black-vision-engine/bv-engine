@@ -15,14 +15,14 @@ void        Observable::NotifyObservers     (  const std::string & arg  ) const
 
 //**************************************
 //
-void        Observable::AddObserver         ( const IObserverPtr & observer )
+void        Observable::AddObserver         ( IObserver * observer )
 {
     m_observers.insert( observer );
 }
 
 //**************************************
 //
-void        Observable::RemoveObserver      ( const IObserverPtr & observer )
+void        Observable::RemoveObserver      ( IObserver * observer )
 {
     m_observers.erase( observer );
 }

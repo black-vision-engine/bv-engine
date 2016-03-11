@@ -161,4 +161,11 @@ void                        FullscreenEffectInstance::AddTexture                
     m_effect->AddTexture( txDesc );
 }
 
+// **************************
+//
+void                        FullscreenEffectInstance::GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const
+{
+    m_effect->GetRenderPasses( passes );
+}
+
 } //bv

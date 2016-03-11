@@ -369,4 +369,16 @@ void            SimpleFullscreenEffect::AddTexture   ( const ITextureDescriptorC
     assert( success && "Trying to add more external textures than this effect supports." );
 }
 
+// **************************
+//
+void            SimpleFullscreenEffect::GetRenderPasses     ( std::set< const RenderablePass * > * passes ) const
+{
+    auto effect = m_fullscreenQuad->GetRenderableEffect();
+
+    for( SizeType i = 0; i < effect->NumPasses(); ++i )
+    {
+        passes->insert( effect->GetPass( ( unsigned int ) i ) );
+    }
+}
+
 } //bv

@@ -2,6 +2,8 @@
 
 #include "Engine/Interfaces/IValue.h"
 
+#include <set>
+
 namespace bv {
 
 enum class NodeEffectType : int
@@ -22,6 +24,8 @@ enum class NodeEffectType : int
     NET_TOTAL
 };
 
+
+class RenderablePass;
 class NodeEffectLogic;
 class SceneNode;
 class RenderLogicContext;
@@ -51,6 +55,9 @@ public:
     IValuePtr       GetValue                    ( const std::string & name ) const;
 
     void            AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
+
+
+    void            GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const;
 };
 
 DEFINE_PTR_TYPE(NodeEffect)

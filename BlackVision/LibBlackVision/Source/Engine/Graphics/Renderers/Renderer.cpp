@@ -29,7 +29,11 @@
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
+
 #include "Tools/HRTimer.h"
+
+#include <set>
 
 //FIXME: add disable methods so that current state can be cleared after a frame is rendered
 
@@ -840,6 +844,19 @@ void    Renderer::PassCCNumUniform  ( int i, SizeType num )
         BVGL::bvglUniform1i( loc, ( bv::GLint )num );
     }
 
+}
+
+// *********************************
+//
+void    Renderer::FreeNodeEffectPDR ( const NodeEffect * nodeEffect )
+{
+    std::set< const RenderablePass * > passes;
+    nodeEffect->GetRenderPasses( &passes );
+
+    for( auto p : passes )
+    {
+        m_PdrShaderMap.erase( p );
+    }
 }
 
 } //bv

@@ -42,6 +42,8 @@ public:
 
     void                        AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
 
+    void                        GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const;
+
 private:
 
     void                        InitializeGuard             ( RenderLogicContext * ctx );

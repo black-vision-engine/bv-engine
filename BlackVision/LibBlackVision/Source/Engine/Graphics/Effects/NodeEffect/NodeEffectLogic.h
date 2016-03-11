@@ -62,6 +62,9 @@ public:
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
     IValuePtr       GetValue                    ( const std::string & name ) const;
 
+    void            GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const;
+
+
 private:
 
     void            RecreateValues              ( std::vector< IValuePtr > & values );

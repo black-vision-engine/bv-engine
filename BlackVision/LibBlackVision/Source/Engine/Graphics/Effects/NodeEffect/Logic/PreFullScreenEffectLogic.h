@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <set>
 
 #include "Engine/Interfaces/IValue.h"
 
@@ -10,6 +11,7 @@ namespace bv {
 class SceneNode;
 class RenderTarget;
 class RenderLogicContext;
+class RenderablePass;
 
 class ITextureDescriptor;
 DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
@@ -43,6 +45,8 @@ public:
     virtual void                            AddTexture                  ( const ITextureDescriptorConstPtr & ) {};
 
     const std::vector< RenderTarget * > &   GetOutputRenderTargets      () const;
+
+    virtual void                            GetRenderPasses             ( std::set< const RenderablePass * > * ) const {};
 
 protected:
 

@@ -947,7 +947,12 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
     {
         auto modelNode = QueryTyped( node );
         modelNode->SetNodeEffect( nodeEffect );
-        BVProjectTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+
+        auto engineNode = GetEngineNode( node );
+
+        m_project->DetachEffect( engineNode );
+
+        BVProjectTools::UpdateSceneNodeEffect( engineNode, modelNode );
         return true;
     }
 

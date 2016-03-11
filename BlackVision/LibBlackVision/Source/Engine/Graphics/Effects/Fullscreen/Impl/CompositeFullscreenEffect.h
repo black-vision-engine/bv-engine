@@ -40,11 +40,14 @@ public:
 
     FullscreenEffectGraph *             GetGraph        ();
 
+    virtual void                        GetRenderPasses ( std::set< const RenderablePass * > * passes ) const override;
+
 private:
 
     void            AddTexture                  ( FullscreenEffectGraphNodePtr node, const ITextureDescriptorConstPtr & txDesc );
     void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx );
     void            Update                      ( FullscreenEffectGraphNodePtr node );
+    void            GetRenderPasses             ( FullscreenEffectGraphNodePtr node, std::set< const RenderablePass * > * passes ) const;
 
 };
 

@@ -11,7 +11,6 @@
 
 #include "Engine/Graphics/State/RendererStateInstance.h"
 
-
 namespace bv {
 
 class Camera;
@@ -45,6 +44,7 @@ class PdrVertexDescriptor;
 class PdrVertexArrayObject;
 class PdrRenderTarget;
 class PdrDownloadPBO;
+class NodeEffect;
 
 class TransformableEntity;
 
@@ -208,6 +208,8 @@ public:
     void                        FreeRADASVBPDR                  ( RenderableArrayDataArraysSingleVertexBuffer * radasvb );
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
+
+    void                        FreeNodeEffectPDR               ( const NodeEffect * nodeEffect );
 
 private:
 

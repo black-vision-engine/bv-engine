@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <set>
 
 #include "CoreDEF.h"
 
@@ -11,6 +12,7 @@
 
 namespace bv {
 
+class RenderablePass;
 class ITextureDescriptor;
 DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
 
@@ -49,6 +51,8 @@ public:
     virtual std::vector< IValuePtr >    GetValues               () const                            = 0;
 
     virtual void                        AddTexture              ( const ITextureDescriptorConstPtr & txDesc ) = 0;
+
+    virtual void                        GetRenderPasses         ( std::set< const RenderablePass * > * passes ) const = 0;
 };
 
 DEFINE_PTR_TYPE(FullscreenEffect)

@@ -13,6 +13,8 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
 namespace bv {
 
 const std::string	BVProject::MAIN_ROOT_NAME			= "main root";
@@ -210,9 +212,28 @@ const model::SceneModelVec &    BVProject::GetScenes    () const
 
 // *******************************
 //
-void							BVProject::SetStartTime		( unsigned long millis )
+void							BVProject::SetStartTime	( unsigned long millis )
 {
     m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
+}
+
+// *******************************
+//
+void                            BVProject::DetachEffect ( SceneNode * engineNode )
+{
+    m_renderer->FreeNodeEffectPDR( engineNode->GetNodeEffect().get() );
+
+    //auto tEntity = engineNode->GetTransformable();
+
+    //if( tEntity != nullptr )
+    //{
+    //    if( auto rEntity = dynamic_cast< RenderableEntity * >( tEntity ) )
+    //    {
+    //        auto rEffect = rEntity->GetRenderableEffect();
+
+            
+    //    }
+    //}
 }
 
 } // bv

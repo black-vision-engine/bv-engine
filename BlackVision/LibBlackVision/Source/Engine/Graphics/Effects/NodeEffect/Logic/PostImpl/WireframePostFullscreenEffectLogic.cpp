@@ -62,4 +62,14 @@ void    WireframePostFullscreenEffectLogic::DrawWirefreameNodeOnly              
     renderer->DrawRenderable( renderable );
 }
 
+// *********************************
+//
+void    WireframePostFullscreenEffectLogic::GetRenderPasses                     ( std::set< const RenderablePass * > * passes ) const
+{
+    for( SizeType i = 0; i < m_effect->NumPasses(); ++i )
+    {
+        passes->insert( m_effect->GetPass( ( unsigned int ) i ) );
+    }
+}
+
 } //bv

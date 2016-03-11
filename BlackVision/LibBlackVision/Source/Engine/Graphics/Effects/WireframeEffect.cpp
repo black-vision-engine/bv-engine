@@ -38,13 +38,7 @@ WireframeEffect::WireframeEffect ()
 // ****************************
 //
 WireframeEffect::~WireframeEffect()
-{
-    auto pass = GetPass( 0 );
-
-    delete pass->GetPixelShader();
-    delete pass->GetVertexShader();
-    delete pass->GetGeometryShader();
-}
+{}
 
 // ****************************
 //

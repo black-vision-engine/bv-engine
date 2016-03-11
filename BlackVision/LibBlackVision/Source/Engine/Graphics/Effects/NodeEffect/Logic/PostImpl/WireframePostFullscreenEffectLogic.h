@@ -26,6 +26,8 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues                           () const override;
 
+    virtual void                        GetRenderPasses                     ( std::set< const RenderablePass * > * ) const override;
+
 private:
 
     void                                EnableWireframeEffect               ( Renderer * renderer, SceneNode * node );

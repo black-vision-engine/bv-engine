@@ -72,4 +72,11 @@ void            NodeEffect::AddTexture                  ( const ITextureDescript
     m_logic->AddTexture( txDesc );
 }
 
+// *********************************
+//
+void            NodeEffect::GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const
+{
+    m_logic->GetRenderPasses( passes );
+}
+
 } //bv

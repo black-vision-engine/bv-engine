@@ -39,6 +39,7 @@ public:
     virtual std::vector< IValuePtr >    GetValues           () const override;
 
     virtual void                        AddTexture          ( const ITextureDescriptorConstPtr & txDesc ) override;
+    virtual void                        GetRenderPasses     ( std::set< const RenderablePass * > * passes ) const override;
 
 private:
 

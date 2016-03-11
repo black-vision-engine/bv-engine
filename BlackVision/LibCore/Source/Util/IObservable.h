@@ -13,11 +13,11 @@ protected:
 
 public:
 
-    virtual void        AddObserver         ( const IObserverPtr & observer ) = 0;
-    virtual void        RemoveObserver      ( const IObserverPtr & observer ) = 0;
+    virtual void        AddObserver         ( IObserver * observer ) = 0;
+    virtual void        RemoveObserver      ( IObserver * observer ) = 0;
 
 
-    virtual             ~IObservable        ();
+    virtual             ~IObservable        () {};
 };
 
 DEFINE_CONST_PTR_TYPE( IObservable )
