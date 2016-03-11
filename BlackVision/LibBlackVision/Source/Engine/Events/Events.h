@@ -874,6 +874,7 @@ public:
     typedef enum
     {
         SetGlobalEffect,
+        LoadGlobalEffectAsset,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -886,6 +887,7 @@ public:
     std::string                     SceneName;
     std::string                     EffectName;
     std::string                     TimelinePath;
+    IDeserializer *                 AssetData;
 
 public:
     explicit                        GlobalEffectEvent   () {}

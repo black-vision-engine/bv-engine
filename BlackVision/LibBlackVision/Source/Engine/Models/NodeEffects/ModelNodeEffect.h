@@ -33,7 +33,9 @@ public:
     
     virtual NodeEffectType			    GetType		        () const override;
 
+    virtual UInt32                                  NumRequiredAssets   () const override;
     virtual bool                                    AddAsset            ( const AssetDescConstPtr & assetDesc ) override;
+    virtual bool                                    RemoveAsset         ( SizeType idx ) override;
     virtual AssetDescVec                            GetAssets           () const;
     virtual void                                    RegisterEvaluator   ( IParamValEvaluatorPtr paramEval ) override;
     virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;

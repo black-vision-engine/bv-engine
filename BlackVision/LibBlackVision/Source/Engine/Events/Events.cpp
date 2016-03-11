@@ -479,6 +479,7 @@ const std::string GLOBAL_EFFECT_NAME_STRING                = "GlobalEffectName";
 std::pair< GlobalEffectEvent::Command, const char* > GlobalEffectEventCommandMapping[] = 
 {
     std::make_pair( GlobalEffectEvent::Command::SetGlobalEffect, "SetGlobalEffect" )
+    , std::make_pair( GlobalEffectEvent::Command::LoadGlobalEffectAsset, "LoadGlobalEffectAsset")
     , std::make_pair( GlobalEffectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -1720,6 +1721,7 @@ IEventPtr                GlobalEffectEvent::Create          ( IDeserializer& des
         newEvent->EffectName            = deser.GetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_STRING );
         newEvent->TimelinePath          = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         newEvent->EffectCommand         = SerializationHelper::String2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GlobalEffectEvent::Command::Fail );
+        newEvent->AssetData             = deser.DetachBranch( SerializationHelper::ASSET_DATA_STRING );
 
         return newEvent;
     }
