@@ -25,6 +25,9 @@
     <Filter Include="Tools\Profiler">
       <UniqueIdentifier>{9d5799c7-b685-4bd8-8d11-3be2322f86e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{65e8b6fd-9954-403b-afb9-796cfe42452d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -111,6 +114,15 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Expected.h" />
+    <ClInclude Include="..\..\..\Source\Util\Observable.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\IObserver.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\IObservable.h">
+      <Filter>Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -175,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\System\Time.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\Observable.cpp">
+      <Filter>Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
