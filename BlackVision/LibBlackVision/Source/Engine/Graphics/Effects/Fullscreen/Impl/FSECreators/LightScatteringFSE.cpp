@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "LightScatteringMaskFSE.h"
+#include "LightScatteringFSE.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/Impl/SimpleFullscreenEffect.h"
 #include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
@@ -17,7 +17,7 @@ namespace bv
 
 // **************************
 //
-FullscreenEffect *       LightScatteringMaskFSECreator::CreateLightScatteringMaskFSE    ( const std::vector< IValuePtr > & values )
+FullscreenEffect *       LightScatteringFSECreator::CreateLightScatteringFSE    ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
 

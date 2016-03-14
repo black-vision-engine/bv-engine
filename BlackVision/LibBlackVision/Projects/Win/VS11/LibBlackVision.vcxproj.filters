@@ -1405,11 +1405,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp">
       <Filter>Engine\Models\EditorVariables</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringMaskFSE.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\LightScatteringPreFullscreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3515,11 +3515,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringMaskFSE.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\LightScatteringPreFullscreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
