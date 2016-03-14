@@ -19,7 +19,9 @@ uniform mat4            maskTx;
 
 void main()
 {
-    vec2 maskUV = ( maskTx * vec4( uvCoord.x, uvCoord.y, 0.0, 1.0 ) ).xy;
+    mat4 scaleMat = mat4( mat2( 1.0 / scale.x, 0, 0, 1.0 / scale.y) );
+
+    vec2 maskUV = ( scaleMat * maskTx * vec4( uvCoord.x, uvCoord.y, 0.0, 1.0 ) ).xy - position;
     
     float alpha = texture( Mask0, maskUV ).a;
 
