@@ -178,17 +178,17 @@ IModelNodeEffectPtr         CreateImageMaskModelNodeEffect              ( const 
     auto invertEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "invert", timeEvaluator );
     auto fitEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "fit", timeEvaluator );
     auto wrapEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "wrap", timeEvaluator );
-    auto maskAspectEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "wrap", timeEvaluator );
+    auto maskAspectEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskAspect", timeEvaluator );
     auto alphaOnlyEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "alphaOnly", timeEvaluator );
     auto softMaskEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "softMask", timeEvaluator );
 
-    blendEval->Parameter()->SetVal( 100.f, 0.f );
+    blendEval->Parameter()->SetVal( 1.f, 0.f );
     positionEval->Parameter()->SetVal( glm::vec2( 0.f, 0.f ), 0.f );
     scaleEval->Parameter()->SetVal( glm::vec2( 1.f, 1.f ), 0.f );
     invertEval->Parameter()->SetVal( 0, 0.f );
     fitEval->Parameter()->SetVal( 0, 0.f );
     wrapEval->Parameter()->SetVal( 0, 0.f );
-    maskAspectEval->Parameter()->SetVal( 0, 0.f );
+    maskAspectEval->Parameter()->SetVal( 1, 0.f );
     alphaOnlyEval->Parameter()->SetVal( 0, 0.f );
     softMaskEval->Parameter()->SetVal( 0, 0.f );
 

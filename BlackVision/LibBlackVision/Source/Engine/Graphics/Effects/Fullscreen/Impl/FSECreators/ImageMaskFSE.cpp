@@ -17,7 +17,7 @@ namespace bv
 
 // **************************
 //
-FullscreenEffect *       ImageMaskFSECreator::CreateImageMaskFSE    ( const std::vector< IValuePtr > & )
+FullscreenEffect *       ImageMaskFSECreator::CreateImageMaskFSE    ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
 
@@ -28,19 +28,20 @@ FullscreenEffect *       ImageMaskFSECreator::CreateImageMaskFSE    ( const std:
     auto positionVal = ValuesFactory::CreateValueVec2( "position" );
     auto scaleVal = ValuesFactory::CreateValueVec2( "scale" );
     auto invertVal = ValuesFactory::CreateValueInt( "invert" );
-    auto fitVal = ValuesFactory::CreateValueInt( "fit" );
+    //auto fitVal = ValuesFactory::CreateValueInt( "fit" );
     auto wrapVal = ValuesFactory::CreateValueInt( "wrap" );
-    auto maskAspectVal = ValuesFactory::CreateValueInt( "wrap" );
+    //auto maskAspectVal = ValuesFactory::CreateValueInt( "maskAspect" );
     auto alphaOnlyVal = ValuesFactory::CreateValueInt( "alphaOnly" );
     auto softMaskVal = ValuesFactory::CreateValueInt( "softMask" );
 
+    fseData.AppendValues( values );
     fseData.AppendValue( blendVal );
     fseData.AppendValue( positionVal );
     fseData.AppendValue( scaleVal );
     fseData.AppendValue( invertVal );
-    fseData.AppendValue( fitVal );
+    //fseData.AppendValue( fitVal );
     fseData.AppendValue( wrapVal );
-    fseData.AppendValue( maskAspectVal );
+    //fseData.AppendValue( maskAspectVal );
     fseData.AppendValue( alphaOnlyVal );
     fseData.AppendValue( softMaskVal );
 

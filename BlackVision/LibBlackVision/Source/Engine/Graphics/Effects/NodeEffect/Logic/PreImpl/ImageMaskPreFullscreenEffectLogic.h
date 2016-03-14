@@ -12,6 +12,10 @@ class ImageMaskPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 private:
     ITextureDescriptorConstPtr      m_txDesc;
 
+    ValueIntPtr                     m_fitVal;
+    ValueIntPtr                     m_maskAspectVal;
+    ValueMat4Ptr                    m_maskTxVal;
+
 public:
                 ImageMaskPreFullscreenEffectLogic   ();
     virtual     ~ImageMaskPreFullscreenEffectLogic  ();

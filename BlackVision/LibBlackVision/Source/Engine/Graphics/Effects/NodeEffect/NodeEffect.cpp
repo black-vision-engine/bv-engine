@@ -69,6 +69,7 @@ void            NodeEffect::Update                      ()
 //
 void            NodeEffect::AddTexture                  ( const ITextureDescriptorConstPtr & txDesc )
 {
+    m_textures.push_back( txDesc );
     m_logic->AddTexture( txDesc );
 }
 
@@ -77,6 +78,21 @@ void            NodeEffect::AddTexture                  ( const ITextureDescript
 void            NodeEffect::GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const
 {
     m_logic->GetRenderPasses( passes );
+}
+
+// *********************************
+//
+SizeType        NodeEffect::GetNumTextures              () const
+{
+    return m_textures.size();
+}
+
+// *********************************
+//
+ITextureDescriptorConstPtr NodeEffect::GetTexture       ( SizeType i ) const
+{
+    assert( i < m_textures.size() );
+    return m_textures[ i ];
 }
 
 } //bv

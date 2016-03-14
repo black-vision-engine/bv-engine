@@ -38,6 +38,7 @@ private:
 
     NodeEffectLogic *   m_logic;
     NodeEffectType      m_type;
+    std::vector< ITextureDescriptorConstPtr > m_textures;
 
 public:
 
@@ -55,7 +56,8 @@ public:
     IValuePtr       GetValue                    ( const std::string & name ) const;
 
     void            AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
-
+    SizeType        GetNumTextures              () const;
+    ITextureDescriptorConstPtr GetTexture       ( SizeType i ) const;
 
     void            GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const;
 };
