@@ -38,13 +38,7 @@ BoundingBoxEffect::BoundingBoxEffect ()
 // ****************************
 //
 BoundingBoxEffect::~BoundingBoxEffect()
-{
-    auto pass = GetPass( 0 );
-
-    delete pass->GetPixelShader();
-    delete pass->GetVertexShader();
-    delete pass->GetGeometryShader();
-}
+{}
 
 // ****************************
 //

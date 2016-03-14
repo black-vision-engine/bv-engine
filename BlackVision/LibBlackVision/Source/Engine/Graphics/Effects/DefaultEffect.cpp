@@ -49,17 +49,7 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
 // *********************************
 //
 DefaultEffect::~DefaultEffect   ()
-{
-    //FIXME: this suxx as this class cleans up shaders from passes and passes itself are deleted in the base class (delete pass should delete shaders as well) - to be fixed
-    for( unsigned int i = 0; i < NumPasses(); ++i )
-    {
-        auto pass = GetPass( i );
-
-        delete pass->GetPixelShader();
-        delete pass->GetVertexShader();
-        delete pass->GetGeometryShader();
-    }
-}
+{}
 
 // *********************************
 //
