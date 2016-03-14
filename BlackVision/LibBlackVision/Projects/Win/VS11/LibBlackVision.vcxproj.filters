@@ -1405,6 +1405,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp">
       <Filter>Engine\Models\EditorVariables</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringMaskFSE.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\LightScatteringPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3126,9 +3132,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
     </ClInclude>
@@ -3508,6 +3511,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h">
       <Filter>Engine\Models\EditorVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringMaskFSE.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\LightScatteringPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

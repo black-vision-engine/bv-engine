@@ -16,6 +16,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/BlurPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/ShadowPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/ImageMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/LightScatteringPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
@@ -179,6 +180,20 @@ NodeEffectPtr       CreateImageMaskEffect()
     return CreateNodeEffect( logic, NodeEffectType::NET_IMAGE_MASK );
 }
 
+// **************************
+//
+NodeEffectPtr       CreateLightScatteringEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new LightScatteringPreFullscreenEffectLogic();
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_LIGHT_SCATTERING, pre->GetValues() );
+
+    SetLogicComponents( logic, pre, fse, nullptr );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_LIGHT_SCATTERING );
+}
+
 } // anonoymnous
 
 
@@ -206,6 +221,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateShadowEffect();
         case NodeEffectType::NET_IMAGE_MASK:
             return CreateImageMaskEffect();
+        case NodeEffectType::NET_LIGHT_SCATTERING:
+            return CreateLightScatteringEffect();
         //Interlace and so on
         default:
             assert( false );

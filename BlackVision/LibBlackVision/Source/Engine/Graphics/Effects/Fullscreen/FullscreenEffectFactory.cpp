@@ -15,6 +15,7 @@
 #include "Engine/Graphics/Effects/Fullscreen/Impl/FSECreators/BlurFSE.h"
 #include "Engine/Graphics/Effects/Fullscreen/Impl/FSECreators/ShadowFSE.h"
 #include "Engine/Graphics/Effects/Fullscreen/Impl/FSECreators/ImageMaskFSE.h"
+#include "Engine/Graphics/Effects/Fullscreen/Impl/FSECreators/LightScatteringMaskFSE.h"
 
 namespace bv {
 
@@ -218,6 +219,10 @@ FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType, const 
         case FullscreenEffectType::FET_IMAGE_MASK:
         {
             return ImageMaskFSECreator::CreateImageMaskFSE( values );
+        }
+        case FullscreenEffectType::FET_LIGHT_SCATTERING:
+        {
+            return LightScatteringMaskFSECreator::CreateLightScatteringMaskFSE( values );
         }
         default:
             assert( false );

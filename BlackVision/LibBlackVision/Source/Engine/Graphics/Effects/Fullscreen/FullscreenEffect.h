@@ -27,6 +27,7 @@ enum class FullscreenEffectType : int
     FET_BLUR,
     FET_SHADOW,
     FET_IMAGE_MASK,
+    FET_LIGHT_SCATTERING,
     //FET_OUTLINE
     //TODO: and so on
 
