@@ -3521,6 +3521,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

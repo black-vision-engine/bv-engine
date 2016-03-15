@@ -10,7 +10,6 @@
 #include "Engine/Graphics/Types/Transform.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
-
 namespace bv {
 
 class Renderer;
@@ -55,7 +54,7 @@ public:
     static  void                SyncSingleNode                      ( model::BasicNodePtr modelNode, SceneNode * node );
 
     static  SceneNode *         BuildEngineSceneNode                ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
-    static  RenderableEntity *  BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc );
+    static  RenderableEntity *  BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc, PrimitiveType type );
 
     static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
     

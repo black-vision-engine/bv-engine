@@ -23,6 +23,7 @@
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+#include "Engine/Graphics/SceneGraph/Lines.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Engine/Graphics/Resources/VertexBuffer.h"
@@ -131,6 +132,7 @@ void    Renderer::FreePdrResources   ()
 // FIXME: stencil is not required here so it is just fine, glClearColor and glClearDepth should be set only once, not every buffer clear - but there is no need to optimize it
 void	Renderer::ClearBuffers		()
 {
+    m_ClearColor	= glm::vec4( 0.0f, 1.0f, 1.0f, 1.0f );
     //FIXME: it should be set once only, when clear color is changed
     BVGL::bvglClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //FIXME: implement
@@ -179,6 +181,9 @@ bool    Renderer::DrawRenderable    ( RenderableEntity * ent )
         //FIXME: FIX-1
         //glDrawArrays(ConstantsMapper::GLConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
+    case RenderableEntity::RenderableType::RT_LINES:
+        DrawLines( static_cast< Lines * >( ent ) );
+        break;
     default:
         assert(!"Should not be here");
     }
@@ -194,6 +199,33 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 
     // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
+
+    Enable  ( vao );
+
+    unsigned int firstVertex = 0;
+    auto ccNum = vao->GetNumConnectedComponents();
+    for( unsigned int i = 0; i < ccNum; ++i )
+    {
+        PassCCNumUniform( i, ccNum );
+
+        unsigned int numVertices = vao->GetNumVertices( i );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
+        firstVertex += numVertices;
+    }
+
+    Disable ( vao );
+
+    return true;
+}
+
+// *********************************
+//
+bool     Renderer::DrawLines      ( Lines * lines )
+{
+    static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_LINES );
+
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
+    const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( lines->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
 
