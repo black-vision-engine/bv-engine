@@ -10,6 +10,10 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
+#include "Mathematics/Util/Transformation.h"
+
+#include "Engine/Graphics/SceneGraph/Camera.h"
+
 namespace bv {
 
 // *********************************
@@ -56,6 +60,42 @@ void                        ImageMaskPreFullscreenEffectLogic::RenderImpl    ( S
 
         if( fit == 1 ) // fit to the object
         {
+            auto bb = node->GetBoundingBox();
+
+            if( bb != nullptr )
+            {
+                auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
+
+                auto tbb = mathematics::TransformationUtils::Transform( bb, projMat * node->GetTransformable()->WorldTransform().Matrix() );
+
+                auto cxo = ( tbb.xmax / tbb.zmax + tbb.xmin / tbb.zmin ) / 2.f;
+                auto cyo = ( tbb.ymax / tbb.zmax + tbb.ymin / tbb.zmin ) / 2.f;
+
+                auto screenAspectRatio = screenWidth / screenHeight;
+
+                auto xd = 1.f;
+                auto yd = 1.f;
+
+                if( screenAspectRatio >= 1.f )
+                {
+                    xd = screenAspectRatio;
+                }
+                else
+                {
+                    yd = screenAspectRatio;
+                }
+
+                cxo = ( cxo + xd ) / ( 2 * xd );
+                cyo = ( cyo + yd ) / ( 2 * yd );
+
+                auto cxm = ( ( maskW / 2.f ) / screenWidth );
+                auto cym = ( ( maskH / 2.f ) / screenHeight );
+
+                auto sx = cxo - cxm;
+                auto sy = cyo - cym;
+
+                tx = glm::translate( tx, glm::vec3( -sx, -sy, 0.0 ) );
+            }
 
         }
         else // fit to the screen

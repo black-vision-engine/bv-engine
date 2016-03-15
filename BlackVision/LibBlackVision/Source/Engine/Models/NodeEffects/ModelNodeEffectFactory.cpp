@@ -186,7 +186,7 @@ IModelNodeEffectPtr         CreateImageMaskModelNodeEffect              ( const 
     positionEval->Parameter()->SetVal( glm::vec2( 0.f, 0.f ), 0.f );
     scaleEval->Parameter()->SetVal( glm::vec2( 1.f, 1.f ), 0.f );
     invertEval->Parameter()->SetVal( 0, 0.f );
-    fitEval->Parameter()->SetVal( 0, 0.f );
+    fitEval->Parameter()->SetVal( 1, 0.f );
     wrapEval->Parameter()->SetVal( 0, 0.f );
     maskAspectEval->Parameter()->SetVal( 1, 0.f );
     alphaOnlyEval->Parameter()->SetVal( 0, 0.f );
