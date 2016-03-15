@@ -68,6 +68,8 @@ SceneNode *         BVProjectTools::BuildEngineSceneNode                  ( mode
 
     nodesMapping[ modelNode.get() ] = engineNode;
 
+    engineNode->SetBoundingBox( modelNode->GetBoundingVolume()->GetBoundingBox() );
+
     UpdateSceneNodeEffect( engineNode, modelNode );
 
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )

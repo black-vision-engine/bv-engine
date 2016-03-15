@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
+#include "Mathematics/Box.h"
 
 #include "CoreDEF.h"
 
@@ -14,6 +15,7 @@ class IValue;
 class TransformableEntity;
 class Renderer;
 
+namespace math = mathematics;
 
 class SceneNode
 {
@@ -30,6 +32,8 @@ private:
     TransformableEntity *   m_transformable;
 
     bool                    m_visible;
+
+    const mathematics::Box * m_boundingBox;
 
 public:
 
@@ -50,6 +54,9 @@ public:
    
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
+
+    void                    SetBoundingBox      ( const math::Box * bb );
+    const math::Box *       GetBoundingBox      () const;
 
 private:
 
