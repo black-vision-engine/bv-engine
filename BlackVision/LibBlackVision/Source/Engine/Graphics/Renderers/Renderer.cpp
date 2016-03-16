@@ -70,6 +70,7 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_currentStateInstance = m_defaultStateInstance;
 
     m_PdrPBOMemTransferRT = nullptr;
+    m_PdrPBOMemTransferSyncRT = nullptr;
 }
 
 // *********************************
@@ -432,12 +433,28 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
     if( !m_PdrPBOMemTransferRT )
     {
-        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
+        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), false );
     }
 
     //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
 
     pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
+}
+
+// ***********************
+//
+void    Renderer::ReadColorTexturSync ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex )
+{
+    PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+
+    if( !m_PdrPBOMemTransferSyncRT )
+    {
+        m_PdrPBOMemTransferSyncRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
+    }
+
+    //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
+
+    pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferSyncRT, outputTex );
 }
 
 // *********************************

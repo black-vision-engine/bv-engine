@@ -93,6 +93,7 @@ private:
     TextureUpdateIDMapType              m_TextureUpdateIDMap;
 
     PdrDownloadPBO *					m_PdrPBOMemTransferRT;
+    PdrDownloadPBO *					m_PdrPBOMemTransferSyncRT;
 
 	bool								m_EnableGLFinish;
 	bool								m_EnableGLFlush;
@@ -160,6 +161,7 @@ public:
     void    Disable             ( const RenderTarget * rt );
 
     void    ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );
+    void    ReadColorTexturSync ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );
 
 public:
 
