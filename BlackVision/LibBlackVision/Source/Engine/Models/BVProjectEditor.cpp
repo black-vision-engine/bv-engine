@@ -988,7 +988,7 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
 
 // *******************************
 //
-bool						BVProjectEditor::LoadGlobalEffectAsset( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string &, IDeserializer & serializedAssetData )
+bool						BVProjectEditor::LoadGlobalEffectAsset( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string &, IDeserializer & serializedAssetData, SizeType idx )
 {
     auto scene = GetScene( sceneName );
 
@@ -1006,7 +1006,7 @@ bool						BVProjectEditor::LoadGlobalEffectAsset( const std::string & sceneName,
     {
         auto node = GetNode( sceneName, nodePath );
         auto modelNode = QueryTyped( node );
-        node->GetNodeEffect()->AddAsset( AssetManager::GetInstance().CreateDesc( serializedAssetData ) );
+        node->GetNodeEffect()->AddAsset( AssetManager::GetInstance().CreateDesc( serializedAssetData ), idx );
 
         BVProjectTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
 

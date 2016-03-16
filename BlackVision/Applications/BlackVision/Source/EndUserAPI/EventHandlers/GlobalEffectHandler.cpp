@@ -1,6 +1,7 @@
 #include "GlobalEffectHandler.h"
 #include "EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Serialization/SerializationHelper.h"
 #include "BVAppLogic.h"
 
 namespace bv
@@ -43,9 +44,24 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
         if( command == GlobalEffectEvent::Command::LoadGlobalEffectAsset )
         {
             auto assetData = effectEvent->AssetData;
+
+            SizeType idx = 0;
+
+            if( effectEvent->Request != nullptr )
+            {
+                auto req = effectEvent->Request;
+
+                auto idxEx = SerializationHelper::String2T< SizeType >( req->GetAttribute( "assetIdx" ) );
+
+                if( idxEx.isValid )
+                {
+                    idx = idxEx.ham;
+                }
+            }
+
             if( assetData != nullptr )
             {
-                result = editor->LoadGlobalEffectAsset( sceneName, nodePath, timelinePath, effectName, *assetData );
+                result = editor->LoadGlobalEffectAsset( sceneName, nodePath, timelinePath, effectName, *assetData, idx );
             }
             else
             {

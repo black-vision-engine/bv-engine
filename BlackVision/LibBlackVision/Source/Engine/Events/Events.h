@@ -888,6 +888,7 @@ public:
     std::string                     EffectName;
     std::string                     TimelinePath;
     IDeserializer *                 AssetData;
+    IDeserializer *                 Request;
 
 public:
     explicit                        GlobalEffectEvent   () {}

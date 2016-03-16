@@ -347,9 +347,11 @@ void            SimpleFullscreenEffect::AddTexture   ( const ITextureDescriptorC
 {
     auto tx2d = std::make_shared< Texture2D >( txDesc->GetFormat(), txDesc->GetWidth(), txDesc->GetHeight(), txDesc->GetSemantic(), txDesc->GetNumLevels() );
 
+    auto data = txDesc->GetBits();
+
     for( UInt32 i = 0; i < txDesc->GetNumLevels(); ++i )
     {
-        tx2d->SetData( txDesc->GetBits( i ), i );
+        tx2d->SetData( data[ i ], i );
     }
 
     bool success = false;

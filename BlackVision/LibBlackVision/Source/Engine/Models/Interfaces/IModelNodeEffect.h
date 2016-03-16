@@ -23,7 +23,7 @@ public:
 
     virtual UInt32                                  NumRequiredAssets       () const = 0;
     virtual bool                                    RemoveAsset             ( SizeType idx ) = 0;
-    virtual bool                                    AddAsset                ( const AssetDescConstPtr & assetDesc ) = 0;
+    virtual bool                                    AddAsset                ( const AssetDescConstPtr & assetDesc, SizeType idx ) = 0;
     virtual AssetDescVec                            GetAssets               () const = 0;
     virtual void                                    RegisterEvaluator       ( IParamValEvaluatorPtr paramEval ) = 0;
     virtual IParameterPtr                           GetParameter            ( const std::string & name ) const = 0;

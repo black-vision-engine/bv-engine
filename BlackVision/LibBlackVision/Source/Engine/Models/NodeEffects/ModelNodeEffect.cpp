@@ -48,6 +48,7 @@ UInt32 GetEffectNumRequiredAssets( NodeEffectType effectType)
 ModelNodeEffect::ModelNodeEffect  ( NodeEffectType type )
     : m_type( type )
     , m_paramValModel( std::make_shared< DefaultParamValModel >() )
+    , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
 {
 }
 
@@ -63,6 +64,7 @@ void                                        ModelNodeEffect::Serialize          
 {
     ser.EnterChild( "effect" );
     ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
+    ser.SetAttribute( "numRequiredAssets", SerializationHelper::T2String< SizeType >( NumRequiredAssets() ) );
     m_paramValModel->Serialize( ser );
 
 	if( m_assetsDescs.size() > 0 )
@@ -119,6 +121,7 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 		// assets
 		if( deser.EnterChild( "assets" ) )
 		{
+            auto idx = 0;
 			do
 			{
 				deser.EnterChild( "asset" );
@@ -137,7 +140,7 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 
 				if( assetDesc )
 				{
-					ret->AddAsset( assetDesc );
+					ret->AddAsset( assetDesc, idx++ );
 				}
 
 				deser.ExitChild(); // asset
@@ -214,11 +217,11 @@ ModelNodeEffectPtr                          ModelNodeEffect::Create             
 
 // ********************************
 //
-bool                                        ModelNodeEffect::AddAsset               ( const AssetDescConstPtr & assetDesc )
+bool                                        ModelNodeEffect::AddAsset               ( const AssetDescConstPtr & assetDesc, SizeType idx )
 {
-    if( m_assetsDescs.size() < NumRequiredAssets() )
+    if( idx < NumRequiredAssets() )
     {
-        m_assetsDescs.push_back( assetDesc );
+        m_assetsDescs[ idx ] = assetDesc;
         return true;
     }
     else

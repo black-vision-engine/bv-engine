@@ -1722,6 +1722,7 @@ IEventPtr                GlobalEffectEvent::Create          ( IDeserializer& des
         newEvent->TimelinePath          = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         newEvent->EffectCommand         = SerializationHelper::String2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GlobalEffectEvent::Command::Fail );
         newEvent->AssetData             = deser.DetachBranch( SerializationHelper::ASSET_DATA_STRING );
+        newEvent->Request               = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
     }
