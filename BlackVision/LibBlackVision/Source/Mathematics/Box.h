@@ -30,12 +30,15 @@ struct Box
     static	BoxPtr		Create          ();
 
     void                Include		    ( const glm::vec3 & point );
+    void                Include		    ( glm::vec3 && point );
 
     Float32             RayIntersection ( glm::vec3 rayPoint, glm::vec3 rayDirection ) const;
 
     Float32		        Width		    () const;
     Float32		        Height			() const;
     Float32             Depth           () const;
+
+    std::vector< glm::vec4 > GetVerticies () const;
 };
 
 } // mathematics

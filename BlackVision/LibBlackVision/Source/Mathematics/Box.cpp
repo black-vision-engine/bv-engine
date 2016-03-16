@@ -96,6 +96,31 @@ void        Box::Include					( const glm::vec3 & point )
     }
 }
 
+// ******************************
+//
+void        Box::Include		            ( glm::vec3 && point )
+{
+    if( m_empty )
+    {
+        m_empty = false;
+        xmin = point.x;
+        ymin = point.y;
+        xmax = point.x;
+        ymax = point.y;
+        zmin = point.z;
+        zmax = point.z;
+    }
+    else
+    {
+        xmin = std::min( xmin, point.x );
+        ymin = std::min( ymin, point.y );
+        zmin = std::min( zmin, point.z );
+        xmax = std::max( xmax, point.x );
+        ymax = std::max( ymax, point.y );
+        zmax = std::max( zmax, point.z );
+    }
+}
+
 // ***********************
 // Parameter rayDirection should be normalized ray vector
 // Returns distance to intersection point and infinity or -infinity if there's no intersection.
@@ -165,6 +190,25 @@ Float32		Box::Height				() const
 Float32     Box::Depth               () const
 {
     return zmax - zmin;
+}
+
+// ******************************
+// 
+std::vector< glm::vec4 > Box::GetVerticies () const
+{
+    std::vector< glm::vec4 > ret;
+    ret.reserve( 8 );
+
+    ret.push_back( glm::vec4( this->xmin, this->ymin, this->zmin, 1.f ) );
+    ret.push_back( glm::vec4( this->xmin, this->ymin, this->zmax, 1.f ) );
+    ret.push_back( glm::vec4( this->xmin, this->ymax, this->zmax, 1.f ) );
+    ret.push_back( glm::vec4( this->xmax, this->ymax, this->zmax, 1.f ) );
+    ret.push_back( glm::vec4( this->xmax, this->ymax, this->zmin, 1.f ) );
+    ret.push_back( glm::vec4( this->xmax, this->ymin, this->zmin, 1.f ) );
+    ret.push_back( glm::vec4( this->xmin, this->ymax, this->zmin, 1.f ) );
+    ret.push_back( glm::vec4( this->xmax, this->ymin, this->zmax, 1.f ) );
+
+    return ret;
 }
 
 } // mathematics
