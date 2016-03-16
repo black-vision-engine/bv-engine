@@ -140,7 +140,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
         auto params     = shader->GetParameters ();
         auto textures   = txData->GetTextures   ();
         auto animations = txData->GetAnimations ();
-		
+        
         for( auto tx : textures )
         {
             auto sampler = CreateSampler( tx, samplerNum );
@@ -196,30 +196,30 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParamsPtr
 {
  //   auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
  //   auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );
-	//auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
+    //auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
 
-	auto w = txParams->GetWidth();
-	auto h = txParams->GetHeight();
-	auto d = txParams->GetDepth();
+    auto w = txParams->GetWidth();
+    auto h = txParams->GetHeight();
+    auto d = txParams->GetDepth();
 
-	assert( w > 0 && h > 0 && d > 0 );
+    assert( w > 0 && h > 0 && d > 0 );
 
     SamplerSamplingMode samplingMode = SamplerSamplingMode::ST_TOTAL;
 
-	if( w >= 1 && h == 1 && d == 1 )
-	{
-		samplingMode = SamplerSamplingMode::SSM_MODE_1D;
-	}
+    if( w >= 1 && h == 1 && d == 1 )
+    {
+        samplingMode = SamplerSamplingMode::SSM_MODE_1D;
+    }
 
-	if( w >= 1 && h > 1 && d == 1 )
-	{
-		samplingMode = SamplerSamplingMode::SSM_MODE_2D;
-	}
+    if( w >= 1 && h > 1 && d == 1 )
+    {
+        samplingMode = SamplerSamplingMode::SSM_MODE_2D;
+    }
 
-	if( w >= 1 && h > 1 && d > 1 )
-	{
-		samplingMode = SamplerSamplingMode::SSM_MODE_3D;
-	}
+    if( w >= 1 && h > 1 && d > 1 )
+    {
+        samplingMode = SamplerSamplingMode::SSM_MODE_3D;
+    }
 
     //auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
     //auto borderColor    = txParams->BorderColor();
@@ -249,9 +249,9 @@ Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDe
 //
 SamplerShaderParametersPtr	DefaultEffect::CreateSamplerParameters  ( const ITextureParamsPtr & txParams ) const
 {
-	auto samplerState = txParams->GetSamplerState();
-	return std::make_shared< SamplerShaderParameters >( ( SamplerWrappingMode )samplerState->GetWrappingModeX(), ( SamplerWrappingMode )samplerState->GetWrappingModeY(), 
-						( SamplerWrappingMode )samplerState->GetWrappingModeZ(), ( SamplerFilteringMode )samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+    auto samplerState = txParams->GetSamplerState();
+    return std::make_shared< SamplerShaderParameters >( ( SamplerWrappingMode )samplerState->GetWrappingModeX(), ( SamplerWrappingMode )samplerState->GetWrappingModeY(), 
+                        ( SamplerWrappingMode )samplerState->GetWrappingModeZ(), ( SamplerFilteringMode )samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
 }
 
 } //bv

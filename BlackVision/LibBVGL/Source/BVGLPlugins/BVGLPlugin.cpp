@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <gl/GLU.h>
+
 namespace bv {
 
 // *****************************
@@ -618,6 +620,14 @@ GLenum      BVGLPlugin::GetError						()
 {
     return glGetError();
 }
+
+// *****************************
+//
+const GLubyte *   BVGLPlugin::GetErrorString              ( GLenum error )
+{
+    return gluErrorString( error );
+}
+
 
 // *****************************
 //

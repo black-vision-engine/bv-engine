@@ -650,6 +650,14 @@ GLenum      BVGL::bvglGetError                  ()
 
 // *****************************
 //
+const GLubyte *   BVGL::bvgluErrorString            ( GLenum error )
+{
+    return bvgl.GetErrorString( error );
+}
+
+
+// *****************************
+//
 const GLubyte * BVGL::bvglGetString             ( GLenum name )
 {
     return bvgl.GetString( name );

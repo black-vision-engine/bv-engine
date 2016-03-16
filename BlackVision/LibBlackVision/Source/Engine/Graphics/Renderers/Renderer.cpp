@@ -34,6 +34,8 @@
 
 #include "Tools/HRTimer.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 #include <set>
 
 //FIXME: add disable methods so that current state can be cleared after a frame is rendered
@@ -235,8 +237,18 @@ bool     Renderer::DrawLines      ( Lines * lines )
     {
         PassCCNumUniform( i, ccNum );
 
+assert( !BVGL::bvglGetError() );
+
         unsigned int numVertices = vao->GetNumVertices( i );
-        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices/2 );
+
+auto error = BVGL::bvglGetError();
+if( error )
+{
+    LOG_MESSAGE( SeverityLevel::error ) << "gl error " << BVGL::bvgluErrorString( error );
+    assert( false );
+}
+
         firstVertex += numVertices;
     }
 

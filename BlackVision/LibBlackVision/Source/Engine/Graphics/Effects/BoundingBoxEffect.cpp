@@ -68,13 +68,14 @@ VertexShader *      BoundingBoxEffect::CreateVS        ()
 //
 GeometryShader *    BoundingBoxEffect::CreateGS        ()
 {
-    auto params = new ShaderParameters();
+    return nullptr;
+    //auto params = new ShaderParameters();
 
-    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
+    //params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
 
-    auto shader = new GeometryShader( CustomShaderSourceProvider->ReadShader( "bounding_box.geom" ), params );
+    //auto shader = new GeometryShader( , params );
 
-    return shader;
+    //return shader;
 }
 
 } //bv
