@@ -117,9 +117,26 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
         nodeEffectType = modelNodeEffect->GetType();
     }
 
-    node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
+    bool update = ( modelNodeEffect == nullptr );
 
-    UpdateEffectAssetData( node, modelNode );
+    if( !update && modelNodeEffect != nullptr )
+    {
+        bool hasProperNumAssetInitialized = ( modelNodeEffect->GetAssets().size() == modelNodeEffect->NumRequiredAssets() );
+
+        for( auto a : modelNodeEffect->GetAssets() )
+        {
+            hasProperNumAssetInitialized = hasProperNumAssetInitialized && ( a != nullptr );
+        }
+
+        update = update || hasProperNumAssetInitialized;
+    }
+
+    if( update )
+    {
+        node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
+
+        UpdateEffectAssetData( node, modelNode );
+    }
 }
 
 // *******************************
