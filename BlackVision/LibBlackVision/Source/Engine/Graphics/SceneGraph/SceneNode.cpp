@@ -17,6 +17,7 @@ namespace bv {
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_transformable( transformable )
     , m_nodeEffect( nullptr )
+    , m_boundingBox( nullptr )
 {
     m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
 }
@@ -182,6 +183,20 @@ bool                    SceneNode::IsVisible    () const
 void                    SceneNode::SetVisible   ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+void                    SceneNode::SetBoundingBox   ( const math::Box * bb )
+{
+    m_boundingBox = bb;
+}
+
+// ********************************
+//
+const math::Box *       SceneNode::GetBoundingBox   () const
+{
+    return m_boundingBox;
 }
 
 } //bv

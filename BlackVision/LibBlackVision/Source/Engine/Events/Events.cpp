@@ -189,11 +189,11 @@ std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
     , std::make_pair( SceneEvent::Command::RemoveAllScenes, "RemoveAllScenes" )
     , std::make_pair( SceneEvent::Command::SetSceneVisible, "SetSceneVisible" ) 
     , std::make_pair( SceneEvent::Command::SetSceneInvisible, "SetSceneInvisible" )
-	, std::make_pair( SceneEvent::Command::RenameScene, "RenameScene" )
-	, std::make_pair( SceneEvent::Command::AttachScene, "AttachScene" )
-	, std::make_pair( SceneEvent::Command::DetachScene, "DetachScene" )
-	, std::make_pair( SceneEvent::Command::MoveScene, "MoveScene" )
-	, std::make_pair( SceneEvent::Command::CopyScene, "CopyScene" )
+    , std::make_pair( SceneEvent::Command::RenameScene, "RenameScene" )
+    , std::make_pair( SceneEvent::Command::AttachScene, "AttachScene" )
+    , std::make_pair( SceneEvent::Command::DetachScene, "DetachScene" )
+    , std::make_pair( SceneEvent::Command::MoveScene, "MoveScene" )
+    , std::make_pair( SceneEvent::Command::CopyScene, "CopyScene" )
     , std::make_pair( SceneEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -212,11 +212,11 @@ std::pair< NodeStructureEvent::Command, const char* > NodeStructureCommandMappin
     , std::make_pair( NodeStructureEvent::Command::RemoveNode, "RemoveNode" ) 
     , std::make_pair( NodeStructureEvent::Command::SetNodeInvisible, "SetNodeInvisible" ) 
     , std::make_pair( NodeStructureEvent::Command::SetNodeVisible, "SetNodeVisible" )
-	, std::make_pair( NodeStructureEvent::Command::RenameNode, "RenameNode" )
-	, std::make_pair( NodeStructureEvent::Command::AttachNode, "AttachNode" )
-	, std::make_pair( NodeStructureEvent::Command::DetachNode, "DetachNode" )
-	, std::make_pair( NodeStructureEvent::Command::MoveNode, "MoveNode" )
-	, std::make_pair( NodeStructureEvent::Command::CopyNode, "CopyNode" )
+    , std::make_pair( NodeStructureEvent::Command::RenameNode, "RenameNode" )
+    , std::make_pair( NodeStructureEvent::Command::AttachNode, "AttachNode" )
+    , std::make_pair( NodeStructureEvent::Command::DetachNode, "DetachNode" )
+    , std::make_pair( NodeStructureEvent::Command::MoveNode, "MoveNode" )
+    , std::make_pair( NodeStructureEvent::Command::CopyNode, "CopyNode" )
     , std::make_pair( NodeStructureEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -267,7 +267,7 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
 
     , std::make_pair( ProjectEvent::Command::CreateFolder, "CreateFolder" )
     , std::make_pair( ProjectEvent::Command::DeleteFolder, "DeleteFolder" )
-	, std::make_pair( ProjectEvent::Command::RenameFolder, "RenameFolder" )
+    , std::make_pair( ProjectEvent::Command::RenameFolder, "RenameFolder" )
 
     , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" ) 

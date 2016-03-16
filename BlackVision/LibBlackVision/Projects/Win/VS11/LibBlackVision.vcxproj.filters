@@ -280,6 +280,9 @@
     <Filter Include="Engine\Models\EditorVariables">
       <UniqueIdentifier>{7894fab9-865a-4c07-a90a-ddde56d8a731}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mathematics\Util">
+      <UniqueIdentifier>{ef62563e-b8be-4fae-9264-9b3c6234fc0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1410,6 +1413,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp">
+      <Filter>Mathematics\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
+      <Filter>Mathematics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3520,6 +3529,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
+      <Filter>Mathematics\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
