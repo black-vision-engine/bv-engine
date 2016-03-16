@@ -231,23 +231,25 @@ bool     Renderer::DrawLines      ( Lines * lines )
 
     Enable  ( vao );
 
+    BVGL::bvglLineWidth( lines->GetWidth() );
+
     unsigned int firstVertex = 0;
     auto ccNum = vao->GetNumConnectedComponents();
     for( unsigned int i = 0; i < ccNum; ++i )
     {
         PassCCNumUniform( i, ccNum );
 
-assert( !BVGL::bvglGetError() );
-
+//assert( !BVGL::bvglGetError() );
+//
         unsigned int numVertices = vao->GetNumVertices( i );
-        BVGL::bvglDrawArrays( mode, firstVertex, numVertices/2 );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
 
-auto error = BVGL::bvglGetError();
-if( error )
-{
-    LOG_MESSAGE( SeverityLevel::error ) << "gl error " << BVGL::bvgluErrorString( error );
-    assert( false );
-}
+//auto error = BVGL::bvglGetError();
+//if( error )
+//{
+//    LOG_MESSAGE( SeverityLevel::error ) << "gl error " << BVGL::bvgluErrorString( error );
+//    assert( false );
+//}
 
         firstVertex += numVertices;
     }

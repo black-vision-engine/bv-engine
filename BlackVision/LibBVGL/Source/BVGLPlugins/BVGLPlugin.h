@@ -21,6 +21,8 @@ public:
     virtual void                ClearDepth					( GLclampd depth );
     virtual void                Clear						( GLbitfield mask );
     
+    virtual void                SetLineWidth                ( GLfloat width );
+
     virtual void                DepthRange					( GLclampd zNear, GLclampd zFar );
 
     virtual void                LinkProgram					( GLuint program );

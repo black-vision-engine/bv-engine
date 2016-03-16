@@ -20,6 +20,8 @@ public:
     static void                 bvglClearDepth              ( GLclampd depth );
     static void                 bvglClear                   ( GLbitfield mask );
 
+    static void                 bvglLineWidth               ( GLfloat width );
+
     static void                 bvglDepthRange              ( GLclampd zNear, GLclampd zFar );
 
     static void                 bvglEnable                  ( GLenum cap );

@@ -24,6 +24,15 @@ model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box
     comp->AddAttributeChannel( vertArrtF3 );
 
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
@@ -31,6 +40,15 @@ model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box
     vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
 
     return comp;
 }

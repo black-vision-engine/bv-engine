@@ -60,6 +60,14 @@ void        BVGL::bvglClear                     ( GLbitfield mask )
     bvgl.Clear( mask );
 }
 
+// ***********************
+//
+void        BVGL::bvglLineWidth               ( GLfloat width )
+{
+    bvgl.SetLineWidth( width );
+}
+
+
 // *****************************
 //
 void        BVGL::bvglDepthRange                ( GLclampd zNear, GLclampd zFar )

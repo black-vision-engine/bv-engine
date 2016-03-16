@@ -46,6 +46,13 @@ void        BVGLPlugin::Clear							( GLbitfield mask )
     glClear( mask );
 }
 
+// ***********************
+//
+void        BVGLPlugin::SetLineWidth                ( GLfloat width )
+{
+    glLineWidth( width );
+}
+
 // *****************************
 //
 void        BVGLPlugin::DepthRange						( GLclampd zNear, GLclampd zFar )
