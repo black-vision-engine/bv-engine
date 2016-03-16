@@ -13,7 +13,7 @@ namespace bv
 
 // *********************************
 //
-void PFLogicUtils::RenderSceneNodeToRenderTarget( SceneNode * node, RenderLogicContext * ctx, RenderTarget * output )
+void        PFLogicUtils::RenderSceneNodeToRenderTarget( SceneNode * node, RenderLogicContext * ctx, RenderTarget * output )
 {
     auto mainRT = disableBoundRT( ctx );
 
@@ -26,5 +26,33 @@ void PFLogicUtils::RenderSceneNodeToRenderTarget( SceneNode * node, RenderLogicC
 
     enable( ctx, mainRT );
 }
+
+// *********************************
+//
+glm::vec2   PFLogicUtils::ScreenPosToFullScreenTexPos     ( const glm::vec3 & screenPos, SizeType screenWidth, SizeType screenHeight )
+{
+    auto x = screenPos.x / screenPos.z;
+    auto y = screenPos.y / screenPos.z;
+
+    auto screenAspectRatio = float( screenWidth ) / float( screenHeight );
+
+    auto xd = 1.f;
+    auto yd = 1.f;
+
+    if( screenAspectRatio >= 1.f )
+    {
+        xd = screenAspectRatio;
+    }
+    else
+    {
+        yd = screenAspectRatio;
+    }
+
+    x = ( x + xd ) / ( 2 * xd );
+    y = ( y + yd ) / ( 2 * yd );
+
+    return glm::vec2( x, y );
+}
+
 
 }

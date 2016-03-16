@@ -41,73 +41,21 @@ void                        ImageMaskPreFullscreenEffectLogic::RenderImpl    ( S
     
     PFLogicUtils::RenderSceneNodeToRenderTarget( node, ctx, outputs[ 0 ] );
 
-    auto screenWidth  = float( outputs[ 0 ]->Width() );
-    auto screenHeight = float( outputs[ 0 ]->Height() );
+    auto screenWidth  = outputs[ 0 ]->Width();
+    auto screenHeight = outputs[ 0 ]->Height();
+
+    auto txt = node->GetNodeEffect()->GetTexture( 0 );
+
+    auto maskW = txt->GetWidth();
+    auto maskH = txt->GetHeight();
 
     auto fit = m_fitVal->GetValue();
 
     auto maskAspect = m_maskAspectVal->GetValue();
 
-    if( maskAspect == 1 )
-    {
-        auto txt = node->GetNodeEffect()->GetTexture( 0 );
-        auto maskW = float( txt->GetWidth() );
-        auto maskH = float( txt->GetHeight() );
+    auto tx = CalculateMaskTransformation( maskW, maskH, screenWidth, screenHeight, maskAspect == 1, fit == 1, node,  ctx );
 
-        glm::mat4 tx( 1.f );
-
-        tx = glm::scale( tx, glm::vec3( screenWidth / maskW, screenHeight / maskH, 1.f ) );
-
-        if( fit == 1 ) // fit to the object
-        {
-            auto bb = node->GetBoundingBox();
-
-            if( bb != nullptr )
-            {
-                auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
-
-                auto tbb = mathematics::TransformationUtils::Transform( bb, projMat * node->GetTransformable()->WorldTransform().Matrix() );
-
-                auto cxo = ( tbb.xmax / tbb.zmax + tbb.xmin / tbb.zmin ) / 2.f;
-                auto cyo = ( tbb.ymax / tbb.zmax + tbb.ymin / tbb.zmin ) / 2.f;
-
-                auto screenAspectRatio = screenWidth / screenHeight;
-
-                auto xd = 1.f;
-                auto yd = 1.f;
-
-                if( screenAspectRatio >= 1.f )
-                {
-                    xd = screenAspectRatio;
-                }
-                else
-                {
-                    yd = screenAspectRatio;
-                }
-
-                cxo = ( cxo + xd ) / ( 2 * xd );
-                cyo = ( cyo + yd ) / ( 2 * yd );
-
-                auto cxm = ( ( maskW / 2.f ) / screenWidth );
-                auto cym = ( ( maskH / 2.f ) / screenHeight );
-
-                auto sx = cxo - cxm;
-                auto sy = cyo - cym;
-
-                tx = glm::translate( tx, glm::vec3( -sx, -sy, 0.0 ) );
-            }
-
-        }
-        else // fit to the screen
-        {
-            auto sx = ( screenWidth - maskW ) / ( 2.f * screenWidth );
-            auto sy = ( screenHeight - maskH ) / ( 2.f * screenHeight );
-
-            tx = glm::translate( tx, glm::vec3( -sx, -sy, 0.0 ) );
-        }
-
-        m_maskTxVal->SetValue( tx );
-    }
+    m_maskTxVal->SetValue( tx );
 }
 
 // *********************************
@@ -143,5 +91,69 @@ bool                        ImageMaskPreFullscreenEffectLogic::IsFSERequired    
 {
     return m_txDesc != nullptr;
 }
+
+// *********************************
+//
+glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTransformation( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool fitMask, SceneNode * node, RenderLogicContext * ctx ) const
+{
+    glm::mat4 ret( 1.f );
+
+    if( aspectMask )
+    {
+        ret = glm::scale( ret, glm::vec3( float( screenW ) / float( maskW ), float( screenH ) / float( maskH ), 1.f ) );
+
+        if( fitMask )
+        {
+            auto bb = node->GetBoundingBox();
+
+            if( bb != nullptr )
+            {
+                auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
+
+                auto tbb = mathematics::TransformationUtils::Transform( bb, projMat * node->GetTransformable()->WorldTransform().Matrix() );
+
+                auto omin = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmin, tbb.ymin, tbb.zmin ), screenW, screenH );
+                auto omax = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmax, tbb.ymax, tbb.zmax ), screenW, screenH );
+
+                auto cxo = ( omin.x + omax.x ) / 2.f;
+                auto cyo = ( omin.y + omax.y ) / 2.f;
+
+                auto cxm = ( ( maskW / 2.f ) / screenW );
+                auto cym = ( ( maskH / 2.f ) / screenH );
+
+                auto sx = cxo - cxm;
+                auto sy = cyo - cym;
+
+                ret = glm::translate( ret, glm::vec3( -sx, -sy, 0.0 ) );
+            }
+        }
+        else // fit to the screen
+        {
+            auto sx = ( screenW - maskW ) / ( 2.f * screenW );
+            auto sy = ( screenH - maskH ) / ( 2.f * screenH );
+
+            ret = glm::translate( ret, glm::vec3( -sx, -sy, 0.0 ) );
+        }
+    }
+    else
+    {
+        if( fitMask )
+        {
+        }
+        else
+        {
+            auto cxm = ( ( maskW / 2.f ) / screenW );
+            auto cym = ( ( maskH / 2.f ) / screenH );
+
+            auto sx = 0.5f - cxm;
+            auto sy = 0.5f - cym;
+
+            ret = glm::translate( ret, glm::vec3( -sx, -sy, 0.0 ) );
+        }
+    }
+
+    return ret;
+}
+
 
 } // bv

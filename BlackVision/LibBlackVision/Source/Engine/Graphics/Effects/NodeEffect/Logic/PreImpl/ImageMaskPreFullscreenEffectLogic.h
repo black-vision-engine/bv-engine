@@ -34,6 +34,9 @@ public:
 
     virtual void                        AddTexture                          ( const ITextureDescriptorConstPtr & ) override;
 
+private:
+    glm::mat4                           CalculateMaskTransformation         ( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool aspectScreen, SceneNode * node, RenderLogicContext * ctx ) const;
+
 };
 
 } // bv
