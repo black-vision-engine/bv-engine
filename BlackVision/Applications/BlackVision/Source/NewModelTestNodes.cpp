@@ -1555,7 +1555,10 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
 
     node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
 
-    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
+
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 10.0f, glm::vec3( 0.0f, 2.f, 0.f ) );
 
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
