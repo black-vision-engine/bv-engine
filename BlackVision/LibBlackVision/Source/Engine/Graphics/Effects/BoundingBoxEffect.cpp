@@ -29,7 +29,7 @@ BoundingBoxEffect::BoundingBoxEffect ()
     auto cs = RenderStateAccessor::AccessCullState( sinst );
 
     as->blendEnabled = true;
-    ds->enabled = false;
+    ds->enabled = true;
     cs->enabled = false;
 
     AddPass( pass );

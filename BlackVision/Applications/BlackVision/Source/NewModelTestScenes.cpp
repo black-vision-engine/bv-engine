@@ -565,6 +565,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
     }
+    else if( scene == "MULTI_GLOBAL_EFFECT_TEST_SCENE" )
+    {
+        node = TestScenesFactory::MultiGlobalEffectTestScene( pluginsManager, timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -685,6 +689,14 @@ model::BasicNodePtr     TestScenesFactory::NodeReplicatorTestScene  ( const mode
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateNodeReplicatorTest( timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::MultiGlobalEffectTestScene( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateNodeMultiGlobalEffectTest( timeEvaluator );
 }
 
 // *****************************

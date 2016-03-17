@@ -431,6 +431,24 @@ model::BasicNodePtr  SimpleNodesFactory::CreateMultiShadowTest          ( model:
 
 // *****************************
 //
+model::BasicNodePtr  SimpleNodesFactory::CreateNodeMultiGlobalEffectTest    ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/rus.jpg", false, 0.6f, 0.6f );
+
+    // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    model::ParamValDelta delta;
+
+    auto image = bTex.CreateNode( "piateczka", true );
+
+    root->AddChildToModelOnly( image );
+
+    return root;
+}
+
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/rus.jpg", false, 0.6f, 0.6f );

@@ -71,7 +71,8 @@ public:
     static  model::BasicNodePtr     CreedPieChartTestScene          ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedPrismBugTestScene          ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedCosineDemoScene            ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     NodeReplicatorTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     NodeReplicatorTestScene         ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     MultiGlobalEffectTestScene      ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     SimpeTextureTestScene           ();
