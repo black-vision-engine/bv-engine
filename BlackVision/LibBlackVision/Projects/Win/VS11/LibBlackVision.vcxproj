@@ -515,6 +515,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />

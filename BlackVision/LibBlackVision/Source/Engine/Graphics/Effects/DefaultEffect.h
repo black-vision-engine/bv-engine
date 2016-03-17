@@ -45,7 +45,7 @@ private:
     Texture2DPtr            GetTexture              ( const ITextureDescriptorPtr & txParams ) const;
     Texture2DPtr            GetSequence             ( const IAnimationDescriptorPtr & animParams ) const;
 
-	SamplerShaderParametersPtr	CreateSamplerParameters ( const ITextureParamsPtr & txParams ) const;
+    SamplerShaderParametersPtr	CreateSamplerParameters ( const ITextureParamsPtr & txParams ) const;
 
 };
 

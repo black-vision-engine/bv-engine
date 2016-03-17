@@ -23,7 +23,7 @@ RenderableEntity *  BuildRenderableBoundingBox          ( const model::BoundingV
 {
     auto component = volume->BuildConnectedComponent();
 
-    return BVProjectTools::BuildRenderableFromComponent( component );
+    return BVProjectTools::BuildRenderableFromComponent( component, PrimitiveType::PT_LINES );
 }
 
 }

@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/SceneGraph/Lines.h"
 
 #include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
@@ -40,9 +41,9 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
 
     assert( obj );
 
-    //renderer( ctx )->DrawRenderable( obj );
+    auto box = Cast< bv::Lines * >( obj->GetBoundingBox() );
 
-    auto box = obj->GetBoundingBox();
+    box->SetWidth( 5.f );
 
     renderer( ctx )->Enable( m_effect->GetPass( 0 ), obj ); // FIXME for some reasons box results in bad transformation
 

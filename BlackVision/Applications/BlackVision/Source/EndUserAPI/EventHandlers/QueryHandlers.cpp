@@ -8,8 +8,8 @@
 #include "EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "ProjectManager.h"
-#include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/BVProjectTools.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"

@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+#include "Engine/Graphics/SceneGraph/Lines.h"
 
 #include "Engine/Graphics/Effects/DefaultEffect.h"
 
@@ -85,7 +86,7 @@ SceneNode *         BVProjectTools::BuildEngineSceneNode                  ( mode
 
 // *******************************
 //
-RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc )
+RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model::IConnectedComponentPtr cc, PrimitiveType type )
 {
     auto attrChan = cc->GetAttributeChannels()[ 0 ];
 
@@ -100,7 +101,15 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
 
     assert( radasvb );
 
-    return new TriangleStrip( radasvb, nullptr, nullptr );
+    if( type == PrimitiveType::PT_TRIANGLE_STRIP )
+        return new TriangleStrip( radasvb, nullptr, nullptr );
+    else if( type == PrimitiveType::PT_LINES )
+        return new Lines( radasvb, nullptr );
+    else
+    {
+        assert( false );
+        return nullptr;
+    }
 }
 
 

@@ -3533,6 +3533,9 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
       <Filter>Mathematics\Util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
