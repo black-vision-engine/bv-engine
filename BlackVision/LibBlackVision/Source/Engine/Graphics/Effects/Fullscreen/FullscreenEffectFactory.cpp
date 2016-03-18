@@ -32,7 +32,7 @@ FullscreenEffect *  CreateSimpleBlitFSE         ( const std::vector< IValuePtr >
 
     fseData.AppendInputTexture( nullptr, "Texture" );
     fseData.SetPixelShaderSource( src );
-    fseData.SetBlendEnabled( false );
+    fseData.SetBlendEnabled( true );
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
 

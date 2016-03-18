@@ -13,6 +13,7 @@ FullscreenEffectContext::FullscreenEffectContext            ( Renderer * rendere
     , m_outputRenderTarget( nullptr )
     , m_rtAllocator( allocator )
     , m_startIndex( startIndex )
+    , m_syncRequired( true )
 {
     SetOutputRenderTarget( outputRenderTarget );
 }

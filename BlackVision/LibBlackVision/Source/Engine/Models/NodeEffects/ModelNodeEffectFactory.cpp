@@ -89,7 +89,7 @@ IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std:
     
     blurSizeEval->Parameter()->SetVal( 10.5f, 0.f );
     normalizeEval->Parameter()->SetVal( 1, 0.f );
-    blurKernelTypeEval->Parameter()->SetVal( 0, 0.f );
+    blurKernelTypeEval->Parameter()->SetVal( 2, 0.f );
 
     effect->RegisterEvaluator( blurSizeEval );
     effect->RegisterEvaluator( normalizeEval );

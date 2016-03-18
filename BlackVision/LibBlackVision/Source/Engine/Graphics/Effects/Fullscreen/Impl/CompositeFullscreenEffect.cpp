@@ -11,6 +11,8 @@
 #include "Engine/Graphics/Effects/FullScreen/Impl/Graph/FullscreenEffectGraph.h"
 #include "Engine/Graphics/Effects/FullScreen/Impl/Graph/InputFullscreenEffectGraphNode.h"
 
+#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
+
 #include <set>
 
 namespace bv {
@@ -20,6 +22,7 @@ namespace bv {
 CompositeFullscreenEffect::CompositeFullscreenEffect   ( FullscreenEffectGraph * graph )
     : m_graph( graph )
 {
+    m_blitEffect = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SIMPLE_BLIT );
 }
 
 // ****************************
@@ -27,6 +30,7 @@ CompositeFullscreenEffect::CompositeFullscreenEffect   ( FullscreenEffectGraph *
 CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 {
     delete m_graph;
+    delete m_blitEffect;
 }
 
 // ****************************
@@ -57,8 +61,35 @@ void    CompositeFullscreenEffect::Update                       ( FullscreenEffe
 //
 void    CompositeFullscreenEffect::Render                       ( FullscreenEffectContext * ctx )
 {
-    SynchronizeInputData( ctx );
-    RenderGraphNode( m_graph->GetSinkNode(), ctx );
+    auto renderer = ctx->GetRenderer();
+	auto outputRenderTarget = ctx->GetOutputRenderTarget();
+
+    renderer->Disable( outputRenderTarget );
+
+	auto allocator = ctx->GetRenderTargetAllocator();
+
+    auto compositeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+    
+    auto compositeCtx = FullscreenEffectContext( renderer, compositeOutRt, allocator, 0 );
+
+    compositeCtx.SetInputRenderTargets( ctx->AccessInputRenderTargets() );
+
+    SynchronizeInputData( &compositeCtx );
+
+    RenderGraphNode( m_graph->GetSinkNode(), &compositeCtx );
+
+    if( m_blitEffect->GetRenderTarget( 0 ) != compositeOutRt )
+    {
+        m_blitEffect->SetRenderTarget( 0, compositeOutRt );
+    }
+
+    renderer->Enable( outputRenderTarget );
+    m_blitEffect->Render( outputRenderTarget, renderer, allocator );
+    renderer->Disable( outputRenderTarget );
+
+    allocator->Free();
+
+    renderer->Enable( outputRenderTarget );
 }
 
 // ****************************
