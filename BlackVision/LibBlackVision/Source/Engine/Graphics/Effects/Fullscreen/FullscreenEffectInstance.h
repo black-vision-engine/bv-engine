@@ -28,6 +28,7 @@ public:
 
     void                        Update                      ();
     void                        Render                      ( RenderTarget * output, RenderLogicContext * ctx );
+    void                        Render                      ( RenderTarget * output, Renderer * rederer, RenderTargetStackAllocator * allocator );
 
     void                        UpdateInputRenderTargets    ( const std::vector< RenderTarget * > & renderTargets );
 
@@ -46,6 +47,7 @@ public:
 
 private:
 
+    void                        InitializeGuard             ( Renderer * renderer, RenderTargetStackAllocator * allocator );
     void                        InitializeGuard             ( RenderLogicContext * ctx );
     void                        RenderImpl                  ( RenderTarget * output, FullscreenEffectContext * ctx );
 

@@ -11,6 +11,7 @@
 namespace bv {
 
 class FullscreenEffectGraph;
+class FullscreenEffectInstance;
 class RenderTarget;
 
 class CompositeFullscreenEffect : public FullscreenEffect
@@ -19,6 +20,7 @@ private:
 
    FullscreenEffectGraph *                  m_graph;
    std::vector< RenderTarget * >            m_sourceRenderTargets;
+   FullscreenEffectInstance *               m_blitEffect;
 
 public:
 

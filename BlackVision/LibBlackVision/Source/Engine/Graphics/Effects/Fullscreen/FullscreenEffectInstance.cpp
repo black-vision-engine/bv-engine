@@ -34,6 +34,15 @@ FullscreenEffectInstance::~FullscreenEffectInstance ()
 
 // **************************
 //
+void        FullscreenEffectInstance::Render                ( RenderTarget * output, Renderer * rederer, RenderTargetStackAllocator * allocator )
+{
+    InitializeGuard( rederer, allocator );
+
+    RenderImpl( output, &m_ctx );
+}
+
+// **************************
+//
 void        FullscreenEffectInstance::Render                ( RenderTarget * output, RenderLogicContext * ctx )
 {
     InitializeGuard( ctx );
@@ -138,13 +147,30 @@ void                        FullscreenEffectInstance::InitializeGuard           
 
 // **************************
 //
+void                        FullscreenEffectInstance::InitializeGuard             ( Renderer * renderer, RenderTargetStackAllocator * allocator )
+{
+    //FIXME: assumes that only one renderer is used
+    if( !m_initialized )
+    {
+        m_ctx.SetRenderer( renderer );
+        m_ctx.SetRenderTargetAllocator( allocator );
+        m_ctx.SetOutputRenderTarget( nullptr );
+        m_ctx.SetInputRenderTargets( &m_inputRenderTargets );
+        m_ctx.SetFirstRenderTargetIndex( 0 );
+
+        m_initialized = true;
+    }
+}
+
+// **************************
+//
 void                        FullscreenEffectInstance::RenderImpl                  ( RenderTarget * output, FullscreenEffectContext * ctx )
 {
     ctx->SetOutputRenderTarget( output );
 
     m_effect->Render( ctx );
 
-    ctx->SetSyncRequired( false );
+    ctx->SetSyncRequired( true );
 }
 
 // **************************
