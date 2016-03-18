@@ -14,6 +14,8 @@ uniform int             invert;
 uniform int             alphaOnly;
 uniform int             maskAspect;
 uniform int             softMask;
+uniform int             onlyMask = 1;
+uniform int             onlyObject = 1;
 
 uniform mat4            maskTx;
 
@@ -23,6 +25,23 @@ void main()
 
     vec2 maskUV = ( scaleMat * maskTx * vec4( uvCoord.x, uvCoord.y, 0.0, 1.0 ) ).xy - position;
     
+	if( onlyMask == 1 || onlyObject == 1 )
+	{
+		FragColor = vec4( 0, 0, 0, 0 );
+	
+		if( onlyMask == 1 )
+		{
+			FragColor += texture( Mask0, maskUV );
+		}
+		
+		if( onlyObject == 1 )
+		{
+			FragColor += texture( Tex0, uvCoord );
+		}
+		
+		return;
+	}
+	
     float alpha = texture( Mask0, maskUV ).a;
 
     if ( invert == 1 )
@@ -36,7 +55,7 @@ void main()
     
     if( alphaOnly == 0 )
     {
-        FragColor = alpha * color;
+		FragColor = alpha * color;
     }
     else
     {

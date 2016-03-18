@@ -48,8 +48,12 @@ glm::vec2   PFLogicUtils::ScreenPosToFullScreenTexPos     ( const glm::vec3 & sc
         yd = screenAspectRatio;
     }
 
-    x = ( x + xd ) / ( 2 * xd );
-    y = ( y + yd ) / ( 2 * yd );
+    x = ( x + 1.f ) / 2.f;
+    y = ( y + 1.f ) / 2.f;
+    //y = ( 1.f - y ) / 2.f;
+
+    //x = ( x / ( 2 * xd ) ) + 0.5f;
+    
 
     return glm::vec2( x, y );
 }
