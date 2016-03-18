@@ -165,12 +165,16 @@ void    NodeUpdater::UpdateNodeEffect       ()
     if( nodeEffect )
     {
         auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-        for( auto & val : nodeEffect->GetValues() )
-        {
-            UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
-        }
 
-        sceneNodeEffect->Update();
+        if( sceneNodeEffect->GetType() != NodeEffectType::NET_DEFAULT )
+        {
+            for( auto & val : nodeEffect->GetValues() )
+            {
+                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+            }
+
+            sceneNodeEffect->Update();
+        }
     }
 }
 

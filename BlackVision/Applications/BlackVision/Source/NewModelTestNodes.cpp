@@ -531,10 +531,19 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeMultiGlobalEffectTest    ( mo
     CreateNodeInPos( bTex, posX, posY, "e18node", root );
 
     posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e19node", root );
+    auto e19node = CreateNodeInPos( bTex, posX, posY, "e19node", root );
+    auto eff = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "shadow", timeEvaluator );
+
+    auto pm = ProjectManager::GetInstance();
+
+    auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
+
+    eff->AddAsset( desc, 0 );
+    e19node->SetNodeEffect( eff );
 
     posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e20node", root );
+    auto e20node = CreateNodeInPos( bTex, posX, posY, "e20node", root );
+    e20node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
 
     posX += 0.7f;
     auto e21node = CreateNodeInPos( bTex, posX, posY, "e21node", root );
