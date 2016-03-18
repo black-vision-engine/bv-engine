@@ -107,6 +107,7 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     {
         auto & editorSceneVariables = obj->GetSceneVariables();
         editorSceneVariables.Deserialize( deser );
+        deser.ExitChild();
     }
 
 // nodes

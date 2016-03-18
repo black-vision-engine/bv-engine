@@ -537,14 +537,15 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeMultiGlobalEffectTest    ( mo
     CreateNodeInPos( bTex, posX, posY, "e20node", root );
 
     posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e21node", root );
+    auto e21node = CreateNodeInPos( bTex, posX, posY, "e21node", root );
+    e21node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
     posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e22node", root );
+    auto e22node = CreateNodeInPos( bTex, posX, posY, "e22node", root );
+    e22node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
     posX += 0.7f;
     auto e23node = CreateNodeInPos( bTex, posX, posY, "e23node", root );
-
     e23node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
 

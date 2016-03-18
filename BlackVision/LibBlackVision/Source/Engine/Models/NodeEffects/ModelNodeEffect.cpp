@@ -5,6 +5,7 @@
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Assets/Assets.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -104,7 +105,11 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 
 	if( type != NodeEffectType::NET_DEFAULT )
 	{
-		auto ret = ModelNodeEffect::Create( type );
+        auto retI = ModelNodeEffectFactory::CreateModelNodeEffect( type, "", deserContext->GetSceneTimeline() );
+
+        assert( std::dynamic_pointer_cast< ModelNodeEffect >( retI ) );
+
+        auto ret = std::static_pointer_cast< ModelNodeEffect >( retI );
 
 		// params
 		auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
