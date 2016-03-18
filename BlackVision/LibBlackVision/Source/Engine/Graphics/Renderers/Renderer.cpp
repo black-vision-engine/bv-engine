@@ -23,6 +23,7 @@
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+#include "Engine/Graphics/SceneGraph/Lines.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Engine/Graphics/Resources/VertexBuffer.h"
@@ -32,6 +33,8 @@
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 #include "Tools/HRTimer.h"
+
+#include "UseLoggerLibBlackVision.h"
 
 #include <set>
 
@@ -179,6 +182,9 @@ bool    Renderer::DrawRenderable    ( RenderableEntity * ent )
         //FIXME: FIX-1
         //glDrawArrays(ConstantsMapper::GLConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
+    case RenderableEntity::RenderableType::RT_LINES:
+        DrawLines( static_cast< Lines * >( ent ) );
+        break;
     default:
         assert(!"Should not be here");
     }
@@ -205,6 +211,45 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 
         unsigned int numVertices = vao->GetNumVertices( i );
         BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
+        firstVertex += numVertices;
+    }
+
+    Disable ( vao );
+
+    return true;
+}
+
+// *********************************
+//
+bool     Renderer::DrawLines      ( Lines * lines )
+{
+    static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_LINES );
+
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
+    const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( lines->GetRenderableArrayData() )->VAO();
+
+    Enable  ( vao );
+
+    BVGL::bvglLineWidth( lines->GetWidth() );
+
+    unsigned int firstVertex = 0;
+    auto ccNum = vao->GetNumConnectedComponents();
+    for( unsigned int i = 0; i < ccNum; ++i )
+    {
+        PassCCNumUniform( i, ccNum );
+
+//assert( !BVGL::bvglGetError() );
+//
+        unsigned int numVertices = vao->GetNumVertices( i );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
+
+//auto error = BVGL::bvglGetError();
+//if( error )
+//{
+//    LOG_MESSAGE( SeverityLevel::error ) << "gl error " << BVGL::bvgluErrorString( error );
+//    assert( false );
+//}
+
         firstVertex += numVertices;
     }
 

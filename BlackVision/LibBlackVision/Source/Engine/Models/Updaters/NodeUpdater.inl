@@ -148,7 +148,7 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 //
 inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
 {
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
 
     RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
 
@@ -158,7 +158,7 @@ inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::I
     char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
 
     //This is update only, so the number of vertices must match
-    assert( 8 == vao->GetNumVertices( 0 ) );
+    assert( cc->GetNumVertices() == vao->GetNumVertices( 0 ) );
  
     WriteVertexDataToVBO( vbData, cc );
 

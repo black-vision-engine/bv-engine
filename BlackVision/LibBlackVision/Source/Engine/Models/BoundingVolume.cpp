@@ -23,6 +23,17 @@ model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box
 
     comp->AddAttributeChannel( vertArrtF3 );
 
+// x-edges
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+
+// y-edges
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
@@ -32,75 +43,36 @@ model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
 
+// z-edges
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+
+// "cross-hair" in the "center of mass"
+    glm::vec3 mid = glm::vec3( 0.5f * ( box.xmin + box.xmax ),
+                                0.5f * (box.ymin + box.ymax ),
+                                0.5f * (box.zmin + box.zmax ) );
+
+    const float scale = 0.03f;
+
+    glm::vec3 sizeX = glm::vec3( scale * ( box.xmax - box.xmin ),   0,                                  0                               );
+    glm::vec3 sizeY = glm::vec3( 0,                                 scale * ( box.ymax - box.ymin ),    0                               );
+    glm::vec3 sizeZ = glm::vec3( 0,                                 0,                                  scale * ( box.zmax - box.zmin ) );
+
+    vertArrtF3->AddAttribute( mid - sizeX );
+    vertArrtF3->AddAttribute( mid + sizeX );
+    vertArrtF3->AddAttribute( mid - sizeY );
+    vertArrtF3->AddAttribute( mid + sizeY );
+    vertArrtF3->AddAttribute( mid - sizeZ );
+    vertArrtF3->AddAttribute( mid + sizeZ );
+
     return comp;
 }
-
-//void AddBoxToVAC( VertexAttributesChannel * vac, mathematics::Box box )
-//{
-//    ConnectedComponentPtr comp = ConnectedComponent::Create();
-//
-//    auto desc = vac->GetDescriptor();
-//
-//    assert( desc->GetAttrChannelDescriptor( 0 )->GetSemantic() == AttributeSemantic::AS_POSITION );
-//    assert( desc->GetAttrChannelDescriptor( 0 )->GetType() == AttributeType::AT_FLOAT3 );
-//
-//    auto compVertDesc = Cast< const AttributeChannelDescriptor* >( desc->GetAttrChannelDescriptor( 0 ) );
-//
-//    Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( compVertDesc, "boundingBox", false );
-//
-//    comp->AddAttributeChannel( vertArrtF3 );
-//
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
-//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
-//
-//    for( UInt32 i = 1; i < desc->GetNumVertexChannels(); i++ ) // FIXME so much when new VAC model arrives
-//    {
-//        auto attrDesc = Cast< const AttributeChannelDescriptor* >( desc->GetAttrChannelDescriptor( i ) );
-//        if( attrDesc->GetType() == AttributeType::AT_FLOAT3 )
-//        {
-//            auto attr = std::make_shared< Float3AttributeChannel >( attrDesc, "dummy", false );
-//            for( int j = 0; j < 8; j++ ) attr->AddAttribute( glm::vec3( 0, 0, 0 ) );
-//            comp->AddAttributeChannel( attr );
-//        }
-//        else if( attrDesc->GetType() == AttributeType::AT_FLOAT2 )
-//        {
-//            auto attr = std::make_shared< Float2AttributeChannel >( attrDesc, "dummy", false );
-//            for( int j = 0; j < 8; j++ ) attr->AddAttribute( glm::vec2( 0, 0 ) );
-//            comp->AddAttributeChannel( attr );
-//        }
-//        else
-//            assert( false );
-//    }
-//
-//    vac->AddConnectedComponent( comp );
-//
-//    box;
-//}
-
-//void UpdateBoxInVAC( VertexAttributesChannel * vac, mathematics::Box box )
-//{
-//    auto comp = vac->GetConnectedComponent( unsigned int( vac->GetComponents().size()-1 ) );
-//
-//    auto channel = Cast< Float3AttributeChannel * >( comp->GetAttrChannel( AttributeSemantic::AS_POSITION ).get() );
-//    
-//    auto verts = channel->GetVertices();
-//    assert( verts.size() == 8 );
-//
-//    verts[ 0 ] = glm::vec3( box.xmin, box.ymin, box.zmin );
-//    verts[ 1 ] = glm::vec3( box.xmin, box.ymax, box.zmin );
-//    verts[ 2 ] = glm::vec3( box.xmax, box.ymin, box.zmin );
-//    verts[ 3 ] = glm::vec3( box.xmax, box.ymax, box.zmin );
-//    verts[ 4 ] = glm::vec3( box.xmax, box.ymin, box.zmax );
-//    verts[ 5 ] = glm::vec3( box.xmax, box.ymax, box.zmax );
-//    verts[ 6 ] = glm::vec3( box.xmin, box.ymin, box.zmax );
-//    verts[ 7 ] = glm::vec3( box.xmin, box.ymax, box.zmax );
-//}
 
 } // anonymous
 
@@ -112,7 +84,6 @@ BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac )
     , m_lastTopologyID( 0 )
 {
     m_box = CalculateBoundingBox( m_vac );
-    //AddBoxToVAC( m_vac, m_box );
     //m_transform *= glm::translate( glm::mat4( 1.0f ), glm::vec3( box.xmin, box.ymin, box.zmin ) );
     //m_transform *= glm::scale( glm::mat4( 1.0f ), glm::vec3( box.xmax - box.xmin, box.ymax - box.ymin, box.zmax - box.zmin ) );
 }
@@ -121,12 +92,12 @@ void                    BoundingVolume::Update                  ()
 {
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {
-        //UpdateBoxInVAC( m_vac, m_box );
+        m_box = CalculateBoundingBox( m_vac );
+        m_lastAttribuetesID = m_vac->GetAttributesUpdateID();
     }
     else if( m_lastTopologyID < m_vac->GetTopologyUpdateID() )
     {
         m_box = CalculateBoundingBox( m_vac );
-        //AddBoxToVAC( m_vac, m_box );
         m_lastTopologyID = m_vac->GetTopologyUpdateID();
         assert( m_lastAttribuetesID == m_vac->GetAttributesUpdateID() );
     }

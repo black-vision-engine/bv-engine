@@ -200,16 +200,16 @@ BasicNodePtr BasicNode::Create( const IDeserializer& deser )
 // node effect
     if( deser.EnterChild( "effect" ) )
     {
-		auto effect = ModelNodeEffect::CreateTyped( deser );
-		
-		if( effect != nullptr)
-		{
-			node->SetNodeEffect( effect );
-		}
-		else
-		{
-			LOG_MESSAGE( SeverityLevel::warning ) << "node " << name << " cannot deserialize node effect.";
-		}
+        auto effect = ModelNodeEffect::CreateTyped( deser );
+        
+        if( effect != nullptr)
+        {
+            node->SetNodeEffect( effect );
+        }
+        else
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "node " << name << " cannot deserialize node effect.";
+        }
 
         deser.ExitChild();  // effect
     }
