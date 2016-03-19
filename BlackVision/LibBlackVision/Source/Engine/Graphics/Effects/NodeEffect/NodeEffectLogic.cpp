@@ -59,6 +59,7 @@ void    NodeEffectLogic::RenderFSE                   ( RenderTarget * output, Re
 {
     if( m_FSE && IsFSERequired() )
     {
+        m_FSE->Update(); // FIXME: Force updating fse because of changing values in Render of PreLogic. Look at ImageMaskPreFullscreenEffectLogic::RenderImpl.
         // FIXME: by default we render to the currently bound render target
         m_FSE->Render( output, ctx );
     }
