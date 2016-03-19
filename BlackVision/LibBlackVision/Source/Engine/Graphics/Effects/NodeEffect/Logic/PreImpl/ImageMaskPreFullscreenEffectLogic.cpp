@@ -26,6 +26,9 @@ ImageMaskPreFullscreenEffectLogic::ImageMaskPreFullscreenEffectLogic            
 
     m_maskTxVal = ValuesFactory::CreateValueMat4( "maskTx" );
     m_maskTxVal->SetValue( glm::mat4( 1.f ) );
+
+    m_debugPoint0 = ValuesFactory::CreateValueVec2( "debugPoint0" );
+    m_debugPoint1 = ValuesFactory::CreateValueVec2( "debugPoint1" );
 }
 
 // *********************************
@@ -62,11 +65,13 @@ void                        ImageMaskPreFullscreenEffectLogic::RenderImpl    ( S
 //
 std::vector< IValuePtr >    ImageMaskPreFullscreenEffectLogic::GetValues        () const
 {
-    std::vector< IValuePtr > ret( 3 );
+    std::vector< IValuePtr > ret( 5 );
 
     ret[ 0 ] = m_fitVal;
     ret[ 1 ] = m_maskAspectVal;
     ret[ 2 ] = m_maskTxVal;
+    ret[ 3 ] = m_debugPoint0;
+    ret[ 4 ] = m_debugPoint1;
 
     return ret;
 }
@@ -94,15 +99,15 @@ bool                        ImageMaskPreFullscreenEffectLogic::IsFSERequired    
 
 // *********************************
 //
-glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTransformation( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool fitMask, SceneNode * node, RenderLogicContext * ctx ) const
+glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTransformation( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool fitObject, SceneNode * node, RenderLogicContext * ctx ) const
 {
     glm::mat4 ret( 1.f );
 
     if( aspectMask )
     {
-        ret = glm::scale( ret, glm::vec3( float( screenW ) / float( maskW ), float( screenH ) / float( maskH ), 1.f ) );
+        //ret = glm::scale( ret, glm::vec3( float( maskW ) / float( screenW ), float( maskH ) / float( screenH ), 1.f ) );
 
-        if( fitMask )
+        if( fitObject )
         {
             auto bb = node->GetBoundingBox();
 
@@ -110,21 +115,44 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
             {
                 auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
 
-                auto tbb = mathematics::TransformationUtils::Transform( bb, projMat * node->GetTransformable()->WorldTransform().Matrix() );
+                auto viewMat = ctx->GetRenderer()->GetCamera()->GetViewMatrix();
 
-                auto omin = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmin, tbb.ymin, tbb.zmin ), screenW, screenH );
-                auto omax = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmax, tbb.ymax, tbb.zmax ), screenW, screenH );
+                auto transformMatrix = node->GetTransformable()->WorldTransform().Matrix();
 
-                auto cxo = ( omin.x + omax.x ) / 2.f;
-                auto cyo = ( omin.y + omax.y ) / 2.f;
+                auto cameraPerspective = ctx->GetRenderer()->GetCamera()->IsPerspective();
 
-                auto cxm = ( ( maskW / 2.f ) / screenW );
-                auto cym = ( ( maskH / 2.f ) / screenH );
+                auto tbb = mathematics::TransformationUtils::Transform( bb, projMat * transformMatrix );
 
-                auto sx = cxo - cxm;
-                auto sy = cyo - cym;
+                auto omin = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmin, tbb.ymin, tbb.zmin ), cameraPerspective );
+                auto omax = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmax, tbb.ymax, tbb.zmax ), cameraPerspective );
 
-                ret = glm::translate( ret, glm::vec3( -sx, -sy, 0.0 ) );
+                //{ // DEBUGGING
+                //    auto dp = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( 1.0f, 0.f, 3.f ), screenW, screenH );
+                    m_debugPoint0->SetValue( omin );
+                    m_debugPoint1->SetValue( omax );
+                //}
+
+                auto maskCenter = glm::vec2( 0.5f, 0.5f );
+                auto objectCenter = glm::vec2( ( omin.x + omax.x ) / 2.f, ( omin.y + omax.y ) / 2.f );
+
+                ret = glm::translate( ret, glm::vec3( objectCenter - maskCenter, 0.f ) );
+                maskCenter = glm::vec2( ret * glm::vec4( maskCenter, 0.f, 1.f ) );
+
+                auto maskSize = glm::vec2( 1.f, 1.f );
+                auto objectSize = glm::vec2( omax.x - omin.x, omax.y - omin.y );
+
+                auto scaleToFit = std::min( objectSize.x / maskSize.x, objectSize.y / maskSize.y );
+
+                auto scaleToFitMat = glm::scale( glm::mat4( 1.f ), glm::vec3( scaleToFit, scaleToFit, 1.f ) );
+
+                auto translateToCenter = glm::translate( glm::mat4( 1.f ), glm::vec3( maskCenter, 0.f) );
+                auto translateToCenterInv = glm::translate( glm::mat4( 1.f ), glm::vec3( -maskCenter, 0.f) );
+
+                ret = translateToCenter * scaleToFitMat * translateToCenterInv * ret;
+
+                ret = glm::inverse( ret );
+
+                auto debug = ret * glm::vec4( 0.5f, 0.5f, 0.f, 1.f );
             }
         }
         else // fit to the screen
@@ -137,7 +165,7 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
     }
     else
     {
-        if( fitMask )
+        if( fitObject )
         {
         }
         else

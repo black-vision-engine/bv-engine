@@ -38,7 +38,7 @@ struct Box
     Float32		        Height			() const;
     Float32             Depth           () const;
 
-    std::vector< glm::vec4 > GetVerticies () const;
+    std::vector< glm::vec3 > GetVerticies () const;
 };
 
 } // mathematics

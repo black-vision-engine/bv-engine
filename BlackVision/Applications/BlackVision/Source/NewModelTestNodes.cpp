@@ -450,7 +450,7 @@ model::BasicNodePtr NewEmptyNodeWithTransform( model::ITimeEvaluatorPtr timeEval
 
 model::BasicNodePtr CreateNodeInPos( TexturedRectNodeBuilder & bTex, Float32 X, Float32 Y, std::string name, model::BasicNodePtr root )
 {
-    bTex.SetPosition( X, Y, -1.1f );
+    bTex.SetPosition( X, Y, 1.0f );
     auto node = bTex.CreateNode( "root", true );
     root->AddChildToModelOnly( node );
 

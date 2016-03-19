@@ -239,8 +239,8 @@ RenderablePass *    SimpleFullscreenEffect::CreateRenderablePass    ( PixelShade
 //
 TextureSampler *    SimpleFullscreenEffect::CreateSampler           ( const std::string & samplerName ) const
 {
-    auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP );
-    auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP );            
+    auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_BORDER );
+    auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_BORDER );            
     auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D;
     auto sfm            = EngineConstantsMapper::EngineConstant( TextureFilteringMode::TFM_POINT );
 

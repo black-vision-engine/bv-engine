@@ -14,7 +14,8 @@ Box  TransformationUtils::Transform( const Box * box, const glm::mat4 & tx )
 
     for( auto v : box->GetVerticies() )
     {
-        ret.Include( glm::vec3( tx * v ) );
+        auto r = tx *  glm::vec4( v, 1.f );
+        ret.Include( glm::vec3( r.x, r.y, r.w ) );
     }
     
     return ret;

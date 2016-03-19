@@ -15,6 +15,8 @@ private:
     ValueIntPtr                     m_fitVal;
     ValueIntPtr                     m_maskAspectVal;
     ValueMat4Ptr                    m_maskTxVal;
+    ValueVec2Ptr                    m_debugPoint0;
+    ValueVec2Ptr                    m_debugPoint1;
 
 public:
                 ImageMaskPreFullscreenEffectLogic   ();
@@ -35,7 +37,7 @@ public:
     virtual void                        AddTexture                          ( const ITextureDescriptorConstPtr & ) override;
 
 private:
-    glm::mat4                           CalculateMaskTransformation         ( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool aspectScreen, SceneNode * node, RenderLogicContext * ctx ) const;
+    glm::mat4                           CalculateMaskTransformation         ( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool fitObject, SceneNode * node, RenderLogicContext * ctx ) const;
 
 };
 

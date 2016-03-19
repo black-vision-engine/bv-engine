@@ -17,7 +17,7 @@ public:
 
     static void         RenderSceneNodeToRenderTarget   ( SceneNode * node, RenderLogicContext * ctx, RenderTarget * outputs );
 
-    static glm::vec2    ScreenPosToFullScreenTexPos     ( const glm::vec3 & screenPos, SizeType screenWidth, SizeType screenHeight );
+    static glm::vec2    ScreenPosToFullScreenTexPos     ( const glm::vec3 & screenPos, bool cameraPerspective );
 };
 
 } // bv

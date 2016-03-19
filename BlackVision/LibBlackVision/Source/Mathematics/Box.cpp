@@ -194,19 +194,19 @@ Float32     Box::Depth               () const
 
 // ******************************
 // 
-std::vector< glm::vec4 > Box::GetVerticies () const
+std::vector< glm::vec3 > Box::GetVerticies () const
 {
-    std::vector< glm::vec4 > ret;
+    std::vector< glm::vec3 > ret;
     ret.reserve( 8 );
 
-    ret.push_back( glm::vec4( this->xmin, this->ymin, this->zmin, 1.f ) );
-    ret.push_back( glm::vec4( this->xmin, this->ymin, this->zmax, 1.f ) );
-    ret.push_back( glm::vec4( this->xmin, this->ymax, this->zmax, 1.f ) );
-    ret.push_back( glm::vec4( this->xmax, this->ymax, this->zmax, 1.f ) );
-    ret.push_back( glm::vec4( this->xmax, this->ymax, this->zmin, 1.f ) );
-    ret.push_back( glm::vec4( this->xmax, this->ymin, this->zmin, 1.f ) );
-    ret.push_back( glm::vec4( this->xmin, this->ymax, this->zmin, 1.f ) );
-    ret.push_back( glm::vec4( this->xmax, this->ymin, this->zmax, 1.f ) );
+    ret.push_back( glm::vec3( this->xmin, this->ymin, this->zmin ) );
+    ret.push_back( glm::vec3( this->xmin, this->ymin, this->zmax ) );
+    ret.push_back( glm::vec3( this->xmin, this->ymax, this->zmax ) );
+    ret.push_back( glm::vec3( this->xmax, this->ymax, this->zmax ) );
+    ret.push_back( glm::vec3( this->xmax, this->ymax, this->zmin ) );
+    ret.push_back( glm::vec3( this->xmax, this->ymin, this->zmin ) );
+    ret.push_back( glm::vec3( this->xmin, this->ymax, this->zmin ) );
+    ret.push_back( glm::vec3( this->xmax, this->ymin, this->zmax ) );
 
     return ret;
 }
