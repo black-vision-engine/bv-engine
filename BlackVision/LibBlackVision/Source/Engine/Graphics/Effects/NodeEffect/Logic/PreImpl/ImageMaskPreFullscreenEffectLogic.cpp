@@ -115,16 +115,14 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
             {
                 auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
 
-                auto viewMat = ctx->GetRenderer()->GetCamera()->GetViewMatrix();
-
                 auto transformMatrix = node->GetTransformable()->WorldTransform().Matrix();
 
-                auto cameraPerspective = ctx->GetRenderer()->GetCamera()->IsPerspective();
+                auto tbb = mathematics::TransformationUtils::Transform( bb, transformMatrix );
 
-                auto tbb = mathematics::TransformationUtils::Transform( bb, projMat * transformMatrix );
+                tbb = mathematics::TransformationUtils::Project( &tbb, projMat );
 
-                auto omin = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmin, tbb.ymin, tbb.zmin ), cameraPerspective );
-                auto omax = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( tbb.xmax, tbb.ymax, tbb.zmax ), cameraPerspective );
+                auto omin = mathematics::TransformationUtils::ToScreenNormCoords( glm::vec2( tbb.xmin, tbb.ymin ) );
+                auto omax = mathematics::TransformationUtils::ToScreenNormCoords( glm::vec2( tbb.xmax, tbb.ymax ) );
 
                 //{ // DEBUGGING
                 //    auto dp = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( 1.0f, 0.f, 3.f ), screenW, screenH );
