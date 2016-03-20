@@ -131,12 +131,19 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
                 //}
 
                 auto maskCenter = glm::vec2( 0.5f, 0.5f );
+
+                auto maskAspect = float( maskW ) / float( maskH );
+
+                auto txKeepAspect = glm::scale( glm::mat4( 1.f ), glm::vec3( maskAspect, 1.f, 1.f ) );
+
+                maskCenter = glm::vec2( txKeepAspect * glm::vec4( maskCenter, 0.f, 1.f ) );
+
                 auto objectCenter = glm::vec2( ( omin.x + omax.x ) / 2.f, ( omin.y + omax.y ) / 2.f );
 
-                ret = glm::translate( ret, glm::vec3( objectCenter - maskCenter, 0.f ) );
-                maskCenter = glm::vec2( ret * glm::vec4( maskCenter, 0.f, 1.f ) );
+                auto txTranslateToObjCenter = glm::translate( glm::mat4( 1.f ), glm::vec3( objectCenter - maskCenter, 0.f ) );
+                maskCenter = glm::vec2( txTranslateToObjCenter * glm::vec4( maskCenter, 0.f, 1.f ) );
 
-                auto maskSize = glm::vec2( 1.f, 1.f );
+                auto maskSize = glm::vec2( txKeepAspect * glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
                 auto objectSize = glm::vec2( omax.x - omin.x, omax.y - omin.y );
 
                 auto scaleToFit = std::min( objectSize.x / maskSize.x, objectSize.y / maskSize.y );
@@ -146,7 +153,7 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
                 auto translateToCenter = glm::translate( glm::mat4( 1.f ), glm::vec3( maskCenter, 0.f) );
                 auto translateToCenterInv = glm::translate( glm::mat4( 1.f ), glm::vec3( -maskCenter, 0.f) );
 
-                ret = translateToCenter * scaleToFitMat * translateToCenterInv * ret;
+                ret = translateToCenter * scaleToFitMat * translateToCenterInv * txTranslateToObjCenter * txKeepAspect;
 
                 ret = glm::inverse( ret );
 
