@@ -109,15 +109,16 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
 
         if( fitObject )
         {
-            auto bb = node->GetBoundingBox();
+            mathematics::Box bb;
+            PFLogicUtils::CalcCommonBoxForNode( node, &bb );
 
-            if( bb != nullptr )
+            if( !bb.m_empty )
             {
                 auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
 
                 auto transformMatrix = node->GetTransformable()->WorldTransform().Matrix();
 
-                auto tbb = mathematics::TransformationUtils::Transform( bb, transformMatrix );
+                auto tbb = mathematics::TransformationUtils::Transform( &bb, transformMatrix );
 
                 tbb = mathematics::TransformationUtils::Project( &tbb, projMat );
 

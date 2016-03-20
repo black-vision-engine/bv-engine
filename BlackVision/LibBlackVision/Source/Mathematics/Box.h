@@ -31,6 +31,7 @@ struct Box
 
     void                Include		    ( const glm::vec3 & point );
     void                Include		    ( glm::vec3 && point );
+    void                Include         ( const Box & box );
 
     Float32             RayIntersection ( glm::vec3 rayPoint, glm::vec3 rayDirection ) const;
 

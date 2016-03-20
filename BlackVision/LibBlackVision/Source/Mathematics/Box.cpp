@@ -171,6 +171,18 @@ Float32   Box::RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirect
     return maxMinPlane;
 }
 
+
+// ******************************
+// 
+void        Box::Include            ( const Box & box )
+{
+    if( !box.m_empty )
+    {
+        this->Include( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+        this->Include( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+    }
+}
+
 // ******************************
 // 
 Float32		Box::Width				() const	

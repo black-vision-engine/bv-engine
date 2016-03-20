@@ -27,4 +27,19 @@ void        PFLogicUtils::RenderSceneNodeToRenderTarget( SceneNode * node, Rende
     enable( ctx, mainRT );
 }
 
+// *********************************
+//
+void        PFLogicUtils::CalcCommonBoxForNode          ( SceneNode * node, mathematics::Box * box )
+{
+    if( auto b = node->GetBoundingBox() )
+    {
+        box->Include( *b );
+    }
+
+    for( SizeType i = 0; i < node->NumChildNodes(); ++i )
+    {
+        CalcCommonBoxForNode( node->GetChild( ( unsigned int )i ), box );
+    }
+}
+
 }
