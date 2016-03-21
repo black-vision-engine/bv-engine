@@ -73,6 +73,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
     auto command        = mouseEvent->MouseCommand;
     auto mouseX         = mouseEvent->MouseX;
     auto mouseY         = mouseEvent->MouseY;
+    bool autoSelect     = mouseEvent->AutoSelect;
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
@@ -114,7 +115,9 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         }
 
         auto node = editor->FindIntersectingNode( cameraPos, rayDirection );
-        editor->UnselectNodes();
+
+        if( autoSelect )
+            editor->UnselectNodes();
 
         if( node == nullptr )
         {
@@ -122,7 +125,10 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
             return;
         }
 
-        bool result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ) );
+        bool result = true;
+        
+        if( autoSelect )
+            result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ) );
         
         std::string nodePath = ModelState::GetInstance().BuildIndexPath( node.get() );
         std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
