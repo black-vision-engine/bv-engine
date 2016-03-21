@@ -105,8 +105,6 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
 
     if( aspectMask )
     {
-        //ret = glm::scale( ret, glm::vec3( float( maskW ) / float( screenW ), float( maskH ) / float( screenH ), 1.f ) );
-
         if( fitObject )
         {
             mathematics::Box bb;
