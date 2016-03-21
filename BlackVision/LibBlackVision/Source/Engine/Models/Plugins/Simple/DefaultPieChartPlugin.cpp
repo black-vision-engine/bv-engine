@@ -208,9 +208,9 @@ public:
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
-    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryVertexAttributeChannel
     {
-		m_vaChannel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+		m_vaChannel = std::make_shared< DefaultGeometryVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
 	else
 	{
@@ -230,7 +230,7 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
     auto gen3 = GenerateSideUV( z1, z2, angleEnd );
     auto gen4 = GenerateRoundSideUV( angleStart, angleEnd, z1, z2 );
 
-	auto channel = std::static_pointer_cast< DefaultGeometryAndUVsVertexAttributeChannel >( m_vaChannel );
+	auto channel = std::static_pointer_cast< DefaultGeometryVertexAttributeChannel >( m_vaChannel );
     channel->GenerateAndAddConnectedComponent( gen0 );
     channel->GenerateAndAddConnectedComponent( gen1 );
     channel->GenerateAndAddConnectedComponent( gen2 );
