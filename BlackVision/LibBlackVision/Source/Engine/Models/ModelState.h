@@ -32,11 +32,12 @@ public:
     bool                                RegisterBVProject ( const BVProject * project );
 
     // Node selection
-    bool                                IsSelected      ( IModelNodePtr node );
-    void                                Select          ( IModelNodePtr node );
-    bool                                Unselect        ( IModelNodePtr node );
-    void                                UnselectAll     ();
-    std::set< IModelNodePtr > &         GetSelectedNodes();
+    bool                                IsSelected          ( IModelNodePtr node );
+    void                                Select              ( IModelNodePtr node );
+    bool                                Unselect            ( IModelNodePtr node );
+    void                                UnselectAll         ();
+    void                                UnselectRecursive   ( IModelNodePtr node );
+    std::set< IModelNodePtr > &         GetSelectedNodes    ();
 
 private:
     

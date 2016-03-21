@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "ModelSceneEditor.h"
+#include "ModelState.h"
 
 namespace bv { namespace model {
 
@@ -35,6 +36,7 @@ bool                    ModelSceneEditor::DeleteRootNode     ( BasicNodePtr main
 {
     if( m_rootNode )
     {
+        ModelState::GetInstance().UnselectRecursive( m_rootNode );
 		mainRootNode->DetachChildNodeOnly( m_rootNode );
         m_rootNode = nullptr;
 
@@ -60,6 +62,7 @@ bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr pare
 {
     if( parentNode && childNode )
     {
+        ModelState::GetInstance().UnselectRecursive( childNode );
         parentNode->DetachChildNodeOnly( childNode );
 
         return true;
@@ -142,6 +145,9 @@ BasicNodePtr    ModelSceneEditor::GetDetachedNode   () const
 //
 void            ModelSceneEditor::DeleteDetachedNode()
 {
+    if( m_detachedNode )
+        ModelState::GetInstance().UnselectRecursive( m_detachedNode );
+    
     m_detachedNode = nullptr;
 }
 
