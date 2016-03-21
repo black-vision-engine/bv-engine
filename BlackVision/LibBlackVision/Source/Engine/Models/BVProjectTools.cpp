@@ -239,11 +239,16 @@ std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    
 
     for( UInt32 i = 0; i < modelNode->GetNumChildren(); ++i )
     {
-        auto newPair = NodeIntersection( modelNode->GetChild( i ), inverseTransform, rayPoint, rayDir );
-        if( newPair.second < result.second && result.second >= 0 )
+        auto childNode = modelNode->GetChild( i );
+
+        if( childNode->IsVisible() )
         {
-            result.first = newPair.first;
-            result.second = newPair.second;
+            auto newPair = NodeIntersection( childNode, inverseTransform, rayPoint, rayDir );
+            if( newPair.second < result.second && result.second >= 0 )
+            {
+                result.first = newPair.first;
+                result.second = newPair.second;
+            }
         }
     }
 
