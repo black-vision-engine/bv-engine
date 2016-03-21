@@ -209,6 +209,7 @@ void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject &
     context->detailedInfo = false;
 
     scene->Serialize( ser );
+    ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( scene->GetName() ) ) );
     PrepareResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, true );
 }
 
@@ -273,7 +274,8 @@ void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, ID
     for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
     {
         ser.EnterChild( "scene" );
-        sceneModel->Serialize( ser );
+            ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
+            sceneModel->Serialize( ser );
         ser.ExitChild();
     }
 
@@ -596,7 +598,8 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
     for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
     {
         ser.EnterChild( "scene" );
-        sceneModel->Serialize( ser );
+            sceneModel->Serialize( ser );
+            ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
         ser.ExitChild();
     }
 

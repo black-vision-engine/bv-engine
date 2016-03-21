@@ -83,7 +83,7 @@ void ScreenShotLogic::FrameRendered   ( RenderTarget * renderTarget, RenderLogic
         {
             HPROFILER_SECTION( "Frame Readback", PROFILER_THREAD1 );
 
-            renderer( ctx )->ReadColorTexture( 0, renderTarget, frame );
+            renderer( ctx )->ReadColorTexturSync( 0, renderTarget, frame );
         }
 
         {

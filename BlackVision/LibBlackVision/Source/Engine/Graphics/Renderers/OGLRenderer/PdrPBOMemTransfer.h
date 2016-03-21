@@ -28,7 +28,7 @@ public:
     static bool		PBORequired		( DataBuffer::Semantic semantic );
 
 protected:
-				PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, SizeType dataSize );
+				PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, SizeType dataSize, bool forceSync );
     virtual		~PdrPBOMemTransfer  () = 0;
 
     GLuint      NumPBOs         ( DataBuffer::Semantic semantic ) const;
@@ -43,7 +43,7 @@ protected:
 class PdrUploadPBO : public PdrPBOMemTransfer
 {
 public:
-			PdrUploadPBO		( DataBuffer::Semantic semantic, SizeType dataSize );
+			PdrUploadPBO		( DataBuffer::Semantic semantic, SizeType dataSize, bool forceSync );
 
 	void 	LockUpload			( const char * source, SizeType dataSize );
 	void 	UnlockUpload		();
@@ -57,7 +57,7 @@ DEFINE_UPTR_TYPE( PdrUploadPBO )
 class PdrDownloadPBO : public PdrPBOMemTransfer
 {
 public:
-			PdrDownloadPBO		( DataBuffer::Semantic semantic, SizeType dataSize );
+			PdrDownloadPBO		( DataBuffer::Semantic semantic, SizeType dataSize, bool forceSync );
 
 	void 	LockDownload		();
 	void 	UnlockDownload		( char * dest, SizeType dataSize );

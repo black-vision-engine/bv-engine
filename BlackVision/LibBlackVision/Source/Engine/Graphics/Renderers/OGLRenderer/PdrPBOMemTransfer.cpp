@@ -7,8 +7,8 @@ namespace bv {
 
 // ****************************
 //
-PdrUploadPBO::PdrUploadPBO			( DataBuffer::Semantic semantic, SizeType dataSize )
-    : PdrPBOMemTransfer( semantic, dataSize )
+PdrUploadPBO::PdrUploadPBO			( DataBuffer::Semantic semantic, SizeType dataSize, bool forceSync )
+    : PdrPBOMemTransfer( semantic, dataSize, forceSync )
 {
     assert( (int) DataBuffer::Semantic::S_TOTAL == 7 );
     assert( PBORequired( semantic ) );
@@ -58,8 +58,8 @@ void				PdrUploadPBO::UnlockUpload			()
 
 // ****************************
 //
-					PdrDownloadPBO::PdrDownloadPBO		( DataBuffer::Semantic semantic, SizeType dataSize )
-			: PdrPBOMemTransfer( semantic, dataSize )
+					PdrDownloadPBO::PdrDownloadPBO		( DataBuffer::Semantic semantic, SizeType dataSize, bool forceSync )
+			: PdrPBOMemTransfer( semantic, dataSize, forceSync )
 {
 	assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
 }
@@ -91,7 +91,7 @@ void				PdrDownloadPBO::UnlockDownload		( char * dest, SizeType dataSize )
 
 // ****************************
 //
-				PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeType dataSize )
+				PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeType dataSize, bool forceSync )
     : m_index( 0 ) 
     , m_dataSize( ( GLenum )dataSize )
 {
@@ -100,7 +100,11 @@ void				PdrDownloadPBO::UnlockDownload		( char * dest, SizeType dataSize )
 
     m_pboTarget = PBOTarget( semantic );
     m_pboUsage  = PBOUsage( semantic );
-    m_numPBOs   = NumPBOs( semantic );
+
+    if( forceSync )
+        m_numPBOs = 1;
+    else
+        m_numPBOs = NumPBOs( semantic );
 
     assert( m_numPBOs > 0 );
 
