@@ -409,6 +409,9 @@ void                    RenderLogic::BlitToPreview          ( RenderTarget * rt,
         m_blitEffect->SetRenderTarget( 0, rt );
     }
 
+    // Clear 'preview' render target.
+    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+
     m_blitEffect->Render( rt, ctx );
 }
 
