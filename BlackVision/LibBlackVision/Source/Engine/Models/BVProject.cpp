@@ -7,6 +7,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/ModelSceneEditor.h"
 #include "Engine/Models/BVProjectEditor.h"
 
 #include "Mathematics/Transform/MatTransform.h"
@@ -105,64 +106,6 @@ SceneNode *             BVProject::GetEngineSceneRoot ()  const
 BVProjectEditor *       BVProject::GetProjectEditor		()
 {
     return m_projectEditor;
-}
-
-// *******************************
-//
-bool					BVProject::AddScene				( model::SceneModelPtr sceneModel )
-{
-    return AddScene( sceneModel, ( UInt32 )m_sceneModelVec.size() );
-}
-
-// *******************************
-//
-bool                    BVProject::AddScene				( model::SceneModelPtr sceneModel, UInt32 idx )
-{
-    //FIXME: prevent adding two scenes with the same name
-    if( GetScene( sceneModel->GetName() ) )
-    {
-        return false;
-    }
-    
-    if( idx < m_sceneModelVec.size() )
-    {
-        m_sceneModelVec.insert( m_sceneModelVec.begin() + idx, sceneModel );
-    }
-    else
-    {
-        m_sceneModelVec.push_back( sceneModel );
-    }
-
-    if( sceneModel->GetRootNode() )
-    {
-        m_rootNode->AddChildToModelOnly( sceneModel->GetRootNode(), idx );
-    }
-
-    m_globalTimeline->AddChild( sceneModel->GetTimeline() );
-    
-    return true;
-}
-
-// *******************************
-//
-bool                    BVProject::RemoveScene			( model::SceneModelPtr sceneModel )
-{
-    for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
-    {
-        if( m_sceneModelVec[ i ] == sceneModel )
-        {
-            if( m_sceneModelVec[ i ]->GetRootNode() )
-            {
-                m_rootNode->DetachChildNodeOnly( m_sceneModelVec[ i ]->GetRootNode() );
-            }
-            m_globalTimeline->RemoveChild( m_sceneModelVec[ i ]->GetTimeline() );
-
-            m_sceneModelVec.erase( m_sceneModelVec.begin() + i );
-
-            return true;
-        }
-    }
-    return false;
 }
 
 // *******************************

@@ -206,8 +206,11 @@ private:
 	
 	/* model scene helpers */
 
-    void                    SetSceneRootNode	( model::SceneModelPtr scene, model::IModelNodePtr rootNode );
-    void                    DeleteSceneRootNode	( model::SceneModelPtr scene );
+    bool                    AddModelScene       ( model::SceneModelPtr scene, UInt32 idx );
+    bool                    RemoveModelScene    ( model::SceneModelPtr scene );
+
+    void                    SetModelSceneRootNode   ( model::SceneModelPtr scene, model::IModelNodePtr rootNode );
+    void                    DeleteModelSceneRootNode( model::SceneModelPtr scene );
 
 
 	/* renaming helpers */

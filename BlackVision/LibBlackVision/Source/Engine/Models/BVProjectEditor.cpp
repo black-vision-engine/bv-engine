@@ -66,7 +66,7 @@ void    BVProjectEditor::AddScene       ( model::SceneModelPtr scene )
         scene->SetName( PrefixSceneName( sceneName ) );
     }
 
-    m_project->AddScene( scene );
+    AddModelScene( scene, ( UInt32 )m_project->m_sceneModelVec.size() );
 
     InitDefaultScene( scene );
 
@@ -101,12 +101,14 @@ bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr scene )
 {
     if( scene )
     {
-        m_project->RemoveScene( scene );
-        
-        m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( scene->GetRootNode() ) );
-        MappingsCleanup( scene->GetRootNode() );
+        auto modelSceneRoot = scene->GetRootNode();
 
-        model::ModelState::GetInstance().UnregisterNode( scene->GetRootNode().get() );
+        RemoveModelScene( scene );
+
+        m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( modelSceneRoot ) );
+        MappingsCleanup( modelSceneRoot );
+
+        model::ModelState::GetInstance().UnregisterNode( modelSceneRoot.get() );
 
         return true;
     }
@@ -135,7 +137,7 @@ bool    BVProjectEditor::DetachScene			( const std::string & sceneName )
         MappingsCleanup( scene->GetRootNode() );
 
         m_detachedScenes.push_back( scene );
-        m_project->RemoveScene( scene );
+        RemoveModelScene( scene );
 
         return true;
     }
@@ -158,7 +160,7 @@ bool    BVProjectEditor::AttachScene			( const std::string & sceneName, UInt32 p
     {
         if( m_detachedScenes[ i ]->GetName() == sceneName )
         {
-            m_project->AddScene( m_detachedScenes[ i ], posIdx );
+            AddModelScene( m_detachedScenes[ i ], posIdx );
 
             auto sceneRoot = m_detachedScenes[ i ]->GetRootNode();
             if( sceneRoot )
@@ -254,7 +256,55 @@ bool	BVProjectEditor::MoveScene				( const std::string & sceneName, UInt32 posId
 
 // *******************************
 //
-void    BVProjectEditor::SetSceneRootNode		( model::SceneModelPtr scene, model::IModelNodePtr rootNode )
+bool    BVProjectEditor::AddModelScene          ( model::SceneModelPtr sceneModel, UInt32 idx )
+{
+    //FIXME: prevent adding two scenes with the same name
+    if( GetScene( sceneModel->GetName() ) )
+    {
+        return false;
+    }
+    
+    if( idx < m_project->m_sceneModelVec.size() )
+    {
+        m_project->m_sceneModelVec.insert( m_project->m_sceneModelVec.begin() + idx, sceneModel );
+    }
+    else
+    {
+        m_project->m_sceneModelVec.push_back( sceneModel );
+    }
+
+    if( sceneModel->GetRootNode() )
+    {
+        m_rootNode->AddChildToModelOnly( sceneModel->GetRootNode(), idx );
+    }
+
+    m_project->m_globalTimeline->AddChild( sceneModel->GetTimeline() );
+    
+    return true;
+}
+
+// *******************************
+//
+bool    BVProjectEditor::RemoveModelScene       ( model::SceneModelPtr sceneModel )
+{
+    for( unsigned int i = 0; i < m_project->m_sceneModelVec.size(); ++i )
+    {
+        auto & currScene = m_project->m_sceneModelVec[ i ];
+        if( currScene == sceneModel )
+        {
+            currScene->GetModelSceneEditor()->DeleteRootNode( m_rootNode );
+            m_project->m_globalTimeline->RemoveChild( currScene->GetTimeline() );
+            m_project->m_sceneModelVec.erase( m_project->m_sceneModelVec.begin() + i );
+
+            return true;
+        }
+    }
+    return false;
+}
+
+// *******************************
+//
+void    BVProjectEditor::SetModelSceneRootNode		( model::SceneModelPtr scene, model::IModelNodePtr rootNode )
 {
     assert( scene );
     assert( rootNode );
@@ -275,7 +325,7 @@ void    BVProjectEditor::SetSceneRootNode		( model::SceneModelPtr scene, model::
 
 // *******************************
 //
-void    BVProjectEditor::DeleteSceneRootNode	( model::SceneModelPtr scene )
+void    BVProjectEditor::DeleteModelSceneRootNode	( model::SceneModelPtr scene )
 {
     assert( scene );
 
@@ -390,7 +440,7 @@ bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, mode
     }
     else
     {
-        SetSceneRootNode( scene, childNode );
+        SetModelSceneRootNode( scene, childNode );
     }
     
     return true;
@@ -400,11 +450,11 @@ bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, mode
 //
 bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr node )
 {    
-    if( scene )
+    if( scene && node )
     {
-        if( node == scene->GetRootNode() && !parentNode )
+        if( node == scene->GetRootNode() )
         {
-            DeleteSceneRootNode( scene );
+            DeleteModelSceneRootNode( scene );
             return true;
         }
         else if( node && parentNode )
