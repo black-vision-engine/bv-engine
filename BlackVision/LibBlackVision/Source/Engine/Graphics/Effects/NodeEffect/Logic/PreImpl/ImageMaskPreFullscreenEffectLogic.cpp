@@ -101,12 +101,14 @@ bool                        ImageMaskPreFullscreenEffectLogic::IsFSERequired    
 //
 glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTransformation( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool fitObject, SceneNode * node, RenderLogicContext * ctx ) const
 {
+    {  screenW; screenH; }
     glm::mat4 ret( 1.f );
 
     if( aspectMask )
     {
-        if( !fitObject )
+        if( fitObject ) // fit to object aspect mask
         {
+            // TODO: Implement. This solution works only for non-perspective camera.
             mathematics::Box bb;
             PFLogicUtils::CalcCommonBoxForNode( node, &bb );
 
@@ -136,34 +138,64 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
 
                 ret = glm::inverse( ret );
             }
-            else
-            {
-
-            }
         }
-        else // fit to the screen
+        else // fit to screen aspect mask
         {
-            auto sx = ( screenW - maskW ) / ( 2.f * screenW );
-            auto sy = ( screenH - maskH ) / ( 2.f * screenH );
+            auto maskSize = glm::vec4( 1.f, 1.f, 0.f, 0.f );
 
-            ret = glm::translate( ret, glm::vec3( -sx, -sy, 0.0 ) );
+            auto keepMaskAspektTx = glm::scale( glm::mat4( 1.f ), glm::vec3( float( maskW ) / float( maskH ), 1.f, 1.f ) );
+
+            maskSize = keepMaskAspektTx * maskSize;
+
+            auto s = std::min( 1.f / maskSize.x, 1.f / maskSize.y );
+            auto scale = glm::scale( glm::mat4( 1.f ), glm::vec3( s, s, 1.f ) );
+
+            auto maskCenter = scale * keepMaskAspektTx * glm::vec4( 0.5f, 0.5f, 0.f, 1.f );
+
+            auto translateToScreenCenter = glm::translate( glm::mat4( 1.f ), glm::vec3( 0.5f - maskCenter.x, 0.5f - maskCenter.y, 0.f ) );
+
+            ret = translateToScreenCenter * scale * keepMaskAspektTx;
+
+            ret = glm::inverse( ret );
         }
     }
     else
     {
-        if( fitObject )
+        if( fitObject ) // fit to object aspect screen
         {
-        }
-        else
-        {
-            auto cxm = ( ( maskW / 2.f ) / screenW );
-            auto cym = ( ( maskH / 2.f ) / screenH );
+            // TODO: Implement. This solution works only for non-perspective camera.
+            mathematics::Box bb;
+            PFLogicUtils::CalcCommonBoxForNode( node, &bb );
 
-            auto sx = 0.5f - cxm;
-            auto sy = 0.5f - cym;
+            if( !bb.m_empty )
+            {
+                // from uv to [-1, 1]x[-1, 1]
+                auto txToR3 = glm::translate( glm::mat4( 1.f ), glm::vec3( -1.f, -1.f, 0.f ) ) * glm::scale( glm::mat4( 1.f ), glm::vec3( 2.f, 2.f, 1.f ) );
 
-            ret = glm::translate( ret, glm::vec3( -sx, -sy, 0.0 ) );
+                // scale to object size
+                auto objectSize = glm::vec3( bb.xmax - bb.xmin, bb.ymax - bb.ymin, bb.zmax - bb.zmin );
+                auto scale = glm::scale( glm::mat4( 1.f ), glm::vec3( objectSize.x / 2.f, objectSize.y / 2.f, 1.f ) );
+
+                // translate to object center.
+                auto objectCenter = glm::vec3( ( bb.xmin + bb.xmax ) / 2.f, ( bb.ymin + bb.ymax ) / 2.f, 0.f/*( bb.zmin + bb.zmax ) / 2.f*/ );
+                auto translate = glm::translate( glm::mat4( 1.f ), objectCenter );
+
+                // node world transform matrix
+                auto transformMatrix = node->GetTransformable()->WorldTransform().Matrix();
+
+                // projection matrix
+                auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
+
+                // from [-1, 1]x[-1, 1] back to uv
+                auto txToUV = glm::scale( glm::mat4( 1.f ), glm::vec3( 0.5f, 0.5f, 1.f ) ) * glm::translate( glm::mat4( 1.f ), glm::vec3( 1.f, 1.f, 0.f ) );
+
+                ret = txToUV * transformMatrix * translate * scale * txToR3;
+
+                ret = glm::inverse( ret );
+            }
         }
+        else // fit to screen aspect screen
+        { /* nothing to do */ }
     }
 
     return ret;
