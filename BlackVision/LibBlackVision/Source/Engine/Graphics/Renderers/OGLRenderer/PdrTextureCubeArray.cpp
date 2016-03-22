@@ -56,7 +56,7 @@ void    PdrTextureCubeArray::Initialize      ( const TextureCubeArray * textureA
 			{
 				for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 				{
-					m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, textureArray->RawFrameSize( lvl ) ) ) );
+					m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, textureArray->RawFrameSize( lvl ), false ) ) );
 				}
 			}
 		}

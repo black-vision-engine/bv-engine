@@ -53,7 +53,7 @@ void    PdrTexture2DArray::Initialize      ( const Texture2DArray * textureArray
 		{
 			for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 			{
-				m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, textureArray->RawFrameSize( lvl ) ) ) );
+				m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, textureArray->RawFrameSize( lvl ), false ) ) );
 			}
 		}
     }

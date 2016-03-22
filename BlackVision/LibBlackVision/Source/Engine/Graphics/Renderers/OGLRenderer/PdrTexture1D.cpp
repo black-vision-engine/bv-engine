@@ -46,7 +46,7 @@ void    PdrTexture1D::Initialize      ( const Texture1D * texture )
 		m_pboMem.reserve( numLevels );
 		for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 		{
-			m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ) ) ) );
+			m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ), false ) ) );
 		}
     }
 
