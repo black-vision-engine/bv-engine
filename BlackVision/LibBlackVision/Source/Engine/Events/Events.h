@@ -985,6 +985,7 @@ public:
 
     Float32                         MouseX;
     Float32                         MouseY;
+    bool                            AutoSelect;
 
 public:
     explicit                        MouseEvent          () {}

@@ -325,6 +325,17 @@ bool    ModelState::Unselect        ( IModelNodePtr node )
     return true;
 }
 
+void    ModelState::UnselectRecursive   ( IModelNodePtr node )
+{
+    Unselect( node );
+
+    for( unsigned int i = 0; i < node->GetNumChildren(); ++i )
+    {
+        auto basicNode = std::static_pointer_cast< BasicNode >( node );
+        UnselectRecursive( basicNode->GetChild( i ) );
+    }
+}
+
 // ***********************
 //
 void    ModelState::UnselectAll     ()

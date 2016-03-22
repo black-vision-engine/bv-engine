@@ -525,6 +525,7 @@ template<> std::string                          T2String   ( const TimelineKeyfr
 
 const std::string MOUSE_X_STRING                = "MouseX";
 const std::string MOUSE_Y_STRING                = "MouseY";
+const std::string MOUSE_AUTO_SELECT_FLAG        = "AutoSelect";
 
 std::pair< MouseEvent::Command, const char* > MouseEventCommandMapping[] = 
 {
@@ -1824,6 +1825,7 @@ void                MouseEvent::Serialize            ( ISerializer& ser ) const
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( MouseCommand ) );
     ser.SetAttribute( SerializationHelper::MOUSE_X_STRING, SerializationHelper::T2String( MouseX ) );
     ser.SetAttribute( SerializationHelper::MOUSE_Y_STRING, SerializationHelper::T2String( MouseY ) );
+    ser.SetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_FLAG, SerializationHelper::T2String( AutoSelect ) );
 }
 
 // *************************************
@@ -1835,6 +1837,7 @@ IEventPtr                MouseEvent::Create          ( IDeserializer& deser )
         MouseEventPtr newEvent      = std::make_shared<MouseEvent>();
         newEvent->MouseX            = SerializationHelper::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_X_STRING ), -1.0f );
         newEvent->MouseY            = SerializationHelper::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1.0f );
+        newEvent->AutoSelect        = SerializationHelper::String2T<bool>( deser.GetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_FLAG ), true );
         newEvent->MouseCommand      = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), MouseEvent::Command::Fail );
 
         return newEvent;
