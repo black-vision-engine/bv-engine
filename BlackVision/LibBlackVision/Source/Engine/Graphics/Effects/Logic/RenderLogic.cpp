@@ -265,6 +265,14 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
     auto ctx = GetContext( renderer );
 
+
+    if( m_screenShotLogic->ReadbackNeeded() )
+    {
+        auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+        m_screenShotLogic->FrameRendered( rt, ctx );
+    }
+
+
     if( m_displayVideoCardPreview )
     {
         auto videoRt    = m_offscreenDisplay->GetVideoRenderTarget          ();
@@ -275,15 +283,9 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
         prevRt = videoRt;
     }
-    
+
     BlitToPreview( prevRt, ctx );
 
-    // FIXME: Optimize. Screenshot and video card output make 2 readbacks.
-    if( m_screenShotLogic->ReadbackNeeded() )
-    {
-        auto rt = m_offscreenDisplay->GetVideoRenderTarget();
-        m_screenShotLogic->FrameRendered( rt, ctx );
-    }
 
     if( m_useVideoCardOutput )
     {

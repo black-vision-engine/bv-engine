@@ -36,6 +36,8 @@ private:
     //void     ListAllResources        ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetAssetDescriptor      ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetAssetThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     GetSceneThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     GetPresetThumbnail      ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 
     void     VideoCardsInfo          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetNodeInfo             ( JsonSerializeObject & ser, IDeserializer * request, int eventID );

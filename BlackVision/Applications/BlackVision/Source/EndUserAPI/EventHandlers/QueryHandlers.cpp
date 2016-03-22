@@ -70,6 +70,10 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             GetAssetDescriptor( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetAssetThumbnail )
             GetAssetThumbnail( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetSceneThumbnail )
+            GetSceneThumbnail( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetPresetThumbnail )
+            GetPresetThumbnail( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListResourcesInFolders )
         //    ListResourcesInFolders( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListAllResources )
@@ -209,6 +213,7 @@ void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject &
     context->detailedInfo = false;
 
     scene->Serialize( ser );
+    ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( scene->GetName() ) ) );
     PrepareResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, true );
 }
 
@@ -273,7 +278,8 @@ void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, ID
     for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
     {
         ser.EnterChild( "scene" );
-        sceneModel->Serialize( ser );
+            ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
+            sceneModel->Serialize( ser );
         ser.ExitChild();
     }
 
@@ -546,6 +552,65 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
 
 // ***********************
 //
+void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        return;
+    }
+
+    auto projectName = request->GetAttribute( "projectName" );
+    auto path = request->GetAttribute( "path" );
+
+    auto thumb = ProjectManager::GetInstance()->GetSceneThumbnail( projectName, path );
+    if( thumb != nullptr )
+    {
+        ser.EnterArray( "thumbnails" );
+
+        thumb->Serialize( ser );
+
+        ser.ExitChild(); // thumbnails
+    }
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Thumbnail not found. Save scene to generate new thumbnail." );
+    }
+
+}
+
+// ***********************
+//
+void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        return;
+    }
+
+    auto projectName = request->GetAttribute( "projectName" );
+    auto path = request->GetAttribute( "path" );
+
+    auto thumb = ProjectManager::GetInstance()->GetPresetThumbnail( projectName, path );
+    if( thumb != nullptr )
+    {
+        ser.EnterArray( "thumbnails" );
+
+        thumb->Serialize( ser );
+
+        ser.ExitChild(); // thumbnails
+    }
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Thumbnail not found. Save preset to generate new thumbnail." );
+    }
+}
+
+// ***********************
+//
 void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
     assert( request != nullptr );
@@ -596,7 +661,8 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
     for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
     {
         ser.EnterChild( "scene" );
-        sceneModel->Serialize( ser );
+            sceneModel->Serialize( ser );
+            ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
         ser.ExitChild();
     }
 

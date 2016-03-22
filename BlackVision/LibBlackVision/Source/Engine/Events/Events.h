@@ -589,6 +589,8 @@ public:
         ListAllResources,
         GetAssetDescriptor,
         GetAssetThumbnail,
+        GetSceneThumbnail,
+        GetPresetThumbnail,
 
         Timelines,
         CheckTimelineTime,

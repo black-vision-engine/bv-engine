@@ -13,6 +13,10 @@
 
 #include "rapidxml/RapidXml.hpp"
 
+
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Assets/Thumbnail/Impl/SceneThumbnail.h"
+
 #include <fstream>
 
 namespace bv
@@ -74,6 +78,19 @@ void			SceneAccessor::AddScene( const model::SceneModelPtr & scene, const Path &
 void			SceneAccessor::RemoveScene( const Path & path ) const
 {
 	Path::Remove( m_rootDir / path );
+}
+
+// ***********************
+//
+ThumbnailConstPtr       SceneAccessor::GetSceneThumbnail   ( const Path & path ) const
+{
+    auto absolutePath = m_rootDir / path / ".thumb";
+
+    JsonDeserializeObject deser;
+    deser.LoadFile( absolutePath.Str() );
+
+    auto thumb = SceneThumbnail::Create( deser );
+    return thumb;
 }
 
 // ********************************

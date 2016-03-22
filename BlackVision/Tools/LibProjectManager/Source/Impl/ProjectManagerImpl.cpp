@@ -347,6 +347,13 @@ model::SceneModelPtr        ProjectManagerImpl::LoadScene           ( const Path
     return m_sceneAccessor->GetScene( projectName / path );
 }
 
+// ***********************
+//
+ThumbnailConstPtr           ProjectManagerImpl::GetSceneThumbnail   ( const Path & projectName, const Path & path ) const
+{
+    return m_sceneAccessor->GetSceneThumbnail( projectName / path );
+}
+
 // ********************************
 //
 void						ProjectManagerImpl::RegisterCategory( const AssetCategoryConstPtr & category )
@@ -882,6 +889,13 @@ PathVec                     ProjectManagerImpl::ListPresets         ( const Path
 PathVec                     ProjectManagerImpl::ListPresets         () const
 {
     return m_presetAccessor->ListPresets( "", true );
+}
+
+// ***********************
+//
+ThumbnailConstPtr           ProjectManagerImpl::GetPresetThumbnail  ( const Path & projectName, const Path & path ) const
+{
+    return m_presetAccessor->GetPresetThumbnail( projectName / path );
 }
 
 // ********************************

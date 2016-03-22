@@ -6,11 +6,15 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
+#include "Assets/Thumbnail/Thumbnail.h"
+
 namespace bv
 {
 
 class PresetAccessor;
 DEFINE_CONST_PTR_TYPE( PresetAccessor )
+
+
 
 class PresetAccessor
 {
@@ -20,6 +24,7 @@ public:
 
     PathVec                     ListPresets         ( const Path & path, bool recursive ) const;
     PathVec                     ListPresets         () const;
+    ThumbnailConstPtr           GetPresetThumbnail  ( const Path & path ) const;
 
     static PresetAccessorConstPtr Create            ( const Path & path );
 

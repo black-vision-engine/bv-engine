@@ -15,6 +15,13 @@
 
 #include <limits>
 #undef max
+#undef LoadImageW
+#undef LoadImage
+
+#include "LibImage.h"
+#include "DataTypes/Hash.h"
+#include "Assets/Thumbnail/Impl/SceneThumbnail.h"
+
 
 namespace bv
 {
@@ -413,10 +420,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
                     SendSimpleResponse( command, projectEvent->EventID, senderID, true );
                 
-                    Path sceneScreenShot( saveTo );
-                    sceneScreenShot = sceneScreenShot / scene->GetName();
-                    sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
-                    m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true ); 
+                    RequestThumbnail( scene, saveTo );
                 }
                 else
                 {
@@ -528,6 +532,23 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         {
             pm->SavePreset( bn, destProjectName, destPath );
             SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+
+            auto scene = editor->GetScene( sceneName );
+
+            // Thumbnails
+            if( !IsPresetScene( sceneName ) )
+            {
+                // Copy node and create temporary preset scene
+                auto tempSceneName = File::GetFileName( destPath ) + File::GetExtension( destPath );
+                editor->AddScene( tempSceneName );
+
+                auto tempScene = editor->GetScene( tempSceneName );
+                
+                editor->AddNodeCopy( tempScene, nullptr, scene, bn );
+                scene = tempScene;
+            }
+
+            RequestThumbnail( scene, destPath );
         }
         else
         {
@@ -691,6 +712,27 @@ void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
         SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Unknown command" );
 }
 
+// ***********************
+//
+void        SceneEventsHandlers::RequestThumbnail    ( bv::model::SceneModelPtr scene, const std::string & saveTo )
+{
+    // Save state and make all scenes invisible.
+    SaveVisibilityState( scene->GetName() );
+
+    std::string sceneName = scene->GetName();
+    Path prefixDir;
+
+    if( IsPresetScene( sceneName ) )
+        prefixDir = "presets";
+    else
+        prefixDir = "scenes";
+
+    Path sceneScreenShot( saveTo );
+    sceneScreenShot = sceneScreenShot.ParentPath();     // Extract directory
+    sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / sceneScreenShot / sceneName;
+    //sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
+    m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true );
+}
 
 // ***********************
 //
@@ -704,7 +746,56 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
     if( screenShotEvent->Result )
     {
         // FIXME: Load image, resize to 128,128 and create thumbnail
+        UInt32 height;
+        UInt32 width;
+        UInt32 bpp;
+        UInt32 channelNum;
+        auto chunk = bv::image::LoadImage( screenShotEvent->FilePath, &width, &height, &bpp, &channelNum );
+        auto resizedChunk = image::Resize( chunk, width, height, bpp, 128, 128, image::FilterType::FT_LANCZOS );
+
+        std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
+        auto hash = Hash::FromFile( thumbName );
+
+        //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
+        auto thumb = SceneThumbnail::Create( resizedChunk, hash );
+
+        JsonSerializeObject ser;
+        thumb->Serialize( ser );        
+        
+        ser.Save( thumbName + ".thumb" );
+        Path::Remove( screenShotEvent->FilePath );
     }
+
+    RestoreVisibilityState();
+}
+
+// ***********************
+//
+void        SceneEventsHandlers::SaveVisibilityState     ( const std::string & sceneName )
+{
+    m_scenesVisibilityState.clear();
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
+    {
+        m_scenesVisibilityState[ scene ] = scene->GetRootNode()->IsVisible();
+        scene->GetRootNode()->SetVisible( false );
+    }
+
+    auto scene = editor->GetScene( sceneName );
+    scene->GetRootNode()->SetVisible( true );
+}
+
+// ***********************
+//
+void        SceneEventsHandlers::RestoreVisibilityState  ()
+{
+    for( auto scene : m_scenesVisibilityState )
+    {
+        scene.first->GetRootNode()->SetVisible( scene.second );
+    }
+
+    m_scenesVisibilityState.clear();
 }
 
 } //bv
