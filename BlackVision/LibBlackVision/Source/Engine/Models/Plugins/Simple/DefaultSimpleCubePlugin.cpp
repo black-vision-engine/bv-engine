@@ -48,22 +48,18 @@ namespace Generator
 	const unsigned int SMOOTH_CUBE = 1;
 
 	/**@brief Generates cube built as strips.*/
-	class SimpleCubeGenerator : public IGeometryAndUVsGenerator
+	class SimpleCubeGenerator : public IGeometryNormalsUVsGenerator
 	{
 	private:
-		Type geometry_type;
+
 		unsigned int cube_type;
+
 	public:
 
-		SimpleCubeGenerator() { geometry_type = Type::GEOMETRY_AND_UVS;
-								cube_type = SMOOTH_CUBE;}
+		SimpleCubeGenerator() { cube_type = SMOOTH_CUBE;}
 		~SimpleCubeGenerator(){}
 
-		Type GetType() { return geometry_type; }
-		//GEOMETRY_AND_UVS
-		//GEOMETRY_ONLY
-
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			float x = dimmension.x / 2;
 			float y = dimmension.y / 2;
@@ -269,9 +265,11 @@ namespace Generator
 													vert.z + 0.5 ) ); // FIXME: scaling
 				}
 			}
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 
-		void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+		void GenerateGeometryNormals ( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
 		{
 			//assert( true );
 
@@ -316,6 +314,8 @@ namespace Generator
 
 			IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
 			converter.makeStrip( resultMesh, verts );
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }
@@ -342,7 +342,7 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
     Generator::dimmension = dimensions->GetValue();
 
     std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new Generator::SimpleCubeGenerator() ) );
+    gens.push_back( std::make_shared< Generator::SimpleCubeGenerator >() );
     return gens;
 }
 

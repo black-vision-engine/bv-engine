@@ -118,7 +118,7 @@ void GenerateSide( Float3AttributeChannelPtr verts )
 
 // geometry&uv generators - functors FTW!!!
 
-class GenerateBaseUV : public IGeometryAndUVsGenerator 
+class GenerateBaseUV : public IGeometryNormalsUVsGenerator 
 {
 private:
 
@@ -129,9 +129,7 @@ public:
 
     GenerateBaseUV( double z_ ) : z( z_ ) { }
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
-
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
         double angle = angleStart;
 
@@ -149,19 +147,19 @@ public:
         angle = angleEnd;
         verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
         uvs->AddAttribute( glm::vec2( angle, z ) );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
-class GenerateSideUV : public IGeometryAndUVsGenerator {
+class GenerateSideUV : public IGeometryNormalsUVsGenerator {
     double z1, z2;
     double angle;
 
 public:
     GenerateSideUV( double z1_, double z2_, double angle_ ) : z1( z1_ ), z2( z2_ ), angle( angle_ ) {}
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
-
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
         verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
         verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
@@ -172,19 +170,19 @@ public:
         uvs->AddAttribute( glm::vec2( angle, z2 ) );
         uvs->AddAttribute( glm::vec2( 0, z1 ) );
         uvs->AddAttribute( glm::vec2( 0, z2 ) );
+    
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
-class GenerateRoundSideUV : public IGeometryAndUVsGenerator {
+class GenerateRoundSideUV : public IGeometryNormalsUVsGenerator {
     double angleStart, angleEnd;
     double z1, z2;
 public:
     GenerateRoundSideUV( double as, double ae, double z1_, double z2_ ) :
         angleStart( as ), angleEnd( ae ), z1( z1_ ), z2( z2_ ) {}
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
-
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
         double angle = angleStart;
 
@@ -203,14 +201,16 @@ public:
 
         verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
         uvs->AddAttribute( glm::vec2( angle, z2 ) );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
-    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryVertexAttributeChannel
     {
-		m_vaChannel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+		m_vaChannel = std::make_shared< DefaultGeometryVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
 	else
 	{
@@ -230,7 +230,7 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
     auto gen3 = GenerateSideUV( z1, z2, angleEnd );
     auto gen4 = GenerateRoundSideUV( angleStart, angleEnd, z1, z2 );
 
-	auto channel = std::static_pointer_cast< DefaultGeometryAndUVsVertexAttributeChannel >( m_vaChannel );
+	auto channel = std::static_pointer_cast< DefaultGeometryVertexAttributeChannel >( m_vaChannel );
     channel->GenerateAndAddConnectedComponent( gen0 );
     channel->GenerateAndAddConnectedComponent( gen1 );
     channel->GenerateAndAddConnectedComponent( gen2 );

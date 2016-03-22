@@ -62,7 +62,7 @@ IPluginPtr                      DefaultEllipsePluginDesc::CreatePlugin         (
     return CreatePluginTyped< DefaultEllipsePlugin >( name, prev, timeEvaluator );
 }
 
-class OldEllipseGenerator : public IGeometryOnlyGenerator
+class OldEllipseGenerator : public IGeometryNormalsGenerator
 {
     float quality;
     float radius1, radius2;
@@ -73,14 +73,12 @@ public:
         , radius1( r1 ), radius2( r2 )
         {}
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
-
     inline void AddPoint( double t, Float3AttributeChannelPtr& verts )
     {
         verts->AddAttribute( glm::vec3( radius1 * cos( t ), radius2 * sin( t ), 0 ) );
     }
 
-    void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+    void GenerateGeometryNormals( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
     { 
         double t1 = 0, t2 = 2 * PI;
         double r1sq = radius1 * radius1;
@@ -96,10 +94,12 @@ public:
         }
 
         AddPoint( PI, verts );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
-class EllipseGenerator : public IGeometryOnlyGenerator
+class EllipseGenerator : public IGeometryNormalsGenerator
 {
     float quality;
     float radius1, radius2; // border is parametrized as [ x, y ] = [ radius1*cos(t), radius2*sin(t) ]
@@ -109,8 +109,6 @@ public:
         : quality( q )
         , radius1( r1 ), radius2( r2 )
         {}
-
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
 
     inline void AddPoint( double t, Float3AttributeChannelPtr& verts )
     {
@@ -186,7 +184,7 @@ public:
         return acos( a / radius1 );
     }
 
-    void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+    void GenerateGeometryNormals( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
     { 
         double t1 = 0, t2 = 2 * PI;
 
@@ -200,6 +198,8 @@ public:
         }
 
         AddPoint( PI, verts );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
@@ -216,9 +216,9 @@ DefaultEllipsePlugin::DefaultEllipsePlugin( const std::string & name, const std:
 
 std::vector<IGeometryGeneratorPtr>           DefaultEllipsePlugin::GetGenerators()
 {
-    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new OldEllipseGenerator( GetQuality(),
+    return std::vector<IGeometryGeneratorPtr>( 1, std::make_shared< OldEllipseGenerator >( GetQuality(),
                                 GetOuterRadius1(),
-                                GetOuterRadius2() ) ) );
+                                GetOuterRadius2() ) );
     //return new EllipseGenerator( GetQuality(),
     //                            GetOuterRadius1(),
     //                            GetOuterRadius2() );

@@ -54,7 +54,7 @@ namespace Generator
 
 	Generates geosphere based on tetrahedron.
 	Number of generators depends on tessellations count. pow( 2, tesselletion )*/
-	class GeosphereGenerator : public IGeometryAndUVsGenerator
+	class GeosphereGenerator : public IGeometryNormalsUVsGenerator
 	{
 		struct face
 		{
@@ -69,8 +69,6 @@ namespace Generator
 
 		GeosphereGenerator( int tile ) { tile_num = static_cast<float>( tile );}
 		~GeosphereGenerator(){}
-
-		Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 		void initFacesTable()
 		{
@@ -162,7 +160,7 @@ namespace Generator
 
 
 #define FACES 4
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			initFacesTable();	// Needed for functions get[...]Vector
 
@@ -202,6 +200,7 @@ namespace Generator
 				uvs->AddAttribute( computeUV( face, current_vertex ) );
 			}
 
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 
 	};
@@ -234,7 +233,7 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 	int loop_max = static_cast<int>( pow( 2, tesselletion->GetValue() ) );
 	for( int i = 0; i < loop_max; ++i )
 	{
-		gens.push_back( IGeometryGeneratorPtr( new Generator::GeosphereGenerator( i ) ) );
+        gens.push_back( std::make_shared< Generator::GeosphereGenerator >( i ) );
 	}
     return gens;
 }
