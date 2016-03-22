@@ -105,58 +105,40 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
 
     if( aspectMask )
     {
-        if( fitObject )
+        if( !fitObject )
         {
             mathematics::Box bb;
             PFLogicUtils::CalcCommonBoxForNode( node, &bb );
 
             if( !bb.m_empty )
             {
-                auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
+                // from uv to [-1, 1]x[-1, 1]
+                auto txToR3 = glm::translate( glm::mat4( 1.f ), glm::vec3( -1.f, -1.f, 0.f ) ) * glm::scale( glm::mat4( 1.f ), glm::vec3( 2.f, 2.f, 1.f ) );
 
+                // scale to object size
+                auto objectSize = glm::vec3( bb.xmax - bb.xmin, bb.ymax - bb.ymin, bb.zmax - bb.zmin );
+                auto scale = glm::scale( glm::mat4( 1.f ), glm::vec3( objectSize.x / 2.f, objectSize.y / 2.f, 1.f ) );
+
+                // translate to object center.
+                auto objectCenter = glm::vec3( ( bb.xmin + bb.xmax ) / 2.f, ( bb.ymin + bb.ymax ) / 2.f, 0.f/*( bb.zmin + bb.zmax ) / 2.f*/ );
+                auto translate = glm::translate( glm::mat4( 1.f ), objectCenter );
+
+                // node world transform matrix
                 auto transformMatrix = node->GetTransformable()->WorldTransform().Matrix();
 
-                auto tbb = mathematics::TransformationUtils::Transform( &bb, transformMatrix );
+                // projection matrix
+                auto projMat = ctx->GetRenderer()->GetCamera()->GetProjectionMatrix();
 
-                tbb = mathematics::TransformationUtils::Project( &tbb, projMat );
+                // from [-1, 1]x[-1, 1] back to uv
+                auto txToUV = glm::scale( glm::mat4( 1.f ), glm::vec3( 0.5f, 0.5f, 1.f ) ) * glm::translate( glm::mat4( 1.f ), glm::vec3( 1.f, 1.f, 0.f ) );
 
-                auto omin = mathematics::TransformationUtils::ToScreenNormCoords( glm::vec2( tbb.xmin, tbb.ymin ) );
-                auto omax = mathematics::TransformationUtils::ToScreenNormCoords( glm::vec2( tbb.xmax, tbb.ymax ) );
-
-                //{ // DEBUGGING
-                //    auto dp = PFLogicUtils::ScreenPosToFullScreenTexPos( glm::vec3( 1.0f, 0.f, 3.f ), screenW, screenH );
-                    m_debugPoint0->SetValue( omin );
-                    m_debugPoint1->SetValue( omax );
-                //}
-
-                auto maskCenter = glm::vec2( 0.5f, 0.5f );
-
-                auto maskAspect = float( maskW ) / float( maskH );
-
-                auto txKeepAspect = glm::scale( glm::mat4( 1.f ), glm::vec3( maskAspect, 1.f, 1.f ) );
-
-                maskCenter = glm::vec2( txKeepAspect * glm::vec4( maskCenter, 0.f, 1.f ) );
-
-                auto objectCenter = glm::vec2( ( omin.x + omax.x ) / 2.f, ( omin.y + omax.y ) / 2.f );
-
-                auto txTranslateToObjCenter = glm::translate( glm::mat4( 1.f ), glm::vec3( objectCenter - maskCenter, 0.f ) );
-                maskCenter = glm::vec2( txTranslateToObjCenter * glm::vec4( maskCenter, 0.f, 1.f ) );
-
-                auto maskSize = glm::vec2( txKeepAspect * glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-                auto objectSize = glm::vec2( omax.x - omin.x, omax.y - omin.y );
-
-                auto scaleToFit = std::min( objectSize.x / maskSize.x, objectSize.y / maskSize.y );
-
-                auto scaleToFitMat = glm::scale( glm::mat4( 1.f ), glm::vec3( scaleToFit, scaleToFit, 1.f ) );
-
-                auto translateToCenter = glm::translate( glm::mat4( 1.f ), glm::vec3( maskCenter, 0.f) );
-                auto translateToCenterInv = glm::translate( glm::mat4( 1.f ), glm::vec3( -maskCenter, 0.f) );
-
-                ret = translateToCenter * scaleToFitMat * translateToCenterInv * txTranslateToObjCenter * txKeepAspect;
+                ret = txToUV * transformMatrix * translate * scale * txToR3;
 
                 ret = glm::inverse( ret );
+            }
+            else
+            {
 
-                auto debug = ret * glm::vec4( 0.5f, 0.5f, 0.f, 1.f );
             }
         }
         else // fit to the screen

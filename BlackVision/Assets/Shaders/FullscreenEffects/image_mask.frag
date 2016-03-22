@@ -14,8 +14,8 @@ uniform int             invert;
 uniform int             alphaOnly;
 uniform int             maskAspect;
 uniform int             softMask;
-uniform int             onlyMask = 0;
-uniform int             onlyObject = 0;
+uniform int             onlyMask = 1;
+uniform int             onlyObject = 1;
 
 uniform mat4            maskTx;
 
