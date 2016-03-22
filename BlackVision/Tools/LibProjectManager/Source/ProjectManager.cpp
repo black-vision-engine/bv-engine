@@ -306,6 +306,14 @@ PathVec                     ProjectManager::ListPresets         () const
     return m_impl->ListPresets();
 }
 
+// ***********************
+//
+ThumbnailConstPtr           ProjectManager::GetPresetThumbnail  ( const Path & projectName, const Path & path ) const
+{
+    return m_impl->GetPresetThumbnail( projectName, path );
+}
+
+
 // ********************************
 //
 PathVec                     ProjectManager::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const

@@ -11,9 +11,6 @@
 
 #include "IO/DirIO.h"
 
-#include "Serialization/Json/JsonDeserializeObject.h"
-#include "Assets/Thumbnail/Impl/SceneThumbnail.h"
-
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibProjectManager
 
@@ -354,14 +351,7 @@ model::SceneModelPtr        ProjectManagerImpl::LoadScene           ( const Path
 //
 ThumbnailConstPtr           ProjectManagerImpl::GetSceneThumbnail   ( const Path & projectName, const Path & path ) const
 {
-    auto pathInScenes = TranslateToPathCategory( projectName, path );
-    auto absolutePath = m_rootPath / "scenes" / pathInScenes / ".thumb";
-
-    JsonDeserializeObject deser;
-    deser.LoadFile( absolutePath.Str() );
-
-    auto thumb = SceneThumbnail::Create( deser );
-    return thumb;
+    return m_sceneAccessor->GetSceneThumbnail( projectName / path );
 }
 
 // ********************************
@@ -899,6 +889,13 @@ PathVec                     ProjectManagerImpl::ListPresets         ( const Path
 PathVec                     ProjectManagerImpl::ListPresets         () const
 {
     return m_presetAccessor->ListPresets( "", true );
+}
+
+// ***********************
+//
+ThumbnailConstPtr           ProjectManagerImpl::GetPresetThumbnail  ( const Path & projectName, const Path & path ) const
+{
+    return m_presetAccessor->GetPresetThumbnail( projectName / path );
 }
 
 // ********************************

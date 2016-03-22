@@ -103,6 +103,8 @@ public:
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
 
+    ThumbnailConstPtr       GetPresetThumbnail  ( const Path & projectName, const Path & path ) const;
+
     // *********************************
 	// handling directories
     PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;

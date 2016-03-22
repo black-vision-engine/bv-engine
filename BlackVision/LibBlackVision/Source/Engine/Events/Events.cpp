@@ -313,6 +313,8 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::ListAllResources, "ListAllResources" )
     , std::make_pair( InfoEvent::Command::GetAssetDescriptor, "GetAssetDescriptor" )
     , std::make_pair( InfoEvent::Command::GetAssetThumbnail, "GetAssetThumbnail" )
+    , std::make_pair( InfoEvent::Command::GetSceneThumbnail, "GetSceneThumbnail" )
+    , std::make_pair( InfoEvent::Command::GetPresetThumbnail, "GetPresetThumbnail" )
 
     , std::make_pair( InfoEvent::Command::Timelines, "TimeLines" ) 
     , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, "ListTimelineKeyframes" ) 

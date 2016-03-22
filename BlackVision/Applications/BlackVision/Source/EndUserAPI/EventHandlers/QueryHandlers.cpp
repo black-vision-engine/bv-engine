@@ -70,6 +70,10 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             GetAssetDescriptor( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetAssetThumbnail )
             GetAssetThumbnail( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetSceneThumbnail )
+            GetSceneThumbnail( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetPresetThumbnail )
+            GetPresetThumbnail( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListResourcesInFolders )
         //    ListResourcesInFolders( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListAllResources )
@@ -543,6 +547,65 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
     else
     {
         ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Cannot find asset." );
+    }
+}
+
+// ***********************
+//
+void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        return;
+    }
+
+    auto projectName = request->GetAttribute( "projectName" );
+    auto path = request->GetAttribute( "path" );
+
+    auto thumb = ProjectManager::GetInstance()->GetSceneThumbnail( projectName, path );
+    if( thumb != nullptr )
+    {
+        ser.EnterArray( "thumbnails" );
+
+        thumb->Serialize( ser );
+
+        ser.ExitChild(); // thumbnails
+    }
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Thumbnail not found. Save scene to generate new thumbnail." );
+    }
+
+}
+
+// ***********************
+//
+void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        return;
+    }
+
+    auto projectName = request->GetAttribute( "projectName" );
+    auto path = request->GetAttribute( "path" );
+
+    auto thumb = ProjectManager::GetInstance()->GetPresetThumbnail( projectName, path );
+    if( thumb != nullptr )
+    {
+        ser.EnterArray( "thumbnails" );
+
+        thumb->Serialize( ser );
+
+        ser.ExitChild(); // thumbnails
+    }
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Thumbnail not found. Save preset to generate new thumbnail." );
     }
 }
 

@@ -753,15 +753,14 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         auto chunk = bv::image::LoadImage( screenShotEvent->FilePath, &width, &height, &bpp, &channelNum );
         auto resizedChunk = image::Resize( chunk, width, height, bpp, 128, 128, image::FilterType::FT_LANCZOS );
 
-        auto hash = Hash::FromFile( screenShotEvent->FilePath );
+        std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
+        auto hash = Hash::FromFile( thumbName );
 
         //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
         auto thumb = SceneThumbnail::Create( resizedChunk, hash );
 
         JsonSerializeObject ser;
-        thumb->Serialize( ser );
-
-        std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
+        thumb->Serialize( ser );        
         
         ser.Save( thumbName + ".thumb" );
         Path::Remove( screenShotEvent->FilePath );

@@ -4,6 +4,8 @@
 #include "Serialization/BV/XML/BVXMLDeserializer.h"
 
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Assets/Thumbnail/Impl/PresetThumbnail.h"
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Timeline/TimeEvaluatorBase.h"
@@ -117,6 +119,19 @@ PathVec                     PresetAccessor::ListPresets( const Path & path, bool
 PathVec                     PresetAccessor::ListPresets() const
 {
     return ListPresets( m_path, true );
+}
+
+// ***********************
+//
+ThumbnailConstPtr           PresetAccessor::GetPresetThumbnail  ( const Path & path ) const
+{
+    auto absolutePath = m_path / path / ".thumb";
+
+    JsonDeserializeObject deser;
+    deser.LoadFile( absolutePath.Str() );
+
+    auto thumb = PresetThumbnail::Create( deser );
+    return thumb;
 }
 
 } // bv
