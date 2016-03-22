@@ -239,7 +239,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
             auto uid = deser.GetAttribute( "uid" );
 
             AssetDescConstPtr asset;
-            if( uid != "" )
+            if( uid != "" && deserContext->GetAssets() != nullptr )
             {
                 asset = deserContext->GetAssets()->UID2Asset( uid );
             }
