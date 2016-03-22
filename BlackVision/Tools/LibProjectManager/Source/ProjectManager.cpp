@@ -194,6 +194,13 @@ model::SceneModelPtr        ProjectManager::LoadScene           ( const Path & p
 	return m_impl->LoadScene( projectName, path );
 }
 
+// ***********************
+//
+ThumbnailConstPtr           ProjectManager::GetSceneThumbnail   ( const Path & projectName, const Path & path ) const
+{
+    return m_impl->GetSceneThumbnail( projectName, path );
+}
+
 // ********************************
 //
 void						ProjectManager::RegisterCategory( const AssetCategoryConstPtr & category)

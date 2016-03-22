@@ -15,6 +15,13 @@
 
 #include <limits>
 #undef max
+#undef LoadImageW
+#undef LoadImage
+
+#include "LibImage.h"
+#include "DataTypes/Hash.h"
+#include "Assets/Thumbnail/Impl/SceneThumbnail.h"
+
 
 namespace bv
 {
@@ -532,7 +539,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             if( !IsPresetScene( sceneName ) )
             {
                 // Copy node and create temporary preset scene
-                auto tempSceneName = File::GetFileName( destPath );
+                auto tempSceneName = File::GetFileName( destPath ) + File::GetExtension( destPath );
                 editor->AddScene( tempSceneName );
 
                 auto tempScene = editor->GetScene( tempSceneName );
@@ -712,10 +719,18 @@ void        SceneEventsHandlers::RequestThumbnail    ( bv::model::SceneModelPtr 
     // Save state and make all scenes invisible.
     SaveVisibilityState( scene->GetName() );
 
+    std::string sceneName = scene->GetName();
+    Path prefixDir;
+
+    if( IsPresetScene( sceneName ) )
+        prefixDir = "presets";
+    else
+        prefixDir = "scenes";
+
     Path sceneScreenShot( saveTo );
     sceneScreenShot = sceneScreenShot.ParentPath();     // Extract directory
-    sceneScreenShot = sceneScreenShot / scene->GetName();
-    sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
+    sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / sceneScreenShot / sceneName;
+    //sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
     m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true );
 }
 
@@ -731,6 +746,25 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
     if( screenShotEvent->Result )
     {
         // FIXME: Load image, resize to 128,128 and create thumbnail
+        UInt32 height;
+        UInt32 width;
+        UInt32 bpp;
+        UInt32 channelNum;
+        auto chunk = bv::image::LoadImage( screenShotEvent->FilePath, &width, &height, &bpp, &channelNum );
+        auto resizedChunk = image::Resize( chunk, width, height, bpp, 128, 128, image::FilterType::FT_LANCZOS );
+
+        auto hash = Hash::FromFile( screenShotEvent->FilePath );
+
+        //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
+        auto thumb = SceneThumbnail::Create( resizedChunk, hash );
+
+        JsonSerializeObject ser;
+        thumb->Serialize( ser );
+
+        std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
+        
+        ser.Save( thumbName + ".thumb" );
+        Path::Remove( screenShotEvent->FilePath );
     }
 
     RestoreVisibilityState();
