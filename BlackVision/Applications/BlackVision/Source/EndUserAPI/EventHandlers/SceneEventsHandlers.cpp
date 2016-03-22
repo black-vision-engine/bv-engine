@@ -21,6 +21,7 @@
 #include "LibImage.h"
 #include "DataTypes/Hash.h"
 #include "Assets/Thumbnail/Impl/SceneThumbnail.h"
+#include "Assets/Thumbnail/Impl/PresetThumbnail.h"
 
 
 namespace bv
@@ -754,10 +755,18 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         auto resizedChunk = image::Resize( chunk, width, height, bpp, 128, 128, image::FilterType::FT_LANCZOS );
 
         std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
-        auto hash = Hash::FromFile( thumbName );
 
         //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
-        auto thumb = SceneThumbnail::Create( resizedChunk, hash );
+        ThumbnailConstPtr thumb = nullptr;
+
+        if( IsPresetScene( thumbName ) )
+        {
+            thumb = PresetThumbnail::Create( resizedChunk );
+        }
+        else
+        {
+            thumb = SceneThumbnail::Create( resizedChunk );
+        }
 
         JsonSerializeObject ser;
         thumb->Serialize( ser );        

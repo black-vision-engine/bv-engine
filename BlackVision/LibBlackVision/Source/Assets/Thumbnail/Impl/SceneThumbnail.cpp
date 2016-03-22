@@ -9,18 +9,16 @@ namespace bv
 
 // ******************************
 //
-SceneThumbnail::SceneThumbnail    ( const MemoryChunkConstPtr & data, const Hash & h )
+SceneThumbnail::SceneThumbnail    ( const MemoryChunkConstPtr & data )
     : m_data( data )
     , m_dataBase64( "" )
-    , m_origDataHash( h )
 {}
 
 // ******************************
 //
-SceneThumbnail::SceneThumbnail   ( const std::string & dataBase64, const Hash & h )
+SceneThumbnail::SceneThumbnail   ( const std::string & dataBase64 )
     : m_data( nullptr )
     , m_dataBase64( dataBase64 )
-    , m_origDataHash( h )
 {}
 
 // ******************************
@@ -31,13 +29,10 @@ SceneThumbnail::~SceneThumbnail   ()
 // ******************************
 //
 SceneThumbnail::SceneThumbnail    ( IDeserializer & deser )
-    : m_origDataHash( "" )
 {
     deser.EnterChild( "thumbnail" );
     
     assert( deser.GetAttribute( "type" ) == "SCENE_THUMBNAIL" );
-
-    m_origDataHash = Hash( deser.GetAttribute( "hash" ) );
 
     m_data = DecodeBase64( deser.GetAttribute( "data" ) );
 
@@ -48,9 +43,9 @@ SceneThumbnail::SceneThumbnail    ( IDeserializer & deser )
 
 // ******************************
 //
-SceneThumbnailConstPtr       SceneThumbnail::Create      ( const MemoryChunkConstPtr & data, const Hash & h )
+SceneThumbnailConstPtr       SceneThumbnail::Create      ( const MemoryChunkConstPtr & data )
 {
-    return SceneThumbnailConstPtr( new SceneThumbnail( data, h ) );
+    return SceneThumbnailConstPtr( new SceneThumbnail( data ) );
 }
 
 // ******************************
@@ -76,12 +71,6 @@ const std::string &                  SceneThumbnail::DataBase64  () const
     return m_dataBase64;
 }
 
-// ******************************
-//
-const Hash &                        SceneThumbnail::GetHash     () const
-{
-    return m_origDataHash;
-}
 
 // ******************************
 //
@@ -89,7 +78,6 @@ void                                SceneThumbnail::Serialize   ( ISerializer & 
 {
     ser.EnterChild( "thumbnail" );
     ser.SetAttribute( "type", "SCENE_THUMBNAIL" );
-    ser.SetAttribute( "hash", m_origDataHash.Get() );
 
     ser.SetAttribute( "data", DataBase64() );
 

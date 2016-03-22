@@ -5,9 +5,6 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
-#include "DataTypes/Hash.h"
-
-
 namespace bv
 {
 
@@ -19,18 +16,16 @@ class PresetThumbnail : public Thumbnail
 private:
     mutable MemoryChunkConstPtr m_data;
     mutable std::string         m_dataBase64;
-    Hash                        m_origDataHash;
 
-    explicit        PresetThumbnail ( const MemoryChunkConstPtr & data, const Hash & h );
-    explicit        PresetThumbnail ( const std::string & data, const Hash & h );
+    explicit        PresetThumbnail ( const MemoryChunkConstPtr & data );
+    explicit        PresetThumbnail ( const std::string & data );
     explicit        PresetThumbnail ( IDeserializer & deser );
 
 public:
     virtual MemoryChunkConstPtr             Data        () const override;
     virtual const std::string &             DataBase64  () const override;
-    const Hash &                            GetHash     () const;
 
-    static PresetThumbnailConstPtr          Create      ( const MemoryChunkConstPtr & data, const Hash & h );
+    static PresetThumbnailConstPtr          Create      ( const MemoryChunkConstPtr & data );
     static PresetThumbnailConstPtr          Create      ( IDeserializer & deser );
 
     void                                    Serialize   ( ISerializer & ser ) const override;
