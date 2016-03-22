@@ -1420,6 +1420,9 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
       <Filter>Mathematics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
+      <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3535,6 +3538,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.h">
+      <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

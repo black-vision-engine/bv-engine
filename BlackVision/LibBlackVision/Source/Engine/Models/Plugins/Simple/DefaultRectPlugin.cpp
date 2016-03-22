@@ -96,13 +96,6 @@ bool                                Plugin::NeedsTopologyUpdate     ()
 
 // *******************************
 //
-IGeometryGenerator::Type            Generator::GetType              () 
-{ 
-    return IGeometryGenerator::Type::GEOMETRY_ONLY; 
-}
-
-// *******************************
-//
 glm::vec2                           Generator::GetWeightCenter      ( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY )
 {
 	glm::vec2 centerTranslate;
@@ -130,7 +123,7 @@ glm::vec2                           Generator::GetWeightCenter      ( Plugin::We
 
 // *******************************
 //
-void                                Generator::GenerateGeometry     ( Float3AttributeChannelPtr verts ) 
+void                                Generator::GenerateGeometryNormals  ( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
 {
     float w = m_width / 2.f;
     float h = m_height / 2.f;
@@ -139,6 +132,8 @@ void                                Generator::GenerateGeometry     ( Float3Attr
     verts->AddAttribute( glm::vec3(  w + m_centerTranslate.x, -h + m_centerTranslate.y, 0.f ) );
     verts->AddAttribute( glm::vec3( -w + m_centerTranslate.x,  h + m_centerTranslate.y, 0.f ) );
     verts->AddAttribute( glm::vec3(  w + m_centerTranslate.x,  h + m_centerTranslate.y, 0.f ) );
+
+    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 }
 
 // *******************************

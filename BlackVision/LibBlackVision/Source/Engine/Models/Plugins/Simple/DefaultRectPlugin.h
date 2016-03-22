@@ -64,7 +64,7 @@ public:
 
 // *******************************
 //
-class Generator : public IGeometryOnlyGenerator
+class Generator : public IGeometryNormalsGenerator
 {
 private:
 
@@ -74,9 +74,8 @@ private:
 
 public:
 
-                                        Generator           ( float w, float h, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy );
-    virtual IGeometryGenerator::Type    GetType             () override;
-    virtual void                        GenerateGeometry    ( Float3AttributeChannelPtr ) override;
+                                        Generator               ( float w, float h, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy );
+    virtual void                        GenerateGeometryNormals ( Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel ) override;
 
 private:
 
