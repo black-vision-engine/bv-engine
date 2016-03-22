@@ -64,7 +64,7 @@ ITimeEvaluatorPtr           TimeEvaluatorBase< ITimeline >::CloneTyped          
 //
 ICloneablePtr               TimeEvaluatorBase< ITimeline >::Clone               () const
 {
-    return Clone();
+    return CloneTyped();
 }
 
 

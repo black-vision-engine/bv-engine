@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "SceneThumbnail.h"
+#include "PresetThumbnail.h"
 
 #include "tools/Base64.h"
 
@@ -9,30 +9,30 @@ namespace bv
 
 // ******************************
 //
-SceneThumbnail::SceneThumbnail    ( const MemoryChunkConstPtr & data )
+PresetThumbnail::PresetThumbnail    ( const MemoryChunkConstPtr & data )
     : m_data( data )
     , m_dataBase64( "" )
 {}
 
 // ******************************
 //
-SceneThumbnail::SceneThumbnail   ( const std::string & dataBase64 )
+PresetThumbnail::PresetThumbnail   ( const std::string & dataBase64 )
     : m_data( nullptr )
     , m_dataBase64( dataBase64 )
 {}
 
 // ******************************
 //
-SceneThumbnail::~SceneThumbnail   ()
+PresetThumbnail::~PresetThumbnail   ()
 {}
 
 // ******************************
 //
-SceneThumbnail::SceneThumbnail    ( IDeserializer & deser )
+PresetThumbnail::PresetThumbnail    ( IDeserializer & deser )
 {
     deser.EnterChild( "thumbnail" );
     
-    assert( deser.GetAttribute( "type" ) == "SCENE_THUMBNAIL" );
+    assert( deser.GetAttribute( "type" ) == "PRESET_THUMBNAIL" );
 
     m_data = DecodeBase64( deser.GetAttribute( "data" ) );
 
@@ -43,14 +43,14 @@ SceneThumbnail::SceneThumbnail    ( IDeserializer & deser )
 
 // ******************************
 //
-SceneThumbnailConstPtr       SceneThumbnail::Create      ( const MemoryChunkConstPtr & data )
+PresetThumbnailConstPtr       PresetThumbnail::Create      ( const MemoryChunkConstPtr & data )
 {
-    return SceneThumbnailConstPtr( new SceneThumbnail( data ) );
+    return PresetThumbnailConstPtr( new PresetThumbnail( data ) );
 }
 
 // ******************************
 //
-MemoryChunkConstPtr                  SceneThumbnail::Data        () const
+MemoryChunkConstPtr                  PresetThumbnail::Data        () const
 {
     if( !m_data )
     {
@@ -61,7 +61,7 @@ MemoryChunkConstPtr                  SceneThumbnail::Data        () const
 
 // ******************************
 //
-const std::string &                  SceneThumbnail::DataBase64  () const
+const std::string &                  PresetThumbnail::DataBase64  () const
 {
     if( m_dataBase64.empty() )
     {
@@ -71,13 +71,12 @@ const std::string &                  SceneThumbnail::DataBase64  () const
     return m_dataBase64;
 }
 
-
 // ******************************
 //
-void                                SceneThumbnail::Serialize   ( ISerializer & ser ) const
+void                                PresetThumbnail::Serialize   ( ISerializer & ser ) const
 {
     ser.EnterChild( "thumbnail" );
-    ser.SetAttribute( "type", "SCENE_THUMBNAIL" );
+    ser.SetAttribute( "type", "PRESET_THUMBNAIL" );
 
     ser.SetAttribute( "data", DataBase64() );
 
@@ -86,8 +85,8 @@ void                                SceneThumbnail::Serialize   ( ISerializer & 
 
 // ******************************
 //
-SceneThumbnailConstPtr    SceneThumbnail::Create          ( IDeserializer & deser )
+PresetThumbnailConstPtr    PresetThumbnail::Create          ( IDeserializer & deser )
 {
-    return SceneThumbnailConstPtr( new SceneThumbnail( deser ) );
+    return PresetThumbnailConstPtr( new PresetThumbnail( deser ) );
 }
 }	// bv

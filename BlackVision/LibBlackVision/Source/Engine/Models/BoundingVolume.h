@@ -9,28 +9,29 @@ namespace bv {
 namespace model {
 
 class VertexAttributesChannel;
+class IVertexAttributesChannel;
 
 class IConnectedComponent;
 DEFINE_PTR_TYPE( IConnectedComponent );
 
 class BoundingVolume {
-    mathematics::Box            m_box;
+    mathematics::Box                    m_box;
     //glm::mat4               m_transform; // apply unit cube to get bounding box :)
 
-    VertexAttributesChannel *   m_vac;
-    UInt64                      m_lastTopologyID;
-    UInt64                      m_lastAttribuetesID;
+    mutable VertexAttributesChannel *   m_vac;
+    UInt64                              m_lastTopologyID;
+    UInt64                              m_lastAttribuetesID;
 
 public:
-                                BoundingVolume          ( VertexAttributesChannel * vac );
+                                        BoundingVolume          ( VertexAttributesChannel * vac );
 
-    //void                        SetVAC                  ( VertexAttributesChannel * vac );
+    void                                UpdateVAC               ( const IVertexAttributesChannel * vac ) const;
 
-    const mathematics::Box *    GetBoundingBox          () const;
+    const mathematics::Box *            GetBoundingBox          () const;
 
-    IConnectedComponentPtr      BuildConnectedComponent () const;
+    IConnectedComponentPtr              BuildConnectedComponent () const;
 
-    void                        Update                  ();
+    void                                Update                  ();
 };
 
 } // model

@@ -29,6 +29,7 @@
 #include "Serialization/SerializationHelper.h"
 #include "UseLoggerLibBlackVision.h"
 
+#include "Engine/Models/BoundingVolume.h"
 
 namespace bv {
 
@@ -1208,6 +1209,10 @@ void                    BVProjectEditor::RefreshNode        (  model::BasicNodeP
 {
     BVProjectTools::ClearSingleNode( sceneNode, renderer );
     BVProjectTools::SyncSingleNode( modelNode, sceneNode );
+
+    auto bv = modelNode->GetBoundingVolume();
+    if( bv )
+        bv->UpdateVAC( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() );
 }
 
 // *******************************

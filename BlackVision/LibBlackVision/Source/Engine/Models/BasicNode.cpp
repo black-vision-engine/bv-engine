@@ -126,7 +126,7 @@ void                            BasicNode::Serialize               ( ISerializer
         ser.ExitChild(); // plugins
     }
 
-    if( context->detailedInfo && m_modelNodeEffect )
+    if( m_modelNodeEffect )
         m_modelNodeEffect->Serialize( ser );
 
     if( m_nodeLogic )  // Logic chooses by itself, what to write as detailed info.

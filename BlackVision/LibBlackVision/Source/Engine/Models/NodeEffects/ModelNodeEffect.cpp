@@ -63,31 +63,37 @@ ModelNodeEffect::~ModelNodeEffect  ()
 //
 void                                        ModelNodeEffect::Serialize          ( ISerializer & ser ) const
 {
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+
     ser.EnterChild( "effect" );
     ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
-    ser.SetAttribute( "numRequiredAssets", SerializationHelper::T2String< SizeType >( NumRequiredAssets() ) );
-    m_paramValModel->Serialize( ser );
 
-	if( m_assetsDescs.size() > 0 )
+    if( context->detailedInfo )
     {
-		auto serContext = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
-        ser.EnterArray( "assets" );
-        for( auto ad : m_assetsDescs )
-        {
-            ser.EnterChild( "asset" );
-			if( serContext->GetAssets() )
-			{
-				auto uid = serContext->GetAssets()->Key2UID( ad->GetKey() );
-				ser.SetAttribute( "uid", uid );
-			}
-			else
-			{
-				ad->Serialize( ser );
-			}
+        ser.SetAttribute( "numRequiredAssets", SerializationHelper::T2String< SizeType >( NumRequiredAssets() ) );
+        m_paramValModel->Serialize( ser );
 
-            ser.ExitChild(); // asset
+	    if( m_assetsDescs.size() > 0 )
+        {
+		    auto serContext = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
+            ser.EnterArray( "assets" );
+            for( auto ad : m_assetsDescs )
+            {
+                ser.EnterChild( "asset" );
+			    if( serContext->GetAssets() )
+			    {
+				    auto uid = serContext->GetAssets()->Key2UID( ad->GetKey() );
+				    ser.SetAttribute( "uid", uid );
+			    }
+			    else
+			    {
+				    ad->Serialize( ser );
+			    }
+
+                ser.ExitChild(); // asset
+            }
+            ser.ExitChild(); // assets
         }
-        ser.ExitChild(); // assets
     }
 
     ser.ExitChild(); // effect

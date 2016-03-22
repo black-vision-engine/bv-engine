@@ -1,15 +1,28 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
+#include <map>
+#include <string>
 
 namespace bv
 {
 class BVAppLogic;
 
+namespace model
+{
+    class SceneModel;
+    DEFINE_PTR_TYPE( SceneModel )
+}
+
+
+typedef std::map< bv::model::SceneModelPtr, bool >   SceneVisibilityStateMap;
+
 class SceneEventsHandlers
 {
 private:
-    BVAppLogic*         m_appLogic;
+    BVAppLogic*                 m_appLogic;
+    SceneVisibilityStateMap     m_scenesVisibilityState;        // Used to save visibility state while making scene or preset thumbnail.
+
 public:
     SceneEventsHandlers( BVAppLogic* appLogic );
     ~SceneEventsHandlers();
@@ -22,7 +35,11 @@ public:
     void        SceneVariable       ( bv::IEventPtr evt );
 
 private:
+    void        RequestThumbnail    ( bv::model::SceneModelPtr scene, const std::string & saveTo );
     void        ThumbnailRendered   ( bv::IEventPtr evt );
+
+    void        SaveVisibilityState     ( const std::string & sceneName );
+    void        RestoreVisibilityState  ();
 };
 
 

@@ -90,6 +90,9 @@ BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac )
 
 void                    BoundingVolume::Update                  ()
 {
+    if( m_vac == nullptr )
+        return;
+
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {
         m_box = CalculateBoundingBox( m_vac );
@@ -115,6 +118,22 @@ const mathematics::Box *           BoundingVolume::GetBoundingBox          () co
 IConnectedComponentPtr      BoundingVolume::BuildConnectedComponent () const
 {
     return BuildComponentFromBox( m_box );
+}
+
+// ***********************
+//
+void                        BoundingVolume::UpdateVAC               ( const IVertexAttributesChannel * vac_ ) const
+{
+    if( vac_ == nullptr )
+    {
+        m_vac = nullptr;
+    }
+    else
+    {
+        auto vac = Cast< VertexAttributesChannel * const >( RemoveConst( vac_ ) );
+
+        m_vac = vac;
+    }
 }
 
 

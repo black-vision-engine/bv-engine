@@ -8,29 +8,29 @@
 namespace bv
 {
 
-class SceneThumbnail;
-DEFINE_CONST_PTR_TYPE( SceneThumbnail )
+class PresetThumbnail;
+DEFINE_CONST_PTR_TYPE( PresetThumbnail )
 
-class SceneThumbnail : public Thumbnail
+class PresetThumbnail : public Thumbnail
 {
 private:
     mutable MemoryChunkConstPtr m_data;
     mutable std::string         m_dataBase64;
 
-    explicit        SceneThumbnail   ( const MemoryChunkConstPtr & data );
-    explicit        SceneThumbnail   ( const std::string & data );
-    explicit        SceneThumbnail   ( IDeserializer & deser );
+    explicit        PresetThumbnail ( const MemoryChunkConstPtr & data );
+    explicit        PresetThumbnail ( const std::string & data );
+    explicit        PresetThumbnail ( IDeserializer & deser );
 
 public:
     virtual MemoryChunkConstPtr             Data        () const override;
     virtual const std::string &             DataBase64  () const override;
 
-    static SceneThumbnailConstPtr           Create      ( const MemoryChunkConstPtr & data );
-    static SceneThumbnailConstPtr           Create      ( IDeserializer & deser );
+    static PresetThumbnailConstPtr          Create      ( const MemoryChunkConstPtr & data );
+    static PresetThumbnailConstPtr          Create      ( IDeserializer & deser );
 
     void                                    Serialize   ( ISerializer & ser ) const override;
 
-    virtual     ~SceneThumbnail  ();
+    virtual     ~PresetThumbnail  ();
 };
 
 

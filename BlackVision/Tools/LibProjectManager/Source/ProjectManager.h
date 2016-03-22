@@ -19,6 +19,9 @@ class Project;
 class AssetCategory;
 class ProjectManagerImpl;
 
+class Thumbnail;
+DEFINE_CONST_PTR_TYPE( Thumbnail )
+
 namespace model 
 {
 	class BasicNode;
@@ -61,6 +64,7 @@ public:
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
     model::SceneModelPtr    LoadScene           ( const Path & projectName, const Path & path ) const;
+    ThumbnailConstPtr       GetSceneThumbnail   ( const Path & projectName, const Path & path ) const;
 
 	// categories
 	void					RegisterCategory	( const AssetCategoryConstPtr & category);
@@ -98,6 +102,8 @@ public:
     PathVec                 ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const;
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
+
+    ThumbnailConstPtr       GetPresetThumbnail  ( const Path & projectName, const Path & path ) const;
 
     // *********************************
 	// handling directories
