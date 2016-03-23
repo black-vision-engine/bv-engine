@@ -32,6 +32,8 @@ namespace bv
 //
 SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* logic )
     : m_appLogic( logic )
+    , m_closeSavedPreset( false )
+    , m_savedScene( nullptr )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SceneEventsHandlers::ThumbnailRendered ), ScreenShotRenderedEvent::Type() );
 }
@@ -538,6 +540,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto destPath = request.GetAttribute( "DestPath" );
         auto sceneName = request.GetAttribute( "SceneName" );
         auto nodePath = request.GetAttribute( "NodePath" );
+        m_closeSavedPreset = SerializationHelper::String2T( request.GetAttribute( "CloseSavedPreset" ), false );
 
         auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
@@ -784,7 +787,8 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
         ThumbnailConstPtr thumb = nullptr;
 
-        if( IsPresetScene( thumbName ) )
+        bool isPreset = IsPresetScene( thumbName );
+        if( isPreset )
         {
             thumb = PresetThumbnail::Create( resizedChunk );
         }
@@ -798,6 +802,12 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         
         ser.Save( thumbName + ".thumb" );
         Path::Remove( screenShotEvent->FilePath );
+
+        if( isPreset && m_closeSavedPreset )
+        {
+            auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+            editor->RemoveScene( m_savedScene );
+        }
     }
 
     RestoreVisibilityState();
@@ -818,6 +828,8 @@ void        SceneEventsHandlers::SaveVisibilityState     ( const std::string & s
 
     auto scene = editor->GetScene( sceneName );
     scene->GetRootNode()->SetVisible( true );
+
+    m_savedScene = scene;
 }
 
 // ***********************
@@ -830,6 +842,7 @@ void        SceneEventsHandlers::RestoreVisibilityState  ()
     }
 
     m_scenesVisibilityState.clear();
+    m_savedScene = nullptr;
 }
 
 } //bv
