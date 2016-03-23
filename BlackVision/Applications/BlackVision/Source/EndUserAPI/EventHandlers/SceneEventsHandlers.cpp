@@ -126,7 +126,23 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
     if( command == NodeStructureEvent::Command::AddNode )
     {
-		editor->AddChildNode( sceneName, nodePath, newNodeName );
+		result = editor->AddChildNode( sceneName, nodePath, newNodeName );
+        
+        bool AddTransformPlugin = false;
+        if( request && request->GetAttribute( "AddTransformPlugin" ) == "true" )
+            AddTransformPlugin = true;
+
+        if( AddTransformPlugin )
+        {
+            auto parentNode = editor->GetNode( sceneName, nodePath );
+            assert( parentNode );
+            auto parentNodeCasted = std::static_pointer_cast< model::BasicNode >( parentNode );
+
+            unsigned int lastChildIdx = parentNodeCasted->GetNumChildren() - 1;
+            auto addedChild = parentNodeCasted->GetChild( lastChildIdx );
+
+            result = addedChild->AddPlugin( "DEFAULT_TRANSFORM", editor->GetSceneDefaultTimeline( editor->GetScene( sceneName ) ) );
+        }
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
