@@ -8,12 +8,16 @@ namespace bv {
 class AssetDescsWithUIDs;
 DEFINE_PTR_TYPE( AssetDescsWithUIDs );    
 
+class BVSerializeContext;
+
 class BVXMLSerializer : public XMLSerializer
 {
 public:
     BVXMLSerializer();
 
     BVXMLSerializer( AssetDescsWithUIDsPtr assets );
+
+    BVSerializeContext *        GetBVSerializeContext();
 };
 
 }

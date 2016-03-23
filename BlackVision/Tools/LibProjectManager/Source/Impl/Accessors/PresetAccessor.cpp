@@ -2,6 +2,7 @@
 #include "SceneDescriptor.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/BV/XML/BVXMLDeserializer.h"
+#include "Serialization/BV/BVSerializeContext.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
@@ -37,6 +38,9 @@ PresetAccessor::PresetAccessor	( const Path & path )
 void                        PresetAccessor::SavePreset ( const model::BasicNodePtr node, const Path & path ) const
 {    
     auto ser = BVXMLSerializer();
+
+    auto bvSerCo = ser.GetBVSerializeContext();
+    bvSerCo->sceneNameInTimeline = false;
     
     ser.EnterChild( "preset" );
 

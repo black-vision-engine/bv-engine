@@ -343,8 +343,8 @@ void				UpdateTimelines				    ( const model::IPlugin * obj, const std::string &
     {
         auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + pluginModel->GetTimeEvaluator()->GetName() );
         auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
-		//FIXME: cast
-		std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
+        //FIXME: cast
+        std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
     }
 }
 

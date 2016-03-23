@@ -4,6 +4,8 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "Engine/Models/BasicNode.h"
+
 namespace bv {
 
 class AssetDescWithUID : public ISerializable

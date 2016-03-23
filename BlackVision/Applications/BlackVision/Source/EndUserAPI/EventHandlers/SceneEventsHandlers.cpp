@@ -47,57 +47,57 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
         return;
     bv::SceneEventPtr sceneEvent = std::static_pointer_cast< bv::SceneEvent >( evt );
 
-	std::string & sceneName		= sceneEvent->SceneName;
+    std::string & sceneName		= sceneEvent->SceneName;
     std::string & newSceneName	= sceneEvent->NewSceneName;
     auto attachIndex			= sceneEvent->AttachIndex;
     auto command                = sceneEvent->SceneCommand;
     auto eventID                = sceneEvent->EventID;
 
     bool result = true;
-	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == SceneEvent::Command::AddScene )
-	{
-		editor->AddScene( newSceneName );
-	}
+    {
+        editor->AddScene( newSceneName );
+    }
     else if( command == SceneEvent::Command::RemoveScene )
-	{
-		result = editor->RemoveScene( sceneName );
-	}
+    {
+        result = editor->RemoveScene( sceneName );
+    }
     else if( command == SceneEvent::Command::RemoveAllScenes )
     {
         editor->RemoveAllScenes();
     }
     else if( command == SceneEvent::Command::SetSceneVisible )
-	{
-		result = editor->SetSceneVisible( sceneName, true );
-	}
+    {
+        result = editor->SetSceneVisible( sceneName, true );
+    }
     else if( command == SceneEvent::Command::SetSceneInvisible )
-	{
-		result = editor->SetSceneVisible( sceneName, false );
-	}
+    {
+        result = editor->SetSceneVisible( sceneName, false );
+    }
     else if( command == SceneEvent::Command::RenameScene )
-	{
-		result = editor->RenameScene( sceneName, newSceneName );
-	}
+    {
+        result = editor->RenameScene( sceneName, newSceneName );
+    }
     else if( command == SceneEvent::Command::AttachScene )
-	{
-		result = editor->AttachScene( sceneName, attachIndex );
-	}
+    {
+        result = editor->AttachScene( sceneName, attachIndex );
+    }
     else if( command == SceneEvent::Command::DetachScene )
-	{
-		result = editor->DetachScene( sceneName );
-	}
+    {
+        result = editor->DetachScene( sceneName );
+    }
     else if( command == SceneEvent::Command::MoveScene )
-	{
-		result = editor->MoveScene( sceneName, attachIndex );
-	}
+    {
+        result = editor->MoveScene( sceneName, attachIndex );
+    }
     else if( command == SceneEvent::Command::CopyScene )
-	{
-		auto sceneCopy = editor->AddSceneCopy( sceneName );
+    {
+        auto sceneCopy = editor->AddSceneCopy( sceneName );
         if( sceneCopy == nullptr )
             result = false;
-	}
+    }
     else
         result = false;
 
@@ -112,7 +112,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         return;
     bv::NodeStructureEventPtr structureEvent = std::static_pointer_cast<bv::NodeStructureEvent>( evt );
 
-	std::string& sceneName		= structureEvent->SceneName;
+    std::string& sceneName		= structureEvent->SceneName;
     std::string& nodePath		= structureEvent->NodePath;
     std::string& newNodeName	= structureEvent->NewNodeName;	
     auto attachIndex			= structureEvent->AttachIndex;
@@ -122,11 +122,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     IDeserializer * request		= structureEvent->Request;
 
     bool result = true;
-	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == NodeStructureEvent::Command::AddNode )
     {
-		result = editor->AddChildNode( sceneName, nodePath, newNodeName );
+        result = editor->AddChildNode( sceneName, nodePath, newNodeName );
         
         bool AddTransformPlugin = false;
         if( request && request->GetAttribute( "AddTransformPlugin" ) == "true" )
@@ -146,30 +146,30 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
-		result = editor->DeleteChildNode( sceneName, nodePath );
+        result = editor->DeleteChildNode( sceneName, nodePath );
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
-	{
-		result = editor->SetNodeVisible( sceneName, nodePath, true );
-	}
+    {
+        result = editor->SetNodeVisible( sceneName, nodePath, true );
+    }
     else if( command == NodeStructureEvent::Command::SetNodeInvisible )
-	{
-		result = editor->SetNodeVisible( sceneName, nodePath, false );
-	}
-	else if( command == NodeStructureEvent::Command::RenameNode )
-	{
-		result = editor->RenameNode( sceneName, nodePath, newNodeName );
-	}
-	else if( command == NodeStructureEvent::Command::AttachNode )
-	{
-		result = editor->AttachChildNode( sceneName, nodePath, attachIndex );
-	}
-	else if( command == NodeStructureEvent::Command::DetachNode )
-	{
-		result = editor->DetachChildNode( sceneName, nodePath );
-	}
-	else if( command == NodeStructureEvent::Command::MoveNode )
-	{
+    {
+        result = editor->SetNodeVisible( sceneName, nodePath, false );
+    }
+    else if( command == NodeStructureEvent::Command::RenameNode )
+    {
+        result = editor->RenameNode( sceneName, nodePath, newNodeName );
+    }
+    else if( command == NodeStructureEvent::Command::AttachNode )
+    {
+        result = editor->AttachChildNode( sceneName, nodePath, attachIndex );
+    }
+    else if( command == NodeStructureEvent::Command::DetachNode )
+    {
+        result = editor->DetachChildNode( sceneName, nodePath );
+    }
+    else if( command == NodeStructureEvent::Command::MoveNode )
+    {
         assert( request != nullptr );
         if( request == nullptr )
         {
@@ -177,17 +177,17 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
             return;
         }
 
-		//FIXME: replace with sth more generic
-		auto destSceneName = request->GetAttribute( "DestSceneName" );
-		auto destNodePath = request->GetAttribute( "DestPath" );
+        //FIXME: replace with sth more generic
+        auto destSceneName = request->GetAttribute( "DestSceneName" );
+        auto destNodePath = request->GetAttribute( "DestPath" );
         auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
-		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
-		auto srcNodePath = request->GetAttribute( "SrcPath" );
-		
-		result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
-	}
-	else if( command == NodeStructureEvent::Command::CopyNode )
-	{
+        auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+        auto srcNodePath = request->GetAttribute( "SrcPath" );
+        
+        result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
+    }
+    else if( command == NodeStructureEvent::Command::CopyNode )
+    {
         assert( request != nullptr );
         if( request == nullptr )
         {
@@ -195,16 +195,16 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
             return;
         }
 
-		//FIXME: replace with sth more generic
-		auto destSceneName = request->GetAttribute( "DestSceneName" );
-		auto destNodePath = request->GetAttribute( "DestPath" );
-		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
-		auto srcNodePath = request->GetAttribute( "SrcPath" );
+        //FIXME: replace with sth more generic
+        auto destSceneName = request->GetAttribute( "DestSceneName" );
+        auto destNodePath = request->GetAttribute( "DestPath" );
+        auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+        auto srcNodePath = request->GetAttribute( "SrcPath" );
 
-		auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
+        auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
         if( copyPtr == nullptr )
             result = false;
-	}
+    }
     else result = false;
 
     SendSimpleResponse( command, eventID, structureEvent->SocketID, result );
@@ -222,7 +222,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     std::string& sceneName		= structureEvent->SceneName;
     std::string& pluginName		= structureEvent->PluginName;
     std::string& pluginUID		= structureEvent->PluginUID;
-	std::string& timelinePath	= structureEvent->TimelinePath;
+    std::string& timelinePath	= structureEvent->TimelinePath;
     unsigned int attachIndex	= structureEvent->AttachIndex;
     auto command				= structureEvent->PluginCommand;
     auto eventID                = structureEvent->EventID;
@@ -230,26 +230,26 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 
 
     bool result = true;
-	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
-		result = editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
+        result = editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
-	{
-		result = editor->DeletePlugin( sceneName, nodePath, pluginName );
-	}
+    {
+        result = editor->DeletePlugin( sceneName, nodePath, pluginName );
+    }
     else if( command == PluginStructureEvent::Command::AttachPlugin )
-	{
-		result = editor->AttachPlugin( sceneName, nodePath, attachIndex );
-	}
+    {
+        result = editor->AttachPlugin( sceneName, nodePath, attachIndex );
+    }
     else if( command == PluginStructureEvent::Command::DetachPlugin )
-	{
-		result = editor->DetachPlugin( sceneName, nodePath, pluginName );
-	}
+    {
+        result = editor->DetachPlugin( sceneName, nodePath, pluginName );
+    }
     else if( command == PluginStructureEvent::Command::CopyPlugin )
-	{
+    {
         assert( request != nullptr );
         if( request == nullptr )
         {
@@ -257,20 +257,20 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
             return;
         }
 
-		//FIXME: replace with sth more generic
+        //FIXME: replace with sth more generic
         auto destSceneName = request->GetAttribute( "SrcSceneName" );
-		auto destNodePath = request->GetAttribute( "DestPath" );
+        auto destNodePath = request->GetAttribute( "DestPath" );
         auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
-		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
-		auto srcNodePath = request->GetAttribute( "SrcPath" );
-		auto srcPluginName = request->GetAttribute( "SrcName" );
+        auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+        auto srcNodePath = request->GetAttribute( "SrcPath" );
+        auto srcPluginName = request->GetAttribute( "SrcName" );
 
-		auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+        auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
         if( pluginPtr == nullptr )
             result = false;
-	}
-	else if( command == PluginStructureEvent::Command::MovePlugin )
-	{
+    }
+    else if( command == PluginStructureEvent::Command::MovePlugin )
+    {
         assert( request != nullptr );
         if( request == nullptr )
         {
@@ -278,16 +278,16 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
             return;
         }
 
-		//FIXME: replace with sth more generic
-		auto destSceneName = request->GetAttribute( "SrcSceneName" );
-		auto destNodePath = request->GetAttribute( "DestPath" );
+        //FIXME: replace with sth more generic
+        auto destSceneName = request->GetAttribute( "SrcSceneName" );
+        auto destNodePath = request->GetAttribute( "DestPath" );
         auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
-		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
-		auto srcNodePath = request->GetAttribute( "SrcPath" );
-		auto srcPluginName = request->GetAttribute( "SrcName" );
+        auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+        auto srcNodePath = request->GetAttribute( "SrcPath" );
+        auto srcPluginName = request->GetAttribute( "SrcName" );
 
-		result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
-	}
+        result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+    }
     else result = false;
 
     SendSimpleResponse( command, eventID, structureEvent->SocketID, result );
@@ -668,11 +668,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
-	 else if( command == ProjectEvent::Command::RenameFolder )
+     else if( command == ProjectEvent::Command::RenameFolder )
     {
         auto categoryName = request.GetAttribute( "categoryName" );
         auto path = request.GetAttribute( "path" );
-		auto path2 = request.GetAttribute( "newName" );
+        auto path2 = request.GetAttribute( "newName" );
 
         auto success = pm->RenameAssetDir( categoryName, path,path2 );
 

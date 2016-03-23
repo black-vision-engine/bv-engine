@@ -46,18 +46,24 @@ void                                BVDeserializeContext::SetSceneTimeline      
 //    
 model::ITimeEvaluatorPtr            BVDeserializeContext::GetTimeline             ( const std::string & timelineName, const std::string & objName )
 {
-    model::ITimeEvaluatorPtr sceneTimeline = GetSceneTimeline();
-    if( sceneTimeline == nullptr ) // this should happen only during cloning, I think
+    model::ITimeEvaluatorPtr defaultTimeline;
+    if( m_sceneTimeline == nullptr ) // this should happen only during cloning, I think
     {
         auto rootTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
-        sceneTimeline = model::TimelineHelper::GetTimeEvaluator( "default", rootTimeline ); // FIXME: this is not really the good way to do it
-        assert( sceneTimeline );
+        defaultTimeline = model::TimelineHelper::GetTimeEvaluator( "default", rootTimeline ); // FIXME: this is not really the good way to do it
+        assert( defaultTimeline );
     }
-    model::ITimeEvaluatorPtr te = model::TimelineHelper::GetTimeEvaluator( timelineName, sceneTimeline );
+    else
+    {
+        defaultTimeline = model::TimelineHelper::GetTimeEvaluator( "default", m_sceneTimeline );
+        assert( defaultTimeline );
+    }
+
+    model::ITimeEvaluatorPtr te = model::TimelineHelper::GetTimeEvaluator( timelineName, m_sceneTimeline );
     if( te == nullptr ) 
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Object's [" << objName << "] timeline [" + timelineName + "] not found. Setting scene timeline [" + sceneTimeline->GetName() + "]";
-        te = sceneTimeline;
+        LOG_MESSAGE( SeverityLevel::error ) << "Object's [" << objName << "] timeline [" + timelineName + "] not found. Setting scene default timeline [" + defaultTimeline->GetName() + "]";
+        te = defaultTimeline;
     }
 
     return te;

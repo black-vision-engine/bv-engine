@@ -7,6 +7,8 @@
 
 #include "Assets/AssetDescsWithUIDs.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 #include <fstream>
 #include <cassert>
 
@@ -59,8 +61,8 @@ bool JsonDeserializeObject::LoadFile        ( const std::string& fileName )
 //
 bool JsonDeserializeObject::Load                ( const std::string& jsonString )
 {
-	Json::Reader reader;
-	if( reader.parse( jsonString, m_root ) )
+    Json::Reader reader;
+    if( reader.parse( jsonString, m_root ) )
     {
         OnRootInit();
         return true;;
@@ -72,8 +74,8 @@ bool JsonDeserializeObject::Load                ( const std::string& jsonString 
 //
 bool JsonDeserializeObject::Load                ( std::istream& stream )
 {
-	Json::Reader reader;
-	if( reader.parse( stream, m_root ) )
+    Json::Reader reader;
+    if( reader.parse( stream, m_root ) )
     {
         OnRootInit();
         return true;
@@ -88,7 +90,7 @@ void JsonDeserializeObject::OnRootInit          ()
     m_nodeStack.push( &m_root );
 
     if( m_root.isObject() )
-	    m_currentNode = &m_root;
+        m_currentNode = &m_root;
     else if( m_root.isArray() && m_root.size() )
     {
         m_currentNode = &m_root[ 0 ];
@@ -148,12 +150,12 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
         m_currentNode = &node;
     }
 
-	if( m_currentNode->isNull() )
+    if( m_currentNode->isNull() )
     {
         ExitChild();        // Return to previous node. Always true.
-		return false;
+        return false;
     }
-	return true;
+    return true;
 }
 
 // ***********************
@@ -168,7 +170,7 @@ bool JsonDeserializeObject::ExitChild           () const
     if( m_currentNode->isArray() )
         m_indexStack.pop();         // Restore last index, before we entered array.
 
-	m_currentNode = m_nodeStack.top();
+    m_currentNode = m_nodeStack.top();
     m_nodeStack.pop();
 
     return true;

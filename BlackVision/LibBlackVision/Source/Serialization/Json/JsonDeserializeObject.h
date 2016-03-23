@@ -15,22 +15,22 @@ namespace bv
 class JsonDeserializeObject : public IDeserializer
 {
 private:
-	Json::Value				        	m_root;
-	mutable Json::Value*				m_currentNode;
-	mutable std::stack<Json::Value*>	m_nodeStack;
+    Json::Value				        	m_root;
+    mutable Json::Value*				m_currentNode;
+    mutable std::stack<Json::Value*>	m_nodeStack;
     mutable std::stack<unsigned int>    m_indexStack;
 
     std::unique_ptr< DeserializeContext >       m_context;
 
 public:
-	JsonDeserializeObject();
+    JsonDeserializeObject();
     virtual ~JsonDeserializeObject();
 
     virtual DeserializeContext* GetDeserializeContext() const;
 
     bool                        LoadFile            ( const std::string& fileName );
-	bool						Load                ( const std::string& jsonString );
-	bool						Load                ( std::istream& stream );
+    bool						Load                ( const std::string& jsonString );
+    bool						Load                ( std::istream& stream );
 
     Json::Value                 GetJson             () const;
 
@@ -38,7 +38,7 @@ public:
     std::string                 GetParentAttribute  ( const std::string& parentName, const std::string& attName ) const override;
 
     bool						EnterChild          ( const std::string& name ) const override;
-	bool						ExitChild           () const override;
+    bool						ExitChild           () const override;
 
     bool                        NextChild           () const override;
 

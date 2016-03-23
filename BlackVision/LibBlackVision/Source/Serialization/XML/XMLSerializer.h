@@ -11,6 +11,7 @@ namespace bv
 
 class XMLSerializer : public ISerializer
 {
+protected:
     rapidxml::xml_document<>                                m_doc;
     std::stack< rapidxml::xml_node<>* >                     m_roots;
 

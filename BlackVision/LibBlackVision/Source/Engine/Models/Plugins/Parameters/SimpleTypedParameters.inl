@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/BV/BVSerializeContext.h"
 
 namespace bv { namespace model {
 
@@ -28,11 +29,17 @@ std::string Type2String( ModelParamType type ); // FIXME
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
 void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Serialize       ( ISerializer& ser ) const
 {
+    auto serContext = Cast< BVSerializeContext * >( ser.GetSerializeContext() );
+
     ser.EnterChild( "param" );
     ser.SetAttribute( "name", GetName() );
     ser.SetAttribute( "type", SerializationHelper::T2String< ModelParamType >( GetType() ) );
     
-    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    std::string timeline;
+    if( serContext->sceneNameInTimeline )
+        timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    else
+        timeline = m_timeEvaluator->GetName();
     ser.SetAttribute( "timeline", timeline );
 
     m_interpolator.Serialize( ser );
@@ -155,7 +162,7 @@ inline  bool        SimpleParameterImpl< InterpolatorType, ValueType, type >::Mo
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
 InterpolatorType &		SimpleParameterImpl< InterpolatorType, ValueType, type >::AccessInterpolator	()
 {
-	return m_interpolator;
+    return m_interpolator;
 }
 
 // *******************************

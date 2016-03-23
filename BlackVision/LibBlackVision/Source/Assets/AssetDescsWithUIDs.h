@@ -5,7 +5,7 @@
 #include "AssetDescriptor.h"
 #include "AssetManager.h"
 
-#include "Engine/Models/BasicNode.h" // FIXME this is only important for GetAssetsWithUIDs
+//#include "Engine/Models/BasicNode.h" // FIXME this is only important for GetAssetsWithUIDs
 
 namespace bv {
 
@@ -39,6 +39,11 @@ public:
 };
 
 DEFINE_PTR_TYPE( AssetDescsWithUIDs );
+
+namespace model {
+class BasicNode;
+class IPlugin;
+}
 
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, bool recursive = false );
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin );

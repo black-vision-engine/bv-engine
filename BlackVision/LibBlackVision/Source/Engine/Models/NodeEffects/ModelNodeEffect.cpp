@@ -7,6 +7,8 @@
 #include "Assets/Assets.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 namespace bv { namespace model {

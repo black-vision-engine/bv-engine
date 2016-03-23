@@ -24,4 +24,11 @@ BVXMLSerializer::BVXMLSerializer( AssetDescsWithUIDsPtr assets )
     SetSerializeContext( con );
 }
 
+// ***********************
+//
+BVSerializeContext *        BVXMLSerializer::GetBVSerializeContext()
+{
+    return Cast< BVSerializeContext * >( m_context.get() );
+}
+
 };
