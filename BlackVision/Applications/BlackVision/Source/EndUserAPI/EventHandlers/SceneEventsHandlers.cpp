@@ -557,11 +557,19 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             {
                 // Copy node and create temporary preset scene
                 auto tempSceneName = File::GetFileName( destPath ) + File::GetExtension( destPath );
-                editor->AddScene( tempSceneName );
 
+                assert( editor->GetScene( tempSceneName ) == nullptr ); // Scene name shouldn't exist.
+
+                editor->AddScene( tempSceneName );
                 auto tempScene = editor->GetScene( tempSceneName );
                 
-                editor->AddNodeCopy( tempScene, nullptr, scene, bn );
+                auto timeline = editor->GetTimeEvaluator( tempSceneName );
+                assert( std::dynamic_pointer_cast< model::OffsetTimeEvaluator >( timeline ) );
+                auto offsetTimeline = std::static_pointer_cast< model::OffsetTimeEvaluator >( timeline );
+
+                auto node = pm->LoadPreset( destProjectName, destPath, offsetTimeline );
+                editor->AddChildNode( tempScene, nullptr, node );
+
                 scene = tempScene;
             }
 
