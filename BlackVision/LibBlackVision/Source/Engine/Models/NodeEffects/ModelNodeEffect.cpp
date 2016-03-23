@@ -73,22 +73,22 @@ void                                        ModelNodeEffect::Serialize          
         ser.SetAttribute( "numRequiredAssets", SerializationHelper::T2String< SizeType >( NumRequiredAssets() ) );
         m_paramValModel->Serialize( ser );
 
-	    if( m_assetsDescs.size() > 0 )
+        if( m_assetsDescs.size() > 0 )
         {
-		    auto serContext = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
+            auto serContext = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
             ser.EnterArray( "assets" );
             for( auto ad : m_assetsDescs )
             {
                 ser.EnterChild( "asset" );
-			    if( serContext->GetAssets() )
-			    {
-				    auto uid = serContext->GetAssets()->Key2UID( ad->GetKey() );
-				    ser.SetAttribute( "uid", uid );
-			    }
-			    else
-			    {
-				    ad->Serialize( ser );
-			    }
+                if( serContext->GetAssets() )
+                {
+                    auto uid = serContext->GetAssets()->Key2UID( ad->GetKey() );
+                    ser.SetAttribute( "uid", uid );
+                }
+                else
+                {
+                    ad->Serialize( ser );
+                }
 
                 ser.ExitChild(); // asset
             }
@@ -103,77 +103,77 @@ void                                        ModelNodeEffect::Serialize          
 //
 ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & deser )
 {
-	auto typeStr = deser.GetAttribute( "type" );
+    auto typeStr = deser.GetAttribute( "type" );
 
-	auto type = SerializationHelper::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
+    auto type = SerializationHelper::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
 
-	auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+    auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 
-	if( type != NodeEffectType::NET_DEFAULT )
-	{
+    if( type != NodeEffectType::NET_DEFAULT )
+    {
         auto retI = ModelNodeEffectFactory::CreateModelNodeEffect( type, "", deserContext->GetSceneTimeline() );
 
         assert( std::dynamic_pointer_cast< ModelNodeEffect >( retI ) );
 
         auto ret = std::static_pointer_cast< ModelNodeEffect >( retI );
 
-		// params
-		auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-		for( auto param : params )
-		{
-			if( ret->m_paramValModel->GetParameter( param->GetName() ) == nullptr )
-			{
-				LOG_MESSAGE( SeverityLevel::warning ) << "effect " << typeStr << " does not have parameter " << param->GetName() << ", which is serialized.";
-			}
+        // params
+        auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
+        for( auto param : params )
+        {
+            if( ret->m_paramValModel->GetParameter( param->GetName() ) == nullptr )
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "effect " << typeStr << " does not have parameter " << param->GetName() << ", which is serialized.";
+            }
 
-			ret->m_paramValModel->SetParameter( param );
-		}
+            ret->m_paramValModel->SetParameter( param );
+        }
 
-		// assets
-		if( deser.EnterChild( "assets" ) )
-		{
+        // assets
+        if( deser.EnterChild( "assets" ) )
+        {
             auto idx = 0;
-			do
-			{
-				deser.EnterChild( "asset" );
+            do
+            {
+                deser.EnterChild( "asset" );
 
-				auto uid = deser.GetAttribute( "uid" );
+                auto uid = deser.GetAttribute( "uid" );
 
-				AssetDescConstPtr assetDesc;
-				if( uid != "" )
-				{
-					assetDesc = deserContext->GetAssets()->UID2Asset( uid );
-				}
-				else
-				{
-					assetDesc = AssetManager::GetInstance().CreateDesc( deser );
-				}
+                AssetDescConstPtr assetDesc;
+                if( uid != "" )
+                {
+                    assetDesc = deserContext->GetAssets()->UID2Asset( uid );
+                }
+                else
+                {
+                    assetDesc = AssetManager::GetInstance().CreateDesc( deser );
+                }
 
-				if( assetDesc )
-				{
-					ret->AddAsset( assetDesc, idx++ );
-				}
+                if( assetDesc )
+                {
+                    ret->AddAsset( assetDesc, idx++ );
+                }
 
-				deser.ExitChild(); // asset
-			}
-			while( deser.NextChild() );
+                deser.ExitChild(); // asset
+            }
+            while( deser.NextChild() );
         
-			deser.ExitChild(); // assets
-		}
+            deser.ExitChild(); // assets
+        }
 
-		return ret;
-	}
-	else
-	{
-		return nullptr;
-	}
+        return ret;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 // ********************************
 //
 ISerializablePtr							ModelNodeEffect::Create				( const IDeserializer & deser )
 {
-	return CreateTyped( deser );
+    return CreateTyped( deser );
 }
 
 // ********************************

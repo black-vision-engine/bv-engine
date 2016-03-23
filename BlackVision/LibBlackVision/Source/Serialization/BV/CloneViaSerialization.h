@@ -40,7 +40,7 @@ std::shared_ptr< T >                              ClonePtr( const T* obj, std::s
     //ser.Save( "clone.xml" ); // for debugging only
 
     BVXMLDeserializer deser( ss, ss.tellp(), sceneTimeline, assets );
-	
+    
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling
     auto clone = T::Create( deser );

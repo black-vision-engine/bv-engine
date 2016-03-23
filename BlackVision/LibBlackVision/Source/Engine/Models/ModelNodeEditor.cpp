@@ -12,9 +12,9 @@ namespace bv { namespace model {
 
 // *******************************
 //
-				ModelNodeEditor::ModelNodeEditor		( BasicNode * node )
+                ModelNodeEditor::ModelNodeEditor		( BasicNode * node )
     : m_node( node )
-	, m_detachedPlugin( nullptr )
+    , m_detachedPlugin( nullptr )
 {
 }
 
@@ -31,7 +31,7 @@ bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
 {
     if( plugin )
     {
-	    return m_node->GetPlugins()->AttachPlugin( plugin, idx );
+        return m_node->GetPlugins()->AttachPlugin( plugin, idx );
     }
     return false;
 }
@@ -40,67 +40,67 @@ bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
 //
 bool			ModelNodeEditor::DeletePlugin				( const std::string & name )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( name );
-	if( plugin )
-	{
-		plugin = nullptr;
-		return true;
-	}
-	return false;
+    auto plugin = m_node->GetPlugins()->DetachPlugin( name );
+    if( plugin )
+    {
+        plugin = nullptr;
+        return true;
+    }
+    return false;
 }
 
 // ********************************
 //
 bool			ModelNodeEditor::DeletePlugin				( unsigned int idx )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( idx );
-	if( plugin )
-	{
-		plugin = nullptr;
-		return true;
-	}
-	return false;
+    auto plugin = m_node->GetPlugins()->DetachPlugin( idx );
+    if( plugin )
+    {
+        plugin = nullptr;
+        return true;
+    }
+    return false;
 }
 
 // ********************************
 //
 bool				ModelNodeEditor::AttachPlugin			( unsigned int idx )
 {
-	if( m_node->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
-	{
-		m_detachedPlugin = nullptr;
-		return true;
-	}
-	return false;
+    if( m_node->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
+    {
+        m_detachedPlugin = nullptr;
+        return true;
+    }
+    return false;
 }
 
 // ********************************
 //
 bool				ModelNodeEditor::AttachPlugin			( BasicNodePtr sourceNode, unsigned int idx )
 {
-	auto plugin = sourceNode->GetModelNodeEditor()->GetDetachedPlugin();
-	if( plugin )
-	{
-		if( AddPlugin( plugin, idx ) )
-		{
-			sourceNode->GetModelNodeEditor()->ResetDetachedPlugin();
-			return true;
-		}
-	}
-	return false;
+    auto plugin = sourceNode->GetModelNodeEditor()->GetDetachedPlugin();
+    if( plugin )
+    {
+        if( AddPlugin( plugin, idx ) )
+        {
+            sourceNode->GetModelNodeEditor()->ResetDetachedPlugin();
+            return true;
+        }
+    }
+    return false;
 }
 
 // ********************************
 //
 bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( name );
+    auto plugin = m_node->GetPlugins()->DetachPlugin( name );
 
-	if ( plugin )
-	{
-		m_detachedPlugin = plugin;
-		return true;
-	}
+    if ( plugin )
+    {
+        m_detachedPlugin = plugin;
+        return true;
+    }
 
     return false;
 }
@@ -109,13 +109,13 @@ bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 //
 bool				ModelNodeEditor::DetachPlugin			( unsigned int idx )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( idx );
+    auto plugin = m_node->GetPlugins()->DetachPlugin( idx );
 
-	if ( plugin )
-	{
-		m_detachedPlugin = plugin;
-		return true;
-	}
+    if ( plugin )
+    {
+        m_detachedPlugin = plugin;
+        return true;
+    }
 
     return false;
 }
@@ -138,12 +138,12 @@ void				ModelNodeEditor::ResetDetachedPlugin	()
 //
 IPluginPtr			ModelNodeEditor::CopyPlugin				( const std::string & name )
 {
-	auto plugin = m_node->GetPlugin( name );
+    auto plugin = m_node->GetPlugin( name );
 
-	if( plugin )
-	{
-		return plugin->Clone();
-	}
+    if( plugin )
+    {
+        return plugin->Clone();
+    }
     return nullptr;
 }
 
@@ -151,14 +151,14 @@ IPluginPtr			ModelNodeEditor::CopyPlugin				( const std::string & name )
 //
 IModelNodeEffectPtr	ModelNodeEditor::GetNodeEffect		()
 {
-	return m_node->GetNodeEffect();
+    return m_node->GetNodeEffect();
 }
 
 // *******************************
 //
 void				ModelNodeEditor::SetNodeEffect		( IModelNodeEffectPtr nodeEffect )
 {
-	m_node->SetNodeEffect( nodeEffect );
+    m_node->SetNodeEffect( nodeEffect );
 }
 
 // ********************************
@@ -169,9 +169,9 @@ void				ModelNodeEditor::ReplaceTimeline	( const model::ITimeEvaluatorPtr & oldT
     for( auto & param : m_node->GetParameters() )
     {
         if( param->GetTimeEvaluator() == oldTimeline )
-		{
-			param->SetTimeEvaluator( newTimeline );
-		}
+        {
+            param->SetTimeEvaluator( newTimeline );
+        }
     }
 
     //replace timeevaluator in plugin model
@@ -179,20 +179,20 @@ void				ModelNodeEditor::ReplaceTimeline	( const model::ITimeEvaluatorPtr & oldT
     for( UInt32 i = 0; i < plugins->NumPlugins(); ++i )
     {
         auto pluginModel = plugins->GetPlugin( i )->GetPluginParamValModel();
-	    if( pluginModel )
-	    {
-		    if( pluginModel->GetTimeEvaluator() == oldTimeline )
-		    {
-			    //FIXME: cast
-			    std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( newTimeline );
-		    }
+        if( pluginModel )
+        {
+            if( pluginModel->GetTimeEvaluator() == oldTimeline )
+            {
+                //FIXME: cast
+                std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( newTimeline );
+            }
         }
     }
 
-	for( UInt32 i = 0; i < m_node->GetNumChildren(); ++i )
-	{
+    for( UInt32 i = 0; i < m_node->GetNumChildren(); ++i )
+    {
         m_node->GetChild( i )->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
-	}
+    }
 }
 
 } //model

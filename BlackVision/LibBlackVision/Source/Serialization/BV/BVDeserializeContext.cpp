@@ -47,10 +47,10 @@ void                                BVDeserializeContext::SetSceneTimeline      
 model::ITimeEvaluatorPtr            BVDeserializeContext::GetTimeline             ( const std::string & timelineName, const std::string & objName )
 {
     model::ITimeEvaluatorPtr sceneTimeline = GetSceneTimeline();
-	if( sceneTimeline == nullptr )
+    if( sceneTimeline == nullptr ) // this should happen only during cloning, I think
     {
-		sceneTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
-        sceneTimeline = sceneTimeline->GetChild( "default" );
+        auto rootTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
+        sceneTimeline = model::TimelineHelper::GetTimeEvaluator( "default", rootTimeline ); // FIXME: this is not really the good way to do it
         assert( sceneTimeline );
     }
     model::ITimeEvaluatorPtr te = model::TimelineHelper::GetTimeEvaluator( timelineName, sceneTimeline );

@@ -72,7 +72,7 @@ Int32                  GetIndex( ITimeEvaluatorPtr parent, std::string name )
 //
 bool					IsSceneRootTimeline( ITimeEvaluatorPtr timeline )
 {
-	return ( timeline->GetType() == OffsetTimeEvaluator::Type() ); // FIXME: not really the best implementation
+    return ( timeline->GetType() == OffsetTimeEvaluator::Type() ); // FIXME: not really the best implementation
 }
 
 // *********************************
@@ -86,25 +86,28 @@ UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, c
     }
 
     Int32 index = 0;
-	
+    
     for( auto timeline : timelines )
-	{
-		if( IsSceneRootTimeline( timeline ) )
-			continue;
-		index = std::max( index, GetIndex( destTimeline, timeline->GetName() ) );
-	}
+    {
+        if( IsSceneRootTimeline( timeline ) )
+        {
+            assert( false );
+            continue;
+        }
+        index = std::max( index, GetIndex( destTimeline, timeline->GetName() ) );
+    }
 
     for( auto timeline : timelines )
     {
-		if( IsSceneRootTimeline( timeline ) )
-			continue;
+        if( IsSceneRootTimeline( timeline ) )
+            continue;
 
         auto clone = Clone( timeline );
         clone->SetName( PrefixHelper::PrefixCopy( index ) + timeline->GetName() );
         destTimeline->AddChild( clone );
     }
 
-	return index;
+    return index;
 }
 
 // ***********************
@@ -180,10 +183,10 @@ ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::
 // FIXME: requires RTTI, reimplement it later on
 ITimelinePtr            TimelineHelper::GetTimeline                     ( const std::string & timelinePath, ITimeEvaluatorPtr parentTimeline )
 {
-	auto path = Split( timelinePath, PATH_SEPARATOR );
+    auto path = Split( timelinePath, PATH_SEPARATOR );
     if( path.size() == 1 )
     {
-		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( timelinePath, parentTimeline ) );
+        return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( timelinePath, parentTimeline ) );
     }
     else
     {
