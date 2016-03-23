@@ -223,7 +223,9 @@ inline  void    NodeUpdater::UpdatePositions     ()
     
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
-    UpdateBoxPositions( m_boundingBox, node->GetBoundingVolume()->BuildConnectedComponent() );
+    auto bv = node->GetBoundingVolume();
+    if( bv )
+        UpdateBoxPositions( m_boundingBox, bv->BuildConnectedComponent() );
 }
 
 // *****************************
@@ -234,7 +236,9 @@ inline  void    NodeUpdater::UpdateTopology      ()
     
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
-    UpdateBoxPositions( m_boundingBox, node->GetBoundingVolume()->BuildConnectedComponent() );
+    auto bv = node->GetBoundingVolume();
+    if( bv )
+        UpdateBoxPositions( m_boundingBox, bv->BuildConnectedComponent() );
 }
 
 // *****************************
