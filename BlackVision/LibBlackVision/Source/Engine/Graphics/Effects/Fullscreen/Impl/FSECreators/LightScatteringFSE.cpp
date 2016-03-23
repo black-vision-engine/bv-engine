@@ -43,7 +43,7 @@ FullscreenEffect *       LightScatteringFSECreator::CreateLightScatteringFSE    
     auto src = FSEShaderSourceProvider->ReadShader( "light_scattering.frag" );
     fseData.SetPixelShaderSource( src );
 
-    fseData.SetBlendEnabled( false );
+    fseData.SetBlendEnabled( true );
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
 

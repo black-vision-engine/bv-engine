@@ -89,7 +89,7 @@ public:
     VideoOutputRenderLogic *        GedVideoOutputRenderLogic   ();
 
 public:
-    void    MakeScreenShot  ( const std::string& path, unsigned int numFrames, bool onRenderedEvent );
+    void    MakeScreenShot  ( const std::string& path, unsigned int numFrames, bool onRenderedEvent, bool asyncWrite = true );
 };
 
 } // bv

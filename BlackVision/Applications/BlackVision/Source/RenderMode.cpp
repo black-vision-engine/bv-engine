@@ -63,11 +63,11 @@ void RenderMode::SetRenderToFileMode( const std::string & filePath, float reques
 
 // ***********************
 //
-void RenderMode::MakeScreenShot( const std::string & filePath, bool onRenderedEvent )
+void RenderMode::MakeScreenShot( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
 {
     if( m_renderLogic )
 	{
-        m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent );
+        m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
 	}
 }
 

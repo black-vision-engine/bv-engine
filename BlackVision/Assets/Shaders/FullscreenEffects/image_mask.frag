@@ -33,17 +33,17 @@ void main()
 
     vec2 maskUV = ( scaleMat * maskTx * vec4( uvCoord.x, uvCoord.y, 0.0, 1.0 ) ).xy - position;
     
-	if( length( uvCoord - debugPoint0 ) < 0.003 )
-	{
-		FragColor = vec4( 1, 0, 0, 1 );
-		return;
-	}
+	// if( length( uvCoord - debugPoint0 ) < 0.003 )
+	// {
+		// FragColor = vec4( 1, 0, 0, 1 );
+		// return;
+	// }
 	
-	if( length( uvCoord - debugPoint1 ) < 0.003 )
-	{
-		FragColor = vec4( 1, 0, 0, 1 );
-		return;
-	}
+	// if( length( uvCoord - debugPoint1 ) < 0.003 )
+	// {
+		// FragColor = vec4( 1, 0, 0, 1 );
+		// return;
+	// }
 
 	
 	if( onlyMask == 1 || onlyObject == 1 )
@@ -58,7 +58,7 @@ void main()
 			FragColor += texture( Tex0, uvCoord );
 		}
 		
-		return;
+		discard;
 	}
 	
     float alpha = 0.0;

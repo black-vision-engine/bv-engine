@@ -150,6 +150,10 @@ void    NodeUpdater::DoUpdate               ()
             UpdateTexturesData();
             UpdateRendererState();
         }
+        else
+        {
+            UpdateNodeEffect();
+        }
     }
     else
     {

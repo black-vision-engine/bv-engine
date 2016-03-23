@@ -20,7 +20,7 @@ namespace bv
 
 // ***********************
 //
-void SaveImageToFileFunction    ( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, bool sendEvent )
+void SaveImageToFileFunction    ( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, bool sendEvent, bool sendAsync )
 {
     bool result = image::SaveBMPImage( filePath, data, width, height, bpp );
 
@@ -30,7 +30,10 @@ void SaveImageToFileFunction    ( const std::string & filePath, MemoryChunkConst
         renderedEvent->FilePath = filePath;
         renderedEvent->Result = result;
 
-        GetDefaultEventManager().ConcurrentQueueEvent( renderedEvent );
+        if( sendAsync )
+            GetDefaultEventManager().ConcurrentQueueEvent( renderedEvent );
+        else
+            GetDefaultEventManager().TriggerEvent( renderedEvent );
     }
 }
 
@@ -40,7 +43,8 @@ ScreenShotLogic::ScreenShotLogic( unsigned int numReadBuffers )
     :   m_remainingFrames( 0 ),
         m_allFrames( 0 ),
         m_curReadbackFrame( 0 ),
-        m_onRenderedEvent( false )
+        m_onRenderedEvent( false ),
+        m_saveToFileAsync( true )
 { m_asyncWrites.resize( numReadBuffers ); }
 
 // ***********************
@@ -50,12 +54,13 @@ ScreenShotLogic::~ScreenShotLogic()
 
 // ***********************
 // Next frame will be written to file.
-void ScreenShotLogic::MakeScreenShot( const std::string& filePath, unsigned int numFrames, bool onRenderedEvent )
+void ScreenShotLogic::MakeScreenShot( const std::string& filePath, unsigned int numFrames, bool onRenderedEvent, bool saveImgAsync )
 {
     if( m_remainingFrames > 0 ) // Can't make new screenshot, while recording frames.
         return;
 
     m_onRenderedEvent = onRenderedEvent;
+    m_saveToFileAsync = saveImgAsync;
 
     m_filePath = filePath;
 
@@ -90,7 +95,12 @@ void ScreenShotLogic::FrameRendered   ( RenderTarget * renderTarget, RenderLogic
             HPROFILER_SECTION( "Write to file", PROFILER_THREAD1 );
             auto chunk = frame->GetData();
 
-            m_asyncWrites[ m_curReadbackFrame ] = std::async( SaveImageToFileFunction, newFilePath, chunk, frame->GetWidth(), frame->GetHeight(), 32, m_onRenderedEvent );
+            if( m_saveToFileAsync )
+                m_asyncWrites[ m_curReadbackFrame ] = std::async( SaveImageToFileFunction, newFilePath, chunk, frame->GetWidth(), frame->GetHeight(), 32, m_onRenderedEvent, false );
+            else
+            {
+                SaveImageToFileFunction( newFilePath, chunk, frame->GetWidth(), frame->GetHeight(), 32, m_onRenderedEvent, true );
+            }
 
             --m_remainingFrames;
         }

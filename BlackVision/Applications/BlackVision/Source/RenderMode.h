@@ -43,7 +43,7 @@ public:
     void        SetStartTime                ( unsigned long time );
     
     void        SetRenderToFileMode         ( const std::string& filePath, float requestedFPS, unsigned int numFrames );
-    void        MakeScreenShot              ( const std::string& filePath, bool onRenderedEvent = false );
+    void        MakeScreenShot              ( const std::string& filePath, bool onRenderedEvent = false, bool asyncWrite = true );
     TimeType    StartFrame                  ( unsigned long millis );
 	TimeType	GetFramesDelta				() const;
 
