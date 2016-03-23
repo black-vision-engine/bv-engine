@@ -132,7 +132,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         if( request && request->GetAttribute( "AddTransformPlugin" ) == "true" )
             AddTransformPlugin = true;
 
-        if( AddTransformPlugin )
+        if( AddTransformPlugin && result )
         {
             auto parentNode = editor->GetNode( sceneName, nodePath );
             assert( parentNode );
