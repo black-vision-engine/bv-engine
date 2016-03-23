@@ -31,6 +31,7 @@ private:
 
     int m_activeQueue;
     int m_activeconcurrentQueue;
+    int m_numLockedFrames;          // Locks processing events for m_numLockedFrames frames.
 
 public:
 
@@ -49,6 +50,8 @@ public:
     virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE );
 
     virtual void    QueueResponse           ( const IEventPtr evt ) override;
+
+    virtual void    LockEvents              ( unsigned int numFrames ) override;
 };
 
 } //bv

@@ -22,12 +22,13 @@ private:
     unsigned int                        m_curReadbackFrame;
 
     bool                                m_onRenderedEvent;
+    bool                                m_saveToFileAsync;
 
 public:
     ScreenShotLogic( unsigned int numReadBuffers );
     ~ScreenShotLogic();
 
-    void        MakeScreenShot  ( const std::string& filePath, unsigned int numFrames = 1, bool onRenderedEvent = false );
+    void        MakeScreenShot  ( const std::string& filePath, unsigned int numFrames = 1, bool onRenderedEvent = false, bool saveImgAsync = true );
 
     void        FrameRendered   ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx );
     bool        ReadbackNeeded  ();

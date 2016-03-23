@@ -755,8 +755,9 @@ void        SceneEventsHandlers::RequestThumbnail    ( bv::model::SceneModelPtr 
     Path sceneScreenShot( saveTo );
     sceneScreenShot = sceneScreenShot.ParentPath();     // Extract directory
     sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / sceneScreenShot / sceneName;
-    //sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
-    m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true );
+    m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true, false );
+
+    GetDefaultEventManager().LockEvents( 1 );   // Lock events for one frame, to protect scenes from changeing visibility and other parameters.
 }
 
 // ***********************

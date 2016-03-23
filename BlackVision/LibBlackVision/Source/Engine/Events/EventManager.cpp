@@ -16,6 +16,7 @@ namespace bv
 EventManager::EventManager                  ()
     : m_activeQueue( 0 )
     , m_activeconcurrentQueue( 0 )
+    , m_numLockedFrames( 0 )
 {
 }
 
@@ -164,6 +165,9 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     auto curMillis = Time::Now();
     auto maxMillis = ( ( maxEvaluationMillis == IEventManager::millisINFINITE ) ? ( IEventManager::millisINFINITE ) : ( curMillis + maxEvaluationMillis ) );
 
+    if( m_numLockedFrames > 0 )
+        m_numLockedFrames--;
+
     //Multithreaded part
     unsigned int activeConcurrentQueue = m_activeconcurrentQueue;
     m_activeconcurrentQueue = ( m_activeconcurrentQueue + 1 ) % NUM_CONCURRENT_QUEUES;
@@ -190,7 +194,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
 
     m_queues[ m_activeQueue ].Clear();
 
-    while( !m_queues[ activeQueue ].IsEmpty() )
+    while( !m_queues[ activeQueue ].IsEmpty() && m_numLockedFrames == 0 )
     {
         IEventPtr evt = m_queues[ activeQueue ].Front();
         m_queues[ activeQueue ].Pop();
@@ -250,6 +254,12 @@ void EventManager::QueueResponse       ( const IEventPtr evt )
     ConcurrentQueueEvent( evt );
 }
 
+
+void EventManager::LockEvents           ( unsigned int numFrames )
+{
+    if( numFrames > 0 )
+        m_numLockedFrames = numFrames;
+}
 
 
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services
