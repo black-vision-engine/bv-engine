@@ -48,7 +48,7 @@ FullscreenEffect *       ImageMaskFSECreator::CreateImageMaskFSE    ( const std:
     auto src = FSEShaderSourceProvider->ReadShader( "image_mask.frag" );
     fseData.SetPixelShaderSource( src );
 
-    fseData.SetBlendEnabled( false );
+    fseData.SetBlendEnabled( true );
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
 
