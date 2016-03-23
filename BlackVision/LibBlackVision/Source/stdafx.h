@@ -3,6 +3,8 @@
 #include "Tools/Logger/Logger.h"
 #include "CoreDEF.h"
 
+#include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
+
 #undef near
 #undef far
 #undef max

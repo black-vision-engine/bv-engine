@@ -7,7 +7,7 @@
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Serialization/BVDeserializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
@@ -113,16 +113,9 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     auto timeline = deser.GetAttribute( "timeline" );
 
     auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
-    ITimeEvaluatorPtr sceneTimeline = bvDeserCo->GetSceneTimeline();
-	if( sceneTimeline == nullptr )
-		sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
-    ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
-    if( te == nullptr ) 
-    {
-        LOG_MESSAGE( SeverityLevel::error ) << "Parameter [" << name << "] timeline [" + timeline + "] not found. Setting scene timeline [" + sceneTimeline->GetName() + "]";
-        //assert( false );
-        te = sceneTimeline;
-    }
+
+    auto te = bvDeserCo->GetTimeline( timeline, "param: " + name );
+    assert( te );
 
     if( type == "float" )
     {

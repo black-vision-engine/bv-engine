@@ -199,20 +199,9 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
     }
 
     auto timeline = deser.GetAttribute( "timeline" );
-    
-    ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
-    if( sceneTimeline == nullptr )
-    {
-        sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
-    }
 
-    ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
-    if( te == nullptr ) 
-    {
-        LOG_MESSAGE( SeverityLevel::error ) << "Plugin [" << pluginName << "] timeline [" + timeline + "] not found. Setting scene timeline [" + sceneTimeline->GetName() + "]";
-        //assert( false );
-        te = sceneTimeline;
-    }
+    auto te = deserContext->GetTimeline( timeline, "plugin: " + pluginName );
+    assert( te );
 
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );           // FIXME Add to deserialization context
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );

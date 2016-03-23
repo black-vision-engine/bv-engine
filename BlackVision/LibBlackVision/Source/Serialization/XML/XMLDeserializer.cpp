@@ -5,7 +5,7 @@
 #include "System/Path.h"
 #include "IO/FileIO.h"
 
-#include "Serialization/BVDeserializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "rapidxml/RapidXml.hpp"
 

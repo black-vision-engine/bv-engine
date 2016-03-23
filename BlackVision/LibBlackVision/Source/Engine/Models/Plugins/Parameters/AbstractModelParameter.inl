@@ -11,6 +11,7 @@ inline ITimeEvaluatorPtr   AbstractModelParameter::GetTimeEvaluator    ()
 //
 inline void AbstractModelParameter::SetTimeEvaluator                   ( ITimeEvaluatorPtr timeEvaluator )
 {
+    assert( timeEvaluator );
     m_timeEvaluator = timeEvaluator;
 }
 

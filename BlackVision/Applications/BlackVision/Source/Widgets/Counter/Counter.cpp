@@ -8,7 +8,7 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
-#include "Serialization/BVDeserializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
 #include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
