@@ -22,6 +22,11 @@ uniform mat4            maskTx;
 uniform vec2            debugPoint0;
 uniform vec2            debugPoint1;
 
+float grayScale( vec4 color )
+{
+	return 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;	
+}
+
 void main()
 {
     mat4 scaleMat = mat4( mat2( 1.0 / scale.x, 0, 0, 1.0 / scale.y) );
@@ -56,7 +61,16 @@ void main()
 		return;
 	}
 	
-    float alpha = texture( Mask0, maskUV ).a;
+    float alpha = 0.0;
+	
+	if( alphaOnly == 1 )
+	{
+		alpha = texture( Mask0, maskUV ).a;
+	}
+	else
+	{
+		alpha = grayScale( texture( Mask0, maskUV ) );
+	}
 
     if ( invert == 1 )
     {
@@ -65,14 +79,6 @@ void main()
 
     alpha = alpha * blend;
     
-    vec4 color = texture( Tex0, uvCoord );
-    
-    if( alphaOnly == 0 )
-    {
-		FragColor = alpha * color;
-    }
-    else
-    {
-        FragColor = vec4( alpha * color.a );
-    }
+    FragColor = texture( Tex0, uvCoord ) * alpha;
+
 }
