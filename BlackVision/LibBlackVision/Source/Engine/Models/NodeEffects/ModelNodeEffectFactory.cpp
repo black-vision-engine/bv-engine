@@ -210,7 +210,15 @@ IModelNodeEffectPtr         CreateImageMaskModelNodeEffect              ( const 
 IModelNodeEffectPtr         CreateBoundingBoxModelNodeEffect          ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     { name; }
-    return ModelNodeEffect::Create( NodeEffectType::NET_BOUNDING_BOX );
+    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_BOUNDING_BOX );
+
+    auto color = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
+
+    color->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 1.f, 1.f ), 0.f );
+
+    effect->RegisterEvaluator( color );
+
+    return effect;
 }
 
 // ********************************

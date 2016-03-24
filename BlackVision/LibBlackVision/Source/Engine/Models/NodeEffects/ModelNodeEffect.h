@@ -44,8 +44,8 @@ public:
 
 
     static ModelNodeEffectPtr						Create              ( NodeEffectType type );
-	static ISerializablePtr							Create              ( const IDeserializer & doc );
-	static ModelNodeEffectPtr						CreateTyped 		( const IDeserializer & deser );
+    static ISerializablePtr							Create              ( const IDeserializer & doc );
+    static ModelNodeEffectPtr						CreateTyped 		( const IDeserializer & deser );
 
 };
 

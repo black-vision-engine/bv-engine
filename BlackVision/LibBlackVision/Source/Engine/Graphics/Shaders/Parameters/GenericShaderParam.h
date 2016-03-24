@@ -41,10 +41,10 @@ public:
 
     template< typename ValType >
     inline const ValType &      GenericGetValue     () const;
-	
+    
 protected:
 
-	virtual const void *        GetValuePtr         () const = 0;
+    virtual const void *        GetValuePtr         () const = 0;
 
 };
 

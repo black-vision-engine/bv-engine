@@ -44,8 +44,11 @@ BoundingBoxEffect::~BoundingBoxEffect()
 //
 PixelShader *       BoundingBoxEffect::CreatePS        ()
 {
-    //FIXM: register additional parameters here
-    auto shader = new PixelShader( CustomShaderSourceProvider->ReadShader( "bounding_box.frag" ), new ShaderParameters() );
+    auto params = new ShaderParameters();
+
+    params->AddParameter( ShaderParamFactory::CreateGenericParameter( "color", ParamType::PT_FLOAT4 ) );
+
+    auto shader = new PixelShader( CustomShaderSourceProvider->ReadShader( "bounding_box.frag" ), params );
     
     return shader;
 }

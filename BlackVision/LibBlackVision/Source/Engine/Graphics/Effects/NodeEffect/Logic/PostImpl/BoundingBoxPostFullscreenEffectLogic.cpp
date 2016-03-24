@@ -12,6 +12,8 @@
 
 #include "Engine/Models/BVProjectTools.h"
 
+#include "Engine/Types/Values/ValuesFactory.h"
+
 namespace bv {
 
 BoundingBoxEffect *   BoundingBoxPostFullscreenEffectLogic::m_effect = new BoundingBoxEffect();
@@ -20,8 +22,9 @@ BoundingBoxEffect *   BoundingBoxPostFullscreenEffectLogic::m_effect = new Bound
 // *********************************
 //
 BoundingBoxPostFullscreenEffectLogic::BoundingBoxPostFullscreenEffectLogic          ()
-    //: m_effect( new BoundingBoxEffect() )
 {
+    m_colorValue = ValuesFactory::CreateValueVec4( "color" );
+    m_colorValue->SetValue( glm::vec4( 1, 1, 1, 1 ) );
 }
 
 // *********************************
@@ -45,16 +48,25 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
 
     box->SetWidth( 5.f );
 
-    renderer( ctx )->Enable( m_effect->GetPass( 0 ), obj ); // FIXME for some reasons box results in bad transformation
+    auto pass = m_effect->GetPass( 0 );
+
+    auto param = Cast< ShaderParamVec4 * >( pass->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
+    param->SetValue( m_colorValue->GetValue() );
+
+    renderer( ctx )->Enable( pass, obj ); // FIXME for some reasons box results in bad transformation
 
     renderer( ctx )->DrawRenderable( box );
+    //renderer( ctx )->Draw( box );
 }
 
 // *********************************
 //
 std::vector< IValuePtr >    BoundingBoxPostFullscreenEffectLogic::GetValues       () const
 {
-    return std::vector< IValuePtr >();
+    std::vector< IValuePtr > res( 1 );
+    res[ 0 ] = m_colorValue;
+
+    return res;
 }
 
 } //bv

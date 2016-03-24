@@ -14,8 +14,8 @@ public:
 
     virtual RendererContextConstPtr     GetRendererContext			() const = 0;
 
-	virtual UInt64						GetTexturesDataUpdateID		() const = 0;
-	virtual UInt64						GetRendererContextUpdateID	() const = 0;
+    virtual UInt64						GetTexturesDataUpdateID		() const = 0;
+    virtual UInt64						GetRendererContextUpdateID	() const = 0;
 
     virtual                             ~IPixelShaderChannel() {};
 

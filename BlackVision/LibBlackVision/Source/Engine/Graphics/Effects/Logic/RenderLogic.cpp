@@ -330,7 +330,7 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
     assert( renderer == ctx->GetRenderer() );
 
     // FIXME: verify that all rendering paths work as expected
-	if( sceneRoot )
+    if( sceneRoot )
     {
         enable( ctx, rt );
         
@@ -366,7 +366,7 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
 //
 void    RenderLogic::DrawNode        ( SceneNode * node, RenderLogicContext * ctx )
 {
-	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
+    HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
     DrawNodeOnly( renderer( ctx ), node );
 
     RenderChildren( node, ctx );
@@ -429,21 +429,21 @@ void                    RenderLogic::UpdateOffscreenState   ()
 //
 void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext * ctx )
 {
-	//static Texture2DPtr vtx[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-	//const static unsigned int numTextures = 7;
-	//static unsigned int i = 0;
+    //static Texture2DPtr vtx[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+    //const static unsigned int numTextures = 7;
+    //static unsigned int i = 0;
 
-	//auto vrt = m_offscreenDisplay->GetVideoRenderTarget          ();
+    //auto vrt = m_offscreenDisplay->GetVideoRenderTarget          ();
 
-	//renderer->ReadColorTexture( 0, vrt, vtx[ i % numTextures ] );
+    //renderer->ReadColorTexture( 0, vrt, vtx[ i % numTextures ] );
 
-	//auto name = std::string( "e:/grabs/frame" ) + std::to_string( 10000 + i ) + ".bmp";
-	//{ name; }
-	//// image::SaveBMPImage( name, vtx[ i % numTextures ]->GetData(), 1920, 1080, 32 );
-	//
+    //auto name = std::string( "e:/grabs/frame" ) + std::to_string( 10000 + i ) + ".bmp";
+    //{ name; }
+    //// image::SaveBMPImage( name, vtx[ i % numTextures ]->GetData(), 1920, 1080, 32 );
+    //
  //   PushToVideoCard( vtx[ i % numTextures ] );	
  //   ++i;
-	
+    
     auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 
     m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );

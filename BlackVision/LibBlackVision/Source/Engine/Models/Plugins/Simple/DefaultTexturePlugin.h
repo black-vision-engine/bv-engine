@@ -16,14 +16,14 @@ class DefaultTexturePluginDesc : public BasePluginDescriptor
 {
 public:
 
-	DefaultTexturePluginDesc                                    ();
+    DefaultTexturePluginDesc                                    ();
 
-	virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
-	virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
-	static  std::string                     UID                 ();
+    static  std::string                     UID                 ();
 
-	static  std::string                     TextureName         ();
+    static  std::string                     TextureName         ();
 
 };
 
@@ -37,36 +37,36 @@ public:
 
 protected:
 
-	DefaultPixelShaderChannelPtr    m_psc;
-	DefaultVertexShaderChannelPtr   m_vsc;
+    DefaultPixelShaderChannelPtr    m_psc;
+    DefaultVertexShaderChannelPtr   m_vsc;
 
-	VertexAttributesChannelPtr      m_vaChannel;
+    VertexAttributesChannelPtr      m_vaChannel;
 
     SizeType	                    m_textureWidth;
     SizeType	                    m_textureHeight;
 
 public:
 
-	explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-												~DefaultTexturePlugin       ();
+    explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                                ~DefaultTexturePlugin       ();
 
     virtual bool                                IsValid						() const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
-	virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-	virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
-	virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
+    virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
     SizeType									GetTextureWidth             () const;
     SizeType									GetTextureHeight            () const;
 
-	virtual void                                Update                      ( TimeType t ) override;
+    virtual void                                Update                      ( TimeType t ) override;
 
 private:
-	void										InitVertexAttributesChannel ();
+    void										InitVertexAttributesChannel ();
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };

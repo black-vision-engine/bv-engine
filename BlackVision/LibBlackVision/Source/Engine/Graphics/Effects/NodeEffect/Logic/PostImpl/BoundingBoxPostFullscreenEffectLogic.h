@@ -14,8 +14,9 @@ class Renderer;
 class BoundingBoxPostFullscreenEffectLogic : public PostFullscreenEffectLogic
 {
 private:
+    ValueVec4Ptr                        m_colorValue;
 
-    static BoundingBoxEffect *   m_effect;
+    static BoundingBoxEffect *          m_effect;
 
 public:
 

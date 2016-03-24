@@ -19,7 +19,7 @@ public:
 
 private:
 
-	virtual const void *    GetValuePtr         () const override;
+    virtual const void *    GetValuePtr         () const override;
 
 };
 
