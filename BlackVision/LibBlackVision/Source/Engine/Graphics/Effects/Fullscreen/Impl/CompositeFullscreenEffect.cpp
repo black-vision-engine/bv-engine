@@ -37,7 +37,7 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Update                      ()
 {
-	Update( m_graph->GetSinkNode() );
+    Update( m_graph->GetSinkNode() );
 }
 
 // ****************************
@@ -52,9 +52,9 @@ void    CompositeFullscreenEffect::Update                       ( FullscreenEffe
     auto eff = node->GetEffect();
     
     if( eff != nullptr )
-	{
-		eff->Update();
-	}
+    {
+        eff->Update();
+    }
 }
 
 // ****************************
@@ -62,11 +62,11 @@ void    CompositeFullscreenEffect::Update                       ( FullscreenEffe
 void    CompositeFullscreenEffect::Render                       ( FullscreenEffectContext * ctx )
 {
     auto renderer = ctx->GetRenderer();
-	auto outputRenderTarget = ctx->GetOutputRenderTarget();
+    auto outputRenderTarget = ctx->GetOutputRenderTarget();
 
     renderer->Disable( outputRenderTarget );
 
-	auto allocator = ctx->GetRenderTargetAllocator();
+    auto allocator = ctx->GetRenderTargetAllocator();
 
     auto compositeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
     
@@ -126,9 +126,9 @@ void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffec
 //
 void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx )
 {
-	auto renderer = ctx->GetRenderer();
-	auto outputRenderTarget = ctx->GetOutputRenderTarget();
-	auto allocator = ctx->GetRenderTargetAllocator();
+    auto renderer = ctx->GetRenderer();
+    auto outputRenderTarget = ctx->GetOutputRenderTarget();
+    auto allocator = ctx->GetRenderTargetAllocator();
 
     std::vector< RenderTarget * >   inputResults;
 
@@ -137,7 +137,7 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
         if( !m_graph->IsSourceNode( it ) ) // Effect is null when the node is a special node which means that it's an input from PreLogic.
         {
             auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-			auto inputCtx = FullscreenEffectContext( renderer, nodeOutRt, allocator, 0 );
+            auto inputCtx = FullscreenEffectContext( renderer, nodeOutRt, allocator, 0 );
 
             RenderGraphNode( it, &inputCtx );
         
@@ -256,10 +256,12 @@ void            CompositeFullscreenEffect::GetRenderPasses( FullscreenEffectGrap
 {
     for( auto input : node->GetInputVec() )
     {
-        GetRenderPasses( node, passes );
+        GetRenderPasses( input, passes );
     }
 
-    node->GetEffect()->GetRenderPasses( passes );
+    auto effect = node->GetEffect();
+    if( effect )
+        effect->GetRenderPasses( passes );
 }
 
 

@@ -11,6 +11,8 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 #include <fstream>
 
 namespace bv
@@ -19,14 +21,14 @@ namespace bv
 // ********************************
 //
 SceneDescriptor::SceneDescriptor( const Path & path )
-	: m_path( path )
+    : m_path( path )
 {}
 
 // ********************************
 //
 Path SceneDescriptor::GetPath() const
 {
-	return m_path;
+    return m_path;
 }
 
 // ********************************
@@ -52,6 +54,8 @@ model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePat
 
     if( f.Good() )
     {
+        LOG_MESSAGE( SeverityLevel::info ) << "Loading scene from file: " << inputFilePath;
+
         auto size = File::Size( inputFilePath.Str() );
 
         auto ret = LoadScene( *f.StreamBuf(), size );
@@ -88,7 +92,7 @@ namespace
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-	auto ser = BVXMLSerializer();
+    auto ser = BVXMLSerializer();
 
     scene->Serialize( ser );
 

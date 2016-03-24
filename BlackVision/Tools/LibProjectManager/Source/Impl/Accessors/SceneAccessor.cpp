@@ -28,13 +28,13 @@ const std::string SceneAccessor::SceneFileExt = ".*\\.scn";
 //
 SceneAccessorConstPtr SceneAccessor::Create( const Path & path )
 {
-	return SceneAccessorConstPtr( new SceneAccessor( path ) );
+    return SceneAccessorConstPtr( new SceneAccessor( path ) );
 }
 
 // ********************************
 //
 SceneAccessor::SceneAccessor( const Path & path )
-	: m_rootDirPM( path )
+    : m_rootDirPM( path )
     , m_rootDir( path / "scenes" )
 {}
 
@@ -42,14 +42,14 @@ SceneAccessor::SceneAccessor( const Path & path )
 //
 SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 {
-	if( Path::Exists( m_rootDir / path ) )
-	{
-		return SceneDescriptor( m_rootDir / path );
-	}
-	else
-	{
-		return SceneDescriptor( "" );
-	}
+    if( Path::Exists( m_rootDir / path ) )
+    {
+        return SceneDescriptor( m_rootDir / path );
+    }
+    else
+    {
+        return SceneDescriptor( "" );
+    }
 }
 
 // ********************************
@@ -63,7 +63,7 @@ model::SceneModelPtr	SceneAccessor::GetScene( const Path & path ) const
 //
 void			SceneAccessor::AddSceneFromFile( const Path & srcPath, const Path & path ) const
 {
-	Path::Copy( srcPath, path );
+    Path::Copy( srcPath, path );
 }
 
 // ********************************
@@ -77,7 +77,7 @@ void			SceneAccessor::AddScene( const model::SceneModelPtr & scene, const Path &
 //
 void			SceneAccessor::RemoveScene( const Path & path ) const
 {
-	Path::Remove( m_rootDir / path );
+    Path::Remove( m_rootDir / path );
 }
 
 // ***********************
@@ -123,7 +123,7 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         {
             auto scene = SceneDescriptor::LoadScene( in, size );
         
-			auto sceneAssertDescs = ListSceneAssetsDescs( scene->GetRootNode() );
+            auto sceneAssertDescs = ListSceneAssetsDescs( scene->GetRootNode() );
         
             std::set< AssetDescConstPtr > assetsDescsSet;
             assetsDescsSet.insert( sceneAssertDescs.begin(), sceneAssertDescs.end() );
@@ -174,27 +174,27 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName,
 //
 void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path & importToProject, const Path & importToPath ) const
 {
-	auto f = File::Open( expFilePath.Str(), File::OpenMode::FOMReadOnly );
-	auto in = f.StreamBuf();
-	ImportScene( *in, importToProject, importToPath );
-	f.Close();
+    auto f = File::Open( expFilePath.Str(), File::OpenMode::FOMReadOnly );
+    auto in = f.StreamBuf();
+    ImportScene( *in, importToProject, importToPath );
+    f.Close();
 }
 
 // ********************************
 //
 void			SceneAccessor::ExportSceneToFile( const Path & projectName, const Path & outputFileName, const Path & path ) const
 {
-	auto f = File::Open( outputFileName.Str(), File::OpenMode::FOMReadOnly );
-	auto out = f.StreamBuf();
-	ExportScene( *out, projectName, path );
-	f.Close();
+    auto f = File::Open( outputFileName.Str(), File::OpenMode::FOMReadOnly );
+    auto out = f.StreamBuf();
+    ExportScene( *out, projectName, path );
+    f.Close();
 }
 
 // ********************************
 //
 PathVec			SceneAccessor::ListScenes( const Path & path, bool recursive ) const
 {
-	auto sceneList = Path::List( m_rootDir / path, recursive, SceneFileExt );
+    auto sceneList = Path::List( m_rootDir / path, recursive, SceneFileExt );
 
     for( auto & s : sceneList )
     {
@@ -212,13 +212,13 @@ PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
 
     std::set< Path > allPaths;
 
-	for( auto ad : simpleAssets )
-	{
+    for( auto ad : simpleAssets )
+    {
         auto paths = GetAllPathsFromAssets( ad );
-		allPaths.insert( paths.begin(), paths.end() );
-	}
+        allPaths.insert( paths.begin(), paths.end() );
+    }
 
-	return PathVec( allPaths.begin(), allPaths.end() );
+    return PathVec( allPaths.begin(), allPaths.end() );
 }
 
 // ********************************
@@ -263,32 +263,32 @@ PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
 AssetDescVec SceneAccessor::UnpackSimpleAssets( const AssetDescConstPtr & assetDesc )
 {
     std::vector< AssetDescConstPtr > simpleAssets;
-	if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
-	{
-		simpleAssets.push_back( stad );
-	}
-	else if( auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
-	{
-		auto stad = tad->GetOrigTextureDesc();
-		if( stad )
-		{
+    if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
+    {
+        simpleAssets.push_back( stad );
+    }
+    else if( auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
+    {
+        auto stad = tad->GetOrigTextureDesc();
+        if( stad )
+        {
             simpleAssets.push_back( stad );
-		}
+        }
 
-		auto mmad = tad->GetMipMapsDesc();
-		if( mmad )
-		{
-			for( SizeType i = 0; i < mmad->GetLevelsNum(); ++i )
-			{
+        auto mmad = tad->GetMipMapsDesc();
+        if( mmad )
+        {
+            for( SizeType i = 0; i < mmad->GetLevelsNum(); ++i )
+            {
                 simpleAssets.push_back( mmad->GetLevelDesc( i ) );
-			}
-		}
-	}
-	else
-	{
-		assert( !"Not implemented" );  // TODO: Implement for the rest of AssetDesc types
-		return std::vector< AssetDescConstPtr >();
-	}
+            }
+        }
+    }
+    else
+    {
+        assert( !"Not implemented" );  // TODO: Implement for the rest of AssetDesc types
+        return std::vector< AssetDescConstPtr >();
+    }
 
     return simpleAssets;
 }
@@ -307,7 +307,7 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( const Path & sceneFile )
         simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
     }
 
-	return simpleAssetsDescs;
+    return simpleAssetsDescs;
 }
 
 // ********************************
@@ -324,7 +324,7 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( std::istream & in, SizeType nu
         simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
     }
 
-	return simpleAssetsDescs;
+    return simpleAssetsDescs;
 }
 
 // ********************************
@@ -335,17 +335,17 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr
 
     auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
 
-	std::vector< AssetDescConstPtr > allDescs;
+    std::vector< AssetDescConstPtr > allDescs;
 
-	while( lastPlugin )
-	{
-		auto lassets = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetLAssets();
-		
+    while( lastPlugin )
+    {
+        auto lassets = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetLAssets();
+        
         for( auto lasset : lassets )
             allDescs.push_back( lasset.assetDesc );
 
         lastPlugin = lastPlugin->GetPrevPlugin();
-	}
+    }
 
     std::vector< AssetDescConstPtr > simpleAssetsDescs;
 
@@ -355,7 +355,7 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr
         //simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
     }
 
-	return simpleAssetsDescs;
+    return simpleAssetsDescs;
 }
 
 // ********************************
@@ -385,7 +385,7 @@ Path         SceneAccessor::AssetDescToPath( const AssetDescConstPtr & desc )
     else
     {
         assert( !"Not implemented" );  // TODO: Implement for the rest of AssetDesc types
-		return Path();
+        return Path();
     }
 }
 
