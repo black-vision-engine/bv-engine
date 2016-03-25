@@ -12,11 +12,11 @@ namespace bv { namespace model {
 
 const std::string        DefaultMaterialPlugin::PARAM::BLEND_ENABLE  = "blend enable";
 
-const std::string        DefaultMaterialPlugin::PARAM::DIFFUSE       = "diffuse";
-const std::string        DefaultMaterialPlugin::PARAM::AMBIENT       = "ambient";
-const std::string        DefaultMaterialPlugin::PARAM::SPECULAR      = "specular";
-const std::string        DefaultMaterialPlugin::PARAM::EMISSION      = "emission";
-const std::string        DefaultMaterialPlugin::PARAM::SHININESS     = "shininess";
+const std::string        DefaultMaterialPlugin::PARAM::DIFFUSE       = "mtlDiffuse";
+const std::string        DefaultMaterialPlugin::PARAM::AMBIENT       = "mtlAmbient";
+const std::string        DefaultMaterialPlugin::PARAM::SPECULAR      = "mtlSpecular";
+const std::string        DefaultMaterialPlugin::PARAM::EMISSION      = "mtlEmission";
+const std::string        DefaultMaterialPlugin::PARAM::SHININESS     = "mtlShininess";
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 

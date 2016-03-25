@@ -2506,12 +2506,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 
 #ifdef VERSION_MATERIAL
     auto material = root->GetPlugin( "material" );
-    model::SetParameter( material->GetParameter( "diffuse" ), 0.0, glm::vec4( 1, 0, 0, 1 ) );
-    model::SetParameter( material->GetParameter( "ambient" ), 0.0, glm::vec4( 0.2, 0, 0, 1 ) );
-    model::SetParameter( material->GetParameter( "specular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 0.3 ) );
-    model::SetParameter( material->GetParameter( "emission" ), 0.0, glm::vec4( 0.2, 0., 0., 1 ) );
-    model::SetParameter( material->GetParameter( "shininess" ), 0.0, 16.0f );
-
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0.2, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.2, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128.0f );
 #endif
     
     return root;

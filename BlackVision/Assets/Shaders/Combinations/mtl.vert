@@ -7,8 +7,8 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat3 normalMat;
 
-out vec3 position;
-out vec3 normal;
+out vec3 position;	//vertex position in modelview space
+out vec3 normal;	//vertex normal in modelview space
 
 
 void main()
