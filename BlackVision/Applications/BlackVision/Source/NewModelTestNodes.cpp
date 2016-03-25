@@ -2225,9 +2225,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::ITimeEvalua
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeEvaluatorPtr timeEvaluator )
 {
 
-#define VERSION_TEXTURE
+//#define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
+#define VERSION_MATERIAL
 
 //#define SHOW_CUBE
 //#define SHOW_CYLINDER
@@ -2235,12 +2236,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
-#define SHOW_ROUNDEDRECT
+//#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
 //#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
-//#define SHOW_SIMPLE_CUBE
+#define SHOW_SIMPLE_CUBE
 //#define SHOW_COGWHEEL
 
       //Timeline stuff
@@ -2257,7 +2258,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 // Plugins stuff
     std::vector< std::string > uids;
     uids.push_back( "DEFAULT_TRANSFORM" );
-
+    
 // ============================================ //
 // Geometry plugins
 #ifdef SHOW_SPHERE
@@ -2311,6 +2312,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     #else
         uids.push_back( "DEFAULT_TEXTURE" );
     #endif
+#endif
+#ifdef VERSION_MATERIAL
+    uids.push_back( "DEFAULT_MATERIAL" );
 #endif
 
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
@@ -2500,29 +2504,39 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     //success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 #endif
 
+#ifdef VERSION_MATERIAL
+    auto material = root->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "diffuse" ), 0.0, glm::vec4( 1, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "ambient" ), 0.0, glm::vec4( 0.2, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "specular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 0.3 ) );
+    model::SetParameter( material->GetParameter( "emission" ), 0.0, glm::vec4( 0.2, 0., 0., 1 ) );
+    model::SetParameter( material->GetParameter( "shininess" ), 0.0, 16.0f );
 
+#endif
+    
     return root;
-
+    
 #undef VERSION_TEXTURE
 #undef NO_PERSPECTIVE
 #undef VERSION_COLOR
+#undef VERSION_MATERIAL
 }
 
 // *****************************
 //
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string texturePath )
 {
-
+    
 #define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
-
+    
         //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 1000.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
       //Timeline stuff
     //auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-
+    
     timeEvaluator->AddChild( someTimelineWithEvents );
 
 // ============================================ //
