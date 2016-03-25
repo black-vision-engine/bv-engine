@@ -127,7 +127,7 @@ namespace Generator
 	One instance of class SimpleCubeGenerator generates stripe of a sphere
 	from north pole to south pole. Contructor takes in parameter number of
 	stripe that it has to process (starting from 0).*/
-	class SphereGenerator : public IGeometryAndUVsGenerator
+	class SphereGenerator : public IGeometryNormalsUVsGenerator
 	{
 	private:
 		float stripe_num;			///<Number of stripe 
@@ -135,9 +135,6 @@ namespace Generator
 
 		SphereGenerator( int stripe ) { stripe_num = static_cast<float>( stripe );}
 		~SphereGenerator(){}
-
-		Type GetType() { return Type::GEOMETRY_AND_UVS; }
-
 
 		glm::vec2 generateUV( float horizontal_angle, float vertical_angle )
 		{
@@ -158,7 +155,7 @@ namespace Generator
 			return returnUV;
 		}
 
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			assert( stripe_num < horizontal_stripes );
 			assert( horizontal_stripes >= 3 );
@@ -223,11 +220,13 @@ namespace Generator
 			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle1, vertical_angle ) );
 			vertical_angle -= vert_delta_angle;
 			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle2, vertical_angle ) );
-		}
+		
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );        
+        }
 
 	};
 
-	class SphereClosureGenerator : public IGeometryAndUVsGenerator
+	class SphereClosureGenerator : public IGeometryNormalsUVsGenerator
 	{
 	private:
 		float number_of_stripes;
@@ -235,8 +234,6 @@ namespace Generator
 
 		SphereClosureGenerator( int stripe ) { number_of_stripes = static_cast<float>( stripe );}
 		~SphereClosureGenerator(){}
-
-		Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 		glm::vec2 computeClosureUV( glm::vec2 normalized_pos, bool invert )
 		{
@@ -260,7 +257,7 @@ namespace Generator
 			return closureRegion + scale_factor * ( glm::vec2( 0.5, 0.5 ) + normalized_pos * glm::vec2( 0.5, 0.5 ) );
 		}
 
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			float angle_offset = computeAngleOffset( open_angle_mode, open_angle );
 
@@ -332,6 +329,8 @@ namespace Generator
 
 				alfa -= vert_delta_angle;
 			}
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 
 	};
@@ -379,14 +378,14 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 		float angle_step = float( TWOPI ) / float(stripes_needed);
 		float angle_needed = float( TWOPI - TO_RADIANS( Generator::open_angle ) );
 		stripes_needed = static_cast<int>( ceil( angle_needed / angle_step ) );
-		gens.push_back( IGeometryGeneratorPtr( new Generator::SphereClosureGenerator( stripes_needed ) ) );
+        gens.push_back( std::make_shared< Generator::SphereClosureGenerator >( stripes_needed ) );
 	}
 	else
 		stripes_needed = Generator::horizontal_stripes;
 
 	for( int i = 0; i < stripes_needed; ++i )
 	{
-		gens.push_back( IGeometryGeneratorPtr( new Generator::SphereGenerator( i ) ) );
+		gens.push_back( std::make_shared< Generator::SphereGenerator >( i ) );
 	}
     return gens;
 }

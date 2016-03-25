@@ -131,7 +131,7 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 
 
 #include "Mathematics/Defines.h"
-class Generator : public IGeometryAndUVsGenerator
+class Generator : public IGeometryNormalsUVsGenerator
 {
 protected:
     int tesselation;
@@ -147,8 +147,6 @@ protected:
 public:
 	Generator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy, Plugin::WeightCenter wcz, Plugin::MappingType mt )
 		: tesselation( t ), radius( r ), radius2( r2), openangle( oa ), open_angle_mode( oam ), weight_centerX( wcx ), weight_centerY( wcy ), weight_centerZ( wcz ), mapping_type( mt ) { }
-
-    Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
 	{
@@ -216,7 +214,7 @@ public:
 		return uv;
 	}
 
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
     {
 		center_translate = computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
@@ -242,6 +240,8 @@ public:
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
 				uvs->AddAttribute( getUV( (float)phi, (float)theta ) );
             }
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 
 };
@@ -299,7 +299,7 @@ public:
 		}
 	}
 
-	void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+	void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
     {
 		center_translate = computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
@@ -314,14 +314,16 @@ public:
 			generateClosure( verts, uvs, max_loop, angle_offset );
 		else
 			generateClosure( verts, uvs, 0, angle_offset );
-	}
+    
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+    }
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 {
     std::vector< IGeometryGeneratorPtr > gens;
     
-    gens.push_back( IGeometryGeneratorPtr( new Generator( 
+    gens.push_back( std::make_shared< Generator >( 
         m_tesselation->GetValue(),
         m_radius->GetValue(),
         m_radiusCrossSection->GetValue(),
@@ -331,11 +333,11 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 		m_weightCenterY->Evaluate(),
 		m_weightCenterZ->Evaluate(),
 		m_mappingType->Evaluate()
-        ) ) );
+        ) );
 
 	if( m_openAngle->GetValue() > 0.0 )
 	{
-		gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( 
+		gens.push_back( std::make_shared< ClosureGenerator >( 
 			m_tesselation->GetValue(),
 			m_radius->GetValue(),
 			m_radiusCrossSection->GetValue(),
@@ -346,8 +348,8 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 			m_weightCenterZ->Evaluate(),
 			m_mappingType->Evaluate(),
 			false
-			) ) );
-		gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( 
+			) );
+		gens.push_back( std::make_shared< ClosureGenerator >( 
 			m_tesselation->GetValue(),
 			m_radius->GetValue(),
 			m_radiusCrossSection->GetValue(),
@@ -358,7 +360,7 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 			m_weightCenterZ->Evaluate(),
 			m_mappingType->Evaluate(),
 			true
-			) ) );
+			) );
 	}
 
     return gens;

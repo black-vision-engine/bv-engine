@@ -39,7 +39,7 @@ const std::string DefaultRoundedRectPlugin::PN_SIZE = "size";
 const std::string DefaultRoundedRectPlugin::PN_BEVELS = "bevels";
 const std::string DefaultRoundedRectPlugin::PN_TESSELATION = "tesselation";
 
-class RoundedRectGenerator : public IGeometryOnlyGenerator
+class RoundedRectGenerator : public IGeometryNormalsGenerator
 {
     glm::vec2 size;
     glm::vec4 bevels;
@@ -48,7 +48,6 @@ public:
     RoundedRectGenerator( glm::vec2 s, glm::vec4 b, int tesselation )
         : size( s ), bevels( b ), tesselation( tesselation ) { }
 
-    Type GetType() { return Type::GEOMETRY_ONLY; }
 private:
     float sx, sy;
     glm::vec3 centers[4];
@@ -69,7 +68,7 @@ private:
         return center + glm::vec3( cos( angle ), sin( angle ), 0 ) * bevels[nCenter];
     }
 public:
-    void GenerateGeometry( Float3AttributeChannelPtr verts )
+    void GenerateGeometryNormals( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals )
     {
         sx = size[0] / 2, sy = size[1] / 2;
         
@@ -86,6 +85,8 @@ public:
         }
         if( i==j )
             assert( false );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
@@ -98,7 +99,7 @@ DefaultRoundedRectPlugin::DefaultRoundedRectPlugin( const std::string & name, co
 
 std::vector<IGeometryGeneratorPtr>                 DefaultRoundedRectPlugin::GetGenerators()
 {
-    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new RoundedRectGenerator( GetSize(), GetBevels(), GetTesselation() ) ) );
+    return std::vector<IGeometryGeneratorPtr>( 1, std::make_shared< RoundedRectGenerator >( GetSize(), GetBevels(), GetTesselation() ) );
 }
 
 bool                                DefaultRoundedRectPlugin::NeedsTopologyUpdate()
