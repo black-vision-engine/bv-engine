@@ -20,6 +20,9 @@ void    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips   
 
     for( UInt32 i = 0; i < vertsNum; ++i )
     {
+        //uniqueVertices.push_back( vertices[ i ] );
+        //indices[ i ] = ( UInt32 )( uniqueVertices.size() - 1 );
+
         auto it = std::find_if( uniqueVertices.begin(), uniqueVertices.end(), [ & ]( const glm::vec3 & vert ){
             return glm::length( vert - vertices[ i ] ) < eps;
         });
@@ -45,7 +48,7 @@ void    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips   
     // 'first' triangle in strip
     for( UInt32 i = 0; i < vertsNum - 2; i += 2 )
     {
-        normal = glm::cross( vertices[ i + 2 ] - vertices[ i ], vertices[ i + 1 ] - vertices[ i ] );
+        normal = glm::cross( vertices[ i + 1 ] - vertices[ i ], vertices[ i + 2 ] - vertices[ i ] );
         uniqueNormals[ indices[ i ] ] += normal;
         uniqueNormals[ indices[ i + 1 ] ] += normal;
         uniqueNormals[ indices[ i + 2 ] ] += normal;
@@ -54,7 +57,7 @@ void    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips   
     // 'second' triangle in strip
     for( UInt32 i = 0; i < vertsNum - 3; i += 2 )
     {
-        normal = glm::cross( vertices[ i + 3 ] - vertices[ i + 2 ], vertices[ i + 1 ] - vertices[ i + 2 ] );
+        normal = glm::cross( vertices[ i + 1 ] - vertices[ i + 2 ], vertices[ i + 3 ] - vertices[ i + 2 ] );
         uniqueNormals[ indices[ i + 2 ] ] += normal;
         uniqueNormals[ indices[ i + 1 ] ] += normal;
         uniqueNormals[ indices[ i + 3 ] ] += normal;
@@ -62,7 +65,10 @@ void    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips   
 
     for( auto & normal : uniqueNormals )
     {
-        normal = glm::normalize( normal ); 
+        if( normal != glm::vec3( 0.0f ) )
+        {
+            normal = glm::normalize( normal ); 
+        }
     }
 
     for( UInt32 i = 0; i < vertsNum; ++i )

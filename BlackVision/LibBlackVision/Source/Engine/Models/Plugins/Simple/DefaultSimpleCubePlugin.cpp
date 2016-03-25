@@ -45,7 +45,7 @@ namespace Generator
 	glm::vec3		dimmension;
 
 	const unsigned int NORMAL_CUBE = 0;
-	const unsigned int SMOOTH_CUBE = 1;
+	const unsigned int SMOOTH_CUBE = 0;
 
 	/**@brief Generates cube built as strips.*/
 	class SimpleCubeGenerator : public IGeometryNormalsUVsGenerator
@@ -72,47 +72,80 @@ namespace Generator
 				verts->AddAttribute( glm::vec3( x, -y, z ) );
 				verts->AddAttribute( glm::vec3( -x , y, z ) );
 				verts->AddAttribute( glm::vec3( x, y, z ) );
+
+				verts->AddAttribute( glm::vec3( x, y, z ) );
+				verts->AddAttribute( glm::vec3( -x , y, z ) );
+				
+                verts->AddAttribute( glm::vec3( -x , y, z ) );
+                verts->AddAttribute( glm::vec3( x, y, z ) );
+				verts->AddAttribute( glm::vec3( -x, y, -z ) );
+				verts->AddAttribute( glm::vec3( x, y, -z ) );
+                
+				verts->AddAttribute( glm::vec3( x, y, -z ) );
+				verts->AddAttribute( glm::vec3( -x, y, -z ) );
+
 				verts->AddAttribute( glm::vec3( -x, y, -z ) );
 				verts->AddAttribute( glm::vec3( x, y, -z ) );
 				verts->AddAttribute( glm::vec3( -x, -y, -z ) );
 				verts->AddAttribute( glm::vec3( x, -y, -z ) );
 
-				// Generates bottom strip of cube
+				verts->AddAttribute( glm::vec3( x, -y, -z ) );
+				verts->AddAttribute( glm::vec3( -x, y, z ) );
+				
+                // Generates bottom strip of cube
 				verts->AddAttribute( glm::vec3( -x, y, z ) );
 				verts->AddAttribute( glm::vec3( -x, y, -z ) );
 				verts->AddAttribute( glm::vec3( -x, -y, z ) );
 				verts->AddAttribute( glm::vec3( -x, -y, -z ) );
-				verts->AddAttribute( glm::vec3( x, -y, z ) );
+				
+				verts->AddAttribute( glm::vec3( -x, -y, -z ) );
+				verts->AddAttribute( glm::vec3( -x, -y, z ) );
+                
+				verts->AddAttribute( glm::vec3( -x, -y, z ) );
+				verts->AddAttribute( glm::vec3( -x, -y, -z ) );
+                verts->AddAttribute( glm::vec3( x, -y, z ) );
+				verts->AddAttribute( glm::vec3( x, -y, -z ) );
+                
+				verts->AddAttribute( glm::vec3( x, -y, -z ) );
+                verts->AddAttribute( glm::vec3( x, -y, z ) );
+
+                verts->AddAttribute( glm::vec3( x, -y, z ) );
 				verts->AddAttribute( glm::vec3( x, -y, -z ) );
 				verts->AddAttribute( glm::vec3( x, y, z ) );
 				verts->AddAttribute( glm::vec3( x, y, -z ) );
 
-				// Generates UVs coordinates for top strip
-				float u = 0.0f;
-				for( int i = 0; i < 4; ++i )
-				{
-					for( int j = 0; j < 2; ++j )
-					{
-						if( j )
-							uvs->AddAttribute( glm::vec2( u, 0.0 ) );
-						else
-							uvs->AddAttribute( glm::vec2( u, 0.5 ) );
-					}
-					u += 1.0f/3.0f;
-				}
+				verts->AddAttribute( glm::vec3( x, y, -z ) );
+				verts->AddAttribute( glm::vec3( x, y, -z ) );
+                
 
+				// Generates UVs coordinates for top strip
+                float u = 0.0f;
+				for( int i = 0; i < 3; ++i )
+				{
+                    uvs->AddAttribute( glm::vec2( u, 0.0 ) );
+                    uvs->AddAttribute( glm::vec2( u, 0.5 ) );
+
+                    u += 1.0f/3.0f;
+                    uvs->AddAttribute( glm::vec2( u, 0.0 ) );
+                    uvs->AddAttribute( glm::vec2( u, 0.5 ) );
+
+                    uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+                    uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+				}
+                
 				// Generates UVs coordinates for bottom strip
 				u = 0.0;
-				for( int i = 0; i < 4; ++i )
+				for( int i = 0; i < 3; ++i )
 				{
-					for( int j = 0; j < 2; ++j )
-					{
-						if( j )
-							uvs->AddAttribute( glm::vec2( u, 0.5 ) );
-						else
-							uvs->AddAttribute( glm::vec2( u, 1.0 ) );
-					}
-					u += 1.0f/3.0f;
+                    uvs->AddAttribute( glm::vec2( u, 0.5 ) );
+                    uvs->AddAttribute( glm::vec2( u, 1.0 ) );
+
+                    u += 1.0f/3.0f;
+                    uvs->AddAttribute( glm::vec2( u, 0.5 ) );
+                    uvs->AddAttribute( glm::vec2( u, 1.0 ) );
+
+                    uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+                    uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
 				}
 
 			}
@@ -266,7 +299,27 @@ namespace Generator
 				}
 			}
 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+
+            glm::vec3 normalsVec[] = {
+                glm::vec3( 0, 0, 1 ),
+                glm::vec3( 0, 1, 0 ),
+                glm::vec3( 0, 0, -1 ),
+                glm::vec3( -1, 0, 0 ),
+                glm::vec3( 0, -1, 0 ),
+                glm::vec3( 1, 0, 0 ),
+            };
+
+            for( auto norm : normalsVec )
+            {
+                normals->AddAttribute( norm );
+                normals->AddAttribute( norm );
+                normals->AddAttribute( norm );
+                normals->AddAttribute( norm );
+
+                normals->AddAttribute( glm::vec3( 0, 0, 0 ) );
+                normals->AddAttribute( glm::vec3( 0, 0, 0 ) );
+            }
 		}
 
 		void GenerateGeometryNormals ( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
@@ -315,7 +368,7 @@ namespace Generator
 			IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
 			converter.makeStrip( resultMesh, verts );
 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }
