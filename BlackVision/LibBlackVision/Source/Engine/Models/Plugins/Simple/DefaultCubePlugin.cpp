@@ -126,7 +126,7 @@ namespace Generator
 		MINUS_Z = 5
 	};
 
-	float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remaining_values )
+	float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remainingValues )
 	{
 		float max = 0;
 		if( abs( direction.x ) > abs( direction.y ) )
@@ -135,15 +135,15 @@ namespace Generator
 			{
 				max = abs( direction.x );
 				plane = direction.x < 0 ? CubicMappingPlane::MINUS_X : CubicMappingPlane::PLUS_X;
-				remaining_values.x = direction.y;
-				remaining_values.y = direction.z;
+				remainingValues.x = direction.y;
+				remainingValues.y = direction.z;
 			}
 			else
 			{
 				max = abs( direction.z );
 				plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
-				remaining_values.x = direction.x;
-				remaining_values.y = direction.y;
+				remainingValues.x = direction.x;
+				remainingValues.y = direction.y;
 			}
 		}
 		else
@@ -152,15 +152,15 @@ namespace Generator
 			{
 				max = abs( direction.y );
 				plane = direction.y < 0 ? CubicMappingPlane::MINUS_Y : CubicMappingPlane::PLUS_Y;
-				remaining_values.x = direction.x;
-				remaining_values.y = direction.z;
+				remainingValues.x = direction.x;
+				remainingValues.y = direction.z;
 			}
 			else
 			{
 				max = abs( direction.z );
 				plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
-				remaining_values.x = direction.x;
-				remaining_values.y = direction.y;
+				remainingValues.x = direction.x;
+				remainingValues.y = direction.y;
 			}
 		}
 		return max;
@@ -207,41 +207,44 @@ namespace Generator
 
         void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
-			CubicMappingPlane mapping_plane;
+			CubicMappingPlane mappingPlane;
 			if( d < 0 )
-				mapping_plane = CubicMappingPlane::MINUS_Z;
+				mappingPlane = CubicMappingPlane::MINUS_Z;
 			else
-				mapping_plane = CubicMappingPlane::PLUS_Z;
+				mappingPlane = CubicMappingPlane::PLUS_Z;
 
             double w = dims.x/2 - bevel, 
                 h = dims.y/2 - bevel;
 
-            verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );
-            verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );
-            verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );
-            verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );
-
-			float bevelUV1 = bevel / dims.x;
-			float bevelUV2 = bevel / dims.y;
-			glm::vec2 pre_uv1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
-			glm::vec2 pre_uv2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
-			glm::vec2 pre_uv3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
-			glm::vec2 pre_uv4 = glm::vec2( bevelUV2, bevelUV1 );
 
 			if( d > 0 )
 			{
-				uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
+                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );
 			}
 			else
 			{
-				uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
+                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );
 			}
+
+
+			float bevelUV1 = bevel / dims.x;
+			float bevelUV2 = bevel / dims.y;
+			glm::vec2 preUV1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
+			glm::vec2 preUV2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
+			glm::vec2 preUV3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
+			glm::vec2 preUV4 = glm::vec2( bevelUV2, bevelUV1 );
+
+
+			uvs->AddAttribute( makeUV( preUV1, mappingPlane ) );
+			uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
+			uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
+			uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
         }
 
         SideComp( double d_ ) : d( d_ ) { }
