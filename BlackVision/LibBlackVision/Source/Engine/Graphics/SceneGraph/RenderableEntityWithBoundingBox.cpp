@@ -48,4 +48,22 @@ RenderableEntity *    RenderableEntityWithBoundingBox::GetBoundingBox           
 }
 
 
+// ***********************
+//
+void                RenderableEntityWithBoundingBox::UpdateTransform                         ( const Transform & transform )
+{
+    RenderableEntity::UpdateTransform( transform );
+    if( m_renderableBoundingBox )
+        m_renderableBoundingBox->UpdateTransform( transform );
+}
+
+// ***********************
+//
+void                RenderableEntityWithBoundingBox::SetLocalTransform                       ( const Transform & t )
+{
+    RenderableEntity::SetLocalTransform( t );
+    if( m_renderableBoundingBox )
+        m_renderableBoundingBox->SetLocalTransform( t );
+}
+
 }
