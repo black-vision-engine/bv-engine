@@ -126,16 +126,16 @@ public:
         switch( generator_.GetType() )
         {
             case IGeometryGenerator::Type::GEOMETRY_ONLY:
-                {IGeometryOnlyGenerator& generator = reinterpret_cast< IGeometryOnlyGenerator& >( generator_ );
-                generator.GenerateGeometry( vertArrtF3 );}
+                {IGeometryOnlyGenerator * generator = Cast< IGeometryOnlyGenerator * >( &generator_ );
+                generator->GenerateGeometry( vertArrtF3 );}
                 
                 comp->AddAttributeChannel( vertArrtF3 );
                 
                 break;
 
             case IGeometryGenerator::Type::GEOMETRY_AND_UVS:
-                {IGeometryAndUVsGenerator& generator = reinterpret_cast< IGeometryAndUVsGenerator& >( generator_ );
-                generator.GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );}
+                {IGeometryAndUVsGenerator * generator = Cast< IGeometryAndUVsGenerator * >( &generator_ );
+                generator->GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );}
 
                 comp->AddAttributeChannel( vertArrtF3 );
                 comp->AddAttributeChannel( vertArrtUV );
