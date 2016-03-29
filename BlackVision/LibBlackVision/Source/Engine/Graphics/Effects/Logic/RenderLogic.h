@@ -26,11 +26,13 @@ class VideoOutputRenderLogic;
 class RenderLogicContext;
 class FullscreenEffectInstance;
 
+class RenderablePass;
+
 class RenderLogic
 {
 private:
 
-	bv::videocards::VideoCardManager *      m_VideoCardManager;
+    bv::videocards::VideoCardManager *      m_VideoCardManager;
     RenderTargetStackAllocator      m_rtStackAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
     FullscreenEffectInstance *      m_blitEffect;
@@ -41,10 +43,12 @@ private:
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
-	SharedMemoryVideoBuffer*		m_SharedMemoryVideoBuffer;
+    SharedMemoryVideoBuffer*		m_SharedMemoryVideoBuffer;
 
     glm::vec4                       m_clearColor;
     bool                            m_renderToSharedMemory;
+
+    RenderablePass *                m_boundingBoxEffect;
 
 public:
 
@@ -66,7 +70,7 @@ private:
     void    FrameRendered   ( Renderer * renderer );
 
     void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
-       
+
 public:
 
     void    RenderNode      ( SceneNode * node, RenderLogicContext * ctx );
@@ -76,6 +80,8 @@ public:
 
 private:
 
+    void    RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx );
+       
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 
     //void                            PushToVideoCard         ( Texture2DConstPtr frame );

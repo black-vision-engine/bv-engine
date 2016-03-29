@@ -1316,11 +1316,11 @@ model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 raySta
 //
 bool                    BVProjectEditor::SelectNode              ( model::BasicNodePtr node )
 {
-    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+//    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
     
-    bool result = SetNodeEffect( node, newEffect );
-    if( !result )
-        return false;
+    //bool result = SetNodeEffect( node, newEffect );
+    //if( !result )
+    //    return false;
     
     model::ModelState::GetInstance().Select( node );
 
