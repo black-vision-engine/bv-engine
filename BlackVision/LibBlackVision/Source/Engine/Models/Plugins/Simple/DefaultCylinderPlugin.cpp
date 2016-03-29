@@ -132,7 +132,7 @@ namespace CylinderGenerator
 		mapping_type = mt;
     }
 
-	class MainGenerator : public IGeometryAndUVsGenerator
+	class MainGenerator : public IGeometryNormalsUVsGenerator
     {
 	protected:
 		double angle_offset;			// OpenAngleMode needs this
@@ -336,10 +336,8 @@ namespace CylinderGenerator
 			}
 		}
 	public:
-		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
-		
 
-		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			if( outer_radius == 0.0 )
 				return;		//Nothing to do.
@@ -361,6 +359,8 @@ namespace CylinderGenerator
 				generateCircuit( inner_radius, inner_radius, 0.0f, height, verts, uvs, gen_direction );
 
 			generateUVs( verts, uvs );
+            
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 
@@ -370,8 +370,6 @@ namespace CylinderGenerator
 		bool rotated;
 	public:
 		ClosureGenerator( bool isRotated ) : rotated( isRotated ){}
-
-		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 		void generateUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
 		{
@@ -411,7 +409,7 @@ namespace CylinderGenerator
 			}
 		}
 
-		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
         {
 			computeAngleOffset();
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
@@ -431,6 +429,8 @@ namespace CylinderGenerator
 			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) + center_translate );
 
 			generateUVs( verts, uvs );
+            
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }
@@ -472,11 +472,11 @@ std::vector<IGeometryGeneratorPtr>    DefaultPlugin::GetGenerators()
 		m_mappingType->Evaluate());
 
     std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::MainGenerator() ) );
+    gens.push_back( std::make_shared< CylinderGenerator::MainGenerator >() );
 	if( m_openAngle->GetValue() > 0.0 )
 	{
-		gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::ClosureGenerator(true) ) );
-		gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::ClosureGenerator(false) ) );
+		gens.push_back( std::make_shared< CylinderGenerator::ClosureGenerator >( true ) );
+		gens.push_back( std::make_shared< CylinderGenerator::ClosureGenerator >( false ) );
 	}
 
     return gens;
