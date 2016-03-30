@@ -777,8 +777,11 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         UInt32 width;
         UInt32 bpp;
         UInt32 channelNum;
+
         auto chunk = bv::image::LoadImage( screenShotEvent->FilePath, &width, &height, &bpp, &channelNum );
         auto resizedChunk = image::Resize( chunk, width, height, bpp, 128, 128, image::FilterType::FT_LANCZOS );
+        auto compresed = image::SaveTGAToHandle( resizedChunk, 128, 128, 32 );
+
 
         std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
 
@@ -788,11 +791,11 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         bool isPreset = IsPresetScene( thumbName );
         if( isPreset )
         {
-            thumb = PresetThumbnail::Create( resizedChunk );
+            thumb = PresetThumbnail::Create( compresed );
         }
         else
         {
-            thumb = SceneThumbnail::Create( resizedChunk );
+            thumb = SceneThumbnail::Create( compresed );
         }
 
         JsonSerializeObject ser;
