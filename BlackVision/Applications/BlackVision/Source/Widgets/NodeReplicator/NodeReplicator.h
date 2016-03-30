@@ -28,6 +28,8 @@ public:
     virtual const std::string &     GetType         () const override;
     static const std::string &      Type            ();
 
+    virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
 
     virtual void                    Serialize       ( ISerializer & ser ) const override;
     static NodeReplicatorPtr        Create          ( const IDeserializer & deser, BasicNodePtr parentNode );

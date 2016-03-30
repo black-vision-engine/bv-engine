@@ -53,6 +53,20 @@ const std::string &     TextEffects::GetType            () const
 
 // ***********************
 //
+IParameterPtr                           TextEffects::GetParameter        ( const std::string & name ) const
+{
+    return m_paramValModel->GetParameter( name );
+}
+
+// ***********************
+//
+const std::vector< IParameterPtr > &    TextEffects::GetParameters       () const
+{
+    return m_paramValModel->GetParameters();
+}
+
+// ***********************
+//
 bool                    TextEffects::HandleEvent        ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor )
 {
     { eventStr; response; editor; }

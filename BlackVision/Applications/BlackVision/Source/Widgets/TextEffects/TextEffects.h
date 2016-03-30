@@ -3,6 +3,8 @@
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Models/BasicNode.h"
 
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+
 namespace bv { namespace model
 {
 
@@ -18,6 +20,11 @@ private:
 
     BasicNodePtr                    m_node;
 
+    BasicNodePtr                    m_shadowNode;
+    BasicNodePtr                    m_blurNode;
+
+    DefaultParamValModelPtr         m_paramValModel;
+
     explicit                        TextEffects     ( const BasicNodePtr & node );
 
 public:
@@ -29,6 +36,9 @@ public:
 	virtual void					Initialize		() override;
 	virtual void					Update			( TimeType t ) override;
 	virtual void					Deinitialize	() override;
+
+    virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
 
     virtual const std::string &     GetType         () const override;
     virtual bool                    HandleEvent     ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor ) override;

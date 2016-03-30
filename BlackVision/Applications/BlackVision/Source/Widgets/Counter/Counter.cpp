@@ -178,6 +178,21 @@ bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, IS
     return true;
 }
 
+// ***********************
+//
+model::IParameterPtr                     WidgetCounter::GetParameter        ( const std::string & ) const
+{
+    return nullptr;
+}
+
+// ***********************
+//
+const std::vector< model::IParameterPtr > & WidgetCounter::GetParameters    () const
+{
+    static std::vector< model::IParameterPtr > ret;
+
+    return ret;
+}
 
 // ***********************
 //

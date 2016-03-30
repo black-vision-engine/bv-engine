@@ -149,6 +149,9 @@ public:
     virtual const std::string & GetType         () const override;
     static const std::string &  Type            ();
 
+    virtual model::IParameterPtr                           GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< model::IParameterPtr > &    GetParameters       () const override;
+
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static ScrollerPtr          Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
     static ScrollerPtr          Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );

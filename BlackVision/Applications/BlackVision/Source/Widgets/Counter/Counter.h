@@ -48,6 +48,9 @@ public:
 	static WidgetCounterPtr         Create              ( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
 	bv::model::IParameterPtr        GetValueParam       ();
 
+    virtual model::IParameterPtr                     GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< model::IParameterPtr > & GetParameters    () const override;
+
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static WidgetCounterPtr     Create          ( const IDeserializer& deser, bv::model::BasicNode * parent );

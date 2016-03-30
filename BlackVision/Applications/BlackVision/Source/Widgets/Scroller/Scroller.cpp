@@ -1138,6 +1138,22 @@ bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerialize
 
 // ***********************
 //
+model::IParameterPtr                     Scroller::GetParameter        ( const std::string & ) const
+{
+    return nullptr;
+}
+
+// ***********************
+//
+const std::vector< model::IParameterPtr > & Scroller::GetParameters    () const
+{
+    static std::vector< model::IParameterPtr > ret;
+
+    return ret;
+}
+
+// ***********************
+//
 void            Scroller::AddTexts            ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
 {
     UInt32 textsCounter = 1;

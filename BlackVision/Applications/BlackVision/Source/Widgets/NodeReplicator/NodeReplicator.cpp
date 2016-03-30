@@ -145,6 +145,22 @@ NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & des
 
 // ***********************
 //
+model::IParameterPtr                     NodeReplicator::GetParameter        ( const std::string & ) const
+{
+    return nullptr;
+}
+
+// ***********************
+//
+const std::vector< model::IParameterPtr > & NodeReplicator::GetParameters    () const
+{
+    static std::vector< model::IParameterPtr > ret;
+
+    return ret;
+}
+
+// ***********************
+//
 bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
     std::string action = eventSer.GetAttribute( "Action" );
