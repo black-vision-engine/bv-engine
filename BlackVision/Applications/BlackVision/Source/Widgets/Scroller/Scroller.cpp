@@ -98,14 +98,14 @@ const std::string   Scroller::m_type = "scroller";
 
 // ***********************
 //
-const std::string    Scroller::Type            ()
+const std::string &  Scroller::Type            ()
 {
     return m_type;
 }
 
 // ***********************
 //
-const std::string   Scroller::GetType             () const
+const std::string &  Scroller::GetType             () const
 {
     return Type();
 }

@@ -17,7 +17,7 @@ const std::string   NodeReplicator::m_type = "replicate";
 
 // ***********************
 //
-const std::string    NodeReplicator::Type            ()
+const std::string &  NodeReplicator::Type            ()
 {
     return m_type;
 }
@@ -25,7 +25,7 @@ const std::string    NodeReplicator::Type            ()
 
 // ***********************
 //
-const std::string   NodeReplicator::GetType             () const
+const std::string & NodeReplicator::GetType             () const
 {
     return Type();
 }
