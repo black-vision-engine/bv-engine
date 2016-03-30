@@ -181,14 +181,14 @@ bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, IS
 
 // ***********************
 //
-const std::string    WidgetCounter::Type            ()
+const std::string &  WidgetCounter::Type            ()
 {
     return m_type;
 }
 
 // ***********************
 //
-const std::string   WidgetCounter::GetType             () const
+const std::string & WidgetCounter::GetType             () const
 {
     return Type();
 }

@@ -557,7 +557,7 @@ void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, 
     assert( request != nullptr );
     if( request == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetSceneThumbnail, eventID, "Not valid request." );
         return;
     }
 
@@ -575,7 +575,7 @@ void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, 
     }
     else
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Thumbnail not found. Save scene to generate new thumbnail." );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetSceneThumbnail, eventID, "Thumbnail not found. Save scene to generate new thumbnail." );
     }
 
 }
@@ -587,7 +587,7 @@ void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, 
     assert( request != nullptr );
     if( request == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetPresetThumbnail, eventID, "Not valid request." );
         return;
     }
 
@@ -605,7 +605,7 @@ void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, 
     }
     else
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Thumbnail not found. Save preset to generate new thumbnail." );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetPresetThumbnail, eventID, "Thumbnail not found. Save preset to generate new thumbnail." );
     }
 }
 

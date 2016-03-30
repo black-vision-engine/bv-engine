@@ -42,8 +42,8 @@ public:
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
 
-    virtual const std::string       GetType             () const override;
-    static const std::string        Type                ();
+    virtual const std::string &     GetType             () const override;
+    static const std::string &      Type                ();
 
 	static WidgetCounterPtr         Create              ( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
 	bv::model::IParameterPtr        GetValueParam       ();

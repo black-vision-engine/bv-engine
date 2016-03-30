@@ -146,8 +146,8 @@ public:
 	virtual void	Deinitialize	()				override {}
 
 
-    virtual const std::string   GetType         () const override;
-    static const std::string    Type            ();
+    virtual const std::string & GetType         () const override;
+    static const std::string &  Type            ();
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static ScrollerPtr          Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
