@@ -443,10 +443,18 @@ std::string  File::GetDirName  ( const std::string & path )
 
 // *******************************
 //
-std::string  File::GetFileName ( const std::string & path )
+std::string  File::GetFileName ( const std::string & path, bool withExt )
 {
 	boost::filesystem::path p( path );
-	return p.stem().string();
+
+    if( !withExt )
+    {
+        return p.stem().string();
+    }
+    else
+    {
+        return p.filename().string();
+    }
 }
 
 // *******************************

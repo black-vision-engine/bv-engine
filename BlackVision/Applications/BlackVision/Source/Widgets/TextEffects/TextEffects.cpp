@@ -28,7 +28,9 @@ const std::string &      TextEffects::Type              ()
 // ***********************
 //
 void					TextEffects::Initialize		    ()
-{}
+{
+
+}
 
 // ***********************
 //
