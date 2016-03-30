@@ -564,19 +564,33 @@ void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, 
     auto projectName = request->GetAttribute( "projectName" );
     auto path = request->GetAttribute( "path" );
 
-    auto thumb = ProjectManager::GetInstance()->GetSceneThumbnail( projectName, path );
-    if( thumb != nullptr )
-    {
-        ser.EnterArray( "thumbnails" );
+    auto pm = ProjectManager::GetInstance();
+    auto aps = pm->ListScenesNames( projectName, path, false );
 
-        thumb->Serialize( ser );
-
-        ser.ExitChild(); // thumbnails
-    }
-    else
+    std::vector< std::pair< ThumbnailConstPtr, std::string >  > thumbs;
+    for( auto& scenePath : aps )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetSceneThumbnail, eventID, "Thumbnail not found. Save scene to generate new thumbnail." );
+        auto thumb = ProjectManager::GetInstance()->GetSceneThumbnail( projectName, scenePath );
+        thumbs.push_back( std::make_pair<>( thumb, scenePath.Str() ) );
     }
+
+
+    ser.EnterArray( "thumbnails" );
+
+    for( auto t : thumbs )
+    {
+        if( t.first )
+        {
+            t.first->Serialize( ser );
+            ser.EnterChild( "scene" );
+                ser.SetAttribute( "SceneName", t.second );
+            ser.ExitChild();
+            // FIXME Inform editor that some thumbs can't be loaded.
+        }
+        
+    }
+
+    ser.ExitChild(); // thumbnails
 
 }
 
@@ -594,19 +608,32 @@ void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, 
     auto projectName = request->GetAttribute( "projectName" );
     auto path = request->GetAttribute( "path" );
 
-    auto thumb = ProjectManager::GetInstance()->GetPresetThumbnail( projectName, path );
-    if( thumb != nullptr )
-    {
-        ser.EnterArray( "thumbnails" );
+    auto pm = ProjectManager::GetInstance();
+    auto aps = pm->ListPresets( projectName, path, false );
 
-        thumb->Serialize( ser );
-
-        ser.ExitChild(); // thumbnails
-    }
-    else
+    std::vector< std::pair< ThumbnailConstPtr, std::string >  > thumbs;
+    for( auto& presetPath : aps )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetPresetThumbnail, eventID, "Thumbnail not found. Save preset to generate new thumbnail." );
+        auto thumb = ProjectManager::GetInstance()->GetPresetThumbnail( projectName, presetPath );
+        thumbs.push_back( std::make_pair<>( thumb, presetPath.Str() ) );
     }
+
+    ser.EnterArray( "thumbnails" );
+
+    for( auto t : thumbs )
+    {
+        if( t.first )
+        {
+            t.first->Serialize( ser );
+            ser.EnterChild( "preset" );
+                ser.SetAttribute( "PresetName", t.second );
+            ser.ExitChild();
+            // FIXME Inform editor that some thumbs can't be loaded.
+        }
+        
+    }
+
+    ser.ExitChild(); // thumbnails
 }
 
 // ***********************
