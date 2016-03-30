@@ -190,10 +190,11 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
             }   
 
             response.SetAttribute( COMMAND_SUCCESS_STRING, "Node replicated." );
+            return true;
         }
         else
         {
-            response.SetAttribute( ERROR_INFO_STRING, "Node have no child. Cannot replicate" );
+            response.SetAttribute( ERROR_INFO_STRING, "Node has no child. Cannot replicate" );
         }
     }
     else 
@@ -201,7 +202,7 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
         response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
     }
 
-    return true;
+    return false;
 }
 
 

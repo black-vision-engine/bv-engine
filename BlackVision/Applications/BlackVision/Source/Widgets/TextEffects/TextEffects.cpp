@@ -2,8 +2,22 @@
 
 #include "TextEffects.h"
 
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
+
+#include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
+#include "Engine/Models/BVProjectEditor.h"
+
 namespace bv { namespace model
 {
+
+namespace 
+{
+
+const std::string SHADOW_TEXT_NODE_EFFECT_NAME = "text_shadow_node_effect";
+
+}
 
 const std::string   TextEffects::m_type = "text_effects";
 
@@ -55,7 +69,16 @@ const std::string &     TextEffects::GetType            () const
 //
 IParameterPtr                           TextEffects::GetParameter        ( const std::string & name ) const
 {
-    return m_paramValModel->GetParameter( name );
+    auto p = m_paramValModel->GetParameter( name );
+
+    if( p != nullptr )
+    {
+        return p;
+    }
+    else
+    {
+        return GetShadowTextPlugin()->GetParameter( name );
+    }
 }
 
 // ***********************
@@ -67,15 +90,30 @@ const std::vector< IParameterPtr > &    TextEffects::GetParameters       () cons
 
 // ***********************
 //
-bool                    TextEffects::HandleEvent        ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor )
+bool                    TextEffects::HandleEvent        ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
-    { eventStr; response; editor; }
-    return true;
+    { editor; }
+
+    std::string action = eventSer.GetAttribute( "Action" );
+    
+    if( action == "Initialize" ) 
+    {
+
+        {
+            response.SetAttribute( ERROR_INFO_STRING, "Node has no child. Cannot i" );
+        }
+    }
+    else 
+    {
+        response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Initialize' command." );
+    }
+
+    return false;
 }
 
 // ***********************
 //
-void                    TextEffects::Serialize          ( ISerializer& ser ) const
+void                    TextEffects::Serialize          ( ISerializer & ser ) const
 {
     { ser; }
 }
@@ -94,6 +132,21 @@ TextEffectsPtr          TextEffects::Create             ( const IDeserializer & 
     { deser; node; }
     return nullptr;
 }
+
+// ***********************
+//
+IPluginPtr              TextEffects::GetTextPlugin      () const
+{
+    return m_node->GetPlugin( "text" );
+}
+
+// ***********************
+//
+IPluginPtr              TextEffects::GetShadowTextPlugin() const
+{
+    return m_node->GetChild( SHADOW_TEXT_NODE_EFFECT_NAME )->GetPlugin( "text" );
+}
+
 
 } // model
 } // bv
