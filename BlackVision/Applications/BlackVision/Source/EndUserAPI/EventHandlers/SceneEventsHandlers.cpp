@@ -402,11 +402,9 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto saveTo = request.GetAttribute( "saveTo" );
 
-        auto fileName = File::GetFileName( saveTo );
+        auto ext = File::GetExtension( saveTo );
 
-        auto ext = File::GetExtension( fileName );
-
-        if( ext.empty() || ext != "scn" )
+        if( ext.empty() || ext != ".scn" )
         {
             saveTo += ".scn";
         }

@@ -84,10 +84,14 @@ void			SceneAccessor::RemoveScene( const Path & path ) const
 //
 ThumbnailConstPtr       SceneAccessor::GetSceneThumbnail   ( const Path & path ) const
 {
-    auto absolutePath = m_rootDir / path / ".thumb";
+    auto absolutePath = m_rootDir / path;
+    Path thumbPath = absolutePath.Str() + ".thumb";
+
+    if( !Path::Exists( thumbPath ) )
+        return nullptr;
 
     JsonDeserializeObject deser;
-    deser.LoadFile( absolutePath.Str() );
+    deser.LoadFile( thumbPath.Str() );
 
     auto thumb = SceneThumbnail::Create( deser );
     return thumb;
