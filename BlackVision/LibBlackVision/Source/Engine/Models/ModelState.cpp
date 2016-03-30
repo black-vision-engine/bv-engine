@@ -296,7 +296,7 @@ const NodeState *                   ModelState::GetNodeState    ( const IModelNo
 
 // ***********************
 //
-bool    ModelState::IsSelected      ( IModelNodePtr node )
+bool    ModelState::IsSelected      ( IModelNodeConstPtr node )
 {
     auto iter = m_selectedNodes.find( node );
     if( iter == m_selectedNodes.end() )
@@ -307,9 +307,9 @@ bool    ModelState::IsSelected      ( IModelNodePtr node )
 
 // ***********************
 //
-void    ModelState::Select          ( IModelNodePtr node )
+void    ModelState::Select          ( IModelNodePtr node, glm::vec4 color )
 {
-    m_selectedNodes.insert( node );
+    m_selectedNodes[ node ] = color;
 }
 
 // ***********************
@@ -345,10 +345,23 @@ void    ModelState::UnselectAll     ()
 
 // ***********************
 //
-std::set< IModelNodePtr > &         ModelState::GetSelectedNodes()
+std::set< IModelNodeConstPtr >         ModelState::GetSelectedNodes()
 {
-    return m_selectedNodes;
+    std::set< IModelNodeConstPtr > ret;
+
+    for( auto node : m_selectedNodes )
+        ret.insert( node.first );
+
+    return ret;
 }
+
+// ***********************
+//
+glm::vec4                           ModelState::GetSelectedNodeColor ( IModelNodeConstPtr node )
+{
+    return m_selectedNodes[ node ];
+}
+
 
 } // model
 } // bv

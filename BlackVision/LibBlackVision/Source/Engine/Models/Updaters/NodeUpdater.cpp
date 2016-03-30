@@ -28,6 +28,8 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
+#include "Engine/Models/ModelState.h"
+
 namespace bv 
 {
 
@@ -133,6 +135,12 @@ void    NodeUpdater::DoUpdate               ()
     if( m_modelNode->IsVisible() )
     {
         m_sceneNode->SetVisible( true );
+
+        auto & modelState = model::ModelState::GetInstance();
+        if( modelState.IsSelected( m_modelNode ) )
+            m_sceneNode->Select( modelState.GetSelectedNodeColor( m_modelNode ) );
+        else
+            m_sceneNode->Unselect();
 
         // Add, when all mechanisms are implemented
         UpdateTransform();

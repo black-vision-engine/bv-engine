@@ -62,6 +62,8 @@ public:
     const math::Box *       GetBoundingBox      () const;
     bool                    IsSelected          () const;
     glm::vec4               GetBoundingBoxColor () const;
+    void                    Select              ( glm::vec4 color );
+    void                    Unselect            ();
 
 private:
 

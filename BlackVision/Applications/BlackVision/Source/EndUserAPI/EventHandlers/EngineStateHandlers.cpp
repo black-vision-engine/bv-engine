@@ -128,7 +128,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         bool result = true;
         
         if( autoSelect )
-            result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ) );
+            result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ), glm::vec4( 1, 1, 1, 1 ) );
         
         std::string nodePath = ModelState::GetInstance().BuildIndexPath( node.get() );
         std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
