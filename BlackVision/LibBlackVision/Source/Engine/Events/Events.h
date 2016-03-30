@@ -360,7 +360,7 @@ public:
     SceneEvent::Command				SceneCommand;
     std::string                     SceneName;
     std::string                     NewSceneName;
-	UInt32							AttachIndex;
+    UInt32							AttachIndex;
 
 public:
     explicit                        SceneEvent   () {}
@@ -407,7 +407,7 @@ public:
     std::string                     SceneName;
     std::string                     NodePath;
     std::string                     NewNodeName;
-	UInt32							AttachIndex;
+    UInt32							AttachIndex;
     IDeserializer *                 Request;
 
 public:
@@ -492,7 +492,7 @@ public:
 
         CreateFolder,
         DeleteFolder,
-		RenameFolder,
+        RenameFolder,
 
         AddExistingSceneToProject,
         CreateSceneInProject,
@@ -635,7 +635,7 @@ public:
 
     typedef enum
     {
-		AddTimeline,
+        AddTimeline,
         DeleteTimeline,
         ForceDeleteTimeline,
         RenameTimeline,
@@ -664,7 +664,7 @@ public:
     float                       Time;
     TimelineType                TimelineType;
     TimeType                    Duration;
-	TimelineWrapMethod			WrapMethod;
+    TimelineWrapMethod			WrapMethod;
 
 public:
 
@@ -988,6 +988,7 @@ public:
     Float32                         MouseX;
     Float32                         MouseY;
     bool                            AutoSelect;
+    glm::vec4                       AutoSelectColor;
 
 public:
     explicit                        MouseEvent          () {}
