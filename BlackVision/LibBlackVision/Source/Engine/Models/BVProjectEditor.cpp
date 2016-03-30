@@ -1314,7 +1314,7 @@ model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 raySta
 
 // ***********************
 //
-bool                    BVProjectEditor::SelectNode              ( model::BasicNodePtr node, glm::vec4 color )
+bool                    BVProjectEditor::SelectNode              ( model::IModelNodePtr node, glm::vec4 color )
 {
 //    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
     

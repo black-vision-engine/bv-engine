@@ -158,6 +158,19 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     {
         result = editor->SetNodeVisible( sceneName, nodePath, false );
     }
+    else if( command == NodeStructureEvent::Command::SelectNode )
+    {
+        auto node = editor->GetNode( sceneName, nodePath );
+
+        auto color = SerializationHelper::String2T< glm::vec4 >( newNodeName );
+
+        result = editor->SelectNode( node, color ); 
+    }
+    else if( command == NodeStructureEvent::Command::UnselectNodes )
+    {
+        editor->UnselectNodes();
+        result = true;
+    }
     else if( command == NodeStructureEvent::Command::RenameNode )
     {
         result = editor->RenameNode( sceneName, nodePath, newNodeName );

@@ -79,7 +79,7 @@ public:
 
     // Selection and intersection
     model::IModelNodePtr	FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection );
-    bool                    SelectNode              ( model::BasicNodePtr node, glm::vec4 color );
+    bool                    SelectNode              ( model::IModelNodePtr node, glm::vec4 color );
     void                    UnselectNodes           ();
 
     /* paths */

@@ -391,6 +391,8 @@ public:
         RemoveNode,
         SetNodeVisible,
         SetNodeInvisible,
+        SelectNode,
+        UnselectNodes,
         RenameNode,
         AttachNode,
         DetachNode,
