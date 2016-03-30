@@ -350,8 +350,18 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
 }
 
 namespace {
-bool IsSelected( SceneNode * ) { return true; }
+
+bool IsSelected( SceneNode * node ) 
+{ 
+    return node->IsSelected();
 }
+
+glm::vec4 BoundingBoxColor( SceneNode * node )
+{
+    return node->GetBoundingBoxColor();
+}
+
+} // anonymous
 
 // *********************************
 //
@@ -372,7 +382,7 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
         }
 
         if( IsSelected( node ) )
-            RenderBoundingBox( node, ctx );
+            RenderBoundingBox( node, ctx, BoundingBoxColor( node ) );
     }
 }
 
@@ -421,13 +431,16 @@ RenderableEntity * GetBoundingBox( SceneNode * node )
 
 // ***********************
 //
-void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx )
+void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color )
 {
     auto * bb = GetBoundingBox( node );
 
     if( bb )
     {
         auto renderer = ctx->GetRenderer();
+
+        auto param = Cast< ShaderParamVec4 * >( m_boundingBoxEffect->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
+        param->SetValue( color );
 
         renderer->Enable( m_boundingBoxEffect, bb );
         renderer->DrawRenderable( bb );

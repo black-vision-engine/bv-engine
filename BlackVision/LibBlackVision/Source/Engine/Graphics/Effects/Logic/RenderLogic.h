@@ -80,7 +80,7 @@ public:
 
 private:
 
-    void    RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx );
+    void    RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color );
        
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 

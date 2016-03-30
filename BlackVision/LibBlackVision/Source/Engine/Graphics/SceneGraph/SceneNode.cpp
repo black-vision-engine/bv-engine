@@ -18,6 +18,8 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_transformable( transformable )
     , m_nodeEffect( nullptr )
     , m_boundingBox( nullptr )
+    , m_drawBoundingBox( true )
+    , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
 {
     m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
 }
@@ -197,6 +199,20 @@ void                    SceneNode::SetBoundingBox   ( const math::Box * bb )
 const math::Box *       SceneNode::GetBoundingBox   () const
 {
     return m_boundingBox;
+}
+
+// ***********************
+//
+bool                    SceneNode::IsSelected          () const
+{
+    return m_drawBoundingBox;
+}
+
+// ***********************
+//
+glm::vec4               SceneNode::GetBoundingBoxColor () const
+{
+    return m_boundingBoxColor;
 }
 
 } //bv

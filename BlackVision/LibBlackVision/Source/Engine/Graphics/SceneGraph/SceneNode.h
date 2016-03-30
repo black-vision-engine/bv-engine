@@ -33,6 +33,9 @@ private:
 
     bool                    m_visible;
 
+    bool                    m_drawBoundingBox;
+    glm::vec4               m_boundingBoxColor;
+
     const mathematics::Box * m_boundingBox;
 
 public:
@@ -57,6 +60,8 @@ public:
 
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;
+    bool                    IsSelected          () const;
+    glm::vec4               GetBoundingBoxColor () const;
 
 private:
 

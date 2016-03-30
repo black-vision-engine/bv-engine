@@ -11,6 +11,7 @@
 
 #include "Engine/Models/BoundingVolume.h"
 
+#include "Engine/Graphics/SceneGraph/Lines.h"
 
 namespace bv {
 
@@ -23,7 +24,11 @@ RenderableEntity *  BuildRenderableBoundingBox          ( const model::BoundingV
 {
     auto component = volume->BuildConnectedComponent();
 
-    return BVProjectTools::BuildRenderableFromComponent( component, PrimitiveType::PT_LINES );
+    auto box = Cast< Lines * >( BVProjectTools::BuildRenderableFromComponent( component, PrimitiveType::PT_LINES ) );
+
+    box->SetWidth( 5.f );
+
+    return box;
 }
 
 }
