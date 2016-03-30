@@ -129,10 +129,14 @@ PathVec                     PresetAccessor::ListPresets() const
 //
 ThumbnailConstPtr           PresetAccessor::GetPresetThumbnail  ( const Path & path ) const
 {
-    auto absolutePath = m_path / path / ".thumb";
+    auto absolutePath = m_path / path;
+    Path thumbPath = absolutePath.Str() + ".thumb";
+
+    if( !Path::Exists( thumbPath ) )
+        return nullptr;
 
     JsonDeserializeObject deser;
-    deser.LoadFile( absolutePath.Str() );
+    deser.LoadFile( thumbPath.Str() );
 
     auto thumb = PresetThumbnail::Create( deser );
     return thumb;

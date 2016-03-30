@@ -25,8 +25,8 @@ public:
 
     static NodeReplicatorPtr        Create          ( BasicNodePtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
 
-    virtual const std::string       GetType         () const override;
-    static const std::string        Type            ();
+    virtual const std::string &     GetType         () const override;
+    static const std::string &      Type            ();
 
 
     virtual void                    Serialize       ( ISerializer & ser ) const override;

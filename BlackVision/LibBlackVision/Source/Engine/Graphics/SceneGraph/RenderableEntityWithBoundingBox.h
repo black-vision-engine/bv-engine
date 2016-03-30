@@ -14,6 +14,9 @@ public:
                                 RenderableEntityWithBoundingBox         ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingVolume, RenderableEffectPtr effect );
 
     RenderableEntity *          GetBoundingBox                          () const;
+
+    virtual void                SetLocalTransform                       ( const Transform & t );
+    virtual void                UpdateTransform                         ( const Transform & transform );
 };
 
 }

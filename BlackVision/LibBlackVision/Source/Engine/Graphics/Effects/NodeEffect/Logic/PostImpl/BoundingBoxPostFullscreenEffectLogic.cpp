@@ -53,10 +53,9 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
     auto param = Cast< ShaderParamVec4 * >( pass->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
     param->SetValue( m_colorValue->GetValue() );
 
-    renderer( ctx )->Enable( pass, obj ); // FIXME for some reasons box results in bad transformation
+    renderer( ctx )->Enable( pass, box );
 
     renderer( ctx )->DrawRenderable( box );
-    //renderer( ctx )->Draw( box );
 }
 
 // *********************************

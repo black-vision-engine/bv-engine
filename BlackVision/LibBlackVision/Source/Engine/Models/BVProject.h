@@ -28,20 +28,20 @@ class BVProject : public IUpdatable
 {
 private:
 
-	static const std::string	MAIN_ROOT_NAME;
-	static const std::string	GLOBAL_TIMELINE_NAME;
+    static const std::string	MAIN_ROOT_NAME;
+    static const std::string	GLOBAL_TIMELINE_NAME;
     
 private:
 
     BVProjectEditor *       m_projectEditor;
-	Renderer *              m_renderer;
+    Renderer *              m_renderer;
 
     model::TimelineManagerPtr		m_timelineManager;
-	model::OffsetTimeEvaluatorPtr   m_globalTimeline;
+    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     model::SceneModelVec	m_sceneModelVec;
     
-	model::BasicNodePtr     m_rootNode;
+    model::BasicNodePtr     m_rootNode;
     SceneNode *             m_engineSceneRoot;
 
 
@@ -72,7 +72,7 @@ public:
 
     BVProjectEditor *       GetProjectEditor      ();
 
-	void					SetStartTime		( unsigned long millis );
+    void					SetStartTime		( unsigned long millis );
 
 private:
 
