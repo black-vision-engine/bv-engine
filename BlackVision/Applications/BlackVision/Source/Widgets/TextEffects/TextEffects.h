@@ -21,6 +21,8 @@ private:
     explicit                        TextEffects     ( const BasicNodePtr & node );
 
 public:
+                                    ~TextEffects    ();
+
     static const std::string &      Type            ();
 
 
@@ -34,6 +36,8 @@ public:
     virtual void                    Serialize       ( ISerializer& ser ) const override;
 
     static TextEffectsPtr           Create          ( const BasicNodePtr & node );
+
+    static TextEffectsPtr           Create          ( const IDeserializer & deser, const BasicNodePtr & node );
 
 };
 

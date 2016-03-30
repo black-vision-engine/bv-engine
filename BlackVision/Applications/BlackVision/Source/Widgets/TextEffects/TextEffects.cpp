@@ -15,6 +15,11 @@ TextEffects::TextEffects     ( const BasicNodePtr & node )
 
 // ***********************
 //
+TextEffects::~TextEffects    ()
+{}
+
+// ***********************
+//
 const std::string &      TextEffects::Type              ()
 {
     return m_type;
@@ -64,6 +69,14 @@ void                    TextEffects::Serialize          ( ISerializer& ser ) con
 TextEffectsPtr          TextEffects::Create             ( const BasicNodePtr & node )
 {
     return TextEffectsPtr( new TextEffects( node ) );
+}
+
+// ***********************
+//
+TextEffectsPtr          TextEffects::Create             ( const IDeserializer & deser, const BasicNodePtr & node )
+{
+    { deser; node; }
+    return nullptr;
 }
 
 } // model
