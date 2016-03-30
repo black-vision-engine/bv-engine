@@ -11,6 +11,10 @@
 #include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 
+#include "Engine/Graphics/Shaders/RenderablePass.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/Effects/BoundingBoxEffect.h"
+
 #include "Engine/Graphics/Rendering/Logic/OfflineRendering/ScreenShotLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
@@ -52,6 +56,9 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
     m_useVideoCardOutput        = videoCardEnabled;
 
     m_screenShotLogic           = new ScreenShotLogic( 1 );
+
+    auto effect = new BoundingBoxEffect(); // FIXME: memory leak
+    m_boundingBoxEffect         = effect->GetPass( 0 );
 }
 
 // *********************************
@@ -342,6 +349,20 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
     }
 }
 
+namespace {
+
+bool IsSelected( SceneNode * node ) 
+{ 
+    return node->IsSelected();
+}
+
+glm::vec4 BoundingBoxColor( SceneNode * node )
+{
+    return node->GetBoundingBoxColor();
+}
+
+} // anonymous
+
 // *********************************
 //
 void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ctx )
@@ -359,6 +380,9 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
         {
             effect->Render( node, ctx );
         }
+
+        if( IsSelected( node ) )
+            RenderBoundingBox( node, ctx, BoundingBoxColor( node ) );
     }
 }
 
@@ -387,6 +411,39 @@ void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ct
     {
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode  ( node->GetChild( i ), ctx ); 
+    }
+}
+
+namespace {
+
+RenderableEntity * GetBoundingBox( SceneNode * node )
+{
+    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
+    assert( obj );
+    auto bb = obj->GetBoundingBox();
+    if( bb )
+        return Cast< RenderableEntity * >( bb );
+    else
+        return nullptr;
+}
+
+}
+
+// ***********************
+//
+void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color )
+{
+    auto * bb = GetBoundingBox( node );
+
+    if( bb )
+    {
+        auto renderer = ctx->GetRenderer();
+
+        auto param = Cast< ShaderParamVec4 * >( m_boundingBoxEffect->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
+        param->SetValue( color );
+
+        renderer->Enable( m_boundingBoxEffect, bb );
+        renderer->DrawRenderable( bb );
     }
 }
 

@@ -1314,15 +1314,15 @@ model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 raySta
 
 // ***********************
 //
-bool                    BVProjectEditor::SelectNode              ( model::BasicNodePtr node )
+bool                    BVProjectEditor::SelectNode              ( model::BasicNodePtr node, glm::vec4 color )
 {
-    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+//    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
     
-    bool result = SetNodeEffect( node, newEffect );
-    if( !result )
-        return false;
+    //bool result = SetNodeEffect( node, newEffect );
+    //if( !result )
+    //    return false;
     
-    model::ModelState::GetInstance().Select( node );
+    model::ModelState::GetInstance().Select( node, color );
 
     return true;
 }
@@ -1331,13 +1331,13 @@ bool                    BVProjectEditor::SelectNode              ( model::BasicN
 //
 void                    BVProjectEditor::UnselectNodes           ()
 {
-    auto noEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "no effect", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
-    auto & selected = model::ModelState::GetInstance().GetSelectedNodes();
+    //auto noEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "no effect", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+    //auto selected = model::ModelState::GetInstance().GetSelectedNodes();
 
-    for( auto node : selected )
-    {
-        SetNodeEffect( node, noEffect );
-    }
+    //for( auto node : selected )
+    //{
+    //    SetNodeEffect( node, noEffect );
+    //}
 
     model::ModelState::GetInstance().UnselectAll();
 }

@@ -48,7 +48,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 
 
     { logic; }
-	// To be implemented in subclasses
+    // To be implemented in subclasses
 
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");
@@ -88,6 +88,8 @@ void TestKeyboardHandler::OnMouse             ( MouseAction action, int posX, in
         mouseEvent->MouseCommand = MouseEvent::Command::MouseDown;
         mouseEvent->MouseX = (Float32)posX;
         mouseEvent->MouseY = (Float32)posY;
+        mouseEvent->AutoSelect = true;
+        mouseEvent->AutoSelectColor = glm::vec4( 1, 0, 0, 1 );
 
         GetDefaultEventManager().QueueEvent( mouseEvent );
     }
