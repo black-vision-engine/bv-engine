@@ -574,6 +574,7 @@ void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, 
         thumbs.push_back( std::make_pair<>( thumb, scenePath.Str() ) );
     }
 
+    PrepareResponseTemplate( ser, InfoEvent::Command::GetSceneThumbnail, eventID, true );
 
     ser.EnterArray( "thumbnails" );
 
@@ -587,11 +588,9 @@ void        QueryHandlers::GetSceneThumbnail       ( JsonSerializeObject & ser, 
             ser.ExitChild();
             // FIXME Inform editor that some thumbs can't be loaded.
         }
-        
     }
 
     ser.ExitChild(); // thumbnails
-
 }
 
 // ***********************
@@ -618,6 +617,8 @@ void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, 
         thumbs.push_back( std::make_pair<>( thumb, presetPath.Str() ) );
     }
 
+    PrepareResponseTemplate( ser, InfoEvent::Command::GetPresetThumbnail, eventID, true );
+
     ser.EnterArray( "thumbnails" );
 
     for( auto t : thumbs )
@@ -630,7 +631,6 @@ void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, 
             ser.ExitChild();
             // FIXME Inform editor that some thumbs can't be loaded.
         }
-        
     }
 
     ser.ExitChild(); // thumbnails
