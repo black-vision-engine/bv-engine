@@ -69,9 +69,9 @@ IPixelShaderChannelPtr              DefaultGeometryPluginBase::GetPixelShaderCha
 // 
 void DefaultGeometryPluginBase::InitGeometry()
 {
-    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryVertexAttributeChannel
     {
-        m_vaChannel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+        m_vaChannel = std::make_shared< DefaultGeometryVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
     else
     {
@@ -82,7 +82,7 @@ void DefaultGeometryPluginBase::InitGeometry()
     auto gens = GetGenerators();
 
     for( auto gen : gens )
-        std::static_pointer_cast< DefaultGeometryAndUVsVertexAttributeChannel >( m_vaChannel )->GenerateAndAddConnectedComponent( *gen );
+        std::static_pointer_cast< DefaultGeometryVertexAttributeChannel >( m_vaChannel )->GenerateAndAddConnectedComponent( *gen );
 }
 
 // *************************************

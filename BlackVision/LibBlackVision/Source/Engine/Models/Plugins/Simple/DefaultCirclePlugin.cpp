@@ -4,6 +4,7 @@
 
 #include "Mathematics/Defines.h"
 
+
 namespace bv { namespace model {
 
 const std::string DefaultCirclePlugin::PN_TESSELATION = "tesselation";
@@ -59,46 +60,21 @@ IPluginPtr                      DefaultCirclePluginDesc::CreatePlugin         ( 
     return CreatePluginTyped< DefaultCirclePlugin >( name, prev, timeEvaluator );
 }
 
-//void										DefaultCirclePlugin::InitGeometry()
-//{
-//    
-//}
-
-class OldCircleGenerator : public IGeometryOnlyGenerator
+// *******************************
+//
+class CircleGenerator : public IGeometryNormalsGenerator
 {
-    int tesselation;
 
-public:
-    OldCircleGenerator( int n )
-        : tesselation( n )
-        {}
+private:
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
-
-    void GenerateGeometry( Float3AttributeChannelPtr verts ) 
-    { 
-        int i = 0, j = tesselation - 1;
-
-        for( ; j >= i ; i++, j-- )
-        {
-            double angle1 = j * 2 * PI / tesselation;
-            double angle2 = i * 2 * PI / tesselation;
-            verts->AddAttribute( glm::vec3( cos( angle1 ), sin( angle1 ), 0 ) );
-            if( i != j )
-                verts->AddAttribute( glm::vec3( cos( angle2 ), sin( angle2 ), 0 ) );
-        }
-    }
-};
-
-class CircleGenerator : public IGeometryOnlyGenerator
-{
-    int tesselation;
-    float inner_radius, outer_radius;
-    double total_angle;
+    int         tesselation;
+    float       inner_radius, outer_radius;
+    double      total_angle;
     DefaultCirclePlugin::OpenAngleMode mode;
 
 public:
-    CircleGenerator( int n, float ir, float or, float oa, DefaultCirclePlugin::OpenAngleMode m )
+
+    CircleGenerator                 ( int n, float ir, float or, float oa, DefaultCirclePlugin::OpenAngleMode m )
         : tesselation( n )
         , inner_radius( ir )
         , outer_radius( or )
@@ -106,9 +82,7 @@ public:
         , mode( m )
         {}
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
-
-    void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+    void GenerateGeometryNormals    ( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
     {
         double angle_offset;
         if( mode == DefaultCirclePlugin::OpenAngleMode::CW )
@@ -133,6 +107,8 @@ public:
             verts->AddAttribute( unitVector * inner_radius );
             verts->AddAttribute( unitVector * outer_radius );
         }
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
@@ -146,11 +122,11 @@ DefaultCirclePlugin::DefaultCirclePlugin( const std::string & name, const std::s
 
 std::vector<IGeometryGeneratorPtr>           DefaultCirclePlugin::GetGenerators()
 {
-    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new CircleGenerator( GetTesselation(),
+    return std::vector<IGeometryGeneratorPtr>( 1, std::make_shared< CircleGenerator >( GetTesselation(),
                                 GetInnerRadius(),
                                 GetOuterRadius(),
                                 GetOpenAngle(),
-                                GetOpenAngleMode() ) ) );
+                                GetOpenAngleMode() ) );
 }
 
 bool DefaultCirclePlugin::NeedsTopologyUpdate()
