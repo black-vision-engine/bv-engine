@@ -21,7 +21,6 @@ private:
     BasicNodePtr                    m_node;
 
     BasicNodePtr                    m_shadowNode;
-    BasicNodePtr                    m_blurNode;
 
     DefaultParamValModelPtr         m_paramValModel;
 
@@ -49,6 +48,10 @@ public:
 
     static TextEffectsPtr           Create          ( const IDeserializer & deser, const BasicNodePtr & node );
 
+private:
+
+    IPluginPtr                      GetTextPlugin           () const;
+    IPluginPtr                      GetShadowTextPlugin     () const;
 };
 
 } // model

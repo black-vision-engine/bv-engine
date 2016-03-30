@@ -212,6 +212,8 @@ std::pair< NodeStructureEvent::Command, const char* > NodeStructureCommandMappin
     , std::make_pair( NodeStructureEvent::Command::RemoveNode, "RemoveNode" ) 
     , std::make_pair( NodeStructureEvent::Command::SetNodeInvisible, "SetNodeInvisible" ) 
     , std::make_pair( NodeStructureEvent::Command::SetNodeVisible, "SetNodeVisible" )
+    , std::make_pair( NodeStructureEvent::Command::SelectNode, "SelectNode" )
+    , std::make_pair( NodeStructureEvent::Command::UnselectNodes, "UnselectNodes" )
     , std::make_pair( NodeStructureEvent::Command::RenameNode, "RenameNode" )
     , std::make_pair( NodeStructureEvent::Command::AttachNode, "AttachNode" )
     , std::make_pair( NodeStructureEvent::Command::DetachNode, "DetachNode" )
