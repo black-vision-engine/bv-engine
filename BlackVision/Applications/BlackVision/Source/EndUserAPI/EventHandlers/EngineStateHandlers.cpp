@@ -17,6 +17,7 @@ namespace bv
 //
 EngineStateHandlers::EngineStateHandlers( BVAppLogic* logic )
     :   m_appLogic( logic )
+    //,   m_lockWarning( 360 )
 {}
 
 // ***********************
@@ -52,6 +53,10 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     else if( command == EngineStateEvent::Command::CloseApplication )
     {
         m_appLogic->ChangeState( BVAppState::BVS_CLOSING );
+    }
+    else if( command == EngineStateEvent::Command::LockEventQueue )
+    {
+        GetDefaultEventManager().LockEvents( numFrames );
     }
     else
     {
