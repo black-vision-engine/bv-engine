@@ -162,9 +162,13 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     {
         auto node = editor->GetNode( sceneName, nodePath );
 
-        auto color = SerializationHelper::String2T< glm::vec4 >( newNodeName );
+        if( node )
+        {
+            auto color = SerializationHelper::String2T< glm::vec4 >( newNodeName, glm::vec4( 1, 1, 1, 1 ) );
 
-        result = editor->SelectNode( node, color ); 
+            result = editor->SelectNode( node, color );
+        }
+
     }
     else if( command == NodeStructureEvent::Command::UnselectNodes )
     {

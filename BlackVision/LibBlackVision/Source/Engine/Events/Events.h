@@ -837,6 +837,7 @@ public:
         RenderOffscreen,
         ScreenShot,
         CloseApplication,
+        LockEventQueue,
         Fail            ///< Wrong command
     } Command;
 private:
