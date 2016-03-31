@@ -140,6 +140,13 @@ bool                    TextEffects::HandleEvent        ( IDeserializer & eventS
             response.SetAttribute( ERROR_INFO_STRING, "Cannot initialize text effects logic" );
         }
     }
+    else if( action == "SetGlowSize" )
+    {
+        std::string valueStr = eventSer.GetAttribute( "NewSizeValue" );
+        auto value = SerializationHelper::String2T< UInt32 >( valueStr );
+
+        m_blurSize = value;
+    }
     else 
     {
         response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Initialize' command." );
