@@ -13,6 +13,7 @@ private:
 
     BVAppLogic*             m_appLogic;
 
+    bool                    m_enableLockQueue;
     //UInt32                  m_lockWarning;    // Warn if queue is locked for more than m_lockWarning frames.
 
 public:

@@ -18,7 +18,9 @@ namespace bv
 EngineStateHandlers::EngineStateHandlers( BVAppLogic* logic )
     :   m_appLogic( logic )
     //,   m_lockWarning( 360 )
-{}
+{
+    m_enableLockQueue = ConfigManager::GetBool( "Application/EnableLockingQueue" );
+}
 
 // ***********************
 //
@@ -56,7 +58,8 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     }
     else if( command == EngineStateEvent::Command::LockEventQueue )
     {
-        GetDefaultEventManager().LockEvents( numFrames );
+        if( m_enableLockQueue )
+            GetDefaultEventManager().LockEvents( numFrames );
     }
     else
     {
