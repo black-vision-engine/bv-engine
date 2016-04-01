@@ -139,6 +139,20 @@ void        BVGLPlugin::UniformMatrix4fv				( GLint location, GLsizei count, GLb
 
 // *****************************
 //
+GLuint      BVGLPlugin::GetUniformBlockIndex            ( GLuint program, const GLchar * blockName )
+{
+    return glGetUniformBlockIndex( program, blockName );
+}
+
+// *****************************
+//
+void        BVGLPlugin::UniformBlockBinding             ( GLuint program, GLuint blockIdx, GLuint blockBinding )
+{
+    glUniformBlockBinding( program, blockIdx, blockBinding );
+}
+
+// *****************************
+//
 void        BVGLPlugin::ShaderSource					( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length )
 {
     glShaderSource( shader, count, strings, length ); 

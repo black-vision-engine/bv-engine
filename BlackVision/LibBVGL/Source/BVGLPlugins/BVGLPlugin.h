@@ -39,6 +39,9 @@ public:
     virtual void                UniformMatrix2fv			( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
     virtual void                UniformMatrix3fv			( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
     virtual void                UniformMatrix4fv			( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
+
+    virtual GLuint              GetUniformBlockIndex        ( GLuint program, const GLchar * blockName );
+    virtual void                UniformBlockBinding         ( GLuint program, GLuint blockIdx, GLuint blockBinding );
                                 
     virtual void                ShaderSource				( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length );
     virtual void                CompileShader				( GLuint shader );
