@@ -1,22 +1,22 @@
 #include "stdafx.h"
 
-#include "PointLight.h"
+#include "ModelPointLight.h"
 
 
 namespace bv { namespace model {
 
 
-const std::string       PointLight::PARAM::COLOR          = "color";
-const std::string       PointLight::PARAM::POSITION       = "position";
+const std::string       ModelPointLight::PARAM::COLOR          = "color";
+const std::string       ModelPointLight::PARAM::POSITION       = "position";
 
-const std::string       PointLight::PARAM::ATT_CONSTANT   = "attConstant";
-const std::string       PointLight::PARAM::ATT_LINEAR     = "attLinear";
-const std::string       PointLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
+const std::string       ModelPointLight::PARAM::ATT_CONSTANT   = "attConstant";
+const std::string       ModelPointLight::PARAM::ATT_LINEAR     = "attLinear";
+const std::string       ModelPointLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
 
 
 // *************************************
 //
-                            PointLight::PointLight          ( ITimeEvaluatorPtr timeEvaluator )
+                        ModelPointLight::ModelPointLight          ( ITimeEvaluatorPtr timeEvaluator )
 {
     m_paramModel = std::make_shared< DefaultParamValModel >();
     
@@ -26,19 +26,11 @@ const std::string       PointLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
     auto attLinearEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::ATT_LINEAR, timeEvaluator );
     auto attQuadraticEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::ATT_QUADRATIC, timeEvaluator );
 
-
-    m_colorParam = colorEvaluator->Parameter();
-    m_positionParam = positionEvaluator->Parameter();
-    m_attConstantParam = attConstantEvaluator->Parameter();
-    m_attLinearParam = attLinearEvaluator->Parameter();
-    m_attQuadraticParam = attQuadraticEvaluator->Parameter();
-
-
-    m_colorParam->SetVal( glm::vec3( 1.0f, 1.0f, 1.0f ), 0.f );
-    m_positionParam->SetVal( glm::vec3( 0.0f, 0.0f, 0.0f ), 0.f );
-    m_attConstantParam->SetVal( 1.0f, 0.f );
-    m_attLinearParam->SetVal( 0.0f, 0.f );
-    m_attQuadraticParam->SetVal( 0.02f, 0.f );
+    colorEvaluator->Parameter()->SetVal( glm::vec3( 1.0f, 1.0f, 1.0f ), 0.f );
+    positionEvaluator->Parameter()->SetVal( glm::vec3( 0.0f, 0.0f, 0.0f ), 0.f );
+    attConstantEvaluator->Parameter()->SetVal( 1.0f, 0.f );
+    attLinearEvaluator->Parameter()->SetVal( 0.0f, 0.f );
+    attQuadraticEvaluator->Parameter()->SetVal( 0.02f, 0.f );
 
     m_paramModel->RegisterAll( colorEvaluator );
     m_paramModel->RegisterAll( positionEvaluator );
@@ -49,14 +41,14 @@ const std::string       PointLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
 
 // *************************************
 //
-void                            PointLight::Serialize           ( ISerializer & ser ) const
+void                    ModelPointLight::Serialize           ( ISerializer & ser ) const
 {
     { ser; }
 }
 
 // *************************************
 //
-void                            PointLight::Update              ( TimeType t )
+void                    ModelPointLight::Update              ( TimeType t )
 {
     { t; }
     m_paramModel->Update();
@@ -64,35 +56,42 @@ void                            PointLight::Update              ( TimeType t )
 
 // *************************************
 //
-std::vector< IParameterPtr > &  PointLight::GetParameters       ()
+std::vector< IParameterPtr > &  ModelPointLight::GetParameters       ()
 {
     return m_paramModel->GetParameters();
 }
 
 // *************************************
 //
-IParameterPtr                   PointLight::GetParameter        ( const std::string & name )
+IParameterPtr                   ModelPointLight::GetParameter        ( const std::string & name )
 {
     return m_paramModel->GetParameter( name );
 }
 
 // *************************************
 //
-const std::vector< IValueConstPtr > &  PointLight::GetValues    () const
+const std::vector< IValueConstPtr > &  ModelPointLight::GetValues    () const
 {
     return m_paramModel->GetValues();
 }
 
 // *************************************
 //
-IValueConstPtr                  PointLight::GetValue            ( const std::string & name ) const
+IValueConstPtr          ModelPointLight::GetValue            ( const std::string & name ) const
 {
     return m_paramModel->GetValue( name );
 }
 
 // *************************************
 //
-LightType                       PointLight::GetType             () const
+std::string             ModelPointLight::GetTypeName         () const
+{
+    return "pointLight";
+}
+
+// *************************************
+//
+LightType               ModelPointLight::GetType             () const
 {
     return LightType::LT_POINT;
 }

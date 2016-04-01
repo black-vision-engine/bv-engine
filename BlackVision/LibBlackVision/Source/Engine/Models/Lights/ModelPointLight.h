@@ -10,25 +10,26 @@
 namespace bv { namespace model {
 
 
-class DirectionalLight : public IModelLight
+class ModelPointLight : public IModelLight
 {
 private:
 
     DefaultParamValModelPtr     m_paramModel;
 
-    ParamVec3Ptr                m_colorParam;
-    ParamVec3Ptr                m_directionParam;
-
     struct PARAM {
 
-        static const std::string COLOR;     // vec3
-        static const std::string DIRECTION; // vec3
+        static const std::string COLOR;         // vec3
+        static const std::string POSITION;      // vec3
+        
+        static const std::string ATT_CONSTANT;  // float
+        static const std::string ATT_LINEAR;    // float
+        static const std::string ATT_QUADRATIC; // float
 
     };
 
 public:
 
-                                DirectionalLight    ( ITimeEvaluatorPtr timeEvaluator );
+                                ModelPointLight     ( ITimeEvaluatorPtr timeEvaluator );
 
     virtual void                Serialize           ( ISerializer & ser ) const override;
 
@@ -40,7 +41,8 @@ public:
     virtual const std::vector< IValueConstPtr > &   GetValues       () const override;
     virtual IValueConstPtr                          GetValue        ( const std::string & name ) const override;
 
-    virtual LightType           GetType             () const override;
+    virtual std::string             GetTypeName         () const override;
+    virtual LightType               GetType             () const override;
 
 };
 

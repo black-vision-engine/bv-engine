@@ -42,7 +42,11 @@ public:
 
     virtual GLuint              GetUniformBlockIndex        ( GLuint program, const GLchar * blockName );
     virtual void                UniformBlockBinding         ( GLuint program, GLuint blockIdx, GLuint blockBinding );
-                                
+                           
+    virtual void                GetActiveUniformName        ( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName );
+    virtual void                GetActiveUniformsiv         ( GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params );
+    virtual void                GetActiveUniformBlockiv     ( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params );
+
     virtual void                ShaderSource				( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length );
     virtual void                CompileShader				( GLuint shader );
     virtual void                AttachShader				( GLuint program, GLuint shader );

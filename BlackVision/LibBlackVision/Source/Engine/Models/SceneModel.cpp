@@ -130,6 +130,16 @@ model::SceneModelPtr		SceneModel::Clone		() const
 
 // *******************************
 //
+void						SceneModel::Update	    ( TimeType t )
+{
+    for( auto & light : m_lights )
+    {
+        light->Update( t );
+    }
+}
+
+// *******************************
+//
 void						SceneModel::SetRootNode	( BasicNodePtr rootNode )
 {
 	m_sceneRootNode = rootNode;
@@ -175,6 +185,49 @@ OffsetTimeEvaluatorPtr		SceneModel::GetTimeline	()  const
 Camera *					SceneModel::GetCamera              ()  const
 {
     return m_camera;
+}
+
+// *******************************
+//
+bool                        SceneModel::AddLight            ( IModelLightUPtr light ) 
+{
+    if( m_lights.size() < MAX_LIGHTS_NUM )
+    {
+        m_lights.push_back( std::move( light ) );
+        return true;
+    }
+    return false;
+}
+
+// *******************************
+//
+bool                        SceneModel::RemoveLight         ( UInt32 idx ) 
+{
+    if( idx < m_lights.size() )
+    {
+        m_lights.erase( m_lights.begin() + idx );
+        return true;
+    }
+    return false;
+}
+
+// *******************************
+//
+IModelLight *               SceneModel::GetLight            ( UInt32 idx ) 
+{
+    if( idx < m_lights.size() )
+    {
+        return m_lights[ idx ].get();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+SizeType                    SceneModel::NumLights            () const
+{
+    return ( SizeType )m_lights.size();
 }
 
 // *******************************

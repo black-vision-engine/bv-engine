@@ -46,6 +46,7 @@ public:
 
     virtual ParamType       GetType         () const override;
     virtual const char *    GetData         () const override;
+    virtual SizeType        GetSize         () const override;
 
     virtual VoidPtr         QueryValueTyped () override;
 
@@ -103,6 +104,14 @@ template< typename ValType, ParamType paramType >
 const char *    ValueImpl< ValType, paramType >::GetData  () const
 {
     return reinterpret_cast< const char * >( &m_value );
+}
+
+// *******************************
+//
+template< typename ValType, ParamType paramType >
+SizeType        ValueImpl< ValType, paramType >::GetSize  () const
+{
+    return sizeof( m_value );
 }
 
 // *******************************

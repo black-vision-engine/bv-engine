@@ -153,6 +153,27 @@ void        BVGLPlugin::UniformBlockBinding             ( GLuint program, GLuint
 
 // *****************************
 //
+void        BVGLPlugin::GetActiveUniformName       ( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName )
+{
+    glGetActiveUniformName( program, uniformIndex, bufSize, length, uniformName );
+}
+
+// *****************************
+//
+void        BVGLPlugin::GetActiveUniformsiv       ( GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params )
+{
+    glGetActiveUniformsiv( program, uniformCount, uniformIndices, pname, params );
+}
+
+// *****************************
+//
+void        BVGLPlugin::GetActiveUniformBlockiv   ( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params )
+{
+    glGetActiveUniformBlockiv( program, uniformBlockIndex, pname, params );
+}
+
+// *****************************
+//
 void        BVGLPlugin::ShaderSource					( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length )
 {
     glShaderSource( shader, count, strings, length ); 

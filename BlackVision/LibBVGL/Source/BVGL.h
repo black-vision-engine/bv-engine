@@ -96,6 +96,10 @@ public:
     static GLuint               bvglGetUniformBlockIndex    ( GLuint program, const GLchar * blockName );
     static void                 bvglUniformBlockBinding     ( GLuint program, GLuint blockIdx, GLuint blockBinding );
 
+    static void                 bvglGetActiveUniformName    ( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName );
+    static void                 bvglGetActiveUniformsiv     ( GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params );
+    static void                 bvglGetActiveUniformBlockiv ( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params );
+
 // Vertex Array Object
     static void                 bvglGenVertexArrays         ( GLsizei n, GLuint * arrays );
     static void                 bvglDeleteVertexArrays      ( GLsizei n, const GLuint * arrays );
