@@ -1,4 +1,4 @@
-#version 400
+#version 420
 
 
 struct DirectionalLight
@@ -10,7 +10,7 @@ struct DirectionalLight
 struct PointLight
 {
 	vec3 	color;
-	vec3 	position;
+	vec3	position;
 	
 	float 	attConstant;
 	float 	attLinear;
@@ -37,13 +37,15 @@ struct SpotLight
 layout (location = 0) out vec4 FragColor;
 
 // LIGHTS
-uniform	DirectionalLight[ MAX_LIGTHS ] 	directionalLights;
-uniform PointLight[ MAX_LIGTHS ] 		pointLights;
-uniform SpotLight[ MAX_LIGTHS ] 		spotLights;
-
-uniform int 	directionalLightsNum;
-uniform int 	pointLightsNum;
-uniform int 	spotLightsNum;
+layout ( std140, binding = 0 ) uniform Lights 
+{
+	uniform	DirectionalLight[ MAX_LIGTHS ] 	directionalLights;
+	uniform int 							directionalLightsNum;
+	uniform PointLight[ MAX_LIGTHS ] 		pointLights;
+	uniform int 							pointLightsNum;	
+	uniform SpotLight[ MAX_LIGTHS ] 		spotLights;
+	uniform int 							spotLightsNum;
+};
 
 // MATERIAL
 uniform vec4 	mtlDiffuse;
@@ -65,20 +67,6 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir );
 
 void main()
 {		
-	DirectionalLight light;
-//	PointLight light;
-//	SpotLight light;
-
-	light.color = vec3( 1, 1, 1 );
-	
-	light.direction = vec3( -1, 0, 0 );
-	
-//	light.position = vec3( 5, 0, -2.5 );	
-//	light.attenuation = 0.02;
-	
-//	light.cutOff = cos( 12.5 * 3.14 / 180.0 );
-//	light.outerCutOff = cos( 15.0 * 3.14 / 180.0 );
-
 	vec3 viewDir = normalize( -position );
 	
 	vec3 color = vec3( 0, 0, 0 );
@@ -117,7 +105,7 @@ vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )
 	
 	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
 	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
-	vec3 ambient = mtlAmbient.rgb * mtlAmbient.a * light.color;
+	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
 	return ambient + diffuse + specular;	
 }
@@ -139,7 +127,7 @@ vec3 computePointLight			( PointLight light, vec3 viewDir )
 	
 	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
 	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
-	vec3 ambient = mtlAmbient.rgb * mtlAmbient.a * light.color;
+	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
 	return attenuation * ( ambient + diffuse + specular );	
 }
@@ -165,7 +153,7 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir )
 	
 	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
 	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
-	vec3 ambient = mtlAmbient.rgb * mtlAmbient.a * light.color;
+	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
 	return attenuation * intensity * ( ambient + diffuse + specular );
 }
