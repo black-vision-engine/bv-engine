@@ -44,6 +44,9 @@ private:
                                                       const std::string & pluginName,
                                                       const std::string & textureName,
                                                       const std::string & paramName );
+    ParameterPtr            GetLightParameter       ( const std::string & sceneName,
+                                                      UInt32 lightIndex,
+                                                      const std::string & paramName );
 
     bool                    AddTransformKey         ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue );
     bool                    RemoveTransformKey      ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime );

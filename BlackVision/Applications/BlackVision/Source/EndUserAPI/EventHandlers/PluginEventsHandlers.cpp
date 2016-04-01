@@ -49,6 +49,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     std::string & paramSubName = setParamEvent->ParamSubName;
     std::string & sceneName    = setParamEvent->SceneName;
     std::string & value        = setParamEvent->Value;
+    UInt32        lightIndex   = setParamEvent->LightIndex;
     
     
     TimeType keyTime           = setParamEvent->Time;
@@ -80,18 +81,22 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
         else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
             param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
+        else if( targetType == ParamKeyEvent::TargetType::LightParam )
+            param = GetLightParameter( sceneName, lightIndex, paramName );
         else
             param = GetPluginParameter( sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
     }
     // ------- preserve compatibility code ------->
-    
-    /*
+
+    /* uncomment me on 'preserve compatibility code' deletion
     if( targetType == ParamKeyEvent::TargetType::PluginParam )
         param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
     else if( targetType == ParamKeyEvent::TargetType::GlobalEffectParam )
         param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
     else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
         param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
+    else if( targetType == ParamKeyEvent::TargetType::LightParam )
+        param = GetLightParameter( sceneName, lightIndex, paramName );
     */
 
     if( param == nullptr )
@@ -295,6 +300,26 @@ ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::strin
     }
     
     return resourceModel->GetParameter( paramName );
+}
+
+// ***********************
+//
+ParameterPtr PluginEventsHandlers::GetLightParameter        ( const std::string & sceneName,
+                                                              UInt32 lightIndex,
+                                                              const std::string & paramName )
+{
+    auto scene = m_projectEditor->GetScene( sceneName );
+    if( scene )
+    {
+        auto light = scene->GetLight( lightIndex );
+        if( light )
+        {
+            return light->GetParameter( paramName );
+        }
+    }
+
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: not found";
+    return nullptr;
 }
 
 // ***********************

@@ -257,6 +257,7 @@ public:
         PluginParam,
         GlobalEffectParam,
         ResourceParam,
+        LightParam,
         FailTarget      ///< Wrong target type
     } TargetType;
 private:
@@ -268,6 +269,7 @@ public:
     std::string                     ParamName;
     std::string                     ParamSubName;
     std::string                     SceneName;
+    UInt32                          LightIndex;
     std::string                     Value;
 
     float                           Time;
