@@ -74,6 +74,8 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
 
             deser.ExitChild();  // paramDelta
 
+            shiftModifier->AddParamShift( pluginName, paramName, shift );
+
         } while( deser.NextChild() );
         deser.ExitChild();  // paramShift
     }
