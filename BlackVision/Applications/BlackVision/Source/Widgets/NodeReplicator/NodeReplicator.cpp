@@ -58,30 +58,6 @@ void					    NodeReplicator::Initialize()
     }
 
     m_initialized = true;
-
-    //assert( !"Shouldn't be used any more" );
-
-    //auto numChildren = m_node->GetNumChildren();
-
-    //if( numChildren > 0 )
-    //{
-    //    auto toReplicate = m_node->GetChild( numChildren - 1 );
-
-    //    auto basicName = toReplicate->GetName();
-    //    
-    //    for( SizeType i = 0; i < m_repNum; ++i )
-    //    {
-    //        auto copiedNode = toReplicate->GetModelNodeEditor()->CopyNode();
-
-    //        copiedNode->SetName( basicName + "_rep" + std::to_string( i ) );
-
-    //        m_repModifier->Apply( toReplicate, copiedNode, nullptr );
-
-    //        m_node->AddChildToModelOnly( copiedNode );
-
-    //        toReplicate = copiedNode;
-    //    }   
-    //}
 }
 
 // *******************************
@@ -184,7 +160,7 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
 
                 editor->RenameNode( copiedNode, basicName + "_rep" + std::to_string( i ) );
 
-                m_repModifier->Apply( toReplicate, copiedNode, editor );
+                m_repModifier->Apply( toReplicate, copiedNode, editor, (int)i );
 
                 toReplicate = copiedNode;
             }   
