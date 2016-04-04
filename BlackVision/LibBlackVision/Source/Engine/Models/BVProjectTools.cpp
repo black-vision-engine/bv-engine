@@ -244,7 +244,7 @@ std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    
         if( childNode->IsVisible() )
         {
             auto newPair = NodeIntersection( childNode, inverseTransform, rayPoint, rayDir );
-            if( newPair.second < result.second && result.second >= 0 )
+            if( newPair.second <= result.second && result.second >= 0 )
             {
                 result.first = newPair.first;
                 result.second = newPair.second;
