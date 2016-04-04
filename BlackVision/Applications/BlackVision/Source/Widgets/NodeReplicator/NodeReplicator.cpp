@@ -197,6 +197,21 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
             response.SetAttribute( ERROR_INFO_STRING, "Node has no child. Cannot replicate" );
         }
     }
+    if( action == "GetModifier" )
+    {
+        m_repModifier->Serialize( response );
+        return true;
+    }
+    else if( action == "GetNumRepetitions" )
+    {
+        response.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
+        return true;
+    }
+    else if( action == "SetNumRepetitions" )
+    {
+        m_repNum = SerializationHelper::String2T< int >( eventSer.GetAttribute( "numRepetitions" ), 0 );
+        return true;
+    }
     else 
     {
         response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
