@@ -22,6 +22,7 @@ public:
 
     void    EngineStateHandler       ( IEventPtr evt );
     void    MouseInteraction         ( IEventPtr evt );
+    void    ConfigManagment          ( IEventPtr evt );
 };
 
 } //bv

@@ -97,6 +97,9 @@ std::string MouseEvent::m_sEventName				= "MouseEvent";
 const EventType SceneVariableEvent::m_sEventType    = 0x30000022;
 std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
 
+const EventType ConfigEvent::m_sEventType           = 0x30000023;
+std::string ConfigEvent::m_sEventName               = "ConfigEvent";
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -561,6 +564,24 @@ std::pair< SceneVariableEvent::Command, const char* > SceneVariableEventCommandM
 
 template<> SceneVariableEvent::Command      SerializationHelper::String2T  ( const std::string& s, const SceneVariableEvent::Command& defaultVal )  { return String2Enum( SceneVariableEventCommandMapping, s, defaultVal ); };
 template<> std::string                      SerializationHelper::T2String  ( const SceneVariableEvent::Command & t )                                { return Enum2String( SceneVariableEventCommandMapping, t ); };
+
+
+// ========================================================================= //
+// ConfigEvent
+// ========================================================================= //
+const std::string CONFIG_VALUE_TYPE_STRING              = "ValueType";
+const std::string CONFIG_VALUE_STRING                   = "Value";
+const std::string CONFIG_KEY_STRING                     = "Key";
+
+std::pair< ConfigEvent::Command, const char* > ConfigEventCommandMapping[] = 
+{
+    std::make_pair( ConfigEvent::Command::ReadValue, "ReadValue" )
+    , std::make_pair( ConfigEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> ConfigEvent::Command String2T        ( const std::string& s, const ConfigEvent::Command& defaultVal )     { return String2Enum( ConfigEventCommandMapping, s, defaultVal ); }
+template<> std::string T2String                 ( const ConfigEvent::Command & t )                                   { return Enum2String( ConfigEventCommandMapping, t ); }
+
 
 // ========================================================================= //
 // HightmapEvent
@@ -1923,6 +1944,59 @@ const std::string&  SceneVariableEvent::GetName() const
 // *************************************
 //
 EventType           SceneVariableEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
+//******************* ConfigEvent *************
+
+// *************************************
+//
+void                ConfigEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ConfigCommand ) );
+    ser.SetAttribute( SerializationHelper::CONFIG_VALUE_STRING, SerializationHelper::T2String( Value ) );
+    ser.SetAttribute( SerializationHelper::CONFIG_KEY_STRING, Key );
+    ser.SetAttribute( SerializationHelper::CONFIG_VALUE_TYPE_STRING, ValueType );
+}
+
+// *************************************
+//
+IEventPtr           ConfigEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        ConfigEventPtr newEvent             = std::make_shared<ConfigEvent>();
+        newEvent->Value                     = deser.GetAttribute( SerializationHelper::CONFIG_VALUE_STRING );
+        newEvent->Key                       = deser.GetAttribute( SerializationHelper::CONFIG_KEY_STRING );
+        newEvent->ValueType                 = deser.GetAttribute( SerializationHelper::CONFIG_VALUE_TYPE_STRING );
+        newEvent->ConfigCommand             = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ConfigEvent::Command::Fail );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr           ConfigEvent::Clone             () const
+{   return IEventPtr( new ConfigEvent( *this ) );  }
+
+// *************************************
+//
+EventType           ConfigEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        ConfigEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  ConfigEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           ConfigEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

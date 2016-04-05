@@ -31,6 +31,7 @@ RemoteController::RemoteController()
     RegisterEvent( TimelineKeyframeEvent::Name(), TimelineKeyframeEvent::Create );
     RegisterEvent( MouseEvent::Name(), MouseEvent::Create );
     RegisterEvent( SceneVariableEvent::Name(), SceneVariableEvent::Create );
+    RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
 }
 
 

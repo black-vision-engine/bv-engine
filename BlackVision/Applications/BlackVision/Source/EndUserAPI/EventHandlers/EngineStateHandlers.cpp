@@ -9,6 +9,7 @@
 #include "Engine/Models/ModelState.h"
 
 #include "BVConfig.h"
+#include "ConfigManager.h"
 
 namespace bv
 {
@@ -162,6 +163,56 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         return;
     }
 
+}
+
+// ***********************
+//
+void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
+{
+    if( evt->GetEventType() != ConfigEvent::Type() )
+        return;
+    
+    bv::ConfigEventPtr configEvent  = std::static_pointer_cast<bv::ConfigEvent>( evt );
+    auto command        = configEvent->ConfigCommand;
+    auto& key           = configEvent->Key;
+    //auto& value         = configEvent->Value;
+    auto& valType       = configEvent->ValueType;
+
+
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, command, configEvent->SocketID, true );
+
+    if( command == ConfigEvent::Command::ReadValue )
+    {
+        if( valType == "int" )
+        {
+            auto result = ConfigManager::GetInt( key );
+            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
+        }
+        else if( valType == "float" )
+        {
+            auto result = ConfigManager::GetFloat( key );
+            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
+        }
+        else if( valType == "bool" )
+        {
+            auto result = ConfigManager::GetBool( key );
+            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
+        }
+        else if( valType == "string" )
+        {
+            auto result = ConfigManager::GetString( key );
+            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Wrong value type." );
+            return;
+        }
+
+    }
+
+    SendResponse( ser, configEvent->SocketID, configEvent->EventID );
 }
 
 } //bv
