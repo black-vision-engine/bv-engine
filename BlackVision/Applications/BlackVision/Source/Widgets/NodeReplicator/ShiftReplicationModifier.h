@@ -38,7 +38,7 @@ private:
 
     explicit                ShiftReplicationModifier ();
 
-    typedef std::map< std::pair< std::string, std::string >, ParamValDelta > ParamsShiftsMapType;
+    typedef std::map< std::pair< std::pair< std::string, std::string >, bv::TimeType >, ParamValDelta > ParamsShiftsMapType;
     ParamsShiftsMapType     m_paramsShifts;
 
 };

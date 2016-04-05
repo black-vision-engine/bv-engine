@@ -22,8 +22,8 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
         for( auto& shift : m_paramsShifts )
         {
             ser.EnterChild( "paramShift" );
-                ser.SetAttribute( "pluginName", shift.first.first );
-                ser.SetAttribute( "paramName", shift.first.second );
+                ser.SetAttribute( "pluginName", shift.first.first.first );
+                ser.SetAttribute( "paramName", shift.first.first.second );
 
                 ser.EnterChild( "paramDelta" );
                     ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
@@ -90,7 +90,8 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
 void                            ShiftReplicationModifier::AddParamShift( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift )
 {
     auto p = std::make_pair( pluginName, paramName );
-    m_paramsShifts[ p ] = shift;
+    auto mapKey = std::make_pair( p, shift.startTime );     // Parameter key time is part of map key. We can move multiple keys for one parameter.
+    m_paramsShifts[ mapKey ] = shift;
 }
 
 
@@ -136,27 +137,27 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
 {
     for( auto it : m_paramsShifts )
     {
-        if( auto p = next->GetPlugin( it.first.first ) )
+        if( auto p = next->GetPlugin( it.first.first.first ) )
         {
-            if( it.first.first == "transform" )
+            if( it.first.first.first == "transform" )
             {
-                if( it.first.second == "translation" )
+                if( it.first.first.second == "translation" )
                 {
                     ApplyTranslationDelta( it.second, next, repCounter );
                 }
 
-                if( it.first.second == "scale" )
+                if( it.first.first.second == "scale" )
                 {
                     ApplyScaleDelta( it.second, next, repCounter );
                 }
 
-                if( it.first.second == "rotation" )
+                if( it.first.first.second == "rotation" )
                 {
                     ApplyRotationDelta( it.second, next, repCounter );
                 }
             }
 
-            if( auto param = p->GetParameter( it.first.second ) )
+            if( auto param = p->GetParameter( it.first.first.second ) )
             {
                 switch( it.second.delta->GetType() )
                 {
