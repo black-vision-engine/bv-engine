@@ -108,23 +108,15 @@ void ApplyParamDelta( IParameterPtr param, ParamValDelta delta, int repCounter )
     if( auto p = QueryTypedParam< ParamTypePtr >( param ) )
     {
         TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
-        bool valueSet = false;
 
-        for( auto & k : p->AccessInterpolator().GetKeys() )
+        auto value = p->AccessInterpolator().Evaluate( startTime );
+        auto deltaValue = QueryTypedValue< ValType >( delta.delta )->GetValue();
+
+        p->SetVal( value + deltaValue, startTime );
+        
+        if( delta.deltaTime > 0 )
         {
-            if( k.t == startTime )
-            {
-                k.t += delta.deltaTime;
-
-                k.val += QueryTypedValue< ValType >( delta.delta )->GetValue();
-                valueSet = true;
-            }
-        }
-
-        if( !valueSet )
-        {
-            auto val = p->AccessInterpolator().Evaluate( startTime );
-            p->SetVal( val + QueryTypedValue< ValType >( delta.delta )->GetValue(), startTime + delta.deltaTime );
+            p->MoveKey( startTime, startTime + delta.deltaTime );
         }
     }
 }
