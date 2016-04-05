@@ -30,6 +30,10 @@
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
+#include "Engine/Graphics/Resources/UniformBuffer.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrUniformBufferObject.h"
+
+#include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 #include "Tools/HRTimer.h"
@@ -43,6 +47,10 @@
 namespace bv {
 
 extern HighResolutionTimer GTimer;
+
+
+const UInt32         Renderer::LIGHTS_UBO_BINDING_IDX   = 0;
+
 
 // *********************************
 //
@@ -74,6 +82,8 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
 
     m_PdrPBOMemTransferRT = nullptr;
     m_PdrPBOMemTransferSyncRT = nullptr;
+
+    m_lightsUBO = nullptr;
 }
 
 // *********************************
@@ -85,9 +95,25 @@ void	Renderer::SetCamera         ( Camera * cam )
 
 // *********************************
 //
-Camera * Renderer::GetCamera         ()
+Camera * Renderer::GetCamera        ()
 {
     return m_Camera;
+}
+
+// *********************************
+//
+void Renderer::EnableScene          ( Scene * scene )
+{
+    auto buffer = scene->GetLightsBuffer();
+    if( buffer )
+    {
+        if( !m_lightsUBO )
+        {
+            m_lightsUBO = new PdrUniformBufferObject( this, buffer, LIGHTS_UBO_BINDING_IDX );
+        }
+
+        m_lightsUBO->Update( buffer );
+    }
 }
 
 // *********************************
@@ -111,6 +137,8 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 void	Renderer::Terminate             ()
 {
     delete m_PdrPBOMemTransferRT;
+    delete m_PdrPBOMemTransferSyncRT;
+    delete m_lightsUBO;
 
     FreePdrResources();
 
@@ -288,6 +316,8 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
         {
             Enable( eff->GetPass( pass ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
 
+            //enable light ubo
+
             DrawRenderable( ent );
 
             //FIXME: Disable whathever there is to be disabled
@@ -336,6 +366,8 @@ void    Renderer::Enable              ( RenderablePass * pass, RenderableEntity 
     {
         shader = PdrShader::Create( pass->GetPixelShader(), pass->GetVertexShader(), pass->GetGeometryShader() );
         m_PdrShaderMap[ pass ] = shader;
+        
+        shader->BindUniformBuffer( m_lightsUBO );
     }
     else
     {

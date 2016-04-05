@@ -37,6 +37,7 @@ class Shader;
 
 class PdrTexture2D;
 class PdrVertexBuffer;
+class PdrUniformBufferObject;
 class PdrShader;
 class PdrIndexBuffer;
 class PdrVertexArrayObject;
@@ -46,6 +47,7 @@ class PdrVertexArrayObject;
 class PdrRenderTarget;
 class PdrDownloadPBO;
 class NodeEffect;
+class Scene;
 
 class TransformableEntity;
 
@@ -54,6 +56,10 @@ enum class FaceKind : int;
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 class Renderer
 {
+private:
+
+    static const UInt32         LIGHTS_UBO_BINDING_IDX;
+
 private:
 
     RendererStateInstance       m_currentStateInstance;
@@ -99,6 +105,8 @@ private:
     bool								m_EnableGLFinish;
     bool								m_EnableGLFlush;
 
+    PdrUniformBufferObject *            m_lightsUBO;
+
 public:
 
     void	Initialize			( int w, int h, TextureFormat colorFormat );
@@ -129,6 +137,8 @@ public:
 
     void    SetVSync            ( bool enable, int verticalBufferFrameCount );
     void    SetFlushFinish      ( bool flush, bool finish );
+
+    void    EnableScene         ( Scene * scene );
 
 public:
 

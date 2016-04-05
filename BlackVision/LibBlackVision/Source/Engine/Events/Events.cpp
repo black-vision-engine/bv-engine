@@ -135,6 +135,7 @@ template<> std::string              T2String        ( const LoadAssetEvent::Comm
 // ========================================================================= //
 const std::string PARAM_NAME_STRING           = "ParamName";
 const std::string PARAM_SUB_NAME_STRING       = "ParamSubName";
+const std::string PARAM_LIGHT_INDEX           = "LightIndex";
 const std::string PARAM_VALUE_STRING          = "ParamValue";
 const std::string KEY_TIME_STRING             = "Time";
 const std::string PARAM_TARGET_TYPE_STRING    = "Target";
@@ -160,6 +161,7 @@ std::pair< ParamKeyEvent::TargetType, const char* > TargetTypeMapping[] =
     { std::make_pair( ParamKeyEvent::TargetType::GlobalEffectParam, "GlobalEffectParam" )
     , std::make_pair( ParamKeyEvent::TargetType::PluginParam, "PluginParam" ) 
     , std::make_pair( ParamKeyEvent::TargetType::ResourceParam, "ResourceParam" ) 
+    , std::make_pair( ParamKeyEvent::TargetType::LightParam, "LightParam" ) 
     , std::make_pair( ParamKeyEvent::TargetType::FailTarget, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -1016,6 +1018,7 @@ void                ParamKeyEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
     ser.SetAttribute( SerializationHelper::PARAM_NAME_STRING, ParamName );
     ser.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, ParamSubName );
+    ser.SetAttribute( SerializationHelper::PARAM_LIGHT_INDEX, SerializationHelper::T2String( LightIndex ) );
     ser.SetAttribute( SerializationHelper::PARAM_VALUE_STRING, Value );
     ser.SetAttribute( SerializationHelper::KEY_TIME_STRING, SerializationHelper::T2String( Time ) );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ParamCommand ) );
@@ -1034,6 +1037,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->ParamName         = deser.GetAttribute( SerializationHelper::PARAM_NAME_STRING );
         newEvent->ParamSubName      = deser.GetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING );
+        newEvent->LightIndex        = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::PARAM_LIGHT_INDEX ), std::numeric_limits< UInt32 >::quiet_NaN() );
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
         newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );
         newEvent->ParamTargetType   = SerializationHelper::String2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING ), ParamKeyEvent::TargetType::FailTarget );

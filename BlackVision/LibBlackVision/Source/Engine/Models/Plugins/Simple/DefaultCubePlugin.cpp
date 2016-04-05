@@ -199,13 +199,12 @@ namespace Generator
 	}
 
 
-    class SideComp : public IGeometryAndUVsGenerator
+    class SideComp : public IGeometryNormalsUVsGenerator
     {
         double d;
     public:
-        Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
-        void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+        void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			CubicMappingPlane mapping_plane;
 			if( d < 0 )
@@ -242,24 +241,27 @@ namespace Generator
 				uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
 				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
 			}
+                
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
 
         SideComp( double d_ ) : d( d_ ) { }
     };
 
-    class MainComp : public IGeometryAndUVsGenerator
+    class MainComp : public IGeometryNormalsUVsGenerator
     {
         glm::vec3 **v;
         int n, m;
     public:
-        Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
-        void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+        void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
             Init();
             GenerateV();
             CopyV( verts, uvs );
             Deinit();
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
 
         void Init() 
@@ -628,9 +630,9 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
     double depth = Generator::dims.z/2;
     
     std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new Generator::MainComp() ) );
-    gens.push_back( IGeometryGeneratorPtr( new Generator::SideComp( depth ) ) );
-    gens.push_back( IGeometryGeneratorPtr( new Generator::SideComp( -depth ) ) );
+    gens.push_back( std::make_shared< Generator::MainComp >() );
+    gens.push_back( std::make_shared< Generator::SideComp >( depth ) );
+    gens.push_back( std::make_shared< Generator::SideComp >( -depth ) );
     return gens;
 }
 

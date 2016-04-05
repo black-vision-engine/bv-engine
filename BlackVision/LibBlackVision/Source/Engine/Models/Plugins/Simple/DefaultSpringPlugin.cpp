@@ -112,7 +112,7 @@ bool                                Plugin::NeedsTopologyUpdate()
 }
 
 
-class Generator : public IGeometryAndUVsGenerator
+class Generator : public IGeometryNormalsUVsGenerator
 {
 protected:
     IParamValModelPtr model;
@@ -130,7 +130,7 @@ public:
 	Generator( IParamValModelPtr m ) : model( m ) { center_translate = glm::vec3( 0.0, 0.0, 0.0); }
 
 	void setLocalParameters();
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr, Float3AttributeChannelPtr, Float2AttributeChannelPtr );
 	void computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ );
 };
 
@@ -141,7 +141,7 @@ private:
 public:
 	ClosureGenerator( IParamValModelPtr m, bool rot ) : Generator( m ), rotated( rot ) {}
 
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr, Float3AttributeChannelPtr, Float2AttributeChannelPtr );
 	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
 	glm::vec2 computeUV( int loop_counter, double h, bool center  );
 };
@@ -150,9 +150,9 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 {
     std::vector<IGeometryGeneratorPtr> gens;
 
-    gens.push_back( IGeometryGeneratorPtr( new Generator( m_pluginParamValModel->GetVertexAttributesChannelModel() ) ) );
-	gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( m_pluginParamValModel->GetVertexAttributesChannelModel(), false ) ) );
-	gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( m_pluginParamValModel->GetVertexAttributesChannelModel(), true ) ) );
+    gens.push_back( std::make_shared< Generator >( m_pluginParamValModel->GetVertexAttributesChannelModel() ) );
+	gens.push_back( std::make_shared< ClosureGenerator >( m_pluginParamValModel->GetVertexAttributesChannelModel(), false ) );
+	gens.push_back( std::make_shared< ClosureGenerator >( m_pluginParamValModel->GetVertexAttributesChannelModel(), true ) );
 
     return gens;
 }
@@ -225,7 +225,7 @@ void Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::Weigh
 		center_translate += glm::vec3( 0.0, 0.0, r + r2 );
 }
 
-void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+void Generator::GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
 {
 	setLocalParameters();
 
@@ -254,6 +254,8 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 			verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
             uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
         }
+
+    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 }
 
 void ClosureGenerator::generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop )
@@ -282,7 +284,7 @@ void ClosureGenerator::generateClosure( Float3AttributeChannelPtr verts, Float2A
 	}
 }
 
-void ClosureGenerator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+void ClosureGenerator::GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
 {
 	setLocalParameters();
 
@@ -290,6 +292,8 @@ void ClosureGenerator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, 
 		generateClosure( verts, uvs, tesselation );
 	else
 		generateClosure( verts, uvs, 0 );
+
+    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 }
 
 /**@brief Generates UV depending on mapping type.

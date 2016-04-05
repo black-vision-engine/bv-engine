@@ -140,7 +140,7 @@ namespace ConeGenerator
 
 
 
-    class LateralSurface : public IGeometryAndUVsGenerator
+    class LateralSurface : public IGeometryNormalsUVsGenerator
     {
 	protected:
         float height, radius;
@@ -148,9 +148,6 @@ namespace ConeGenerator
 		double angle_offset;			// OpenAngleMode needs this
     public:
         LateralSurface( float h, float r ) : height( h ), radius( r ) { }
-
-        virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
-
 
 		double computeAngle2Clamped( double angle, float stripe_num )
 		{
@@ -497,7 +494,7 @@ namespace ConeGenerator
 				assert( false );
 		}
 
-        virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+        virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
         {
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			computeAngleOffset();
@@ -551,6 +548,8 @@ namespace ConeGenerator
 				generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs, gen_direction );
 
 			generateUV( verts, uvs );
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
     };
 
@@ -661,7 +660,7 @@ namespace ConeGenerator
 			}
 		}
 
-		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
         {
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			computeAngleOffset();
@@ -699,7 +698,9 @@ namespace ConeGenerator
 			generateHalfClosure( circleCenter1, circleCenter2, verts, uvs, angle );
 
 			computeOLDSTYLEmapping( verts, uvs );	// Computed only if mapping_type::OLDSTYLE is set.
-		}
+		
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+        }
 	};
 };
 
@@ -743,10 +744,12 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 		m_mappingType->Evaluate()
 		);
 
-    std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
+    std::vector< IGeometryGeneratorPtr > gens;
+    gens.push_back( std::make_shared< ConeGenerator::LateralSurface >( ConeGenerator::height, ConeGenerator::outer_radius ) );
 	if( m_openAngle->GetValue() > 0.0 )
-		gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
+    {
+		gens.push_back( std::make_shared< ConeGenerator::ConeClosure >( ConeGenerator::height, ConeGenerator::outer_radius ) );
+    }
     return gens;
 }
 
