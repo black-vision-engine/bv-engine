@@ -189,14 +189,9 @@ Camera *					SceneModel::GetCamera              ()  const
 
 // *******************************
 //
-bool                        SceneModel::AddLight            ( IModelLightUPtr light ) 
+void                        SceneModel::AddLight            ( IModelLightUPtr light ) 
 {
-    if( m_lights.size() < MAX_LIGHTS_NUM )
-    {
-        m_lights.push_back( std::move( light ) );
-        return true;
-    }
-    return false;
+    m_lights.push_back( std::move( light ) );
 }
 
 // *******************************
@@ -237,6 +232,8 @@ ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 	return m_modelSceneEditor;
 }
 
+// *******************************
+//
 SceneVariables &            SceneModel::GetSceneVariables   ()
 {
     return m_sceneVariables;

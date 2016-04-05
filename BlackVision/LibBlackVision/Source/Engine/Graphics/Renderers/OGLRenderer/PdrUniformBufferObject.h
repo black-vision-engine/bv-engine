@@ -3,6 +3,8 @@
 #include "BVGL.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+#include "Engine/Graphics/Resources/UniformBuffer.h"
+
 
 namespace bv {
 
@@ -13,13 +15,13 @@ class PdrUniformBufferObject
 {
 private:
 
-    GLuint          m_bufferHandle;
-    GLuint          m_blockBindingIdx;
-    std::string     m_blockName;
+    GLuint                  m_bufferHandle;
+    GLuint                  m_blockBindingIdx;
+    std::string             m_blockName;
 
 public:
 
-            PdrUniformBufferObject     ( Renderer * renderer, const UniformBuffer * ub, UInt32 bindingBlockIdx, const std::string & blockName );
+            PdrUniformBufferObject     ( Renderer * renderer, const UniformBuffer * ub, UInt32 bindingBlockIdx );
             ~PdrUniformBufferObject    ();
 
     void    Enable              ( Renderer * renderer );
@@ -34,12 +36,16 @@ public:
     void    Bind                ();
     void    Unbind              ();
 
-    void    UniformBlockBinding ( UInt32 program );
+    void    UniformBlockBinding ( UInt32 program ) const;
+
+    bool    ValidateUniformBlockLayout          ( const UniformBuffer * ub, UInt32 program );
 
 private:
 
-    void    BufferData          ( const UniformBuffer * ub ) const;
-    void    CreateBuffer        ( const UniformBuffer * ub );
+    void    BufferData                          ( const UniformBuffer * ub ) const;
+    void    CreateBuffer                        ( const UniformBuffer * ub );
+
+    UniformBlockLayout  GetUniformBlockLayout   ( UInt32 program ) const;
 
 };
 

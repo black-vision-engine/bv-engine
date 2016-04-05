@@ -5,15 +5,38 @@
 
 namespace bv {
 
+
+Int32      UniformBuffer::TypeAlignMap[ ( UInt32 )ParamType::PT_TOTAL ] =
+{
+    4,  //PT_FLOAT1,
+    8,  //PT_FLOAT2,
+    16, //PT_FLOAT3,
+    16, //PT_FLOAT4,
+    16, //PT_MAT2,
+    16, //PT_MAT3,
+    16, //PT_MAT4,
+    4,  //PT_INT,
+    4,  //PT_BOOL,
+    4,  //PT_ENUM,
+    -1, //PT_STRING,
+    -1 //PT_WSTRING,
+};
+
 // *********************************
 //
-UniformBuffer::UniformBuffer ( SizeType size, DataBuffer::Semantic semantic )
-    : m_size( size )
-    , m_semantic( semantic )
+bool UniformDesc::operator < ( const UniformDesc & other ) const
 {
-    assert( size > 0 );
+    return offset < other.offset;
+}
 
-	m_data = new char[ m_size ];
+// *********************************
+//
+UniformBuffer::UniformBuffer ( const UniformBlockLayout * blockLayout, DataBuffer::Semantic semantic )
+    : m_semantic( semantic )
+    , m_layout( blockLayout )
+{
+    assert( m_layout->size > 0 );
+	m_data = new char[ m_layout->size ];
 }
 
 // *********************************
@@ -25,30 +48,37 @@ UniformBuffer::~UniformBuffer ()
 
 // *********************************
 //
-DataBuffer::Semantic	UniformBuffer::GetSemantic	() const
+DataBuffer::Semantic	    UniformBuffer::GetSemantic	() const
 {
     return m_semantic;
 }
 
 // *********************************
 //
-SizeType    UniformBuffer::Size	() const
+const UniformBlockLayout *	UniformBuffer::GetLayout	() const
 {
-    return m_size;
+    return m_layout;
 }
 
 // *********************************
 //
-char *	    UniformBuffer::Data	() const
+SizeType                    UniformBuffer::Size	        () const
+{
+    return m_layout->size;
+}
+
+// *********************************
+//
+const char *                UniformBuffer::GetData	    () const
 {
     return m_data;
 }
 
 // *********************************
 //
-void        UniformBuffer::WriteToBuffer   ( const char * src, SizeType size )
+void                        UniformBuffer::WriteData    ( const char * srcData, SizeType srcSize, UInt32 destOffset )
 {
-    memcpy( m_data, src, size );
+    memcpy( &m_data[ destOffset ], srcData, srcSize );
 }
 
 }

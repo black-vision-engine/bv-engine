@@ -16,6 +16,9 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Models/Lights/HelperModelLights.h"
+
+
 namespace bv {
 
 const std::string	BVProject::MAIN_ROOT_NAME			= "main root";
@@ -76,6 +79,11 @@ void            BVProject::Update( TimeType t )
     if( m_rootNode )
     {
         m_rootNode->Update( t );
+
+        for( auto & scene : m_sceneModelVec )
+        {
+            scene->Update( t );
+        }
 
         UpdatersManager::Get().UpdateStep();
 
@@ -151,6 +159,13 @@ model::SceneModelPtr    BVProject::GetScene            ( UInt32 idx ) const
 const model::SceneModelVec &    BVProject::GetScenes    () const
 {
     return m_sceneModelVec;
+}
+
+// *******************************
+//
+SceneVec &                      BVProject::GetEngineScenes ()
+{
+    return m_sceneVec;
 }
 
 // *******************************
