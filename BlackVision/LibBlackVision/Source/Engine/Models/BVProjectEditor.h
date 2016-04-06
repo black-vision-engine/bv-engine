@@ -197,10 +197,10 @@ public:
 
 /* LIGHTS */
 
-    bool                    AddLight                    ( const std::string & sceneName, LightType type );
+    bool                    AddLight                    ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath );
     bool                    RemoveLight                 ( const std::string & sceneName, UInt32 idx );
 
-    bool                    AddLight                    ( model::SceneModelPtr scene, LightType type );
+    bool                    AddLight                    ( model::SceneModelPtr scene, LightType type, model::ITimeEvaluatorPtr timeline );
     bool                    RemoveLight                 ( model::SceneModelPtr scene, UInt32 idx );
     
 private:

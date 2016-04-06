@@ -999,10 +999,13 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
 
 // *******************************
 //
-bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, LightType type )
+bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath )
 {
     auto modelScene = m_project->GetModelScene( sceneName );
-    return AddLight( modelScene, type );
+    auto type = SerializationHelper::String2T< LightType >( lightType , LightType::LT_DIRECTIONAL );
+    auto timeline = GetTimeEvaluator( timelinePath );
+
+    return AddLight( modelScene, type, timeline );
 }
 
 // *******************************
@@ -1015,13 +1018,11 @@ bool            BVProjectEditor::RemoveLight                ( const std::string 
 
 // *******************************
 //
-bool            BVProjectEditor::AddLight                    ( model::SceneModelPtr modelScene, LightType type )
+bool            BVProjectEditor::AddLight                    ( model::SceneModelPtr modelScene, LightType type, model::ITimeEvaluatorPtr timeline )
 {
-    if( modelScene )
+    if( modelScene && timeline )
     {
-        auto timeEval = GetSceneDefaultTimeline( modelScene );
-        auto light = model::HelperModelLights::CreateModelLight( type, timeEval );
-
+        auto light = model::HelperModelLights::CreateModelLight( type, timeline );
         modelScene->AddLight( std::unique_ptr< model::IModelLight >( light ) );
         
         return true;

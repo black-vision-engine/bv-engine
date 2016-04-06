@@ -705,6 +705,36 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
 // ***********************
 //
+void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
+{
+    if( evt->GetEventType() != LightEvent::Type() )
+    {
+        return;
+    }
+
+    auto lightEvent = std::static_pointer_cast< LightEvent >( evt );
+
+    auto command      = lightEvent->SceneCommand;
+    auto sceneName    = lightEvent->SceneName;
+    auto lightType    = lightEvent->LightType;
+    auto lightIdx     = lightEvent->LightIndex;
+    auto timelinePath = lightEvent->TimelinePath;
+   // auto eventID      = lightEvent->EventID;
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    if( command == LightEvent::Command::AddLight )
+    {
+        editor->AddLight( sceneName, lightType, timelinePath );
+    }
+    else if( command == LightEvent::Command::RemoveLight )
+    {
+        editor->RemoveLight( sceneName, lightIdx );
+    }
+}
+
+// ***********************
+//
 void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
 {
     if( evt->GetEventType() != bv::SceneVariableEvent::Type() )

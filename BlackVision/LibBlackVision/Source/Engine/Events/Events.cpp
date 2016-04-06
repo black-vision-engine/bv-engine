@@ -103,6 +103,9 @@ std::string ConfigEvent::m_sEventName               = "ConfigEvent";
 const EventType TabStopEvent::m_sEventType          = 0x30000024;
 std::string TabStopEvent::m_sEventName              = "TabStopEvent";
 
+const EventType LightEvent::m_sEventType			= 0x30000025;
+std::string LightEvent::m_sEventName				= "LightEvent";
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -207,6 +210,23 @@ std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
 
 template<> SceneEvent::Command  String2T    ( const std::string& s, const SceneEvent::Command& defaultVal )     { return String2Enum( SceneCommandMapping, s, defaultVal ); }
 template<> std::string          T2String    ( const SceneEvent::Command & t )                                   { return Enum2String( SceneCommandMapping, t ); }
+
+
+// ========================================================================= //
+// LightEvent
+// ========================================================================= //
+const std::string LIGHT_TYPE_STRING        = "LightType";
+const std::string LIGHT_INDEX_STRING       = "LightIndex";
+
+std::pair< LightEvent::Command, const char* > LightCommandMapping[] = 
+{
+    std::make_pair( LightEvent::Command::AddLight, "AddLight" )
+    , std::make_pair( LightEvent::Command::RemoveLight, "RemoveLight" )
+    , std::make_pair( LightEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> LightEvent::Command  String2T    ( const std::string& s, const LightEvent::Command& defaultVal )     { return String2Enum( LightCommandMapping, s, defaultVal ); }
+template<> std::string          T2String    ( const LightEvent::Command & t )                                   { return Enum2String( LightCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -1190,6 +1210,60 @@ const std::string&  SceneEvent::GetName() const
 // *************************************
 //
 EventType           SceneEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
+//******************* LightEvent *************
+
+// *************************************
+//
+void					LightEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( SceneCommand ) );
+    ser.SetAttribute( SerializationHelper::LIGHT_TYPE_STRING, LightType );
+    ser.SetAttribute( SerializationHelper::LIGHT_INDEX_STRING, SerializationHelper::T2String( LightIndex ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
+}
+
+// *************************************
+//
+IEventPtr                LightEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        LightEventPtr newEvent		= std::make_shared< LightEvent >();
+        newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->SceneCommand      = SerializationHelper::String2T< LightEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), LightEvent::Command::Fail );
+        newEvent->LightType         = deser.GetAttribute( SerializationHelper::LIGHT_TYPE_STRING );
+        newEvent->LightIndex        = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::LIGHT_INDEX_STRING ), 0 );
+        newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               LightEvent::Clone             () const
+{   return IEventPtr( new LightEvent( *this ) );  }
+
+// *************************************
+//
+EventType           LightEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        LightEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  LightEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           LightEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

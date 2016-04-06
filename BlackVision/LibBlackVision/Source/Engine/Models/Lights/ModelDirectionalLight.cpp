@@ -20,7 +20,7 @@ const std::string       ModelDirectionalLight::PARAM::DIRECTION      = "directio
     auto directionEvaluator = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::DIRECTION, timeEvaluator );
 
     colorEvaluator->Parameter()->SetVal( glm::vec3( 1.0f, 1.0f, 1.0f ), 0.f );
-    directionEvaluator->Parameter()->SetVal( glm::vec3( -1.0f, 0.0f, 0.0f ), 0.f );
+    directionEvaluator->Parameter()->SetVal( glm::vec3( 0.0f, 0.0f, -1.0f ), 0.f );
 
     m_paramModel->RegisterAll( colorEvaluator );
     m_paramModel->RegisterAll( directionEvaluator );
