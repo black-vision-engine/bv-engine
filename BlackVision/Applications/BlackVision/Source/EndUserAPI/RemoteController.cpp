@@ -32,6 +32,7 @@ RemoteController::RemoteController()
     RegisterEvent( MouseEvent::Name(), MouseEvent::Create );
     RegisterEvent( SceneVariableEvent::Name(), SceneVariableEvent::Create );
     RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
+    RegisterEvent( TabStopEvent::Name(), TabStopEvent::Create );
 }
 
 

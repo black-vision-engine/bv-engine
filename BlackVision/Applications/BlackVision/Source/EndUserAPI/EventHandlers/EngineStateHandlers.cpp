@@ -175,8 +175,7 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     bv::ConfigEventPtr configEvent  = std::static_pointer_cast<bv::ConfigEvent>( evt );
     auto command        = configEvent->ConfigCommand;
     auto& key           = configEvent->Key;
-    //auto& value         = configEvent->Value;
-    auto& valType       = configEvent->ValueType;
+    auto& value         = configEvent->Value;
 
 
     JsonSerializeObject ser;
@@ -184,32 +183,23 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
 
     if( command == ConfigEvent::Command::ReadValue )
     {
-        if( valType == "int" )
-        {
-            auto result = ConfigManager::GetInt( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else if( valType == "float" )
-        {
-            auto result = ConfigManager::GetFloat( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else if( valType == "bool" )
-        {
-            auto result = ConfigManager::GetBool( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else if( valType == "string" )
-        {
-            auto result = ConfigManager::GetString( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else
-        {
-            SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Wrong value type." );
-            return;
-        }
-
+        auto result = ConfigManager::GetString( key );
+        ser.SetAttribute( "Value", result );
+    }
+    else if( command == ConfigEvent::Command::SetValue )
+    {
+        ConfigManager::SetString( key, value );
+    }
+    else if( command == ConfigEvent::Command::SaveConfig )
+    {
+        bool result = ConfigManager::SaveXMLConfig();
+        SendSimpleResponse( command, configEvent->EventID, configEvent->SocketID, result );
+        return;
+    }
+    else
+    {
+        SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Unknown command" );
+        return;
     }
 
     SendResponse( ser, configEvent->SocketID, configEvent->EventID );

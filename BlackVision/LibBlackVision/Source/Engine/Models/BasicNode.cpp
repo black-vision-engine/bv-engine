@@ -108,10 +108,10 @@ void                            BasicNode::Serialize               ( ISerializer
     if( context->detailedInfo )
         ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
-    if( context->detailedInfo )
-    {
-        GetAssetsWithUIDs( *context->GetAssets(), this );
-    }
+    //if( context->detailedInfo )
+    //{
+    //    GetAssetsWithUIDs( *context->GetAssets(), this );
+    //}
 
     if( context->pluginsInfo )
     {
