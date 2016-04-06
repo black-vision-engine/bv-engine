@@ -157,7 +157,8 @@ ser.EnterChild( "plugin" );
             {
                 auto assetDesc = lasset.assetDesc;
                 ser.EnterChild( "asset" );
-                    if( serContext->GetAssets() )
+                    auto assets = serContext->GetAssets();
+                    if( assets && assets->Key2UID( assetDesc->GetKey() ) != "" )
                     {
                         auto uid = serContext->GetAssets()->Key2UID( assetDesc->GetKey() );
                         ser.SetAttribute( "uid", uid );
@@ -225,16 +226,15 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
         {
             deser.EnterChild( "asset" );
 
-            auto uid = deser.GetAttribute( "uid" );
+            auto asset = AssetManager::GetInstance().CreateDesc( deser );
 
-            AssetDescConstPtr asset;
-            if( uid != "" && deserContext->GetAssets() != nullptr )
+            if( asset == nullptr )
             {
+                auto uid = deser.GetAttribute( "uid" );
+
+                assert( deserContext->GetAssets() != nullptr );
+
                 asset = deserContext->GetAssets()->UID2Asset( uid );
-            }
-            else
-            {
-                asset = AssetManager::GetInstance().CreateDesc( deser );
             }
 
             if( asset )
