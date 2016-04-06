@@ -20,6 +20,7 @@ public:
 	static bool LoadConfig();
 
     static bool LoadXMLConfig();
+    static bool SaveXMLConfig();
 
     static KeyValue&        GetOrCreateValue    ( const std::string& key );
     static KeyValue         GetValue            ( std::string key );

@@ -1064,6 +1064,7 @@ public:
     {
         ReadValue,
         SetValue,
+        SaveConfig,
         Fail            ///< Wrong command
     } Command;
 private:

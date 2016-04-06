@@ -190,6 +190,12 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     {
         ConfigManager::SetString( key, value );
     }
+    else if( command == ConfigEvent::Command::SaveConfig )
+    {
+        bool result = ConfigManager::SaveXMLConfig();
+        SendSimpleResponse( command, configEvent->EventID, configEvent->SocketID, result );
+        return;
+    }
     else
     {
         SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Unknown command" );

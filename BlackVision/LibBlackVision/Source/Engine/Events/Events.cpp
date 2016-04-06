@@ -576,6 +576,7 @@ std::pair< ConfigEvent::Command, const char* > ConfigEventCommandMapping[] =
 {
     std::make_pair( ConfigEvent::Command::ReadValue, "ReadValue" )
     , std::make_pair( ConfigEvent::Command::SetValue, "SetValue" )
+    , std::make_pair( ConfigEvent::Command::SaveConfig, "SaveConfig" )
     , std::make_pair( ConfigEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
