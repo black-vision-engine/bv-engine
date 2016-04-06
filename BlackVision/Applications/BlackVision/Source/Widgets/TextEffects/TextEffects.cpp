@@ -126,7 +126,7 @@ bool                    TextEffects::HandleEvent        ( IDeserializer & eventS
     if( action == "Initialize" ) 
     {
         auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
-        auto scene = editor->GetScene( context->GetSceneName() );
+        auto scene = editor->GetModelScene( context->GetSceneName() );
 
         m_shadowNode = editor->AddNodeCopy( scene, m_node, scene, m_node );
 

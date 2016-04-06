@@ -308,7 +308,7 @@ ParameterPtr PluginEventsHandlers::GetLightParameter        ( const std::string 
                                                               UInt32 lightIndex,
                                                               const std::string & paramName )
 {
-    auto scene = m_projectEditor->GetScene( sceneName );
+    auto scene = m_projectEditor->GetModelScene( sceneName );
     if( scene )
     {
         auto light = scene->GetLight( lightIndex );

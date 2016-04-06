@@ -33,7 +33,7 @@ private:
     SceneEditor *               m_engineSceneEditor;
     
     TNodesMapping	            m_nodesMapping;
-    TScenesMapping	            m_scenesMapping;
+    TScenesMapping              m_scenesMapping;
 
     SceneModelVec				m_detachedScenes;
 
@@ -61,7 +61,7 @@ public:
 
     bool					SetSceneVisible		( const std::string & sceneName, bool visible );
 
-    model::SceneModelPtr    GetScene			( const std::string & sceneName ) const;
+    model::SceneModelPtr    GetModelScene			( const std::string & sceneName ) const;
 
     bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
 
@@ -205,24 +205,27 @@ public:
     
 private:
 
-    /* engine scene helpers */
+    /* scene helpers */
     void					RefreshNode			( model::BasicNodePtr modelNode, SceneNode * sceneNode, Renderer * renderer );
+    
     void                    MappingsCleanup     ( model::IModelNodePtr node );
-
     void                    RemoveNodeMapping   ( model::IModelNodePtr node );
     void                    UnregisterUpdaters  ( model::IModelNodePtr node );
 
+    void                    MappingsCleanup     ( model::SceneModelPtr modelScene );
+    void                    RemoveSceneMapping  ( model::SceneModelPtr modelScene );
+    void                    UnregisterUpdaters  ( model::SceneModelPtr modelScene );
+
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node ) const;
     
-    
-    /* scene helpers */
+    void                    AddModelScene       ( model::SceneModelPtr modelScene, UInt32 idx );
+    void                    AddEngineScene      ( model::SceneModelPtr modelScene, UInt32 idx );
 
-    bool                    AddModelScene       ( model::SceneModelPtr modelScene, UInt32 idx );
-    void                    AddScene            ( model::SceneModelPtr modelScene, Scene * scene, UInt32 idx );
     bool                    RemoveModelScene    ( model::SceneModelPtr modelScene );
+    bool                    RemoveEngineScene   ( model::SceneModelPtr modelScene );
 
-    void                    SetModelSceneRootNode   ( model::SceneModelPtr modelScene, model::IModelNodePtr rootNode );
-    void                    DeleteModelSceneRootNode( model::SceneModelPtr modelScene );
+    void                    SetSceneRootNode    ( model::SceneModelPtr modelScene, model::IModelNodePtr rootNode );
+    void                    DeleteSceneRootNode ( model::SceneModelPtr modelScene );
 
 
     /* renaming helpers */

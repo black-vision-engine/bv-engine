@@ -310,7 +310,8 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
 
                 HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
-                m_renderLogic->RenderFrame( renderer, m_bvProject->GetEngineSceneRoot() );
+
+                m_renderLogic->RenderFrame( renderer, m_bvProject->GetScenes() );
      
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
                 {

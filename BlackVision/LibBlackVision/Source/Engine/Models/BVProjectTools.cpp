@@ -116,11 +116,12 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
 
 // *******************************
 //
-Scene *             BVProjectTools::BuildEngineScene                    ( model::SceneModelPtr modelScene )
+Scene *             BVProjectTools::BuildEngineScene                    ( model::SceneModelPtr modelScene, model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping )
 {
     auto scene = new Scene();
     
-    //todo
+    auto root = BuildEngineSceneNode( modelNode, nodesMapping );
+    scene->SetRoot( root );
 
     return scene;
 }

@@ -11,6 +11,7 @@ namespace bv {
 // ********************************
 //
                     Scene::Scene                    ()
+    : m_root( nullptr )
 {
     auto lightsLayout = LightsLayout< UniformBlockLayoutType::STD140 >::Instance().GetBlockLayout();
     m_lightsBuffer =  new UniformBuffer( lightsLayout, DataBuffer::Semantic::S_DYNAMIC );
@@ -25,15 +26,23 @@ namespace bv {
 
 // ********************************
 //
-UniformBuffer *     Scene::GetLightsBuffer          ()
+SceneNode *         Scene::GetRoot                  () const
 {
-    return m_lightsBuffer;
+    return m_root;
 }
 
 // ********************************
 //
-void                Scene::Update                   ()
+void                Scene::SetRoot                  ( SceneNode * node )
 {
+    m_root = node;
+}
+
+// ********************************
+//
+UniformBuffer *     Scene::GetLightsBuffer          () const
+{
+    return m_lightsBuffer;
 }
 
 // ********************************

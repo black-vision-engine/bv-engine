@@ -7,6 +7,8 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
 #include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
+
 
 namespace bv {
 
@@ -55,7 +57,7 @@ public:
             RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool renderToSharedMemory );
             ~RenderLogic    ();
 
-    void    RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot );
+    void    RenderFrame     ( Renderer * renderer, const SceneVec & scenes );
 
 //	//pablito
 //	void	SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
@@ -66,10 +68,10 @@ public:
 private:
 
 
-    void    RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot );
+    void    RenderFrameImpl ( Renderer * renderer, const SceneVec & scenes );
     void    FrameRendered   ( Renderer * renderer );
 
-    void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
+    void    RenderRootNode  ( Renderer * renderer, const SceneVec & scenes, RenderTarget * rt );
 
 public:
 

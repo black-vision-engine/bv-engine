@@ -29,7 +29,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
     if( c == 's' )
     {
         auto sob = new BVXMLSerializer();
-        logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
+        logic->GetBVProject()->GetModelScenes()[ 0 ]->Serialize( *sob );
         sob->Save( "test.xml" );
         delete sob;
     }

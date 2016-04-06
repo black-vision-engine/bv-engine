@@ -104,21 +104,21 @@ model::BasicNodePtr		BVProject::GetModelSceneRoot  () const
 
 // *******************************
 //
-SceneNode *             BVProject::GetEngineSceneRoot ()  const
+SceneNode *             BVProject::GetEngineSceneRoot   ()  const
 {
     return m_engineSceneRoot;
 }
 
 // *******************************
 //
-BVProjectEditor *       BVProject::GetProjectEditor		()
+BVProjectEditor *       BVProject::GetProjectEditor	    () const
 {
     return m_projectEditor;
 }
 
 // *******************************
 //
-StringVector            BVProject::ListScenesNames     () const
+StringVector            BVProject::ListScenesNames      () const
 {
     StringVector ret;
     for( auto & sm : m_sceneModelVec )
@@ -131,7 +131,7 @@ StringVector            BVProject::ListScenesNames     () const
 
 // *******************************
 //
-model::SceneModelPtr    BVProject::GetScene            ( const std::string & name ) const
+model::SceneModelPtr    BVProject::GetModelScene            ( const std::string & name ) const
 {
     for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
     {
@@ -145,7 +145,7 @@ model::SceneModelPtr    BVProject::GetScene            ( const std::string & nam
 
 // *******************************
 //
-model::SceneModelPtr    BVProject::GetScene            ( UInt32 idx ) const
+model::SceneModelPtr    BVProject::GetModelScene            ( UInt32 idx ) const
 {
     if( idx < m_sceneModelVec.size() )
     {
@@ -156,14 +156,14 @@ model::SceneModelPtr    BVProject::GetScene            ( UInt32 idx ) const
 
 // *******************************
 //
-const model::SceneModelVec &    BVProject::GetScenes    () const
+const model::SceneModelVec &    BVProject::GetModelScenes   () const
 {
     return m_sceneModelVec;
 }
 
 // *******************************
 //
-SceneVec &                      BVProject::GetEngineScenes ()
+const SceneVec &                BVProject::GetScenes        () const
 {
     return m_sceneVec;
 }

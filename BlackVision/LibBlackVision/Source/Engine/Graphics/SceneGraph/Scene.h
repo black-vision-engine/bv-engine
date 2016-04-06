@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Resources/UniformBuffer.h"
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
 
 #include "CoreDEF.h"
 
@@ -14,6 +15,8 @@ class Scene
 {
 private:
 
+    SceneNode *             m_root;
+
     UniformBuffer *         m_lightsBuffer;
 
 public:
@@ -23,9 +26,10 @@ public:
 
 public:
 
-    void                    Update              ();
+    SceneNode *             GetRoot             () const;
+    void                    SetRoot             ( SceneNode * node );
 
-    UniformBuffer *         GetLightsBuffer     ();
+    UniformBuffer *         GetLightsBuffer     () const;
     static UInt32           GetMaxLightsNum     ();
 
 };
