@@ -719,18 +719,21 @@ void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
     auto lightType    = lightEvent->LightType;
     auto lightIdx     = lightEvent->LightIndex;
     auto timelinePath = lightEvent->TimelinePath;
-   // auto eventID      = lightEvent->EventID;
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    
+    bool result = false;
 
     if( command == LightEvent::Command::AddLight )
     {
-        editor->AddLight( sceneName, lightType, timelinePath );
+        result = editor->AddLight( sceneName, lightType, timelinePath );
     }
     else if( command == LightEvent::Command::RemoveLight )
     {
-        editor->RemoveLight( sceneName, lightIdx );
+        result = editor->RemoveLight( sceneName, lightIdx );
     }
+
+    SendSimpleResponse( command, lightEvent->EventID, lightEvent->SocketID, result );
 }
 
 // ***********************
