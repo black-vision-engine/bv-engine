@@ -1,9 +1,11 @@
 #pragma once
 
+
 #include "Engine/Models/Interfaces/INodeLogic.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/BasicNode.h"
 
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+#include "Assets/Font/FontAssetDescriptor.h"
 
 namespace bv { namespace model
 {
@@ -23,6 +25,8 @@ private:
     BasicNodePtr                    m_shadowNode;
 
     DefaultParamValModelPtr         m_paramValModel;
+
+    UInt32                          m_blurSize;
 
     explicit                        TextEffects     ( const BasicNodePtr & node );
 
@@ -52,6 +56,11 @@ private:
 
     IPluginPtr                      GetTextPlugin           () const;
     IPluginPtr                      GetShadowTextPlugin     () const;
+
+    FontAssetDescConstPtr           GetFontAssetDesc        () const;
+    FontAssetDescConstPtr           GetShadowFontAssetDesc  () const;
+    bool                            ReloadShadowNodeAsset   () const;
+    bool                            ShadowAssetIsValid      () const;
 };
 
 } // model

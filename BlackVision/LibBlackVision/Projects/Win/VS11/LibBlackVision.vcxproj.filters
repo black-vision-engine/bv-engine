@@ -283,6 +283,9 @@
     <Filter Include="Mathematics\Util">
       <UniqueIdentifier>{ef62563e-b8be-4fae-9264-9b3c6234fc0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Lights">
+      <UniqueIdentifier>{db65c1af-2082-49de-86c2-432b5bc6149a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1431,6 +1434,30 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.cpp">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\UniformBuffer.cpp">
+      <Filter>Engine\Graphics\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrUniformBufferObject.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.cpp">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.cpp">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelSpotLight.cpp">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.cpp">
+      <Filter>Engine\Models\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3563,6 +3590,36 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelLight.h">
+      <Filter>Engine\Models\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.h">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\UniformBuffer.h">
+      <Filter>Engine\Graphics\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrUniformBufferObject.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.h">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.h">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelSpotLight.h">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.h">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -3627,6 +3684,9 @@
     </None>
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl">
       <Filter>Mathematics\Interpolators</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.inl">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </None>
   </ItemGroup>
 </Project>

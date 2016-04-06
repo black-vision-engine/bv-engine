@@ -22,8 +22,8 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
         for( auto& shift : m_paramsShifts )
         {
             ser.EnterChild( "paramShift" );
-                ser.SetAttribute( "pluginName", shift.first.first );
-                ser.SetAttribute( "paramName", shift.first.second );
+                ser.SetAttribute( "pluginName", shift.first.first.first );
+                ser.SetAttribute( "paramName", shift.first.first.second );
 
                 ser.EnterChild( "paramDelta" );
                     ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
@@ -74,6 +74,8 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
 
             deser.ExitChild();  // paramDelta
 
+            shiftModifier->AddParamShift( pluginName, paramName, shift );
+
         } while( deser.NextChild() );
         deser.ExitChild();  // paramShift
     }
@@ -88,7 +90,8 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
 void                            ShiftReplicationModifier::AddParamShift( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift )
 {
     auto p = std::make_pair( pluginName, paramName );
-    m_paramsShifts[ p ] = shift;
+    auto mapKey = std::make_pair( p, shift.startTime );     // Parameter key time is part of map key. We can move multiple keys for one parameter.
+    m_paramsShifts[ mapKey ] = shift;
 }
 
 
@@ -98,29 +101,22 @@ namespace
 {
 
 template< class ParamTypePtr, ParamType paramType >
-void ApplyParamDelta( IParameterPtr param, ParamValDelta delta )
+void ApplyParamDelta( IParameterPtr param, ParamValDelta delta, int repCounter )
 {
     typedef std::shared_ptr< ValueImpl< ParamTypePtr::element_type::ValType, paramType > > ValType;
 
     if( auto p = QueryTypedParam< ParamTypePtr >( param ) )
     {
-        bool valueSet = false;
+        TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
 
-        for( auto & k : p->AccessInterpolator().GetKeys() )
+        auto value = p->AccessInterpolator().Evaluate( startTime );
+        auto deltaValue = QueryTypedValue< ValType >( delta.delta )->GetValue();
+
+        p->SetVal( value + deltaValue, startTime );
+        
+        if( delta.deltaTime > 0 )
         {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                k.val += QueryTypedValue< ValType >( delta.delta )->GetValue();
-                valueSet = true;
-            }
-        }
-
-        if( !valueSet )
-        {
-            auto val = p->AccessInterpolator().Evaluate( delta.startTime );
-            p->SetVal( val + QueryTypedValue< ValType >( delta.delta )->GetValue(), delta.startTime + delta.deltaTime );
+            p->MoveKey( startTime, startTime + delta.deltaTime );
         }
     }
 }
@@ -129,45 +125,45 @@ void ApplyParamDelta( IParameterPtr param, ParamValDelta delta )
 
 // *******************************
 //
-void                            ShiftReplicationModifier::Apply( const BasicNodeConstPtr &, const BasicNodePtr & next, BVProjectEditor * /* editor */ ) const
+void                            ShiftReplicationModifier::Apply( const BasicNodeConstPtr &, const BasicNodePtr & next, BVProjectEditor * /* editor */, int repCounter ) const
 {
     for( auto it : m_paramsShifts )
     {
-        if( auto p = next->GetPlugin( it.first.first ) )
+        if( auto p = next->GetPlugin( it.first.first.first ) )
         {
-            if( it.first.first == "transform" )
+            if( it.first.first.first == "transform" )
             {
-                if( it.first.second == "translation" )
+                if( it.first.first.second == "translation" )
                 {
-                    ApplyTranslationDelta( it.second, next );
+                    ApplyTranslationDelta( it.second, next, repCounter );
                 }
 
-                if( it.first.second == "scale" )
+                if( it.first.first.second == "scale" )
                 {
-                    ApplyScaleDelta( it.second, next );
+                    ApplyScaleDelta( it.second, next, repCounter );
                 }
 
-                if( it.first.second == "rotation" )
+                if( it.first.first.second == "rotation" )
                 {
-                    ApplyRotationDelta( it.second, next );
+                    ApplyRotationDelta( it.second, next, repCounter );
                 }
             }
 
-            if( auto param = p->GetParameter( it.first.second ) )
+            if( auto param = p->GetParameter( it.first.first.second ) )
             {
                 switch( it.second.delta->GetType() )
                 {
                 case ParamType::PT_FLOAT1:
-                    ApplyParamDelta< ParamFloatPtr, ParamType::PT_FLOAT1 >( param, it.second );                        
+                    ApplyParamDelta< ParamFloatPtr, ParamType::PT_FLOAT1 >( param, it.second, repCounter );                        
                     break;
                 case ParamType::PT_FLOAT2:
-                    ApplyParamDelta< ParamVec2Ptr, ParamType::PT_FLOAT2 >( param, it.second );
+                    ApplyParamDelta< ParamVec2Ptr, ParamType::PT_FLOAT2 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_FLOAT3:
-                    ApplyParamDelta< ParamVec3Ptr, ParamType::PT_FLOAT3 >( param, it.second );
+                    ApplyParamDelta< ParamVec3Ptr, ParamType::PT_FLOAT3 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_FLOAT4:
-                    ApplyParamDelta< ParamVec4Ptr, ParamType::PT_FLOAT4 >( param, it.second );
+                    ApplyParamDelta< ParamVec4Ptr, ParamType::PT_FLOAT4 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_MAT2:
                     assert( false ); // TODO: Implement
@@ -182,7 +178,7 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
                     //ApplyParamDelta< ParamMat4Ptr, ParamType::PT_MAT4 >( param, it.second );
                     break;
                 case ParamType::PT_INT:
-                    ApplyParamDelta< ParamIntPtr, ParamType::PT_INT >( param, it.second );
+                    ApplyParamDelta< ParamIntPtr, ParamType::PT_INT >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_BOOL:
                     //ApplyParamDelta< ParamBoolPtr, ParamType::PT_BOOL >( param, it.second );
@@ -191,10 +187,10 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
                     //ApplyParamDelta< ParamMat2Ptr, ParamType::PT_MAT2 >( param, it.second );
                     break;
                 case ParamType::PT_STRING:
-                    ApplyParamDelta< ParamStringPtr, ParamType::PT_STRING >( param, it.second );
+                    ApplyParamDelta< ParamStringPtr, ParamType::PT_STRING >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_WSTRING:
-                    ApplyParamDelta< ParamWStringPtr, ParamType::PT_WSTRING >( param, it.second );
+                    ApplyParamDelta< ParamWStringPtr, ParamType::PT_WSTRING >( param, it.second, repCounter );
                     break;
                 }
             }
@@ -211,56 +207,78 @@ ShiftReplicationModifierPtr             ShiftReplicationModifier::Create()
 
 // *******************************
 //
-void                                    ShiftReplicationModifier::ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node ) const
+void                                    ShiftReplicationModifier::ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
     if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
+        TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
+
         auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-        auto val = transformParamTyped->GetTransform().GetTranslation( delta.startTime );
+        auto val = transformParamTyped->GetTransform().GetTranslation( startTime );
 
         //FIXME: it might not work as original (previous) code
-        transformParamTyped->SetTranslation( val + dv, delta.startTime + delta.deltaTime );
+        //transformParamTyped->SetTranslation( val + dv, delta.startTime + delta.deltaTime );
+        transformParamTyped->SetTranslation( val + dv, startTime );
+        
+        if( delta.deltaTime > 0.0f )
+        {
+            transformParamTyped->MoveTranslation( startTime, startTime + delta.deltaTime );
+        }
     }
 }
 
 // *******************************
 //
-void                                    ShiftReplicationModifier::ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node ) const
+void                                    ShiftReplicationModifier::ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
     if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
+        TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
+
         auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-        auto val = transformParamTyped->GetTransform().GetScale( delta.startTime );
+        auto val = transformParamTyped->GetTransform().GetScale( startTime );
 
         //FIXME: it might not work as original (previous) code
-        transformParamTyped->SetScale( val + dv, delta.startTime + delta.deltaTime );
+        transformParamTyped->SetScale( val + dv, startTime );
+        
+        if( delta.deltaTime > 0.0f )
+        {
+            transformParamTyped->MoveScale( startTime, startTime + delta.deltaTime );
+        }
     }
 
 }
 
 // *******************************
 //
-void                                    ShiftReplicationModifier::ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node ) const
+void                                    ShiftReplicationModifier::ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
     if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
+        TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
+
         auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-        auto valAngles = transformParamTyped->GetTransform().GetRotation( delta.startTime );
+        auto valAngles = transformParamTyped->GetTransform().GetRotation( startTime );
 
         //FIXME: it might not work as original (previous) code
-        transformParamTyped->SetRotation( valAngles, delta.startTime + delta.deltaTime );
+        transformParamTyped->SetRotation( valAngles, startTime );
+
+        if( delta.deltaTime > 0.0f )
+        {
+            transformParamTyped->MoveRotation( startTime, startTime + delta.deltaTime );
+        }
     }
 }
 

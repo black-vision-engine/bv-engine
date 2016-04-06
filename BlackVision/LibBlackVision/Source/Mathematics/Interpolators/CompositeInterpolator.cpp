@@ -346,7 +346,7 @@ void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValue
         }
     }
 
-    assert( left.t <= t && t <= right.t );
+    assert( left.t <= t && t <= right.t + m_tolerance );
     bool isSame = fabs( t - right.t ) < m_tolerance;
 
     if( isSame )

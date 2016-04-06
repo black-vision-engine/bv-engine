@@ -3,6 +3,8 @@
 #include "BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
+
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "Engine/Graphics/SceneGraph/Lines.h"
 
@@ -112,7 +114,16 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
     }
 }
 
+// *******************************
+//
+Scene *             BVProjectTools::BuildEngineScene                    ( model::SceneModelPtr modelScene )
+{
+    auto scene = new Scene();
+    
+    //todo
 
+    return scene;
+}
 
 // *******************************
 //
@@ -244,7 +255,7 @@ std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    
         if( childNode->IsVisible() )
         {
             auto newPair = NodeIntersection( childNode, inverseTransform, rayPoint, rayDir );
-            if( newPair.second < result.second && result.second >= 0 )
+            if( newPair.second <= result.second && result.second >= 0 )
             {
                 result.first = newPair.first;
                 result.second = newPair.second;

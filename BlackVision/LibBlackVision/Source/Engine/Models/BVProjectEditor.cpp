@@ -4,6 +4,7 @@
 #include "ModelState.h"
 
 #include "Engine/Models/BVProject.h"
+#include "Engine/Models/Updaters/SceneUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/BVProjectTools.h"
 
@@ -17,6 +18,7 @@
 #include "Engine/Models/ModelSceneEditor.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
+#include "Engine/Models/Lights/HelperModelLights.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
@@ -30,6 +32,8 @@
 #include "UseLoggerLibBlackVision.h"
 
 #include "Engine/Models/BoundingVolume.h"
+
+
 
 namespace bv {
 
@@ -59,26 +63,33 @@ BVProjectEditor::BVProjectEditor                ( BVProject * project )
 
 // *******************************
 //
-void    BVProjectEditor::AddScene       ( model::SceneModelPtr scene )
+void    BVProjectEditor::AddScene       ( model::SceneModelPtr modelScene )
 {
-    auto sceneName = scene->GetName();
+    auto sceneName = modelScene->GetName();
     if( m_project->GetScene( sceneName ) )
     {
-        scene->SetName( PrefixSceneName( sceneName ) );
+        modelScene->SetName( PrefixSceneName( sceneName ) );
     }
 
-    AddModelScene( scene, ( UInt32 )m_project->m_sceneModelVec.size() );
+    auto idx = ( UInt32 )m_project->m_sceneModelVec.size();
+    AddModelScene( modelScene, idx );
 
-    InitDefaultScene( scene );
+    auto scene = BVProjectTools::BuildEngineScene( modelScene );
+    AddScene( modelScene, scene, idx );
 
-    auto sceneRoot = scene->GetRootNode();
+    InitDefaultScene( modelScene );
+
+    auto sceneRoot = modelScene->GetRootNode();
     if( sceneRoot )
     {
         auto sceneNode = BVProjectTools::BuildEngineSceneNode( sceneRoot, m_nodesMapping );
         m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), sceneNode );
     }
 
-    model::ModelState::GetInstance().RegisterNode( scene->GetRootNode().get(), nullptr );
+    model::ModelState::GetInstance().RegisterNode( modelScene->GetRootNode().get(), nullptr );
+    
+    auto updater  = SceneUpdater::Create( scene, modelScene.get() );
+    UpdatersManager::Get().RegisterUpdater( modelScene.get(), updater );
 }
 
 // *******************************
@@ -162,6 +173,9 @@ bool    BVProjectEditor::AttachScene			( const std::string & sceneName, UInt32 p
         if( m_detachedScenes[ i ]->GetName() == sceneName )
         {
             AddModelScene( m_detachedScenes[ i ], posIdx );
+
+            auto scene = BVProjectTools::BuildEngineScene( m_detachedScenes[ i ] );
+            AddScene( m_detachedScenes[ i ], scene, posIdx );
 
             auto sceneRoot = m_detachedScenes[ i ]->GetRootNode();
             if( sceneRoot )
@@ -282,6 +296,22 @@ bool    BVProjectEditor::AddModelScene          ( model::SceneModelPtr sceneMode
     m_project->m_globalTimeline->AddChild( sceneModel->GetTimeline() );
     
     return true;
+}
+
+// *******************************
+//
+void    BVProjectEditor::AddScene         ( model::SceneModelPtr modelScene, Scene * scene, UInt32 idx )
+{
+    if( idx < m_project->m_sceneVec.size() )
+    {
+        m_project->m_sceneVec.insert( m_project->m_sceneVec.begin() + idx, scene );
+    }
+    else
+    {
+        m_project->m_sceneVec.push_back( scene );
+    }
+
+    m_scenesMapping[ modelScene.get() ] = scene;
 }
 
 // *******************************
@@ -946,6 +976,55 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
         auto success = plugin->LoadResource( assetDesc );
         BVProjectTools::ReleaseUnusedResources( m_project->m_renderer );
         return success;
+    }
+
+    return false;
+}
+
+// *******************************
+//
+bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, LightType type )
+{
+    auto modelScene = m_project->GetScene( sceneName );
+    return AddLight( modelScene, type );
+}
+
+// *******************************
+//
+bool            BVProjectEditor::RemoveLight                ( const std::string & sceneName, UInt32 idx )
+{
+    auto modelScene = m_project->GetScene( sceneName );
+    return RemoveLight( modelScene, idx );
+}
+
+// *******************************
+//
+bool            BVProjectEditor::AddLight                    ( model::SceneModelPtr modelScene, LightType type )
+{
+    if( modelScene )
+    {
+        auto timeEval = GetSceneDefaultTimeline( modelScene );
+        auto light = model::HelperModelLights::CreateModelLight( type, timeEval );
+
+        modelScene->AddLight( std::unique_ptr< model::IModelLight >( light ) );
+        
+        return true;
+    }
+
+    return false;
+}
+
+// *******************************
+//
+bool            BVProjectEditor::RemoveLight                ( model::SceneModelPtr modelScene, UInt32 idx )
+{
+    if( modelScene )
+    {
+        auto light = modelScene->GetLight( idx );
+        if( light )
+        {
+            return modelScene->RemoveLight( idx );
+        }
     }
 
     return false;

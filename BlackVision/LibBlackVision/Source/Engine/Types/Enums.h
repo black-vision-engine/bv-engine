@@ -243,4 +243,13 @@ enum class VideoPixelFormat : int
     VPF_UYVY422,
 };
 
+enum class LightType : int 
+{
+    LT_DIRECTIONAL = 0,
+    LT_POINT,
+    LT_SPOT,
+
+    LT_TOTAL
+};
+
 } // bv
