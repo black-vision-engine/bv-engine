@@ -165,5 +165,51 @@ wstring ExePath()
 		MediaFolder = path;
 		return true;
 	};
+
+    // ***********************
+    //
+    KeyValue&       ConfigManager::GetOrCreateValue            ( const std::string& key )
+    {
+        for( unsigned int i = 0; i < Properties.size(); i++ )
+        {
+            if( Properties[i].key == key )
+                return Properties[i];
+        }
+
+        Properties.push_back( KeyValue( key, "" ) );
+        return Properties.back();
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetBool     ( const std::string& key, bool value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = std::to_string( value );
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetInt      ( const std::string& key, int value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = std::to_string( value );
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetString   ( const std::string& key, const std::string& value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = value;
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetFloat    ( const std::string& key, float value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = std::to_string( value );
+    }
     
 }

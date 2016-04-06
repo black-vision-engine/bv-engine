@@ -1063,6 +1063,7 @@ public:
     typedef enum
     {
         ReadValue,
+        SetValue,
         Fail            ///< Wrong command
     } Command;
 private:

@@ -175,7 +175,7 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     bv::ConfigEventPtr configEvent  = std::static_pointer_cast<bv::ConfigEvent>( evt );
     auto command        = configEvent->ConfigCommand;
     auto& key           = configEvent->Key;
-    //auto& value         = configEvent->Value;
+    auto& value         = configEvent->Value;
     auto& valType       = configEvent->ValueType;
 
 
@@ -210,6 +210,26 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
             return;
         }
 
+    }
+    else if( command == ConfigEvent::Command::SetValue )
+    {
+        if( valType == "int" 
+            || valType == "float" 
+            || valType == "bool" 
+            || valType == "string" )
+        {
+            ConfigManager::SetString( key, value );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Wrong value type." );
+            return;
+        }
+    }
+    else
+    {
+        SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Unknown command" );
+        return;
     }
 
     SendResponse( ser, configEvent->SocketID, configEvent->EventID );
