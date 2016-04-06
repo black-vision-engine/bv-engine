@@ -1073,7 +1073,6 @@ public:
 
     Command                 ConfigCommand;
     std::string             Key;
-    std::string             ValueType;
     std::string             Value;
 
 public:

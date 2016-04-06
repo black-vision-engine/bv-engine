@@ -569,7 +569,6 @@ template<> std::string                      SerializationHelper::T2String  ( con
 // ========================================================================= //
 // ConfigEvent
 // ========================================================================= //
-const std::string CONFIG_VALUE_TYPE_STRING              = "ValueType";
 const std::string CONFIG_VALUE_STRING                   = "Value";
 const std::string CONFIG_KEY_STRING                     = "Key";
 
@@ -1959,7 +1958,6 @@ void                ConfigEvent::Serialize            ( ISerializer& ser ) const
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ConfigCommand ) );
     ser.SetAttribute( SerializationHelper::CONFIG_VALUE_STRING, SerializationHelper::T2String( Value ) );
     ser.SetAttribute( SerializationHelper::CONFIG_KEY_STRING, Key );
-    ser.SetAttribute( SerializationHelper::CONFIG_VALUE_TYPE_STRING, ValueType );
 }
 
 // *************************************
@@ -1971,7 +1969,6 @@ IEventPtr           ConfigEvent::Create          ( IDeserializer& deser )
         ConfigEventPtr newEvent             = std::make_shared<ConfigEvent>();
         newEvent->Value                     = deser.GetAttribute( SerializationHelper::CONFIG_VALUE_STRING );
         newEvent->Key                       = deser.GetAttribute( SerializationHelper::CONFIG_KEY_STRING );
-        newEvent->ValueType                 = deser.GetAttribute( SerializationHelper::CONFIG_VALUE_TYPE_STRING );
         newEvent->ConfigCommand             = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ConfigEvent::Command::Fail );
 
         return newEvent;

@@ -176,7 +176,6 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     auto command        = configEvent->ConfigCommand;
     auto& key           = configEvent->Key;
     auto& value         = configEvent->Value;
-    auto& valType       = configEvent->ValueType;
 
 
     JsonSerializeObject ser;
@@ -184,47 +183,12 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
 
     if( command == ConfigEvent::Command::ReadValue )
     {
-        if( valType == "int" )
-        {
-            auto result = ConfigManager::GetInt( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else if( valType == "float" )
-        {
-            auto result = ConfigManager::GetFloat( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else if( valType == "bool" )
-        {
-            auto result = ConfigManager::GetBool( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else if( valType == "string" )
-        {
-            auto result = ConfigManager::GetString( key );
-            ser.SetAttribute( "Value", SerializationHelper::T2String( result ) );
-        }
-        else
-        {
-            SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Wrong value type." );
-            return;
-        }
-
+        auto result = ConfigManager::GetString( key );
+        ser.SetAttribute( "Value", result );
     }
     else if( command == ConfigEvent::Command::SetValue )
     {
-        if( valType == "int" 
-            || valType == "float" 
-            || valType == "bool" 
-            || valType == "string" )
-        {
-            ConfigManager::SetString( key, value );
-        }
-        else
-        {
-            SendSimpleErrorResponse( command, configEvent->EventID, configEvent->SocketID, "Wrong value type." );
-            return;
-        }
+        ConfigManager::SetString( key, value );
     }
     else
     {
