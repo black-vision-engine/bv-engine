@@ -100,6 +100,9 @@ std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
 const EventType ConfigEvent::m_sEventType           = 0x30000023;
 std::string ConfigEvent::m_sEventName               = "ConfigEvent";
 
+const EventType TabStopEvent::m_sEventType          = 0x30000024;
+std::string TabStopEvent::m_sEventName              = "TabStopEvent";
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -582,6 +585,25 @@ std::pair< ConfigEvent::Command, const char* > ConfigEventCommandMapping[] =
 
 template<> ConfigEvent::Command String2T        ( const std::string& s, const ConfigEvent::Command& defaultVal )     { return String2Enum( ConfigEventCommandMapping, s, defaultVal ); }
 template<> std::string T2String                 ( const ConfigEvent::Command & t )                                   { return Enum2String( ConfigEventCommandMapping, t ); }
+
+
+// ========================================================================= //
+// TabStopEvent
+// ========================================================================= //
+const std::string TABSTOP_NAME_STRING           = "TabStopName";
+const std::string TABSTOP_POSITION_STRING       = "TabStopPosition";
+const std::string TABSTOP_TYPE_STRING           = "TabStopType";
+
+std::pair< TabStopEvent::Command, const char* > TabStopEventEventCommandMapping[] = 
+{
+    std::make_pair( TabStopEvent::Command::SetTabStopPosition, "SetTabStopPosition" )
+    , std::make_pair( TabStopEvent::Command::RenameTabStop, "RenameTabStop" )
+    , std::make_pair( TabStopEvent::Command::AlignToTabStop, "AlignToTabStop" )
+    , std::make_pair( TabStopEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> TabStopEvent::Command String2T       ( const std::string& s, const TabStopEvent::Command& defaultVal )     { return String2Enum( TabStopEventEventCommandMapping, s, defaultVal ); }
+template<> std::string T2String                 ( const TabStopEvent::Command & t )                                   { return Enum2String( TabStopEventEventCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -1997,6 +2019,66 @@ const std::string&  ConfigEvent::GetName() const
 //
 EventType           ConfigEvent::GetEventType() const
 {   return this->m_sEventType; }
+
+
+//******************* TabStopEvent *************
+
+// *************************************
+//
+void                TabStopEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( TabStopCommand ) );
+    ser.SetAttribute( SerializationHelper::TABSTOP_NAME_STRING, TabStopName );
+    ser.SetAttribute( SerializationHelper::TABSTOP_TYPE_STRING, TabStopType );
+    ser.SetAttribute( SerializationHelper::TABSTOP_POSITION_STRING, TabPosition );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+    ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
+}
+
+// *************************************
+//
+IEventPtr           TabStopEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        TabStopEventPtr newEvent             = std::make_shared<TabStopEvent>();
+        newEvent->SceneName                  = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->NodeName                   = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
+        newEvent->TabStopName                = deser.GetAttribute( SerializationHelper::TABSTOP_NAME_STRING );
+        newEvent->TabStopType                = deser.GetAttribute( SerializationHelper::TABSTOP_TYPE_STRING );
+        newEvent->TabPosition                = deser.GetAttribute( SerializationHelper::TABSTOP_POSITION_STRING );
+
+        newEvent->TabStopCommand             = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TabStopEvent::Command::Fail );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr           TabStopEvent::Clone             () const
+{   return IEventPtr( new TabStopEvent( *this ) );  }
+
+// *************************************
+//
+EventType           TabStopEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        TabStopEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  TabStopEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           TabStopEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
 
 
 //******************* HightmapEvent *************

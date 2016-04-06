@@ -1056,7 +1056,7 @@ DEFINE_PTR_TYPE( SceneVariableEvent )
 
 
 
-// ************************************* EngineStateEvent *************************************
+// ************************************* ConfigEvent *************************************
 class ConfigEvent : public RemoteEvent
 {
 public:
@@ -1094,6 +1094,50 @@ template<> ConfigEvent::Command         SerializationHelper::String2T  ( const s
 template<> std::string                  SerializationHelper::T2String  ( const ConfigEvent::Command & t );
 
 DEFINE_PTR_TYPE( ConfigEvent )
+
+
+// ************************************* TabStopEvent *************************************
+class TabStopEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        SetTabStopPosition,
+        RenameTabStop,
+        AlignToTabStop,
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+
+    Command                 TabStopCommand;
+    std::string             SceneName;
+    std::string             NodeName;
+    std::string             TabStopName;
+    std::string             TabStopType;
+    std::string             TabPosition;
+
+public:
+
+    explicit                        TabStopEvent        () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> TabStopEvent::Command        SerializationHelper::String2T  ( const std::string& s, const TabStopEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const TabStopEvent::Command & t );
+
+DEFINE_PTR_TYPE( TabStopEvent )
 
 
 
