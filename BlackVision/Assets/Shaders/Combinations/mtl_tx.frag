@@ -57,7 +57,11 @@ uniform float 	mtlShininess;
 
 in vec3 		position;		//vertex position in modelview space
 in vec3 		normal;			//vertex normal in modelview space
+in vec2 		uvCoord;
 
+uniform sampler2D Tex0;
+
+uniform float alpha;
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir );
 vec3 computePointLight			( PointLight light, vec3 viewDir );
@@ -86,8 +90,10 @@ void main()
 	}
 	
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
+	vec4 texColor = texture( Tex0, uvCoord );
 	
-	FragColor = vec4( emission + color, 1.0 );
+	FragColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
+	
 }
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )

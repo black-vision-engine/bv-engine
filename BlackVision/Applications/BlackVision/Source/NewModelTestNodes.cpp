@@ -2225,7 +2225,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::ITimeEvalua
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeEvaluatorPtr timeEvaluator )
 {
 
-//#define VERSION_TEXTURE
+#define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 #define VERSION_MATERIAL
@@ -2306,15 +2306,17 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #ifdef VERSION_COLOR
     uids.push_back( "DEFAULT_COLOR" );
 #endif
+
+#ifdef VERSION_MATERIAL
+    uids.push_back( "DEFAULT_MATERIAL" );
+#endif
+
 #ifdef VERSION_TEXTURE
     #ifdef NO_PERSPECTIVE
         uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
     #else
         uids.push_back( "DEFAULT_TEXTURE" );
     #endif
-#endif
-#ifdef VERSION_MATERIAL
-    uids.push_back( "DEFAULT_MATERIAL" );
 #endif
 
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
