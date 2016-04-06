@@ -283,6 +283,9 @@
     <Filter Include="Mathematics\Util">
       <UniqueIdentifier>{ef62563e-b8be-4fae-9264-9b3c6234fc0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\TabStops">
+      <UniqueIdentifier>{63a2c4ad-8694-4a12-b1c2-5a76f823772a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1422,6 +1425,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStop.cpp">
+      <Filter>Engine\Models\TabStops</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.cpp">
+      <Filter>Engine\Models\TabStops</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3541,6 +3550,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStop.h">
+      <Filter>Engine\Models\TabStops</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.h">
+      <Filter>Engine\Models\TabStops</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
