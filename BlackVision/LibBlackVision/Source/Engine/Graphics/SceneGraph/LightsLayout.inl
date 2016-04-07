@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Lights/HelperModelLights.h"
+#include "Engine/Models/Lights/ModelBaseLight.h"
 
 
 namespace bv

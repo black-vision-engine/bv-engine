@@ -19,6 +19,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IModelLight)
+DEFINE_CONST_PTR_TYPE(IModelLight)
 DEFINE_UPTR_TYPE(IModelLight)
 
 } // model

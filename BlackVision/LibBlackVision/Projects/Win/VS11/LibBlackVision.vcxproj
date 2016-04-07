@@ -317,6 +317,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.cpp" />
@@ -545,6 +546,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelLight.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.h" />

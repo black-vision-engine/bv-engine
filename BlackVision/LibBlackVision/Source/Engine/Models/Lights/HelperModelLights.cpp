@@ -14,7 +14,7 @@ namespace bv { namespace model {
 
 // *************************************
 //
-IModelLight *                   HelperModelLights::CreateModelLight              ( LightType type, ITimeEvaluatorPtr timeEvaluator )
+ModelBaseLight *                HelperModelLights::CreateModelLight              ( LightType type, ITimeEvaluatorPtr timeEvaluator )
 {
     if( type == LightType::LT_DIRECTIONAL )
     {
@@ -50,13 +50,13 @@ std::pair< LightType, const char* > lt2s[] =
 };
 
 template<>
-std::string     T2String< LightType >( const LightType & t )
+std::string             T2String< LightType >   ( const LightType & t )
 {
     return SerializationHelper::Enum2String< LightType >( lt2s, t );
 }
 
 template<>
-LightType       String2T( const std::string & s, const LightType & defaultType )
+LightType               String2T                ( const std::string & s, const LightType & defaultType )
 {
     auto effectType = String2Enum( lt2s, s );
     if( effectType == LightType::LT_TOTAL )
@@ -65,6 +65,12 @@ LightType       String2T( const std::string & s, const LightType & defaultType )
     }
 
     return effectType;
+}
+
+template<> 
+Expected< LightType >   String2T                ( const std::string & s )
+{ 
+    return String2Enum( lt2s, s );
 }
 
 } // SerializationHelper

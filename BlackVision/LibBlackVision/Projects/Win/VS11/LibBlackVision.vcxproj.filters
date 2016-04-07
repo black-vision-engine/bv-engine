@@ -1468,6 +1468,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.cpp">
       <Filter>Engine\Models\TabStops</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.cpp">
+      <Filter>Engine\Models\Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3640,6 +3643,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.h">
       <Filter>Engine\Models\TabStops</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.h">
+      <Filter>Engine\Models\Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

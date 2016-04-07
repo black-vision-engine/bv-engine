@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Engine/Types/Enums.h"
-#include "Engine/Models/Interfaces/IModelLight.h"
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 
 namespace bv { namespace model {
 
+class ModelBaseLight;
 
 class HelperModelLights
 {
 public:
 
-    static IModelLight *                                    CreateModelLight        ( LightType type, ITimeEvaluatorPtr timeEvaluator );
+    static ModelBaseLight *         CreateModelLight        ( LightType type, ITimeEvaluatorPtr timeEvaluator );
 
 };
 

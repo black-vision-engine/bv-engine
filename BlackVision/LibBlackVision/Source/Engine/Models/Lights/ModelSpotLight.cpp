@@ -21,9 +21,8 @@ const std::string       ModelSpotLight::PARAM::OUTER_CUT_OFF  = "outerCutOff";
 // *************************************
 //
                         ModelSpotLight::ModelSpotLight          ( ITimeEvaluatorPtr timeEvaluator )
+    : ModelBaseLight()
 {
-    m_paramModel = std::make_shared< DefaultParamValModel >();
-    
     auto colorEvaluator     = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::COLOR, timeEvaluator );
     auto directionEvaluator = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::DIRECTION, timeEvaluator );
     auto positionEvaluator = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::POSITION, timeEvaluator );
@@ -50,49 +49,6 @@ const std::string       ModelSpotLight::PARAM::OUTER_CUT_OFF  = "outerCutOff";
     m_paramModel->RegisterAll( attQuadraticEvaluator );
     m_paramModel->RegisterAll( cutOffEvaluator );
     m_paramModel->RegisterAll( outerCutOffEvaluator );
-}
-
-// *************************************
-//
-void                    ModelSpotLight::Serialize             ( ISerializer & ser ) const
-{
-    { ser; }
-}
-
-// *************************************
-//
-void                    ModelSpotLight::Update                ( TimeType t )
-{
-    { t; }
-    m_paramModel->Update();
-}
-
-// *************************************
-//
-std::vector< IParameterPtr > &  ModelSpotLight::GetParameters         ()
-{
-    return m_paramModel->GetParameters();
-}
-
-// *************************************
-//
-IParameterPtr           ModelSpotLight::GetParameter          ( const std::string & name )
-{
-    return m_paramModel->GetParameter( name );
-}
-
-// *************************************
-//
-const std::vector< IValueConstPtr > &  ModelSpotLight::GetValues     () const
-{
-    return m_paramModel->GetValues();
-}
-
-// *************************************
-//
-IValueConstPtr          ModelSpotLight::GetValue            ( const std::string & name ) const
-{
-    return m_paramModel->GetValue( name );
 }
 
 // *************************************

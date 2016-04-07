@@ -17,9 +17,8 @@ const std::string       ModelPointLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
 // *************************************
 //
                         ModelPointLight::ModelPointLight          ( ITimeEvaluatorPtr timeEvaluator )
+    : ModelBaseLight()
 {
-    m_paramModel = std::make_shared< DefaultParamValModel >();
-    
     auto colorEvaluator     = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::COLOR, timeEvaluator );
     auto positionEvaluator = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::POSITION, timeEvaluator );
     auto attConstantEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::ATT_CONSTANT, timeEvaluator );
@@ -37,49 +36,6 @@ const std::string       ModelPointLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
     m_paramModel->RegisterAll( attConstantEvaluator );
     m_paramModel->RegisterAll( attLinearEvaluator );
     m_paramModel->RegisterAll( attQuadraticEvaluator );
-}
-
-// *************************************
-//
-void                    ModelPointLight::Serialize           ( ISerializer & ser ) const
-{
-    { ser; }
-}
-
-// *************************************
-//
-void                    ModelPointLight::Update              ( TimeType t )
-{
-    { t; }
-    m_paramModel->Update();
-}
-
-// *************************************
-//
-std::vector< IParameterPtr > &  ModelPointLight::GetParameters       ()
-{
-    return m_paramModel->GetParameters();
-}
-
-// *************************************
-//
-IParameterPtr                   ModelPointLight::GetParameter        ( const std::string & name )
-{
-    return m_paramModel->GetParameter( name );
-}
-
-// *************************************
-//
-const std::vector< IValueConstPtr > &  ModelPointLight::GetValues    () const
-{
-    return m_paramModel->GetValues();
-}
-
-// *************************************
-//
-IValueConstPtr          ModelPointLight::GetValue            ( const std::string & name ) const
-{
-    return m_paramModel->GetValue( name );
 }
 
 // *************************************

@@ -1025,7 +1025,7 @@ bool            BVProjectEditor::AddLight                    ( model::SceneModel
     if( modelScene && timeline )
     {
         auto light = model::HelperModelLights::CreateModelLight( type, timeline );
-        modelScene->AddLight( std::unique_ptr< model::IModelLight >( light ) );
+        modelScene->AddLight( std::shared_ptr< model::IModelLight >( light ) );
         
         return true;
     }
