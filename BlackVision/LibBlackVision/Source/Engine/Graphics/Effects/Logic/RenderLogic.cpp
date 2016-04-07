@@ -73,11 +73,11 @@ RenderLogic::~RenderLogic    ()
 
 // *********************************
 //
-void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
+void    RenderLogic::RenderFrame    ( Renderer * renderer, const SceneVec & scenes )
 {
     renderer->PreDraw();
 
-    RenderFrameImpl( renderer, sceneRoot );
+    RenderFrameImpl( renderer, scenes );
     
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
@@ -241,11 +241,11 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 //}
 // *********************************
 //
-void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot )
+void    RenderLogic::RenderFrameImpl ( Renderer * renderer, const SceneVec & scenes )
 {
     auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
 
-    RenderRootNode( renderer, sceneRoot, rt );
+    RenderRootNode( renderer, scenes, rt );
     {
         HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
     }
@@ -329,7 +329,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
 // *********************************
 //
-void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt )
+void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & scenes, RenderTarget * rt )
 {
     //FIXME: assumes only one renderer instance per application
     auto ctx = GetContext( renderer );
@@ -337,16 +337,17 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
     assert( renderer == ctx->GetRenderer() );
 
     // FIXME: verify that all rendering paths work as expected
-    if( sceneRoot )
-    {
-        enable( ctx, rt );
+    enable( ctx, rt );
         
-        clearBoundRT( ctx, m_clearColor );
+    clearBoundRT( ctx, m_clearColor );
 
-        RenderNode( sceneRoot, ctx );
-
-        disableBoundRT( ctx );
+    for( auto & scene : scenes )
+    {
+        renderer->EnableScene( scene );
+        RenderNode( scene->GetRoot(), ctx );
     }
+
+    disableBoundRT( ctx );
 }
 
 namespace {

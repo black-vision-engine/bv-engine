@@ -205,8 +205,10 @@ bool    BlackVisionApp::InitializeLicenses   ()
 //
 void    BlackVisionApp::InitializeConfig  ()
 {
+    // Function BVConfig::Instance() have already initialized this config.
+    // Code commented to avoid double keys in config.
     //ConfigManager::LoadConfig();
-    ConfigManager::LoadXMLConfig();
+    //ConfigManager::LoadXMLConfig();
     BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
 
 	BB::AssetManager::LoadSurfaces();

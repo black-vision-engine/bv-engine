@@ -93,6 +93,12 @@ public:
     static void                 bvglUniformMatrix3fv        ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
     static void                 bvglUniformMatrix4fv        ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
 
+    static GLuint               bvglGetUniformBlockIndex    ( GLuint program, const GLchar * blockName );
+    static void                 bvglUniformBlockBinding     ( GLuint program, GLuint blockIdx, GLuint blockBinding );
+
+    static void                 bvglGetActiveUniformName    ( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName );
+    static void                 bvglGetActiveUniformsiv     ( GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params );
+    static void                 bvglGetActiveUniformBlockiv ( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params );
 
 // Vertex Array Object
     static void                 bvglGenVertexArrays         ( GLsizei n, GLuint * arrays );
@@ -223,6 +229,7 @@ public:
 
     static void                 bvglBufferData					( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
     static void					bvglBufferSubData				( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
+
 #ifdef BV_GL_VERSION_4_5
     static void					bvglNamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage );
     static void					bvglNamedBufferStorage			( GLuint buffer, GLsizei size, const void* data, GLbitfield flags );

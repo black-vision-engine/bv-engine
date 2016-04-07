@@ -18,6 +18,7 @@ RemoteController::RemoteController()
     RegisterEvent( NodeStructureEvent::Name(), NodeStructureEvent::Create );
     RegisterEvent( ProjectEvent::Name(), ProjectEvent::Create );
     RegisterEvent( SceneEvent::Name(), SceneEvent::Create );
+    RegisterEvent( LightEvent::Name(), LightEvent::Create );
     RegisterEvent( InfoEvent::Name(), InfoEvent::Create );
     RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
     RegisterEvent( TimerEvent::Name(), TimerEvent::Create );
@@ -31,6 +32,8 @@ RemoteController::RemoteController()
     RegisterEvent( TimelineKeyframeEvent::Name(), TimelineKeyframeEvent::Create );
     RegisterEvent( MouseEvent::Name(), MouseEvent::Create );
     RegisterEvent( SceneVariableEvent::Name(), SceneVariableEvent::Create );
+    RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
+    RegisterEvent( TabStopEvent::Name(), TabStopEvent::Create );
 }
 
 

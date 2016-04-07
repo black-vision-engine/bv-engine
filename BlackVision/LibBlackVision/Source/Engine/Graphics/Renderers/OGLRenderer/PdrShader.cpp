@@ -91,6 +91,13 @@ void PdrShader::Disable        ( Renderer * renderer )
 }
 
 // *******************************
+//
+void    PdrShader::BindUniformBuffer    ( PdrUniformBufferObject * ubo )
+{
+    ubo->UniformBlockBinding( m_program->GetHandle() );
+}
+
+// *******************************
 // FIXME: if enabled or something should be used here
 void    PdrShader::SetUniforms     ( Shader * shader )
 {

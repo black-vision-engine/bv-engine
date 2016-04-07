@@ -2225,12 +2225,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::ITimeEvalua
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeEvaluatorPtr timeEvaluator )
 {
 
-//#define VERSION_TEXTURE
+#define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 #define VERSION_MATERIAL
 
-//#define SHOW_CUBE
+#define SHOW_CUBE
 //#define SHOW_CYLINDER
 //#define SHOW_CONE
 //#define SHOW_SPHERE
@@ -2241,7 +2241,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
-#define SHOW_SIMPLE_CUBE
+//#define SHOW_SIMPLE_CUBE
 //#define SHOW_COGWHEEL
 
       //Timeline stuff
@@ -2306,15 +2306,17 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #ifdef VERSION_COLOR
     uids.push_back( "DEFAULT_COLOR" );
 #endif
+
+#ifdef VERSION_MATERIAL
+    uids.push_back( "DEFAULT_MATERIAL" );
+#endif
+
 #ifdef VERSION_TEXTURE
     #ifdef NO_PERSPECTIVE
         uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
     #else
         uids.push_back( "DEFAULT_TEXTURE" );
     #endif
-#endif
-#ifdef VERSION_MATERIAL
-    uids.push_back( "DEFAULT_MATERIAL" );
 #endif
 
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
@@ -2414,8 +2416,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     auto plugin = root->GetPlugin( "cube" );
     model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
     model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
-    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
-    model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 100 );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
+    //model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 10 );
 
     model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
     model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );

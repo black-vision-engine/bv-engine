@@ -257,6 +257,7 @@ public:
         PluginParam,
         GlobalEffectParam,
         ResourceParam,
+        LightParam,
         FailTarget      ///< Wrong target type
     } TargetType;
 private:
@@ -268,6 +269,7 @@ public:
     std::string                     ParamName;
     std::string                     ParamSubName;
     std::string                     SceneName;
+    UInt32                          LightIndex;
     std::string                     Value;
 
     float                           Time;
@@ -379,6 +381,45 @@ template<> SceneEvent::Command      SerializationHelper::String2T   ( const std:
 template<> std::string              SerializationHelper::T2String   ( const SceneEvent::Command & t );
 
 DEFINE_PTR_TYPE( SceneEvent )
+
+
+// ************************************* LightEvent *************************************
+class LightEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        AddLight,
+        RemoveLight,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+public:
+    LightEvent::Command				SceneCommand;
+    std::string                     SceneName;
+    std::string                     LightType;
+    UInt32							LightIndex;
+    std::string                     TimelinePath;
+
+public:
+    explicit                        LightEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> LightEvent::Command      SerializationHelper::String2T   ( const std::string & s, const LightEvent::Command & defaultVal );
+template<> std::string              SerializationHelper::T2String   ( const LightEvent::Command & t );
+
+DEFINE_PTR_TYPE( LightEvent )
 
 
 // ************************************* SceneStructureEvent Event *************************************
@@ -837,6 +878,7 @@ public:
         RenderOffscreen,
         ScreenShot,
         CloseApplication,
+        LockEventQueue,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -1052,6 +1094,91 @@ template<> SceneVariableEvent::Command      SerializationHelper::String2T  ( con
 template<> std::string                      SerializationHelper::T2String  ( const SceneVariableEvent::Command & t );
 
 DEFINE_PTR_TYPE( SceneVariableEvent )
+
+
+
+// ************************************* ConfigEvent *************************************
+class ConfigEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        ReadValue,
+        SetValue,
+        SaveConfig,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+
+    Command                 ConfigCommand;
+    std::string             Key;
+    std::string             Value;
+
+public:
+
+    explicit                        ConfigEvent         () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> ConfigEvent::Command         SerializationHelper::String2T  ( const std::string& s, const ConfigEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const ConfigEvent::Command & t );
+
+DEFINE_PTR_TYPE( ConfigEvent )
+
+
+// ************************************* TabStopEvent *************************************
+class TabStopEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        SetTabStopPosition,
+        RenameTabStop,
+        AlignToTabStop,
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+
+    Command                 TabStopCommand;
+    std::string             SceneName;
+    std::string             NodeName;
+    std::string             TabStopName;
+    std::string             TabStopType;
+    std::string             TabPosition;
+
+public:
+
+    explicit                        TabStopEvent        () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> TabStopEvent::Command        SerializationHelper::String2T  ( const std::string& s, const TabStopEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const TabStopEvent::Command & t );
+
+DEFINE_PTR_TYPE( TabStopEvent )
 
 
 

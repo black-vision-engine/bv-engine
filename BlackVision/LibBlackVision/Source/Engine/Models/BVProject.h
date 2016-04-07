@@ -9,8 +9,8 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-
-#include "SceneModel.h"
+#include "Engine/Models/SceneModel.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
 
 
 namespace bv {
@@ -40,6 +40,7 @@ private:
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     model::SceneModelVec	m_sceneModelVec;
+    SceneVec                m_sceneVec;
     
     model::BasicNodePtr     m_rootNode;
     SceneNode *             m_engineSceneRoot;
@@ -57,9 +58,11 @@ public:
 
     static BVProjectPtr     Create              ( Renderer * renderer );
 
-    model::SceneModelPtr    GetScene            ( const std::string & name ) const;
-    model::SceneModelPtr    GetScene            ( UInt32 idx ) const;
-    const model::SceneModelVec &  GetScenes     () const;
+    model::SceneModelPtr         GetModelScene  ( const std::string & name ) const;
+    model::SceneModelPtr         GetModelScene  ( UInt32 idx ) const;
+
+    const model::SceneModelVec & GetModelScenes () const;
+    const SceneVec &             GetScenes      () const;
 
     StringVector            ListScenesNames     () const;
 
@@ -70,7 +73,7 @@ public:
     model::BasicNodePtr		GetModelSceneRoot   () const;
     SceneNode *             GetEngineSceneRoot  () const;
 
-    BVProjectEditor *       GetProjectEditor      ();
+    BVProjectEditor *       GetProjectEditor    () const;
 
     void					SetStartTime		( unsigned long millis );
 

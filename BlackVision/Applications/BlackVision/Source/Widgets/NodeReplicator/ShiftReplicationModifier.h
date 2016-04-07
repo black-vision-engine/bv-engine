@@ -21,7 +21,7 @@ class ShiftReplicationModifier : public IReplicationModifier
 {
 public:
 
-    virtual void                            Apply               ( const BasicNodeConstPtr & prev, const BasicNodePtr & next, BVProjectEditor * editor ) const override;
+    virtual void                            Apply               ( const BasicNodeConstPtr & prev, const BasicNodePtr & next, BVProjectEditor * editor, int repCounter ) const override;
 
     void                                    AddParamShift       ( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift );
 
@@ -32,13 +32,13 @@ public:
 
 private:
 
-    void                                    ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
-    void                                    ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
-    void                                    ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
+    void                                    ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const;
+    void                                    ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const;
+    void                                    ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const;
 
     explicit                ShiftReplicationModifier ();
 
-    typedef std::map< std::pair< std::string, std::string >, ParamValDelta > ParamsShiftsMapType;
+    typedef std::map< std::pair< std::pair< std::string, std::string >, bv::TimeType >, ParamValDelta > ParamsShiftsMapType;
     ParamsShiftsMapType     m_paramsShifts;
 
 };

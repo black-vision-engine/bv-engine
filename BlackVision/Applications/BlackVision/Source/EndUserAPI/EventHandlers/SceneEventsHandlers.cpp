@@ -143,7 +143,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
             unsigned int lastChildIdx = parentNodeCasted->GetNumChildren() - 1;
             auto addedChild = parentNodeCasted->GetChild( lastChildIdx );
 
-            result = addedChild->AddPlugin( "DEFAULT_TRANSFORM", editor->GetSceneDefaultTimeline( editor->GetScene( sceneName ) ) );
+            result = addedChild->AddPlugin( "DEFAULT_TRANSFORM", editor->GetSceneDefaultTimeline( editor->GetModelScene( sceneName ) ) );
         }
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
@@ -162,9 +162,13 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     {
         auto node = editor->GetNode( sceneName, nodePath );
 
-        auto color = SerializationHelper::String2T< glm::vec4 >( newNodeName );
+        if( node )
+        {
+            auto color = SerializationHelper::String2T< glm::vec4 >( newNodeName, glm::vec4( 1, 1, 1, 1 ) );
 
-        result = editor->SelectNode( node, color ); 
+            result = editor->SelectNode( node, color );
+        }
+
     }
     else if( command == NodeStructureEvent::Command::UnselectNodes )
     {
@@ -433,7 +437,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 forceSave = true;
             }
 
-            auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+            auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
 
             if( scene )
             {
@@ -564,7 +568,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             pm->SavePreset( bn, destProjectName, destPath );
             SendSimpleResponse( command, projectEvent->EventID, senderID, true );
 
-            auto scene = editor->GetScene( sceneName );
+            auto scene = editor->GetModelScene( sceneName );
 
             // Thumbnails
             if( !IsPresetScene( sceneName ) )
@@ -572,10 +576,10 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 // Copy node and create temporary preset scene
                 auto tempSceneName = File::GetFileName( destPath ) + File::GetExtension( destPath );
 
-                assert( editor->GetScene( tempSceneName ) == nullptr ); // Scene name shouldn't exist.
+                assert( editor->GetModelScene( tempSceneName ) == nullptr ); // Scene name shouldn't exist.
 
                 editor->AddScene( tempSceneName );
-                auto tempScene = editor->GetScene( tempSceneName );
+                auto tempScene = editor->GetModelScene( tempSceneName );
                 
                 auto timeline = editor->GetTimeEvaluator( tempSceneName );
                 assert( std::dynamic_pointer_cast< model::OffsetTimeEvaluator >( timeline ) );
@@ -611,7 +615,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto node = pm->LoadPreset( projectName, path, offsetTimeline );
 
         auto parentNode = editor->GetNode( sceneName, nodePath );
-        auto scene = editor->GetScene( sceneName );
+        auto scene = editor->GetModelScene( sceneName );
 
         auto success = false;
 
@@ -638,7 +642,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         std::string sceneName = File::GetFileName( path );
         editor->AddScene( sceneName );
-        auto scene = editor->GetScene( sceneName );
+        auto scene = editor->GetModelScene( sceneName );
 
         auto timeline = editor->GetTimeEvaluator( sceneName );
 
@@ -701,6 +705,39 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
 // ***********************
 //
+void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
+{
+    if( evt->GetEventType() != LightEvent::Type() )
+    {
+        return;
+    }
+
+    auto lightEvent = std::static_pointer_cast< LightEvent >( evt );
+
+    auto command      = lightEvent->SceneCommand;
+    auto sceneName    = lightEvent->SceneName;
+    auto lightType    = lightEvent->LightType;
+    auto lightIdx     = lightEvent->LightIndex;
+    auto timelinePath = lightEvent->TimelinePath;
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    
+    bool result = false;
+
+    if( command == LightEvent::Command::AddLight )
+    {
+        result = editor->AddLight( sceneName, lightType, timelinePath );
+    }
+    else if( command == LightEvent::Command::RemoveLight )
+    {
+        result = editor->RemoveLight( sceneName, lightIdx );
+    }
+
+    SendSimpleResponse( command, lightEvent->EventID, lightEvent->SocketID, result );
+}
+
+// ***********************
+//
 void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
 {
     if( evt->GetEventType() != bv::SceneVariableEvent::Type() )
@@ -712,7 +749,7 @@ void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
     std::string & variableContent   = sceneVarEvent->VariableContent;
     auto command                    = sceneVarEvent->VariableCommand;
 
-    auto sceneModel = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    auto sceneModel = m_appLogic->GetBVProject()->GetProjectEditor()->GetModelScene( sceneName );
     if( sceneModel == nullptr )
     {
         SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Scene not found" );
@@ -834,13 +871,13 @@ void        SceneEventsHandlers::SaveVisibilityState     ( const std::string & s
     m_scenesVisibilityState.clear();
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
-    for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
+    for( auto scene : m_appLogic->GetBVProject()->GetModelScenes() )
     {
         m_scenesVisibilityState[ scene ] = scene->GetRootNode()->IsVisible();
         scene->GetRootNode()->SetVisible( false );
     }
 
-    auto scene = editor->GetScene( sceneName );
+    auto scene = editor->GetModelScene( sceneName );
     scene->GetRootNode()->SetVisible( true );
 
     m_savedScene = scene;
