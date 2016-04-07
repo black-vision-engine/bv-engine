@@ -94,8 +94,8 @@ bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr modelScene )
 {
     if( modelScene )
     {
-        RemoveModelScene( modelScene );
         RemoveEngineScene( modelScene );
+        RemoveModelScene( modelScene );
 
         return true;
     }
@@ -334,6 +334,8 @@ bool    BVProjectEditor::RemoveEngineScene      ( model::SceneModelPtr modelScen
         {
             m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( modelRoot ) );
         }
+
+        m_project->m_sceneVec.erase( it );
 
         MappingsCleanup( modelScene );
 
