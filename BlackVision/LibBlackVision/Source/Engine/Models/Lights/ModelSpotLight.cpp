@@ -34,13 +34,13 @@ const std::string       ModelSpotLight::PARAM::OUTER_CUT_OFF  = "outerCutOff";
     auto outerCutOffEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::OUTER_CUT_OFF, timeEvaluator );
 
     colorEvaluator->Parameter()->SetVal( glm::vec3( 1.0f, 1.0f, 1.0f ), 0.f );
-    directionEvaluator->Parameter()->SetVal( glm::vec3( -1.0f, 0.0f, 0.0f ), 0.f );
+    directionEvaluator->Parameter()->SetVal( glm::vec3( 0.0f, 0.0f, -1.0f ), 0.f );
     positionEvaluator->Parameter()->SetVal( glm::vec3( 0.0f, 0.0f, 0.0f ), 0.f );
     attConstantEvaluator->Parameter()->SetVal( 1.0f, 0.f );
     attLinearEvaluator->Parameter()->SetVal( 0.0f, 0.f );
-    attQuadraticEvaluator->Parameter()->SetVal( 0.02f, 0.f );
-    cutOffEvaluator->Parameter()->SetVal( glm::radians( 12.5f ), 0.f );
-    outerCutOffEvaluator->Parameter()->SetVal( glm::radians( 15.0f ), 0.f );
+    attQuadraticEvaluator->Parameter()->SetVal( 0.0f, 0.f );
+    cutOffEvaluator->Parameter()->SetVal( glm::cos( glm::radians( 15.0f ) ), 0.f );
+    outerCutOffEvaluator->Parameter()->SetVal( glm::cos( glm::radians( 25.0f ) ), 0.f );
     
     m_paramModel->RegisterAll( colorEvaluator );
     m_paramModel->RegisterAll( directionEvaluator );
