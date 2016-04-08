@@ -9,8 +9,11 @@
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
+#include "Engine/Models/Lights/ModelBaseLight.h"
+
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
+
 
 namespace bv { namespace model {
 
@@ -53,9 +56,17 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
         {
             ser.EnterArray( "timelines" );
             for( auto timeline : m_timeline->GetChildren() )
+            {
                 timeline->Serialize( ser );
+            }
             ser.ExitChild(); // timelines
 
+            ser.EnterArray( "lights" );
+            for( auto & light : m_lights )
+            {
+                light->Serialize( ser );
+            }
+            ser.ExitChild(); // lights
 
             m_sceneVariables.Serialize( ser );
         }
@@ -101,6 +112,13 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 
 	bvDeserCo->SetSceneTimeline( sceneTimeline );
 
+// lights
+    auto lights = SerializationHelper::DeserializeArray< model::ModelBaseLight >( deser, "lights" );
+    for( auto light : lights )
+    {
+        obj->AddLight( light );
+    }
+
 // editor scene varables
 
     if( deser.EnterChild( "sceneVariables" ) )
@@ -126,6 +144,16 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 model::SceneModelPtr		SceneModel::Clone		() const
 {
 	return CloneViaSerialization::Clone( this, "scene", nullptr, nullptr ); // FIXME probably
+}
+
+// *******************************
+//
+void						SceneModel::Update	    ( TimeType t )
+{
+    for( auto & light : m_lights )
+    {
+        light->Update( t );
+    }
 }
 
 // *******************************
@@ -179,11 +207,51 @@ Camera *					SceneModel::GetCamera              ()  const
 
 // *******************************
 //
+void                        SceneModel::AddLight            ( IModelLightPtr light ) 
+{
+    m_lights.push_back( light );
+}
+
+// *******************************
+//
+bool                        SceneModel::RemoveLight         ( UInt32 idx ) 
+{
+    if( idx < m_lights.size() )
+    {
+        m_lights.erase( m_lights.begin() + idx );
+        return true;
+    }
+    return false;
+}
+
+// *******************************
+//
+IModelLight *               SceneModel::GetLight            ( UInt32 idx ) 
+{
+    if( idx < m_lights.size() )
+    {
+        return m_lights[ idx ].get();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+SizeType                    SceneModel::NumLights            () const
+{
+    return ( SizeType )m_lights.size();
+}
+
+// *******************************
+//
 ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 {
 	return m_modelSceneEditor;
 }
 
+// *******************************
+//
 SceneVariables &            SceneModel::GetSceneVariables   ()
 {
     return m_sceneVariables;

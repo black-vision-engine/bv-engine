@@ -584,10 +584,17 @@ bool            BasicNode::AddPlugin                        ( IPluginPtr plugin 
 bool            BasicNode::AddPlugin                        ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
-    m_boundingVolume = CreateBoundingVolume( m_pluginList );
 
-    return true;
+    auto plugin = m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator );
+    if( plugin )
+    {
+        m_pluginList->AttachPlugin( plugin );
+        m_boundingVolume = CreateBoundingVolume( m_pluginList );
+    
+        return true;
+    }
+ 
+    return false;
 }
 
 // ********************************

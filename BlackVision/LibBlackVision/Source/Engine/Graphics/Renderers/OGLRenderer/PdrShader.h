@@ -3,6 +3,7 @@
 #include "Mathematics/glm_inc.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrUniformBufferObject.h"
 #include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
 #include "Engine/Types/Enums.h"
 
@@ -49,6 +50,8 @@ public:
 
     //FIXME: use SamplerState to cache it at least a bit (this should be stored in current Renderer)
     //void SetSamplerState (Renderer* renderer, RendererData::SamplerState * curSamplerState ); //see comments in PdrShader.cpp
+
+    void    BindUniformBuffer       ( PdrUniformBufferObject * ubo );
 
 private:
 

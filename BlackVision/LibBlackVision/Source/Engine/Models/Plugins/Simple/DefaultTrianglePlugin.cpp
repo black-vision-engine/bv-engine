@@ -33,26 +33,26 @@ std::string                     DefaultTrianglePluginDesc::UID                 (
 }
 
 
-class TriangleGenerator : public IGeometryOnlyGenerator
+class TriangleGenerator : public IGeometryNormalsGenerator
 {
     glm::vec3 pa_, pb_, pc_;
 public:
     TriangleGenerator( glm::vec3 pa, glm::vec3 pb, glm::vec3 pc )
         : pa_( pa ), pb_( pb ), pc_( pc ) { }
 
-    virtual Type GetType() override { return Type::GEOMETRY_ONLY; }
-
-    virtual void GenerateGeometry( Float3AttributeChannelPtr verts ) override
+    virtual void GenerateGeometryNormals( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) override
     {
         verts->AddAttribute( pa_ );
         verts->AddAttribute( pb_ );
         verts->AddAttribute( pc_ );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
 std::vector<IGeometryGeneratorPtr>    DefaultTrianglePlugin::GetGenerators()
 {
-    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new TriangleGenerator( GetPointA(), GetPointB(), GetPointC() ) ) );
+    return std::vector< IGeometryGeneratorPtr >( 1, std::make_shared< TriangleGenerator >( GetPointA(), GetPointB(), GetPointC() ) );
 }
 
 bool                                DefaultTrianglePlugin::NeedsTopologyUpdate()

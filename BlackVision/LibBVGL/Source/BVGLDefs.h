@@ -370,6 +370,25 @@ namespace bv {
 #define GL_CULL_FACE					0x0B44
 #define GL_CULL_FACE_MODE				0x0B45
 
+#define GL_BOOL                         0x8B56
+#define GL_FLOAT_VEC2                   0x8B50
+#define GL_FLOAT_VEC3                   0x8B51
+#define GL_FLOAT_VEC4                   0x8B52
+#define GL_FLOAT_MAT2                   0x8B5A
+#define GL_FLOAT_MAT3                   0x8B5B
+#define GL_FLOAT_MAT4                   0x8B5C
+
+#define GL_UNIFORM_TYPE                         0x8A37
+#define GL_UNIFORM_SIZE                         0x8A38
+#define GL_UNIFORM_OFFSET                       0x8A3B
+#define GL_UNIFORM_ARRAY_STRIDE                 0x8A3C
+#define GL_UNIFORM_MATRIX_STRIDE                0x8A3D
+#define GL_UNIFORM_BLOCK_DATA_SIZE              0x8A40
+#define GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS        0x8A42
+#define GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES 0x8A43
+
+#define GL_INVALID_INDEX                0xFFFFFFFF
+
 //pablito
 #define GL_FRAMEBUFFER_EXT 0x8D40
 #define GL_RENDERBUFFER_EXT 0x8D41

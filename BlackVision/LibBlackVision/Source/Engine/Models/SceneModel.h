@@ -4,8 +4,9 @@
 #include "Serialization/ISerializable.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Models/EditorVariables/SceneVariables.h"
-
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
+#include "Engine/Models/Lights/ModelBaseLight.h"
+
 
 namespace bv { namespace model {
 
@@ -15,20 +16,22 @@ class SceneModel;
 DEFINE_PTR_TYPE( SceneModel );
 DEFINE_CONST_PTR_TYPE( SceneModel );
 
-class SceneModel : public ISerializable
+class SceneModel : public IUpdatable, public ISerializable
 {
 private:
 
-    std::string             m_name;
+    std::string                     m_name;
 
-    BasicNodePtr            m_sceneRootNode;
+    BasicNodePtr                    m_sceneRootNode;
 
-    OffsetTimeEvaluatorPtr  m_timeline;
+    OffsetTimeEvaluatorPtr          m_timeline;
 
-    Camera *                m_camera; //FIXME: camera model
+    Camera *                        m_camera; //FIXME: camera model
 
-    ModelSceneEditor *		m_modelSceneEditor;
-    SceneVariables          m_sceneVariables;       // Variables can be queried by editor.
+    ModelSceneEditor *		        m_modelSceneEditor;
+    SceneVariables                  m_sceneVariables;       // Variables can be queried by editor.
+
+    std::vector< IModelLightPtr >   m_lights; //could be unique_ptr but serialization doesn't support that
 
 public:
                             SceneModel			( const std::string & name, Camera * camera );
@@ -40,6 +43,8 @@ public:
 
     model::SceneModelPtr 	Clone				() const;
 
+    virtual void            Update              ( TimeType t );
+
     void					SetRootNode			( BasicNodePtr rootNode );
     BasicNodePtr			GetRootNode			() const;
 
@@ -49,6 +54,12 @@ public:
     OffsetTimeEvaluatorPtr  GetTimeline         () const;
 
     Camera *                GetCamera           () const;
+
+    // LIGHTS
+    void                    AddLight            ( IModelLightPtr light );
+    bool                    RemoveLight         ( UInt32 idx );
+    IModelLight *           GetLight            ( UInt32 idx );
+    SizeType                NumLights           () const;
 
     ModelSceneEditor *		GetModelSceneEditor	() const;
     SceneVariables &        GetSceneVariables   ();

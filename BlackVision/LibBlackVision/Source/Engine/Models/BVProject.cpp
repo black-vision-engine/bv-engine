@@ -16,6 +16,9 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Models/Lights/HelperModelLights.h"
+
+
 namespace bv {
 
 const std::string	BVProject::MAIN_ROOT_NAME			= "main root";
@@ -77,6 +80,11 @@ void            BVProject::Update( TimeType t )
     {
         m_rootNode->Update( t );
 
+        for( auto & scene : m_sceneModelVec )
+        {
+            scene->Update( t );
+        }
+
         UpdatersManager::Get().UpdateStep();
 
         //FIXME: camera should be per scene model
@@ -96,21 +104,21 @@ model::BasicNodePtr		BVProject::GetModelSceneRoot  () const
 
 // *******************************
 //
-SceneNode *             BVProject::GetEngineSceneRoot ()  const
+SceneNode *             BVProject::GetEngineSceneRoot   ()  const
 {
     return m_engineSceneRoot;
 }
 
 // *******************************
 //
-BVProjectEditor *       BVProject::GetProjectEditor		()
+BVProjectEditor *       BVProject::GetProjectEditor	    () const
 {
     return m_projectEditor;
 }
 
 // *******************************
 //
-StringVector            BVProject::ListScenesNames     () const
+StringVector            BVProject::ListScenesNames      () const
 {
     StringVector ret;
     for( auto & sm : m_sceneModelVec )
@@ -123,7 +131,7 @@ StringVector            BVProject::ListScenesNames     () const
 
 // *******************************
 //
-model::SceneModelPtr    BVProject::GetScene            ( const std::string & name ) const
+model::SceneModelPtr    BVProject::GetModelScene            ( const std::string & name ) const
 {
     for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
     {
@@ -137,7 +145,7 @@ model::SceneModelPtr    BVProject::GetScene            ( const std::string & nam
 
 // *******************************
 //
-model::SceneModelPtr    BVProject::GetScene            ( UInt32 idx ) const
+model::SceneModelPtr    BVProject::GetModelScene            ( UInt32 idx ) const
 {
     if( idx < m_sceneModelVec.size() )
     {
@@ -148,9 +156,16 @@ model::SceneModelPtr    BVProject::GetScene            ( UInt32 idx ) const
 
 // *******************************
 //
-const model::SceneModelVec &    BVProject::GetScenes    () const
+const model::SceneModelVec &    BVProject::GetModelScenes   () const
 {
     return m_sceneModelVec;
+}
+
+// *******************************
+//
+const SceneVec &                BVProject::GetScenes        () const
+{
+    return m_sceneVec;
 }
 
 // *******************************

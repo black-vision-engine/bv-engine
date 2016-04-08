@@ -132,7 +132,7 @@ namespace CylinderGenerator
 		mapping_type = mt;
     }
 
-	class MainGenerator : public IGeometryAndUVsGenerator
+	class MainGenerator : public IGeometryNormalsUVsGenerator
     {
 	protected:
 		double angle_offset;			// OpenAngleMode needs this
@@ -219,11 +219,11 @@ namespace CylinderGenerator
 				double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
 				angle1 += angle_offset;
 
-				double cos_angle1 = cos( angle1 );
-				double sin_angle1 = sin( angle1 );
+				double cosAngle = cos( angle1 );
+				double sinAngle1 = sin( angle1 );
 
-				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
-				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) + center_translate );
+				verts->AddAttribute( glm::vec3( R1 * cosAngle, h1, R1 * sinAngle1 ) + center_translate );
+				verts->AddAttribute( glm::vec3( R2 * cosAngle, h2, R2 * sinAngle1 ) + center_translate );
 
 
 				if( direction )
@@ -258,7 +258,7 @@ namespace CylinderGenerator
 			return glm::clamp( angle / TWOPI, 0.0, 1.0 );
 		}
 
-		void generateUVCircuit( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, float topV, float bottomV, unsigned int& start_index )
+		void generateUVCircuit( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, float topV, float bottomV, unsigned int& startIndex )
 		{
 			int max_loop;
 			int i;
@@ -266,7 +266,7 @@ namespace CylinderGenerator
 
 			for( int j = 0; j <= max_loop; j++ )
             {
-				double U_coord = generateUFromPosition( verts, start_index );
+				double U_coord = generateUFromPosition( verts, startIndex );
 
 				if( U_coord > 0.97 )
 				//Maybe it should be 0.0 not 1.0 ?
@@ -276,8 +276,8 @@ namespace CylinderGenerator
 				uvs->AddAttribute( glm::vec2( U_coord, topV ) );
 				uvs->AddAttribute( glm::vec2( U_coord, bottomV ) );
 
-				++start_index;
-				++start_index;
+				++startIndex;
+				++startIndex;
 			}
 		}
 
@@ -319,10 +319,10 @@ namespace CylinderGenerator
 				unsigned int start_index = 0;
 
 				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 6.0, 5.0 / 6.0 ), static_cast<float>( 1.0 / 6.0 ), start_index, true );
-				generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 0.0 ), start_index );
+				generateUVCircuit( verts, uvs, static_cast<float>( 0.0 ), static_cast<float>( 1.0 / 3.0 ), start_index );
 				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 2.0, 5.0 / 6.0 ), float( 1.0 / 6.0 ), start_index, false );
 				if( inner_radius > 0.0 )
-					generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 2.0 / 3.0 ), start_index );
+					generateUVCircuit( verts, uvs, static_cast<float>( 2.0 / 3.0 ), static_cast<float>( 1.0 / 3.0 ), start_index );
 			}
 			else
 			{
@@ -336,31 +336,31 @@ namespace CylinderGenerator
 			}
 		}
 	public:
-		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
-		
 
-		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			if( outer_radius == 0.0 )
 				return;		//Nothing to do.
 
 			computeAngleOffset();
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
-			bool gen_direction = true;		// Generation direction clockwise or counter clockwise
+			bool gen_direction = false;		// Generation direction clockwise or counter clockwise
 
 			// Top of cylinder
 			generateCircuit( inner_radius, outer_radius, height, height, verts, uvs, gen_direction );
 
 			// Lateral surface
-			generateCircuit( outer_radius, outer_radius, height, 0.0f, verts, uvs, gen_direction );
+			generateCircuit( outer_radius, outer_radius, 0.0f, height, verts, uvs, gen_direction );
 
 			// Bottom of cylinder
 			generateCircuit( outer_radius, inner_radius, 0.0f, 0.0f, verts, uvs, gen_direction );
 
 			if( inner_radius > 0.0 )
-				generateCircuit( inner_radius, inner_radius, 0.0f, height, verts, uvs, gen_direction );
+				generateCircuit( inner_radius, inner_radius, height, 0.0f, verts, uvs, gen_direction );
 
 			generateUVs( verts, uvs );
+            
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 
@@ -370,8 +370,6 @@ namespace CylinderGenerator
 		bool rotated;
 	public:
 		ClosureGenerator( bool isRotated ) : rotated( isRotated ){}
-
-		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 		void generateUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
 		{
@@ -411,7 +409,7 @@ namespace CylinderGenerator
 			}
 		}
 
-		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
         {
 			computeAngleOffset();
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
@@ -425,12 +423,24 @@ namespace CylinderGenerator
 			double cos_angle = cos( angle );
 			double sin_angle = sin( angle );
 
-			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, height, outer_radius * sin_angle ) + center_translate );
-			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, height, inner_radius * sin_angle ) + center_translate );
-			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) + center_translate );
-			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) + center_translate );
+            if( rotated )
+            {
+		        verts->AddAttribute( glm::vec3( outer_radius * cos_angle, height, outer_radius * sin_angle ) + center_translate );
+		        verts->AddAttribute( glm::vec3( inner_radius * cos_angle, height, inner_radius * sin_angle ) + center_translate );
+		        verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) + center_translate );
+		        verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) + center_translate );
+            }
+            else
+            {
+                verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) + center_translate );
+		        verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) + center_translate );
+		        verts->AddAttribute( glm::vec3( outer_radius * cos_angle, height, outer_radius * sin_angle ) + center_translate );
+		        verts->AddAttribute( glm::vec3( inner_radius * cos_angle, height, inner_radius * sin_angle ) + center_translate );
+            }
 
 			generateUVs( verts, uvs );
+            
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }
@@ -472,11 +482,11 @@ std::vector<IGeometryGeneratorPtr>    DefaultPlugin::GetGenerators()
 		m_mappingType->Evaluate());
 
     std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::MainGenerator() ) );
+    gens.push_back( std::make_shared< CylinderGenerator::MainGenerator >() );
 	if( m_openAngle->GetValue() > 0.0 )
 	{
-		gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::ClosureGenerator(true) ) );
-		gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::ClosureGenerator(false) ) );
+		gens.push_back( std::make_shared< CylinderGenerator::ClosureGenerator >( true ) );
+		gens.push_back( std::make_shared< CylinderGenerator::ClosureGenerator >( false ) );
 	}
 
     return gens;

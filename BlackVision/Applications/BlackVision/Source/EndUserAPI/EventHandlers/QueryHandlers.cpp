@@ -124,7 +124,7 @@ void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser
     PrepareResponseTemplate( ser, InfoEvent::Command::ListSceneAssets, eventID, true );
 
     ser.EnterArray( "assets" );
-    for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
+    for( auto scene : m_appLogic->GetBVProject()->GetModelScenes() )
     {
         auto sceneRoot = scene->GetRootNode();
 
@@ -201,7 +201,7 @@ void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject &
 
     std::string sceneName = request->GetAttribute( "SceneName" );
     
-    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetModelScene( sceneName );
     if( scene == nullptr )
     {
         ErrorResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, "Scene not found." );
@@ -224,7 +224,7 @@ void         QueryHandlers::GetTimeLinesInfo         ( JsonSerializeObject & ser
     PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, eventID, true );
 
     ser.EnterArray( "scenes" );
-    for( auto s : m_appLogic->GetBVProject()->GetScenes() )
+    for( auto s : m_appLogic->GetBVProject()->GetModelScenes() )
     {
         ser.EnterChild( "scene" );
 
@@ -275,7 +275,7 @@ void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, ID
 
     ser.EnterArray( "scenes" );
 
-    for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
+    for( auto sceneModel : m_appLogic->GetBVProject()->GetModelScenes() )
     {
         ser.EnterChild( "scene" );
             ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
@@ -650,7 +650,7 @@ void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, ID
     std::string sceneName = request->GetAttribute( "SceneName" );
     std::string timelineName = request->GetAttribute( "TimelineName" );
 
-    auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+    auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
     if( scene == nullptr )
     {
         ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, "Scene not found." );
@@ -685,7 +685,7 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
 
     ser.EnterArray( "scenes" );
 
-    for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
+    for( auto sceneModel : m_appLogic->GetBVProject()->GetModelScenes() )
     {
         ser.EnterChild( "scene" );
             sceneModel->Serialize( ser );
@@ -789,7 +789,7 @@ void    QueryHandlers::ListTimelinesParams     ( JsonSerializeObject & ser, IDes
     }
 
     std::string sceneName = request->GetAttribute( "SceneName" );
-    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetModelScene( sceneName );
     if( scene == nullptr )
     {
         ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelinesParams, eventID, "Scene not found" );

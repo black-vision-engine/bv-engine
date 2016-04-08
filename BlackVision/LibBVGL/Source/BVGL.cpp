@@ -154,6 +154,41 @@ void        BVGL::bvglUniformMatrix4fv          ( GLint location, GLsizei count,
 
 // *****************************
 //
+GLuint      BVGL::bvglGetUniformBlockIndex      ( GLuint program, const GLchar * blockName )
+{
+    return bvgl.GetUniformBlockIndex( program, blockName );
+}
+
+// *****************************
+//
+void        BVGL::bvglUniformBlockBinding       ( GLuint program, GLuint blockIdx, GLuint blockBinding )
+{
+    bvgl.UniformBlockBinding( program, blockIdx, blockBinding );
+}
+
+// *****************************
+//
+void        BVGL::bvglGetActiveUniformName       ( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName )
+{
+    bvgl.GetActiveUniformName( program, uniformIndex, bufSize, length, uniformName );
+}
+
+// *****************************
+//
+void        BVGL::bvglGetActiveUniformsiv       ( GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params )
+{
+    bvgl.GetActiveUniformsiv( program, uniformCount, uniformIndices, pname, params );
+}
+
+// *****************************
+//
+void        BVGL::bvglGetActiveUniformBlockiv   ( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params )
+{
+    bvgl.GetActiveUniformBlockiv( program, uniformBlockIndex, pname, params );
+}
+
+// *****************************
+//
 void        BVGL::bvglShaderSource              ( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length )
 {
     bvgl.ShaderSource( shader, count, strings, length ); 

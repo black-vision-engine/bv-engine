@@ -68,7 +68,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam<int>( PN::VERTICAL_STRIPES, 10, true, true );
 	h.AddSimpleParam<int>( PN::HORIZONTAL_STRIPES, 10, true, true );
 	h.AddSimpleParam<float>( PN::RADIUS, 1.0f, true, true );
-	h.AddSimpleParam<float>( PN::OPEN_ANGLE, 240.0f, true, true );
+	h.AddSimpleParam<float>( PN::OPEN_ANGLE, 0.0f, true, true );
 	h.AddParam< IntInterpolator, Plugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
 		( DefaultSphere::PN::OPEN_ANGLE_MODE, Plugin::OpenAngleMode::CW, true, true );
 	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
@@ -111,15 +111,15 @@ namespace Generator
 	
 	float computeAngle2Clamped( float angle, float stripe_num )
 	{
-		float ret_value = angle * ( stripe_num + 1 );
+		float retValue = angle * ( stripe_num + 1 );
 		if( open_angle > 0.0 )
 		{
-			float max_angle = float( TWOPI - TO_RADIANS( open_angle ) );
-			if( ret_value > max_angle )
-				return max_angle;
+			float maxAngle = float( TWOPI - TO_RADIANS( open_angle ) );
+			if( retValue > maxAngle )
+				return maxAngle;
 		}
 
-		return ret_value;
+		return retValue;
 	}
 
 	/**@brief Generates sphere built as strips.
@@ -127,7 +127,7 @@ namespace Generator
 	One instance of class SimpleCubeGenerator generates stripe of a sphere
 	from north pole to south pole. Contructor takes in parameter number of
 	stripe that it has to process (starting from 0).*/
-	class SphereGenerator : public IGeometryAndUVsGenerator
+	class SphereGenerator : public IGeometryNormalsUVsGenerator
 	{
 	private:
 		float stripe_num;			///<Number of stripe 
@@ -135,9 +135,6 @@ namespace Generator
 
 		SphereGenerator( int stripe ) { stripe_num = static_cast<float>( stripe );}
 		~SphereGenerator(){}
-
-		Type GetType() { return Type::GEOMETRY_AND_UVS; }
-
 
 		glm::vec2 generateUV( float horizontal_angle, float vertical_angle )
 		{
@@ -158,76 +155,80 @@ namespace Generator
 			return returnUV;
 		}
 
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			assert( stripe_num < horizontal_stripes );
 			assert( horizontal_stripes >= 3 );
 			assert( vertical_stripes >= 3 );
 
-			float angle_offset = computeAngleOffset( open_angle_mode, open_angle );
+			float angleOffset = computeAngleOffset( open_angle_mode, open_angle );
 
 			// Vertex on north pole ( we need two verticies )
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 
-			float vert_delta_angle = float( PI ) / float(vertical_stripes);			// Added each loop
-			float hor_delta_angle = float( TWOPI ) / float(horizontal_stripes);		// Added each loop
+			float vertDeltaAngle = float( PI ) / float(vertical_stripes);			// Added each loop
+			float horDeltaAngle = float( TWOPI ) / float(horizontal_stripes);		// Added each loop
 
 			// We compute cos and sin of angles we need (we are processing stripe, so we must
 			// take values of theese functions for left and right verticies.
-			float cos_hor_angle1 = radius * cos( hor_delta_angle * stripe_num + angle_offset );
-			float sin_hor_angle1 = radius * sin( hor_delta_angle * stripe_num + angle_offset );
+			float cosHorAngle1 = radius * cos( horDeltaAngle * stripe_num + angleOffset );
+			float sinHorAngle1 = radius * sin( horDeltaAngle * stripe_num + angleOffset );
 
-			float hor_angle2_clamped = computeAngle2Clamped( hor_delta_angle, stripe_num );
+			float horAngle2Clamped = computeAngle2Clamped( horDeltaAngle, stripe_num );
 
-			float cos_hor_angle2 = radius * cos( hor_angle2_clamped + angle_offset );
-			float sin_hor_angle2 = radius * sin( hor_angle2_clamped + angle_offset );
+			float cosHorAngle2 = radius * cos( horAngle2Clamped + angleOffset );
+			float sinHorAngle2 = radius * sin( horAngle2Clamped + angleOffset );
 
-			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
+			float alfa = float( PI ) / float(2) - vertDeltaAngle;		// Angle counting from north pole
 
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
-				float cos_alfa = cos( alfa );
-				float sin_alfa = sin( alfa );
+				float cosAlfa = cos( alfa );
+				float sinAlfa = sin( alfa );
 
-				float x = sin_hor_angle1 * cos_alfa;
-				float y = radius * sin_alfa;
-				float z = cos_hor_angle1 * cos_alfa;
+				float x = sinHorAngle2 * cosAlfa;
+				float y = radius * sinAlfa;
+				float z = cosHorAngle2 * cosAlfa;
 
 				verts->AddAttribute( glm::vec3( x, y, z ) );
 
-				x = sin_hor_angle2 * cos_alfa;
-				z = cos_hor_angle2 * cos_alfa;
+                x = sinHorAngle1 * cosAlfa;
+                z = cosHorAngle1 * cosAlfa;
 				verts->AddAttribute( glm::vec3( x, y, z ) );
 
-				alfa -= vert_delta_angle;
+				alfa -= vertDeltaAngle;
 			}
 			
 
-			float horizontal_angle2;
-			horizontal_angle2 = ( hor_angle2_clamped + angle_offset ) / float( TWOPI );		//transformed to interval [0.0 , 1.0]
+			float horizontalAngle2;
+			horizontalAngle2 = ( horAngle2Clamped + angleOffset ) / float( TWOPI );		//transformed to interval [0.0 , 1.0]
 
-			float horizontal_angle1 = ( hor_delta_angle * stripe_num + angle_offset ) / float( TWOPI );				//transformed to interval [0.0 , 1.0]
-			float vertical_angle = float( PI ) - vert_delta_angle;
+			float horizontalAngle1 = ( horDeltaAngle * stripe_num + angleOffset ) / float( TWOPI );				//transformed to interval [0.0 , 1.0]
+			float vertical_angle = float( PI ) - vertDeltaAngle;
 
 
-			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), bottomUV, topUV )*/generateUV( horizontal_angle1, static_cast<float>(PI) ) );
-			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), bottomUV, topUV )*/generateUV( horizontal_angle2, static_cast<float>(PI) ) );
+            uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, 1.0 ), bottomUV, topUV )*/generateUV( horizontalAngle2, static_cast<float>(PI) ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, 1.0 ), bottomUV, topUV )*/generateUV( horizontalAngle1, static_cast<float>(PI) ) );
 			for( unsigned int i = 0; i < vertical_stripes - 1; ++i )
 			{
-				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle1, vertical_angle ) );
-				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle2, vertical_angle ) );
+                uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle2, vertical_angle ) );
+				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle1, vertical_angle ) );
 
-				vertical_angle -= vert_delta_angle;
+				vertical_angle -= vertDeltaAngle;
 			}
-			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle1, vertical_angle ) );
-			vertical_angle -= vert_delta_angle;
-			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle2, vertical_angle ) );
-		}
+
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle2, vertical_angle ) );
+            vertical_angle -= vertDeltaAngle;
+   			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle1, vertical_angle ) );
+
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );        
+        }
 
 	};
 
-	class SphereClosureGenerator : public IGeometryAndUVsGenerator
+	class SphereClosureGenerator : public IGeometryNormalsUVsGenerator
 	{
 	private:
 		float number_of_stripes;
@@ -236,67 +237,66 @@ namespace Generator
 		SphereClosureGenerator( int stripe ) { number_of_stripes = static_cast<float>( stripe );}
 		~SphereClosureGenerator(){}
 
-		Type GetType() { return Type::GEOMETRY_AND_UVS; }
-
 		glm::vec2 computeClosureUV( glm::vec2 normalized_pos, bool invert )
 		{
 			if( invert )
 				normalized_pos.x = -normalized_pos.x;
 
-			glm::vec2 scale_factor;
+			glm::vec2 scaleFactor;
 			glm::vec2 closureRegion;
 
 			if( mapping_type == Plugin::MappingType::SINGLETEXTURE )
 			{
-				scale_factor = glm::vec2( 1.0 / 3.0, 1.0 );
+				scaleFactor = glm::vec2( 1.0 / 3.0, 1.0 );
 				closureRegion = glm::vec2( 2.0 / 3.0, 0.0 );
 			}
 			else if( mapping_type == Plugin::MappingType::DOUBLETEXTURE )
 			{
-				scale_factor = glm::vec2( 1.0, 1.0 );
+				scaleFactor = glm::vec2( 1.0, 1.0 );
 				closureRegion = glm::vec2( 0.0, 0.0 );
 			}
 
-			return closureRegion + scale_factor * ( glm::vec2( 0.5, 0.5 ) + normalized_pos * glm::vec2( 0.5, 0.5 ) );
+			return closureRegion + scaleFactor * ( glm::vec2( 0.5, 0.5 ) + normalized_pos * glm::vec2( 0.5, 0.5 ) );
 		}
 
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
-			float angle_offset = computeAngleOffset( open_angle_mode, open_angle );
+			float angleOffset = computeAngleOffset( open_angle_mode, open_angle );
 
-			float vert_delta_angle = float( PI ) / float(vertical_stripes);
-			float hor_delta_angle = float( TWOPI ) / float(horizontal_stripes);
+			float vertDeltaAngle = float( PI ) / float(vertical_stripes);
+			float horDeltaAngle = float( TWOPI ) / float(horizontal_stripes);
 			
-			float hor_angle_clamped = computeAngle2Clamped( hor_delta_angle, number_of_stripes );
+			float horAngleClamped = computeAngle2Clamped( horDeltaAngle, number_of_stripes );
 
-			float cos_hor_angle = radius * cos( angle_offset );
-			float sin_hor_angle = radius * sin( angle_offset );
+			float cosHorAngle = radius * cos( angleOffset );
+			float sinHorAngle = radius * sin( angleOffset );
 
 			// ===================================================== //
 			// The first face
-			float U_coord = ( angle_offset ) / float( TWOPI );
-			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
+			float U_coord = ( angleOffset ) / float( TWOPI );
+			float alfa = float( PI ) / float(2) - vertDeltaAngle;		// Angle counting from north pole
 
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 			uvs->AddAttribute( /*glm::vec2( 0.0, 1.0 )*/computeClosureUV( glm::vec2(0.0, 1.0), false ) );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
-				//float V_coord = float( ( PI / 2 + alfa ) / PI );
-				float cos_alfa = cos( alfa );
-				float sin_alfa = sin( alfa );
+				float cosAlfa = cos( alfa );
+                float sinAlfa = sin( alfa );
 
-				float x = 0.0;
-				float y = radius * sin_alfa;
-				float z = 0.0;
-				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( /*glm::vec2( 1.0, V_coord ) */computeClosureUV( glm::vec2(0.0, sin_alfa), false ) );
+                float x = 0.0f;		// Radius already multiplied
+                float y = radius * sinAlfa;
+                float z = 0.0f;		// Radius already multiplied
 
-				x = sin_hor_angle * cos_alfa;		// Radius already multiplied
-				z = cos_hor_angle * cos_alfa;		// Radius already multiplied
-				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cos_alfa, sin_alfa), false ) );
+                verts->AddAttribute( glm::vec3( x, y, z ) );
+                uvs->AddAttribute( /*glm::vec2( 1.0, V_coord ) */computeClosureUV( glm::vec2(0.0, sinAlfa), false ) );
 
-				alfa -= vert_delta_angle;
+                x = sinHorAngle * cosAlfa;		// Radius already multiplied
+                z = cosHorAngle * cosAlfa;		// Radius already multiplied
+
+                verts->AddAttribute( glm::vec3( x, y, z ) );
+                uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cosAlfa, sinAlfa), false ) );
+
+				alfa -= vertDeltaAngle;
 			}
 			verts->AddAttribute( glm::vec3( 0.0, -1.0, 0.0 ) * radius );
 			uvs->AddAttribute( /*glm::vec2( 0.0, 0.0 )*/computeClosureUV( glm::vec2(0.0, -1.0), false ) );
@@ -305,33 +305,37 @@ namespace Generator
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );			//It' doesn't matter
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );			//It' doesn't matter
+			uvs->AddAttribute( computeClosureUV( glm::vec2( 0.0, 1.0 ), true ) );			//It' doesn't matter
 
 			// ===================================================== //
 			// The second face
-			U_coord = ( hor_angle_clamped ) / float( TWOPI );
-			alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
-			cos_hor_angle = radius * cos( hor_angle_clamped + angle_offset );
-			sin_hor_angle = radius * sin( hor_angle_clamped + angle_offset );
+			U_coord = ( horAngleClamped ) / float( TWOPI );
+			alfa = float( PI ) / float(2) - vertDeltaAngle;		// Angle counting from north pole
+			cosHorAngle = radius * cos( horAngleClamped + angleOffset );
+			sinHorAngle = radius * sin( horAngleClamped + angleOffset );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
 				//float V_coord = float( ( PI / 2 + alfa ) / PI );
-				float cos_alfa = cos( alfa );
-				float sin_alfa = sin( alfa );
+				float cosAlfa = cos( alfa );
+				float sinAlfa = sin( alfa );
 
-				float x = sin_hor_angle * cos_alfa;		// Radius already multiplied
-				float y = radius * sin_alfa;
-				float z = cos_hor_angle * cos_alfa;		// Radius already multiplied
+				float x = 0.0f;		// Radius already multiplied
+				float y = radius * sinAlfa;
+				float z = 0.0f;		// Radius already multiplied
+
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cos_alfa, sin_alfa), true ) );
+				uvs->AddAttribute( /*glm::vec2( 0.0, V_coord )*/computeClosureUV( glm::vec2(0.0, sinAlfa), true ) );
 
-				x = 0.0;
-				z = 0.0;
+				x = sinHorAngle * cosAlfa;		// Radius already multiplied
+				z = cosHorAngle * cosAlfa;		// Radius already multiplied
+
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( /*glm::vec2( 0.0, V_coord )*/computeClosureUV( glm::vec2(0.0, sin_alfa), true ) );
+                uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cosAlfa, sinAlfa), true ) );
 
-				alfa -= vert_delta_angle;
+				alfa -= vertDeltaAngle;
 			}
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 
 	};
@@ -379,14 +383,14 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 		float angle_step = float( TWOPI ) / float(stripes_needed);
 		float angle_needed = float( TWOPI - TO_RADIANS( Generator::open_angle ) );
 		stripes_needed = static_cast<int>( ceil( angle_needed / angle_step ) );
-		gens.push_back( IGeometryGeneratorPtr( new Generator::SphereClosureGenerator( stripes_needed ) ) );
+        gens.push_back( std::make_shared< Generator::SphereClosureGenerator >( stripes_needed ) );
 	}
 	else
 		stripes_needed = Generator::horizontal_stripes;
 
 	for( int i = 0; i < stripes_needed; ++i )
 	{
-		gens.push_back( IGeometryGeneratorPtr( new Generator::SphereGenerator( i ) ) );
+		gens.push_back( std::make_shared< Generator::SphereGenerator >( i ) );
 	}
     return gens;
 }

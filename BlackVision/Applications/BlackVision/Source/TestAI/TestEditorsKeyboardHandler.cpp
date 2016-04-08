@@ -35,7 +35,7 @@ void    TestEditorsKeyboardHandler::HandleKey   ( unsigned char c, BVAppLogic * 
     {
         BVXMLSerializer ser;
         //auto sob = new JsonSerializeObject();
-        logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( ser );
+        logic->GetBVProject()->GetModelScenes()[ 0 ]->Serialize( ser );
         ser.Save( "test.xml" );
     }
 }

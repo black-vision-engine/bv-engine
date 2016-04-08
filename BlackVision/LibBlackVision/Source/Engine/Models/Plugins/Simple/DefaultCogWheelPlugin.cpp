@@ -105,18 +105,16 @@ namespace Generator
 	unsigned int allVerticies;
 
 	/**@brief Generates CogWheel*/
-	class CogWheelGenerator : public IGeometryAndUVsGenerator
+	class CogWheelGenerator : public IGeometryNormalsUVsGenerator
 	{
 	private:
+
 		glm::vec3 center_translate;
+
 	public:
 
 		CogWheelGenerator() {}
 		~CogWheelGenerator(){}
-
-		Type GetType() { return GEOMETRY_AND_UVS; }
-		//GEOMETRY_AND_UVS
-		//GEOMETRY_ONLY
 
 		void computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
 		{
@@ -289,7 +287,7 @@ namespace Generator
 		}
 
 
-		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 
@@ -332,6 +330,8 @@ namespace Generator
 				uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
 												vert.y*0.5 + 0.5 ) ); // FIXME: scaling
 			}
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }
@@ -380,8 +380,8 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 	Generator::weight_centerZ = m_weightCenterZ->Evaluate();
 
 
-    std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new Generator::CogWheelGenerator() ) );
+    std::vector< IGeometryGeneratorPtr > gens;
+    gens.push_back( std::make_shared< Generator::CogWheelGenerator >() );
     return gens;
 }
 

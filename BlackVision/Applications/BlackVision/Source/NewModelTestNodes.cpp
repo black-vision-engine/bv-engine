@@ -2228,14 +2228,15 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
+#define VERSION_MATERIAL
 
-//#define SHOW_CUBE
+#define SHOW_CUBE
 //#define SHOW_CYLINDER
 //#define SHOW_CONE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
-#define SHOW_ROUNDEDRECT
+//#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
 //#define SHOW_TORUS
 //#define SHOW_SPRING
@@ -2257,7 +2258,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 // Plugins stuff
     std::vector< std::string > uids;
     uids.push_back( "DEFAULT_TRANSFORM" );
-
+    
 // ============================================ //
 // Geometry plugins
 #ifdef SHOW_SPHERE
@@ -2305,6 +2306,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #ifdef VERSION_COLOR
     uids.push_back( "DEFAULT_COLOR" );
 #endif
+
+#ifdef VERSION_MATERIAL
+    uids.push_back( "DEFAULT_MATERIAL" );
+#endif
+
 #ifdef VERSION_TEXTURE
     #ifdef NO_PERSPECTIVE
         uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
@@ -2410,8 +2416,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     auto plugin = root->GetPlugin( "cube" );
     model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
     model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
-    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
-    model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 100 );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
+    //model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 10 );
 
     model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
     model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
@@ -2500,29 +2506,38 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     //success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 #endif
 
-
+#ifdef VERSION_MATERIAL
+    auto material = root->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0.2, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.2, 0, 0, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128.0f );
+#endif
+    
     return root;
-
+    
 #undef VERSION_TEXTURE
 #undef NO_PERSPECTIVE
 #undef VERSION_COLOR
+#undef VERSION_MATERIAL
 }
 
 // *****************************
 //
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string texturePath )
 {
-
+    
 #define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
-
+    
         //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 1000.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
       //Timeline stuff
     //auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-
+    
     timeEvaluator->AddChild( someTimelineWithEvents );
 
 // ============================================ //

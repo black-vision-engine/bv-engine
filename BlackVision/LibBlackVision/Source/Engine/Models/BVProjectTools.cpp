@@ -3,6 +3,8 @@
 #include "BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
+
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "Engine/Graphics/SceneGraph/Lines.h"
 
@@ -112,7 +114,17 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
     }
 }
 
+// *******************************
+//
+Scene *             BVProjectTools::BuildEngineScene                    ( model::SceneModelPtr modelScene, model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping )
+{
+    auto scene = new Scene();
+    
+    auto root = BuildEngineSceneNode( modelNode, nodesMapping );
+    scene->SetRoot( root );
 
+    return scene;
+}
 
 // *******************************
 //

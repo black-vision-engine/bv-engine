@@ -93,7 +93,7 @@ namespace
 
 SceneModelConstPtr IsSceneRootNode    ( const IModelNode * node, const BVProject * project )
 {
-    auto scenesModels = project->GetScenes();
+    auto scenesModels = project->GetModelScenes();
 
     for( auto sm : scenesModels )
     {

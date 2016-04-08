@@ -15,7 +15,7 @@ enum class RenderableArrayDataEnumKind : int
     RADEK_VAO = 0,
     RADEK_ELEMENTS,
 
-    RADT_TOTAL
+    RADEK_TOTAL
 };
 
 //FIXME: this is designed for singe vertexbuffer <-> vertexdescriptor case (it's general enough, the rest is simply abut the Sdata layout)

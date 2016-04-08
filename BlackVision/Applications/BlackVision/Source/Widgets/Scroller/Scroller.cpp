@@ -496,7 +496,7 @@ void		Scroller::OnNotifyNodeOffscreen         ( bv::model::BasicNode * n )
     else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_DeleteNode )
     {
         m_nodesStates.Remove( n );
-        m_editor->DeleteChildNode( m_editor->GetScene( m_sceneName ), m_parentNode, n->shared_from_this() );
+        m_editor->DeleteChildNode( m_editor->GetModelScene( m_sceneName ), m_parentNode, n->shared_from_this() );
     }
     else
         assert( false );
@@ -891,7 +891,7 @@ bool        Scroller::Pause               ()
 //
 bool       Scroller::Clear               ()
 {
-    auto scene = m_editor->GetScene( m_sceneName );
+    auto scene = m_editor->GetModelScene( m_sceneName );
 
     for( auto node : m_nodesStates.m_actives )
     {
@@ -1091,7 +1091,7 @@ model::BasicNodePtr Scroller::CreatePreset    ( IDeserializer & eventSer, ISeria
         
     //auto timeline = editor->GetTimeEvaluator( timelinePath );
     auto timeline = editor->GetTimeEvaluator( context->GetSceneName() );
-    auto scene = editor->GetScene( context->GetSceneName() );
+    auto scene = editor->GetModelScene( context->GetSceneName() );
 
     if( timeline == nullptr )
     {
@@ -1115,7 +1115,7 @@ model::BasicNodePtr Scroller::CreatePreset    ( IDeserializer & eventSer, ISeria
 bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node )
 {
     auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
-    auto scene = editor->GetScene( context->GetSceneName() );
+    auto scene = editor->GetModelScene( context->GetSceneName() );
 
     if( scene == nullptr )
     {

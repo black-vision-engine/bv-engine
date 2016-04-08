@@ -2,6 +2,7 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/SceneModel.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
 
 namespace bv {
 
@@ -21,6 +22,7 @@ class BVProjectEditor
 private:
 
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
+    typedef std::hash_map< model::SceneModel *, Scene * >	    TScenesMapping;
     typedef std::vector< model::SceneModelPtr >					SceneModelVec;
 
 private:
@@ -31,6 +33,7 @@ private:
     SceneEditor *               m_engineSceneEditor;
     
     TNodesMapping	            m_nodesMapping;
+    TScenesMapping              m_scenesMapping;
 
     SceneModelVec				m_detachedScenes;
 
@@ -58,7 +61,7 @@ public:
 
     bool					SetSceneVisible		( const std::string & sceneName, bool visible );
 
-    model::SceneModelPtr    GetScene			( const std::string & sceneName ) const;
+    model::SceneModelPtr    GetModelScene			( const std::string & sceneName ) const;
 
     bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
 
@@ -192,25 +195,37 @@ public:
     bool					LoadAsset					( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData );
     bool					LoadAsset					( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
 
+/* LIGHTS */
+
+    bool                    AddLight                    ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath );
+    bool                    RemoveLight                 ( const std::string & sceneName, UInt32 idx );
+
+    bool                    AddLight                    ( model::SceneModelPtr scene, LightType type, model::ITimeEvaluatorPtr timeline );
+    bool                    RemoveLight                 ( model::SceneModelPtr scene, UInt32 idx );
+    
 private:
 
-    /* engine scene helpers */
+    /* scene helpers */
     void					RefreshNode			( model::BasicNodePtr modelNode, SceneNode * sceneNode, Renderer * renderer );
+    
     void                    MappingsCleanup     ( model::IModelNodePtr node );
-
     void                    RemoveNodeMapping   ( model::IModelNodePtr node );
     void                    UnregisterUpdaters  ( model::IModelNodePtr node );
 
+    void                    MappingsCleanup     ( model::SceneModelPtr modelScene );
+    void                    RemoveSceneMapping  ( model::SceneModelPtr modelScene );
+    void                    UnregisterUpdaters  ( model::SceneModelPtr modelScene );
+
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node ) const;
     
-    
-    /* model scene helpers */
+    void                    AddModelScene       ( model::SceneModelPtr modelScene, UInt32 idx );
+    void                    AddEngineScene      ( model::SceneModelPtr modelScene, UInt32 idx );
 
-    bool                    AddModelScene       ( model::SceneModelPtr scene, UInt32 idx );
-    bool                    RemoveModelScene    ( model::SceneModelPtr scene );
+    bool                    RemoveModelScene    ( model::SceneModelPtr modelScene );
+    bool                    RemoveEngineScene   ( model::SceneModelPtr modelScene );
 
-    void                    SetModelSceneRootNode   ( model::SceneModelPtr scene, model::IModelNodePtr rootNode );
-    void                    DeleteModelSceneRootNode( model::SceneModelPtr scene );
+    void                    SetSceneRootNode    ( model::SceneModelPtr modelScene, model::IModelNodePtr rootNode );
+    void                    DeleteSceneRootNode ( model::SceneModelPtr modelScene );
 
 
     /* renaming helpers */

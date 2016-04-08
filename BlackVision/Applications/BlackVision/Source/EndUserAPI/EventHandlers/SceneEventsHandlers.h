@@ -36,6 +36,8 @@ public:
     void        ProjectStructure    ( bv::IEventPtr evt );
     void        SceneStructure	    ( bv::IEventPtr evt );
 
+    void        LightsManagement	( bv::IEventPtr evt );
+
     void        SceneVariable       ( bv::IEventPtr evt );
 
 private:

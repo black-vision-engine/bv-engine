@@ -152,7 +152,7 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
             auto basicName = toReplicate->GetName();
         
             auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
-            auto scene = editor->GetScene( context->GetSceneName() );
+            auto scene = editor->GetModelScene( context->GetSceneName() );
 
             for( SizeType i = 0; i < m_repNum; ++i )
             {
