@@ -18,24 +18,17 @@ private:
 
     // cut off
     SimpleFloatEvaluatorPtr     m_cutOffEval;       //in - angle in degrees, out - cosine of angle
-    SimpleFloatEvaluatorPtr     m_outerCutOffEval;  //in - angle in degrees, out - cosine of angle
     Float32                     m_cutOffAngle;
     Float32                     m_cutOffCos;
-    Float32                     m_outerCutOffAngle;
-    Float32                     m_outerCutOffCos;
 
     struct PARAM {
 
         static const std::string COLOR;         // vec3
         static const std::string DIRECTION;     // vec3
         static const std::string POSITION;      // vec3
-
-        static const std::string ATT_CONSTANT;  // float
-        static const std::string ATT_LINEAR;    // float
-        static const std::string ATT_QUADRATIC; // float
-
+        static const std::string ATTENUATION;   // vec3
         static const std::string CUT_OFF;       // float
-        static const std::string OUTER_CUT_OFF; // float
+        static const std::string EXPONENT;      // float
 
     };
 
@@ -45,7 +38,6 @@ public:
 
     virtual void				Update			    ( TimeType t )	override;
 
-    virtual std::string         GetTypeName         () const override;
     virtual LightType           GetType             () const override;
 
 private:

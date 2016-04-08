@@ -47,14 +47,6 @@ void                    ModelDirectionalLight::Update                ( TimeType 
     m_directionEval->Value()->SetValue( m_directionVector );
 }
 
-
-// *************************************
-//
-std::string             ModelDirectionalLight::GetTypeName      () const
-{
-    return "directionalLight";
-}
-
 // *************************************
 //
 LightType               ModelDirectionalLight::GetType          () const

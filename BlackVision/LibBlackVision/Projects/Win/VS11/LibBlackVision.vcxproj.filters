@@ -1471,6 +1471,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.cpp">
       <Filter>Engine\Models\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3711,9 +3714,6 @@
     </None>
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl">
       <Filter>Mathematics\Interpolators</Filter>
-    </None>
-    <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.inl">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
     </None>
   </ItemGroup>
 </Project>

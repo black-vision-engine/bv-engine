@@ -132,20 +132,21 @@ void                PdrUniformBufferObject::CreateBuffer    ( const UniformBuffe
 
 // *******************************
 //
-UniformBlockLayout  PdrUniformBufferObject::GetUniformBlockLayout   ( UInt32 program ) const
+UniformBlockLayout *  PdrUniformBufferObject::GetUniformBlockLayout   ( UInt32 program, const std::string & blockName )
 {
-    UniformBlockLayout layout;
-    layout.blockName = m_blockName;
-    
-    GLuint blockIdx = BVGL::bvglGetUniformBlockIndex( program, m_blockName.c_str() );
-    if ( blockIdx == GL_INVALID_INDEX ) {
-        assert( false );
-        return layout;
+    GLuint blockIdx = BVGL::bvglGetUniformBlockIndex( program, blockName.c_str() );
+    if( blockIdx == GL_INVALID_INDEX ) 
+    {
+        return nullptr;
     }
     
+    auto layout = new UniformBlockLayout();
+
+    layout->blockName = blockName;
+
     Int32 uboSize;
     BVGL::bvglGetActiveUniformBlockiv( program, blockIdx, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize );
-    layout.size = uboSize;
+    layout->size = uboSize;
     
     Int32 currBlock;
     BVGL::bvglGetActiveUniformBlockiv( program, blockIdx, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &currBlock );
@@ -164,28 +165,13 @@ UniformBlockLayout  PdrUniformBufferObject::GetUniformBlockLayout   ( UInt32 pro
         UniformDesc desc;
         desc.name = name;
         desc.offset = offset;
-        layout.uniformDescs.push_back( desc );
+        layout->uniformDescs.push_back( desc );
     }
 
-    std::sort( layout.uniformDescs.begin(), layout.uniformDescs.end() );
+    std::sort( layout->uniformDescs.begin(), layout->uniformDescs.end() );
 
     delete indices;
     return layout;
-}
-
-// *******************************
-//
-bool               PdrUniformBufferObject::ValidateUniformBlockLayout      ( const UniformBuffer * ub, UInt32 program )
-{
-    auto origLayout = GetUniformBlockLayout( program );
-    auto ubLayout = ub->GetLayout();
-    for( UInt32 i = 0; i < origLayout.uniformDescs.size(); ++i )
-    {
-        if( origLayout.uniformDescs[ i ].offset != ubLayout->uniformDescs[ i ].offset )
-            return false;
-    }
-
-    return true;
 }
 
 }

@@ -51,7 +51,7 @@ DefaultPluginParamValModelPtr   DefaultMaterialPluginDesc::CreateDefaultModel  (
     helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::AMBIENT, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
     helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SPECULAR, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
     helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::EMISSION, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SHININESS, 0.0f, true );
+    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SHININESS, 0, true );
 
     return helper.GetModel();
 }

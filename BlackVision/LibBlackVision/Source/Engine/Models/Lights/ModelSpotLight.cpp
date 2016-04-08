@@ -14,13 +14,10 @@ namespace bv { namespace model {
 const std::string       ModelSpotLight::PARAM::COLOR          = "color";
 const std::string       ModelSpotLight::PARAM::DIRECTION      = "direction";
 const std::string       ModelSpotLight::PARAM::POSITION       = "position";
-
-const std::string       ModelSpotLight::PARAM::ATT_CONSTANT   = "attConstant";
-const std::string       ModelSpotLight::PARAM::ATT_LINEAR     = "attLinear";
-const std::string       ModelSpotLight::PARAM::ATT_QUADRATIC  = "attQuadratic";
+const std::string       ModelSpotLight::PARAM::ATTENUATION    = "attenuation";
 
 const std::string       ModelSpotLight::PARAM::CUT_OFF        = "cutOff";
-const std::string       ModelSpotLight::PARAM::OUTER_CUT_OFF  = "outerCutOff";
+const std::string       ModelSpotLight::PARAM::EXPONENT       = "exponent";
 
 
 // *************************************
@@ -32,35 +29,27 @@ const std::string       ModelSpotLight::PARAM::OUTER_CUT_OFF  = "outerCutOff";
     , m_directionVector( glm::vec3( 0.0f ) )
     , m_cutOffAngle( 0.0f )
     , m_cutOffCos( 0.0f )
-    , m_outerCutOffAngle( 0.0f )
-    , m_outerCutOffCos( 0.0f )
 {
     auto colorEvaluator         = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::COLOR, timeEvaluator );
     m_directionEval             = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::DIRECTION, timeEvaluator );
     auto positionEvaluator      = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::POSITION, timeEvaluator );
-    auto attConstantEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::ATT_CONSTANT, timeEvaluator );
-    auto attLinearEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::ATT_LINEAR, timeEvaluator );
-    auto attQuadraticEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::ATT_QUADRATIC, timeEvaluator );
+    auto attenuationEvaluator   = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::ATTENUATION, timeEvaluator );
     m_cutOffEval                = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::CUT_OFF, timeEvaluator );
-    m_outerCutOffEval           = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( PARAM::OUTER_CUT_OFF, timeEvaluator );
+    auto exponentEval           = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( PARAM::EXPONENT, timeEvaluator );
     
     colorEvaluator->Parameter()->SetVal( glm::vec3( 1.0f, 1.0f, 1.0f ), 0.f );
     m_directionEval->Parameter()->SetVal( glm::vec3( 0.0f ), 0.f );
     positionEvaluator->Parameter()->SetVal( glm::vec3( 0.0f, 0.0f, 0.0f ), 0.f );
-    attConstantEvaluator->Parameter()->SetVal( 1.0f, 0.f );
-    attLinearEvaluator->Parameter()->SetVal( 0.0f, 0.f );
-    attQuadraticEvaluator->Parameter()->SetVal( 0.0f, 0.f );
-    m_cutOffEval->Parameter()->SetVal( 15.0f, 0.f );
-    m_outerCutOffEval->Parameter()->SetVal( 25.0f, 0.f );
+    attenuationEvaluator->Parameter()->SetVal( glm::vec3( 1.0f, 0.0f, 0.02f ), 0.f );
+    m_cutOffEval->Parameter()->SetVal( 100.0f, 0.f );
+    exponentEval->Parameter()->SetVal( 10, 0.f );
     
     m_paramModel->RegisterAll( colorEvaluator );
     m_paramModel->RegisterAll( m_directionEval );
     m_paramModel->RegisterAll( positionEvaluator );
-    m_paramModel->RegisterAll( attConstantEvaluator );
-    m_paramModel->RegisterAll( attLinearEvaluator );
-    m_paramModel->RegisterAll( attQuadraticEvaluator );
+    m_paramModel->RegisterAll( attenuationEvaluator );
     m_paramModel->RegisterAll( m_cutOffEval );
-    m_paramModel->RegisterAll( m_outerCutOffEval );
+    m_paramModel->RegisterAll( exponentEval );
 }
 
 // *************************************
@@ -86,22 +75,6 @@ void                    ModelSpotLight::Update                ( TimeType t )
         m_cutOffAngle = cutOff;
     }
     m_cutOffEval->Value()->SetValue( m_cutOffCos );
-
-    // update outer cut off angle to cosine
-    auto outerCutOff = m_outerCutOffEval->Parameter()->Evaluate();
-    if( outerCutOff != m_outerCutOffAngle )
-    {
-        m_outerCutOffCos = CalculateCosine( outerCutOff );
-        m_outerCutOffAngle = outerCutOff;
-    }
-    m_outerCutOffEval->Value()->SetValue( m_outerCutOffCos );
-}
-
-// *************************************
-//
-std::string             ModelSpotLight::GetTypeName         () const
-{
-    return "spotLight";
 }
 
 // *************************************

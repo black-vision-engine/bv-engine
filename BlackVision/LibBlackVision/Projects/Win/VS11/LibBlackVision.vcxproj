@@ -266,6 +266,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.cpp" />
@@ -928,7 +929,6 @@
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
-    <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />

@@ -14,7 +14,6 @@ class IModelLight : public IUpdatable, public ISerializable, public IParamSet, p
 {
 public:
 
-    virtual std::string             GetTypeName     () const        = 0;
     virtual LightType               GetType         () const        = 0;
 
 };

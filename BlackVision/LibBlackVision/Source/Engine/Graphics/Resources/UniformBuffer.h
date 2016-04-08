@@ -13,8 +13,6 @@ class UniformDesc
 public: 
 
     std::string     name;
-    UInt32          size;
-    UInt32          align;
     UInt32          offset;
 
     bool operator < ( const UniformDesc & other ) const;
@@ -35,10 +33,6 @@ DEFINE_UPTR_TYPE( UniformBlockLayout )
 
 class UniformBuffer
 {
-public:
-
-    static Int32                TypeAlignMap[ ( UInt32 )ParamType::PT_TOTAL ];
-
 private:
     
     char *		                m_data;
@@ -54,7 +48,6 @@ public:
     DataBuffer::Semantic	    GetSemantic	    () const;
 
     const UniformBlockLayout *  GetLayout	    () const;
-    //void	                    SetLayout	    ( UniformBlockLayout * layout );
     
     const char *	            GetData			() const;
     void                        WriteData       ( const char * srcData, SizeType srcSize, UInt32 destOffset = 0 );

@@ -1,5 +1,10 @@
 #version 420
 
+layout (location = 0) out vec4 FragColor;
+
+// *** LIGHTS *** (Assets/Shaders/UniformBlockDefs/lights)
+
+#define MAX_LIGTHS 8
 
 struct DirectionalLight
 {
@@ -11,10 +16,7 @@ struct PointLight
 {
 	vec3 	color;
 	vec3	position;
-	
-	float 	attConstant;
-	float 	attLinear;
-	float 	attQuadratic;
+	vec3 	attenuation;
 };
 
 struct SpotLight
@@ -22,21 +24,13 @@ struct SpotLight
 	vec3 	color;
 	vec3 	direction;
 	vec3 	position;
-	
-	float 	attConstant;
-	float 	attLinear;
-	float 	attQuadratic;
+	vec3 	attenuation;
 	
 	float 	cutOff;
-	float 	outerCutOff;
+	int 	exponent;
 };
 
 
-#define MAX_LIGTHS 8
-
-layout (location = 0) out vec4 FragColor;
-
-// LIGHTS
 layout ( std140, binding = 0 ) uniform Lights 
 {
 	uniform	DirectionalLight[ MAX_LIGTHS ] 	directionalLight;
@@ -47,12 +41,14 @@ layout ( std140, binding = 0 ) uniform Lights
 	uniform int 							spotLightNum;
 };
 
+// *** LIGHTS ***
+
 // MATERIAL
 uniform vec4 	mtlDiffuse;
 uniform vec4 	mtlAmbient;
 uniform vec4 	mtlSpecular;
 uniform vec4 	mtlEmission;
-uniform float 	mtlShininess;
+uniform int 	mtlShininess;
 
 
 in vec3 		position;		//vertex position in modelview space
@@ -93,7 +89,6 @@ void main()
 	vec4 texColor = texture( Tex0, uvCoord );
 	
 	FragColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
-	
 }
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )
@@ -128,7 +123,7 @@ vec3 computePointLight			( PointLight light, vec3 viewDir )
 	}
 	
 	float distance = length( light.position - position );
-	float attenuation = 1.0 / ( light.attConstant + light.attLinear * distance + light.attQuadratic * pow( distance, 2 ) );
+	float attenuation = 1.0 / ( light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * distance * distance );
 	
 	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
 	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
@@ -150,15 +145,15 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir )
 	}
 	
 	float distance = length( light.position - position );
-	float attenuation = 1.0 / ( light.attConstant + light.attLinear * distance + light.attQuadratic * pow( distance, 2 ) );
-		
-	float theta = dot( normalize( -light.direction ), lightDir );
-	float eps = light.cutOff - light.outerCutOff;
-	float intensity = clamp( ( theta - light.outerCutOff ) / eps, 0.0, 1.0 );
+	float attenuation = 1.0 / ( light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * distance * distance );
 	
 	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
 	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
 	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
-	return attenuation * intensity * ( ambient + diffuse + specular );
+	float dl = max( 0.0, dot( -lightDir, light.direction ) );
+	
+	attenuation *= step( light.cutOff, dl ) * pow( dl, light.exponent );
+	
+	return attenuation * ( ambient + diffuse + specular );
 }

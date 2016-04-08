@@ -1,8 +1,10 @@
 #include "stdafx.h"
 
 #include "Scene.h"
+
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/LightsLayout.h"
-#include "Tools/Utils.h"
+#include "Engine/Graphics/Resources/UniformBuffer.h"
 
 
 namespace bv {
@@ -13,7 +15,7 @@ namespace bv {
                     Scene::Scene                    ()
     : m_root( nullptr )
 {
-    auto lightsLayout = LightsLayout< UniformBlockLayoutType::STD140 >::Instance().GetBlockLayout();
+    auto lightsLayout = LightsLayout::Instance().GetBlockLayout();
     m_lightsBuffer =  new UniformBuffer( lightsLayout, DataBuffer::Semantic::S_DYNAMIC );
 }
 
@@ -44,13 +46,5 @@ UniformBuffer *     Scene::GetLightsBuffer          () const
 {
     return m_lightsBuffer;
 }
-
-// ********************************
-//
-UInt32              Scene::GetMaxLightsNum          ()
-{
-    return LightsLayout< UniformBlockLayoutType::STD140 >::Instance().MaxLightsNum;
-}
-
 
 } //bv

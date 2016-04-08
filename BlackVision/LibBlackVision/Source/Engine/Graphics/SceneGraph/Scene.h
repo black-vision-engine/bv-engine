@@ -1,14 +1,11 @@
 #pragma once
 
-#include "Engine/Graphics/Resources/UniformBuffer.h"
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-
-#include "CoreDEF.h"
-
 
 namespace bv {
 
 class Renderer;
+class SceneNode;
+class UniformBuffer;
 
 
 class Scene
@@ -30,7 +27,6 @@ public:
     void                    SetRoot             ( SceneNode * node );
 
     UniformBuffer *         GetLightsBuffer     () const;
-    static UInt32           GetMaxLightsNum     ();
 
 };
 

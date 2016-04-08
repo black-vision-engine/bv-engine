@@ -29,7 +29,6 @@ public:
 
     virtual void				Update			        ( TimeType t )	override;
 
-    virtual std::string         GetTypeName             () const override;
     virtual LightType           GetType                 () const override;
 
 private:
