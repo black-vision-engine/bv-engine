@@ -164,21 +164,21 @@ namespace Generator
 			float angleOffset = computeAngleOffset( open_angle_mode, open_angle );
 
 			// Vertex on north pole ( we need two verticies )
-			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
+            verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius ); normals->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) );
+			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius ); normals->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) );
 
 			float vertDeltaAngle = float( PI ) / float(vertical_stripes);			// Added each loop
 			float horDeltaAngle = float( TWOPI ) / float(horizontal_stripes);		// Added each loop
 
 			// We compute cos and sin of angles we need (we are processing stripe, so we must
 			// take values of theese functions for left and right verticies.
-			float cosHorAngle1 = radius * cos( horDeltaAngle * stripe_num + angleOffset );
-			float sinHorAngle1 = radius * sin( horDeltaAngle * stripe_num + angleOffset );
+			float cosHorAngle1 = cos( horDeltaAngle * stripe_num + angleOffset );
+			float sinHorAngle1 = sin( horDeltaAngle * stripe_num + angleOffset );
 
 			float horAngle2Clamped = computeAngle2Clamped( horDeltaAngle, stripe_num );
 
-			float cosHorAngle2 = radius * cos( horAngle2Clamped + angleOffset );
-			float sinHorAngle2 = radius * sin( horAngle2Clamped + angleOffset );
+			float cosHorAngle2 = cos( horAngle2Clamped + angleOffset );
+			float sinHorAngle2 = sin( horAngle2Clamped + angleOffset );
 
 			float alfa = float( PI ) / float(2) - vertDeltaAngle;		// Angle counting from north pole
 
@@ -187,15 +187,15 @@ namespace Generator
 				float cosAlfa = cos( alfa );
 				float sinAlfa = sin( alfa );
 
-				float x = sinHorAngle2 * cosAlfa;
+				float x = radius * sinHorAngle2 * cosAlfa;
 				float y = radius * sinAlfa;
-				float z = cosHorAngle2 * cosAlfa;
+				float z = radius * cosHorAngle2 * cosAlfa;
 
-				verts->AddAttribute( glm::vec3( x, y, z ) );
+				verts->AddAttribute( glm::vec3( x, y, z ) );    normals->AddAttribute( glm::vec3( sinHorAngle2 * cosAlfa, sinAlfa, cosHorAngle2 * cosAlfa ) );
 
-                x = sinHorAngle1 * cosAlfa;
-                z = cosHorAngle1 * cosAlfa;
-				verts->AddAttribute( glm::vec3( x, y, z ) );
+                x = radius * sinHorAngle1 * cosAlfa;
+                z = radius * cosHorAngle1 * cosAlfa;
+				verts->AddAttribute( glm::vec3( x, y, z ) );    normals->AddAttribute( glm::vec3( sinHorAngle1 * cosAlfa, sinAlfa, cosHorAngle1 * cosAlfa ) );
 
 				alfa -= vertDeltaAngle;
 			}
@@ -223,7 +223,7 @@ namespace Generator
    			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle1, vertical_angle ) );
 
 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );        
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );        
         }
 
 	};

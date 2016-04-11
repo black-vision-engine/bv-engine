@@ -88,6 +88,13 @@ namespace Generator
 	glm::vec3 center_translate;
 	Plugin::MappingType mapping_type;
 
+
+    template < typename T >
+    int sign( T val )
+    {
+        return (T(0) < val) - (val < T(0));
+    }
+
 	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
 	{
 		glm::vec3 centerTranslate = glm::vec3( 0.0f, 0.0f, 0.0f );
@@ -218,17 +225,17 @@ namespace Generator
 
 			if( d > 0 )
 			{
-                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );
-                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );
-                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
 			}
 			else
 			{
-                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );
-                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );
-                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );
+                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
 			}
 
 
@@ -245,7 +252,7 @@ namespace Generator
 			uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
 			uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
                 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
 
         SideComp( double d_ ) : d( d_ ) { }
@@ -254,6 +261,7 @@ namespace Generator
     class MainComp : public IGeometryNormalsUVsGenerator
     {
         glm::vec3 **v;
+        glm::vec3 **norm;
         int n, m;
     public:
 
@@ -261,10 +269,10 @@ namespace Generator
         {
             Init();
             GenerateV();
-            CopyV( verts, uvs );
+            CopyV( verts, uvs, normals );
             Deinit();
 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
 
         void Init() 
@@ -275,16 +283,26 @@ namespace Generator
             n = 4*(tesselation+1);
             m = (tesselation+1) * 2;
             assert( n >= 0 );
+            
             v = new glm::vec3*[ n ];
+            norm = new glm::vec3*[ n ];
+
             for( int i = 0; i < n; i++ )
+            {
                 v[ i ] = new glm::vec3[ m ];
+                norm[ i ] = new glm::vec3[ m ];
+            }
         }
 
         void Deinit()
         {
             for( int i = 0; i < n; i++ )
-                delete[] v[i];
+            {
+                delete[] v[ i ];
+                delete[] norm[ i ];
+            }
             delete[] v;
+            delete[] norm;
         }
 
 		glm::vec2 getUV( float bevel1, float bevel2, bool inverse1, bool inverse2 )
@@ -504,7 +522,7 @@ namespace Generator
 		}
 
 
-        void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+        void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
         {
 			for( int face = 0; face < 4; ++face )
 				generatePartUV( face, uvs );
@@ -517,35 +535,35 @@ namespace Generator
 			{
                 for( int j = 0; j < m; j++ )
                 {
-					verts->AddAttribute( v[ i   ][ j ] + center_translate );
-                    verts->AddAttribute( v[ i+1 ][ j ] + center_translate );
+                    verts->AddAttribute( v[ i   ][ j ] + center_translate );    normals->AddAttribute( norm[ i   ][ j ] );
+                    verts->AddAttribute( v[ i+1 ][ j ] + center_translate );    normals->AddAttribute( norm[ i+1 ][ j ] );
 
 					if( j == main_plane_tess || j == tesselation + 1 + remain_plane_tess )
 					{
-						verts->AddAttribute( v[ i   ][ j ] + center_translate );
-						verts->AddAttribute( v[ i+1 ][ j ] + center_translate );
+						verts->AddAttribute( v[ i   ][ j ] + center_translate );    normals->AddAttribute( norm[ i   ][ j ] );
+						verts->AddAttribute( v[ i+1 ][ j ] + center_translate );    normals->AddAttribute( norm[ i+1 ][ j ] );
 					}
                 }
 				// Degenerated triangle
-				verts->AddAttribute( v[ i+1 ][ m - 1 ] + center_translate );
-                verts->AddAttribute( v[ i+1 ][ 0 ] + center_translate );
+				verts->AddAttribute( v[ i+1 ][ m - 1 ] + center_translate );    normals->AddAttribute( norm[ i+1 ][ m - 1 ] );
+                verts->AddAttribute( v[ i+1 ][ 0 ] + center_translate );        normals->AddAttribute( norm[ i+1 ][ 0 ] );
 			}
 
             for( int j = 0; j < m; j++ )
             {
-                verts->AddAttribute( v[ n-1 ][ j ] + center_translate );
-                verts->AddAttribute( v[ 0   ][ j ] + center_translate );
+                verts->AddAttribute( v[ n-1 ][ j ] + center_translate );    normals->AddAttribute( norm[ n-1 ][ j ] );
+                verts->AddAttribute( v[ 0   ][ j ] + center_translate );    normals->AddAttribute( norm[ 0   ][ j ] );
 
 				if( j == main_plane_tess || j == tesselation + 1 + remain_plane_tess )
 				{
-					verts->AddAttribute( v[ n-1   ][ j ] + center_translate );
-					verts->AddAttribute( v[ 0 ][ j ] + center_translate );
+					verts->AddAttribute( v[ n-1   ][ j ] + center_translate );  normals->AddAttribute( norm[ n-1 ][ j ] );
+					verts->AddAttribute( v[ 0 ][ j ] + center_translate );      normals->AddAttribute( norm[ 0 ][ j ] );
 				}
             }
 			
 			// Degenerated triangle
-			verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );
-            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );
+			verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );  normals->AddAttribute( norm[ 0 ][ 0 ] );
+            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );  normals->AddAttribute( norm[ 0 ][ 0 ] );
 
         }
 
@@ -553,16 +571,29 @@ namespace Generator
         {
             double d = dims.z/2 - bevel;
             double b = bevel;
+
+            double sinA = sin( a );
+            double cosA = cos( a );
             
             for( int j = 0; j <= tesselation; j++ )
             {
                 double angle2 = j * PI/2 / tesselation;
-                v[ i ][ j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ), -d - b*cos( angle2 ) );
+
+                double sinAngle2 = sin( angle2 );
+                double cosAngle2 = cos( angle2 );
+                
+                v[ i ][ j ] = glm::vec3( x - b * sinA * sinAngle2, y + b * cosA * sinAngle2, -d - b * cosAngle2 );
+                norm[ i ][ j ] = glm::normalize( glm::vec3( -sinA * sinAngle2, cosA * sinAngle2, -cosAngle2 ) );
             }
             for( int j = 0; j <= tesselation; j++ )
             {
                 double angle2 = j * PI/2 / tesselation + PI/2;
-                v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ),  d - b*cos( angle2 ) );
+
+                double sinAngle2 = sin( angle2 );
+                double cosAngle2 = cos( angle2 );
+                
+                v[ i ][ tesselation + 1 + j ] = glm::vec3( x - b * sinA * sinAngle2, y + b * cosA * sinAngle2,  d - b * cosAngle2 );
+                norm[ i ][ tesselation + 1 + j ] = glm::normalize( glm::vec3( -sinA * sinAngle2, cosA * sinAngle2, -cosAngle2 ) );
             }
         }
 
@@ -574,31 +605,31 @@ namespace Generator
 
 // top
             GenerateLine( 0, w, h, 0. );
-            for( int i = 0; i < tesselation; i++ ) // (-w, h+b) for i = 0
+            for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                GenerateLine( 1 + i,                        -w,  h, angle );
+                GenerateLine( 1 + i, -w,  h, angle );
             }
 // left
             GenerateLine( t+1, -w,  h, PI/2 );
-            for( int i = 0; i < tesselation; i++ ) // (-w-b, -h ) for i = 0
+            for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / ( tesselation - 1 ) + PI/2;
-                GenerateLine( t+2 + i,                      -w, -h, angle );
+                GenerateLine( t+2 + i, -w, -h, angle );
             }
 // bottom
             GenerateLine( 2*( t + 1 ), -w, -h, PI );
-            for( int i = 0; i < tesselation; i++ ) // ( w, -h-b ) for i = 0
+            for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / ( tesselation - 1 ) + PI;
-                GenerateLine( 2*( t + 1 )+1 + i,            w,  -h, angle );
+                GenerateLine( 2*( t + 1 ) + 1 + i, w, -h, angle );
             }
 // right
             GenerateLine( 3*( t + 1 ), w, -h, 3*PI/2 );
-            for( int i = 0; i < tesselation; i++ ) // ( w+b, h ) for i = 0
+            for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / ( tesselation - 1 ) + 3*PI/2;
-                GenerateLine( 3*( t + 1 )+1 + i,            w,   h, angle );
+                GenerateLine( 3*( t + 1 ) + 1 + i, w, h, angle );
             }
         }
     };
