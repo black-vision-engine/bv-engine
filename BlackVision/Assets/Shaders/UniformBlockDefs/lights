@@ -40,3 +40,5 @@ layout ( std140, binding = 0 ) uniform Lights
 };
 
 // *** LIGHTS ***
+
+void main() {}
