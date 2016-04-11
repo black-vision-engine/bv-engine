@@ -17,5 +17,5 @@ void main()
 	
 	position = vec3( MV * vec4( vertexPosition, 1.0 ) );
 	
-	normal = normalize( normalMat * vertexNormal );	
+	normal = normalMat * vertexNormal;	
 }

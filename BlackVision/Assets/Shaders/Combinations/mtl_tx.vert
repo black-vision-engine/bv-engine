@@ -21,7 +21,7 @@ void main()
 	
 	position = vec3( MV * vec4( vertexPosition, 1.0 ) );
 	
-	normal = normalize( normalMat * vertexNormal );
+	normal = normalMat * vertexNormal;
 	
 	uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
 }
