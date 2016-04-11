@@ -59,30 +59,31 @@ uniform sampler2D Tex0;
 
 uniform float alpha;
 
-vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir );
-vec3 computePointLight			( PointLight light, vec3 viewDir );
-vec3 computeSpotLight			( SpotLight light, vec3 viewDir );
+vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 normal );
+vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
+vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
 
 void main()
 {		
 	vec3 viewDir = normalize( -position );
+	vec3 norm = normalize( normal );
 	
 	vec3 color = vec3( 0, 0, 0 );
 	
 	for( int i = 0; i < directionalLightNum; ++i )
 	{
-		color += computeDirectionalLight( directionalLight[ i ], viewDir );
+		color += computeDirectionalLight( directionalLight[ i ], viewDir, norm );
 	}
 
 	for( int i = 0; i < pointLightNum; ++i )
 	{
-		color += computePointLight( pointLight[ i ], viewDir );
+		color += computePointLight( pointLight[ i ], viewDir, norm );
 	}
 	
 	for( int i = 0; i < spotLightNum; ++i )
 	{
-		color += computeSpotLight( spotLight[ i ], viewDir );
+		color += computeSpotLight( spotLight[ i ], viewDir, norm );
 	}
 	
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
@@ -91,16 +92,16 @@ void main()
 	FragColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
 }
 
-vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )
+vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )
 {
 	vec3 lightDir = normalize( -light.direction );
 	
-	float diffuseCoeff = max( dot( normal, lightDir ), 0.0 );
+	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
 	if( diffuseCoeff > 0.0 )
 	{
 		vec3 halfDir = normalize( viewDir + lightDir );
-		specularCoeff = pow( max( dot( normal, halfDir ), 0.0 ), mtlShininess );
+		specularCoeff = pow( max( dot( norm, halfDir ), 0.0 ), mtlShininess );
 	}
 	
 	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
@@ -110,11 +111,11 @@ vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )
 	return ambient + diffuse + specular;	
 }
 
-vec3 computePointLight			( PointLight light, vec3 viewDir )
+vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 norm )
 {
 	vec3 lightDir = normalize( light.position - position );
 	
-	float diffuseCoeff = max( dot( normal, lightDir ), 0.0 );
+	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
 	if( diffuseCoeff > 0.0 )
 	{
@@ -132,16 +133,16 @@ vec3 computePointLight			( PointLight light, vec3 viewDir )
 	return attenuation * ( ambient + diffuse + specular );	
 }
 
-vec3 computeSpotLight			( SpotLight light, vec3 viewDir )
+vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 {
 	vec3 lightDir = normalize( light.position - position );
 	
-	float diffuseCoeff = max( dot( normal, lightDir ), 0.0 );
+	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
 	if( diffuseCoeff > 0.0 )
 	{
 		vec3 halfDir = normalize( viewDir + lightDir );
-		specularCoeff = pow( max( dot( normal, halfDir ), 0.0 ), mtlShininess );
+		specularCoeff = pow( max( dot( norm, halfDir ), 0.0 ), mtlShininess );
 	}
 	
 	float distance = length( light.position - position );
