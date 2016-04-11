@@ -24,6 +24,10 @@ namespace bv
 QueryHandlers::QueryHandlers    ( BVAppLogic * appLogic )
     :   m_appLogic( appLogic )
 {
+    if( appLogic && appLogic->GetBVProject() )
+    {
+        m_editor = appLogic->GetBVProject()->GetProjectEditor();
+    }
 }
 
 // ***********************
@@ -92,6 +96,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             PluginInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::MinimalSceneInfo )
             GetMinimalSceneInfo( responseJSON, request, eventID );
+        else if ( command == InfoEvent::Command::LightsInfo )
+            GetLightsInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Videocards )
             VideoCardsInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::CheckTimelineTime )
@@ -866,6 +872,36 @@ void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, IDes
         ser.SetAttribute( "", d.Str() );
     }
     ser.ExitChild();
+}
+
+// ***********************
+//
+void         QueryHandlers::GetLightsInfo       ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr && m_editor );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::LightsInfo, eventID, "Not valid request." );
+        return;
+    }
+
+    std::string sceneName = request->GetAttribute( "SceneName" );
+
+    auto scene = m_editor->GetModelScene( sceneName );
+    if( scene == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::LightsInfo, eventID, "Scene not found" );
+        return;
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::LightsInfo, eventID, true );
+
+    ser.EnterArray( "lights" );
+    for( UInt32 i = 0; i < scene->NumLights(); ++i )
+    {
+        scene->GetLight( i )->Serialize( ser );
+    }
+    ser.ExitChild(); // lights
 }
 
 //// ***********************

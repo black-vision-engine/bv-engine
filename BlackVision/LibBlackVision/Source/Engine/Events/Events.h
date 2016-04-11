@@ -618,6 +618,7 @@ public:
         NodeInfo,
         PluginInfo,
         MinimalSceneInfo,
+        LightsInfo,
 
         ListSceneAssets,
         ListProjectNames,

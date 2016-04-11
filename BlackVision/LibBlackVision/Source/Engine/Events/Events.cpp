@@ -329,6 +329,7 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::NodeInfo, "NodeInfo" )
     , std::make_pair( InfoEvent::Command::PluginInfo, "PluginInfo" )
     , std::make_pair( InfoEvent::Command::MinimalSceneInfo, "MinimalSceneInfo" )
+    , std::make_pair( InfoEvent::Command::LightsInfo, "LightsInfo" )
 
     , std::make_pair( InfoEvent::Command::ListSceneAssets, "ListSceneAssets" )
     , std::make_pair( InfoEvent::Command::ListProjectNames, "ListProjectNames" )
