@@ -266,6 +266,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.cpp" />
@@ -317,6 +318,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.cpp" />
@@ -545,6 +547,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelLight.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.h" />
@@ -926,7 +929,6 @@
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
-    <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />

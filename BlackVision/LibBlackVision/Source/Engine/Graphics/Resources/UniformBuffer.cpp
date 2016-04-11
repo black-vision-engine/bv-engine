@@ -6,22 +6,6 @@
 namespace bv {
 
 
-Int32      UniformBuffer::TypeAlignMap[ ( UInt32 )ParamType::PT_TOTAL ] =
-{
-    4,  //PT_FLOAT1,
-    8,  //PT_FLOAT2,
-    16, //PT_FLOAT3,
-    16, //PT_FLOAT4,
-    16, //PT_MAT2,
-    16, //PT_MAT3,
-    16, //PT_MAT4,
-    4,  //PT_INT,
-    4,  //PT_BOOL,
-    4,  //PT_ENUM,
-    -1, //PT_STRING,
-    -1 //PT_WSTRING,
-};
-
 // *********************************
 //
 bool UniformDesc::operator < ( const UniformDesc & other ) const

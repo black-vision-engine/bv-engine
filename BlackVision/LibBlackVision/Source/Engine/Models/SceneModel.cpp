@@ -9,8 +9,11 @@
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
+#include "Engine/Models/Lights/ModelBaseLight.h"
+
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
+
 
 namespace bv { namespace model {
 
@@ -53,9 +56,17 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
         {
             ser.EnterArray( "timelines" );
             for( auto timeline : m_timeline->GetChildren() )
+            {
                 timeline->Serialize( ser );
+            }
             ser.ExitChild(); // timelines
 
+            ser.EnterArray( "lights" );
+            for( auto & light : m_lights )
+            {
+                light->Serialize( ser );
+            }
+            ser.ExitChild(); // lights
 
             m_sceneVariables.Serialize( ser );
         }
@@ -100,6 +111,13 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     }
 
 	bvDeserCo->SetSceneTimeline( sceneTimeline );
+
+// lights
+    auto lights = SerializationHelper::DeserializeArray< model::ModelBaseLight >( deser, "lights" );
+    for( auto light : lights )
+    {
+        obj->AddLight( light );
+    }
 
 // editor scene varables
 
@@ -189,9 +207,9 @@ Camera *					SceneModel::GetCamera              ()  const
 
 // *******************************
 //
-void                        SceneModel::AddLight            ( IModelLightUPtr light ) 
+void                        SceneModel::AddLight            ( IModelLightPtr light ) 
 {
-    m_lights.push_back( std::move( light ) );
+    m_lights.push_back( light );
 }
 
 // *******************************

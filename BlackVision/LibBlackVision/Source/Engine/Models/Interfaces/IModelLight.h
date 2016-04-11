@@ -14,11 +14,12 @@ class IModelLight : public IUpdatable, public ISerializable, public IParamSet, p
 {
 public:
 
-    virtual std::string             GetTypeName     () const        = 0;
     virtual LightType               GetType         () const        = 0;
 
 };
 
+DEFINE_PTR_TYPE(IModelLight)
+DEFINE_CONST_PTR_TYPE(IModelLight)
 DEFINE_UPTR_TYPE(IModelLight)
 
 } // model

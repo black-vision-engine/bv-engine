@@ -2,6 +2,8 @@
 
 #include "ModelDirectionalLight.h"
 
+#include <glm/gtx/euler_angles.hpp>
+
 
 namespace bv { namespace model {
 
@@ -13,67 +15,36 @@ const std::string       ModelDirectionalLight::PARAM::DIRECTION      = "directio
 // *************************************
 //
                         ModelDirectionalLight::ModelDirectionalLight          ( ITimeEvaluatorPtr timeEvaluator )
+    : ModelBaseLight()
+    , m_defaultDirection( glm::vec3( 0.0f, 0.0f, -1.0f ) )
+    , m_directionAngles( glm::vec3( 1.0f ) )
+    , m_directionVector( glm::vec3( 0.0f ) )
 {
-    m_paramModel = std::make_shared< DefaultParamValModel >();
-    
     auto colorEvaluator     = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::COLOR, timeEvaluator );
-    auto directionEvaluator = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::DIRECTION, timeEvaluator );
+    m_directionEval         = ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( PARAM::DIRECTION, timeEvaluator );
 
     colorEvaluator->Parameter()->SetVal( glm::vec3( 1.0f, 1.0f, 1.0f ), 0.f );
-    directionEvaluator->Parameter()->SetVal( glm::vec3( 0.0f, 0.0f, -1.0f ), 0.f );
+    m_directionEval->Parameter()->SetVal( glm::vec3( 0.0f ), 0.f );
 
     m_paramModel->RegisterAll( colorEvaluator );
-    m_paramModel->RegisterAll( directionEvaluator );
+    m_paramModel->RegisterAll( m_directionEval );
 }
 
-// *************************************
-//
-void                    ModelDirectionalLight::Serialize             ( ISerializer & ser ) const
-{
-    { ser; }
-}
-
+                        
 // *************************************
 //
 void                    ModelDirectionalLight::Update                ( TimeType t )
 {
-    { t; }
-    m_paramModel->Update();
-}
+    ModelBaseLight::Update( t );
 
-// *************************************
-//
-std::vector< IParameterPtr > &  ModelDirectionalLight::GetParameters         ()
-{
-    return m_paramModel->GetParameters();
-}
-
-// *************************************
-//
-IParameterPtr           ModelDirectionalLight::GetParameter          ( const std::string & name )
-{
-    return m_paramModel->GetParameter( name );
-}
-
-// *************************************
-//
-const std::vector< IValueConstPtr > &  ModelDirectionalLight::GetValues      () const
-{
-    return m_paramModel->GetValues();
-}
-
-// *************************************
-//
-IValueConstPtr          ModelDirectionalLight::GetValue          ( const std::string & name ) const
-{
-    return m_paramModel->GetValue( name );
-}
-
-// *************************************
-//
-std::string             ModelDirectionalLight::GetTypeName      () const
-{
-    return "directionalLight";
+    // compute direction vector from angles
+    auto direction = m_directionEval->Parameter()->Evaluate();
+    if( direction != m_directionAngles )
+    {
+        m_directionVector = CalculateDirection( direction );
+        m_directionAngles = direction;
+    }
+    m_directionEval->Value()->SetValue( m_directionVector );
 }
 
 // *************************************
@@ -81,6 +52,13 @@ std::string             ModelDirectionalLight::GetTypeName      () const
 LightType               ModelDirectionalLight::GetType          () const
 {
     return LightType::LT_DIRECTIONAL;
+}
+
+// *************************************
+//
+glm::vec3               ModelDirectionalLight::CalculateDirection   ( const glm::vec3 & angles ) const 
+{
+    return glm::orientate3( glm::radians( angles ) ) * m_defaultDirection;
 }
 
 } //model

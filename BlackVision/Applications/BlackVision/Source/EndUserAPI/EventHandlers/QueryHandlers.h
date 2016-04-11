@@ -7,12 +7,14 @@ namespace bv
 {
 
 class BVAppLogic;
+class BVProjectEditor;
 
 class QueryHandlers
 {
 private:
 
     BVAppLogic *        m_appLogic;
+    BVProjectEditor *   m_editor;
 
 public:
 
@@ -51,6 +53,8 @@ private:
     void     ListTimelineKeyframes   ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     ListTimelinesParams     ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     MinimalTreeStructureInfo( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+
+    void     GetLightsInfo           ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 
 };
 

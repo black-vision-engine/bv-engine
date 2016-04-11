@@ -38,14 +38,12 @@ public:
 
     void    UniformBlockBinding ( UInt32 program ) const;
 
-    bool    ValidateUniformBlockLayout          ( const UniformBuffer * ub, UInt32 program );
+    static UniformBlockLayout * GetUniformBlockLayout  ( UInt32 program, const std::string & blockName );
 
 private:
 
     void    BufferData                          ( const UniformBuffer * ub ) const;
     void    CreateBuffer                        ( const UniformBuffer * ub );
-
-    UniformBlockLayout  GetUniformBlockLayout   ( UInt32 program ) const;
 
 };
 

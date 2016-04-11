@@ -94,8 +94,8 @@ bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr modelScene )
 {
     if( modelScene )
     {
-        RemoveModelScene( modelScene );
         RemoveEngineScene( modelScene );
+        RemoveModelScene( modelScene );
 
         return true;
     }
@@ -334,6 +334,8 @@ bool    BVProjectEditor::RemoveEngineScene      ( model::SceneModelPtr modelScen
         {
             m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( modelRoot ) );
         }
+
+        m_project->m_sceneVec.erase( it );
 
         MappingsCleanup( modelScene );
 
@@ -1023,7 +1025,7 @@ bool            BVProjectEditor::AddLight                    ( model::SceneModel
     if( modelScene && timeline )
     {
         auto light = model::HelperModelLights::CreateModelLight( type, timeline );
-        modelScene->AddLight( std::unique_ptr< model::IModelLight >( light ) );
+        modelScene->AddLight( std::shared_ptr< model::IModelLight >( light ) );
         
         return true;
     }

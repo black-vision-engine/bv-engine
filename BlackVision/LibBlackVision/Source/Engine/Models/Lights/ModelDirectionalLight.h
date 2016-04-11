@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Mathematics/glm_inc.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Interfaces/IModelLight.h"
-#include "Serialization/SerializationHelper.h"
+#include "Engine/Models/Lights/ModelBaseLight.h"
 
 
 namespace bv { namespace model {
 
 
-class ModelDirectionalLight : public IModelLight
+class ModelDirectionalLight : public ModelBaseLight
 {
 private:
 
-    DefaultParamValModelPtr     m_paramModel;
+    // direction
+    SimpleVec3EvaluatorPtr  m_directionEval;        //in - angles in degrees, out - direction vector
+    glm::vec3               m_directionAngles;
+    glm::vec3               m_directionVector;
+    glm::vec3               m_defaultDirection;
 
     struct PARAM {
 
@@ -27,18 +27,13 @@ public:
 
                                 ModelDirectionalLight   ( ITimeEvaluatorPtr timeEvaluator );
 
-    virtual void                Serialize               ( ISerializer & ser ) const override;
-
     virtual void				Update			        ( TimeType t )	override;
-    
-    virtual std::vector< IParameterPtr > &          GetParameters   () override;
-    virtual IParameterPtr                           GetParameter    ( const std::string & name ) override;
 
-    virtual const std::vector< IValueConstPtr > &   GetValues       () const override;
-    virtual IValueConstPtr                          GetValue        ( const std::string & name ) const override;
+    virtual LightType           GetType                 () const override;
 
-    virtual std::string             GetTypeName         () const override;
-    virtual LightType               GetType             () const override;
+private:
+
+    glm::vec3                   CalculateDirection      ( const glm::vec3 & angles ) const;
 
 };
 

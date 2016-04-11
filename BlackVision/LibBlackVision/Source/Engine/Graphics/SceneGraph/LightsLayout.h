@@ -1,48 +1,39 @@
 #pragma once
 
-#include "Mathematics/glm_inc.h"
 #include "Engine/Graphics/Resources/UniformBuffer.h"
 
 
 namespace bv
 {
 
-
-// *****************************
-//
-enum class UniformBlockLayoutType : int
-{
-    STD140 = 0
-};
-
-// *****************************
-//
-template< UniformBlockLayoutType L >
 class LightsLayout
 {
-public:
+private:
 
-    static const UInt32         MaxLightsNum        = 8;
+    static const UInt32         MAX_LIGTHS;
+    static std::string          UNIFORM_BLOCK_NAME;
+    static std::string          UNIFORM_BLOCK_DEF_PATH;
 
 private:
 
-    UniformBlockLayoutUPtr      m_blockLayout;
+    UniformBlockLayoutUPtr                          m_blockLayout;
+
+    std::map< LightType, std::vector< UInt32 > >    m_lightOffsetIdx;
+    std::map< LightType, UInt32 >                   m_lightsNumOffsetIdx;
 
 private:
 
-                                LightsLayout        ();
-                                
-    void                        ComputeOffset       ( UInt32 idx );
+                                LightsLayout            ();
 
 public:
 
-    const UniformBlockLayout *  GetBlockLayout      () const;
+    UInt32                      GetLightOffsetIdx      ( LightType type, UInt32 idx ) const;
+    UInt32                      GetLightsNumOffsetIdx  ( LightType type ) const;
 
-    static LightsLayout &       Instance            ();
+    const UniformBlockLayout *  GetBlockLayout          () const;
+
+    static LightsLayout &       Instance                ();
 
 };
 
 } // bv
-
-#include "LightsLayout.inl"
-

@@ -1,5 +1,10 @@
 #version 420
 
+layout (location = 0) out vec4 FragColor;
+
+// *** LIGHTS *** (Assets/Shaders/UniformBlockDefs/lights)
+
+#define MAX_LIGTHS 8
 
 struct DirectionalLight
 {
@@ -11,10 +16,7 @@ struct PointLight
 {
 	vec3 	color;
 	vec3	position;
-	
-	float 	attConstant;
-	float 	attLinear;
-	float 	attQuadratic;
+	vec3 	attenuation;
 };
 
 struct SpotLight
@@ -22,21 +24,13 @@ struct SpotLight
 	vec3 	color;
 	vec3 	direction;
 	vec3 	position;
-	
-	float 	attConstant;
-	float 	attLinear;
-	float 	attQuadratic;
+	vec3 	attenuation;
 	
 	float 	cutOff;
-	float 	outerCutOff;
+	int 	exponent;
 };
 
 
-#define MAX_LIGTHS 8
-
-layout (location = 0) out vec4 FragColor;
-
-// LIGHTS
 layout ( std140, binding = 0 ) uniform Lights 
 {
 	uniform	DirectionalLight[ MAX_LIGTHS ] 	directionalLight;
@@ -47,12 +41,14 @@ layout ( std140, binding = 0 ) uniform Lights
 	uniform int 							spotLightNum;
 };
 
+// *** LIGHTS ***
+
 // MATERIAL
 uniform vec4 	mtlDiffuse;
 uniform vec4 	mtlAmbient;
 uniform vec4 	mtlSpecular;
 uniform vec4 	mtlEmission;
-uniform float 	mtlShininess;
+uniform int 	mtlShininess;
 
 
 in vec3 		position;		//vertex position in modelview space
@@ -92,7 +88,7 @@ void main()
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )
 {
-	vec3 lightDir = normalize( -light.direction.xyz );
+	vec3 lightDir = normalize( -light.direction );
 	
 	float diffuseCoeff = max( dot( normal, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -102,16 +98,16 @@ vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir )
 		specularCoeff = pow( max( dot( normal, halfDir ), 0.0 ), mtlShininess );
 	}
 	
-	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color.rgb * mtlDiffuse.a;
-	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color.rgb * mtlSpecular.a;
-	vec3 ambient = mtlAmbient.rgb * light.color.rgb * mtlAmbient.a;
+	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
+	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
+	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
 	return ambient + diffuse + specular;	
 }
 
 vec3 computePointLight			( PointLight light, vec3 viewDir )
 {
-	vec3 lightDir = normalize( light.position.xyz - position );
+	vec3 lightDir = normalize( light.position - position );
 	
 	float diffuseCoeff = max( dot( normal, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -121,19 +117,19 @@ vec3 computePointLight			( PointLight light, vec3 viewDir )
 		specularCoeff = pow( max( dot( normal, halfDir ), 0.0 ), mtlShininess );
 	}
 	
-	float distance = length( light.position.xyz - position );
-	float attenuation = 1.0 / ( light.attConstant + light.attLinear * distance + light.attQuadratic * pow( distance, 2 ) );
+	float distance = length( light.position - position );
+	float attenuation = 1.0 / ( light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * distance * distance );
 	
-	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color.rgb * mtlDiffuse.a;
-	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color.rgb * mtlSpecular.a;
-	vec3 ambient = mtlAmbient.rgb * light.color.rgb * mtlAmbient.a;
+	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
+	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
+	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
 	return attenuation * ( ambient + diffuse + specular );	
 }
 
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir )
 {
-	vec3 lightDir = normalize( light.position.xyz - position );
+	vec3 lightDir = normalize( light.position - position );
 	
 	float diffuseCoeff = max( dot( normal, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -143,16 +139,16 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir )
 		specularCoeff = pow( max( dot( normal, halfDir ), 0.0 ), mtlShininess );
 	}
 	
-	float distance = length( light.position.xyz - position );
-	float attenuation = 1.0 / ( light.attConstant + light.attLinear * distance + light.attQuadratic * pow( distance, 2 ) );
-		
-	float theta = dot( lightDir, normalize( -light.direction.xyz ) );
-	float eps = light.cutOff - light.outerCutOff;
-	float intensity = clamp( ( theta - light.outerCutOff ) / eps, 0.0, 1.0 );
+	float distance = length( light.position - position );
+	float attenuation = 1.0 / ( light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * distance * distance );
 	
-	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color.rgb * mtlDiffuse.a;
-	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color.rgb * mtlSpecular.a;
-	vec3 ambient = mtlAmbient.rgb * light.color.rgb * mtlAmbient.a;
+	vec3 diffuse = diffuseCoeff * mtlDiffuse.rgb * light.color * mtlDiffuse.a;
+	vec3 specular = specularCoeff * mtlSpecular.rgb * light.color * mtlSpecular.a;
+	vec3 ambient = mtlAmbient.rgb * light.color * mtlAmbient.a;
 	
-	return attenuation * intensity * ( ambient + diffuse + specular );
+	float dl = max( 0.0, dot( -lightDir, light.direction ) );
+	
+	attenuation *= step( light.cutOff, dl ) * pow( dl, light.exponent );
+	
+	return attenuation * ( ambient + diffuse + specular );
 }
