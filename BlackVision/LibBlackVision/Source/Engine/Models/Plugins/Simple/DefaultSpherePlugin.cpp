@@ -268,16 +268,16 @@ namespace Generator
 			
 			float horAngleClamped = computeAngle2Clamped( horDeltaAngle, number_of_stripes );
 
-			float cosHorAngle = radius * cos( angleOffset );
-			float sinHorAngle = radius * sin( angleOffset );
+			float cosHorAngle = cos( angleOffset );
+			float sinHorAngle = sin( angleOffset );
 
 			// ===================================================== //
 			// The first face
 			float U_coord = ( angleOffset ) / float( TWOPI );
 			float alfa = float( PI ) / float(2) - vertDeltaAngle;		// Angle counting from north pole
 
-			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			uvs->AddAttribute( /*glm::vec2( 0.0, 1.0 )*/computeClosureUV( glm::vec2(0.0, 1.0), false ) );
+			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );    normals->AddAttribute( glm::vec3( -cosHorAngle, 0.0, sinHorAngle) );
+			uvs->AddAttribute( computeClosureUV( glm::vec2(0.0, 1.0), false ) );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
 				float cosAlfa = cos( alfa );
@@ -287,25 +287,23 @@ namespace Generator
                 float y = radius * sinAlfa;
                 float z = 0.0f;		// Radius already multiplied
 
-                verts->AddAttribute( glm::vec3( x, y, z ) );
-                uvs->AddAttribute( /*glm::vec2( 1.0, V_coord ) */computeClosureUV( glm::vec2(0.0, sinAlfa), false ) );
+                verts->AddAttribute( glm::vec3( x, y, z ) );    normals->AddAttribute( glm::vec3( -cosHorAngle, 0.0, sinHorAngle) );
+                uvs->AddAttribute( computeClosureUV( glm::vec2(0.0, sinAlfa), false ) );
 
-                x = sinHorAngle * cosAlfa;		// Radius already multiplied
-                z = cosHorAngle * cosAlfa;		// Radius already multiplied
+                x = radius * sinHorAngle * cosAlfa;		// Radius already multiplied
+                z = radius * cosHorAngle * cosAlfa;		// Radius already multiplied
 
-                verts->AddAttribute( glm::vec3( x, y, z ) );
-                uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cosAlfa, sinAlfa), false ) );
+                verts->AddAttribute( glm::vec3( x, y, z ) );    normals->AddAttribute( glm::vec3( -cosHorAngle, 0.0, sinHorAngle) );
+                uvs->AddAttribute( computeClosureUV( glm::vec2(cosAlfa, sinAlfa), false ) );
 
 				alfa -= vertDeltaAngle;
 			}
-			verts->AddAttribute( glm::vec3( 0.0, -1.0, 0.0 ) * radius );
-			uvs->AddAttribute( /*glm::vec2( 0.0, 0.0 )*/computeClosureUV( glm::vec2(0.0, -1.0), false ) );
+			verts->AddAttribute( glm::vec3( 0.0, -1.0, 0.0 ) * radius );    normals->AddAttribute( glm::vec3( -cosHorAngle, 0.0, sinHorAngle) );
+			uvs->AddAttribute( computeClosureUV( glm::vec2(0.0, -1.0), false ) );
 
 			// Degenerated traingles
-			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
+			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );    normals->AddAttribute( glm::vec3( -cosHorAngle, 0.0, sinHorAngle) );
 			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );			//It' doesn't matter
-			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			uvs->AddAttribute( computeClosureUV( glm::vec2( 0.0, 1.0 ), true ) );			//It' doesn't matter
 
 			// ===================================================== //
 			// The second face
@@ -313,6 +311,12 @@ namespace Generator
 			alfa = float( PI ) / float(2) - vertDeltaAngle;		// Angle counting from north pole
 			cosHorAngle = radius * cos( horAngleClamped + angleOffset );
 			sinHorAngle = radius * sin( horAngleClamped + angleOffset );
+
+            // Degenerated traingles
+			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );    normals->AddAttribute( glm::vec3( cosHorAngle, 0.0, -sinHorAngle) );
+			uvs->AddAttribute( computeClosureUV( glm::vec2( 0.0, 1.0 ), true ) );			//It' doesn't matter
+
+
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
 				//float V_coord = float( ( PI / 2 + alfa ) / PI );
@@ -323,19 +327,19 @@ namespace Generator
 				float y = radius * sinAlfa;
 				float z = 0.0f;		// Radius already multiplied
 
-				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( /*glm::vec2( 0.0, V_coord )*/computeClosureUV( glm::vec2(0.0, sinAlfa), true ) );
+				verts->AddAttribute( glm::vec3( x, y, z ) );    normals->AddAttribute( glm::vec3( cosHorAngle, 0.0, -sinHorAngle) );
+				uvs->AddAttribute( computeClosureUV( glm::vec2(0.0, sinAlfa), true ) );
 
 				x = sinHorAngle * cosAlfa;		// Radius already multiplied
 				z = cosHorAngle * cosAlfa;		// Radius already multiplied
 
-				verts->AddAttribute( glm::vec3( x, y, z ) );
-                uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cosAlfa, sinAlfa), true ) );
+				verts->AddAttribute( glm::vec3( x, y, z ) );    normals->AddAttribute( glm::vec3( cosHorAngle, 0.0, -sinHorAngle) );
+                uvs->AddAttribute( computeClosureUV( glm::vec2(cosAlfa, sinAlfa), true ) );
 
 				alfa -= vertDeltaAngle;
 			}
 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 
 	};
