@@ -28,13 +28,13 @@ const void *    ShaderParamNormalMatrix::GetValuePtr   () const
 
 // ********************************
 //
-void            ShaderParamNormalMatrix::Update        ( RenderableEntity * renderable, Camera * /*camera*/ )
+void            ShaderParamNormalMatrix::Update        ( RenderableEntity * renderable, Camera * camera )
 {
     { renderable; } // FIXME: suppress unused variable
 
     if( IsUpdatable() )
     {
-        assert( camera != nullptr );
+        assert( camera != nullptr );    { camera; }
 
         auto mv = renderable->WorldTransform().Matrix();
         m_normalMat = glm::mat3( glm::transpose( glm::inverse( mv ) ) );
