@@ -83,7 +83,8 @@ BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac )
     , m_lastAttribuetesID( 0 )
     , m_lastTopologyID( 0 )
 {
-    m_box = CalculateBoundingBox( m_vac );
+    if( vac )
+        m_box = CalculateBoundingBox( m_vac );
     //m_transform *= glm::translate( glm::mat4( 1.0f ), glm::vec3( box.xmin, box.ymin, box.zmin ) );
     //m_transform *= glm::scale( glm::mat4( 1.0f ), glm::vec3( box.xmax - box.xmin, box.ymax - box.ymin, box.zmax - box.zmin ) );
 }

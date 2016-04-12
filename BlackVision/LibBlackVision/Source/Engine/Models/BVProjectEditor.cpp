@@ -1309,8 +1309,8 @@ void                    BVProjectEditor::RefreshNode        (  model::BasicNodeP
     BVProjectTools::SyncSingleNode( modelNode, sceneNode );
 
     auto bv = modelNode->GetBoundingVolume();
-    if( bv )
-        bv->UpdateVAC( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() );
+    assert( bv );
+    bv->UpdateVAC( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() );
 }
 
 // *******************************
