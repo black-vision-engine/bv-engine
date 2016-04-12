@@ -28,7 +28,7 @@ const void *    ShaderParamNormalMatrix::GetValuePtr   () const
 
 // ********************************
 //
-void            ShaderParamNormalMatrix::Update        ( RenderableEntity * renderable, Camera * camera )
+void            ShaderParamNormalMatrix::Update        ( RenderableEntity * renderable, Camera * /*camera*/ )
 {
     { renderable; } // FIXME: suppress unused variable
 
