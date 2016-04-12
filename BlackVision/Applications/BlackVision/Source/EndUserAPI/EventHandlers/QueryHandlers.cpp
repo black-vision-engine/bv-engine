@@ -896,6 +896,7 @@ void         QueryHandlers::GetLightsInfo       ( JsonSerializeObject & ser, IDe
 
     PrepareResponseTemplate( ser, InfoEvent::Command::LightsInfo, eventID, true );
 
+    ser.SetAttribute( "SceneName", sceneName );
     ser.EnterArray( "lights" );
     for( UInt32 i = 0; i < scene->NumLights(); ++i )
     {
