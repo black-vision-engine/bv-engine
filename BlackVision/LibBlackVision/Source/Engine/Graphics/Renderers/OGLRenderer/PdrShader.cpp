@@ -94,7 +94,10 @@ void PdrShader::Disable        ( Renderer * renderer )
 //
 void    PdrShader::BindUniformBuffer    ( PdrUniformBufferObject * ubo )
 {
-    ubo->UniformBlockBinding( m_program->GetHandle() );
+    if( ubo )
+    {
+        ubo->UniformBlockBinding( m_program->GetHandle() );
+    }
 }
 
 // *******************************

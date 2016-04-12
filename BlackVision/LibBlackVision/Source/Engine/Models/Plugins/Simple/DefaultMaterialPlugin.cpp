@@ -47,11 +47,11 @@ DefaultPluginParamValModelPtr   DefaultMaterialPluginDesc::CreateDefaultModel  (
     helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::BLEND_ENABLE, true, true, true );
 
     helper.CreatePSModel();
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::DIFFUSE, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::AMBIENT, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SPECULAR, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::EMISSION, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), true );
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SHININESS, 0, true );
+    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::DIFFUSE, glm::vec4( 0.5f, 0.5f, 0.5f, 1.0f ), true );
+    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::AMBIENT, glm::vec4( 0.2f, 0.2f, 0.2f, 1.0f ), true );
+    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SPECULAR, glm::vec4( 1.0f, 1.0f, 1.0f, 0.0f ), true );
+    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::EMISSION, glm::vec4( 0.1f, 0.1f, 0.1f, 1.0f ), true );
+    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::SHININESS, 128, true );
 
     return helper.GetModel();
 }
