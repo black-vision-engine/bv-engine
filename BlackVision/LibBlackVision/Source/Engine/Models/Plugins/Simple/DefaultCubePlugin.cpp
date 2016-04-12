@@ -277,8 +277,9 @@ namespace Generator
 
         void Init() 
         {
-			//if( tesselation < 2 )
-			//	tesselation = 2;		// It's a little hackisch.
+            // It's a little hackisch. We should implement constraints in paramters.
+			if( tesselation < 2 )
+				tesselation = 2;
 
             n = 4*(tesselation+1);
             m = (tesselation+1) * 2;

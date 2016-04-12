@@ -19,7 +19,7 @@ const std::string SamplerStateModel::Params::BORDER_COLOR = "borderColor";
 //
 SamplerStateModel::SamplerStateModel	( ITimeEvaluatorPtr timeEvaluator )
 {
-	Initialize( timeEvaluator, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, 
+    Initialize( timeEvaluator, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, 
 		TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 }
 
