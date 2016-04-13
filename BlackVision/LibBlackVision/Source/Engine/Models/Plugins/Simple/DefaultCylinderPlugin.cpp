@@ -132,6 +132,20 @@ namespace CylinderGenerator
 		mapping_type = mt;
     }
 
+    glm::vec3       OuterNormal( double x, double z )
+    {        return glm::vec3( x, 0.0, z );    }
+
+    glm::vec3       InnerNormal( double x, double z )
+    {        return glm::vec3( -x, 0.0, -z );    }
+
+    glm::vec3       TopNormal( double, double )
+    {        return glm::vec3( 0.0, 1.0, 0.0 );    }
+
+    glm::vec3       BottomNormal( double, double )
+    {        return glm::vec3( 0.0, -1.0, 0.0 );    }
+
+
+
 	class MainGenerator : public IGeometryNormalsUVsGenerator
     {
 	protected:
@@ -201,6 +215,8 @@ namespace CylinderGenerator
 				i = 0;
 		}
 
+
+
 		/**Generates verticies of one circuit of the beveled edges.
 		R1 and h1 describe position of top verticies of the strip,
 		R2 and h2 describe position of bottom verticies of the strip.
@@ -208,7 +224,8 @@ namespace CylinderGenerator
 		@param[inout] direction Because of OpenAngle, we can't generate verticies in continous circles. Thats why we change direction every circle.
 		Function gets direction that will use to draw and in the same param returns direction for the next function.
 		*/
-		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction )
+        template< typename glm::vec3 (*NormComputingFun)( double, double ) >
+		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float3AttributeChannelPtr norm, bool& direction )
 		{
 			int max_loop;
 			int i;
@@ -222,8 +239,8 @@ namespace CylinderGenerator
 				double cosAngle = cos( angle1 );
 				double sinAngle1 = sin( angle1 );
 
-				verts->AddAttribute( glm::vec3( R1 * cosAngle, h1, R1 * sinAngle1 ) + center_translate );
-				verts->AddAttribute( glm::vec3( R2 * cosAngle, h2, R2 * sinAngle1 ) + center_translate );
+                verts->AddAttribute( glm::vec3( R1 * cosAngle, h1, R1 * sinAngle1 ) + center_translate );   norm->AddAttribute( NormComputingFun( cosAngle, sinAngle1 ) );
+				verts->AddAttribute( glm::vec3( R2 * cosAngle, h2, R2 * sinAngle1 ) + center_translate );   norm->AddAttribute( NormComputingFun( cosAngle, sinAngle1 ) );
 
 
 				if( direction )
@@ -347,20 +364,20 @@ namespace CylinderGenerator
 			bool gen_direction = false;		// Generation direction clockwise or counter clockwise
 
 			// Top of cylinder
-			generateCircuit( inner_radius, outer_radius, height, height, verts, uvs, gen_direction );
+            generateCircuit< TopNormal >( inner_radius, outer_radius, height, height, verts, normals, gen_direction );
 
 			// Lateral surface
-			generateCircuit( outer_radius, outer_radius, 0.0f, height, verts, uvs, gen_direction );
+            generateCircuit< OuterNormal >( outer_radius, outer_radius, 0.0f, height, verts, normals, gen_direction );
 
 			// Bottom of cylinder
-			generateCircuit( outer_radius, inner_radius, 0.0f, 0.0f, verts, uvs, gen_direction );
+            generateCircuit< BottomNormal >( outer_radius, inner_radius, 0.0f, 0.0f, verts, normals, gen_direction );
 
 			if( inner_radius > 0.0 )
-				generateCircuit( inner_radius, inner_radius, height, 0.0f, verts, uvs, gen_direction );
+                generateCircuit< InnerNormal >( inner_radius, inner_radius, height, 0.0f, verts, normals, gen_direction );
 
 			generateUVs( verts, uvs );
             
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 
