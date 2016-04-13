@@ -2230,7 +2230,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define VERSION_COLOR
 #define VERSION_MATERIAL
 
-#define SHOW_CUBE
+//#define SHOW_CUBE
 //#define SHOW_CYLINDER
 //#define SHOW_CONE
 //#define SHOW_SPHERE
@@ -2243,6 +2243,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_GEOSPHERE
 //#define SHOW_SIMPLE_CUBE
 //#define SHOW_COGWHEEL
+#define SHOW_WALL
 
       //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -2299,6 +2300,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #endif
 #ifdef SHOW_COGWHEEL
     uids.push_back( "DEFAULT_COGWHEEL" );
+#endif
+#ifdef SHOW_WALL
+    uids.push_back( "DEFAULT_WALL" );
 #endif
 
 // ============================================ //
@@ -2373,11 +2377,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #ifdef SHOW_CYLINDER
     auto plugin = root->GetPlugin( "cylinder" );
     model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
-    model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.0f );
-    model::SetParameter( plugin->GetParameter( "inner radius" ), 10.0f, 0.78f );
+    model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.4f );
+    //model::SetParameter( plugin->GetParameter( "inner radius" ), 10.0f, 0.78f );
     model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
     model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.8f );
-    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 120.0f );
     //model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
 
     model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
@@ -2485,7 +2489,16 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
     model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
 #endif
+#ifdef SHOW_WALL
+    auto plugin = root->GetPlugin( "wall" );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
+    model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "width" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "depth" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "angle" ), 0.0f, 80.0f );
+    model::SetParameter( plugin->GetParameter( "front" ), 0.0f, true );
 
+#endif
 
 // ============================================ //
 // Color, texture plugins parameters

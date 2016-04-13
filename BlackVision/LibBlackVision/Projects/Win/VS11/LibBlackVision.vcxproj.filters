@@ -1474,6 +1474,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultWallPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3650,6 +3651,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.h">
       <Filter>Engine\Models\Lights</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultWallPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
