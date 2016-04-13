@@ -94,23 +94,23 @@ namespace WallGenerator
 
         // ***********************
         //
-        glm::vec3   ComputeVertex   ( float angle, float height, float zTranslate )
+        glm::vec3   ComputeVertex   ( float curAngle, float height, float zTranslate )
         {
             glm::vec3 position;
-            position.x = m_radius * sin( angle );
+            position.x = m_radius * sin( curAngle );
             position.y = height;
-            position.z = ( m_radius * cos( angle ) - zTranslate ) * m_scaleFactor;
+            position.z = -( m_radius * cos( curAngle ) + zTranslate ) * m_scaleFactor;
             return position;
         }
 
         // ***********************
         //
-        glm::vec2   ComputeUV       ( float angle, float maxAngle, bool top )
+        glm::vec2   ComputeUV       ( float curAngle, float maxAngle, bool top )
         {
             if( top )
-                return glm::vec2( angle / maxAngle, 1.0 );
+                return glm::vec2( curAngle / maxAngle, 1.0 );
             else
-                return glm::vec2( angle / maxAngle, 0.0 );
+                return glm::vec2( curAngle / maxAngle, 0.0 );
         }
 
         // ***********************
@@ -139,10 +139,11 @@ namespace WallGenerator
             
             float topY = height / 2;
             float bottomY = - topY;
-            float zTranslate = -cos( angleOffset );
 
             // Compute member variables.
-            m_radius = width / ( 2 * sin( angleOffset ) );
+            m_radius = width / ( 2 * sin( -angleOffset ) );
+
+            float zTranslate = -m_radius * cos( angleOffset );
             m_scaleFactor = depth / ( m_radius + zTranslate );  // zTranslate is negative, thats why I add instead of subtract.
 
 
@@ -151,13 +152,13 @@ namespace WallGenerator
             {
                 int index = i << 1;
                 float delta = i * deltaAngle;
-                float angle = angleOffset + delta;
+                float curAngle = angleOffset + delta;
 
-                vert[ index ] = ComputeVertex( angle, topY, zTranslate );
-                vert[ index + 1 ] = ComputeVertex( angle, bottomY, zTranslate );
+                vert[ index ] = ComputeVertex( curAngle, topY, zTranslate );
+                vert[ index + 1 ] = ComputeVertex( curAngle, bottomY, zTranslate );
 
-                uv[ index ] = ComputeUV( delta, angle, true );
-                uv[ index ] = ComputeUV( delta, angle, false );
+                uv[ index ] = ComputeUV( delta, radiansAngle, true );
+                uv[ index + 1 ] = ComputeUV( delta, radiansAngle, false );
             }
 
             // Normals
