@@ -68,6 +68,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const Plugins
     , m_visible( true )
     , m_modelNodeEditor ( new ModelNodeEditor( this ) )
     , m_modelNodeEffect( nullptr )
+    , m_boundingVolume( new BoundingVolume( nullptr ) )
 {
     if( pluginsManager == nullptr )
     {
@@ -558,13 +559,14 @@ namespace {
 BoundingVolumePtr CreateBoundingVolume( DefaultPluginListFinalizedPtr pluginList )
 {
     auto vac_ = pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+
     if( vac_ )
     {
         auto vac = Cast< VertexAttributesChannel * >( RemoveConst( vac_.get() ) ); // FIXME
         return std::make_shared< BoundingVolume >( vac );
     }
     else
-        return nullptr;
+        return std::make_shared< BoundingVolume >( nullptr );
 }
 
 }
