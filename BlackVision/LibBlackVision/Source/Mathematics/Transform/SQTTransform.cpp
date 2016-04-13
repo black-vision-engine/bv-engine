@@ -17,11 +17,11 @@ glm::mat4x4         SQTTransform::Evaluate        ( const glm::vec3 & translatio
 {
     glm::mat4x4 ret( 1.0f );
 
-    ret *= glm::translate( glm::mat4( 1.0f ), center );
     ret *= glm::translate( glm::mat4( 1.0f ), translation );
+    ret *= glm::translate( glm::mat4( 1.0f ), center );
     ret *= glm::mat4_cast( rotation );
-    ret *= glm::scale( glm::mat4( 1.0f ), scale );
     ret *= glm::translate( glm::mat4( 1.0f ), -center );
+    ret *= glm::scale( glm::mat4( 1.0f ), scale );
 
     return ret; 
 }
