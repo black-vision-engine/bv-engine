@@ -14,11 +14,10 @@ class TabStopsLogic
 {
 private:
 
-    BVProjectEditor                 m_editor;
     std::vector< TabStopPtr >       m_tabStops;
 
 public:
-    TabStopsLogic( BVProjectEditor editor );
+    TabStopsLogic();
     ~TabStopsLogic();
 };
 
