@@ -2,7 +2,6 @@
 
 #include "DefaultNoPerspectiveTexturePlugin.h"
 
-
 namespace bv { namespace model {
 
 	// ************************************************************************* DESCRIPTOR *************************************************************************
@@ -45,6 +44,7 @@ DefaultPluginParamValModelPtr   DefaultNoPerspectiveTexturePluginDesc::CreateDef
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
 
     return model;
 }

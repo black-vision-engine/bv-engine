@@ -3,7 +3,7 @@
 #include "DefaultVideoInputPlugin.h"
 //#include "DefaultVideoInput.h"
 #include "Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h"
-
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "VideoInput/DefaultVideoInputResourceDescr.h"
 
@@ -54,6 +54,7 @@ namespace bv { namespace model {
         //Set default values of all parameters
         alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
         trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+        trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
 
         //FIXME: integer parmeters should be used here
         paramVideoInputSource->SetVal( (float) 0.f, TimeType( 0.f ) );
@@ -122,6 +123,8 @@ namespace bv { namespace model {
     void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
     {
 		BasePlugin::Update( t );
+
+        HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
         //desc.Update();
 

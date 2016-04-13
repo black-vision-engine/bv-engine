@@ -13,6 +13,7 @@ public:
 	static bool									PropagateAttributesUpdate	( VertexAttributesChannelPtr vaChannel, IPluginPtr prevPlugin );
 	static void									SetTopologyUpdate			( VertexAttributesChannelPtr vaChannel );
 	static bool									PropagateTopologyUpdate		( VertexAttributesChannelPtr vaChannel, IPluginPtr prevPlugin );
+
 };
 
 } // model

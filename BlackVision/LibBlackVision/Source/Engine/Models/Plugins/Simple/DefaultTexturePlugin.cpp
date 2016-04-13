@@ -9,6 +9,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
@@ -65,6 +66,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
 
     //Set default values of all parameters
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
 
     return model;
 }
@@ -195,7 +197,9 @@ IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
-    
+
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+
     if( ParameterChanged( PARAM_BLEND_ENABLE ) )
     {
         auto ctx = m_psc->GetRendererContext();

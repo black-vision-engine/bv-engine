@@ -9,6 +9,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
@@ -74,6 +75,8 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
 
     helper.CreateVSModel();
     helper.AddTransformParam( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT, true );
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT );
+    SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
     helper.CreatePSModel();
     helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::ALPHA, 1.f, true );
@@ -211,6 +214,9 @@ IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexSh
 void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
+
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+
     MarkOffsetChanges();
 
     HandleDecoder();

@@ -20,8 +20,8 @@ glm::mat4x4         SQTTransform::Evaluate        ( const glm::vec3 & translatio
     ret *= glm::translate( glm::mat4( 1.0f ), translation );
     ret *= glm::translate( glm::mat4( 1.0f ), center );
     ret *= glm::mat4_cast( rotation );
-    ret *= glm::translate( glm::mat4( 1.0f ), -center );
     ret *= glm::scale( glm::mat4( 1.0f ), scale );
+    ret *= glm::translate( glm::mat4( 1.0f ), -center );
 
     return ret; 
 }

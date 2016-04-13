@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
@@ -46,6 +47,7 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
     //Create all parameters and evaluators
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
     
     helper.CreatePluginModel();
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_BLEND_ENABLE, true, true, true );
@@ -79,6 +81,7 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     //Set default values of all parameters
     //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
 
     //FIXME: integer parmeters should be used here
     //paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );
@@ -212,6 +215,8 @@ IVertexShaderChannelConstPtr        DefaultAnimationPlugin::GetVertexShaderChann
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
+
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
     unsigned int frameNum = ( unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony

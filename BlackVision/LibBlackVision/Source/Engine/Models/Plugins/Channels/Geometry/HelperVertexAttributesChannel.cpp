@@ -74,5 +74,7 @@ bool		HelperVertexAttributesChannel::PropagateTopologyUpdate		( VertexAttributes
 	return ( prevPlugin && prevPlugin->GetVertexAttributesChannel() );
 }
 
+
+
 } // model
 } // bv
