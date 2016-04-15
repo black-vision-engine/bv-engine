@@ -63,7 +63,7 @@ void                JsonCommandsListener::TryParseRegularEvent( IDeserializer & 
     {
         do
         {
-            auto newEvent = DeserializeEvent( deser );
+            auto newEvent = GetDefaultEventManager().GetEventFactory().DeserializeEvent( deser );
             if( newEvent != nullptr )
             {
                 RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
