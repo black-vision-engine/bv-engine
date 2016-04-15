@@ -5,6 +5,7 @@
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 
+
 #include "Engine/Events/Queues/EventQueue.h"
 #include "Engine/Events/Queues/EventQueueConcurrent.h"
 
@@ -23,6 +24,8 @@ private:
     static const unsigned int NUM_CONCURRENT_QUEUES = 2;
 
 private:
+
+    EventFactory            m_eventFactory;
 
     EventListenerMap        m_eventListeners;
 
@@ -52,6 +55,9 @@ public:
     virtual void    QueueResponse           ( const IEventPtr evt ) override;
 
     virtual void    LockEvents              ( unsigned int numFrames ) override;
+    
+    
+    virtual const EventFactory &            GetEventFactory() override;
 };
 
 } //bv

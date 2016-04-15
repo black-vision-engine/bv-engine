@@ -158,8 +158,13 @@ namespace Generator
 		void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
 			assert( stripe_num < horizontal_stripes );
-			assert( horizontal_stripes >= 3 );
-			assert( vertical_stripes >= 3 );
+			//assert( horizontal_stripes >= 3 );
+			//assert( vertical_stripes >= 3 );
+
+            if( vertical_stripes < 3 )
+                vertical_stripes = 3;
+            if( horizontal_stripes < 3 )
+                horizontal_stripes = 3;
 
 			float angleOffset = computeAngleOffset( open_angle_mode, open_angle );
 

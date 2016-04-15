@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Events/Interfaces/IEvent.h"
-
+#include "Engine/Events/EventFactory.h"
 
 namespace bv 
 {
@@ -30,6 +30,8 @@ public:
     virtual void    QueueResponse           ( const IEventPtr evt )                                                 = 0;
 
     virtual void    LockEvents              ( unsigned int numFrames )                                              = 0;
+
+    virtual const EventFactory &            GetEventFactory()                                                       = 0; 
 };
 
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services

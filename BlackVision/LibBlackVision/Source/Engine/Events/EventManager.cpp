@@ -278,4 +278,9 @@ IEventManager &     GetDefaultEventManager  ()
     return instance;
 }
 
+const EventFactory &            EventManager::GetEventFactory()
+{
+    return m_eventFactory;
+}
+
 } //bv
