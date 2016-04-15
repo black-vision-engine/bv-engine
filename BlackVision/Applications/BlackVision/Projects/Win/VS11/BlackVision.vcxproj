@@ -286,7 +286,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
-    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp" />
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />

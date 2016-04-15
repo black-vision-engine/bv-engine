@@ -71,7 +71,7 @@ std::string                         ModelState::BuildIndexPath  ( const IModelNo
 {
     auto parent = static_cast< const BasicNode * >( QueryNodeParent( node ) );
     if( parent == nullptr )
-        return node->GetName();
+        return "#0";
 
     for( UInt32 i = 0; i < parent->GetNumChildren(); ++i )
     {

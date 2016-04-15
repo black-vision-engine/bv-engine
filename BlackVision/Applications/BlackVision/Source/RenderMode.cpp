@@ -19,7 +19,7 @@ RenderMode::RenderMode()
 
 	if( m_fps == 0 )
 	{
-		m_fps = 25;
+		m_fps = 50;
 	}
 }
 

@@ -124,9 +124,6 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp">
       <Filter>EndUserAPI\JsonCommandsListener</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp">
-      <Filter>EndUserAPI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
