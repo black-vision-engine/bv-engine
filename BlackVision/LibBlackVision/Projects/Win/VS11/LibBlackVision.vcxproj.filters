@@ -286,7 +286,7 @@
     <Filter Include="Engine\Models\Lights">
       <UniqueIdentifier>{db65c1af-2082-49de-86c2-432b5bc6149a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\TabStops">
+    <Filter Include="Engine\Models\GridLines">
       <UniqueIdentifier>{63a2c4ad-8694-4a12-b1c2-5a76f823772a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1462,12 +1462,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.cpp">
       <Filter>Engine\Models\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStop.cpp">
-      <Filter>Engine\Models\TabStops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.cpp">
-      <Filter>Engine\Models\TabStops</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.cpp">
       <Filter>Engine\Models\Lights</Filter>
     </ClCompile>
@@ -1485,6 +1479,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventTrigger.cpp">
       <Filter>Engine\Models\Timeline\Dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLine.cpp">
+      <Filter>Engine\Models\GridLines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.cpp">
+      <Filter>Engine\Models\GridLines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3605,12 +3605,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStop.h">
-      <Filter>Engine\Models\TabStops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.h">
-      <Filter>Engine\Models\TabStops</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.h">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
     </ClInclude>
@@ -3673,6 +3667,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventTrigger.h">
       <Filter>Engine\Models\Timeline\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLine.h">
+      <Filter>Engine\Models\GridLines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.h">
+      <Filter>Engine\Models\GridLines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

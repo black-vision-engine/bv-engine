@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "TabStop.h"
+#include "GridLine.h"
 
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
@@ -7,21 +7,12 @@
 #include "Engine/Models/BoundingVolume.h"
 
 
-namespace bv
+namespace bv { namespace model
 {
 
-// ***********************
-//
-TabStop::TabStop( TabStopType type, const std::string & name )
-    :   m_type( type )
-    ,   m_name( name )
-    ,   m_position( 0.0 )
-{}
-
-// ***********************
-//
-TabStop::~TabStop()
-{}
+// ========================================================================= //
+// Helper functions
+// ========================================================================= //
 
 // ***********************
 //
@@ -52,10 +43,27 @@ glm::mat4           GetTransform    ( const model::IModelNode* node )
     }
 }
 
+// ========================================================================= //
+// GridLine
+// ========================================================================= //
 
 // ***********************
 //
-bool        TabStop::AlignNode       ( model::BasicNodePtr node, TabStopAlignement alignement )
+GridLine::GridLine( GridLineType type, const std::string & name )
+    :   m_type( type )
+    ,   m_name( name )
+    ,   m_position( 0.0 )
+{}
+
+// ***********************
+//
+GridLine::~GridLine()
+{}
+
+
+// ***********************
+//
+bool        GridLine::AlignNode       ( model::BasicNodePtr node, GridLineAlignement alignement )
 {
     glm::mat4 transform = GetTransform( node.get() );
     glm::vec4 referencePos = glm::vec4( ReferencePos( node, alignement ), 1.0 );
@@ -69,9 +77,16 @@ bool        TabStop::AlignNode       ( model::BasicNodePtr node, TabStopAligneme
 
 // ***********************
 //
-glm::vec3   TabStop::ReferencePos    ( model::BasicNodePtr& node, TabStopAlignement alignement )
+void        GridLine::Rename              ( const std::string & newName )
 {
-    if( alignement == TabStopAlignement::TSA_WeightCenter )
+    m_name = newName;
+}
+
+// ***********************
+//
+glm::vec3   GridLine::ReferencePos    ( model::BasicNodePtr& node, GridLineAlignement alignement )
+{
+    if( alignement == GridLineAlignement::TSA_WeightCenter )
     {
         auto paramTransform = node->GetFinalizePlugin()->GetParamTransform();
         assert( paramTransform );
@@ -81,7 +96,7 @@ glm::vec3   TabStop::ReferencePos    ( model::BasicNodePtr& node, TabStopAlignem
 
         return paramTransform->Transform().GetCenter( timeline->GetLocalTime() );
     }
-    else if( alignement == TabStopAlignement::TSA_BoundingBoxCenter )
+    else if( alignement == GridLineAlignement::TSA_BoundingBoxCenter )
     {
         auto boundingVolume = node->GetBoundingVolume();
         assert( boundingVolume );
@@ -91,15 +106,15 @@ glm::vec3   TabStop::ReferencePos    ( model::BasicNodePtr& node, TabStopAlignem
 
         return glm::vec3( ( boundingBox->xmin + boundingBox->xmax ) / 2, ( boundingBox->ymax + boundingBox->ymin ) / 2, ( boundingBox->zmax + boundingBox->zmin ) / 2 );
     }
-    else if( alignement == TabStopAlignement::TSA_BoundingBoxMinor )
+    else if( alignement == GridLineAlignement::TSA_BoundingBoxMinor )
     {
         assert( !"Not implemented" );
     }
-    else if( alignement == TabStopAlignement::TSA_BoundingBoxMajor )
+    else if( alignement == GridLineAlignement::TSA_BoundingBoxMajor )
     {
         assert( !"Not implemented" );
     }
-    else if( alignement == TabStopAlignement::TSA_GeometryCenter )
+    else if( alignement == GridLineAlignement::TSA_GeometryCenter )
     {
         return glm::vec3( 0.0, 0.0, 0.0 );
     }
@@ -111,13 +126,13 @@ glm::vec3   TabStop::ReferencePos    ( model::BasicNodePtr& node, TabStopAlignem
 
 // ***********************
 //
-glm::vec3   TabStop::ComputeTranslation  ( glm::vec3 referencePosition )
+glm::vec3   GridLine::ComputeTranslation  ( glm::vec3 referencePosition )
 {
-    if( m_type == TabStopType::TST_Horizontal )
+    if( m_type == GridLineType::TST_Horizontal )
     {
         return glm::vec3( m_position - referencePosition.x, 0.0, 0.0 );
     }
-    else if( m_type == TabStopType::TST_Vertical )
+    else if( m_type == GridLineType::TST_Vertical )
     {
         return glm::vec3( 0.0, m_position - referencePosition.y, 0.0 );
     }
@@ -129,7 +144,7 @@ glm::vec3   TabStop::ComputeTranslation  ( glm::vec3 referencePosition )
 
 // ***********************
 //
-bool        TabStop::UpdateTransform     ( model::BasicNodePtr& node, glm::vec3 translation )
+bool        GridLine::UpdateTransform     ( model::BasicNodePtr& node, glm::vec3 translation )
 {
     auto paramTransform = node->GetFinalizePlugin()->GetParamTransform();
     assert( paramTransform );
@@ -147,5 +162,5 @@ bool        TabStop::UpdateTransform     ( model::BasicNodePtr& node, glm::vec3 
     return true;
 }
 
-
+}   // model
 }	// bv

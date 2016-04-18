@@ -5,13 +5,13 @@
 #include "Engine/Models/BasicNode.h"
 
 
-namespace bv
+namespace bv { namespace model
 {
 
 class BVProjectEditor;
 
 
-enum TabStopType
+enum GridLineType
 {
     TST_Vertical,
     TST_Horizontal,
@@ -20,7 +20,7 @@ enum TabStopType
 };
 
 
-enum TabStopAlignement
+enum GridLineAlignement
 {
     TSA_GeometryCenter,     ///< Point ( 0.0, 0.0, 0.0 )
     TSA_WeightCenter,
@@ -31,32 +31,31 @@ enum TabStopAlignement
     TSA_TOTAL
 };
 
-class TabStop
+class GridLine
 {
 private:
 
-    TabStopType         m_type;
+    GridLineType        m_type;
     std::string         m_name;
     float               m_position;
 
 public:
-    explicit TabStop    ( TabStopType type, const std::string & name );
-    ~TabStop();
+    explicit GridLine    ( GridLineType type, const std::string & name );
+    ~GridLine();
 
-    void                SetPosition     ( float pos )   { m_position = pos; }
-    float               GetPosition     ()              { return m_position; }
+    void                SetPosition         ( float pos )   { m_position = pos; }
+    float               GetPosition         ()              { return m_position; }
 
-public:
-
-    bool                AlignNode       ( model::BasicNodePtr node, TabStopAlignement alignement );
+    bool                AlignNode           ( model::BasicNodePtr node, GridLineAlignement alignement );
+    void                Rename              ( const std::string & newName );
 
 private:
 
-    glm::vec3           ReferencePos        ( model::BasicNodePtr& node, TabStopAlignement alignement );
+    glm::vec3           ReferencePos        ( model::BasicNodePtr& node, GridLineAlignement alignement );
     glm::vec3           ComputeTranslation  ( glm::vec3 referencePosition );
     bool                UpdateTransform     ( model::BasicNodePtr& node, glm::vec3 translation );
 };
 
-DEFINE_PTR_TYPE( TabStop )
 
+}   // model
 }	// bv

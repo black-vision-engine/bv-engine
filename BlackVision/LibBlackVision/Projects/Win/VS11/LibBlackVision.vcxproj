@@ -318,6 +318,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLine.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelDirectionalLight.cpp" />
@@ -440,8 +442,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStop.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
@@ -549,6 +549,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLine.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelLight.h" />
@@ -869,8 +871,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IVideoDecoder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStop.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
