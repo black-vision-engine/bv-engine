@@ -12,6 +12,7 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventLoop.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventTrigger.h"
 
 #include "Serialization/IDeserializer.h"
 #include "Serialization/SerializationHelper.h"
@@ -470,7 +471,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             SetLocalTime( evt->GetEventTime() );
             m_timeEvalImpl.Stop();
             //printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
-            printf( "Event STOP %s \n", evt->GetName().c_str() );
+            //printf( "Event STOP %s \n", evt->GetName().c_str() );
             
             keyframeType = TimelineKeyframeEvent::KeyframeType::StopKeyframe;
 
@@ -494,7 +495,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
 
-                    printf( "Event LOOP -> GOTO: %.4f %s\n", evtImpl->GetTargetTime(), evt->GetName().c_str() );
+                    //printf( "Event LOOP -> GOTO: %.4f %s\n", evtImpl->GetTargetTime(), evt->GetName().c_str() );
                     break;
                 case LoopEventAction::LEA_RESTART:
                     m_timeEvalImpl.Reset();
@@ -508,14 +509,14 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe;
 
-                    printf( "Event LOOP -> RESTART %s\n", evt->GetName().c_str() );                    
+                    //printf( "Event LOOP -> RESTART %s\n", evt->GetName().c_str() );                    
                     break;
                 case LoopEventAction::LEA_REVERSE:
                     Reverse();
                     
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe;
 
-                    printf( "Event LOOP -> REVERSE %s\n", evt->GetName().c_str() );
+                    //printf( "Event LOOP -> REVERSE %s\n", evt->GetName().c_str() );
                     
                     break;
                 default:
@@ -524,7 +525,20 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
             evtImpl->IncLoopCount();
                 
-            printf( "Event LOOP %d\n", evtImpl->GetLoopCount() );
+            //printf( "Event LOOP %d\n", evtImpl->GetLoopCount() );
+
+            break;
+        }
+        case TimelineEventType::TET_TRIGGER:
+        {
+            auto evtImpl = static_cast< TimelineEventTrigger * >( evt );
+            evtImpl->SetActive( false );
+
+            evtImpl->SendEvents();
+
+            keyframeType = TimelineKeyframeEvent::KeyframeType::TriggerEventKeyframe;
+
+            //printf( "Event Trigger\n" );
 
             break;
         }
@@ -535,7 +549,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
             keyframeType = TimelineKeyframeEvent::KeyframeType::NullKeyframe;
 
-            printf( "Event NULL\n" );
+            //printf( "Event NULL\n" );
 
             break;
         }
@@ -545,7 +559,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
     JsonSerializeObject ser;
     ser.SetAttribute( "cmd", "KeyframeEvent" );
-    ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
+    ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );
     ser.SetAttribute( "KeyframeName", evt->GetName() );
     ser.SetAttribute( "Timeline", this->GetName() );
     ser.SetAttribute( "SceneName", TimelineHelper::GetSceneName( this ) );

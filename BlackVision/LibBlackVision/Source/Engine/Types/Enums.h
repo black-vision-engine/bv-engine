@@ -172,6 +172,7 @@ enum class TimelineEventType : int
 {
     TET_STOP = 0,
     TET_LOOP,
+    TET_TRIGGER,
     TET_NULL,
 
     TET_TOTAL

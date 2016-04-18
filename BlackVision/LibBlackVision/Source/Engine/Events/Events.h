@@ -973,6 +973,7 @@ public:
         LoopReverseKeyframe,
         LoopJumpKeyframe,
         LoopRestartKeyframe,
+        TriggerEventKeyframe,
         NullKeyframe,
         KeyframeTypeFail
     } KeyframeType;

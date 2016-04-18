@@ -1483,6 +1483,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\EventFactory.cpp">
       <Filter>Engine\Events</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventTrigger.cpp">
+      <Filter>Engine\Models\Timeline\Dynamic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3667,6 +3670,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventFactory.h">
       <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventTrigger.h">
+      <Filter>Engine\Models\Timeline\Dynamic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
