@@ -103,6 +103,7 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 
 	av_seek_frame( m_formatCtx, streamIdx, initTs, AVSEEK_FLAG_BACKWARD );
 	ClearPacketQueue();
+	m_isEOF = false; 
 }
 
 // *******************************

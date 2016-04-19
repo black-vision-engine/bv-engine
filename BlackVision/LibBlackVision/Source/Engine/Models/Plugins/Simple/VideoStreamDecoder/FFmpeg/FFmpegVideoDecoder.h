@@ -13,12 +13,14 @@
 #include "FFmpegDemuxer.h"
 #include "FFmpegVideoStreamDecoder.h"
 
+
 namespace bv
 {
 
 class FFmpegVideoDecoder : public IVideoDecoder
 {
 private:
+
 	FFmpegDemuxerUPtr				m_demuxer;
 
 	FFmpegVideoStreamDecoderUPtr	m_vstreamDecoder;
@@ -33,17 +35,20 @@ private:
 	VideoDecoderThreadUPtr			m_decoderThread;
 	mutable std::mutex				m_mutex;
 
-	QueueConcurrent< VideoMediaData >	m_frameQueue;
+	QueueConcurrent< VideoMediaData >	m_outQueue;
+	QueueConcurrent< VideoMediaData >	m_bufferQueue;
+
 	static const UInt32				MAX_QUEUE_SIZE;
 
 public:
 								FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset );
 	virtual						~FFmpegVideoDecoder		();
 
-	virtual void				Start					() override;
+	virtual void				Play					() override;
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
+    virtual VideoMediaData      PreviewVideoMediaData   () override;
 	virtual VideoMediaData		GetVideoMediaData		() override;
     virtual VideoMediaData		GetSingleFrame  		( TimeType frameTime) override;
 
@@ -53,14 +58,18 @@ public:
 	virtual UInt32				GetHeight				() const override;
 	virtual Float64				GetFrameRate			() const override;
 
+    virtual UInt32              GetMaxBufferSize        () const override;
+
 	/** Accurate seeking.
 	@param[time] in seconds 
     */
 	virtual void				Seek					( Float64 time ) override;
+	virtual void				FlushBuffers			() override;
 
 	virtual void				Reset					() override;
 
 	virtual bool				IsEOF					() const override;
+	virtual bool				IsFinished				() const override;
 
 protected:
 	

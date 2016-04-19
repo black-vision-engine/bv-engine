@@ -21,12 +21,14 @@ struct VideoMediaData
 class IVideoDecoder
 {
 public:
+
 	virtual 						~IVideoDecoder			() {};
 
-	virtual void					Start					() = 0;
+	virtual void					Play					() = 0;
 	virtual void					Pause					() = 0;
 	virtual void					Stop					() = 0;
-
+    
+	virtual VideoMediaData			PreviewVideoMediaData	() = 0;
 	virtual VideoMediaData			GetVideoMediaData		() = 0;
     virtual VideoMediaData			GetSingleFrame  		( TimeType frameTime) = 0;
 
@@ -36,21 +38,26 @@ public:
 	virtual UInt32					GetHeight				() const = 0;
 	virtual Float64					GetFrameRate			() const = 0;
 
+    virtual UInt32                  GetMaxBufferSize        () const = 0;
+
 	/** Accurate seeking.
 	@param[time] in seconds 
     */
 	virtual void					Seek					( Float64 time ) = 0;
+	virtual void				    FlushBuffers			() = 0;
 
 	virtual void					Reset					() = 0;
 
 	virtual bool					IsEOF					() const = 0;
-
+	virtual bool					IsFinished				() const = 0;
+    
 protected:
 
 	virtual bool					DecodeNextFrame			() = 0;
 	virtual void					NextFrameDataReady		() = 0;
-
+    
 	friend class VideoDecoderThread;
+
 };
 
 DEFINE_PTR_TYPE( IVideoDecoder )

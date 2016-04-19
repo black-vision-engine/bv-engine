@@ -43,6 +43,8 @@ public:
         static const std::string TX_MAT;
         static const std::string DECODER_STATE;
         static const std::string SEEK_OFFSET;
+        static const std::string LOOP_ENABLED;
+        static const std::string LOOP_COUNT;
     };
 
 private:
@@ -64,9 +66,15 @@ private:
 	DecoderModeParamPtr                 m_decoderModeParam;
     DecoderMode                         m_prevDecoderMode;
 
+    UInt32                              m_prevFrameIdx;
+
 	/** time in seconds from the beginning of video */
     ParamVec2Ptr                        m_offsetParam;                 
     Float32                             m_prevOffsetCounter;
+
+    ParamBoolPtr                        m_loopEnabledParam;                 
+    ParamIntPtr                         m_loopCountParam;
+    UInt32                              m_loopCount;
 
 public:
 
@@ -88,6 +96,7 @@ public:
 private:
 
     void                                        HandleDecoder               ();
+    void                                        UploadVideoFrame            ();
 
     void                                        InitVertexAttributesChannel ();
 
