@@ -533,6 +533,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
         {
             auto evtImpl = static_cast< TimelineEventTrigger * >( evt );
             evtImpl->SetActive( false );
+            m_activeEvent = nullptr;
 
             evtImpl->SendEvents();
 
