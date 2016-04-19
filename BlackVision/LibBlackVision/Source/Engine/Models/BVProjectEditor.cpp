@@ -1311,6 +1311,7 @@ void                    BVProjectEditor::RefreshNode        (  model::BasicNodeP
     auto bv = modelNode->GetBoundingVolume();
     assert( bv );
     bv->UpdateVAC( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() );
+    bv->UpdateParam( modelNode->GetFinalizePlugin()->GetParamTransform().get() );
 }
 
 // *******************************

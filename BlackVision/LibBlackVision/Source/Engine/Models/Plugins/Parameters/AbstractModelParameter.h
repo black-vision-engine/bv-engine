@@ -47,7 +47,7 @@ public:
 
     virtual int                 GetNumKeys              () = 0;
 
-    virtual ITimeEvaluatorPtr   GetTimeEvaluator        () override;
+    virtual ITimeEvaluatorPtr   GetTimeEvaluator        () const override;
     virtual void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator ) override;
 
     inline  TimeType            GetLocalEvaluationTime  () const;

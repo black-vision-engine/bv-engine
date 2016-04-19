@@ -22,7 +22,20 @@ namespace {
 //
 RenderableEntity *  BuildRenderableBoundingBox          ( const model::BoundingVolume * volume )
 {
-    auto component = volume->BuildConnectedComponent();
+    auto component = volume->BuildBoxRepresentation();
+
+    auto box = Cast< Lines * >( BVProjectTools::BuildRenderableFromComponent( component, PrimitiveType::PT_LINES ) );
+
+    box->SetWidth( 5.f );
+
+    return box;
+}
+
+// *******************************
+//
+RenderableEntity *  BuildRenderableCenterOfMass          ( const model::BoundingVolume * volume )
+{
+    auto component = volume->BuildCenterRepresentation();
 
     auto box = Cast< Lines * >( BVProjectTools::BuildRenderableFromComponent( component, PrimitiveType::PT_LINES ) );
 
@@ -39,7 +52,10 @@ RenderableEntityWithBoundingBox::RenderableEntityWithBoundingBox         ( Rende
     : RenderableEntity( type, rad, effect )
 {
     if( boundingBox )
+    {
         m_renderableBoundingBox = BuildRenderableBoundingBox( boundingBox );
+        m_renderableCenterOfMass = BuildRenderableCenterOfMass( boundingBox );
+    }
     else
         m_renderableBoundingBox = nullptr;
 }
@@ -52,6 +68,12 @@ RenderableEntity *    RenderableEntityWithBoundingBox::GetBoundingBox           
     return m_renderableBoundingBox;
 }
 
+// ***********************
+//
+RenderableEntity *          RenderableEntityWithBoundingBox::GetCenterOfMass                         () const
+{
+    return m_renderableCenterOfMass;
+}
 
 // ***********************
 //
@@ -59,7 +81,10 @@ void                RenderableEntityWithBoundingBox::UpdateTransform            
 {
     RenderableEntity::UpdateTransform( transform );
     if( m_renderableBoundingBox )
+    {
         m_renderableBoundingBox->UpdateTransform( transform );
+        m_renderableCenterOfMass->UpdateTransform( transform );
+    }
 }
 
 // ***********************
@@ -68,7 +93,10 @@ void                RenderableEntityWithBoundingBox::SetLocalTransform          
 {
     RenderableEntity::SetLocalTransform( t );
     if( m_renderableBoundingBox )
+    {
         m_renderableBoundingBox->SetLocalTransform( t );
+        m_renderableCenterOfMass->SetLocalTransform( t );
+    }
 }
 
 }

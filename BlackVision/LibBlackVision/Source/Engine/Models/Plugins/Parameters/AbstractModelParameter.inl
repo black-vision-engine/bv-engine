@@ -2,7 +2,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-inline ITimeEvaluatorPtr   AbstractModelParameter::GetTimeEvaluator    ()
+inline ITimeEvaluatorPtr   AbstractModelParameter::GetTimeEvaluator    () const
 {
     return m_timeEvaluator;
 }

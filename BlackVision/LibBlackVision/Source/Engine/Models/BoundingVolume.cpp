@@ -7,13 +7,15 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelUtils.h"
 
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
+
 //#include <glm/gtc/matrix_transform.hpp>
 
 namespace bv { namespace model {
 
 namespace {
 
-model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box )
+model::ConnectedComponentPtr BuildBoxComponent( const mathematics::Box & box )
 {
     auto comp = model::ConnectedComponent::Create();
 
@@ -53,16 +55,57 @@ model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box
     vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
     vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
 
+    return comp;
+}
+
+model::ConnectedComponentPtr BuildCenterComponent( const glm::vec3 & center )
+{
+    auto comp = model::ConnectedComponent::Create();
+
+    auto * compVertDesc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+
+    auto vertArrtF3 = std::make_shared< model::Float3AttributeChannel >( compVertDesc, "boundingBox", false );
+
+    comp->AddAttributeChannel( vertArrtF3 );
+
+//// x-edges
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+//
+//// y-edges
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+//
+//// z-edges
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
+//    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
+
 // "cross-hair" in the "center of mass"
-    glm::vec3 mid = glm::vec3( 0.5f * ( box.xmin + box.xmax ),
-                                0.5f * (box.ymin + box.ymax ),
-                                0.5f * (box.zmin + box.zmax ) );
+    glm::vec3 mid = center;
 
-    const float scale = 0.03f;
+    const float scale = 0.3f;
 
-    glm::vec3 sizeX = glm::vec3( scale * ( box.xmax - box.xmin ),   0,                                  0                               );
-    glm::vec3 sizeY = glm::vec3( 0,                                 scale * ( box.ymax - box.ymin ),    0                               );
-    glm::vec3 sizeZ = glm::vec3( 0,                                 0,                                  scale * ( box.zmax - box.zmin ) );
+    glm::vec3 sizeX = glm::vec3( scale /** ( box.xmax - box.xmin )*/,   0,                                  0                               );
+    glm::vec3 sizeY = glm::vec3( 0,                                 scale /** ( box.ymax - box.ymin )*/,    0                               );
+    glm::vec3 sizeZ = glm::vec3( 0,                                 0,                                  scale /** ( box.zmax - box.zmin )*/ );
 
     vertArrtF3->AddAttribute( mid - sizeX );
     vertArrtF3->AddAttribute( mid + sizeX );
@@ -78,10 +121,11 @@ model::ConnectedComponentPtr BuildComponentFromBox( const mathematics::Box & box
 
 
 
-BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac )
+BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac, ParamTransform * param )
     : m_vac( vac )
     , m_lastAttribuetesID( 0 )
     , m_lastTopologyID( 0 )
+    , m_param( param )
 {
     if( vac )
         m_box = CalculateBoundingBox( m_vac );
@@ -93,6 +137,9 @@ void                    BoundingVolume::Update                  ()
 {
     if( m_vac == nullptr )
         return;
+
+    assert( m_param );
+    m_center = m_param->GetTransform().GetCenter( m_param->GetTimeEvaluator()->GetLocalTime() );
 
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {
@@ -116,9 +163,16 @@ const mathematics::Box *           BoundingVolume::GetBoundingBox          () co
 
 // ***********************
 //
-IConnectedComponentPtr      BoundingVolume::BuildConnectedComponent () const
+IConnectedComponentPtr      BoundingVolume::BuildBoxRepresentation () const
 {
-    return BuildComponentFromBox( m_box );
+    return BuildBoxComponent( m_box );
+}
+
+// ***********************
+//
+IConnectedComponentPtr              BoundingVolume::BuildCenterRepresentation () const
+{
+    return BuildCenterComponent( m_center );
 }
 
 // ***********************
@@ -137,5 +191,11 @@ void                        BoundingVolume::UpdateVAC               ( const IVer
     }
 }
 
+// ***********************
+//
+void                                BoundingVolume::UpdateParam             ( const ParamTransform * param ) const
+{
+    m_param = param;
+}
 
 } }

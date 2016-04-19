@@ -307,7 +307,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
     }
     else
     {
-        renderable = new TriangleStrip( nullptr, nullptr, nullptr );
+        renderable = new TriangleStrip( nullptr, modelNode->GetBoundingVolume().get(), nullptr );
     }
 
 

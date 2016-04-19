@@ -74,6 +74,7 @@ private:
 
     RenderableEntity *                          m_renderable;
     RenderableEntity *                          m_boundingBox;
+    RenderableEntity *                          m_centerOfMass;
     model::ITransformChannelConstPtr            m_transformChannel;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
     

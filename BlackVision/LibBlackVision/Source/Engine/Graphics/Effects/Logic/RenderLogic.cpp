@@ -415,27 +415,14 @@ void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ct
     }
 }
 
-namespace {
-
-RenderableEntity * GetBoundingBox( SceneNode * node )
-{
-    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
-    assert( obj );
-    auto bb = obj->GetBoundingBox();
-    if( bb )
-        return Cast< RenderableEntity * >( bb );
-    else
-        return nullptr;
-}
-
-}
-
 // ***********************
 //
 void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color )
 {
-    auto * bb = GetBoundingBox( node );
+    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
+    assert( obj );
 
+    auto bb = obj->GetBoundingBox();
     if( bb )
     {
         auto renderer = ctx->GetRenderer();
@@ -445,6 +432,10 @@ void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * c
 
         renderer->Enable( m_boundingBoxEffect, bb );
         renderer->DrawRenderable( bb );
+
+        auto wc = obj->GetCenterOfMass();
+        renderer->Enable( m_boundingBoxEffect, wc );
+        renderer->DrawRenderable( wc );
     }
 }
 

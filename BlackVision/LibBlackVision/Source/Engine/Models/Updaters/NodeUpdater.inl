@@ -146,7 +146,7 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 
 // *****************************
 //
-inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
+inline  void    UpdateLinesPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
 {
     assert( renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
 
@@ -224,8 +224,9 @@ inline  void    NodeUpdater::UpdatePositions     ()
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
     auto bv = node->GetBoundingVolume();
-    if( bv )
-        UpdateBoxPositions( m_boundingBox, bv->BuildConnectedComponent() );
+    assert( bv );
+    UpdateLinesPositions( m_boundingBox, bv->BuildBoxRepresentation() );
+    UpdateLinesPositions( m_centerOfMass, bv->BuildCenterRepresentation() );
 }
 
 // *****************************
@@ -237,8 +238,9 @@ inline  void    NodeUpdater::UpdateTopology      ()
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
     auto bv = node->GetBoundingVolume();
-    if( bv )
-        UpdateBoxPositions( m_boundingBox, bv->BuildConnectedComponent() );
+    assert( bv );
+    UpdateLinesPositions( m_boundingBox, bv->BuildBoxRepresentation() );
+    UpdateLinesPositions( m_centerOfMass, bv->BuildCenterRepresentation() );
 }
 
 // *****************************

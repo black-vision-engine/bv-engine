@@ -65,6 +65,7 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     assert( m_renderable != nullptr );
 
     m_boundingBox = Cast< RenderableEntityWithBoundingBox * >( m_renderable )->GetBoundingBox();
+    m_centerOfMass = Cast< RenderableEntityWithBoundingBox * >( m_renderable )->GetCenterOfMass();
 
     m_timeInvariantVertexData = false;
 
