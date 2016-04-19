@@ -6,9 +6,31 @@
 
 #include "Engine/Models/BoundingVolume.h"
 
+#include "Serialization/SerializationHelper.inl"
 
 namespace bv { namespace model
 {
+
+
+std::pair< GridLineType, const char* > GridLineTypeMapping[] = 
+{
+    std::make_pair( GridLineType::TST_Horizontal, "Horizontal" )
+    , std::make_pair( GridLineType::TST_Vertical, "Vertical" )
+    , std::make_pair( GridLineType::TST_TOTAL, "" )      // default
+};
+
+
+std::pair< GridLineAlignement, const char* > GridLineAlignementMapping[] = 
+{
+    std::make_pair( GridLineAlignement::TSA_BoundingBoxCenter, "BoundingBoxCenter" )
+    , std::make_pair( GridLineAlignement::TSA_BoundingBoxMajor, "BoundingBoxMajor" )
+    , std::make_pair( GridLineAlignement::TSA_BoundingBoxMinor, "BoundingBoxMinor" )
+    , std::make_pair( GridLineAlignement::TSA_GeometryCenter, "GeometryCenter" ) 
+    , std::make_pair( GridLineAlignement::TSA_WeightCenter, "WeightCenter" )
+    , std::make_pair( GridLineAlignement::TSA_TOTAL, "" )      // default
+};
+
+
 
 // ========================================================================= //
 // Helper functions
@@ -163,4 +185,18 @@ bool        GridLine::UpdateTransform     ( model::BasicNodePtr& node, glm::vec3
 }
 
 }   // model
+
+namespace SerializationHelper
+{
+
+template<> model::GridLineType          String2T  ( const std::string& s, const model::GridLineType & defaultVal )     { return String2Enum( model::GridLineTypeMapping, s, defaultVal ); }
+template<> std::string                  T2String  ( const model::GridLineType & t )                                    { return Enum2String( model::GridLineTypeMapping, t ); }
+
+template<> model::GridLineAlignement    String2T    ( const std::string& s, const model::GridLineAlignement & defaultVal )     { return String2Enum( model::GridLineAlignementMapping, s, defaultVal ); }
+template<> std::string                  T2String    ( const model::GridLineAlignement & t )                                    { return Enum2String( model::GridLineAlignementMapping, t ); }
+
+
+}   // SerializationHelper
+
+
 }	// bv

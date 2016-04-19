@@ -257,6 +257,13 @@ SceneVariables &            SceneModel::GetSceneVariables   ()
     return m_sceneVariables;
 }
 
+// ***********************
+//
+GridLinesLogic &            SceneModel::GetGridLinesLogic   ()
+{
+    return m_gridLinesLogic;
+}
+
 // *******************************
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )

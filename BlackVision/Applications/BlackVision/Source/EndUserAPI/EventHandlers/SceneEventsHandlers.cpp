@@ -45,8 +45,8 @@ SceneEventsHandlers::~SceneEventsHandlers()
 //
 void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::SceneEvent::Type() )
-        return;
+    assert( evt->GetEventType() == bv::SceneEvent::Type() );
+
     bv::SceneEventPtr sceneEvent = std::static_pointer_cast< bv::SceneEvent >( evt );
 
     std::string & sceneName		= sceneEvent->SceneName;
@@ -110,8 +110,8 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::NodeStructureEvent::Type() )
-        return;
+    assert( evt->GetEventType() == bv::NodeStructureEvent::Type() );
+
     bv::NodeStructureEventPtr structureEvent = std::static_pointer_cast<bv::NodeStructureEvent>( evt );
 
     std::string& sceneName		= structureEvent->SceneName;
@@ -233,8 +233,8 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::PluginStructureEvent::Type() )
-        return;
+    assert( evt->GetEventType() == bv::PluginStructureEvent::Type() );
+
     bv::PluginStructureEventPtr structureEvent = std::static_pointer_cast<bv::PluginStructureEvent>( evt );
 
     std::string& nodePath		= structureEvent->NodePath;
@@ -316,8 +316,8 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::ProjectEvent::Type() )
-        return;
+    assert( evt->GetEventType() == bv::ProjectEvent::Type() );
+
     bv::ProjectEventPtr projectEvent = std::static_pointer_cast<bv::ProjectEvent>( evt );
 
     auto pm = ProjectManager::GetInstance();
@@ -707,10 +707,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
 {
-    if( evt->GetEventType() != LightEvent::Type() )
-    {
-        return;
-    }
+    assert( evt->GetEventType() == LightEvent::Type() );
 
     auto lightEvent = std::static_pointer_cast< LightEvent >( evt );
 
@@ -740,8 +737,7 @@ void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
 //
 void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::SceneVariableEvent::Type() )
-        return;
+    assert( evt->GetEventType() == bv::SceneVariableEvent::Type() );
 
     SceneVariableEventPtr sceneVarEvent = std::static_pointer_cast< bv::SceneVariableEvent >( evt );
     std::string & sceneName         = sceneVarEvent->SceneName;
@@ -787,6 +783,62 @@ void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
     else
         SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Unknown command" );
 }
+
+// ***********************
+//
+void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
+{
+    assert( evt->GetEventType() == bv::SceneVariableEvent::Type() );
+
+    GridLineEventPtr gridLineEvent = std::static_pointer_cast< bv::GridLineEvent >( evt );
+
+    auto command        = gridLineEvent->GridLineCommand;
+    auto gridPosition   = gridLineEvent->GridLinePosition;
+    auto & nodeName     = gridLineEvent->NodeName;
+    auto & sceneName    = gridLineEvent->SceneName;
+    auto & gridName     = gridLineEvent->GridLineName;
+    auto gridLineIdx    = gridLineEvent->GridLineIndex;
+    auto gridType       = SerializationHelper::String2T( gridLineEvent->GridLineType, GridLineType::TST_Horizontal );
+    auto alignement     = SerializationHelper::String2T( gridLineEvent->AlignementType, GridLineAlignement::TSA_WeightCenter );
+
+    auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
+    if( scene != nullptr )
+        SendSimpleErrorResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, "Scene not found" );
+
+    auto & gridLinesLogic = scene->GetGridLinesLogic();
+    bool result = true;
+
+    if( command == GridLineEvent::Command::SetGridLinePosition )
+    {
+        gridLinesLogic.MoveGridLine( gridType, gridLineIdx, gridPosition );
+    }
+    else if( command == GridLineEvent::Command::RenameGridLine )
+    {
+        gridLinesLogic.RenameGridLine( gridType, gridLineIdx, gridName );
+    }
+    else if( command == GridLineEvent::Command::AlignToGridLine )
+    {
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+        auto modelScene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
+
+        auto node = editor->GetNode( sceneName, nodeName );
+    
+        if( node != nullptr )
+            SendSimpleErrorResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, "Node not found" );
+
+        auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+        result = gridLinesLogic.AlignNodeToGridLine( gridType, gridLineIdx, basicNode, alignement );
+    }
+    else
+        SendSimpleErrorResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, "Unknown command" );
+
+    SendSimpleResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, result );
+}
+
+
+// ========================================================================= //
+// Thumbnails functions
+// ========================================================================= //
 
 // ***********************
 //

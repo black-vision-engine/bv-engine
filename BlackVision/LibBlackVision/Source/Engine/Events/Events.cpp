@@ -100,8 +100,8 @@ std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
 const EventType ConfigEvent::m_sEventType           = 0x30000023;
 std::string ConfigEvent::m_sEventName               = "ConfigEvent";
 
-const EventType TabStopEvent::m_sEventType          = 0x30000024;
-std::string TabStopEvent::m_sEventName              = "TabStopEvent";
+const EventType GridLineEvent::m_sEventType          = 0x30000024;
+std::string GridLineEvent::m_sEventName              = "GridLineEvent";
 
 const EventType LightEvent::m_sEventType			= 0x30000025;
 std::string LightEvent::m_sEventName				= "LightEvent";
@@ -613,22 +613,24 @@ template<> std::string T2String                 ( const ConfigEvent::Command & t
 
 
 // ========================================================================= //
-// TabStopEvent
+// GridLineEvent
 // ========================================================================= //
-const std::string TABSTOP_NAME_STRING           = "TabStopName";
-const std::string TABSTOP_POSITION_STRING       = "TabStopPosition";
-const std::string TABSTOP_TYPE_STRING           = "TabStopType";
+const std::string GRIDLINE_NAME_STRING              = "GridLineName";
+const std::string GRIDLINE_POSITION_STRING          = "GridLinePosition";
+const std::string GRIDLINE_TYPE_STRING              = "GridLineType";
+const std::string GRIDLINE_INDEX_STRING             = "GridLineIndex";
+const std::string GRIDLINE_ALIGNEMENT_TYPE_STRING   = "AlignementType";
 
-std::pair< TabStopEvent::Command, const char* > TabStopEventEventCommandMapping[] = 
+std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMapping[] = 
 {
-    std::make_pair( TabStopEvent::Command::SetTabStopPosition, "SetTabStopPosition" )
-    , std::make_pair( TabStopEvent::Command::RenameTabStop, "RenameTabStop" )
-    , std::make_pair( TabStopEvent::Command::AlignToTabStop, "AlignToTabStop" )
-    , std::make_pair( TabStopEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+    std::make_pair( GridLineEvent::Command::SetGridLinePosition, "SetGridLinePosition" )
+    , std::make_pair( GridLineEvent::Command::RenameGridLine, "RenameGridLine" )
+    , std::make_pair( GridLineEvent::Command::AlignToGridLine, "AlignToGridLine" )
+    , std::make_pair( GridLineEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> TabStopEvent::Command String2T       ( const std::string& s, const TabStopEvent::Command& defaultVal )     { return String2Enum( TabStopEventEventCommandMapping, s, defaultVal ); }
-template<> std::string T2String                 ( const TabStopEvent::Command & t )                                   { return Enum2String( TabStopEventEventCommandMapping, t ); }
+template<> GridLineEvent::Command String2T       ( const std::string& s, const GridLineEvent::Command& defaultVal )     { return String2Enum( GridLineEventEventCommandMapping, s, defaultVal ); }
+template<> std::string T2String                 ( const GridLineEvent::Command & t )                                   { return Enum2String( GridLineEventEventCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -2104,36 +2106,40 @@ EventType           ConfigEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 
-//******************* TabStopEvent *************
+//******************* GridLineEvent *************
 
 // *************************************
 //
-void                TabStopEvent::Serialize            ( ISerializer& ser ) const
+void                GridLineEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( TabStopCommand ) );
-    ser.SetAttribute( SerializationHelper::TABSTOP_NAME_STRING, TabStopName );
-    ser.SetAttribute( SerializationHelper::TABSTOP_TYPE_STRING, TabStopType );
-    ser.SetAttribute( SerializationHelper::TABSTOP_POSITION_STRING, TabPosition );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( GridLineCommand ) );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_NAME_STRING, GridLineName );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_TYPE_STRING, GridLineType );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING, SerializationHelper::T2String< float >( GridLinePosition ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_INDEX_STRING, SerializationHelper::T2String( GridLineIndex ) );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_ALIGNEMENT_TYPE_STRING, AlignementType );
 }
 
 // *************************************
 //
-IEventPtr           TabStopEvent::Create          ( IDeserializer& deser )
+IEventPtr           GridLineEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
-        TabStopEventPtr newEvent             = std::make_shared<TabStopEvent>();
-        newEvent->SceneName                  = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->NodeName                   = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
-        newEvent->TabStopName                = deser.GetAttribute( SerializationHelper::TABSTOP_NAME_STRING );
-        newEvent->TabStopType                = deser.GetAttribute( SerializationHelper::TABSTOP_TYPE_STRING );
-        newEvent->TabPosition                = deser.GetAttribute( SerializationHelper::TABSTOP_POSITION_STRING );
+        GridLineEventPtr newEvent               = std::make_shared<GridLineEvent>();
+        newEvent->SceneName                     = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->NodeName                      = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
+        newEvent->GridLineName                  = deser.GetAttribute( SerializationHelper::GRIDLINE_NAME_STRING );
+        newEvent->GridLineType                  = deser.GetAttribute( SerializationHelper::GRIDLINE_TYPE_STRING );
+        newEvent->GridLinePosition              = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING ), 0.0f );
+        newEvent->GridLineIndex                 = SerializationHelper::String2T( SerializationHelper::GRIDLINE_INDEX_STRING, 0 );
+        newEvent->AlignementType                = deser.GetAttribute( SerializationHelper::GRIDLINE_ALIGNEMENT_TYPE_STRING );
 
-        newEvent->TabStopCommand             = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TabStopEvent::Command::Fail );
+        newEvent->GridLineCommand               = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GridLineEvent::Command::Fail );
 
         return newEvent;
     }
@@ -2141,24 +2147,24 @@ IEventPtr           TabStopEvent::Create          ( IDeserializer& deser )
 }
 // *************************************
 //
-IEventPtr           TabStopEvent::Clone             () const
-{   return IEventPtr( new TabStopEvent( *this ) );  }
+IEventPtr           GridLineEvent::Clone             () const
+{   return IEventPtr( new GridLineEvent( *this ) );  }
 
 // *************************************
 //
-EventType           TabStopEvent::Type()
+EventType           GridLineEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        TabStopEvent::Name()
+std::string&        GridLineEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  TabStopEvent::GetName() const
+const std::string&  GridLineEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           TabStopEvent::GetEventType() const
+EventType           GridLineEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

@@ -8,9 +8,6 @@
 namespace bv { namespace model
 {
 
-class BVProjectEditor;
-
-
 enum GridLineType
 {
     TST_Vertical,
@@ -18,6 +15,7 @@ enum GridLineType
 
     TST_TOTAL
 };
+
 
 
 enum GridLineAlignement
@@ -30,6 +28,8 @@ enum GridLineAlignement
 
     TSA_TOTAL
 };
+
+
 
 class GridLine
 {
@@ -58,4 +58,11 @@ private:
 
 
 }   // model
+
+template<> model::GridLineType      SerializationHelper::String2T  ( const std::string& s, const model::GridLineType & defaultVal );
+template<> std::string              SerializationHelper::T2String  ( const model::GridLineType & t );
+
+template<> model::GridLineAlignement    SerializationHelper::String2T  ( const std::string& s, const model::GridLineAlignement & defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const model::GridLineAlignement & t );
+
 }	// bv

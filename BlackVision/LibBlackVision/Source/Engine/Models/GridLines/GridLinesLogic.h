@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GridLine.h"
-#include "Engine/Models/BVProjectEditor.h"
 
 #include <vector>
 

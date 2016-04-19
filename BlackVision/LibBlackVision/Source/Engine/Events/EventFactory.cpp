@@ -35,7 +35,7 @@ EventFactory::EventFactory()
     RegisterEvent( MouseEvent::Name(), MouseEvent::Create );
     RegisterEvent( SceneVariableEvent::Name(), SceneVariableEvent::Create );
     RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
-    RegisterEvent( TabStopEvent::Name(), TabStopEvent::Create );
+    RegisterEvent( GridLineEvent::Name(), GridLineEvent::Create );
 }
 
 // ***********************

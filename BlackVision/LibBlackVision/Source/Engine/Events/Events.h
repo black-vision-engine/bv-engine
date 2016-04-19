@@ -1140,15 +1140,15 @@ template<> std::string                  SerializationHelper::T2String  ( const C
 DEFINE_PTR_TYPE( ConfigEvent )
 
 
-// ************************************* TabStopEvent *************************************
-class TabStopEvent : public RemoteEvent
+// ************************************* GridLineEvent *************************************
+class GridLineEvent : public RemoteEvent
 {
 public:
     typedef enum
     {
-        SetTabStopPosition,
-        RenameTabStop,
-        AlignToTabStop,
+        SetGridLinePosition,
+        RenameGridLine,
+        AlignToGridLine,
         Fail            ///< Wrong command
     } Command;
 
@@ -1157,16 +1157,18 @@ private:
     static std::string          m_sEventName;
 public:
 
-    Command                 TabStopCommand;
+    Command                 GridLineCommand;
     std::string             SceneName;
     std::string             NodeName;
-    std::string             TabStopName;
-    std::string             TabStopType;
-    std::string             TabPosition;
+    std::string             GridLineName;
+    std::string             GridLineType;
+    std::string             AlignementType;
+    float                   GridLinePosition;
+    int                     GridLineIndex;
 
 public:
 
-    explicit                        TabStopEvent        () {};
+    explicit                        GridLineEvent        () {};
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -1178,10 +1180,10 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TabStopEvent::Command        SerializationHelper::String2T  ( const std::string& s, const TabStopEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const TabStopEvent::Command & t );
+template<> GridLineEvent::Command       SerializationHelper::String2T  ( const std::string& s, const GridLineEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const GridLineEvent::Command & t );
 
-DEFINE_PTR_TYPE( TabStopEvent )
+DEFINE_PTR_TYPE( GridLineEvent )
 
 
 

@@ -6,6 +6,7 @@
 #include "Engine/Models/EditorVariables/SceneVariables.h"
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Models/Lights/ModelBaseLight.h"
+#include "Engine/Models/GridLines/GridLinesLogic.h"
 
 
 namespace bv { namespace model {
@@ -28,6 +29,7 @@ private:
 
     Camera *                        m_camera; //FIXME: camera model
 
+    GridLinesLogic                  m_gridLinesLogic;
     ModelSceneEditor *		        m_modelSceneEditor;
     SceneVariables                  m_sceneVariables;       // Variables can be queried by editor.
 
@@ -63,6 +65,7 @@ public:
 
     ModelSceneEditor *		GetModelSceneEditor	() const;
     SceneVariables &        GetSceneVariables   ();
+    GridLinesLogic &        GetGridLinesLogic   ();
 
     static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };

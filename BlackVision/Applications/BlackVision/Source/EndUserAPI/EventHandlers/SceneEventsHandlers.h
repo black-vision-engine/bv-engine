@@ -39,6 +39,7 @@ public:
     void        LightsManagement	( bv::IEventPtr evt );
 
     void        SceneVariable       ( bv::IEventPtr evt );
+    void        GridLines           ( bv::IEventPtr evt );
 
 private:
     void        RequestThumbnail    ( bv::model::SceneModelPtr scene, const std::string & saveTo );
