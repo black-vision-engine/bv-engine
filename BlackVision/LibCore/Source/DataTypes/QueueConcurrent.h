@@ -33,6 +33,8 @@ public:
     void        Push                ( const T & val );
     void        Push                ( const T && val );
 
+    bool        Front               ( T & val );
+
     bool        TryPop              ( T & val );
     void        WaitAndPop          ( T & val );
 
@@ -94,6 +96,23 @@ void        QueueConcurrent< T >::Push                ( const T && val )
     m_queue.push( val );
 
     m_conditionVariable.notify_one();
+}
+
+// *************************************
+//
+template< typename T >
+bool        QueueConcurrent< T >::Front       ( T & val )
+{
+    ScopedCriticalSection lock( m_criticalSection );
+
+    if( m_queue.empty() )
+    {
+        return false;
+    }
+
+    val = m_queue.front();
+
+    return true;
 }
 
 // *************************************

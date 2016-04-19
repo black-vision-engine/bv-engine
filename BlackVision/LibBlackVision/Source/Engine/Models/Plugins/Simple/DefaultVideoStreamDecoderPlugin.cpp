@@ -23,6 +23,8 @@ const std::string        DefaultVideoStreamDecoderPlugin::PARAM::ALPHA          
 const std::string        DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT         = "txMat";
 const std::string        DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE  = "state";
 const std::string        DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
+const std::string        DefaultVideoStreamDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
+const std::string        DefaultVideoStreamDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
 
 typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamEnumDM;
 
@@ -72,6 +74,8 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
     helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultVideoStreamDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP, true, true );
+    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_ENABLED, true, false );
+    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
 
     helper.CreateVSModel();
     helper.AddTransformParam( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT, true );
@@ -123,9 +127,10 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_vsc( nullptr )
 	, m_vaChannel( nullptr )
 	, m_decoder( nullptr )
-    , m_prevOffsetCounter( 0 )
+    , m_prevOffsetCounter( 1 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
+    , m_prevFrameIdx( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -140,6 +145,9 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
     
     m_offsetParam = QueryTypedParam< ParamVec2Ptr >( GetParameter( PARAM::SEEK_OFFSET ) );
     m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
+
+    m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
+    m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
 }
 
 // *************************************
@@ -179,6 +187,8 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 			    SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
 			    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+
+                m_prevFrameIdx = 0;
 
 			    return true;
 		    }
@@ -228,12 +238,7 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
 	}
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 	
-	//update texture with video data
-	auto mediaData = m_decoder->GetVideoMediaData();
-	if( mediaData.frameData != nullptr )
-	{
-		std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
-	}
+    UploadVideoFrame();
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -314,23 +319,35 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
         auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
         auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
 
+        auto loopEnabled = m_loopEnabledParam->Evaluate();
+        auto loopCount = m_loopCountParam->Evaluate();
+        if( ParameterChanged( PARAM::LOOP_COUNT ) )
+        {
+            m_loopCount = loopCount;
+        }
+
+
         //edge case - loop
         if( ( m_prevDecoderModeTime > decoderModeTime ) && ( mode == DecoderMode::PLAY ) )
         {
-            m_decoder->Start();
+            m_decoder->Play();
             m_prevOffsetCounter = 0;
         }
-
 
         if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
         {
             //edge case - eof
             if( mode == DecoderMode::PLAY )
             {
-                m_decoder->Start();
+                m_decoder->Play();
+                m_decoder->Seek( offset[ 0 ] );
+            }
+            else
+            {
+                m_decoder->Seek( offset[ 0 ] );
+                m_decoder->FlushBuffers();
             }
 
-            m_decoder->Seek( offset[ 0 ] );
             m_prevOffsetCounter = offset[ 1 ];
         }
 
@@ -339,7 +356,7 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
             switch( mode )
             {
             case DecoderMode::PLAY:
-                m_decoder->Start(); break;
+                m_decoder->Play(); break;
             case DecoderMode::STOP:
                 m_decoder->Stop(); break;
             case DecoderMode::PAUSE:
@@ -349,8 +366,35 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
             m_prevDecoderMode = mode;
         }
 
+        if( m_decoder->IsEOF() && loopEnabled )
+        {
+            m_decoder->Seek( 0.f );
+            //m_loopCount--;
+        }
+
         m_prevDecoderModeTime = decoderModeTime;
     }
+}
+
+// *************************************
+//
+void                                DefaultVideoStreamDecoderPlugin::UploadVideoFrame   ()
+{
+    //update texture with video data
+	auto mediaData = m_decoder->GetVideoMediaData();
+    if( mediaData.frameData )
+	{
+	    std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
+	}
+    else
+    {
+        mediaData = m_decoder->PreviewVideoMediaData();
+        if( mediaData.frameData && m_prevFrameIdx != mediaData.frameIdx )
+        {
+	        std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
+        }
+    }
+    m_prevFrameIdx = mediaData.frameIdx;
 }
 
 // *************************************

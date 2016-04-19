@@ -10,6 +10,7 @@
 #include "Tools/SimpleTimer.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
 
+
 namespace bv
 {
 
@@ -17,6 +18,7 @@ class VideoDecoderThread : public Thread
 {
 
 private:
+
 	IVideoDecoder *				m_decoder;
 
 	mutable std::mutex			m_mutex;
@@ -25,12 +27,16 @@ private:
 	std::atomic< bool >			m_paused;
 	std::atomic< bool >			m_stopped;
 
+	std::atomic< bool >			m_cancelled;
+
     SimpleTimer					m_timer;
 
 public:
 								VideoDecoderThread	( IVideoDecoder * decoder );
 	virtual						~VideoDecoderThread	();
+	void						Kill				();
 
+	void						Play				();
 	void						Pause				();
 	void						Stop				();
 
@@ -38,7 +44,9 @@ public:
 	bool						Stopped				() const;
 
 protected:
+
 	virtual void				Run					() override;
+
 };
 
 DEFINE_UPTR_TYPE( VideoDecoderThread )
