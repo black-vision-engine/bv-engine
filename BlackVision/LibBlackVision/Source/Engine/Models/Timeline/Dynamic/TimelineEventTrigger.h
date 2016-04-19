@@ -20,15 +20,16 @@ class TimelineEventTrigger : public TimelineEventBaseMixin< ITimelineEvent >
     typedef TimelineEventBaseMixin< ITimelineEvent > Parent;
 private:
 
-    std::vector< IEventPtr >        m_eventsToTrigger;
+    std::string             m_eventsToTrigger;
 
 public:
-    TimelineEventTrigger    ( const std::string & name, TimeType eventTime, const ITimeline * owner, std::vector< IEventPtr >&& eventsToTrigger );
+    TimelineEventTrigger    ( const std::string & name, TimeType eventTime, const ITimeline * owner, const std::string & eventsToTrigger );
     ~TimelineEventTrigger   ();
 
 
     virtual void                    Serialize       ( ISerializer & ser ) const;
     static TimelineEventTriggerPtr  Create          ( const IDeserializer & deser, const ITimeline * timeline );
+    static TimelineEventTriggerPtr  Create          ( const std::string & name, TimeType eventTime, const std::string & eventsToTrigger, const ITimeline * owner =  nullptr );
 
     void                            SendEvents      ();
 };

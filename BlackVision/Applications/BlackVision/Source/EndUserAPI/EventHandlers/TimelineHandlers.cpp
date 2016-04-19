@@ -37,6 +37,8 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
     TimeType keyTime            = keyframeEvent->Time;
     TimeType jumpToTime         = keyframeEvent->JumpToTime;
     unsigned int loopCount      = keyframeEvent->TotalLoopCount;
+    std::string & triggerEvents = keyframeEvent->TriggerEvents;
+
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
     auto timeEvaluator = editor->GetTimeEvaluator( timelinePath );
@@ -56,7 +58,7 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
     bool result;
     if( command == TimelineKeyframeEvent::Command::AddKeyframe )
     {
-        result = AddKeyframe( targetType, timeline, keyframeName, keyTime, loopCount, jumpToTime );
+        result = AddKeyframe( targetType, timeline, keyframeName, keyTime, loopCount, jumpToTime, triggerEvents );
         SendSimpleResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, result );
     }
     else if( command == TimelineKeyframeEvent::Command::RemoveKeyframe )
@@ -197,7 +199,8 @@ bool        TimelineHandlers::AddKeyframe     ( TimelineKeyframeEvent::KeyframeT
                                                 const std::string& eventName,
                                                 TimeType eventTime,
                                                 unsigned int totalLoopCount,
-                                                TimeType jumpToTime )
+                                                TimeType jumpToTime,
+                                                std::string & triggerEvents )
 {
     bool result;
 
@@ -211,6 +214,8 @@ bool        TimelineHandlers::AddKeyframe     ( TimelineKeyframeEvent::KeyframeT
         result = TimelineManager::GetInstance()->AddNullEventToTimeline( timeline, eventName, eventTime );
     else if( keyframeType == TimelineKeyframeEvent::KeyframeType::StopKeyframe )
         result = TimelineManager::GetInstance()->AddStopEventToTimeline( timeline, eventName, eventTime );
+    else if( keyframeType == TimelineKeyframeEvent::KeyframeType::TriggerEventKeyframe )
+        result = TimelineManager::GetInstance()->AddTriggerEventToTimeline( timeline, eventName, eventTime, triggerEvents );
     else
         return false;
     return result;

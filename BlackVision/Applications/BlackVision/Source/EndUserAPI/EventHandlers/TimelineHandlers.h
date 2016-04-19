@@ -27,7 +27,8 @@ private:
                                     const std::string& eventName,
                                     TimeType eventTime,
                                     unsigned int totalLoopCount,
-                                    TimeType jumpToTime );
+                                    TimeType jumpToTime,
+                                    std::string & triggerEvents);
 };
 
 

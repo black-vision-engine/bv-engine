@@ -33,54 +33,14 @@ JsonCommandsListener::~JsonCommandsListener()
 /// @param[in] socketID Event sender identifier.
 void                JsonCommandsListener::QueueEvent          ( const std::string& eventString, int socketID )
 {
-    JsonDeserializeObject deser;
+    auto eventsVec = GetDefaultEventManager().GetEventFactory().ParseEventsListJSON( eventString, socketID );
 
-    if( !deser.Load( eventString ) )
+    for( auto & evt : eventsVec )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Remote controller can't parse command: \n" + eventString;
-        return;
+        GetDefaultEventManager().ConcurrentQueueEvent( evt );
     }
-
-    TryParseRegularEvent( deser, socketID );
 }
 
-// ***********************
-//
-void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int requestedFrame, RemoteEventPtr& eventPtr )
-{
-    ScopedCriticalSection lock( m_eventsMapLock );
-    m_triggeredEvents.insert( std::make_pair( requestedFrame, eventPtr ) );
-}
-
-// ***********************
-//
-void                JsonCommandsListener::TryParseRegularEvent( IDeserializer & deser, int socketID )
-{
-    if( !deser.EnterChild( "Events" ) )
-        return;
-
-    if( deser.EnterChild( "Event" ) )
-    {
-        do
-        {
-            auto newEvent = GetDefaultEventManager().GetEventFactory().DeserializeEvent( deser );
-            if( newEvent != nullptr )
-            {
-                RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
-                newEventBase->SocketID = socketID;
-                newEventBase->EventID = SerializationHelper::String2T( deser.GetAttribute( "EventID" ), std::numeric_limits< int >::max() );
-
-                GetDefaultEventManager().ConcurrentQueueEvent( newEventBase );
-            }
-
-        } while( deser.NextChild() );
-
-        deser.ExitChild();  // Event
-    }
-        
-    deser.ExitChild();  // Events
-
-}
 
 // ***********************
 //

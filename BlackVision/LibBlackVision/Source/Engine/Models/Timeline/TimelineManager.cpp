@@ -119,6 +119,13 @@ bool                    TimelineManager::AddNullEventToTimeline     ( ITimelineP
     return timeline->AddKeyFrame( model::TimelineEventNull::Create( eventName, eventTime, timeline.get() ) );
 }
 
+bool                    TimelineManager::AddTriggerEventToTimeline       ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, const std::string & triggerEvents )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( model::TimelineEventTrigger::Create ( eventName, eventTime, triggerEvents, timeline.get() ) );
+}
+
 // *********************************
 //
 void                    TimelineManager::RegisterRootTimeline       ( ITimeEvaluatorPtr root )

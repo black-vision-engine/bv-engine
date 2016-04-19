@@ -13,7 +13,7 @@ namespace bv { namespace model
 
 // ***********************
 //
-TimelineEventTrigger::TimelineEventTrigger( const std::string & name, TimeType eventTime, const ITimeline * owner, std::vector< IEventPtr >&& eventsToTrigger )
+TimelineEventTrigger::TimelineEventTrigger( const std::string & name, TimeType eventTime, const ITimeline * owner, const std::string & eventsToTrigger )
     :   Parent( name, TimelineEventType::TET_TRIGGER, eventTime, owner )
     ,   m_eventsToTrigger( eventsToTrigger )
 {}
@@ -31,12 +31,7 @@ ser.EnterChild( "event" );
     ser.SetAttribute( "type", "trigger" );
     ser.SetAttribute( "name", GetName() );
 
-    ser.EnterArray( "EventsToTrigger" );
-    for( auto& evt : m_eventsToTrigger )
-    {
-        evt->Serialize( ser );
-    }
-    ser.ExitChild();
+    ser.SetAttribute( "events", m_eventsToTrigger );
 
 ser.ExitChild();
 }
@@ -45,40 +40,27 @@ ser.ExitChild();
 //
 TimelineEventTriggerPtr     TimelineEventTrigger::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
-    std::string name = deser.GetAttribute( "name" );
-    TimeType    time = SerializationHelper::String2T< TimeType >( "time", 0.f );
-    std::vector< IEventPtr >    triggers;
+    std::string     name = deser.GetAttribute( "name" );
+    TimeType        time = SerializationHelper::String2T< TimeType >( "time", 0.f );
+    std::string     events = deser.GetAttribute( "events" );
 
-    //if( deser.EnterChild( "EventsToTrigger" ) )
-    //{
-    //    if( deser.EnterChild( "Event" ) )
-    //    {
-    //        do
-    //        {
-    //            auto newEvent = GetDefaultEventManager().GetEventFactory().DeserializeEvent( deser );
-    //            if( newEvent != nullptr )
-    //            {
-    //                RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
-    //                newEventBase->SocketID = SEND_BROADCAST_EVENT;
-    //                newEventBase->EventID = SerializationHelper::String2T( deser.GetAttribute( "EventID" ), std::numeric_limits< int >::max() );
+    return std::make_shared< TimelineEventTrigger >( name, time, timeline, events );
+}
 
-    //                triggers.push_back( newEventBase );
-    //            }
-
-    //        } while( deser.NextChild() );
-    //    }
-    //}
-
-    return std::make_shared< TimelineEventTrigger >( name, time, timeline, std::move( triggers ) );
+TimelineEventTriggerPtr     TimelineEventTrigger::Create          ( const std::string & name, TimeType eventTime, const std::string & eventsToTrigger, const ITimeline * owner )
+{
+    return std::make_shared< TimelineEventTrigger >( name, eventTime, owner, eventsToTrigger );
 }
 
 // ***********************
 //
 void    TimelineEventTrigger::SendEvents      ()
 {
-    for( auto& evt : m_eventsToTrigger )
+    auto eventsVec = GetDefaultEventManager().GetEventFactory().ParseEventsListJSON( m_eventsToTrigger, SEND_BROADCAST_EVENT );
+
+    for( auto & evt : eventsVec )
     {
-        GetDefaultEventManager().QueueEvent( evt/*->Clone()*/ );
+        GetDefaultEventManager().QueueEvent( evt );
     }
 }
 

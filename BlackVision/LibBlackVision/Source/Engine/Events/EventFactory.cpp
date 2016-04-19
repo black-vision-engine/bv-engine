@@ -3,6 +3,8 @@
 #include "Engine/Events/Events.h"
 #include "EventFactory.h"
 
+#include "Serialization/Json/JsonDeserializeObject.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 namespace bv
@@ -64,6 +66,54 @@ IEventPtr EventFactory::DeserializeEvent         ( IDeserializer& deser ) const
         LOG_MESSAGE( SeverityLevel::error ) << "Unregistered event cannot be deserialized: " + command;
         return nullptr;
     }
+}
+
+// ***********************
+//
+std::vector< IEventPtr >        EventFactory::ParseEventsList( IDeserializer & deser, int socketID ) const
+{
+    if( !deser.EnterChild( "Events" ) )
+        return std::vector< IEventPtr >();
+
+    std::vector< IEventPtr >    result;
+
+    if( deser.EnterChild( "Event" ) )
+    {
+        do
+        {
+            auto newEvent = DeserializeEvent( deser );
+            if( newEvent != nullptr )
+            {
+                RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
+                newEventBase->SocketID = socketID;
+                newEventBase->EventID = SerializationHelper::String2T( deser.GetAttribute( "EventID" ), std::numeric_limits< int >::max() );
+
+                result.push_back( newEventBase );
+            }
+
+        } while( deser.NextChild() );
+
+        deser.ExitChild();  // Event
+    }
+        
+    deser.ExitChild();  // Events
+
+    return result;
+}
+
+// ***********************
+//
+std::vector< IEventPtr >        EventFactory::ParseEventsListJSON ( const std::string & eventString, int socketID ) const
+{
+    JsonDeserializeObject deser;
+
+    if( !deser.Load( eventString ) )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Can't parse command: \n" + eventString;
+        return std::vector< IEventPtr >();
+    }
+
+    return ParseEventsList( deser, socketID );
 }
 
 }	// bv

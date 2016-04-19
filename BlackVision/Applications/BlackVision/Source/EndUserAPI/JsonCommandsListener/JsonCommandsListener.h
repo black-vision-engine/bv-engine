@@ -26,10 +26,6 @@ public:
     bool                InitializeServer    ( int port ) override;
     void                DeinitializeServer  () override;
     void                SendResponse        ( const IEventPtr response ) override;
-
-private:
-    void                TryParseRegularEvent( IDeserializer& deser, int socketID );
-    void                AddTriggeredEvent   ( unsigned int requestedFrame, RemoteEventPtr& eventPtr );
 };
 
 } //bv

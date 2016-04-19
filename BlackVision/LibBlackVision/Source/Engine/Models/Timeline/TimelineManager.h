@@ -18,6 +18,7 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventLoop.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventTrigger.h"
 
 #include "Serialization/ISerializable.h"
 
@@ -50,6 +51,7 @@ public:
     bool                    AddLoopJumpEventToTimeline      ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime );
     bool                    AddLoopRestartEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount );
     bool                    AddNullEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
+    bool                    AddTriggerEventToTimeline       ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, const std::string & triggerEvents );
 
     void                    RegisterRootTimeline            ( ITimeEvaluatorPtr root );
 

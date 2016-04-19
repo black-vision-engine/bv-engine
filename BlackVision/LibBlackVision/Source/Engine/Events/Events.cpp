@@ -529,6 +529,7 @@ const std::string KEYFRAME_INDEX_STRING               = "KeyframeIndex";
 const std::string NEW_KEYFRAME_TYPE_STRING            = "NewKeyframeType";
 const std::string JUMP_TO_TIME_STRING                 = "JumpToTime";
 const std::string TOTAL_LOOP_COUNT_STRING             = "TotalLoopCount";
+const std::string TRIGGER_EVENTS                      = "TriggerEvents";
 
 std::pair< TimelineKeyframeEvent::Command, const char* > TimelineKeyframeEventCommandMapping[] = 
 {
@@ -546,6 +547,7 @@ std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMappin
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe, "LoopReverseKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe, "LoopJumpKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe, "LoopRestartKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::KeyframeType::TriggerEventKeyframe, "TriggerEventKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::NullKeyframe, "NullKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail, SerializationHelper::EMPTY_STRING )      // default
 };
@@ -1897,6 +1899,7 @@ void                TimelineKeyframeEvent::Serialize            ( ISerializer& s
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING, SerializationHelper::T2String( Time ) );
     ser.SetAttribute( SerializationHelper::JUMP_TO_TIME_STRING, SerializationHelper::T2String( JumpToTime ) );
     ser.SetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_STRING, SerializationHelper::T2String( TotalLoopCount ) );
+    ser.SetAttribute( SerializationHelper::TRIGGER_EVENTS, TriggerEvents );
 }
 
 // *************************************
@@ -1915,6 +1918,7 @@ IEventPtr                TimelineKeyframeEvent::Create          ( IDeserializer&
         newEvent->Time                  = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ), std::numeric_limits<float>::quiet_NaN() );
         newEvent->JumpToTime            = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::JUMP_TO_TIME_STRING ), std::numeric_limits<float>::quiet_NaN() );
         newEvent->TotalLoopCount        = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_STRING ), 0 );
+        newEvent->TriggerEvents         = deser.GetAttribute( SerializationHelper::TRIGGER_EVENTS );
 
         return newEvent;
     }

@@ -21,7 +21,9 @@ public:
     EventFactory    ();
     ~EventFactory   ();
 
-    IEventPtr   DeserializeEvent    ( IDeserializer& deser ) const;
+    IEventPtr                       DeserializeEvent    ( IDeserializer& deser ) const;
+    std::vector< IEventPtr >        ParseEventsList     ( IDeserializer & deser, int socketID ) const;
+    std::vector< IEventPtr >        ParseEventsListJSON ( const std::string & eventString, int socketID ) const;
 
 private:
     void        RegisterEvent       ( const std::string& eventName, EventCreatorDelegate eventCreator );

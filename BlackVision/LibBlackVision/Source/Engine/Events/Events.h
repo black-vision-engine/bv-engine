@@ -990,6 +990,7 @@ public:
     float                               Time;
     float                               JumpToTime;
     unsigned int                        TotalLoopCount;
+    std::string                         TriggerEvents;
 
 public:
     explicit                        TimelineKeyframeEvent   () {}
