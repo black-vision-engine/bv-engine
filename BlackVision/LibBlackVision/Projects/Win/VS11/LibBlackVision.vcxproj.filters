@@ -1486,6 +1486,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.cpp">
       <Filter>Engine\Models\GridLines</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.cpp">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3647,12 +3653,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.h">
       <Filter>Engine\Models\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStop.h">
-      <Filter>Engine\Models\TabStops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\TabStops\TabStopsLogic.h">
-      <Filter>Engine\Models\TabStops</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Lights\ModelBaseLight.h">
       <Filter>Engine\Models\Lights</Filter>
     </ClInclude>
@@ -3673,6 +3673,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.h">
       <Filter>Engine\Models\GridLines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.h">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

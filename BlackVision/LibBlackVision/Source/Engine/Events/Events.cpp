@@ -367,7 +367,7 @@ const std::string TIMELINE_TYPE_STRING                = "Type";
 const std::string TIMELINE_TIME_VALUE_STRING          = "Time";
 const std::string TIMELINE_DURATION_VALUE_STRING      = "Duration";
 const std::string TIMELINE_NEW_NAME_STRING            = "TimelineNewName";
-const std::string TIMELINE_WRAP_METHOD_STRING			= "WrapMethod";
+const std::string TIMELINE_WRAP_METHOD_STRING		  = "WrapMethod";
 const std::string SCENE_NAME_STRING                   = "SceneName";
 
 // Timeline Command
@@ -626,6 +626,8 @@ std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMappin
     std::make_pair( GridLineEvent::Command::SetGridLinePosition, "SetGridLinePosition" )
     , std::make_pair( GridLineEvent::Command::RenameGridLine, "RenameGridLine" )
     , std::make_pair( GridLineEvent::Command::AlignToGridLine, "AlignToGridLine" )
+    , std::make_pair( GridLineEvent::Command::ShowGridLines, "ShowGridLines" )
+    , std::make_pair( GridLineEvent::Command::HideGridLines, "HideGridLines" )
     , std::make_pair( GridLineEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -2136,7 +2138,7 @@ IEventPtr           GridLineEvent::Create          ( IDeserializer& deser )
         newEvent->GridLineName                  = deser.GetAttribute( SerializationHelper::GRIDLINE_NAME_STRING );
         newEvent->GridLineType                  = deser.GetAttribute( SerializationHelper::GRIDLINE_TYPE_STRING );
         newEvent->GridLinePosition              = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING ), 0.0f );
-        newEvent->GridLineIndex                 = SerializationHelper::String2T( SerializationHelper::GRIDLINE_INDEX_STRING, 0 );
+        newEvent->GridLineIndex                 = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_INDEX_STRING ), 0 );
         newEvent->AlignementType                = deser.GetAttribute( SerializationHelper::GRIDLINE_ALIGNEMENT_TYPE_STRING );
 
         newEvent->GridLineCommand               = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GridLineEvent::Command::Fail );
