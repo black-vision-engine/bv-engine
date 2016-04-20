@@ -48,7 +48,6 @@ public:
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
-    virtual VideoMediaData      PreviewVideoMediaData   () override;
 	virtual VideoMediaData		GetVideoMediaData		() override;
     virtual VideoMediaData		GetSingleFrame  		( TimeType frameTime) override;
 
@@ -74,7 +73,7 @@ public:
 protected:
 	
 	virtual bool				DecodeNextFrame			() override;
-	virtual void				NextFrameDataReady		() override;
+	virtual bool				NextFrameDataReady		() override;
 
 };
 

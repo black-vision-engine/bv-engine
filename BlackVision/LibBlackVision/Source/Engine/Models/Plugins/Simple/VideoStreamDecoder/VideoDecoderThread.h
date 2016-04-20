@@ -27,7 +27,7 @@ private:
 	std::atomic< bool >			m_paused;
 	std::atomic< bool >			m_stopped;
 
-	std::atomic< bool >			m_cancelled;
+	std::atomic< bool >			m_running;
 
     SimpleTimer					m_timer;
 
@@ -42,6 +42,7 @@ public:
 
 	bool						Paused				() const;
 	bool						Stopped				() const;
+	bool						IsRunning			() const;
 
 protected:
 

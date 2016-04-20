@@ -74,7 +74,7 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
     helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultVideoStreamDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP, true, true );
-    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_ENABLED, true, false );
+    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
 
     helper.CreateVSModel();
@@ -141,13 +141,14 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
-    m_prevDecoderMode = m_decoderModeParam->Evaluate();
     
     m_offsetParam = QueryTypedParam< ParamVec2Ptr >( GetParameter( PARAM::SEEK_OFFSET ) );
     m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
 
     m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
     m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
+
+    m_decoderMode =  m_decoderModeParam->Evaluate();
 }
 
 // *************************************
@@ -224,12 +225,11 @@ IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexSh
 void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
+    m_decoderMode =  m_decoderModeParam->Evaluate();
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
     MarkOffsetChanges();
-
-    HandleDecoder();
 
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
@@ -237,8 +237,9 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
 		InitVertexAttributesChannel();
 	}
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
-	
+
     UploadVideoFrame();
+    UpdateDecoder();
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -308,36 +309,28 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 
 // *************************************
 //
-void                                DefaultVideoStreamDecoderPlugin::HandleDecoder  ()
+void                                DefaultVideoStreamDecoderPlugin::UpdateDecoder  ()
 {
     if( m_decoder )
     {
         //order matters - update offset first then mode
         auto offset = m_offsetParam->Evaluate();
-        auto mode =  m_decoderModeParam->Evaluate();
 
         auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-
-        auto loopEnabled = m_loopEnabledParam->Evaluate();
-        auto loopCount = m_loopCountParam->Evaluate();
-        if( ParameterChanged( PARAM::LOOP_COUNT ) )
-        {
-            m_loopCount = loopCount;
-        }
-
 
         //edge case - loop
-        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( mode == DecoderMode::PLAY ) )
+        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( m_decoderMode == DecoderMode::PLAY ) )
         {
             m_decoder->Play();
             m_prevOffsetCounter = 0;
         }
+        m_prevDecoderModeTime = decoderModeTime;
 
+        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
         if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
         {
             //edge case - eof
-            if( mode == DecoderMode::PLAY )
+            if( m_decoderMode == DecoderMode::PLAY )
             {
                 m_decoder->Play();
                 m_decoder->Seek( offset[ 0 ] );
@@ -351,9 +344,9 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
             m_prevOffsetCounter = offset[ 1 ];
         }
 
-        if( m_prevDecoderMode != mode )
+        if( ParameterChanged( PARAM::DECODER_STATE ) )
         {
-            switch( mode )
+            switch( m_decoderMode )
             {
             case DecoderMode::PLAY:
                 m_decoder->Play(); break;
@@ -362,17 +355,25 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
             case DecoderMode::PAUSE:
                 m_decoder->Pause(); break;
             }
-
-            m_prevDecoderMode = mode;
         }
 
-        if( m_decoder->IsEOF() && loopEnabled )
+        // handle perfect loops
+        auto loopEnabled = m_loopEnabledParam->Evaluate();
+        auto loopCount = m_loopCountParam->Evaluate();
+        if( ParameterChanged( PARAM::LOOP_COUNT ) )
+        {
+            if( loopCount == 0 )
+            {
+                loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
+            }
+            m_loopCount = loopCount;
+        }
+
+        if( m_decoder->IsEOF() && loopEnabled && m_loopCount > 1 )
         {
             m_decoder->Seek( 0.f );
-            //m_loopCount--;
+            m_loopCount--;
         }
-
-        m_prevDecoderModeTime = decoderModeTime;
     }
 }
 
@@ -382,18 +383,10 @@ void                                DefaultVideoStreamDecoderPlugin::UploadVideo
 {
     //update texture with video data
 	auto mediaData = m_decoder->GetVideoMediaData();
-    if( mediaData.frameData )
+    if( mediaData.frameData && m_prevFrameIdx != mediaData.frameIdx )
 	{
 	    std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
 	}
-    else
-    {
-        mediaData = m_decoder->PreviewVideoMediaData();
-        if( mediaData.frameData && m_prevFrameIdx != mediaData.frameIdx )
-        {
-	        std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
-        }
-    }
     m_prevFrameIdx = mediaData.frameIdx;
 }
 

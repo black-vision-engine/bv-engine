@@ -59,12 +59,12 @@ private:
     VertexAttributesChannelPtr          m_vaChannel;
 
 	IVideoDecoderPtr				    m_decoder;
+	DecoderMode				            m_decoderMode;
 
     TimeType                            m_prevDecoderModeTime;
     TimeType                            m_prevOffsetTime;
 
 	DecoderModeParamPtr                 m_decoderModeParam;
-    DecoderMode                         m_prevDecoderMode;
 
     UInt32                              m_prevFrameIdx;
 
@@ -95,7 +95,7 @@ public:
 
 private:
 
-    void                                        HandleDecoder               ();
+    void                                        UpdateDecoder               ();
     void                                        UploadVideoFrame            ();
 
     void                                        InitVertexAttributesChannel ();

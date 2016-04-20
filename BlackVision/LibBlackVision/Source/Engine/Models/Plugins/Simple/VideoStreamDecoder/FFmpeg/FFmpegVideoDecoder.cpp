@@ -43,12 +43,11 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset )
 //
 FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 {
-	if( m_decoderThread )
-	{
-		m_decoderThread->Kill();
-		m_decoderThread->Join();
-		m_decoderThread = nullptr;
-	}
+    assert( m_decoderThread );
+	
+	m_decoderThread->Kill();
+	m_decoderThread->Join();
+	m_decoderThread = nullptr;
 
 	//force 
 	m_vstreamDecoder = nullptr;
@@ -67,44 +66,28 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 //
 void						FFmpegVideoDecoder::Play				()
 {
-    if( m_decoderThread != nullptr )
-	{
-        if ( m_decoderThread->Stopped() )
-        {
-		    Reset();
-        }
-        m_decoderThread->Play();
-	}
+    assert( m_decoderThread );
+
+    m_decoderThread->Play();
 }
 
 // *********************************
 //
 void						FFmpegVideoDecoder::Pause				()
 {
-	if( m_decoderThread != nullptr )
-	{
-		m_decoderThread->Pause();
-	}
+    assert( m_decoderThread );
+	
+    m_decoderThread->Pause();
 }
 
 // *********************************
 //
 void						FFmpegVideoDecoder::Stop				()
 {
-	if( m_decoderThread != nullptr )
-	{
-		m_decoderThread->Stop();
-		Reset();
-	}
-}
-
-// *********************************
-//
-VideoMediaData			FFmpegVideoDecoder::PreviewVideoMediaData	()
-{
-    VideoMediaData mediaData;
-    m_bufferQueue.Front( mediaData );
-    return mediaData;
+    assert( m_decoderThread );
+	
+    m_decoderThread->Stop();
+	Reset();
 }
 
 // *********************************
@@ -112,7 +95,7 @@ VideoMediaData			FFmpegVideoDecoder::PreviewVideoMediaData	()
 VideoMediaData			FFmpegVideoDecoder::GetVideoMediaData		()
 {
 	VideoMediaData mediaData;
-    m_outQueue.TryPop( mediaData );
+    m_outQueue.Front( mediaData );
     return mediaData;
 }
 
@@ -136,17 +119,20 @@ VideoMediaData		    FFmpegVideoDecoder::GetSingleFrame  		( TimeType frameTime )
 
 // *********************************
 //
-void					FFmpegVideoDecoder::NextFrameDataReady		()
+bool					FFmpegVideoDecoder::NextFrameDataReady		()
 {
     VideoMediaData mediaData;
     if( m_bufferQueue.TryPop( mediaData ) )
     {
         m_outQueue.Push( mediaData );
-    } 
-    else
-    {
 
+        VideoMediaData del;
+        m_outQueue.TryPop( del );
+
+        return true;
     }
+
+    return false;
 }
 
 // *********************************
@@ -172,6 +158,11 @@ bool					FFmpegVideoDecoder::DecodeNextFrame			()
 	            mediaData.frameIdx = m_vstreamDecoder->GetCurrentFrameId();
 	            mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
 	            m_bufferQueue.Push( mediaData );
+
+                if( m_outQueue.Size() == 0 )
+                {
+                    m_outQueue.Push( mediaData );
+                }
 
 		        success = true;
             }

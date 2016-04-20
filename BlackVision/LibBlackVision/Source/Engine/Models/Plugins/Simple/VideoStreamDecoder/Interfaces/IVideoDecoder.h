@@ -28,7 +28,6 @@ public:
 	virtual void					Pause					() = 0;
 	virtual void					Stop					() = 0;
     
-	virtual VideoMediaData			PreviewVideoMediaData	() = 0;
 	virtual VideoMediaData			GetVideoMediaData		() = 0;
     virtual VideoMediaData			GetSingleFrame  		( TimeType frameTime) = 0;
 
@@ -54,7 +53,7 @@ public:
 protected:
 
 	virtual bool					DecodeNextFrame			() = 0;
-	virtual void					NextFrameDataReady		() = 0;
+	virtual bool					NextFrameDataReady		() = 0;
     
 	friend class VideoDecoderThread;
 

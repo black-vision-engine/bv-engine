@@ -16,7 +16,7 @@ VideoDecoderThread::VideoDecoderThread				( IVideoDecoder * decoder )
 	: m_decoder( decoder )
 	, m_paused( false )
 	, m_stopped( true )
-    , m_cancelled( false )
+    , m_running( true )
 {
 }
 
@@ -32,7 +32,7 @@ void				VideoDecoderThread::Kill	    ()
 {
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
-		m_cancelled = true;
+		m_running = false;
 	}
 	m_cond.notify_one();
 }
@@ -45,6 +45,7 @@ void				VideoDecoderThread::Play	    ()
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_paused = false;
 		m_stopped = false;
+        m_timer.Start();
 	}
 	m_cond.notify_one();
 }
@@ -96,13 +97,12 @@ void				VideoDecoderThread::Run			()
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_paused = false;
 		m_stopped = true;
+		m_running = true;
 	}
-
-    m_timer.Start();
 
 	//FIXME
 	auto frameDuration = 1000.0 / m_decoder->GetFrameRate();
-    while( !m_cancelled )
+    while( m_running )
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
 

@@ -115,7 +115,7 @@ Int64					FFmpegVideoStreamDecoder::ConvertTime		( Float64 time )
 void					FFmpegVideoStreamDecoder::Reset				()
 {
 	avcodec_flush_buffers( m_codecCtx );
-	//m_codecCtx->frame_number = 0;
+	m_codecCtx->frame_number = 0;
 }
 
 // *******************************
