@@ -67,7 +67,6 @@ void    UpdatersHelpers::RecreateRenderableBuffer    ( RenderableEntity * render
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO();
     VertexBuffer * vb                   = vao->GetVertexBuffer();
-    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
 
     auto channels = cc->GetAttributeChannels();
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
@@ -80,6 +79,8 @@ void    UpdatersHelpers::RecreateRenderableBuffer    ( RenderableEntity * render
 
     vb->Reinitialize( cc->GetNumVertices(), entrySize, vbSemantic );
     vao->ResetState();
+
+    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
 
     assert( !cc->GetAttributeChannels().empty() );
 

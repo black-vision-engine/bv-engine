@@ -112,6 +112,7 @@ void                SceneUpdater::UpdateGridLines     ()
             param->SetValue( glm::vec4( 1.0, 0.7, 0.0, 0.8) );
 
             m_scene->SetGridLinesRenderable( linesRenderable );
+            m_gridLinesUpdateID = gridLinesLogic.GetUpdateID();
         }
 
         if( m_gridLinesUpdateID < gridLinesLogic.GetUpdateID() )
