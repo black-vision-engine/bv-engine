@@ -36,6 +36,9 @@ std::pair< GridLineAlignement, const char* > GridLineAlignementMapping[] =
 // Helper functions
 // ========================================================================= //
 
+namespace
+{
+
 // ***********************
 //
 glm::mat4           GetTransform    ( const model::IModelNode* node )
@@ -64,6 +67,22 @@ glm::mat4           GetTransform    ( const model::IModelNode* node )
         return transform;
     }
 }
+
+
+// ***********************
+//
+const bv::mathematics::Box *        GetBoundignBox( model::BasicNodePtr& node )
+{
+    auto boundingVolume = node->GetBoundingVolume();
+    assert( boundingVolume );
+
+    auto boundingBox = boundingVolume->GetBoundingBox();
+    assert( boundingBox );
+
+    return boundingBox;
+}
+
+}   // anonymous
 
 // ========================================================================= //
 // GridLine
@@ -120,21 +139,36 @@ glm::vec3   GridLine::ReferencePos    ( model::BasicNodePtr& node, GridLineAlign
     }
     else if( alignement == GridLineAlignement::TSA_BoundingBoxCenter )
     {
-        auto boundingVolume = node->GetBoundingVolume();
-        assert( boundingVolume );
-
-        auto boundingBox = boundingVolume->GetBoundingBox();
-        assert( boundingBox );
+        auto boundingBox = GetBoundignBox( node );
 
         return glm::vec3( ( boundingBox->xmin + boundingBox->xmax ) / 2, ( boundingBox->ymax + boundingBox->ymin ) / 2, ( boundingBox->zmax + boundingBox->zmin ) / 2 );
     }
     else if( alignement == GridLineAlignement::TSA_BoundingBoxMinor )
     {
-        assert( !"Not implemented" );
+        auto boundingBox = GetBoundignBox( node );
+
+        if( m_type == GridLineType::TST_Horizontal )
+        {
+            return glm::vec3( ( boundingBox->xmin + boundingBox->xmax ) / 2, boundingBox->ymin, ( boundingBox->zmax + boundingBox->zmin ) / 2 );
+        }
+        else 
+        {
+            return glm::vec3( boundingBox->xmin, ( boundingBox->ymax + boundingBox->ymin ) / 2, ( boundingBox->zmax + boundingBox->zmin ) / 2 );
+        }
+
     }
     else if( alignement == GridLineAlignement::TSA_BoundingBoxMajor )
     {
-        assert( !"Not implemented" );
+        auto boundingBox = GetBoundignBox( node );
+
+        if( m_type == GridLineType::TST_Horizontal )
+        {
+            return glm::vec3( ( boundingBox->xmin + boundingBox->xmax ) / 2, boundingBox->ymax, ( boundingBox->zmax + boundingBox->zmin ) / 2 );
+        }
+        else 
+        {
+            return glm::vec3( boundingBox->xmax, ( boundingBox->ymax + boundingBox->ymin ) / 2, ( boundingBox->zmax + boundingBox->zmin ) / 2 );
+        }
     }
     else if( alignement == GridLineAlignement::TSA_GeometryCenter )
     {
@@ -152,11 +186,11 @@ glm::vec3   GridLine::ComputeTranslation  ( glm::vec3 referencePosition )
 {
     if( m_type == GridLineType::TST_Horizontal )
     {
-        return glm::vec3( m_position - referencePosition.x, 0.0, 0.0 );
+        return glm::vec3( 0.0, m_position - referencePosition.y, 0.0 );
     }
     else if( m_type == GridLineType::TST_Vertical )
     {
-        return glm::vec3( 0.0, m_position - referencePosition.y, 0.0 );
+        return glm::vec3( m_position - referencePosition.x, 0.0, 0.0 );
     }
     else 
         assert( false );
@@ -183,6 +217,8 @@ bool        GridLine::UpdateTransform     ( model::BasicNodePtr& node, glm::vec3
 
     return true;
 }
+
+
 
 }   // model
 
