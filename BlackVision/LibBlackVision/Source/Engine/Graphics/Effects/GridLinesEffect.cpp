@@ -59,6 +59,8 @@ VertexShader *      GridLinesEffect::CreateVS        ()
 {
     auto params = new ShaderParameters();
 
+    params->AddParameter( ShaderParamFactory::CreateMVPParameter() );
+
     auto shader = new VertexShader( CustomShaderSourceProvider->ReadShader( "grid_lines.vert" ), params );
 
     return shader;

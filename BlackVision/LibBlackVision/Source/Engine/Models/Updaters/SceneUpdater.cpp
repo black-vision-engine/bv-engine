@@ -108,6 +108,8 @@ void                SceneUpdater::UpdateGridLines     ()
             auto linesRenderable = Cast< Lines * >( BVProjectTools::BuildRenderableFromComponent( std::static_pointer_cast< model::IConnectedComponent >( component ), PrimitiveType::PT_LINES ) );
 
             linesRenderable->SetRenderableEffect( std::make_shared< GridLinesEffect >() );
+            linesRenderable->SetWidth( 1.0f );
+
             auto param = Cast< ShaderParamVec4 * >( linesRenderable->GetRenderableEffect()->GetPass( 0 )->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
             param->SetValue( glm::vec4( 1.0, 0.7, 0.0, 0.8) );
 

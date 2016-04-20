@@ -60,7 +60,6 @@ VertexShader *      BoundingBoxEffect::CreateVS        ()
     auto params = new ShaderParameters();
 
     params->AddParameter( ShaderParamFactory::CreateMVPParameter() );
-    params->AddParameter( ShaderParamFactory::CreateMVParameter() );
 
     auto shader = new VertexShader( CustomShaderSourceProvider->ReadShader( "bounding_box.vert" ), params );
 

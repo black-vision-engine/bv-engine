@@ -100,8 +100,8 @@ ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
     {
         if( line )
         {
-            lineVerts->AddAttribute( glm::vec3( line->GetPosition(), 1.0, 0.0 ) );
-            lineVerts->AddAttribute( glm::vec3( line->GetPosition(), -1.0, 0.0 ) );
+            lineVerts->AddAttribute( glm::vec3( line->GetPosition(), 10.0, 0.0 ) );
+            lineVerts->AddAttribute( glm::vec3( line->GetPosition(), -10.0, 0.0 ) );
         }
     }
 
@@ -109,8 +109,8 @@ ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
     {
         if( line )
         {
-            lineVerts->AddAttribute( glm::vec3( 1.0, line->GetPosition(), 0.0 ) );
-            lineVerts->AddAttribute( glm::vec3( -1.0, line->GetPosition(), 0.0 ) );
+            lineVerts->AddAttribute( glm::vec3( 10.0, line->GetPosition(), 0.0 ) );
+            lineVerts->AddAttribute( glm::vec3( -10.0, line->GetPosition(), 0.0 ) );
         }
     }
 
