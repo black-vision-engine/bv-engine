@@ -345,6 +345,7 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & sce
     {
         renderer->EnableScene( scene );
         RenderNode( scene->GetRoot(), ctx );
+        RenderGridLines( scene, ctx );          // Use some generic solution when other editor helper object apear in engine.
     }
 
     disableBoundRT( ctx );
@@ -432,7 +433,7 @@ RenderableEntity * GetBoundingBox( SceneNode * node )
 
 // ***********************
 //
-void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color )
+void    RenderLogic::RenderBoundingBox  ( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color )
 {
     auto * bb = GetBoundingBox( node );
 
@@ -447,6 +448,20 @@ void    RenderLogic::RenderBoundingBox( SceneNode * node, RenderLogicContext * c
         renderer->DrawRenderable( bb );
     }
 }
+
+// ***********************
+//
+void    RenderLogic::RenderGridLines    ( Scene * scene, RenderLogicContext * ctx )
+{
+    if( scene->GetGridLinesVisibility() )
+    {
+        auto renderable = scene->GetGridLines();
+        auto renderer = ctx->GetRenderer();
+
+        renderer->Draw( renderable );
+    }
+}
+
 
 // *********************************
 //

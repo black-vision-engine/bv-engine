@@ -24,6 +24,9 @@ private:
     Scene *                 m_scene;
     model::SceneModel *     m_modelScene;
 
+    UInt64                  m_gridLinesUpdateID;
+
+
                             SceneUpdater        ( Scene * scene, model::SceneModel * modelScene ); 
 
 public:
@@ -37,6 +40,7 @@ public:
 private:
 
     void                    UpdateLights        ();
+    void                    UpdateGridLines     ();
 
 };
 

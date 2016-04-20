@@ -788,7 +788,7 @@ void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
 //
 void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
 {
-    assert( evt->GetEventType() == bv::SceneVariableEvent::Type() );
+    assert( evt->GetEventType() == bv::GridLineEvent::Type() );
 
     GridLineEventPtr gridLineEvent = std::static_pointer_cast< bv::GridLineEvent >( evt );
 
@@ -802,8 +802,11 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
     auto alignement     = SerializationHelper::String2T( gridLineEvent->AlignementType, GridLineAlignement::TSA_WeightCenter );
 
     auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
-    if( scene != nullptr )
+    if( scene == nullptr )
+    {
         SendSimpleErrorResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, "Scene not found" );
+        return;
+    }
 
     auto & gridLinesLogic = scene->GetGridLinesLogic();
     bool result = true;
@@ -828,6 +831,14 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
 
         auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
         result = gridLinesLogic.AlignNodeToGridLine( gridType, gridLineIdx, basicNode, alignement );
+    }
+    else if( command == GridLineEvent::Command::ShowGridLines )
+    {
+        gridLinesLogic.ShowGridLines( true );
+    }
+    else if( command == GridLineEvent::Command::HideGridLines )
+    {
+        gridLinesLogic.ShowGridLines( false );
     }
     else
         SendSimpleErrorResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, "Unknown command" );

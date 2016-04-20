@@ -4,7 +4,15 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/LightsLayout.h"
+#include "Engine/Graphics/SceneGraph/Lines.h"
 
+#include "Engine/Models/BVProjectTools.h"
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
+#include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Effects/GridLinesEffect.h"
+
+#include "UpdatersHelpers.h"
 
 namespace bv 
 {
@@ -29,6 +37,7 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
                     SceneUpdater::SceneUpdater      ( Scene * scene, model::SceneModel * modelScene )
     : m_scene( scene )
     , m_modelScene( modelScene )
+    , m_gridLinesUpdateID( 0 )
 {
 }
 
@@ -43,6 +52,7 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
 void                SceneUpdater::DoUpdate          ()
 {
     UpdateLights();
+    UpdateGridLines();
 }
 
 // *****************************
@@ -79,5 +89,44 @@ void                SceneUpdater::UpdateLights      ()
         }
     }
 }
+
+// ***********************
+//
+void                SceneUpdater::UpdateGridLines     ()
+{
+    auto & gridLinesLogic = m_modelScene->GetGridLinesLogic();
+
+    bool linesVisible = gridLinesLogic.GetGridLinesVisibility();
+    m_scene->SetGridLinesVisible( linesVisible );
+
+    if( linesVisible )
+    {
+        if( m_gridLinesUpdateID == 0 )
+        {
+            // First update. Create RenderableEntity
+            auto component = gridLinesLogic.BuildConnectedComponent();
+            auto linesRenderable = Cast< Lines * >( BVProjectTools::BuildRenderableFromComponent( std::static_pointer_cast< model::IConnectedComponent >( component ), PrimitiveType::PT_LINES ) );
+
+            linesRenderable->SetRenderableEffect( std::make_shared< GridLinesEffect >() );
+            auto param = Cast< ShaderParamVec4 * >( linesRenderable->GetRenderableEffect()->GetPass( 0 )->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
+            param->SetValue( glm::vec4( 1.0, 0.7, 0.0, 0.8) );
+
+            m_scene->SetGridLinesRenderable( linesRenderable );
+        }
+
+        if( m_gridLinesUpdateID < gridLinesLogic.GetUpdateID() )
+        {
+            auto component = gridLinesLogic.BuildConnectedComponent();
+            auto linesRenderable = m_scene->GetGridLines();
+            
+            // Sometimes buffers are recreated when not necessary. But GridLines are only editor helpers
+            // and they don't need to be efficient.
+            UpdatersHelpers::RecreateRenderableBuffer( linesRenderable, component );
+
+            m_gridLinesUpdateID = gridLinesLogic.GetUpdateID();
+        }
+    }
+}
+
 
 } //bv

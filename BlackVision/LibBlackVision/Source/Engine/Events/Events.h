@@ -1149,6 +1149,8 @@ public:
         SetGridLinePosition,
         RenameGridLine,
         AlignToGridLine,
+        ShowGridLines,
+        HideGridLines,
         Fail            ///< Wrong command
     } Command;
 

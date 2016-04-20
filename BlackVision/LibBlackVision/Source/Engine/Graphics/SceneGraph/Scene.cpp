@@ -6,6 +6,7 @@
 #include "Engine/Graphics/SceneGraph/LightsLayout.h"
 #include "Engine/Graphics/Resources/UniformBuffer.h"
 
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 namespace bv {
 
@@ -13,7 +14,9 @@ namespace bv {
 // ********************************
 //
                     Scene::Scene                    ()
-    : m_root( nullptr )
+    :   m_root( nullptr )
+    ,   m_gridLines( nullptr )
+    ,   m_gridLinesVisible( false )
 {
     auto lightsLayout = LightsLayout::Instance().GetBlockLayout();
     m_lightsBuffer =  new UniformBuffer( lightsLayout, DataBuffer::Semantic::S_DYNAMIC );
@@ -24,6 +27,7 @@ namespace bv {
                     Scene::~Scene                   ()
 {
     delete m_lightsBuffer;
+    delete m_gridLines;
 }
 
 // ********************************
@@ -45,6 +49,27 @@ void                Scene::SetRoot                  ( SceneNode * node )
 UniformBuffer *     Scene::GetLightsBuffer          () const
 {
     return m_lightsBuffer;
+}
+
+// ***********************
+//
+RenderableEntity *  Scene::GetGridLines        () const
+{
+    return m_gridLines;
+}
+
+// ***********************
+//
+void                Scene::SetGridLinesRenderable  ( RenderableEntity * renderable )
+{
+    m_gridLines = renderable;
+}
+
+// ***********************
+//
+void                Scene::SetGridLinesVisible ( bool visibility )
+{
+    m_gridLinesVisible = visibility;
 }
 
 } //bv

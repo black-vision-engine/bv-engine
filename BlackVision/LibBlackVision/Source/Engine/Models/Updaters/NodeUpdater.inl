@@ -1,5 +1,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/BoundingVolume.h"
+#include "UpdatersHelpers.h"
+
 
 namespace bv {
 
@@ -15,29 +17,6 @@ inline void UpdateState( const ContextType * ctxState, StateTypePtr rendererStat
         assert( rendererState );
 
         RendererStatesBuilder::Assign( rendererState, ctxState );
-    }
-}
-
-// *********************************
-//FIXME: this should be implemented via VBOAcessor in one place only (VBO utils or some more generic utils) - right now it is copied here and in BasicNode (as AddVertexDataToVBO)
-inline void    WriteVertexDataToVBO( char * data, model::IConnectedComponentPtr cc )
-{
-    unsigned int numVertices = cc->GetNumVertices();
-    unsigned int offset = 0;
-
-    for( unsigned int i = 0; i < numVertices; ++i )
-    {
-        for( auto vach : cc->GetAttributeChannels() )
-        {
-            assert( vach->GetNumEntries() == numVertices );
-
-            auto eltSize = vach->GetDescriptor()->GetEntrySize(); //FIXME: most probably not required here (can be safely read from other location)
-            const char * eltData = vach->GetData();
-
-            memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
-
-            offset += eltSize;
-        }
     }
 }
 
@@ -134,7 +113,7 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
         //This is update only, so the number of vertices must match
         assert( cc->GetNumVertices() == vao->GetNumVertices( k ) );
  
-        WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
+        UpdatersHelpers::WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
 
@@ -143,27 +122,27 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 
     vao->SetNeedsUpdateMemUpload( true );
 }
-
-// *****************************
 //
-inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
-{
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
-
-    RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
-
-    VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
-    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-
-    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
-
-    //This is update only, so the number of vertices must match
-    assert( cc->GetNumVertices() == vao->GetNumVertices( 0 ) );
- 
-    WriteVertexDataToVBO( vbData, cc );
-
-    vao->SetNeedsUpdateMemUpload( true );
-}
+//// *****************************
+////
+//inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
+//{
+//    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
+//
+//    RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
+//
+//    VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
+//    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
+//
+//    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+//
+//    //This is update only, so the number of vertices must match
+//    assert( cc->GetNumVertices() == vao->GetNumVertices( 0 ) );
+// 
+//    UpdatersHelpers::WriteVertexDataToVBO( vbData, cc );
+//
+//    vao->SetNeedsUpdateMemUpload( true );
+//}
 
 inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
@@ -205,7 +184,7 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
         vao->AddCCEntry( cc->GetNumVertices() );
 
-        WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
+        UpdatersHelpers::WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
     }
@@ -225,7 +204,7 @@ inline  void    NodeUpdater::UpdatePositions     ()
 
     auto bv = node->GetBoundingVolume();
     if( bv )
-        UpdateBoxPositions( m_boundingBox, bv->BuildConnectedComponent() );
+        UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildConnectedComponent() );
 }
 
 // *****************************
@@ -238,7 +217,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
     auto bv = node->GetBoundingVolume();
     if( bv )
-        UpdateBoxPositions( m_boundingBox, bv->BuildConnectedComponent() );
+        UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildConnectedComponent() );
 }
 
 // *****************************
