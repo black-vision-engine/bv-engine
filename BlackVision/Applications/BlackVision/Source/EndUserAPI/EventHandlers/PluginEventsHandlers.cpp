@@ -7,7 +7,7 @@
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
 
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 

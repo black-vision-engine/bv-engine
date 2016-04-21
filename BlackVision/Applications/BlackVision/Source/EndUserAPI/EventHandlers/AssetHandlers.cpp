@@ -3,7 +3,7 @@
 #include "BVAppLogic.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 
 
 namespace bv

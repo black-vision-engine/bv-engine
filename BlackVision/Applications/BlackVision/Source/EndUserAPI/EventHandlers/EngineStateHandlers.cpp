@@ -1,7 +1,7 @@
 #include "EngineStateHandlers.h"
 
 #include "BVAppLogic.h"
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Application/ApplicationContext.h"

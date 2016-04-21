@@ -1,5 +1,5 @@
 #include "GlobalEffectHandler.h"
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Serialization/SerializationHelper.h"
 #include "BVAppLogic.h"

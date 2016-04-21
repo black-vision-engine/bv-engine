@@ -106,6 +106,9 @@ std::string GridLineEvent::m_sEventName              = "GridLineEvent";
 const EventType LightEvent::m_sEventType			= 0x30000025;
 std::string LightEvent::m_sEventName				= "LightEvent";
 
+const EventType VideoDecoderEvent::m_sEventType     = 0x300000;
+std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -485,6 +488,22 @@ std::pair< TimerEvent::Command, const char* > TimerEventCommandMapping[] =
 
 template<> TimerEvent::Command  String2T    ( const std::string& s, const TimerEvent::Command& defaultVal )     { return String2Enum( TimerEventCommandMapping, s, defaultVal ); }
 template<> std::string          T2String    ( const TimerEvent::Command & t )                                   { return Enum2String( TimerEventCommandMapping, t ); }
+
+
+// ========================================================================= //
+// VideoDecoderEvent
+// ========================================================================= //
+const std::string ASSET_PATH_STRING                  = "AssetPath";
+
+std::pair< VideoDecoderEvent::Command, const char* > VideoDecoderEventMapping[] = 
+{
+    std::make_pair( VideoDecoderEvent::Command::HasFinished, "HasFinished" )
+    , std::make_pair( VideoDecoderEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> VideoDecoderEvent::Command   String2T    ( const std::string& s, const VideoDecoderEvent::Command& defaultVal )     { return String2Enum( VideoDecoderEventMapping, s, defaultVal ); }
+template<> std::string                  T2String    ( const VideoDecoderEvent::Command & t )                                   { return Enum2String( VideoDecoderEventMapping, t ); }
+
 
 // ========================================================================= //
 // EngineStateEvent
@@ -1671,6 +1690,54 @@ const std::string&  TimerEvent::GetName() const
 // *************************************
 //
 EventType           TimerEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
+//******************* VideoDecoderEvent *************
+
+// *************************************
+//
+void                VideoDecoderEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( EventCommand ) );
+    ser.SetAttribute( SerializationHelper::ASSET_PATH_STRING, AssetPath );
+}
+
+// *************************************
+//
+IEventPtr                VideoDecoderEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        VideoDecoderEventPtr newEvent   = std::make_shared< VideoDecoderEvent >();
+        newEvent->EventCommand          = SerializationHelper::String2T< VideoDecoderEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoDecoderEvent::Command::Fail );
+        newEvent->AssetPath             = deser.GetAttribute( SerializationHelper::ASSET_PATH_STRING );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               VideoDecoderEvent::Clone             () const
+{   return IEventPtr( new VideoDecoderEvent( *this ) );  }
+
+// *************************************
+//
+EventType           VideoDecoderEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        VideoDecoderEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  VideoDecoderEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           VideoDecoderEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

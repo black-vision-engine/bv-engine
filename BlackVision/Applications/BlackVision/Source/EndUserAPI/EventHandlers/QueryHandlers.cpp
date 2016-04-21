@@ -5,7 +5,7 @@
 #include "Tools/IncludeJSON.h"
 #include "PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectTools.h"

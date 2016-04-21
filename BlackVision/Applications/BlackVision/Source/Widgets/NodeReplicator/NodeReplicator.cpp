@@ -7,7 +7,7 @@
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 

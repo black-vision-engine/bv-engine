@@ -15,6 +15,10 @@
 
 #include "Assets/DefaultAssets.h"
 
+#include "Engine/Events/EventManager.h"
+#include "Engine/Events/EventHandlerHelpers.h"
+#include "Engine/Events/Events.h"
+
 
 namespace bv { namespace model {
 
@@ -131,6 +135,7 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_prevFrameIdx( 0 )
+    , m_isFinished( false )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -168,16 +173,18 @@ bool							DefaultVideoStreamDecoderPlugin::IsValid     () const
 // 
 bool                            DefaultVideoStreamDecoderPlugin::LoadResource		( AssetDescConstPtr assetDescr )
 {
-	auto vstreamAssetDescr = QueryTypedDesc< VideoStreamAssetDescConstPtr >( assetDescr );
+	m_assetDesc = QueryTypedDesc< VideoStreamAssetDescConstPtr >( assetDescr );
 
-    if ( vstreamAssetDescr != nullptr )
+    if ( m_assetDesc != nullptr )
     {
         auto asset = LoadTypedAsset<VideoStreamAsset>( assetDescr );
         if( asset != nullptr )
         {
 		    m_decoder = std::make_shared< FFmpegVideoDecoder >( asset );
 
-		    auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), vstreamAssetDescr->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
+		    auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(),
+                MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
+                m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
             if( vsDesc != nullptr )
 		    {
 			    vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
@@ -349,7 +356,9 @@ void                                DefaultVideoStreamDecoderPlugin::UpdateDecod
             switch( m_decoderMode )
             {
             case DecoderMode::PLAY:
-                m_decoder->Play(); break;
+                m_decoder->Play();
+                m_isFinished = false;
+                break;
             case DecoderMode::STOP:
                 m_decoder->Stop(); break;
             case DecoderMode::PAUSE:
@@ -369,10 +378,22 @@ void                                DefaultVideoStreamDecoderPlugin::UpdateDecod
             m_loopCount = loopCount;
         }
 
-        if( m_decoder->IsEOF() && loopEnabled && m_loopCount > 1 )
+        if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
         {
             m_decoder->Seek( 0.f );
             m_loopCount--;
+        }
+
+        // send event on video finished
+        if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
+        {
+            auto evt = std::make_shared< VideoDecoderEvent >();
+            evt->AssetPath = m_assetDesc->GetStreamPath();
+            evt->EventCommand = VideoDecoderEvent::Command::HasFinished;
+            JsonSerializeObject ser;
+            evt->Serialize( ser );
+            SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+            m_isFinished = true;
         }
     }
 }

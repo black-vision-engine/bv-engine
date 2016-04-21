@@ -11,7 +11,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 namespace bv {

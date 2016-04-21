@@ -76,6 +76,10 @@ private:
     ParamIntPtr                         m_loopCountParam;
     UInt32                              m_loopCount;
 
+    VideoStreamAssetDescConstPtr        m_assetDesc;
+
+    bool                                m_isFinished;
+
 public:
 
     explicit							DefaultVideoStreamDecoderPlugin		( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

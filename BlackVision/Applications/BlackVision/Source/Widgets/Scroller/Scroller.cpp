@@ -13,7 +13,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Tools/StringHeplers.h"
-#include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 
 #include "Mathematics/glm_inc.h"
 

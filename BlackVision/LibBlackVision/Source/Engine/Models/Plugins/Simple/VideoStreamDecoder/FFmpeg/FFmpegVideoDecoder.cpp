@@ -266,7 +266,7 @@ bool					FFmpegVideoDecoder::IsEOF					() const
 //
 bool					FFmpegVideoDecoder::IsFinished				() const
 {
-    return IsEOF() && m_outQueue.IsEmpty() && m_bufferQueue.IsEmpty();
+    return IsEOF() && m_outQueue.Size() == 1 && m_bufferQueue.IsEmpty();
 }
 
 } //bv

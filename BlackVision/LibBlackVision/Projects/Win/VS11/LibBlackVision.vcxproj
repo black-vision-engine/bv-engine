@@ -170,6 +170,7 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueue.cpp" />
@@ -515,6 +516,7 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h" />
@@ -939,6 +941,7 @@
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl" />

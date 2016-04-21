@@ -5,7 +5,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "UseLoggerBVAppModule.h"
 
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 
 namespace bv
 {

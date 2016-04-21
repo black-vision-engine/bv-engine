@@ -8,7 +8,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 
 #include "System/Path.h"
 #include "IO/FileIO.h"

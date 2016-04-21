@@ -1492,6 +1492,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp">
+      <Filter>Engine\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3680,6 +3683,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -3744,6 +3750,9 @@
     </None>
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl">
       <Filter>Mathematics\Interpolators</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.inl">
+      <Filter>Engine\Events</Filter>
     </None>
   </ItemGroup>
 </Project>

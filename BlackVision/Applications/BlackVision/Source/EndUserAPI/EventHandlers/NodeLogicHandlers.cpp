@@ -3,7 +3,7 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Widgets/NodeLogicFactory.h"
 #include "Engine/Models/BasicNode.h"
 

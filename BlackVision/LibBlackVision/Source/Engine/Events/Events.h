@@ -776,6 +776,47 @@ template<> std::string              SerializationHelper::T2String    ( const Tim
 DEFINE_PTR_TYPE( TimerEvent )
 
 
+// ************************************* VideoDecoderEvent *************************************
+class VideoDecoderEvent : public RemoteEvent
+{
+public:
+
+    typedef enum
+    {
+        HasFinished,
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+
+    Command                     EventCommand;
+    std::string                 AssetPath;
+
+public:
+
+    explicit                        VideoDecoderEvent          (){};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string&      GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> VideoDecoderEvent::Command       SerializationHelper::String2T    ( const std::string & s, const VideoDecoderEvent::Command & defaultVal );
+template<> std::string                      SerializationHelper::T2String    ( const VideoDecoderEvent::Command & t );
+
+DEFINE_PTR_TYPE( VideoDecoderEvent )
+
+
 // ************************************* NodeLogicEvent *************************************
 class NodeLogicEvent : public RemoteEvent
 {

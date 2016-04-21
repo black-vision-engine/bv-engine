@@ -1,5 +1,5 @@
 #include "TimelineHandlers.h"
-#include "EventHandlerHelpers.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "BVAppLogic.h"
 

@@ -137,9 +137,6 @@
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp">
       <Filter>Widgets\NodeReplicator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.cpp">
-      <Filter>EndUserAPI\EventHandlers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
@@ -282,9 +279,6 @@
       <Filter>Widgets\NodeReplicator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.h">
-      <Filter>EndUserAPI\EventHandlers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
@@ -323,8 +317,5 @@
     <None Include="..\..\..\Source\BVConfig.inl" />
     <None Include="..\..\..\Source\FrameStatsService.inl" />
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
-    <None Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.inl">
-      <Filter>EndUserAPI\EventHandlers</Filter>
-    </None>
   </ItemGroup>
 </Project>
