@@ -114,7 +114,7 @@ bool        GridLine::AlignNode       ( model::BasicNodePtr node, GridLineAligne
     glm::vec3 translate = ComputeTranslation( position );
 
     // Compute translation in local coordinates system of object
-    glm::vec4 localTranslate = glm::inverse( transform ) * glm::vec4( translate, 1.0 );
+    glm::vec4 localTranslate = glm::inverse( transform ) * glm::vec4( translate, 0.0 );
 
     // debug
     glm::vec4 checkPoint = transform * ( referencePos + localTranslate );

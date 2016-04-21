@@ -1148,6 +1148,7 @@ public:
     {
         SetGridLinePosition,
         RenameGridLine,
+        RemoveGridLine,
         AlignToGridLine,
         ShowGridLines,
         HideGridLines,

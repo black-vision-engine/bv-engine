@@ -149,9 +149,8 @@ void            GridLinesLogic::RenameGridLine  ( GridLineType gridType, int gri
 void            GridLinesLogic::RemoveGridLine          ( GridLineType gridType, int gridIndex )
 {
     auto & gridLineVec = SelectGridLineVec( gridType );
-    AllocGridLine( gridType, gridIndex, gridLineVec );  // In case grid line didn't exist.
 
-    delete gridLineVec[ gridIndex ];
+    delete gridLineVec[ gridIndex ];    // In case grid line doesn't exists, delete nullptr is safe.
     gridLineVec[ gridIndex ] = nullptr;
 
     m_gridLinesUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;

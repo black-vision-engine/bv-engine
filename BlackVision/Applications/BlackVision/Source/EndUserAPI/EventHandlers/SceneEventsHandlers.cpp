@@ -819,6 +819,10 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
     {
         gridLinesLogic.RenameGridLine( gridType, gridLineIdx, gridName );
     }
+    else if( command == GridLineEvent::Command::RemoveGridLine )
+    {
+        gridLinesLogic.RemoveGridLine( gridType, gridLineIdx );
+    }
     else if( command == GridLineEvent::Command::AlignToGridLine )
     {
         auto editor = m_appLogic->GetBVProject()->GetProjectEditor();

@@ -625,6 +625,7 @@ std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMappin
 {
     std::make_pair( GridLineEvent::Command::SetGridLinePosition, "SetGridLinePosition" )
     , std::make_pair( GridLineEvent::Command::RenameGridLine, "RenameGridLine" )
+    , std::make_pair( GridLineEvent::Command::RemoveGridLine, "RemoveGridLine" )
     , std::make_pair( GridLineEvent::Command::AlignToGridLine, "AlignToGridLine" )
     , std::make_pair( GridLineEvent::Command::ShowGridLines, "ShowGridLines" )
     , std::make_pair( GridLineEvent::Command::HideGridLines, "HideGridLines" )
