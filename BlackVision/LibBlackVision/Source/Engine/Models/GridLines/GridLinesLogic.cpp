@@ -35,6 +35,95 @@ GridLinesLogic::~GridLinesLogic()
 
 // ***********************
 //
+void            GridLinesLogic::Deserialize             ( const IDeserializer & deser )
+{
+    //m_showGridLines = SerializationHelper::String2T( deser.GetAttribute( "show" ), false );
+
+    if( deser.EnterChild( "horizontal" ) )
+    {
+        if( deser.EnterChild( "gridline" ) )
+        {
+            do
+            {
+                std::string gridLineName = deser.GetAttribute( "name" );
+                float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
+                int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
+                
+                if( index != std::numeric_limits< int >::max() )
+                {
+                    // This allocates new grid line
+                    MoveGridLine( GridLineType::TST_Horizontal, index, position );
+                    RenameGridLine( GridLineType::TST_Horizontal, index, gridLineName );
+                }
+
+            } while( deser.NextChild() );
+            deser.ExitChild();  //  gridline
+        }
+        deser.ExitChild();  // horizontal
+    }
+
+    if( deser.EnterChild( "vertical" ) )
+    {
+        if( deser.EnterChild( "gridline" ) )
+        {
+            do
+            {
+                std::string gridLineName = deser.GetAttribute( "name" );
+                float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
+                int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
+                
+                if( index != std::numeric_limits< int >::max() )
+                {
+                    // This allocates new grid line
+                    MoveGridLine( GridLineType::TST_Vertical, index, position );
+                    RenameGridLine( GridLineType::TST_Vertical, index, gridLineName );
+                }
+
+            } while( deser.NextChild() );
+            deser.ExitChild();  //  gridline
+        }
+        deser.ExitChild();  // horizontal
+    }
+}
+
+// ***********************
+//
+void            GridLinesLogic::SerializeGridArray      ( ISerializer & ser, const std::vector< GridLine * > & gridArray ) const
+{
+    for( int i = 0; i < gridArray.size(); ++i )
+    {
+        if( gridArray[ i ] )
+        {
+            ser.EnterChild( "gridline" );
+                ser.SetAttribute( "index", SerializationHelper::T2String( i ) );
+                ser.SetAttribute( "position", SerializationHelper::T2String( gridArray[ i ]->GetPosition() ) );
+                ser.SetAttribute( "name", gridArray[ i ]->GetName() );
+            ser.ExitChild();    //  gridline
+        }
+    }
+}
+
+// ***********************
+//
+void            GridLinesLogic::Serialize               ( ISerializer & ser ) const
+{
+    ser.EnterChild( "gridlines" );
+
+        //ser.SetAttribute( "show", SerializationHelper::T2String( m_showGridLines ) );
+        
+        ser.EnterArray( "horizontal" );
+            SerializeGridArray( ser, m_horizontalGridLines );
+        ser.ExitChild();    //  horizontal
+
+        ser.EnterArray( "vertical" );
+            SerializeGridArray( ser, m_verticalGridLines );
+        ser.ExitChild();    //  vertical
+
+    ser.ExitChild();    // gridlines
+}
+
+// ***********************
+//
 void            GridLinesLogic::MoveGridLine    ( GridLineType gridType, int gridIndex, Float32 newPosition )
 {
     auto & gridLineVec = SelectGridLineVec( gridType );

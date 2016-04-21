@@ -60,7 +60,7 @@ glm::mat4           GetTransform    ( const model::IModelNode* node )
     if( parentNode )
     {
         glm::mat4 parentTransform = GetTransform( parentNode );
-        return transform * parentTransform;
+        return parentTransform * transform;
     }
     else
     {
@@ -112,8 +112,14 @@ bool        GridLine::AlignNode       ( model::BasicNodePtr node, GridLineAligne
     glm::vec3 position = glm::vec3( transform * referencePos );
 
     glm::vec3 translate = ComputeTranslation( position );
+
+    // Compute translation in local coordinates system of object
+    glm::vec4 localTranslate = glm::inverse( transform ) * glm::vec4( translate, 1.0 );
+
+    // debug
+    glm::vec4 checkPoint = transform * ( referencePos + localTranslate );
     
-    return UpdateTransform( node, translate );
+    return UpdateTransform( node, glm::vec3( localTranslate ) );
 }
 
 // ***********************

@@ -27,6 +27,9 @@ public:
     GridLinesLogic();
     ~GridLinesLogic();
 
+    void                    Deserialize             ( const IDeserializer & deser );
+    void                    Serialize               ( ISerializer & ser ) const;
+
     void                    MoveGridLine            ( GridLineType gridType, int gridIndex, Float32 newPosition );
     void                    RenameGridLine          ( GridLineType gridType, int gridIndex, const std::string & newName );
     void                    RemoveGridLine          ( GridLineType gridType, int gridIndex );
@@ -41,6 +44,7 @@ public:
 
 private:
 
+    void                        SerializeGridArray      ( ISerializer & ser,const std::vector< GridLine * > & gridArray ) const;
     std::vector< GridLine* > &  SelectGridLineVec       ( GridLineType gridType );
     void                        AllocGridLine           ( GridLineType gridType, int gridIndex, std::vector< GridLine* >& gridLinesVec );
 };

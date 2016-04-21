@@ -69,6 +69,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
             ser.ExitChild(); // lights
 
             m_sceneVariables.Serialize( ser );
+            m_gridLinesLogic.Serialize( ser );
         }
 
         if( m_sceneRootNode )
@@ -126,6 +127,12 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
         auto & editorSceneVariables = obj->GetSceneVariables();
         editorSceneVariables.Deserialize( deser );
         deser.ExitChild();
+    }
+
+    if( deser.EnterChild( "gridlines" ) )
+    {
+        obj->GetGridLinesLogic().Deserialize( deser );
+        deser.ExitChild();  // gridlines
     }
 
 // nodes

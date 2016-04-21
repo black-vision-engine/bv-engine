@@ -43,8 +43,10 @@ public:
     explicit GridLine    ( GridLineType type, const std::string & name );
     ~GridLine();
 
+
     void                SetPosition         ( float pos )   { m_position = pos; }
     float               GetPosition         ()              { return m_position; }
+    const std::string & GetName             ()              { return m_name; }
 
     bool                AlignNode           ( model::BasicNodePtr node, GridLineAlignement alignement );
     void                Rename              ( const std::string & newName );
