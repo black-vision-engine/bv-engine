@@ -41,6 +41,9 @@ namespace
     
 glm::mat4           GetSingleNodeTransform  ( const model::IModelNode* node )
 {
+    if( node == nullptr )
+        return glm::mat4( 1 ); //  Identity matrix;
+
     glm::mat4 transform = glm::mat4( 1 ); //  Identity matrix;
     auto transPlugin = node->GetPlugin( "transform" );
 
@@ -117,7 +120,13 @@ bool        GridLine::AlignNode       ( model::BasicNodePtr node, GridLineAligne
 
     glm::mat4 transform = parentTransform;
     if( alignement != GridLineAlignement::TSA_WeightCenter )
+    {
         transform = transform * childTransform;
+    }
+    else
+    {
+        childTransform = glm::mat4( 1 );
+    }
 
     glm::vec4 referencePos = glm::vec4( ReferencePos( node, alignement ), 1.0 );
 
