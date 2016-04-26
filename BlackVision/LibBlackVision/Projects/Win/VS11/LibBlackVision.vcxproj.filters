@@ -1495,6 +1495,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp">
       <Filter>Engine\Events</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderQueueStackAllocator.cpp">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.cpp">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3685,6 +3691,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h">
       <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderQueueStackAllocator.h">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.h">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
