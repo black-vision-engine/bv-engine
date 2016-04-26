@@ -136,8 +136,8 @@ void Camera::SetPosition                            ( const glm::vec3 & position
 //
 void Camera::SetAxes                                ( const glm::vec3 & direction, const glm::vec3 & up )
 {
-    m_direction = direction;
-    m_up = up;
+    m_direction = glm::normalize( direction );
+    m_up = glm::normalize( up );
 
     UpdatePVMatrix();
 }

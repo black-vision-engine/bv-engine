@@ -204,6 +204,17 @@ Float32     Box::Depth               () const
     return zmax - zmin;
 }
 
+// ***********************
+//
+glm::vec3   Box::Center             () const
+{
+    glm::vec3 center;
+    center.x = ( xmin + xmax ) / 2;
+    center.y = ( ymin + ymax ) / 2;
+    center.z = ( zmin + zmax ) / 2;
+    return center;
+}
+
 // ******************************
 // 
 std::vector< glm::vec3 > Box::GetVerticies () const

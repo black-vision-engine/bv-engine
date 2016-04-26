@@ -10,8 +10,7 @@ namespace bv
 // ***********************
 //
 RenderQueueStackAllocator::RenderQueueStackAllocator()
-    :   m_currentIdx( 0 )
-    ,   m_renderQueues( 1 )
+    :   m_currentIdx( -1 )
 {}
 
 // ***********************
@@ -53,9 +52,14 @@ bool                RenderQueueStackAllocator::Free                        ()
 //
 bool                RenderQueueStackAllocator::Free                        ( unsigned int num )
 {
-    assert( m_currentIdx - num >= 0 );
-    if( m_currentIdx - num < 0 )
+    assert( m_currentIdx - num >= -1 );
+    if( m_currentIdx - num < -1 )
         return false;
+
+    for( unsigned int i = 0; i < num; ++i )
+    {
+        m_renderQueues[ m_currentIdx - i ].ClearQueue();
+    }
 
     m_currentIdx -= num;
     return true;
@@ -70,10 +74,11 @@ unsigned int        RenderQueueStackAllocator::GetTopIndex                 () co
 }
 
 // ***********************
-// Clears all RenderingQueues except one.
+// Clears (deletes) all RenderingQueues.
 void                RenderQueueStackAllocator::Clear                       ()
 {
-    m_renderQueues.resize( 1 );
+    m_currentIdx = -1;
+    m_renderQueues.resize( 0 );
 }
 
 }	// bv

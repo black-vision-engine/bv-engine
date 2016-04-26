@@ -39,6 +39,8 @@ struct Box
     Float32		        Height			() const;
     Float32             Depth           () const;
 
+    glm::vec3           Center          () const;
+
     std::vector< glm::vec3 > GetVerticies () const;
 };
 
