@@ -38,12 +38,10 @@ std::pair< GridLineAlignement, const char* > GridLineAlignementMapping[] =
 
 namespace
 {
-
-// ***********************
-//
-glm::mat4           GetTransform    ( const model::IModelNode* node )
+    
+glm::mat4           GetSingleNodeTransform  ( const model::IModelNode* node )
 {
-    glm::mat4 transform;
+    glm::mat4 transform = glm::mat4( 1 ); //  Identity matrix;
     auto transPlugin = node->GetPlugin( "transform" );
 
     if( transPlugin != nullptr )
@@ -51,9 +49,15 @@ glm::mat4           GetTransform    ( const model::IModelNode* node )
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
         if( transformParam != nullptr )
             transform = transformParam->Evaluate();
-        else
-            transform = glm::mat4( 1 ); //  Identity matrix
     }
+    return transform;
+}
+
+// ***********************
+//
+glm::mat4           GetTransform            ( const model::IModelNode* node )
+{
+    glm::mat4 transform = GetSingleNodeTransform( node );
 
     auto parentNode = model::ModelState::GetInstance().QueryNodeParent( node );
 
@@ -106,20 +110,27 @@ GridLine::~GridLine()
 //
 bool        GridLine::AlignNode       ( model::BasicNodePtr node, GridLineAlignement alignement )
 {
-    glm::mat4 transform = GetTransform( node.get() );
+    auto parentNode = model::ModelState::GetInstance().QueryNodeParent( node.get() );
+
+    glm::mat4 childTransform = GetSingleNodeTransform( node.get() );
+    glm::mat4 parentTransform = GetTransform( parentNode );
+
+    glm::mat4 transform = parentTransform;
+    if( alignement != GridLineAlignement::TSA_WeightCenter )
+        transform = transform * childTransform;
+
     glm::vec4 referencePos = glm::vec4( ReferencePos( node, alignement ), 1.0 );
 
-    glm::vec3 position = glm::vec3( transform * referencePos );
+    glm::vec3 transformedReferencePos = glm::vec3( transform * referencePos );
 
-    glm::vec3 translate = ComputeTranslation( position );
+    glm::vec3 translate = ComputeTranslation( transformedReferencePos );
+    glm::vec3 newPosition = transformedReferencePos + translate;
 
     // Compute translation in local coordinates system of object
-    glm::vec4 localTranslate = glm::inverse( transform ) * glm::vec4( translate, 0.0 );
-
-    // debug
-    glm::vec4 checkPoint = transform * ( referencePos + localTranslate );
+    glm::vec4 localPosition = glm::inverse( transform ) * glm::vec4( newPosition, 1.0 );
+    glm::vec3 localTranslate = glm::vec3( childTransform * ( localPosition - referencePos ) );
     
-    return UpdateTransform( node, glm::vec3( localTranslate ) );
+    return UpdateTransform( node, localTranslate );
 }
 
 // ***********************
