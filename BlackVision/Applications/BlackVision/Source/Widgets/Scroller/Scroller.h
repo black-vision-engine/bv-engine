@@ -54,6 +54,14 @@ public:
         ONB_Total
     };
 
+    enum ScrollerItemType
+    {
+        SIT_Enqued,
+        SIT_OnScreen,
+        SIT_OffScreen,
+        SIT_All
+    };
+
 private:
     static const std::string        m_type;
 
@@ -129,34 +137,34 @@ public:
 
 
 
-	void		SetSpeed			( Float32 speed );
-	void		SetInterspace		( Float32 interspace );
-    void        SetNodePath         ( std::string nodePath );
-    void        SetLowBufferMult    ( Float32 lowBufferVal );
-    void        SetScrollDirection  ( ScrollDirection scrollDirection );
-    void        SetEnableEvents     ( bool enable );
-    bool        SetSmoothTime       ( Float32 time );
-    Float32     GetSmoothTime       () const;
+	void		SetSpeed			        ( Float32 speed );
+	void		SetInterspace		        ( Float32 interspace );
+    void        SetNodePath                 ( std::string nodePath );
+    void        SetLowBufferMult            ( Float32 lowBufferVal );
+    void        SetScrollDirection          ( ScrollDirection scrollDirection );
+    void        SetEnableEvents             ( bool enable );
+    bool        SetSmoothTime               ( Float32 time );
+    Float32     GetSmoothTime               () const;
     void        SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior );
 
 
 
-	virtual void	Initialize		()				override {}
-	virtual void	Update			( TimeType t )	override;
-	virtual void	Deinitialize	()				override {}
+	virtual void	            Initialize		()				override {}
+	virtual void	            Update			( TimeType t )	override;
+	virtual void	            Deinitialize	()				override {}
 
 
-    virtual const std::string & GetType         () const override;
-    static const std::string &  Type            ();
+    virtual const std::string &                             GetType         () const override;
+    static const std::string &                              Type            ();
 
-    virtual model::IParameterPtr                           GetParameter        ( const std::string & name ) const override;
-    virtual const std::vector< model::IParameterPtr > &    GetParameters       () const override;
+    virtual model::IParameterPtr                            GetParameter    ( const std::string & name ) const override;
+    virtual const std::vector< model::IParameterPtr > &     GetParameters   () const override;
 
-    virtual void                Serialize       ( ISerializer& ser ) const override;
-    static ScrollerPtr          Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
-    static ScrollerPtr          Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
+    virtual void                                            Serialize       ( ISerializer& ser ) const override;
+    static ScrollerPtr                                      Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
+    static ScrollerPtr                                      Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 
-    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
+    virtual bool                                            HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 
 public:
     // Event handler funtions
@@ -168,6 +176,9 @@ public:
 
     bool            SmoothStart         ();
     bool            SmoothPause         ();
+
+    void            ListTypedItems      ( std::vector< bv::model::BasicNode * > & items, ISerializer & response, ScrollerItemType type );
+    bool            GetItems            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 
     bool            AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
     bool            AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );

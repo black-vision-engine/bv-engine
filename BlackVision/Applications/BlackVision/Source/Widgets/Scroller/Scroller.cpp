@@ -19,6 +19,7 @@
 
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Models/ModelState.h"
 
 #include <algorithm>
 #include "System/Time.h"
@@ -49,6 +50,18 @@ std::pair< bv::nodelogic::Scroller::OffscreenNodeBehavior, const char* > Offscre
 
 template<> bv::nodelogic::Scroller::OffscreenNodeBehavior   String2T        ( const std::string & s, const bv::nodelogic::Scroller::OffscreenNodeBehavior & defaultVal )    { return String2Enum( OffscreenNodeBehaviorMapping, s, defaultVal ); }
 template<> std::string                                      T2String        ( const bv::nodelogic::Scroller::OffscreenNodeBehavior & t )                                    { return Enum2String( OffscreenNodeBehaviorMapping, t ); }
+    
+
+std::pair< bv::nodelogic::Scroller::ScrollerItemType, const char* > ScrollerItemTypeMapping[] = 
+{   std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_All, "All" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_Enqued, "Enqued" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_OffScreen, "OffScreen" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_OnScreen, "OnScreen" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_All, "" )      // default
+};
+
+template<> bv::nodelogic::Scroller::ScrollerItemType    String2T        ( const std::string & s, const bv::nodelogic::Scroller::ScrollerItemType & defaultVal )    { return String2Enum( ScrollerItemTypeMapping, s, defaultVal ); }
+template<> std::string                                  T2String        ( const bv::nodelogic::Scroller::ScrollerItemType & t )                                    { return Enum2String( ScrollerItemTypeMapping, t ); }
     
 
 // ***********************
@@ -845,6 +858,10 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     {
         response.SetAttribute( "SmoothTime", SerializationHelper::T2String( GetSmoothTime() ) );
     }
+    else if( scrollAction == "GetItems" )
+    {
+        GetItems( eventDeser, response, editor );
+    }
 
     return true;
 }
@@ -1220,7 +1237,58 @@ void            Scroller::AddImages           ( IDeserializer & eventSer, ISeria
     }
 }
 
+// ***********************
+//
+bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
+{
+    ScrollerItemType type = SerializationHelper::String2T( eventDeser.GetAttribute( "Type" ), ScrollerItemType::SIT_All );
 
+    response.EnterArray( "Items" );
+
+    if( type == ScrollerItemType::SIT_OnScreen )
+    {
+        ListTypedItems( m_nodesStates.m_visibles, response, type );
+    }
+    else if( type == ScrollerItemType::SIT_OffScreen )
+    {
+        ListTypedItems( m_nodesStates.m_nonActives, response, type );
+    }
+    else if( type == ScrollerItemType::SIT_Enqued )
+    {
+        ListTypedItems( m_nodesStates.m_actives, response, type );
+    }
+    else
+    {
+        // type == ScrollerItemType::SIT_All
+        ListTypedItems( m_nodesStates.m_nonActives, response, ScrollerItemType::SIT_OffScreen );
+        ListTypedItems( m_nodesStates.m_actives, response, ScrollerItemType::SIT_Enqued );
+    }
+
+    response.ExitChild();   // Items
+
+    return true;
+}
+
+// ***********************
+//
+void            Scroller::ListTypedItems      ( std::vector< bv::model::BasicNode * > & items, ISerializer & response, ScrollerItemType type )
+{
+    std::string typeString = SerializationHelper::T2String( type );
+
+    for( auto & item : items )
+    {
+        response.EnterChild( "Item" );
+        
+        response.SetAttribute( "NodePath", model::ModelState::GetInstance().BuildIndexPath( item ) );
+        
+        if( m_nodesStates.IsVisible( item ) )
+            response.SetAttribute( "Type", SerializationHelper::T2String( ScrollerItemType::SIT_OnScreen ) );
+        else
+            response.SetAttribute( "Type", typeString );
+
+        response.ExitChild();   // Item
+    }
+}
 
 } // nodelogic
 } // bv
