@@ -28,7 +28,7 @@ public:
 
 
 
-    static float        GetNodeZ            ( SceneNode * node, RenderLogicContext * ctx );
+    static float        ComputeNodeZ        ( SceneNode * node, RenderLogicContext * ctx );
     static bool         IsTransparent       ( SceneNode * node );
 
 private:

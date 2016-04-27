@@ -38,7 +38,7 @@ RenderingQueue::~RenderingQueue()
 
 // ***********************
 //
-float               RenderingQueue::GetNodeZ            ( SceneNode * node, RenderLogicContext * ctx )
+float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, RenderLogicContext * ctx )
 {
     float z = 0.0f;
 
@@ -87,7 +87,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
     if( !node->IsVisible() )
         return;
 
-    float z = GetNodeZ( node, ctx );
+    float z = ComputeNodeZ( node, ctx );
     
     if( IsTransparent( node ) )
     {
