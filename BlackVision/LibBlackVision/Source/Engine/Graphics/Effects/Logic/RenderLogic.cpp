@@ -344,8 +344,14 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & sce
     for( auto & scene : scenes )
     {
         renderer->EnableScene( scene );
-        RenderNode( scene->GetRoot(), ctx );
-        RenderGridLines( scene, ctx );          // Use some generic solution when other editor helper object apear in engine.
+        auto renderQueue = ctx->GetRenderQueueAllocator()->Allocate();
+
+        renderQueue->QueueNodeSubtree( scene->GetRoot(), ctx );
+        renderQueue->Render( ctx );
+        
+        ctx->GetRenderQueueAllocator()->Free();
+        
+        RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
     }
 
     disableBoundRT( ctx );
@@ -460,7 +466,7 @@ RenderLogicContext *    RenderLogic::GetContext         ( Renderer * renderer )
 {
     if( !m_ctx )
     {
-        m_ctx = new RenderLogicContext( renderer, &m_rtStackAllocator, this );
+        m_ctx = new RenderLogicContext( renderer, &m_rtStackAllocator, &m_renderQueueAllocator, this );
     }
 
     return m_ctx;

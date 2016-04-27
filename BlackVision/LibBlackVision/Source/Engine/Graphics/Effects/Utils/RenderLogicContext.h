@@ -2,6 +2,7 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 
 
@@ -13,16 +14,18 @@ private:
 
     Renderer *                      m_renderer;
     RenderTargetStackAllocator *    m_rtAllocator;
+    RenderQueueStackAllocator *     m_renderQueueAllocator;
     RenderLogic *                   m_renderLogic;
     RenderTarget *                  m_boundRenderTarget;
 
 public:
 
-        RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderLogic * renderLogic );
+        RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderQueueStackAllocator * rqStackAllocator, RenderLogic * renderLogic );
         ~RenderLogicContext ();
 
     Renderer *                      GetRenderer             () const;
     RenderTargetStackAllocator *    GetRenderTargetAllocator() const;
+    RenderQueueStackAllocator *     GetRenderQueueAllocator () const;
     RenderLogic *                   GetRenderLogic          () const;
     RenderTarget *                  GetBoundRenderTarget    () const;
 

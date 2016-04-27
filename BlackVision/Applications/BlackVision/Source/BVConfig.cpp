@@ -99,7 +99,7 @@ BVConfig::BVConfig                      ()
 		m_defaultFOV = 90.0f;
 
     m_defaultCameraPosition  = glm::vec3( ConfigManager::GetFloat( "camera/position/x" ), ConfigManager::GetFloat( "camera/position/y" ), ConfigManager::GetFloat( "camera/position/z" ) );
-    m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 0.f );
+    m_defaultCameraDirection = glm::vec3( ConfigManager::GetFloat( "camera/direction/x" ), ConfigManager::GetFloat( "camera/direction/y" ), ConfigManager::GetFloat( "camera/direction/z" ) );
     m_defaultCameraUp        = glm::vec3( 0.f, 1.f, 0.f );
 
     m_defaultStatsMovingAverageWindowSize   = 500; //500

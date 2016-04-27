@@ -116,9 +116,8 @@ void Camera::SetFrustum                             ( float left, float right, f
 //
 void Camera::SetFrame                               ( const glm::vec3 & position, const glm::vec3 & direction, const glm::vec3 & up )
 {
-    m_position = position;
-    m_direction = direction;
-    m_up = up;
+    SetPosition( position );
+    SetAxes( direction, up );
 
     UpdatePVMatrix();
 }

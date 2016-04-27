@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
 #include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
@@ -36,6 +37,7 @@ private:
 
     bv::videocards::VideoCardManager *      m_VideoCardManager;
     RenderTargetStackAllocator      m_rtStackAllocator;
+    RenderQueueStackAllocator       m_renderQueueAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
     FullscreenEffectInstance *      m_blitEffect;
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
@@ -80,9 +82,11 @@ public:
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
     void    RenderChildren  ( SceneNode * node, RenderLogicContext * ctx, int firstChildIdx = 0 );
 
+    // Moved from private for RenderingQueue logic
+    void    RenderBoundingBox   ( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color );
+
 private:
 
-    void    RenderBoundingBox   ( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color );
     void    RenderGridLines     ( Scene * scene, RenderLogicContext * ctx );
        
     RenderLogicContext *            GetContext              ( Renderer * renderer );

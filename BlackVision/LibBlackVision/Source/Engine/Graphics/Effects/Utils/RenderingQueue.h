@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-
 
 namespace bv
 {
-
+class RenderLogicContext;
+class SceneNode;
 
 class RenderingQueue
 {
@@ -24,7 +22,7 @@ public:
     void                QueueSingleNode     ( SceneNode * node, RenderLogicContext * ctx );
     void                QueueNodeSubtree    ( SceneNode * node, RenderLogicContext * ctx );
 
-    void                RenderQueue         ( RenderLogicContext * ctx );
+    void                Render              ( RenderLogicContext * ctx );
 
     void                ClearQueue          ();
 
@@ -32,6 +30,9 @@ public:
 
     static float        GetNodeZ            ( SceneNode * node, RenderLogicContext * ctx );
     static bool         IsTransparent       ( SceneNode * node );
+
+private:
+    void                RenderNode          ( SceneNode * node, RenderLogicContext * ctx );
 };
 
 
