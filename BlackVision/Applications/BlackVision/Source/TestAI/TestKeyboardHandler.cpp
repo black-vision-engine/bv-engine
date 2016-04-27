@@ -90,6 +90,8 @@ void TestKeyboardHandler::OnMouse             ( MouseAction action, int posX, in
         mouseEvent->MouseY = (Float32)posY;
         mouseEvent->AutoSelect = true;
         mouseEvent->AutoSelectColor = glm::vec4( 1, 0, 0, 1 );
+        mouseEvent->SocketID = SEND_BROADCAST_EVENT;
+        mouseEvent->EventID = 0;
 
         GetDefaultEventManager().QueueEvent( mouseEvent );
     }
