@@ -54,7 +54,7 @@ template<> std::string                                      T2String        ( co
 
 std::pair< bv::nodelogic::Scroller::ScrollerItemType, const char* > ScrollerItemTypeMapping[] = 
 {   std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_All, "All" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_Enqued, "Enqued" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_Enqueued, "Enqueued" )
     , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_OffScreen, "OffScreen" )
     , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_OnScreen, "OnScreen" )
     , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_All, "" )      // default
@@ -1253,7 +1253,7 @@ bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISer
     {
         ListTypedItems( m_nodesStates.m_nonActives, response, type );
     }
-    else if( type == ScrollerItemType::SIT_Enqued )
+    else if( type == ScrollerItemType::SIT_Enqueued )
     {
         ListTypedItems( m_nodesStates.m_actives, response, type );
     }
@@ -1261,7 +1261,7 @@ bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISer
     {
         // type == ScrollerItemType::SIT_All
         ListTypedItems( m_nodesStates.m_nonActives, response, ScrollerItemType::SIT_OffScreen );
-        ListTypedItems( m_nodesStates.m_actives, response, ScrollerItemType::SIT_Enqued );
+        ListTypedItems( m_nodesStates.m_actives, response, ScrollerItemType::SIT_Enqueued );
     }
 
     response.ExitChild();   // Items

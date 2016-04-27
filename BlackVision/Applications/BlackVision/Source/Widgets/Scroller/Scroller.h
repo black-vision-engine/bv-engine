@@ -56,7 +56,7 @@ public:
 
     enum ScrollerItemType
     {
-        SIT_Enqued,
+        SIT_Enqueued,
         SIT_OnScreen,
         SIT_OffScreen,
         SIT_All
