@@ -185,6 +185,7 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     {
         auto result = ConfigManager::GetString( key );
         ser.SetAttribute( "Value", result );
+		ser.SetAttribute( "Key", key );
     }
     else if( command == ConfigEvent::Command::SetValue )
     {
