@@ -2,8 +2,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-
-
+#include "Engine/Models/Timeline/TimelineHelper.h"
 
 namespace bv
 {
@@ -19,6 +18,9 @@ IValuePtr           CreateValue                         ( const IDeserializer & 
 void                SerializeValue                      ( ISerializer & ser, IValueConstPtr val );
 
 } // SerializationHelper
+
+model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserializer & deser );
+
 } // bv
 
 

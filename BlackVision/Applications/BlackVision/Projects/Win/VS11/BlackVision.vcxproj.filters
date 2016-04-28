@@ -170,6 +170,9 @@
     <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp">
       <Filter>Widgets\TextEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp">
+      <Filter>Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -311,6 +314,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h">
       <Filter>Widgets\TextEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h">
+      <Filter>Widgets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

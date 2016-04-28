@@ -3,6 +3,9 @@
 #include "CoreDEF.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "ScrollerNodesStates.h"
+
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+
 #include <string>
 #include <vector>
 #include <map>
@@ -70,6 +73,8 @@ private:
 	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
 
 private:
+
+    model::DefaultParamValModelPtr          m_paramValModel;
 
     std::string                             m_scrollerNodePath;
     std::string                             m_sceneName;

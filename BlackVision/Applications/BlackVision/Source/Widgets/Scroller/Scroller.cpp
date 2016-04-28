@@ -7,19 +7,23 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
-#include "ScrollerEvents.h"
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
+
+#include "ScrollerEvents.h"
 #include "Tools/StringHeplers.h"
 #include "Engine/Events/EventHandlerHelpers.h"
+#include "Widgets/NodeLogicHelper.h"
 
 #include "Mathematics/glm_inc.h"
 
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+
 
 #include <algorithm>
 #include "System/Time.h"
@@ -184,7 +188,12 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_enableEvents( false )
     , m_lowBufferMultiplier( 3.5 )
     , m_offscreenNodeBehavior( OffscreenNodeBehavior::ONB_SetNonActive )
-{}
+{
+    m_paramValModel = std::make_shared< model::DefaultParamValModel >();
+    
+    //auto alphaEval = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    //m_paramValModel->
+}
 
 
 // ========================================================================= //
@@ -705,6 +714,8 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
     auto offscreenBahavior = SerializationHelper::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
     float smoothTime = SerializationHelper::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
 
+    //auto timeline = GetDefaultTimeline( deser );
+
     auto scroller = Scroller::Create( parent, rect );
     scroller->SetSpeed( speed );
     scroller->SetInterspace( interspace );
@@ -1211,18 +1222,16 @@ bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerialize
 
 // ***********************
 //
-model::IParameterPtr                     Scroller::GetParameter        ( const std::string & ) const
+model::IParameterPtr                     Scroller::GetParameter        ( const std::string & name ) const
 {
-    return nullptr;
+    return m_paramValModel->GetParameter( name );
 }
 
 // ***********************
 //
 const std::vector< model::IParameterPtr > & Scroller::GetParameters    () const
 {
-    static std::vector< model::IParameterPtr > ret;
-
-    return ret;
+    return m_paramValModel->GetParameters();
 }
 
 // ***********************
