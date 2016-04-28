@@ -146,6 +146,7 @@ public:
     bool        SetSmoothTime               ( Float32 time );
     Float32     GetSmoothTime               () const;
     void        SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior );
+    Float32     GetContentLength            ();
 
 
 

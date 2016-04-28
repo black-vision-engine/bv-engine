@@ -862,6 +862,10 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     {
         GetItems( eventDeser, response, editor );
     }
+    else if( scrollAction == "ContentLength" )
+    {
+        response.SetAttribute( "ContentLength", SerializationHelper::T2String( GetContentLength() ) );
+    }
 
     return true;
 }
@@ -1068,6 +1072,24 @@ void		Scroller::SetSpeed			( Float32 speed )
 void        Scroller::SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior )
 {
     m_offscreenNodeBehavior = behavior;
+}
+
+// ***********************
+//
+Float32     Scroller::GetContentLength            ()
+{
+    std::vector< model::BasicNode * > allNodes = m_nodesStates.m_actives;
+    allNodes.insert( allNodes.end(), m_nodesStates.m_nonActives.begin(), m_nodesStates.m_nonActives.end() );
+
+    Float32 scrollLength = 0.0f;
+
+    for( int i = 1; i < allNodes.size(); ++i )
+    {
+        scrollLength += ShiftStep( allNodes[ i - 1 ], allNodes[ i ] );
+    }
+    scrollLength += ShiftStep( allNodes[ allNodes.size() - 1 ], allNodes[ 0 ] );
+
+    return abs( scrollLength );
 }
 
 // ***********************
