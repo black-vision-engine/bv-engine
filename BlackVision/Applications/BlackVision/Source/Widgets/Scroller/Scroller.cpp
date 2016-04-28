@@ -802,6 +802,10 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     {
         return AddPresetAndMessages( eventDeser, response, editor );
     }
+    else if( scrollAction == "RemoveNodes" )
+    {
+        return RemoveNodes( eventDeser, response, editor );
+    }
     else if( scrollAction == "SetSpeed" )
 	{
         std::string param = eventDeser.GetAttribute( "Speed" );
@@ -1115,6 +1119,36 @@ bool            Scroller::AddPresetAndMessages( IDeserializer & eventSer, ISeria
     AddImages( eventSer, response, editor, addedNode );
 
     return AddPresetToScene( eventSer, response, editor, addedNode );
+}
+
+// ***********************
+//
+bool            Scroller::RemoveNodes         ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * editor )
+{
+    bool deleteNodes = SerializationHelper::String2T( eventDeser.GetAttribute( "DeleteFromTree" ), false );
+
+    if( eventDeser.EnterChild( "NodesArray" ) )
+    {
+        if( eventDeser.EnterChild( "Node" ) )
+        {
+            do
+            {
+                std::string nodePath = eventDeser.GetAttribute( "NodePath" );
+                auto node = editor->GetNode( m_sceneName, nodePath );
+
+                m_nodesStates.Remove( std::static_pointer_cast< model::BasicNode >( node ).get() );
+                
+                if( deleteNodes )
+                    editor->DeleteChildNode( editor->GetModelScene( m_sceneName ), m_parentNode, node );
+
+            } while( eventDeser.NextChild() );
+
+            eventDeser.ExitChild();   // Node
+        }
+        eventDeser.ExitChild();   // NodesArray
+    }
+
+    return true;
 }
 
 // ***********************

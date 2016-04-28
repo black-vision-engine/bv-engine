@@ -183,6 +183,7 @@ public:
 
     bool            AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
     bool            AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
+    bool            RemoveNodes         ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 
     bool            GetStatus           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 
