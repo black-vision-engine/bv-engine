@@ -89,7 +89,8 @@ namespace {
 inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+        m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
 
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
@@ -147,7 +148,8 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+        renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
 
     //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;

@@ -66,7 +66,12 @@ void                    Float3AttributeChannel::AddAttribute( const glm::vec3 & 
     m_attributes.push_back( v );
 }
 
-
+// *********************************
+//
+void                    Float3AttributeChannel::AddAttributes( const std::vector< glm::vec3 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
+}
 
 // *********************************
 //

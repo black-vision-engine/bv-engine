@@ -569,6 +569,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::MultiGlobalEffectTestScene( pluginsManager, timeline );
     }
+    else if( scene == "MESH_TEST_SCENE" )
+    {
+        node = TestScenesFactory::MeshTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1185,6 +1189,22 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
     //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
     //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+
+    return root;
+}
+
+// *******************************
+//
+model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 15.f, 15.f, 15.f ) );
+
+    model::LoadMesh( root->GetPlugin( "mesh" ), "bunny.obj" );
 
     return root;
 }

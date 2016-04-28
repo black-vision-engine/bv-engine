@@ -86,5 +86,14 @@ bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt3
     return plugin->LoadResource( desc );
 }
 
+// *******************************
+//
+bool    LoadMesh        ( IPluginPtr plugin, const std::string & meshPath )
+{
+    auto desc = MeshAssetDesc::Create( meshPath );
+
+    return plugin->LoadResource( desc );
+}
+
 } //model
 } //bv

@@ -289,6 +289,9 @@
     <Filter Include="Engine\Models\GridLines">
       <UniqueIdentifier>{63a2c4ad-8694-4a12-b1c2-5a76f823772a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Mesh">
+      <UniqueIdentifier>{c3e1c121-8faf-4d86-b3cb-bdd03b0273ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1494,6 +1497,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp">
       <Filter>Engine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAsset.cpp">
+      <Filter>Assets\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp">
+      <Filter>Assets\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp">
+      <Filter>Assets\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp">
+      <Filter>Assets\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3685,6 +3703,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h">
       <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h">
+      <Filter>Assets\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h">
+      <Filter>Assets\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h">
+      <Filter>Assets\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h">
+      <Filter>Assets\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

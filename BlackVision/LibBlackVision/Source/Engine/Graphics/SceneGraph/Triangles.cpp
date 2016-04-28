@@ -22,4 +22,18 @@ Triangles::~Triangles              ()
 {
 }
 
+// **************************
+//
+int     Triangles::NumTriangles    ( unsigned int ccNum ) const
+{
+    return NumVertices( ccNum ) - 2;
+}
+
+// **************************
+//
+int     Triangles::NumVertices     ( unsigned int ccNum ) const
+{
+    return RAD()->GetNumVerticesInConnectedComponent( ccNum );
+}
+
 } //bv
