@@ -29,6 +29,7 @@
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Resources/VertexDescriptor.h"
 
 #include "Engine/Graphics/Resources/VertexArray.h"
 

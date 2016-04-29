@@ -65,6 +65,7 @@ public:
     //virtual int                     GetEntrySize                    ()                      const;
 
     void                            AddAttribute                    ( const glm::vec2 & v );
+    void                            AddAttributes                   ( const std::vector< glm::vec2 > & v );
 
 };
 

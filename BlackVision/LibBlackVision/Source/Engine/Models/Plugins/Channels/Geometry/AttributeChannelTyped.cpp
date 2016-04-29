@@ -125,5 +125,12 @@ void                    Float2AttributeChannel::AddAttribute ( const glm::vec2 &
     m_attributes.push_back(v);
 }
 
+// *********************************
+//
+void                    Float2AttributeChannel::AddAttributes ( const std::vector< glm::vec2 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
+}
+
 } // model
 } // bv

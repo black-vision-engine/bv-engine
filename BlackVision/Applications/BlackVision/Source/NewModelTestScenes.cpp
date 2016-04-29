@@ -1201,10 +1201,24 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 15.f, 15.f, 15.f ) );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 5.f, 5.f, 5.f ) );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 50.f, 0.f ) );
 
-    model::LoadMesh( root->GetPlugin( "mesh" ), "bunny.obj" );
+    auto material = root->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+    
+    //model::LoadMesh( root->GetPlugin( "mesh" ), "bunny.obj" );
+    model::LoadMesh( root->GetPlugin( "mesh" ), "spot.obj" );
+    model::LoadTexture( root->GetPlugin( "texture" ), "spot_texture.png" );
+    //model::LoadMesh( root->GetPlugin( "mesh" ), "capsule.obj" );
+
 
     return root;
 }

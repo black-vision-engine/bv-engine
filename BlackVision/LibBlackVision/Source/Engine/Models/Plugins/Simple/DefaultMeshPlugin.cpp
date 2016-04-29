@@ -66,10 +66,11 @@ void DefaultMeshPlugin::SetPrevPlugin( IPluginPtr prev )
 DefaultMeshPlugin::DefaultMeshPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
-    , m_vaChannel( nullptr )
     , m_meshAsset( nullptr )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    
+    m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES );
 
     SetPrevPlugin( prev );
 }
@@ -135,36 +136,60 @@ void                                DefaultMeshPlugin::Update                   
 //
 void		DefaultMeshPlugin::InitVertexAttributesChannel		()
 {
-    m_vaChannel = nullptr;
-
     if( m_meshAsset )
     {
         auto cc = ConnectedComponent::Create();
 
         auto posDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        auto normDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
+        auto uvDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
+        
         auto pos = std::make_shared< Float3AttributeChannel >( posDesc, posDesc->SuggestedDefaultName( 0 ), false );
+        auto norm = std::make_shared< Float3AttributeChannel >( normDesc, normDesc->SuggestedDefaultName( 0 ), false );
+        auto uv = std::make_shared< Float2AttributeChannel >( uvDesc, uvDesc->SuggestedDefaultName( 0 ), false );
 
-        AddGeometry( m_meshAsset, pos );
+        AddGeometry( m_meshAsset, pos, norm, uv );
 
         VertexAttributesChannelDescriptor vacDesc;
-        vacDesc.AddAttrChannelDesc( posDesc );
 
-        m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vacDesc );
+        if( pos->GetNumEntries() > 0 )
+        {
+            vacDesc.AddAttrChannelDesc( posDesc );
+            cc->AddAttributeChannel( pos );
+        }
 
-        cc->AddAttributeChannel( pos );
+        if( norm->GetNumEntries() > 0 )
+        {
+            vacDesc.AddAttrChannelDesc( normDesc );
+            cc->AddAttributeChannel( norm );
+        }
+
+        if( uv->GetNumEntries() > 0 )
+        {
+            vacDesc.AddAttrChannelDesc( uvDesc );
+            cc->AddAttributeChannel( uv );
+        }
+
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vacDesc );
 
         m_vaChannel->AddConnectedComponent( cc );
+
+        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
     }
 }
 
 // *************************************
 //
-void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel )
+void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel )
 {
     posChannel->AddAttributes( meshAsset->GetGeometry()->positions );
+    normChannel->AddAttributes( meshAsset->GetGeometry()->normals );
+    uvChannel->AddAttributes( meshAsset->GetGeometry()->uvs );
+
     for( UInt32 i = 0; i < meshAsset->NumChildren(); ++i )
     {
-        AddGeometry( meshAsset->GetChild( i ), posChannel );
+        AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel );
     }
 }
 

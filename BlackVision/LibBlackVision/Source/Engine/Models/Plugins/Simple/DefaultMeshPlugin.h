@@ -56,7 +56,7 @@ private:
 
     void										InitVertexAttributesChannel ();
 
-    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel );
+    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel );
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 

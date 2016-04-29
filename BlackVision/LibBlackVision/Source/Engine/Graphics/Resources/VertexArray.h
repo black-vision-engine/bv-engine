@@ -69,6 +69,8 @@ public:
     VertexBuffer *              GetVertexBuffer                 ();
     VertexDescriptor *          GetVertexDescriptor             ();
 
+    void                        SetVertexDescriptor             ( VertexDescriptor * desc );
+
     void                        AddCCEntry                      ( unsigned int numVertices );
 
     SizeType                    GetNumConnectedComponents       () const;

@@ -172,10 +172,24 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
     vao->ResetState();
+
+    // recreate vertex descriptor
+    VertexDescriptor * vd = new VertexDescriptor( geomDesc->GetNumVertexChannels() );
+    unsigned int attributeOffset = 0;
+
+    for( unsigned int i = 0; i < geomDesc->GetNumVertexChannels(); ++i )
+    {
+        auto * channelDesc = geomDesc->GetAttrChannelDescriptor( i );
+        vd->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );
+        attributeOffset += channelDesc->GetEntrySize();     
+    }
+
+    vd->SetStride( attributeOffset );
+    vao->SetVertexDescriptor( vd );
+
 
     char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
     unsigned int currentOffset = 0;
@@ -190,7 +204,7 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
     }
-
+    
     vao->SetNeedsUpdateRecreation( true );
 }
 
