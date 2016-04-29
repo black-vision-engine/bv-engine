@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
-#include "Serialization/Json/JsonSerializeObject.h"
 #include "Assets/Mesh/MeshAsset.h"
 
 #include "CoreDEF.h"
@@ -18,9 +17,12 @@ class MeshAssetDesc : public AssetDesc,  public std::enable_shared_from_this< As
 private:
 
 	static const std::string			uid;
+
     std::string						    m_path;
+    std::string                         m_groupName;
+    bool                                m_recursive;
 	
-	explicit							MeshAssetDesc	( const std::string & path );
+    explicit							MeshAssetDesc	    ( const std::string & path, const std::string & groupName, bool recursive );
 
 protected:
 
@@ -28,19 +30,22 @@ protected:
 
 public:
 
-    virtual void                        Serialize       ( ISerializer& sob ) const;
-	static ISerializableConstPtr        Create          ( const IDeserializer& dob );
+    virtual void                        Serialize           ( ISerializer & ser ) const;
+	static ISerializableConstPtr        Create              ( const IDeserializer & deser );
 
 	virtual bool						IsCacheable			() const override;
 
 	virtual VoidConstPtr				QueryThis			() const override;
 
 	virtual std::string					GetKey				() const override;
-    virtual std::string                 GetProposedShortKey () const override;
+	
+    std::string					        GetPath				() const;
+	std::string					        GetGroupName		() const;
+	bool				                IsRecursive			() const;
 
     virtual SizeType                    EstimateMemoryUsage () const override;
 
-    static MeshAssetDescConstPtr		Create				( const std::string & path );
+    static MeshAssetDescConstPtr		Create				( const std::string & path, const std::string & groupName, bool recursive );
 
 	static const std::string &			UID					();
 

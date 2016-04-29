@@ -1,12 +1,7 @@
 #include "stdafx.h"
 
 #include "MeshAssetDescriptor.h"
-#include "Tools/Utils.h"
-#include "ProjectManager.h"
-
 #include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
-#include "Serialization/BV/BVSerializeContext.h"
 
 
 namespace bv
@@ -19,30 +14,41 @@ const std::string   MeshAssetDesc::uid = "MESH_ASSET_DESC";
 //
 void                MeshAssetDesc::Serialize       ( ISerializer & ser ) const
 {
-    { ser; }
+    ser.EnterChild( "asset" );
+
+    ser.SetAttribute( "type", UID() );
+
+	ser.SetAttribute( "path", m_path );
+	ser.SetAttribute( "groupName", m_groupName );
+	ser.SetAttribute( "recursive", SerializationHelper::T2String( m_recursive ) );
+
+    ser.ExitChild();
 }
 
 // ***********************
 //
 ISerializableConstPtr MeshAssetDesc::Create          ( const IDeserializer & deser )
 {
-    { deser; }
-    return nullptr;
+	auto path = deser.GetAttribute( "path" );
+	auto groupName = deser.GetAttribute( "groupName" );
+	auto recursive = SerializationHelper::String2T< bool >( deser.GetAttribute( "recursive" ) );
+
+    return Create( path, groupName, recursive );
 }
 
 // ***********************
 //
-MeshAssetDescConstPtr MeshAssetDesc::Create         ( const std::string & path )
+MeshAssetDescConstPtr MeshAssetDesc::Create         ( const std::string & path, const std::string & groupName, bool recursive )
 {
     struct make_shared_enabler_MeshAssetDesc : public MeshAssetDesc
     {
-        make_shared_enabler_MeshAssetDesc( const std::string & path )
-            : MeshAssetDesc( path )
+        make_shared_enabler_MeshAssetDesc( const std::string & path, const std::string & groupName, bool recursive )
+            : MeshAssetDesc( path, groupName, recursive )
         {
         }
     };
 
-    return std::make_shared< make_shared_enabler_MeshAssetDesc >( path );
+    return std::make_shared< make_shared_enabler_MeshAssetDesc >( path, groupName, recursive );
 }
 
 // ***********************
@@ -75,8 +81,10 @@ VoidConstPtr MeshAssetDesc::QueryThis() const
 
 // ***********************
 //
-MeshAssetDesc::MeshAssetDesc( const std::string & path )
+MeshAssetDesc::MeshAssetDesc( const std::string & path, const std::string & groupName, bool recursive )
     : m_path( path )
+    , m_groupName( groupName )
+    , m_recursive( recursive )
 {
 }
 
@@ -84,21 +92,35 @@ MeshAssetDesc::MeshAssetDesc( const std::string & path )
 //
 std::string				MeshAssetDesc::GetKey		() const
 {
+    return m_path;
+}
+
+// ***********************
+//
+std::string				MeshAssetDesc::GetPath		() const
+{
 	return m_path;
 }
 
 // ***********************
 //
-std::string             MeshAssetDesc::GetProposedShortKey () const
+std::string				MeshAssetDesc::GetGroupName	() const
 {
-    auto basename = AssetDesc::GetProposedShortKey();
-    return basename.substr( 0, basename.find( '.' ) );
+	return m_groupName;
+}
+
+// ***********************
+//
+bool				    MeshAssetDesc::IsRecursive	() const
+{
+	return m_recursive;
 }
 
 // ***********************
 //
 SizeType                MeshAssetDesc::EstimateMemoryUsage () const
 {
+    //FIXME
     SizeType assetSize = 0;
     return assetSize;
 }

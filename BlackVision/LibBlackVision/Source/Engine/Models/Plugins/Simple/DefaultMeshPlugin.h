@@ -54,9 +54,9 @@ public:
 
 private:
 
-    void										InitVertexAttributesChannel ();
+    bool										InitVertexAttributesChannel ( bool recursive );
 
-    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel );
+    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, bool recursive );
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 

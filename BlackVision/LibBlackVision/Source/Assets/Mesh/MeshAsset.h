@@ -1,10 +1,9 @@
 #pragma once
 
 #include "Assets/Asset.h"
-#include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
-#include "CoreDEF.h"
 #include "Mathematics/glm_inc.h"
+#include "CoreDEF.h"
 
 
 namespace bv
@@ -31,10 +30,10 @@ public:
 
 private:
 
-	static const std::string	    uid;
-    std::string			            m_key;
+	static const std::string	        uid;
+    std::string			                m_key;
 
-    MeshGeometryPtr                 m_geometry;
+    MeshGeometryPtr                     m_geometry;
 
     std::vector< MeshAssetConstPtr >    m_children;
 
@@ -53,6 +52,7 @@ public:
 
     void                        AddChild        ( MeshAssetConstPtr child );
 
+    MeshAssetConstPtr           GetChild        ( const std::string & key ) const;
     MeshAssetConstPtr           GetChild        ( UInt32 idx ) const;
     UInt32                      NumChildren     () const;
 

@@ -3,6 +3,7 @@
 #include <fbxsdk.h>
 
 #include "Assets/Mesh/MeshAsset.h"
+#include "Assets/Mesh/MeshAssetDescriptor.h"
 
 
 namespace bv {
@@ -10,7 +11,7 @@ namespace bv {
 struct MeshUtils
 {
 
-	static MeshAssetConstPtr		    LoadMesh			( const std::string & path );
+	static MeshAssetConstPtr		    LoadMesh			( MeshAssetDescConstPtr desc );
     static MeshAssetConstPtr            ConvertToMesh       ( FbxNode * node );
 
 private:

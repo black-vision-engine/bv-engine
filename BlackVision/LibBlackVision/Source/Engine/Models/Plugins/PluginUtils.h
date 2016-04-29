@@ -17,7 +17,7 @@ bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, Tex
 
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps );
 
-bool    LoadMesh        ( IPluginPtr plugin, const std::string & meshPath );
+bool    LoadMesh        ( IPluginPtr plugin, const std::string & meshPath, const std::string & meshName = "", bool recursive = true );
 
 } //model
 } //bv

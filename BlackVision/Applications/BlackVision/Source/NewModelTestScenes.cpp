@@ -1197,15 +1197,25 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 //
 model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    auto child = model::BasicNode::Create( "child", timeEvaluator );
+    root->AddChildToModelOnly( child );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
     root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
+    child->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    child->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    child->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+
     model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 5.f, 5.f, 5.f ) );
     model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 50.f, 0.f ) );
+    
+    model::SetParameterScale( child->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.5f, 0.5f, 0.5f ) );
+    model::SetParameterTranslation( child->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 3.0f, 1.0f, 0.0f ) );
 
     auto material = root->GetPlugin( "material" );
     model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
@@ -1215,10 +1225,14 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
     model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
     
     //model::LoadMesh( root->GetPlugin( "mesh" ), "bunny.obj" );
-    model::LoadMesh( root->GetPlugin( "mesh" ), "spot.obj" );
-    model::LoadTexture( root->GetPlugin( "texture" ), "spot_texture.png" );
-    //model::LoadMesh( root->GetPlugin( "mesh" ), "capsule.obj" );
+    //model::LoadMesh( root->GetPlugin( "mesh" ), "spot.obj" );
+    //model::LoadTexture( root->GetPlugin( "texture" ), "spot_texture.png" );
 
+    model::LoadMesh( root->GetPlugin( "mesh" ), "cruiser.obj" );
+    model::LoadTexture( root->GetPlugin( "texture" ), "Desert.jpg" );
+
+    model::LoadMesh( child->GetPlugin( "mesh" ), "cruiser.obj", "hull", false );
+    model::LoadTexture( child->GetPlugin( "texture" ), "Desert.jpg" );
 
     return root;
 }

@@ -98,11 +98,12 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
     
     if ( meshAssetDescr )
     {
-        m_meshAsset = LoadTypedAsset< MeshAsset >( meshAssetDescr );
+        auto mesh = LoadTypedAsset< MeshAsset >( meshAssetDescr );
+        m_meshAsset = mesh->GetChild( meshAssetDescr->GetGroupName() );
 
         if( m_meshAsset )
         {
-            InitVertexAttributesChannel();
+            InitVertexAttributesChannel( meshAssetDescr->IsRecursive() );
             return true;
         }
 
@@ -134,7 +135,7 @@ void                                DefaultMeshPlugin::Update                   
 
 // *************************************
 //
-void		DefaultMeshPlugin::InitVertexAttributesChannel		()
+bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
 {
     if( m_meshAsset )
     {
@@ -148,7 +149,7 @@ void		DefaultMeshPlugin::InitVertexAttributesChannel		()
         auto norm = std::make_shared< Float3AttributeChannel >( normDesc, normDesc->SuggestedDefaultName( 0 ), false );
         auto uv = std::make_shared< Float2AttributeChannel >( uvDesc, uvDesc->SuggestedDefaultName( 0 ), false );
 
-        AddGeometry( m_meshAsset, pos, norm, uv );
+        AddGeometry( m_meshAsset, pos, norm, uv, recursive );
 
         VertexAttributesChannelDescriptor vacDesc;
 
@@ -156,6 +157,10 @@ void		DefaultMeshPlugin::InitVertexAttributesChannel		()
         {
             vacDesc.AddAttrChannelDesc( posDesc );
             cc->AddAttributeChannel( pos );
+        }
+        else
+        {
+            return false;
         }
 
         if( norm->GetNumEntries() > 0 )
@@ -176,20 +181,27 @@ void		DefaultMeshPlugin::InitVertexAttributesChannel		()
         m_vaChannel->AddConnectedComponent( cc );
 
         HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+        
+        return true;
     }
+
+    return false;
 }
 
 // *************************************
 //
-void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel )
+void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, bool recursive )
 {
     posChannel->AddAttributes( meshAsset->GetGeometry()->positions );
     normChannel->AddAttributes( meshAsset->GetGeometry()->normals );
     uvChannel->AddAttributes( meshAsset->GetGeometry()->uvs );
 
-    for( UInt32 i = 0; i < meshAsset->NumChildren(); ++i )
+    if( recursive )
     {
-        AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel );
+        for( UInt32 i = 0; i < meshAsset->NumChildren(); ++i )
+        {
+            AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel, recursive );
+        }
     }
 }
 

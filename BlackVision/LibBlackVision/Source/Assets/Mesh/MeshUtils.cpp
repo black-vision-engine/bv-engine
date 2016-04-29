@@ -122,6 +122,7 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
             if( FbxNodeAttribute::eMesh == type )
             {
                 auto fbxMesh = static_cast< FbxMesh * >( att );
+
                 auto geometry = mesh->GetGeometry();
 
                 auto polyCount = fbxMesh->GetPolygonCount();
@@ -168,13 +169,13 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
 
 // ******************************
 //
-MeshAssetConstPtr   MeshUtils::LoadMesh             ( const std::string & path )
+MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc )
 {
     auto manager = FbxManager::Create();
     manager->SetIOSettings( FbxIOSettings::Create( manager, IOSROOT ) );
 
     auto importer = FbxImporter::Create( manager, "" );
-    if( !importer->Initialize( path.c_str(), -1, manager->GetIOSettings() ) )
+    if( !importer->Initialize( desc->GetPath().c_str(), -1, manager->GetIOSettings() ) )
     {
         //FIXME: failed to load mesh
 	    return nullptr;

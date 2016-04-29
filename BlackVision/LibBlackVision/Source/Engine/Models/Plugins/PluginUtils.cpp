@@ -88,9 +88,9 @@ bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt3
 
 // *******************************
 //
-bool    LoadMesh        ( IPluginPtr plugin, const std::string & meshPath )
+bool    LoadMesh        ( IPluginPtr plugin, const std::string & meshPath, const std::string & meshName, bool recursive )
 {
-    auto desc = MeshAssetDesc::Create( meshPath );
+    auto desc = MeshAssetDesc::Create( meshPath, meshName, recursive );
 
     return plugin->LoadResource( desc );
 }

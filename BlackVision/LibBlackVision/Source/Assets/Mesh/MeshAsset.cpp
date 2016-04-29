@@ -68,6 +68,32 @@ void	                MeshAsset::AddChild         ( MeshAssetConstPtr child )
 
 // *******************************
 // 
+MeshAssetConstPtr	    MeshAsset::GetChild         ( const std::string & key ) const
+{
+    if( key.empty() )
+    {
+        return shared_from_this();
+    }
+
+    for( auto child : m_children )
+    {
+        if( child->GetKey() == key )
+        {
+            return child;
+        }
+        
+        auto ret = child->GetChild( key );
+        if( ret )
+        {
+            return ret;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+// 
 MeshAssetConstPtr	    MeshAsset::GetChild         ( UInt32 idx ) const
 {
     assert( idx < m_children.size() );
