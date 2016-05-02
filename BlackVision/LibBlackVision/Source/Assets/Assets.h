@@ -19,6 +19,10 @@
 #include "Assets/VideoStream/VideoStreamAsset.h"
 #include "Assets//VideoStream/VideoStreamLoader.h"
 
+#include "Assets/Mesh/MeshAssetDescriptor.h"
+#include "Assets/Mesh/MeshAsset.h"
+#include "Assets/Mesh/MeshLoader.h"
+
 #include "Assets/AssetManager.h"
 
 namespace bv
@@ -43,5 +47,4 @@ FontAssetConstPtr		LoadFontAsset	(	const std::string & fontFileName,
 											UInt32 blurSize,
 											UInt32 outlineSize,
 											bool generateMipmaps );
-
 } // bv

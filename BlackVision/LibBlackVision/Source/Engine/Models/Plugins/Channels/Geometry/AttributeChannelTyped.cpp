@@ -66,7 +66,12 @@ void                    Float3AttributeChannel::AddAttribute( const glm::vec3 & 
     m_attributes.push_back( v );
 }
 
-
+// *********************************
+//
+void                    Float3AttributeChannel::AddAttributes( const std::vector< glm::vec3 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
+}
 
 // *********************************
 //
@@ -118,6 +123,13 @@ std::vector< glm::vec2 > &  Float2AttributeChannel::GetVertices()
 void                    Float2AttributeChannel::AddAttribute ( const glm::vec2 & v )
 {
     m_attributes.push_back(v);
+}
+
+// *********************************
+//
+void                    Float2AttributeChannel::AddAttributes ( const std::vector< glm::vec2 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
 }
 
 } // model

@@ -145,6 +145,10 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationLoader.cpp" />
@@ -421,6 +425,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
@@ -504,6 +509,10 @@
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h" />
@@ -853,6 +862,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />

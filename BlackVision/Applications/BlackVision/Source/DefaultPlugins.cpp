@@ -32,6 +32,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultMaterialPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultWallPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
 
 
 namespace bv { namespace model {
@@ -72,6 +73,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 	descriptors.push_back( new DefaultCogWheel::PluginDesc() );
     descriptors.push_back( new DefaultMaterialPluginDesc() );
     descriptors.push_back( new DefaultWallPlugin::PluginDesc() );
+    descriptors.push_back( new DefaultMeshPluginDesc() );
 
     for( auto descr : descriptors )
     {
