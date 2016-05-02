@@ -1211,7 +1211,7 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
     child->AddPlugin( "DEFAULT_MESH", timeEvaluator );
     child->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 5.f, 5.f, 5.f ) );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 2.f, 2.f, 2.f ) );
     model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 50.f, 0.f ) );
     
     model::SetParameterScale( child->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.5f, 0.5f, 0.5f ) );
@@ -1228,11 +1228,11 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
     //model::LoadMesh( root->GetPlugin( "mesh" ), "spot.obj" );
     //model::LoadTexture( root->GetPlugin( "texture" ), "spot_texture.png" );
 
-    model::LoadMesh( root->GetPlugin( "mesh" ), "cruiser.obj" );
-    model::LoadTexture( root->GetPlugin( "texture" ), "Desert.jpg" );
+    model::LoadMesh( root->GetPlugin( "mesh" ), "meshes/daria/cruiser.obj" );
+    model::LoadTexture( root->GetPlugin( "texture" ), "textures/wombat.jpg" );
 
-    model::LoadMesh( child->GetPlugin( "mesh" ), "cruiser.obj", "hull", false );
-    model::LoadTexture( child->GetPlugin( "texture" ), "Desert.jpg" );
+    model::LoadMesh( child->GetPlugin( "mesh" ), "meshes/daria/cruiser.obj", "hull", false );
+    model::LoadTexture( child->GetPlugin( "texture" ), "textures/wombat.jpg" );
 
     return root;
 }

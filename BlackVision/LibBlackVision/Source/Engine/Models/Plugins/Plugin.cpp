@@ -75,9 +75,9 @@ namespace
 //
 ITimeEvaluatorPtr GetTimeline                                               ( const BasePlugin< IPlugin >* plugin )
 {
-    auto ps = plugin->GetParameters();
-    assert( ps.size() > 0 );
-    return ps[ 0 ]->GetTimeEvaluator();
+    auto timelines = plugin->GetTimelines();
+    assert( timelines.size() > 0 );
+    return timelines[ 0 ];
 }
 
 } // anonymous
@@ -169,8 +169,11 @@ ser.EnterChild( "plugin" );
                     ser.SetAttribute( "name", lasset.name );
 
                     auto rsm = lasset.rsm;
-                    assert( rsm );
-                    rsm->Serialize( ser );
+                    if( rsm )
+                    {
+                        rsm->Serialize( ser );
+                    }
+
                 ser.ExitChild();
             }
             ser.ExitChild(); // assets

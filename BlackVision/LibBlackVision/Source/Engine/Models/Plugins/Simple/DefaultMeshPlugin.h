@@ -25,6 +25,8 @@ public:
    
     static  std::string                     UID                 ();
 
+    static  std::string                     MeshName            ();
+
 };
 
 // ***************************** PLUGIN ********************************** 

@@ -48,6 +48,13 @@ std::string             DefaultMeshPluginDesc::UID                       ()
 }
 
 
+// *******************************
+// 
+std::string             DefaultMeshPluginDesc::MeshName                  ()
+{
+    return "Mesh0";
+}
+
 // ************************************************************************* PLUGIN *************************************************************************
 
 // *************************************
@@ -99,14 +106,17 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
     if ( meshAssetDescr )
     {
         auto mesh = LoadTypedAsset< MeshAsset >( meshAssetDescr );
-        m_meshAsset = mesh->GetChild( meshAssetDescr->GetGroupName() );
-
-        if( m_meshAsset )
+        if( mesh )
         {
-            InitVertexAttributesChannel( meshAssetDescr->IsRecursive() );
-            return true;
-        }
+            m_meshAsset = mesh->GetChild( meshAssetDescr->GetGroupName() );
 
+            if( m_meshAsset )
+            {
+                InitVertexAttributesChannel( meshAssetDescr->IsRecursive() );
+                SetAsset( 0, LAsset( DefaultMeshPluginDesc::MeshName(), assetDescr, nullptr ) );
+                return true;
+            }
+        }
     }
     return false;
 }
