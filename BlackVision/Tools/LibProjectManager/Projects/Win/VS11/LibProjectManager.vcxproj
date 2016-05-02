@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="..\..\..\Source\AssetCategory.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />

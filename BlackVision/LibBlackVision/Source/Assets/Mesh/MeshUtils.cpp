@@ -171,11 +171,13 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
 //
 MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc )
 {
+    auto path = ProjectManager::GetInstance()->ToAbsPath( desc->GetPath() ).Str();
+
     auto manager = FbxManager::Create();
     manager->SetIOSettings( FbxIOSettings::Create( manager, IOSROOT ) );
 
     auto importer = FbxImporter::Create( manager, "" );
-    if( !importer->Initialize( desc->GetPath().c_str(), -1, manager->GetIOSettings() ) )
+    if( !importer->Initialize( path.c_str(), -1, manager->GetIOSettings() ) )
     {
         //FIXME: failed to load mesh
 	    return nullptr;
