@@ -25,6 +25,10 @@ public:
     virtual const std::vector< IParameterPtr > &    GetParameters       () const;
 
 
+	virtual void	            Initialize		()				override {}
+    virtual void	            Update			( TimeType )	override {}
+	virtual void	            Deinitialize	()				override {}
+
     virtual void                Serialize       ( ISerializer & ser ) const;
     virtual void                Deserialize     ( const IDeserializer & ser );
 };
