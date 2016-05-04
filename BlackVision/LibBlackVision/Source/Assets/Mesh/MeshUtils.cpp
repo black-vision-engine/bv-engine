@@ -115,6 +115,7 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
     if( node )
     {
         auto mesh = MeshAsset::Create( node->GetName() );
+
         auto att = node->GetNodeAttribute();
         if( att )
         {
@@ -122,7 +123,7 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
             if( FbxNodeAttribute::eMesh == type )
             {
                 auto fbxMesh = static_cast< FbxMesh * >( att );
-
+                
                 auto geometry = mesh->GetGeometry();
 
                 auto polyCount = fbxMesh->GetPolygonCount();
@@ -146,6 +147,7 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
 
                         positions.push_back( pos );
 
+                        fbxMesh->GenerateNormals();
                         ProcessNormals( normals, fbxMesh, vertexIdx );
                         ProcessUVs( uvs, fbxMesh, i, j, vertexIdx );
 
@@ -187,8 +189,11 @@ MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc
     importer->Import( scene );
     importer->Destroy();
 
-    auto mesh = ConvertToMesh( scene->GetRootNode() );
+    FbxGeometryConverter converter( manager );
+    converter.Triangulate( scene, true );
 
+    auto mesh = ConvertToMesh( scene->GetRootNode() );
+    
     manager->Destroy();
 
 	return mesh;
