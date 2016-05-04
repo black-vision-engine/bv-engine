@@ -94,11 +94,23 @@ private:
 	// handling directories
     PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;
     PathVec                 ListScenesDirs      ( const Path & path ) const;
+    PathVec                 ListPresetsDirs     ( const Path & path ) const;
+
     bool                    CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const;
-    bool                    CreateSceneDir      ( const Path & path ) const;
+    bool                    CreateSceneDir      ( const Path & path, bool recursive ) const;
+    bool                    CreatePresetDir     ( const Path & path, bool recursive ) const;
+
     bool                    RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const;
-	bool                    RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
     bool                    RemoveSceneDir      ( const Path & path ) const;
+    bool                    RemovePresetDir     ( const Path & path ) const;
+
+  	bool                    RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
+  	bool                    RenameSceneDir      ( const Path & path, const std::string &newName ) const;
+  	bool                    RenamePresetDir     ( const Path & path, const std::string &newName ) const;
+
+    bool                    CopyAssetDir        ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
+    bool                    CopySceneDir        ( const Path & path, const std::string &newName ) const;
+    bool                    CopyPresetDir       ( const Path & path, const std::string &newName ) const;
 
 	void					InitializeProjects	();
 	void					InitializeScenes	();
@@ -149,6 +161,11 @@ private:
 	Path					Location2Path		( const Location & loc ) const;
     bool                    IsValidPMPath       ( const Path & path ) const;
     bool                    PathExistsInPM      ( const Path & path ) const;
+    bool                    CreateDir           ( const std::string & categoryName, const Path & path, bool recursive ) const;
+    bool                    RemoveDir           ( const std::string & categoryName, const Path & path ) const;
+    bool                    RenameDir           ( const std::string & categoryName, const Path & path, const std::string & newName ) const;
+    bool                    CopyDir             ( const std::string & categoryName, const Path & path, const std::string & newName ) const;
+    PathVec                 ListDirs            ( const std::string & categoryName, const Path & path ) const;
 };
 
 

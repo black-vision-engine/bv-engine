@@ -975,26 +975,174 @@ bool                        ProjectManagerImpl::PathExistsInPM      ( const Path
 //
 PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
 {
-    auto paths = Path::List( m_rootPath / Path( categoryName ) / path, true );
-
-    PathVec ret;
-
-    for( auto p : paths )
-    {
-        if( Path::IsDir( p ) )
-        {
-            ret.push_back( Path::RelativePath( p, m_rootPath / categoryName ) );
-        }
-    }
-
-    return ret;
+    return ListDirs( categoryName, path );
 }
 
 // ********************************
 //
 PathVec                     ProjectManagerImpl::ListScenesDirs      ( const Path & path ) const
 {
-    auto paths = Path::List( m_rootPath / Path( "scenes" ) / path, true );
+    return ListDirs( "scenes", path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListPresetsDirs      ( const Path & path ) const
+{
+    return ListDirs( "presets", path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
+{
+    return CreateDir( categoryName, path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateSceneDir      ( const Path & path, bool recursive ) const
+{
+    return CreateDir( "scenes", path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreatePresetDir     ( const Path & path, bool recursive ) const
+{
+    return CreateDir( "presets", path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
+{
+    return RemoveDir( categoryName, path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveSceneDir      ( const Path & path ) const
+{
+    return RemoveDir( "scenes", path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemovePresetDir     ( const Path & path ) const
+{
+    return RemoveDir( "presets", path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameAssetDir      ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    return RenameDir( categoryName, path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameSceneDir      ( const Path & path,const std::string & newName ) const
+{
+    return RenameDir( "scenes", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenamePresetDir     ( const Path & path,const std::string & newName ) const
+{
+    return RenameDir( "presets", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopyAssetDir        ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    return CopyDir( categoryName, path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopySceneDir        ( const Path & path,const std::string & newName ) const
+{
+    return CopyDir( "scenes", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopyPresetDir       ( const Path & path,const std::string & newName ) const
+{
+    return CopyDir( "presets", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateDir           ( const std::string & categoryName, const Path & path, bool recursive ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( !Path::Exists( p ) )
+    {
+        return Dir::CreateDir( p.Str(), recursive );
+    }
+    else
+    {
+        return false;
+    }
+}
+  
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveDir           ( const std::string & categoryName, const Path & path ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        return Dir::RemoveDir( p.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameDir           ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        auto p2 = p.ParentPath() / Path(newName);
+        return Dir::RenameDir( p.Str(), p2.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopyDir             ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        auto p2 = p.ParentPath() / Path(newName);
+        return Dir::CopyDir( p.Str(), p2.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListDirs            ( const std::string & categoryName, const Path & path ) const
+{
+    auto paths = Path::List( m_rootPath / Path( categoryName ) / path, true );
 
     PathVec ret;
 
@@ -1008,86 +1156,5 @@ PathVec                     ProjectManagerImpl::ListScenesDirs      ( const Path
 
     return ret;
 }
-
-// ********************************
-//
-bool                        ProjectManagerImpl::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
-{
-    auto p = m_rootPath / Path( categoryName ) / path;
-    if( !Path::Exists( p ) )
-    {
-        return Dir::CreateDir( p.Str(), recursive );
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// ********************************
-//
-bool                        ProjectManagerImpl::CreateSceneDir      ( const Path & path ) const
-{
-    auto p = m_rootPath / Path( "scenes" ) / path;
-    if( !Path::Exists( p ) )
-    {
-        return Dir::CreateDir( p.Str(), true );
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// ********************************
-//
-bool                        ProjectManagerImpl::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
-{
-    auto p = m_rootPath / Path( categoryName ) / path;
-    if( Path::Exists( p ) )
-    {
-        return Dir::RemoveDir( p.Str() );
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-// ********************************
-//
-bool                        ProjectManagerImpl::RenameAssetDir      ( const std::string & categoryName, const Path & path,const std::string & newName ) const
-{
-    auto p = m_rootPath / Path( categoryName ) / path;
-    if( Path::Exists( p ) )
-    {
-        auto p2 = p.ParentPath() / Path(newName);
-        return Dir::RenameDir( p.Str(),p2.Str() );
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// ********************************
-//
-bool                        ProjectManagerImpl::RemoveSceneDir      ( const Path & path ) const
-{
-    auto p = m_rootPath / Path( "scenes" ) / path;
-    if( Path::Exists( p ) )
-    {
-        return Dir::RemoveDir( p.Str() );
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// ********************************
-//
-
 
 } // bv

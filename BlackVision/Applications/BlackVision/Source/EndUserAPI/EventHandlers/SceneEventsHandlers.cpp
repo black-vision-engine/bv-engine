@@ -673,7 +673,19 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             recursive = true;
         }
 
-        auto success = pm->CreateAssetDir( categoryName, path, recursive );
+        bool success = false;
+        if( categoryName == "scenes" )
+        {
+            success = pm->CreateSceneDir( path, recursive );
+        }
+        else if( categoryName == "presets" )
+        {
+            success = pm->CreatePresetDir( path, recursive );
+        }
+        else
+        {
+            success = pm->CreateAssetDir( categoryName, path, recursive );
+        }
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
@@ -682,17 +694,88 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto categoryName = request.GetAttribute( "categoryName" );
         auto path = request.GetAttribute( "path" );
 
-        auto success = pm->RemoveAssetDir( categoryName, path );
+        bool success = false;
+        if( categoryName == "scenes" )
+        {
+            success = pm->RemoveSceneDir( path );
+        }
+        else if( categoryName == "presets" )
+        {
+            success = pm->RemovePresetDir( path );
+        }
+        else
+        {
+            success = pm->RemoveAssetDir( categoryName, path );
+        }
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
-     else if( command == ProjectEvent::Command::RenameFolder )
+    else if( command == ProjectEvent::Command::RenameFolder )
     {
         auto categoryName = request.GetAttribute( "categoryName" );
         auto path = request.GetAttribute( "path" );
         auto path2 = request.GetAttribute( "newName" );
 
-        auto success = pm->RenameAssetDir( categoryName, path,path2 );
+        bool success = false;
+        if( categoryName == "scenes" )
+        {
+            success = pm->RenameSceneDir( path, path2 );
+        }
+        else if( categoryName == "presets" )
+        {
+            success = pm->RenamePresetDir( path, path2 );
+        }
+        else
+        {
+            success = pm->RenameAssetDir( categoryName, path, path2 );
+        }
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, success );
+    }
+    else if( command == ProjectEvent::Command::CopyFolder )
+    {
+        auto categoryName = request.GetAttribute( "categoryName" );
+        auto path = request.GetAttribute( "path" );
+        auto path2 = request.GetAttribute( "newName" );
+
+        bool success = false;
+        if( categoryName == "scenes" )
+        {
+            success = pm->CopySceneDir( path, path2 );
+        }
+        else if( categoryName == "presets" )
+        {
+            success = pm->CopyPresetDir( path, path2 );
+        }
+        else
+        {
+            success = pm->CopyAssetDir( categoryName, path, path2 );
+        }
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, success );
+    }
+    else if( command == ProjectEvent::Command::MoveFolder )
+    {
+        auto categoryName = request.GetAttribute( "categoryName" );
+        auto path = request.GetAttribute( "path" );
+        auto path2 = request.GetAttribute( "newName" );
+
+        bool success = false;
+        if( categoryName == "scenes" )
+        {
+            success = pm->CopySceneDir( path, path2 );
+            success = success && pm->RemoveSceneDir( path );
+        }
+        else if( categoryName == "presets" )
+        {
+            success = pm->CopyPresetDir( path, path2 );
+            success = success && pm->RemovePresetDir( path );
+        }
+        else
+        {
+            success = pm->CopyAssetDir( categoryName, path, path2 );
+            success = success && pm->RemoveAssetDir( categoryName, path );
+        }
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }

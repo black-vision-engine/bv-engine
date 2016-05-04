@@ -537,6 +537,8 @@ public:
         CreateFolder,
         DeleteFolder,
         RenameFolder,
+        MoveFolder,
+        CopyFolder,
 
         AddExistingSceneToProject,
         CreateSceneInProject,

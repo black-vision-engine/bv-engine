@@ -330,6 +330,13 @@ PathVec                     ProjectManager::ListScenesDirs      ( const Path & p
 
 // ********************************
 //
+PathVec                     ProjectManager::ListPresetsDirs     ( const Path & path ) const
+{
+    return m_impl->ListPresetsDirs( path );
+}
+
+// ********************************
+//
 bool                        ProjectManager::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
 {
     return m_impl->CreateAssetDir( categoryName, path, recursive );
@@ -337,9 +344,16 @@ bool                        ProjectManager::CreateAssetDir      ( const std::str
 
 // ********************************
 //
-bool                        ProjectManager::CreateSceneDir      ( const Path & path ) const
+bool                        ProjectManager::CreateSceneDir      ( const Path & path, bool recursive ) const
 {
-    return m_impl->CreateSceneDir( path );
+    return m_impl->CreateSceneDir( path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CreatePresetDir      ( const Path & path, bool recursive ) const
+{
+    return m_impl->CreatePresetDir( path, recursive );
 }
 
 // ********************************
@@ -349,6 +363,19 @@ bool                        ProjectManager::RemoveAssetDir      ( const std::str
     return m_impl->RemoveAssetDir( categoryName, path );
 }
 
+// ********************************
+//
+bool                        ProjectManager::RemoveSceneDir      ( const Path & path ) const
+{
+    return m_impl->RemoveSceneDir( path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::RemovePresetDir     ( const Path & path ) const
+{
+    return m_impl->RemovePresetDir( path );
+}
 
 // ********************************
 //
@@ -359,9 +386,37 @@ bool                        ProjectManager::RenameAssetDir      ( const std::str
 
 // ********************************
 //
-bool                        ProjectManager::RemoveSceneDir      ( const Path & path ) const
+bool                        ProjectManager::RenameSceneDir      ( const Path & path, const std::string &newName ) const
 {
-    return m_impl->RemoveSceneDir( path );
+    return m_impl->RenameSceneDir( path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CopyPresetDir       ( const Path & path, const std::string &newName ) const
+{
+    return m_impl->CopyPresetDir( path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CopyAssetDir        ( const std::string & categoryName, const Path & path, const std::string &newName ) const
+{
+    return m_impl->CopyAssetDir( categoryName, path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CopySceneDir        ( const Path & path, const std::string &newName ) const
+{
+    return m_impl->CopySceneDir( path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManager::RenamePresetDir      ( const Path & path, const std::string &newName ) const
+{
+    return m_impl->RenamePresetDir( path, newName );
 }
 
 // ********************************

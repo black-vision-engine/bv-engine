@@ -106,25 +106,37 @@ public:
     ThumbnailConstPtr       GetPresetThumbnail  ( const Path & projectName, const Path & path ) const;
 
     // *********************************
-	// handling directories
+    // handling directories
     PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;
     PathVec                 ListScenesDirs      ( const Path & path ) const;
+    PathVec                 ListPresetsDirs     ( const Path & path ) const;
+
     bool                    CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const;
-    bool                    CreateSceneDir      ( const Path & path ) const;
+    bool                    CreateSceneDir      ( const Path & path, bool recursive ) const;
+    bool                    CreatePresetDir     ( const Path & path, bool recursive) const;
+
     bool                    RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const;
-	bool                    RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
     bool                    RemoveSceneDir      ( const Path & path ) const;
+    bool                    RemovePresetDir     ( const Path & path ) const;
+
+    bool                    RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
+    bool                    RenameSceneDir      ( const Path & path, const std::string &newName ) const;
+    bool                    RenamePresetDir     ( const Path & path, const std::string &newName ) const;
+
+    bool                    CopyAssetDir        ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
+    bool                    CopySceneDir        ( const Path & path, const std::string &newName ) const;
+    bool                    CopyPresetDir       ( const Path & path, const std::string &newName ) const;
 
     Path                    ToAbsPath           ( const Path & path ) const;
 
     static ProjectManager *	GetInstance			(  );
 
-	~ProjectManager	();
+    ~ProjectManager	();
 
 private:
-	ProjectManagerImpl * m_impl;
+    ProjectManagerImpl * m_impl;
 
-	ProjectManager	( const Path & rootPath );
+    ProjectManager	( const Path & rootPath );
 
     static std::shared_ptr< ProjectManager > _instance;
 
