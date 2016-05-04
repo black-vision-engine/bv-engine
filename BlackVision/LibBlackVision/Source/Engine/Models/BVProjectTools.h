@@ -31,6 +31,8 @@ enum ParamOwner : int
     PO_Plugin,
     PO_GlobalEffect,
     PO_Resource,
+    PO_NodeLogic,
+    //PO_Light,
 
     PO_Total
 };

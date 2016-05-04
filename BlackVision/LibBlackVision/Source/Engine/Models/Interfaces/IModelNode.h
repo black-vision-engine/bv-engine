@@ -8,6 +8,8 @@
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 
+#include "Engine/Models/Interfaces/INodeLogic.h"
+
 #include <unordered_set>
 
 namespace bv {
@@ -46,10 +48,12 @@ public:
     virtual IModelNodeEffectPtr						    GetNodeEffect       () const                                                            = 0;
     // FIXME: TRANSITION - END
 
+    virtual INodeLogicPtr							    GetLogic            () const                                                            = 0;
+
     virtual bool                                        IsVisible           () const                                                            = 0;
 
     //pablito
-    virtual void                                        SetVisible           (bool visible)                                                             = 0;
+    virtual void                                        SetVisible           ( bool visible )                                                   = 0;
 
     virtual                                             ~IModelNode         () {};
 

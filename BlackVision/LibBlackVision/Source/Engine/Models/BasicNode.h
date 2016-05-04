@@ -5,7 +5,6 @@
 #include <hash_map>
 
 #include "Engine/Models/Interfaces/IModelNode.h"
-#include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
 #include "Serialization/ISerializable.h"
@@ -71,7 +70,7 @@ public:
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
     
-    INodeLogicPtr							GetLogic				() const;
+    INodeLogicPtr							GetLogic				() const override;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
     virtual std::vector< IParameterPtr >    GetParameters           () const override;

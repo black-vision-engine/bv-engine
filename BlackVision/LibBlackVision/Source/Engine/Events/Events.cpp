@@ -168,9 +168,10 @@ template<> std::string              T2String    ( const ParamKeyEvent::Command &
 
 std::pair< ParamKeyEvent::TargetType, const char* > TargetTypeMapping[] = 
     { std::make_pair( ParamKeyEvent::TargetType::GlobalEffectParam, "GlobalEffectParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::PluginParam, "PluginParam" ) 
-    , std::make_pair( ParamKeyEvent::TargetType::ResourceParam, "ResourceParam" ) 
-    , std::make_pair( ParamKeyEvent::TargetType::LightParam, "LightParam" ) 
+    , std::make_pair( ParamKeyEvent::TargetType::PluginParam, "PluginParam" )
+    , std::make_pair( ParamKeyEvent::TargetType::ResourceParam, "ResourceParam" )
+    , std::make_pair( ParamKeyEvent::TargetType::LightParam, "LightParam" )
+    , std::make_pair( ParamKeyEvent::TargetType::NodeLogicParam, "NodeLogicParam" )
     , std::make_pair( ParamKeyEvent::TargetType::FailTarget, SerializationHelper::EMPTY_STRING )      // default
 };
 

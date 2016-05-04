@@ -189,8 +189,6 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_lowBufferMultiplier( 3.5 )
     , m_offscreenNodeBehavior( OffscreenNodeBehavior::ONB_SetNonActive )
 {
-    m_paramValModel = std::make_shared< model::DefaultParamValModel >();
-    
     //auto alphaEval = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     //m_paramValModel->
 }
@@ -661,6 +659,7 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
             ser.SetAttribute( "OffscreenNodeBehavior", SerializationHelper::T2String( m_offscreenNodeBehavior ) );
             ser.SetAttribute( "SmoothTime", SerializationHelper::T2String( GetSmoothTime() ) );
 
+            NodeLogicBase::Serialize( ser );
 
             // Node names aren't enough to identify node. Checking children indicies.
             SizeType numChildren = m_parentNode->GetNumChildren();
@@ -723,6 +722,8 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
     scroller->SetEnableEvents( enableEvents );
     scroller->SetOffscreenNodeBehavior( offscreenBahavior );
     scroller->SetSmoothTime( smoothTime );
+
+    scroller->Deserialize( deser ); // Deserialize model parameters.
 
 
     if( !deser.EnterChild( "scrollerNodes" ) )

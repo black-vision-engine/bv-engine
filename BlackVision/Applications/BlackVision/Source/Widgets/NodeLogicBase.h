@@ -12,14 +12,12 @@ namespace bv { namespace model
 class NodeLogicBase : public INodeLogic
 {
 private:
-
-    NodeLogicBase();
-
 protected:
 
     DefaultParamValModelPtr         m_paramValModel;
 
 public:
+    NodeLogicBase();
     virtual ~NodeLogicBase();
 
 
@@ -28,7 +26,7 @@ public:
 
 
     virtual void                Serialize       ( ISerializer & ser ) const;
-    void                        Deserialize     ( const IDeserializer & ser );
+    virtual void                Deserialize     ( const IDeserializer & ser );
 };
 
 
