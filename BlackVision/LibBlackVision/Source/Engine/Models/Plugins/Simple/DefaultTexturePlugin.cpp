@@ -278,8 +278,6 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-    
-    assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
 // *************************************

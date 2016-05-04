@@ -116,6 +116,18 @@ VertexDescriptor *          VertexArraySingleVertexBuffer::GetVertexDescriptor  
 
 // *******************************
 //
+void         VertexArraySingleVertexBuffer::SetVertexDescriptor             ( VertexDescriptor * desc )
+{
+    if( m_vertexDescriptor )
+    {
+        delete m_vertexDescriptor;
+    }
+    m_vertexDescriptor = desc;
+}
+
+
+// *******************************
+//
 void                        VertexArraySingleVertexBuffer::AddCCEntry                      ( unsigned int numVertices )
 {
     m_ccVertexNum.push_back( numVertices );
