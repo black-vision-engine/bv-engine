@@ -6,8 +6,8 @@
 #include <boost/lexical_cast.hpp>
 
 // default plugins 
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"

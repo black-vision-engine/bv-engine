@@ -292,6 +292,9 @@
     <Filter Include="Assets\Mesh">
       <UniqueIdentifier>{c3e1c121-8faf-4d86-b3cb-bdd03b0273ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\TextPlugins">
+      <UniqueIdentifier>{120dcd81-503b-439f-89ff-c182c64c4056}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -681,13 +684,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTextPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp">
@@ -1047,14 +1044,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultText3DPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
@@ -1088,9 +1079,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp">
       <Filter>Application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextArranger.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
@@ -1518,6 +1506,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTimerPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.cpp">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2037,13 +2040,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRectPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTextPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
@@ -3318,12 +3315,6 @@
     <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultText3DPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
       <Filter>Serialization</Filter>
     </ClInclude>
@@ -3338,9 +3329,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
       <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextArranger.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectFactory.h">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
@@ -3736,6 +3724,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTimerPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.h">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.h">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

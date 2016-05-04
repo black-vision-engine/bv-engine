@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "Serialization/SerializationHelper.h"

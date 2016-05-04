@@ -11,8 +11,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 
 namespace bv { namespace model {
 

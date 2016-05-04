@@ -78,11 +78,11 @@ std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 const EventType EngineStateEvent::m_sEventType      = 0x30000016;
 std::string EngineStateEvent::m_sEventName          = "EngineStateEvent";
 
-const EventType SceneEvent::m_sEventType			= 0x30000017;
-std::string SceneEvent::m_sEventName				= "SceneEvent";
+const EventType SceneEvent::m_sEventType            = 0x30000017;
+std::string SceneEvent::m_sEventName                = "SceneEvent";
 
-const EventType AssetEvent::m_sEventType			= 0x30000018;
-std::string AssetEvent::m_sEventName				= "AssetEvent";
+const EventType AssetEvent::m_sEventType            = 0x30000018;
+std::string AssetEvent::m_sEventName                = "AssetEvent";
 
 
 const EventType GlobalEffectEvent::m_sEventType     = 0x30000019;
@@ -91,8 +91,8 @@ std::string GlobalEffectEvent::m_sEventName         = "GlobalEffectEvent";
 const EventType TimelineKeyframeEvent::m_sEventType = 0x30000020;
 std::string TimelineKeyframeEvent::m_sEventName     = "TimelineKeyframeEvent";
 
-const EventType MouseEvent::m_sEventType			= 0x30000021;
-std::string MouseEvent::m_sEventName				= "MouseEvent";
+const EventType MouseEvent::m_sEventType            = 0x30000021;
+std::string MouseEvent::m_sEventName                = "MouseEvent";
 
 const EventType SceneVariableEvent::m_sEventType    = 0x30000022;
 std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
@@ -103,8 +103,8 @@ std::string ConfigEvent::m_sEventName               = "ConfigEvent";
 const EventType GridLineEvent::m_sEventType          = 0x30000024;
 std::string GridLineEvent::m_sEventName              = "GridLineEvent";
 
-const EventType LightEvent::m_sEventType			= 0x30000025;
-std::string LightEvent::m_sEventName				= "LightEvent";
+const EventType LightEvent::m_sEventType            = 0x30000025;
+std::string LightEvent::m_sEventName                = "LightEvent";
 
 const EventType VideoDecoderEvent::m_sEventType     = 0x300000;
 std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
@@ -260,7 +260,7 @@ template<> std::string                  T2String   ( const NodeStructureEvent::C
 // ========================================================================= //
 // PluginStructureEvent
 // ========================================================================= //
-const std::string ATTACH_INDEX_STRING				= "AttachIndex";
+const std::string ATTACH_INDEX_STRING                = "AttachIndex";
 const std::string PLUGIN_UID_STRING               = "PluginUID";
 
 std::pair< PluginStructureEvent::Command, const char* > PluginStructureCommandMapping[] = 
@@ -371,7 +371,7 @@ const std::string TIMELINE_TYPE_STRING                = "Type";
 const std::string TIMELINE_TIME_VALUE_STRING          = "Time";
 const std::string TIMELINE_DURATION_VALUE_STRING      = "Duration";
 const std::string TIMELINE_NEW_NAME_STRING            = "TimelineNewName";
-const std::string TIMELINE_WRAP_METHOD_STRING		  = "WrapMethod";
+const std::string TIMELINE_WRAP_METHOD_STRING          = "WrapMethod";
 const std::string SCENE_NAME_STRING                   = "SceneName";
 
 // Timeline Command
@@ -1148,7 +1148,7 @@ EventType           ParamKeyEvent::GetEventType         () const
 
 // *************************************
 //
-void					AssetEvent::Serialize            ( ISerializer& ser ) const
+void                    AssetEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( AssetCommand ) );
 }
@@ -1159,7 +1159,7 @@ IEventPtr                AssetEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
-        AssetEventPtr newEvent		= std::make_shared< AssetEvent >();
+        AssetEventPtr newEvent        = std::make_shared< AssetEvent >();
         newEvent->AssetCommand      = SerializationHelper::String2T< AssetEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), AssetEvent::Command::Fail );
         
         return newEvent;
@@ -1193,7 +1193,7 @@ EventType           AssetEvent::GetEventType() const
 
 // *************************************
 //
-void					SceneEvent::Serialize            ( ISerializer& ser ) const
+void                    SceneEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
@@ -1208,7 +1208,7 @@ IEventPtr                SceneEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
-        SceneEventPtr newEvent		= std::make_shared< SceneEvent >();
+        SceneEventPtr newEvent        = std::make_shared< SceneEvent >();
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->NewSceneName      = deser.GetAttribute( SerializationHelper::NEW_SCENE_NAME_STRING );
         newEvent->SceneCommand      = SerializationHelper::String2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneEvent::Command::Fail );
@@ -1245,7 +1245,7 @@ EventType           SceneEvent::GetEventType() const
 
 // *************************************
 //
-void					LightEvent::Serialize            ( ISerializer& ser ) const
+void                    LightEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
@@ -1261,7 +1261,7 @@ IEventPtr                LightEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
-        LightEventPtr newEvent		= std::make_shared< LightEvent >();
+        LightEventPtr newEvent        = std::make_shared< LightEvent >();
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->SceneCommand      = SerializationHelper::String2T< LightEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), LightEvent::Command::Fail );
         newEvent->LightType         = deser.GetAttribute( SerializationHelper::LIGHT_TYPE_STRING );
@@ -1388,7 +1388,7 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->PluginUID         = deser.GetAttribute( SerializationHelper::PLUGIN_UID_STRING );
         newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
 
-        newEvent->Request			= deser.DetachBranch( SerializationHelper::REQUEST_STRING );
+        newEvent->Request            = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
     }

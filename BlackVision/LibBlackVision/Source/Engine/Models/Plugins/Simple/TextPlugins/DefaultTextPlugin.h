@@ -39,44 +39,44 @@ private:
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-	glm::mat4						m_scaleMat;
+    glm::mat4                        m_scaleMat;
 
     ParamWStringPtr                 m_textParam;
     std::wstring                    m_currentText;
     Float32                         m_currentAligment;
     Float32                         m_currentSpacing;
-    TextAtlasConstPtr				m_atlas;
-	Float32							m_textLength;
+    TextAtlasConstPtr               m_atlas;
+    Float32                         m_textLength;
 
-    UInt32		                    m_fontSize;
-    UInt32		                    m_blurSize;
-	UInt32		                    m_outlineSize;
+    UInt32                          m_fontSize;
+    UInt32                          m_blurSize;
+    UInt32                          m_outlineSize;
 
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
     ParamFloatPtr                   m_timeParam;
-	ValueMat4Ptr					m_scaleValue;
+    ValueMat4Ptr                    m_scaleValue;
 
     TextArranger *                  m_arranger;
 
     //delegates
-    void                                        OnSetText                   ( IEventPtr evt );
+    void                            OnSetText                   ( IEventPtr evt );
 
-    void                                        SetText                     ( const std::wstring & newText );
+    void                            SetText                     ( const std::wstring & newText );
 
-	void										LoadTexture					(	DefaultTexturesDataPtr,
-																				TextureAssetConstPtr,
-																				const std::string &,
-																				TextureWrappingMode,
-																				TextureWrappingMode,
-																				TextureFilteringMode,
-																				const glm::vec4 &,
-																				DataBuffer::Semantic );
+    void                            LoadTexture                 (   DefaultTexturesDataPtr,
+                                                                    TextureAssetConstPtr,
+                                                                    const std::string &,
+                                                                    TextureWrappingMode,
+                                                                    TextureWrappingMode,
+                                                                    TextureFilteringMode,
+                                                                    const glm::vec4 &,
+                                                                    DataBuffer::Semantic );
 
-	bool										LoadAtlas					( const FontAssetDescConstPtr & fontAssetDesc );
+    bool                            LoadAtlas                   ( const FontAssetDescConstPtr & fontAssetDesc );
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
+    virtual bool                    LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
 public:
 
@@ -86,21 +86,21 @@ public:
 
 private:
 
-	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
+    virtual mathematics::RectConstPtr           GetAABB                     ( const glm::mat4 & trans ) const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
 
-	void										ScaleToMaxTextLength		();
+    void                                        ScaleToMaxTextLength        ();
 
 public:
 
-	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-												~DefaultTextPlugin          ();
+    explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                                ~DefaultTextPlugin          ();
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-	std::wstring                                GetText                     () const;
+    std::wstring                                GetText                     () const;
 };
 
 } // model

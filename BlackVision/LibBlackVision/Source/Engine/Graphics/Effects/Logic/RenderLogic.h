@@ -47,7 +47,7 @@ private:
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
-    SharedMemoryVideoBuffer*		m_SharedMemoryVideoBuffer;
+    SharedMemoryVideoBuffer*        m_SharedMemoryVideoBuffer;
 
     glm::vec4                       m_clearColor;
     bool                            m_renderToSharedMemory;
@@ -61,10 +61,10 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, const SceneVec & scenes );
 
-//	//pablito
-//	void	SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
+//    //pablito
+//    void    SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
 //private:
-//    void	InitVideoCards      ();
+//    void    InitVideoCards      ();
 //    // pablito end
 
 private:

@@ -4,7 +4,7 @@
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include <string>
 #include <iostream>
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"

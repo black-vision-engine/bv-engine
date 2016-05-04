@@ -2,7 +2,7 @@
 
 #include "BVAppLogic.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 #include "UseLoggerBVAppModule.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"

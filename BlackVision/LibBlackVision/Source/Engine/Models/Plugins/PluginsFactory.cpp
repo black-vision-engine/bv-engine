@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 #include "Simple/DefaultTransformPlugin.h"
 
 

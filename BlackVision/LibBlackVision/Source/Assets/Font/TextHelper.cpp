@@ -10,7 +10,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
-#include "Engine/Models/Plugins/Simple/TextArranger.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/TextArranger.h"
 
 #include <assert.h>
 

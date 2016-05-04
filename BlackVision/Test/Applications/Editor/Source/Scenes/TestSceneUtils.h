@@ -16,8 +16,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"

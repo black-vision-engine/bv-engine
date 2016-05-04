@@ -69,7 +69,7 @@ std::string                  Dir::WorkingDirectory  ()
 
 // *******************************
 //
-bool						Dir::Exists				( const std::string & path )
+bool                        Dir::Exists                ( const std::string & path )
 {
     auto ftyp = GetFileAttributesA( path.c_str() );
     
@@ -88,7 +88,7 @@ bool						Dir::Exists				( const std::string & path )
 
 // *******************************
 //
-bool						Dir::CreateDir			( const std::string & path, bool createRecusive )
+bool                        Dir::CreateDir            ( const std::string & path, bool createRecusive )
 {
     if( Exists( path ) )
     {

@@ -360,10 +360,10 @@ private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    SceneEvent::Command				SceneCommand;
+    SceneEvent::Command                SceneCommand;
     std::string                     SceneName;
     std::string                     NewSceneName;
-    UInt32							AttachIndex;
+    UInt32                            AttachIndex;
 
 public:
     explicit                        SceneEvent   () {}
@@ -398,10 +398,10 @@ private:
     static const EventType          m_sEventType;
     static std::string              m_sEventName;
 public:
-    LightEvent::Command				SceneCommand;
+    LightEvent::Command                SceneCommand;
     std::string                     SceneName;
     std::string                     LightType;
-    UInt32							LightIndex;
+    UInt32                            LightIndex;
     std::string                     TimelinePath;
 
 public:
@@ -451,7 +451,7 @@ public:
     std::string                     SceneName;
     std::string                     NodePath;
     std::string                     NewNodeName;
-    UInt32							AttachIndex;
+    UInt32                            AttachIndex;
     IDeserializer *                 Request;
 
 public:
@@ -499,7 +499,7 @@ public:
     std::string                     PluginUID;
     std::string                     TimelinePath;
     unsigned int                    AttachIndex;
-    IDeserializer * 				Request;
+    IDeserializer *                 Request;
 
 public:
     explicit                        PluginStructureEvent    () { Request = nullptr; }
@@ -711,7 +711,7 @@ public:
     float                       Time;
     TimelineType                TimelineType;
     TimeType                    Duration;
-    TimelineWrapMethod			WrapMethod;
+    TimelineWrapMethod            WrapMethod;
 
 public:
 
@@ -841,8 +841,8 @@ public:
     IDeserializer *             Action;
 
 public:
-    explicit                        NodeLogicEvent			(){ Action = nullptr; }
-                                    ~NodeLogicEvent			(){ delete Action; }
+    explicit                        NodeLogicEvent            (){ Action = nullptr; }
+                                    ~NodeLogicEvent            (){ delete Action; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );

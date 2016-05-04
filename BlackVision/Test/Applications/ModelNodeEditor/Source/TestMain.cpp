@@ -10,7 +10,7 @@
 //#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 //#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 //#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-//#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+//#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 //
 //#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 //#include "Engine/Models/Plugins/PluginUtils.h"

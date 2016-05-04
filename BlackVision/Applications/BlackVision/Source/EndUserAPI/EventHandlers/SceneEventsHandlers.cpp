@@ -6,7 +6,7 @@
 
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
 
@@ -49,9 +49,9 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 
     bv::SceneEventPtr sceneEvent = std::static_pointer_cast< bv::SceneEvent >( evt );
 
-    std::string & sceneName		= sceneEvent->SceneName;
-    std::string & newSceneName	= sceneEvent->NewSceneName;
-    auto attachIndex			= sceneEvent->AttachIndex;
+    std::string & sceneName        = sceneEvent->SceneName;
+    std::string & newSceneName    = sceneEvent->NewSceneName;
+    auto attachIndex            = sceneEvent->AttachIndex;
     auto command                = sceneEvent->SceneCommand;
     auto eventID                = sceneEvent->EventID;
 
@@ -114,14 +114,14 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
     bv::NodeStructureEventPtr structureEvent = std::static_pointer_cast<bv::NodeStructureEvent>( evt );
 
-    std::string& sceneName		= structureEvent->SceneName;
-    std::string& nodePath		= structureEvent->NodePath;
-    std::string& newNodeName	= structureEvent->NewNodeName;	
-    auto attachIndex			= structureEvent->AttachIndex;
+    std::string& sceneName        = structureEvent->SceneName;
+    std::string& nodePath        = structureEvent->NodePath;
+    std::string& newNodeName    = structureEvent->NewNodeName;    
+    auto attachIndex            = structureEvent->AttachIndex;
     auto eventID                = structureEvent->EventID;
     auto command                = structureEvent->SceneCommand;
 
-    IDeserializer * request		= structureEvent->Request;
+    IDeserializer * request        = structureEvent->Request;
 
     bool result = true;
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
@@ -237,15 +237,15 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 
     bv::PluginStructureEventPtr structureEvent = std::static_pointer_cast<bv::PluginStructureEvent>( evt );
 
-    std::string& nodePath		= structureEvent->NodePath;
-    std::string& sceneName		= structureEvent->SceneName;
-    std::string& pluginName		= structureEvent->PluginName;
-    std::string& pluginUID		= structureEvent->PluginUID;
-    std::string& timelinePath	= structureEvent->TimelinePath;
-    unsigned int attachIndex	= structureEvent->AttachIndex;
-    auto command				= structureEvent->PluginCommand;
+    std::string& nodePath        = structureEvent->NodePath;
+    std::string& sceneName        = structureEvent->SceneName;
+    std::string& pluginName        = structureEvent->PluginName;
+    std::string& pluginUID        = structureEvent->PluginUID;
+    std::string& timelinePath    = structureEvent->TimelinePath;
+    unsigned int attachIndex    = structureEvent->AttachIndex;
+    auto command                = structureEvent->PluginCommand;
     auto eventID                = structureEvent->EventID;
-    IDeserializer * request		= structureEvent->Request;
+    IDeserializer * request        = structureEvent->Request;
 
 
     bool result = true;
