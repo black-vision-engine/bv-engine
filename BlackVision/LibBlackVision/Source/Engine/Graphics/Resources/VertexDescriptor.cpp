@@ -45,7 +45,7 @@ VertexDescriptor::VertexDescriptor ( unsigned int numAttrs )
     : m_numAttrs( numAttrs )
     , m_stride(0)
 {
-    assert( numAttrs > 0 );
+    //assert( numAttrs > 0 );
 
     for( unsigned int i = 0; i < numAttrs; ++i )
     {
@@ -112,7 +112,7 @@ void VertexDescriptor::SetAttribute ( unsigned int attr, unsigned int channelLoc
 //
 void VertexDescriptor::SetStride ( unsigned int stride )
 {
-    assert( stride > 0 );
+    //assert( stride > 0 );
     
     m_stride = stride;
 }

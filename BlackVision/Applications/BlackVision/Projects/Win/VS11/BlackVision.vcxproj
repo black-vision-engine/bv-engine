@@ -108,6 +108,7 @@
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -138,6 +139,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -169,6 +171,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -216,6 +219,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -321,6 +325,8 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +388,8 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h" />
     <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h" />
   </ItemGroup>
   <ItemGroup>

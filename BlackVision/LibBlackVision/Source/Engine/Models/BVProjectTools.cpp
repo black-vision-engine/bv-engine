@@ -299,6 +299,15 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
                 break;
             }
             case PrimitiveType::PT_TRIANGLES:
+            {
+                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip( modelNode, finalizer );
+
+                if( radasvb )
+                {
+                    renderable = new Triangles( radasvb, modelNode->GetBoundingVolume().get(), effect );
+                }
+                break;
+            }
             case PrimitiveType::PT_TRIANGLE_MESH:
                 assert( false );
             default:

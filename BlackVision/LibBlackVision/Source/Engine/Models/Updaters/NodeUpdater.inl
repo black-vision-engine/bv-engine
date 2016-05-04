@@ -89,7 +89,8 @@ namespace {
 inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+        m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
 
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
@@ -147,7 +148,8 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+        renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
 
     //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
@@ -170,10 +172,24 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
     vao->ResetState();
+
+    // recreate vertex descriptor
+    VertexDescriptor * vd = new VertexDescriptor( geomDesc->GetNumVertexChannels() );
+    unsigned int attributeOffset = 0;
+
+    for( unsigned int i = 0; i < geomDesc->GetNumVertexChannels(); ++i )
+    {
+        auto * channelDesc = geomDesc->GetAttrChannelDescriptor( i );
+        vd->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );
+        attributeOffset += channelDesc->GetEntrySize();     
+    }
+
+    vd->SetStride( attributeOffset );
+    vao->SetVertexDescriptor( vd );
+
 
     char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
     unsigned int currentOffset = 0;
@@ -188,7 +204,7 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
     }
-
+    
     vao->SetNeedsUpdateRecreation( true );
 }
 

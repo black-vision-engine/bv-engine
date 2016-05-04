@@ -8,6 +8,7 @@
 #include "Impl/Accessors/FontAssetAccessor.h"
 #include "Impl/Accessors/AnimationAssetAccessor.h"
 #include "Impl/Accessors/VideoStreamAssetAccessor.h"
+#include "Impl/Accessors/MeshAssetAccessor.h"
 
 #include "IO/DirIO.h"
 
@@ -738,6 +739,15 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     auto vsaa = VideoStreamAssetAccessor::Create( GetRootDir() / "video", videoExts );
     RegisterCategory( AssetCategory::Create( "video", vsaa ) );
+
+    // --- mesh ---
+    StringVector meshExts;
+    videoExts.push_back( ".*\\.obj" );
+    videoExts.push_back( ".*\\.fbx" );
+    videoExts.push_back( ".*\\.dae" );
+
+    auto maa = MeshAssetAccessor::Create( GetRootDir() / "meshes", meshExts );
+    RegisterCategory( AssetCategory::Create( "meshes", maa ) );
 }
 
 // ********************************

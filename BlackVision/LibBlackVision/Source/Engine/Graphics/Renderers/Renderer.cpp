@@ -211,6 +211,9 @@ bool    Renderer::DrawRenderable    ( RenderableEntity * ent )
         //FIXME: FIX-1
         //glDrawArrays(ConstantsMapper::GLConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
+    case RenderableEntity::RenderableType::RT_TRIANGLES:
+        DrawTriangles( static_cast< Triangles * >( ent ) );
+        break;
     case RenderableEntity::RenderableType::RT_LINES:
         DrawLines( static_cast< Lines * >( ent ) );
         break;
@@ -229,6 +232,33 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 
     // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
+
+    Enable  ( vao );
+
+    unsigned int firstVertex = 0;
+    auto ccNum = vao->GetNumConnectedComponents();
+    for( unsigned int i = 0; i < ccNum; ++i )
+    {
+        PassCCNumUniform( i, ccNum );
+
+        unsigned int numVertices = vao->GetNumVertices( i );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
+        firstVertex += numVertices;
+    }
+
+    Disable ( vao );
+
+    return true;
+}
+
+// *********************************
+//
+bool     Renderer::DrawTriangles            ( Triangles * triangles )
+{
+    static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_TRIANGLES );
+
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
+    const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( triangles->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
 
@@ -811,7 +841,8 @@ void    Renderer::DeletePDR                                 ( const RenderTarget
 //
 void    Renderer::FreeAllPDResources                        ( RenderableEntity * renderable )
 {
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+        renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
 
     // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
     auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );

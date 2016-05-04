@@ -9,6 +9,8 @@ class ValuesFactory
 {
 public:
 
+    static ValueBoolPtr         CreateValueBool     ( const std::string & name );
+    static ValueBoolPtr         CreateValueBool     ( const std::string & name, bool initVal );
     static ValueIntPtr          CreateValueInt      ( const std::string & name );
     static ValueIntPtr          CreateValueInt      ( const std::string & name, int initVal );
     static ValueFloatPtr        CreateValueFloat    ( const std::string & name );

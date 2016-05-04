@@ -654,7 +654,7 @@ namespace bv{
 		bool autostart=false;
 		if(crawl->autostart=="true")autostart=true;
 
-		auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
+		auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ), nullptr );
 
 		node->SetLogic(Scroller);
 		

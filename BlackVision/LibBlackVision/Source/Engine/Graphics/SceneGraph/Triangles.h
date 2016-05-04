@@ -18,8 +18,8 @@ public:
             Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
-    virtual int     NumTriangles    ( unsigned int ccNum ) const = 0;
-    virtual int     NumVertices     ( unsigned int ccNum ) const = 0;
+    virtual int     NumTriangles    ( unsigned int ccNum ) const;
+    virtual int     NumVertices     ( unsigned int ccNum ) const;
 
     //TODO:
     //virtual GetVertex

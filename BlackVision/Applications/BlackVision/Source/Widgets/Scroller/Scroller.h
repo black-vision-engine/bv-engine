@@ -127,7 +127,7 @@ private:
     bool        AddNode             ( bv::model::BasicNodePtr node );
 
 public:
-	explicit	Scroller            ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
+	explicit	Scroller            ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
 				~Scroller			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
@@ -164,7 +164,7 @@ public:
 
     virtual void                                            Serialize       ( ISerializer& ser ) const override;
     static ScrollerPtr                                      Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
-    static ScrollerPtr                                      Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
+    static ScrollerPtr                                      Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
 
     virtual bool                                            HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 

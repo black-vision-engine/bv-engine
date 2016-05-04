@@ -17,6 +17,7 @@ class Camera;
 
 class RenderableEntity;
 class TriangleStrip;
+class Triangles;
 class Lines;
 
 class PixelShader;
@@ -186,6 +187,7 @@ public:
 
     bool                        DrawRenderable                  ( RenderableEntity * ent );
     bool                        DrawTriangleStrips              ( TriangleStrip * strip );
+    bool                        DrawTriangles                   ( Triangles * triangles );
     bool                        DrawLines                       ( Lines * lines );
 
 private:
