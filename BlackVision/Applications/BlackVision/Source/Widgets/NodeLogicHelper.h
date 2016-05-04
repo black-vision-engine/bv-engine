@@ -17,9 +17,9 @@ namespace SerializationHelper
 IValuePtr           CreateValue                         ( const IDeserializer & deser, const std::string & name );
 void                SerializeValue                      ( ISerializer & ser, IValueConstPtr val );
 
-} // SerializationHelper
+model::ITimeEvaluatorPtr            GetDefaultTimeline  ( const IDeserializer & deser );
 
-model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserializer & deser );
+} // SerializationHelper
 
 } // bv
 

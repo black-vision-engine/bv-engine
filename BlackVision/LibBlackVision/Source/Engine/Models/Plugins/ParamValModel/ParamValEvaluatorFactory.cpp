@@ -25,6 +25,44 @@ namespace bv { namespace model {
     //    }
     //}
 
+// ************************************************************** BOOL **************************************************************
+
+// ***********************
+//
+SimpleBoolEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleBoolEvaluator       ( ParamBoolPtr param, ValueBoolPtr value )
+{
+    return std::make_shared< SimpleBoolEvaluator >( param, value );
+}
+
+// ***********************
+//
+SimpleBoolEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleBoolEvaluator       ( ParamBoolPtr param, const std::string & valueName )
+{
+    return CreateSimpleBoolEvaluator( param, ValuesFactory::CreateValueBool( valueName ) );
+}
+
+// ***********************
+//
+SimpleBoolEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleBoolEvaluator       ( ParamBoolPtr param )
+{
+    return CreateSimpleBoolEvaluator( param, param->GetName() );
+}
+
+// ***********************
+//
+SimpleBoolEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleBoolEvaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
+{
+    return CreateSimpleBoolEvaluator( ParametersFactory::CreateParameterBool( paramName, timeEvaluator ), paramName );
+}
+
+// ***********************
+//
+SimpleBoolEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleBoolEvaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
+{
+    return CreateSimpleBoolEvaluator( ParametersFactory::CreateParameterBool( paramName, timeEvaluator ), valueName );
+}
+
+
 // ************************************************************** INT **************************************************************
 
 // *******************************

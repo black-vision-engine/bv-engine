@@ -1875,7 +1875,7 @@ model::BasicNodePtr	SimpleNodesFactory::ScrollerNodeTestScene( model::ITimeEvalu
 
     auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
 
-    auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+    auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ), nullptr );
 
     node->SetLogic( Scroller );
 

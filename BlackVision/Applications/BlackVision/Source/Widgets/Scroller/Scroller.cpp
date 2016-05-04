@@ -3,6 +3,8 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -22,7 +24,6 @@
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 
 #include <algorithm>
@@ -164,14 +165,14 @@ glm::vec3       ScrollerShiftToVec   ( Scroller::ScrollDirection crawlDirection 
 
 // *******************************
 //
-ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view )
+ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator )
 {
-	return std::make_shared< Scroller >( parent, view );
+	return std::make_shared< Scroller >( parent, view, timeEvaluator );
 }
 
 // *******************************
 //
-Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view )
+Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator )
 	: m_parentNode( parent )
     , m_editor( nullptr )
 	, m_isFinalized( false )
@@ -181,7 +182,7 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_smoothTime( 3000 )
     , m_smoothStart( false )
     , m_smoothPause( false )
-	, m_speed( 0.f )
+	, m_speed( 0.4f )
 	, m_interspace( 0.0f )
     , m_paused( false )
     , m_scrollDirection( ScrollDirection::SD_Left )
@@ -189,8 +190,21 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_lowBufferMultiplier( 3.5 )
     , m_offscreenNodeBehavior( OffscreenNodeBehavior::ONB_SetNonActive )
 {
-    //auto alphaEval = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    //m_paramValModel->
+    auto speedParam = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "Speed", timeEvaluator );
+    speedParam->Parameter()->SetVal( 0.4f, TimeType( 0.0f ) );
+    m_paramValModel->RegisterAll( speedParam );
+
+    auto spacingParam = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "Spacing", timeEvaluator );
+    spacingParam->Parameter()->SetVal( 0.4f, TimeType( 0.0f ) );
+    m_paramValModel->RegisterAll( spacingParam );
+
+    auto smoothTimeParam = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "SmoothTime", timeEvaluator );
+    smoothTimeParam->Parameter()->SetVal( 3000.0f, TimeType( 0.0f ) );
+    m_paramValModel->RegisterAll( smoothTimeParam );
+
+    auto enableEventsParam = model::ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "EnableEvents", timeEvaluator );
+    enableEventsParam->Parameter()->SetVal( false, TimeType( 0.0f ) );
+    m_paramValModel->RegisterAll( enableEventsParam );
 }
 
 
@@ -713,9 +727,9 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
     auto offscreenBahavior = SerializationHelper::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
     float smoothTime = SerializationHelper::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
 
-    //auto timeline = GetDefaultTimeline( deser );
+    auto timeline = SerializationHelper::GetDefaultTimeline( deser );
 
-    auto scroller = Scroller::Create( parent, rect );
+    auto scroller = Scroller::Create( parent, rect, timeline );
     scroller->SetSpeed( speed );
     scroller->SetInterspace( interspace );
     scroller->SetScrollDirection( scrollDirection );
@@ -892,6 +906,11 @@ bool		Scroller::Start			()
 {
 	if( !m_started )
 	{
+        SetSpeed( model::QueryTypedParam< model::ParamFloatPtr >( m_paramValModel->GetParameter( "Speed" ) )->Evaluate() );
+        SetInterspace( model::QueryTypedParam< model::ParamFloatPtr >( m_paramValModel->GetParameter( "Spacing" ) )->Evaluate() );
+        SetSmoothTime( model::QueryTypedParam< model::ParamFloatPtr >( m_paramValModel->GetParameter( "SmoothTime" ) )->Evaluate() );
+        SetEnableEvents( model::QueryTypedParam< model::ParamBoolPtr >( m_paramValModel->GetParameter( "EnableEvents" ) )->Evaluate() );
+
         Finalize();
 
 		m_started = true;
@@ -1061,6 +1080,8 @@ bool        Scroller::SetSmoothTime       ( Float32 time )
     return true;
 }
 
+// ***********************
+//
 Float32     Scroller::GetSmoothTime       () const
 {
     return static_cast< Float32 >( m_smoothTime / 1000 ) ;
