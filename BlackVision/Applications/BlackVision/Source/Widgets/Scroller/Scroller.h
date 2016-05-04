@@ -1,10 +1,8 @@
 #pragma once
 
 #include "CoreDEF.h"
-#include "Engine/Models/Interfaces/INodeLogic.h"
+#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
 #include "ScrollerNodesStates.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 
 #include <string>
 #include <vector>
@@ -34,7 +32,7 @@ class Scroller;
 DEFINE_PTR_TYPE( Scroller )
 DEFINE_CONST_PTR_TYPE( Scroller )
 
-class Scroller : public model::INodeLogic, public std::enable_shared_from_this< Scroller >
+class Scroller : public model::NodeLogicBase, public std::enable_shared_from_this< Scroller >
 {
 public:
 
@@ -73,8 +71,6 @@ private:
 	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
 
 private:
-
-    model::DefaultParamValModelPtr          m_paramValModel;
 
     std::string                             m_scrollerNodePath;
     std::string                             m_sceneName;

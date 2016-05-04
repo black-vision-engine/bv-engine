@@ -258,6 +258,7 @@ public:
         GlobalEffectParam,
         ResourceParam,
         LightParam,
+        NodeLogicParam,
         FailTarget      ///< Wrong target type
     } TargetType;
 private:

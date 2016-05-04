@@ -5,6 +5,9 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
+#include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
+
+#include "UseLoggerBVAppModule.h"
 
 
 namespace bv { namespace model
@@ -54,9 +57,19 @@ void                                            NodeLogicBase::Serialize       (
 
 // ***********************
 //
-void                                            NodeLogicBase::Deserialize     ( const IDeserializer & /*deser*/ )
+void                                            NodeLogicBase::Deserialize     ( const IDeserializer & deser )
 {
+    // params
+    auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
+    for( auto param : params )
+    {
+        if( GetParameter( param->GetName() ) == nullptr )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Logic " << GetType() << " does not have parameter " << param->GetName() << ", which is serialized.";
+        }
 
+        m_paramValModel->SetParameter( param );
+    }
 }
 
 }   // model

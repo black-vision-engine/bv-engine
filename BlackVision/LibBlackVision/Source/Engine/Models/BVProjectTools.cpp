@@ -510,6 +510,8 @@ void GetParamsOfTimelinesRecursively                ( const std::string & nodePa
 
     // Add node effect parameters.
     timelineParamInfo.paramOwner = ParamOwner::PO_GlobalEffect;
+    timelineParamInfo.pluginName = "";
+    timelineParamInfo.paramSubName = "";
 
     auto effect = modelNode->GetNodeEffect();
 
@@ -517,6 +519,23 @@ void GetParamsOfTimelinesRecursively                ( const std::string & nodePa
     {
         for( auto param : effect->GetParameters() )
         {
+            timelineParamInfo.param = param;
+
+            auto te = param->GetTimeEvaluator();
+            assert( map.find( te ) != map.end() ); // a little bit of defensive programming
+            map[ te ].push_back( timelineParamInfo );
+        }
+    }
+
+    timelineParamInfo.paramOwner = ParamOwner::PO_NodeLogic;
+
+    auto logic = modelNode->GetLogic();
+    if( logic != nullptr )
+    {
+        for( auto param : logic->GetParameters() )
+        {
+            timelineParamInfo.param = param;
+
             auto te = param->GetTimeEvaluator();
             assert( map.find( te ) != map.end() ); // a little bit of defensive programming
             map[ te ].push_back( timelineParamInfo );

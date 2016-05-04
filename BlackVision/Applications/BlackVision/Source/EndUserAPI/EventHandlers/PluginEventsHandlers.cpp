@@ -83,6 +83,8 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
         else if( targetType == ParamKeyEvent::TargetType::LightParam )
             param = GetLightParameter( sceneName, lightIndex, paramName );
+        else if( targetType == ParamKeyEvent::TargetType::NodeLogicParam )
+            param = GetNodeLogicParameter( sceneName, nodeName, paramName );
         else
             param = GetPluginParameter( sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
     }
@@ -319,6 +321,26 @@ ParameterPtr PluginEventsHandlers::GetLightParameter        ( const std::string 
     }
 
     LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: not found";
+    return nullptr;
+}
+
+// ***********************
+//
+ParameterPtr    PluginEventsHandlers::GetNodeLogicParameter   ( const std::string & sceneName, const std::string & nodePath, const std::string & paramName )
+{
+    auto node = m_projectEditor->GetNode( sceneName, nodePath );
+    if( node == nullptr )
+    {
+        return nullptr;
+    }
+
+    auto logic = node->GetLogic();
+    if( logic )
+    {
+        logic->GetParameter( paramName );
+    }
+
+    LOG_MESSAGE( SeverityLevel::warning ) << "Node logic parameter not found";
     return nullptr;
 }
 
