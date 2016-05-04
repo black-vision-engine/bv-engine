@@ -43,6 +43,9 @@
     <Filter Include="Widgets\TextEffects">
       <UniqueIdentifier>{43575d01-557b-4b91-b0f0-1b97e602acc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\SmoothValueSetter">
+      <UniqueIdentifier>{ccd4e404-2ee7-4498-922d-e72b5a4a28e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -173,6 +176,10 @@
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp">
       <Filter>Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp">
+      <Filter>Widgets\SmoothValueSetter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -318,6 +325,10 @@
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h">
       <Filter>Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h">
+      <Filter>Widgets\SmoothValueSetter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

@@ -325,6 +325,8 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +388,8 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h" />
     <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h" />
   </ItemGroup>
   <ItemGroup>
