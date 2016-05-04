@@ -4,6 +4,7 @@
 #include "Scroller/Scroller.h"
 #include "NodeReplicator/NodeReplicator.h"
 #include "TextEffects/TextEffects.h"
+#include "SmoothValueSetter/SmoothValueSetter.h"
 
 
 namespace bv
@@ -28,6 +29,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == model::TextEffects::Type() )
     {
         return model::TextEffects::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::SmoothValueSetter::Type() )
+    {
+        return nodelogic::SmoothValueSetter::Create( deser, logicParent );
     }
 
     return nullptr;
