@@ -20,6 +20,11 @@ public:
         > >( param, value );
     }
 
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( ParamBoolPtr param, ValueBoolPtr value );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( ParamBoolPtr param, const std::string & valueName );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( ParamBoolPtr param );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
 
     static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, ValueIntPtr value );
     static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, const std::string & valueName );

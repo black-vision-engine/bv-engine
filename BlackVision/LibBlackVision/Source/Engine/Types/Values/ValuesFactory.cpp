@@ -5,6 +5,24 @@
 
 namespace bv {
 
+// ***********************
+//
+ValueBoolPtr         ValuesFactory::CreateValueBool     ( const std::string & name )
+{
+    return std::make_shared< ValueBool >( name );
+}
+
+// ***********************
+//
+ValueBoolPtr         ValuesFactory::CreateValueBool     ( const std::string & name, bool initVal )
+{
+    auto val = CreateValueBool( name );
+
+    val->SetValue( initVal );
+
+    return val;
+}
+
 // *******************************
 //
 ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name )

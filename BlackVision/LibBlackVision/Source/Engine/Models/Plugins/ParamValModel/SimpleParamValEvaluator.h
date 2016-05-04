@@ -44,6 +44,7 @@ public:
 };
 
 // Make sure that all types defined here are explicitely instantiated
+typedef SimpleParamValEvaluator< ParamBoolPtr, ValueBoolPtr >         SimpleBoolEvaluator;
 typedef SimpleParamValEvaluator< ParamIntPtr, ValueIntPtr >           SimpleIntEvaluator;
 typedef SimpleParamValEvaluator< ParamFloatPtr, ValueFloatPtr >       SimpleFloatEvaluator;
 typedef SimpleParamValEvaluator< ParamVec4Ptr, ValueVec4Ptr >         SimpleVec4Evaluator;
@@ -54,6 +55,7 @@ typedef SimpleParamValEvaluator< ParamTransformPtr, ValueMat4Ptr >    SimpleTran
 typedef SimpleParamValEvaluator< ParamStringPtr, ValueStringPtr >     SimpleStringEvaluator;
 typedef SimpleParamValEvaluator< ParamWStringPtr, ValueWStringPtr >   SimpleWStringEvaluator;
 
+DEFINE_PTR_TYPE(SimpleBoolEvaluator)
 DEFINE_PTR_TYPE(SimpleIntEvaluator)
 DEFINE_PTR_TYPE(SimpleFloatEvaluator)
 DEFINE_PTR_TYPE(SimpleVec4Evaluator)
