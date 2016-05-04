@@ -31,7 +31,7 @@ ISerializableConstPtr MeshAssetDesc::Create          ( const IDeserializer & des
 {
 	auto path = deser.GetAttribute( "path" );
 	auto groupName = deser.GetAttribute( "groupName" );
-	auto recursive = SerializationHelper::String2T< bool >( deser.GetAttribute( "recursive" ) );
+	auto recursive = SerializationHelper::String2T< bool >( deser.GetAttribute( "recursive" ), true );
 
     return Create( path, groupName, recursive );
 }
