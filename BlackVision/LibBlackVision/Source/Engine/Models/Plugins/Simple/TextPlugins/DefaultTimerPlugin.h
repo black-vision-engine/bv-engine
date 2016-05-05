@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TextPluginBase.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Assets/Asset.h"
@@ -83,20 +85,10 @@ bool            ResetTimerPlugin( IPluginPtr timerPlugin );
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultTimerPlugin : public BasePlugin< IPlugin >
+class DefaultTimerPlugin : public TextPluginBase
 {
 private:
-
-    SizeType                        m_fontSize;
-    SizeType                        m_blurSize;
-	SizeType                        m_outlineSize;
-    ParamFloatPtr                   m_spacingParam;
-    ParamFloatPtr                   m_alignmentParam;
-
     ParamFloatPtr                   m_precisionParam;
-
-    //TimeSegmentEvalImpl             m_timeEvaluator;
-
 
     bool                            m_started;
     unsigned long                   m_globalStartTime;
@@ -108,61 +100,46 @@ private:
     wchar_t                         m_secSeparator;
     wchar_t                         m_widestGlyph;
 
-    DefaultPixelShaderChannelPtr    m_psc;
-    DefaultVertexShaderChannelPtr   m_vsc;
-
-    VertexAttributesChannelPtr      m_vaChannel;
-
-    TextAtlasConstPtr               m_textAtlas;
-
     std::wstring                    m_timePatern;
     TimeInfo                        m_timePaternInfo;
 
-    bool                            CheckTimeConsistency ( const std::wstring & time ) const;
+    bool            CheckTimeConsistency( const std::wstring & time ) const;
 
-    void                            SetValue        ( unsigned int connComp, wchar_t wch );
-    const Glyph *					GetGlyph		( wchar_t wch ) const;
-    void                            Refresh         ( bool isPaused );
+    void            SetValue            ( unsigned int connComp, wchar_t wch );
+    const Glyph *   GetGlyph            ( wchar_t wch ) const;
+    void            Refresh             ( bool isPaused );
 
-    void                            SetTimePatern   ( const std::wstring & patern );
+    void            SetTimePatern       ( const std::wstring & patern );
 
-    std::wstring                    GenerateTimePatern( double time );
-    void                            InitBigestGlyph ();
+    std::wstring    GenerateTimePatern  ( double time );
+    void            InitBigestGlyph     ();
 private:
 
     
-    void                                        SetTime                     ( TimeType time );
+    void            SetTime             ( TimeType time );
 
-    void                                        SetTime                     ( int h, int m, int s, int hoSec );
+    void            SetTime             ( int h, int m, int s, int hoSec );
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
-
-public:
-
-    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
-    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    virtual bool    LoadResource        ( AssetDescConstPtr assetDescr ) override;
 
 private:
 
-	virtual void                                Update                      ( TimeType t ) override;
+    virtual void    Update              ( TimeType t ) override;
 
-    void                                        Start                       ();
-    void                                        Stop                        ();
-    void                                        Reset                       ( float localTime );
+    void            Start               ();
+    void            Stop                ();
+    void            Reset               ( float localTime );
 
 private:
 
-	friend bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
-	friend bool            StartTimerPlugin( IPluginPtr timerPlugin );
-	friend bool            StopTimerPlugin( IPluginPtr timerPlugin );
-	friend bool            ResetTimerPlugin( IPluginPtr timerPlugin );
+    friend bool     SetTimeTimerPlugin  ( IPluginPtr timerPlugin, TimeType time );
+    friend bool     StartTimerPlugin    ( IPluginPtr timerPlugin );
+    friend bool     StopTimerPlugin     ( IPluginPtr timerPlugin );
+    friend bool     ResetTimerPlugin    ( IPluginPtr timerPlugin );
 
 public:
-	explicit               DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-							~DefaultTimerPlugin         ();
-
-    virtual void			SetPrevPlugin               ( IPluginPtr plugin ) override;
+    explicit        DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                    ~DefaultTimerPlugin ();
 };
 
 

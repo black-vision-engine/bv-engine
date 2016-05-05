@@ -205,24 +205,9 @@ TimeValue::TimeValue( double time, int accuracy )
 }
 
 // *************************************
-// 
-void		DefaultTimerPlugin::SetPrevPlugin		( IPluginPtr prev )
-{
-    BasePlugin::SetPrevPlugin( prev );
-
-	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-	auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-}
-
-// *************************************
 //
 DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
-    , m_textAtlas()
+    : TextPluginBase( name, uid, prev, model )
     , m_timePatern( )
     , m_globalStartTime( 0 )
     , m_localStartTime( 0 )
@@ -231,31 +216,18 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_secSeparator(L'.')
     , m_widestGlyph( L'0' ) 
     , m_started(false)
-    , m_fontSize( 0 )
-    , m_blurSize( 0 )
-    , m_outlineSize( 0 )
 {
-    m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
+    SetPrevPlugin( prev );
 
-    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
-    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
-	m_vaChannel = TextHelper::CreateEmptyVACForText();
-	
-	SetPrevPlugin( prev );
+    m_precisionParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
 
-    m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
-    m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
-    m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
-    
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
 
 // *************************************
 //
 DefaultTimerPlugin::~DefaultTimerPlugin  ( )
-{
-
-}
+{}
 
 namespace {
 // *************************************
@@ -274,73 +246,24 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 // 
 bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
+    auto success = TextPluginBase::LoadResource( assetDescr, DefaultTimerPluginDesc::TextureName() );
 	auto txAssetDescr = QueryTypedDesc< FontAssetDescConstPtr >( assetDescr );
 
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txAssetDescr != nullptr )
+    if( success )
     {
-		auto fontResource = LoadTypedAsset<FontAsset>( txAssetDescr );
-
-        m_textAtlas = TextHelper::GetAtlas( fontResource );
-
-        InitBigestGlyph();
-
-		auto textureResource = m_textAtlas->GetAsset();
-
-        m_fontSize = txAssetDescr->GetFontSize();
-        m_blurSize = txAssetDescr->GetBlurSize();
-        m_outlineSize = txAssetDescr->GetOutlineSize();
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
-		auto txDesc = std::make_shared< DefaultTextureDescriptor >( textureResource, DefaultTimerPluginDesc::TextureName(), DataBuffer::Semantic::S_TEXTURE_STATIC );
-        if( txDesc != nullptr )
-        {
-			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-			
-			auto txData = m_psc->GetTexturesDataImpl();
-			txData->SetTexture( 0, txDesc );
+        m_timePatern = L""; // force reseting time patern. New font's loading.
 
-			//FIXME: on runtime reload it will add another descriptor instead of replacing the old one
-			txData->SetFont( 0, std::make_shared< DefaultFontDescriptor >( txDesc, txDesc->GetName() ) );
+        SetTimePatern( GenerateTimePatern( 0.f ) );
 
-			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+        SetTime(0.);
 
-            m_timePatern = L""; // force reseting time patern. New font's loading.
-
-            SetTimePatern( GenerateTimePatern( 0.f ) );
-
-            SetTime(0.);
-
-			auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
-			assert( fonts.size() == 1 );
-            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, fonts[ 0 ]->GetStateModel() ) );
-
-            return true;
-        }
+        return true;
     }    
-
-    return false;
-}
-
-// *************************************
-// 
-IVertexAttributesChannelConstPtr    DefaultTimerPlugin::GetVertexAttributesChannel  () const
-{
-    return m_vaChannel;
-}
-
-// *************************************
-// 
-IPixelShaderChannelPtr              DefaultTimerPlugin::GetPixelShaderChannel       () const
-{
-    return m_psc;
-}
-
-// *************************************
-// 
-IVertexShaderChannelConstPtr        DefaultTimerPlugin::GetVertexShaderChannel      () const
-{
-    return m_vsc;
+    else
+    {
+        return false;
+    }
 }
 
 // *************************************
@@ -449,16 +372,18 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
 	auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, m_blurSize, m_spacingParam->Evaluate(), alignType, false, viewWidth, viewHeight );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, timerInit, m_blurSize, m_spacingParam->Evaluate(), alignType, false, viewWidth, viewHeight );
 }
 
 ////////////////////////////
 //
-const Glyph *						DefaultTimerPlugin::GetGlyph	( wchar_t wch ) const
+const Glyph *                       DefaultTimerPlugin::GetGlyph        ( wchar_t wch ) const
 {
-    auto glyph = m_textAtlas->GetGlyph( wch );
+    auto glyph = m_atlas->GetGlyph( wch );
     if( glyph )
+    {
         return glyph;
+    }
     else
     {
         assert( !( "Cannot find glyph for char " + wch) );
@@ -592,18 +517,19 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
         auto glyph = GetGlyph( wch );
         auto zeroGlyph = GetGlyph( m_widestGlyph );
 
-        textureXNorm    = ((float)glyph->textureX /*+ (float)zeroGlyph->glyphX - 1.f*/ )  / m_textAtlas->GetWidth();
-        textureYNorm    = ((float)glyph->textureY /*+ (float)zeroGlyph->glyphY - 1.f*/ )  / m_textAtlas->GetHeight();
-        widthNorm       = ((float)zeroGlyph->width + 2.f )     / m_textAtlas->GetWidth();
-        heightNorm      = ((float)zeroGlyph->height + 2.f )    / m_textAtlas->GetHeight();
+        textureXNorm    = ((float)glyph->textureX /*+ (float)zeroGlyph->glyphX - 1.f*/ )  / m_atlas->GetWidth();
+        textureYNorm    = ((float)glyph->textureY /*+ (float)zeroGlyph->glyphY - 1.f*/ )  / m_atlas->GetHeight();
+        widthNorm       = ((float)zeroGlyph->width + 2.f )     / m_atlas->GetWidth();
+        heightNorm      = ((float)zeroGlyph->height + 2.f )    / m_atlas->GetHeight();
     }
 
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
+    {
         if( connComp < comps.size() )
         {
             if( comps[ connComp ]->GetNumVertices() == 4 )
             {
-				auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( comps[ connComp ] );
+                auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( comps[ connComp ] );
                 auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
 
                 auto& verts = uvChannel->GetVertices();
@@ -614,6 +540,7 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
                 verts[ 3 ] = glm::vec2( textureXNorm + widthNorm, textureYNorm );
             }
         }
+    }
 }
 
 ////////////////////////////
@@ -621,7 +548,9 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 bool                                DefaultTimerPlugin::CheckTimeConsistency ( const std::wstring& time ) const
 {
     if( m_timePatern.size() != time.size() )
+    {
         return false;
+    }
 
     for( unsigned int i = 0; i < m_timePatern.size(); ++i )
     {
@@ -655,7 +584,7 @@ void                              DefaultTimerPlugin::InitBigestGlyph ()
 
     for( auto wch : numbers )
     {
-        auto w = m_textAtlas->GetGlyph( wch )->width;
+        auto w = m_atlas->GetGlyph( wch )->width;
         if( w > width )
         {
             width = w;
@@ -690,11 +619,13 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         ret.append( L"MM" );
         ret.push_back( m_defaultSeparator );
         ret.append( L"SS" );
-		int prec =  EvaluateAsInt< int >( m_precisionParam );
-		if(prec>0){
-				ret.push_back( m_secSeparator );
-				ret.append( L"s" );
-			}
+
+        int prec =  EvaluateAsInt< int >( m_precisionParam );
+        if(prec>0)
+        {
+            ret.push_back( m_secSeparator );
+            ret.append( L"s" );
+        }
     }
     else
     {
@@ -702,35 +633,43 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         if( iminute > 0 )
         {
             if( iminute >= 10 )
+            {
                 ret.append( L"MM" );
+            }
             else
+            {
                 ret.push_back( L'M' );
+            }
 
             ret.push_back( m_defaultSeparator );
             ret.append( L"SS" );
-			
+
             auto prec =  EvaluateAsInt< int >( m_precisionParam );
             if( prec > 0 )
             {
-				ret.push_back( m_secSeparator );
-				ret.append( L"s" );
-			}
+                ret.push_back( m_secSeparator );
+                ret.append( L"s" );
+            }
         }
         else
         {
             auto isecond = int( second );
 
             if( isecond >= 10 )
+            {
                 ret.append( L"SS" );
+            }
             else
+            {
                 ret.push_back( L'S' );
+            }
 
-			auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            auto prec =  EvaluateAsInt< int >( m_precisionParam );
             if( prec > 0 )
             {
-				ret.push_back( m_secSeparator );
-				ret.append( L"s" );
-			}
+                ret.push_back( m_secSeparator );
+                ret.append( L"s" );
+            }
         }
     }
 
