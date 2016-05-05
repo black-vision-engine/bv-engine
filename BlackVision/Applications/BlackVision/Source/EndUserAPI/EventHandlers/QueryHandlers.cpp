@@ -78,6 +78,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             GetSceneThumbnail( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetPresetThumbnail )
             GetPresetThumbnail( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetPMItemStats )
+            GetPMItemStats( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListResourcesInFolders )
         //    ListResourcesInFolders( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListAllResources )
@@ -640,6 +642,90 @@ void        QueryHandlers::GetPresetThumbnail      ( JsonSerializeObject & ser, 
     }
 
     ser.ExitChild(); // thumbnails
+}
+
+// ***********************
+//
+void        QueryHandlers::GetPMItemStats      ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    auto pm = ProjectManager::GetInstance();
+
+    auto categoryName = request->GetAttribute( "categoryName" );
+    auto path = request->GetAttribute( "path" );
+
+    UInt32 count = 0;
+    UInt64 size = 0;
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::GetPMItemStats, eventID, true );
+
+    if( categoryName == "scenes" )
+    {
+        count = pm->GetScenesCount( path );
+        ser.EnterArray( "" );
+        ser.EnterChild( "" );
+        ser.SetAttribute( "categoryName", "scenes" );
+        ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
+        ser.ExitChild();
+        ser.ExitChild();
+    }
+    else if( categoryName == "presets" )
+    {
+        count = pm->GetPresetsCount( path );
+        ser.EnterArray( "" );
+        ser.EnterChild( "" );
+        ser.SetAttribute( "categoryName", "presets" );
+        ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
+        ser.ExitChild();
+        ser.ExitChild();
+    }
+    else
+    {
+        if( categoryName.empty() )
+        {
+            ser.EnterArray( "" );
+            auto catList = pm->ListCategoriesNames();
+
+            for( auto cat : catList )
+            {
+                count = pm->GetAssetCount( cat, path );
+                size = pm->GetAssetSize( cat, path );
+
+                ser.EnterChild( "" );
+                ser.SetAttribute( "categoryName", cat );
+                ser.SetAttribute( "size", SerializationHelper::T2String( size ) );
+                ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
+                ser.ExitChild();
+            }
+
+            count = pm->GetScenesCount( path );
+            ser.EnterChild( "" );
+            ser.SetAttribute( "categoryName", "scenes" );
+            ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
+            ser.ExitChild();
+
+            count = pm->GetPresetsCount( path );
+            ser.EnterChild( "" );
+            ser.SetAttribute( "categoryName", "presets" );
+            ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
+            ser.ExitChild();
+
+            ser.ExitChild();
+        }
+        else
+        {
+            count = pm->GetAssetCount( categoryName, path );
+            size = pm->GetAssetSize( categoryName, path );
+            ser.EnterArray( "" );
+            ser.EnterChild( "" );
+            ser.SetAttribute( "categoryName", categoryName );
+            ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
+            ser.SetAttribute( "size", SerializationHelper::T2String( size ) );
+            ser.ExitChild();
+            ser.ExitChild();
+        }
+
+        
+    }
 }
 
 // ***********************

@@ -302,6 +302,8 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::CreateFolder, "CreateFolder" )
     , std::make_pair( ProjectEvent::Command::DeleteFolder, "DeleteFolder" )
     , std::make_pair( ProjectEvent::Command::RenameFolder, "RenameFolder" )
+    , std::make_pair( ProjectEvent::Command::CopyFolder, "CopyFolder" )
+    , std::make_pair( ProjectEvent::Command::MoveFolder, "MoveFolder" )
 
     , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" ) 
@@ -350,6 +352,8 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::GetAssetThumbnail, "GetAssetThumbnail" )
     , std::make_pair( InfoEvent::Command::GetSceneThumbnail, "GetSceneThumbnail" )
     , std::make_pair( InfoEvent::Command::GetPresetThumbnail, "GetPresetThumbnail" )
+
+    , std::make_pair( InfoEvent::Command::GetPMItemStats, "GetPMItemStats" )
 
     , std::make_pair( InfoEvent::Command::Timelines, "TimeLines" ) 
     , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, "ListTimelineKeyframes" ) 

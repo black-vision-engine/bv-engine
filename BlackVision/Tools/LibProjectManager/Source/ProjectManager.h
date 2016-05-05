@@ -127,6 +127,13 @@ public:
     bool                    CopySceneDir        ( const Path & path, const std::string &newName ) const;
     bool                    CopyPresetDir       ( const Path & path, const std::string &newName ) const;
 
+    // *********************************
+    // categories statistics
+    UInt64                  GetAssetSize        ( const std::string & categoryName, const Path & path ) const;
+    UInt32                  GetAssetCount       ( const std::string & categoryName, const Path & path ) const;
+    UInt32                  GetScenesCount      ( const Path & path ) const;
+    UInt32                  GetPresetsCount     ( const Path & path ) const;
+
     Path                    ToAbsPath           ( const Path & path ) const;
 
     static ProjectManager *	GetInstance			(  );

@@ -426,6 +426,33 @@ Path                        ProjectManager::ToAbsPath           ( const Path & p
     return m_impl->ToAbsPath( path );
 }
 
+// ********************************
+//
+UInt64                      ProjectManager::GetAssetSize        ( const std::string & categoryName, const Path & path ) const
+{
+    return m_impl->GetAssetSize( categoryName, path );
+}
+
+// ********************************
+//
+UInt32                      ProjectManager::GetAssetCount       ( const std::string & categoryName, const Path & path ) const
+{
+    return m_impl->GetAssetCount( categoryName, path );
+}
+
+// ********************************
+//
+UInt32                      ProjectManager::GetScenesCount      ( const Path & path ) const
+{
+    return m_impl->GetScenesCount( path );
+}
+
+// ********************************
+//
+UInt32                      ProjectManager::GetPresetsCount     ( const Path & path ) const
+{
+    return m_impl->GetPresetsCount( path );
+}
 
 } // bv
 

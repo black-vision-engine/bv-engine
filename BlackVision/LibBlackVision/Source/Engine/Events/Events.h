@@ -638,6 +638,7 @@ public:
         GetAssetThumbnail,
         GetSceneThumbnail,
         GetPresetThumbnail,
+        GetPMItemStats,
 
         Timelines,
         CheckTimelineTime,
