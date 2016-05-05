@@ -1522,6 +1522,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.cpp">
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.cpp">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2802,13 +2805,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRectPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTextPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
@@ -3738,6 +3735,9 @@
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.h">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClInclude>
   </ItemGroup>

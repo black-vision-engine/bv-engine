@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TextPluginBase.h"
+
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
@@ -31,32 +33,21 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultTextPlugin : public BasePlugin< IPlugin >
+class DefaultTextPlugin : public TextPluginBase
 {
 private:
-
-    DefaultPixelShaderChannelPtr    m_psc;
-    DefaultVertexShaderChannelPtr   m_vsc;
-
-    VertexAttributesChannelPtr      m_vaChannel;
-    glm::mat4                        m_scaleMat;
 
     ParamWStringPtr                 m_textParam;
     std::wstring                    m_currentText;
     Float32                         m_currentAligment;
     Float32                         m_currentSpacing;
-    TextAtlasConstPtr               m_atlas;
+
     Float32                         m_textLength;
 
-    UInt32                          m_fontSize;
-    UInt32                          m_blurSize;
-    UInt32                          m_outlineSize;
-
-    ParamFloatPtr                   m_spacingParam;
-    ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
     ParamFloatPtr                   m_timeParam;
     ValueMat4Ptr                    m_scaleValue;
+    glm::mat4                       m_scaleMat;
 
     TextArranger *                  m_arranger;
 
@@ -65,24 +56,7 @@ private:
 
     void                            SetText                     ( const std::wstring & newText );
 
-    void                            LoadTexture                 (   DefaultTexturesDataPtr,
-                                                                    TextureAssetConstPtr,
-                                                                    const std::string &,
-                                                                    TextureWrappingMode,
-                                                                    TextureWrappingMode,
-                                                                    TextureFilteringMode,
-                                                                    const glm::vec4 &,
-                                                                    DataBuffer::Semantic );
-
-    bool                            LoadAtlas                   ( const FontAssetDescConstPtr & fontAssetDesc );
-
     virtual bool                    LoadResource                ( AssetDescConstPtr assetDescr ) override;
-
-public:
-
-    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
-    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
 private:
 
@@ -90,15 +64,12 @@ private:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-
     void                                        ScaleToMaxTextLength        ();
 
 public:
 
     explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTextPlugin          ();
-
-    virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     std::wstring                                GetText                     () const;
 };

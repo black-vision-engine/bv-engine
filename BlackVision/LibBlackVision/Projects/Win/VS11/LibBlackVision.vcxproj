@@ -445,6 +445,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp" />
@@ -882,6 +883,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTimerPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDef.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.h" />
