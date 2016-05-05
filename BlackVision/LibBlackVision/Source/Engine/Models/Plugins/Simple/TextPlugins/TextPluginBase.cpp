@@ -39,9 +39,7 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
 // *********************************
 //
 TextPluginBase::~TextPluginBase             ()
-{
-
-}
+{}
 
 // *********************************
 //
@@ -152,14 +150,14 @@ bool                                TextPluginBase::LoadAtlas                   
 
 // *************************************
 // 
-DefaultTextureDescriptorPtr         TextPluginBase::LoadTexture(    DefaultTexturesDataPtr txData,
-                                                                    TextureAssetConstPtr res,
-                                                                    const std::string & name,
-                                                                    TextureWrappingMode hWrappingMode,
-                                                                    TextureWrappingMode vWrappingMode,
-                                                                    TextureFilteringMode txFilteringMode,
-                                                                    const glm::vec4 & bColor,
-                                                                    DataBuffer::Semantic semantic )
+DefaultTextureDescriptorPtr         TextPluginBase::LoadTexture                 (    DefaultTexturesDataPtr txData,
+                                                                                     TextureAssetConstPtr res,
+                                                                                     const std::string & name,
+                                                                                     TextureWrappingMode hWrappingMode,
+                                                                                     TextureWrappingMode vWrappingMode,
+                                                                                     TextureFilteringMode txFilteringMode,
+                                                                                     const glm::vec4 & bColor,
+                                                                                     DataBuffer::Semantic semantic )
 {
       //FIXME: use some better API to handle resources in general and textures in this specific case
     auto txDesc = std::make_shared< DefaultTextureDescriptor >( res, name, semantic );
