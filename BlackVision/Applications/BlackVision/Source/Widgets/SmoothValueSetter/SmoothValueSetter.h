@@ -58,7 +58,12 @@ public:
 
 public:
 
-    void                                AddBinding      ( const std::string & nodePath, const std::string & pluginName, const std::string & paramName, const std::string & srcName, BVProjectEditor * editor );
+    void                                AddBinding      ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
+
+
+
+private:
+    const ParameterBinding *            FindSource      ( const std::string & bindingSource );
 
 };
 

@@ -13,7 +13,6 @@
 namespace bv { namespace nodelogic
 {
 
-
 const std::string       SmoothValueSetter::m_type = "SmoothValueSetter";
 
 // ***********************
@@ -28,6 +27,23 @@ const std::string &     SmoothValueSetter::Type            ()
 const std::string &     SmoothValueSetter::GetType             () const
 {
     return Type();
+}
+
+
+// ========================================================================= //
+// Helpers
+// ========================================================================= //
+
+
+const ParameterBinding *        SmoothValueSetter::FindSource      ( const std::string & bindingSource )
+{
+    for( auto & binding : m_paramBindings )
+    {
+        if( binding.SourceName == bindingSource )
+            return &binding;
+    }
+
+    return nullptr;
 }
 
 
@@ -49,6 +65,10 @@ void                    SmoothValueSetter::Update			( TimeType )
 {
 
 }
+
+// ========================================================================= //
+// Serialization
+// ========================================================================= //
 
 // ***********************
 //
@@ -77,20 +97,19 @@ SmoothValueSetterPtr    SmoothValueSetter::Create          ( const IDeserializer
     return std::make_shared< SmoothValueSetter >( parentNode, timeline );
 }
 
+// ========================================================================= //
+// Handling events
+// ========================================================================= //
+
 // ***********************
 //
-bool                    SmoothValueSetter::HandleEvent     ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * editor )
+bool                    SmoothValueSetter::HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor )
 {
     std::string action = eventDeser.GetAttribute( "Action" );
 
     if( action == "AddParamBinding" )
     {
-        auto nodePath = eventDeser.GetAttribute( "NodeName" );
-        auto pluginName = eventDeser.GetAttribute( "PluginName" );
-        auto paramName = eventDeser.GetAttribute( "ParamName" );
-        auto srcName = eventDeser.GetAttribute( "SourceName" );
-
-        AddBinding( nodePath, pluginName, paramName, srcName, editor );
+        AddBinding( eventDeser, response, editor );
     }
     else if( action == "RemoveParamBinding" )
     {
@@ -102,14 +121,58 @@ bool                    SmoothValueSetter::HandleEvent     ( IDeserializer & eve
 }
 
 
-void                    SmoothValueSetter::AddBinding      ( const std::string & nodePath, const std::string & pluginName, const std::string & paramName, const std::string & srcName, BVProjectEditor * editor )
+void                    SmoothValueSetter::AddBinding      ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
 {
-    //m_parentNode->
-    nodePath;
-    pluginName;
-    paramName;
-    srcName;
-    editor;
+    auto nodePath       = eventDeser.GetAttribute( "NodeName" );
+    auto pluginName     = eventDeser.GetAttribute( "PluginName" );
+    auto paramName      = eventDeser.GetAttribute( "ParamName" );
+    auto srcName        = eventDeser.GetAttribute( "SourceName" );
+    ModelParamType type = SerializationHelper::String2T( eventDeser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
+
+    auto node = m_parentNode->GetNode( nodePath );
+    if( node == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Node: " + nodePath + " not found." );
+        return;
+    }
+
+    auto plugin = node->GetPlugin( pluginName );
+    if( plugin == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Plugin: " + pluginName + " not found." );
+        return;
+    }
+
+    auto param = plugin->GetParameter( paramName );
+    if( param == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Parameter: " + paramName + " not found." );
+        return;
+    }
+
+    ParameterBinding newBinding;
+    newBinding.Node = std::static_pointer_cast< model::BasicNode >( node );
+    newBinding.Plugin = plugin;
+    newBinding.Parameter = param;
+    newBinding.SourceName = srcName;
+
+    auto existingSource = FindSource( srcName );
+    if( existingSource == nullptr )
+    {
+
+    }
+    else
+    {
+        if( existingSource->ValueSrc->GetType() != type )
+        {
+            response.SetAttribute( "ErrorInfo", "Source type: " + SerializationHelper::T2String( type ) + " is different then existing source type: " + SerializationHelper::T2String< bv::ModelParamType >( existingSource->ValueSrc->GetType() ) );
+            return;
+        }
+
+        newBinding.ValueSrc = existingSource->ValueSrc;
+    }
+
+    m_paramBindings.push_back( newBinding );
 }
 
 

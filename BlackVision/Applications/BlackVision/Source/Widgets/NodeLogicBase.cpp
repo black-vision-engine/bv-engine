@@ -72,5 +72,12 @@ void                                            NodeLogicBase::Deserialize     (
     }
 }
 
+// ***********************
+//
+void	                                        NodeLogicBase::Update			( TimeType )
+{
+    m_paramValModel->Update();
+}
+
 }   // model
 }	// bv

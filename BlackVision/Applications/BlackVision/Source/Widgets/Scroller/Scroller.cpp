@@ -165,14 +165,14 @@ glm::vec3       ScrollerShiftToVec   ( Scroller::ScrollDirection crawlDirection 
 
 // *******************************
 //
-ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator )
+ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model::ITimeEvaluatorPtr timeEvaluator )
 {
 	return std::make_shared< Scroller >( parent, view, timeEvaluator );
 }
 
 // *******************************
 //
-Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator )
+Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model::ITimeEvaluatorPtr timeEvaluator )
 	: m_parentNode( parent )
     , m_editor( nullptr )
 	, m_isFinalized( false )
@@ -190,21 +190,11 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_lowBufferMultiplier( 3.5 )
     , m_offscreenNodeBehavior( OffscreenNodeBehavior::ONB_SetNonActive )
 {
-    auto speedParam = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "Speed", timeEvaluator );
-    speedParam->Parameter()->SetVal( 0.4f, TimeType( 0.0f ) );
-    m_paramValModel->RegisterAll( speedParam );
+    AddFloatParam( m_paramValModel, timeEvaluator, "Speed", 0.4f );
+    AddFloatParam( m_paramValModel, timeEvaluator, "Spacing", 0.4f );
+    AddFloatParam( m_paramValModel, timeEvaluator, "SmoothTime", 3000.0f );
 
-    auto spacingParam = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "Spacing", timeEvaluator );
-    spacingParam->Parameter()->SetVal( 0.4f, TimeType( 0.0f ) );
-    m_paramValModel->RegisterAll( spacingParam );
-
-    auto smoothTimeParam = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "SmoothTime", timeEvaluator );
-    smoothTimeParam->Parameter()->SetVal( 3000.0f, TimeType( 0.0f ) );
-    m_paramValModel->RegisterAll( smoothTimeParam );
-
-    auto enableEventsParam = model::ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "EnableEvents", timeEvaluator );
-    enableEventsParam->Parameter()->SetVal( false, TimeType( 0.0f ) );
-    m_paramValModel->RegisterAll( enableEventsParam );
+    AddBoolParam( m_paramValModel, timeEvaluator, "EnableEvents", false );
 }
 
 

@@ -209,5 +209,25 @@ model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserialize
 }
 
 } // SerializationHelper
+
+model::SimpleFloatEvaluatorPtr      AddFloatParam       ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const float & initVal )
+{
+    auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( paramName, timeEvaluator );
+    paramEval->Parameter()->SetVal( initVal, TimeType( 0.0f ) );
+    paramModel->RegisterAll( paramEval );
+
+    return paramEval;
+}
+
+model::SimpleBoolEvaluatorPtr       AddBoolParam        ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const bool & initVal )
+{
+    auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( paramName, timeEvaluator );
+    paramEval->Parameter()->SetVal( initVal, TimeType( 0.0f ) );
+    paramModel->RegisterAll( paramEval );
+
+    return paramEval;
+}
+
+
 } // bv
 

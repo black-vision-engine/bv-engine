@@ -26,7 +26,7 @@ public:
 
 
 	virtual void	            Initialize		()				override {}
-    virtual void	            Update			( TimeType )	override {}
+    virtual void	            Update			( TimeType )	override;
 	virtual void	            Deinitialize	()				override {}
 
     virtual void                Serialize       ( ISerializer & ser ) const;

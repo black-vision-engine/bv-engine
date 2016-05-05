@@ -30,13 +30,23 @@ std::pair< bv::ModelParamType, const char* > mpt2s[] = {
     std::make_pair( bv::ModelParamType::MPT_VEC2, "vec2" ),
     std::make_pair( bv::ModelParamType::MPT_VEC3, "vec3" ),
     std::make_pair( bv::ModelParamType::MPT_VEC4, "vec4" ),
-    std::make_pair( bv::ModelParamType::MPT_WSTRING, "wstring" )
+    std::make_pair( bv::ModelParamType::MPT_WSTRING, "wstring" ),
+    std::make_pair( bv::ModelParamType::MPT_TOTAL, "" )
 };
 
 template<>
 std::string T2String< bv::ModelParamType>( const bv::ModelParamType& t )
 {
     return SerializationHelper::Enum2String< bv::ModelParamType >( mpt2s, t );
+}
+
+template<>
+bv::ModelParamType  String2T< bv::ModelParamType >            ( const std::string & s, const bv::ModelParamType & defaultVal )
+{
+    auto result = SerializationHelper::String2Enum< bv::ModelParamType >( mpt2s, s );
+    if( result == ModelParamType::MPT_TOTAL )
+        return defaultVal;
+    return result;
 }
 
 
