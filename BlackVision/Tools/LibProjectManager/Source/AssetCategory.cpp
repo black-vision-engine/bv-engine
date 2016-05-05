@@ -93,4 +93,11 @@ PathVec					AssetCategory::ListAssets	( const Path & path, bool recursive ) cons
 	return m_assetAccessor->ListAll( path, recursive );
 }
 
+// ********************************
+//
+UInt64                  AssetCategory::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return m_assetAccessor->GetAssetSizeInBytes( path );
+}
+
 } // bv

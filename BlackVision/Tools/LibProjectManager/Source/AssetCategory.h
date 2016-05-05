@@ -43,6 +43,8 @@ public:
 	
 	void					ExportAll		( const Path & expAssetFilePath ) const;
 	
+    UInt64                  GetAssetSizeInBytes ( const Path & path ) const;
+
 	PathVec					ListAssets		( const Path & projectName, bool recursive ) const;
 
 };

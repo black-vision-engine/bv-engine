@@ -819,6 +819,7 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
     auto categoriesNames = ListCategoriesNames();
 
     categoriesNames.push_back( "scenes" ); // Adding scenes to categories
+    categoriesNames.push_back( "presets" ); // Adding scenes to categories
 
     std::string categoryName = "";
 
@@ -1165,6 +1166,78 @@ PathVec                     ProjectManagerImpl::ListDirs            ( const std:
     }
 
     return ret;
+}
+
+// ********************************
+//
+UInt64                      ProjectManagerImpl::GetAssetSize        ( const std::string & categoryName, const Path & path ) const
+{
+    if( categoryName.empty() )
+    {
+        UInt64 size = 0 ;
+        for( auto cat : m_categories )
+        {
+            size += GetAssetSize( cat.first, path );
+        }
+
+        return size;
+    }
+    else
+    {
+        auto it = m_categories.find( categoryName );
+
+        if( it != m_categories.end() )
+        {
+            return (*it).second->GetAssetSizeInBytes( TranslateToPathCategory( "", path ) );
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+
+// ********************************
+//
+UInt32                      ProjectManagerImpl::GetAssetCount       ( const std::string & categoryName, const Path & path ) const
+{
+    if( categoryName.empty() )
+    {
+        UInt32 size = 0 ;
+        for( auto cat : m_categories )
+        {
+            size += GetAssetCount( cat.first, path );
+        }
+
+        return size;
+    }
+    else
+    {
+        auto it = m_categories.find( categoryName );
+
+        if( it != m_categories.end() )
+        {
+            return UInt32( (*it).second->ListAssets( TranslateToPathCategory( "", path ), true ).size() );
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+
+// ********************************
+//
+UInt32                      ProjectManagerImpl::GetScenesCount      ( const Path & path ) const
+{
+    return UInt32( m_sceneAccessor->ListScenes( path, true ).size() );
+}
+
+// ********************************
+//
+UInt32                      ProjectManagerImpl::GetPresetsCount     ( const Path & path ) const
+{
+    return UInt32( m_presetAccessor->ListPresets( path, true ).size() );
 }
 
 } // bv

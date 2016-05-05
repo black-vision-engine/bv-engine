@@ -91,7 +91,7 @@ private:
     ThumbnailConstPtr       GetPresetThumbnail  ( const Path & projectName, const Path & path ) const;
 
     // *********************************
-	// handling directories
+    // handling directories
     PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;
     PathVec                 ListScenesDirs      ( const Path & path ) const;
     PathVec                 ListPresetsDirs     ( const Path & path ) const;
@@ -111,6 +111,13 @@ private:
     bool                    CopyAssetDir        ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
     bool                    CopySceneDir        ( const Path & path, const std::string &newName ) const;
     bool                    CopyPresetDir       ( const Path & path, const std::string &newName ) const;
+
+    // *********************************
+    // categories statistics
+    UInt64                  GetAssetSize        ( const std::string & categoryName, const Path & path ) const;
+    UInt32                  GetAssetCount       ( const std::string & categoryName, const Path & path ) const;
+    UInt32                  GetScenesCount      ( const Path & path ) const;
+    UInt32                  GetPresetsCount     ( const Path & path ) const;
 
 	void					InitializeProjects	();
 	void					InitializeScenes	();
