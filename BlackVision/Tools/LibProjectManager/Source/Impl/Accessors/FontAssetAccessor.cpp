@@ -229,4 +229,11 @@ void				FontAssetAccessor::CreateDir		() const
 	}
 }
 
+// ********************************
+//
+UInt64              FontAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return File::GetSize( ( m_rootPath / path ).Str() );
+}
+
 } // bv

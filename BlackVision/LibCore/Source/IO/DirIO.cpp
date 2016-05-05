@@ -209,5 +209,23 @@ bool                    Dir::CopyDir            ( const std::string & path, cons
     }
 }
 
+// *******************************
+//
+UInt64                  Dir::GetSize            ( const std::string & path )
+{
+    UInt64 size = 0;
+
+    for(    boost::filesystem::recursive_directory_iterator it( path );
+            it != boost::filesystem::recursive_directory_iterator();
+            ++it )
+    {   
+        if( !is_directory( *it ) )
+        {
+            size += boost::filesystem::file_size( *it );
+        }
+    }
+
+    return size;
+}
 
 } //bv

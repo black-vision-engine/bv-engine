@@ -228,6 +228,11 @@ PathVec	VideoStreamAssetAccessor::ListAllUnique	( const Path & path ) const
 	return PathVec( unique.begin(), unique.end() );	
 }
 
-
+// ********************************
+//
+UInt64 VideoStreamAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return File::GetSize( ( m_rootPath / path ).Str() );
+}
 
 }   // bv

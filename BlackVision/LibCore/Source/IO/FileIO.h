@@ -59,6 +59,7 @@ public:
     static std::string  GetDirName  ( const std::string & path );
 	static std::string  GetFileName ( const std::string & path, bool withExt = false );
     static std::string  GetExtension( const std::string & path );
+    static UInt64       GetSize     ( const std::string & path );
 
     friend class FileImpl;
 };

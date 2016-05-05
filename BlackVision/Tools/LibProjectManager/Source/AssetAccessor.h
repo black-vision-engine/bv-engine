@@ -30,6 +30,8 @@ public:
 	virtual void			 	ExportAll			( std::ostream & out ) const = 0;
     virtual void				ExportAll			( const Path & expAssetFilePath ) const = 0;
 
+    virtual UInt64              GetAssetSizeInBytes ( const Path & path ) const = 0;
+
     virtual PathVec				ListAll				( const Path & path, bool recursive ) const = 0;
 
     virtual PathVec				ListAllUnique		( const Path & path ) const = 0;

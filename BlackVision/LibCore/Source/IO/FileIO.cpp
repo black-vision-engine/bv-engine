@@ -476,4 +476,11 @@ void         File::Touch       ( const std::string & fileName )
     }
 }
 
+// *******************************
+//
+UInt64       File::GetSize     ( const std::string & path )
+{
+    return boost::filesystem::file_size( path );
+}
+
 } //bv

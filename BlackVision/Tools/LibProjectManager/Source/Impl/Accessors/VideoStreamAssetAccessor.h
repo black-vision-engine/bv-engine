@@ -42,6 +42,8 @@ public:
 	virtual void			 	ExportAll			( std::ostream & out ) const override;
     virtual void			 	ExportAll			( const Path & expAssetFilePath ) const override;
 
+    virtual UInt64              GetAssetSizeInBytes ( const Path & path ) const override;
+
     virtual PathVec	ListAll				( const Path & path, bool recursive ) const override;
 
     virtual PathVec	ListAllUnique		( const Path & path ) const override;

@@ -309,4 +309,11 @@ void				AnimationAssetAccessor::CreateDir() const
 	}
 }
 
+// ********************************
+//
+UInt64              AnimationAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return Dir::GetSize( ( m_rootPath / path ).Str() );
+}
+
 } // bv

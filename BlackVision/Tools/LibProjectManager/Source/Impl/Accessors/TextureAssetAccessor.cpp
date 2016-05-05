@@ -237,4 +237,11 @@ void				TextureAssetAccessor::CreateDir		() const
 	}
 }
 
+// ********************************
+//
+UInt64              TextureAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return File::GetSize( ( m_rootPath / path ).Str() );
+}
+
 } // bv
