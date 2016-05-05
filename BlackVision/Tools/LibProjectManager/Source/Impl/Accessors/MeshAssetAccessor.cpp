@@ -235,4 +235,11 @@ PathVec	            MeshAssetAccessor::ListAllUnique    ( const Path & path ) co
 	return PathVec( unique.begin(), unique.end() );	
 }
 
+// ********************************
+//
+UInt64              MeshAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return File::GetSize( ( m_rootPath / path ).Str() );
+}
+
 }   // bv
