@@ -19,21 +19,55 @@ class MeshAsset : public Asset, public std::enable_shared_from_this< MeshAsset >
 
 public:
 
+    struct MeshTransform
+    {
+        glm::vec3                   translation;
+        glm::vec3                   rotation;
+        glm::vec3                   scale;
+    };
+
     struct MeshGeometry
     {
-        std::vector< glm::vec3 >  positions;
-        std::vector< glm::vec3 >  normals;
-        std::vector< glm::vec2 >  uvs;
+        std::vector< glm::vec3 >    positions;
+        std::vector< glm::vec3 >    normals;
+        std::vector< glm::vec2 >    uvs;
+    };
+
+    struct MeshTexture
+    {
+        std::string                 diffuseTexturePath;
     };
     
+    struct MeshMaterial
+    {
+        glm::vec4                   diffuse;
+        glm::vec4                   ambient;
+        glm::vec4                   emissive;
+        glm::vec4                   specular;
+        Float32                     shininess;
+    };
+
+    DEFINE_PTR_TYPE( MeshTransform )
+    DEFINE_CONST_PTR_TYPE( MeshTransform )
+
     DEFINE_PTR_TYPE( MeshGeometry )
+    DEFINE_CONST_PTR_TYPE( MeshGeometry )
+
+    DEFINE_PTR_TYPE( MeshTexture )
+    DEFINE_CONST_PTR_TYPE( MeshTexture )
+
+    DEFINE_PTR_TYPE( MeshMaterial )
+    DEFINE_CONST_PTR_TYPE( MeshMaterial )
 
 private:
 
 	static const std::string	        uid;
     std::string			                m_key;
 
-    MeshGeometryPtr                     m_geometry;
+    MeshTransformConstPtr               m_transform;
+    MeshGeometryConstPtr                m_geometry;
+    MeshTextureConstPtr                 m_texture;
+    MeshMaterialConstPtr                m_material;
 
     std::vector< MeshAssetConstPtr >    m_children;
 
@@ -48,7 +82,16 @@ public:
 
 	const std::string &			GetKey		    () const;
 
-    MeshGeometryPtr             GetGeometry     () const;
+    void                        SetTransform    ( MeshTransformConstPtr transform );
+    void                        SetGeometry     ( MeshGeometryConstPtr geometry );
+    void                        SetTexture      ( MeshTextureConstPtr texture );
+    void                        SetMaterial     ( MeshMaterialConstPtr material );
+
+    MeshTransformConstPtr       GetTransform    () const;
+    MeshGeometryConstPtr        GetGeometry     () const;
+    MeshTextureConstPtr         GetTexture      () const;
+    MeshMaterialConstPtr        GetMaterial     () const;
+
 
     void                        AddChild        ( MeshAssetConstPtr child );
 

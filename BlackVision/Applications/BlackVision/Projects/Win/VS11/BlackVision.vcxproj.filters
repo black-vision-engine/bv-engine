@@ -43,6 +43,9 @@
     <Filter Include="Widgets\TextEffects">
       <UniqueIdentifier>{43575d01-557b-4b91-b0f0-1b97e602acc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\MeshLoader">
+      <UniqueIdentifier>{c95511b3-3c0c-485b-afed-6ccc3168883d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Widgets\SmoothValueSetter">
       <UniqueIdentifier>{ccd4e404-2ee7-4498-922d-e72b5a4a28e7}</UniqueIdentifier>
     </Filter>
@@ -175,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp">
       <Filter>Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp">
+      <Filter>Widgets\MeshLoader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp">
       <Filter>Widgets\SmoothValueSetter</Filter>
@@ -324,6 +330,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h">
       <Filter>Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h">
+      <Filter>Widgets\MeshLoader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h">
       <Filter>Widgets\SmoothValueSetter</Filter>
