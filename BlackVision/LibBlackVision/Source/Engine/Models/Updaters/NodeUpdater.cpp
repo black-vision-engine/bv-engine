@@ -30,6 +30,8 @@
 
 #include "Engine/Models/ModelState.h"
 
+#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
+
 namespace bv 
 {
 
@@ -76,6 +78,7 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
 
     m_transformChannel = finalizer->GetTransformChannel();
     assert( m_transformChannel != nullptr );
+    m_transformStatedValue = model::IStatedValuePtr( new model::SimpleState< glm::mat4 >() );
 
     if( effect )
     {

@@ -16,7 +16,7 @@ DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMa
     , m_prevValue( nullptr )
 {
     if( prev != nullptr && prev->GetTransformChannel() != nullptr )
-	{
+    {
         m_prevValue = static_cast< const ValueMat4Ptr * >( &prev->GetTransformChannel()->GetTransformValue() );
     }
 }

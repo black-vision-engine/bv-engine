@@ -2,6 +2,7 @@
 #include "Engine/Models/BoundingVolume.h"
 #include "UpdatersHelpers.h"
 
+#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h" // FIXME
 
 namespace bv {
 
@@ -36,6 +37,17 @@ inline  void    NodeUpdater::UpdateTransform     ()
         const glm::mat4 & mat = transform->GetValue();
 
         m_renderable->SetLocalTransform( m_renderable->LocalTransform() * Transform( mat, glm::inverse( mat ) ) );
+
+        auto state = Cast< model::SimpleState< glm::mat4 >* >( m_transformStatedValue.get() );
+        state->Update( mat );
+    }
+
+    if( m_transformStatedValue->StateChanged() )
+    {
+        auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+        auto bv = node->GetBoundingVolume();
+        assert( bv );
+        UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() ); // FIXME: this should not be updated every frame
     }
 }
 
@@ -221,7 +233,7 @@ inline  void    NodeUpdater::UpdatePositions     ()
     auto bv = node->GetBoundingVolume();
     assert( bv );
     UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-    UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+    //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
 }
 
 // *****************************
@@ -235,7 +247,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
     auto bv = node->GetBoundingVolume();
     assert( bv );
     UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-    UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+    //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
 }
 
 // *****************************
