@@ -27,8 +27,11 @@ MeshAssetPtr	    MeshAsset::Create           ( const std::string & key )
 // 
 MeshAsset::MeshAsset                                ( const std::string & key )
     : m_key( key )
+    , m_transform( nullptr )
+    , m_geometry( nullptr )
+    , m_texture( nullptr )
+    , m_material( nullptr )
 {
-    m_geometry = std::make_shared< MeshGeometry >();
 }
 
 // ******************************
@@ -54,9 +57,58 @@ const std::string &	    MeshAsset::UID              ()
 
 // *******************************
 // 
-MeshAsset::MeshGeometryPtr	MeshAsset::GetGeometry      () const
+void	                MeshAsset::SetTransform      ( MeshAsset::MeshTransformConstPtr transform )
+{
+    m_transform = transform;
+}
+
+// *******************************
+// 
+void	                MeshAsset::SetGeometry      ( MeshAsset::MeshGeometryConstPtr geometry )
+{
+    m_geometry = geometry;
+}
+
+// *******************************
+// 
+void	                MeshAsset::SetTexture      ( MeshAsset::MeshTextureConstPtr texture )
+{
+    m_texture = texture;
+}
+
+// *******************************
+// 
+void	                MeshAsset::SetMaterial      ( MeshAsset::MeshMaterialConstPtr material )
+{
+    m_material = material;
+}
+
+// *******************************
+// 
+MeshAsset::MeshTransformConstPtr MeshAsset::GetTransform     () const
+{
+    return m_transform;
+}
+
+// *******************************
+// 
+MeshAsset::MeshGeometryConstPtr	MeshAsset::GetGeometry      () const
 {
     return m_geometry;
+}
+
+// *******************************
+// 
+MeshAsset::MeshTextureConstPtr	MeshAsset::GetTexture      () const
+{
+    return m_texture;
+}
+
+// *******************************
+// 
+MeshAsset::MeshMaterialConstPtr	MeshAsset::GetMaterial      () const
+{
+    return m_material;
 }
 
 // *******************************
