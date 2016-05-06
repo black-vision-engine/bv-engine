@@ -182,7 +182,7 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
 
     for( auto a : framesAssets )
     {
-        auto resized = image::Resize( a->GetData(), a->GetWidth(), a->GetHeight(), TextureUtils::ToBPP( a->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
+        auto resized = image::MakeThumbnai( a->GetData(), a->GetWidth(), a->GetHeight(), TextureUtils::ToBPP( a->GetFormat() ), 128 );
 
         auto compresed = image::SaveTGAToHandle( resized, 128, 128, 32 );
 

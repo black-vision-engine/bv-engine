@@ -369,6 +369,64 @@ char *		            ResizeImpl		( const char * in, UInt32 width, UInt32 height, 
 
 // *********************************
 //
+char *                  MakeThumbnailImpl   ( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 maxSize )
+{
+    FIBITMAP * inBitmap = nullptr;
+    if( bpp <= 32 )
+    {
+        inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
+    else
+    {
+        inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
+    
+    memcpy( FreeImage_GetBits( inBitmap ), in, width * height * bpp / 8 );
+    
+    auto b = FreeImage_GetBPP( inBitmap );
+
+    if( b > 32 ) 
+    {
+        FIBITMAP * inBitmapConverted = FreeImage_ConvertTo32Bits( inBitmap );
+        FreeImage_Unload( inBitmap );
+        inBitmap = inBitmapConverted;
+    }
+
+    
+    auto outBitmap = FreeImage_MakeThumbnail( inBitmap, ( int )maxSize, true );
+    
+    auto outW = FreeImage_GetWidth( outBitmap );
+    auto outH = FreeImage_GetHeight( outBitmap );
+
+    if( outW != maxSize || outH != maxSize )
+    {
+        FIBITMAP * cropedBitmap = nullptr;
+        
+        cropedBitmap = FreeImage_Allocate( ( int )maxSize, ( int )maxSize, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+
+        auto copiedBitmap = FreeImage_Copy( outBitmap, 0, 0, outW, outH );
+
+        FreeImage_Paste( cropedBitmap, outBitmap, ( maxSize - outW ) / 2, ( maxSize - outH ) / 2, 255 );
+
+        FreeImage_Unload( outBitmap );
+        FreeImage_Unload( copiedBitmap );
+
+        outBitmap = cropedBitmap;
+    }
+    
+    auto numBytes = maxSize * maxSize * bpp / 8;
+    
+    char * pixels = new char[ numBytes ];
+    memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
+    
+    FreeImage_Unload( inBitmap );
+    FreeImage_Unload( outBitmap );
+    
+    return pixels;
+}
+
+// *********************************
+//
 char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize )
 {
     auto numBytes = width * height * bpp / 8;
@@ -518,7 +576,17 @@ MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt3
     auto numBytes = newWidth * newHeight * bpp / 8;
     auto pixels = ResizeImpl( in->Get(), width, height, bpp, newWidth, newHeight, ft );
 
-	return MemoryChunk::Create( pixels, numBytes );
+    return MemoryChunk::Create( pixels, numBytes );
+}
+
+// ***********************
+//
+MemoryChunkConstPtr     MakeThumbnai    ( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 maxSize )
+{
+    auto numBytes = maxSize * maxSize * bpp / 8;
+    auto pixels = MakeThumbnailImpl( in->Get(), width, height, bpp, maxSize );
+
+    return MemoryChunk::Create( pixels, numBytes );
 }
 
 // ***********************

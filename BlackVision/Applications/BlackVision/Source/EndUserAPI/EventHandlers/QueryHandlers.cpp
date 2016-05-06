@@ -688,7 +688,7 @@ void        QueryHandlers::GetPMItemStats      ( JsonSerializeObject & ser, IDes
             res[ "scenes" ] = std::make_pair( count, 0 );
 
             count = pm->GetPresetsCount( path );
-            res[ "scenes" ] = std::make_pair( count, 0 );
+            res[ "presets" ] = std::make_pair( count, 0 );
         }
         else
         {

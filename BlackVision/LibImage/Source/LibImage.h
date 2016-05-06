@@ -53,6 +53,7 @@ MemoryChunkConstPtr     SwapChannels    ( const MemoryChunkConstPtr & in, UInt32
 MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp );
 
 char *		            ResizeImpl		    ( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft );
+char *                  MakeThumbnailImpl   ( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 maxSize );
 char *		            BlurImageImpl	    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize );
 char *                  FlipHorizontalImpl  ( const char * data, UInt32 width, UInt32 height, UInt32 bpp );
 char *                  FlipVerticalImpl    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp );
@@ -65,6 +66,7 @@ bool					SaveBMPImage	( const std::string & filePath, MemoryChunkConstPtr data, 
 void					SaveRAWImage	( const std::string & filePath, MemoryChunkConstPtr data);
 
 MemoryChunkConstPtr		Resize			( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft );
+MemoryChunkConstPtr     MakeThumbnai    ( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 maxSize );
 MemoryChunkConstPtr		BlurImage		( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize );
 MemoryChunkConstPtr		FlipHorizontal  ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp );
 MemoryChunkConstPtr		FlipVertical    ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp );

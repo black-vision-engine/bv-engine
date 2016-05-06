@@ -447,7 +447,7 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     auto t = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
 
-    auto resized = image::Resize( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
+    auto resized = image::MakeThumbnai( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128 );
 
     auto compresed = image::SaveTGAToHandle( resized, 128, 128, 32 );
 

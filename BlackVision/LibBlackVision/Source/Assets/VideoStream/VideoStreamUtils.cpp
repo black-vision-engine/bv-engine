@@ -41,7 +41,7 @@ ThumbnailConstPtr            VideoStreamUtils::LoadThumbnail                   (
     if( frameTex == nullptr )
         return nullptr;
 
-    auto resized = image::Resize( frameTex->GetData(), frameTex->GetWidth(), frameTex->GetHeight(), TextureUtils::ToBPP( frameTex->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
+    auto resized = image::MakeThumbnai( frameTex->GetData(), frameTex->GetWidth(), frameTex->GetHeight(), TextureUtils::ToBPP( frameTex->GetFormat() ), 128 );
     auto flipped = image::FlipVertical( resized, 128, 128, 32 );
     auto compresed = image::SaveTGAToHandle( flipped, 128, 128, 32 );
 
