@@ -202,9 +202,13 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
 //
 void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, bool recursive )
 {
-    posChannel->AddAttributes( meshAsset->GetGeometry()->positions );
-    normChannel->AddAttributes( meshAsset->GetGeometry()->normals );
-    uvChannel->AddAttributes( meshAsset->GetGeometry()->uvs );
+    auto geometry = meshAsset->GetGeometry();
+    if( geometry )
+    {
+        posChannel->AddAttributes( geometry->positions );
+        normChannel->AddAttributes( geometry->normals );
+        uvChannel->AddAttributes( geometry->uvs );
+    }
 
     if( recursive )
     {

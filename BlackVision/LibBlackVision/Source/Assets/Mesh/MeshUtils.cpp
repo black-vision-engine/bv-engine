@@ -110,71 +110,80 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
 
 // ******************************
 //
-void                MeshUtils::ProcessGeometry        ( MeshAsset::MeshGeometryPtr assetGeometry, FbxMesh * fbxMesh )
+void                MeshUtils::ProcessGeometry        ( MeshAssetPtr meshAsset, FbxMesh * fbxMesh )
 {
     auto polyCount = fbxMesh->GetPolygonCount();
-                
-    auto & positions = assetGeometry->positions;
-    auto & normals = assetGeometry->normals;
-    auto & uvs = assetGeometry->uvs;
 
-    UInt32 vertexIdx = 0;
-
-    for( Int32 i = 0; i < polyCount; ++i )
+    if( polyCount > 0 )
     {
-        auto polySize = fbxMesh->GetPolygonSize( i );
-        for ( Int32 j = 0; j < polySize; ++j )
-		{
-            auto idx = fbxMesh->GetPolygonVertex( i, j );
+        auto geometry = std::make_shared< MeshAsset::MeshGeometry >();
+        
+        auto & positions = geometry->positions;
+        auto & normals = geometry->normals;
+        auto & uvs = geometry->uvs;
 
-            glm::vec3 pos;
-            pos.x = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 0 ];
-            pos.y = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 1 ];
-            pos.z = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 2 ];
+        UInt32 vertexIdx = 0;
 
-            positions.push_back( pos );
+        for( Int32 i = 0; i < polyCount; ++i )
+        {
+            auto polySize = fbxMesh->GetPolygonSize( i );
+            for ( Int32 j = 0; j < polySize; ++j )
+		    {
+                auto idx = fbxMesh->GetPolygonVertex( i, j );
 
-            fbxMesh->GenerateNormals();
-            ProcessNormals( normals, fbxMesh, vertexIdx );
-            ProcessUVs( uvs, fbxMesh, i, j, vertexIdx );
+                glm::vec3 pos;
+                pos.x = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 0 ];
+                pos.y = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 1 ];
+                pos.z = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 2 ];
 
-            vertexIdx++;
+                positions.push_back( pos );
+
+                fbxMesh->GenerateNormals();
+                ProcessNormals( normals, fbxMesh, vertexIdx );
+                ProcessUVs( uvs, fbxMesh, i, j, vertexIdx );
+
+                vertexIdx++;
+            }
         }
+
+        meshAsset->SetGeometry( geometry );
     }
 }
 
 // ******************************
 //
-void                MeshUtils::ProcessMaterial        ( MeshAsset::MeshMaterialPtr assetMaterial, MeshAsset::MeshTexturePtr assetTexture, FbxNode * fbxNode )
+void                MeshUtils::ProcessMaterial        ( MeshAssetPtr meshAsset, const FbxSurfaceMaterial * fbxMaterial )
 {
-    auto materialCount = fbxNode->GetMaterialCount();
-    for( int i  = 0; i < materialCount; ++i )
+    if( fbxMaterial )
     {
-        auto material = fbxNode->GetMaterial( i );
+        auto material = std::make_shared< MeshAsset::MeshMaterial >();
 
         // get material
-        assetMaterial->diffuse = ProcessMaterialProperty( material, FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor );
-        assetMaterial->ambient = ProcessMaterialProperty( material, FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor );
-        assetMaterial->emissive = ProcessMaterialProperty( material, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor );
-        assetMaterial->specular = ProcessMaterialProperty( material, FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor );
+        material->diffuse = ProcessMaterialProperty( fbxMaterial, FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor );
+        material->ambient = ProcessMaterialProperty( fbxMaterial, FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor );
+        material->emissive = ProcessMaterialProperty( fbxMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor );
+        material->specular = ProcessMaterialProperty( fbxMaterial, FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor );
         
-        auto shininessProp = material->FindProperty( FbxSurfaceMaterial::sShininess );
+        auto shininessProp = fbxMaterial->FindProperty( FbxSurfaceMaterial::sShininess );
         if( shininessProp.IsValid() )
         {
-            assetMaterial->shininess = shininessProp.Get< Float32 >();
+            material->shininess = shininessProp.Get< Float32 >();
         }
+        meshAsset->SetMaterial( material );
 
         // get diffuse texture
-        auto diffuseProp = material->FindProperty( FbxSurfaceMaterial::sDiffuse );
+        auto diffuseProp = fbxMaterial->FindProperty( FbxSurfaceMaterial::sDiffuse );
         if( diffuseProp.IsValid() )
         {
             auto textureCount = diffuseProp.GetSrcObjectCount< FbxFileTexture >();
             if( textureCount )
             {
-                auto texture = diffuseProp.GetSrcObject< FbxFileTexture >();
-                if( texture )
+                auto fbxTexture = diffuseProp.GetSrcObject< FbxFileTexture >();
+                if( fbxTexture )
                 {
-                    assetTexture->diffuseTexturePath = texture->GetFileName();
+                    auto texture = std::make_shared< MeshAsset::MeshTexture >();
+                    texture->diffuseTexturePath = fbxTexture->GetFileName();
+                    meshAsset->SetTexture( texture );
                 }
             }
         }
@@ -208,6 +217,7 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
     {
         auto mesh = MeshAsset::Create( node->GetName() );
 
+        auto c = node->GetNodeAttributeCount(); c;
         for( auto idx = 0; idx < node->GetNodeAttributeCount(); ++idx )
         {
             auto att = node->GetNodeAttributeByIndex( idx );
@@ -220,16 +230,10 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
                     
                     auto childMesh = MeshAsset::Create( att->GetName() );
 
-                    auto geometry = std::make_shared< MeshAsset::MeshGeometry >();
-                    auto texture = std::make_shared< MeshAsset::MeshTexture >();
-                    auto material = std::make_shared< MeshAsset::MeshMaterial >();
+                    ProcessGeometry( childMesh, fbxMesh );
 
-                    ProcessGeometry( geometry, fbxMesh );
-                    ProcessMaterial( material, texture, node );
-
-                    mesh->SetGeometry( geometry );
-                    mesh->SetTexture( texture );
-                    mesh->SetMaterial( material );
+                    auto fbxMaterial = node->GetMaterial( idx );
+                    ProcessMaterial( childMesh, fbxMaterial );
 
                     mesh->AddChild( childMesh );
                 }

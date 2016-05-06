@@ -1,20 +1,18 @@
 #include "MeshLoader.h"
 
-#include "Engine/Types/Values/ValuesFactory.h"
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-#include <string>
-#include <iostream>
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "Engine/Events/EventHandlerHelpers.h"
-#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultMaterialPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 
-#include "Assets/Assets.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 
 namespace bv { namespace nodelogic {
@@ -22,25 +20,23 @@ namespace bv { namespace nodelogic {
 
 const std::string           MeshLoader::m_type = "mesh_loader";
 
+const std::string           MeshLoader::ACTION::LOAD                 = "Load";
+const std::string           MeshLoader::ACTION::MESH_INFO            = "MeshInfo";
+const std::string           MeshLoader::ACTION::GET_ASSET_PATH       = "GetAssetPath";
+const std::string           MeshLoader::ACTION::SET_ASSET_PATH       = "SetAssetPath";
 	
 // *******************************
 //
-MeshLoaderPtr	            MeshLoader::Create				( model::BasicNodePtr parent, const std::string & assetPath )
+MeshLoaderPtr	            MeshLoader::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
 {
-	return std::make_shared< MeshLoader >( parent, assetPath );
-}
-
-// ****************************
-//
-bv::model::IParameterPtr    MeshLoader::GetValueParam       ()
-{
-    return m_param;
+	return std::make_shared< MeshLoader >( parent, timeEval, assetPath );
 }
 
 // *******************************
 //
-MeshLoader::MeshLoader( model::BasicNodePtr parent, const std::string & assetPath )
+MeshLoader::MeshLoader      ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
     : m_parentNode( parent )
+    , m_timeEval( timeEval )
     , m_textureEnabled( false )
     , m_materialEnabled( false )
 {
@@ -50,13 +46,13 @@ MeshLoader::MeshLoader( model::BasicNodePtr parent, const std::string & assetPat
 
 // *******************************
 //
-MeshLoader::~MeshLoader()
+MeshLoader::~MeshLoader     ()
 {
 }
 
 // *******************************
 //
-void		MeshLoader::Update				( TimeType )
+void		        MeshLoader::Update			( TimeType )
 {
 }
 
@@ -73,8 +69,13 @@ void                MeshLoader::Serialize       ( ISerializer & ser ) const
 
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
-        m_param->Serialize( ser );
+        ser.SetAttribute( "textureEnabled", SerializationHelper::T2String( m_textureEnabled ) );
+        ser.SetAttribute( "materialEnabled", SerializationHelper::T2String( m_materialEnabled ) );
+
         ser.SetAttribute( "assetPath", m_assetDesc->GetPath() );
+
+        auto timeline = model::TimelineManager::GetInstance()->GetTimelinePath( m_timeEval );
+        ser.SetAttribute( "timelinePath", timeline );
     }
 
     ser.ExitChild();
@@ -85,53 +86,57 @@ void                MeshLoader::Serialize       ( ISerializer & ser ) const
 MeshLoaderPtr           MeshLoader::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
 {
     auto assetPath = deser.GetAttribute( "assetPath" );
+    auto timelinePath = deser.GetAttribute( "timelinePath" );
 
-    return MeshLoader::Create( parent, assetPath );
+    if( !timelinePath.empty() )
+    {
+        auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+        if( deserContext )
+        {
+            model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
+            if( !sceneTimeline )
+            {
+                sceneTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
+            }
+            auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
+        
+            return MeshLoader::Create( parent, timeEval, assetPath );
+        }
+    }
+    return nullptr;
 }
 
 // ***********************
 //
-bool                    MeshLoader::HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * /*editor*/ )
+bool                    MeshLoader::HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
     std::string action = eventSer.GetAttribute( "Action" );
 
-    if( action == "Load" ) 
+    if( action == ACTION::LOAD ) 
     {
-        Load();
+        m_textureEnabled = SerializationHelper::String2T( eventSer.GetAttribute( "textureEnabled" ), false );
+        m_materialEnabled = SerializationHelper::String2T( eventSer.GetAttribute( "materialEnabled" ), false );
+        
+        Load( eventSer, editor );
     }
-    else if( action == "GetAssetPath" )
+    else if( action == ACTION::GET_ASSET_PATH )
     {
         response.SetAttribute( "assetPath", m_assetDesc->GetPath() );
         return true;
     }
-    else if( action == "SetAssetPath" )
+    else if( action == ACTION::SET_ASSET_PATH )
     {
-        m_assetDesc = MeshAssetDesc::Create( eventSer.GetAttribute( "assetPath" ), "", true );
-        m_asset = LoadTypedAsset< MeshAsset >( m_assetDesc );
-        
-        //send info event
-
-        return true;
+        m_assetDesc = MeshAssetDesc::Create( eventSer.GetAttribute( "AssetPath" ), "", true );
+        if( m_assetDesc )
+        {
+            m_asset = LoadTypedAsset< MeshAsset >( m_assetDesc );
+            return ( m_asset != nullptr );
+        }
+        return false;
     }
-    else if( action == "GetTextureEnabled" )
+    else if( action == ACTION::MESH_INFO )
     {
-        response.SetAttribute( "textureEnabled", SerializationHelper::T2String( m_textureEnabled ) );
-        return true;
-    }
-    else if( action == "SetTextureEnabled" )
-    {
-        m_textureEnabled = SerializationHelper::String2T( eventSer.GetAttribute( "textureEnabled" ), false );
-        return true;
-    }
-    else if( action == "GetMaterialEnabled" )
-    {
-        response.SetAttribute( "materialEnabled", SerializationHelper::T2String( m_materialEnabled ) );
-        return true;
-    }
-    else if( action == "SetMaterialEnabled" )
-    {
-        m_materialEnabled = SerializationHelper::String2T( eventSer.GetAttribute( "materialEnabled" ), false );
-        return true;
+        return MeshInfo( response );
     }
     else 
     {
@@ -139,22 +144,6 @@ bool                    MeshLoader::HandleEvent     ( IDeserializer & eventSer, 
     }
 
     return false;
-}
-
-// ***********************
-//
-model::IParameterPtr                     MeshLoader::GetParameter        ( const std::string & ) const
-{
-    return nullptr;
-}
-
-// ***********************
-//
-const std::vector< model::IParameterPtr > & MeshLoader::GetParameters    () const
-{
-    static std::vector< model::IParameterPtr > ret;
-
-    return ret;
 }
 
 // ***********************
@@ -173,39 +162,48 @@ const std::string &         MeshLoader::GetType               () const
 
 // ***********************
 //
-void                        MeshLoader::Load                  ()
+void                        MeshLoader::Load                  ( IDeserializer & eventSer, BVProjectEditor * editor )
 {
-    auto timeEval = m_parentNode->GetTimelines( false )[ 0 ];
-    Load( m_asset, m_parentNode, timeEval );
+    auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
+    auto scene = editor->GetModelScene( context->GetSceneName() );
+
+    auto node = Load( m_asset, m_timeEval );
+    editor->AddChildNode( scene, m_parentNode, node );
 }
 
 // ***********************
 //
-void                        MeshLoader::Load                  ( MeshAssetConstPtr asset, model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval )
+model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPtr asset, model::ITimeEvaluatorPtr timeEval )
 {
-    auto node = model::BasicNode::Create( "", timeEval );
+    auto node = model::BasicNode::Create( asset->GetKey(), timeEval );
+    node->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", timeEval );
 
     auto geometry = asset->GetGeometry();
     if( geometry )
     {
-        node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEval );
-        node->AddPlugin( "DEFAULT_MESH", "mesh", timeEval );
+        node->AddPlugin( model::DefaultMeshPluginDesc::UID(), "mesh", timeEval );
         auto meshPlugin = node->GetPlugin( "mesh" );
 
         auto meshAssetDesc = MeshAssetDesc::Create( m_assetDesc->GetPath(), asset->GetKey(), false );
         meshPlugin->LoadResource( meshAssetDesc );
 
         auto material = asset->GetMaterial();
-        if( material )
+        if( m_materialEnabled && material )
         {
-            node->AddPlugin( "DEFAULT_MATERIAL", "material", timeEval );
-            //FIXME
+            node->AddPlugin( model::DefaultMaterialPluginDesc::UID(), "material", timeEval );
+            auto materialPlugin = node->GetPlugin( "material" );
+            
+            model::SetParameter( materialPlugin->GetParameter( model::DefaultMaterialPlugin::PARAM::DIFFUSE ), 0.f, material->diffuse );
+            model::SetParameter( materialPlugin->GetParameter( model::DefaultMaterialPlugin::PARAM::AMBIENT ), 0.f, material->ambient );
+            model::SetParameter( materialPlugin->GetParameter( model::DefaultMaterialPlugin::PARAM::SPECULAR ), 0.f, material->specular );
+            model::SetParameter( materialPlugin->GetParameter( model::DefaultMaterialPlugin::PARAM::EMISSION ), 0.f, material->emissive );
+            model::SetParameter( materialPlugin->GetParameter( model::DefaultMaterialPlugin::PARAM::SHININESS ), 0.f, material->shininess );
         }
 
         auto texture = asset->GetTexture();
-        if( texture )
+        if( m_textureEnabled && texture )
         {
-            node->AddPlugin( "DEFAULT_TEXTURE", "texture", timeEval );
+            node->AddPlugin( model::DefaultTexturePluginDesc::UID(), "texture", timeEval );
             auto txPlugin = node->GetPlugin( "texture" );
             auto texDesc = TextureAssetDesc::Create( texture->diffuseTexturePath, true );
             txPlugin->LoadResource( texDesc );
@@ -215,10 +213,68 @@ void                        MeshLoader::Load                  ( MeshAssetConstPt
     for( UInt32 i = 0; i < asset->NumChildren(); ++i )
     {
         auto childAsset = asset->GetChild( i );
-        Load( childAsset, node, timeEval );
+        auto childNode = Load( childAsset, timeEval );
+        node->AddChildToModelOnly( childNode );
     }
 
-    parent->AddChildToModelOnly( node );
+    return node;
+}
+
+// ***********************
+//
+bool                        MeshLoader::MeshInfo                  ( ISerializer & response )
+{
+    if( m_asset )
+    {
+        std::vector< MeshAssetConstPtr > meshes;
+        GetMeshes( m_asset, meshes );
+
+        response.SetAttribute( "meshNum", SerializationHelper::T2String( meshes.size() ) );
+
+        response.EnterArray( "meshes" );
+        
+        for( auto & mesh : meshes )
+        {
+            response.EnterChild( "mesh" );
+
+            response.SetAttribute( "name", mesh->GetKey() );
+
+            auto material = mesh->GetMaterial();
+            if( material )
+            {
+                response.SetAttribute( "material", "true" );
+            }
+
+            auto texture = mesh->GetTexture();
+            if( texture )
+            {
+                response.SetAttribute( "texture", texture->diffuseTexturePath );
+            }
+
+            response.ExitChild(); //mesh
+        }
+
+        response.ExitChild(); //meshes
+
+        return true;
+    }
+    return false;
+}
+
+// ***********************
+//
+void                        MeshLoader::GetMeshes                  ( MeshAssetConstPtr asset, std::vector< MeshAssetConstPtr > & meshes ) const
+{
+    if( asset->GetGeometry() )
+    {
+        meshes.push_back( asset );
+    }
+
+    for( UInt32 i = 0; i < asset->NumChildren(); ++i )
+    {
+        auto childAsset = asset->GetChild( i );
+        GetMeshes( childAsset, meshes );
+    }
 }
 
 } //nodelogic
