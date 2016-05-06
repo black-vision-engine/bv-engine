@@ -658,25 +658,17 @@ void        QueryHandlers::GetPMItemStats      ( JsonSerializeObject & ser, IDes
 
     PrepareResponseTemplate( ser, InfoEvent::Command::GetPMItemStats, eventID, true );
 
+    std::map< std::string, std::pair< UInt32, UInt64 > > res;
+
     if( categoryName == "scenes" )
     {
         count = pm->GetScenesCount( path );
-        ser.EnterArray( "" );
-        ser.EnterChild( "" );
-        ser.SetAttribute( "categoryName", "scenes" );
-        ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
-        ser.ExitChild();
-        ser.ExitChild();
+        res[ "scenes" ] = std::make_pair( count, 0 );
     }
     else if( categoryName == "presets" )
     {
         count = pm->GetPresetsCount( path );
-        ser.EnterArray( "" );
-        ser.EnterChild( "" );
-        ser.SetAttribute( "categoryName", "presets" );
-        ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
-        ser.ExitChild();
-        ser.ExitChild();
+        res[ "presets" ] = std::make_pair( count, 0 );
     }
     else
     {
@@ -689,43 +681,35 @@ void        QueryHandlers::GetPMItemStats      ( JsonSerializeObject & ser, IDes
             {
                 count = pm->GetAssetCount( cat, path );
                 size = pm->GetAssetSize( cat, path );
-
-                ser.EnterChild( "" );
-                ser.SetAttribute( "categoryName", cat );
-                ser.SetAttribute( "size", SerializationHelper::T2String( size ) );
-                ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
-                ser.ExitChild();
+                res[ cat ] = std::make_pair( count, size );
             }
 
             count = pm->GetScenesCount( path );
-            ser.EnterChild( "" );
-            ser.SetAttribute( "categoryName", "scenes" );
-            ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
-            ser.ExitChild();
+            res[ "scenes" ] = std::make_pair( count, 0 );
 
             count = pm->GetPresetsCount( path );
-            ser.EnterChild( "" );
-            ser.SetAttribute( "categoryName", "presets" );
-            ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
-            ser.ExitChild();
-
-            ser.ExitChild();
+            res[ "scenes" ] = std::make_pair( count, 0 );
         }
         else
         {
             count = pm->GetAssetCount( categoryName, path );
             size = pm->GetAssetSize( categoryName, path );
-            ser.EnterArray( "" );
-            ser.EnterChild( "" );
-            ser.SetAttribute( "categoryName", categoryName );
-            ser.SetAttribute( "count", SerializationHelper::T2String( count ) );
-            ser.SetAttribute( "size", SerializationHelper::T2String( size ) );
-            ser.ExitChild();
-            ser.ExitChild();
-        }
 
-        
+            res[ categoryName ] = std::make_pair( count, size );
+        }
     }
+
+    ser.EnterArray( "" );
+    for( auto r : res )
+    {
+        ser.EnterChild( "" );
+        ser.SetAttribute( "categoryName", r.first );
+        ser.SetAttribute( "count", SerializationHelper::T2String( r.second.first ) );
+        ser.SetAttribute( "size", SerializationHelper::T2String( r.second.second ) );
+        ser.ExitChild();
+    }
+    ser.ExitChild();
+
 }
 
 // ***********************
