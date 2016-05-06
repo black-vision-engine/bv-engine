@@ -167,8 +167,12 @@ void                        MeshLoader::Load                  ( IDeserializer & 
     auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
     auto scene = editor->GetModelScene( context->GetSceneName() );
 
-    auto node = Load( m_asset, m_timeEval );
-    editor->AddChildNode( scene, m_parentNode, node );
+    // add nodes directly to parentNode, because 'RootNode' from mesh asset is always empty
+    auto rootNode = Load( m_asset, m_timeEval );
+    for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
+    {
+        editor->AddChildNode( scene, m_parentNode, rootNode->GetChild( i ) );
+    }
 }
 
 // ***********************
@@ -177,6 +181,16 @@ model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPt
 {
     auto node = model::BasicNode::Create( asset->GetKey(), timeEval );
     node->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", timeEval );
+    
+    auto transform = asset->GetTransform();
+    if( transform )
+    {
+        auto transformPlugin = node->GetPlugin( "transform" );
+
+        model::SetParameterTranslation( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.f, transform->translation );
+        model::SetParameterRotation( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.f, transform->rotation );
+        model::SetParameterScale( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.f, transform->scale );
+    }
 
     auto geometry = asset->GetGeometry();
     if( geometry )

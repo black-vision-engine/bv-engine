@@ -8,6 +8,10 @@
 
 namespace bv { namespace model {
 
+
+const std::string        DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM  = "simple_transform";
+
+
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************

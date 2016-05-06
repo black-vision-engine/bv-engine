@@ -110,7 +110,24 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
 
 // ******************************
 //
-void                MeshUtils::ProcessGeometry        ( MeshAssetPtr meshAsset, FbxMesh * fbxMesh )
+void                            MeshUtils::ProcessTransform       ( MeshAssetPtr meshAsset, FbxNode * fbxNode )
+{
+    auto transform = std::make_shared< MeshAsset::MeshTransform >();
+
+    auto translation = fbxNode->LclTranslation.Get();
+    auto rotation = fbxNode->LclRotation.Get();
+    auto scale = fbxNode->LclScaling.Get();
+
+    transform->translation = glm::vec3( translation[ 0 ], translation[ 1 ], translation[ 2 ] );
+    transform->rotation = glm::vec3( rotation[ 0 ], rotation[ 1 ], rotation[ 2 ] );
+    transform->scale = glm::vec3( scale[ 0 ], scale[ 1 ], scale[ 2 ] );
+
+    meshAsset->SetTransform( transform );
+}
+
+// ******************************
+//
+void                            MeshUtils::ProcessGeometry        ( MeshAssetPtr meshAsset, FbxMesh * fbxMesh )
 {
     auto polyCount = fbxMesh->GetPolygonCount();
 
@@ -130,7 +147,7 @@ void                MeshUtils::ProcessGeometry        ( MeshAssetPtr meshAsset, 
             for ( Int32 j = 0; j < polySize; ++j )
 		    {
                 auto idx = fbxMesh->GetPolygonVertex( i, j );
-
+                
                 glm::vec3 pos;
                 pos.x = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 0 ];
                 pos.y = ( Float32 )fbxMesh->GetControlPointAt( idx ).mData[ 1 ];
@@ -152,7 +169,7 @@ void                MeshUtils::ProcessGeometry        ( MeshAssetPtr meshAsset, 
 
 // ******************************
 //
-void                MeshUtils::ProcessMaterial        ( MeshAssetPtr meshAsset, const FbxSurfaceMaterial * fbxMaterial )
+void                            MeshUtils::ProcessMaterial        ( MeshAssetPtr meshAsset, const FbxSurfaceMaterial * fbxMaterial )
 {
     if( fbxMaterial )
     {
@@ -211,13 +228,14 @@ glm::vec4           MeshUtils::ProcessMaterialProperty  ( const FbxSurfaceMateri
 
 // ******************************
 //
-MeshAssetConstPtr   MeshUtils::ConvertToMesh        ( FbxNode * node )
+MeshAssetConstPtr   MeshUtils::ConvertToMesh            ( FbxNode * node )
 {
     if( node )
     {
         auto mesh = MeshAsset::Create( node->GetName() );
 
-        auto c = node->GetNodeAttributeCount(); c;
+        ProcessTransform( mesh, node );
+
         for( auto idx = 0; idx < node->GetNodeAttributeCount(); ++idx )
         {
             auto att = node->GetNodeAttributeByIndex( idx );
@@ -277,7 +295,7 @@ MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc
     converter.SplitMeshesPerMaterial( scene, true );
 
     auto mesh = ConvertToMesh( scene->GetRootNode() );
-    
+
     manager->Destroy();
 
 	return mesh;

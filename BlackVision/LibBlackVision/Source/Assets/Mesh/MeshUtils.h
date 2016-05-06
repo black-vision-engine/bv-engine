@@ -17,6 +17,7 @@ struct MeshUtils
 
 private:
 
+    static void                         ProcessTransform        ( MeshAssetPtr meshAsset, FbxNode * fbxNode );
     static void                         ProcessGeometry         ( MeshAssetPtr meshAsset, FbxMesh * fbxMesh );
     static void                         ProcessMaterial         ( MeshAssetPtr meshAsset, const FbxSurfaceMaterial * fbxMaterial );
 
@@ -24,6 +25,7 @@ private:
     static void                         ProcessUVs              ( std::vector< glm::vec2 > & uvs, FbxMesh * fbxMesh, int i, int j, int vertexIdx );
 
     static glm::vec4                    ProcessMaterialProperty ( const FbxSurfaceMaterial * material, const char * propertyName, const char * factorPropertyName );
+
 };
 
 }  // bv
