@@ -986,7 +986,7 @@ bool                        ProjectManagerImpl::PathExistsInPM      ( const Path
 //
 PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
 {
-    return ListDirs( categoryName, path );
+    return ListDirs( categoryName, path, m_rootPath / categoryName );
 }
 
 // ********************************
@@ -1151,7 +1151,7 @@ bool                        ProjectManagerImpl::CopyDir             ( const std:
 
 // ********************************
 //
-PathVec                     ProjectManagerImpl::ListDirs            ( const std::string & categoryName, const Path & path ) const
+PathVec                     ProjectManagerImpl::ListDirs            ( const std::string & categoryName, const Path & path, const Path & relativeTo ) const
 {
     auto paths = Path::List( m_rootPath / Path( categoryName ) / path, true );
 
@@ -1161,7 +1161,7 @@ PathVec                     ProjectManagerImpl::ListDirs            ( const std:
     {
         if( Path::IsDir( p ) )
         {
-            ret.push_back( p );
+            ret.push_back( relativeTo.Str().empty() ? p : Path::RelativePath( p, relativeTo ) );
         }
     }
 

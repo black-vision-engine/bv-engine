@@ -172,7 +172,7 @@ private:
     bool                    RemoveDir           ( const std::string & categoryName, const Path & path ) const;
     bool                    RenameDir           ( const std::string & categoryName, const Path & path, const std::string & newName ) const;
     bool                    CopyDir             ( const std::string & categoryName, const Path & path, const std::string & newName ) const;
-    PathVec                 ListDirs            ( const std::string & categoryName, const Path & path ) const;
+    PathVec                 ListDirs            ( const std::string & categoryName, const Path & path, const Path & relativeTo = "" ) const;
 };
 
 
