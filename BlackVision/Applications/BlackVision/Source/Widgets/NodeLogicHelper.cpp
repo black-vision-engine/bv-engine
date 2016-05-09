@@ -232,6 +232,38 @@ model::SimpleBoolEvaluatorPtr       AddBoolParam        ( model::DefaultParamVal
     return paramEval;
 }
 
+// ***********************
+//
+model::SimpleVec2EvaluatorPtr       AddVec2Param        ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const glm::vec2 & initVal )
+{
+    auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( paramName, timeEvaluator );
+    paramEval->Parameter()->SetVal( initVal, TimeType( 0.0f ) );
+    paramModel->RegisterAll( paramEval );
+
+    return paramEval;
+}
+
+// ***********************
+//
+model::SimpleVec3EvaluatorPtr       AddVec3Param        ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const glm::vec3 & initVal )
+{
+    auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleVec3Evaluator( paramName, timeEvaluator );
+    paramEval->Parameter()->SetVal( initVal, TimeType( 0.0f ) );
+    paramModel->RegisterAll( paramEval );
+
+    return paramEval;
+}
+
+// ***********************
+//
+model::SimpleVec4EvaluatorPtr       AddVec4Param        ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const glm::vec4 & initVal )
+{
+    auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( paramName, timeEvaluator );
+    paramEval->Parameter()->SetVal( initVal, TimeType( 0.0f ) );
+    paramModel->RegisterAll( paramEval );
+
+    return paramEval;
+}
 
 } // bv
 

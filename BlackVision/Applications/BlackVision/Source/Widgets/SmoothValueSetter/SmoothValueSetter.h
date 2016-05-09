@@ -75,9 +75,10 @@ private:
 
     const ParameterBinding *            FindSource              ( const std::string & bindingSource );
     ParameterBinding                    TargetBindingData       ( IDeserializer & eventDeser, ISerializer & response );
-    model::IParameterPtr                CreateSrcParameter      ( ModelParamType type, const std::string & name );
+    IValuePtr                           CreateSrcParameter      ( ModelParamType type, const std::string & name );
 
-
+    void                                UpdateParameter         ( IValuePtr paramSource, model::IParameterPtr boundParam );
+    void                                UpdateFloatParam        ( ValueFloatPtr paramSource, model::ParamFloatPtr boundParam );
 };
 
 

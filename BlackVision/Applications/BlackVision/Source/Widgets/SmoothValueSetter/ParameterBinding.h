@@ -23,13 +23,13 @@ namespace nodelogic
 
 struct ParameterBinding
 {
-    model::BasicNodePtr         Node;
-    model::IPluginPtr           Plugin;
+    model::BasicNodePtr             Node;
+    model::IPluginPtr               Plugin;
 
-    model::IParameterPtr        Parameter;
-    model::IParameterPtr        ValueSrc;
+    model::IParameterPtr            Parameter;
+    IValuePtr                       ValueSrc;
 
-    std::string                 SourceName;
+    std::string                     SourceName;
 
     ParameterBinding()
     {

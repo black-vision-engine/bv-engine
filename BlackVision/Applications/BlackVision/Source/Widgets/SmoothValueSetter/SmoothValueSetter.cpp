@@ -88,23 +88,55 @@ ParameterBinding                SmoothValueSetter::TargetBindingData       ( IDe
 
 // ***********************
 //
-model::IParameterPtr            SmoothValueSetter::CreateSrcParameter      ( ModelParamType type, const std::string & name )
+IValuePtr                       SmoothValueSetter::CreateSrcParameter      ( ModelParamType type, const std::string & name )
 {
     switch( type )
     {
         case ModelParamType::MPT_FLOAT:
         {
-            auto param = AddFloatParam( m_paramValModel, m_timeEval, name, 0.0f );
-            return param->Parameter();
+            auto paramEval = AddFloatParam( m_paramValModel, m_timeEval, name, 0.0f );
+            return paramEval->Value();
         }
         case ModelParamType::MPT_BOOL:
         {
-            auto param = AddBoolParam( m_paramValModel, m_timeEval, name, false );
-            return param->Parameter();
+            auto paramEval = AddBoolParam( m_paramValModel, m_timeEval, name, false );
+            return paramEval->Value();
+        }
+        case ModelParamType::MPT_VEC2:
+        {
+            auto paramEval = AddVec2Param( m_paramValModel, m_timeEval, name, glm::vec2( 0.0f, 0.0f ) );
+            return paramEval->Value();
+        }
+        case ModelParamType::MPT_VEC3:
+        {
+            auto paramEval = AddVec3Param( m_paramValModel, m_timeEval, name, glm::vec3( 0.0f, 0.0f, 0.0f ) );
+            return paramEval->Value();
+        }
+        case ModelParamType::MPT_VEC4:
+        {
+            auto paramEval = AddVec4Param( m_paramValModel, m_timeEval, name, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+            return paramEval->Value();
         }
     }
 
     return nullptr;
+}
+
+// ***********************
+//
+void                            SmoothValueSetter::UpdateParameter         ( IValuePtr sourceParam, model::IParameterPtr boundParam )
+{
+    if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_FLOAT )
+    {
+        UpdateFloatParam( QueryTypedValue< ValueFloatPtr >( sourceParam ), model::QueryTypedParam< model::ParamFloatPtr >( boundParam ) );
+    }
+}
+
+// ***********************
+//
+void                            SmoothValueSetter::UpdateFloatParam        ( ValueFloatPtr paramSource, model::ParamFloatPtr boundParam )
+{
+    boundParam->SetVal( paramSource->GetValue(), 0.0f );
 }
 
 // ***********************
@@ -121,9 +153,14 @@ SmoothValueSetter::~SmoothValueSetter()
 
 // ***********************
 //
-void                    SmoothValueSetter::Update			( TimeType )
+void                    SmoothValueSetter::Update			( TimeType time )
 {
+    NodeLogicBase::Update( time );
 
+    for( auto & binding : m_paramBindings )
+    {
+        UpdateParameter( binding.ValueSrc, binding.Parameter );
+    }
 }
 
 // ========================================================================= //
@@ -196,15 +233,15 @@ void                    SmoothValueSetter::AddBinding      ( IDeserializer & eve
     if( existingSource == nullptr )
     {
         auto newParam = CreateSrcParameter( type, newBinding.SourceName );
-        newBinding.Parameter = newParam;
+        newBinding.ValueSrc = newParam;
     }
     else
     {
-        if( existingSource->ValueSrc->GetType() != type )
-        {
-            response.SetAttribute( "ErrorInfo", "Source type: " + SerializationHelper::T2String( type ) + " is different then existing source type: " + SerializationHelper::T2String< bv::ModelParamType >( existingSource->ValueSrc->GetType() ) );
-            return;
-        }
+        //if( existingSource->ValueSrc->GetType() != type )
+        //{
+        //    response.SetAttribute( "ErrorInfo", "Source type: " + SerializationHelper::T2String( type ) + " is different then existing source type: " + SerializationHelper::T2String< bv::ParamType >( existingSource->ValueSrc->GetType() ) );
+        //    return;
+        //}
 
         newBinding.ValueSrc = existingSource->ValueSrc;
     }
