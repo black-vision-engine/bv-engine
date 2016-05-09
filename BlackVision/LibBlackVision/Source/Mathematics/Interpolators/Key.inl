@@ -43,7 +43,7 @@ ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializ
 
     if( !time.isValid || !val.isValid )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Cannot read all serialized data for key properly. Substituting by defaut values";
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot read all serialized data for a key properly. Substituting by defaut values";
         return std::make_shared< Key< TimeValueT, ValueT > >( time.isValid ? time : TimeValueT(), val.isValid ? val : ValueT() );
     }
     else

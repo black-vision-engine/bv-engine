@@ -3,6 +3,7 @@
 
 #include "Path.h"
 #include "IO/DirIO.h"
+#include "IO/FileIO.h"
 
 #include "UseLoggerLibCoreModule.h"
 
@@ -318,7 +319,10 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 //
 bool            Path::IsValisPathName   ( const std::string & path )
 {
-    return boost::filesystem::windows_name( path );
+    auto dirName = File::GetDirName( path );
+    auto fileName = File::GetFileName( path, true );
+
+    return boost::filesystem::windows_name( fileName ) && ( dirName.empty() || boost::filesystem::portable_directory_name( dirName ) );
 }
 
 // *********************************

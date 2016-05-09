@@ -437,30 +437,33 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 forceSave = true;
             }
 
-            auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
+            SceneModelPtr scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
 
-            if( scene )
+            if( scene != nullptr )
             {
-                if( forceSave )
+                auto newSceneName = !saveTo.empty() ? saveTo : scene->GetName();
+
+                m_appLogic->GetBVProject()->GetProjectEditor()->RenameScene( sceneName, newSceneName );
+
+                scene = m_appLogic->GetBVProject()->GetModelScene( newSceneName );
+
+                if( scene != nullptr )
                 {
-                    if( saveTo.empty() )
+                
+                    if( forceSave )
                     {
-                        pm->AddScene( scene, "", scene->GetName() );
+                        pm->AddScene( scene, "", newSceneName );
+
+                        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+                
+                        RequestThumbnail( scene, newSceneName );
                     }
                     else
                     {
-                        pm->AddScene( scene, "", saveTo );
+                        SendSimpleResponse( command, projectEvent->EventID, senderID, false );
+                        assert( false );
+                        // TODO: Implement
                     }
-
-                    SendSimpleResponse( command, projectEvent->EventID, senderID, true );
-                
-                    RequestThumbnail( scene, saveTo );
-                }
-                else
-                {
-                    SendSimpleResponse( command, projectEvent->EventID, senderID, false );
-                    assert( false );
-                    // TODO: Implement
                 }
             }
             else
@@ -954,8 +957,9 @@ void        SceneEventsHandlers::RequestThumbnail    ( bv::model::SceneModelPtr 
         prefixDir = "scenes";
 
     Path sceneScreenShot( saveTo );
-    sceneScreenShot = sceneScreenShot.ParentPath();     // Extract directory
-    sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / sceneScreenShot / sceneName;
+    auto parentPath = sceneScreenShot.ParentPath();     // Extract directory
+    sceneScreenShot = File::GetFileName( sceneScreenShot.Str(), true );   
+    sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / parentPath /sceneScreenShot;
     m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true, false );
 
     GetDefaultEventManager().LockEvents( 1 );   // Lock events for one frame, to protect scenes from changeing visibility and other parameters.
