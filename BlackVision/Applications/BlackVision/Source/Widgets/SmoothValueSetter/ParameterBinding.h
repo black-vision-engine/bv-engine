@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/BasicNode.h"
 #include "Engine/Types/Enums.h"
 
 #include <string>
@@ -29,6 +30,14 @@ struct ParameterBinding
     model::IParameterPtr        ValueSrc;
 
     std::string                 SourceName;
+
+    ParameterBinding()
+    {
+        Node = nullptr;
+        Plugin = nullptr;
+        Parameter = nullptr;
+        ValueSrc = nullptr;
+    }
 };
 
 

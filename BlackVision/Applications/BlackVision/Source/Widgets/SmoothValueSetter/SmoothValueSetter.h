@@ -33,14 +33,23 @@ class SmoothValueSetter : public model::NodeLogicBase, public std::enable_shared
 private:
     static const std::string            m_type;
 
+    struct ACTION 
+    {
+        static const std::string    ADD_PARAMETER_BINDING;
+        static const std::string    REMOVE_PARAMETER_BINDING;
+    };
+
 private:
+
     std::string                         m_sceneName;
     bv::model::BasicNodePtr	            m_parentNode;
 
     std::vector< ParameterBinding >     m_paramBindings;
+
+    model::ITimeEvaluatorPtr            m_timeEval;
     
 public:
-    explicit    SmoothValueSetter   ( bv::model::BasicNodePtr parent, bv::model:: ITimeEvaluatorPtr timeEvaluator );
+    explicit    SmoothValueSetter   ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
                 ~SmoothValueSetter  ();
 
 	virtual void                        Initialize		()				override {}
@@ -63,7 +72,11 @@ public:
 
 
 private:
-    const ParameterBinding *            FindSource      ( const std::string & bindingSource );
+
+    const ParameterBinding *            FindSource              ( const std::string & bindingSource );
+    ParameterBinding                    TargetBindingData       ( IDeserializer & eventDeser, ISerializer & response );
+    model::IParameterPtr                CreateSrcParameter      ( ModelParamType type, const std::string & name );
+
 
 };
 
