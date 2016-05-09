@@ -161,7 +161,10 @@ glm::vec3   GridLine::ReferencePos    ( model::BasicNodePtr& node, GridLineAlign
         auto timeline = paramTransform->GetTimeEvaluator();
         assert( timeline );
 
-        return paramTransform->Transform().GetCenter( timeline->GetLocalTime() );
+        glm::vec3 center = paramTransform->Transform().GetCenter( timeline->GetLocalTime() );
+        glm::vec3 position = paramTransform->Transform().GetTranslation( timeline->GetLocalTime() );
+
+        return position + center;
     }
     else if( alignement == GridLineAlignement::TSA_BoundingBoxCenter )
     {
