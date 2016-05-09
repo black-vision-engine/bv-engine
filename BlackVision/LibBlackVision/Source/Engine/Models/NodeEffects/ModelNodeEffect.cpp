@@ -81,18 +81,21 @@ void                                        ModelNodeEffect::Serialize          
             ser.EnterArray( "assets" );
             for( auto ad : m_assetsDescs )
             {
-                ser.EnterChild( "asset" );
-                if( serContext->GetAssets() )
+                if( ad != nullptr )
                 {
-                    auto uid = serContext->GetAssets()->Key2UID( ad->GetKey() );
-                    ser.SetAttribute( "uid", uid );
-                }
-                else
-                {
-                    ad->Serialize( ser );
-                }
+                    ser.EnterChild( "asset" );
+                    if( serContext->GetAssets() )
+                    {
+                        auto uid = serContext->GetAssets()->Key2UID( ad->GetKey() );
+                        ser.SetAttribute( "uid", uid );
+                    }
+                    else
+                    {
+                        ad->Serialize( ser );
+                    }
 
-                ser.ExitChild(); // asset
+                    ser.ExitChild(); // asset
+                }
             }
             ser.ExitChild(); // assets
         }
