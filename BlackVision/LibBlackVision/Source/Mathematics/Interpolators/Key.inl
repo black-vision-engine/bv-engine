@@ -9,6 +9,7 @@
 
 #include "CoreDEF.h"
 
+#include "UseLoggerLibBlackVision.h"
 
 namespace bv
 {
@@ -41,9 +42,14 @@ ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializ
     auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
 
     if( !time.isValid || !val.isValid )
-        assert( false ); // FIXME: error handling
-    
-    return std::make_shared< Key< TimeValueT, ValueT > >( time, val );
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot read all serialized data for key properly. Substituting by defaut values";
+        return std::make_shared< Key< TimeValueT, ValueT > >( time.isValid ? time : TimeValueT(), val.isValid ? val : ValueT() );
+    }
+    else
+    {
+        return std::make_shared< Key< TimeValueT, ValueT > >( time, val );
+    }
 }
 
 // *************************************

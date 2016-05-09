@@ -979,7 +979,7 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         UInt32 channelNum;
 
         auto chunk = bv::image::LoadImage( screenShotEvent->FilePath, &width, &height, &bpp, &channelNum );
-        auto resizedChunk = image::Resize( chunk, width, height, bpp, 128, 128, image::FilterType::FT_LANCZOS );
+        auto resizedChunk = image::MakeThumbnai( chunk, width, height, bpp, 128 );
         auto compresed = image::SaveTGAToHandle( resizedChunk, 128, 128, 32 );
 
 
