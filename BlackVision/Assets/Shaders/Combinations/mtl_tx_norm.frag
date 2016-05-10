@@ -51,13 +51,13 @@ uniform vec4 		mtlEmission;
 uniform int 		mtlShininess;
 
 uniform sampler2D 	Tex0;
+uniform sampler2D 	NormMap0;
 
 uniform float 		alpha;
 
-
-in vec3 		position;		//vertex position in modelview space
-in vec3 		normal;			//vertex normal in modelview space
-in vec2 		uvCoord;
+in vec3 			position;		//vertex position in modelview space
+in vec2 			uvCoord;
+in mat3 			TBN;			//matrix transformation to tangent space
 
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 normal );
@@ -67,9 +67,9 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
 void main()
 {		
-	vec3 viewDir = normalize( -position );
-	vec3 norm = normalize( normal );
-	
+	vec3 viewDir = normalize( TBN * ( -position ) );
+	vec3 norm = normalize( 2.0 * texture( NormMap0, uvCoord ).rgb - 1.0 );
+
 	vec3 color = vec3( 0, 0, 0 );
 	
 	for( int i = 0; i < directionalLightNum; ++i )
@@ -95,7 +95,7 @@ void main()
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )
 {
-	vec3 lightDir = normalize( -light.direction );
+	vec3 lightDir = normalize( TBN * ( -light.direction ) );
 	
 	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -114,7 +114,7 @@ vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )
 
 vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 norm )
 {
-	vec3 lightDir = normalize( light.position - position );
+	vec3 lightDir = normalize( TBN * ( light.position - position ) );
 	
 	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -136,7 +136,7 @@ vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 norm )
 
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 {
-	vec3 lightDir = normalize( light.position - position );
+	vec3 lightDir = normalize( TBN * ( light.position - position ) );
 	
 	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;

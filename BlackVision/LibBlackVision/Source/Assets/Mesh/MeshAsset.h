@@ -31,11 +31,14 @@ public:
         std::vector< glm::vec3 >    positions;
         std::vector< glm::vec3 >    normals;
         std::vector< glm::vec2 >    uvs;
+        std::vector< glm::vec4 >    tangents;
     };
 
     struct MeshTexture
     {
         std::string                 diffuseTexturePath;
+        std::string                 bumpMapTexturePath;
+        std::string                 normalMapTexturePath;
     };
     
     struct MeshMaterial

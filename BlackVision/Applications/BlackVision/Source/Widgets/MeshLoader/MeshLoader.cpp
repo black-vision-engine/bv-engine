@@ -11,6 +11,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultMaterialPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultNormalMapPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultParallaxMapPlugin.h"
 
 #include "Engine/Models/BVProjectEditor.h"
 
@@ -37,8 +39,8 @@ MeshLoaderPtr	            MeshLoader::Create				( model::BasicNodePtr parent, mo
 MeshLoader::MeshLoader      ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
     : m_parentNode( parent )
     , m_timeEval( timeEval )
-    , m_textureEnabled( false )
-    , m_materialEnabled( false )
+    , m_textureEnabled( true )
+    , m_materialEnabled( true )
 {
     m_assetDesc = MeshAssetDesc::Create( assetPath, "", true );
     m_asset = LoadTypedAsset< MeshAsset >( m_assetDesc );
@@ -217,10 +219,9 @@ model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPt
         auto texture = asset->GetTexture();
         if( m_textureEnabled && texture )
         {
-            node->AddPlugin( model::DefaultTexturePluginDesc::UID(), "texture", timeEval );
-            auto txPlugin = node->GetPlugin( "texture" );
-            auto texDesc = TextureAssetDesc::Create( texture->diffuseTexturePath, true );
-            txPlugin->LoadResource( texDesc );
+            LoadTexture( texture->diffuseTexturePath, model::DefaultTexturePluginDesc::UID(), "texture", node, timeEval );
+            LoadTexture( texture->normalMapTexturePath, model::DefaultNormalMapPluginDesc::UID(), "normalmap", node, timeEval );
+            LoadTexture( texture->bumpMapTexturePath, model::DefaultParallaxMapPluginDesc::UID(), "parallaxmap", node, timeEval );
         }
     }
 
@@ -262,7 +263,20 @@ bool                        MeshLoader::MeshInfo                  ( ISerializer 
             auto texture = mesh->GetTexture();
             if( texture )
             {
-                response.SetAttribute( "texture", texture->diffuseTexturePath );
+                if( !texture->diffuseTexturePath.empty() )
+                {
+                    response.SetAttribute( "texture", texture->diffuseTexturePath );
+                }
+
+                if( !texture->normalMapTexturePath.empty() )
+                {
+                    response.SetAttribute( "normal map", texture->normalMapTexturePath );
+                }
+
+                if( !texture->bumpMapTexturePath.empty() )
+                {
+                    response.SetAttribute( "bump map", texture->bumpMapTexturePath );
+                }
             }
 
             response.ExitChild(); //mesh
@@ -273,6 +287,13 @@ bool                        MeshLoader::MeshInfo                  ( ISerializer 
         return true;
     }
     return false;
+}
+
+// ***********************
+//
+MeshAssetConstPtr           MeshLoader::GetMeshAsset                () const
+{
+    return m_asset;
 }
 
 // ***********************
@@ -288,6 +309,22 @@ void                        MeshLoader::GetMeshes                  ( MeshAssetCo
     {
         auto childAsset = asset->GetChild( i );
         GetMeshes( childAsset, meshes );
+    }
+}
+
+// ***********************
+//
+void                        MeshLoader::LoadTexture                 ( const std::string & txPath, const std::string & pluginUID, const std::string & pluginName, model::BasicNodePtr node, model::ITimeEvaluatorPtr timeEval )
+{
+    if( !txPath.empty() )
+    {
+        node->AddPlugin( pluginUID, pluginName, timeEval );
+        auto txPlugin = node->GetPlugin( pluginName );
+        auto texDesc = TextureAssetDesc::Create( txPath, true );
+        if( texDesc )
+        {
+            txPlugin->LoadResource( texDesc );
+        }
     }
 }
 

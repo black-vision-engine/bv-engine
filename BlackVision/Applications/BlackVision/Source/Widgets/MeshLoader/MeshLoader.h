@@ -60,14 +60,18 @@ public:
     virtual bool                    HandleEvent         ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
     void                            Load                ( IDeserializer & eventSer, BVProjectEditor * editor );
+    model::BasicNodePtr             Load                ( MeshAssetConstPtr asset, model::ITimeEvaluatorPtr timeEval );
 
     bool                            MeshInfo            ( ISerializer & response );
 
+    MeshAssetConstPtr               GetMeshAsset        () const;
+
 private:
-
-    model::BasicNodePtr             Load                ( MeshAssetConstPtr asset, model::ITimeEvaluatorPtr timeEval );
-
+    
     void                            GetMeshes           ( MeshAssetConstPtr asset, std::vector< MeshAssetConstPtr > & meshes ) const;
+
+    void                            LoadTexture         ( const std::string & txPath, const std::string & pluginUID, const std::string & pluginName, model::BasicNodePtr node, model::ITimeEvaluatorPtr timeEval );
+    
 };
 
 } //nodelogic

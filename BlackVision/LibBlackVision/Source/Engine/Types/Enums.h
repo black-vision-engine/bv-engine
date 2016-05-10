@@ -77,6 +77,7 @@ enum class AttributeSemantic : int
     AS_TEXCOORD,
     AS_COLOR,
     AS_NORMAL,        
+    AS_TANGENT,        
     AS_BINORMAL,        
     AS_CUSTOM,
 

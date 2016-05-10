@@ -51,25 +51,34 @@ uniform vec4 		mtlEmission;
 uniform int 		mtlShininess;
 
 uniform sampler2D 	Tex0;
+uniform sampler2D 	NormMap0;
+uniform sampler2D 	ParallaxMap0;
 
 uniform float 		alpha;
+uniform float 		heightScale;
 
-
-in vec3 		position;		//vertex position in modelview space
-in vec3 		normal;			//vertex normal in modelview space
-in vec2 		uvCoord;
+in vec3 			position;		//vertex position in modelview space
+in vec2 			uvCoord;
+in mat3 			TBN;			//matrix transformation to tangent space
 
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 normal );
 vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
+vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir );
 
 void main()
 {		
-	vec3 viewDir = normalize( -position );
-	vec3 norm = normalize( normal );
+	vec3 viewDir = normalize( TBN * ( -position ) );
 	
+	vec2 texCoord = parallaxMapping( uvCoord, viewDir );
+	
+	if( texCoord.x > 1.0 || texCoord.y > 1.0 || texCoord.x < 0.0 || texCoord.y < 0.0 )
+        discard;
+		
+	vec3 norm = normalize( 2.0 * texture( NormMap0, texCoord ).rgb - 1.0 );
+
 	vec3 color = vec3( 0, 0, 0 );
 	
 	for( int i = 0; i < directionalLightNum; ++i )
@@ -88,14 +97,14 @@ void main()
 	}
 	
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
-	vec4 texColor = texture( Tex0, uvCoord );
+	vec4 texColor = texture( Tex0, texCoord );
 	
 	FragColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
 }
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )
 {
-	vec3 lightDir = normalize( -light.direction );
+	vec3 lightDir = normalize( TBN * ( -light.direction ) );
 	
 	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -114,7 +123,7 @@ vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )
 
 vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 norm )
 {
-	vec3 lightDir = normalize( light.position - position );
+	vec3 lightDir = normalize( TBN * ( light.position - position ) );
 	
 	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -136,7 +145,7 @@ vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 norm )
 
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 {
-	vec3 lightDir = normalize( light.position - position );
+	vec3 lightDir = normalize( TBN * ( light.position - position ) );
 	
 	float diffuseCoeff = max( dot( norm, lightDir ), 0.0 );
 	float specularCoeff = 0.0;
@@ -158,4 +167,38 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 	attenuation *= step( light.cutOff, dl ) * pow( dl, light.exponent );
 	
 	return attenuation * ( ambient + diffuse + specular );
+}
+
+vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir )
+{
+    const float minLayers = 10;
+    const float maxLayers = 20;
+	
+    float numLayers = mix( maxLayers, minLayers, abs( dot( vec3( 0.0, 0.0, 1.0 ), viewDir ) ) );  
+	
+    float layerDepth = 1.0 / numLayers;
+
+    float currentLayerDepth = 0.0;
+	
+    vec2 P = viewDir.xy / viewDir.z * heightScale; 
+    vec2 deltaTexCoords = P / numLayers;
+  
+    vec2 currentTexCoords = texCoord;
+    float currentDepthMapValue = texture( ParallaxMap0, currentTexCoords ).r;
+      
+    while(currentLayerDepth < currentDepthMapValue)
+    {
+        currentTexCoords -= deltaTexCoords;
+        currentDepthMapValue = texture( ParallaxMap0, currentTexCoords ).r;  
+        currentLayerDepth += layerDepth;  
+    }
+    
+    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+
+    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = texture( ParallaxMap0, prevTexCoords ).r - currentLayerDepth + layerDepth;
+ 
+    float weight = afterDepth / ( afterDepth - beforeDepth );
+	
+    return ( prevTexCoords * weight + currentTexCoords * ( 1.0 - weight ) );
 }
