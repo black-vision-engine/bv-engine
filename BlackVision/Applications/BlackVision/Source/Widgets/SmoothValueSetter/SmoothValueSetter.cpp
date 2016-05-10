@@ -42,7 +42,7 @@ SmoothValueSetter::SmoothValueSetter( bv::model::BasicNodePtr parent, model::ITi
     :   m_parentNode( parent )
     ,   m_timeEval( timeEvaluator )
 {
-    m_smoothTime = AddFloatParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_TIME, 2.0f )->Value();
+    m_smoothTime = AddFloatParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_TIME, 5.0f )->Value();
 }
 
 // ***********************
@@ -78,7 +78,14 @@ void                    SmoothValueSetter::Serialize       ( ISerializer & ser )
 
         if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
         {
+            NodeLogicBase::Serialize( ser );    // Serialize parameters.
 
+            ser.EnterArray( "bindings" );
+            for( auto & binding : m_paramBindings )
+            {
+                SerializeBinding( ser, binding );
+            }
+            ser.ExitChild();    // bindings
         }
 
     ser.ExitChild();    // logic
@@ -86,11 +93,64 @@ void                    SmoothValueSetter::Serialize       ( ISerializer & ser )
 
 // ***********************
 //
+void                    SmoothValueSetter::Deserialize     ( const IDeserializer & deser )
+{
+    if( deser.EnterChild( "bindings" ) )
+    {
+        if( deser.EnterChild( "binding" ) )
+        {
+            do
+            {
+                DeserializeBinding( deser );
+
+            } while( deser.NextChild() );
+            deser.ExitChild();  // binding
+        }
+        deser.ExitChild();  // bindings
+    }
+
+    NodeLogicBase::Deserialize( deser );    // Deserialize parameters.
+}
+
+// ***********************
+//
 SmoothValueSetterPtr    SmoothValueSetter::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
+    auto smoothValueSetter = std::make_shared< SmoothValueSetter >( parentNode, timeline );
 
-    return std::make_shared< SmoothValueSetter >( parentNode, timeline );
+    smoothValueSetter->Deserialize( deser );
+
+    return smoothValueSetter;
+}
+
+// ***********************
+//
+void                    SmoothValueSetter::SerializeBinding        ( ISerializer & ser, const ParameterBinding & binding ) const
+{
+    ser.EnterChild( "binding" );
+
+    ser.SetAttribute( "NodePath", binding.Node );
+    ser.SetAttribute( "PluginName", binding.Plugin );
+    ser.SetAttribute( "ParamName", binding.Parameter->GetName() );
+    ser.SetAttribute( "SourceName", binding.ValueSrc->GetName() );
+    ser.SetAttribute( "SourceParamType", SerializationHelper::T2String( GetParameter( binding.ValueSrc->GetName() )->GetType() ) );
+
+    ser.ExitChild();    // binding
+}
+
+// ***********************
+//
+void                    SmoothValueSetter::DeserializeBinding      ( const IDeserializer & deser )
+{
+    auto nodePath       = deser.GetAttribute( "NodePath" );
+    auto pluginName     = deser.GetAttribute( "PluginName" );
+    auto paramName      = deser.GetAttribute( "ParamName" );
+    auto sourceName     = deser.GetAttribute( "SourceName" );
+    auto sourceType     = SerializationHelper::String2T( deser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
+
+    ParameterBinding newBinding = FillTargetData( nodePath, pluginName, paramName );
+    CreateAndAddSourceData( newBinding, sourceName, sourceType );
 }
 
 // ========================================================================= //
@@ -127,29 +187,11 @@ bool                    SmoothValueSetter::AddBinding      ( IDeserializer & eve
     if( newBinding.Parameter == nullptr )
         return false;
 
-    newBinding.SourceName   = eventDeser.GetAttribute( "SourceName" );
-    ModelParamType type     = SerializationHelper::String2T( eventDeser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
+    auto sourceName     = eventDeser.GetAttribute( "SourceName" );
+    ModelParamType type = SerializationHelper::String2T( eventDeser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
 
+    CreateAndAddSourceData( newBinding, sourceName, type );
 
-    auto existingSource = FindSource( newBinding.SourceName );
-    if( existingSource == nullptr )
-    {
-        auto param = newBinding.Parameter;
-        auto newParam = CreateSrcParameter( type, newBinding.SourceName, param->EvaluateToString( param->GetTimeEvaluator()->GetLocalTime() ) );
-        newBinding.ValueSrc = newParam;
-    }
-    else
-    {
-        //if( existingSource->ValueSrc->GetType() != type )
-        //{
-        //    response.SetAttribute( "ErrorInfo", "Source type: " + SerializationHelper::T2String( type ) + " is different then existing source type: " + SerializationHelper::T2String< bv::ParamType >( existingSource->ValueSrc->GetType() ) );
-        //    return;
-        //}
-
-        newBinding.ValueSrc = existingSource->ValueSrc;
-    }
-
-    m_paramBindings.push_back( newBinding );
     return true;
 }
 
@@ -157,7 +199,6 @@ bool                    SmoothValueSetter::AddBinding      ( IDeserializer & eve
 //
 bool                    SmoothValueSetter::RemoveBinding   ( IDeserializer & /*eventDeser*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
 {
-
     return false;
 }
 
@@ -215,7 +256,7 @@ const ParameterBinding *        SmoothValueSetter::FindSource      ( const std::
 {
     for( auto & binding : m_paramBindings )
     {
-        if( binding.SourceName == bindingSource )
+        if( binding.ValueSrc->GetName() == bindingSource )
             return &binding;
     }
 
@@ -230,33 +271,69 @@ ParameterBinding                SmoothValueSetter::TargetBindingData       ( IDe
     auto pluginName     = eventDeser.GetAttribute( "PluginName" );
     auto paramName      = eventDeser.GetAttribute( "ParamName" );
 
+    ParameterBinding newBinding = FillTargetData( nodePath, pluginName, paramName );
+
+    if( newBinding.Parameter == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Node: " + nodePath + "] Plugin: [" + pluginName + "] Parameter: [" + paramName + " not found." );
+    }
+
+    return newBinding;
+}
+
+// ***********************
+//
+ParameterBinding                SmoothValueSetter::FillTargetData          ( const std::string & nodePath, const std::string & pluginName, const std::string & paramName )
+{
     auto node = m_parentNode->GetNode( nodePath );
     if( node == nullptr )
     {
-        response.SetAttribute( "ErrorInfo", "Node: " + nodePath + " not found." );
         return ParameterBinding();
     }
 
     auto plugin = node->GetPlugin( pluginName );
     if( plugin == nullptr )
     {
-        response.SetAttribute( "ErrorInfo", "Plugin: " + pluginName + " not found." );
         return ParameterBinding();
     }
 
     auto param = plugin->GetParameter( paramName );
     if( param == nullptr )
     {
-        response.SetAttribute( "ErrorInfo", "Parameter: " + paramName + " not found." );
         return ParameterBinding();
     }
 
     ParameterBinding newBinding;
-    newBinding.Node = std::static_pointer_cast< model::BasicNode >( node );
-    newBinding.Plugin = plugin;
-    newBinding.Parameter = param;    
+    newBinding.Node = nodePath;
+    newBinding.Plugin = pluginName;
+    newBinding.Parameter = param;
 
     return newBinding;
+}
+
+// ***********************
+//
+void                            SmoothValueSetter::CreateAndAddSourceData   ( ParameterBinding & srcBindingData, const std::string & sourceName, ModelParamType type )
+{
+    auto existingSource = FindSource( sourceName );
+    if( existingSource == nullptr )
+    {
+        auto param = srcBindingData.Parameter;
+        auto newParam = CreateSrcParameter( type, sourceName, param->EvaluateToString( param->GetTimeEvaluator()->GetLocalTime() ) );
+        srcBindingData.ValueSrc = newParam;
+    }
+    else
+    {
+        //if( GetParameter( existingSource->ValueSrc->GetName() )->GetType() != type )
+        //{
+        //    response.SetAttribute( "ErrorInfo", "Source type: " + SerializationHelper::T2String( type ) + " is different then existing source type: " + SerializationHelper::T2String< bv::ParamType >( existingSource->ValueSrc->GetType() ) );
+        //    return;
+        //}
+
+        srcBindingData.ValueSrc = existingSource->ValueSrc;
+    }
+
+    m_paramBindings.push_back( std::move( srcBindingData ) );
 }
 
 // ***********************

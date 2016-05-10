@@ -67,8 +67,8 @@ void                                            NodeLogicBase::Deserialize     (
         {
             LOG_MESSAGE( SeverityLevel::warning ) << "Logic " << GetType() << " does not have parameter " << param->GetName() << ", which is serialized.";
         }
-
-        m_paramValModel->SetParameter( param );
+        else
+            m_paramValModel->SetParameter( param );
     }
 }
 

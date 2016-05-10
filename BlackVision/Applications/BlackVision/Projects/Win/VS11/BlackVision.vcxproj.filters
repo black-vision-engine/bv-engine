@@ -185,9 +185,6 @@
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp">
       <Filter>Widgets\SmoothValueSetter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp">
-      <Filter>Widgets\SmoothValueSetter</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />

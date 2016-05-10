@@ -2,7 +2,9 @@
 
 #include "CoreDEF.h"
 #include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Engine/Models/BasicNode.h"
 
+#include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "ParameterBinding.h"
 
 #include <vector>
@@ -70,6 +72,7 @@ public:
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
+    virtual void                        Deserialize     ( const IDeserializer & deser );
     static SmoothValueSetterPtr         Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
@@ -82,14 +85,19 @@ public:
 
 private:
 
-    const ParameterBinding *            FindSource              ( const std::string & bindingSource );
-    ParameterBinding                    TargetBindingData       ( IDeserializer & eventDeser, ISerializer & response );
-    IValuePtr                           CreateSrcParameter      ( ModelParamType type, const std::string & name, const std::string & initValue );
+    const ParameterBinding *    FindSource              ( const std::string & bindingSource );
+    ParameterBinding            TargetBindingData       ( IDeserializer & eventDeser, ISerializer & response );
+    ParameterBinding            FillTargetData          ( const std::string & nodeName, const std::string & pluginName, const std::string & paramName );
+    IValuePtr                   CreateSrcParameter      ( ModelParamType type, const std::string & name, const std::string & initValue );
+    void                        CreateAndAddSourceData  ( ParameterBinding & srcBindingData, const std::string & sourceName, ModelParamType type );
 
-    void                                UpdateParameter         ( IValuePtr paramSource, model::IParameterPtr boundParam );
+    void                        UpdateParameter         ( IValuePtr paramSource, model::IParameterPtr boundParam );
+
+    void                        SerializeBinding        ( ISerializer & ser, const ParameterBinding & binding ) const;
+    void                        DeserializeBinding      ( const IDeserializer & deser );
 
     template< typename InterpolatorType, typename Type, ModelParamType type >
-    bool                                SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );
+    bool                        SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );
 };
 
 
