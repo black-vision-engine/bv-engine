@@ -55,9 +55,6 @@ private:
     std::vector< ParameterBinding >     m_paramBindings;
 
     model::ITimeEvaluatorPtr            m_timeEval;
-
-    // Parameters
-    ValueFloatPtr                       m_smoothTime;
     
 public:
     explicit    SmoothValueSetter   ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
@@ -97,7 +94,7 @@ private:
     void                        DeserializeBinding      ( const IDeserializer & deser );
 
     template< typename InterpolatorType, typename Type, ModelParamType type >
-    bool                        SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );
+    bool                        SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, float deltaTime, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );
 };
 
 

@@ -41,9 +41,7 @@ const std::string &     SmoothValueSetter::GetType             () const
 SmoothValueSetter::SmoothValueSetter( bv::model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
     ,   m_timeEval( timeEvaluator )
-{
-    m_smoothTime = AddFloatParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_TIME, 5.0f )->Value();
-}
+{}
 
 // ***********************
 //
@@ -218,26 +216,30 @@ bool                    SmoothValueSetter::SetParameter    ( IDeserializer & eve
         return false;
     }
 
+    auto smoothTimeParam = GetParameter( srcParamName + "_" + PARAMETERS::SMOOTH_TIME );
+    assert( smoothTimeParam );
+
+    auto deltaTime = model::QueryTypedParam< model::ParamFloatPtr >( smoothTimeParam )->Evaluate();
 
     if( param->GetType() == ModelParamType::MPT_FLOAT )
     {
         auto typedeParam = model::QueryTypedParam< model::ParamFloatPtr >( param );
-        return SetSmoothParam( typedeParam, response, srcParamName, paramValue );
+        return SetSmoothParam( typedeParam, deltaTime, response, srcParamName, paramValue );
     }
     else if( param->GetType() == ModelParamType::MPT_VEC2 )
     {
         auto typedeParam = model::QueryTypedParam< model::ParamVec2Ptr >( param );
-        return SetSmoothParam( typedeParam, response, srcParamName, paramValue );
+        return SetSmoothParam( typedeParam, deltaTime, response, srcParamName, paramValue );
     }
     else if( param->GetType() == ModelParamType::MPT_VEC3 )
     {
         auto typedeParam = model::QueryTypedParam< model::ParamVec3Ptr >( param );
-        return SetSmoothParam( typedeParam, response, srcParamName, paramValue );
+        return SetSmoothParam( typedeParam, deltaTime, response, srcParamName, paramValue );
     }
     else if( param->GetType() == ModelParamType::MPT_VEC4 )
     {
         auto typedeParam = model::QueryTypedParam< model::ParamVec4Ptr >( param );
-        return SetSmoothParam( typedeParam, response, srcParamName, paramValue );
+        return SetSmoothParam( typedeParam, deltaTime, response, srcParamName, paramValue );
     }
 
     response.SetAttribute( "ErrorInfo", "Parameter type [" + SerializationHelper::T2String( param->GetType() ) + "] not supported" );
@@ -321,6 +323,7 @@ void                            SmoothValueSetter::CreateAndAddSourceData   ( Pa
         auto param = srcBindingData.Parameter;
         auto newParam = CreateSrcParameter( type, sourceName, param->EvaluateToString( param->GetTimeEvaluator()->GetLocalTime() ) );
         srcBindingData.ValueSrc = newParam;
+        AddFloatParam( m_paramValModel, m_timeEval, sourceName + "_" + PARAMETERS::SMOOTH_TIME, 2.0f );
     }
     else
     {
@@ -406,7 +409,7 @@ void                            SmoothValueSetter::UpdateParameter         ( IVa
 // ***********************
 //
 template< typename InterpolatorType, typename ValType, ModelParamType type >
-bool                    SmoothValueSetter::SetSmoothParam      ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, ValType, type > > & param, ISerializer & response, const std::string & srcParamName, const std::string & paramValue )
+bool                    SmoothValueSetter::SetSmoothParam      ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, ValType, type > > & param, float deltaTime, ISerializer & response, const std::string & srcParamName, const std::string & paramValue )
 {
     Expected< ValType > newValue = SerializationHelper::String2T< ValType >( paramValue );
 
@@ -439,7 +442,7 @@ bool                    SmoothValueSetter::SetSmoothParam      ( std::shared_ptr
     }
 
     // Add new value key. Smoothing lasts m_smoothTime.
-    param->SetVal( newValue.ham, currentTime + m_smoothTime->GetValue() );
+    param->SetVal( newValue.ham, currentTime + deltaTime );
     
     return true;
 }
