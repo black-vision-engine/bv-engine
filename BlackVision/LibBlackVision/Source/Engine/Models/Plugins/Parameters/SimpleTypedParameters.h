@@ -46,7 +46,7 @@ public:
     inline  bool                RemoveVal               ( TimeType t );
     inline  bool                MoveKey                 ( TimeType t, TimeType newTime );
 
-    inline  std::string         EvaluateToString        ( TimeType t ) const;
+    virtual  std::string         EvaluateToString        ( TimeType t ) const;
 
 	InterpolatorType &		    AccessInterpolator	    ();
 
