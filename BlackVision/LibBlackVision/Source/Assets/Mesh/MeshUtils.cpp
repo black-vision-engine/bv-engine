@@ -275,10 +275,10 @@ void                            MeshUtils::ProcessMaterial        ( MeshAssetPtr
             meshAsset->SetTexture( texture );
         }
 
-        auto bumpMapTex = ProcessTextureProperty( fbxMaterial, FbxSurfaceMaterial::sBump );
-        if( !bumpMapTex.empty() )
+        auto heightMapTex = ProcessTextureProperty( fbxMaterial, FbxSurfaceMaterial::sBump );
+        if( !heightMapTex.empty() )
         {
-            texture->bumpMapTexturePath = bumpMapTex;
+            texture->heightMapTexturePath = heightMapTex;
             meshAsset->SetTexture( texture );
         }
 

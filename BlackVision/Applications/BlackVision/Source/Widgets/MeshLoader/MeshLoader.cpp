@@ -221,7 +221,7 @@ model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPt
         {
             LoadTexture( texture->diffuseTexturePath, model::DefaultTexturePluginDesc::UID(), "texture", node, timeEval );
             LoadTexture( texture->normalMapTexturePath, model::DefaultNormalMapPluginDesc::UID(), "normal map", node, timeEval );
-            LoadTexture( texture->bumpMapTexturePath, model::DefaultParallaxMapPluginDesc::UID(), "parallax map", node, timeEval );
+            LoadTexture( texture->heightMapTexturePath, model::DefaultParallaxMapPluginDesc::UID(), "parallax map", node, timeEval );
         }
     }
 
@@ -273,9 +273,9 @@ bool                        MeshLoader::MeshInfo                  ( ISerializer 
                     response.SetAttribute( "normal map", texture->normalMapTexturePath );
                 }
 
-                if( !texture->bumpMapTexturePath.empty() )
+                if( !texture->heightMapTexturePath.empty() )
                 {
-                    response.SetAttribute( "bump map", texture->bumpMapTexturePath );
+                    response.SetAttribute( "height map", texture->heightMapTexturePath );
                 }
             }
 

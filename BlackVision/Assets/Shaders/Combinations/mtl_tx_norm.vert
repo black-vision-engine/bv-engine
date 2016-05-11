@@ -7,14 +7,13 @@ layout (location = 3) in vec4 vertexTangent;
 
 uniform mat4 MVP;
 uniform mat4 MV;
-uniform mat4 P;
 uniform mat3 normalMat;
 
 uniform mat4 txMat;
 
 out vec3 position;	//vertex position in modelview space
 out vec2 uvCoord;
-out mat3 TBN;    //matrix transformation to tangent space
+out mat3 TBN;    	//matrix transformation to tangent space
 
 
 void main()

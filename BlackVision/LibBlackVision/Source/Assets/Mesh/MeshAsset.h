@@ -37,7 +37,7 @@ public:
     struct MeshTexture
     {
         std::string                 diffuseTexturePath;
-        std::string                 bumpMapTexturePath;
+        std::string                 heightMapTexturePath;
         std::string                 normalMapTexturePath;
     };
     

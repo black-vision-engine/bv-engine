@@ -69,7 +69,8 @@ void main()
 {		
 	vec3 viewDir = normalize( TBN * ( -position ) );
 	vec3 norm = normalize( 2.0 * texture( NormMap0, uvCoord ).rgb - 1.0 );
-
+	norm.y = -norm.y; //flip y coord
+	
 	vec3 color = vec3( 0, 0, 0 );
 	
 	for( int i = 0; i < directionalLightNum; ++i )

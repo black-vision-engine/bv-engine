@@ -55,7 +55,13 @@ uniform sampler2D 	NormMap0;
 uniform sampler2D 	ParallaxMap0;
 
 uniform float 		alpha;
+
+uniform mat4 		normalMapMat;
+uniform mat4 		parallaxMapMat;
+
 uniform float 		heightScale;
+uniform int 		minSamplesNum;
+uniform int 		maxSamplesNum;
 
 in vec3 			position;		//vertex position in modelview space
 in vec2 			uvCoord;
@@ -78,6 +84,7 @@ void main()
         discard;
 		
 	vec3 norm = normalize( 2.0 * texture( NormMap0, texCoord ).rgb - 1.0 );
+	norm.y = -norm.y; //flip y coord
 
 	vec3 color = vec3( 0, 0, 0 );
 	
@@ -169,36 +176,32 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 	return attenuation * ( ambient + diffuse + specular );
 }
 
+// parallax occlusion mapping
 vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir )
 {
-    const float minLayers = 10;
-    const float maxLayers = 20;
+    float currHeight = 0.0;
+	vec2 currTex = texCoord;
 	
-    float numLayers = mix( maxLayers, minLayers, abs( dot( vec3( 0.0, 0.0, 1.0 ), viewDir ) ) );  
+    float samplesNum = mix( maxSamplesNum, minSamplesNum, abs( dot( vec3( 0, 0, 1 ), viewDir ) ) );
+    float sampleHeight = 1.0 / samplesNum;
 	
-    float layerDepth = 1.0 / numLayers;
-
-    float currentLayerDepth = 0.0;
+    vec2 stepHeight = ( heightScale * ( viewDir.xy / viewDir.z ) ) / samplesNum;
 	
-    vec2 P = viewDir.xy / viewDir.z * heightScale; 
-    vec2 deltaTexCoords = P / numLayers;
-  
-    vec2 currentTexCoords = texCoord;
-    float currentDepthMapValue = texture( ParallaxMap0, currentTexCoords ).r;
+    float heightTex = texture( ParallaxMap0, currTex ).r;
       
-    while(currentLayerDepth < currentDepthMapValue)
+    while( currHeight < heightTex )
     {
-        currentTexCoords -= deltaTexCoords;
-        currentDepthMapValue = texture( ParallaxMap0, currentTexCoords ).r;  
-        currentLayerDepth += layerDepth;  
+        currTex -= stepHeight;
+        heightTex = texture( ParallaxMap0, currTex ).r;  
+        currHeight += sampleHeight;  
     }
     
-    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+    vec2 prevTex = currTex + stepHeight;
 
-    float afterDepth  = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = texture( ParallaxMap0, prevTexCoords ).r - currentLayerDepth + layerDepth;
+    float nextHeight  = heightTex - currHeight;
+    float prevHeight = texture( ParallaxMap0, prevTex ).r - currHeight + sampleHeight;
  
-    float weight = afterDepth / ( afterDepth - beforeDepth );
+    float weight = nextHeight / ( nextHeight - prevHeight );
 	
-    return ( prevTexCoords * weight + currentTexCoords * ( 1.0 - weight ) );
+    return ( prevTex * weight + currTex * ( 1.0 - weight ) );
 }
