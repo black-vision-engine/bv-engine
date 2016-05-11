@@ -125,7 +125,7 @@ void        Box::Include		            ( glm::vec3 && point )
 // Parameter rayDirection should be normalized ray vector
 // Returns distance to intersection point and infinity or -infinity if there's no intersection.
 // If box is behind rayPoint return value is negative.
-Float32   Box::RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirection ) const
+Float32   Box::RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirection, bool & inside ) const
 {
     if( rayDirection.x == 0.0 )
         rayDirection.x = std::numeric_limits< float >::epsilon();
@@ -166,6 +166,9 @@ Float32   Box::RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirect
     // No intersection in front of rayPoint
     if( maxMinPlane > minMaxPlane )
         return std::numeric_limits< Float32 >::infinity();
+
+    if( minMaxPlane > 0.0f && maxMinPlane < 0.0f )
+        inside = true;
 
     // Returns intersection distance.
     return maxMinPlane;
