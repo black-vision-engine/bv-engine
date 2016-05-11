@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Types/Values/BaseValue.h"
+#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
 #include "Engine/Types/Enums.h"
 
 #include <string>
@@ -31,6 +32,7 @@ struct ParameterBinding
 
     model::IParameterPtr            Parameter;
     IValuePtr                       ValueSrc;
+    model::IStatedValuePtr          ValueState;
 
     TransformKind                   TransformKind;
     VectorComponent                 Component;
