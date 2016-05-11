@@ -8,6 +8,7 @@
 #include "Widgets/NodeLogicHelper.h"
 
 
+
 namespace bv { namespace nodelogic
 {
 
@@ -56,7 +57,7 @@ void                    SmoothValueSetter::Update			( TimeType time )
 
     for( auto & binding : m_paramBindings )
     {
-        UpdateParameter( binding.ValueSrc, binding.Parameter );
+        UpdateParameter( binding.ValueSrc, binding.Parameter, binding.TransformKind, binding.Component );
     }
 }
 
@@ -133,22 +134,34 @@ void                    SmoothValueSetter::SerializeBinding        ( ISerializer
     ser.SetAttribute( "ParamName", binding.Parameter->GetName() );
     ser.SetAttribute( "SourceName", binding.ValueSrc->GetName() );
     ser.SetAttribute( "SourceParamType", SerializationHelper::T2String( GetParameter( binding.ValueSrc->GetName() )->GetType() ) );
+    
+    if( binding.TransformKind != TransformKind::invalid )
+        ser.SetAttribute( "Kind", SerializationHelper::T2String( binding.TransformKind ) );
+    if( binding.Component != ParameterBinding::VectorComponent::Invalid )
+        ser.SetAttribute( "Component", SerializationHelper::T2String( binding.Component ) );
 
     ser.ExitChild();    // binding
 }
 
 // ***********************
 //
-void                    SmoothValueSetter::DeserializeBinding      ( const IDeserializer & deser )
+bool                    SmoothValueSetter::DeserializeBinding      ( const IDeserializer & deser )
 {
     auto nodePath       = deser.GetAttribute( "NodePath" );
     auto pluginName     = deser.GetAttribute( "PluginName" );
     auto paramName      = deser.GetAttribute( "ParamName" );
+    auto component      = SerializationHelper::String2T( deser.GetAttribute( "Component" ), ParameterBinding::VectorComponent::Invalid );
+    auto transformKind  = SerializationHelper::String2T( deser.GetAttribute( "Kind" ), TransformKind::invalid );
+
     auto sourceName     = deser.GetAttribute( "SourceName" );
     auto sourceType     = SerializationHelper::String2T( deser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
 
-    ParameterBinding newBinding = FillTargetData( nodePath, pluginName, paramName );
+    ParameterBinding newBinding = FillTargetData( nodePath, pluginName, paramName, transformKind, component );
+    if( newBinding.Parameter == nullptr )
+        return false;
+
     CreateAndAddSourceData( newBinding, sourceName, sourceType );
+    return true;
 }
 
 // ========================================================================= //
@@ -179,18 +192,9 @@ bool                    SmoothValueSetter::HandleEvent     ( IDeserializer & eve
 
 // ***********************
 //
-bool                    SmoothValueSetter::AddBinding      ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
+bool                    SmoothValueSetter::AddBinding      ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
 {
-    ParameterBinding newBinding = TargetBindingData( eventDeser, response );
-    if( newBinding.Parameter == nullptr )
-        return false;
-
-    auto sourceName     = eventDeser.GetAttribute( "SourceName" );
-    ModelParamType type = SerializationHelper::String2T( eventDeser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
-
-    CreateAndAddSourceData( newBinding, sourceName, type );
-
-    return true;
+    return DeserializeBinding( eventDeser );
 }
 
 // ***********************
@@ -208,7 +212,6 @@ bool                    SmoothValueSetter::SetParameter    ( IDeserializer & eve
     auto srcParamName = eventDeser.GetAttribute( "SourceName" );
     auto paramValue = eventDeser.GetAttribute( "Value" );
 
-    // FIXME: @todo This code shouldn't allow to change SmoothValueSetter parameters, for example SmoothTime.
     auto param = GetParameter( srcParamName );
     if( !param )
     {
@@ -251,6 +254,41 @@ bool                    SmoothValueSetter::SetParameter    ( IDeserializer & eve
 // Helpers
 // ========================================================================= //
 
+// ***********************
+//
+template< typename VectorType >
+bool        HasComponent                ( ParameterBinding::VectorComponent component )
+{    return false;  }
+
+template<>
+bool        HasComponent< glm::vec2 >   ( ParameterBinding::VectorComponent component )
+{   return (int)component < 2;  }
+
+template<>
+bool        HasComponent< glm::vec3 >   ( ParameterBinding::VectorComponent component )
+{   return (int)component < 3;  }
+
+template<>
+bool        HasComponent< glm::vec4 >   ( ParameterBinding::VectorComponent component )
+{   return (int)component < 4;  }
+
+// ***********************
+//
+template< typename VectorType >
+void        SetComponent            ( VectorType & vector, float value, ParameterBinding::VectorComponent component )
+{
+    assert( HasComponent< VectorType >( component ) );
+    vector[ static_cast< int >( component ) ] = value; 
+}
+
+// ***********************
+//
+template< typename VectorType >
+void        GetComponent            ( VectorType & vector, ParameterBinding::VectorComponent component )
+{
+    assert( HasComponent< VectorType >( component ) );
+    return vector[ component ];
+}
 
 // ***********************
 //
@@ -265,27 +303,10 @@ const ParameterBinding *        SmoothValueSetter::FindSource      ( const std::
     return nullptr;
 }
 
-// ***********************
-//
-ParameterBinding                SmoothValueSetter::TargetBindingData       ( IDeserializer & eventDeser, ISerializer & response )
-{
-    auto nodePath       = eventDeser.GetAttribute( "NodeName" );
-    auto pluginName     = eventDeser.GetAttribute( "PluginName" );
-    auto paramName      = eventDeser.GetAttribute( "ParamName" );
-
-    ParameterBinding newBinding = FillTargetData( nodePath, pluginName, paramName );
-
-    if( newBinding.Parameter == nullptr )
-    {
-        response.SetAttribute( "ErrorInfo", "Node: " + nodePath + "] Plugin: [" + pluginName + "] Parameter: [" + paramName + " not found." );
-    }
-
-    return newBinding;
-}
 
 // ***********************
 //
-ParameterBinding                SmoothValueSetter::FillTargetData          ( const std::string & nodePath, const std::string & pluginName, const std::string & paramName )
+ParameterBinding                SmoothValueSetter::FillTargetData          ( const std::string & nodePath, const std::string & pluginName, const std::string & paramName, TransformKind transformKind, ParameterBinding::VectorComponent component )
 {
     auto node = m_parentNode->GetNode( nodePath );
     if( node == nullptr )
@@ -309,6 +330,8 @@ ParameterBinding                SmoothValueSetter::FillTargetData          ( con
     newBinding.Node = nodePath;
     newBinding.Plugin = pluginName;
     newBinding.Parameter = param;
+    newBinding.Component = component;
+    newBinding.TransformKind = transformKind;
 
     return newBinding;
 }
@@ -320,8 +343,7 @@ void                            SmoothValueSetter::CreateAndAddSourceData   ( Pa
     auto existingSource = FindSource( sourceName );
     if( existingSource == nullptr )
     {
-        auto param = srcBindingData.Parameter;
-        auto newParam = CreateSrcParameter( type, sourceName, param->EvaluateToString( param->GetTimeEvaluator()->GetLocalTime() ) );
+        auto newParam = CreateSrcParameter( type, sourceName );
         srcBindingData.ValueSrc = newParam;
         AddFloatParam( m_paramValModel, m_timeEval, sourceName + "_" + PARAMETERS::SMOOTH_TIME, 2.0f );
     }
@@ -341,39 +363,35 @@ void                            SmoothValueSetter::CreateAndAddSourceData   ( Pa
 
 // ***********************
 //
-IValuePtr                       SmoothValueSetter::CreateSrcParameter      ( ModelParamType type, const std::string & name, const std::string & initValue )
+IValuePtr                       SmoothValueSetter::CreateSrcParameter      ( ModelParamType type, const std::string & name )
 {
     switch( type )
     {
         case ModelParamType::MPT_FLOAT:
         {
-            auto paramEval = AddFloatParam( m_paramValModel, m_timeEval, name, SerializationHelper::String2T( initValue, 0.0f ) );
-            return paramEval->Value();
-        }
-        case ModelParamType::MPT_BOOL:
-        {
-            auto paramEval = AddBoolParam( m_paramValModel, m_timeEval, name, SerializationHelper::String2T( initValue, false ) );
+            auto paramEval = AddFloatParam( m_paramValModel, m_timeEval, name, 0.0f );
             return paramEval->Value();
         }
         case ModelParamType::MPT_VEC2:
         {
-            auto paramEval = AddVec2Param( m_paramValModel, m_timeEval, name, SerializationHelper::String2T( initValue, glm::vec2( 0.0f, 0.0f ) ) );
+            auto paramEval = AddVec2Param( m_paramValModel, m_timeEval, name, glm::vec2( 0.0f, 0.0f ) );
             return paramEval->Value();
         }
         case ModelParamType::MPT_VEC3:
         {
-            auto paramEval = AddVec3Param( m_paramValModel, m_timeEval, name, SerializationHelper::String2T( initValue, glm::vec3( 0.0f, 0.0f, 0.0f ) ) );
+            auto paramEval = AddVec3Param( m_paramValModel, m_timeEval, name, glm::vec3( 0.0f, 0.0f, 0.0f ) );
             return paramEval->Value();
         }
         case ModelParamType::MPT_VEC4:
         {
-            auto paramEval = AddVec4Param( m_paramValModel, m_timeEval, name, SerializationHelper::String2T( initValue, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ) ) );
+            auto paramEval = AddVec4Param( m_paramValModel, m_timeEval, name, glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ) );
             return paramEval->Value();
         }
     }
 
     return nullptr;
 }
+
 
 
 // ***********************
@@ -386,11 +404,58 @@ void        UpdateParam         ( Value paramSource, Param boundParam )
 
 // ***********************
 //
-void                            SmoothValueSetter::UpdateParameter         ( IValuePtr sourceParam, model::IParameterPtr boundParam )
+template< typename Param >
+void        UpdateParam         ( ValueFloatPtr paramSource, Param boundParam, ParameterBinding::VectorComponent component )
+{
+    auto value = boundParam->Evaluate();
+    SetComponent( value, paramSource->GetValue(), component );
+    boundParam->SetVal( value, TimeType( 0.0f ) );
+}
+
+// ***********************
+//
+void        UpdateParam         ( ValueFloatPtr paramSource, model::ParamTransformPtr boundParam, TransformKind kind, ParameterBinding::VectorComponent component )
+{
+    auto & transform = boundParam->Transform();
+    auto time = boundParam->GetLocalEvaluationTime();
+
+    if( kind == TransformKind::translation )
+    {
+        glm::vec3 trans = transform.GetTranslation( time );
+        SetComponent( trans, paramSource->GetValue(), component );
+        transform.SetTranslation( trans, time );
+    }
+    else if( kind == TransformKind::rotation )
+    {
+        glm::vec3 trans = transform.GetRotation( time );
+        SetComponent( trans, paramSource->GetValue(), component );
+        transform.SetRotation( trans, time );
+    }
+    else if( kind == TransformKind::scale )
+    {
+        glm::vec3 trans = transform.GetScale( time );
+        SetComponent( trans, paramSource->GetValue(), component );
+        transform.SetScale( trans, time );
+    }
+    else if( kind == TransformKind::center )
+    {
+        glm::vec3 trans = transform.GetCenter( time );
+        SetComponent( trans, paramSource->GetValue(), component );
+        transform.SetCenter( trans, time );
+    }
+}
+
+// ***********************
+//
+void                            SmoothValueSetter::UpdateParameter         ( IValuePtr & sourceParam, model::IParameterPtr & boundParam, TransformKind kind, ParameterBinding::VectorComponent component )
 {
     if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_FLOAT )
     {
         UpdateParam( QueryTypedValue< ValueFloatPtr >( sourceParam ), model::QueryTypedParam< model::ParamFloatPtr >( boundParam ) );
+    }
+    else if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_VEC3 )
+    {
+        UpdateParam( QueryTypedValue< ValueFloatPtr >( sourceParam ), model::QueryTypedParam< model::ParamVec3Ptr >( boundParam ), component );
     }
     else if( sourceParam->GetType() == ParamType::PT_FLOAT2 && boundParam->GetType() == ModelParamType::MPT_VEC2 )
     {
@@ -403,6 +468,10 @@ void                            SmoothValueSetter::UpdateParameter         ( IVa
     else if( sourceParam->GetType() == ParamType::PT_FLOAT4 && boundParam->GetType() == ModelParamType::MPT_VEC4 )
     {
         UpdateParam( QueryTypedValue< ValueVec3Ptr >( sourceParam ), model::QueryTypedParam< model::ParamVec3Ptr >( boundParam ) );
+    }
+    else if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_TRANSFORM )
+    {
+        UpdateParam( QueryTypedValue< ValueFloatPtr >( sourceParam ), model::QueryTypedParam< model::ParamTransformPtr >( boundParam ), kind, component );
     }
 }
 

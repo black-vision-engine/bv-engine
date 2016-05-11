@@ -49,12 +49,10 @@ private:
 
 private:
 
-    std::string                         m_sceneName;
     bv::model::BasicNodePtr	            m_parentNode;
+    model::ITimeEvaluatorPtr            m_timeEval;
 
     std::vector< ParameterBinding >     m_paramBindings;
-
-    model::ITimeEvaluatorPtr            m_timeEval;
     
 public:
     explicit    SmoothValueSetter   ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
@@ -83,15 +81,14 @@ public:
 private:
 
     const ParameterBinding *    FindSource              ( const std::string & bindingSource );
-    ParameterBinding            TargetBindingData       ( IDeserializer & eventDeser, ISerializer & response );
-    ParameterBinding            FillTargetData          ( const std::string & nodeName, const std::string & pluginName, const std::string & paramName );
-    IValuePtr                   CreateSrcParameter      ( ModelParamType type, const std::string & name, const std::string & initValue );
+    ParameterBinding            FillTargetData          ( const std::string & nodeName, const std::string & pluginName, const std::string & paramName, TransformKind transformKind, ParameterBinding::VectorComponent component );
+    IValuePtr                   CreateSrcParameter      ( ModelParamType type, const std::string & name );
     void                        CreateAndAddSourceData  ( ParameterBinding & srcBindingData, const std::string & sourceName, ModelParamType type );
 
-    void                        UpdateParameter         ( IValuePtr paramSource, model::IParameterPtr boundParam );
+    void                        UpdateParameter         ( IValuePtr & paramSource, model::IParameterPtr & boundParam, TransformKind kind, ParameterBinding::VectorComponent component );
 
     void                        SerializeBinding        ( ISerializer & ser, const ParameterBinding & binding ) const;
-    void                        DeserializeBinding      ( const IDeserializer & deser );
+    bool                        DeserializeBinding      ( const IDeserializer & deser );
 
     template< typename InterpolatorType, typename Type, ModelParamType type >
     bool                        SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, float deltaTime, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );

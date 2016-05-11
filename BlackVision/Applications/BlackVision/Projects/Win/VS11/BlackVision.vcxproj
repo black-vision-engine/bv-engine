@@ -326,6 +326,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
