@@ -40,6 +40,7 @@ private:
         static const std::string    ADD_PARAMETER_BINDING;
         static const std::string    REMOVE_PARAMETER_BINDING;
         static const std::string    SET_PARAMETER;
+        static const std::string    LIST_BINDINGS;
     };
 
     struct PARAMETERS
@@ -77,6 +78,7 @@ public:
     bool                                AddBinding      ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
     bool                                RemoveBinding   ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
     bool                                SetParameter    ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
+    bool                                ListBindings    ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
 
 private:
 

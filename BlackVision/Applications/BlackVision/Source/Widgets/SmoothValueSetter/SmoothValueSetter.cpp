@@ -18,6 +18,7 @@ const std::string       SmoothValueSetter::m_type = "SmoothValueSetter";
 const std::string       SmoothValueSetter::ACTION::ADD_PARAMETER_BINDING            = "AddParamBinding";
 const std::string       SmoothValueSetter::ACTION::REMOVE_PARAMETER_BINDING         = "RemoveParamBinding";
 const std::string       SmoothValueSetter::ACTION::SET_PARAMETER                    = "SetParameter";
+const std::string       SmoothValueSetter::ACTION::LIST_BINDINGS                    = "ListBindings";
 
 const std::string       SmoothValueSetter::PARAMETERS::SMOOTH_TIME                  = "_SmoothTime";
 
@@ -186,6 +187,10 @@ bool                    SmoothValueSetter::HandleEvent     ( IDeserializer & eve
     {
         return RemoveBinding( eventDeser, response, editor );
     }
+    else if( action == SmoothValueSetter::ACTION::LIST_BINDINGS )
+    {
+        return ListBindings( eventDeser, response, editor );
+    }
 
     return false;
 }
@@ -284,6 +289,19 @@ bool                    SmoothValueSetter::SetParameter    ( IDeserializer & eve
     return false;
 }
 
+// ***********************
+//
+bool                    SmoothValueSetter::ListBindings    ( IDeserializer & /*eventDeser*/, ISerializer & response, BVProjectEditor * /*editor*/ )
+{
+    response.EnterArray( "bindings" );
+    for( auto & binding : m_paramBindings )
+    {
+        SerializeBinding( response, binding );
+    }
+    response.ExitChild();    // bindings
+
+    return true;
+}
 
 // ========================================================================= //
 // Helpers
