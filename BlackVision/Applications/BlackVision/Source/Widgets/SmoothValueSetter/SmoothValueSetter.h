@@ -80,6 +80,7 @@ public:
 
 private:
 
+    const ParameterBinding *    FindTarget              ( model::IParameterPtr & param );
     const ParameterBinding *    FindSource              ( const std::string & bindingSource );
     ParameterBinding            FillTargetData          ( const std::string & nodeName, const std::string & pluginName, const std::string & paramName, TransformKind transformKind, ParameterBinding::VectorComponent component );
     IValuePtr                   CreateSrcParameter      ( ModelParamType type, const std::string & name );

@@ -9,8 +9,10 @@
 
 namespace bv { namespace model {
 
+
+
 template< typename StateTypePtr, typename ValueTypePtr >
-class SimpleStateUpdater : public IUpdater
+class SimpleStateUpdater : public IStateUpdater
 {
 private:
 
@@ -21,7 +23,8 @@ public:
 
     SimpleStateUpdater( StateTypePtr state, ValueTypePtr value );
 
-    virtual void    DoUpdate    () override;
+    virtual void                    DoUpdate    () override;
+    virtual const std::string &     GetName     () override;
 
 };
 
