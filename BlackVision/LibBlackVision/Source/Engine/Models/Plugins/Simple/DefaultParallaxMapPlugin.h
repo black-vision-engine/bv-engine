@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/ResourceStateModel.h"
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"

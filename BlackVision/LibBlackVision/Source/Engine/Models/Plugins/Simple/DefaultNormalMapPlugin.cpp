@@ -2,16 +2,7 @@
 
 #include "DefaultNormalMapPlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine\Interfaces\IValue.h"
-
-#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
-
-#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
-
-#include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -43,25 +34,10 @@ DefaultPluginParamValModelPtr   DefaultNormalMapPluginDesc::CreateDefaultModel( 
 
     //Create all models
     auto model  = helper.GetModel();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
-    //Create all parameters and evaluators
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    
     helper.CreatePluginModel();
-
     helper.CreatePSModel();
-
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
-
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-
-    //Set default values of all parameters
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
-
+    
     return model;
 }
 
@@ -168,8 +144,6 @@ void                                DefaultNormalMapPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
-    
     HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_psc->PostUpdate();    
