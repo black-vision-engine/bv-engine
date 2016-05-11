@@ -220,8 +220,8 @@ model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPt
         if( m_textureEnabled && texture )
         {
             LoadTexture( texture->diffuseTexturePath, model::DefaultTexturePluginDesc::UID(), "texture", node, timeEval );
-            LoadTexture( texture->normalMapTexturePath, model::DefaultNormalMapPluginDesc::UID(), "normalmap", node, timeEval );
-            LoadTexture( texture->bumpMapTexturePath, model::DefaultParallaxMapPluginDesc::UID(), "parallaxmap", node, timeEval );
+            LoadTexture( texture->normalMapTexturePath, model::DefaultNormalMapPluginDesc::UID(), "normal map", node, timeEval );
+            LoadTexture( texture->bumpMapTexturePath, model::DefaultParallaxMapPluginDesc::UID(), "parallax map", node, timeEval );
         }
     }
 

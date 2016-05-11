@@ -24,7 +24,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultNormalMapPluginDesc::DefaultNormalMapPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "normalmap", "norm" )
+    : BasePluginDescriptor( UID(), "normal map", "norm" )
 {
 }
 

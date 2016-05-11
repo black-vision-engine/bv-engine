@@ -27,7 +27,7 @@ const std::string        DefaultParallaxMapPlugin::PARAM_HEIGHT_SCALE          =
 // *******************************
 //
 DefaultParallaxMapPluginDesc::DefaultParallaxMapPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "parallaxmap", "prlx" )
+    : BasePluginDescriptor( UID(), "parallax map", "prlx" )
 {
 }
 

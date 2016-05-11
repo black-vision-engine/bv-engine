@@ -169,32 +169,29 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
         {
             vacDesc.AddAttrChannelDesc( posDesc );
             cc->AddAttributeChannel( pos );
-        }
-        else
-        {
-            return false;
-        }
 
-        if( norm->GetNumEntries() > 0 )
-        {
+            assert( norm->GetNumEntries() > 0 );
+            assert( uv->GetNumEntries() > 0 );
+            assert( tangent->GetNumEntries() > 0 );
+
             vacDesc.AddAttrChannelDesc( normDesc );
             cc->AddAttributeChannel( norm );
-        }
 
-        if( uv->GetNumEntries() > 0 )
-        {
             vacDesc.AddAttrChannelDesc( uvDesc );
             cc->AddAttributeChannel( uv );
+
+            vacDesc.AddAttrChannelDesc( tangentDesc );
+            cc->AddAttributeChannel( tangent );
+
+            m_vaChannel->ClearAll();
+            m_vaChannel->SetDescriptor( vacDesc );
+
+            m_vaChannel->AddConnectedComponent( cc );
+
+            HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+
+            return true;
         }
-
-        m_vaChannel->ClearAll();
-        m_vaChannel->SetDescriptor( vacDesc );
-
-        m_vaChannel->AddConnectedComponent( cc );
-
-        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
-        
-        return true;
     }
 
     return false;
