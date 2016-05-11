@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/BasicNode.h"
+#include "Engine/Types/Values/BaseValue.h"
+#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
 #include "Engine/Types/Enums.h"
 
 #include <string>
@@ -10,35 +10,42 @@
 
 namespace bv
 {
-namespace model {
-
-class BasicNode;
-DEFINE_PTR_TYPE( BasicNode )
-
-} // model    
     
 namespace nodelogic
 {
 
-
 struct ParameterBinding
 {
-    model::BasicNodePtr             Node;
-    model::IPluginPtr               Plugin;
+    enum class VectorComponent
+    {
+        X = 0,
+        Y = 1,
+        Z = 2,
+        W = 3,
+
+        Invalid
+    };
+
+
+    std::string                     Node;
+    std::string                     Plugin;
 
     model::IParameterPtr            Parameter;
     IValuePtr                       ValueSrc;
+    model::IStatedValuePtr          ValueState;
 
-    std::string                     SourceName;
+    TransformKind                   TransformKind;
+    VectorComponent                 Component;
 
     ParameterBinding()
     {
-        Node = nullptr;
-        Plugin = nullptr;
         Parameter = nullptr;
         ValueSrc = nullptr;
+        TransformKind = TransformKind::invalid;
+        Component = VectorComponent::Invalid;
     }
 };
+
 
 
 }   // nodelogic

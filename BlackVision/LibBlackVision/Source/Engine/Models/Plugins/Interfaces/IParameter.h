@@ -29,6 +29,8 @@ namespace bv { namespace model {
 
         virtual VoidPtr                 QueryParamTyped ()										= 0;
 
+        virtual std::string             EvaluateToString( TimeType t ) const                    = 0;
+
         virtual ~IParameter() {}
 
     };

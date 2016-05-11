@@ -469,7 +469,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     }
 
     shift = m_timePaternInfo.fosPHStart;
-    int fosPHSize = 1;//m_timePaternInfo.fracOfSecondsPlaceholderSize;
+    int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
 
     int prec =  EvaluateAsInt< int >( m_precisionParam );
 
@@ -621,10 +621,11 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         ret.append( L"SS" );
 
         int prec =  EvaluateAsInt< int >( m_precisionParam );
-        if(prec>0)
+        if( prec > 0 )
         {
             ret.push_back( m_secSeparator );
-            ret.append( L"s" );
+            for( int i = 0; i < prec; ++i )
+                ret.append( L"s" );
         }
     }
     else
@@ -648,7 +649,9 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
             if( prec > 0 )
             {
                 ret.push_back( m_secSeparator );
-                ret.append( L"s" );
+
+                for( int i = 0; i < prec; ++i )
+                    ret.append( L"s" );
             }
         }
         else
@@ -668,7 +671,8 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
             if( prec > 0 )
             {
                 ret.push_back( m_secSeparator );
-                ret.append( L"s" );
+                for( int i = 0; i < prec; ++i )
+                    ret.append( L"s" );
             }
         }
     }

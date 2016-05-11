@@ -102,6 +102,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         {
             LOG_MESSAGE( SeverityLevel::warning ) << "Error NodeLogicEvent node [" + nodePath + "] , logic [] not found";
             SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
+            return;
         }
 
         bool result = logic->HandleEvent( action, ser, editor );

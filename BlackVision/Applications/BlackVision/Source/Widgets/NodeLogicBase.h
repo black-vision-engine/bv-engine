@@ -21,8 +21,8 @@ public:
     virtual ~NodeLogicBase();
 
 
-    virtual IParameterPtr                           GetParameter        ( const std::string & name ) const;
-    virtual const std::vector< IParameterPtr > &    GetParameters       () const;
+    virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
 
 
 	virtual void	            Initialize		()				override {}
