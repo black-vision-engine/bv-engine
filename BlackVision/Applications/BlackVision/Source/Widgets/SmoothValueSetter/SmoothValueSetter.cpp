@@ -524,6 +524,31 @@ void        UpdateParam         ( ValueFloatPtr paramSource, model::ParamTransfo
 
 // ***********************
 //
+void        UpdateParam         ( ValueVec3Ptr paramSource, model::ParamTransformPtr boundParam, TransformKind kind )
+{
+    auto & transform = boundParam->Transform();
+    auto time = boundParam->GetLocalEvaluationTime();
+
+    if( kind == TransformKind::translation )
+    {
+        transform.SetTranslation( paramSource->GetValue(), time );
+    }
+    else if( kind == TransformKind::rotation )
+    {
+        transform.SetRotation( paramSource->GetValue(), time );
+    }
+    else if( kind == TransformKind::scale )
+    {
+        transform.SetScale( paramSource->GetValue(), time );
+    }
+    else if( kind == TransformKind::center )
+    {
+        transform.SetCenter( paramSource->GetValue(), time );
+    }
+}
+
+// ***********************
+//
 void                            SmoothValueSetter::UpdateParameter         ( IValuePtr & sourceParam, model::IParameterPtr & boundParam, TransformKind kind, ParameterBinding::VectorComponent component )
 {
     if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_FLOAT )
@@ -533,6 +558,10 @@ void                            SmoothValueSetter::UpdateParameter         ( IVa
     else if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
         UpdateParam( QueryTypedValue< ValueFloatPtr >( sourceParam ), model::QueryTypedParam< model::ParamTransformPtr >( boundParam ), kind, component );
+    }
+    else if( sourceParam->GetType() == ParamType::PT_FLOAT3 && boundParam->GetType() == ModelParamType::MPT_TRANSFORM )
+    {
+        UpdateParam( QueryTypedValue< ValueVec3Ptr >( sourceParam ), model::QueryTypedParam< model::ParamTransformPtr >( boundParam ), kind );
     }
     else if( sourceParam->GetType() == ParamType::PT_FLOAT1 && boundParam->GetType() == ModelParamType::MPT_VEC2 )
     {
@@ -556,7 +585,7 @@ void                            SmoothValueSetter::UpdateParameter         ( IVa
     }
     else if( sourceParam->GetType() == ParamType::PT_FLOAT4 && boundParam->GetType() == ModelParamType::MPT_VEC4 )
     {
-        UpdateParam( QueryTypedValue< ValueVec3Ptr >( sourceParam ), model::QueryTypedParam< model::ParamVec3Ptr >( boundParam ) );
+        UpdateParam( QueryTypedValue< ValueVec4Ptr >( sourceParam ), model::QueryTypedParam< model::ParamVec4Ptr >( boundParam ) );
     }
 }
 
