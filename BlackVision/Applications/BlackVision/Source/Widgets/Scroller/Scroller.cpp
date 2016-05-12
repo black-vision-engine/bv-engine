@@ -754,6 +754,23 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
     return scroller;
 }
 
+// ***********************
+//
+void                        Scroller::SerializeMargin     ( ISerializer & ser, const Scroller::NodeMargin & margin )
+{
+    ser.SetAttribute( "MarginLeft", SerializationHelper::T2String( margin.Left ) );
+    ser.SetAttribute( "MarginRight", SerializationHelper::T2String( margin.Right ) );
+    ser.SetAttribute( "MarginTop", SerializationHelper::T2String( margin.Top ) );
+    ser.SetAttribute( "MarginBottom", SerializationHelper::T2String( margin.Bottom ) );
+}
+
+// ***********************
+//
+Scroller::NodeMargin        Scroller::DeserializeMargin   ( const IDeserializer & /*deser*/ ) const
+{
+    return NodeMargin();
+}
+
 // ========================================================================= //
 // Communication with outer world
 // ========================================================================= //

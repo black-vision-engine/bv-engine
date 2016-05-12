@@ -235,14 +235,15 @@ std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    
     Float32 distance = -std::numeric_limits< Float32 >::infinity();
     const mathematics::Box * boundingBox;
 
+    bool rayPointInside = false;
     auto boundingVolume = modelNode->GetBoundingVolume();
     if( boundingVolume != nullptr )
     {
         boundingBox = boundingVolume->GetBoundingBox();
-        distance = boundingBox->RayIntersection( rayLocalPos, glm::normalize( rayLocalDir ) );
+        distance = boundingBox->RayIntersection( rayLocalPos, glm::normalize( rayLocalDir ), rayPointInside );
     }
 
-    if( distance >= 0.0 )
+    if( distance >= 0.0 || rayPointInside )
     {
         result.second = distance;
         result.first = modelNode;

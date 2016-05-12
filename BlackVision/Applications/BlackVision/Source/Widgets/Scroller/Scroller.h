@@ -36,6 +36,22 @@ class Scroller : public model::NodeLogicBase, public std::enable_shared_from_thi
 {
 public:
 
+    struct NodeMargin
+    {
+        Float32     Left;
+        Float32     Right;
+        Float32     Top;
+        Float32     Bottom;
+
+        NodeMargin()
+            :   Left    ( 0.0f )
+            ,   Right   ( 0.0f )
+            ,   Top     ( 0.0f )
+            ,   Bottom  ( 0.0f )
+        {}
+
+    };
+
     enum ScrollDirection
     {
         SD_Up,
@@ -190,8 +206,11 @@ public:
 
 private:
 
-    void            AddTexts            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
-    void            AddImages           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
+    void                    SerializeMargin     ( ISerializer & ser, const NodeMargin & margin );
+    NodeMargin              DeserializeMargin   ( const IDeserializer & deser ) const;
+
+    void                    AddTexts            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
+    void                    AddImages           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
 
     model::BasicNodePtr     CreatePreset    ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
     bool                    AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );

@@ -40,6 +40,7 @@ private:
         static const std::string    ADD_PARAMETER_BINDING;
         static const std::string    REMOVE_PARAMETER_BINDING;
         static const std::string    SET_PARAMETER;
+        static const std::string    LIST_BINDINGS;
     };
 
     struct PARAMETERS
@@ -77,9 +78,11 @@ public:
     bool                                AddBinding      ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
     bool                                RemoveBinding   ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
     bool                                SetParameter    ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
+    bool                                ListBindings    ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor );
 
 private:
 
+    const ParameterBinding *    FindTarget              ( model::IParameterPtr & param );
     const ParameterBinding *    FindSource              ( const std::string & bindingSource );
     ParameterBinding            FillTargetData          ( const std::string & nodeName, const std::string & pluginName, const std::string & paramName, TransformKind transformKind, ParameterBinding::VectorComponent component );
     IValuePtr                   CreateSrcParameter      ( ModelParamType type, const std::string & name );
