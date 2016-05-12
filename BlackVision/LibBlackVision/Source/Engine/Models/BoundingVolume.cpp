@@ -138,8 +138,10 @@ void                    BoundingVolume::Update                  ()
     if( m_vac == nullptr )
         return;
 
-    assert( m_param );
-    m_center = m_param->GetTransform().GetCenter( m_param->GetTimeEvaluator()->GetLocalTime() );
+    if( m_param )
+        m_center = m_param->GetTransform().GetCenter( m_param->GetTimeEvaluator()->GetLocalTime() );
+    else
+        m_center = glm::vec3( 0, 0, 0 );
 
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {

@@ -333,7 +333,7 @@ std::vector< std::string >          DefaultFinalizePlugin::GetUIDS              
 ParamTransformPtr				    DefaultFinalizePlugin::GetParamTransform			() const
 {
     auto paramTransform = GetCurrentParamTransform( m_prevPlugin.get() );
-    assert( paramTransform );
+    //assert( paramTransform );
 
     return paramTransform;
 }
