@@ -50,6 +50,15 @@ public:
             ,   Bottom  ( 0.0f )
         {}
 
+        bool    IsEmpty() const
+        {
+            if( Left == 0.0f &&
+                Right == 0.0f &&
+                Top == 0.0f &&
+                Bottom == 0.0f )
+                return true;
+            return false;
+        }
     };
 
     enum ScrollDirection
@@ -83,8 +92,9 @@ private:
     static const std::string        m_type;
 
 
-	typedef std::map< bv::model::BasicNode *, Float32 > NodeFloatMap;
-	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
+	typedef std::map< bv::model::BasicNode *, Float32 >     NodeFloatMap;
+	typedef std::map< bv::model::BasicNode *, bool >	    NodeBoolMap;
+    typedef std::map< bv::model::BasicNode *, NodeMargin >  NodeMarginMap;
 
 private:
 
@@ -95,6 +105,7 @@ private:
 	bv::model::BasicNodePtr					m_parentNode;
 	ScrollerNodesStates						m_nodesStates;
 	NodeFloatMap							m_shifts;
+    NodeMarginMap                           m_margins;
 	UInt64									m_currTime;
     BVProjectEditor *                       m_editor;
 
@@ -148,7 +159,10 @@ public:
 
 	void		AddNext				( bv::model::BasicNodePtr node );
     bool		AddNext				( Int32 nodeIdx );
-    bool		AddNext				( const std::string& childNodeName );
+    bool		AddNext				( const std::string & childNodeName );
+    NodeMargin  GetMargin           ( bv::model::BasicNode * n );
+    bool        SetNodeMargin       ( bv::model::BasicNodePtr node, NodeMargin & margin );
+    bool        SetNodeMargin       ( IDeserializer & eventSer, ISerializer & response );
 	bool		Finalize			();
     bool        Unfinalize          ();
 
@@ -206,8 +220,8 @@ public:
 
 private:
 
-    void                    SerializeMargin     ( ISerializer & ser, const NodeMargin & margin );
-    NodeMargin              DeserializeMargin   ( const IDeserializer & deser ) const;
+    void                    SerializeMargin     ( ISerializer & ser, bv::model::BasicNode * node ) const;
+    static NodeMargin       DeserializeMargin   ( const IDeserializer & deser );
 
     void                    AddTexts            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
     void                    AddImages           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
