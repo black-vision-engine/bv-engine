@@ -85,6 +85,8 @@ mathematics::RectPtr        CreateRect      ( const IDeserializer & deser )
             rect->ymax = SerializationHelper::String2T( deser.GetAttribute( "ymax" ), 0.0f );
             rect->ymin = SerializationHelper::String2T( deser.GetAttribute( "ymin" ), 0.0f );
         }
+        rect->m_empty = empty;
+
         deser.ExitChild(); // view
     }
 
@@ -234,6 +236,44 @@ bool		Scroller::AddNext				( const std::string& childNodeName )
 
 // ***********************
 //
+Scroller::NodeMargin  Scroller::GetMargin           ( bv::model::BasicNode * n )
+{
+    auto iter = m_margins.find( n );
+    if( iter != m_margins.end() )
+        return iter->second;
+    return NodeMargin();
+}
+
+// ***********************
+//
+bool        Scroller::SetNodeMargin       ( bv::model::BasicNodePtr node, Scroller::NodeMargin & margin )
+{
+    // Node must exist on list.
+    if( !m_nodesStates.Exist( node.get() ) )
+        return false;
+
+    m_margins[ node.get() ] = margin;
+    return true;
+}
+
+// ***********************
+//
+bool        Scroller::SetNodeMargin       ( IDeserializer & eventSer, ISerializer & /*response*/ )
+{
+    auto nodePath = eventSer.GetAttribute( "NodePath" );
+    auto margin = DeserializeMargin( eventSer );
+
+    auto node = GetNode( m_parentNode.get(), nodePath );
+    if( node )
+    {
+        return SetNodeMargin( node, margin );
+    }
+    else
+        return false;
+}
+
+// ***********************
+//
 bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
 {
     bool alreadyExists = m_nodesStates.Exist( node.get() );
@@ -256,22 +296,24 @@ bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
 //
 Float32     Scroller::InitialShift        ( model::BasicNode * node )
 {
+    auto margin = GetMargin( node );
+
     Float32 shift;
     if( m_scrollDirection == Scroller::ScrollDirection::SD_Down )
     {
-        shift = m_view->ymax + node->GetAABB().Height() / 2.0f + m_interspace;
+        shift = m_view->ymax + node->GetAABB().Height() / 2.0f + m_interspace + margin.Bottom;
     }
     else if( m_scrollDirection == Scroller::ScrollDirection::SD_Up )
     {
-        shift = m_view->ymin - node->GetAABB().Height() / 2.0f - m_interspace;
+        shift = m_view->ymin - node->GetAABB().Height() / 2.0f - m_interspace + margin.Top;
     }
     else if( m_scrollDirection == Scroller::ScrollDirection::SD_Right )
     {
-        shift = m_view->xmin - node->GetAABB().Width() - m_interspace;
+        shift = m_view->xmin - node->GetAABB().Width() - m_interspace - margin.Right - margin.Left;
     }
     else if( m_scrollDirection == Scroller::ScrollDirection::SD_Left )
     {
-        shift = m_view->xmax + m_interspace;
+        shift = m_view->xmax + m_interspace + margin.Left;
     }
     else
     {
@@ -285,22 +327,25 @@ Float32     Scroller::InitialShift        ( model::BasicNode * node )
 //
 Float32     Scroller::ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * curNode )
 {
+    auto prevMargin = GetMargin( prevNode );
+    auto curMargin = GetMargin( curNode );
+
     Float32 shift;
     if( m_scrollDirection == Scroller::ScrollDirection::SD_Down )
     {
-        shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f + m_interspace;
+        shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f + m_interspace + prevMargin.Top + curMargin.Bottom;
     }
     else if( m_scrollDirection == Scroller::ScrollDirection::SD_Up )
     {
-        shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f - m_interspace;
+        shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f - m_interspace - prevMargin.Bottom - curMargin.Top;
     }
     else if( m_scrollDirection == Scroller::ScrollDirection::SD_Right )
     {
-        shift = -curNode->GetAABB().Width() - m_interspace;
+        shift = -curNode->GetAABB().Width() - curMargin.Left - m_interspace - curMargin.Right;
     }
     else if( m_scrollDirection == Scroller::ScrollDirection::SD_Left )
     {
-        shift = prevNode->GetAABB().Width() + m_interspace;
+        shift = prevNode->GetAABB().Width() + prevMargin.Right + m_interspace + curMargin.Left;
     }
     else
     {
@@ -676,16 +721,19 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
 
 
             ser.EnterArray( "scrollerNodes" );
-                for( auto& node : m_shifts )
+                auto allNodes = m_nodesStates.m_actives;
+                allNodes.insert( allNodes.end(), m_nodesStates.m_nonActives.begin(), m_nodesStates.m_nonActives.end() );
+
+                for( auto& node : allNodes )
                 {
                     ser.EnterChild( "scrollerNode" );
-                        ser.SetAttribute( "name", node.first->GetName() );
+                        ser.SetAttribute( "name", node->GetName() );
 
                         // Find node index
                         Int32  nodeIndex = -1;
                         for( Int32 i = 0; i < numChildren; ++i )
                         {
-                            if( childrenNodes[ i ] == node.first )
+                            if( childrenNodes[ i ] == node )
                             {
                                 nodeIndex = i;
                                 break;
@@ -694,6 +742,8 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
 
                         assert( nodeIndex >= 0 );   // Node held by Scroller exists in tree no more.
                         ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
+
+                        SerializeMargin( ser, node );
 
                     ser.ExitChild(); // node
                 }
@@ -743,6 +793,9 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
             if( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() )
             {
                 scroller->AddNext( nodeIdx );
+                NodeMargin margin = DeserializeMargin( deser );
+                if( !margin.IsEmpty() )
+                    scroller->SetNodeMargin( GetNode( parent.get(), nodeIdx ), margin );
             }
 
         } while( deser.NextChild() );
@@ -756,19 +809,33 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
 
 // ***********************
 //
-void                        Scroller::SerializeMargin     ( ISerializer & ser, const Scroller::NodeMargin & margin )
+void                        Scroller::SerializeMargin     ( ISerializer & ser, bv::model::BasicNode * node ) const
 {
-    ser.SetAttribute( "MarginLeft", SerializationHelper::T2String( margin.Left ) );
-    ser.SetAttribute( "MarginRight", SerializationHelper::T2String( margin.Right ) );
-    ser.SetAttribute( "MarginTop", SerializationHelper::T2String( margin.Top ) );
-    ser.SetAttribute( "MarginBottom", SerializationHelper::T2String( margin.Bottom ) );
+    auto iter = m_margins.find( node );
+    if( iter != m_margins.end() )
+    {
+        const NodeMargin & margin = iter->second;
+
+        if( margin.IsEmpty() )
+            return;
+
+        ser.SetAttribute( "MarginLeft", SerializationHelper::T2String( margin.Left ) );
+        ser.SetAttribute( "MarginRight", SerializationHelper::T2String( margin.Right ) );
+        ser.SetAttribute( "MarginTop", SerializationHelper::T2String( margin.Top ) );
+        ser.SetAttribute( "MarginBottom", SerializationHelper::T2String( margin.Bottom ) );
+    }
 }
 
 // ***********************
 //
-Scroller::NodeMargin        Scroller::DeserializeMargin   ( const IDeserializer & /*deser*/ ) const
+Scroller::NodeMargin        Scroller::DeserializeMargin   ( const IDeserializer & deser )
 {
-    return NodeMargin();
+    NodeMargin margin;
+    margin.Left = SerializationHelper::String2T( deser.GetAttribute( "MarginLeft" ), 0.0f );
+    margin.Top = SerializationHelper::String2T( deser.GetAttribute( "MarginTop" ), 0.0f );
+    margin.Bottom = SerializationHelper::String2T( deser.GetAttribute( "MarginBottom" ), 0.0f );
+    margin.Right = SerializationHelper::String2T( deser.GetAttribute( "MarginRight" ), 0.0f );
+    return margin;
 }
 
 // ========================================================================= //
@@ -902,6 +969,10 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     else if( scrollAction == "ContentLength" )
     {
         response.SetAttribute( "ContentLength", SerializationHelper::T2String( GetContentLength() ) );
+    }
+    else if( scrollAction == "SetNodeMargin" )
+    {
+        return SetNodeMargin( eventDeser, response );
     }
 
     return true;
@@ -1331,6 +1402,7 @@ void            Scroller::AddImages           ( IDeserializer & eventSer, ISeria
     }
 }
 
+
 // ***********************
 //
 bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
@@ -1374,6 +1446,7 @@ void            Scroller::ListTypedItems      ( std::vector< bv::model::BasicNod
         response.EnterChild( "Item" );
         
         response.SetAttribute( "NodePath", model::ModelState::GetInstance().BuildIndexPath( item ) );
+        SerializeMargin( response, item );
         
         if( m_nodesStates.IsVisible( item ) )
             response.SetAttribute( "Type", SerializationHelper::T2String( ScrollerItemType::SIT_OnScreen ) );

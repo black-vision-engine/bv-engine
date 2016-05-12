@@ -1,64 +1,61 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/ResourceStateModel.h"
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Assets/Mesh/MeshAsset.h"
 
 
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultMeshPluginDesc : public BasePluginDescriptor
+class DefaultNormalMapPluginDesc : public BasePluginDescriptor
 {
 public:
 
-    DefaultMeshPluginDesc                                       ();
+    DefaultNormalMapPluginDesc                                  ();
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
 
-    static  std::string                     MeshName            ();
+    static  std::string                     TextureName         ();
 
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultMeshPlugin : public BasePlugin< IPlugin >
+class DefaultNormalMapPlugin : public BasePlugin< IPlugin >
 {
+public:
+
+    struct PARAM 
+    {
+        static const std::string    NORMAL_MAP_MAT;
+    };
+
 protected:
 
     DefaultPixelShaderChannelPtr    m_psc;
-
-    VertexAttributesChannelPtr      m_vaChannel;
-    
-    MeshAssetConstPtr               m_meshAsset;
+    DefaultVertexShaderChannelPtr   m_vsc;
 
 public:
 
-    explicit                                    DefaultMeshPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-                                                ~DefaultMeshPlugin          ();
+    explicit                                    DefaultNormalMapPlugin      ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                                ~DefaultNormalMapPlugin     ();
 
     virtual bool                                IsValid						() const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
-    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
-
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
-
-    bool										InitVertexAttributesChannel ( bool recursive );
-
-    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, bool recursive );
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 

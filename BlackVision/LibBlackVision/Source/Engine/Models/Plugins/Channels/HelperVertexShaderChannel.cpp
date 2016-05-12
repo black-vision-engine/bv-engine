@@ -10,7 +10,7 @@ void        HelperVertexShaderChannel::InverseTextureMatrix        ( IPluginPara
 {
     auto param = QueryTypedParam< ParamTransformPtr >( pluginParamValModel->GetVertexShaderChannelModel()->GetParameter( paramName ) );
     auto transform = param->Evaluate();
-    QueryTypedValue< ValueMat4Ptr >( pluginParamValModel->GetVertexShaderChannelModel()->GetValue( "txMat" ) )->SetValue( glm::inverse( transform ) );
+    QueryTypedValue< ValueMat4Ptr >( pluginParamValModel->GetVertexShaderChannelModel()->GetValue( paramName ) )->SetValue( glm::inverse( transform ) );
 
 }
 

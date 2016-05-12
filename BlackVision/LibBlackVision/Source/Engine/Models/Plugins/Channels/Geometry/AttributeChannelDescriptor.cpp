@@ -95,6 +95,9 @@ std::string     AttributeChannelDescriptor::DefaultName                         
         case AttributeSemantic::AS_NORMAL:
             oss << "norm";
             break;
+        case AttributeSemantic::AS_TANGENT:
+            oss << "tang";
+            break;
         case AttributeSemantic::AS_BINORMAL:
             oss << "binorm";
             break;

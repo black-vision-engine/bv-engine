@@ -154,12 +154,14 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
         auto posDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
         auto normDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
         auto uvDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
+        auto tangentDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT4, AttributeSemantic::AS_TANGENT, ChannelRole::CR_GENERATOR );
         
         auto pos = std::make_shared< Float3AttributeChannel >( posDesc, posDesc->SuggestedDefaultName( 0 ), false );
         auto norm = std::make_shared< Float3AttributeChannel >( normDesc, normDesc->SuggestedDefaultName( 0 ), false );
         auto uv = std::make_shared< Float2AttributeChannel >( uvDesc, uvDesc->SuggestedDefaultName( 0 ), false );
+        auto tangent = std::make_shared< Float4AttributeChannel >( tangentDesc, tangentDesc->SuggestedDefaultName( 0 ), false );
 
-        AddGeometry( m_meshAsset, pos, norm, uv, recursive );
+        AddGeometry( m_meshAsset, pos, norm, uv, tangent, recursive );
 
         VertexAttributesChannelDescriptor vacDesc;
 
@@ -167,32 +169,29 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
         {
             vacDesc.AddAttrChannelDesc( posDesc );
             cc->AddAttributeChannel( pos );
-        }
-        else
-        {
-            return false;
-        }
 
-        if( norm->GetNumEntries() > 0 )
-        {
+            assert( norm->GetNumEntries() > 0 );
+            assert( uv->GetNumEntries() > 0 );
+            assert( tangent->GetNumEntries() > 0 );
+
             vacDesc.AddAttrChannelDesc( normDesc );
             cc->AddAttributeChannel( norm );
-        }
 
-        if( uv->GetNumEntries() > 0 )
-        {
             vacDesc.AddAttrChannelDesc( uvDesc );
             cc->AddAttributeChannel( uv );
+
+            vacDesc.AddAttrChannelDesc( tangentDesc );
+            cc->AddAttributeChannel( tangent );
+
+            m_vaChannel->ClearAll();
+            m_vaChannel->SetDescriptor( vacDesc );
+
+            m_vaChannel->AddConnectedComponent( cc );
+
+            HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+
+            return true;
         }
-
-        m_vaChannel->ClearAll();
-        m_vaChannel->SetDescriptor( vacDesc );
-
-        m_vaChannel->AddConnectedComponent( cc );
-
-        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
-        
-        return true;
     }
 
     return false;
@@ -200,7 +199,7 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
 
 // *************************************
 //
-void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, bool recursive )
+void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, bool recursive )
 {
     auto geometry = meshAsset->GetGeometry();
     if( geometry )
@@ -208,13 +207,14 @@ void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAs
         posChannel->AddAttributes( geometry->positions );
         normChannel->AddAttributes( geometry->normals );
         uvChannel->AddAttributes( geometry->uvs );
+        tangentChannel->AddAttributes( geometry->tangents );
     }
 
     if( recursive )
     {
         for( UInt32 i = 0; i < meshAsset->NumChildren(); ++i )
         {
-            AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel, recursive );
+            AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel, tangentChannel, /*binormalChannel,*/ recursive );
         }
     }
 }
