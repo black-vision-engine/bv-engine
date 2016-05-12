@@ -47,7 +47,7 @@ inline  void    NodeUpdater::UpdateTransform     ()
         auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
         auto bv = node->GetBoundingVolume();
         assert( bv );
-        UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() ); // FIXME: this should not be updated every frame
+        UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
     }
 }
 
@@ -232,8 +232,7 @@ inline  void    NodeUpdater::UpdatePositions     ()
 
     auto bv = node->GetBoundingVolume();
     assert( bv );
-    UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-    //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+    UpdateBoundingBox( bv.get() );
 }
 
 // *****************************
@@ -246,8 +245,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
     auto bv = node->GetBoundingVolume();
     assert( bv );
-    UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-    //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+    UpdateBoundingBox( bv.get() );
 }
 
 // *****************************

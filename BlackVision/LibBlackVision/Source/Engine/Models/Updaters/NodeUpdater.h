@@ -54,6 +54,8 @@ namespace model
     class IVertexAttributesChannel;
 
     class HelperVertexAttributesChannel;
+
+    class BoundingVolume;
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
@@ -131,6 +133,8 @@ private:
 
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
+
+    void            UpdateBoundingBox   ( const model::BoundingVolume * bv );
 
     inline	void	UpdateShaderParams  ();
     inline  void    UpdateTexturesData	();

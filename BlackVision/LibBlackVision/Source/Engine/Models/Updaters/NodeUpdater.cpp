@@ -357,4 +357,11 @@ void	NodeUpdater::UpdateValue			( IValueConstPtr source, IValuePtr dest )
     }
 }
 
+void NodeUpdater::UpdateBoundingBox( const model::BoundingVolume * bv )
+{
+    UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
+    //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+    m_sceneNode->SetBoundingBox( bv->GetBoundingBox() );
+}
+
 } //bv
