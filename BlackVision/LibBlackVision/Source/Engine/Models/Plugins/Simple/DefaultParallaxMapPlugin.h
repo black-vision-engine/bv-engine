@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
@@ -30,7 +31,12 @@ class DefaultParallaxMapPlugin : public BasePlugin< IPlugin >
 {
 public:
 
-    static const std::string        PARAM_HEIGHT_SCALE;
+    struct PARAM 
+    {
+        static const std::string    HEIGHT_SCALE;
+        static const std::string    MIN_SAMPLES_NUM;
+        static const std::string    MAX_SAMPLES_NUM;
+    };
 
 protected:
 

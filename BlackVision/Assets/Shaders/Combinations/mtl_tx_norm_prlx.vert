@@ -11,10 +11,12 @@ uniform mat4 P;
 uniform mat3 normalMat;
 
 uniform mat4 txMat;
+uniform mat4 normalMapMat;
 
 out vec3 position;	//vertex position in modelview space
-out vec2 uvCoord;
+out vec2 normUVCoord;
 out mat3 TBN;    //matrix transformation to tangent space
+out mat4 texMat;
 
 
 void main()
@@ -31,5 +33,6 @@ void main()
 				T.y, B.y, N.y,
 				T.z, B.z, N.z );
 	
-	uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+	normUVCoord = ( normalMapMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+	texMat = inverse( normalMapMat ) * txMat;
 }

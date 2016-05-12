@@ -57,6 +57,7 @@ uniform float 		alpha;
 
 in vec3 			position;		//vertex position in modelview space
 in vec2 			uvCoord;
+in vec2 			normUVCoord;
 in mat3 			TBN;			//matrix transformation to tangent space
 
 
@@ -68,7 +69,7 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 void main()
 {		
 	vec3 viewDir = normalize( TBN * ( -position ) );
-	vec3 norm = normalize( 2.0 * texture( NormMap0, uvCoord ).rgb - 1.0 );
+	vec3 norm = normalize( 2.0 * texture( NormMap0, normUVCoord ).rgb - 1.0 );
 	norm.y = -norm.y; //flip y coord
 	
 	vec3 color = vec3( 0, 0, 0 );

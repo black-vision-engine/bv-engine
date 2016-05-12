@@ -58,7 +58,7 @@ uniform int 		minSamplesNum;
 uniform int 		maxSamplesNum;
 
 in vec3 			position;		//vertex position in modelview space
-in vec2 			uvCoord;
+in vec2 			normUVCoord;
 in mat3 			TBN;			//matrix transformation to tangent space
 
 
@@ -66,13 +66,13 @@ vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 normal
 vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
-vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir );
+vec2 parallaxMapping			( vec3 viewDir );
 
 void main()
 {		
 	vec3 viewDir = normalize( TBN * ( -position ) );
 	
-	vec2 texCoord = parallaxMapping( uvCoord, viewDir );
+	vec2 texCoord = parallaxMapping( viewDir );
 	if( texCoord.x > 1.0 || texCoord.y > 1.0 || texCoord.x < 0.0 || texCoord.y < 0.0 )
         discard;
 	
@@ -169,10 +169,10 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 }
 
 // parallax occlusion mapping
-vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir )
+vec2 parallaxMapping			( vec3 viewDir )
 {
     float currHeight = 0.0;
-	vec2 currTex = texCoord;
+	vec2 currTex = normUVCoord;
 	
     float samplesNum = mix( maxSamplesNum, minSamplesNum, abs( dot( vec3( 0, 0, 1 ), viewDir ) ) );
     float sampleHeight = 1.0 / samplesNum;

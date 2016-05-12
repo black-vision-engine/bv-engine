@@ -3,12 +3,15 @@
 #include "DefaultNormalMapPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Assets/DefaultAssets.h"
 
 
 namespace bv { namespace model {
 
+
+const std::string        DefaultNormalMapPlugin::PARAM::NORMAL_MAP_MAT  = "normalMapMat";
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -34,10 +37,19 @@ DefaultPluginParamValModelPtr   DefaultNormalMapPluginDesc::CreateDefaultModel( 
 
     //Create all models
     auto model  = helper.GetModel();
+    DefaultParamValModelPtr vsModel = std::make_shared< DefaultParamValModel >();
 
+    SimpleTransformEvaluatorPtr trTxEvaluator = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( DefaultNormalMapPlugin::PARAM::NORMAL_MAP_MAT, timeEvaluator );
+    
     helper.CreatePluginModel();
     helper.CreatePSModel();
     
+    vsModel->RegisterAll( trTxEvaluator );
+    model->SetVertexShaderChannelModel( vsModel );
+
+    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
+
     return model;
 }
 
@@ -69,19 +81,15 @@ void DefaultNormalMapPlugin::SetPrevPlugin( IPluginPtr prev )
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
-    
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
 // 
 DefaultNormalMapPlugin::DefaultNormalMapPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, model )
-    , m_psc( nullptr )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     SetPrevPlugin( prev );
 
@@ -140,10 +148,19 @@ IPixelShaderChannelPtr              DefaultNormalMapPlugin::GetPixelShaderChanne
 
 // *************************************
 // 
+IVertexShaderChannelConstPtr        DefaultNormalMapPlugin::GetVertexShaderChannel      () const
+{
+    return m_vsc;
+}
+
+// *************************************
+// 
 void                                DefaultNormalMapPlugin::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
 
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, PARAM::NORMAL_MAP_MAT.c_str() );
+    
     HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_psc->PostUpdate();    

@@ -3,6 +3,7 @@
 #include "DefaultParallaxMapPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -10,7 +11,9 @@
 namespace bv { namespace model {
 
 
-const std::string        DefaultParallaxMapPlugin::PARAM_HEIGHT_SCALE          = "heightScale";
+const std::string        DefaultParallaxMapPlugin::PARAM::HEIGHT_SCALE      = "heightScale";
+const std::string        DefaultParallaxMapPlugin::PARAM::MIN_SAMPLES_NUM   = "minSamplesNum";
+const std::string        DefaultParallaxMapPlugin::PARAM::MAX_SAMPLES_NUM   = "maxSamplesNum";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -39,9 +42,11 @@ DefaultPluginParamValModelPtr   DefaultParallaxMapPluginDesc::CreateDefaultModel
     auto model  = helper.GetModel();
 
     helper.CreatePluginModel();
-
+    
     helper.CreatePSModel();
-    helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM_HEIGHT_SCALE, 0.1f, true );
+    helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM::HEIGHT_SCALE, 0.1f, true );
+    helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM::MIN_SAMPLES_NUM, 10, true );
+    helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM::MAX_SAMPLES_NUM, 20, true );
 
     return model;
 }
@@ -74,17 +79,12 @@ void DefaultParallaxMapPlugin::SetPrevPlugin( IPluginPtr prev )
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
-    
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
 // 
 DefaultParallaxMapPlugin::DefaultParallaxMapPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, model )
-    , m_psc( nullptr )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
 

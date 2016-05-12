@@ -56,29 +56,27 @@ uniform sampler2D 	ParallaxMap0;
 
 uniform float 		alpha;
 
-uniform mat4 		normalMapMat;
-uniform mat4 		parallaxMapMat;
-
 uniform float 		heightScale;
 uniform int 		minSamplesNum;
 uniform int 		maxSamplesNum;
 
 in vec3 			position;		//vertex position in modelview space
-in vec2 			uvCoord;
+in vec2 			normUVCoord;
 in mat3 			TBN;			//matrix transformation to tangent space
+in mat4 			texMat;
 
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 normal );
 vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
-vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir );
+vec2 parallaxMapping			( vec3 viewDir );
 
 void main()
 {		
 	vec3 viewDir = normalize( TBN * ( -position ) );
 	
-	vec2 texCoord = parallaxMapping( uvCoord, viewDir );
+	vec2 texCoord = parallaxMapping( viewDir );
 	
 	if( texCoord.x > 1.0 || texCoord.y > 1.0 || texCoord.x < 0.0 || texCoord.y < 0.0 )
         discard;
@@ -104,7 +102,7 @@ void main()
 	}
 	
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
-	vec4 texColor = texture( Tex0, texCoord );
+	vec4 texColor = texture( Tex0, ( texMat * vec4( texCoord, 0.0, 1.0 ) ).xy );
 	
 	FragColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
 }
@@ -177,10 +175,10 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 }
 
 // parallax occlusion mapping
-vec2 parallaxMapping			( vec2 texCoord, vec3 viewDir )
+vec2 parallaxMapping			( vec3 viewDir )
 {
     float currHeight = 0.0;
-	vec2 currTex = texCoord;
+	vec2 currTex = normUVCoord;
 	
     float samplesNum = mix( maxSamplesNum, minSamplesNum, abs( dot( vec3( 0, 0, 1 ), viewDir ) ) );
     float sampleHeight = 1.0 / samplesNum;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
@@ -28,9 +29,17 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultNormalMapPlugin : public BasePlugin< IPlugin >
 {
+public:
+
+    struct PARAM 
+    {
+        static const std::string    NORMAL_MAP_MAT;
+    };
+
 protected:
 
     DefaultPixelShaderChannelPtr    m_psc;
+    DefaultVertexShaderChannelPtr   m_vsc;
 
 public:
 
@@ -42,6 +51,7 @@ public:
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     
     virtual void                                Update                      ( TimeType t ) override;
 
