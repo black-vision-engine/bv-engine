@@ -60,7 +60,7 @@ public:
     // LIGHTS
     void                    AddLight            ( IModelLightPtr light );
     bool                    RemoveLight         ( UInt32 idx );
-    IModelLight *           GetLight            ( UInt32 idx );
+    IModelLightPtr          GetLight            ( UInt32 idx ) const;
     SizeType                NumLights           () const;
 
     ModelSceneEditor *		GetModelSceneEditor	() const;

@@ -591,6 +591,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 auto node = pm->LoadPreset( destProjectName, destPath, offsetTimeline );
                 editor->AddChildNode( tempScene, nullptr, node );
 
+                for( UInt32 i = 0; i < scene->NumLights(); ++i )
+                {
+                    tempScene->AddLight( scene->GetLight( i ) );
+                }
+
                 scene = tempScene;
             }
 

@@ -233,11 +233,11 @@ bool                        SceneModel::RemoveLight         ( UInt32 idx )
 
 // *******************************
 //
-IModelLight *               SceneModel::GetLight            ( UInt32 idx ) 
+IModelLightPtr              SceneModel::GetLight            ( UInt32 idx ) const
 {
     if( idx < m_lights.size() )
     {
-        return m_lights[ idx ].get();
+        return m_lights[ idx ];
     }
 
     return nullptr;
