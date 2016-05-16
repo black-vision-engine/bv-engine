@@ -323,6 +323,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
@@ -387,6 +388,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />

@@ -6,6 +6,7 @@
 #include "TextEffects/TextEffects.h"
 #include "MeshLoader/MeshLoader.h"
 #include "SmoothValueSetter/SmoothValueSetter.h"
+#include "PieChart/PieChart.h"
 
 
 namespace bv
@@ -42,6 +43,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == nodelogic::SmoothValueSetter::Type() )
     {
         return nodelogic::SmoothValueSetter::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::PieChart::Type() )
+    {
+        return nodelogic::PieChart::Create( deser, logicParent );
     }
 
     return nullptr;

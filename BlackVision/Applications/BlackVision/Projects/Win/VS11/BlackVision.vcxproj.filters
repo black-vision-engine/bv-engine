@@ -49,6 +49,9 @@
     <Filter Include="Widgets\SmoothValueSetter">
       <UniqueIdentifier>{ccd4e404-2ee7-4498-922d-e72b5a4a28e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\PieChart">
+      <UniqueIdentifier>{ef5aebcb-1c90-42c6-b474-161ad97d275c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -187,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp">
       <Filter>Widgets\SmoothValueSetter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp">
+      <Filter>Widgets\PieChart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h">
       <Filter>Widgets\SmoothValueSetter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h">
+      <Filter>Widgets\PieChart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
