@@ -573,6 +573,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::MeshTestScene( timeline );
     }
+    else if( scene == "ENVIRONMENTAL_MAP_TEST_SCENE" )
+    {
+        node = TestScenesFactory::EnvMappingTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1244,6 +1248,34 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
     model::LoadTexture( child1->GetPlugin( "texture" ), "meshes/StarWarsFighter/ARC170_TXT_VERSION_4_D.jpg" );
     
     model::LoadMesh( child2->GetPlugin( "mesh" ), "meshes/daria/bb8.obj" );
+
+    return root;
+}
+
+
+model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    auto envSphereNode = model::BasicNode::Create( "EnvSphere", timeEvaluator );
+    root->AddChildToModelOnly( envSphereNode );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.0f, 0.0f, -5.0f ) );
+
+    envSphereNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    envSphereNode->AddPlugin( "DEFAULT_SPHERE", timeEvaluator );
+    envSphereNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    envSphereNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_MAP", timeEvaluator );
+
+    auto material = envSphereNode->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.5, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+    
+    model::LoadTexture( envSphereNode->GetPlugin( "environmental map" ), "textures/witek/Env/CityEnv.jpg" );
 
     return root;
 }

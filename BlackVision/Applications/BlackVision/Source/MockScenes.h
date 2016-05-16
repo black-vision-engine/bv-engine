@@ -75,6 +75,7 @@ public:
     static  model::BasicNodePtr     MultiGlobalEffectTestScene      ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     MeshTestScene                   ( model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     EnvMappingTestScene             ( model::ITimeEvaluatorPtr timeEvaluator );
         
     static  model::BasicNodePtr     SimpeTextureTestScene           ();
     static  model::BasicNodePtr     SimpleMultiCCScene              ();

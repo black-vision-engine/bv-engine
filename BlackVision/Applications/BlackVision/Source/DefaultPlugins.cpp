@@ -35,6 +35,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultNormalMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultParallaxMapPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultEnvironmentMapPlugin.h"
 
 
 namespace bv { namespace model {
@@ -78,6 +79,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultMeshPluginDesc() );
     descriptors.push_back( new DefaultNormalMapPluginDesc() );
     descriptors.push_back( new DefaultParallaxMapPluginDesc() );
+    descriptors.push_back( new DefaultEnvironmentMapPluginDesc() );
 
     for( auto descr : descriptors )
     {
