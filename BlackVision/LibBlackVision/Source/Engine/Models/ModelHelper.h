@@ -5,6 +5,8 @@
 #include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
 #include "Engine/Models/Plugins/ParamValModel/SimpleStateUpdater.h"
 
+#include "Engine/Models/Timeline/TimelineHelper.h"
+
 
 namespace bv { namespace model {
 
@@ -30,4 +32,13 @@ void                                AddState            ( model::DefaultParamVal
 }
 
 } // model
+
+namespace SerializationHelper
+{
+
+model::ITimeEvaluatorPtr            GetDefaultTimeline  ( const IDeserializer & deser );
+
+
+} //SerializationHelper
+
 } //bv

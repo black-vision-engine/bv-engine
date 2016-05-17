@@ -26,17 +26,15 @@ GridLinesLogic::GridLinesLogic()
 //
 GridLinesLogic::~GridLinesLogic()
 {
-    for( auto line : m_horizontalGridLines )
-        delete line;
-
-    for( auto line : m_verticalGridLines )
-        delete line;
+    ClearAll();
 }
 
 // ***********************
 //
 void            GridLinesLogic::Deserialize             ( const IDeserializer & deser )
 {
+    ClearAll();
+
     //m_showGridLines = SerializationHelper::String2T( deser.GetAttribute( "show" ), false );
 
     if( deser.EnterChild( "horizontal" ) )
@@ -228,7 +226,16 @@ std::vector< GridLine* >&       GridLinesLogic::SelectGridLineVec       ( GridLi
     return gridType == GridLineType::TST_Horizontal ? m_horizontalGridLines : m_verticalGridLines;
 }
 
+// ***********************
+//
+void                            GridLinesLogic::ClearAll                ()
+{
+    for( auto line : m_horizontalGridLines )
+        delete line;
 
+    for( auto line : m_verticalGridLines )
+        delete line;
+}
 
 }   // model
 }	// bv

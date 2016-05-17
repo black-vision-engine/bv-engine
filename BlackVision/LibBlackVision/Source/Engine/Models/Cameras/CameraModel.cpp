@@ -31,7 +31,7 @@ CameraModel::CameraModel( ITimeEvaluatorPtr timeEvaluator )
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::FAR_CLIPPING_PLANE, 100.0f, true );
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_WIDTH, 1920.0f, true );
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_HEIGHT, 1080.0f, true );
-    AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::POSITION, glm::vec3( 0.0f, 0.0f, 0.0f ), true );
+    AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::POSITION, glm::vec3( 0.0f, 0.0f, 5.0f ), true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::DIRECTION, glm::vec3( 0.0f, 0.0f, -1.0f ), true );
 }
 

@@ -1,20 +1,135 @@
 #include "stdafx.h"
 #include "CamerasLogic.h"
 
-
+#include "Engine/Models/ModelHelper.h"
 
 
 namespace bv { namespace model {
 
 // ***********************
 //
-CamerasLogic::CamerasLogic()
+CamerasLogic::CamerasLogic( ITimeEvaluatorPtr timeEvaluator )
+    :   m_currentCamera( nullptr )
+    ,   m_defaultTimeline( timeEvaluator )
 {}
 
 // ***********************
 //
 CamerasLogic::~CamerasLogic()
 {}
+
+// ***********************
+//
+void            CamerasLogic::Deserialize             ( const IDeserializer & deser )
+{
+    ClearAll();
+
+    m_defaultTimeline = SerializationHelper::GetDefaultTimeline( deser );
+
+    if( deser.EnterChild( "cameras" ) )
+    {
+        auto cameras = SerializationHelper::DeserializeArray< CameraModel >( deser, "cameras" );
+
+        for( int i = 0; i < cameras.size(); ++i )
+        {
+            if( cameras[ i ] != nullptr )
+                m_cameras.push_back( cameras[ i ] );
+        }
+
+        deser.ExitChild();  // cameras
+    }
+
+    int currCameraIdx = SerializationHelper::String2T( deser.GetAttribute( "CurrentCamera" ), 0 );
+
+    // Add default camera in case we deserialized nothing.
+    if( m_cameras.empty() )
+        m_cameras.push_back( std::make_shared< CameraModel >( m_defaultTimeline ) );
+
+    // Set current camera. Add first camera, when camera at currCameraIdx doesn't exists.
+    if( currCameraIdx < m_cameras.size() )
+        m_currentCamera = m_cameras[ currCameraIdx ];
+    else
+        m_currentCamera = m_cameras[ currCameraIdx ];
+}
+
+
+// ***********************
+//
+void            CamerasLogic::Serialize               ( ISerializer & ser ) const
+{
+    ser.EnterChild( "cameras" );
+
+    int currCameraIdx = -1;
+
+    for( int i = 0; i < m_cameras.size(); ++i )
+    {
+        m_cameras[ i ]->Serialize( ser );
+        if( m_cameras[ i ] == m_currentCamera )
+            currCameraIdx = i;
+    }
+
+    ser.ExitChild();    // cameras
+        
+    if( currCameraIdx > -1 )
+        ser.SetAttribute( "CurrentCamera", SerializationHelper::T2String( currCameraIdx ) );
+}
+
+// ***********************
+//
+bool                    CamerasLogic::AddCamera               ()
+{
+    m_cameras.push_back( std::make_shared< CameraModel >( m_defaultTimeline ) );
+    return true;
+}
+
+// ***********************
+//
+bool                    CamerasLogic::RemoveCamera            ( unsigned int index )
+{
+    if( index < m_cameras.size() )
+    {
+        m_cameras.erase( m_cameras.begin() + index );
+        return true;
+    }
+    else
+        return false;
+}
+
+// ***********************
+//
+CameraModelPtr &        CamerasLogic::GetCurrentCamera        ()
+{
+    return m_currentCamera;
+}
+
+// ***********************
+//
+bool                    CamerasLogic::SetCurrentCamera        ( unsigned int index )
+{
+    if( index < m_cameras.size() )
+    {
+        m_currentCamera = m_cameras[ index ];
+        return true;
+    }
+    else
+        return false;
+}
+
+// ***********************
+//
+void            CamerasLogic::SetDefaultTimeline      ( ITimeEvaluatorPtr timeEvaluator )
+{
+    if( timeEvaluator )
+        m_defaultTimeline = timeEvaluator;
+}
+
+// ***********************
+//
+void            CamerasLogic::ClearAll                ()
+{
+    m_cameras.clear();
+    m_currentCamera = nullptr;
+}
 
 } // model
 } //bv

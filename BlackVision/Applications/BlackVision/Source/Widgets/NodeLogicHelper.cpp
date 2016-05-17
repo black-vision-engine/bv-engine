@@ -8,8 +8,6 @@
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
-#include "Engine/Models/Timeline/TimelineManager.h"
-
 #include "Tools/StringHeplers.h"
 
 namespace bv
@@ -175,37 +173,6 @@ void                SerializeValue                      ( ISerializer & ser, IVa
         assert( !"Implement" );
     }
 
-}
-
-// ***********************
-//
-model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserializer & deser )
-{
-    bv::model::ITimeEvaluatorPtr timeEvaluator = nullptr;
-
-
-    auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
-
-    if( deserContext == nullptr )
-    {
-        assert( false );
-        return nullptr;
-    }
-
-    bv::model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
-    if( sceneTimeline == nullptr )
-    {
-        sceneTimeline = bv::model::TimelineManager::GetInstance()->GetRootTimeline();
-    }
-
-    timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( "default", sceneTimeline );
-    if( timeEvaluator == nullptr ) 
-    {
-        assert( false );
-        timeEvaluator = sceneTimeline;
-    }
-
-    return timeEvaluator;
 }
 
 } // SerializationHelper

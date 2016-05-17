@@ -1523,7 +1523,7 @@ std::string				BVProjectEditor::PrefixSceneName		( const std::string & name ) co
 //
 void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene )
 {
-    //Set default root node & timeline
+    //Set default root node & timeline & camera
 
     auto defaultTimeline = GetTimeline( model::TimelineHelper::CombineTimelinePath( scene->GetName(), DEFAULT_TIMELINE_NAME ) );
     //don't add default timeline if it already exists
@@ -1532,6 +1532,12 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
         defaultTimeline = model::TimelineHelper::CreateDefaultTimeline( DEFAULT_TIMELINE_NAME, ( std::numeric_limits< TimeType >::max )(), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ); //FIXME: infinite duration
         scene->GetTimeline()->AddChild( defaultTimeline );
     }
+
+    //Add default camera and set default timeline for cameras
+    scene->GetCamerasLogic().SetDefaultTimeline( defaultTimeline );
+    scene->GetCamerasLogic().AddCamera();       // Creates camera with default parameters.
+                                                // FIXME: add posibility to set default parameters.
+    scene->GetCamerasLogic().SetCurrentCamera( 0 );
 
     //don't overwrite root node if it already exists
     if( !scene->GetRootNode() ) 

@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Engine/Interfaces/IValue.h"
-
-#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/ModelHelper.h"
 
 namespace bv
@@ -17,8 +15,6 @@ namespace SerializationHelper
 
 IValuePtr           CreateValue                         ( const IDeserializer & deser, const std::string & name );
 void                SerializeValue                      ( ISerializer & ser, IValueConstPtr val );
-
-model::ITimeEvaluatorPtr            GetDefaultTimeline  ( const IDeserializer & deser );
 
 } // SerializationHelper
 

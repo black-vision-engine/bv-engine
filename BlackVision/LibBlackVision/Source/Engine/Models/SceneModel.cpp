@@ -31,6 +31,7 @@ SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera
     , m_timeline( model::OffsetTimeEvaluator::Create( name, TimeType( 0.0 ) ) )
 	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
+    , m_camerasLogic( m_timeline )
 {
 	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
@@ -68,6 +69,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
             }
             ser.ExitChild(); // lights
 
+            m_camerasLogic.Serialize( ser );
             m_sceneVariables.Serialize( ser );
             m_gridLinesLogic.Serialize( ser );
         }
@@ -119,6 +121,10 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     {
         obj->AddLight( light );
     }
+
+// cameras
+    auto & cameraLogic = obj->GetCamerasLogic();
+    cameraLogic.Deserialize( deser );
 
 // editor scene varables
 
@@ -269,6 +275,13 @@ SceneVariables &            SceneModel::GetSceneVariables   ()
 GridLinesLogic &            SceneModel::GetGridLinesLogic   ()
 {
     return m_gridLinesLogic;
+}
+
+// ***********************
+//
+CamerasLogic &              SceneModel::GetCamerasLogic     ()
+{
+    return m_camerasLogic;
 }
 
 // *******************************

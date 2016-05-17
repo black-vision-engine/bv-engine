@@ -47,6 +47,8 @@ private:
     void                        SerializeGridArray      ( ISerializer & ser,const std::vector< GridLine * > & gridArray ) const;
     std::vector< GridLine* > &  SelectGridLineVec       ( GridLineType gridType );
     void                        AllocGridLine           ( GridLineType gridType, int gridIndex, std::vector< GridLine* >& gridLinesVec );
+
+    void                        ClearAll                ();
 };
 
 }   // model
