@@ -2,6 +2,7 @@
 
 #include "Widgets/NodeLogicBase.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/SceneModel.h"
 
 #include "CoreDEF.h"
 
@@ -28,6 +29,7 @@ public:
 
     struct PieSliceDesc;
     DEFINE_PTR_TYPE( PieSliceDesc )
+    DEFINE_CONST_PTR_TYPE( PieSliceDesc )
 
     struct PieSliceDesc : public ISerializable
     {
@@ -48,10 +50,19 @@ private:
 
     struct ACTION 
     {
-        static const std::string    LOAD;
         static const std::string    UPDATE_PIECHART;
+        static const std::string    UPDATE_PIESLICE;
         static const std::string    ADD_PIESLICE;
         static const std::string    REMOVE_PIESLICE;
+    };
+
+    struct PLUGIN
+    {
+        static const std::string    TRANSFORM;
+        static const std::string    CYLINDER;
+        static const std::string    COLOR;
+        static const std::string    MATERIAL;
+        static const std::string    TEXT;
     };
 
 private:
@@ -60,16 +71,19 @@ private:
     model::ITimeEvaluatorPtr        m_timeEval;
 
     std::vector< PieSliceDescPtr >                      m_slicesDesc;
-    std::map< PieSliceDescPtr, model::BasicNodePtr >    m_slices;
+    std::map< model::BasicNodePtr, PieSliceDescPtr >    m_slices;
 
     PieChartType                    m_chartType;
+    bool                            m_textEnabled;
+
+    Float32                         m_totalPercent;
 
 public:
 
-	explicit                        PieChart            ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::vector< PieSliceDescPtr > & slicesDesc, PieChartType chartType );
+	explicit                        PieChart            ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
 	                                ~PieChart           ();
 
-	static PieChartPtr              Create              ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::vector< PieSliceDescPtr > & slicesDesc, PieChartType chartType );
+	static PieChartPtr              Create              ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
 
     virtual void                    Serialize           ( ISerializer & ser ) const override;
     static PieChartPtr              Create              ( const IDeserializer & deser, model::BasicNodePtr parent );
@@ -83,12 +97,25 @@ public:
 
     virtual bool                    HandleEvent         ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
-    void                            Load                ( IDeserializer & eventSer, BVProjectEditor * editor );
-
 private:
 
-    void                            SetType             ( model::BasicNodePtr node );
-    void                            AddText             ( model::BasicNodePtr node, Float32 percent );
+    void                            AddSlice            ( model::SceneModelPtr scene, PieSliceDescPtr sliceDesc, UInt32 idx, BVProjectEditor * editor );
+    bool                            RemoveSlice         ( model::SceneModelPtr scene, UInt32 sliceDescIdx, BVProjectEditor * editor );
+
+    model::BasicNodePtr             CreateSlice         ( PieSliceDescPtr sliceDesc, UInt32 idx );
+    void                            AddShaderPlugin     ( model::BasicNodePtr node );
+    
+    void                            AddLabelNode        ( model::BasicNodePtr node, Float32 percent );
+    void                            UpdateLabelNode     ( model::BasicNodePtr node, Float32 percent );
+    void                            SetLabelTransform   ( model::BasicNodePtr node, model::BasicNodePtr textNode );
+    void                            SetLabelText        ( model::BasicNodePtr node, Float32 percent );
+
+    void                            UpdateChart         ();
+    Float32                         UpdateSlice         ( model::BasicNodePtr node, PieSliceDescPtr sliceDesc, Float32 angle );
+    void                            CleanMapping        ();
+
+    std::string                     LabelNodeName       ( const std::string & parentNodeName );
+    std::string                     SliceNodeName       ( const std::string & parentNodeName, UInt32 idx );
 
 };
 

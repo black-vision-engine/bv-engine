@@ -24,6 +24,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
+#include "Widgets/MeshLoader/MeshLoader.h"
+
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/ModelSceneEditor.h"
@@ -1203,52 +1205,82 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
 {
     auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
-    auto child1 = model::BasicNode::Create( "child1", timeEvaluator );
-    root->AddChildToModelOnly( child1 );
+    //auto child1 = model::BasicNode::Create( "child1", timeEvaluator );
+    //root->AddChildToModelOnly( child1 );
 
-    auto child2 = model::BasicNode::Create( "child2", timeEvaluator );
-    root->AddChildToModelOnly( child2 );
+    //auto child2 = model::BasicNode::Create( "child2", timeEvaluator );
+    //root->AddChildToModelOnly( child2 );
 
-    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
-    root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
-    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    child1->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    child1->AddPlugin( "DEFAULT_MESH", timeEvaluator );
-    child1->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
-    child1->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    //child1->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    //child1->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    //child1->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    //child1->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     
-    child2->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    child2->AddPlugin( "DEFAULT_MESH", timeEvaluator );
-    child2->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    //child2->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    //child2->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    //child2->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
 
-    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.01f, 0.01f, 0.01f ) );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 20.f, 0.f, 0.f ) );
+    //model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.01f, 0.01f, 0.01f ) );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 20.f, 0.f, 0.f ) );
     
-    model::SetParameterScale( child1->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.2f, 0.2f, 0.2f ) );
-    model::SetParameterTranslation( child1->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -400.0f, 400.0f, -500.0f ) );
-    model::SetParameterRotation( child1->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 20.f, 30.f, 0.f ) );
+    //model::SetParameterScale( child1->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.2f, 0.2f, 0.2f ) );
+    //model::SetParameterTranslation( child1->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -400.0f, 400.0f, -500.0f ) );
+    //model::SetParameterRotation( child1->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 20.f, 30.f, 0.f ) );
 
-    model::SetParameterScale( child2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 4.0f, 4.0f, 4.0f ) );
-    model::SetParameterTranslation( child2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 500.0f, -300.0f, -200.0f ) );
-    model::SetParameterRotation( child2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 50.f, 0.f ) );
+    //model::SetParameterScale( child2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 4.0f, 4.0f, 4.0f ) );
+    //model::SetParameterTranslation( child2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 500.0f, -300.0f, -200.0f ) );
+    //model::SetParameterRotation( child2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 50.f, 0.f ) );
 
-    auto material = root->GetPlugin( "material" );
-    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
-    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
-    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
-    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
-    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+    //auto material = root->GetPlugin( "material" );
+    //model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
+    //model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    //model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    //model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    //model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
     
-    model::LoadMesh( root->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
-    model::LoadTexture( root->GetPlugin( "texture" ), "meshes/daria/bunny-atlas.jpg" );
+//    model::LoadMesh( root->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
+//    model::LoadTexture( root->GetPlugin( "texture" ), "meshes/daria/bunny-atlas.jpg" );
 
-    model::LoadMesh( child1->GetPlugin( "mesh" ), "meshes/StarWarsFighter/ARC.FBX" );
-    model::LoadTexture( child1->GetPlugin( "texture" ), "meshes/StarWarsFighter/ARC170_TXT_VERSION_4_D.jpg" );
+    //auto meshLoader = nodelogic::MeshLoader::Create( root, timeEvaluator, "meshes/StarWarsFighter/ARC.FBX" );
+    auto meshLoader = nodelogic::MeshLoader::Create( root, timeEvaluator, "meshes/daria/cube.obj" );
+    root->SetLogic( meshLoader );
+
+    auto rootNode = meshLoader->Load( meshLoader->GetMeshAsset(), timeEvaluator );
+    for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
+    {
+        root->AddChildToModelOnly( rootNode->GetChild( i ), i );
+    }
+
+    auto child = root->GetChild( 0 )->GetChild( 0 )->GetChild( 0 );
     
-    model::LoadMesh( child2->GetPlugin( "mesh" ), "meshes/daria/bb8.obj" );
+    //child->AddPlugin( "DEFAULT_TEXTURE", "texture", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "texture" ), "meshes/daria/brickwall.jpg" );
+    
+    //child->AddPlugin( "DEFAULT_NORMAL_MAP", "normal map", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "normal map" ), "meshes/daria/brickwall_normal.jpg" );
 
+    //child->AddPlugin( "DEFAULT_PARALLAX_MAP", "parallax map", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "parallax map" ), "meshes/daria/bricks2_disp.jpg" );
+
+    child->AddPlugin( "DEFAULT_TEXTURE", "texture", timeEvaluator );
+    model::LoadTexture( child->GetPlugin( "texture" ), "meshes/daria/d.jpg" );
+    
+    child->AddPlugin( "DEFAULT_NORMAL_MAP", "normal map", timeEvaluator );
+    model::LoadTexture( child->GetPlugin( "normal map" ), "meshes/daria/n.jpg" );
+    
+    child->AddPlugin( "DEFAULT_PARALLAX_MAP", "parallax map", timeEvaluator );
+    model::LoadTexture( child->GetPlugin( "parallax map" ), "meshes/daria/h.jpg" );
+
+    //auto child = root->GetChild( 0 )->GetChild( 1 );
+
+    //child->AddPlugin( "DEFAULT_NORMAL_MAP", "normalmap", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "normalmap" ), "meshes/StarWarsFighter/ARC170_TXT_VERSION_4_N.jpg" );
+    
     return root;
 }
 

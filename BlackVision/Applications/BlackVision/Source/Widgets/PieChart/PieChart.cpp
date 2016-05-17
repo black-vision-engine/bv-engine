@@ -1,9 +1,12 @@
 #include "PieChart.h"
 
 #include <random>
+#include <iomanip>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "Engine/Events/EventHandlerHelpers.h"
+
+#include "Widgets/NodeLogicHelper.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -19,6 +22,8 @@
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
+#include "Tools/StringHeplers.h"
+#include "Engine/Models/BoundingVolume.h"
 
 #include "Engine/Models/BVProjectEditor.h"
 
@@ -63,16 +68,29 @@ Expected< nodelogic::PieChart::PieChartType >  String2T    ( const std::string &
 } // SerializationHelper
 
 
+// *******************************
+
 
 namespace nodelogic {
 
+
 const std::string           PieChart::m_type = "pie_chart";
 
-const std::string           PieChart::ACTION::LOAD                 = "Load";
-const std::string           PieChart::ACTION::UPDATE_PIECHART     = "UpdatePieSlice";
+// *******************************
+
+const std::string           PieChart::ACTION::UPDATE_PIECHART     = "UpdatePieChart";
+const std::string           PieChart::ACTION::UPDATE_PIESLICE     = "UpdatePieSlice";
 const std::string           PieChart::ACTION::ADD_PIESLICE        = "AddPieSlice";
 const std::string           PieChart::ACTION::REMOVE_PIESLICE     = "RemovePieSlice";
 	
+// *******************************
+
+const std::string           PieChart::PLUGIN::TRANSFORM           = "transform";
+const std::string           PieChart::PLUGIN::CYLINDER            = "cylinder";
+const std::string           PieChart::PLUGIN::COLOR               = "solid color";
+const std::string           PieChart::PLUGIN::MATERIAL            = "material";
+const std::string           PieChart::PLUGIN::TEXT                = "text";
+
 
 // *******************************
 //
@@ -102,18 +120,19 @@ void	                    PieChart::PieSliceDesc::Serialize		( ISerializer & ser 
 
 // *******************************
 //
-PieChartPtr	                PieChart::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::vector< PieSliceDescPtr > & slicesDesc, PieChartType chartType )
+PieChartPtr	                PieChart::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
 {
-	return std::make_shared< PieChart >( parent, timeEval, slicesDesc, chartType );
+	return std::make_shared< PieChart >( parent, timeEval, chartType, textEnabled );
 }
 
 // *******************************
 //
-PieChart::PieChart          ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::vector< PieSliceDescPtr > & slicesDesc, PieChartType chartType )
+PieChart::PieChart          ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
     : m_parentNode( parent )
     , m_timeEval( timeEval )
-    , m_slicesDesc( slicesDesc )
     , m_chartType( chartType )
+    , m_textEnabled( textEnabled )
+    , m_totalPercent( 0.f )
 {
 }
 
@@ -146,6 +165,7 @@ void                PieChart::Serialize       ( ISerializer & ser ) const
         ser.SetAttribute( "materialEnabled", SerializationHelper::T2String( m_materialEnabled ) );*/
 
         ser.SetAttribute( "pieChartType", SerializationHelper::T2String( m_chartType ) );
+        ser.SetAttribute( "textEnabled", SerializationHelper::T2String( m_textEnabled ) );
 
         auto timeline = model::TimelineManager::GetInstance()->GetTimelinePath( m_timeEval );
         ser.SetAttribute( "timelinePath", timeline );
@@ -172,11 +192,10 @@ PieChartPtr             PieChart::Create          ( const IDeserializer & deser,
             }
             auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
         
-            auto slicesDesc = SerializationHelper::DeserializeArray< PieSliceDesc >( deser, "pieSlices" );
-            
             auto chartType = SerializationHelper::String2T< PieChartType >( deser.GetAttribute( "pieChartType" ), PieChartType::PST_COLOR );
+            auto textEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "textEnabled" ), true );
 
-            return PieChart::Create( parent, timeEval, slicesDesc, chartType );
+            return PieChart::Create( parent, timeEval, chartType, textEnabled );
         }
     }
     return nullptr;
@@ -188,29 +207,48 @@ bool                    PieChart::HandleEvent     ( IDeserializer & eventSer, IS
 {
     std::string action = eventSer.GetAttribute( "Action" );
 
-    if( action == ACTION::LOAD ) 
-    {
-        Load( eventSer, editor );
-    }
-    else if( action == ACTION::UPDATE_PIECHART )
-    {
+    auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
+    auto scene = editor->GetModelScene( context->GetSceneName() );
 
-        //response.SetAttribute( "assetPath", m_assetDesc->GetPath() );
+    if( action == ACTION::UPDATE_PIECHART )
+    {
+        UpdateChart();
         return true;
+    }
+    else if( action == ACTION::UPDATE_PIESLICE )
+    {
+        auto sliceDescIdx = SerializationHelper::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
+        if( RemoveSlice( scene, sliceDescIdx, editor ) )
+        {
+            auto sliceDesc = SerializationHelper::DeserializeObject< PieSliceDesc >( eventSer, "pieSlice" );
+            if( sliceDesc )
+            {
+                AddSlice( scene, sliceDesc, sliceDescIdx, editor );
+                UpdateChart();
+                return true;
+            }
+        }
+        return false;
     }
     else if( action == ACTION::ADD_PIESLICE )
     {
-        //m_assetDesc = MeshAssetDesc::Create( eventSer.GetAttribute( "AssetPath" ), "", true );
-        //if( m_assetDesc )
-        //{
-        //    m_asset = LoadTypedAsset< MeshAsset >( m_assetDesc );
-        //    return ( m_asset != nullptr );
-        //}
+        auto sliceDesc = SerializationHelper::DeserializeObject< PieSliceDesc >( eventSer, "pieSlice" );
+        if( sliceDesc )
+        {
+            AddSlice( scene, sliceDesc, ( UInt32 )m_slicesDesc.size(), editor );
+            UpdateChart();
+            return true;
+        }
         return false;
     }
     else if( action == ACTION::REMOVE_PIESLICE )
     {
-        //return MeshInfo( response );
+        auto sliceDescIdx = SerializationHelper::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
+        if( RemoveSlice( scene, sliceDescIdx, editor ) )
+        {
+            UpdateChart();
+            return true;
+        }
         return false;
     }
     else 
@@ -237,54 +275,82 @@ const std::string &         PieChart::GetType               () const
 
 // ***********************
 //
-void                        PieChart::Load                  ( IDeserializer & eventSer, BVProjectEditor * editor )
+void                        PieChart::AddSlice           ( model::SceneModelPtr scene, PieSliceDescPtr sliceDesc, UInt32 idx, BVProjectEditor * editor )
 {
-    auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
-    auto scene = editor->GetModelScene( context->GetSceneName() );
-    
-    Float32 angle = 0.f;
-
-    for( UInt32 i = 0; i < ( UInt32 )m_slicesDesc.size(); ++i )
+    auto node = CreateSlice( sliceDesc, ( UInt32 )m_slicesDesc.size() );
+    if( node )
     {
-        auto & sliceDesc = m_slicesDesc[ i ];
-        auto sliceAngle = sliceDesc->percent * 360.f * 0.01f;
-        auto midAngle = angle + ( sliceAngle / 2 );
-
-        auto node = model::BasicNode::Create( m_parentNode->GetName() + "_pieSlice" + SerializationHelper::T2String( i ), m_timeEval );
-        
-        auto transformName = "transform";
-        node->AddPlugin( model::DefaultTransformPluginDesc::UID(), transformName, m_timeEval );
-        auto transformParam = node->GetPlugin( transformName )->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM );
-        SetParameterRotation( transformParam, 0.0f, glm::vec3( 90.f, 0.f, midAngle ) );
-        SetParameterTranslation( transformParam, 0.0f, sliceDesc->offset * glm::vec3( glm::rotate( glm::vec2( 0.f, 1.f ), midAngle ), 0.f ) );
-
-
-        auto cylinderName = "cylinder";
-        node->AddPlugin( model::DefaultCylinder::DefaultCylinderPluginDesc::UID(), cylinderName, m_timeEval );
-        auto cylinderPlugin = node->GetPlugin( cylinderName );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::HEIGHT ), 0.0f, 0.1f );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::TESSELATION ), 0.0f, 20 );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::INNERRADIUS ), 0.0f, 0.f );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OUTERRADIUS ), 0.0f, 1.f );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OPENANGLE ), 0.f, ( 360.f - sliceAngle ) );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OPENANGLEMODE ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::OpenAngleMode::SYMMETRIC );
-
-
-        SetType( node );
-
-        AddText( node, sliceDesc->percent );
-
         editor->AddChildNode( scene, m_parentNode, node );
 
-        m_slices[ sliceDesc ] = node;
-
-        angle += sliceAngle;
+        if( idx >= ( UInt32 )m_slicesDesc.size() )
+        {
+            m_slicesDesc.push_back( sliceDesc );
+        }
+        else
+        {
+            m_slicesDesc.insert( m_slicesDesc.begin() + idx, sliceDesc );
+        }
+        m_slices[ node ] = sliceDesc;
     }
 }
 
 // ***********************
 //
-void                        PieChart::SetType                   ( model::BasicNodePtr node )
+bool                        PieChart::RemoveSlice           ( model::SceneModelPtr scene, UInt32 sliceDescIdx, BVProjectEditor * editor )
+{
+    if( sliceDescIdx < m_slices.size() )
+    {
+        auto desc = m_slicesDesc[ sliceDescIdx ];
+        for( auto & slice : m_slices )
+        {
+            if( slice.second == desc )
+            {
+                editor->DeleteChildNode( scene, m_parentNode, slice.first );
+                m_slicesDesc.erase( m_slicesDesc.begin() + sliceDescIdx );
+                m_slices.erase( slice.first );
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// ***********************
+//
+model::BasicNodePtr         PieChart::CreateSlice           ( PieSliceDescPtr sliceDesc, UInt32 idx )
+{
+    if( sliceDesc->percent > 0 )
+    {
+        auto node = model::BasicNode::Create( SliceNodeName( m_parentNode->GetName(), idx ), m_timeEval );
+        
+        node->AddPlugin( model::DefaultTransformPluginDesc::UID(), PLUGIN::TRANSFORM, m_timeEval );
+        node->AddPlugin( model::DefaultCylinder::DefaultCylinderPluginDesc::UID(), PLUGIN::CYLINDER, m_timeEval );
+    
+        AddShaderPlugin( node );
+    
+        if( m_textEnabled )
+        {
+            AddLabelNode( node, sliceDesc->percent );
+        }
+
+        auto cylinderPlugin = node->GetPlugin( PLUGIN::CYLINDER );
+        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::HEIGHT ), 0.0f, 0.1f );
+        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::TESSELATION ), 0.0f, 50 );
+        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::INNERRADIUS ), 0.0f, 0.f );
+        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OUTERRADIUS ), 0.0f, 1.f );
+        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OPENANGLEMODE ), 0.0, model::DefaultCylinder::DefaultPlugin::OpenAngleMode::SYMMETRIC );
+
+        return node;
+    }
+
+    return nullptr;
+}
+
+// ***********************
+//
+void                        PieChart::AddShaderPlugin           ( model::BasicNodePtr node )
 {
     static std::random_device rd;
     static std::mt19937 re( rd() );
@@ -292,35 +358,188 @@ void                        PieChart::SetType                   ( model::BasicNo
 
     if( m_chartType == PieChartType::PST_COLOR )
     {
-        auto colorName = "solid color";
-        node->AddPlugin( model::DefaultColorPluginDesc::UID(), colorName, m_timeEval );
-        SetParameter( node->GetPlugin( colorName )->GetParameter( model::DefaultColorPlugin::PARAM_COLOR ), 0.0f, glm::vec4( ui( re ), ui( re ), ui( re ), 1.f ) );
+        node->AddPlugin( model::DefaultColorPluginDesc::UID(), PLUGIN::COLOR, m_timeEval );
+        SetParameter( node->GetPlugin( PLUGIN::COLOR )->GetParameter( model::DefaultColorPlugin::PARAM_COLOR ), 0.0f, glm::vec4( ui( re ), ui( re ), ui( re ), 1.f ) );
     }
     else if( m_chartType == PieChartType::PST_MATERIAL )
     {
-        auto materialName = "material";
-        node->AddPlugin( model::DefaultMaterialPluginDesc::UID(), materialName, m_timeEval );
-        SetParameter( node->GetPlugin( materialName )->GetParameter( model::DefaultMaterialPlugin::PARAM::DIFFUSE ), 0.0f, glm::vec4( ui( re ), ui( re ), ui( re ), 1.f ) );
+        node->AddPlugin( model::DefaultMaterialPluginDesc::UID(), PLUGIN::MATERIAL, m_timeEval );
+        SetParameter( node->GetPlugin( PLUGIN::MATERIAL )->GetParameter( model::DefaultMaterialPlugin::PARAM::DIFFUSE ), 0.0f, glm::vec4( ui( re ), ui( re ), ui( re ), 1.f ) );
     }
 }
 
 // ***********************
 //
-void                        PieChart::AddText                   ( model::BasicNodePtr node, Float32 percent )
+void                        PieChart::AddLabelNode              ( model::BasicNodePtr node, Float32 percent )
 {
-    auto textNode = model::BasicNode::Create( node->GetName() + "_label" , m_timeEval );
+    auto textNode = model::BasicNode::Create( LabelNodeName( node->GetName() ), m_timeEval );
     
-    textNode->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", m_timeEval );
-    
-    auto colorName = "solid color";
-    textNode->AddPlugin( model::DefaultColorPluginDesc::UID(), colorName, m_timeEval );
-    SetParameter( textNode->GetPlugin( colorName )->GetParameter( model::DefaultColorPlugin::PARAM_COLOR ), 0.0f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    textNode->AddPlugin( model::DefaultTransformPluginDesc::UID(), PLUGIN::TRANSFORM, m_timeEval );
+    textNode->AddPlugin( model::DefaultColorPluginDesc::UID(), PLUGIN::COLOR, m_timeEval );
+    textNode->AddPlugin( model::DefaultTextPluginDesc::UID(), PLUGIN::TEXT, m_timeEval );
 
-    auto textName = "text";
-    textNode->AddPlugin( model::DefaultTextPluginDesc::UID(), textName, m_timeEval );
-    SetParameter( textNode->GetPlugin( textName )->GetParameter( "text" ), 0.f, SerializationHelper::T2String( percent ) );
+    SetLabelTransform( node, textNode );
+    SetParameter( textNode->GetPlugin( PLUGIN::COLOR )->GetParameter( model::DefaultColorPlugin::PARAM_COLOR ), 0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    SetLabelText( textNode, percent );
 
     node->AddChildToModelOnly( textNode );
+}
+
+// ***********************
+//
+void                        PieChart::UpdateLabelNode           ( model::BasicNodePtr node, Float32 percent )
+{
+    auto textNode = std::static_pointer_cast< model::BasicNode >( node->GetChild( LabelNodeName( node->GetName() ) ) );
+    if( textNode )
+    {
+        SetLabelTransform( node, textNode );
+        SetLabelText( textNode, percent );
+    }
+}
+
+// ***********************
+//
+void                        PieChart::SetLabelTransform         ( model::BasicNodePtr node, model::BasicNodePtr textNode )
+{
+    auto parentTransformPlugin = node->GetPlugin( PLUGIN::TRANSFORM );
+    auto textTransformPlugin = textNode->GetPlugin( PLUGIN::TRANSFORM );
+    if( parentTransformPlugin && textTransformPlugin )
+    {
+        auto parentTransformParam = parentTransformPlugin->GetParamTransform();
+        auto parentRotation = parentTransformParam->GetTransform().GetRotation( 0.f );
+      
+        auto transformParam = textTransformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM );
+        SetParameterRotation( transformParam, 0.f, glm::vec3( -parentRotation.x, -parentRotation.z, 0.f ) );
+        SetParameterScale( transformParam, 0.f, glm::vec3( 2.f, 2.f, 2.f ) );
+        SetParameterTranslation( transformParam, 0.f, glm::vec3( -0.1f, 0.f, -1.4f ) );
+    }
+}
+
+// ***********************
+//
+void                        PieChart::SetLabelText              ( model::BasicNodePtr textNode, Float32 percent )
+{
+    auto textPlugin = textNode->GetPlugin( PLUGIN::TEXT );
+    if( textPlugin )
+    {
+        std::ostringstream out;
+        out << std::setprecision( 3 ) << percent;
+        auto wtext = StringToWString( out.str() );
+        SetParameter( textPlugin->GetParameter( model::DefaultTextPlugin::PARAM::TEXT ), 0.f, wtext.ham );
+    }
+}
+
+// ***********************
+//
+void                        PieChart::UpdateChart               ()
+{
+    CleanMapping();
+
+    m_totalPercent = 0.f;
+    Float32 angle = 0.f;
+    m_slicesDesc.clear();
+    for( UInt32 i = 0; i < m_parentNode->GetNumChildren(); ++i )
+    {
+        auto node = m_parentNode->GetChild( i );
+
+        auto sliceDesc = m_slices[ node ];
+        m_slicesDesc.push_back( sliceDesc );
+
+        angle = UpdateSlice( node, sliceDesc, angle );
+    }
+}
+
+// ***********************
+//
+Float32                     PieChart::UpdateSlice               ( model::BasicNodePtr node, PieSliceDescPtr sliceDesc, Float32 angle )
+{
+    if( m_totalPercent + sliceDesc->percent > 100.f )
+    {
+        sliceDesc->percent = 100.f - m_totalPercent;
+    }
+    m_totalPercent += sliceDesc->percent;
+
+    auto sliceAngle = sliceDesc->percent * 360.f * 0.01f;
+
+    auto midAngle = angle + ( sliceAngle / 2 );
+    if( angle == 0.f )
+    {
+        midAngle = 0.f;
+    }
+
+    auto translation = glm::vec3( glm::rotate( glm::vec2( 0.f, 1.f ), midAngle ), 0.f );
+    
+    auto transformPlugin = node->GetPlugin( PLUGIN::TRANSFORM );
+    if( transformPlugin )
+    {
+        auto transformParam = transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM );
+        SetParameterRotation( transformParam, 0.0f, glm::vec3( 90.f, 0.f, midAngle ) );
+        SetParameterTranslation( transformParam, 0.0f, sliceDesc->offset * translation );
+    }
+
+    auto cylinderPlugin = node->GetPlugin( PLUGIN::CYLINDER );
+    if( cylinderPlugin )
+    {
+        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OPENANGLE ), 0.f, ( 360.f - sliceAngle ) );
+    }
+
+    if( m_textEnabled )
+    {
+        UpdateLabelNode( node, sliceDesc->percent );
+    }
+
+    if( angle == 0.f )
+    {
+        angle += sliceAngle / 2.f;
+    }
+    else
+    {
+        angle += sliceAngle;
+    }
+
+    return angle;
+}
+
+// ***********************
+//
+void                        PieChart::CleanMapping              ()
+{
+    auto it = m_slices.begin();
+    while( it != m_slices.end() ) 
+    {
+        auto exists = false;
+        for( UInt32 i = 0; i < m_parentNode->GetNumChildren(); ++i )
+        {
+            if( m_parentNode->GetChild( i ) == it->first )
+            {
+                exists = true;
+                break;
+            }
+        }
+
+        if( !exists ) 
+        {
+            m_slices.erase( it++ );
+        } 
+        else 
+        {
+            ++it;
+        }
+    }
+}
+
+// ***********************
+//
+std::string                 PieChart::LabelNodeName             ( const std::string & parentNodeName )
+{
+    return parentNodeName + "_label";
+}
+
+// ***********************
+//
+std::string                 PieChart::SliceNodeName             ( const std::string & parentNodeName, UInt32 idx )
+{
+    return parentNodeName + "_pieSlice" + SerializationHelper::T2String( idx );
 }
 
 } //nodelogic

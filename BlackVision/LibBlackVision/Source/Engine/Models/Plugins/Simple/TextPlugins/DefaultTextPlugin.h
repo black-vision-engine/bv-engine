@@ -35,6 +35,13 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultTextPlugin : public TextPluginBase
 {
+public:
+
+    struct PARAM
+    {
+        static const std::string    TEXT;
+    };
+
 private:
 
     ParamWStringPtr                 m_textParam;
