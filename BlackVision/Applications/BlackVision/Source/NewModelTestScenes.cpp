@@ -1255,18 +1255,22 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
 
 model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( model::ITimeEvaluatorPtr timeEvaluator )
 {
+    // Root node
     auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
-
-    auto envSphereNode = model::BasicNode::Create( "EnvSphere", timeEvaluator );
-    root->AddChildToModelOnly( envSphereNode );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.0f, 0.0f, -5.0f ) );
 
+    // Sphere node
+    auto envSphereNode = model::BasicNode::Create( "EnvSphere", timeEvaluator );
+    root->AddChildToModelOnly( envSphereNode );
+
     envSphereNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     envSphereNode->AddPlugin( "DEFAULT_SPHERE", timeEvaluator );
     envSphereNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
-    envSphereNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_MAP", timeEvaluator );
+    envSphereNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1.0f, 0.0f, -5.0f ) );
 
     auto material = envSphereNode->GetPlugin( "material" );
     model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
@@ -1274,8 +1278,36 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
     model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.5, 0, 0, 0 ) );
     model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    auto envMap = envSphereNode->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.8f );
     
-    model::LoadTexture( envSphereNode->GetPlugin( "environmental map" ), "textures/witek/Env/CityEnv.jpg" );
+    model::LoadTexture( envSphereNode->GetPlugin( "environmental tex" ), "textures/witek/Env/MountainEnv.jpg" );
+
+    // Mesh node
+    auto envMeshNode = model::BasicNode::Create( "EnvMesh", timeEvaluator );
+    root->AddChildToModelOnly( envMeshNode );
+
+    envMeshNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    envMeshNode->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    envMeshNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    envMeshNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+
+    model::SetParameterTranslation( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -1.0f, 0.0f, -30.0f ) );
+    model::SetParameterScale( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.01f, 0.01f, 0.01f ) );
+
+    material = envMeshNode->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.5, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    envMap = envMeshNode->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.9f );
+    
+    model::LoadTexture( envMeshNode->GetPlugin( "environmental tex" ), "textures/witek/Env/MountainEnv.jpg" );
+    model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
 
     return root;
 }

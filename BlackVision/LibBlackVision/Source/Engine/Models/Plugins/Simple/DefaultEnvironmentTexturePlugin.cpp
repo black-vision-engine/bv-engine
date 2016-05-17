@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "DefaultEnvironmentMapPlugin.h"
+#include "DefaultEnvironmentTexturePlugin.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -12,26 +12,26 @@
 namespace bv { namespace model {
 
 
-const std::string        DefaultEnvironmentMapPlugin::PARAM::Reflectivity   = "reflectivity";
+const std::string        DefaultEnvironmentTexturePlugin::PARAM::Reflectivity   = "reflectivity";
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
 //
-DefaultEnvironmentMapPluginDesc::DefaultEnvironmentMapPluginDesc                ()
-    : BasePluginDescriptor( UID(), "environmental map", "env" )
+DefaultEnvironmentTexturePluginDesc::DefaultEnvironmentTexturePluginDesc                ()
+    : BasePluginDescriptor( UID(), "environmental tex", "env" )
 {}
 
 // *******************************
 //
-IPluginPtr              DefaultEnvironmentMapPluginDesc::CreatePlugin                ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultEnvironmentTexturePluginDesc::CreatePlugin                ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultEnvironmentMapPlugin >( name, prev, timeEvaluator );
+    return CreatePluginTyped< DefaultEnvironmentTexturePlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModelPtr   DefaultEnvironmentMapPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultEnvironmentTexturePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper helper( timeEvaluator );
 
@@ -41,21 +41,21 @@ DefaultPluginParamValModelPtr   DefaultEnvironmentMapPluginDesc::CreateDefaultMo
     helper.CreatePluginModel();
 
     helper.CreatePSModel();
-    helper.AddSimpleParam( DefaultEnvironmentMapPlugin::PARAM::Reflectivity, 0.5f, true );
+    helper.AddSimpleParam( DefaultEnvironmentTexturePlugin::PARAM::Reflectivity, 0.5f, true );
 
     return helper.GetModel();
 }
 
 // *******************************
 //
-std::string             DefaultEnvironmentMapPluginDesc::UID                    ()
+std::string             DefaultEnvironmentTexturePluginDesc::UID                    ()
 {
-    return "DEFAULT_ENVIRONMENTAL_MAP";
+    return "DEFAULT_ENVIRONMENTAL_TEXTURE";
 }
 
 // *******************************
 // 
-std::string             DefaultEnvironmentMapPluginDesc::TextureName            ()
+std::string             DefaultEnvironmentTexturePluginDesc::TextureName            ()
 {
     //return "Tex0";
     return "EnvMap0";
@@ -66,7 +66,7 @@ std::string             DefaultEnvironmentMapPluginDesc::TextureName            
 
 // ***********************
 //
-DefaultEnvironmentMapPlugin::DefaultEnvironmentMapPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+DefaultEnvironmentTexturePlugin::DefaultEnvironmentTexturePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )
@@ -79,12 +79,12 @@ DefaultEnvironmentMapPlugin::DefaultEnvironmentMapPlugin( const std::string & na
 
 // ***********************
 //
-DefaultEnvironmentMapPlugin::~DefaultEnvironmentMapPlugin()
+DefaultEnvironmentTexturePlugin::~DefaultEnvironmentTexturePlugin()
 {}
 
 // *************************************
 // 
-void DefaultEnvironmentMapPlugin::SetPrevPlugin( IPluginPtr prev )
+void DefaultEnvironmentTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
@@ -92,14 +92,14 @@ void DefaultEnvironmentMapPlugin::SetPrevPlugin( IPluginPtr prev )
 
 // *************************************
 //
-IPixelShaderChannelPtr              DefaultEnvironmentMapPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultEnvironmentTexturePlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel;    
 }
 
 // *************************************
 //
-void                                DefaultEnvironmentMapPlugin::Update                      ( TimeType t )
+void                                DefaultEnvironmentTexturePlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
     HelperPixelShaderChannel::PropagateUpdate( m_pixelShaderChannel, m_prevPlugin );
@@ -109,13 +109,13 @@ void                                DefaultEnvironmentMapPlugin::Update         
 
 // *************************************
 // 
-bool                            DefaultEnvironmentMapPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
+bool                            DefaultEnvironmentTexturePlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
     auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
     
     if ( txAssetDescr != nullptr )
     {
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvironmentMapPluginDesc::TextureName() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvironmentTexturePluginDesc::TextureName() );
 
         if( txDesc != nullptr )
         {

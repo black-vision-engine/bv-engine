@@ -11,10 +11,10 @@
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultEnvironmentMapPluginDesc : public BasePluginDescriptor
+class DefaultEnvironmentTexturePluginDesc : public BasePluginDescriptor
 {
 public:
-    DefaultEnvironmentMapPluginDesc                             ();
+    DefaultEnvironmentTexturePluginDesc                         ();
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
@@ -27,7 +27,7 @@ public:
 // ***************************** PLUGIN ********************************** 
 
 
-class DefaultEnvironmentMapPlugin : public BasePlugin< IPlugin >
+class DefaultEnvironmentTexturePlugin : public BasePlugin< IPlugin >
 {
 public:
     
@@ -42,8 +42,8 @@ private:
     DefaultPluginParamValModelPtr           m_paramValModel;
 
 public:
-    explicit                                DefaultEnvironmentMapPlugin ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-                                            ~DefaultEnvironmentMapPlugin();
+    explicit                                DefaultEnvironmentTexturePlugin ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                            ~DefaultEnvironmentTexturePlugin();
 
 
     virtual IPixelShaderChannelPtr          GetPixelShaderChannel       () const override;
