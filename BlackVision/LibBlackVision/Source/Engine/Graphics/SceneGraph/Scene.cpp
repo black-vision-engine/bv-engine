@@ -8,6 +8,8 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Graphics/SceneGraph/Camera.h"
+
 namespace bv {
 
 
@@ -17,6 +19,7 @@ namespace bv {
     :   m_root( nullptr )
     ,   m_gridLines( nullptr )
     ,   m_gridLinesVisible( false )
+    ,   m_camera( new Camera() )
 {
     auto lightsLayout = LightsLayout::Instance().GetBlockLayout();
     m_lightsBuffer =  new UniformBuffer( lightsLayout, DataBuffer::Semantic::S_DYNAMIC );
@@ -53,7 +56,14 @@ UniformBuffer *     Scene::GetLightsBuffer          () const
 
 // ***********************
 //
-RenderableEntity *  Scene::GetGridLines        () const
+Camera *            Scene::GetCamera                () const
+{
+    return m_camera;
+}
+
+// ***********************
+//
+RenderableEntity *  Scene::GetGridLines             () const
 {
     return m_gridLines;
 }

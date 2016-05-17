@@ -42,7 +42,9 @@ public:
     static ISerializablePtr		Create              ( const IDeserializer & deser );
 
     virtual void				Update			    ( TimeType t )	override;
-    
+    bool                        ParameterChanged    ( const std::string & name );
+    bool                        StateChanged        ();
+
     virtual std::vector< IParameterPtr > &          GetParameters   () override;
     virtual IParameterPtr                           GetParameter    ( const std::string & name ) override;
 

@@ -27,6 +27,20 @@ model::SimpleFloatEvaluatorPtr      AddFloatParam       ( model::DefaultParamVal
 
 // ***********************
 //
+model::SimpleIntEvaluatorPtr      AddIntParam       ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const int & initVal, bool addState )
+{
+    auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleIntEvaluator( paramName, timeEvaluator );
+    paramEval->Parameter()->SetVal( initVal, TimeType( 0.0f ) );
+    paramModel->RegisterAll( paramEval );
+
+    if( addState )
+        AddState( paramModel, paramEval->Value(), paramName );
+
+    return paramEval;
+}
+
+// ***********************
+//
 model::SimpleBoolEvaluatorPtr       AddBoolParam        ( model::DefaultParamValModelPtr paramModel, model::ITimeEvaluatorPtr timeEvaluator, const std::string & paramName, const bool & initVal, bool addState )
 {
     auto paramEval = model::ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( paramName, timeEvaluator );

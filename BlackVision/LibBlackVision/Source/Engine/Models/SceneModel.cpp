@@ -167,6 +167,7 @@ void						SceneModel::Update	    ( TimeType t )
     {
         light->Update( t );
     }
+    m_camerasLogic.Update( t );
 }
 
 // *******************************

@@ -29,8 +29,8 @@ CameraModel::CameraModel( ITimeEvaluatorPtr timeEvaluator )
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::FOV, 45.0f, true );
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::NEAR_CLIPPING_PLANE, 0.1f, true );
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::FAR_CLIPPING_PLANE, 100.0f, true );
-    AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_WIDTH, 1920.0f, true );
-    AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_HEIGHT, 1080.0f, true );
+    AddIntParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_WIDTH, 1920, true );
+    AddIntParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_HEIGHT, 1080, true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::POSITION, glm::vec3( 0.0f, 0.0f, 5.0f ), true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::DIRECTION, glm::vec3( 0.0f, 0.0f, -1.0f ), true );
 }
@@ -115,6 +115,29 @@ IValueConstPtr                          CameraModel::GetValue       ( const std:
     return m_paramModel->GetValue( name );
 }
 
+// ***********************
+//
+bool                                    CameraModel::ParameterChanged ( const std::string & name )
+{
+    auto state = m_paramModel->GetState( name );
+    assert( state );
+    return state->StateChanged();
+}
+
+// ***********************
+//
+bool                                    CameraModel::StateChanged        ()
+{
+    bool result = false;
+    auto & states = m_paramModel->GetStates();
+
+    for( auto & state : states )
+    {
+        result = result || state.second->StateChanged();
+    }
+
+    return result;
+}
 
 } // model
 } //bv

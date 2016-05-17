@@ -38,14 +38,14 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
     : m_scene( scene )
     , m_modelScene( modelScene )
     , m_gridLinesUpdateID( 0 )
+    , m_cameraUpdateID( 0 )
 {
 }
 
 // *****************************
 //
                     SceneUpdater::~SceneUpdater     ()
-{
-}
+{}
 
 // *****************************
 //
@@ -131,5 +131,17 @@ void                SceneUpdater::UpdateGridLines     ()
     }
 }
 
+// ***********************
+//
+void                    SceneUpdater::UpdateCamera        ()
+{
+    auto & camLogic = m_modelScene->GetCamerasLogic();
+    
+    if( m_cameraUpdateID < camLogic.GetUpdateID() )
+    {
+        auto camera = m_modelScene->GetCamera();
+        UpdatersHelpers::UpdateCamera( camera, camLogic.GetCurrentCamera() );
+    }
+}
 
 } //bv

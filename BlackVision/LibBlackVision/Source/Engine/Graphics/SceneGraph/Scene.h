@@ -7,6 +7,7 @@ class Renderer;
 class SceneNode;
 class UniformBuffer;
 class RenderableEntity;
+class Camera;
 
 class Scene
 {
@@ -15,6 +16,7 @@ private:
     SceneNode *             m_root;
 
     UniformBuffer *         m_lightsBuffer;
+    Camera *                m_camera;
     
     // @todo Maybe it should move to container class for engine grid lines.
     // In future when other helper object will apear in BV, we should implement
@@ -29,10 +31,11 @@ public:
 
 public:
 
-    SceneNode *             GetRoot             () const;
-    void                    SetRoot             ( SceneNode * node );
+    SceneNode *             GetRoot                 () const;
+    void                    SetRoot                 ( SceneNode * node );
 
-    UniformBuffer *         GetLightsBuffer     () const;
+    UniformBuffer *         GetLightsBuffer         () const;
+    Camera *                GetCamera               () const;
 
     RenderableEntity *      GetGridLines            () const;
     void                    SetGridLinesRenderable  ( RenderableEntity * renderable );

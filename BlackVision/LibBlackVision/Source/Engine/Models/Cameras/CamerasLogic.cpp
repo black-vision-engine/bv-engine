@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CamerasLogic.h"
 
+#include "Application/ApplicationContext.h"
 #include "Engine/Models/ModelHelper.h"
 
 
@@ -17,6 +18,10 @@ CamerasLogic::CamerasLogic( ITimeEvaluatorPtr timeEvaluator )
 //
 CamerasLogic::~CamerasLogic()
 {}
+
+// ========================================================================= //
+// Serialization
+// ========================================================================= //
 
 // ***********************
 //
@@ -74,6 +79,21 @@ void            CamerasLogic::Serialize               ( ISerializer & ser ) cons
         ser.SetAttribute( "CurrentCamera", SerializationHelper::T2String( currCameraIdx ) );
 }
 
+// ========================================================================= //
+// Interaction
+// ========================================================================= //
+
+void                    CamerasLogic::Update                  ( TimeType t )
+{
+    for( auto & camera : m_cameras )
+    {
+        camera->Update( t );
+    }
+
+    if( m_currentCamera->StateChanged() )
+        UpdateID();
+}
+
 // ***********************
 //
 bool                    CamerasLogic::AddCamera               ()
@@ -109,11 +129,16 @@ bool                    CamerasLogic::SetCurrentCamera        ( unsigned int ind
     if( index < m_cameras.size() )
     {
         m_currentCamera = m_cameras[ index ];
+        UpdateID();
         return true;
     }
     else
         return false;
 }
+
+// ========================================================================= //
+// Private Helpers
+// ========================================================================= //
 
 // ***********************
 //
@@ -129,6 +154,13 @@ void            CamerasLogic::ClearAll                ()
 {
     m_cameras.clear();
     m_currentCamera = nullptr;
+}
+
+// ***********************
+//
+void            CamerasLogic::UpdateID                ()
+{
+    m_cameraUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
 }
 
 } // model

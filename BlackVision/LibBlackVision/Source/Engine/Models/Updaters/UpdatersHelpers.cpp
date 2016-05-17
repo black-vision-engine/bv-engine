@@ -8,6 +8,7 @@
 #include "Engine/Graphics/Resources/VertexBuffer.h"
 #include "Engine/Graphics/Resources/VertexArray.h"
 
+#include "Engine/Graphics/SceneGraph/Camera.h"
 
 namespace bv
 {
@@ -90,5 +91,34 @@ void    UpdatersHelpers::RecreateRenderableBuffer    ( RenderableEntity * render
     vao->SetNeedsUpdateRecreation( true );
 }
 
+// ***********************
+//
+void         UpdatersHelpers::UpdateCamera                ( Camera * camera, model::CameraModelPtr & cameraModel )
+{
+    auto position = QueryTypedValue< ValueVec3Ptr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::POSITION ) );
+    auto direction = QueryTypedValue< ValueVec3Ptr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::DIRECTION ) );
+    auto fov = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::FOV ) );
+    auto isPerspective = QueryTypedValue< ValueBoolPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::IS_PERSPECTIVE ) );
+    auto far = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::FAR_CLIPPING_PLANE ) );
+    auto near = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::NEAR_CLIPPING_PLANE ) );
+    auto height = QueryTypedValue< ValueIntPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) );
+    auto width = QueryTypedValue< ValueIntPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) );
+
+    if( isPerspective->GetValue() != camera->IsPerspective() )
+    {
+        // FIXME: Change camera type !!!
+    }
+
+    if( isPerspective )
+    {
+        camera->SetPerspective( fov->GetValue(), width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
+        camera->SetFrame( position->GetValue(), direction->GetValue(), glm::vec3( 0.0, 1.0, 0.0 ) );
+    }
+    else
+    {
+
+    }
+    
+}
 
 }	// bv

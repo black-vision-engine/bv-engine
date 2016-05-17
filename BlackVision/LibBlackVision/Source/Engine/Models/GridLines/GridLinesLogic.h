@@ -49,6 +49,7 @@ private:
     void                        AllocGridLine           ( GridLineType gridType, int gridIndex, std::vector< GridLine* >& gridLinesVec );
 
     void                        ClearAll                ();
+    void                        UpdateID                ();
 };
 
 }   // model
