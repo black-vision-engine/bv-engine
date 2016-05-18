@@ -18,6 +18,7 @@ const std::string       CameraModel::PARAMETERS::POSITION               = "Posit
 const std::string       CameraModel::PARAMETERS::FOV                    = "FOV";
 const std::string       CameraModel::PARAMETERS::FAR_CLIPPING_PLANE     = "FarClippingPlane";
 const std::string       CameraModel::PARAMETERS::NEAR_CLIPPING_PLANE    = "NearClippingPlane";
+const std::string       CameraModel::PARAMETERS::UP_VECTOR              = "UpVector";
 
 // ***********************
 //
@@ -33,6 +34,7 @@ CameraModel::CameraModel( ITimeEvaluatorPtr timeEvaluator )
     AddIntParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_HEIGHT, 1080, true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::POSITION, glm::vec3( 0.0f, 0.0f, 5.0f ), true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::DIRECTION, glm::vec3( 0.0f, 0.0f, -1.0f ), true );
+    AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::UP_VECTOR, glm::vec3( 0.0f, 1.0f, 0.0f ), true );
 }
 
 // ***********************

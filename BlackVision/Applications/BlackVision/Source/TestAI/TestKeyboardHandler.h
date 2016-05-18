@@ -14,6 +14,11 @@ class TestKeyboardHandler
 private:
 
     bool            m_moveCamera;
+    float           m_moveMultiplier;
+    float           m_rotationMultiplier;
+
+    float           m_moveMultiplierBase;
+    float           m_rotationMultiplierBase;
 
 public:
     explicit                TestKeyboardHandler();
@@ -21,6 +26,9 @@ public:
 
     virtual void            HandleKey           ( unsigned char c, BVAppLogic * logic );
     virtual void            OnMouse             ( MouseAction action, int posX, int posY, BVAppLogic * logic );
+
+private:
+    float                   ComputeMoveMultiplier   ( char c );
 };
 
 } //bv

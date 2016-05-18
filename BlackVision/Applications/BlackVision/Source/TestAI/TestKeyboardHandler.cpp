@@ -20,7 +20,11 @@ namespace
 //
 TestKeyboardHandler::TestKeyboardHandler()
     :   m_moveCamera( false )
-{}
+    ,   m_moveMultiplierBase( 0.03f )
+    ,   m_rotationMultiplierBase( 0.2f )
+{
+    m_moveMultiplier = ComputeMoveMultiplier( '5' );
+}
 
 // *********************************
 //
@@ -31,29 +35,74 @@ TestKeyboardHandler::~TestKeyboardHandler()
 //
 void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
-    if( c == 's' )
-    {
-        auto sob = new BVXMLSerializer();
-        logic->GetBVProject()->GetModelScenes()[ 0 ]->Serialize( *sob );
-        sob->Save( "test.xml" );
-        delete sob;
-    }
-    else if( c == 'j' )
-    {
-        auto sob = new JsonSerializeObject();
-        logic->GetBVProject()->Serialize( *sob );
-        sob->Save( "test.json" );
-        delete sob;
-    }
-    else if( c == 'e' )
-    {
-        // Serialize all events
-        SerializeAllEvents( "serialization/Events.json" );
-    }
-    
+    //if( c == 's' )
+    //{
+    //    auto sob = new BVXMLSerializer();
+    //    logic->GetBVProject()->GetModelScenes()[ 0 ]->Serialize( *sob );
+    //    sob->Save( "test.xml" );
+    //    delete sob;
+    //}
+    //else if( c == 'j' )
+    //{
+    //    auto sob = new JsonSerializeObject();
+    //    logic->GetBVProject()->Serialize( *sob );
+    //    sob->Save( "test.json" );
+    //    delete sob;
+    //}
+    //else if( c == 'e' )
+    //{
+    //    // Serialize all events
+    //    SerializeAllEvents( "serialization/Events.json" );
+    //}
+    //
 
-    // Move camera logic
-    //auto & scenes = logic->GetBVProject()->GetScenes();
+    if( c >= '0' && c <= '9' )
+    {
+        m_moveMultiplier = ComputeMoveMultiplier( c );
+    }
+
+    if( c == 'w' || c == 's' )
+    {
+        float multiplier = m_moveMultiplier;
+        if( c == 's' )
+            multiplier = -1.0f * multiplier;
+
+        // Move forward and backward camera logic
+        auto & scenes = logic->GetBVProject()->GetModelScenes();
+        for( auto & scene : scenes )
+        {
+            auto & camera = scene->GetCamerasLogic().GetCurrentCamera();
+            auto posValue = QueryTypedValue< ValueVec3Ptr >( camera->GetValue( "Position" ) );
+            auto posParam = camera->GetParameter( "Position" );
+            auto dirValue = QueryTypedValue< ValueVec3Ptr >( camera->GetValue( "Direction" ) );
+
+            glm::vec3 translation = dirValue->GetValue() * multiplier;
+            model::SetParameter( posParam, TimeType( 0.0f ), posValue->GetValue() + translation );
+        }
+    }
+
+    if( c == 'a' || c == 'd' )
+    {
+        float multiplier = m_moveMultiplier;
+        if( c == 'a' )
+            multiplier = -1.0f * multiplier;
+
+        // Move left and right camera logic
+        auto & scenes = logic->GetBVProject()->GetModelScenes();
+        for( auto & scene : scenes )
+        {
+            auto & camera = scene->GetCamerasLogic().GetCurrentCamera();
+            auto posValue = QueryTypedValue< ValueVec3Ptr >( camera->GetValue( "Position" ) );
+            auto posParam = camera->GetParameter( "Position" );
+            auto dirValue = QueryTypedValue< ValueVec3Ptr >( camera->GetValue( "Direction" ) );
+            auto upValue = QueryTypedValue< ValueVec3Ptr >( camera->GetValue( "UpVector" ) );
+
+            glm::vec3 rightVec = glm::cross( dirValue->GetValue(), upValue->GetValue() );
+
+            glm::vec3 translation = rightVec * multiplier;
+            model::SetParameter( posParam, TimeType( 0.0f ), posValue->GetValue() + translation );
+        }
+    }
 
 
     { logic; }
@@ -119,6 +168,15 @@ void TestKeyboardHandler::OnMouse             ( MouseAction action, int posX, in
 
         }
     }
+}
+
+// ***********************
+//
+float TestKeyboardHandler::ComputeMoveMultiplier   ( char c )
+{
+    float param = 1.5f * static_cast< float >( c - '5' );
+    float value = pow( 2.0f, param );
+    return m_moveMultiplierBase * value;
 }
 
 namespace

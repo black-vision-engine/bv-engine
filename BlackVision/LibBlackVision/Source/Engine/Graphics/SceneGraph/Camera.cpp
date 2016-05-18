@@ -217,7 +217,7 @@ const glm::mat4 &   Camera::GetViewProjectionMatrix () const
 //
 void Camera::UpdatePVMatrix                         ()
 {
-    m_view = glm::lookAt( m_position, m_direction, m_up );
+    m_view = glm::lookAt( m_position, m_position + m_direction, m_up );
 
     m_viewProj = m_projection * m_view;
 }
