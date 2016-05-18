@@ -16,11 +16,16 @@ namespace
 };
 
 
+// ***********************
+//
+TestKeyboardHandler::TestKeyboardHandler()
+    :   m_moveCamera( false )
+{}
+
 // *********************************
 //
 TestKeyboardHandler::~TestKeyboardHandler()
-{
-}
+{}
 
 // *********************************
 //
@@ -45,6 +50,10 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         // Serialize all events
         SerializeAllEvents( "serialization/Events.json" );
     }
+    
+
+    // Move camera logic
+    //auto & scenes = logic->GetBVProject()->GetScenes();
 
 
     { logic; }
@@ -94,6 +103,21 @@ void TestKeyboardHandler::OnMouse             ( MouseAction action, int posX, in
         mouseEvent->EventID = 0;
 
         GetDefaultEventManager().QueueEvent( mouseEvent );
+    }
+    else if( action == MouseAction::RIGHT_DOWN )
+    {
+        m_moveCamera = true;
+    }
+    else if( action == MouseAction::RIGHT_UP )
+    {
+        m_moveCamera = false;
+    }
+    else if( action == MouseAction::MOVE )
+    {
+        if( m_moveCamera )
+        {
+
+        }
     }
 }
 

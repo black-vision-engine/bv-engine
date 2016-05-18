@@ -11,8 +11,12 @@ class BVAppLogic;
 
 class TestKeyboardHandler
 {
-public:
+private:
 
+    bool            m_moveCamera;
+
+public:
+    explicit                TestKeyboardHandler();
     virtual                 ~TestKeyboardHandler();
 
     virtual void            HandleKey           ( unsigned char c, BVAppLogic * logic );

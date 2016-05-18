@@ -54,7 +54,9 @@ void            CamerasLogic::Deserialize             ( const IDeserializer & de
     if( currCameraIdx < m_cameras.size() )
         m_currentCamera = m_cameras[ currCameraIdx ];
     else
-        m_currentCamera = m_cameras[ currCameraIdx ];
+        m_currentCamera = m_cameras[ 0 ];
+
+    UpdateID();
 }
 
 

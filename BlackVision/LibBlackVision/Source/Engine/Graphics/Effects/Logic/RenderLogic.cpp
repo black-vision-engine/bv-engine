@@ -343,6 +343,8 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & sce
 
     for( auto & scene : scenes )
     {
+        renderer->SetCamera( scene->GetCamera() );
+
         renderer->EnableScene( scene );
         auto renderQueue = ctx->GetRenderQueueAllocator()->Allocate();
 

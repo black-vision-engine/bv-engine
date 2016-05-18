@@ -53,6 +53,7 @@ void                SceneUpdater::DoUpdate          ()
 {
     UpdateLights();
     UpdateGridLines();
+    UpdateCamera();
 }
 
 // *****************************
@@ -139,7 +140,7 @@ void                    SceneUpdater::UpdateCamera        ()
     
     if( m_cameraUpdateID < camLogic.GetUpdateID() )
     {
-        auto camera = m_modelScene->GetCamera();
+        auto camera = m_scene->GetCamera();
         UpdatersHelpers::UpdateCamera( camera, camLogic.GetCurrentCamera() );
     }
 }
