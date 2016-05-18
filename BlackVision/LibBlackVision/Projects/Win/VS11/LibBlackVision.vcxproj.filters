@@ -1546,6 +1546,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp">
       <Filter>Engine\Models\Cameras</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3778,6 +3781,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.h">
       <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

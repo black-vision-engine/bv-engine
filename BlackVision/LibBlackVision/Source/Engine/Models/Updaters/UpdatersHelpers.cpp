@@ -111,15 +111,11 @@ void         UpdatersHelpers::UpdateCamera                ( Camera * camera, mod
     }
 
     if( isPerspective )
-    {
         camera->SetPerspective( fov->GetValue(), width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
-        camera->SetFrame( position->GetValue(), direction->GetValue(), up->GetValue() );
-    }
     else
-    {
+        camera->SetFrustum( -width->GetValue() / 2.0f, width->GetValue() / 2.0f, -height->GetValue() / 2.0f, height->GetValue() / 2.0f, near->GetValue(), far->GetValue() );
 
-    }
-    
+    camera->SetFrame( position->GetValue(), direction->GetValue(), up->GetValue() );
 }
 
 }	// bv

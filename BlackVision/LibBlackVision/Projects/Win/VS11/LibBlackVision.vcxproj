@@ -275,6 +275,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp" />
@@ -564,6 +565,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\UniformBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h" />

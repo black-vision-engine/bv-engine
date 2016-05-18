@@ -16,9 +16,10 @@ private:
     SceneNode *             m_root;
 
     UniformBuffer *         m_lightsBuffer;
+    UniformBuffer *         m_cameraBuffer;
     Camera *                m_camera;
     
-    // @todo Maybe it should move to container class for engine grid lines.
+    // @todo Maybe it should be moved to container class for engine grid lines.
     // In future when other helper object will apear in BV, we should implement
     // genering solution for handling it.
     RenderableEntity *      m_gridLines;
@@ -34,6 +35,7 @@ public:
     SceneNode *             GetRoot                 () const;
     void                    SetRoot                 ( SceneNode * node );
 
+    UniformBuffer *         GetCameraBuffer         () const;
     UniformBuffer *         GetLightsBuffer         () const;
     Camera *                GetCamera               () const;
 

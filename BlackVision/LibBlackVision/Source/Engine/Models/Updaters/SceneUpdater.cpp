@@ -142,6 +142,13 @@ void                    SceneUpdater::UpdateCamera        ()
     {
         auto camera = m_scene->GetCamera();
         UpdatersHelpers::UpdateCamera( camera, camLogic.GetCurrentCamera() );
+
+        // Set camera position in UBO.
+        // FIXME: In future all camera data should be placed in this UBO instead of using
+        // uniforms per object.
+        auto cameraUBO = m_scene->GetCameraBuffer();
+        auto positionValue = camLogic.GetCurrentCamera()->GetValue( "Position" );
+        cameraUBO->WriteData( positionValue->GetData(), positionValue->GetSize(), 0 );
     }
 }
 

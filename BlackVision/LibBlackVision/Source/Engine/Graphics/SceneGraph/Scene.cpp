@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/LightsLayout.h"
+#include "Engine/Graphics/SceneGraph/CameraLayout.h"
 #include "Engine/Graphics/Resources/UniformBuffer.h"
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
@@ -23,6 +24,9 @@ namespace bv {
 {
     auto lightsLayout = LightsLayout::Instance().GetBlockLayout();
     m_lightsBuffer =  new UniformBuffer( lightsLayout, DataBuffer::Semantic::S_DYNAMIC );
+
+    auto cameraLayout = CameraLayout::Instance().GetBlockLayout();
+    m_cameraBuffer = new UniformBuffer( cameraLayout, DataBuffer::Semantic::S_DYNAMIC );
 }
 
 // ********************************
@@ -31,6 +35,7 @@ namespace bv {
 {
     delete m_lightsBuffer;
     delete m_gridLines;
+    delete m_camera;
 }
 
 // ********************************
@@ -45,6 +50,13 @@ SceneNode *         Scene::GetRoot                  () const
 void                Scene::SetRoot                  ( SceneNode * node )
 {
     m_root = node;
+}
+
+// ***********************
+//
+UniformBuffer *     Scene::GetCameraBuffer         () const
+{
+    return m_cameraBuffer;
 }
 
 // ********************************
