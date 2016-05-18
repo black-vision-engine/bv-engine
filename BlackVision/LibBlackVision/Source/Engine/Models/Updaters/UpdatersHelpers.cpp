@@ -97,6 +97,7 @@ void         UpdatersHelpers::UpdateCamera                ( Camera * camera, mod
 {
     auto position = QueryTypedValue< ValueVec3Ptr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::POSITION ) );
     auto direction = QueryTypedValue< ValueVec3Ptr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::DIRECTION ) );
+    auto up = QueryTypedValue< ValueVec3Ptr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::UP_VECTOR ) );
     auto fov = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::FOV ) );
     auto isPerspective = QueryTypedValue< ValueBoolPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::IS_PERSPECTIVE ) );
     auto far = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::FAR_CLIPPING_PLANE ) );
@@ -112,7 +113,7 @@ void         UpdatersHelpers::UpdateCamera                ( Camera * camera, mod
     if( isPerspective )
     {
         camera->SetPerspective( fov->GetValue(), width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
-        camera->SetFrame( position->GetValue(), direction->GetValue(), glm::vec3( 0.0, 1.0, 0.0 ) );
+        camera->SetFrame( position->GetValue(), direction->GetValue(), up->GetValue() );
     }
     else
     {

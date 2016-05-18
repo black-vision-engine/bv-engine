@@ -20,6 +20,9 @@ private:
     float           m_moveMultiplierBase;
     float           m_rotationMultiplierBase;
 
+    int             m_lastX;
+    int             m_lastY;
+
 public:
     explicit                TestKeyboardHandler();
     virtual                 ~TestKeyboardHandler();
@@ -28,7 +31,8 @@ public:
     virtual void            OnMouse             ( MouseAction action, int posX, int posY, BVAppLogic * logic );
 
 private:
-    float                   ComputeMoveMultiplier   ( char c );
+    float                   ComputeMoveMultiplier       ( char c );
+    float                   ComputeRotationMultiplier   ( char c );
 };
 
 } //bv
