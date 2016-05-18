@@ -5,13 +5,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "Engine/Events/EventHandlerHelpers.h"
-
 #include "Widgets/NodeLogicHelper.h"
-
-#include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/Timeline/TimelineHelper.h"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
@@ -20,15 +14,15 @@
 #include "Engine/Models/Plugins/Simple/DefaultMaterialPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
+#include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
 #include "Tools/StringHeplers.h"
-#include "Engine/Models/BoundingVolume.h"
 
 #include "Engine/Models/BVProjectEditor.h"
 
 
 namespace bv {
+
 
 namespace SerializationHelper {
 
@@ -281,15 +275,12 @@ void                        PieChart::AddSlice           ( model::SceneModelPtr 
     if( node )
     {
         editor->AddChildNode( scene, m_parentNode, node );
+        if( idx < ( UInt32 )m_slicesDesc.size() )
+        {
+            editor->MoveNode( scene, m_parentNode, idx, scene, m_parentNode, node );
+        }
 
-        if( idx >= ( UInt32 )m_slicesDesc.size() )
-        {
-            m_slicesDesc.push_back( sliceDesc );
-        }
-        else
-        {
-            m_slicesDesc.insert( m_slicesDesc.begin() + idx, sliceDesc );
-        }
+        m_slicesDesc.push_back( sliceDesc );
         m_slices[ node ] = sliceDesc;
     }
 }

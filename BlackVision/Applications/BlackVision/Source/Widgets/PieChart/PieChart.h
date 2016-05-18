@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Widgets/NodeLogicBase.h"
-#include "Engine/Models/BasicNode.h"
 #include "Engine/Models/SceneModel.h"
 
 #include "CoreDEF.h"
 
 
 namespace bv { namespace nodelogic {
+
 
 class PieChart;
 
@@ -26,6 +26,7 @@ public:
         
         PST_TOTAL
 	};
+
 
     struct PieSliceDesc;
     DEFINE_PTR_TYPE( PieSliceDesc )
