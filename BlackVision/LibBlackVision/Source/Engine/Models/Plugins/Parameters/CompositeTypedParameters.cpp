@@ -84,7 +84,7 @@ int         ParamTransform::GetNumKeys      ()
 
 // *******************************
 //
-void    ParamTransform::Serialize       ( ISerializer& ser ) const
+void    ParamTransform::Serialize       ( ISerializer & ser ) const
 {
     auto serContext = Cast< BVSerializeContext * >( ser.GetSerializeContext() );
 
@@ -100,6 +100,28 @@ void    ParamTransform::Serialize       ( ISerializer& ser ) const
     ser.SetAttribute( "timeline", timeline );
 
     m_transformModel.Serialize( ser );
+
+    ser.ExitChild();
+}
+
+// *******************************
+//
+void    ParamTransform::Serialize       ( ISerializer & ser, TransformKind kind ) const
+{
+    auto serContext = Cast< BVSerializeContext * >( ser.GetSerializeContext() );
+
+    ser.EnterChild( "param" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "transform" );
+
+    std::string timeline;
+    if( serContext->sceneNameInTimeline )
+        timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    else
+        timeline = m_timeEvaluator->GetName();
+    ser.SetAttribute( "timeline", timeline );
+
+    m_transformModel.Serialize( ser, kind );
 
     ser.ExitChild();
 }

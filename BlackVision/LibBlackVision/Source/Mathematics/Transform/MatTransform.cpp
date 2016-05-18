@@ -372,60 +372,88 @@ CompositeTransformPtr    CompositeTransform::Create      ( const IDeserializer &
 
 // *************************************
 //
-void                                CompositeTransform::Serialize               ( ISerializer & ser ) const
+void                CompositeTransform::Serialize       ( ISerializer & ser ) const
 {
     ser.EnterArray( "composite_transform" );
 
-    //center
-    ser.EnterChild( "transform" );
-    SerializationHelper::SerializeAttribute( ser, TransformKind::center, "kind" );
-    ser.EnterArray( "interpolators" );
-
-    m_centerX.Serialize( ser );
-    m_centerY.Serialize( ser );
-    m_centerZ.Serialize( ser );
-
-    ser.ExitChild(); // interpolators
-    ser.ExitChild(); // transform
-    
-    //translation
-    ser.EnterChild( "transform" );
-    SerializationHelper::SerializeAttribute( ser, TransformKind::translation, "kind" );
-    ser.EnterArray( "interpolators" );
-
-    m_translationX.Serialize( ser );
-    m_translationY.Serialize( ser );
-    m_translationZ.Serialize( ser );
-
-    ser.ExitChild(); // interpolators
-    ser.ExitChild(); // transform
-
-    //rotation
-    ser.EnterChild( "transform" );
-    SerializationHelper::SerializeAttribute( ser, TransformKind::rotation, "kind" );
-    ser.SetAttribute( "iseuler", "true" ); //?
-    ser.EnterArray( "interpolators" );
-
-    m_eulerPitch.Serialize( ser );
-    m_eulerYaw.Serialize( ser );
-    m_eulerRoll.Serialize( ser );
-
-    ser.ExitChild(); // interpolators
-    ser.ExitChild(); // transform
-
-    //scale
-    ser.EnterChild( "transform" );
-    SerializationHelper::SerializeAttribute( ser, TransformKind::scale, "kind" );
-    ser.EnterArray( "interpolators" );
-
-    m_scaleX.Serialize( ser );
-    m_scaleY.Serialize( ser );
-    m_scaleZ.Serialize( ser );
-
-    ser.ExitChild(); // interpolators
-    ser.ExitChild(); // transform
+    Serialize( ser, TransformKind::center );
+    Serialize( ser, TransformKind::translation );
+    Serialize( ser, TransformKind::rotation );
+    Serialize( ser, TransformKind::scale );
 
     ser.ExitChild(); // composite_transform
+}
+
+// *************************************
+//
+void                CompositeTransform::Serialize       ( ISerializer & ser, TransformKind kind ) const
+{
+    switch( kind )
+    {
+        case TransformKind::center:
+        {
+            ser.EnterChild( "transform" );
+            SerializationHelper::SerializeAttribute( ser, TransformKind::center, "kind" );
+            ser.EnterArray( "interpolators" );
+
+            m_centerX.Serialize( ser );
+            m_centerY.Serialize( ser );
+            m_centerZ.Serialize( ser );
+
+            ser.ExitChild(); // interpolators
+            ser.ExitChild(); // transform
+        }
+        break;
+
+        case TransformKind::translation:
+        {
+            ser.EnterChild( "transform" );
+            SerializationHelper::SerializeAttribute( ser, TransformKind::translation, "kind" );
+            ser.EnterArray( "interpolators" );
+
+            m_translationX.Serialize( ser );
+            m_translationY.Serialize( ser );
+            m_translationZ.Serialize( ser );
+
+            ser.ExitChild(); // interpolators
+            ser.ExitChild(); // transform
+        }
+        break;
+
+        case TransformKind::rotation:
+        {
+            ser.EnterChild( "transform" );
+            SerializationHelper::SerializeAttribute( ser, TransformKind::rotation, "kind" );
+            ser.SetAttribute( "iseuler", "true" ); //?
+            ser.EnterArray( "interpolators" );
+
+            m_eulerPitch.Serialize( ser );
+            m_eulerYaw.Serialize( ser );
+            m_eulerRoll.Serialize( ser );
+
+            ser.ExitChild(); // interpolators
+            ser.ExitChild(); // transform
+        }
+        break;
+
+        case TransformKind::scale:
+        {
+            ser.EnterChild( "transform" );
+            SerializationHelper::SerializeAttribute( ser, TransformKind::scale, "kind" );
+            ser.EnterArray( "interpolators" );
+
+            m_scaleX.Serialize( ser );
+            m_scaleY.Serialize( ser );
+            m_scaleZ.Serialize( ser );
+
+            ser.ExitChild(); // interpolators
+            ser.ExitChild(); // transform
+        }
+        break;
+
+        default:
+            break;
+    }
 }
 
 // *************************************

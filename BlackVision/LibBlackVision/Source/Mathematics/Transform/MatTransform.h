@@ -71,6 +71,7 @@ public:
 
     static CompositeTransformPtr Create      ( const IDeserializer & dob );
     virtual void                 Serialize   ( ISerializer & doc ) const;
+    void                         Serialize   ( ISerializer & doc, TransformKind kind ) const;
 
     explicit        CompositeTransform   ();
     void            InitializeDefaultSRT();

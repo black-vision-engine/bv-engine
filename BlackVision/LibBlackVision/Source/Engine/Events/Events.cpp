@@ -116,8 +116,6 @@ namespace SerializationHelper
 // Key names used to serialization.
 
 const std::string EVENT_TYPE_STRING       = "Event";
-const std::string NODE_NAME_STRING        = "NodeName";
-const std::string PLUGIN_NAME_STRING      = "PluginName";
 const std::string TIMELINE_NAME_STRING    = "TimelineName";      // TimeLineEvent and NodeStructureEvent
 const std::string COMMAND_STRING          = "Command";
 const std::string REQUEST_STRING          = "Request";           // ProjectStructureEvent InfoEvent
@@ -142,12 +140,9 @@ template<> std::string              T2String        ( const LoadAssetEvent::Comm
 // ========================================================================= //
 // ParamKeyEvent
 // ========================================================================= //
-const std::string PARAM_NAME_STRING           = "ParamName";
-const std::string PARAM_SUB_NAME_STRING       = "ParamSubName";
 const std::string PARAM_LIGHT_INDEX           = "LightIndex";
 const std::string PARAM_VALUE_STRING          = "ParamValue";
 const std::string KEY_TIME_STRING             = "Time";
-const std::string PARAM_TARGET_TYPE_STRING    = "Target";
 
 std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] = 
     { std::make_pair( ParamKeyEvent::Command::AddKey, "AddKey" )
@@ -159,6 +154,7 @@ std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] =
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPostWrapMethod, "SetInterpolatorPostWrapMethod" )
     , std::make_pair( ParamKeyEvent::Command::AssignTimeline, "AssignTimeline" )
     , std::make_pair( ParamKeyEvent::Command::SampleCurve, "SampleCurve" )
+    , std::make_pair( ParamKeyEvent::Command::ListKeys, "ListKeys" )
     , std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -376,7 +372,6 @@ const std::string TIMELINE_TIME_VALUE_STRING          = "Time";
 const std::string TIMELINE_DURATION_VALUE_STRING      = "Duration";
 const std::string TIMELINE_NEW_NAME_STRING            = "TimelineNewName";
 const std::string TIMELINE_WRAP_METHOD_STRING          = "WrapMethod";
-const std::string SCENE_NAME_STRING                   = "SceneName";
 
 // Timeline Command
 

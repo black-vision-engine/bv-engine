@@ -20,7 +20,8 @@ public:
     explicit                    ParamTransform          ( const std::string & name, const CompositeTransform & transform, ITimeEvaluatorPtr evaluator );
                                 ~ParamTransform         ();
 
-    virtual void                Serialize               ( ISerializer& doc ) const override;
+    virtual void                Serialize               ( ISerializer & ser ) const override;
+    void                        Serialize               ( ISerializer & ser, TransformKind kind ) const;
 
     virtual void                SetAddedKeyCurveType    ( CurveType type ) override;
     virtual void                SetGlobalCurveType      ( CurveType type ) override;

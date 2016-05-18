@@ -20,6 +20,20 @@ const static unsigned int SEND_BROADCAST_EVENT = UINT_MAX;
 
 class Renderer;
 
+
+// *************************************
+
+namespace SerializationHelper
+{
+    static const std::string SCENE_NAME_STRING          = "SceneName";
+    static const std::string NODE_NAME_STRING           = "NodeName";
+    static const std::string PLUGIN_NAME_STRING         = "PluginName";
+    static const std::string PARAM_NAME_STRING          = "ParamName";
+    static const std::string PARAM_SUB_NAME_STRING      = "ParamSubName";
+    static const std::string PARAM_TARGET_TYPE_STRING   = "Target";
+}
+
+
 // ************************************* PluginAddedEvent *************************************
 class PluginAddedEvent : public BaseEvent
 {
@@ -249,6 +263,7 @@ public:
         SetInterpolatorPostWrapMethod,
         AssignTimeline,
         SampleCurve,
+        ListKeys,
         Fail            ///< Wrong command
     } Command;
 

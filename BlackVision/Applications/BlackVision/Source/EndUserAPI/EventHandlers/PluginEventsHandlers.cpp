@@ -204,6 +204,32 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         }
         result = false;
     }
+    else if( command == ParamKeyEvent::Command::ListKeys )
+    {
+        JsonSerializeObject responseJSON;
+        PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
+
+        responseJSON.SetAttribute( SerializationHelper::SCENE_NAME_STRING, setParamEvent->SceneName );
+        responseJSON.SetAttribute( SerializationHelper::NODE_NAME_STRING, setParamEvent->NodeName );
+        responseJSON.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, setParamEvent->PluginName );
+        responseJSON.SetAttribute( SerializationHelper::PARAM_NAME_STRING, setParamEvent->ParamName );
+        responseJSON.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, setParamEvent->ParamSubName );
+        responseJSON.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, SerializationHelper::T2String( setParamEvent->ParamTargetType ) );
+
+        if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
+        {
+            auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
+            QueryTypedParam< ParamTransformPtr >( param )->Serialize( responseJSON, transformKind );
+        }
+        else
+        {
+            param->Serialize( responseJSON );
+        }
+
+        SendResponse( responseJSON, setParamEvent->SocketID, setParamEvent->EventID );
+        
+        return;
+    }
 
     if( result )
     {
