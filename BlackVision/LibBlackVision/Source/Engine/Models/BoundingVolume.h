@@ -16,6 +16,11 @@ DEFINE_PTR_TYPE( IConnectedComponent );
 
 class ParamTransform;
 
+class BoundingVolume;
+DEFINE_PTR_TYPE(BoundingVolume)
+DEFINE_CONST_PTR_TYPE(BoundingVolume)
+
+
 class BoundingVolume {
     mathematics::Box                    m_box;
     glm::vec3                           m_center;
@@ -39,6 +44,7 @@ public:
     IConnectedComponentPtr              BuildCenterRepresentation () const;
 
     void                                Update                  ();
+
 };
 
 } // model

@@ -100,21 +100,21 @@ ThumbnailConstPtr FontLoader::LoadThumbnail     ( const AssetDescConstPtr & desc
 
 	assert( typedDesc );
 
-    auto filePath = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetFontFileName() ).Str();
+    auto filePath = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetFontFileName() );
 
-    auto thumbFilePath = filePath + ".bvthumb";
+    auto thumbFilePath = AssetAccessor::GetThumbnailPath( filePath );
 
     auto charSetFilePath = ProjectManager::GetInstance()->ToAbsPath( "fonts/ThumbnailCharSet.txt" ).Str();
 
     auto hChSet = Hash::FromFile( charSetFilePath );
-    auto hData = Hash::FromFile( filePath );
+    auto hData = Hash::FromFile( filePath.Str() );
 
     auto h = Hash::FromString( hChSet.Get() + hData.Get() );
 
     if( Path::Exists( thumbFilePath ) )
     {
         JsonDeserializeObject deser;
-        deser.LoadFile( thumbFilePath );
+        deser.LoadFile( thumbFilePath.Str() );
 
         auto thumb = FontAssetThumbnail::Create( deser );
 
@@ -124,7 +124,7 @@ ThumbnailConstPtr FontLoader::LoadThumbnail     ( const AssetDescConstPtr & desc
         }
     }
 
-    auto text = LoadFontFile( filePath, 10, 0, 0, false, L"fonts/ThumbnailCharSet.txt" );
+    auto text = LoadFontFile( filePath.Str(), 10, 0, 0, false, L"fonts/ThumbnailCharSet.txt" );
 
     auto atlasTexture = text->GetAtlas()->GetAsset()->GetOriginal();
 
@@ -139,7 +139,7 @@ ThumbnailConstPtr FontLoader::LoadThumbnail     ( const AssetDescConstPtr & desc
 
     thumb->Serialize( ser );
 
-    ser.Save( thumbFilePath );
+    ser.Save( thumbFilePath.Str() );
 
     return thumb;
 }

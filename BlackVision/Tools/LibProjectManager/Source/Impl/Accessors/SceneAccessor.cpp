@@ -1,5 +1,7 @@
 #include "SceneAccessor.h"
 
+#include "AssetAccessor.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
@@ -85,7 +87,7 @@ void			SceneAccessor::RemoveScene( const Path & path ) const
 ThumbnailConstPtr       SceneAccessor::GetSceneThumbnail   ( const Path & path ) const
 {
     auto absolutePath = m_rootDir / path;
-    Path thumbPath = absolutePath.Str() + ".thumb";
+    Path thumbPath = AssetAccessor::GetThumbnailPath( absolutePath );
 
     if( !Path::Exists( thumbPath ) )
         return nullptr;

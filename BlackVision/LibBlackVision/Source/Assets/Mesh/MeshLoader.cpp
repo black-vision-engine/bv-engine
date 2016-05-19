@@ -29,9 +29,11 @@ AssetDescConstPtr MeshLoader::CreateDescriptor( const IDeserializer & deser ) co
 //
 ThumbnailConstPtr MeshLoader::LoadThumbnail   ( const AssetDescConstPtr & desc ) const
 {
-    //FIXME
-    { desc; }
-	return nullptr;
+    auto typedDesc = QueryTypedDesc< MeshAssetDescConstPtr >( desc );
+
+	assert( typedDesc );
+
+    return MeshUtils::LoadThumbnail( typedDesc );
 }
 
 

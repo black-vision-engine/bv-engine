@@ -37,6 +37,7 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.cpp">
       <Filter>Impl\Accessors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetAccessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />

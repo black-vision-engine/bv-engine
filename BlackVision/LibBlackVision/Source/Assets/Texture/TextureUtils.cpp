@@ -427,7 +427,7 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     auto absTexPath = ProjectManager::GetInstance()->ToAbsPath( texPath );
 
-    auto thumbPath = Path( absTexPath.Str() + ".bvthumb" );
+    auto thumbPath = AssetAccessor::GetThumbnailPath( absTexPath );
 
     auto h = Hash::FromFile( absTexPath.Str() );
 

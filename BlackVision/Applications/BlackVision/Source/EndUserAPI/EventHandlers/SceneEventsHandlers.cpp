@@ -8,6 +8,9 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
+#include "Widgets/MeshLoader/MeshLoader.h"
+#include "Engine/Models/BoundingVolume.h"
+
 #include "Engine/Events/EventHandlerHelpers.h"
 
 #include "System/Path.h"
@@ -22,6 +25,7 @@
 #include "DataTypes/Hash.h"
 #include "Assets/Thumbnail/Impl/SceneThumbnail.h"
 #include "Assets/Thumbnail/Impl/PresetThumbnail.h"
+#include "Assets/Thumbnail/Impl/MeshAssetThumbnail.h"
 
 
 namespace bv
@@ -456,7 +460,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
                         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
                 
-                        RequestThumbnail( scene, newSceneName );
+                        RequestThumbnail( scene, newSceneName, ThumbnailType::Preset );
                     }
                     else
                     {
@@ -599,7 +603,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 scene = tempScene;
             }
 
-            RequestThumbnail( scene, destPath );
+            RequestThumbnail( scene, destPath, ThumbnailType::Preset );
         }
         else
         {
@@ -787,6 +791,12 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
+    else if( command == ProjectEvent::Command::GenerateMeshThumbnail )//temp testing event
+    {
+        auto assetPath = request.GetAttribute( "assetFilePath" );
+        auto destPath = request.GetAttribute( "destAssetFilePath" );
+        GenerateMeshThumbnail( assetPath, destPath );
+    }
     else
     {
         SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );
@@ -948,23 +958,22 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
 
 // ***********************
 //
-void        SceneEventsHandlers::RequestThumbnail    ( bv::model::SceneModelPtr scene, const std::string & saveTo )
+void        SceneEventsHandlers::RequestThumbnail       ( model::SceneModelPtr scene, const std::string & saveTo, ThumbnailType thumbnailType )
 {
     // Save state and make all scenes invisible.
     SaveVisibilityState( scene->GetName() );
 
     std::string sceneName = scene->GetName();
-    Path prefixDir;
 
-    if( IsPresetScene( sceneName ) )
-        prefixDir = "presets";
-    else
-        prefixDir = "scenes";
+    Path prefixDir = GetPrefixDir( thumbnailType );
 
     Path sceneScreenShot( saveTo );
     auto parentPath = sceneScreenShot.ParentPath();     // Extract directory
     sceneScreenShot = File::GetFileName( sceneScreenShot.Str(), true );   
     sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / parentPath /sceneScreenShot;
+
+    m_thumbnailTypeMap[ sceneScreenShot.Str() ] = thumbnailType;
+
     m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true, false );
 
     GetDefaultEventManager().LockEvents( 1 );   // Lock events for one frame, to protect scenes from changeing visibility and other parameters.
@@ -991,32 +1000,25 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         auto resizedChunk = image::MakeThumbnai( chunk, width, height, bpp, 128 );
         auto compresed = image::SaveTGAToHandle( resizedChunk, 128, 128, 32 );
 
-
         std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
 
-        //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
-        ThumbnailConstPtr thumb = nullptr;
+        auto thumbnailType = m_thumbnailTypeMap[ thumbName ];
 
-        bool isPreset = IsPresetScene( thumbName );
-        if( isPreset )
-        {
-            thumb = PresetThumbnail::Create( compresed );
-        }
-        else
-        {
-            thumb = SceneThumbnail::Create( compresed );
-        }
+        //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
+
+        auto thumb = CreateThumbnail( thumbnailType, compresed );
 
         JsonSerializeObject ser;
         thumb->Serialize( ser );        
         
-        ser.Save( thumbName + ".thumb" );
+        ser.Save( AssetAccessor::GetThumbnailPath( thumbName ).Str() );
         Path::Remove( screenShotEvent->FilePath );
 
-        if( isPreset && m_closeSavedPreset )
+        if( ( thumbnailType == ThumbnailType::Preset && m_closeSavedPreset ) || thumbnailType == ThumbnailType::MeshAsset )
         {
             auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
             editor->RemoveScene( m_savedScene );
+            m_scenesVisibilityState.erase( m_savedScene );
         }
     }
 
@@ -1053,6 +1055,84 @@ void        SceneEventsHandlers::RestoreVisibilityState  ()
 
     m_scenesVisibilityState.clear();
     m_savedScene = nullptr;
+}
+
+// ***********************
+//
+ThumbnailConstPtr       SceneEventsHandlers::CreateThumbnail        ( ThumbnailType thumbnailType, MemoryChunkConstPtr data )
+{
+    switch( thumbnailType )
+    {
+    case ThumbnailType::Scene:
+        return SceneThumbnail::Create( data );
+    case ThumbnailType::Preset:
+        return PresetThumbnail::Create( data );
+    case ThumbnailType::MeshAsset:
+        return MeshAssetThumbnail::Create( data );
+    default:
+        return nullptr;
+    }
+}
+
+// ***********************
+//
+std::string             SceneEventsHandlers::GetPrefixDir           ( ThumbnailType thumbnailType )
+{
+    switch( thumbnailType )
+    {
+    case ThumbnailType::Scene:
+        return "scenes";
+    case ThumbnailType::Preset:
+        return "presets";
+    case ThumbnailType::MeshAsset:
+        return "meshes";
+    default:
+        return "";
+    }
+}
+
+// ***********************
+//
+void        SceneEventsHandlers::GenerateMeshThumbnail               ( const std::string & meshPath, const std::string & destPath )
+{
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    auto sceneName = File::GetFileName( meshPath );
+
+    editor->AddScene( sceneName );
+
+    auto scene = editor->GetModelScene( sceneName );
+    auto timeline = editor->GetTimeEvaluator( sceneName );
+    auto root = scene->GetRootNode();
+
+    // add default light
+    editor->AddLight( scene, LightType::LT_DIRECTIONAL, timeline );
+
+    auto meshLoader = nodelogic::MeshLoader::Create( root, timeline, meshPath );
+    meshLoader->EnableTextures( true );
+    meshLoader->EnableMaterials( true );
+
+    meshLoader->Load( scene, editor );
+    
+    auto bb = root->GetBoundingBoxRecursive();
+        
+    auto bbCenter = bb.Center();
+    auto bbRadius = 0.f;
+    for( auto vert : bb.GetVerticies() )
+    {
+        auto dist = glm::distance( vert, bbCenter );
+        bbRadius = glm::max( dist, bbRadius );
+    }
+
+    //FIXME: move camera to fit bounding box
+    //Camera camera;
+
+    //auto fov = glm::radians( camera.GetFOV() );
+    //auto camDist = ( bbRadius * 2.0 ) / std::tan( fov / 2.0 );
+
+    //camera.SetFrame( bbCenter - camDist, bbCenter, glm::vec3( 0.f, 0.f, 1.f ) );
+
+    RequestThumbnail( scene, destPath, ThumbnailType::MeshAsset );
 }
 
 } //bv

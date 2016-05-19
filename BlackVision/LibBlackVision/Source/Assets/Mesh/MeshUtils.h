@@ -3,8 +3,7 @@
 #define FBXSDK_SHARED
 #include <fbxsdk.h>
 
-#include "Assets/Mesh/MeshAsset.h"
-#include "Assets/Mesh/MeshAssetDescriptor.h"
+#include "Assets/Assets.h"
 
 
 namespace bv {
@@ -14,6 +13,8 @@ struct MeshUtils
 
 	static MeshAssetConstPtr		    LoadMesh			    ( MeshAssetDescConstPtr desc );
     static MeshAssetConstPtr            ConvertToMesh           ( FbxNode * node );
+
+    static ThumbnailConstPtr            LoadThumbnail           ( const MeshAssetDescConstPtr & desc );
 
 private:
 

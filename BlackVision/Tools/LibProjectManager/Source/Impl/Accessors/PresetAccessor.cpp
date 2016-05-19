@@ -1,4 +1,7 @@
 #include "PresetAccessor.h"
+
+#include "AssetAccessor.h"
+
 #include "SceneDescriptor.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/BV/XML/BVXMLDeserializer.h"
@@ -130,7 +133,7 @@ PathVec                     PresetAccessor::ListPresets() const
 ThumbnailConstPtr           PresetAccessor::GetPresetThumbnail  ( const Path & path ) const
 {
     auto absolutePath = m_path / path;
-    Path thumbPath = absolutePath.Str() + ".thumb";
+    Path thumbPath = AssetAccessor::GetThumbnailPath( absolutePath );
 
     if( !Path::Exists( thumbPath ) )
         return nullptr;

@@ -677,9 +677,28 @@ void BasicNode::Update( TimeType t )
 
 // ********************************
 //
-BoundingVolumeConstPtr              BasicNode::GetBoundingVolume		() const
+BoundingVolumeConstPtr              BasicNode::GetBoundingVolume		    () const
 {
     return m_boundingVolume;
+}
+
+// ********************************
+//
+mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
+{
+    mathematics::Box ret;
+
+    if( m_boundingVolume->GetBoundingBox() )
+    {
+        ret.Include(  *m_boundingVolume->GetBoundingBox() );
+
+        for( UInt32 i = 0; i < m_children.size(); ++i )
+        {
+            ret.Include( m_children[ i ]->GetBoundingBoxRecursive() );
+        }
+    }
+
+    return ret;
 }
 
 // ********************************

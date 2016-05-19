@@ -159,14 +159,14 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
     
     auto p = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetPath() );
 
-    auto thumbFileName = p.Str() + ".bvthumb";
+    auto thumbFileName = AssetAccessor::GetThumbnailPath( p );
 
     auto h = CalcHash( typedDesc, 3 );
 
     if( Path::Exists( thumbFileName ) )
     {
         JsonDeserializeObject deser;
-        deser.LoadFile( thumbFileName );
+        deser.LoadFile( thumbFileName.Str() );
 
         auto thumb = AnimationAssetThumbnail::Create( deser );
 
@@ -189,11 +189,11 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
         mcVec.push_back( compresed );
     }
 
-    auto thumb =  AnimationAssetThumbnail::Create( mcVec, h );
+    auto thumb = AnimationAssetThumbnail::Create( mcVec, h );
 
     JsonSerializeObject ser;
     thumb->Serialize( ser );
-    ser.Save( thumbFileName );
+    ser.Save( thumbFileName.Str() );
 
     return thumb;
 }

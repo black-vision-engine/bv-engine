@@ -5,6 +5,9 @@
 #include "ProjectManager.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
+#include "Assets/Thumbnail/Impl/MeshAssetThumbnail.h"
+
+#include "DataTypes/Hash.h"
 
 
 namespace bv {
@@ -410,6 +413,27 @@ MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc
     manager->Destroy();
 
 	return mesh;
+}
+
+// ******************************
+//
+ThumbnailConstPtr   MeshUtils::LoadThumbnail             ( const MeshAssetDescConstPtr & desc )
+{
+    auto texPath = desc->GetPath();
+
+    auto absTexPath = ProjectManager::GetInstance()->ToAbsPath( texPath );
+
+    auto thumbPath = AssetAccessor::GetThumbnailPath( absTexPath );
+
+    if( Path::Exists( thumbPath ) )
+    {
+        JsonDeserializeObject deser;
+        deser.LoadFile( thumbPath.Str() );
+
+        return MeshAssetThumbnail::Create( deser );
+    }
+
+    return nullptr;
 }
 
 // ******************************

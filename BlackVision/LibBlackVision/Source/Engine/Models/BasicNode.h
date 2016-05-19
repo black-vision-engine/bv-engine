@@ -6,6 +6,7 @@
 
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
+#include "Engine/Models/BoundingVolume.h"
 
 #include "Serialization/ISerializable.h"
 
@@ -22,10 +23,6 @@ typedef std::weak_ptr< BasicNode >  BasicNodeWeakPtr;
 typedef std::vector< BasicNodePtr > TNodeVec;
 
 class ModelNodeEditor;
-
-class BoundingVolume;
-DEFINE_PTR_TYPE(BoundingVolume)
-DEFINE_CONST_PTR_TYPE(BoundingVolume)
 
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
@@ -85,8 +82,9 @@ public:
     void                                    SetName                 ( const std::string & name );
 
     // axis-aligned bounding box
-    mathematics::Rect 						GetAABB					() const;
-    BoundingVolumeConstPtr				    GetBoundingVolume		() const;
+    mathematics::Rect 						GetAABB					    () const;
+    BoundingVolumeConstPtr				    GetBoundingVolume		    () const;
+    mathematics::Box				        GetBoundingBoxRecursive     () const;
 
     BasicNodePtr                            GetChild                ( unsigned int i );
     const BasicNode *                       GetChild                ( unsigned int i ) const;

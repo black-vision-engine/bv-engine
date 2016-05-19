@@ -169,6 +169,13 @@ void                        MeshLoader::Load                  ( IDeserializer & 
     auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
     auto scene = editor->GetModelScene( context->GetSceneName() );
 
+    Load( scene, editor );
+}
+
+// ***********************
+//
+void                        MeshLoader::Load                  ( model::SceneModelPtr scene, BVProjectEditor * editor )
+{
     // add nodes directly to parentNode, because 'RootNode' from mesh asset is always empty
     auto rootNode = Load( m_asset, m_timeEval );
     for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
@@ -294,6 +301,20 @@ bool                        MeshLoader::MeshInfo                  ( ISerializer 
 MeshAssetConstPtr           MeshLoader::GetMeshAsset                () const
 {
     return m_asset;
+}
+
+// ***********************
+//
+void                        MeshLoader::EnableTextures              ( bool enabled )
+{
+    m_textureEnabled = enabled;
+}
+
+// ***********************
+//
+void                        MeshLoader::EnableMaterials              ( bool enabled )
+{
+    m_materialEnabled = enabled;
 }
 
 // ***********************

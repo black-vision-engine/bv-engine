@@ -19,7 +19,7 @@ namespace bv
 ThumbnailConstPtr            VideoStreamUtils::LoadThumbnail                   ( const VideoStreamAssetDescConstPtr & desc )
 {
     auto absTexPath = ProjectManager::GetInstance()->ToAbsPath( desc->GetStreamPath() );
-    auto thumbPath = Path( absTexPath.Str() + ".bvthumb" );
+    auto thumbPath = AssetAccessor::GetThumbnailPath( absTexPath );
     auto h = Hash::FromFile( absTexPath.Str() );
 
 

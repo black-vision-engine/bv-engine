@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
-#include <map>
-#include <string>
 
-namespace bv
-{
+
+namespace bv {
+
 class BVAppLogic;
 
 namespace model
@@ -17,9 +16,20 @@ namespace model
 
 typedef std::map< bv::model::SceneModelPtr, bool >   SceneVisibilityStateMap;
 
+
 class SceneEventsHandlers
 {
 private:
+    
+    enum class ThumbnailType : int
+    {
+        Scene,
+        Preset,
+        MeshAsset
+    };
+
+private:
+
     BVAppLogic*                 m_appLogic;
 
     // Save scene or preset state
@@ -27,7 +37,10 @@ private:
     bool                        m_closeSavedPreset;
     model::SceneModelPtr        m_savedScene;
 
+    std::map< std::string, ThumbnailType >  m_thumbnailTypeMap;
+
 public:
+
     SceneEventsHandlers( BVAppLogic* appLogic );
     ~SceneEventsHandlers();
 
@@ -42,11 +55,18 @@ public:
     void        GridLines           ( bv::IEventPtr evt );
 
 private:
-    void        RequestThumbnail    ( bv::model::SceneModelPtr scene, const std::string & saveTo );
-    void        ThumbnailRendered   ( bv::IEventPtr evt );
+
+    void        RequestThumbnail        ( model::SceneModelPtr scene, const std::string & saveTo, ThumbnailType thumbnailType );
+    void        ThumbnailRendered       ( bv::IEventPtr evt );
 
     void        SaveVisibilityState     ( const std::string & sceneName );
     void        RestoreVisibilityState  ();
+
+    ThumbnailConstPtr   CreateThumbnail         ( ThumbnailType thumbnailType, MemoryChunkConstPtr data );
+    std::string         GetPrefixDir            ( ThumbnailType thumbnailType );
+
+    void                GenerateMeshThumbnail   ( const std::string & meshPath, const std::string & destPath );
+
 };
 
 

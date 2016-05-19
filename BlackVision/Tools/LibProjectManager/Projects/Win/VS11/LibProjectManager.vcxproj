@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.cpp" />

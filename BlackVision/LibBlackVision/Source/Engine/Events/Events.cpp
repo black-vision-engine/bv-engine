@@ -309,6 +309,9 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::SavePreset, "SavePreset" ) 
     , std::make_pair( ProjectEvent::Command::LoadPreset, "LoadPreset" ) 
     , std::make_pair( ProjectEvent::Command::EditPreset, "EditPreset" ) 
+
+    , std::make_pair( ProjectEvent::Command::GenerateMeshThumbnail, "GenerateMeshThumbnail" ) //temp testing event
+    
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 

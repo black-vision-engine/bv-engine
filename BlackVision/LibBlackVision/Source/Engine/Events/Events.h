@@ -572,6 +572,9 @@ public:
         MoveAsset,
         RemoveAsset,
         ImportAsset,
+
+        GenerateMeshThumbnail,//temp testing event
+
         Fail            ///< Wrong command
     } Command;
 private:

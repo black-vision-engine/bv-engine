@@ -36,6 +36,8 @@ public:
 
     virtual PathVec				ListAllUnique		( const Path & path ) const = 0;
 
+    static Path                 GetThumbnailPath    ( const Path & absPath );
+
 	virtual						~AssetAccessor		() = 0 {};
 };
 

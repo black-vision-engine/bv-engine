@@ -1247,16 +1247,16 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
 //    model::LoadTexture( root->GetPlugin( "texture" ), "meshes/daria/bunny-atlas.jpg" );
 
     //auto meshLoader = nodelogic::MeshLoader::Create( root, timeEvaluator, "meshes/StarWarsFighter/ARC.FBX" );
-    auto meshLoader = nodelogic::MeshLoader::Create( root, timeEvaluator, "meshes/daria/cube.obj" );
-    root->SetLogic( meshLoader );
+    //auto meshLoader = nodelogic::MeshLoader::Create( root, timeEvaluator, "meshes/daria/cube.obj" );
+    //root->SetLogic( meshLoader );
 
-    auto rootNode = meshLoader->Load( meshLoader->GetMeshAsset(), timeEvaluator );
-    for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
-    {
-        root->AddChildToModelOnly( rootNode->GetChild( i ), i );
-    }
+    //auto rootNode = meshLoader->Load( meshLoader->GetMeshAsset(), timeEvaluator );
+    //for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
+    //{
+    //    root->AddChildToModelOnly( rootNode->GetChild( i ), i );
+    //}
 
-    auto child = root->GetChild( 0 )->GetChild( 0 )->GetChild( 0 );
+    //auto child = root->GetChild( 0 )->GetChild( 0 )->GetChild( 0 );
     
     //child->AddPlugin( "DEFAULT_TEXTURE", "texture", timeEvaluator );
     //model::LoadTexture( child->GetPlugin( "texture" ), "meshes/daria/brickwall.jpg" );
@@ -1267,14 +1267,14 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
     //child->AddPlugin( "DEFAULT_PARALLAX_MAP", "parallax map", timeEvaluator );
     //model::LoadTexture( child->GetPlugin( "parallax map" ), "meshes/daria/bricks2_disp.jpg" );
 
-    child->AddPlugin( "DEFAULT_TEXTURE", "texture", timeEvaluator );
-    model::LoadTexture( child->GetPlugin( "texture" ), "meshes/daria/d.jpg" );
-    
-    child->AddPlugin( "DEFAULT_NORMAL_MAP", "normal map", timeEvaluator );
-    model::LoadTexture( child->GetPlugin( "normal map" ), "meshes/daria/n.jpg" );
-    
-    child->AddPlugin( "DEFAULT_PARALLAX_MAP", "parallax map", timeEvaluator );
-    model::LoadTexture( child->GetPlugin( "parallax map" ), "meshes/daria/h.jpg" );
+    //child->AddPlugin( "DEFAULT_TEXTURE", "texture", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "texture" ), "meshes/daria/d.jpg" );
+    //
+    //child->AddPlugin( "DEFAULT_NORMAL_MAP", "normal map", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "normal map" ), "meshes/daria/n.jpg" );
+    //
+    //child->AddPlugin( "DEFAULT_PARALLAX_MAP", "parallax map", timeEvaluator );
+    //model::LoadTexture( child->GetPlugin( "parallax map" ), "meshes/daria/h.jpg" );
 
     //auto child = root->GetChild( 0 )->GetChild( 1 );
 

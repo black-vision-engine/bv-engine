@@ -1534,6 +1534,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.cpp">
+      <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3757,6 +3760,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

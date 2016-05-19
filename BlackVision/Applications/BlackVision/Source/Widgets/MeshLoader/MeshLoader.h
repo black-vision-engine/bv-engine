@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Widgets/NodeLogicBase.h"
-#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/SceneModel.h"
 #include "Assets/Assets.h"
 
 #include "CoreDEF.h"
@@ -60,14 +60,19 @@ public:
     virtual bool                    HandleEvent         ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
     void                            Load                ( IDeserializer & eventSer, BVProjectEditor * editor );
-    model::BasicNodePtr             Load                ( MeshAssetConstPtr asset, model::ITimeEvaluatorPtr timeEval );
+    void                            Load                ( model::SceneModelPtr scene, BVProjectEditor * editor );
 
     bool                            MeshInfo            ( ISerializer & response );
 
     MeshAssetConstPtr               GetMeshAsset        () const;
 
+    void                            EnableTextures      ( bool enabled );
+    void                            EnableMaterials     ( bool enabled );
+
 private:
     
+    model::BasicNodePtr             Load                ( MeshAssetConstPtr asset, model::ITimeEvaluatorPtr timeEval );
+
     void                            GetMeshes           ( MeshAssetConstPtr asset, std::vector< MeshAssetConstPtr > & meshes ) const;
 
     void                            LoadTexture         ( const std::string & txPath, const std::string & pluginUID, const std::string & pluginName, model::BasicNodePtr node, model::ITimeEvaluatorPtr timeEval );
