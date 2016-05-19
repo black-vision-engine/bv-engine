@@ -14,8 +14,8 @@ class IModelLight : public IUpdatable, public ISerializable, public IParamSet, p
 {
 public:
 
-    virtual LightType               GetType         () const        = 0;
-
+    virtual LightType               GetType             () const                = 0;
+    virtual void                    UpdateToCameraSpace ( const glm::mat4 & viewMat ) = 0;
 };
 
 DEFINE_PTR_TYPE(IModelLight)

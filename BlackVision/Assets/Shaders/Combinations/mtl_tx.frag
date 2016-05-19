@@ -41,6 +41,7 @@ layout ( std140, binding = 0 ) uniform Lights
 	uniform int 							spotLightNum;
 };
 
+
 // *** LIGHTS ***
 
 // MATERIAL

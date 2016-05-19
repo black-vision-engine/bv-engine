@@ -39,6 +39,7 @@ public:
     virtual void				Update			    ( TimeType t )	override;
 
     virtual LightType           GetType             () const override;
+    virtual void                UpdateToCameraSpace ( const glm::mat4 & viewMat ) override;
 
 private:
 

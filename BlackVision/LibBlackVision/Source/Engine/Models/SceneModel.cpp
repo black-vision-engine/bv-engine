@@ -5,6 +5,7 @@
 
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Models/Updaters/UpdatersHelpers.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -163,11 +164,16 @@ model::SceneModelPtr		SceneModel::Clone		() const
 //
 void						SceneModel::Update	    ( TimeType t )
 {
+    m_camerasLogic.Update( t );
+
+    Camera tempCamera;
+    UpdatersHelpers::UpdateCamera( &tempCamera, GetCamerasLogic().GetCurrentCamera() );
+
     for( auto & light : m_lights )
     {
         light->Update( t );
+        light->UpdateToCameraSpace( tempCamera.GetViewMatrix() );
     }
-    m_camerasLogic.Update( t );
 }
 
 // *******************************

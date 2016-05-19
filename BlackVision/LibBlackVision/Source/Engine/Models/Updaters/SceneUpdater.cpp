@@ -51,9 +51,9 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
 //
 void                SceneUpdater::DoUpdate          ()
 {
+    UpdateCamera();
     UpdateLights();
     UpdateGridLines();
-    UpdateCamera();
 }
 
 // *****************************
