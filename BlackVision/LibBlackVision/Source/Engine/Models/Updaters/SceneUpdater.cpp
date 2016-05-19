@@ -38,14 +38,14 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
     : m_scene( scene )
     , m_modelScene( modelScene )
     , m_gridLinesUpdateID( 0 )
+    , m_cameraUpdateID( 0 )
 {
 }
 
 // *****************************
 //
                     SceneUpdater::~SceneUpdater     ()
-{
-}
+{}
 
 // *****************************
 //
@@ -53,6 +53,7 @@ void                SceneUpdater::DoUpdate          ()
 {
     UpdateLights();
     UpdateGridLines();
+    UpdateCamera();
 }
 
 // *****************************
@@ -131,5 +132,24 @@ void                SceneUpdater::UpdateGridLines     ()
     }
 }
 
+// ***********************
+//
+void                    SceneUpdater::UpdateCamera        ()
+{
+    auto & camLogic = m_modelScene->GetCamerasLogic();
+    
+    if( m_cameraUpdateID < camLogic.GetUpdateID() )
+    {
+        auto camera = m_scene->GetCamera();
+        UpdatersHelpers::UpdateCamera( camera, camLogic.GetCurrentCamera() );
+
+        // Set camera position in UBO.
+        // FIXME: In future all camera data should be placed in this UBO instead of using
+        // uniforms per object.
+        auto cameraUBO = m_scene->GetCameraBuffer();
+        auto positionValue = camLogic.GetCurrentCamera()->GetValue( "Position" );
+        cameraUBO->WriteData( positionValue->GetData(), positionValue->GetSize(), 0 );
+    }
+}
 
 } //bv

@@ -295,6 +295,9 @@
     <Filter Include="Engine\Models\Plugins\Simple\TextPlugins">
       <UniqueIdentifier>{120dcd81-503b-439f-89ff-c182c64c4056}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Cameras">
+      <UniqueIdentifier>{4b96ea70-4824-40fe-bf3a-6c223213ee6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1533,6 +1536,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3757,6 +3772,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.h">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelHelper.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.h">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

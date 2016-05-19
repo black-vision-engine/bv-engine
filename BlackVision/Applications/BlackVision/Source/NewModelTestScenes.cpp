@@ -1339,7 +1339,8 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.9f );
     
     model::LoadTexture( envMeshNode->GetPlugin( "environmental tex" ), "textures/witek/Env/MountainEnv.jpg" );
-    model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
+    //model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
+    model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/Sculpture.3ds" );
 
     return root;
 }
