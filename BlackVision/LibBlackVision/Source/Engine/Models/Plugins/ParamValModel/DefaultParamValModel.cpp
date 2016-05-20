@@ -58,6 +58,13 @@ std::vector< IParamValEvaluatorPtr > &      DefaultParamValModel::GetEvaluators 
     return m_evaluators;
 }
 
+// ***********************
+//
+const std::map< std::string, IStatedValuePtr > &    DefaultParamValModel::GetStates       ()
+{
+    return m_states;
+}
+
 // *******************************
 //
 IParameterPtr                               DefaultParamValModel::GetParameter      ( const std::string & name )

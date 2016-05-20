@@ -50,6 +50,7 @@ extern HighResolutionTimer GTimer;
 
 
 const UInt32         Renderer::LIGHTS_UBO_BINDING_IDX   = 0;
+const UInt32         Renderer::CAMERA_UBO_BINDING_IDX   = 1;
 
 
 // *********************************
@@ -84,6 +85,7 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_PdrPBOMemTransferSyncRT = nullptr;
 
     m_lightsUBO = nullptr;
+    m_cameraUBO = nullptr;
 }
 
 // *********************************
@@ -114,6 +116,17 @@ void Renderer::EnableScene          ( Scene * scene )
 
         m_lightsUBO->Update( buffer );
     }
+
+    auto cameraBuffer = scene->GetCameraBuffer();
+    if( cameraBuffer )
+    {
+        if( !m_cameraUBO )
+        {
+            m_cameraUBO = new PdrUniformBufferObject( this, cameraBuffer, CAMERA_UBO_BINDING_IDX );
+        }
+
+        m_cameraUBO->Update( cameraBuffer );
+    }
 }
 
 // *********************************
@@ -139,6 +152,7 @@ void	Renderer::Terminate             ()
     delete m_PdrPBOMemTransferRT;
     delete m_PdrPBOMemTransferSyncRT;
     delete m_lightsUBO;
+    delete m_cameraUBO;
 
     FreePdrResources();
 
@@ -398,6 +412,7 @@ void    Renderer::Enable              ( RenderablePass * pass, RenderableEntity 
         m_PdrShaderMap[ pass ] = shader;
         
         shader->BindUniformBuffer( m_lightsUBO );
+        shader->BindUniformBuffer( m_cameraUBO );
     }
     else
     {

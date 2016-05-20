@@ -98,5 +98,16 @@ Float32                 ModelSpotLight::CalculateCosine     ( Float32 angle ) co
     return glm::cos( glm::radians( angle ) );
 }
 
+// ***********************
+//
+void                    ModelSpotLight::UpdateToCameraSpace ( const glm::mat4 & viewMat )
+{
+    auto positionVal = QueryTypedValue< ValueVec3Ptr >( m_paramModel->GetValue( PARAM::POSITION ) );
+    positionVal->SetValue( glm::vec3( viewMat * glm::vec4( positionVal->GetValue(), 1.0f ) ) );
+
+    auto directionVal = QueryTypedValue< ValueVec3Ptr >( m_paramModel->GetValue( PARAM::DIRECTION ) );
+    directionVal->SetValue( glm::vec3( viewMat * glm::vec4( directionVal->GetValue(), 0.0f ) ) );
+}
+
 } //model
 } //bv

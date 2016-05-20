@@ -7,6 +7,7 @@
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Models/Lights/ModelBaseLight.h"
 #include "Engine/Models/GridLines/GridLinesLogic.h"
+#include "Engine/Models/Cameras/CamerasLogic.h"
 
 
 namespace bv { namespace model {
@@ -27,13 +28,14 @@ private:
 
     OffsetTimeEvaluatorPtr          m_timeline;
 
-    Camera *                        m_camera; //FIXME: camera model
-
     GridLinesLogic                  m_gridLinesLogic;
     ModelSceneEditor *		        m_modelSceneEditor;
     SceneVariables                  m_sceneVariables;       // Variables can be queried by editor.
+    CamerasLogic                    m_camerasLogic;
 
     std::vector< IModelLightPtr >   m_lights; //could be unique_ptr but serialization doesn't support that
+
+    Camera *                        m_camera; //FIXME: camera model. Delete this variable, after creating new model.
 
 public:
                             SceneModel			( const std::string & name, Camera * camera );
@@ -66,6 +68,7 @@ public:
     ModelSceneEditor *		GetModelSceneEditor	() const;
     SceneVariables &        GetSceneVariables   ();
     GridLinesLogic &        GetGridLinesLogic   ();
+    CamerasLogic &          GetCamerasLogic     ();
 
     static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };
