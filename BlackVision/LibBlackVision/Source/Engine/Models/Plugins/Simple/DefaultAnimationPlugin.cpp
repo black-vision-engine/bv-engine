@@ -17,6 +17,8 @@ namespace bv { namespace model {
 const std::string        DefaultAnimationPlugin::PARAM_BLEND_ENABLE   = "blend enable";
 const std::string        DefaultAnimationPlugin::PARAM_ALPHA          = "alpha";
 const std::string        DefaultAnimationPlugin::PARAM_FRAME_NUM      = "frameNum";
+const std::string        DefaultAnimationPlugin::PARAM_AUTO_PLAY      = "autoPlay";
+const std::string        DefaultAnimationPlugin::PARAM_FPS            = "fps";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -52,31 +54,17 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     helper.CreatePluginModel();
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_BLEND_ENABLE, true, true, true );
 
+    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_AUTO_PLAY, false, true, true );
+    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FPS, 24.f, true, true );
+
     helper.CreatePSModel();
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_ALPHA, 1.f, true );
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FRAME_NUM, 0.f, true );    // FIXME: integer parmeters should be used here
 
 
-
-    ////Create all models
-    //DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    //DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    //DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
-
-    //Create all parameters and evaluators
-    //SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    //SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-
-    //ParamFloatPtr  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
-
-    //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    //psModel->RegisterAll( alphaEvaluator );
-    //psModel->AddParameter( paramFrameNum );
 
-    //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
-    //model->SetPixelShaderChannelModel( psModel );
 
     //Set default values of all parameters
     //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
@@ -143,7 +131,12 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();
     
-    m_paramFrameNum         = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "frameNum" ) );
+    m_paramFrameNum = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( PARAM_FRAME_NUM ) );
+
+    auto pluginModel =  m_pluginParamValModel->GetPluginModel();
+    m_paramAutoPlay = QueryTypedParam< ParamBoolPtr >( pluginModel->GetParameter( PARAM_AUTO_PLAY ) );
+    m_paramFPS = QueryTypedParam< ParamFloatPtr >( pluginModel->GetParameter( PARAM_FPS ) );
+
     assert( m_paramFrameNum );
 }
 
@@ -181,6 +174,8 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
             SetAsset( 0, LAsset( animDesc->GetName(), animAssetDescr, animDesc->GetSamplerState() ) );
 
             HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+
+            m_texturesNum = animDesc->NumTextures();
     
             return true;
         }
@@ -218,8 +213,7 @@ void                                DefaultAnimationPlugin::Update              
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-    unsigned int frameNum = ( unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
-    m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
+    FrameUpdate();
 
     if( ParameterChanged( PARAM_BLEND_ENABLE ) )
     {
@@ -298,6 +292,21 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+}
+
+// *************************************
+//
+void		DefaultAnimationPlugin::FrameUpdate		                    ()
+{
+    if( m_paramAutoPlay->Evaluate() && ( ParameterChanged( PARAM_AUTO_PLAY ) || ParameterChanged( PARAM_FPS ) ) )
+    {
+        m_paramFrameNum->AccessInterpolator().RemoveAllKeys();
+        SetParameter( m_paramFrameNum, 0.f, 0.f );
+        SetParameter( m_paramFrameNum, ( Float32 )m_texturesNum / m_paramFPS->Evaluate(), ( Float32 )m_texturesNum );
+    }
+
+    auto frameNum = ( UInt32 )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
+    m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 }
 
 } // model

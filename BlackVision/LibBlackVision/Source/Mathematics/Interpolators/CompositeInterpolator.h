@@ -54,6 +54,8 @@ public:
     bool                                                RemoveKey           ( TimeValueT t );
     bool                                                MoveKey             ( TimeValueT t, TimeValueT newTime );
     ValueT                                              Evaluate            ( TimeValueT t ) const;
+    
+    void                                                RemoveAllKeys       ();
 
     int                                                 GetNumKeys          ();
     const std::vector< Key > &                          GetKeys             () const;

@@ -433,6 +433,15 @@ bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t
     return true;
 }
 
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+void CompositeInterpolator< TimeValueT, ValueT >::RemoveAllKeys     ()
+{
+    //FIXME: is this correct?
+    interpolators.clear();
+    keys.clear();
+}
 
 // ***********************
 //

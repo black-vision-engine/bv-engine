@@ -32,6 +32,9 @@ class DefaultAnimationPlugin : public BasePlugin< IPlugin >
 public:
 
     static const std::string        PARAM_BLEND_ENABLE;
+    static const std::string        PARAM_AUTO_PLAY;
+    static const std::string        PARAM_FPS;
+    
     static const std::string        PARAM_ALPHA;
     static const std::string        PARAM_FRAME_NUM;
 
@@ -45,6 +48,10 @@ private:
     DefaultTexturesDataPtr          m_texturesData;
 
     ParamFloatPtr                   m_paramFrameNum;
+    ParamBoolPtr                    m_paramAutoPlay;
+    ParamFloatPtr                   m_paramFPS;
+
+    UInt32                          m_texturesNum;
 
 public:
 
@@ -62,9 +69,13 @@ public:
     virtual void                                Update                      ( TimeType t ) override;
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
 private:
 
     void                                        InitVertexAttributesChannel ();
+
+    void                                        FrameUpdate                 ();
+
 };
 
 } // model
