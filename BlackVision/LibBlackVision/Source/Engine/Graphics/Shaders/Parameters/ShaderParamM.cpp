@@ -34,9 +34,7 @@ void            ShaderParamM::Update      ( RenderableEntity * renderable, Camer
         assert( camera != nullptr );
         assert( renderable != nullptr );
 
-        auto projMat = camera->GetProjectionMatrix();
-
-        m_modelMatrix = projMat * renderable->LocalTransform().Matrix();
+        m_modelMatrix = renderable->LocalTransform().Matrix();
     }
 }
 
