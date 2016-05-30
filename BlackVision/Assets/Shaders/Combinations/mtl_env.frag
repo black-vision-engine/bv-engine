@@ -60,6 +60,7 @@ uniform int 		mtlShininess;
 
 in vec3 		position;		//vertex position in modelview space
 in vec3 		normal;			//vertex normal in modelview space
+in vec3 		envReflection;	//reflection direction in world space
 
 // *** ENVIRONMENTAL MAP ***
 uniform sampler2D 	EnvMap0;
@@ -68,7 +69,7 @@ uniform float		reflectivity;
 #define M_PI 3.1415926535897932384626433832795
 
 
-vec3 computeEnvironment			( vec3 viewDir, vec3 normal );
+vec3 computeEnvironment			( vec3 reflectionVec );
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 normal );
 vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
@@ -100,7 +101,7 @@ void main()
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
 	color += emission;
 	
-	vec3 envColor = computeEnvironment( viewDir, norm );
+	vec3 envColor = computeEnvironment( envReflection );
 	color = mix( color, envColor, reflectivity );
 	
 	FragColor = vec4( color, 1.0 );
@@ -173,11 +174,12 @@ vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 norm )
 	return attenuation * ( ambient + diffuse + specular );
 }
 
-vec3 computeEnvironment			( vec3 viewDir, vec3 normal )
+vec3 computeEnvironment			( vec3 reflectionVec )
 {
-	vec3 reflectionVec = reflect( viewDir, normal );
+	reflectionVec = normalize( reflectionVec );
+	
 	vec2 uvCoord;
-	uvCoord.x = atan( reflectionVec.x, reflectionVec.z ) / ( 2 * M_PI ) + 0.5;
+	uvCoord.x = atan( reflectionVec.z, reflectionVec.x ) / ( 2 * M_PI ) + 0.5;
 	uvCoord.y = acos( reflectionVec.y ) / M_PI;
 	
 	vec3 texColor = texture( EnvMap0, uvCoord ).xyz;

@@ -7,7 +7,7 @@ layout (location = 3) in vec4 vertexTangent;
 
 uniform mat4 MVP;
 uniform mat4 MV;
-uniform mat3 normalMat;
+uniform mat3 normalMatMV;
 
 uniform mat4 normalMapMat;
 
@@ -22,8 +22,8 @@ void main()
 	
 	position = vec3( MV * vec4( vertexPosition, 1.0 ) );
 	
-	vec3 N = normalize( normalMat * vertexNormal );
-	vec3 T = normalize( normalMat * vec3( vertexTangent ) );
+	vec3 N = normalize( normalMatMV * vertexNormal );
+	vec3 T = normalize( normalMatMV * vec3( vertexTangent ) );
 	vec3 B = normalize( cross( N, T ) ) * vertexTangent.w;
 	
 	TBN = mat3( T.x, B.x, N.x,
