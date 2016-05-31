@@ -110,7 +110,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
 
 
         auto & scenes = m_appLogic->GetBVProject()->GetModelScenes();
-        std::pair< model::BasicNodePtr, Float32 > intersectedNode = std::make_pair< model::BasicNodePtr, Float32 >( nullptr, 0.0f );
+        std::pair< model::BasicNodePtr, Float32 > intersectedNode = std::make_pair< model::BasicNodePtr, Float32 >( nullptr, std::numeric_limits< float >::infinity() );
         std::string nodeScene;
 
         for( auto & scene : scenes )
@@ -144,7 +144,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
 
             auto sceneIntersection = editor->FindIntersectingNode( scene, cameraPos, rayDirection );
 
-            if( intersectedNode.first == nullptr )
+            if( intersectedNode.first == nullptr && intersectedNode.second != std::numeric_limits< float >::infinity() )
                 intersectedNode = sceneIntersection;
             else
             {

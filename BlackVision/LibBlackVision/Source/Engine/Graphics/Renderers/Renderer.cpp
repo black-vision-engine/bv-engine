@@ -198,7 +198,7 @@ void	Renderer::Resize	        ( unsigned int w, unsigned int h )
 {
     BVGL::bvglViewport( 0 , 0, w, h );
 
-    m_Camera->SetViewportSize( w, h );
+    //m_Camera->SetViewportSize( w, h );
 
     m_Width = w;
     m_Height = h;

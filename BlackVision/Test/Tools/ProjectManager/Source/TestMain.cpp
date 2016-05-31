@@ -45,7 +45,7 @@ bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, co
 bv::model::SceneModelPtr CreateTestScene0()
 {
 	auto sceneName = "textured_rect";
-	auto scene = bv::model::SceneModel::Create( sceneName, nullptr );
+	auto scene = bv::model::SceneModel::Create( sceneName );
 	auto timeline = scene->GetTimeline();
 
     std::vector< model::IPluginDescriptor * > descriptors;

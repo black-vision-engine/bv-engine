@@ -33,7 +33,7 @@ const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "el
 //
 void	                TestSceneUtils::AddColoredRectangleScene	( BVProjectEditor * editor, const std::string & name, glm::vec4 color, glm::vec3 transform )
 {
-    auto sceneModel = model::SceneModel::Create( name, new Camera() );
+    auto sceneModel = model::SceneModel::Create( name );
 	editor->AddScene( sceneModel );
     
     auto root = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( sceneModel ), "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );

@@ -20,17 +20,16 @@ namespace bv { namespace model {
 
 // *******************************
 //
-SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera )
+SceneModelPtr    SceneModel::Create		( const std::string & name )
 {
-    return std::make_shared< SceneModel >( name, camera );
+    return std::make_shared< SceneModel >( name );
 }
 
 // *******************************
 //
-				SceneModel::SceneModel	( const std::string & name, Camera * camera )
+SceneModel::SceneModel	( const std::string & name )
     : m_name( name )
     , m_timeline( model::OffsetTimeEvaluator::Create( name, TimeType( 0.0 ) ) )
-	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
     , m_camerasLogic( m_timeline )
 {
@@ -100,7 +99,7 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 
 	//FIXME: pass nullptr as camera because we don't have camera model yet
     auto sceneName = deser.GetAttribute( "name" );
-    auto obj = SceneModel::Create( sceneName, nullptr );
+    auto obj = SceneModel::Create( sceneName );
 
     // Add scene name to context
     bvDeserCo->SetSceneName( sceneName );
@@ -220,13 +219,6 @@ OffsetTimeEvaluatorPtr		SceneModel::GetTimeline	()  const
 
 // *******************************
 //
-Camera *					SceneModel::GetCamera              ()  const
-{
-    return m_camera;
-}
-
-// *******************************
-//
 void                        SceneModel::AddLight            ( IModelLightPtr light ) 
 {
     m_lights.push_back( light );
@@ -296,7 +288,7 @@ CamerasLogic &              SceneModel::GetCamerasLogic     ()
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
 	//FIXME:camera can be nullptr because it's not used yet
-	return SceneModel::Create( name, nullptr );
+	return SceneModel::Create( name );
 }
 
 } // model

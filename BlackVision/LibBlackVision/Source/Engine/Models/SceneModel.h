@@ -35,13 +35,11 @@ private:
 
     std::vector< IModelLightPtr >   m_lights; //could be unique_ptr but serialization doesn't support that
 
-    Camera *                        m_camera; //FIXME: camera model. Delete this variable, after creating new model.
-
 public:
-                            SceneModel			( const std::string & name, Camera * camera );
+                            SceneModel			( const std::string & name );
     virtual					~SceneModel			();
 
-    static SceneModelPtr    Create              ( const std::string & name, Camera * camera );
+    static SceneModelPtr    Create              ( const std::string & name );
     static SceneModelPtr    Create              ( const IDeserializer & deser );
     virtual void            Serialize           ( ISerializer & doc) const override;
 
@@ -56,8 +54,6 @@ public:
     const std::string &		GetName				() const;
 
     OffsetTimeEvaluatorPtr  GetTimeline         () const;
-
-    Camera *                GetCamera           () const;
 
     // LIGHTS
     void                    AddLight            ( IModelLightPtr light );

@@ -549,7 +549,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto inSceneName = request.GetAttribute( "inSceneName" );
         auto projectName = request.GetAttribute( "projectName" );
 
-        auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str(), nullptr );
+        auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str() );
 
         pm->AddScene( scene, projectName, inSceneName );
 
