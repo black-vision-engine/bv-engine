@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "UpdatersHelpers.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
@@ -105,15 +106,11 @@ void         UpdatersHelpers::UpdateCamera                ( Camera * camera, mod
     auto height = QueryTypedValue< ValueIntPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) );
     auto width = QueryTypedValue< ValueIntPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) );
 
-    if( isPerspective->GetValue() != camera->IsPerspective() )
-    {
-        // FIXME: Change camera type !!!
-    }
 
-    if( isPerspective )
+    if( isPerspective->GetValue() )
         camera->SetPerspective( fov->GetValue(), width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
     else
-        camera->SetFrustum( -width->GetValue() / 2.0f, width->GetValue() / 2.0f, -height->GetValue() / 2.0f, height->GetValue() / 2.0f, near->GetValue(), far->GetValue() );
+        camera->SetOrthogonal( width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
 
     camera->SetFrame( position->GetValue(), direction->GetValue(), up->GetValue() );
 }

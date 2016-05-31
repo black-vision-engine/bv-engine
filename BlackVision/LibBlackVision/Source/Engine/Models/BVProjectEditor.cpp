@@ -1085,21 +1085,27 @@ bool            BVProjectEditor::SetCurrentCamera            ( const std::string
 //
 bool            BVProjectEditor::AddCamera                   ( model::SceneModelPtr scene )
 {
-    return scene->GetCamerasLogic().AddCamera();
+    if( scene )
+        return scene->GetCamerasLogic().AddCamera();
+    return false;
 }
 
 // ***********************
 //
 bool            BVProjectEditor::RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx )
 {
-    return scene->GetCamerasLogic().RemoveCamera( idx );
+    if( scene )
+        return scene->GetCamerasLogic().RemoveCamera( idx );
+    return false;
 }
 
 // ***********************
 //
 bool            BVProjectEditor::SetCurrentCamera            ( model::SceneModelPtr scene, UInt32 idx )
 {
-    return scene->GetCamerasLogic().SetCurrentCamera( idx );
+    if( scene )
+        return scene->GetCamerasLogic().SetCurrentCamera( idx );
+    return false;
 }
 
 
@@ -1494,13 +1500,25 @@ model::IModelNodePtr	BVProjectEditor::FindNode            ( model::BasicNodePtr 
 }
 
 // ***********************
-// If nullptr, there's no intersection.
-model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection )
+// If node is nullptr, there's no intersection.
+std::pair< model::BasicNodePtr, Float32 >   BVProjectEditor::FindIntersectingNode    ( const std::string & sceneName, glm::vec3 rayStart, glm::vec3 rayDirection )
 {
-    glm::mat4 transform = glm::mat4( 1 );   // Identity
-    auto result = BVProjectTools::NodeIntersection( m_rootNode, transform, rayStart, rayDirection );
+    auto modelScene = GetModelScene( sceneName );
+    return FindIntersectingNode( modelScene, rayStart, rayDirection );
+}
 
-    return result.first;
+// ***********************
+// If node is nullptr, there's no intersection.
+std::pair< model::BasicNodePtr, Float32 >	BVProjectEditor::FindIntersectingNode    ( model::SceneModelPtr scene, glm::vec3 rayStart, glm::vec3 rayDirection )
+{
+    if( scene )
+    {
+        glm::mat4 transform = glm::mat4( 1 );   // Identity
+        auto result = BVProjectTools::NodeIntersection( scene->GetRootNode(), transform, rayStart, rayDirection );
+
+        return result;
+    }
+    return std::make_pair< model::BasicNodePtr, Float32 >( nullptr, 0.0f );
 }
 
 // ***********************

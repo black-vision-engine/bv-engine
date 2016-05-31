@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Models/Cameras/CameraModel.h"
 
 namespace bv
 {
 class Camera;
-
+class RenderableEntity;
 
 class UpdatersHelpers
 {

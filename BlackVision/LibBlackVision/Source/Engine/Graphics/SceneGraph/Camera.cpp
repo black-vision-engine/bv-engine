@@ -19,7 +19,7 @@ Camera::Camera( bool isPerspective )
     , m_FOV( 90.f )
     , m_nearClippingPlane( 0.1f )
     , m_farClippingPlane( 100.f )
-    , m_isPrespactive( isPerspective )
+    , m_isPerspective( isPerspective )
 {
     if( isPerspective )
     {
@@ -38,17 +38,14 @@ Camera::~Camera()
 //
 void Camera::SetPerspective                         ( float fov, float aspectRatio, float near, float far )
 {
-    assert( IsPerspective() );
+    m_isPerspective = true;
 
-    if( IsPerspective() )
-    {
-        m_FOV = fov;
-        m_nearClippingPlane = near;
-        m_farClippingPlane = far;
+    m_FOV = fov;
+    m_nearClippingPlane = near;
+    m_farClippingPlane = far;
 
-        auto m = glm::perspective( fov, aspectRatio, near, far );
-        SetProjectionMatrix( m );
-    }
+    auto m = glm::perspective( fov, aspectRatio, near, far );
+    SetProjectionMatrix( m );
 }
 
 // *********************************
@@ -66,6 +63,21 @@ void Camera::SetPerspective                         ( float fov, unsigned int w,
 void  Camera::SetPerspective                        ( float aspectRatio )
 {
     SetPerspective( m_FOV, aspectRatio, m_nearClippingPlane, m_farClippingPlane );
+}
+
+// ***********************
+//
+void Camera::SetOrthogonal           ( unsigned int w, unsigned int h, float near, float far )
+{
+    m_isPerspective = false;
+
+    m_viewportWidth = w;
+    m_viewportHeight = h;
+    m_nearClippingPlane = near;
+    m_farClippingPlane = far;
+
+    auto m = glm::ortho( -(float)m_viewportWidth / 2.0f, (float)m_viewportWidth / 2.0f, -(float)m_viewportHeight / 2.0f, (float)m_viewportHeight / 2.0f, near, far );
+    SetProjectionMatrix( m );
 }
 
 // *********************************
@@ -165,6 +177,13 @@ unsigned int        Camera::GetViewportHeight       () const
     return m_viewportHeight;
 }
 
+// ***********************
+//
+float               Camera::GetFOV                  () const
+{
+    return m_FOV;
+}
+
 // *********************************
 //
 const glm::mat4 &   Camera::GetViewMatrix           () const
@@ -204,7 +223,7 @@ const glm::vec3 &   Camera::GetUp                   () const
 //
 bool                Camera::IsPerspective           () const
 {
-    return m_isPrespactive;
+    return m_isPerspective;
 }
 
 // *********************************
