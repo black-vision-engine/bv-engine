@@ -8,13 +8,19 @@
 
 namespace bv {
 
+struct FFmpegPacketQueue
+{
+    std::deque< AVPacket * >    packets;
+    Int32                       serial;
+};
+
 class FFmpegDemuxer
 {
 
 private:
 
-	typedef std::deque< AVPacket * >						PacketQueue;
-	typedef std::map< Int32, PacketQueue >					PacketQueueMap;
+	//typedef std::deque< AVPacket * >						PacketQueue;
+	typedef std::map< Int32, FFmpegPacketQueue >			PacketQueueMap;
 
     static const UInt32         SAFE_SEEK_FRAMES;
 

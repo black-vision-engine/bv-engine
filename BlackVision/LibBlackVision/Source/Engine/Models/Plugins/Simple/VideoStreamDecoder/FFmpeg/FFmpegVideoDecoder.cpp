@@ -12,28 +12,48 @@ const UInt32			FFmpegVideoDecoder::MAX_QUEUE_SIZE = 25;
 // *********************************
 //
 FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset )
+    : m_vstreamDecoder( nullptr )
+    , m_astreamDecoder( nullptr )
+    , m_syncType( FFmpegSyncType::FST_AUDIO_MASTER )
 {
 	auto path = asset->GetStreamPath();
 
 	m_demuxer = std::unique_ptr< FFmpegDemuxer >( new FFmpegDemuxer( path ) );
 
-	m_vstreamDecoder = std::unique_ptr< FFmpegVideoStreamDecoder >
-		( new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO ) ) );
+    InitClock( &m_videoClock );
+    InitClock( &m_audioClock );
+    InitClock( &m_externalClock );
 
-	m_frame = av_frame_alloc();
 
-	auto width = m_vstreamDecoder->GetWidth();
-	auto height = m_vstreamDecoder->GetHeight();
+    auto vstreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO );
+    if( vstreamIdx >= 0 )
+    {
+	    m_vstreamDecoder = std::unique_ptr< FFmpegVideoStreamDecoder >( new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx ) );
+    }
+
+    auto astreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_AUDIO );
+    if( astreamIdx >= 0 )
+    {
+        m_astreamDecoder = std::unique_ptr< FFmpegAudioStreamDecoder >( new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx ) );
+    }
+
+    if( m_vstreamDecoder )
+    {
+	    m_frame.frame = av_frame_alloc();
+
+	    auto width = m_vstreamDecoder->GetWidth();
+	    auto height = m_vstreamDecoder->GetHeight();
 	
-	auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
-	m_outFrame = av_frame_alloc();
-	auto numBytes = av_image_get_buffer_size( ffmpegFormat, width, height, 1 );
-	m_outBuffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
-    av_image_fill_arrays( ( uint8_t ** ) m_outFrame->data, m_outFrame->linesize, m_outBuffer, ffmpegFormat, width, height, 1 );
-	m_outFrame->width = width;
-	m_outFrame->height = height;
-	m_outFrame->format = ( int )ffmpegFormat;
-	m_frameSize = av_image_get_buffer_size( static_cast< AVPixelFormat >( m_outFrame->format ), m_outFrame->width, m_outFrame->height, 1 );
+	    auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
+	    m_outFrame.frame = av_frame_alloc();
+	    auto numBytes = av_image_get_buffer_size( ffmpegFormat, width, height, 1 );
+	    m_outBuffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
+        av_image_fill_arrays( ( uint8_t ** ) m_outFrame.frame->data, m_outFrame.frame->linesize, m_outBuffer, ffmpegFormat, width, height, 1 );
+	    m_outFrame.frame->width = width;
+	    m_outFrame.frame->height = height;
+	    m_outFrame.frame->format = ( int )ffmpegFormat;
+	    m_frameSize = av_image_get_buffer_size( static_cast< AVPixelFormat >( m_outFrame.frame->format ), m_outFrame.frame->width, m_outFrame.frame->height, 1 );
+    }
 
 	m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( this ) );
     m_decoderThread->Start();
@@ -53,8 +73,8 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 	m_vstreamDecoder = nullptr;
 	m_demuxer = nullptr;
 
-	av_frame_free( &m_frame );
-    av_free( m_outBuffer );
+    av_frame_free( &m_frame.frame );
+    av_free( m_outBuffer );             // deallocation of m_outFrame 
 
 	std::lock_guard< std::mutex > lock( m_mutex );
 
@@ -147,12 +167,12 @@ bool					FFmpegVideoDecoder::DecodeNextFrame			()
 	    auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
 	    if( packet )
 	    {
-            if( m_vstreamDecoder->DecodePacket( packet, m_frame ) )
+            if( m_vstreamDecoder->DecodePacket( packet, m_frame.frame ) )
             {
-		        m_vstreamDecoder->ConvertFrame( m_frame, m_outFrame );
+		        m_vstreamDecoder->ConvertFrame( m_frame.frame, m_outFrame.frame );
 
                 char * data = new char[ m_frameSize ];
-	            memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
+	            memcpy( data, ( char * )m_outFrame.frame->data[ 0 ], m_frameSize );
 
 	            VideoMediaData mediaData;
 	            mediaData.frameIdx = m_vstreamDecoder->GetCurrentFrameId();
@@ -185,7 +205,7 @@ SizeType				FFmpegVideoDecoder::GetFrameSize			() const
 //
 UInt32					FFmpegVideoDecoder::GetWidth				() const
 {
-	return m_vstreamDecoder->GetWidth();
+    return m_vstreamDecoder->GetWidth();
 }
 
 // *********************************
@@ -224,7 +244,7 @@ void					FFmpegVideoDecoder::Seek					( Float64 time )
         auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
         if( packet != nullptr )
         {
-	        m_vstreamDecoder->DecodePacket( packet, m_frame );
+	        m_vstreamDecoder->DecodePacket( packet, m_frame.frame );
             currTs = packet->dts;
         }
         else if( m_demuxer->IsEOF() )
@@ -267,6 +287,54 @@ bool					FFmpegVideoDecoder::IsEOF					() const
 bool					FFmpegVideoDecoder::IsFinished				() const
 {
     return IsEOF() && m_outQueue.Size() == 1 && m_bufferQueue.IsEmpty();
+}
+
+// *********************************
+//
+Float64					FFmpegVideoDecoder::GetMaterClock			() const
+{
+    switch( m_syncType ) 
+    {
+    case FFmpegSyncType::FST_VIDEO_MASTER:
+        return GetClock( &m_videoClock );
+    case FFmpegSyncType::FST_AUDIO_MASTER:
+        return GetClock( &m_audioClock );
+    default:
+        return GetClock( &m_externalClock );
+    }
+}
+
+// *********************************
+//
+void					FFmpegVideoDecoder::InitClock				( FFmpegClock * clock )
+{
+    clock->speed = 1.0;
+    clock->paused = 0;
+    SetClock( clock, NAN, -1 );
+}
+
+// *********************************
+//
+void					FFmpegVideoDecoder::SetClock				( FFmpegClock * clock, Float64 pts, Int32 serial )
+{
+    auto time = av_gettime_relative() / 1000000.0;
+    clock->pts = pts;
+    clock->lastUpdated = time;
+    clock->ptsDrift = clock->pts - time;
+    clock->serial = serial;
+}
+
+// *********************************
+//
+Float64				    FFmpegVideoDecoder::GetClock				( const FFmpegClock * clock ) const
+{
+    if( clock->paused )
+    {
+        return clock->pts;
+    } 
+ 
+    auto time = av_gettime_relative() / 1000000.0;
+    return clock->ptsDrift + time - ( time - clock->lastUpdated ) * ( 1.0 - clock->speed );
 }
 
 } //bv

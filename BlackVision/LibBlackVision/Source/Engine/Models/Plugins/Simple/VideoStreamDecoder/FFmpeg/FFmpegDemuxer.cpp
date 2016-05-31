@@ -52,10 +52,10 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 
 	AVPacket * packet = nullptr;
 
-	if( !m_packetQueue.at( streamIdx ).empty() )
+	if( !m_packetQueue.at( streamIdx ).packets.empty() )
 	{
-		packet = m_packetQueue.at( streamIdx ).front();
-		m_packetQueue.at( streamIdx ).pop_front();
+		packet = m_packetQueue.at( streamIdx ).packets.front();
+		m_packetQueue.at( streamIdx ).packets.pop_front();
 	}
 	else 
 	{
@@ -78,7 +78,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 			{
                 if ( m_packetQueue.count( packet->stream_index ) > 0 )
 				{
-					m_packetQueue[ packet->stream_index ].push_back( packet );
+					m_packetQueue[ packet->stream_index ].packets.push_back( packet );
 				}
 				else
 				{
@@ -120,12 +120,14 @@ void				FFmpegDemuxer::Reset				()
 Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
 {
 	auto streamIdx = FindStreamIndex( type, idx );
-	assert( streamIdx >= 0 );
-	
-	if( m_packetQueue.count( streamIdx ) == 0 )
-	{
-		m_packetQueue[ streamIdx ] = PacketQueue();
-	}
+
+    if( streamIdx >= 0 )
+    {
+	    if( m_packetQueue.count( streamIdx ) == 0 )
+	    {
+		    m_packetQueue[ streamIdx ] = FFmpegPacketQueue();
+	    }
+    }
 
 	return streamIdx;
 }
@@ -145,12 +147,12 @@ void				FFmpegDemuxer::ClearPacketQueue		()
 	{
 		auto queue = it->second;
 
-		for( auto qit = queue.begin(); qit != queue.end(); ++qit )
+        for( auto qit = queue.packets.begin(); qit != queue.packets.end(); ++qit )
 		{
 			av_packet_unref( *qit );
 		}
 
-		queue.clear();
+		queue.packets.clear();
 	}
 }
 
