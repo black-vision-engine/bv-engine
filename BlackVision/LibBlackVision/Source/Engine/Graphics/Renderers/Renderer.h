@@ -60,6 +60,7 @@ class Renderer
 private:
 
     static const UInt32         LIGHTS_UBO_BINDING_IDX;
+    static const UInt32         CAMERA_UBO_BINDING_IDX;
 
 private:
 
@@ -107,6 +108,7 @@ private:
     bool								m_EnableGLFlush;
 
     PdrUniformBufferObject *            m_lightsUBO;
+    PdrUniformBufferObject *            m_cameraUBO;
 
 public:
 

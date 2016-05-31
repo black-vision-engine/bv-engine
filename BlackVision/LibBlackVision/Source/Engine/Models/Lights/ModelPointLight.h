@@ -23,7 +23,7 @@ public:
                                 ModelPointLight     ( ITimeEvaluatorPtr timeEvaluator );
 
     virtual LightType           GetType             () const override;
-
+    virtual void                UpdateToCameraSpace ( const glm::mat4 & viewMat ) override;
 };
 
 } //model

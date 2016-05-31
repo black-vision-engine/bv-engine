@@ -50,6 +50,9 @@ private:
     ParameterPtr            GetNodeLogicParameter   ( const std::string & sceneName,
                                                       const std::string & nodePath,
                                                       const std::string & paramName );
+    ParameterPtr            GetCameraParameter      ( const std::string & sceneName,
+                                                      UInt32 cameraIndex,
+                                                      const std::string & paramName );
 
     bool                    AddTransformKey         ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue );
     bool                    RemoveTransformKey      ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime );

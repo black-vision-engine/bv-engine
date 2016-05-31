@@ -9,15 +9,14 @@
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
 #include "Widgets/MeshLoader/MeshLoader.h"
-#include "Engine/Models/BoundingVolume.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
+#include "Engine/Models/BoundingVolume.h"
 
 #include "System/Path.h"
 #include "IO/FileIO.h"
 
 #include <limits>
-#undef max
 #undef LoadImageW
 #undef LoadImage
 
@@ -550,7 +549,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto inSceneName = request.GetAttribute( "inSceneName" );
         auto projectName = request.GetAttribute( "projectName" );
 
-        auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str(), nullptr );
+        auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str() );
 
         pm->AddScene( scene, projectName, inSceneName );
 
@@ -836,6 +835,39 @@ void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
 
 // ***********************
 //
+void SceneEventsHandlers::CameraManagement    ( bv::IEventPtr evt )
+{
+    assert( evt->GetEventType() == CameraEvent::Type() );
+
+    auto cameraEvent = std::static_pointer_cast< CameraEvent >( evt );
+
+    auto command      = cameraEvent->CameraCommand;
+    auto sceneName    = cameraEvent->SceneName;
+    auto cameraIdx    = cameraEvent->CameraIndex;
+    //auto timelinePath = cameraEvent->TimelinePath;
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    
+    bool result = false;
+
+    if( command == CameraEvent::Command::AddCamera )
+    {
+        result = editor->AddCamera( sceneName );
+    }
+    else if( command == CameraEvent::Command::RemoveCamera )
+    {
+        result = editor->RemoveCamera( sceneName, cameraIdx );
+    }
+    else if( command == CameraEvent::Command::SetCurrentCamera )
+    {
+        result = editor->SetCurrentCamera( sceneName, cameraIdx );
+    }
+
+    SendSimpleResponse( command, cameraEvent->EventID, cameraEvent->SocketID, result );
+}
+
+// ***********************
+//
 void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
 {
     assert( evt->GetEventType() == bv::SceneVariableEvent::Type() );
@@ -1014,9 +1046,10 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         ser.Save( AssetAccessor::GetThumbnailPath( thumbName ).Str() );
         Path::Remove( screenShotEvent->FilePath );
 
-        if( ( thumbnailType == ThumbnailType::Preset && m_closeSavedPreset ) || thumbnailType == ThumbnailType::MeshAsset )
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+        if( ( thumbnailType == ThumbnailType::Preset && m_closeSavedPreset )
+                || thumbnailType == ThumbnailType::MeshAsset )
         {
-            auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
             editor->RemoveScene( m_savedScene );
             m_scenesVisibilityState.erase( m_savedScene );
         }
@@ -1115,24 +1148,43 @@ void        SceneEventsHandlers::GenerateMeshThumbnail               ( const std
     meshLoader->Load( scene, editor );
     
     auto bb = root->GetBoundingBoxRecursive();
-        
-    auto bbCenter = bb.Center();
-    auto bbRadius = 0.f;
-    for( auto vert : bb.GetVerticies() )
-    {
-        auto dist = glm::distance( vert, bbCenter );
-        bbRadius = glm::max( dist, bbRadius );
-    }
+    auto & cameraLogic = scene->GetCamerasLogic();
+    auto & camera = cameraLogic.GetCurrentCamera();
 
-    //FIXME: move camera to fit bounding box
-    //Camera camera;
+    auto meshPos = GetMeshTranslationToFitCamera( camera, bb );
 
-    //auto fov = glm::radians( camera.GetFOV() );
-    //auto camDist = ( bbRadius * 2.0 ) / std::tan( fov / 2.0 );
-
-    //camera.SetFrame( bbCenter - camDist, bbCenter, glm::vec3( 0.f, 0.f, 1.f ) );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParamTransform(), 0.f, meshPos );
 
     RequestThumbnail( scene, destPath, ThumbnailType::MeshAsset );
+}
+
+// ***********************
+//
+glm::vec3   SceneEventsHandlers::GetMeshTranslationToFitCamera            ( model::CameraModelPtr camera, const mathematics::Box & boundingBox )
+{
+    //FIXME: probably it would be better to move camera than mesh but there is no appropriate API
+    auto bbCenter = boundingBox.Center();
+    auto bbRadius = 0.f;
+    for( auto vert : boundingBox.GetVerticies() )
+    {
+        auto dist = glm::distance( vert, bbCenter );
+        bbRadius = (std::max)( dist, bbRadius );
+    }
+
+    auto camFOV = glm::radians( QueryTypedParam< ParamFloatPtr >( camera->GetParameter( CameraModel::PARAMETERS::FOV ) )->Evaluate() );
+    auto camPos = QueryTypedParam< ParamVec3Ptr >( camera->GetParameter( CameraModel::PARAMETERS::POSITION ) )->Evaluate();
+    auto camDir = QueryTypedParam< ParamVec3Ptr >( camera->GetParameter( CameraModel::PARAMETERS::DIRECTION ) )->Evaluate();
+    
+    auto camViewportW = QueryTypedParam< ParamIntPtr >( camera->GetParameter( CameraModel::PARAMETERS::VIEWPORT_WIDTH ) )->Evaluate();
+    auto camViewportH = QueryTypedParam< ParamIntPtr >( camera->GetParameter( CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) )->Evaluate();
+    
+    auto ratio = ( Float32 )(std::max)( camViewportW, camViewportH ) / ( Float32 )(std::min)( camViewportW, camViewportH );
+
+    auto camDist = ratio * bbRadius / ( 2.f * glm::tan( camFOV / 2.0f ) );
+
+    SetParameter( camera->GetParameter( CameraModel::PARAMETERS::FAR_CLIPPING_PLANE ), 0.f, camDist + (std::max)( boundingBox.Width(), boundingBox.Height() ) / 2.f );
+
+    return camPos + camDir * camDist - bbCenter;
 }
 
 } //bv

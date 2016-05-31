@@ -5,7 +5,7 @@ layout (location = 1) in vec3 vertexNormal;
 
 uniform mat4 MVP;
 uniform mat4 MV;
-uniform mat3 normalMat;
+uniform mat3 normalMatMV;
 
 out vec3 position;	//vertex position in modelview space
 out vec3 normal;	//vertex normal in modelview space
@@ -17,5 +17,5 @@ void main()
 	
 	position = vec3( MV * vec4( vertexPosition, 1.0 ) );
 	
-	normal = normalMat * vertexNormal;	
+	normal = normalMatMV * vertexNormal;	
 }

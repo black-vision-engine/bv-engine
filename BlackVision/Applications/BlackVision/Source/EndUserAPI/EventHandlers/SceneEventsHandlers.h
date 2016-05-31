@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
+#include "Engine/Models/Cameras/CameraModel.h"
+#include "Mathematics/Box.h"
 
 
 namespace bv {
@@ -35,6 +37,7 @@ private:
     // Save scene or preset state
     SceneVisibilityStateMap     m_scenesVisibilityState;        // Used to save visibility state while making scene or preset thumbnail.
     bool                        m_closeSavedPreset;
+    
     model::SceneModelPtr        m_savedScene;
 
     std::map< std::string, ThumbnailType >  m_thumbnailTypeMap;
@@ -50,6 +53,7 @@ public:
     void        SceneStructure	    ( bv::IEventPtr evt );
 
     void        LightsManagement	( bv::IEventPtr evt );
+    void        CameraManagement    ( bv::IEventPtr evt );
 
     void        SceneVariable       ( bv::IEventPtr evt );
     void        GridLines           ( bv::IEventPtr evt );
@@ -62,10 +66,11 @@ private:
     void        SaveVisibilityState     ( const std::string & sceneName );
     void        RestoreVisibilityState  ();
 
-    ThumbnailConstPtr   CreateThumbnail         ( ThumbnailType thumbnailType, MemoryChunkConstPtr data );
-    std::string         GetPrefixDir            ( ThumbnailType thumbnailType );
+    ThumbnailConstPtr   CreateThumbnail                 ( ThumbnailType thumbnailType, MemoryChunkConstPtr data );
+    std::string         GetPrefixDir                    ( ThumbnailType thumbnailType );
 
-    void                GenerateMeshThumbnail   ( const std::string & meshPath, const std::string & destPath );
+    void                GenerateMeshThumbnail           ( const std::string & meshPath, const std::string & destPath );
+    glm::vec3           GetMeshTranslationToFitCamera  ( model::CameraModelPtr camera, const mathematics::Box & boundingBox );
 
 };
 

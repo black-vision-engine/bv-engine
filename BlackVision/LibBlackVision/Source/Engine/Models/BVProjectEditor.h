@@ -81,9 +81,11 @@ public:
     model::IModelNodePtr	FindNode            ( model::BasicNodePtr node, const std::string & nodeName ) const;
 
     // Selection and intersection
-    model::IModelNodePtr	FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection );
     bool                    SelectNode              ( model::IModelNodePtr node, glm::vec4 color );
     void                    UnselectNodes           ();
+
+    std::pair< model::BasicNodePtr, Float32 >	    FindIntersectingNode    ( model::SceneModelPtr scene, glm::vec3 rayStart, glm::vec3 rayDirection );
+    std::pair< model::BasicNodePtr, Float32 >	    FindIntersectingNode    ( const std::string & sceneName, glm::vec3 rayStart, glm::vec3 rayDirection );
 
     /* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
@@ -202,7 +204,17 @@ public:
 
     bool                    AddLight                    ( model::SceneModelPtr scene, LightType type, model::ITimeEvaluatorPtr timeline );
     bool                    RemoveLight                 ( model::SceneModelPtr scene, UInt32 idx );
+
+/* CAMERAS */
+
+    bool                    AddCamera                   ( const std::string & sceneName );
+    bool                    RemoveCamera                ( const std::string & sceneName, UInt32 idx );
+    bool                    SetCurrentCamera            ( const std::string & sceneName, UInt32 idx );
     
+    bool                    AddCamera                   ( model::SceneModelPtr scene );
+    bool                    RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx );
+    bool                    SetCurrentCamera            ( model::SceneModelPtr scene, UInt32 idx );
+
 private:
 
     /* scene helpers */

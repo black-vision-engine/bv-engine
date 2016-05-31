@@ -19,7 +19,9 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMVP.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMV.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamP.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamNormalMatrix.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamM.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamNormalMatrixMV.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamNormalMatrixM.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamViewport.h"
 
 
@@ -88,6 +90,13 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
     return nullptr;
 }
 
+// ***********************
+//
+GenericShaderParam *     ShaderParamFactory::CreateMParameter                ()
+{
+    return new ShaderParamM( "M" );
+}
+
 // ********************************
 //
 GenericShaderParam *     ShaderParamFactory::CreateMVPParameter                 ()
@@ -111,14 +120,21 @@ GenericShaderParam *     ShaderParamFactory::CreatePParameter                   
 
 // ********************************
 //
-GenericShaderParam *     ShaderParamFactory::CreateNormalMatrixParameter        ()
+GenericShaderParam *     ShaderParamFactory::CreateNormalMatrixMVParameter        ()
 {
-    return new ShaderParamNormalMatrix( "normalMat" );
+    return new ShaderParamNormalMatrixMV( "normalMatMV" );
 }
 
 // ********************************
 //
-GenericShaderParam *     ShaderParamFactory::CreateViewportMatrixParameter      ()
+GenericShaderParam *     ShaderParamFactory::CreateNormalMatrixMParameter         ()
+{
+    return new ShaderParamNormalMatrixM( "normalMatM" );
+}
+
+// ********************************
+//
+GenericShaderParam *     ShaderParamFactory::CreateViewportMatrixParameter       ()
 {
     return new ShaderParamViewport( "ViewportMatrix" );
 }

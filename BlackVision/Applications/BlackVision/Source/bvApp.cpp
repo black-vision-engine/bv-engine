@@ -235,11 +235,9 @@ void    BlackVisionApp::InitializeAppLogic  ()
 
     m_app = new BVAppLogic( m_Renderer );
 
-    // FIXME: InitCamera depends implicitly ond LoadScene - which suxx (as camera is created by LoadScene and passed to bvScene)
 	m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();
     m_app->LoadScene();
-    m_app->InitCamera( m_Width, m_Height );
 }
 
 // *********************************

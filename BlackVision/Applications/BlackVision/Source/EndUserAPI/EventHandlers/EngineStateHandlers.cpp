@@ -1,12 +1,14 @@
 #include "EngineStateHandlers.h"
 
 #include "BVAppLogic.h"
-#include "Engine/Events/EventHandlerHelpers.h"
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Application/ApplicationContext.h"
 
 #include "Engine/Models/ModelState.h"
+
+#include "Engine/Events/EventHandlerHelpers.h"
+#include "Engine/Models/Updaters/UpdatersHelpers.h"
 
 #include "BVConfig.h"
 #include "ConfigManager.h"
@@ -106,24 +108,55 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         Float32 aspect = screenWidth / screenHeight;
         glm::vec3 screenSpaceVec( normMouseX * aspect, normMouseY, 0.0f );
 
-        glm::vec3 rayDirection;
-        glm::vec3 cameraPos;
+
+        auto & scenes = m_appLogic->GetBVProject()->GetModelScenes();
+        std::pair< model::BasicNodePtr, Float32 > intersectedNode = std::make_pair< model::BasicNodePtr, Float32 >( nullptr, std::numeric_limits< float >::infinity() );
+        std::string nodeScene;
+
+        for( auto & scene : scenes )
+        {
+            glm::vec3 rayDirection;
+            glm::vec3 cameraPos;
         
-        if( DefaultConfig.IsCameraPerspactive() )
-        {
-            Float32 fovY = glm::radians( DefaultConfig.FOV() );
-            Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
+            Camera tempCamera;
+            auto& currentCam = scene->GetCamerasLogic().GetCurrentCamera();
 
-            rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );
-            cameraPos = DefaultConfig.CameraPosition();
-        }
-        else
-        {
-            rayDirection = glm::vec3( 0.0, 0.0, -1.0 );
-            cameraPos = DefaultConfig.CameraPosition() + screenSpaceVec;
+            UpdatersHelpers::UpdateCamera( &tempCamera, currentCam );
+
+            if( tempCamera.IsPerspective() )
+            {
+                Float32 fovY = glm::radians( tempCamera.GetFOV() );
+                Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
+
+                rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );
+                rayDirection = glm::vec3( glm::inverse( tempCamera.GetViewMatrix() ) * glm::vec4( rayDirection, 0.0 ) );
+                cameraPos = tempCamera.GetPosition();
+            }
+            else
+            {
+                rayDirection = tempCamera.GetDirection();
+
+                screenSpaceVec = screenSpaceVec * glm::vec3( tempCamera.GetViewportWidth(), tempCamera.GetViewportHeight(), 0.0f );
+                screenSpaceVec = glm::vec3( glm::inverse( tempCamera.GetViewMatrix() ) * glm::vec4( screenSpaceVec, 0.0 ) );
+
+                cameraPos = tempCamera.GetPosition() + screenSpaceVec;
+            }
+
+            auto sceneIntersection = editor->FindIntersectingNode( scene, cameraPos, rayDirection );
+
+            if( intersectedNode.first == nullptr && intersectedNode.second != std::numeric_limits< float >::infinity() )
+                intersectedNode = sceneIntersection;
+            else
+            {
+                if( sceneIntersection.first != nullptr && sceneIntersection.second < intersectedNode.second )
+                {
+                    nodeScene = scene->GetName();
+                    intersectedNode = sceneIntersection;
+                }
+            }
         }
 
-        auto node = editor->FindIntersectingNode( cameraPos, rayDirection );
+        auto node = intersectedNode.first;
 
         if( autoSelect )
             editor->UnselectNodes();
@@ -140,7 +173,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
             result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ), mouseEvent->AutoSelectColor );
         
         std::string nodePath = ModelState::GetInstance().BuildIndexPath( node.get() );
-        std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
+        //std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
 
         JsonSerializeObject ser;
         PrepareResponseTemplate( ser, command, mouseEvent->SocketID, result );

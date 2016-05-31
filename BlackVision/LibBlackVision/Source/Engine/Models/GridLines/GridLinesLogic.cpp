@@ -26,17 +26,15 @@ GridLinesLogic::GridLinesLogic()
 //
 GridLinesLogic::~GridLinesLogic()
 {
-    for( auto line : m_horizontalGridLines )
-        delete line;
-
-    for( auto line : m_verticalGridLines )
-        delete line;
+    ClearAll();
 }
 
 // ***********************
 //
 void            GridLinesLogic::Deserialize             ( const IDeserializer & deser )
 {
+    ClearAll();
+
     //m_showGridLines = SerializationHelper::String2T( deser.GetAttribute( "show" ), false );
 
     if( deser.EnterChild( "horizontal" ) )
@@ -131,7 +129,7 @@ void            GridLinesLogic::MoveGridLine    ( GridLineType gridType, int gri
 
     gridLineVec[ gridIndex ]->SetPosition( newPosition );
 
-    m_gridLinesUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
+    UpdateID();
 }
 
 // ***********************
@@ -153,7 +151,7 @@ void            GridLinesLogic::RemoveGridLine          ( GridLineType gridType,
     delete gridLineVec[ gridIndex ];    // In case grid line doesn't exists, delete nullptr is safe.
     gridLineVec[ gridIndex ] = nullptr;
 
-    m_gridLinesUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
+    UpdateID();
 }
 
 // ***********************
@@ -217,7 +215,7 @@ void            GridLinesLogic::AllocGridLine   ( GridLineType gridType, int gri
     if( gridLinesVec[ gridIndex ] == nullptr )
     {
         gridLinesVec[ gridIndex ] = new GridLine( gridType, std::string( "GridLine" + SerializationHelper::T2String( gridIndex ) ) );
-        m_gridLinesUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
+        UpdateID();
     }
 }
 
@@ -228,7 +226,23 @@ std::vector< GridLine* >&       GridLinesLogic::SelectGridLineVec       ( GridLi
     return gridType == GridLineType::TST_Horizontal ? m_horizontalGridLines : m_verticalGridLines;
 }
 
+// ***********************
+//
+void                            GridLinesLogic::ClearAll                ()
+{
+    for( auto line : m_horizontalGridLines )
+        delete line;
 
+    for( auto line : m_verticalGridLines )
+        delete line;
+}
+
+// ***********************
+//
+void                            GridLinesLogic::UpdateID                ()
+{
+    m_gridLinesUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
+}
 
 }   // model
 }	// bv

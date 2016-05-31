@@ -1,0 +1,15 @@
+#version 420
+
+// *** CAMERA *** (Assets/Shaders/UniformBlockDefs/camera)
+
+
+// FIXME: in future this uniform buffer should contain all variables
+// that depends only on camera and change once per scene.
+
+
+layout( std140, binding = 1 ) uniform Camera
+{
+	uniform vec3 cameraPos;
+};
+
+void main() {}
