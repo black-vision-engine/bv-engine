@@ -295,6 +295,9 @@
     <Filter Include="Engine\Models\Plugins\Simple\TextPlugins">
       <UniqueIdentifier>{120dcd81-503b-439f-89ff-c182c64c4056}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Cameras">
+      <UniqueIdentifier>{4b96ea70-4824-40fe-bf3a-6c223213ee6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1423,9 +1426,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrix.cpp">
-      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
@@ -1534,8 +1534,29 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamM.cpp">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.cpp">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.cpp">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3641,9 +3662,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrix.h">
-      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -3763,6 +3781,30 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.h">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelHelper.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.h">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamM.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

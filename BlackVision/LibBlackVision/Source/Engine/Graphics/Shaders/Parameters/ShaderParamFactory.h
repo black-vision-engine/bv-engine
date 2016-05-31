@@ -14,10 +14,12 @@ public:
     static GenericShaderParam *     CreateGenericParameter          ( const IValue * value );
     static GenericShaderParam *     CreateGenericParameter          ( const std::string & name, ParamType paramType );
 
+    static GenericShaderParam *     CreateMParameter                ();
     static GenericShaderParam *     CreateMVPParameter              ();
     static GenericShaderParam *     CreateMVParameter               ();
     static GenericShaderParam *     CreatePParameter                ();
-    static GenericShaderParam *     CreateNormalMatrixParameter     ();
+    static GenericShaderParam *     CreateNormalMatrixMVParameter   ();
+    static GenericShaderParam *     CreateNormalMatrixMParameter    ();
     static GenericShaderParam *     CreateViewportMatrixParameter   ();
 
 };

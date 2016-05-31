@@ -106,6 +106,9 @@ std::string GridLineEvent::m_sEventName              = "GridLineEvent";
 const EventType LightEvent::m_sEventType            = 0x30000025;
 std::string LightEvent::m_sEventName                = "LightEvent";
 
+const EventType CameraEvent::m_sEventType           = 0x30000026;
+std::string CameraEvent::m_sEventName               = "CameraEvent";
+
 const EventType VideoDecoderEvent::m_sEventType     = 0x300000;
 std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
 
@@ -140,7 +143,7 @@ template<> std::string              T2String        ( const LoadAssetEvent::Comm
 // ========================================================================= //
 // ParamKeyEvent
 // ========================================================================= //
-const std::string PARAM_LIGHT_INDEX           = "LightIndex";
+const std::string PARAM_INDEX                 = "Index";       // Light and cameras
 const std::string PARAM_VALUE_STRING          = "ParamValue";
 const std::string KEY_TIME_STRING             = "Time";
 
@@ -168,6 +171,7 @@ std::pair< ParamKeyEvent::TargetType, const char* > TargetTypeMapping[] =
     , std::make_pair( ParamKeyEvent::TargetType::ResourceParam, "ResourceParam" )
     , std::make_pair( ParamKeyEvent::TargetType::LightParam, "LightParam" )
     , std::make_pair( ParamKeyEvent::TargetType::NodeLogicParam, "NodeLogicParam" )
+    , std::make_pair( ParamKeyEvent::TargetType::CameraParam, "CameraParam" )
     , std::make_pair( ParamKeyEvent::TargetType::FailTarget, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -227,6 +231,23 @@ std::pair< LightEvent::Command, const char* > LightCommandMapping[] =
 
 template<> LightEvent::Command  String2T    ( const std::string& s, const LightEvent::Command& defaultVal )     { return String2Enum( LightCommandMapping, s, defaultVal ); }
 template<> std::string          T2String    ( const LightEvent::Command & t )                                   { return Enum2String( LightCommandMapping, t ); }
+
+
+// ========================================================================= //
+// CameraEvent
+// ========================================================================= //
+const std::string CAMERA_INDEX_STRING       = "CameraIndex";
+
+std::pair< CameraEvent::Command, const char* > CameraCommandMapping[] = 
+{
+    std::make_pair( CameraEvent::Command::AddCamera, "AddCamera" )
+    , std::make_pair( CameraEvent::Command::RemoveCamera, "RemoveCamera" )
+    , std::make_pair( CameraEvent::Command::SetCurrentCamera, "SetCurrentCamera" )
+    , std::make_pair( CameraEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> CameraEvent::Command     String2T    ( const std::string& s, const CameraEvent::Command& defaultVal )     { return String2Enum( CameraCommandMapping, s, defaultVal ); }
+template<> std::string              T2String    ( const CameraEvent::Command & t )                                   { return Enum2String( CameraCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -335,6 +356,7 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::PluginInfo, "PluginInfo" )
     , std::make_pair( InfoEvent::Command::MinimalSceneInfo, "MinimalSceneInfo" )
     , std::make_pair( InfoEvent::Command::LightsInfo, "LightsInfo" )
+    , std::make_pair( InfoEvent::Command::CamerasInfo, "CamerasInfo" )
 
     , std::make_pair( InfoEvent::Command::ListSceneAssets, "ListSceneAssets" )
     , std::make_pair( InfoEvent::Command::ListProjectNames, "ListProjectNames" )
@@ -1091,7 +1113,7 @@ void                ParamKeyEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
     ser.SetAttribute( SerializationHelper::PARAM_NAME_STRING, ParamName );
     ser.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, ParamSubName );
-    ser.SetAttribute( SerializationHelper::PARAM_LIGHT_INDEX, SerializationHelper::T2String( LightIndex ) );
+    ser.SetAttribute( SerializationHelper::PARAM_INDEX, SerializationHelper::T2String( Index ) );
     ser.SetAttribute( SerializationHelper::PARAM_VALUE_STRING, Value );
     ser.SetAttribute( SerializationHelper::KEY_TIME_STRING, SerializationHelper::T2String( Time ) );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ParamCommand ) );
@@ -1110,7 +1132,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->ParamName         = deser.GetAttribute( SerializationHelper::PARAM_NAME_STRING );
         newEvent->ParamSubName      = deser.GetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING );
-        newEvent->LightIndex        = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::PARAM_LIGHT_INDEX ), std::numeric_limits< UInt32 >::quiet_NaN() );
+        newEvent->Index             = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::PARAM_INDEX ), std::numeric_limits< UInt32 >::quiet_NaN() );
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
         newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );
         newEvent->ParamTargetType   = SerializationHelper::String2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING ), ParamKeyEvent::TargetType::FailTarget );
@@ -1295,6 +1317,60 @@ const std::string&  LightEvent::GetName() const
 //
 EventType           LightEvent::GetEventType() const
 {   return this->m_sEventType; }
+
+
+//******************* CameraEvent *************
+
+// *************************************
+//
+void                    CameraEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( CameraCommand ) );
+    ser.SetAttribute( SerializationHelper::LIGHT_INDEX_STRING, SerializationHelper::T2String( CameraIndex ) );
+    //ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
+}
+
+// *************************************
+//
+IEventPtr                CameraEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        CameraEventPtr newEvent        = std::make_shared< CameraEvent >();
+        newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->CameraCommand      = SerializationHelper::String2T< CameraEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), CameraEvent::Command::Fail );
+        newEvent->CameraIndex        = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::LIGHT_INDEX_STRING ), 0 );
+        //newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               CameraEvent::Clone             () const
+{   return IEventPtr( new CameraEvent( *this ) );  }
+
+// *************************************
+//
+EventType           CameraEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        CameraEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  CameraEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           CameraEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
 
 
 //******************* NodeStructureEvent *************

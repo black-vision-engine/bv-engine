@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
-#include "ShaderParamNormalMatrix.h"
+#include "ShaderParamNormalMatrixMV.h"
 
 
 namespace bv {
 
 // ********************************
 //
-ShaderParamNormalMatrix::ShaderParamNormalMatrix                  ( const std::string & name )
+ShaderParamNormalMatrixMV::ShaderParamNormalMatrixMV                  ( const std::string & name )
     : GenericShaderParam( ParamType::PT_MAT3, name )
     , m_normalMat( 1.0f ) 
 {
@@ -15,20 +15,20 @@ ShaderParamNormalMatrix::ShaderParamNormalMatrix                  ( const std::s
 
 // ********************************
 //
-ShaderParamNormalMatrix::~ShaderParamNormalMatrix                 ()
+ShaderParamNormalMatrixMV::~ShaderParamNormalMatrixMV                 ()
 {
 }
 
 // ********************************
 // FIXME: is there any use for this - this is not a value pointer used by some model but a simply an inner instance value
-const void *    ShaderParamNormalMatrix::GetValuePtr   () const
+const void *    ShaderParamNormalMatrixMV::GetValuePtr   () const
 {
     return &m_normalMat;
 }
 
 // ********************************
 //
-void            ShaderParamNormalMatrix::Update        ( RenderableEntity * renderable, Camera * camera )
+void            ShaderParamNormalMatrixMV::Update        ( RenderableEntity * renderable, Camera * camera )
 {
     { renderable; } // FIXME: suppress unused variable
 

@@ -49,7 +49,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     std::string & paramSubName = setParamEvent->ParamSubName;
     std::string & sceneName    = setParamEvent->SceneName;
     std::string & value        = setParamEvent->Value;
-    UInt32        lightIndex   = setParamEvent->LightIndex;
+    UInt32        index        = setParamEvent->Index;
     
     
     TimeType keyTime           = setParamEvent->Time;
@@ -82,9 +82,11 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
             param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
         else if( targetType == ParamKeyEvent::TargetType::LightParam )
-            param = GetLightParameter( sceneName, lightIndex, paramName );
+            param = GetLightParameter( sceneName, index, paramName );
         else if( targetType == ParamKeyEvent::TargetType::NodeLogicParam )
             param = GetNodeLogicParameter( sceneName, nodeName, paramName );
+        else if( targetType == ParamKeyEvent::TargetType::CameraParam )
+            param = GetCameraParameter( sceneName, index, paramName );
         else
             param = GetPluginParameter( sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
     }
@@ -367,6 +369,24 @@ ParameterPtr    PluginEventsHandlers::GetNodeLogicParameter   ( const std::strin
     }
 
     LOG_MESSAGE( SeverityLevel::warning ) << "Node logic parameter not found";
+    return nullptr;
+}
+
+// ***********************
+//
+ParameterPtr    PluginEventsHandlers::GetCameraParameter      ( const std::string & sceneName, UInt32 cameraIndex, const std::string & paramName )
+{
+    auto scene = m_projectEditor->GetModelScene( sceneName );
+    if( scene )
+    {
+        auto camera = scene->GetCamerasLogic().GetCamera( cameraIndex );
+        if( camera )
+        {
+            return camera->GetParameter( paramName );
+        }
+    }
+
+    LOG_MESSAGE( SeverityLevel::warning ) << "Camera parameter not found";
     return nullptr;
 }
 

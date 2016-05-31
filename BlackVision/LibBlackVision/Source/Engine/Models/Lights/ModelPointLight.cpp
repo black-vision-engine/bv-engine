@@ -36,5 +36,13 @@ LightType               ModelPointLight::GetType             () const
     return LightType::LT_POINT;
 }
 
+// ***********************
+//
+void                    ModelPointLight::UpdateToCameraSpace ( const glm::mat4 & viewMat )
+{
+    auto positionVal = QueryTypedValue< ValueVec3Ptr >( m_paramModel->GetValue( PARAM::POSITION ) );
+    positionVal->SetValue( glm::vec3( viewMat * glm::vec4( positionVal->GetValue(), 1.0f ) ) );
+}
+
 } //model
 } //bv

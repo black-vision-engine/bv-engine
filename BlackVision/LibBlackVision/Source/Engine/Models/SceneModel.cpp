@@ -5,6 +5,7 @@
 
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Models/Updaters/UpdatersHelpers.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -19,18 +20,18 @@ namespace bv { namespace model {
 
 // *******************************
 //
-SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera )
+SceneModelPtr    SceneModel::Create		( const std::string & name )
 {
-    return std::make_shared< SceneModel >( name, camera );
+    return std::make_shared< SceneModel >( name );
 }
 
 // *******************************
 //
-				SceneModel::SceneModel	( const std::string & name, Camera * camera )
+SceneModel::SceneModel	( const std::string & name )
     : m_name( name )
     , m_timeline( model::OffsetTimeEvaluator::Create( name, TimeType( 0.0 ) ) )
-	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
+    , m_camerasLogic( m_timeline )
 {
 	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
@@ -68,6 +69,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
             }
             ser.ExitChild(); // lights
 
+            m_camerasLogic.Serialize( ser );
             m_sceneVariables.Serialize( ser );
             m_gridLinesLogic.Serialize( ser );
         }
@@ -97,7 +99,7 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 
 	//FIXME: pass nullptr as camera because we don't have camera model yet
     auto sceneName = deser.GetAttribute( "name" );
-    auto obj = SceneModel::Create( sceneName, nullptr );
+    auto obj = SceneModel::Create( sceneName );
 
     // Add scene name to context
     bvDeserCo->SetSceneName( sceneName );
@@ -119,6 +121,10 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     {
         obj->AddLight( light );
     }
+
+// cameras
+    auto & cameraLogic = obj->GetCamerasLogic();
+    cameraLogic.Deserialize( deser );
 
 // editor scene varables
 
@@ -157,9 +163,15 @@ model::SceneModelPtr		SceneModel::Clone		() const
 //
 void						SceneModel::Update	    ( TimeType t )
 {
+    m_camerasLogic.Update( t );
+
+    Camera tempCamera;
+    UpdatersHelpers::UpdateCamera( &tempCamera, GetCamerasLogic().GetCurrentCamera() );
+
     for( auto & light : m_lights )
     {
         light->Update( t );
+        light->UpdateToCameraSpace( tempCamera.GetViewMatrix() );
     }
 }
 
@@ -203,13 +215,6 @@ const std::string &			SceneModel::GetName		() const
 OffsetTimeEvaluatorPtr		SceneModel::GetTimeline	()  const
 {
     return m_timeline;
-}
-
-// *******************************
-//
-Camera *					SceneModel::GetCamera              ()  const
-{
-    return m_camera;
 }
 
 // *******************************
@@ -271,12 +276,19 @@ GridLinesLogic &            SceneModel::GetGridLinesLogic   ()
     return m_gridLinesLogic;
 }
 
+// ***********************
+//
+CamerasLogic &              SceneModel::GetCamerasLogic     ()
+{
+    return m_camerasLogic;
+}
+
 // *******************************
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
 	//FIXME:camera can be nullptr because it's not used yet
-	return SceneModel::Create( name, nullptr );
+	return SceneModel::Create( name );
 }
 
 } // model

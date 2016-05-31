@@ -61,5 +61,13 @@ glm::vec3               ModelDirectionalLight::CalculateDirection   ( const glm:
     return glm::orientate3( glm::radians( angles ) ) * m_defaultDirection;
 }
 
+// ***********************
+//
+void                    ModelDirectionalLight::UpdateToCameraSpace ( const glm::mat4 & viewMat )
+{
+    auto directionVal = QueryTypedValue< ValueVec3Ptr >( m_paramModel->GetValue( PARAM::DIRECTION ) );
+    directionVal->SetValue( glm::vec3( viewMat * glm::vec4( directionVal->GetValue(), 0.0f ) ) );
+}
+
 } //model
 } //bv

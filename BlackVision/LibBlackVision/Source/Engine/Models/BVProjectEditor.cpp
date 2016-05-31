@@ -999,6 +999,10 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
     return false;
 }
 
+// ========================================================================= //
+// Lights
+// ========================================================================= //
+
 // *******************************
 //
 bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath )
@@ -1048,6 +1052,62 @@ bool            BVProjectEditor::RemoveLight                ( model::SceneModelP
 
     return false;
 }
+
+// ========================================================================= //
+// Cameras
+// ========================================================================= //
+
+// ***********************
+//
+bool            BVProjectEditor::AddCamera                   ( const std::string & sceneName )
+{
+    auto modelScene = m_project->GetModelScene( sceneName );
+    return AddCamera( modelScene );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::RemoveCamera                ( const std::string & sceneName, UInt32 idx )
+{
+    auto modelScene = m_project->GetModelScene( sceneName );
+    return RemoveCamera( modelScene, idx );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::SetCurrentCamera            ( const std::string & sceneName, UInt32 idx )
+{
+    auto modelScene = m_project->GetModelScene( sceneName );
+    return SetCurrentCamera( modelScene, idx );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::AddCamera                   ( model::SceneModelPtr scene )
+{
+    if( scene )
+        return scene->GetCamerasLogic().AddCamera();
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx )
+{
+    if( scene )
+        return scene->GetCamerasLogic().RemoveCamera( idx );
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::SetCurrentCamera            ( model::SceneModelPtr scene, UInt32 idx )
+{
+    if( scene )
+        return scene->GetCamerasLogic().SetCurrentCamera( idx );
+    return false;
+}
+
 
 // *******************************
 //
@@ -1440,13 +1500,25 @@ model::IModelNodePtr	BVProjectEditor::FindNode            ( model::BasicNodePtr 
 }
 
 // ***********************
-// If nullptr, there's no intersection.
-model::IModelNodePtr	BVProjectEditor::FindIntersectingNode    ( glm::vec3 rayStart, glm::vec3 rayDirection )
+// If node is nullptr, there's no intersection.
+std::pair< model::BasicNodePtr, Float32 >   BVProjectEditor::FindIntersectingNode    ( const std::string & sceneName, glm::vec3 rayStart, glm::vec3 rayDirection )
 {
-    glm::mat4 transform = glm::mat4( 1 );   // Identity
-    auto result = BVProjectTools::NodeIntersection( m_rootNode, transform, rayStart, rayDirection );
+    auto modelScene = GetModelScene( sceneName );
+    return FindIntersectingNode( modelScene, rayStart, rayDirection );
+}
 
-    return result.first;
+// ***********************
+// If node is nullptr, there's no intersection.
+std::pair< model::BasicNodePtr, Float32 >	BVProjectEditor::FindIntersectingNode    ( model::SceneModelPtr scene, glm::vec3 rayStart, glm::vec3 rayDirection )
+{
+    if( scene )
+    {
+        glm::mat4 transform = glm::mat4( 1 );   // Identity
+        auto result = BVProjectTools::NodeIntersection( scene->GetRootNode(), transform, rayStart, rayDirection );
+
+        return result;
+    }
+    return std::make_pair< model::BasicNodePtr, Float32 >( nullptr, 0.0f );
 }
 
 // ***********************
@@ -1523,7 +1595,7 @@ std::string				BVProjectEditor::PrefixSceneName		( const std::string & name ) co
 //
 void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene )
 {
-    //Set default root node & timeline
+    //Set default root node & timeline & camera
 
     auto defaultTimeline = GetTimeline( model::TimelineHelper::CombineTimelinePath( scene->GetName(), DEFAULT_TIMELINE_NAME ) );
     //don't add default timeline if it already exists
@@ -1532,6 +1604,15 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
         defaultTimeline = model::TimelineHelper::CreateDefaultTimeline( DEFAULT_TIMELINE_NAME, ( std::numeric_limits< TimeType >::max )(), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ); //FIXME: infinite duration
         scene->GetTimeline()->AddChild( defaultTimeline );
     }
+
+    //Add default camera and set default timeline for cameras
+    scene->GetCamerasLogic().SetDefaultTimeline( defaultTimeline );
+    if( scene->GetCamerasLogic().GetNumCameras() == 0 )
+        scene->GetCamerasLogic().AddCamera();   // Creates camera with default parameters.
+                                                // FIXME: add posibility to set default parameters.
+    if( scene->GetCamerasLogic().GetCurrentCamera() == nullptr )
+        scene->GetCamerasLogic().SetCurrentCamera( 0 );
+
 
     //don't overwrite root node if it already exists
     if( !scene->GetRootNode() ) 

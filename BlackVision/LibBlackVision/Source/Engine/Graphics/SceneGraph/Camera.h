@@ -10,7 +10,7 @@ class Camera
 {
 private:
 
-    bool            m_isPrespactive;
+    bool            m_isPerspective;
 
     unsigned int    m_viewportWidth;
     unsigned int    m_viewportHeight;
@@ -34,8 +34,9 @@ public:
     virtual             ~Camera                 ();
 
     void                SetPerspective          ( float fov, float aspectRatio,float near, float far );
-    void                SetPerspective          ( float fov, unsigned int w, unsigned int h,float near, float far );
+    void                SetPerspective          ( float fov, unsigned int w, unsigned int h, float near, float far );
     void                SetPerspective          ( float aspectRatio );
+    void                SetOrthogonal           ( unsigned int w, unsigned int h, float near, float far );
 
     void                SetViewportSize         ( unsigned int w, unsigned int h );
 
@@ -48,6 +49,7 @@ public:
 
     unsigned int        GetViewportWidth        () const;
     unsigned int        GetViewportHeight       () const;
+    float               GetFOV                  () const;
 
     const glm::mat4 &   GetViewMatrix           () const;
     const glm::mat4 &   GetProjectionMatrix     () const;

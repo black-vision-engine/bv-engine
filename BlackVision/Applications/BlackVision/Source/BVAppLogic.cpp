@@ -161,8 +161,6 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
         auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
         m_bvProject->GetProjectEditor()->AddScene( scene );
     }
-
-    InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
 }
 
 // *********************************
@@ -178,7 +176,7 @@ void BVAppLogic::LoadScene          ( void )
             //m_solution.SetTimeline(m_timelineManager);
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
 
-            auto sceneModel = SceneModel::Create( "root", m_renderer->GetCamera() );
+            auto sceneModel = SceneModel::Create( "root" );
             projectEditor->AddScene( sceneModel );
 
             projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
@@ -216,7 +214,7 @@ void BVAppLogic::LoadScene          ( void )
         {
             auto sceneName = "sceneFromEnv@ " + GetEnvScene();
 
-            sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
+            sceneModel = model::SceneModel::Create( sceneName );
             projectEditor->AddScene( sceneModel );
 
             auto defaultTimeline = projectEditor->GetSceneDefaultTimeline( sceneModel );
@@ -228,33 +226,6 @@ void BVAppLogic::LoadScene          ( void )
     }
 }
 
-// *********************************
-//
-void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
-{
-    auto cam = new Camera( DefaultConfig.IsCameraPerspactive() );
-
-    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
-    
-    if( cam->IsPerspective() )
-    {
-        cam->SetPerspective( DefaultConfig.FOV(), w, h, DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
-    }
-    else
-    {
-        cam->SetViewportSize( w, h );
-    }
-
-    //FIXME: nobody owns camera right now.. so it will be deleted here instead of scene model
-    if( m_renderer->GetCamera() )
-    {
-        delete m_renderer->GetCamera();
-    }
-
-    m_renderer->SetCamera( cam );
-
-    //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
-}
 
 // *********************************
 //

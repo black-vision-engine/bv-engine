@@ -6,25 +6,30 @@
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 
-namespace bv {
+namespace bv
+{
 
-class ShaderParamNormalMatrix : public GenericShaderParam
+
+
+
+class ShaderParamM : public GenericShaderParam
 {
 private:
 
-    glm::mat3   m_normalMat;
+    glm::mat4   m_modelMatrix;
 
 public:
-
-                            ShaderParamNormalMatrix    ( const std::string & name );
-                            ~ShaderParamNormalMatrix   ();
+public:
+                            ShaderParamM    ( const std::string & name );
+                            ~ShaderParamM   ();
 
     virtual void            Update          ( RenderableEntity * renderable, Camera * camera ) override;
 
 private:
 
     virtual const void *    GetValuePtr     () const override;
-
 };
 
-} //bv
+
+
+}	// bv

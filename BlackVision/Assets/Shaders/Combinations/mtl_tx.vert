@@ -7,7 +7,7 @@ layout (location = 2) in vec2 vertexTexCoord;
 uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
-uniform mat3 normalMat;
+uniform mat3 normalMatMV;
 
 uniform mat4 txMat;
 
@@ -21,7 +21,7 @@ void main()
 	
 	position = vec3( MV * vec4( vertexPosition, 1.0 ) );
 	
-	normal = normalMat * vertexNormal;
+	normal = normalMatMV * vertexNormal;
 	
 	uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
 }

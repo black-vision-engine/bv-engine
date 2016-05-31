@@ -87,11 +87,19 @@ void            BVProject::Update( TimeType t )
 
         UpdatersManager::Get().UpdateStep();
 
-        //FIXME: camera should be per scene model
-        auto viewMat = m_renderer->GetCamera()->GetViewMatrix();
-        auto transform = Transform( viewMat, glm::inverse( viewMat ) );
+        auto & scenes = GetScenes();
+        for( auto & scene : scenes )
+        {
+            auto viewMat = scene->GetCamera()->GetViewMatrix();
+            auto transform = Transform( viewMat, glm::inverse( viewMat ) );
+            scene->GetRoot()->Update( transform );
+        }
 
-        m_engineSceneRoot->Update( transform );
+        ////FIXME: camera should be per scene model
+        //auto viewMat = m_renderer->GetCamera()->GetViewMatrix();
+        //auto transform = Transform( viewMat, glm::inverse( viewMat ) );
+
+        //m_engineSceneRoot->Update( transform );
     }
 }
 

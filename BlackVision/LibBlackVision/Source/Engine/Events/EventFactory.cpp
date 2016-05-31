@@ -21,6 +21,7 @@ EventFactory::EventFactory()
     RegisterEvent( ProjectEvent::Name(), ProjectEvent::Create );
     RegisterEvent( SceneEvent::Name(), SceneEvent::Create );
     RegisterEvent( LightEvent::Name(), LightEvent::Create );
+    RegisterEvent( CameraEvent::Name(), CameraEvent::Create );
     RegisterEvent( InfoEvent::Name(), InfoEvent::Create );
     RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
     RegisterEvent( TimerEvent::Name(), TimerEvent::Create );

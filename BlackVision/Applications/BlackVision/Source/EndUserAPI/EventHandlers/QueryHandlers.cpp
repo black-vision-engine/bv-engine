@@ -100,6 +100,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             GetMinimalSceneInfo( responseJSON, request, eventID );
         else if ( command == InfoEvent::Command::LightsInfo )
             GetLightsInfo( responseJSON, request, eventID );
+        else if ( command == InfoEvent::Command::CamerasInfo )
+            GetCamerasInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Videocards )
             VideoCardsInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::CheckTimelineTime )
@@ -973,6 +975,31 @@ void         QueryHandlers::GetLightsInfo       ( JsonSerializeObject & ser, IDe
         scene->GetLight( i )->Serialize( ser );
     }
     ser.ExitChild(); // lights
+}
+
+// ***********************
+//
+void     QueryHandlers::GetCamerasInfo          ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr && m_editor );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::CamerasInfo, eventID, "Not valid request." );
+        return;
+    }
+
+    std::string sceneName = request->GetAttribute( "SceneName" );
+
+    auto scene = m_editor->GetModelScene( sceneName );
+    if( scene == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::CamerasInfo, eventID, "Scene not found" );
+        return;
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::CamerasInfo, eventID, true );
+
+    scene->GetCamerasLogic().Serialize( ser );
 }
 
 //// ***********************
