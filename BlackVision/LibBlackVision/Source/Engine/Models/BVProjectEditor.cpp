@@ -1535,7 +1535,8 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
 
     //Add default camera and set default timeline for cameras
     scene->GetCamerasLogic().SetDefaultTimeline( defaultTimeline );
-    scene->GetCamerasLogic().AddCamera();       // Creates camera with default parameters.
+    if( scene->GetCamerasLogic().GetNumCameras() == 0 )
+        scene->GetCamerasLogic().AddCamera();   // Creates camera with default parameters.
                                                 // FIXME: add posibility to set default parameters.
     if( scene->GetCamerasLogic().GetCurrentCamera() == nullptr )
         scene->GetCamerasLogic().SetCurrentCamera( 0 );

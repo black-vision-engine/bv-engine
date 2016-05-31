@@ -31,6 +31,7 @@ public:
 
     bool                    AddCamera               ();
     bool                    RemoveCamera            ( unsigned int index );
+    SizeType                GetNumCameras           ();
 
     CameraModelPtr &        GetCurrentCamera        ();
     bool                    SetCurrentCamera        ( unsigned int index );

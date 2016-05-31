@@ -64,10 +64,11 @@ ISerializablePtr	            CameraModel::Create                 ( const IDeseri
 {
     // params
     auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-
-    //FIXME: take first timeeval for light creation
+    
+    auto defaultTimeline = SerializationHelper::GetDefaultTimeline( deser );
+    
     assert( params.size() > 0 );
-    auto camera = std::shared_ptr< CameraModel >();
+    auto camera = std::make_shared< CameraModel >( defaultTimeline );
 
     for( auto param : params )
     {

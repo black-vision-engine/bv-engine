@@ -31,18 +31,15 @@ void            CamerasLogic::Deserialize             ( const IDeserializer & de
 
     m_defaultTimeline = SerializationHelper::GetDefaultTimeline( deser );
 
-    if( deser.EnterChild( "cameras" ) )
+
+    auto cameras = SerializationHelper::DeserializeArray< CameraModel >( deser, "cameras" );
+
+    for( int i = 0; i < cameras.size(); ++i )
     {
-        auto cameras = SerializationHelper::DeserializeArray< CameraModel >( deser, "cameras" );
-
-        for( int i = 0; i < cameras.size(); ++i )
-        {
-            if( cameras[ i ] != nullptr )
-                m_cameras.push_back( cameras[ i ] );
-        }
-
-        deser.ExitChild();  // cameras
+        if( cameras[ i ] != nullptr )
+            m_cameras.push_back( cameras[ i ] );
     }
+
 
     int currCameraIdx = SerializationHelper::String2T( deser.GetAttribute( "CurrentCamera" ), 0 );
 
@@ -115,6 +112,13 @@ bool                    CamerasLogic::RemoveCamera            ( unsigned int ind
     }
     else
         return false;
+}
+
+// ***********************
+//
+SizeType                CamerasLogic::GetNumCameras           ()
+{
+    return m_cameras.size();
 }
 
 // ***********************
