@@ -274,6 +274,7 @@ public:
         ResourceParam,
         LightParam,
         NodeLogicParam,
+        CameraParam,
         FailTarget      ///< Wrong target type
     } TargetType;
 private:
@@ -285,7 +286,7 @@ public:
     std::string                     ParamName;
     std::string                     ParamSubName;
     std::string                     SceneName;
-    UInt32                          LightIndex;
+    UInt32                          Index;
     std::string                     Value;
 
     float                           Time;
@@ -436,6 +437,45 @@ template<> LightEvent::Command      SerializationHelper::String2T   ( const std:
 template<> std::string              SerializationHelper::T2String   ( const LightEvent::Command & t );
 
 DEFINE_PTR_TYPE( LightEvent )
+
+
+// ************************************* CameraEvent *************************************
+class CameraEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        AddCamera,
+        RemoveCamera,
+        SetCurrentCamera,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+public:
+    CameraEvent::Command            CameraCommand;
+    std::string                     SceneName;
+    UInt32                          CameraIndex;
+    //std::string                     TimelinePath;
+
+public:
+    explicit                        CameraEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> CameraEvent::Command     SerializationHelper::String2T   ( const std::string & s, const CameraEvent::Command & defaultVal );
+template<> std::string              SerializationHelper::T2String   ( const CameraEvent::Command & t );
+
+DEFINE_PTR_TYPE( CameraEvent )
 
 
 // ************************************* SceneStructureEvent Event *************************************
@@ -640,6 +680,7 @@ public:
         PluginInfo,
         MinimalSceneInfo,
         LightsInfo,
+        CamerasInfo,
 
         ListSceneAssets,
         ListProjectNames,

@@ -55,6 +55,7 @@ private:
     void     MinimalTreeStructureInfo( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 
     void     GetLightsInfo           ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     GetCamerasInfo          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetPMItemStats          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 
 };

@@ -105,13 +105,37 @@ bool                    CamerasLogic::AddCamera               ()
 //
 bool                    CamerasLogic::RemoveCamera            ( unsigned int index )
 {
-    if( index < m_cameras.size() )
+    if( index < m_cameras.size() && m_cameras.size() > 1 )
     {
+        bool currentRemoved = false;
+        if( m_cameras[ index ] == m_currentCamera )
+        {
+            currentRemoved = true;
+        }
+
         m_cameras.erase( m_cameras.begin() + index );
+
+        if( currentRemoved )
+        {
+            m_currentCamera = m_cameras[ 0 ];
+            UpdateID();
+        }
+
         return true;
     }
     else
         return false;
+}
+
+// ***********************
+//
+CameraModelPtr          CamerasLogic::GetCamera               ( unsigned int index )
+{
+    if( index < m_cameras.size() )
+    {
+        m_cameras[ index ];
+    }
+    return nullptr;
 }
 
 // ***********************

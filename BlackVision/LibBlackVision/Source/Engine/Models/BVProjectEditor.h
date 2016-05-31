@@ -202,7 +202,17 @@ public:
 
     bool                    AddLight                    ( model::SceneModelPtr scene, LightType type, model::ITimeEvaluatorPtr timeline );
     bool                    RemoveLight                 ( model::SceneModelPtr scene, UInt32 idx );
+
+/* CAMERAS */
+
+    bool                    AddCamera                   ( const std::string & sceneName );
+    bool                    RemoveCamera                ( const std::string & sceneName, UInt32 idx );
+    bool                    SetCurrentCamera            ( const std::string & sceneName, UInt32 idx );
     
+    bool                    AddCamera                   ( model::SceneModelPtr scene );
+    bool                    RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx );
+    bool                    SetCurrentCamera            ( model::SceneModelPtr scene, UInt32 idx );
+
 private:
 
     /* scene helpers */

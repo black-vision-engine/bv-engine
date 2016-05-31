@@ -999,6 +999,10 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
     return false;
 }
 
+// ========================================================================= //
+// Lights
+// ========================================================================= //
+
 // *******************************
 //
 bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath )
@@ -1048,6 +1052,56 @@ bool            BVProjectEditor::RemoveLight                ( model::SceneModelP
 
     return false;
 }
+
+// ========================================================================= //
+// Cameras
+// ========================================================================= //
+
+// ***********************
+//
+bool            BVProjectEditor::AddCamera                   ( const std::string & sceneName )
+{
+    auto modelScene = m_project->GetModelScene( sceneName );
+    return AddCamera( modelScene );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::RemoveCamera                ( const std::string & sceneName, UInt32 idx )
+{
+    auto modelScene = m_project->GetModelScene( sceneName );
+    return RemoveCamera( modelScene, idx );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::SetCurrentCamera            ( const std::string & sceneName, UInt32 idx )
+{
+    auto modelScene = m_project->GetModelScene( sceneName );
+    return SetCurrentCamera( modelScene, idx );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::AddCamera                   ( model::SceneModelPtr scene )
+{
+    return scene->GetCamerasLogic().AddCamera();
+}
+
+// ***********************
+//
+bool            BVProjectEditor::RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx )
+{
+    return scene->GetCamerasLogic().RemoveCamera( idx );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::SetCurrentCamera            ( model::SceneModelPtr scene, UInt32 idx )
+{
+    return scene->GetCamerasLogic().SetCurrentCamera( idx );
+}
+
 
 // *******************************
 //

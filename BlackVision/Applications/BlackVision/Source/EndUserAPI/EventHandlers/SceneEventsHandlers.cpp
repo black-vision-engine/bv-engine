@@ -835,6 +835,39 @@ void SceneEventsHandlers::LightsManagement    ( IEventPtr evt )
 
 // ***********************
 //
+void SceneEventsHandlers::CameraManagement    ( bv::IEventPtr evt )
+{
+    assert( evt->GetEventType() == CameraEvent::Type() );
+
+    auto cameraEvent = std::static_pointer_cast< CameraEvent >( evt );
+
+    auto command      = cameraEvent->CameraCommand;
+    auto sceneName    = cameraEvent->SceneName;
+    auto cameraIdx    = cameraEvent->CameraIndex;
+    //auto timelinePath = cameraEvent->TimelinePath;
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    
+    bool result = false;
+
+    if( command == CameraEvent::Command::AddCamera )
+    {
+        result = editor->AddCamera( sceneName );
+    }
+    else if( command == CameraEvent::Command::RemoveCamera )
+    {
+        result = editor->RemoveCamera( sceneName, cameraIdx );
+    }
+    else if( command == CameraEvent::Command::SetCurrentCamera )
+    {
+        result = editor->SetCurrentCamera( sceneName, cameraIdx );
+    }
+
+    SendSimpleResponse( command, cameraEvent->EventID, cameraEvent->SocketID, result );
+}
+
+// ***********************
+//
 void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
 {
     assert( evt->GetEventType() == bv::SceneVariableEvent::Type() );

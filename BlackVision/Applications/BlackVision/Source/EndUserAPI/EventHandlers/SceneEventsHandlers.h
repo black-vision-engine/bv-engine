@@ -53,6 +53,7 @@ public:
     void        SceneStructure	    ( bv::IEventPtr evt );
 
     void        LightsManagement	( bv::IEventPtr evt );
+    void        CameraManagement    ( bv::IEventPtr evt );
 
     void        SceneVariable       ( bv::IEventPtr evt );
     void        GridLines           ( bv::IEventPtr evt );
