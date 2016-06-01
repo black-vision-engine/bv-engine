@@ -36,6 +36,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultNormalMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultParallaxMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEnvironmentTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultEnvReflectivityMapPlugin.h"
 
 
 namespace bv { namespace model {
@@ -80,6 +81,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultNormalMapPluginDesc() );
     descriptors.push_back( new DefaultParallaxMapPluginDesc() );
     descriptors.push_back( new DefaultEnvironmentTexturePluginDesc() );
+    descriptors.push_back( new DefaultEnvReflectivityMapPluginDesc() );
 
     for( auto descr : descriptors )
     {

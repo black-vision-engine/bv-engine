@@ -1314,33 +1314,59 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     auto envMap = envSphereNode->GetPlugin( "environmental tex" );
     model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.8f );
     
-    model::LoadTexture( envSphereNode->GetPlugin( "environmental tex" ), "textures/witek/Env/MountainEnv.jpg" );
+    model::LoadTexture( envSphereNode->GetPlugin( "environmental tex" ), "textures/witek/Env/EnvVillage.jpg" );
 
     // Mesh node
-    auto envMeshNode = model::BasicNode::Create( "EnvMesh", timeEvaluator );
-    root->AddChildToModelOnly( envMeshNode );
+    //auto envMeshNode = model::BasicNode::Create( "EnvMesh", timeEvaluator );
+    //root->AddChildToModelOnly( envMeshNode );
 
-    envMeshNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    envMeshNode->AddPlugin( "DEFAULT_MESH", timeEvaluator );
-    envMeshNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
-    envMeshNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    //envMeshNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    //envMeshNode->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    //envMeshNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    //envMeshNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
 
-    model::SetParameterTranslation( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -1.0f, 0.0f, -30.0f ) );
-    model::SetParameterScale( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.01f, 0.01f, 0.01f ) );
+    //model::SetParameterTranslation( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -1.0f, 0.0f, -30.0f ) );
+    //model::SetParameterScale( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.01f, 0.01f, 0.01f ) );
 
-    material = envMeshNode->GetPlugin( "material" );
+    //material = envMeshNode->GetPlugin( "material" );
+    //model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
+    //model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    //model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+    //model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.5, 0, 0, 0 ) );
+    //model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    //envMap = envMeshNode->GetPlugin( "environmental tex" );
+    //model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.9f );
+    //
+    //model::LoadTexture( envMeshNode->GetPlugin( "environmental tex" ), "textures/witek/Env/FieldEnv.jpg" );
+    ////model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
+    //model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/Sculpture.3ds" );
+
+    // Cube node
+    auto cubeNode = model::BasicNode::Create( "CubeNode", timeEvaluator );
+    root->AddChildToModelOnly( cubeNode );
+
+    cubeNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    cubeNode->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
+    cubeNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    cubeNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    cubeNode->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
+
+    model::SetParameterTranslation( cubeNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -5.0f, -0.5f, -4.0f ) );
+
+    material = cubeNode->GetPlugin( "material" );
     model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
     model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
     model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
     model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.5, 0, 0, 0 ) );
     model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
 
-    envMap = envMeshNode->GetPlugin( "environmental tex" );
+    envMap = cubeNode->GetPlugin( "environmental tex" );
     model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.9f );
-    
-    model::LoadTexture( envMeshNode->GetPlugin( "environmental tex" ), "textures/witek/Env/MountainEnv.jpg" );
-    //model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
-    model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/Sculpture.3ds" );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+
+    auto reflectivityMap = cubeNode->GetPlugin( "env reflectivity map" );
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );    
 
     return root;
 }
