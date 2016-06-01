@@ -1384,6 +1384,27 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
     model::LoadTexture( sphereTexEnv->GetPlugin( "texture" ), "textures/ice.jpg" );
 
+    // Cube texture environemnt reflectivity map node
+    auto cubeTexEnvRefl = model::BasicNode::Create( "CubeTexEnvRefl", timeEvaluator );
+    root->AddChildToModelOnly( cubeTexEnvRefl );
+
+    cubeTexEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    cubeTexEnvRefl->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
+    cubeTexEnvRefl->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    cubeTexEnvRefl->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    cubeTexEnvRefl->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
+
+    model::SetParameterTranslation( cubeTexEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 4.0f, -0.5f, -1.0f ) );
+    model::SetParameterRotation( cubeTexEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    envMap = cubeTexEnvRefl->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 1.0f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+    model::LoadTexture( cubeTexEnvRefl->GetPlugin( "texture" ), "textures/poison.jpg" );
+    
+    reflectivityMap = cubeTexEnvRefl->GetPlugin( "env reflectivity map" );
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
     return root;
 }
 
