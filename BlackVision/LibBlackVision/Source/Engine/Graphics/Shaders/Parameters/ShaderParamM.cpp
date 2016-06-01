@@ -27,10 +27,11 @@ const void *    ShaderParamM::GetValuePtr () const
 
 // ********************************
 //
-void            ShaderParamM::Update      ( RenderableEntity * renderable, Camera * /*camera*/ )
+void            ShaderParamM::Update      ( RenderableEntity * renderable, Camera * camera )
 {
     if( IsUpdatable() )
     {
+        { camera; }
         assert( camera != nullptr );
         assert( renderable != nullptr );
 
