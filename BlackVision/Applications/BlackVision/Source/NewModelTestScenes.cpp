@@ -1435,6 +1435,36 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( cubeMatTexEnv->GetPlugin( "texture" ), "textures/fire.jpg" );
     
 
+    // Cube material texture environment, reflectivity map node
+    auto cubeMatTexEnvRefl = model::BasicNode::Create( "CubeMatTexEnv", timeEvaluator );
+    root->AddChildToModelOnly( cubeMatTexEnvRefl );
+
+    cubeMatTexEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    cubeMatTexEnvRefl->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
+    cubeMatTexEnvRefl->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    cubeMatTexEnvRefl->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    cubeMatTexEnvRefl->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    cubeMatTexEnvRefl->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
+
+    model::SetParameterTranslation( cubeMatTexEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -3.0f, -1.0f, 4.0f ) );
+    model::SetParameterRotation( cubeMatTexEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    material = cubeMatTexEnvRefl->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.2, 1.0, 0.1, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+
+    envMap = cubeMatTexEnvRefl->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.5f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+    model::LoadTexture( cubeMatTexEnvRefl->GetPlugin( "texture" ), "textures/fire.jpg" );
+
+    reflectivityMap = cubeMatTexEnvRefl->GetPlugin( "env reflectivity map" );
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
     return root;
 }
 
