@@ -27,14 +27,14 @@ const void *    ShaderParamM::GetValuePtr () const
 
 // ********************************
 //
-void            ShaderParamM::Update      ( RenderableEntity * renderable, Camera * camera )
+void            ShaderParamM::Update      ( RenderableEntity * renderable, Camera * /*camera*/ )
 {
     if( IsUpdatable() )
     {
         assert( camera != nullptr );
         assert( renderable != nullptr );
 
-        m_modelMatrix = renderable->LocalTransform().Matrix();
+        m_modelMatrix = renderable->WorldTransform().Matrix();
     }
 }
 

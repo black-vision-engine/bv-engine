@@ -36,7 +36,7 @@ void            ShaderParamNormalMatrixMV::Update        ( RenderableEntity * re
     {
         assert( camera != nullptr );    { camera; }
 
-        auto mv = renderable->WorldTransform().Matrix();
+        auto mv = camera->GetViewMatrix() * renderable->WorldTransform().Matrix();
         m_normalMat = glm::mat3( glm::transpose( glm::inverse( mv ) ) );
     }
 }

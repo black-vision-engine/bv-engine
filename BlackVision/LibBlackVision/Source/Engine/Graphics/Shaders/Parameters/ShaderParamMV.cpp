@@ -35,7 +35,7 @@ void            ShaderParamMV::Update       ( RenderableEntity * renderable, Cam
     {
         assert( renderable != nullptr );
 
-        m_mv = renderable->WorldTransform().Matrix();
+        m_mv = camera->GetViewMatrix() * renderable->WorldTransform().Matrix();
     }
 }
 

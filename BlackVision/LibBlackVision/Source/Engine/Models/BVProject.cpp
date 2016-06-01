@@ -88,18 +88,12 @@ void            BVProject::Update( TimeType t )
         UpdatersManager::Get().UpdateStep();
 
         auto & scenes = GetScenes();
+        auto identityTrans = Transform( glm::mat4( 1 ), glm::mat4( 1 ) );
+
         for( auto & scene : scenes )
         {
-            auto viewMat = scene->GetCamera()->GetViewMatrix();
-            auto transform = Transform( viewMat, glm::inverse( viewMat ) );
-            scene->GetRoot()->Update( transform );
+            scene->GetRoot()->Update( identityTrans );
         }
-
-        ////FIXME: camera should be per scene model
-        //auto viewMat = m_renderer->GetCamera()->GetViewMatrix();
-        //auto transform = Transform( viewMat, glm::inverse( viewMat ) );
-
-        //m_engineSceneRoot->Update( transform );
     }
 }
 
