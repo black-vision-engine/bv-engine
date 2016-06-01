@@ -1303,6 +1303,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     envSphereNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
 
     model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1.0f, 0.0f, -5.0f ) );
+    model::SetParameterRotation( envSphereNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
 
     auto material = envSphereNode->GetPlugin( "material" );
     model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
@@ -1353,6 +1354,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     cubeNode->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
 
     model::SetParameterTranslation( cubeNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -5.0f, -0.5f, -4.0f ) );
+    model::SetParameterRotation( cubeNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
 
     material = cubeNode->GetPlugin( "material" );
     model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
@@ -1378,6 +1380,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     sphereTexEnv->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
 
     model::SetParameterTranslation( sphereTexEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -9.0f, -0.5f, -2.0f ) );
+    model::SetParameterRotation( sphereTexEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
 
     envMap = sphereTexEnv->GetPlugin( "environmental tex" );
     model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.6f );
@@ -1404,6 +1407,33 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     
     reflectivityMap = cubeTexEnvRefl->GetPlugin( "env reflectivity map" );
     model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
+    // Cube material texture environemnt node
+    auto cubeMatTexEnv = model::BasicNode::Create( "CubeMatTexEnv", timeEvaluator );
+    root->AddChildToModelOnly( cubeMatTexEnv );
+
+    cubeMatTexEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    cubeMatTexEnv->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
+    cubeMatTexEnv->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    cubeMatTexEnv->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    cubeMatTexEnv->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+
+    model::SetParameterTranslation( cubeMatTexEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 7.0f, -0.8f, 0.5f ) );
+    model::SetParameterRotation( cubeMatTexEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    material = cubeMatTexEnv->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+
+    envMap = cubeMatTexEnv->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.5f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+    model::LoadTexture( cubeMatTexEnv->GetPlugin( "texture" ), "textures/fire.jpg" );
+    
 
     return root;
 }
