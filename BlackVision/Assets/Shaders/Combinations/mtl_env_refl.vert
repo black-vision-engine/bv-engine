@@ -20,9 +20,11 @@ layout( std140, binding = 1 ) uniform Camera
 
 out vec3 position;			//vertex position in modelview space
 out vec3 normal;			//vertex normal in modelview space
+
+
+// *** ENVIRONMENTAL MAP ***
 out vec3 envReflection;		//reflection direction in world space
 out vec2 uvCoordReflectivityMap;
-
 
 vec3 ComputeEnvironmentReflectionVec();
 

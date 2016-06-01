@@ -1366,7 +1366,23 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
 
     auto reflectivityMap = cubeNode->GetPlugin( "env reflectivity map" );
-    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );    
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
+    // Sphere texture environemnt node
+    auto sphereTexEnv = model::BasicNode::Create( "SphereTexEnv", timeEvaluator );
+    root->AddChildToModelOnly( sphereTexEnv );
+
+    sphereTexEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    sphereTexEnv->AddPlugin( "DEFAULT_SPHERE", timeEvaluator );
+    sphereTexEnv->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    sphereTexEnv->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+
+    model::SetParameterTranslation( sphereTexEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -9.0f, -0.5f, -2.0f ) );
+
+    envMap = sphereTexEnv->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.6f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+    model::LoadTexture( sphereTexEnv->GetPlugin( "texture" ), "textures/ice.jpg" );
 
     return root;
 }
