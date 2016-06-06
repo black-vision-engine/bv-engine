@@ -4,17 +4,20 @@
 
 #include <cassert>
 
-namespace bv
-{
+
+namespace bv {
+
 
 const UInt32         FFmpegDemuxer::SAFE_SEEK_FRAMES = 10;
 
+
 // *******************************
 //FIXME: pass which stream we want - now only video
-FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
+FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQueueSize )
 	: m_streamPath( streamPath )
 	, m_formatCtx( nullptr )
 	, m_isEOF( false )
+    , m_maxQueueSize( maxQueueSize )
 {
 	av_register_all();
 
@@ -46,49 +49,61 @@ AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 
 // *******************************
 //
+bool			FFmpegDemuxer::ProcessPacket			()
+{
+    auto process = false;
+    for( auto & queue : m_packetQueue )
+    {
+        if( queue.second->Size() <= m_maxQueueSize )
+        {
+            process = true;
+        }
+    }
+
+    if( process )
+    {
+	    auto packet = new AVPacket();
+
+	    auto error = av_read_frame( m_formatCtx, packet );
+	    if( error < 0 ) 
+        {
+		    assert( error == AVERROR_EOF ); //error reading frame
+				
+		    m_isEOF = true;
+            av_packet_unref( packet );
+            delete packet;
+            return false;
+        }
+
+	    auto currStream = packet->stream_index;
+        if ( m_packetQueue.count( currStream ) > 0 )
+	    {
+            m_packetQueue.at( currStream )->Push( packet );
+            return true;
+	    }
+	    else
+	    {
+            av_packet_unref( packet );
+            delete packet;
+        }
+    }
+    return false;
+}
+
+// *******************************
+//
 AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 {
 	assert( m_packetQueue.count( streamIdx ) > 0 );
 
-	AVPacket * packet = nullptr;
-
-	if( !m_packetQueue.at( streamIdx ).packets.empty() )
+    if( !m_packetQueue.at( streamIdx )->IsEmpty() )
 	{
-		packet = m_packetQueue.at( streamIdx ).packets.front();
-		m_packetQueue.at( streamIdx ).packets.pop_front();
-	}
-	else 
-	{
-		Int32 currStream = -1;
-		while( currStream != streamIdx )
-		{
-            packet = new AVPacket();
-
-			auto error = av_read_frame( m_formatCtx, packet );
-			if( error < 0 ) {
-				assert( error == AVERROR_EOF ); //error reading frame
-				
-				m_isEOF = true;
-                av_packet_unref( packet );
-                return nullptr;
-            }
-
-			currStream = packet->stream_index;
-			if ( currStream != streamIdx )
-			{
-                if ( m_packetQueue.count( packet->stream_index ) > 0 )
-				{
-					m_packetQueue[ packet->stream_index ].packets.push_back( packet );
-				}
-				else
-				{
-                    av_packet_unref( packet );
-                }
-            }
-		}
+        auto packet = new AVPacket();
+		m_packetQueue.at( streamIdx )->TryPop( packet );
+        return packet;
 	}
 
-	return packet;
+	return nullptr;
 }
 
 // *******************************
@@ -125,7 +140,7 @@ Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
     {
 	    if( m_packetQueue.count( streamIdx ) == 0 )
 	    {
-		    m_packetQueue[ streamIdx ] = FFmpegPacketQueue();
+            m_packetQueue.insert( std::make_pair( streamIdx, std::make_shared< QueueConcurrent< AVPacket * > >() ) );
 	    }
     }
 
@@ -139,20 +154,29 @@ bool				FFmpegDemuxer::IsEOF				() const
 	return m_isEOF;
 }
 
+// *********************************
+//
+bool			    FFmpegDemuxer::IsPacketQueueEmpty	( Int32 streamIdx ) const
+{
+    return m_packetQueue.at( streamIdx )->IsEmpty();
+}
+
 // *******************************
 //
 void				FFmpegDemuxer::ClearPacketQueue		()
 {
 	for( auto it = m_packetQueue.begin(); it != m_packetQueue.end(); ++it )
 	{
-		auto queue = it->second;
+		auto & queue = it->second;
 
-        for( auto qit = queue.packets.begin(); qit != queue.packets.end(); ++qit )
-		{
-			av_packet_unref( *qit );
-		}
+        while( !queue->IsEmpty() )
+        {
+            auto packet = new AVPacket();
+            queue->TryPop( packet );
+            av_packet_unref( packet );
+        }
 
-		queue.packets.clear();
+        queue->Clear();
 	}
 }
 

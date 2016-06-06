@@ -2,8 +2,8 @@
 
 #include "FFmpegUtils.h"
 
-namespace bv
-{
+namespace bv {
+
 
 // *********************************
 //

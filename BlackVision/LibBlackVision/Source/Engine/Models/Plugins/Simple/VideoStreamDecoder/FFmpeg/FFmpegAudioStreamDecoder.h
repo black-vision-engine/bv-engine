@@ -1,41 +1,48 @@
 #pragma once
 
-#include "FFmpegDef.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/IFFmpegStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
 #include "Assets/VideoStream/VideoStreamAsset.h"
 
-namespace bv
-{
 
-class FFmpegAudioStreamDecoder
+namespace bv {
+
+class FFmpegDemuxer;
+
+class FFmpegAudioStreamDecoder : public IFFmpegStreamDecoder
 {
 
 private:
+	
+    SwrContext *			            m_swrCtx;
 
-	AVStream *				m_stream;
-	AVCodecContext *		m_codecCtx;
-	AVCodec *				m_codec;
+    AudioFormat                         m_format;
 
-    Int32                   m_sampleRate;
-    Int32                   m_channelsNum;
-    UInt64                  m_channelLayout;
+	QueueConcurrent< AudioMediaData >   m_bufferQueue;
 
-	Int32					m_streamIdx;
+    UInt32                              m_maxQueueSize;
 
 public:
 
-							FFmpegAudioStreamDecoder	( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx );
+							FFmpegAudioStreamDecoder	( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
 							~FFmpegAudioStreamDecoder	();
 
-	/** Converts time from seconds to the stream specific time base timestamp */
+    AudioFormat             GetAudioFormat              () const;
+
+    bool                    GetData                     ( AudioMediaData & data );
+
+    bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
+	
+    /** Converts time from seconds to the stream specific time base timestamp */
 	Int64					ConvertTime					( Float64 time );
 
-	Int32					DecodePacket				( AVPacket * packet, AVFrame * frame );
-	void					ConvertFrame				( AVFrame * inFrame, AVFrame * outFrame );
+	virtual bool			DecodePacket				( AVPacket * packet ) override;
+	AudioMediaData			ConvertFrame				();
 
 	void					Reset						();
 
-	Int32					GetStreamIdx				() const;
+	virtual Int32			GetStreamIdx				() const override;
 
 };
 

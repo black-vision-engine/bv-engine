@@ -84,6 +84,20 @@ VideoPixelFormat    VideoStreamAsset::GetVideoFormat	() const
 	return m_videoFormat;
 }
 
+// ***********************
+//
+bool                VideoStreamAsset::IsVideoEnabled	() const
+{
+    return m_videoEnabled;
+}
+
+// ***********************
+//
+bool                VideoStreamAsset::IsAudioEnabled	() const
+{
+    return m_audioEnabled;
+}
+
 // *******************************
 // 
 VoidConstPtr        VideoStreamAsset::QueryThis() const

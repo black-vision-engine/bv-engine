@@ -21,6 +21,9 @@ private:
 
 	std::string                 m_streamPath;
 
+    bool                        m_videoEnabled;
+    bool                        m_audioEnabled;
+
 	//raw videos data
 	UInt32						m_width;
 	UInt32						m_height;
@@ -46,6 +49,9 @@ public:
 	VideoPixelFormat							GetVideoFormat      () const;
 
 	TextureFormat								GetTextureFormat    () const;
+
+    bool							            IsVideoEnabled      () const;
+	bool							            IsAudioEnabled      () const;
 
 	static VideoStreamAssetConstPtr				Create		        ( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
