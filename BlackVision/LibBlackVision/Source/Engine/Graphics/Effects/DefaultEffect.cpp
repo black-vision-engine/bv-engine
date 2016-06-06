@@ -107,6 +107,7 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const IShaderDataSour
     auto mvpParam   = ShaderParamFactory::CreateMVPParameter();
     auto mvParam    = ShaderParamFactory::CreateMVParameter ();
     auto mParam     = ShaderParamFactory::CreateMParameter  ();
+    auto vParam     = ShaderParamFactory::CreateVParameter  ();
     //auto pParam     = ShaderParamFactory::CreatePParameter  ();       // This parameter was never used, but you can uncommment it in future.
     auto normParamMV= ShaderParamFactory::CreateNormalMatrixMVParameter  ();
     auto normParamM = ShaderParamFactory::CreateNormalMatrixMParameter  ();
@@ -114,6 +115,7 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const IShaderDataSour
     params->AddParameter( mvpParam );
     params->AddParameter( mvParam );
     params->AddParameter( mParam );
+    params->AddParameter( vParam );
     //params->AddParameter( pParam );
     params->AddParameter( normParamMV );
     params->AddParameter( normParamM );

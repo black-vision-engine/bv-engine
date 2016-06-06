@@ -20,6 +20,7 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMV.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamP.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamM.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamV.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamNormalMatrixMV.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamNormalMatrixM.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamViewport.h"
@@ -88,6 +89,13 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
     }
 
     return nullptr;
+}
+
+// ***********************
+//
+GenericShaderParam *     ShaderParamFactory::CreateVParameter                ()
+{
+    return new ShaderParamV( "V" );
 }
 
 // ***********************

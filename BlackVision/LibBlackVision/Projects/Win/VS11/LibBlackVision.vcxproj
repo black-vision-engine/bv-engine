@@ -303,6 +303,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamMVP.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamP.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
@@ -578,6 +579,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamM.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h" />

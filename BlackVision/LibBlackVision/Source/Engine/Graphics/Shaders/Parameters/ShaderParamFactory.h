@@ -14,6 +14,7 @@ public:
     static GenericShaderParam *     CreateGenericParameter          ( const IValue * value );
     static GenericShaderParam *     CreateGenericParameter          ( const std::string & name, ParamType paramType );
 
+    static GenericShaderParam *     CreateVParameter                ();
     static GenericShaderParam *     CreateMParameter                ();
     static GenericShaderParam *     CreateMVPParameter              ();
     static GenericShaderParam *     CreateMVParameter               ();
