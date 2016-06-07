@@ -73,9 +73,6 @@ void                        AnalogWatch::Update			( TimeType /*t*/ )
 //
 void                        AnalogWatch::Serialize       ( ISerializer & ser ) const
 {
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
-    assert( context != nullptr );
-
     ser.EnterChild( "logic" );
         ser.SetAttribute( "type", m_type );
     ser.ExitChild();    // logic
