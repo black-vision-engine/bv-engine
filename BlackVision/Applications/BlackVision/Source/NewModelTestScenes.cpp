@@ -1607,7 +1607,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     meshMatBumpParalaxEnv->AddPlugin( "DEFAULT_PARALLAX_MAP", timeEvaluator );
     meshMatBumpParalaxEnv->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
 
-    model::SetParameterTranslation( meshMatBumpParalaxEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 3.0f, 3.0f, -3.0f ) );
+    model::SetParameterTranslation( meshMatBumpParalaxEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 2.0f, 3.0f, -3.0f ) );
     model::SetParameterRotation( meshMatBumpParalaxEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
 
     material = meshMatBumpParalaxEnv->GetPlugin( "material" );
@@ -1628,6 +1628,42 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( meshMatBumpParalaxEnv->GetPlugin( "parallax map" ), "meshes/daria/bricks2_disp.jpg" );
     
     model::LoadMesh( meshMatBumpParalaxEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
+
+    // Mesh material, normal map, paralax, environement, reflectivity node
+    auto meshMatBumpParalaxEnvRefl = model::BasicNode::Create( "MeshMatBumpParalaxEnvRefl", timeEvaluator );
+    root->AddChildToModelOnly( meshMatBumpParalaxEnvRefl );
+
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_NORMAL_MAP", timeEvaluator );
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_PARALLAX_MAP", timeEvaluator );
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
+
+    model::SetParameterTranslation( meshMatBumpParalaxEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 5.8f, 3.0f, -3.0f ) );
+    model::SetParameterRotation( meshMatBumpParalaxEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    material = meshMatBumpParalaxEnvRefl->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    reflectivityMap = meshMatBumpParalaxEnvRefl->GetPlugin( "env reflectivity map" );
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
+    envMap = meshMatBumpParalaxEnvRefl->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.7f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+
+    normalMap = meshMatBumpParalaxEnvRefl->GetPlugin( "normal map" );
+    model::LoadTexture( normalMap, "meshes/daria/bricks2_normal.jpg" );
+
+    model::LoadTexture( meshMatBumpParalaxEnvRefl->GetPlugin( "parallax map" ), "meshes/daria/bricks2_disp.jpg" );
+    
+    model::LoadMesh( meshMatBumpParalaxEnvRefl->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     return root;
 }
