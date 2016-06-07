@@ -147,7 +147,7 @@ Int64					FFmpegAudioStreamDecoder::ConvertTime		( Float64 time )
 void					FFmpegAudioStreamDecoder::Reset				()
 {
 	avcodec_flush_buffers( m_codecCtx );
-	m_codecCtx->frame_number = 0;
+    m_bufferQueue.Clear();
 }
 
 // *******************************

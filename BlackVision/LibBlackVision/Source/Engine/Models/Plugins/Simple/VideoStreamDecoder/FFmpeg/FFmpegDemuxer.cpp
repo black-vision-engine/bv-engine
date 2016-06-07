@@ -126,8 +126,6 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 void				FFmpegDemuxer::Reset				()
 {
 	Seek( 0 );
-	m_isEOF = false; 
-	ClearPacketQueue();
 }
 
 // *******************************

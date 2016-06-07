@@ -81,13 +81,12 @@ void				FFmpegDemuxerThread::Run			()
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
         
-        if( !m_running || m_demuxer->IsEOF() )
+        if( !m_running )
         {
-            m_running = false;
             break;
         }
 
-        if( !m_demuxer->ProcessPacket() )
+        if( !m_demuxer->ProcessPacket() || m_demuxer->IsEOF() )
         {
             m_stopped = true;
         }

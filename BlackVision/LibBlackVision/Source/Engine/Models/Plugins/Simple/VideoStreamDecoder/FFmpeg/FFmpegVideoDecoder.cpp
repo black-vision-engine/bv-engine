@@ -335,20 +335,24 @@ void					FFmpegVideoDecoder::FlushBuffers			()
 //
 void					FFmpegVideoDecoder::Reset					() 
 {
-	std::lock_guard< std::mutex > lock( m_mutex );
-	m_demuxer->Reset();
+	{
+        std::lock_guard< std::mutex > lock( m_mutex );
+	    m_demuxer->Reset();
 
-    if( m_hasVideo )
-    {
-	    m_videoDecoder->Reset();
+        if( m_hasVideo )
+        {
+	        m_videoDecoder->Reset();
+        }
+
+        if( m_hasAudio )
+        {
+	        m_audioDecoder->Reset();
+        }
+
+        FlushBuffers();
     }
 
-    if( m_hasAudio )
-    {
-	    m_audioDecoder->Reset();
-    }
-
-    FlushBuffers();
+    Seek( 0.f );
 }
 
 // *********************************
