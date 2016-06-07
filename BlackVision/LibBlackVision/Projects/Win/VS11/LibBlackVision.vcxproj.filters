@@ -298,6 +298,9 @@
     <Filter Include="Engine\Models\Cameras">
       <UniqueIdentifier>{4b96ea70-4824-40fe-bf3a-6c223213ee6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\EditorVariables\ParametersDescriptors">
+      <UniqueIdentifier>{2a31797a-f6db-4c21-b0dd-9af1d02cd771}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1563,6 +1566,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3817,6 +3823,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParamAddress.h">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
