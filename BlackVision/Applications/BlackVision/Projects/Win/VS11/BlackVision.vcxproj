@@ -316,6 +316,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp" />
@@ -380,6 +381,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />
     <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h" />
