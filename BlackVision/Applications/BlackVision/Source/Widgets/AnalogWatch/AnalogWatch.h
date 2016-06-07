@@ -62,7 +62,6 @@ public:
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
-    virtual void                        Deserialize     ( const IDeserializer & deser );
     static AnalogWatchPtr               Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
@@ -75,6 +74,7 @@ private:
 private:
 
     void            SetInitialPosition      ( bv::model::BasicNodePtr& node );
+    void            ClearPosition           ( bv::model::BasicNodePtr& node );
     void            UpdateTime              ( bv::model::BasicNodePtr& node, float ratio );
 };
 

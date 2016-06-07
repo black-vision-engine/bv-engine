@@ -78,20 +78,7 @@ void                        AnalogWatch::Serialize       ( ISerializer & ser ) c
 
     ser.EnterChild( "logic" );
         ser.SetAttribute( "type", m_type );
-
-        if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
-        {
-
-        }
-
     ser.ExitChild();    // logic
-}
-
-// ***********************
-//
-void                        AnalogWatch::Deserialize     ( const IDeserializer & /*deser*/ )
-{
-
 }
 
 // ***********************
@@ -152,6 +139,10 @@ bool        AnalogWatch::StartWatch      ( IDeserializer & /*eventSer*/, ISerial
 //
 bool        AnalogWatch::ClearWatch      ( IDeserializer & /*eventSer*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
 {
+    ClearPosition( m_hourNode );
+    ClearPosition( m_minuteNode );
+    ClearPosition( m_secondsNode );
+
     m_hourNode = nullptr;
     m_minuteNode = nullptr;
     m_secondsNode = nullptr;
@@ -197,6 +188,17 @@ void        AnalogWatch::UpdateTime              ( bv::model::BasicNodePtr& node
     {
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
         transformParam->SetRotation( glm::vec3( 0.0f, 0.0f, -360.0f * ratio ), TimeType( 0.0f ) );
+    }
+}
+
+// ***********************
+//
+void        AnalogWatch::ClearPosition           ( bv::model::BasicNodePtr& node )
+{
+    if( node )
+    {
+        auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
+        transformParam->SetRotation( glm::vec3( 0.0f, 0.0f, 0.0f ), TimeType( 0.0f ) );
     }
 }
 
