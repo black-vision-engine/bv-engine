@@ -9,17 +9,20 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 V;
 uniform mat3 normalMatMV;
+uniform mat4 txMat;
+uniform mat4 reflMat;
 
 uniform mat4 normalMapMat;
 
 out vec3 position;	//vertex position in modelview space
 out vec2 normUVCoord;
+out vec2 uvCoord;
 out mat3 TBN;    	//matrix transformation to tangent space
 
 
 // *** ENVIRONMENTAL MAP ***
 out mat3 tangentToWorldSpace;
-
+out vec2 uvCoordReflectivityMap;
 
 
 void main()
@@ -38,6 +41,8 @@ void main()
 				
 	// Compute world space to tangent space matrix and inverse it by transposing.
 	tangentToWorldSpace = transpose( TBN * mat3( V ) );
-				
+
 	normUVCoord = ( normalMapMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+	uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+	uvCoordReflectivityMap = ( reflMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
 }

@@ -1495,6 +1495,106 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     
     model::LoadMesh( meshMatBumpEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
+    // Mesh material, normal map, environment, reflectivity map node
+    auto meshMatBumpEnvRefl = model::BasicNode::Create( "CubeMatBumpEnv", timeEvaluator );
+    root->AddChildToModelOnly( meshMatBumpEnvRefl );
+
+    meshMatBumpEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    meshMatBumpEnvRefl->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    meshMatBumpEnvRefl->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    meshMatBumpEnvRefl->AddPlugin( "DEFAULT_NORMAL_MAP", timeEvaluator );
+    meshMatBumpEnvRefl->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    meshMatBumpEnvRefl->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
+
+    model::SetParameterTranslation( meshMatBumpEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 3.0f, -2.0f, 4.0f ) );
+    model::SetParameterRotation( meshMatBumpEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    material = meshMatBumpEnvRefl->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.8, 0.1, 0.7, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    reflectivityMap = meshMatBumpEnvRefl->GetPlugin( "env reflectivity map" );
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
+    envMap = meshMatBumpEnvRefl->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 1.0f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+
+    normalMap = meshMatBumpEnvRefl->GetPlugin( "normal map" );
+    model::LoadTexture( normalMap, "meshes/daria/bricks2_normal.jpg" );
+    
+    model::LoadMesh( meshMatBumpEnvRefl->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
+
+    // Mesh material, texture, normal map, environment node
+    auto meshMatTexBumpEnv = model::BasicNode::Create( "CubeMatBumpEnv", timeEvaluator );
+    root->AddChildToModelOnly( meshMatTexBumpEnv );
+
+    meshMatTexBumpEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    meshMatTexBumpEnv->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    meshMatTexBumpEnv->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    meshMatTexBumpEnv->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    meshMatTexBumpEnv->AddPlugin( "DEFAULT_NORMAL_MAP", timeEvaluator );
+    meshMatTexBumpEnv->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+
+    model::SetParameterTranslation( meshMatTexBumpEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -3.5f, 1.8f, -1.0f ) );
+    model::SetParameterRotation( meshMatTexBumpEnv->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    material = meshMatTexBumpEnv->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.2, 1.0, 0.1, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+
+    envMap = meshMatTexBumpEnv->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.6f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+    model::LoadTexture( meshMatTexBumpEnv->GetPlugin( "texture" ), "textures/sand.jpg" );
+
+    normalMap = meshMatTexBumpEnv->GetPlugin( "normal map" );
+    model::LoadTexture( normalMap, "meshes/daria/bricks2_normal.jpg" );
+    
+    model::LoadMesh( meshMatTexBumpEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
+
+    // Mesh material, texture, normal map, environment, reflectivity map node
+    auto meshMatTexBumpEnvRefl = model::BasicNode::Create( "CubeMatBumpEnv", timeEvaluator );
+    root->AddChildToModelOnly( meshMatTexBumpEnvRefl );
+
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_NORMAL_MAP", timeEvaluator );
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
+    meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_ENV_REFLECTIVITY_MAP", timeEvaluator );
+
+    model::SetParameterTranslation( meshMatTexBumpEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -5.5f, -2.3f, 3.0f ) );
+    model::SetParameterRotation( meshMatTexBumpEnvRefl->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 30.f, glm::vec3( 0.0f, 900.0f, 0.0f ) );
+
+    material = meshMatTexBumpEnvRefl->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.1, 0.0, 1.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    reflectivityMap = meshMatTexBumpEnvRefl->GetPlugin( "env reflectivity map" );
+    model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
+
+    envMap = meshMatTexBumpEnvRefl->GetPlugin( "environmental tex" );
+    model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.6f );
+    model::LoadTexture( envMap, "textures/witek/Env/EnvVillage.jpg" );
+    model::LoadTexture( meshMatTexBumpEnvRefl->GetPlugin( "texture" ), "textures/sand.jpg" );
+
+    normalMap = meshMatTexBumpEnvRefl->GetPlugin( "normal map" );
+    model::LoadTexture( normalMap, "meshes/daria/bricks2_normal.jpg" );
+    
+    model::LoadMesh( meshMatTexBumpEnvRefl->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
+
     return root;
 }
 

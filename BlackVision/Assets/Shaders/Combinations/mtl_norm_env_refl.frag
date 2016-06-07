@@ -62,15 +62,18 @@ vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
 // *** ENVIRONMENTAL MAP ***
-in mat3 tangentToWorldSpace;
+in mat3 			tangentToWorldSpace;
+in vec2				uvCoordReflectivityMap;
 
 uniform sampler2D 	EnvMap0;
+uniform sampler2D	ReflectivityMap0;
 uniform float		reflectivity;
 
 #define M_PI 3.1415926535897932384626433832795
 
 
 vec3 computeEnvironment			( vec3 viewDir, vec3 normal );
+float computeReflectivity		();
 
 
 void main()
@@ -102,7 +105,7 @@ void main()
 	color = emission + color;
 	
 	vec3 envColor = computeEnvironment( viewDir, norm );
-	color = mix( color, envColor, reflectivity );
+	color = mix( color, envColor, computeReflectivity() );
 	
 	FragColor = vec4( color, 1.0f );
 }
@@ -187,5 +190,10 @@ vec3 computeEnvironment			( vec3 viewDir, vec3 normal )
 	vec3 texColor = texture( EnvMap0, uvCoord ).xyz;
 	
 	return texColor;
+}
+
+float computeReflectivity		()
+{
+	return reflectivity * texture( ReflectivityMap0, uvCoordReflectivityMap ).x;
 }
 

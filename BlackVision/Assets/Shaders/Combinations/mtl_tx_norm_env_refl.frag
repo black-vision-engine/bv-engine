@@ -51,9 +51,13 @@ uniform vec4		mtlEmission;
 uniform int 		mtlShininess;
 
 uniform sampler2D 	NormMap0;
+uniform sampler2D 	Tex0;
+
+uniform float 		alpha;
 
 in vec3 			position;		//vertex position in modelview space
 in vec2 			normUVCoord;
+in vec2 			uvCoord;
 in mat3 			TBN;			//matrix transformation to tangent space
 
 
@@ -62,15 +66,18 @@ vec3 computePointLight			( PointLight light, vec3 viewDir, vec3 normal );
 vec3 computeSpotLight			( SpotLight light, vec3 viewDir, vec3 normal );
 
 // *** ENVIRONMENTAL MAP ***
-in mat3 tangentToWorldSpace;
+in mat3 			tangentToWorldSpace;
+in vec2				uvCoordReflectivityMap;
 
 uniform sampler2D 	EnvMap0;
+uniform sampler2D	ReflectivityMap0;
 uniform float		reflectivity;
 
 #define M_PI 3.1415926535897932384626433832795
 
 
 vec3 computeEnvironment			( vec3 viewDir, vec3 normal );
+float computeReflectivity		();
 
 
 void main()
@@ -100,11 +107,13 @@ void main()
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
 	
 	color = emission + color;
+	vec4 texColor = texture( Tex0, uvCoord );
+	color = color.rgb * texColor.rgb;
 	
 	vec3 envColor = computeEnvironment( viewDir, norm );
-	color = mix( color, envColor, reflectivity );
+	color = mix( color, envColor, computeReflectivity() );
 	
-	FragColor = vec4( color, 1.0f );
+	FragColor = vec4( color, texColor.a * alpha );
 }
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )
@@ -189,3 +198,7 @@ vec3 computeEnvironment			( vec3 viewDir, vec3 normal )
 	return texColor;
 }
 
+float computeReflectivity		()
+{
+	return reflectivity * texture( ReflectivityMap0, uvCoordReflectivityMap ).x;
+}
