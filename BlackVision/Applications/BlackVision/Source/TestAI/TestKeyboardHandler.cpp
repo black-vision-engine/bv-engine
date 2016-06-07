@@ -110,6 +110,24 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         }
     }
 
+    if( c == 'r' || c == 'f' )
+    {
+        float multiplier = m_moveMultiplier;
+        if( c == 'f' )
+            multiplier = -1.0f * multiplier;
+
+        // Move up and down camera logic
+        auto & scenes = logic->GetBVProject()->GetModelScenes();
+        for( auto & scene : scenes )
+        {
+            auto & camera = scene->GetCamerasLogic().GetCurrentCamera();
+            auto posValue = QueryTypedValue< ValueVec3Ptr >( camera->GetValue( "Position" ) );
+            auto posParam = camera->GetParameter( "Position" );
+
+            glm::vec3 translation = glm::vec3( 0.0, 1.0, 0.0 ) * multiplier;
+            model::SetParameter( posParam, TimeType( 0.0f ), posValue->GetValue() + translation );
+        }
+    }
 
     { logic; }
     // To be implemented in subclasses
