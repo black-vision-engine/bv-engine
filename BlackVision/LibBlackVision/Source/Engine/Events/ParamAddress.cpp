@@ -36,7 +36,7 @@ void                    ParameterAddress::Serialize       ( ISerializer & ser ) 
     ser.SetAttribute( SerializationHelper::PARAM_NAME_STRING, ParamName );
     ser.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, ParamSubName );
 
-    if( ParamTargetType == ParameterAddress::TargetType::LightParam || ParameterAddress::TargetType::CameraParam )
+    if( ParamTargetType == ParameterAddress::TargetType::LightParam || ParamTargetType ==  ParameterAddress::TargetType::CameraParam )
         ser.SetAttribute( SerializationHelper::PARAM_INDEX, SerializationHelper::T2String( Index ) );
 }
 

@@ -32,7 +32,7 @@ public:
     void                    Serialize       ( ISerializer & ser ) const;
     void                    Deserialize     ( const IDeserializer & deser );
 
-    const EndUserParamDescriptor *      GetDescriptor   ( const ParameterAddress & param );
+    EndUserParamDescriptor *      GetDescriptor   ( const ParameterAddress & param );
 };
 
 

@@ -108,7 +108,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             CheckTimelineTime( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListParamDescriptors )
             ListParamDescriptors( responseJSON, request, eventID );
-        else if( command == InfoEvent::Command::GetParamDesriptor )
+        else if( command == InfoEvent::Command::GetParamDescriptor )
             GetParamDescriptor( responseJSON, request, eventID );
         else
         {
@@ -1038,7 +1038,7 @@ void    QueryHandlers::GetParamDescriptor       ( JsonSerializeObject & ser, IDe
     assert( request != nullptr && m_editor );
     if( request == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Not valid request." );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetParamDescriptor, eventID, "Not valid request." );
         return;
     }
 
@@ -1048,7 +1048,7 @@ void    QueryHandlers::GetParamDescriptor       ( JsonSerializeObject & ser, IDe
     auto scene = m_editor->GetModelScene( sceneName );
     if( scene == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Scene not found" );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetParamDescriptor, eventID, "Scene not found" );
         return;
     }
 
@@ -1057,12 +1057,12 @@ void    QueryHandlers::GetParamDescriptor       ( JsonSerializeObject & ser, IDe
     auto descriptor = paramsLogic.GetDescriptor( paramAddress );
     if( descriptor )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, true );
+        PrepareResponseTemplate( ser, InfoEvent::Command::GetParamDescriptor, eventID, true );
         descriptor->Serialize( ser );
     }
     else
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Descriptor not found" );
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetParamDescriptor, eventID, "Descriptor not found" );
     }
 }
 

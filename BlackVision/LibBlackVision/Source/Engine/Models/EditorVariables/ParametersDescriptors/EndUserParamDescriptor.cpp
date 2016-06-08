@@ -77,7 +77,7 @@ EndUserParamDescriptor      EndUserParamDescriptor::Create          ( const IDes
     EndUserParamDescriptor descriptor;
 
     descriptor.SetName( deser.GetAttribute( "name" ) );
-    descriptor.SetName( deser.GetAttribute( "description" ) );
+    descriptor.SetDescription( deser.GetAttribute( "description" ) );
     descriptor.SetOrder( SerializationHelper::String2T< int >( deser.GetAttribute( "order" ), 0 ) );
     descriptor.Enable( SerializationHelper::String2T( deser.GetAttribute( "enable" ), false ) );
 
@@ -87,7 +87,7 @@ EndUserParamDescriptor      EndUserParamDescriptor::Create          ( const IDes
         {
             do
             {
-                Expected< float > key = SerializationHelper::String2T< float >( "timeValue" );
+                Expected< float > key = SerializationHelper::String2T< float >( deser.GetAttribute( "timeValue" ) );
                 if( key.isValid )
                 {
                     descriptor.AddKeyTimeValue( key.ham );

@@ -162,7 +162,10 @@ template<> std::string              T2String    ( const ParamKeyEvent::Command &
 
 std::pair< ParamDescriptorEvent::Command, const char* > ParamDescriptorCommandMapping[] = 
 {   std::make_pair( ParamDescriptorEvent::Command::AddParamDescriptor, "AddParamDescriptor" )
-    , std::make_pair( ParamDescriptorEvent::Command::RemoveParamDescriptor, "RemoveParamDescriptor" ) 
+    , std::make_pair( ParamDescriptorEvent::Command::RemoveParamDescriptor, "RemoveParamDescriptor" )
+    , std::make_pair( ParamDescriptorEvent::Command::AddAvaibleKeyTimes, "AddAvaibleKeyTimes" )
+    , std::make_pair( ParamDescriptorEvent::Command::RemoveAvaibleKeyTimes, "RemoveAvaibleKeyTimes" )
+    , std::make_pair( ParamDescriptorEvent::Command::SetDescriptorParameters, "SetDescriptorParameters" )
     , std::make_pair( ParamDescriptorEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -350,7 +353,7 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::LightsInfo, "LightsInfo" )
     , std::make_pair( InfoEvent::Command::CamerasInfo, "CamerasInfo" )
     , std::make_pair( InfoEvent::Command::ListParamDescriptors, "ListParamDescriptors" )
-    , std::make_pair( InfoEvent::Command::GetParamDesriptor, "GetParamDesriptor" )
+    , std::make_pair( InfoEvent::Command::GetParamDescriptor, "GetParamDescriptor" )
 
     , std::make_pair( InfoEvent::Command::ListSceneAssets, "ListSceneAssets" )
     , std::make_pair( InfoEvent::Command::ListProjectNames, "ListProjectNames" )

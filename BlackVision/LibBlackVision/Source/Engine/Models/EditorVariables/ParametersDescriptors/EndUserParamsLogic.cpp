@@ -39,12 +39,11 @@ bool            EndUserParamsLogic::RemoveDescriptor( const ParameterAddress & p
 
 // ***********************
 //
-const EndUserParamDescriptor *      EndUserParamsLogic::GetDescriptor   ( const ParameterAddress & param )
+EndUserParamDescriptor *      EndUserParamsLogic::GetDescriptor   ( const ParameterAddress & param )
 {
     auto iter = m_paramsDescsMap.find( param );
     if( iter != m_paramsDescsMap.end() )
     {
-        m_paramsDescsMap.erase( iter );
         return &iter->second;
     }
     return nullptr;

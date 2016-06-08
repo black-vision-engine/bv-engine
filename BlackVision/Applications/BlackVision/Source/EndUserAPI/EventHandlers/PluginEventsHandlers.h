@@ -24,6 +24,7 @@ public:
 
     void                    ParamHandler        ( bv::IEventPtr eventPtr );
     void                    TimerHandler        ( bv::IEventPtr eventPtr );
+    void                    ParamDescHandler    ( bv::IEventPtr eventPtr );
 
 private:
 
@@ -31,6 +32,8 @@ private:
     bool                    AddParameter        ( ParameterPtr & param, const std::string & stringValue, TimeType keyTime );
     bool                    RemoveParameter     ( ParameterPtr & param, TimeType keyTime );
 
+
+    ParameterPtr            GetParameter            ( const ParameterAddress & paramAddress );
 
     ParameterPtr            GetPluginParameter      ( const std::string & sceneName,
                                                       const std::string & nodePath,

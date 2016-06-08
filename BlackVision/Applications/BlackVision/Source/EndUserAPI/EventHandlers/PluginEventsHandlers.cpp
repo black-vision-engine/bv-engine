@@ -93,18 +93,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     // ------- preserve compatibility code ------->
 
     /* uncomment me on 'preserve compatibility code' deletion
-    if( targetType == ParamKeyEvent::TargetType::PluginParam )
-        param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
-    else if( targetType == ParamKeyEvent::TargetType::GlobalEffectParam )
-        param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
-    else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
-        param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
-    else if( targetType == ParamKeyEvent::TargetType::LightParam )
-        param = GetLightParameter( sceneName, lightIndex, paramName );
-    else if( targetType == ParameterAddress::TargetType::NodeLogicParam )
-        param = GetNodeLogicParameter( sceneName, nodeName, paramName );
-    else if( targetType == ParameterAddress::TargetType::CameraParam )
-        param = GetCameraParameter( sceneName, index, paramName );
+    param = GetParameter( setParamEvent->ParamAddress );
     */
 
     if( param == nullptr )
@@ -245,6 +234,25 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
 }
 
+// ***********************
+//
+ParameterPtr    PluginEventsHandlers::GetParameter      ( const ParameterAddress & paramAddress )
+{
+    if( paramAddress.ParamTargetType == ParameterAddress::TargetType::PluginParam )
+        return GetPluginParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamName );
+    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::GlobalEffectParam )
+        return GetGlobalEffectParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
+    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::ResourceParam )
+        return GetResourceParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamSubName, paramAddress.ParamName );
+    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::LightParam )
+        return GetLightParameter( paramAddress.SceneName, paramAddress.LightParam, paramAddress.ParamName );
+    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::NodeLogicParam )
+        return GetNodeLogicParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
+    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::CameraParam )
+        return GetCameraParameter( paramAddress.SceneName, paramAddress.Index, paramAddress.ParamName );
+
+    return nullptr;
+}
 
 // ***********************
 //
@@ -586,6 +594,72 @@ bool        PluginEventsHandlers::MoveTransformKey        ( ParameterPtr & param
         default:
             return false;
     }
+}
+
+// ***********************
+//
+void        PluginEventsHandlers::ParamDescHandler    ( bv::IEventPtr eventPtr )
+{
+    if( eventPtr->GetEventType() != ParamDescriptorEvent::Type() )
+        return;
+
+    ParamDescriptorEventPtr paramDescEvent = std::static_pointer_cast< ParamDescriptorEvent >( eventPtr );
+    ParamDescriptorEvent::Command command  = paramDescEvent->ParamCommand;
+
+
+    assert( paramDescEvent->Request != nullptr || command == ParamDescriptorEvent::RemoveParamDescriptor );
+    if( paramDescEvent->Request == nullptr && command != ParamDescriptorEvent::RemoveParamDescriptor )
+    {
+        SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Not valid request." );
+        return;
+    }
+
+    std::string & sceneName = paramDescEvent->ParamAddress.SceneName;
+
+    auto scene = m_projectEditor->GetModelScene( sceneName );
+    if( scene == nullptr )
+    {
+        SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Scene not found" );
+        return;
+    }
+
+
+    if( command == ParamDescriptorEvent::AddParamDescriptor )
+    {
+        IParameterPtr param = nullptr;
+        param = GetParameter( paramDescEvent->ParamAddress );
+
+        if( param )
+        {
+            EndUserParamDescriptor descriptor = EndUserParamDescriptor::Create( *paramDescEvent->Request );
+            bool result = scene->GetEndUserParams().AddDescriptor( ParameterAddress( paramDescEvent->ParamAddress ), std::move( descriptor ) );
+        
+            SendSimpleResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, result );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Parameter not found" );
+        }
+    }
+    else if( command == ParamDescriptorEvent::RemoveParamDescriptor )
+    {
+        bool result = scene->GetEndUserParams().RemoveDescriptor( paramDescEvent->ParamAddress );
+        SendSimpleResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, result );
+    }
+    else if( command == ParamDescriptorEvent::SetDescriptorParameters )
+    {
+
+    }
+    else if( command == ParamDescriptorEvent::AddAvaibleKeyTimes )
+    {
+
+    }
+    else if( command == ParamDescriptorEvent::RemoveAvaibleKeyTimes )
+    {
+
+    }
+    else
+        SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Unknown command" );
 }
 
 } //bv

@@ -295,6 +295,9 @@ public:
     {
         AddParamDescriptor,
         RemoveParamDescriptor,
+        AddAvaibleKeyTimes,
+        RemoveAvaibleKeyTimes,
+        SetDescriptorParameters,
         Fail            ///< Wrong command
     } Command;
 
@@ -694,7 +697,7 @@ public:
         LightsInfo,
         CamerasInfo,
         ListParamDescriptors,
-        GetParamDesriptor,
+        GetParamDescriptor,
 
         ListSceneAssets,
         ListProjectNames,
