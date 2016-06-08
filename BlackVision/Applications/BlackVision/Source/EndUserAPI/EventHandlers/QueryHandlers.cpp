@@ -106,6 +106,10 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             VideoCardsInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::CheckTimelineTime )
             CheckTimelineTime( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::ListParamDescriptors )
+            ListParamDescriptors( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetParamDesriptor )
+            GetParamDescriptor( responseJSON, request, eventID );
         else
         {
             SendSimpleErrorResponse( command, eventID, infoEvent->SocketID, "Unknown command" );
@@ -898,11 +902,13 @@ void    QueryHandlers::ListTimelinesParams     ( JsonSerializeObject & ser, IDes
                     ser.SetAttribute( "ParamSubName", timelineParamInfo.paramSubName );
                 
                     if( timelineParamInfo.paramOwner == ParamOwner::PO_Plugin )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParamKeyEvent::TargetType::PluginParam ) );
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::PluginParam ) );
                     else if( timelineParamInfo.paramOwner == ParamOwner::PO_Resource )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParamKeyEvent::TargetType::ResourceParam ) );
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::ResourceParam ) );
                     else if( timelineParamInfo.paramOwner == ParamOwner::PO_GlobalEffect )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParamKeyEvent::TargetType::GlobalEffectParam ) );
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::GlobalEffectParam ) );
+                    else if( timelineParamInfo.paramOwner == ParamOwner::PO_NodeLogic )
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::NodeLogicParam ) );
                 
                     timelineParamInfo.param->Serialize( ser );
                 ser.ExitChild();    //  Param
@@ -1000,6 +1006,64 @@ void     QueryHandlers::GetCamerasInfo          ( JsonSerializeObject & ser, IDe
     PrepareResponseTemplate( ser, InfoEvent::Command::CamerasInfo, eventID, true );
 
     scene->GetCamerasLogic().Serialize( ser );
+}
+
+// ***********************
+//
+void    QueryHandlers::ListParamDescriptors     ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr && m_editor );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Not valid request." );
+        return;
+    }
+
+    std::string sceneName = request->GetAttribute( "SceneName" );
+
+    auto scene = m_editor->GetModelScene( sceneName );
+    if( scene == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Scene not found" );
+        return;
+    }
+
+    scene->GetEndUserParams().Serialize( ser );
+}
+
+// ***********************
+//
+void    QueryHandlers::GetParamDescriptor       ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr && m_editor );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Not valid request." );
+        return;
+    }
+
+    ParameterAddress paramAddress = ParameterAddress::Create( *request );
+    std::string & sceneName = paramAddress.SceneName;
+
+    auto scene = m_editor->GetModelScene( sceneName );
+    if( scene == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Scene not found" );
+        return;
+    }
+
+    
+    auto & paramsLogic = scene->GetEndUserParams();
+    auto descriptor = paramsLogic.GetDescriptor( paramAddress );
+    if( descriptor )
+    {
+        PrepareResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, true );
+        descriptor->Serialize( ser );
+    }
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListParamDescriptors, eventID, "Descriptor not found" );
+    }
 }
 
 //// ***********************

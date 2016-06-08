@@ -8,6 +8,7 @@
 #include "Engine/Models/Lights/ModelBaseLight.h"
 #include "Engine/Models/GridLines/GridLinesLogic.h"
 #include "Engine/Models/Cameras/CamerasLogic.h"
+#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 
 namespace bv { namespace model {
@@ -32,6 +33,7 @@ private:
     ModelSceneEditor *		        m_modelSceneEditor;
     SceneVariables                  m_sceneVariables;       // Variables can be queried by editor.
     CamerasLogic                    m_camerasLogic;
+    EndUserParamsLogic              m_endUserParams;
 
     std::vector< IModelLightPtr >   m_lights; //could be unique_ptr but serialization doesn't support that
 
@@ -65,6 +67,7 @@ public:
     SceneVariables &        GetSceneVariables   ();
     GridLinesLogic &        GetGridLinesLogic   ();
     CamerasLogic &          GetCamerasLogic     ();
+    EndUserParamsLogic &    GetEndUserParams    ();
 
     static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };

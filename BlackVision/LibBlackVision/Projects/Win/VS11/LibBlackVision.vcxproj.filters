@@ -1570,7 +1570,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParamAddress.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Events\ParamAddress.cpp">
+      <Filter>Engine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3830,7 +3833,13 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParamAddress.h">
+    <ClInclude Include="..\..\..\Source\Engine\Events\CommonEventsStrings.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
   </ItemGroup>

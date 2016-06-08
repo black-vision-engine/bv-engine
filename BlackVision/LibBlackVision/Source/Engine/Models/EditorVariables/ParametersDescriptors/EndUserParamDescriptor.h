@@ -1,23 +1,21 @@
 #pragma once
 
-#include "Engine/Models/EditorVariables/ParametersDescriptors/ParamAddress.h"
-
 #include <string>
 #include <vector>
 
 
-class ISerializer;
-class IDeserializer;
 
 namespace bv
 {
 
 
+class ISerializer;
+class IDeserializer;
+
+
 class EndUserParamDescriptor
 {
 private:
-
-    ParameterAddress            m_paramPath;
 
     std::string                 m_name;
     std::string                 m_description;
@@ -34,17 +32,18 @@ public:
     void            SetName         ( const std::string & newName )     { m_name = newName; }
     void            SetDescription  ( const std::string & description ) { m_description = description; }
     void            SetOrder        ( int order )                       { m_order = order; }
-    void            Enabel          ( bool enable )                     { m_enabled = enable; }
+    void            Enable          ( bool enable )                     { m_enabled = enable; }
 
     const std::string &     GetName         ()  { return m_name; }
     const std::string &     GetDescription  ()  { return m_description; }
     int                     GetOrder        ()  { return m_order; }
     bool                    IsEnabled       ()  { return m_enabled; }
 
+    void                    AddKeyTimeValue ( TimeType time );
+    bool                    RemoveKeyTime   ( TimeType time );
 
-    void                    Serialize       ( ISerializer & ser ) const;
-    void                    Deserialize     ( const IDeserializer & deser );
-
+    void                            Serialize       ( ISerializer & ser ) const;
+    static EndUserParamDescriptor   Create          ( const IDeserializer & deser );
 };
 
 

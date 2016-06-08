@@ -41,15 +41,15 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     ParamKeyEventPtr setParamEvent = std::static_pointer_cast<ParamKeyEvent>( eventPtr );
         
     ParamKeyEvent::Command command  = setParamEvent->ParamCommand;
-    ParamKeyEvent::TargetType targetType = setParamEvent->ParamTargetType;
+    ParameterAddress::TargetType targetType = setParamEvent->ParamAddress.ParamTargetType;
 
-    std::string & nodeName     = setParamEvent->NodeName;
-    std::string & pluginName   = setParamEvent->PluginName;
-    std::string & paramName    = setParamEvent->ParamName;
-    std::string & paramSubName = setParamEvent->ParamSubName;
-    std::string & sceneName    = setParamEvent->SceneName;
+    std::string & nodeName     = setParamEvent->ParamAddress.NodeName;
+    std::string & pluginName   = setParamEvent->ParamAddress.PluginName;
+    std::string & paramName    = setParamEvent->ParamAddress.ParamName;
+    std::string & paramSubName = setParamEvent->ParamAddress.ParamSubName;
+    std::string & sceneName    = setParamEvent->ParamAddress.SceneName;
     std::string & value        = setParamEvent->Value;
-    UInt32        index        = setParamEvent->Index;
+    UInt32        index        = setParamEvent->ParamAddress.Index;
     
     
     TimeType keyTime           = setParamEvent->Time;
@@ -69,23 +69,23 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             param = GetPluginParameter( sceneName, nodeName, pluginName, "txMat" );
             paramSubName = paramName;
         }
-        else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
+        else if( targetType == ParameterAddress::TargetType::ResourceParam )
             param = GetResourceParameter( sceneName, nodeName, pluginName, "Tex0", paramName );
     }
 
     if( !param )
     {
-        if( targetType == ParamKeyEvent::TargetType::PluginParam )
+        if( targetType == ParameterAddress::TargetType::PluginParam )
             param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
-        else if( targetType == ParamKeyEvent::TargetType::GlobalEffectParam )
+        else if( targetType == ParameterAddress::TargetType::GlobalEffectParam )
             param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
-        else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
+        else if( targetType == ParameterAddress::TargetType::ResourceParam )
             param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
-        else if( targetType == ParamKeyEvent::TargetType::LightParam )
+        else if( targetType == ParameterAddress::TargetType::LightParam )
             param = GetLightParameter( sceneName, index, paramName );
-        else if( targetType == ParamKeyEvent::TargetType::NodeLogicParam )
+        else if( targetType == ParameterAddress::TargetType::NodeLogicParam )
             param = GetNodeLogicParameter( sceneName, nodeName, paramName );
-        else if( targetType == ParamKeyEvent::TargetType::CameraParam )
+        else if( targetType == ParameterAddress::TargetType::CameraParam )
             param = GetCameraParameter( sceneName, index, paramName );
         else
             param = GetPluginParameter( sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
@@ -101,6 +101,10 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
     else if( targetType == ParamKeyEvent::TargetType::LightParam )
         param = GetLightParameter( sceneName, lightIndex, paramName );
+    else if( targetType == ParameterAddress::TargetType::NodeLogicParam )
+        param = GetNodeLogicParameter( sceneName, nodeName, paramName );
+    else if( targetType == ParameterAddress::TargetType::CameraParam )
+        param = GetCameraParameter( sceneName, index, paramName );
     */
 
     if( param == nullptr )
@@ -211,12 +215,12 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         JsonSerializeObject responseJSON;
         PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
 
-        responseJSON.SetAttribute( SerializationHelper::SCENE_NAME_STRING, setParamEvent->SceneName );
-        responseJSON.SetAttribute( SerializationHelper::NODE_NAME_STRING, setParamEvent->NodeName );
-        responseJSON.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, setParamEvent->PluginName );
-        responseJSON.SetAttribute( SerializationHelper::PARAM_NAME_STRING, setParamEvent->ParamName );
-        responseJSON.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, setParamEvent->ParamSubName );
-        responseJSON.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, SerializationHelper::T2String( setParamEvent->ParamTargetType ) );
+        responseJSON.SetAttribute( SerializationHelper::SCENE_NAME_STRING, setParamEvent->ParamAddress.SceneName );
+        responseJSON.SetAttribute( SerializationHelper::NODE_NAME_STRING, setParamEvent->ParamAddress.NodeName );
+        responseJSON.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, setParamEvent->ParamAddress.PluginName );
+        responseJSON.SetAttribute( SerializationHelper::PARAM_NAME_STRING, setParamEvent->ParamAddress.ParamName );
+        responseJSON.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, setParamEvent->ParamAddress.ParamSubName );
+        responseJSON.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, SerializationHelper::T2String( setParamEvent->ParamAddress.ParamTargetType ) );
 
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {

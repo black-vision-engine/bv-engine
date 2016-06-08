@@ -44,26 +44,30 @@ void                SceneVariables::Serialize       ( ISerializer & ser ) const
 //
 void                SceneVariables::Deserialize     ( const IDeserializer & deser )
 {
-    if( deser.EnterChild( "variablesDict" ) )
+    if( deser.EnterChild( "sceneVariables" ) )
     {
-        if( deser.EnterChild( "variable" ) )
+        if( deser.EnterChild( "variablesDict" ) )
         {
-            do
+            if( deser.EnterChild( "variable" ) )
             {
-                std::string variableName = deser.GetAttribute( "variableName" );
-                std::string variableContent = deser.GetAttribute( "variableContent" );
+                do
+                {
+                    std::string variableName = deser.GetAttribute( "variableName" );
+                    std::string variableContent = deser.GetAttribute( "variableContent" );
 
-                // Warn (by assert :P) in debug mode, overwrite variable in release.
-                assert( m_varCollection.find( variableName ) == m_varCollection.end() );
+                    // Warn (by assert :P) in debug mode, overwrite variable in release.
+                    assert( m_varCollection.find( variableName ) == m_varCollection.end() );
 
-                m_varCollection[ variableName ] = variableContent;
+                    m_varCollection[ variableName ] = variableContent;
 
-            } while( deser.NextChild() );
+                } while( deser.NextChild() );
 
-            deser.ExitChild();  //  variable
+                deser.ExitChild();  //  variable
+            }
+
+            deser.ExitChild();  //  variablesDict
         }
-
-        deser.ExitChild();  //  variablesDict
+        deser.ExitChild();  // sceneVariables
     }
 }
 

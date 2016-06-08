@@ -7,6 +7,8 @@
 
 #include  "Mathematics/glm_inc.h"
 
+#include "Engine/Events/ParamAddress.h"
+
 
 namespace bv
 {
@@ -19,19 +21,6 @@ namespace model
 const static unsigned int SEND_BROADCAST_EVENT = UINT_MAX;
 
 class Renderer;
-
-
-// *************************************
-
-namespace SerializationHelper
-{
-    static const std::string SCENE_NAME_STRING          = "SceneName";
-    static const std::string NODE_NAME_STRING           = "NodeName";
-    static const std::string PLUGIN_NAME_STRING         = "PluginName";
-    static const std::string PARAM_NAME_STRING          = "ParamName";
-    static const std::string PARAM_SUB_NAME_STRING      = "ParamSubName";
-    static const std::string PARAM_TARGET_TYPE_STRING   = "Target";
-}
 
 
 // ************************************* PluginAddedEvent *************************************
@@ -267,31 +256,17 @@ public:
         Fail            ///< Wrong command
     } Command;
 
-    typedef enum
-    {
-        PluginParam,
-        GlobalEffectParam,
-        ResourceParam,
-        LightParam,
-        NodeLogicParam,
-        CameraParam,
-        FailTarget      ///< Wrong target type
-    } TargetType;
+
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    std::string                     NodeName;
-    std::string                     PluginName;
-    std::string                     ParamName;
-    std::string                     ParamSubName;
-    std::string                     SceneName;
-    UInt32                          Index;
+    
+    ParameterAddress                ParamAddress;
     std::string                     Value;
 
     float                           Time;
     ParamKeyEvent::Command          ParamCommand;
-    ParamKeyEvent::TargetType       ParamTargetType;
 
 public:
     virtual void                    Serialize           ( ISerializer& ser ) const;
@@ -309,11 +284,48 @@ public:
 template<> ParamKeyEvent::Command       SerializationHelper::String2T      ( const std::string& s, const ParamKeyEvent::Command& defaultVal );
 template<> std::string                  SerializationHelper::T2String      ( const ParamKeyEvent::Command & t );
 
-template<> ParamKeyEvent::TargetType    SerializationHelper::String2T      ( const std::string& s, const ParamKeyEvent::TargetType& defaultVal );
-template<> std::string                  SerializationHelper::T2String      ( const ParamKeyEvent::TargetType & t );
-
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
+
+// ************************************* ParamDescriptorEvent *************************************
+class ParamDescriptorEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        AddParamDescriptor,
+        RemoveParamDescriptor,
+        Fail            ///< Wrong command
+    } Command;
+
+
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    
+    ParamDescriptorEvent::Command   ParamCommand;
+    ParameterAddress                ParamAddress;
+
+    IDeserializer *                 Request;
+
+public:
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+
+    virtual EventType               GetEventType        () const;
+    virtual const std::string &     GetName             () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+};
+
+template<> ParamDescriptorEvent::Command        SerializationHelper::String2T      ( const std::string& s, const ParamDescriptorEvent::Command& defaultVal );
+template<> std::string                          SerializationHelper::T2String      ( const ParamDescriptorEvent::Command & t );
+
+DEFINE_PTR_TYPE( ParamDescriptorEvent )
 
 // ************************************* AssetEvent *************************************
 class AssetEvent : public RemoteEvent
@@ -681,6 +693,8 @@ public:
         MinimalSceneInfo,
         LightsInfo,
         CamerasInfo,
+        ListParamDescriptors,
+        GetParamDesriptor,
 
         ListSceneAssets,
         ListProjectNames,

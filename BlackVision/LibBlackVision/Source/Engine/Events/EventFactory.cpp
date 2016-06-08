@@ -37,6 +37,7 @@ EventFactory::EventFactory()
     RegisterEvent( SceneVariableEvent::Name(), SceneVariableEvent::Create );
     RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
     RegisterEvent( GridLineEvent::Name(), GridLineEvent::Create );
+    RegisterEvent( ParamDescriptorEvent::Name(), ParamDescriptorEvent::Create );
 }
 
 // ***********************

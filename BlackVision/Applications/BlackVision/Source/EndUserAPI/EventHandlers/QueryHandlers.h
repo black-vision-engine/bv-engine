@@ -57,7 +57,9 @@ private:
     void     GetLightsInfo           ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetCamerasInfo          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetPMItemStats          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
-
+    
+    void    ListParamDescriptors     ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void    GetParamDescriptor       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 };
 
 } //bv

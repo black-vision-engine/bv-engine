@@ -100,8 +100,8 @@ std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
 const EventType ConfigEvent::m_sEventType           = 0x30000023;
 std::string ConfigEvent::m_sEventName               = "ConfigEvent";
 
-const EventType GridLineEvent::m_sEventType          = 0x30000024;
-std::string GridLineEvent::m_sEventName              = "GridLineEvent";
+const EventType GridLineEvent::m_sEventType         = 0x30000024;
+std::string GridLineEvent::m_sEventName             = "GridLineEvent";
 
 const EventType LightEvent::m_sEventType            = 0x30000025;
 std::string LightEvent::m_sEventName                = "LightEvent";
@@ -109,23 +109,16 @@ std::string LightEvent::m_sEventName                = "LightEvent";
 const EventType CameraEvent::m_sEventType           = 0x30000026;
 std::string CameraEvent::m_sEventName               = "CameraEvent";
 
-const EventType VideoDecoderEvent::m_sEventType     = 0x300000;
+const EventType VideoDecoderEvent::m_sEventType     = 0x30000027;
 std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
+
+const EventType ParamDescriptorEvent::m_sEventType  = 0x30000028;
+std::string ParamDescriptorEvent::m_sEventName      = "ParamDescriptorEvent";
 
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
 {
-// Key names used to serialization.
-
-const std::string EVENT_TYPE_STRING       = "Event";
-const std::string TIMELINE_NAME_STRING    = "TimelineName";      // TimeLineEvent and NodeStructureEvent
-const std::string COMMAND_STRING          = "Command";
-const std::string REQUEST_STRING          = "Request";           // ProjectStructureEvent InfoEvent
-
-const std::string RESPONSE_COMMAND_STRING   = "cmd";
-
-static const char* EMPTY_STRING = "";
 
 // ========================================================================= //
 // LoadAssetEvent
@@ -143,7 +136,6 @@ template<> std::string              T2String        ( const LoadAssetEvent::Comm
 // ========================================================================= //
 // ParamKeyEvent
 // ========================================================================= //
-const std::string PARAM_INDEX                 = "Index";       // Light and cameras
 const std::string PARAM_VALUE_STRING          = "ParamValue";
 const std::string KEY_TIME_STRING             = "Time";
 
@@ -164,19 +156,19 @@ std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] =
 template<> ParamKeyEvent::Command   String2T    ( const std::string& s, const ParamKeyEvent::Command& defaultVal )      { return String2Enum( ParameterCommandMapping, s, defaultVal ); }
 template<> std::string              T2String    ( const ParamKeyEvent::Command & t )                                    { return Enum2String( ParameterCommandMapping, t ); }
 
+// ========================================================================= //
+// ParamDescriptorEvent
+// ========================================================================= //
 
-std::pair< ParamKeyEvent::TargetType, const char* > TargetTypeMapping[] = 
-    { std::make_pair( ParamKeyEvent::TargetType::GlobalEffectParam, "GlobalEffectParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::PluginParam, "PluginParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::ResourceParam, "ResourceParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::LightParam, "LightParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::NodeLogicParam, "NodeLogicParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::CameraParam, "CameraParam" )
-    , std::make_pair( ParamKeyEvent::TargetType::FailTarget, SerializationHelper::EMPTY_STRING )      // default
+std::pair< ParamDescriptorEvent::Command, const char* > ParamDescriptorCommandMapping[] = 
+{   std::make_pair( ParamDescriptorEvent::Command::AddParamDescriptor, "AddParamDescriptor" )
+    , std::make_pair( ParamDescriptorEvent::Command::RemoveParamDescriptor, "RemoveParamDescriptor" ) 
+    , std::make_pair( ParamDescriptorEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> ParamKeyEvent::TargetType    String2T            ( const std::string& s, const ParamKeyEvent::TargetType& defaultVal )       { return String2Enum( TargetTypeMapping, s, defaultVal ); }
-template<> std::string                  T2String            ( const ParamKeyEvent::TargetType & t )                                     { return Enum2String( TargetTypeMapping, t ); }
+template<> ParamDescriptorEvent::Command    String2T    ( const std::string& s, const ParamDescriptorEvent::Command& defaultVal )      { return String2Enum( ParamDescriptorCommandMapping, s, defaultVal ); }
+template<> std::string                      T2String    ( const ParamDescriptorEvent::Command & t )                                    { return Enum2String( ParamDescriptorCommandMapping, t ); }
+
 
 // ========================================================================= //
 // AssetEvent
@@ -357,6 +349,8 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::MinimalSceneInfo, "MinimalSceneInfo" )
     , std::make_pair( InfoEvent::Command::LightsInfo, "LightsInfo" )
     , std::make_pair( InfoEvent::Command::CamerasInfo, "CamerasInfo" )
+    , std::make_pair( InfoEvent::Command::ListParamDescriptors, "ListParamDescriptors" )
+    , std::make_pair( InfoEvent::Command::GetParamDesriptor, "GetParamDesriptor" )
 
     , std::make_pair( InfoEvent::Command::ListSceneAssets, "ListSceneAssets" )
     , std::make_pair( InfoEvent::Command::ListProjectNames, "ListProjectNames" )
@@ -1108,16 +1102,12 @@ EventType           LoadAssetEvent::GetEventType         () const
 void                ParamKeyEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-    ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
-    ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
-    ser.SetAttribute( SerializationHelper::PARAM_NAME_STRING, ParamName );
-    ser.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, ParamSubName );
-    ser.SetAttribute( SerializationHelper::PARAM_INDEX, SerializationHelper::T2String( Index ) );
+
+    ParamAddress.Serialize( ser );
+
     ser.SetAttribute( SerializationHelper::PARAM_VALUE_STRING, Value );
     ser.SetAttribute( SerializationHelper::KEY_TIME_STRING, SerializationHelper::T2String( Time ) );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ParamCommand ) );
-    ser.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, SerializationHelper::T2String( ParamTargetType ) );
 }
 
 // *************************************
@@ -1127,15 +1117,11 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         ParamKeyEventPtr newEvent   = std::make_shared<ParamKeyEvent>();
-        newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING);
-        newEvent->PluginName        = deser.GetAttribute( SerializationHelper::PLUGIN_NAME_STRING );
-        newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
-        newEvent->ParamName         = deser.GetAttribute( SerializationHelper::PARAM_NAME_STRING );
-        newEvent->ParamSubName      = deser.GetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING );
-        newEvent->Index             = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::PARAM_INDEX ), std::numeric_limits< UInt32 >::quiet_NaN() );
+
+        newEvent->ParamAddress      = ParameterAddress::Create( deser );
+
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
-        newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );
-        newEvent->ParamTargetType   = SerializationHelper::String2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING ), ParamKeyEvent::TargetType::FailTarget );
+        newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );        
         newEvent->Time              = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits<float>::quiet_NaN() );
 
         return newEvent;
@@ -1166,6 +1152,64 @@ const std::string &     ParamKeyEvent::GetName           () const
 //
 EventType           ParamKeyEvent::GetEventType         () const
 { return this->m_sEventType; }
+
+
+//******************* ParamKeyEvent *************
+
+// *************************************
+//
+void                ParamDescriptorEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ParamCommand ) );
+
+    ParamAddress.Serialize( ser );
+
+    ser.EnterChild( SerializationHelper::REQUEST_STRING );
+    ser.ExitChild();
+}
+
+// *************************************
+//
+IEventPtr           ParamDescriptorEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        ParamDescriptorEventPtr newEvent   = std::make_shared<ParamDescriptorEvent>();
+
+        newEvent->ParamAddress      = ParameterAddress::Create( deser );
+        newEvent->ParamCommand      = SerializationHelper::String2T<ParamDescriptorEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamDescriptorEvent::Command::Fail );        
+        newEvent->Request           = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+
+// *************************************
+//
+IEventPtr               ParamDescriptorEvent::Clone             () const
+{ return IEventPtr( new ParamDescriptorEvent( *this ) ); }
+
+
+
+// *************************************
+//
+EventType               ParamDescriptorEvent::Type              ()
+{    return m_sEventType;   }
+// *************************************
+//
+std::string&            ParamDescriptorEvent::Name                ()
+{    return m_sEventName;   }
+// *************************************
+//
+const std::string &     ParamDescriptorEvent::GetName           () const
+{    return Name();   }
+// *************************************
+//
+EventType               ParamDescriptorEvent::GetEventType         () const
+{ return this->m_sEventType; }
+
 
 
 //******************* AssetEvent *************

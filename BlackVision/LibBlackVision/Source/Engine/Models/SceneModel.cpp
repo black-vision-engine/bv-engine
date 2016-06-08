@@ -72,6 +72,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
             m_camerasLogic.Serialize( ser );
             m_sceneVariables.Serialize( ser );
             m_gridLinesLogic.Serialize( ser );
+            m_endUserParams.Serialize( ser );
         }
 
         if( m_sceneRootNode )
@@ -127,19 +128,16 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     cameraLogic.Deserialize( deser );
 
 // editor scene varables
+    auto & editorSceneVariables = obj->GetSceneVariables();
+    editorSceneVariables.Deserialize( deser );
 
-    if( deser.EnterChild( "sceneVariables" ) )
-    {
-        auto & editorSceneVariables = obj->GetSceneVariables();
-        editorSceneVariables.Deserialize( deser );
-        deser.ExitChild();
-    }
+// end user params
 
-    if( deser.EnterChild( "gridlines" ) )
-    {
-        obj->GetGridLinesLogic().Deserialize( deser );
-        deser.ExitChild();  // gridlines
-    }
+    auto & endUserParams = obj->GetEndUserParams();
+    endUserParams.Deserialize( deser );
+
+// gridlines
+    obj->GetGridLinesLogic().Deserialize( deser );
 
 // nodes
     auto node = SerializationHelper::DeserializeObject< model::BasicNode >( deser, "node" );
@@ -281,6 +279,13 @@ GridLinesLogic &            SceneModel::GetGridLinesLogic   ()
 CamerasLogic &              SceneModel::GetCamerasLogic     ()
 {
     return m_camerasLogic;
+}
+
+// ***********************
+//
+EndUserParamsLogic &        SceneModel::GetEndUserParams    ()
+{
+    return m_endUserParams;
 }
 
 // *******************************

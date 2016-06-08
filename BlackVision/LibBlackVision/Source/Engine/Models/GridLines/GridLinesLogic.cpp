@@ -35,52 +35,56 @@ void            GridLinesLogic::Deserialize             ( const IDeserializer & 
 {
     ClearAll();
 
-    //m_showGridLines = SerializationHelper::String2T( deser.GetAttribute( "show" ), false );
-
-    if( deser.EnterChild( "horizontal" ) )
+    if( deser.EnterChild( "gridlines" ) )
     {
-        if( deser.EnterChild( "gridline" ) )
+        //m_showGridLines = SerializationHelper::String2T( deser.GetAttribute( "show" ), false );
+
+        if( deser.EnterChild( "horizontal" ) )
         {
-            do
+            if( deser.EnterChild( "gridline" ) )
             {
-                std::string gridLineName = deser.GetAttribute( "name" );
-                float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
-                int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
-                
-                if( index != std::numeric_limits< int >::max() )
+                do
                 {
-                    // This allocates new grid line
-                    MoveGridLine( GridLineType::TST_Horizontal, index, position );
-                    RenameGridLine( GridLineType::TST_Horizontal, index, gridLineName );
-                }
+                    std::string gridLineName = deser.GetAttribute( "name" );
+                    float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
+                    int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
+                
+                    if( index != std::numeric_limits< int >::max() )
+                    {
+                        // This allocates new grid line
+                        MoveGridLine( GridLineType::TST_Horizontal, index, position );
+                        RenameGridLine( GridLineType::TST_Horizontal, index, gridLineName );
+                    }
 
-            } while( deser.NextChild() );
-            deser.ExitChild();  //  gridline
+                } while( deser.NextChild() );
+                deser.ExitChild();  //  gridline
+            }
+            deser.ExitChild();  // horizontal
         }
-        deser.ExitChild();  // horizontal
-    }
 
-    if( deser.EnterChild( "vertical" ) )
-    {
-        if( deser.EnterChild( "gridline" ) )
+        if( deser.EnterChild( "vertical" ) )
         {
-            do
+            if( deser.EnterChild( "gridline" ) )
             {
-                std::string gridLineName = deser.GetAttribute( "name" );
-                float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
-                int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
-                
-                if( index != std::numeric_limits< int >::max() )
+                do
                 {
-                    // This allocates new grid line
-                    MoveGridLine( GridLineType::TST_Vertical, index, position );
-                    RenameGridLine( GridLineType::TST_Vertical, index, gridLineName );
-                }
+                    std::string gridLineName = deser.GetAttribute( "name" );
+                    float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
+                    int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
+                
+                    if( index != std::numeric_limits< int >::max() )
+                    {
+                        // This allocates new grid line
+                        MoveGridLine( GridLineType::TST_Vertical, index, position );
+                        RenameGridLine( GridLineType::TST_Vertical, index, gridLineName );
+                    }
 
-            } while( deser.NextChild() );
-            deser.ExitChild();  //  gridline
+                } while( deser.NextChild() );
+                deser.ExitChild();  //  gridline
+            }
+            deser.ExitChild();  // horizontal
         }
-        deser.ExitChild();  // horizontal
+        deser.ExitChild();  // gridlines
     }
 }
 
