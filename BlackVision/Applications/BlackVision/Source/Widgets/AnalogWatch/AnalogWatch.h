@@ -2,6 +2,7 @@
 
 #include "CoreDEF.h"
 #include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv
@@ -40,6 +41,13 @@ private:
         static const std::string    CLEAR_WATCH;
     };
 
+    struct PARAMETERS
+    {
+        static const std::string    SMOOTH_HOURS;
+        static const std::string    SMOOTH_MINUTES;
+        static const std::string    SMOOTH_SECONDS;
+    };
+
 private:
     bv::model::BasicNodePtr	            m_parentNode;
 
@@ -48,6 +56,10 @@ private:
     bv::model::BasicNodePtr	            m_secondsNode;
 
     bool                                m_started;
+
+    ValueBoolPtr                        m_smoothHours;
+    ValueBoolPtr                        m_smoothMinutes;
+    ValueBoolPtr                        m_smoothSeconds;
 
 public:
     explicit    AnalogWatch             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );

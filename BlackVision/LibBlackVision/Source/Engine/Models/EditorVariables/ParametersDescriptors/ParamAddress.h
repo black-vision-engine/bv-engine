@@ -4,6 +4,8 @@
 
 #include <string>
 
+class ISerializer;
+class IDeserializer;
 
 namespace bv
 {
@@ -17,6 +19,9 @@ struct ParameterAddress
     std::string                     ParamSubName;
     std::string                     SceneName;
     UInt32                          Index;
+
+    void                    Serialize       ( ISerializer & ser ) const;
+    ParameterAddress        Create          ( const IDeserializer & deser );
 };
 
 }	// bv

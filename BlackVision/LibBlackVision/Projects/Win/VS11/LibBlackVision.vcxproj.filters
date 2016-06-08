@@ -1570,6 +1570,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParamAddress.cpp">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">

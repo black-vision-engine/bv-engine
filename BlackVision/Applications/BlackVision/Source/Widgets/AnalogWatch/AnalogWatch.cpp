@@ -23,6 +23,12 @@ const std::string       AnalogWatch::m_type = "AnalogWatch";
 const std::string       AnalogWatch::ACTION::START_WATCH        = "StartWatch";
 const std::string       AnalogWatch::ACTION::CLEAR_WATCH        = "ClearWatch";
 
+const std::string       AnalogWatch::PARAMETERS::SMOOTH_HOURS   = "SmoothHours";
+const std::string       AnalogWatch::PARAMETERS::SMOOTH_MINUTES = "SmoothMinutes";
+const std::string       AnalogWatch::PARAMETERS::SMOOTH_SECONDS = "SmoothSeconds";
+
+
+
 // ***********************
 //
 const std::string &     AnalogWatch::Type            ()
@@ -39,9 +45,13 @@ const std::string &     AnalogWatch::GetType             () const
 
 // ***********************
 //
-AnalogWatch::AnalogWatch             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr /*timeEvaluator*/ )
+AnalogWatch::AnalogWatch             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
-{}
+{
+    m_smoothHours = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_HOURS, false )->Value();
+    m_smoothMinutes = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_MINUTES, false )->Value();
+    m_smoothSeconds = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_SECONDS, false )->Value();
+}
 
 // ***********************
 //
@@ -50,18 +60,46 @@ AnalogWatch::~AnalogWatch()
 
 // ***********************
 //
-void                        AnalogWatch::Update			( TimeType /*t*/ )
+void                        AnalogWatch::Update			( TimeType t )
 {
     if( m_started )
     {
+        NodeLogicBase::Update( t );
+
         auto now = std::chrono::system_clock::now();
         std::time_t time = std::chrono::system_clock::to_time_t( now );
     
         tm* localTime = localtime( &time );
+        float millis = 0.0f;
+
+        if( m_smoothHours->GetValue() || m_smoothSeconds->GetValue() )
+        {
+            time_t roundedTime = mktime( localTime );
+            auto roundedNow = std::chrono::system_clock::from_time_t( roundedTime );
+
+            auto millisDuration = now - roundedNow;
+            millis = (float)std::chrono::duration_cast<std::chrono::milliseconds>( millisDuration ).count();
+        }
+
+
+        float hoursRatio = (float)localTime->tm_hour / 12.0f;
+        if( m_smoothHours->GetValue() )
+            hoursRatio += (float)localTime->tm_min / ( 60.0f * 12.0f ) + (float)localTime->tm_sec / ( 60.0f * 12.0f * 60.0f );
+            
+
+        float minutesRatio = (float)localTime->tm_min / 60.0f;
+        if( m_smoothMinutes->GetValue() )
+            minutesRatio += (float)localTime->tm_sec / ( 60.0f * 60.0f ) + millis / ( 1000.0f * 60.0f * 60.0f );
+            
+
+        float secondsRatio = (float)localTime->tm_sec / 60.0f;
+        if( m_smoothSeconds->GetValue() )
+            secondsRatio += millis / ( 1000.0f * 60.0f );
     
-        UpdateTime( m_hourNode, (float)localTime->tm_hour / 12.0f );
-        UpdateTime( m_minuteNode, (float)localTime->tm_min / 60.0f );
-        UpdateTime( m_secondsNode, (float)localTime->tm_sec / 60.0f );
+
+        UpdateTime( m_hourNode, hoursRatio );
+        UpdateTime( m_minuteNode, minutesRatio );
+        UpdateTime( m_secondsNode, secondsRatio );
     }
 }
 
@@ -73,8 +111,17 @@ void                        AnalogWatch::Update			( TimeType /*t*/ )
 //
 void                        AnalogWatch::Serialize       ( ISerializer & ser ) const
 {
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    assert( context != nullptr );
+
     ser.EnterChild( "logic" );
         ser.SetAttribute( "type", m_type );
+
+        if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
+        {
+            NodeLogicBase::Serialize( ser );
+        }
+
     ser.ExitChild();    // logic
 }
 

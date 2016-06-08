@@ -333,6 +333,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParamAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLine.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.cpp" />
