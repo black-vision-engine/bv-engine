@@ -648,15 +648,56 @@ void        PluginEventsHandlers::ParamDescHandler    ( bv::IEventPtr eventPtr )
     }
     else if( command == ParamDescriptorEvent::SetDescriptorParameters )
     {
+        auto descriptor = scene->GetEndUserParams().GetDescriptor( paramDescEvent->ParamAddress );
 
+        if( descriptor )
+        {
+            // This code deserializes only parameters and ignores array of time values.
+            EndUserParamDescriptor newDesc = EndUserParamDescriptor::Create( *paramDescEvent->Request );
+
+            descriptor->SetName( newDesc.GetName() );
+            descriptor->SetDescription( newDesc.GetDescription() );
+            descriptor->SetOrder( newDesc.GetOrder() );
+            descriptor->Enable( newDesc.IsEnabled() );
+
+            SendSimpleResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, true );
+        }
+        else
+            SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Descriptor not found" );
     }
     else if( command == ParamDescriptorEvent::AddAvaibleKeyTimes )
     {
+        // This code deserializes only array of time values. Rest is ignored.
+        EndUserParamDescriptor descriptor = EndUserParamDescriptor::Create( *paramDescEvent->Request );
 
+        auto desc = scene->GetEndUserParams().GetDescriptor( paramDescEvent->ParamAddress );
+        
+        if( desc )
+        {
+            for( auto value : descriptor.GetAvaibleTimeValues() )
+                desc->AddKeyTimeValue( value );
+
+            SendSimpleResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, true );
+        }
+        else
+            SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Descriptor not found" );
     }
     else if( command == ParamDescriptorEvent::RemoveAvaibleKeyTimes )
     {
+        // This code deserializes only array of time values. Rest is ignored.
+        EndUserParamDescriptor descriptor = EndUserParamDescriptor::Create( *paramDescEvent->Request );
 
+        auto desc = scene->GetEndUserParams().GetDescriptor( paramDescEvent->ParamAddress );
+        
+        if( desc )
+        {
+            for( auto value : descriptor.GetAvaibleTimeValues() )
+                desc->RemoveKeyTime( value );
+
+            SendSimpleResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, true );
+        }
+        else
+            SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Descriptor not found" );
     }
     else
         SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Unknown command" );

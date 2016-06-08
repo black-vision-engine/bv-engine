@@ -9,7 +9,7 @@
 namespace bv
 {
 
-
+const float FloatTolarance = 0.0001f;
 
 
 // ***********************
@@ -26,7 +26,15 @@ EndUserParamDescriptor::~EndUserParamDescriptor()
 //
 void            EndUserParamDescriptor::AddKeyTimeValue ( TimeType time )
 {
-    m_avaibleTimeValues.push_back( time );
+    bool exists = false;
+    for( TimeType timeValue : m_avaibleTimeValues )
+    {
+        if( abs( timeValue - time ) < FloatTolarance )
+            exists = true;
+    }
+
+    if( !exists )
+        m_avaibleTimeValues.push_back( time );
 }
 // ***********************
 //
@@ -41,6 +49,13 @@ bool            EndUserParamDescriptor::RemoveKeyTime   ( TimeType time )
         }
     }
     return false;
+}
+
+// ***********************
+//
+void            EndUserParamDescriptor::SetAvaibleTimeValues    ( std::vector< TimeType > && values )
+{
+    m_avaibleTimeValues = values;
 }
 
 // ========================================================================= //
@@ -103,5 +118,6 @@ EndUserParamDescriptor      EndUserParamDescriptor::Create          ( const IDes
 
     return descriptor;
 }
+
 
 }	// bv

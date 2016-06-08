@@ -42,8 +42,13 @@ public:
     void                    AddKeyTimeValue ( TimeType time );
     bool                    RemoveKeyTime   ( TimeType time );
 
+    std::vector< TimeType > &       GetAvaibleTimeValues    ()                                          { return m_avaibleTimeValues; }
+    void                            SetAvaibleTimeValues    ( std::vector< TimeType > && values );
+
     void                            Serialize       ( ISerializer & ser ) const;
     static EndUserParamDescriptor   Create          ( const IDeserializer & deser );
+
+    std::vector< TimeType >         DeserializeTimeValues   ( const IDeserializer & deser );
 };
 
 
