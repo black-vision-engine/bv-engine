@@ -24,9 +24,7 @@ private:
 	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
 
-	std::atomic< bool >			m_paused;
 	std::atomic< bool >			m_stopped;
-
 	std::atomic< bool >			m_running;
 
     SimpleTimer					m_timer;
@@ -37,12 +35,9 @@ public:
 	void						Kill				();
 
 	void						Play				();
-	void						Pause				();
 	void						Stop				();
 
-	bool						Paused				() const;
 	bool						Stopped				() const;
-	bool						IsRunning			() const;
 
 protected:
 

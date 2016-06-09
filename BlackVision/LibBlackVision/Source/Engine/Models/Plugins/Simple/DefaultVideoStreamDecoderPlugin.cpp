@@ -134,7 +134,7 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
     , m_prevOffsetCounter( 1 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
-    , m_prevFrameIdx( 0 )
+    , m_prevFrameIdx( -1 )
     , m_isFinished( false )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
@@ -182,6 +182,8 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
         {
 		    m_decoder = std::make_shared< FFmpegVideoDecoder >( asset );
 
+            while( !m_decoder->NextVideoDataReady() );
+
 		    auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(),
                 MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
                 m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
@@ -196,7 +198,7 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 
 			    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
-                m_prevFrameIdx = 0;
+                m_prevFrameIdx = -1;
 
 			    return true;
 		    }

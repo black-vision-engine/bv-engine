@@ -1552,6 +1552,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamM.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
@@ -1560,6 +1563,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvReflectivityMapPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -3823,6 +3835,66 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvReflectivityMapPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\CommonEventsStrings.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.h">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelHelper.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.h">
+      <Filter>Engine\Models\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamM.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\IFFmpegStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDefs.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvReflectivityMapPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>

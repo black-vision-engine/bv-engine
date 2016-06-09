@@ -66,7 +66,7 @@ private:
 
 	DecoderModeParamPtr                 m_decoderModeParam;
 
-    UInt32                              m_prevFrameIdx;
+    Int64                               m_prevFrameIdx;
 
 	/** time in seconds from the beginning of video */
     ParamVec2Ptr                        m_offsetParam;                 
