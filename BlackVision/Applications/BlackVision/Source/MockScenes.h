@@ -76,6 +76,7 @@ public:
     static  model::BasicNodePtr     CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     MeshTestScene                   ( model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     EnvMappingTestScene             ( model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     BlendTextureTestScene           ( model::ITimeEvaluatorPtr timeEvaluator );
         
     static  model::BasicNodePtr     SimpeTextureTestScene           ();
     static  model::BasicNodePtr     SimpleMultiCCScene              ();

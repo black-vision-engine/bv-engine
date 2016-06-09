@@ -1576,6 +1576,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultBlendTexturePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3841,6 +3844,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultBlendTexturePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

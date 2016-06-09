@@ -23,6 +23,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultBlendTexturePlugin.h"
 
 #include "Widgets/MeshLoader/MeshLoader.h"
 
@@ -578,6 +579,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     else if( scene == "ENVIRONMENTAL_MAP_TEST_SCENE" )
     {
         node = TestScenesFactory::EnvMappingTestScene( timeline );
+    }
+    else if( scene == "BLEND_TEXTURE_TEST_SCENE" )
+    {
+        node = TestScenesFactory::BlendTextureTestScene( timeline );
     }
     else
     {
@@ -1317,32 +1322,6 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     
     model::LoadTexture( envSphereNode->GetPlugin( "environmental tex" ), "textures/witek/Env/EnvVillage.jpg" );
 
-    // Mesh node
-    //auto envMeshNode = model::BasicNode::Create( "EnvMesh", timeEvaluator );
-    //root->AddChildToModelOnly( envMeshNode );
-
-    //envMeshNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    //envMeshNode->AddPlugin( "DEFAULT_MESH", timeEvaluator );
-    //envMeshNode->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
-    //envMeshNode->AddPlugin( "DEFAULT_ENVIRONMENTAL_TEXTURE", timeEvaluator );
-
-    //model::SetParameterTranslation( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( -1.0f, 0.0f, -30.0f ) );
-    //model::SetParameterScale( envMeshNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.01f, 0.01f, 0.01f ) );
-
-    //material = envMeshNode->GetPlugin( "material" );
-    //model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
-    //model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
-    //model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
-    //model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.5, 0, 0, 0 ) );
-    //model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
-
-    //envMap = envMeshNode->GetPlugin( "environmental tex" );
-    //model::SetParameter( envMap->GetParameter( "reflectivity" ), 0.0, 0.9f );
-    //
-    //model::LoadTexture( envMeshNode->GetPlugin( "environmental tex" ), "textures/witek/Env/FieldEnv.jpg" );
-    ////model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/daria/bunny.obj" );
-    //model::LoadMesh( envMeshNode->GetPlugin( "mesh" ), "meshes/Sculpture.3ds" );
-
     // Cube node
     auto cubeNode = model::BasicNode::Create( "cubeEnvRefl", timeEvaluator );
     root->AddChildToModelOnly( cubeNode );
@@ -1739,6 +1718,38 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
 
     return root;
 }
+
+// ***********************
+//
+model::BasicNodePtr     TestScenesFactory::BlendTextureTestScene           ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    // Root node
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+    // Rectangle node
+    auto rectNode = model::BasicNode::Create( "RectNode", timeEvaluator );
+    root->AddChildToModelOnly( rectNode );
+
+    rectNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    rectNode->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+    rectNode->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    rectNode->AddPlugin( "DEFAULT_BLEND_TEXTURE", timeEvaluator );
+
+    auto rectangle = rectNode->GetPlugin( "rectangle" );
+    model::SetParameter( rectangle->GetParameter( "width" ), 0.0f, 4.0f );
+    model::SetParameter( rectangle->GetParameter( "height" ), 0.0f, 4.0f );
+
+    auto blendTex = rectNode->GetPlugin( "blend texture" );
+    model::SetParameter( blendTex->GetParameter( "blendingMode" ), 0.0f, (int)model::DefaultBlendTexturePlugin::BlendingMode::BM_PinLight );
+
+    model::LoadTexture( rectNode->GetPlugin( "texture" ), "textures/poison.jpg" );
+    model::LoadTexture( rectNode->GetPlugin( "blend texture" ), "textures/lens_flares/1.png" );
+    
+
+    return root;
+}
+
 
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
