@@ -55,6 +55,9 @@
     <Filter Include="Widgets\AnalogWatch">
       <UniqueIdentifier>{5d1ec72f-d720-4d11-9d5e-fdf7262dcc25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\Arrange">
+      <UniqueIdentifier>{8acc0a3d-f935-4d70-b0ac-0189ba17394b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp">
       <Filter>Widgets\AnalogWatch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp">
+      <Filter>Widgets\Arrange</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -359,6 +365,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h">
       <Filter>Widgets\AnalogWatch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h">
+      <Filter>Widgets\Arrange</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
