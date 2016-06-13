@@ -712,35 +712,35 @@ namespace bv{
 	}
 
 	//**********************************
-	bool TreeBuilder::AttachCounterPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
+	bool TreeBuilder::AttachCounterPlugin(model::BasicNodePtr /*node*/,XMLPlugin* /*plugin*/)
 	{		 
-		PluginCounter * counter_meta	= (PluginCounter*)plugin;
+		//PluginCounter * counter_meta	= (PluginCounter*)plugin;
 
-		{counter_meta;}
-      
-		auto counter = nodelogic::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
-		node->SetLogic(counter);
+		//{counter_meta;}
+  //    
+		//auto counter = nodelogic::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
+		//node->SetLogic(counter);
 
-		 auto counter_param = counter->GetValueParam();
+		// auto counter_param = counter->GetValueParam();
 
-		for(unsigned int i=0;i<plugin->properties.size();i++)
-		{
-            vector<TimeProperty> *timevals  = plugin->properties[i].timeproperty;				
-			string propertyName             = plugin->properties[i].name;
-            if(propertyName		==	"values")
-			{
-                for(unsigned int h=0;h<timevals->size();h++)
-				{
-					
-					auto tF		        =	atof(timevals->operator[](h).time.c_str());
-					string temp	        =	timevals->operator[](h).value;
-                    float counter_value   =   (float)atof(temp.c_str());
-                    
-					SetParameter( counter_param, (bv::TimeType)tF, counter_value );
-                }
-            }
-             
-        }
+		//for(unsigned int i=0;i<plugin->properties.size();i++)
+		//{
+  //          vector<TimeProperty> *timevals  = plugin->properties[i].timeproperty;				
+		//	string propertyName             = plugin->properties[i].name;
+  //          if(propertyName		==	"values")
+		//	{
+  //              for(unsigned int h=0;h<timevals->size();h++)
+		//		{
+		//			
+		//			auto tF		        =	atof(timevals->operator[](h).time.c_str());
+		//			string temp	        =	timevals->operator[](h).value;
+  //                  float counter_value   =   (float)atof(temp.c_str());
+  //                  
+		//			SetParameter( counter_param, (bv::TimeType)tF, counter_value );
+  //              }
+  //          }
+  //           
+  //      }
 
 
 		 //
