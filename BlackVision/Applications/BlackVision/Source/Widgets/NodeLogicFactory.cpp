@@ -8,6 +8,7 @@
 #include "SmoothValueSetter/SmoothValueSetter.h"
 #include "PieChart/PieChart.h"
 #include "AnalogWatch/AnalogWatch.h"
+#include "Arrange/Arrange.h"
 
 
 namespace bv
@@ -52,6 +53,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == nodelogic::AnalogWatch::Type() )
     {
         return nodelogic::AnalogWatch::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::Arrange::Type() )
+    {
+        return nodelogic::Arrange::Create( deser, logicParent );
     }
 
     return nullptr;
