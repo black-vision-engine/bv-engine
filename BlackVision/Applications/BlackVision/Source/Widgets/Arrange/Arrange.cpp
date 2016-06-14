@@ -226,6 +226,7 @@ void                            Arrange::SphereArrangeParams::Serialize       ( 
 
     ser.SetAttribute( "Center", SerializationHelper::T2String( Center ) );
     ser.SetAttribute( "Radius", SerializationHelper::T2String( Radius ) );
+    ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
 
     ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
 
@@ -240,6 +241,7 @@ Arrange::SphereArrangeParams    Arrange::SphereArrangeParams::Create          ( 
 
     params.Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
     params.Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
+    params.Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
 
     params.Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 4 );
     params.Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 4 );
@@ -426,9 +428,39 @@ void            Arrange::Grid3DArrange       ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-void            Arrange::SphereArrange       ( std::vector< bv::model::BasicNodePtr > & /*nodes*/, const SphereArrangeParams & /*params*/ )
+void            Arrange::SphereArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const SphereArrangeParams & params )
 {
+    auto numElements = nodes.size();
 
+    if( numElements > 0 )
+    {
+        glm::mat3 rotate = glm::mat3( glm::eulerAngleYXZ( glm::radians( params.Rotation.y ), glm::radians( params.Rotation.x ), glm::radians( params.Rotation.z ) ) );
+
+        int nodesCounter = 0;
+        float colDelta = 2.0f * glm::pi< float >() / params.Columns;
+        float rowDelta = glm::pi< float >() / ( params.Rows + 1 );
+
+        for( int row = 0; row < params.Rows && nodesCounter < numElements; ++row )
+        {
+            float rowAngle = glm::half_pi< float >() - rowDelta * ( row + 1 );
+            float posY = sin( rowAngle ) * params.Radius;
+            float RcastXZ = cos( rowAngle ) * params.Radius;
+
+            for( int col = 0; col < params.Columns && nodesCounter < numElements; col++ )
+            {
+                float colAngle = colDelta * col;
+
+                glm::vec3 position = glm::vec3( RcastXZ * cos( colAngle ), posY, RcastXZ * sin( colAngle ) );
+                
+                position = rotate * position;
+                position += params.Center;
+
+                SetNodePosition( nodes[ nodesCounter ], position, TimeType( 0.0 ) );
+
+                nodesCounter++;
+            }
+        }
+    }
 }
 
 // ***********************

@@ -50,6 +50,7 @@ public:
         float           Radius;
         int             Columns;
         int             Rows;
+        glm::vec3       Rotation;
         bool            Uniform;
 
     public:
