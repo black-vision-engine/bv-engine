@@ -364,7 +364,26 @@ void            Arrange::Grid2DArrange       ( std::vector< bv::model::BasicNode
     {
         glm::mat3 rotate = glm::mat3( glm::eulerAngleYXZ( glm::radians( params.Rotation.y ), glm::radians( params.Rotation.x ), glm::radians( params.Rotation.z ) ) );
 
+        // @todo Zrobiæ równomierne rozmieszczanie elementów.
 
+        int nodesCounter = 0;
+        for( int row = 0; row < params.Rows && nodesCounter < numElements; ++row )
+        {
+            for( int col = 0; col < params.Columns && nodesCounter < numElements; col++ )
+            {
+                float xMult = (float)col - params.Columns / 2.0f + 0.5f;
+                float yMult = (float)row - params.Rows / 2.0f + 0.5f;
+
+                glm::vec3 position = glm::vec3( params.Interspaces * glm::vec2( xMult, -yMult ), 0.0 );
+                
+                position = rotate * position;
+                position += params.Center;
+
+                SetNodePosition( nodes[ nodesCounter ], position, TimeType( 0.0 ) );
+
+                nodesCounter++;
+            }
+        }
     }
 }
 
