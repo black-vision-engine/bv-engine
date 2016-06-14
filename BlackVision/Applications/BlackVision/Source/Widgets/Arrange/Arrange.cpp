@@ -389,9 +389,39 @@ void            Arrange::Grid2DArrange       ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-void            Arrange::Grid3DArrange       ( std::vector< bv::model::BasicNodePtr > & /*nodes*/, const Grid3DArrangeParams & /*params*/ )
+void            Arrange::Grid3DArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const Grid3DArrangeParams & params )
 {
+    auto numElements = nodes.size();
 
+    if( numElements > 0 )
+    {
+        glm::mat3 rotate = glm::mat3( glm::eulerAngleYXZ( glm::radians( params.Rotation.y ), glm::radians( params.Rotation.x ), glm::radians( params.Rotation.z ) ) );
+
+        // @todo Zrobiæ równomierne rozmieszczanie elementów.
+
+        int nodesCounter = 0;
+        for( int layer = 0; layer < params.Layers && nodesCounter < numElements; ++layer )
+        {
+            for( int row = 0; row < params.Rows && nodesCounter < numElements; ++row )
+            {
+                for( int col = 0; col < params.Columns && nodesCounter < numElements; col++ )
+                {
+                    float xMult = (float)col - params.Columns / 2.0f + 0.5f;
+                    float yMult = (float)row - params.Rows / 2.0f + 0.5f;
+                    float zMult = (float)layer - params.Layers / 2.0f + 0.5f;
+
+                    glm::vec3 position = params.Interspaces * glm::vec3( xMult, -yMult, -zMult );
+                
+                    position = rotate * position;
+                    position += params.Center;
+
+                    SetNodePosition( nodes[ nodesCounter ], position, TimeType( 0.0 ) );
+
+                    nodesCounter++;
+                }
+            }
+        }
+    }
 }
 
 // ***********************
