@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/Audio/DefaultAudioChannel.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
@@ -58,6 +59,8 @@ private:
 
     VertexAttributesChannelPtr          m_vaChannel;
 
+    DefaultAudioChannelPtr              m_audioChannel;
+
 	IVideoDecoderPtr				    m_decoder;
 	DecoderMode				            m_decoderMode;
 
@@ -67,6 +70,7 @@ private:
 	DecoderModeParamPtr                 m_decoderModeParam;
 
     Int64                               m_prevFrameIdx;
+    Int64                               m_prevAudioFrameIdx;
 
 	/** time in seconds from the beginning of video */
     ParamVec2Ptr                        m_offsetParam;                 
@@ -92,6 +96,7 @@ public:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelPtr		        GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    virtual IAudioChannelPtr                    GetAudioChannel             () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
@@ -101,6 +106,7 @@ private:
 
     void                                        UpdateDecoder               ();
     void                                        UploadVideoFrame            ();
+    void                                        UploadAudioFrame            ();
 
     void                                        InitVertexAttributesChannel ();
 

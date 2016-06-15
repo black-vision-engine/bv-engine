@@ -21,7 +21,7 @@ private:
     UInt32                              m_height;
     Float64                             m_frameRate;
 
-    QueueConcurrent< VideoMediaData >   m_bufferQueue;
+    QueueConcurrent< AVMediaData >      m_bufferQueue;
 
     UInt32                              m_maxQueueSize;
 
@@ -35,15 +35,15 @@ public:
     UInt32                  GetHeight                   () const;   
     Float64                 GetFrameRate                () const;   
     
-    bool                    GetData                     ( VideoMediaData & data );
+    bool                    GetData                     ( AVMediaData & data );
 
     bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
 
     /** Converts time from seconds to the stream specific time base timestamp */
     Int64                   ConvertTime                 ( Float64 time );
 
-    virtual bool            DecodePacket                ( AVPacket * packet ) override;
-    virtual VideoMediaData  ConvertFrame                ();
+    bool                    DecodePacket                ( AVPacket * packet );
+    virtual AVMediaData     ConvertFrame                ();
 
     void                    Reset                       ();
 

@@ -41,8 +41,8 @@ private:
 	FFmpegVideoStreamDecoderThreadUPtr  m_videoDecoderThread;
 	FFmpegAudioStreamDecoderThreadUPtr  m_audioDecoderThread;
 
-	QueueConcurrent< VideoMediaData >	m_outVideoQueue;
-	QueueConcurrent< AudioMediaData > 	m_outAudioQueue;
+	QueueConcurrent< AVMediaData >	m_outVideoQueue;
+	QueueConcurrent< AVMediaData > 	m_outAudioQueue;
 
 public:
 
@@ -53,15 +53,18 @@ public:
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
-	virtual VideoMediaData		GetVideoMediaData		() override;
-	virtual AudioMediaData		GetAudioMediaData		() override;
-    virtual VideoMediaData		GetSingleFrame  		( TimeType frameTime) override;
+	virtual AVMediaData		    GetVideoMediaData		() override;
+	virtual AVMediaData		    GetAudioMediaData		() override;
+    virtual AVMediaData		    GetSingleFrame  		( TimeType frameTime) override;
 
 	virtual SizeType			GetFrameSize			() const override;
 
 	virtual UInt32				GetWidth				() const override;
 	virtual UInt32				GetHeight				() const override;
 	virtual Float64				GetFrameRate			() const override;
+
+	virtual Int32				GetSampleRate			() const override;
+    virtual AudioFormat			GetAudioFormat			() const override;
 
     virtual bool                HasVideo                () const override;
     virtual bool                HasAudio                () const override;

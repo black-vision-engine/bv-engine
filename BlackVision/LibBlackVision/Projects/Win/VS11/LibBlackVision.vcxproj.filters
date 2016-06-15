@@ -301,6 +301,21 @@
     <Filter Include="Engine\Models\EditorVariables\ParametersDescriptors">
       <UniqueIdentifier>{2a31797a-f6db-4c21-b0dd-9af1d02cd771}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{b0cb1f67-29fc-43ff-bb8a-d022a47b1e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\Resources">
+      <UniqueIdentifier>{ada2c392-a931-45be-bd08-702c1c1c3fdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\OALRenderer">
+      <UniqueIdentifier>{8a6f4b0b-f668-4466-a2a4-396287c340b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Channels\Audio">
+      <UniqueIdentifier>{3d60bd56-86f9-4160-b85a-691862af0cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\Logic">
+      <UniqueIdentifier>{29dabc99-31dd-4ba4-892e-fa7d4834d6b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1587,6 +1602,33 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioBuffer.cpp">
+      <Filter>Engine\Audio\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.cpp">
+      <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrListener.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.cpp">
+      <Filter>Engine\Audio\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3913,6 +3955,36 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioBuffer.h">
+      <Filter>Engine\Audio\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.h">
+      <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IAudioChannel.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrListener.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.h">
+      <Filter>Engine\Audio\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

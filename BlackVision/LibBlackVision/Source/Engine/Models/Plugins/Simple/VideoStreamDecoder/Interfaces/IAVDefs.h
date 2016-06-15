@@ -7,32 +7,17 @@
 
 namespace bv {
 
-struct VideoMediaData
+struct AVMediaData
 {
 	UInt32			frameIdx;
 	MemoryChunkPtr	frameData;
 
-	VideoMediaData()
+	AVMediaData()
 		: frameIdx( 0 )
 		, frameData( nullptr )
 	{
     }
 };
 
-struct AudioMediaData
-{
-	UInt32			frameIdx;
-	MemoryChunkPtr	frameData;
-    Int32           sampleRate;
-    AudioFormat     format;
-
-	AudioMediaData()
-		: frameIdx( 0 )
-		, frameData( nullptr )
-		, sampleRate( 0 )
-		, format( AudioFormat::MONO8 )
-	{
-    }
-};
 
 } //bv

@@ -90,11 +90,12 @@ void				VideoDecoderThread::Run			    ()
             break;
         }
 
+        m_decoder->NextAudioDataReady();
+
         if( ( UInt64 )frameDuration <= m_timer.ElapsedMillis() )
 		{
 			//std::this_thread::sleep_for( std::chrono::milliseconds( ( UInt64 )frameDuration - m_timer.ElapsedMillis() ) );
             m_decoder->NextVideoDataReady();
-            m_decoder->NextAudioDataReady();
 
 			m_timer.Start();
 		}

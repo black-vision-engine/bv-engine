@@ -250,7 +250,9 @@ enum class AudioFormat : int
     MONO8 = 0,
     STEREO8,
     MONO16,
-    STEREO16
+    STEREO16,
+
+    AF_TOTAL
 };
 
 enum class LightType : int 

@@ -27,13 +27,19 @@
 
 
 
-namespace bv
-{
+namespace bv {
 
 class SimpleTimer;
 class RenderLogic;
 class Renderer;
 class RemoteEventsHandlers;
+
+namespace audio {
+
+    class AudioRenderer;
+    class AudioLogic;
+
+}
 
 enum class BVAppState : int
 {
@@ -63,6 +69,10 @@ private:
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
+
+    audio::AudioRenderer *          m_audioRenderer;
+    audio::AudioLogic *             m_audioLogic;
+
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
@@ -79,7 +89,7 @@ private:
 
 public:
 
-                    BVAppLogic      ( Renderer * renderer );
+                    BVAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
                     ~BVAppLogic     ();
 
     void            Initialize      ();
@@ -93,14 +103,14 @@ public:
 	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
 	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
 
-    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer );
+    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer );
     virtual void    OnKey           ( unsigned char c );
     virtual void    OnMouse         ( MouseAction action, int posX, int posY );
 
     virtual void    ShutDown        ();
 
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
-    void            UpdateFrame     ( TimeType time, Renderer * renderer );
+    void            UpdateFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
     const FrameStatsCalculator &     FrameStats () const;
 

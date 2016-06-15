@@ -8,12 +8,14 @@
 
 namespace bv {
 
+const AVSampleFormat        FFmpegAudioStreamDecoder::DEFAULT_FORMAT  = AV_SAMPLE_FMT_S16;
 
 // *******************************
 //
 FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
 	: m_swrCtx( nullptr )
     , m_maxQueueSize( maxQueueSize )
+    , m_frameSize( 0 )
 {
     m_streamIdx = streamIdx;
 
@@ -24,11 +26,13 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( VideoStreamAssetConstPt
     
 	bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
 	assert( !error ); { error; }
-
+    
     m_swrCtx = swr_alloc();
-    m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, AV_SAMPLE_FMT_S16, m_codecCtx->sample_rate, m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
+    m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, DEFAULT_FORMAT, m_codecCtx->sample_rate, 
+        m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
     swr_init( m_swrCtx );
 
+    m_sampleRate = m_codecCtx->sample_rate;
 	if( m_codecCtx->channels == 1 )
     {
 		m_format = AudioFormat::MONO16;
@@ -39,16 +43,10 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( VideoStreamAssetConstPt
 	}
 
     m_frame = av_frame_alloc();
-	m_outFrame = av_frame_alloc();
-        
-    m_outFrame->nb_samples = m_codecCtx->frame_size;
-    m_outFrame->format = m_codecCtx->sample_fmt;
-    m_outFrame->channel_layout = m_codecCtx->channel_layout;
-    m_outFrame->channels = m_codecCtx->channels;
 
-    m_frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_codecCtx->channels, m_codecCtx->frame_size, m_codecCtx->sample_fmt, 0 );
-	m_outBuffer = ( uint8_t * )av_malloc( ( Int32 )m_frameSize * sizeof( uint8_t ) );
-    avcodec_fill_audio_frame( m_outFrame, m_codecCtx->channels, m_codecCtx->sample_fmt, ( const uint8_t * )m_outBuffer, ( Int32 )m_frameSize, 0 );
+    m_frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_codecCtx->channels, m_codecCtx->frame_size, DEFAULT_FORMAT, 0 );
+	m_outBuffer = ( uint8_t * )av_malloc( ( Int32 )m_frameSize );
+    memset( m_outBuffer, 0, ( Int32 )m_frameSize );
 }
 
 // *******************************
@@ -59,21 +57,28 @@ FFmpegAudioStreamDecoder::~FFmpegAudioStreamDecoder    ()
 	avcodec_close( m_codecCtx );
 
     av_frame_free( &m_frame );
-    av_free( m_outBuffer );     // deallocation of m_outFrame 
+    av_free( m_outBuffer );
 
     m_bufferQueue.Clear();
 }
 
 // *******************************
 //
-AudioFormat             FFmpegAudioStreamDecoder::GetAudioFormat    () const
+Int32                   FFmpegAudioStreamDecoder::GetSampleRate     () const
+{
+    return m_sampleRate;
+}
+
+// *******************************
+//
+AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 {
     return m_format;
 }
 
 // *******************************
 //
-bool		            FFmpegAudioStreamDecoder::GetData	        ( AudioMediaData & data )
+bool		            FFmpegAudioStreamDecoder::GetData	        ( AVMediaData & data )
 {
     return m_bufferQueue.TryPop( data );
 }
@@ -87,7 +92,8 @@ bool			        FFmpegAudioStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxe
         auto packet = demuxer->GetPacket( m_streamIdx );
         if( packet )
         {
-            if( DecodePacket( packet ) )
+            auto success = DecodePacket( packet );
+            if( success )
             {
                 auto data = ConvertFrame();
                 m_bufferQueue.Push( data );
@@ -105,41 +111,28 @@ bool				FFmpegAudioStreamDecoder::DecodePacket		( AVPacket * packet )
 	assert( packet != nullptr );
 
 	int frameReady = 0;
-    auto decoded = avcodec_decode_audio4( m_codecCtx, m_frame, &frameReady, packet );
-    decoded;
-	av_packet_unref( packet ); //FIXME
-    
-    //return std::min( decoded, packet->size );
+    avcodec_decode_audio4( m_codecCtx, m_frame, &frameReady, packet );
+
+    av_packet_unref( packet ); //FIXME
+
     return ( frameReady != 0 );
 }
 
 // *******************************
 //
-AudioMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
+AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 {
-    swr_convert( m_swrCtx, m_outFrame->data, m_outFrame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
+    swr_convert( m_swrCtx, &m_outBuffer, m_frame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
 
-    auto size = 0; //FIXME
-    char * data = new char[ size ];
-    memcpy( data, ( char * )m_outFrame->data[ 0 ], size );
+    char * data = new char[ m_frameSize ];
+    memcpy( data, ( char * )&m_outBuffer, m_frameSize );
 
-    AudioMediaData mediaData;
+    AVMediaData mediaData;
 
     mediaData.frameIdx = ( UInt32 )m_frame->pkt_pts;
-    mediaData.frameData = MemoryChunk::Create( data, SizeType( size ) );
-    mediaData.sampleRate = m_frame->sample_rate;
-    mediaData.format = GetAudioFormat();
+    mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
 
     return mediaData;
-}
-
-
-// *******************************
-//
-Int64					FFmpegAudioStreamDecoder::ConvertTime		( Float64 time )
-{
-    auto timeBase = av_q2d( m_stream->time_base );
-	return ( Int64 )( time / timeBase );
 }
 
 // *******************************

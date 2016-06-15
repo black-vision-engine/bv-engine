@@ -19,6 +19,7 @@ WindowedApplication::WindowedApplication			( const char * title, int x, int y, i
     , m_MultipleMonitors(false)
     , m_ClearColor( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
     , m_Renderer( nullptr )
+    , m_audioRenderer( nullptr )
 {
 	if(windowMode==WindowMode::WINDOWED)
         m_AllowResize = true;
@@ -160,6 +161,15 @@ const Renderer * WindowedApplication::Renderer		() const
 {
     return m_Renderer;
 }
+
+
+// *********************************
+//
+const audio::AudioRenderer * WindowedApplication::AudioRenderer		() const
+{
+    return m_audioRenderer;
+}
+
 
 // *********************************
 //

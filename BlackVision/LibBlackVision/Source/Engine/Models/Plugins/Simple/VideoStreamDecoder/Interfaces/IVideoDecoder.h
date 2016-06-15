@@ -15,15 +15,18 @@ public:
 	virtual void					Pause					() = 0;
 	virtual void					Stop					() = 0;
     
-	virtual VideoMediaData			GetVideoMediaData		() = 0;
-	virtual AudioMediaData		    GetAudioMediaData		() = 0;
-    virtual VideoMediaData			GetSingleFrame  		( TimeType frameTime) = 0;
+	virtual AVMediaData			    GetVideoMediaData		() = 0;
+	virtual AVMediaData		        GetAudioMediaData		() = 0;
+    virtual AVMediaData			    GetSingleFrame  		( TimeType frameTime) = 0;
 
 	virtual SizeType				GetFrameSize			() const = 0;
 
 	virtual UInt32					GetWidth				() const = 0;
 	virtual UInt32					GetHeight				() const = 0;
 	virtual Float64					GetFrameRate			() const = 0;
+
+	virtual Int32				    GetSampleRate			() const = 0;
+    virtual AudioFormat			    GetAudioFormat			() const = 0;
 
     virtual bool                    HasVideo                () const = 0;
     virtual bool                    HasAudio                () const = 0;

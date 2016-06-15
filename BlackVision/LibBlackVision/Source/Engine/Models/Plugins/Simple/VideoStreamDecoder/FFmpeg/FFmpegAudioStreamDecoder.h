@@ -12,14 +12,20 @@ class FFmpegDemuxer;
 
 class FFmpegAudioStreamDecoder : public IFFmpegStreamDecoder
 {
+private:
+
+    static const AVSampleFormat         DEFAULT_FORMAT;
 
 private:
 	
+    UInt32                              m_frameSize;
+
     SwrContext *			            m_swrCtx;
 
+    Int32                               m_sampleRate;
     AudioFormat                         m_format;
 
-	QueueConcurrent< AudioMediaData >   m_bufferQueue;
+	QueueConcurrent< AVMediaData >      m_bufferQueue;
 
     UInt32                              m_maxQueueSize;
 
@@ -28,17 +34,15 @@ public:
 							FFmpegAudioStreamDecoder	( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
 							~FFmpegAudioStreamDecoder	();
 
-    AudioFormat             GetAudioFormat              () const;
+    Int32                   GetSampleRate               () const;
+    AudioFormat             GetFormat                   () const;
 
-    bool                    GetData                     ( AudioMediaData & data );
+    bool                    GetData                     ( AVMediaData & data );
 
     bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
 	
-    /** Converts time from seconds to the stream specific time base timestamp */
-	Int64					ConvertTime					( Float64 time );
-
-	virtual bool			DecodePacket				( AVPacket * packet ) override;
-	AudioMediaData			ConvertFrame				();
+	bool			        DecodePacket				( AVPacket * packet );
+	AVMediaData			    ConvertFrame				();
 
 	void					Reset						();
 

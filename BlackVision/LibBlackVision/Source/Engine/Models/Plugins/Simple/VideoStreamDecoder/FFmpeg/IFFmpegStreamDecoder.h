@@ -26,8 +26,6 @@ protected:
 
 public:
 
-    virtual bool            DecodePacket                ( AVPacket * packet ) = 0;
-
     virtual Int32           GetStreamIdx                () const = 0;
     
 };

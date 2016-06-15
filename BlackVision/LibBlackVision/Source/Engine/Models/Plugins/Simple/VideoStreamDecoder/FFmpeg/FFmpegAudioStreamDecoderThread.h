@@ -32,7 +32,7 @@ private:
 	std::atomic< bool >			m_stopped;
 	std::atomic< bool >			m_running;
 
-	QueueConcurrent< AudioMediaData >   m_bufferQueue;
+	QueueConcurrent< AVMediaData >   m_bufferQueue;
 
 public:
 

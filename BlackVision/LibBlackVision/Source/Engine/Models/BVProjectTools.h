@@ -21,6 +21,7 @@ class RenderableArrayDataArraysSingleVertexBuffer;
 class VertexDescriptor;
 class Scene;
 class UniformBuffer;
+class AudioEntity;
 
 
 typedef std::vector< model::Transform >                                                    TransformVec;
@@ -77,6 +78,8 @@ private:
     static  SceneNode *         BuildSingleEngineNode               ( model::BasicNodePtr modelNode );
 
     static  RenderableEntity *  CreateRenderableEntity              ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer );
+    
+    static  AudioEntity *       CreateAudioEntity                   ( const model::IPluginConstPtr & finalizer );
 
     static  RenderableEffectPtr CreateDefaultEffect                 ( const model::IPluginConstPtr & finalizer );
 

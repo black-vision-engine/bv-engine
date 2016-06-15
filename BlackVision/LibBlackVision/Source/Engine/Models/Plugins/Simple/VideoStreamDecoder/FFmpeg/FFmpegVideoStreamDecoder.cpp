@@ -93,14 +93,14 @@ bool                FFmpegVideoStreamDecoder::DecodePacket          ( AVPacket *
 
 // *******************************
 //
-VideoMediaData      FFmpegVideoStreamDecoder::ConvertFrame          ()
+AVMediaData         FFmpegVideoStreamDecoder::ConvertFrame          ()
 {
     sws_scale( m_swsCtx, m_frame->data, m_frame->linesize, 0, m_frame->height, m_outFrame->data, m_outFrame->linesize );
 
     char * data = new char[ m_frameSize ];
     memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
 
-    VideoMediaData mediaData;
+    AVMediaData mediaData;
     mediaData.frameIdx = ( UInt32 )m_frame->pkt_pts;
     mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
     
@@ -130,7 +130,7 @@ UInt32              FFmpegVideoStreamDecoder::GetHeight         () const
 
 // *******************************
 //
-bool		        FFmpegVideoStreamDecoder::GetData	        ( VideoMediaData & data )
+bool		        FFmpegVideoStreamDecoder::GetData	        ( AVMediaData & data )
 {
     return m_bufferQueue.TryPop( data );
 }

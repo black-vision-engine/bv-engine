@@ -123,25 +123,29 @@ void						FFmpegVideoDecoder::Stop				()
 
 // *********************************
 //
-VideoMediaData			FFmpegVideoDecoder::GetVideoMediaData		()
+AVMediaData			        FFmpegVideoDecoder::GetVideoMediaData		()
 {
-	VideoMediaData mediaData;
+	AVMediaData mediaData;
     m_outVideoQueue.Front( mediaData );
     return mediaData;
 }
 
 // *********************************
 //
-AudioMediaData			FFmpegVideoDecoder::GetAudioMediaData		()
+AVMediaData			        FFmpegVideoDecoder::GetAudioMediaData		()
 {
-	AudioMediaData mediaData;
-    m_outAudioQueue.Front( mediaData );
+	AVMediaData mediaData;
+    mediaData.frameIdx = 0;
+    mediaData.frameData = nullptr;
+
+    m_outAudioQueue.TryPop( mediaData );
+
     return mediaData;
 }
 
 // ***********************
 // Jumps to frameTime. This function doesn't return to time before this function call.
-VideoMediaData		    FFmpegVideoDecoder::GetSingleFrame  		( TimeType frameTime )
+AVMediaData		            FFmpegVideoDecoder::GetSingleFrame  		( TimeType frameTime )
 {
     frameTime;
     //Seek( frameTime );
@@ -174,14 +178,14 @@ bool					FFmpegVideoDecoder::NextVideoDataReady		()
             m_videoDecoderThread->Restart();
         }
 
-        VideoMediaData videoMediaData;
+        AVMediaData videoMediaData;
         if( m_videoDecoder->GetData( videoMediaData ) )
         {
             m_outVideoQueue.Push( videoMediaData );
 
             if( m_outVideoQueue.Size() > 1 )
             {
-                VideoMediaData del;
+                AVMediaData del;
                 m_outVideoQueue.TryPop( del );
             }
 
@@ -208,16 +212,16 @@ bool					FFmpegVideoDecoder::NextAudioDataReady		()
             m_audioDecoderThread->Restart();
         }
 
-        AudioMediaData audioMediaData;
+        AVMediaData audioMediaData;
         if( m_audioDecoder->GetData( audioMediaData ) )
         {
-            m_outAudioQueue.Push( audioMediaData );
+            //if( !m_outAudioQueue.IsEmpty() )
+            //{
+            //    AVMediaData del;
+            //    m_outAudioQueue.TryPop( del );
+            //}
 
-            if( m_outAudioQueue.Size() > 1 )
-            {
-                AudioMediaData del;
-                m_outAudioQueue.TryPop( del );
-            }
+            m_outAudioQueue.Push( audioMediaData );
 
             return true;
         }
@@ -268,6 +272,30 @@ Float64					FFmpegVideoDecoder::GetFrameRate			() const
 	    return m_videoDecoder->GetFrameRate();
     }
     return 0;
+}
+
+// *********************************
+//
+Int32					FFmpegVideoDecoder::GetSampleRate			() const
+{
+    if( m_hasAudio )
+	{
+        return m_audioDecoder->GetSampleRate();
+    }
+
+    return 0;
+}
+
+// *********************************
+//
+AudioFormat				FFmpegVideoDecoder::GetAudioFormat			() const
+{
+    if( m_hasAudio )
+	{
+        return m_audioDecoder->GetFormat();
+    }
+
+    return AudioFormat::AF_TOTAL;
 }
 
 // *********************************

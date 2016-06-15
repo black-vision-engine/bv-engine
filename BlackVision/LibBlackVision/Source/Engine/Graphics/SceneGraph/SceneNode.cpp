@@ -20,6 +20,7 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
     , m_boundingBox( nullptr )
     , m_drawBoundingBox( false )
     , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
+    , m_audio( nullptr )
 {
     m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
 }
@@ -29,6 +30,8 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
 SceneNode::~SceneNode          ()
 {
     DeleteTransformable();
+    
+    DeleteAudio();
 
     for ( auto node : m_sceneNodes )
     {
@@ -129,6 +132,13 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 
 // ********************************
 //
+AudioEntity *           SceneNode::GetAudio             ()
+{
+    return m_audio;
+}
+
+// ********************************
+//
 NodeEffectPtr   SceneNode::GetNodeEffect  ()
 {
     return m_nodeEffect;
@@ -157,6 +167,22 @@ void            SceneNode::DeleteTransformable  ()
     delete m_transformable;
 
     m_transformable = nullptr;
+}
+
+// ********************************
+//
+void            SceneNode::SetAudio             ( AudioEntity * audio )
+{
+    DeleteAudio();
+    m_audio = audio;
+}
+
+// ********************************
+//
+void            SceneNode::DeleteAudio          ()
+{
+    delete m_audio;
+    m_audio = nullptr;
 }
 
 // ********************************
@@ -225,7 +251,7 @@ void               SceneNode::Select              ( glm::vec4 color )
 
 // ***********************
 //
-void                    SceneNode::Unselect            ()
+void                    SceneNode::Unselect             ()
 {
     m_drawBoundingBox = false;
 }

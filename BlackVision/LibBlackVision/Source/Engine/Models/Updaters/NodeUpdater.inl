@@ -341,6 +341,27 @@ inline void		NodeUpdater::UpdateTexturesData				()
     }
 }
 
+// *****************************
+//
+inline void		NodeUpdater::UpdateAudio				()
+{
+    if( m_audio && m_audioChannel )
+    {
+        std::vector< MemoryChunkConstPtr > data;
+        auto packet = m_audioChannel->PopPacket();
+        while( packet )
+        {
+            data.push_back( packet );
+            packet = m_audioChannel->PopPacket();
+        }
+
+        if( !data.empty() )
+        {
+            m_audio->PushData( data );
+        }
+    }
+}
+
 // *******************************
 //
 template< typename ValType, typename ShaderParamType >

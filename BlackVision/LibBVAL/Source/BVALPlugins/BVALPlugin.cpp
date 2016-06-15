@@ -17,18 +17,23 @@ namespace bv {
 //
 bool        BVALPlugin::InitializeBVAL						()
 {
+    auto success = false; 
+
     auto device = alcOpenDevice( nullptr );
+    
     if( device )
     {
         auto ctx = alcCreateContext( device, nullptr );
         if( ctx )
         {
             alcMakeContextCurrent( ctx );
-            return true;
+            success = true;
         }
     }
 
-    return false;
+    alGetError();
+
+    return success;
 }
 
 // *****************************
