@@ -134,11 +134,15 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
     , m_prevOffsetCounter( 1 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
-    , m_prevFrameIdx( 0 )
+    , m_prevFrameIdx( -1 )
+    , m_prevAudioFrameIdx( -1 )
     , m_isFinished( false )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+
+    //FIXME:
+    m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
 
 	SetPrevPlugin( prev );
 
@@ -182,24 +186,31 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
         {
 		    m_decoder = std::make_shared< FFmpegVideoDecoder >( asset );
 
-		    auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(),
-                MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
-                m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
-            if( vsDesc != nullptr )
-		    {
-			    vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            if( m_decoder->HasVideo() )
+            {
+                while( !m_decoder->NextVideoDataReady() );
 
-			    auto txData = m_psc->GetTexturesDataImpl();
-			    txData->SetTexture( 0, vsDesc );
+		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(),
+                    MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
+                    m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
-			    SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
+                if( vsDesc != nullptr )
+		        {
+			        vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
 
-			    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+			        auto txData = m_psc->GetTexturesDataImpl();
+			        txData->SetTexture( 0, vsDesc );
 
-                m_prevFrameIdx = 0;
+			        SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
-			    return true;
-		    }
+			        HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+
+                    m_prevFrameIdx = -1;
+                    m_prevAudioFrameIdx = -1;
+
+			        return true;
+		        }
+            }
         }
     }
 
@@ -229,6 +240,13 @@ IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexSh
 
 // *************************************
 // 
+IAudioChannelPtr                    DefaultVideoStreamDecoderPlugin::GetAudioChannel      () const
+{
+    return m_audioChannel;
+}
+
+// *************************************
+// 
 void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
@@ -246,6 +264,7 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     UploadVideoFrame();
+    UploadAudioFrame();
     UpdateDecoder();
 
     m_vsc->PostUpdate();
@@ -409,6 +428,19 @@ void                                DefaultVideoStreamDecoderPlugin::UploadVideo
 	    std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
 	}
     m_prevFrameIdx = mediaData.frameIdx;
+}
+
+// *************************************
+//
+void                                DefaultVideoStreamDecoderPlugin::UploadAudioFrame   ()
+{
+    //update audio data
+    auto mediaData = m_decoder->GetAudioMediaData();
+    if( mediaData.frameData && m_prevAudioFrameIdx != mediaData.frameIdx )
+	{
+        m_audioChannel->PushPacket( mediaData.frameData );
+	}
+    m_prevAudioFrameIdx = mediaData.frameIdx;
 }
 
 // *************************************

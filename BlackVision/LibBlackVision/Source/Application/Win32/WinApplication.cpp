@@ -5,6 +5,7 @@
 #include "System/InitSubsystem.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 
@@ -299,6 +300,9 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     assert( !m_Renderer );
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
 
+    assert( !m_audioRenderer );
+    m_audioRenderer = new audio::AudioRenderer();
+
     if ( app->OnInitialize() )
     {
         GLUtils::DumpGLInfo();
@@ -343,6 +347,7 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     app->OnTerminate();
 
     delete m_Renderer;
+    delete m_audioRenderer;
 
     DestroyApplicationWindow( app, handle );
 

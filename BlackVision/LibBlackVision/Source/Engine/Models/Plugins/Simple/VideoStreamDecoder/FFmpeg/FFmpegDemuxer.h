@@ -1,20 +1,21 @@
 #pragma once
 
 #include <map>
-#include <deque>
 
 #include "FFmpegDef.h"
+#include "DataTypes/QueueConcurrent.h"
 
 
 namespace bv {
+
 
 class FFmpegDemuxer
 {
 
 private:
 
-	typedef std::deque< AVPacket * >						PacketQueue;
-	typedef std::map< Int32, PacketQueue >					PacketQueueMap;
+    typedef std::shared_ptr< QueueConcurrent< AVPacket * > >    PacketQueue;
+	typedef std::map< Int32, PacketQueue >			            PacketQueueMap;
 
     static const UInt32         SAFE_SEEK_FRAMES;
 
@@ -24,14 +25,18 @@ private:
 
 	AVFormatContext *			m_formatCtx;
 
-	PacketQueueMap				m_packetQueue;
+	std::map< Int32, PacketQueue >  m_packetQueue;
 
 	bool						m_isEOF;
 
+    UInt32                      m_maxQueueSize;
+
 public:
 
-								FFmpegDemuxer			( const std::string & streamPath );
+								FFmpegDemuxer			( const std::string & streamPath, UInt32 maxQueueSize = 10 );
 								~FFmpegDemuxer			();
+
+	bool					    ProcessPacket			();
 
 	AVFormatContext *			GetFormatContext		() const;
 	AVPacket *					GetPacket				( Int32 streamIdx );
@@ -45,6 +50,7 @@ public:
 	void						Reset					();
 	
 	bool						IsEOF					() const;
+	bool						IsPacketQueueEmpty		( Int32 streamIdx ) const;
 
 private:
 

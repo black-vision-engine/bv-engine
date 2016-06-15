@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Channels/DefaultFinalizePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultFinalizeVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultFinalizeGeometryShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/Audio/DefaultAudioChannel.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 
@@ -30,6 +31,7 @@ private:
     mutable DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;
     mutable DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
     mutable DefaultFinalizeGeometryShaderChannelPtr m_finalizeGSC;
+    mutable DefaultAudioChannelPtr                  m_finalizeAudioChannel;
 
 public:
 
@@ -57,6 +59,7 @@ public:
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
+    virtual IAudioChannelPtr                    GetAudioChannel             () const override;
                  
     virtual RendererContextConstPtr             GetRendererContext          () const override;
     virtual void                                SetRendererContext          ( RendererContextPtr context ) override;

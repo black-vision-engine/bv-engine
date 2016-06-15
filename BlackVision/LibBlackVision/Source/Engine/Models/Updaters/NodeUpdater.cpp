@@ -59,6 +59,7 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     , m_rendererContext( nullptr )
     , m_attributesUpdateID( 0 )
     , m_topologyUpdateID( 0 )
+    , m_audio( nullptr )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
@@ -79,6 +80,9 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     m_transformChannel = finalizer->GetTransformChannel();
     assert( m_transformChannel != nullptr );
     m_transformStatedValue = model::IStatedValuePtr( new model::SimpleState< glm::mat4 >() );
+
+    m_audio = sceneNode->GetAudio();
+    m_audioChannel = finalizer->GetAudioChannel();
 
     if( effect )
     {
@@ -166,6 +170,8 @@ void    NodeUpdater::DoUpdate               ()
         {
             UpdateNodeEffect();
         }
+
+        UpdateAudio();
     }
     else
     {

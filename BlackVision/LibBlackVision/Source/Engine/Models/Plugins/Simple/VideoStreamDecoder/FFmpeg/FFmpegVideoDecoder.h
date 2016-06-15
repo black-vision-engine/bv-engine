@@ -7,40 +7,45 @@
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/VideoDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxerThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoStreamDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoderThread.h"
 
 #include "DataTypes/QueueConcurrent.h"
 
 #include "FFmpegDemuxer.h"
 #include "FFmpegVideoStreamDecoder.h"
+#include "FFmpegAudioStreamDecoder.h"
 
 
-namespace bv
-{
+namespace bv {
+
 
 class FFmpegVideoDecoder : public IVideoDecoder
 {
 private:
 
+    bool                            m_hasVideo;
+    bool                            m_hasAudio;
+
 	FFmpegDemuxerUPtr				m_demuxer;
 
-	FFmpegVideoStreamDecoderUPtr	m_vstreamDecoder;
-	//FFmpegAudioStreamDecoderUPtr
-
-	AVFrame *						m_frame;
-	AVFrame *						m_outFrame;
-    uint8_t *                       m_outBuffer;
-
-	SizeType						m_frameSize;
+	FFmpegVideoStreamDecoderUPtr	m_videoDecoder;
+	FFmpegAudioStreamDecoderUPtr    m_audioDecoder;
 
 	VideoDecoderThreadUPtr			m_decoderThread;
 	mutable std::mutex				m_mutex;
 
-	QueueConcurrent< VideoMediaData >	m_outQueue;
-	QueueConcurrent< VideoMediaData >	m_bufferQueue;
+    FFmpegDemuxerThreadUPtr         m_demuxerThread;
 
-	static const UInt32				MAX_QUEUE_SIZE;
+	FFmpegVideoStreamDecoderThreadUPtr  m_videoDecoderThread;
+	FFmpegAudioStreamDecoderThreadUPtr  m_audioDecoderThread;
+
+	QueueConcurrent< AVMediaData >	m_outVideoQueue;
+	QueueConcurrent< AVMediaData > 	m_outAudioQueue;
 
 public:
+
 								FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset );
 	virtual						~FFmpegVideoDecoder		();
 
@@ -48,8 +53,9 @@ public:
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
-	virtual VideoMediaData		GetVideoMediaData		() override;
-    virtual VideoMediaData		GetSingleFrame  		( TimeType frameTime) override;
+	virtual AVMediaData		    GetVideoMediaData		() override;
+	virtual AVMediaData		    GetAudioMediaData		() override;
+    virtual AVMediaData		    GetSingleFrame  		( TimeType frameTime) override;
 
 	virtual SizeType			GetFrameSize			() const override;
 
@@ -57,7 +63,11 @@ public:
 	virtual UInt32				GetHeight				() const override;
 	virtual Float64				GetFrameRate			() const override;
 
-    virtual UInt32              GetMaxBufferSize        () const override;
+	virtual Int32				GetSampleRate			() const override;
+    virtual AudioFormat			GetAudioFormat			() const override;
+
+    virtual bool                HasVideo                () const override;
+    virtual bool                HasAudio                () const override;
 
 	/** Accurate seeking.
 	@param[time] in seconds 
@@ -68,12 +78,16 @@ public:
 	virtual void				Reset					() override;
 
 	virtual bool				IsEOF					() const override;
+	virtual bool				IsPacketQueueEmpty		( Int32 streamIdx ) const;
 	virtual bool				IsFinished				() const override;
 
 protected:
 	
-	virtual bool				DecodeNextFrame			() override;
-	virtual bool				NextFrameDataReady		() override;
+	virtual bool				NextVideoDataReady		() override;
+	virtual bool				NextAudioDataReady		() override;
+
+
+    friend class FFmpegAudioStreamDecoderThread;
 
 };
 

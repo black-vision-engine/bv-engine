@@ -18,6 +18,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAudioChannel.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Mathematics/Rect.h"
 
@@ -62,6 +63,7 @@ public:
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const = 0;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const = 0;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const = 0;
+    virtual IAudioChannelPtr                    GetAudioChannel             () const = 0;
 
     virtual RendererContextConstPtr             GetRendererContext          () const = 0;
     virtual void                                SetRendererContext          ( RendererContextPtr context ) = 0;

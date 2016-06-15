@@ -49,8 +49,11 @@ void                BVProjectTools::SyncSingleNode                        ( mode
 {
     model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
     RenderableEntity * renderable = CreateRenderableEntity( modelNode, finalizer );
-
+    
     node->SetTransformable( renderable );
+
+    auto audio = CreateAudioEntity( finalizer );
+    node->SetAudio( audio );
 
     if( UpdatersManager::Get().IsRegistered( modelNode.get() ) )
     {
@@ -181,8 +184,12 @@ SceneNode *         BVProjectTools::BuildSingleEngineNode                 ( mode
     model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
 
     RenderableEntity * renderable = CreateRenderableEntity( modelNode, finalizer );
-
+    
     SceneNode * node        = new SceneNode( renderable );
+
+    auto audio = CreateAudioEntity( finalizer );
+    node->SetAudio( audio );
+
     NodeUpdaterPtr updater  = NodeUpdater::Create( node, modelNode );
     UpdatersManager::Get().RegisterUpdater( modelNode.get(), updater );
 
@@ -324,6 +331,19 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
     assert( finalizer->GetTransformChannel() );
     
     return renderable;
+}
+
+// ********************************
+//
+AudioEntity *           BVProjectTools::CreateAudioEntity                 ( const model::IPluginConstPtr & finalizer )
+{
+    auto audioChannel = finalizer->GetAudioChannel();
+    if( audioChannel )
+    {
+        return new AudioEntity( audioChannel->GetFrequency(), audioChannel->GetFormat() );
+    }
+
+    return nullptr;
 }
 
 // ********************************

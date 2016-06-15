@@ -186,9 +186,24 @@ IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShade
         }
     }
 
-    
-
     return m_finalizeGSC;
+}
+
+// *******************************
+//
+IAudioChannelPtr                            DefaultFinalizePlugin::GetAudioChannel          () const
+{
+    if( m_prevPlugin && !m_finalizeAudioChannel )
+    {
+        auto prevChannel = m_prevPlugin->GetAudioChannel();
+
+        if( prevChannel )
+        {
+            return prevChannel;
+        }
+    }
+
+    return m_finalizeAudioChannel;
 }
 
 // *******************************

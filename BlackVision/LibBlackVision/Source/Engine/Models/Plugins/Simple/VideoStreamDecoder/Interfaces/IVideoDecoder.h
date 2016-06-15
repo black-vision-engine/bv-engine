@@ -1,22 +1,9 @@
 #pragma once
 
-#include "Memory/MemoryChunk.h"
-#include "CoreDef.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
-namespace bv
-{
 
-struct VideoMediaData
-{
-	UInt32			frameIdx;
-	MemoryChunkPtr	frameData;
-
-	VideoMediaData()
-		: frameIdx( 0 )
-		, frameData( nullptr )
-	{}
-};
-
+namespace bv {
 
 class IVideoDecoder
 {
@@ -28,8 +15,9 @@ public:
 	virtual void					Pause					() = 0;
 	virtual void					Stop					() = 0;
     
-	virtual VideoMediaData			GetVideoMediaData		() = 0;
-    virtual VideoMediaData			GetSingleFrame  		( TimeType frameTime) = 0;
+	virtual AVMediaData			    GetVideoMediaData		() = 0;
+	virtual AVMediaData		        GetAudioMediaData		() = 0;
+    virtual AVMediaData			    GetSingleFrame  		( TimeType frameTime) = 0;
 
 	virtual SizeType				GetFrameSize			() const = 0;
 
@@ -37,7 +25,11 @@ public:
 	virtual UInt32					GetHeight				() const = 0;
 	virtual Float64					GetFrameRate			() const = 0;
 
-    virtual UInt32                  GetMaxBufferSize        () const = 0;
+	virtual Int32				    GetSampleRate			() const = 0;
+    virtual AudioFormat			    GetAudioFormat			() const = 0;
+
+    virtual bool                    HasVideo                () const = 0;
+    virtual bool                    HasAudio                () const = 0;
 
 	/** Accurate seeking.
 	@param[time] in seconds 
@@ -50,10 +42,10 @@ public:
 	virtual bool					IsEOF					() const = 0;
 	virtual bool					IsFinished				() const = 0;
     
-protected:
+//protected:
 
-	virtual bool					DecodeNextFrame			() = 0;
-	virtual bool					NextFrameDataReady		() = 0;
+	virtual bool					NextVideoDataReady		() = 0;
+	virtual bool					NextAudioDataReady		() = 0;
     
 	friend class VideoDecoderThread;
 

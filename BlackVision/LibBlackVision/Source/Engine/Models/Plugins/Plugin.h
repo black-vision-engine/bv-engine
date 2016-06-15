@@ -78,12 +78,14 @@ public:
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannelPtr pShCh )         { assert(!"Implement in derived class"); }
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannelPtr vShCh )        { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannelPtr gShCh )      { assert(!"Implement in derived class"); }
+    virtual void                                SetAudioChannel             ( IAudioChannelPtr audioChannel )        { assert(!"Implement in derived class"); }
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
+    virtual IAudioChannelPtr                    GetAudioChannel             () const override;
 
     virtual RendererContextConstPtr             GetRendererContext          () const override;
     virtual void                                SetRendererContext          ( RendererContextPtr context ) override;
@@ -422,6 +424,19 @@ IGeometryShaderChannelConstPtr      BasePlugin< Iface >::GetGeometryShaderChanne
     if( m_prevPlugin )
     {
         return m_prevPlugin->GetGeometryShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IAudioChannelPtr                    BasePlugin< Iface >::GetAudioChannel       () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetAudioChannel();
     }
 
     return nullptr;

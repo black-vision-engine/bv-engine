@@ -106,7 +106,7 @@ bool BlackVisionApp::OnIdle		()
 
 	ApplicationContext::Instance().SetTimestamp( millis );
 
-    m_app->OnUpdate( millis, m_Renderer );
+    m_app->OnUpdate( millis, m_Renderer, m_audioRenderer );
 
     PostFrame( millis );
 
@@ -233,7 +233,7 @@ void    BlackVisionApp::InitializeAppLogic  ()
 		HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
 	}
 
-    m_app = new BVAppLogic( m_Renderer );
+    m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
 
 	m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();

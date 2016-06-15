@@ -17,6 +17,8 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
+#include "Engine/Graphics/SceneGraph/AudioEntity.h"
+
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
@@ -24,6 +26,7 @@
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IAudioChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
 
@@ -38,12 +41,9 @@
 namespace bv {
 
 class SceneNode;
-class RenderableEntity;
 class RendererStateInstance;
 class ShaderParameters;
 class IShaderDataSource;
-class ITextureDescriptor;
-class IAnimationDescriptor;
 class Texture2D;
 
 
@@ -81,6 +81,9 @@ private:
     model::ITransformChannelConstPtr            m_transformChannel;
     model::IStatedValuePtr                      m_transformStatedValue;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
+
+    AudioEntity *                               m_audio;
+    model::IAudioChannelPtr                     m_audioChannel;
     
     bool                                        m_timeInvariantVertexData;
     bool                                        m_hasEffect;
@@ -138,6 +141,8 @@ private:
 
     inline	void	UpdateShaderParams  ();
     inline  void    UpdateTexturesData	();
+
+    inline  void    UpdateAudio     	();
 
 private:
 
