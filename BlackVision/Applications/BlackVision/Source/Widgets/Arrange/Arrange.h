@@ -124,6 +124,7 @@ private:
         static const std::string    GRID2D_ARRANGE;
         static const std::string    GRID3D_ARRANGE;
         static const std::string    GET_PARAMETERS;
+        static const std::string    ARRANGE_AFTER_LOAD;
     };
 
     struct PARAMETERS {};
@@ -132,6 +133,8 @@ private:
 
     bv::model::BasicNodePtr	                m_parentNode;
     std::unique_ptr< ArrangeParamsBase >    m_lastArrangement;
+
+    bool                                    m_arrangeAfterLoad;
 
 public:
     explicit                            Arrange			( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );

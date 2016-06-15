@@ -24,6 +24,7 @@ const std::string       Arrange::ACTION::SPHERE_ARRANGE     = "SphereArrange";
 const std::string       Arrange::ACTION::GRID2D_ARRANGE     = "Grid2DArrange";
 const std::string       Arrange::ACTION::GRID3D_ARRANGE     = "Grid3DArrange";
 const std::string       Arrange::ACTION::GET_PARAMETERS     = "GetParameters";
+const std::string       Arrange::ACTION::ARRANGE_AFTER_LOAD = "ArrangeAfterLoad";
 
 //const std::string       Arrange::PARAMETERS::PARAMETER_NAME = "ParamName";
 
@@ -46,6 +47,7 @@ const std::string &     Arrange::GetType             () const
 //
 Arrange::Arrange             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
+    ,   m_arrangeAfterLoad( true )
 {}
 
 // ***********************
@@ -70,8 +72,9 @@ void                        Arrange::Serialize       ( ISerializer & ser ) const
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
         NodeLogicBase::Serialize( ser );
-
         m_lastArrangement->Serialize( ser );
+
+        ser.SetAttribute( "ArrangeAfterLoad", SerializationHelper::T2String( m_arrangeAfterLoad ) );
     }
 
     ser.ExitChild();    // logic
@@ -95,38 +98,43 @@ void                    Arrange::Deserialize     ( const IDeserializer & ser )
 {
     NodeLogicBase::Deserialize( ser );
 
-    if( ser.EnterChild( "CircleArrangeParams" ) )
+    m_arrangeAfterLoad = SerializationHelper::String2T( ser.GetAttribute( "ArrangeAfterLoad" ), true );
+
+    if( m_arrangeAfterLoad )
     {
-        m_lastArrangement = CircleArrangeParams::Create( ser );
-        ArrangeChildren( ArrangmentType::Circle, m_lastArrangement );
-    }
-    else if( ser.EnterChild( "LineArrangeParams" ) )
-    {
-        m_lastArrangement = LineArrangeParams::Create( ser );
-        ArrangeChildren( ArrangmentType::Line, m_lastArrangement );
-    }
-    else if( ser.EnterChild( "Grid2DArrangeParams" ) )
-    {
-        m_lastArrangement = Grid2DArrangeParams::Create( ser );
-        ArrangeChildren( ArrangmentType::Grid2D, m_lastArrangement );
-    }
-    else if( ser.EnterChild( "Grid3DArrangeParams" ) )
-    {
-        m_lastArrangement = Grid3DArrangeParams::Create( ser );
-        ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
-    }
-    else if( ser.EnterChild( "SphereArrangeParams" ) )
-    {
-        m_lastArrangement = SphereArrangeParams::Create( ser );
-        ArrangeChildren( ArrangmentType::Sphere, m_lastArrangement );
+        if( ser.EnterChild( "CircleArrangeParams" ) )
+        {
+            m_lastArrangement = CircleArrangeParams::Create( ser );
+            ArrangeChildren( ArrangmentType::Circle, m_lastArrangement );
+        }
+        else if( ser.EnterChild( "LineArrangeParams" ) )
+        {
+            m_lastArrangement = LineArrangeParams::Create( ser );
+            ArrangeChildren( ArrangmentType::Line, m_lastArrangement );
+        }
+        else if( ser.EnterChild( "Grid2DArrangeParams" ) )
+        {
+            m_lastArrangement = Grid2DArrangeParams::Create( ser );
+            ArrangeChildren( ArrangmentType::Grid2D, m_lastArrangement );
+        }
+        else if( ser.EnterChild( "Grid3DArrangeParams" ) )
+        {
+            m_lastArrangement = Grid3DArrangeParams::Create( ser );
+            ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
+        }
+        else if( ser.EnterChild( "SphereArrangeParams" ) )
+        {
+            m_lastArrangement = SphereArrangeParams::Create( ser );
+            ArrangeChildren( ArrangmentType::Sphere, m_lastArrangement );
+        }
+
+        ser.ExitChild();
     }
     else
     {
         m_lastArrangement = nullptr;
         return;
     }
-
-    ser.ExitChild();
 }
 
 // ***********************
@@ -340,6 +348,18 @@ bool                        Arrange::HandleEvent     ( IDeserializer & eventDese
         m_lastArrangement->Serialize( response );
 
         return true;
+    }
+    else if( action == Arrange::ACTION::ARRANGE_AFTER_LOAD )
+    {
+        Expected< bool > value = SerializationHelper::String2T< bool >( eventDeser.GetAttribute( "Value" ) );
+        
+        if( value.isValid )
+        {
+            m_arrangeAfterLoad = value.ham;
+            return true;
+        }
+        else
+            return false;
     }
 
     return false;
