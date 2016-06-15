@@ -123,6 +123,7 @@ private:
         static const std::string    SPHERE_ARRANGE;
         static const std::string    GRID2D_ARRANGE;
         static const std::string    GRID3D_ARRANGE;
+        static const std::string    GET_PARAMETERS;
     };
 
     struct PARAMETERS {};

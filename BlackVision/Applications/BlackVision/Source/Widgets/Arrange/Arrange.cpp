@@ -23,6 +23,7 @@ const std::string       Arrange::ACTION::CIRCLE_ARRANGE     = "CircleArrange";
 const std::string       Arrange::ACTION::SPHERE_ARRANGE     = "SphereArrange";
 const std::string       Arrange::ACTION::GRID2D_ARRANGE     = "Grid2DArrange";
 const std::string       Arrange::ACTION::GRID3D_ARRANGE     = "Grid3DArrange";
+const std::string       Arrange::ACTION::GET_PARAMETERS     = "GetParameters";
 
 //const std::string       Arrange::PARAMETERS::PARAMETER_NAME = "ParamName";
 
@@ -295,7 +296,7 @@ std::unique_ptr< Arrange::SphereArrangeParams >   Arrange::SphereArrangeParams::
 
 // ***********************
 //
-bool                        Arrange::HandleEvent     ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
+bool                        Arrange::HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
 {
     std::string action = eventDeser.GetAttribute( "Action" );
 
@@ -331,6 +332,12 @@ bool                        Arrange::HandleEvent     ( IDeserializer & eventDese
     {
         m_lastArrangement = Grid3DArrangeParams::Create( eventDeser );
         ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
+
+        return true;
+    }
+    else if( action == Arrange::ACTION::GET_PARAMETERS )
+    {
+        m_lastArrangement->Serialize( response );
 
         return true;
     }
