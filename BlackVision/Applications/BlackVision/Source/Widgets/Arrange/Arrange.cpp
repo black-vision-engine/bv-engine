@@ -52,11 +52,6 @@ Arrange::Arrange             ( bv::model::BasicNodePtr parent, bv::model::ITimeE
 Arrange::~Arrange()
 {}
 
-// ***********************
-//
-void                        Arrange::Update			( TimeType /*t*/ )
-{}
-
 // ========================================================================= //
 // Serialization and deserialization
 // ========================================================================= //
@@ -74,6 +69,8 @@ void                        Arrange::Serialize       ( ISerializer & ser ) const
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
         NodeLogicBase::Serialize( ser );
+
+        m_lastArrangement->Serialize( ser );
     }
 
     ser.ExitChild();    // logic
@@ -93,6 +90,46 @@ ArrangePtr              Arrange::Create          ( const IDeserializer & deser, 
 
 // ***********************
 //
+void                    Arrange::Deserialize     ( const IDeserializer & ser )
+{
+    NodeLogicBase::Deserialize( ser );
+
+    if( ser.EnterChild( "CircleArrangeParams" ) )
+    {
+        m_lastArrangement = CircleArrangeParams::Create( ser );
+        ArrangeChildren( ArrangmentType::Circle, m_lastArrangement );
+    }
+    else if( ser.EnterChild( "LineArrangeParams" ) )
+    {
+        m_lastArrangement = LineArrangeParams::Create( ser );
+        ArrangeChildren( ArrangmentType::Line, m_lastArrangement );
+    }
+    else if( ser.EnterChild( "Grid2DArrangeParams" ) )
+    {
+        m_lastArrangement = Grid2DArrangeParams::Create( ser );
+        ArrangeChildren( ArrangmentType::Grid2D, m_lastArrangement );
+    }
+    else if( ser.EnterChild( "Grid3DArrangeParams" ) )
+    {
+        m_lastArrangement = Grid3DArrangeParams::Create( ser );
+        ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
+    }
+    else if( ser.EnterChild( "SphereArrangeParams" ) )
+    {
+        m_lastArrangement = SphereArrangeParams::Create( ser );
+        ArrangeChildren( ArrangmentType::Sphere, m_lastArrangement );
+    }
+    else
+    {
+        m_lastArrangement = nullptr;
+        return;
+    }
+
+    ser.ExitChild();
+}
+
+// ***********************
+//
 void                            Arrange::CircleArrangeParams::Serialize       ( ISerializer & ser ) const
 {
     ser.EnterChild( "CircleArrangeParams" );
@@ -106,13 +143,13 @@ void                            Arrange::CircleArrangeParams::Serialize       ( 
 
 // ***********************
 //
-Arrange::CircleArrangeParams    Arrange::CircleArrangeParams::Create          ( const IDeserializer & deser )
+std::unique_ptr< Arrange::CircleArrangeParams >   Arrange::CircleArrangeParams::Create          ( const IDeserializer & deser )
 {
-    CircleArrangeParams params;
+    std::unique_ptr< CircleArrangeParams > params = std::unique_ptr< CircleArrangeParams >( new CircleArrangeParams );
 
-    params.Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
-    params.Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
+    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
     
     return params;
 }
@@ -131,12 +168,12 @@ void                            Arrange::LineArrangeParams::Serialize       ( IS
 
 // ***********************
 //
-Arrange::LineArrangeParams      Arrange::LineArrangeParams::Create          ( const IDeserializer & deser )
+std::unique_ptr< Arrange::LineArrangeParams >     Arrange::LineArrangeParams::Create          ( const IDeserializer & deser )
 {
-    LineArrangeParams params;
+    std::unique_ptr< LineArrangeParams > params = std::unique_ptr< LineArrangeParams >( new LineArrangeParams );
 
-    params.StartPoint = SerializationHelper::String2T( deser.GetAttribute( "StartPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.EndPoint = SerializationHelper::String2T( deser.GetAttribute( "EndPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->StartPoint = SerializationHelper::String2T( deser.GetAttribute( "StartPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->EndPoint = SerializationHelper::String2T( deser.GetAttribute( "EndPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
 
     return params;
 }
@@ -154,25 +191,25 @@ void                            Arrange::Grid2DArrangeParams::Serialize       ( 
     ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
     ser.SetAttribute( "Interspaces", SerializationHelper::T2String( Interspaces ) );
 
-    ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
+    //ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
 
     ser.ExitChild();    // Grid2DArrangeParams
 }
 
 // ***********************
 //
-Arrange::Grid2DArrangeParams    Arrange::Grid2DArrangeParams::Create          ( const IDeserializer & deser )
+std::unique_ptr< Arrange::Grid2DArrangeParams >   Arrange::Grid2DArrangeParams::Create          ( const IDeserializer & deser )
 {
-    Grid2DArrangeParams params;
+    std::unique_ptr< Grid2DArrangeParams > params = std::unique_ptr< Grid2DArrangeParams >( new Grid2DArrangeParams );
 
-    params.Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 3 );
-    params.Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 3 );
+    params->Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 3 );
+    params->Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 3 );
 
-    params.Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec2( 1.0, 1.0 ) );
+    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec2( 1.0, 1.0 ) );
 
-    params.Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
     
     return params;
 }
@@ -191,26 +228,26 @@ void                            Arrange::Grid3DArrangeParams::Serialize       ( 
     ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
     ser.SetAttribute( "Interspaces", SerializationHelper::T2String( Interspaces ) );
 
-    ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
+    //ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
 
     ser.ExitChild();    // Grid3DArrangeParams
 }
 
 // ***********************
 //
-Arrange::Grid3DArrangeParams    Arrange::Grid3DArrangeParams::Create          ( const IDeserializer & deser )
+std::unique_ptr< Arrange::Grid3DArrangeParams >   Arrange::Grid3DArrangeParams::Create          ( const IDeserializer & deser )
 {
-    Grid3DArrangeParams params;
+    std::unique_ptr< Grid3DArrangeParams > params = std::unique_ptr< Grid3DArrangeParams >( new Grid3DArrangeParams );
 
-    params.Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 3 );
-    params.Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 3 );
-    params.Layers = SerializationHelper::String2T( deser.GetAttribute( "Layers" ), 3 );
+    params->Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 3 );
+    params->Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 3 );
+    params->Layers = SerializationHelper::String2T( deser.GetAttribute( "Layers" ), 3 );
 
-    params.Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec3( 1.0, 1.0, 1.0 ) );
+    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec3( 1.0, 1.0, 1.0 ) );
 
-    params.Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
 
     return params;
 }
@@ -228,25 +265,25 @@ void                            Arrange::SphereArrangeParams::Serialize       ( 
     ser.SetAttribute( "Radius", SerializationHelper::T2String( Radius ) );
     ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
 
-    ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
+    //ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
 
     ser.ExitChild();
 }
 
 // ***********************
 //
-Arrange::SphereArrangeParams    Arrange::SphereArrangeParams::Create          ( const IDeserializer & deser )
+std::unique_ptr< Arrange::SphereArrangeParams >   Arrange::SphereArrangeParams::Create          ( const IDeserializer & deser )
 {
-    SphereArrangeParams params;
+    std::unique_ptr< SphereArrangeParams > params = std::unique_ptr< SphereArrangeParams >( new SphereArrangeParams);
 
-    params.Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params.Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
-    params.Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
+    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
 
-    params.Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 4 );
-    params.Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 4 );
+    params->Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 4 );
+    params->Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 4 );
 
-    params.Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
 
     return params;
 }
@@ -264,41 +301,36 @@ bool                        Arrange::HandleEvent     ( IDeserializer & eventDese
 
     if( action == Arrange::ACTION::CIRCLE_ARRANGE )
     {
-        auto nodes = GetNodesToArrange();
-        auto params = CircleArrangeParams::Create( eventDeser );
-        CircleArrange( nodes, params );
+        m_lastArrangement = CircleArrangeParams::Create( eventDeser );
+        ArrangeChildren( ArrangmentType::Circle, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::LINE_ARRANGE )
     {
-        auto nodes = GetNodesToArrange();
-        auto params = LineArrangeParams::Create( eventDeser );
-        LineArrange( nodes, params );
+        m_lastArrangement = LineArrangeParams::Create( eventDeser );
+        ArrangeChildren( ArrangmentType::Line, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::SPHERE_ARRANGE )
     {
-        auto nodes = GetNodesToArrange();
-        auto params = SphereArrangeParams::Create( eventDeser );
-        SphereArrange( nodes, params );
+        m_lastArrangement = SphereArrangeParams::Create( eventDeser );
+        ArrangeChildren( ArrangmentType::Sphere, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::GRID2D_ARRANGE )
     {
-        auto nodes = GetNodesToArrange();
-        auto params = Grid2DArrangeParams::Create( eventDeser );
-        Grid2DArrange( nodes, params );
+        m_lastArrangement = Grid2DArrangeParams::Create( eventDeser );
+        ArrangeChildren( ArrangmentType::Grid2D, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::GRID3D_ARRANGE )
     {
-        auto nodes = GetNodesToArrange();
-        auto params = Grid3DArrangeParams::Create( eventDeser );
-        Grid3DArrange( nodes, params );
+        m_lastArrangement = Grid3DArrangeParams::Create( eventDeser );
+        ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
 
         return true;
     }
@@ -310,6 +342,34 @@ bool                        Arrange::HandleEvent     ( IDeserializer & eventDese
 // ========================================================================= //
 // Arrangment
 // ========================================================================= //
+
+// ***********************
+//
+void            Arrange::ArrangeChildren     ( ArrangmentType type, std::unique_ptr< ArrangeParamsBase > & params )
+{
+    auto nodes = GetNodesToArrange();
+
+    if( type == ArrangmentType::Circle )
+    {
+        CircleArrange( nodes, *static_cast< CircleArrangeParams* >( params.get() ) );
+    }
+    else if( type == ArrangmentType::Sphere )
+    {
+        SphereArrange( nodes, *static_cast< SphereArrangeParams* >( params.get() ) );
+    }
+    else if( type == ArrangmentType::Grid2D )
+    {
+        Grid2DArrange( nodes, *static_cast< Grid2DArrangeParams* >( params.get() ) );
+    }
+    else if( type == ArrangmentType::Grid3D )
+    {
+        Grid3DArrange( nodes, *static_cast< Grid3DArrangeParams* >( params.get() ) );
+    }
+    else if( type == ArrangmentType::Line )
+    {
+        LineArrange( nodes, *static_cast< LineArrangeParams* >( params.get() ) );
+    }
+}
 
 // ***********************
 //

@@ -3,6 +3,7 @@
 #include "CoreDEF.h"
 #include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
 #include "Engine/Types/Values/TypedValues.h"
+#include <memory>
 
 
 namespace bv
@@ -32,19 +33,34 @@ DEFINE_CONST_PTR_TYPE( Arrange );
 class Arrange : public model::NodeLogicBase, public std::enable_shared_from_this< Arrange >
 {
 public:
+    enum ArrangmentType
+    {
+        Circle,
+        Sphere,
+        Grid2D,
+        Grid3D,
+        Line,
 
-    struct CircleArrangeParams
+        Total
+    };
+
+    struct ArrangeParamsBase
+    {
+        virtual void                    Serialize       ( ISerializer & ser ) const = 0;
+    };
+
+    struct CircleArrangeParams : public ArrangeParamsBase
     {
         glm::vec3       Center;
         float           Radius;
         glm::vec3       Rotation;
 
     public:
-        void                            Serialize       ( ISerializer & ser ) const;
-        static CircleArrangeParams      Create          ( const IDeserializer & deser );
+        void                                            Serialize       ( ISerializer & ser ) const;
+        static std::unique_ptr< CircleArrangeParams >   Create          ( const IDeserializer & deser );
     };
 
-    struct SphereArrangeParams
+    struct SphereArrangeParams : public ArrangeParamsBase
     {
         glm::vec3       Center;
         float           Radius;
@@ -54,21 +70,21 @@ public:
         bool            Uniform;
 
     public:
-        void                            Serialize       ( ISerializer & ser ) const;
-        static SphereArrangeParams      Create          ( const IDeserializer & deser );
+        void                                            Serialize       ( ISerializer & ser ) const;
+        static std::unique_ptr< SphereArrangeParams >   Create          ( const IDeserializer & deser );
     };
 
-    struct LineArrangeParams
+    struct LineArrangeParams : public ArrangeParamsBase
     {
         glm::vec3       StartPoint;
         glm::vec3       EndPoint;
 
     public:
-        void                            Serialize       ( ISerializer & ser ) const;
-        static LineArrangeParams        Create          ( const IDeserializer & deser );
+        void                                        Serialize       ( ISerializer & ser ) const;
+        static std::unique_ptr< LineArrangeParams > Create          ( const IDeserializer & deser );
     };
 
-    struct Grid2DArrangeParams
+    struct Grid2DArrangeParams : public ArrangeParamsBase
     {
         int             Rows;
         int             Columns;
@@ -78,11 +94,11 @@ public:
         bool            Uniform;
 
     public:
-        void                            Serialize       ( ISerializer & ser ) const;
-        static Grid2DArrangeParams      Create          ( const IDeserializer & deser );
+        void                                            Serialize       ( ISerializer & ser ) const;
+        static std::unique_ptr< Grid2DArrangeParams >   Create          ( const IDeserializer & deser );
     };
 
-    struct Grid3DArrangeParams
+    struct Grid3DArrangeParams : public ArrangeParamsBase
     {
         int             Rows;
         int             Columns;
@@ -93,8 +109,8 @@ public:
         bool            Uniform;
 
     public:
-        void                            Serialize       ( ISerializer & ser ) const;
-        static Grid3DArrangeParams      Create          ( const IDeserializer & deser );
+        void                                            Serialize       ( ISerializer & ser ) const;
+        static std::unique_ptr< Grid3DArrangeParams >   Create          ( const IDeserializer & deser );
     };
 
 private:
@@ -112,27 +128,26 @@ private:
     struct PARAMETERS {};
 
 private:
-    bv::model::BasicNodePtr	            m_parentNode;
 
+    bv::model::BasicNodePtr	                m_parentNode;
+    std::unique_ptr< ArrangeParamsBase >    m_lastArrangement;
 
 public:
     explicit                            Arrange			( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
                                         ~Arrange		();
 
-    virtual void                        Initialize		()				override {}
-    virtual void                        Update			( TimeType t )	override;
-    virtual void                        Deinitialize	()				override {}
-
-
     virtual const std::string &         GetType         () const override;
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
+    virtual void                        Deserialize     ( const IDeserializer & ser );
     static ArrangePtr			        Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 
 private:
+
+    void            ArrangeChildren     ( ArrangmentType type, std::unique_ptr< ArrangeParamsBase > & params );
 
     void            CircleArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const CircleArrangeParams & params );
     void            LineArrange         ( std::vector< bv::model::BasicNodePtr > & nodes, const LineArrangeParams & params );
