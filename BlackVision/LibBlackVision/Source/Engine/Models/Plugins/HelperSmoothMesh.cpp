@@ -85,10 +85,10 @@ void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_T
 /**Tesselates given mesh one time.*/
 std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh, std::vector<INDEX_TYPE> sharpEdges )
 {
-	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
-	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.GetVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.GetIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.GetVerticies();
 	std::vector<INDEX_TYPE> newSharpEdges;
 
 	resultIndicies.reserve( 4 * indicies.size() );
@@ -145,10 +145,10 @@ std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, Inde
 Old version. New is more efficient, but can have problems with not closed meshes.*/
 void HelperSmoothMesh::oldMoveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
 {
-	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
-	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.GetVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.GetIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.GetVerticies();
 	
 	std::vector<INDEX_TYPE> vertexNeighbours;
 	std::vector<float> vertexWeights;
@@ -171,10 +171,10 @@ void HelperSmoothMesh::oldMoveVerticies( IndexedGeometry& mesh, std::vector<INDE
 /**Moves verticies of the new mesh to appropriate positions.*/
 void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
 {
-	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
-	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.GetVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.GetIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.GetVerticies();
 
 
 	std::vector<VertexData> vertexData;

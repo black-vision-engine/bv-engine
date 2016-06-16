@@ -35,7 +35,7 @@ protected:
 
 protected:
 
-    void                                        InitGeometry                ();
+    void                                        InitGeometry                ( PrimitiveType primitiveType = PrimitiveType::PT_TRIANGLE_STRIP );
     virtual bool                                NeedsTopologyUpdate         () = 0;
 
 public:

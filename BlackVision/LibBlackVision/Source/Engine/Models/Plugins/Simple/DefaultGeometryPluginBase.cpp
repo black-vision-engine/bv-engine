@@ -67,11 +67,11 @@ IPixelShaderChannelPtr              DefaultGeometryPluginBase::GetPixelShaderCha
 
 // *************************************
 // 
-void DefaultGeometryPluginBase::InitGeometry()
+void DefaultGeometryPluginBase::InitGeometry( PrimitiveType primitiveType )
 {
     if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryVertexAttributeChannel
     {
-        m_vaChannel = std::make_shared< DefaultGeometryVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+        m_vaChannel = std::make_shared< DefaultGeometryVertexAttributeChannel >( primitiveType );
     }
     else
     {

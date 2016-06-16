@@ -31,8 +31,8 @@ public:
 		return *this;
 	}
 
-	std::vector<INDEX_TYPE>& getIndicies() { return indicies; }
-	std::vector<glm::vec3>& getVerticies() { return verticies; }
+	std::vector< INDEX_TYPE > &       GetIndicies     () { return indicies; }
+	std::vector< glm::vec3 > &        GetVerticies    () { return verticies; }
 };
 
 

@@ -294,8 +294,8 @@ namespace Generator
 			HelperSmoothMesh smoother;
 			IndexedGeometryConverter converter;
 			IndexedGeometry cogWheel;
-			std::vector<glm::vec3>& verticies = cogWheel.getVerticies();
-			std::vector<INDEX_TYPE>& indicies = cogWheel.getIndicies();
+			std::vector<glm::vec3>& verticies = cogWheel.GetVerticies();
+			std::vector<INDEX_TYPE>& indicies = cogWheel.GetIndicies();
 
 			allVerticies = 2 * teethNumber * verticiesPerRingTooth;
 
@@ -321,7 +321,8 @@ namespace Generator
 			std::vector<INDEX_TYPE> sharpEdges;
 			
 			IndexedGeometry resultMesh = smoother.smooth( cogWheel, sharpEdges, tesselation );
-			converter.makeStrip( resultMesh, verts );
+			//converter.MakeStrip( resultMesh, verts );
+            converter.MakeTriangles( resultMesh, verts );
 
 			for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
 			{
@@ -356,7 +357,7 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 
 
     m_pluginParamValModel->Update();
-    InitGeometry();
+    InitGeometry( PrimitiveType::PT_TRIANGLES );
 }
 
 

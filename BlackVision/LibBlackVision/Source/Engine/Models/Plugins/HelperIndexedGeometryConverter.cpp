@@ -5,26 +5,29 @@
 namespace bv { namespace model {
 
 
-IndexedGeometryConverter::IndexedGeometryConverter(void)
-{
-}
+IndexedGeometryConverter::IndexedGeometryConverter()
+{}
 
 
-IndexedGeometryConverter::~IndexedGeometryConverter(void)
-{
-}
+IndexedGeometryConverter::~IndexedGeometryConverter()
+{}
+
+
+// ========================================================================= //
+// Stripifier
+// ========================================================================= //
 
 /**Function convert indexed triangle list to strips and ads verticies to verts param.
 Function doesn't take into account sharp edges. It will be in future versions.
 
 @param[in] mesh Mesh to convert.
 @param[out] verts Object to store result verticies.*/
-void IndexedGeometryConverter::makeStrip( IndexedGeometry& mesh, Float3AttributeChannelPtr verts)
+void IndexedGeometryConverter::MakeStrip( IndexedGeometry& mesh, Float3AttributeChannelPtr verts)
 {
 	usedRangeIndex = 0;
 
-	std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	std::vector<glm::vec3>& verticies = mesh.getVerticies();
+	std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	std::vector<glm::vec3>& verticies = mesh.GetVerticies();
 	if( indicies.size() < 3 )
 		return;
 
@@ -166,6 +169,24 @@ void IndexedGeometryConverter::moveRangeIndex()
 	usedRangeIndex = static_cast<unsigned int>( 3*i );
 }
 
+// ========================================================================= //
+// Trianglifier
+// ========================================================================= //
+
+// ***********************
+//
+void    IndexedGeometryConverter::MakeTriangles           ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts )
+{
+    auto & indicies = mesh.GetIndicies();
+    auto & verticies = mesh.GetVerticies();
+
+    for( auto index : indicies )
+    {
+        verts->AddAttribute( verticies[ index ] );
+    }
 }
 
-}
+
+
+}   // model
+}   // bv

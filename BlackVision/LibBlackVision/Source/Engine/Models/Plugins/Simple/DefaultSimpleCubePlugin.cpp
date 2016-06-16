@@ -155,8 +155,8 @@ namespace Generator
 				IndexedGeometryConverter converter;
 				IndexedGeometry cube;
 
-				std::vector<glm::vec3>& verticies = cube.getVerticies();
-				std::vector<INDEX_TYPE>& indicies = cube.getIndicies();
+				std::vector<glm::vec3>& verticies = cube.GetVerticies();
+				std::vector<INDEX_TYPE>& indicies = cube.GetIndicies();
 
 				verticies.reserve( 8 );
 				indicies.reserve( 36 );
@@ -289,7 +289,7 @@ namespace Generator
 				const unsigned tesselation = 3;
 
 				IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
-				converter.makeStrip( resultMesh, verts );
+				converter.MakeStrip( resultMesh, verts );
 
 				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
 				{
@@ -334,8 +334,8 @@ namespace Generator
 			IndexedGeometryConverter converter;
 			IndexedGeometry cube;
 
-			auto verticies = cube.getVerticies();
-			auto indicies = cube.getIndicies();
+			auto verticies = cube.GetVerticies();
+			auto indicies = cube.GetIndicies();
 
 			verticies.reserve( 8 );
 			indicies.reserve( 36 );
@@ -366,7 +366,7 @@ namespace Generator
 			const unsigned tesselation = 1;
 
 			IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
-			converter.makeStrip( resultMesh, verts );
+			converter.MakeStrip( resultMesh, verts );
 
             //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
