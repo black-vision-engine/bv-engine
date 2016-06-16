@@ -279,7 +279,7 @@ namespace CylinderGenerator
 		{
 			int max_loop;
 			int i;
-			computeMaxLoopInitI( max_loop, i, true );
+			computeMaxLoopInitI( max_loop, i, false );
 
 			for( int j = 0; j <= max_loop; j++ )
             {
