@@ -143,7 +143,7 @@ namespace Generator
 			
 		}
 
-		void connectVerticiesBetween( unsigned int begin, unsigned int offset, std::vector<INDEX_TYPE>& indicies )
+		void ConnectVerticiesBetween( unsigned int begin, unsigned int offset, std::vector<INDEX_TYPE>& indicies )
 		{
 			for( unsigned int j = begin; j < begin + offset - 1; ++j )
 			{
@@ -157,64 +157,92 @@ namespace Generator
 			}
 		}
 
-		void connectVerticiesBetween2( unsigned int begin1, unsigned int begin2, unsigned int offset, std::vector<INDEX_TYPE>& indicies )
+		void ConnectSideToothVerticies( unsigned int begin1, unsigned int begin2, unsigned int offset, std::vector<INDEX_TYPE>& indicies, bool inverseOrder )
 		{
 			for( unsigned int j = 0; j < offset - 1; ++j )
 			{
-				indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j ) );
-				indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
-				indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
+                if( inverseOrder )
+                {
+			        indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j ) );
+                    indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
+                    indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
 
-				indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
-				indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
-				indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j + 1 ) ) % allVerticies );
+			        indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
+			        indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j + 1 ) ) % allVerticies );
+                    indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
+                }
+                else
+                {
+			        indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j ) );
+                    indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
+			        indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
+
+			        indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
+			        indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
+			        indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j + 1 ) ) % allVerticies );
+                }
 			}
 		}
 
-		void connectTopToothSurface( int index1, int index2, std::vector<INDEX_TYPE>& indicies )
+		void ConnectTopToothSurface( int index1, int index2, std::vector<INDEX_TYPE>& indicies )
 		{
 			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 ) % allVerticies ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 + verticiesPerRingTooth ) % allVerticies ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 ) % allVerticies ) );
 
 			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 + verticiesPerRingTooth ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 + verticiesPerRingTooth ) % allVerticies ) );
+            indicies.push_back( static_cast<INDEX_TYPE>( ( index2 ) % allVerticies ) );
+		}
+
+		void ConnectBottomToothSurface( int index1, int index2, std::vector<INDEX_TYPE>& indicies )
+		{
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 ) % allVerticies ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 ) % allVerticies ) );
+            indicies.push_back( static_cast<INDEX_TYPE>( ( index1 + verticiesPerRingTooth ) % allVerticies ) );
+
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 + verticiesPerRingTooth ) % allVerticies ) );
+            indicies.push_back( static_cast<INDEX_TYPE>( ( index2 ) % allVerticies ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 + verticiesPerRingTooth ) % allVerticies ) );
 		}
 
-		void closeRing( unsigned int begin, std::vector<INDEX_TYPE>& indicies )
+		void CloseRing( unsigned int begin, std::vector<INDEX_TYPE>& indicies )
 		{
 			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRing - 1 ) % allVerticies ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRingTooth + verticiesPerRing - 1 ) % allVerticies ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( begin ) );
 
 			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRingTooth + verticiesPerRing - 1 ) % allVerticies ) );
-			indicies.push_back( static_cast<INDEX_TYPE>( begin ) );
 			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRingTooth ) % allVerticies ) );
+            indicies.push_back( static_cast<INDEX_TYPE>( begin ) );
 		}
 
-		void connectToothRingVerticies( int i, std::vector<INDEX_TYPE>& indicies )
+		void ConnectToothRingVerticies( int i, std::vector<INDEX_TYPE>& indicies )
 		{
-			indicies;
-			i;
 			unsigned int index = i * verticiesPerRingTooth;
 			const int verticiesWithoutTooth = 5;
 
-			connectVerticiesBetween( index, verticiesWithoutTooth, indicies );
+			ConnectVerticiesBetween( index, verticiesWithoutTooth, indicies );
 
 		// We must add tooth
-			connectVerticiesBetween2( index + verticiesWithoutTooth - 1, index + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
-			connectVerticiesBetween2( index + verticiesPerRingTooth + verticiesWithoutTooth - 1, index + verticiesPerRingTooth + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
-			connectVerticiesBetween2( index + verticiesPerRing,  index + verticiesPerRingTooth + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
-			// Top surface of the tooth.
-			connectTopToothSurface( index + verticiesWithoutTooth - 1, index + verticiesPerRing, indicies );
-			connectTopToothSurface( index + 7, index + verticiesPerRingTooth - 1, indicies );
+            // Left side
+			ConnectSideToothVerticies( index + verticiesWithoutTooth - 1, index + verticiesPerRing, verticiesWithoutTooth - 1, indicies, true );
+            // Right side
+			ConnectSideToothVerticies( index + verticiesPerRingTooth + verticiesWithoutTooth - 1, index + verticiesPerRingTooth + verticiesPerRing, verticiesWithoutTooth - 1, indicies, false );
+            // Front side
+            ConnectVerticiesBetween( index + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
+			//ConnectSideToothVerticies( index + verticiesPerRing, index + verticiesPerRingTooth + verticiesPerRing, verticiesWithoutTooth - 1, indicies, true );
+			
+            // Top and bottom surface of the tooth.
+			ConnectTopToothSurface( index + verticiesWithoutTooth - 1, index + verticiesPerRing, indicies );
+			ConnectBottomToothSurface( index + 7, index + verticiesPerRingTooth - 1, indicies );
 
-			connectVerticiesBetween( index + 7, verticiesWithoutTooth, indicies );
-			closeRing( index, indicies );
+        // Close rest of tooth
+			ConnectVerticiesBetween( index + 7, verticiesWithoutTooth, indicies );
+			CloseRing( index, indicies );
 		}
 
-		void generateRing( std::vector<glm::vec3>& verticies, double angle, double uniformAngle, double topToothAngle )
+		void GenerateRing( std::vector<glm::vec3>& verticies, double angle, double uniformAngle, double topToothAngle )
 		{
 			glm::vec3 newVertex;
 			verticies.reserve( verticiesPerRing );
@@ -225,9 +253,6 @@ namespace Generator
 			double cosUniformAngle = cos( uniformAngle );
 			double sinUniformAngle = sin( uniformAngle );
 			
-			sinUniformAngle;
-			cosUniformAngle;
-			uniformAngle;
 
 			newVertex = glm::vec3( cosUniformAngle * innerRadius, height - bevel, sinUniformAngle * innerRadius );
 			verticies.push_back( newVertex + center_translate );
@@ -276,13 +301,13 @@ namespace Generator
 				{
 					// We can make whole ring because there's no tooth.
 					unsigned int index = i * verticiesPerRingTooth;
-					connectVerticiesBetween( index, verticiesPerRing, indicies );
+					ConnectVerticiesBetween( index, verticiesPerRing, indicies );
 				
 					// Close the ring.
-					closeRing( index, indicies );
+					CloseRing( index, indicies );
 				}
 				else
-					connectToothRingVerticies( i, indicies );
+					ConnectToothRingVerticies( i, indicies );
 			}
 		}
 
@@ -311,8 +336,8 @@ namespace Generator
 				double uniformAngle2 = double( (i << 1) + 1) * PI / teethNumber;
 				double toothCenterAngle = ( angle1 + angle2 ) / 2;
 
-				generateRing( verticies, angle1, uniformAngle1, toothCenterAngle - anglePerTopTooth / 2 );
-				generateRing( verticies, angle2, uniformAngle2, toothCenterAngle + anglePerTopTooth / 2 );
+				GenerateRing( verticies, angle1, uniformAngle1, toothCenterAngle - anglePerTopTooth / 2 );
+				GenerateRing( verticies, angle2, uniformAngle2, toothCenterAngle + anglePerTopTooth / 2 );
 			}
 
 			ConnectVerticiesIntoTriangles( indicies );
@@ -322,9 +347,9 @@ namespace Generator
 			
 			IndexedGeometry resultMesh = smoother.smooth( cogWheel, sharpEdges, tesselation );
             converter.MakeTriangles( resultMesh, verts );
-            //converter.MakeStrip( resultMesh, verts );
 
             GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangles( resultMesh, normals );
+
 
 			for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
 			{
@@ -333,8 +358,6 @@ namespace Generator
 				uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
 												vert.y*0.5 + 0.5 ) ); // FIXME: scaling
 			}
-
-            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }
