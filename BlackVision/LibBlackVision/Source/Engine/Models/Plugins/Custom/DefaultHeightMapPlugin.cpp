@@ -11,8 +11,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 
 #include "Assets/DefaultAssets.h"
 

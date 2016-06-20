@@ -95,14 +95,8 @@
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp">
       <Filter>VideoInput</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp">
-      <Filter>VideoInput</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
-    <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
-      <Filter>VideoInput</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
       <Filter>hack_videoinput</Filter>
     </ClCompile>
@@ -242,20 +236,11 @@
     <ClInclude Include="..\..\..\Source\PieChartNode.h">
       <Filter>PieCharts</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h">
-      <Filter>VideoInput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h">
-      <Filter>VideoInput</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
-    <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
-      <Filter>VideoInput</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
       <Filter>hack_videoinput</Filter>
     </ClInclude>

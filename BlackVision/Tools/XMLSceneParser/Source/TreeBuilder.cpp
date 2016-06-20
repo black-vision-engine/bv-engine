@@ -8,9 +8,9 @@
 // default plugins 
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultColorPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultAnimationPlugin.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
@@ -24,10 +24,10 @@
 
 
 //video input
-#include "../../../../Applications/BlackVision/Source/VideoInput/DefaultVideoInputResourceDescr.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "../../../../Applications/BlackVision/Source/hack_videoinput/TestVideoInput.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/DefaultCubePlugin.h"
 
 // Log
 #include "UseLoggerXMLModule.h"

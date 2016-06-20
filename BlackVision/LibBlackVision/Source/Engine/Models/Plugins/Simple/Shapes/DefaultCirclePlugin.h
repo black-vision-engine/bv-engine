@@ -1,4 +1,4 @@
-#include "DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
 namespace bv { namespace model {
 

@@ -8,10 +8,10 @@
 #include "Widgets/NodeLogicHelper.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultMaterialPlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/DefaultCylinderPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultColorPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultGradientPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultMaterialPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
 #include "Serialization/BV/BVDeserializeContext.h"

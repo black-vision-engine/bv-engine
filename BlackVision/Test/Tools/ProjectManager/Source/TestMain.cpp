@@ -8,9 +8,9 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Graphics/Renderers/Renderer.h"

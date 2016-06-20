@@ -2,8 +2,8 @@
 
 #include "DefaultSimpleCubePlugin.h"
 #include "Mathematics/Defines.h"
-#include "..\HelperIndexedGeometryConverter.h"
-#include "..\HelperSmoothMesh.h"
+#include "Engine/Models/Plugins/HelperIndexedGeometryConverter.h"
+#include "Engine/Models/Plugins/HelperSmoothMesh.h"
 
 namespace bv { namespace model { namespace DefaultSimpleCube {
 

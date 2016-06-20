@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DefaultVideoInputResourceDescr.h"
 
 namespace bv { namespace model {

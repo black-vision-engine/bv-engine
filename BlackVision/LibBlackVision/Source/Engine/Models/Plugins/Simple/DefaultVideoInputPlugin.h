@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 //#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "CompositeVideoInputResourceDescr.h"
 

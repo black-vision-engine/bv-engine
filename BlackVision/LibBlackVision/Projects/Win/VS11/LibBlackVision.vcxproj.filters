@@ -301,6 +301,15 @@
     <Filter Include="Engine\Models\EditorVariables\ParametersDescriptors">
       <UniqueIdentifier>{2a31797a-f6db-4c21-b0dd-9af1d02cd771}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\Shapes">
+      <UniqueIdentifier>{8b2b74c7-c2c1-4d30-bf32-782e5c374df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\ShaderPlugins">
+      <UniqueIdentifier>{35624e73-6ef9-448c-8bdd-6a7d3ccf1605}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\VideoInput">
+      <UniqueIdentifier>{96e84485-a1b2-485c-924f-be608057a1fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -669,33 +678,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
@@ -837,23 +819,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
@@ -882,41 +849,14 @@
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp">
       <Filter>Assets\Cache</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTorusPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpringPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSimpleCubePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp">
       <Filter>Engine\Models</Filter>
@@ -935,9 +875,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.cpp">
       <Filter>Engine\Models\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
@@ -1206,9 +1143,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClCompile>
@@ -1429,9 +1363,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
@@ -1465,9 +1396,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperVertexShaderChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultWallPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\EventFactory.cpp">
       <Filter>Engine\Events</Filter>
     </ClCompile>
@@ -1488,9 +1416,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp">
       <Filter>Engine\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAsset.cpp">
       <Filter>Assets\Mesh</Filter>
@@ -1528,15 +1453,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.cpp">
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNormalMapPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultParallaxMapPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp">
       <Filter>Engine\Models\Cameras</Filter>
     </ClCompile>
@@ -1561,9 +1477,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvReflectivityMapPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
@@ -1576,8 +1489,113 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultBlendTexturePlugin.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCogWheelPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultConePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCubePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCylinderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultEllipsePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultGeospherePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultRectPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultRoundedRectPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultSimpleCubePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultSpherePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultSpringPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultTorusPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultTrianglePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultWallPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAnimationPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultBlendTexturePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultColorPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultEnvironmentTexturePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultEnvReflectivityMapPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultFadePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultGradientPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultMaterialPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultNoPerspectiveTexturePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultNormalMapPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultParallaxMapPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultTexturePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2076,33 +2094,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRectPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.h">
       <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
@@ -2256,29 +2247,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.h">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
@@ -2331,38 +2304,11 @@
     <ClInclude Include="..\..\..\Source\Assets\Assets.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.h">
       <Filter>Assets\Cache</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTorusPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSimpleCubePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpringPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h">
       <Filter>Engine\Models\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h">
       <Filter>Engine\Models\Plugins</Filter>
@@ -2384,9 +2330,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h">
       <Filter>Engine\Models</Filter>
@@ -3480,9 +3423,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
@@ -3683,9 +3623,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\PresetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMaterialPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelLight.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
@@ -3722,9 +3659,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperVertexShaderChannel.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultWallPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventFactory.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
@@ -3751,9 +3685,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h">
       <Filter>Assets\Mesh</Filter>
@@ -3791,15 +3722,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNormalMapPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultParallaxMapPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvironmentTexturePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\MeshAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
@@ -3827,9 +3749,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEnvReflectivityMapPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -3845,8 +3764,119 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
       <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultBlendTexturePlugin.h">
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCogWheelPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultConePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCubePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCylinderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultEllipsePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultGeospherePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultRectPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultRoundedRectPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultSimpleCubePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultSpherePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultSpringPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultTorusPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultTrianglePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultWallPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAnimationPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultBlendTexturePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultColorPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultEnvironmentTexturePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultEnvReflectivityMapPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultFadePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultGradientPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultMaterialPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultNoPerspectiveTexturePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultNormalMapPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultParallaxMapPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultTexturePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

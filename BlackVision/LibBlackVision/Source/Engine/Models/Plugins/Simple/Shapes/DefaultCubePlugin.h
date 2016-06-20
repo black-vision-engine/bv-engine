@@ -1,8 +1,10 @@
-#include "DefaultGeometryPluginBase.h"
+#pragma once
+
+#include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
 namespace bv { namespace model {
 
-namespace DefaultTorus {
+namespace DefaultCube {
 
 class PluginDesc : public DefaultGeometryPluginDescBase
 {
@@ -16,11 +18,9 @@ public:
 };
 
 struct PN {
-    static const std::string TESSELATION;
-    static const std::string RADIUS;
-    static const std::string RADIUSCROSSSECTION;
-    static const std::string OPENANGLE;
-    static const std::string OPENANGLEMODE;
+    static const std::string TESSELATION; // int tesselation
+    static const std::string DIMENSIONS; // VecParam3 Size[x,y,z]
+    static const std::string BEVEL; // VecParam1 Bevel 
     static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
@@ -30,39 +30,32 @@ struct PN {
 class Plugin : public DefaultGeometryPluginBase
 {
 public:
-	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
-	enum WeightCenter : int { MAX, MIN, CENTER };
-	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, DOUBLETEXTURE };
+    enum WeightCenter : int { MAX, MIN, CENTER };
+	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
 
-
-    ValueIntPtr                                 m_tesselation;
-    ValueFloatPtr                               m_radius;
-    ValueFloatPtr                               m_radiusCrossSection;
-    ValueFloatPtr                               m_openAngle;
-	std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
+    ValueIntPtr										    m_tesselation;
+    ValueFloatPtr										m_bevel;
+    ValueVec3Ptr										m_dimensions;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
 	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
-
 private:
-    virtual std::vector<IGeometryGeneratorPtr>  GetGenerators() override;
+    virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
     virtual bool                                NeedsTopologyUpdate() override;
 public:
     Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
-
 }
 
-// Nie patrzeæ w dó³!!! Brzydkie !!!!!!
 
 template<>
-inline bool SetParameter< DefaultTorus::Plugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::OpenAngleMode & val )
+inline bool SetParameter< DefaultCube::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCube::Plugin::WeightCenter & val )
 {
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::OpenAngleMode> ParamType;
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultCube::Plugin::WeightCenter> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
@@ -77,29 +70,10 @@ inline bool SetParameter< DefaultTorus::Plugin::OpenAngleMode >( IParameterPtr p
 }
 
 template<>
-inline bool SetParameter< DefaultTorus::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::WeightCenter & val )
+inline bool SetParameter< DefaultCube::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultCube::Plugin::MappingType & val )
 {
     //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::WeightCenter> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-
-template<>
-inline bool SetParameter< DefaultTorus::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::MappingType & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::MappingType> ParamType;
+    typedef ParamEnum<DefaultCube::Plugin::MappingType> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 

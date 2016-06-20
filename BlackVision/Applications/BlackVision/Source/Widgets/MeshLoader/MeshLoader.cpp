@@ -9,10 +9,10 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultMaterialPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultNormalMapPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultParallaxMapPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultMaterialPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultNormalMapPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultParallaxMapPlugin.h"
 
 #include "Engine/Models/BVProjectEditor.h"
 

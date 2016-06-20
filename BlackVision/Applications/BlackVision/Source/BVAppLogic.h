@@ -22,7 +22,7 @@
 #include "structure/AssetManager.h"
 
 //hackvideoinput
-#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "hack_videoinput/TestVideoInput.h"
 
 

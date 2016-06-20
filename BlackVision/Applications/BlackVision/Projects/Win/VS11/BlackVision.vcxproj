@@ -272,7 +272,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
@@ -314,7 +313,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp" />
@@ -334,7 +332,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\bvApp.h" />
     <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
@@ -379,9 +376,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />

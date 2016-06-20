@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"

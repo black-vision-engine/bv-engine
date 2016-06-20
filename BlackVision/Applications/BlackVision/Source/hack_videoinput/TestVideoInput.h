@@ -1,5 +1,6 @@
 #pragma once
-#include "../VideoInput/IVideoInput.h"
+
+#include "Engine/Models/Plugins/Simple/VideoInput/IVideoInput.h"
 
 namespace bv {
 
