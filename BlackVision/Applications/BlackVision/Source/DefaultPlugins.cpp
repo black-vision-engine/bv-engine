@@ -38,6 +38,7 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultEnvironmentTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultEnvReflectivityMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultBlendTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultFadePlugin.h"
 
 
 namespace bv { namespace model {
@@ -84,6 +85,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultEnvironmentTexturePluginDesc() );
     descriptors.push_back( new DefaultEnvReflectivityMapPluginDesc() );
     descriptors.push_back( new DefaultBlendTexturePluginDesc() );
+    descriptors.push_back( new DefaultFadePluginDesc() );
 
     for( auto descr : descriptors )
     {
