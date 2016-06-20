@@ -13,10 +13,10 @@
 namespace bv
 {
 
-class VideoStreamAssetDesc;
-DEFINE_CONST_PTR_TYPE( VideoStreamAssetDesc )
+class AVAssetDesc;
+DEFINE_CONST_PTR_TYPE( AVAssetDesc )
 
-class VideoStreamAssetDesc : public AssetDesc, public std::enable_shared_from_this< VideoStreamAssetDesc >
+class AVAssetDesc : public AssetDesc, public std::enable_shared_from_this< AVAssetDesc >
 {
 private:
 
@@ -38,8 +38,8 @@ protected:
 	virtual VoidConstPtr						QueryThis					() const override;
 
 public:
-	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat );
-	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
+	explicit									AVAssetDesc		( const std::string & streamPath, TextureFormat textureFormat );
+	explicit									AVAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
 
     virtual void								Serialize					( ISerializer& sob ) const;
@@ -62,17 +62,17 @@ public:
 
 	TextureFormat								GetTextureFormat			() const;
 	
-	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat );
-	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat  );
+	static AVAssetDescConstPtr			        Create						( const std::string & streamPath, TextureFormat textureFormat );
+	static AVAssetDescConstPtr			        Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat  );
 
 };
 
 // ***********************
 /// Returns AssetDescriptor UID for Asset in template parameter.
 /// @note AssetDescriptor uid and Asset uid are different strings.
-template<> inline const std::string& GetAssetDescUID<VideoStreamAsset>()
+template<> inline const std::string& GetAssetDescUID<AVAsset>()
 {
-    return VideoStreamAssetDesc::UID();
+    return AVAssetDesc::UID();
 }
 
 

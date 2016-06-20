@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "VideoStreamAssetDescriptor.h"
+#include "AVAssetDescriptor.h"
 #include <cassert>			//@todo delete after implementing all functions
 
 #include "Assets/Texture/TextureUtils.h"
@@ -9,15 +9,15 @@
 // There is no way to convert it to ProjectManager path.
 #include "ProjectManager.h"
 
-namespace bv
-{
 
-const std::string		VideoStreamAssetDesc::uid = "VIDEO_STREAM_ASSET_DESC";
+namespace bv {
+
+const std::string		AVAssetDesc::uid = "AVASSET_DESC";
 
 
 // ***********************
 //
-void                VideoStreamAssetDesc::Serialize       ( ISerializer& ser ) const
+void                    AVAssetDesc::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "asset" );
     ser.SetAttribute( "type", UID() );
@@ -37,7 +37,7 @@ ser.ExitChild();
 
 // ***********************
 //
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( const IDeserializer& deser )
+ISerializableConstPtr AVAssetDesc::Create          ( const IDeserializer& deser )
 {
 	auto path = deser.GetAttribute( "path" );
 	
@@ -49,41 +49,41 @@ ISerializableConstPtr VideoStreamAssetDesc::Create          ( const IDeserialize
 
 // ***********************
 //
-const std::string &		VideoStreamAssetDesc::GetUID		() const
+const std::string &		AVAssetDesc::GetUID		() const
 {
-	return VideoStreamAssetDesc::UID();
+	return AVAssetDesc::UID();
 }
 
 // ***********************
-const std::string &		VideoStreamAssetDesc::UID			()
+const std::string &		AVAssetDesc::UID			()
 {
-	return VideoStreamAssetDesc::uid;
+	return AVAssetDesc::uid;
 }
 
 // ***********************
 //
-VoidConstPtr			VideoStreamAssetDesc::QueryThis		() const
+VoidConstPtr			AVAssetDesc::QueryThis		() const
 {
 	return shared_from_this();
 }
 
 // ***********************
 //
-bool					VideoStreamAssetDesc::IsCacheable	() const
+bool					AVAssetDesc::IsCacheable	() const
 {
 	return false;
 }
 
 // *******************************
 //
-std::string				VideoStreamAssetDesc::GetKey      () const
+std::string				AVAssetDesc::GetKey      () const
 {
     return m_streamPath;
 }
 
 // ***********************
 //
-SizeType                VideoStreamAssetDesc::EstimateMemoryUsage () const
+SizeType                AVAssetDesc::EstimateMemoryUsage () const
 {
     UInt32 pixelSize = TextureUtils::ToBPP( m_textureFormat ) / 8;
 
@@ -93,21 +93,21 @@ SizeType                VideoStreamAssetDesc::EstimateMemoryUsage () const
 
 // ***********************
 //
-VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat )
+AVAssetDescConstPtr AVAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat )
 {
-	return std::make_shared< VideoStreamAssetDesc >( streamPath, textureFormat );
+	return std::make_shared< AVAssetDesc >( streamPath, textureFormat );
 }
 
 // ***********************
 //
-VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
+AVAssetDescConstPtr AVAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
 {
-	return std::make_shared< VideoStreamAssetDesc >( streamPath, textureFormat, width, height, frameRate, videoFormat );
+	return std::make_shared< AVAssetDesc >( streamPath, textureFormat, width, height, frameRate, videoFormat );
 }
 
 // ***********************
 //
-VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath, TextureFormat textureFormat )
+AVAssetDesc::AVAssetDesc					( const std::string & streamPath, TextureFormat textureFormat )
 	: m_streamPath( streamPath )
 	, m_width( 0 )
 	, m_height( 0 )
@@ -118,7 +118,7 @@ VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath,
 
 // ***********************
 //
-VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
+AVAssetDesc::AVAssetDesc					( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
 	: m_streamPath( streamPath )
 	, m_width( width )
 	, m_height( height )
@@ -130,42 +130,42 @@ VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath,
 
 // ***********************
 //
-const std::string &		VideoStreamAssetDesc::GetStreamPath	() const
+const std::string &		AVAssetDesc::GetStreamPath	() const
 {
 	return m_streamPath;
 }
 
 // ***********************
 //
-UInt32					VideoStreamAssetDesc::GetWidth		() const
+UInt32					AVAssetDesc::GetWidth		() const
 {
 	return m_width;
 }
 
 // ***********************
 //
-UInt32					VideoStreamAssetDesc::GetHeight		() const
+UInt32					AVAssetDesc::GetHeight		() const
 {
 	return m_height;
 }
 
 // ***********************
 //
-Float64					VideoStreamAssetDesc::GetFrameRate	() const
+Float64					AVAssetDesc::GetFrameRate	() const
 {
 	return m_frameRate;
 }
 
 // ***********************
 //
-TextureFormat			VideoStreamAssetDesc::GetTextureFormat	() const
+TextureFormat			AVAssetDesc::GetTextureFormat	() const
 {
 	return m_textureFormat;
 }
 
 // ***********************
 //
-VideoPixelFormat		VideoStreamAssetDesc::GetVideoFormat	() const
+VideoPixelFormat		AVAssetDesc::GetVideoFormat	() const
 {
 	return m_videoFormat;
 }

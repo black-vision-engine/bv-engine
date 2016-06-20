@@ -22,10 +22,9 @@ AudioEntity::~AudioEntity           ()
 
 // ***********************
 //
-void                        AudioEntity::PushData       ( MemoryChunkConstPtr data )
+bool                        AudioEntity::IsEmpty        () const
 {
-    auto buffer = audio::AudioBuffer::Create( data->Get(), data->Size(), m_frequency, m_format );
-    m_audioData.Push( buffer );
+    return m_audioData.IsEmpty();
 }
 
 // ***********************
@@ -38,9 +37,9 @@ void                        AudioEntity::PushData       ( const std::vector< Mem
 
 // ***********************
 //
-std::vector< audio::AudioBufferConstPtr >  AudioEntity::PopData        ()
+AudioEntity::AudioBufferVec AudioEntity::PopData        ()
 {
-    std::vector< audio::AudioBufferConstPtr > buffers;
+    AudioBufferVec buffers;
 
     while( !m_audioData.IsEmpty() )
     {

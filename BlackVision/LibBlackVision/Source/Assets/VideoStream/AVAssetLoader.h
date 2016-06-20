@@ -1,16 +1,16 @@
 #pragma once
 
-
 #include "Assets/AssetLoader.h"
-#include "Assets/VideoStream/VideoStreamAsset.h"
-#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
+#include "Assets/VideoStream/AVAsset.h"
+#include "Assets/VideoStream/AVAssetDescriptor.h"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
+
 
 namespace bv {
 
 
-class VideoStreamLoader : public AssetLoader
+class AVAssetLoader : public AssetLoader
 {
 public:
 
@@ -19,12 +19,13 @@ public:
 
     ThumbnailConstPtr   LoadThumbnail       ( const AssetDescConstPtr & desc ) const override;
 
-    virtual ~VideoStreamLoader(){}
+    virtual ~AVAssetLoader(){}
 
 private:
-    ThumbnailConstPtr   LoadThumbnail       ( const VideoStreamAssetDescConstPtr & desc );
-};
 
+    ThumbnailConstPtr   LoadThumbnail       ( const AVAssetDescConstPtr & desc );
+
+};
 
 } // bv
 

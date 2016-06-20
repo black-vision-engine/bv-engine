@@ -12,7 +12,7 @@ const AVSampleFormat        FFmpegAudioStreamDecoder::DEFAULT_FORMAT  = AV_SAMPL
 
 // *******************************
 //
-FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
+FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
 	: m_swrCtx( nullptr )
     , m_maxQueueSize( maxQueueSize )
     , m_frameSize( 0 )

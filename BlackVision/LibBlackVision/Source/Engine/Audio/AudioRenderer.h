@@ -38,7 +38,6 @@ public:
     void	            Terminate			();
 
     void                Play                ( AudioEntity * audio );
-    bool                BufferData          ( PdrSource * source, PdrAudioBuffersQueue * queue, AudioEntity * audio );
 
 };
 

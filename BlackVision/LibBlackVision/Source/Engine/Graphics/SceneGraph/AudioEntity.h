@@ -10,6 +10,9 @@ namespace bv {
 
 class AudioEntity
 {
+private:
+    typedef std::vector< audio::AudioBufferConstPtr > AudioBufferVec;
+
 protected:
 
     Queue< audio::AudioBufferConstPtr > m_audioData;
@@ -24,10 +27,10 @@ public:
 
 public:
 
-    void                                        PushData        ( MemoryChunkConstPtr data );
-    void                                        PushData        ( const std::vector< MemoryChunkConstPtr > & data );
+    bool                        IsEmpty         () const;
 
-    std::vector< audio::AudioBufferConstPtr >   PopData         ();
+    void                        PushData        ( const std::vector< MemoryChunkConstPtr > & data );
+    AudioBufferVec              PopData         ();
 
 };
 

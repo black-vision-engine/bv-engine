@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/IFFmpegStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
-#include "Assets/VideoStream/VideoStreamAsset.h"
+#include "Assets/VideoStream/AVAsset.h"
 
 
 namespace bv {
 
 class FFmpegDemuxer;
 
-class FFmpegAudioStreamDecoder : public IFFmpegStreamDecoder
+class FFmpegAudioStreamDecoder : public FFmpegStreamDecoder
 {
 private:
 
@@ -31,7 +31,7 @@ private:
 
 public:
 
-							FFmpegAudioStreamDecoder	( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
+							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
 							~FFmpegAudioStreamDecoder	();
 
     Int32                   GetSampleRate               () const;

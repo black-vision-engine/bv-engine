@@ -2,26 +2,28 @@
 
 #include <mutex>
 
-#include "Assets/VideoStream/VideoStreamAsset.h"
-#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
+#include "Assets/VideoStream/AVAsset.h"
+#include "Assets/VideoStream/AVAssetDescriptor.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/VideoDecoderThread.h"
+
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxerThread.h"
+
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoStreamDecoderThread.h"
+
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoderThread.h"
 
 #include "DataTypes/QueueConcurrent.h"
-
-#include "FFmpegDemuxer.h"
-#include "FFmpegVideoStreamDecoder.h"
-#include "FFmpegAudioStreamDecoder.h"
 
 
 namespace bv {
 
 
-class FFmpegVideoDecoder : public IVideoDecoder
+class FFmpegAVDecoder : public IAVDecoder
 {
 private:
 
@@ -46,8 +48,8 @@ private:
 
 public:
 
-								FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset );
-	virtual						~FFmpegVideoDecoder		();
+								FFmpegAVDecoder		    ( AVAssetConstPtr asset );
+	virtual						~FFmpegAVDecoder		();
 
 	virtual void				Play					() override;
 	virtual void				Pause					() override;

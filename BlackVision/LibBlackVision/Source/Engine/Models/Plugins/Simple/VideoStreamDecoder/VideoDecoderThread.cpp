@@ -13,7 +13,7 @@ namespace bv {
 
 // *******************************
 //
-VideoDecoderThread::VideoDecoderThread				( IVideoDecoder * decoder )
+VideoDecoderThread::VideoDecoderThread				( IAVDecoder * decoder )
 	: m_decoder( decoder )
 	, m_stopped( false )
     , m_running( false )

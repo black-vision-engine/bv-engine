@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "FFmpegVideoDecoder.h"
+#include "FFmpegAVDecoder.h"
 
 #include "FFmpegUtils.h"
 
@@ -10,7 +10,7 @@ namespace bv {
 
 // *********************************
 //
-FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset )
+FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
     : m_videoDecoder( nullptr )
     , m_audioDecoder( nullptr )
     , m_videoDecoderThread( nullptr )
@@ -59,7 +59,7 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset )
 
 // *********************************
 //
-FFmpegVideoDecoder::~FFmpegVideoDecoder		()
+FFmpegAVDecoder::~FFmpegAVDecoder		()
 {
     assert( m_decoderThread );
 	
@@ -97,7 +97,7 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 
 // *********************************
 //
-void						FFmpegVideoDecoder::Play				()
+void						FFmpegAVDecoder::Play				()
 {
     assert( m_decoderThread );
 
@@ -106,7 +106,7 @@ void						FFmpegVideoDecoder::Play				()
 
 // *********************************
 //
-void						FFmpegVideoDecoder::Pause				()
+void						FFmpegAVDecoder::Pause				()
 {
     assert( m_decoderThread );
 	
@@ -115,7 +115,7 @@ void						FFmpegVideoDecoder::Pause				()
 
 // *********************************
 //
-void						FFmpegVideoDecoder::Stop				()
+void						FFmpegAVDecoder::Stop				()
 {
     Pause();
 	Reset();
@@ -123,7 +123,7 @@ void						FFmpegVideoDecoder::Stop				()
 
 // *********************************
 //
-AVMediaData			        FFmpegVideoDecoder::GetVideoMediaData		()
+AVMediaData			        FFmpegAVDecoder::GetVideoMediaData		()
 {
 	AVMediaData mediaData;
     m_outVideoQueue.Front( mediaData );
@@ -132,7 +132,7 @@ AVMediaData			        FFmpegVideoDecoder::GetVideoMediaData		()
 
 // *********************************
 //
-AVMediaData			        FFmpegVideoDecoder::GetAudioMediaData		()
+AVMediaData			        FFmpegAVDecoder::GetAudioMediaData		()
 {
 	AVMediaData mediaData;
     mediaData.frameIdx = 0;
@@ -145,7 +145,7 @@ AVMediaData			        FFmpegVideoDecoder::GetAudioMediaData		()
 
 // ***********************
 // Jumps to frameTime. This function doesn't return to time before this function call.
-AVMediaData		            FFmpegVideoDecoder::GetSingleFrame  		( TimeType frameTime )
+AVMediaData		            FFmpegAVDecoder::GetSingleFrame  		( TimeType frameTime )
 {
     frameTime;
     //Seek( frameTime );
@@ -164,7 +164,7 @@ AVMediaData		            FFmpegVideoDecoder::GetSingleFrame  		( TimeType frameT
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::NextVideoDataReady		()
+bool					FFmpegAVDecoder::NextVideoDataReady		()
 {
     if( m_hasVideo )
     {
@@ -198,7 +198,7 @@ bool					FFmpegVideoDecoder::NextVideoDataReady		()
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::NextAudioDataReady		()
+bool					FFmpegAVDecoder::NextAudioDataReady		()
 {
     if( m_hasAudio )
     {
@@ -232,7 +232,7 @@ bool					FFmpegVideoDecoder::NextAudioDataReady		()
 
 // *********************************
 //
-SizeType				FFmpegVideoDecoder::GetFrameSize			() const
+SizeType				FFmpegAVDecoder::GetFrameSize			() const
 {
     if( m_hasVideo )
     {
@@ -243,7 +243,7 @@ SizeType				FFmpegVideoDecoder::GetFrameSize			() const
 
 // *********************************
 //
-UInt32					FFmpegVideoDecoder::GetWidth				() const
+UInt32					FFmpegAVDecoder::GetWidth				() const
 {
     if( m_hasVideo )
     {
@@ -254,7 +254,7 @@ UInt32					FFmpegVideoDecoder::GetWidth				() const
 
 // *********************************
 //
-UInt32					FFmpegVideoDecoder::GetHeight				() const
+UInt32					FFmpegAVDecoder::GetHeight				() const
 {
     if( m_hasVideo )
 	{
@@ -265,7 +265,7 @@ UInt32					FFmpegVideoDecoder::GetHeight				() const
 
 // *********************************
 //
-Float64					FFmpegVideoDecoder::GetFrameRate			() const
+Float64					FFmpegAVDecoder::GetFrameRate			() const
 {
     if( m_hasVideo )
 	{
@@ -276,7 +276,7 @@ Float64					FFmpegVideoDecoder::GetFrameRate			() const
 
 // *********************************
 //
-Int32					FFmpegVideoDecoder::GetSampleRate			() const
+Int32					FFmpegAVDecoder::GetSampleRate			() const
 {
     if( m_hasAudio )
 	{
@@ -288,7 +288,7 @@ Int32					FFmpegVideoDecoder::GetSampleRate			() const
 
 // *********************************
 //
-AudioFormat				FFmpegVideoDecoder::GetAudioFormat			() const
+AudioFormat				FFmpegAVDecoder::GetAudioFormat			() const
 {
     if( m_hasAudio )
 	{
@@ -300,7 +300,7 @@ AudioFormat				FFmpegVideoDecoder::GetAudioFormat			() const
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::HasVideo			    () const
+bool					FFmpegAVDecoder::HasVideo			    () const
 {
     return m_hasVideo ;
 }
@@ -308,14 +308,14 @@ bool					FFmpegVideoDecoder::HasVideo			    () const
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::HasAudio			    () const
+bool					FFmpegAVDecoder::HasAudio			    () const
 {
     return m_hasAudio;
 }
 
 // *********************************
 //
-void					FFmpegVideoDecoder::Seek					( Float64 time ) 
+void					FFmpegAVDecoder::Seek					( Float64 time ) 
 {
 	std::lock_guard< std::mutex > lock( m_mutex );
     
@@ -353,7 +353,7 @@ void					FFmpegVideoDecoder::Seek					( Float64 time )
 
 // *********************************
 //
-void					FFmpegVideoDecoder::FlushBuffers			() 
+void					FFmpegAVDecoder::FlushBuffers			() 
 {
 	m_outVideoQueue.Clear();
 	m_outAudioQueue.Clear();
@@ -361,7 +361,7 @@ void					FFmpegVideoDecoder::FlushBuffers			()
 
 // *********************************
 //
-void					FFmpegVideoDecoder::Reset					() 
+void					FFmpegAVDecoder::Reset					() 
 {
 	{
         std::lock_guard< std::mutex > lock( m_mutex );
@@ -385,7 +385,7 @@ void					FFmpegVideoDecoder::Reset					()
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::IsEOF					() const
+bool					FFmpegAVDecoder::IsEOF					() const
 {
 	std::lock_guard< std::mutex > lock( m_mutex );
     return m_demuxer->IsEOF();
@@ -393,7 +393,7 @@ bool					FFmpegVideoDecoder::IsEOF					() const
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::IsPacketQueueEmpty		( Int32 streamIdx ) const
+bool					FFmpegAVDecoder::IsPacketQueueEmpty		( Int32 streamIdx ) const
 {
 	std::lock_guard< std::mutex > lock( m_mutex );
     return m_demuxer->IsPacketQueueEmpty( streamIdx ) && m_videoDecoder->IsDataQueueEmpty();
@@ -401,7 +401,7 @@ bool					FFmpegVideoDecoder::IsPacketQueueEmpty		( Int32 streamIdx ) const
 
 // *********************************
 //
-bool					FFmpegVideoDecoder::IsFinished				() const
+bool					FFmpegAVDecoder::IsFinished				() const
 {
     bool finished = true;
     finished &= IsEOF();

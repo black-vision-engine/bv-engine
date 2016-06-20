@@ -17,7 +17,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
 #include "Widgets/NodeReplicator/NodeReplicator.h"
 #include "Widgets/NodeReplicator/ShiftReplicationModifier.h"
 
@@ -56,7 +56,7 @@ namespace {
     std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
     std::string GSimplePlugins5[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TIMER" };
     std::string GSimplePlugins6[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_HEIGHT_MAP" };
-    std::string GSimplePlugins7[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_VIDEO_STREAM_DECODER" };
+    std::string GSimplePlugins7[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_AV_DECODER" };
 
 
     // *****************************
@@ -1729,7 +1729,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 {
     { useAlphaMask; }
     //Timeline stuff
-    auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 5.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_REPEAT );
+    auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 15.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timeEvaluator->AddChild( localTimeline );
 
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
@@ -1739,29 +1739,36 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
-    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 2.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
     //http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
-    //success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
+    //success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
 
     //http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
-    success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov", TextureFormat::F_A8R8G8B8 );
+    //success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov", TextureFormat::F_A8R8G8B8 );
 
     //http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
-    //success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
-    
+    //success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
+    //success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "rsrcy/H264_test7_voiceclip_mp4_480x360.mp4", TextureFormat::F_A8R8G8B8 );
+    //success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "adYze0j_460sv.mp4", TextureFormat::F_A8R8G8B8 );
+    success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "rsrcy/stereo.wav", TextureFormat::F_A8R8G8B8 );
+
     //http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
-    //success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
+    //success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
 
-    SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
-    SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 5.f, 0.f ) );
+    SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
+    
+    //SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 5.f, 0.f ) );
 
-    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 5.0f, glm::vec2( 0.f, 0.f ) );
-   // SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
-    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 10.0f, glm::vec2( 7.f, 0.f ) );
-    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
-    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 15.0f, glm::vec2( 0.f, 0.f ) );
+    //SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "offset" ), 5.0f, glm::vec2( 0.f, 0.f ) );
+   // SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "offset" ), 10.0f, glm::vec2( 7.f, 0.f ) );
+    //SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "offset" ), 15.0f, glm::vec2( 0.f, 0.f ) );
+
+    //SetParameter( node->GetPlugin( "av_decoder" )->GetParameter( "offset" ), 15.0f, glm::vec2( 0.f, 0.f ) );
     
     localTimeline->Play();
 

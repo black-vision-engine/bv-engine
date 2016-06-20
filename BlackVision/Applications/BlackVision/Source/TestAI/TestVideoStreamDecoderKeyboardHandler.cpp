@@ -5,7 +5,7 @@
 #include "MockScenes.h"
 #include "BVAppLogic.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/BVProjectEditor.h"
@@ -22,18 +22,18 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
 	static int seekOffset = 0;
    	auto editor = logic->GetBVProject()->GetProjectEditor();
 	auto node = editor->GetModelScene( "sceneFromEnv@ VIDEO_STREAM_TEST_SCENE" )->GetRootNode();
-    auto plugin = node->GetPlugin( "video_stream_decoder" );
+    auto plugin = node->GetPlugin( "av_decoder" );
 	if( c == 'q' )
     {
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::PLAY );
     }
     else if( c == 'w' )
     {
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::PAUSE );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::PAUSE );
     }
 	else if( c == 'e' )
 	{
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::STOP );
     }
 	else if( c == 'a' )
     {
@@ -48,10 +48,10 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
     }
 	else if( c == 'x' )
     {
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP );
-		auto desc = VideoStreamAssetDesc::Create( "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::STOP );
+		auto desc = AVAssetDesc::Create( "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
         editor->LoadAsset( plugin, desc );
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::PLAY );
     }
 	else if( c == 'z' )
     {

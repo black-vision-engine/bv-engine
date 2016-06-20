@@ -5,11 +5,11 @@
 
 namespace bv {
 
-class IVideoDecoder
+class IAVDecoder
 {
 public:
 
-	virtual 						~IVideoDecoder			() {};
+	virtual 						~IAVDecoder			() {};
 
 	virtual void					Play					() = 0;
 	virtual void					Pause					() = 0;
@@ -51,7 +51,7 @@ public:
 
 };
 
-DEFINE_PTR_TYPE( IVideoDecoder )
-DEFINE_CONST_PTR_TYPE( IVideoDecoder )
+DEFINE_PTR_TYPE( IAVDecoder )
+DEFINE_CONST_PTR_TYPE( IAVDecoder )
 
 } //bv

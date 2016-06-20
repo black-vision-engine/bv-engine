@@ -3,16 +3,14 @@
 #include "AssetAccessor.h"
 #include "Assets/FwdDecls.h"
 
-namespace bv
-{
 
-class VideoStreamAssetAccessor;
-DEFINE_CONST_PTR_TYPE( VideoStreamAssetAccessor )
+namespace bv {
 
-
+class VideoAssetAccessor;
+DEFINE_CONST_PTR_TYPE( VideoAssetAccessor )
 
 
-class VideoStreamAssetAccessor : public AssetAccessor
+class VideoAssetAccessor : public AssetAccessor
 {
 private:
     
@@ -21,9 +19,9 @@ private:
 
 public:
 
-    static VideoStreamAssetAccessorConstPtr Create( const Path & rootPath, const StringVector & fileExts );
+    static VideoAssetAccessorConstPtr Create        ( const Path & rootPath, const StringVector & fileExts );
 
-                                ~VideoStreamAssetAccessor();
+                                ~VideoAssetAccessor ();
 
 	virtual AssetDescConstPtr	GetAssetDesc		( const Path & path ) const override;
 
@@ -44,12 +42,14 @@ public:
 
     virtual UInt64              GetAssetSizeInBytes ( const Path & path ) const override;
 
-    virtual PathVec	ListAll				( const Path & path, bool recursive ) const override;
+    virtual PathVec	            ListAll				( const Path & path, bool recursive ) const override;
 
-    virtual PathVec	ListAllUnique		( const Path & path ) const override;
+    virtual PathVec	            ListAllUnique		( const Path & path ) const override;
 
 private:
-    explicit            VideoStreamAssetAccessor( const Path & rootPath, const StringVector & fileExts );
+
+    explicit                    VideoAssetAccessor  ( const Path & rootPath, const StringVector & fileExts );
+
 };
 
 

@@ -50,14 +50,14 @@ inline std::shared_ptr< const FontAssetDesc >       DefaultAssets::GetDefaultDes
 // ***********************
 //
 template<>
-inline std::shared_ptr< const VideoStreamAssetDesc >    DefaultAssets::GetDefaultDesc   ()
+inline std::shared_ptr< const AVAssetDesc >    DefaultAssets::GetDefaultDesc   ()
 {
-    static VideoStreamAssetDescConstPtr videoStreamDesc;
-	if( !videoStreamDesc )
+    static AVAssetDescConstPtr avDesc;
+	if( !avDesc )
     {
-        videoStreamDesc = VideoStreamAssetDesc::Create( m_config.videoStreamPath, m_config.videoStreamFormat );
+        avDesc = AVAssetDesc::Create( m_config.videoStreamPath, m_config.videoStreamFormat );
     }
-    return videoStreamDesc;
+    return avDesc;
 }
 
 } // bv

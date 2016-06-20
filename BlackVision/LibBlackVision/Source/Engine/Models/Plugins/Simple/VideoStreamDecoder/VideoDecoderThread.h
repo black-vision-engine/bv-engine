@@ -8,7 +8,7 @@
 
 #include "Threading/Thread.h"
 #include "Tools/SimpleTimer.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
 
 
 namespace bv
@@ -19,7 +19,7 @@ class VideoDecoderThread : public Thread
 
 private:
 
-	IVideoDecoder *				m_decoder;
+	IAVDecoder *				m_decoder;
 
 	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
@@ -30,7 +30,7 @@ private:
     SimpleTimer					m_timer;
 
 public:
-								VideoDecoderThread	( IVideoDecoder * decoder );
+								VideoDecoderThread	( IAVDecoder * decoder );
 	virtual						~VideoDecoderThread	();
 	void						Kill				();
 

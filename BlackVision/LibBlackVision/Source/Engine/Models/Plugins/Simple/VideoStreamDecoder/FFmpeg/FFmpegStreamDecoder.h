@@ -2,13 +2,13 @@
 
 #include "FFmpegDef.h"
 
-#include "Assets/VideoStream/VideoStreamAsset.h"
+#include "Assets/VideoStream/AVAsset.h"
 
 
 namespace bv {
 
 
-class IFFmpegStreamDecoder
+class FFmpegStreamDecoder
 {
 protected:
 
@@ -30,6 +30,6 @@ public:
     
 };
 
-DEFINE_UPTR_TYPE( IFFmpegStreamDecoder )
+DEFINE_UPTR_TYPE( FFmpegStreamDecoder )
 
 } //bv

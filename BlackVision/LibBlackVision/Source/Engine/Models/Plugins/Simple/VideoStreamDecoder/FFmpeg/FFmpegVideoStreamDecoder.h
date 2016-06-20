@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/IFFmpegStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
-#include "Assets/VideoStream/VideoStreamAsset.h"
+#include "Assets/VideoStream/AVAsset.h"
 #include "DataTypes/QueueConcurrent.h"
 
 
@@ -11,7 +11,7 @@ namespace bv {
     
 class FFmpegDemuxer;
 
-class FFmpegVideoStreamDecoder : public IFFmpegStreamDecoder
+class FFmpegVideoStreamDecoder : public FFmpegStreamDecoder
 {
 private:
 
@@ -26,7 +26,8 @@ private:
     UInt32                              m_maxQueueSize;
 
 public:
-                            FFmpegVideoStreamDecoder    ( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
+
+                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
                             ~FFmpegVideoStreamDecoder   ();
 
     SizeType                GetFrameSize                () const;   

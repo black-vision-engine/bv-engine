@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "DefaultVideoStreamDecoderPlugin.h"
+#include "DefaultAVDecoderPlugin.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
@@ -23,22 +23,22 @@
 namespace bv { namespace model {
 
 
-const std::string        DefaultVideoStreamDecoderPlugin::PARAM::ALPHA          = "alpha";
-const std::string        DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT         = "txMat";
-const std::string        DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE  = "state";
-const std::string        DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
-const std::string        DefaultVideoStreamDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
-const std::string        DefaultVideoStreamDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
+const std::string        DefaultAVDecoderPlugin::PARAM::ALPHA          = "alpha";
+const std::string        DefaultAVDecoderPlugin::PARAM::TX_MAT         = "txMat";
+const std::string        DefaultAVDecoderPlugin::PARAM::DECODER_STATE  = "state";
+const std::string        DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
+const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
+const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
 
-typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamEnumDM;
+typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamEnumDM;
 
 
 // ***********************
 //
 template<>
-static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultVideoStreamDecoderPlugin::DecoderMode > ( const std::string & name, ITimeEvaluatorPtr timeline )
+static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultAVDecoderPlugin::DecoderMode > ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return CreateParameterEnum< DefaultVideoStreamDecoderPlugin::DecoderMode >( name, timeline );
+    return CreateParameterEnum< DefaultAVDecoderPlugin::DecoderMode >( name, timeline );
 }
 
 // ***********************
@@ -55,53 +55,53 @@ VoidPtr    ParamEnumDM::QueryParamTyped  ()
 
 // *******************************
 //
-DefaultVideoStreamDecoderPluginDesc::DefaultVideoStreamDecoderPluginDesc			()
-    : BasePluginDescriptor( UID(), "video_stream_decoder", "tx" )
+DefaultAVDecoderPluginDesc::DefaultAVDecoderPluginDesc			()
+    : BasePluginDescriptor( UID(), "av_decoder", "tx" )
 {
 }
 
 // *******************************
 //
-IPluginPtr              DefaultVideoStreamDecoderPluginDesc::CreatePlugin           ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                      DefaultAVDecoderPluginDesc::CreatePlugin           ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultVideoStreamDecoderPlugin >( name, prev, timeEvaluator );
+    return CreatePluginTyped< DefaultAVDecoderPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper helper( timeEvaluator );
     auto model  = helper.GetModel();
 
     helper.CreatePluginModel();
-    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
-    helper.AddParam< IntInterpolator, DefaultVideoStreamDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
-        ( DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP, true, true );
-    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
-    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
+    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
+    helper.AddParam< IntInterpolator, DefaultAVDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
+        ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
+    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
+    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
 
     helper.CreateVSModel();
-    helper.AddTransformParam( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT, true );
-    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT );
+    helper.AddTransformParam( DefaultAVDecoderPlugin::PARAM::TX_MAT, true );
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultAVDecoderPlugin::PARAM::TX_MAT );
     SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
     helper.CreatePSModel();
-    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::ALPHA, 1.f, true );
+    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::ALPHA, 1.f, true );
 
     return model;
 }
 
 // *******************************
 //
-std::string             DefaultVideoStreamDecoderPluginDesc::UID                       ()
+std::string                     DefaultAVDecoderPluginDesc::UID                       ()
 {
-    return "DEFAULT_VIDEO_STREAM_DECODER";
+    return "DEFAULT_AV_DECODER";
 }
 
 // *******************************
 //
-std::string             DefaultVideoStreamDecoderPluginDesc::TextureName               ()
+std::string                     DefaultAVDecoderPluginDesc::TextureName               ()
 {
     return "Tex0";
 }
@@ -109,7 +109,7 @@ std::string             DefaultVideoStreamDecoderPluginDesc::TextureName        
 
 // ************************************************************************* PLUGIN *************************************************************************
 
-void					DefaultVideoStreamDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
+void					DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
@@ -125,7 +125,7 @@ void					DefaultVideoStreamDecoderPlugin::SetPrevPlugin               ( IPluginP
 
 // *************************************
 // 
-DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, uid, prev, model )
 	, m_psc( nullptr )
 	, m_vsc( nullptr )
@@ -146,7 +146,7 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 
 	SetPrevPlugin( prev );
 
-    LoadResource( DefaultAssets::Instance().GetDefaultDesc< VideoStreamAssetDesc >() );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
 
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
@@ -162,35 +162,35 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 
 // *************************************
 // 
-DefaultVideoStreamDecoderPlugin::~DefaultVideoStreamDecoderPlugin					()
+DefaultAVDecoderPlugin::~DefaultAVDecoderPlugin					()
 {
 }
 
 // *************************************
 // 
-bool							DefaultVideoStreamDecoderPlugin::IsValid     () const
+bool							DefaultAVDecoderPlugin::IsValid     () const
 {
 	return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************
 // 
-bool                            DefaultVideoStreamDecoderPlugin::LoadResource		( AssetDescConstPtr assetDescr )
+bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDescConstPtr assetDescr )
 {
-	m_assetDesc = QueryTypedDesc< VideoStreamAssetDescConstPtr >( assetDescr );
+	m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
 
     if ( m_assetDesc != nullptr )
     {
-        auto asset = LoadTypedAsset<VideoStreamAsset>( assetDescr );
+        auto asset = LoadTypedAsset<AVAsset>( assetDescr );
         if( asset != nullptr )
         {
-		    m_decoder = std::make_shared< FFmpegVideoDecoder >( asset );
+		    m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
             if( m_decoder->HasVideo() )
             {
                 while( !m_decoder->NextVideoDataReady() );
 
-		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(),
+		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
                     m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
@@ -219,35 +219,35 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 
 // *************************************
 // 
-IVertexAttributesChannelConstPtr    DefaultVideoStreamDecoderPlugin::GetVertexAttributesChannel  () const
+IVertexAttributesChannelConstPtr    DefaultAVDecoderPlugin::GetVertexAttributesChannel  () const
 {
     return m_vaChannel;
 }
 
 // *************************************
 // 
-IPixelShaderChannelPtr		         DefaultVideoStreamDecoderPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr		         DefaultAVDecoderPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }
 
 // *************************************
 // 
-IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr        DefaultAVDecoderPlugin::GetVertexShaderChannel      () const
 {
     return m_vsc;
 }
 
 // *************************************
 // 
-IAudioChannelPtr                    DefaultVideoStreamDecoderPlugin::GetAudioChannel      () const
+IAudioChannelPtr                    DefaultAVDecoderPlugin::GetAudioChannel      () const
 {
     return m_audioChannel;
 }
 
 // *************************************
 // 
-void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
+void                                DefaultAVDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
     m_decoderMode =  m_decoderModeParam->Evaluate();
@@ -273,7 +273,7 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
 
 // *************************************
 //
-void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
+void									DefaultAVDecoderPlugin::InitVertexAttributesChannel		()
 {
 	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
 	{
@@ -318,7 +318,7 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 		if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
 		{
 			//FIXME: only one texture - convex hull calculations
-			auto uvs = new model::Float2AttributeChannel( desc, DefaultVideoStreamDecoderPluginDesc::TextureName(), true );
+			auto uvs = new model::Float2AttributeChannel( desc, DefaultAVDecoderPluginDesc::TextureName(), true );
 			auto uvsPtr = Float2AttributeChannelPtr( uvs );
 			
 			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
@@ -335,7 +335,7 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 
 // *************************************
 //
-void                                DefaultVideoStreamDecoderPlugin::UpdateDecoder  ()
+void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 {
     if( m_decoder )
     {
@@ -419,7 +419,7 @@ void                                DefaultVideoStreamDecoderPlugin::UpdateDecod
 
 // *************************************
 //
-void                                DefaultVideoStreamDecoderPlugin::UploadVideoFrame   ()
+void                                DefaultAVDecoderPlugin::UploadVideoFrame   ()
 {
     //update texture with video data
 	auto mediaData = m_decoder->GetVideoMediaData();
@@ -432,7 +432,7 @@ void                                DefaultVideoStreamDecoderPlugin::UploadVideo
 
 // *************************************
 //
-void                                DefaultVideoStreamDecoderPlugin::UploadAudioFrame   ()
+void                                DefaultAVDecoderPlugin::UploadAudioFrame   ()
 {
     //update audio data
     auto mediaData = m_decoder->GetAudioMediaData();
@@ -445,7 +445,7 @@ void                                DefaultVideoStreamDecoderPlugin::UploadAudio
 
 // *************************************
 //
-void                                DefaultVideoStreamDecoderPlugin::MarkOffsetChanges  ()
+void                                DefaultAVDecoderPlugin::MarkOffsetChanges  ()
 {
     auto counter = 0;
     const auto keys = m_offsetParam->AccessInterpolator().GetKeys();

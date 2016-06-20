@@ -12,7 +12,7 @@ namespace bv {
 
 // *******************************
 //
-FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
+FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
     : m_swsCtx( nullptr )
     , m_width( 0 )
     , m_height( 0 )

@@ -65,21 +65,16 @@ void    AudioRenderer::Play             ( AudioEntity * audio )
         queue = m_bufferMap[ source ];
     }
 
-    if( BufferData( source, queue, audio ) )
+    if( !audio->IsEmpty() )
+    {
+        queue->PushData( audio->PopData() );
+    }
+
+    if( queue->BufferData( source ) )
     {
         source->Play();
     }
 }
-
-// *********************************
-//
-bool    AudioRenderer::BufferData       ( PdrSource * source, PdrAudioBuffersQueue * queue, AudioEntity * audio )
-{
-    queue->PushData( audio->PopData() );
-    return queue->BufferData( source );
-}
-
-
 
 } // audio
 } //bv

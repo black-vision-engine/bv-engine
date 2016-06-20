@@ -5,7 +5,7 @@
 
 #include "Threading/Thread.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
 #include "DataTypes/QueueConcurrent.h"
@@ -14,7 +14,7 @@
 namespace bv {
 
 
-class FFmpegVideoDecoder;
+class FFmpegAVDecoder;
 
 
 class FFmpegAudioStreamDecoderThread : public Thread
@@ -22,7 +22,7 @@ class FFmpegAudioStreamDecoderThread : public Thread
 
 private:
 
-    FFmpegVideoDecoder *        m_decoder;
+    FFmpegAVDecoder *        m_decoder;
     FFmpegAudioStreamDecoder *  m_audioDecoder;
     FFmpegDemuxer *				m_demuxer;
 
@@ -36,7 +36,7 @@ private:
 
 public:
 
-							    FFmpegAudioStreamDecoderThread	( FFmpegVideoDecoder * decoder, FFmpegAudioStreamDecoder * audioDecoder, FFmpegDemuxer * demuxer );
+							    FFmpegAudioStreamDecoderThread	( FFmpegAVDecoder * decoder, FFmpegAudioStreamDecoder * audioDecoder, FFmpegDemuxer * demuxer );
 	virtual					    ~FFmpegAudioStreamDecoderThread	();
 	void						Kill				            ();
 

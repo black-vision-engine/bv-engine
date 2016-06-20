@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "VideoStreamUtils.h"
+#include "AVAssetUtils.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
@@ -9,14 +9,14 @@
 #include "LibImage.h"
 #include "Assets/Thumbnail/Impl/VideoStreamAssetThumbnail.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 #include "Assets/Texture/TextureUtils.h"        // ToBPP function
 
 
 namespace bv
 {
 
-ThumbnailConstPtr            VideoStreamUtils::LoadThumbnail                   ( const VideoStreamAssetDescConstPtr & desc )
+ThumbnailConstPtr            AVAssetUtils::LoadThumbnail                   ( const AVAssetDescConstPtr & desc )
 {
     auto absTexPath = ProjectManager::GetInstance()->ToAbsPath( desc->GetStreamPath() );
     auto thumbPath = AssetAccessor::GetThumbnailPath( absTexPath );
@@ -60,13 +60,13 @@ ThumbnailConstPtr            VideoStreamUtils::LoadThumbnail                   (
 
 // ***********************
 //
-SingleTextureAssetConstPtr  VideoStreamUtils::LoadSingleFrame     ( const VideoStreamAssetDescConstPtr & desc, TimeType frameTime )
+SingleTextureAssetConstPtr  AVAssetUtils::LoadSingleFrame     ( const AVAssetDescConstPtr & desc, TimeType frameTime )
 {
-    auto videoAsset = LoadTypedAsset< VideoStreamAsset >( desc );
+    auto videoAsset = LoadTypedAsset< AVAsset >( desc );
 
     if( videoAsset != nullptr )
     {
-        auto decoder = std::make_shared< FFmpegVideoDecoder >( videoAsset );
+        auto decoder = std::make_shared< FFmpegAVDecoder >( videoAsset );
 
         auto frameChunk = decoder->GetSingleFrame( frameTime );
     

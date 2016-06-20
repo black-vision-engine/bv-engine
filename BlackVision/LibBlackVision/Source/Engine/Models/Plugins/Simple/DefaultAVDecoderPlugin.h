@@ -10,17 +10,17 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 
 
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultVideoStreamDecoderPluginDesc : public BasePluginDescriptor
+class DefaultAVDecoderPluginDesc : public BasePluginDescriptor
 {
 public:
 
-	DefaultVideoStreamDecoderPluginDesc                         ();
+	                                DefaultAVDecoderPluginDesc  ();
 
 	virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
 	virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
@@ -32,7 +32,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultVideoStreamDecoderPlugin : public BasePlugin< IPlugin >
+class DefaultAVDecoderPlugin : public BasePlugin< IPlugin >
 {
 public:
 
@@ -61,7 +61,7 @@ private:
 
     DefaultAudioChannelPtr              m_audioChannel;
 
-	IVideoDecoderPtr				    m_decoder;
+	IAVDecoderPtr				        m_decoder;
 	DecoderMode				            m_decoderMode;
 
     TimeType                            m_prevDecoderModeTime;
@@ -80,14 +80,14 @@ private:
     ParamIntPtr                         m_loopCountParam;
     UInt32                              m_loopCount;
 
-    VideoStreamAssetDescConstPtr        m_assetDesc;
+    AVAssetDescConstPtr        m_assetDesc;
 
     bool                                m_isFinished;
 
 public:
 
-    explicit							DefaultVideoStreamDecoderPlugin		( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-                                        ~DefaultVideoStreamDecoderPlugin    ();
+    explicit							        DefaultAVDecoderPlugin		( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                                ~DefaultAVDecoderPlugin     ();
 
     virtual bool                                IsValid						() const override;
 
@@ -117,9 +117,9 @@ private:
 // ***********************
 //
 template<>
-inline bool SetParameter< DefaultVideoStreamDecoderPlugin::DecoderMode >( IParameterPtr param, TimeType t, const DefaultVideoStreamDecoderPlugin::DecoderMode & val )
+inline bool SetParameter< DefaultAVDecoderPlugin::DecoderMode >( IParameterPtr param, TimeType t, const DefaultAVDecoderPlugin::DecoderMode & val )
 {
-    typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamType;
+    typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 

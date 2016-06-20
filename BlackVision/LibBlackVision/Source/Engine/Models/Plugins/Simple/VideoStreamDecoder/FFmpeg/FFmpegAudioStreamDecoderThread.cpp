@@ -2,7 +2,7 @@
 
 #include "FFmpegAudioStreamDecoderThread.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 #include "Tools/HRTimer.h"
 
 #include <thread>
@@ -13,7 +13,7 @@ namespace bv
 
 // *******************************
 //
-FFmpegAudioStreamDecoderThread::FFmpegAudioStreamDecoderThread				( FFmpegVideoDecoder * decoder, FFmpegAudioStreamDecoder * audioDecoder, FFmpegDemuxer * demuxer )
+FFmpegAudioStreamDecoderThread::FFmpegAudioStreamDecoderThread				( FFmpegAVDecoder * decoder, FFmpegAudioStreamDecoder * audioDecoder, FFmpegDemuxer * demuxer )
 	: m_decoder( decoder )
     , m_audioDecoder( audioDecoder )
     , m_demuxer( demuxer )

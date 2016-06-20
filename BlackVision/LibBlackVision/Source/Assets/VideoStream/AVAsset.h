@@ -11,10 +11,10 @@
 namespace bv
 {
 
-class VideoStreamAsset;
-DEFINE_CONST_PTR_TYPE( VideoStreamAsset )
+class AVAsset;
+DEFINE_CONST_PTR_TYPE( AVAsset )
 
-class VideoStreamAsset : public Asset, public std::enable_shared_from_this< VideoStreamAsset >
+class AVAsset : public Asset, public std::enable_shared_from_this< AVAsset >
 {
 private:
 	static const std::string    uid;
@@ -33,10 +33,12 @@ private:
 	TextureFormat				m_textureFormat;
 
 protected:
+
 	virtual VoidConstPtr						QueryThis	        () const override;
 
 public:
-	explicit									VideoStreamAsset    ( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
+
+	explicit									AVAsset    ( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
 	static const std::string &					UID                 ();
 
@@ -53,7 +55,7 @@ public:
     bool							            IsVideoEnabled      () const;
 	bool							            IsAudioEnabled      () const;
 
-	static VideoStreamAssetConstPtr				Create		        ( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
+	static AVAssetConstPtr				        Create		        ( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
 };
 

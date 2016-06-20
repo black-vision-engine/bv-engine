@@ -7,7 +7,7 @@
 namespace bv { namespace audio {
 
 
-const Int32 PdrAudioBuffersQueue::QUEUE_SIZE    = 4;
+const Int32 PdrAudioBuffersQueue::QUEUE_SIZE    = 3;
 
 // *******************************
 //

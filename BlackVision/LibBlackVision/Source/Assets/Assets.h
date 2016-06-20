@@ -15,9 +15,9 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/FontAsset.h"
 
-#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
-#include "Assets/VideoStream/VideoStreamAsset.h"
-#include "Assets//VideoStream/VideoStreamLoader.h"
+#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/VideoStream/AVAsset.h"
+#include "Assets//VideoStream/AVAssetLoader.h"
 
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 #include "Assets/Mesh/MeshAsset.h"
