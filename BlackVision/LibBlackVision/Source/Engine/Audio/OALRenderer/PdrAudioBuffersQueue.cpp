@@ -67,7 +67,7 @@ bool    PdrAudioBuffersQueue::BufferData      ( const PdrSource * source )
         auto buffer = m_buffers.Front();
         bufferId = m_unqueuedBufferHandles.Front();
 
-        BVAL::bvalBufferData( bufferId, OALConstansMapper::ALConstant( buffer->GetFormat() ), ( const ALvoid * )buffer->Data(), ( Int32 )buffer->GetSize(), buffer->GetFrequency() );
+        BVAL::bvalBufferData( bufferId, OALConstantsMapper::ALConstant( buffer->GetFormat() ), ( const ALvoid * )buffer->Data(), ( Int32 )buffer->GetSize(), buffer->GetFrequency() );
         BVAL::bvalSourceQueueBuffers( sourceHandle, 1, &bufferId );
         m_buffers.Pop();
         m_unqueuedBufferHandles.Pop();

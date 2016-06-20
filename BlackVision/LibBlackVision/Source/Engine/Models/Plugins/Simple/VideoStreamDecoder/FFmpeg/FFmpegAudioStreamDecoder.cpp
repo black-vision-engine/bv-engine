@@ -111,7 +111,18 @@ bool				FFmpegAudioStreamDecoder::DecodePacket		( AVPacket * packet )
 	assert( packet != nullptr );
 
 	int frameReady = 0;
-    avcodec_decode_audio4( m_codecCtx, m_frame, &frameReady, packet );
+    
+    while ( packet->size > 0)
+    {
+        auto len = avcodec_decode_audio4( m_codecCtx, m_frame, &frameReady, packet );
+        if( len < 0 )
+        {
+            //FIXME: error
+        }
+
+        packet->size -= len;
+        packet->data += len;
+    }
 
     av_packet_unref( packet ); //FIXME
 
@@ -123,9 +134,9 @@ bool				FFmpegAudioStreamDecoder::DecodePacket		( AVPacket * packet )
 AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 {
     swr_convert( m_swrCtx, &m_outBuffer, m_frame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
-
+    
     char * data = new char[ m_frameSize ];
-    memcpy( data, ( char * )&m_outBuffer, m_frameSize );
+    memcpy( data, m_outBuffer, m_frameSize );
 
     AVMediaData mediaData;
 
