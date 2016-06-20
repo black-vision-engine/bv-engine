@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GeometryGenerator.h"
+#include "Engine/Models/Plugins/IndexedGeometry.h"
 
 
 namespace bv { namespace model {
@@ -61,6 +62,40 @@ void    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips   
         uniqueNormals[ indices[ i + 2 ] ] += normal;
         uniqueNormals[ indices[ i + 1 ] ] += normal;
         uniqueNormals[ indices[ i + 3 ] ] += normal;
+    }
+
+    for( auto & normal : uniqueNormals )
+    {
+        if( normal != glm::vec3( 0.0f ) )
+        {
+            normal = glm::normalize( normal ); 
+        }
+    }
+
+    for( UInt32 i = 0; i < vertsNum; ++i )
+    {
+        normChannel->AddAttribute( uniqueNormals[ indices[ i ] ] );
+    }
+}
+
+// ***********************
+//
+void     GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangles         ( IndexedGeometry & mesh, Float3AttributeChannelPtr normChannel )
+{
+    auto & vertices = mesh.GetVerticies();
+    auto & indices = mesh.GetIndicies();
+    auto vertsNum = indices.size();
+
+    // compute not weighted normals
+    auto uniqueNormals = std::vector< glm::vec3 >( vertices.size(), glm::vec3( 0.0f ) );
+    
+    auto normal = glm::vec3( 0.0f );
+    for( UInt32 i = 0; i < vertsNum - 2; i += 3 )
+    {
+        normal = glm::cross( vertices[ indices[ i + 1 ] ] - vertices[ indices[ i ] ], vertices[ indices[ i + 2 ] ] - vertices[ indices[ i ] ] );
+        uniqueNormals[ indices[ i ] ] += normal;
+        uniqueNormals[ indices[ i + 1 ] ] += normal;
+        uniqueNormals[ indices[ i + 2 ] ] += normal;
     }
 
     for( auto & normal : uniqueNormals )

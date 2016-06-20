@@ -6,6 +6,8 @@
 namespace bv { namespace model {
 
 
+class IndexedGeometry;
+
 // *********************************
 //
 class IGeometryGenerator
@@ -69,8 +71,8 @@ class GeometryGeneratorHelper
 {
 public:
     
-    static void     GenerateNonWeightedNormalsFromTriangleStrips     ( Float3AttributeChannelConstPtr posChannel, Float3AttributeChannelPtr normChannel );
-
+    static void     GenerateNonWeightedNormalsFromTriangleStrips    ( Float3AttributeChannelConstPtr posChannel, Float3AttributeChannelPtr normChannel );
+    static void     GenerateNonWeightedNormalsFromTriangles         ( IndexedGeometry & mesh, Float3AttributeChannelPtr normChannel );
 };
 
 } //model

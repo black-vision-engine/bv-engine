@@ -152,8 +152,8 @@ namespace Generator
 				indicies.push_back( static_cast<INDEX_TYPE>( j + 1 ) );
 
 				indicies.push_back( static_cast<INDEX_TYPE>( ( j + verticiesPerRingTooth ) % allVerticies ) );
-				indicies.push_back( static_cast<INDEX_TYPE>( j + 1 ) );
 				indicies.push_back( static_cast<INDEX_TYPE>( ( j + verticiesPerRingTooth + 1 ) % allVerticies ) );
+                indicies.push_back( static_cast<INDEX_TYPE>( j + 1 ) );
 			}
 		}
 
@@ -268,7 +268,7 @@ namespace Generator
 			verticies.push_back( newVertex + center_translate );
 		}
 
-		void connectVerticiesIntoTriangles( std::vector<INDEX_TYPE>& indicies )
+		void ConnectVerticiesIntoTriangles( std::vector<INDEX_TYPE>& indicies )
 		{
 			for( int i = 0; i < 2 * teethNumber; ++i )
 			{
@@ -315,14 +315,16 @@ namespace Generator
 				generateRing( verticies, angle2, uniformAngle2, toothCenterAngle + anglePerTopTooth / 2 );
 			}
 
-			connectVerticiesIntoTriangles( indicies );
+			ConnectVerticiesIntoTriangles( indicies );
 
 			//Smooth cog wheel
 			std::vector<INDEX_TYPE> sharpEdges;
 			
 			IndexedGeometry resultMesh = smoother.smooth( cogWheel, sharpEdges, tesselation );
-			//converter.MakeStrip( resultMesh, verts );
             converter.MakeTriangles( resultMesh, verts );
+            //converter.MakeStrip( resultMesh, verts );
+
+            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangles( resultMesh, normals );
 
 			for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
 			{
@@ -332,7 +334,7 @@ namespace Generator
 												vert.y*0.5 + 0.5 ) ); // FIXME: scaling
 			}
 
-            GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 		}
 	};
 }

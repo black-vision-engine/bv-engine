@@ -2242,8 +2242,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
 //#define SHOW_SIMPLE_CUBE
-//#define SHOW_COGWHEEL
-#define SHOW_WALL
+#define SHOW_COGWHEEL
+//#define SHOW_WALL
 
       //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -2475,7 +2475,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #endif
 #ifdef SHOW_COGWHEEL
     auto plugin = root->GetPlugin( "cog wheel" );
-    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1 );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
     model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
     model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
     model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.5f );
@@ -2483,7 +2483,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     model::SetParameter( plugin->GetParameter( "tooth height" ), 0.0f, 0.2f );
     model::SetParameter( plugin->GetParameter( "tooth base length" ), 0.0f, 0.20f );
     model::SetParameter( plugin->GetParameter( "tooth top length" ), 0.0f, 0.02f );
-    model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 3 );
+    model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 8 );
 
     model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
     model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
