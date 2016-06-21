@@ -9,10 +9,14 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
-#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
+//#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+//#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
+
+#include "Engine/Models/Plugins/HelperUVGenerator.h"
+
 
 namespace bv { namespace model {
 
@@ -73,7 +77,7 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
 
     //Set default values of all parameters
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-
+    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
 
     return model;
 }
@@ -152,6 +156,8 @@ void                                DefaultGradientPlugin::Update               
 {
 	BasePlugin::Update( t );
 
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+
     if( ParameterChanged( PARAM_BLEND_ENABLE ) )
     {
         auto ctx = m_psc->GetRendererContext();
@@ -160,15 +166,11 @@ void                                DefaultGradientPlugin::Update               
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
     }
 	
-	if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
-	{
-		RecalculateUVChannel();
-	}
-
-	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
-	{
-		InitVertexAttributesChannel();
-	}
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    {
+        InitVertexAttributesChannel();
+    }
 
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
@@ -216,12 +218,24 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
         }
 
 		//add gradient uv channel
-		connComp->AddAttributeChannel( std::make_shared< Float2AttributeChannel >( desc, DefaultGradientPluginDesc::TextureName(), true ) );
+        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        {
+            //FIXME: only one texture - convex hull calculations
+            auto uvs = new model::Float2AttributeChannel( desc, DefaultGradientPluginDesc::TextureName(), true );
+            auto uvsPtr = Float2AttributeChannelPtr( uvs );
+            
+            Helper::UVGenerator::generateUV( std::static_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices().data(), posChannel->GetNumEntries(),
+                                            uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+
+            connComp->AddAttributeChannel( uvsPtr );
+        }
+
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
 
-	RecalculateUVChannel();
+	//RecalculateUVChannel();
 }
 
 // *************************************
