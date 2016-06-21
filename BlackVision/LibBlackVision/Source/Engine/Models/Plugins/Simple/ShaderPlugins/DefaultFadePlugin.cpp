@@ -33,8 +33,7 @@ const std::string        DefaultFadePlugin::PARAMS::POINT4_ALPHA        = "FadeA
 //
 DefaultFadePluginDesc::DefaultFadePluginDesc                          ()
     : BasePluginDescriptor( UID(), "fade", "fade" )
-{
-}
+{}
 
 // *******************************
 //

@@ -15,7 +15,7 @@
 #include "PieChartNode.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
-#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "VideoInput/ExampleVideoInput.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultEllipsePlugin.h"
@@ -583,6 +583,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     else if( scene == "BLEND_TEXTURE_TEST_SCENE" )
     {
         node = TestScenesFactory::BlendTextureTestScene( timeline );
+    }
+    else if( scene == "FADE_RECT_TEST_SCENE" )
+    {
+        node = TestScenesFactory::FadeRectTestScene( timeline );
     }
     else
     {
@@ -1944,6 +1948,42 @@ model::BasicNodePtr TestScenesFactory::FontTestScene( const model::PluginsManage
     //}
 
     return node0;
+}
+
+// ***********************
+//
+model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    // Root node
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_FADE_PLUGIN", timeEvaluator );
+
+    auto rectPlugin = root->GetPlugin( "rectangle" );
+    model::SetParameter( rectPlugin->GetParameter( "width" ), 0.0, 3.0f );
+    model::SetParameter( rectPlugin->GetParameter( "height" ), 0.0, 3.0f );
+
+    model::LoadTexture( root->GetPlugin( "texture" ), "textures/water.jpg" );
+
+
+    auto fadePlugin = root->GetPlugin( "fade" );
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha1" ), 0.0, 1.0f );
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha1" ), 3.0, 0.3f );
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha1" ), 4.0, 0.8f );
+
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha2" ), 0.0, 1.0f );
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha2" ), 4.0, 1.0f );
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha2" ), 6.0, 0.5f );
+
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha3" ), 0.0, 1.0f );
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha3" ), 3.0, 0.1f );
+
+    model::SetParameter( fadePlugin->GetParameter( "FadeAlpha4" ), 0.0, 1.0f );
+
+    return root;
 }
 
 } //bv
