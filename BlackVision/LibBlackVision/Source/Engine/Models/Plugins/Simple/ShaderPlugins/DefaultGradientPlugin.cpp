@@ -231,62 +231,8 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-
-	//RecalculateUVChannel();
 }
 
-// *************************************
-//
-void									DefaultGradientPlugin::RecalculateUVChannel         ()
-{
-	//FIXME: only one texture - convex hull calculations
-    float minX = 100000.0f, minY = 100000.0f;
-    float maxX = 0.0f, maxY = 0.0f;
-
-	auto cc = m_vaChannel->GetComponents();
-    for( unsigned int i = 0; i < cc.size(); ++i )
-    {
-        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( cc[ i ] );
-		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-		if( posChannel )
-		{
-			for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
-			{
-				const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( posChannel->GetData() );
-				minX = std::min( minX, pos[ j ].x );
-				minY = std::min( minY, pos[ j ].y );
-				maxX = std::max( maxX, pos[ j ].x );
-				maxY = std::max( maxY, pos[ j ].y );
-			}
-		}
-	}
-
-	for( unsigned int i = 0; i < cc.size(); ++i )
-    {
-        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( cc[ i ] );
-		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-		auto uvChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD, -1 );
-
-		if( posChannel && uvChannel )
-		{
-			auto pos = std::static_pointer_cast< Float3AttributeChannel >( posChannel );
-			auto uvs = std::static_pointer_cast< Float2AttributeChannel >( uvChannel );
-			
-			auto & uvVerts = uvs->GetVertices();
-			if( uvVerts.size() < posChannel->GetNumEntries() )
-			{
-				uvVerts.resize( posChannel->GetNumEntries() );
-			}
-
-			auto & posVerts = pos->GetVertices();
-			for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
-			{
-				uvVerts[ j ] = glm::vec2( ( posVerts[ j ].x - minX ) / ( maxX - minX ), 
-					( posVerts[ j ].y - minY ) / ( maxY - minY ) );
-			}
-		}
-    }
-}
 
 } // model
 } // bv

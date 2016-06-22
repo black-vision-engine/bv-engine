@@ -36,7 +36,7 @@ public:
     virtual const std::vector< bv::IValueConstPtr > &   GetValues       () const override;
     virtual std::vector< IParamValEvaluatorPtr > &      GetEvaluators   () override;
 
-    const std::map< std::string, IStatedValuePtr > &    GetStates       ();
+    virtual const std::map< std::string, IStatedValuePtr > &    GetStates   () override;
 
     virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
     virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
