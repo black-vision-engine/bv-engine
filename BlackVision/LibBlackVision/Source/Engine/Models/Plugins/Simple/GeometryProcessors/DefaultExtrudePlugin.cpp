@@ -1,11 +1,7 @@
 #include "stdafx.h"
-
 #include "DefaultExtrudePlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Interfaces/IValue.h"
-
-#include "Assets/DefaultAssets.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 
 namespace bv { namespace model {
@@ -37,7 +33,7 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     ModelHelper helper( timeEvaluator );
 
     //Create all models
-    auto model  = helper.GetModel();
+    auto model = helper.GetModel();
     helper.CreateVacModel();
 
     return model;
@@ -68,10 +64,22 @@ DefaultExtrudePlugin::~DefaultExtrudePlugin         ()
 
 // ***********************
 //
-void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::ConnectedComponentPtr & /*currComponent*/,
-                                                                    std::vector< IConnectedComponentPtr > & /*allComponents*/ )
+void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::ConnectedComponentPtr & currComponent,
+                                                                    std::vector< IConnectedComponentPtr > & /*allComponents*/,
+                                                                    PrimitiveType topology )
 {
-
+    auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
+    auto normals = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_NORMAL ) );
+    auto uvs = std::static_pointer_cast< Float2AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
+    
+    if( topology == PrimitiveType::PT_TRIANGLE_STRIP )
+    {
+        auto connComp = ConnectedComponent::Create();
+    }
+    else
+    {
+        assert( !"This primitive topology is not supported yet" );
+    }
 }
 
 

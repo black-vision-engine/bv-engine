@@ -33,7 +33,9 @@ protected:
 
     // Processes one connected component. This function will be executed as many times as many connected components there are.
     // Function can use parameter allComponents as context for processing.
-    virtual void                                ProcessConnectedComponent       ( model::ConnectedComponentPtr & currComponent, std::vector< IConnectedComponentPtr > & allComponents ) = 0;
+    virtual void                                ProcessConnectedComponent       (   model::ConnectedComponentPtr & currComponent,
+                                                                                    std::vector< IConnectedComponentPtr > & allComponents,
+                                                                                    PrimitiveType topology ) = 0;
 
 public:
 

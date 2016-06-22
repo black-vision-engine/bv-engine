@@ -40,7 +40,9 @@ public:
                         ~DefaultExtrudePlugin  ();
 
 
-    virtual void        ProcessConnectedComponent       ( model::ConnectedComponentPtr & currComponent, std::vector< IConnectedComponentPtr > & allComponents ) override;
+    virtual void        ProcessConnectedComponent       (   model::ConnectedComponentPtr & currComponent,
+                                                            std::vector< IConnectedComponentPtr > & allComponents,
+                                                            PrimitiveType topology ) override;
 };
 
 
