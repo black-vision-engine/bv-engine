@@ -12,9 +12,6 @@
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
-//#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
-//#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
-
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 

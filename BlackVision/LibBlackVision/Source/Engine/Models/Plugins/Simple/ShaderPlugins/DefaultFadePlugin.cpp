@@ -4,9 +4,15 @@
 
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Interfaces/IValue.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+
+#include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -88,7 +94,12 @@ std::string             DefaultFadePluginDesc::UID                       ()
     return "DEFAULT_FADE_PLUGIN";
 }
 
-
+// ***********************
+//
+std::string             DefaultFadePluginDesc::TextureName               ()
+{
+    return "Fade0";
+}
 
 // ************************************************************************* PLUGIN *************************************************************************
 
@@ -98,7 +109,8 @@ void DefaultFadePlugin::SetPrevPlugin( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    InitVertexAttributesChannel();
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 }
 
 // *************************************
@@ -133,6 +145,12 @@ bool                            DefaultFadePlugin::LoadResource  ( AssetDescCons
     return false;
 }
 
+// *************************************
+// 
+IVertexAttributesChannelConstPtr    DefaultFadePlugin::GetVertexAttributesChannel  () const
+{
+    return m_vaChannel;
+}
 
 // *************************************
 // 
@@ -157,11 +175,75 @@ void                                DefaultFadePlugin::Update                   
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "fadeMat" );    
     HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    {
+        InitVertexAttributesChannel();
+    }
+
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
 }
 
+// *************************************
+//
+void		                        DefaultFadePlugin::InitVertexAttributesChannel		()
+{
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevCC = prevGeomChannel->GetComponents();
+
+    //Only one texture
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
+    {
+        vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    }
+    
+    if( !m_vaChannel )
+    {		
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
+
+    auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    for( unsigned int i = 0; i < prevCC.size(); ++i )
+    {
+        auto connComp = ConnectedComponent::Create();
+
+        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ i ] );
+        auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
+
+        for( auto prevCompCh : prevCompChannels )
+        {
+            connComp->AddAttributeChannel( prevCompCh );
+        }
+
+        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        {
+            //FIXME: only one texture - convex hull calculations
+            auto uvs = new model::Float2AttributeChannel( desc, DefaultFadePluginDesc::TextureName(), true );
+            auto uvsPtr = Float2AttributeChannelPtr( uvs );
+            
+            Helper::UVGenerator::generateUV( std::static_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices().data(), posChannel->GetNumEntries(),
+                                            uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+
+            connComp->AddAttributeChannel( uvsPtr );
+        }
+
+        m_vaChannel->AddConnectedComponent( connComp );
+    }
+}
 
 
 } // model

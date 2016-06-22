@@ -22,6 +22,7 @@ namespace bv { namespace model {
         virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
         static  std::string                     UID                 ();
+        static  std::string                     TextureName         ();
     };
 
     // ***************************** PLUGIN ********************************** 
@@ -46,6 +47,8 @@ namespace bv { namespace model {
         DefaultPixelShaderChannelPtr    m_psc;
         DefaultVertexShaderChannelPtr   m_vsc;
 
+        VertexAttributesChannelPtr      m_vaChannel;
+
     public:
 
         explicit                                    DefaultFadePlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -55,6 +58,7 @@ namespace bv { namespace model {
 
         virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+        virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
         virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
         virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
@@ -62,6 +66,7 @@ namespace bv { namespace model {
 
     private:
         virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+        void										InitVertexAttributesChannel ();
     };
 
 

@@ -1959,7 +1959,7 @@ model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( mod
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
-    root->AddPlugin( "DEFAULT_LINEAR_GRADIENT", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     root->AddPlugin( "DEFAULT_FADE_PLUGIN", timeEvaluator );
 
     auto rectPlugin = root->GetPlugin( "rectangle" );
@@ -1968,11 +1968,11 @@ model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( mod
     
     //model::LoadTexture( root->GetPlugin( "texture" ), "textures/water.jpg" );
     
-    auto gradientPlugin = root->GetPlugin( "linear_gradient" );
-    model::SetParameter( gradientPlugin->GetParameter( "color1" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
-    model::SetParameter( gradientPlugin->GetParameter( "color2" ), 0.0, glm::vec4( 0.0, 0.0, 1.0, 1.0 ) );
+    //auto gradientPlugin = root->GetPlugin( "linear_gradient" );
+    //model::SetParameter( gradientPlugin->GetParameter( "color1" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    //model::SetParameter( gradientPlugin->GetParameter( "color2" ), 0.0, glm::vec4( 0.0, 0.0, 1.0, 1.0 ) );
 
-
+    
     auto fadePlugin = root->GetPlugin( "fade" );
     model::SetParameter( fadePlugin->GetParameter( "FadeAlpha1" ), 0.0, 1.0f );
     model::SetParameter( fadePlugin->GetParameter( "FadeAlpha1" ), 3.0, 0.3f );
