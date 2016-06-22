@@ -59,6 +59,7 @@ protected:
         void                                    CreateVacModel      ();
         void                                    CreateVSModel       ();
         void                                    CreatePSModel       ();
+        void                                    CreateGSModel       ();
         void                                    CreatePluginModel   ();
 
 
