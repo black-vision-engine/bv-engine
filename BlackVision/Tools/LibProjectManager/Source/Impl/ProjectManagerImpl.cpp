@@ -7,7 +7,7 @@
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Impl/Accessors/FontAssetAccessor.h"
 #include "Impl/Accessors/AnimationAssetAccessor.h"
-#include "Impl/Accessors/VideoStreamAssetAccessor.h"
+#include "Impl/Accessors/VideoAssetAccessor.h"
 #include "Impl/Accessors/MeshAssetAccessor.h"
 
 #include "IO/DirIO.h"
@@ -737,7 +737,7 @@ void				        ProjectManagerImpl::InitializeAssets	()
     videoExts.push_back( ".*\\.avi" );
     videoExts.push_back( ".*\\.wmv" );
 
-    auto vsaa = VideoStreamAssetAccessor::Create( GetRootDir() / "video", videoExts );
+    auto vsaa = VideoAssetAccessor::Create( GetRootDir() / "video", videoExts );
     RegisterCategory( AssetCategory::Create( "video", vsaa ) );
 
     // --- mesh ---

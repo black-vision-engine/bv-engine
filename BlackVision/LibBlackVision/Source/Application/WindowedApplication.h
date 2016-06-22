@@ -12,6 +12,11 @@ namespace bv
 {
 
 class Renderer;
+
+namespace audio {
+    class AudioRenderer;
+}
+
 //pablito
 enum WindowMode {FULLSCREEN=0,WINDOWED=1,MULTIPLE_SCREENS=2};
 
@@ -37,7 +42,8 @@ protected:
 
     glm::vec4		m_ClearColor;
 
-    Renderer *		m_Renderer;
+    Renderer *		        m_Renderer;
+    audio::AudioRenderer *  m_audioRenderer;
 	
 	bool			m_EnableGLFinish;
 	bool			m_EnableGLFlush;
@@ -76,7 +82,8 @@ public:
     void			SetClearColor	( const glm::vec4 & col );
     glm::vec4		ClearColor		() const;
 
-    const Renderer* Renderer		() const;
+    const Renderer *             Renderer		() const;
+    const audio::AudioRenderer * AudioRenderer	() const;
 
     virtual bool	OnInitialize	();
     virtual void	OnTerminate		();

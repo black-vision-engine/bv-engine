@@ -2,6 +2,7 @@
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
@@ -10,6 +11,7 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Audio/Logic/AudioLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/NodeLogicFactory.h"
@@ -98,10 +100,11 @@ namespace
 }
 
 //
-BVAppLogic::BVAppLogic              ( Renderer * renderer )
+BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : m_bvProject( BVProject::Create( renderer ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
+    , m_audioRenderer( nullptr )
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
@@ -112,6 +115,8 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     GTimer.StartTimer();
 
     m_renderer = renderer;
+    m_audioRenderer = audioRenderer;
+
     m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory() );
     
     m_remoteHandlers = new RemoteEventsHandlers;
@@ -237,18 +242,20 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer )
+void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
     TimeType time = m_renderMode.StartFrame( millis );
-    UpdateFrame( time, renderer );
+    UpdateFrame( time, renderer, audioRenderer );
 }
 
 // ***********************
 //
-void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
+void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
+    { audioRenderer; }
+
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
     {
@@ -283,6 +290,8 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
                 FRAME_STATS_SECTION( "Render" );
 
                 m_renderLogic->RenderFrame( renderer, m_bvProject->GetScenes() );
+
+                m_audioLogic->Play( audioRenderer, m_bvProject->GetScenes() );
      
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
                 {
@@ -292,14 +301,12 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
                 }
 
                 last_time = time;
-
             }
         }
     }
 
     GTimer.StartTimer();
 }
-
 
 // *********************************
 //

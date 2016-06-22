@@ -452,7 +452,7 @@ model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( model::ITimeEvaluato
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
 	plugins.push_back( plugin );
-	plugins.push_back( "DEFAULT_VIDEO_STREAM_DECODER" );
+	plugins.push_back( "DEFAULT_AV_DECODER" );
 	if( !alphaMask.empty() )
 	{
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
@@ -462,7 +462,7 @@ model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( model::ITimeEvaluato
 
 	assert( success );
 
-	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
+	success = model::LoadAVStream( node->GetPlugin( "av_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
     
 	if( !alphaMask.empty() )
 	{
@@ -568,7 +568,7 @@ std::vector< model::IPluginDescriptor * >  TestSceneUtils::DefaultBVPluginDescri
 	descriptors.push_back( new model::DefaultPieChartPluginDesc() );
 	descriptors.push_back( new model::DefaultPrismPluginDesc() );
 
-	descriptors.push_back( new model::DefaultVideoStreamDecoderPluginDesc() );
+	descriptors.push_back( new model::DefaultAVDecoderPluginDesc() );
 
     return descriptors;
 }

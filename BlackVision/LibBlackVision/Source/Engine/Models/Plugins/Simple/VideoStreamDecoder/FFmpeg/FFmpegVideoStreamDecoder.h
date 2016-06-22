@@ -1,47 +1,62 @@
 #pragma once
 
-#include "FFmpegDef.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
-#include "Assets/VideoStream/VideoStreamAsset.h"
+#include "Assets/VideoStream/AVAsset.h"
+#include "DataTypes/QueueConcurrent.h"
 
-namespace bv
+
+namespace bv {
+    
+class FFmpegDemuxer;
+
+class FFmpegVideoStreamDecoder : public FFmpegStreamDecoder
 {
-
-class FFmpegVideoStreamDecoder
-{
-
 private:
-	AVStream *				m_stream;
-	AVCodecContext *		m_codecCtx;
-	AVCodec *				m_codec;
 
-	SwsContext *			m_swsCtx;
+    AVFrame *                           m_outFrame;
+    uint8_t *                           m_outBuffer;
 
-	UInt32					m_width;
-	UInt32					m_height;
-	Float64					m_frameRate;
+    SizeType                            m_frameSize;
 
-	Int32					m_streamIdx;
+    SwsContext *                        m_swsCtx;
+
+    UInt32                              m_width;
+    UInt32                              m_height;
+    Float64                             m_frameRate;
+
+    QueueConcurrent< AVMediaData >      m_bufferQueue;
+
+    UInt32                              m_maxQueueSize;
 
 public:
-							FFmpegVideoStreamDecoder	( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx );
-							~FFmpegVideoStreamDecoder	();
 
-	UInt32					GetWidth					() const;	
-	UInt32					GetHeight					() const;	
-	Float64					GetFrameRate				() const;	
-	
-	/** Converts time from seconds to the stream specific time base timestamp */
-	Int64					ConvertTime					( Float64 time );
+                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
+                            ~FFmpegVideoStreamDecoder   ();
 
-	bool					DecodePacket				( AVPacket * packet, AVFrame * frame );
-	void					ConvertFrame				( AVFrame * inFrame, AVFrame * outFrame );
+    SizeType                GetFrameSize                () const;   
 
-	void					Reset						();
+    UInt32                  GetWidth                    () const;   
+    UInt32                  GetHeight                   () const;   
+    Float64                 GetFrameRate                () const;   
+    
+    bool                    GetData                     ( AVMediaData & data );
 
-	Int32					GetStreamIdx				() const;
+    bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
 
-	UInt32					GetCurrentFrameId			() const;
+    /** Converts time from seconds to the stream specific time base timestamp */
+    Int64                   ConvertTime                 ( Float64 time );
+
+    bool                    DecodePacket                ( AVPacket * packet );
+    virtual AVMediaData     ConvertFrame                ();
+
+    void                    Reset                       ();
+
+    virtual Int32           GetStreamIdx                () const override;
+
+	bool					IsDataQueueEmpty		    () const;
+    
 };
 
 DEFINE_UPTR_TYPE( FFmpegVideoStreamDecoder )

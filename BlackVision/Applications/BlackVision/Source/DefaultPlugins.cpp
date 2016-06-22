@@ -4,11 +4,12 @@
 
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAudioDecoderPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultGradientPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultAnimationPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultAlphaMaskPlugin.h"
@@ -56,7 +57,8 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTexturePluginDesc() );
 	descriptors.push_back( new DefaultNoPerspectiveTexturePluginDesc() );
     descriptors.push_back( new DefaultAnimationPluginDesc() );
-    descriptors.push_back( new DefaultVideoStreamDecoderPluginDesc() );
+    descriptors.push_back( new DefaultAVDecoderPluginDesc() );
+    descriptors.push_back( new DefaultAudioDecoderPluginDesc() );
     descriptors.push_back( new DefaultTextPluginDesc() );
     descriptors.push_back( new DefaultAlphaMaskPluginDesc() );
     descriptors.push_back( new DefaultTimerPluginDesc() );

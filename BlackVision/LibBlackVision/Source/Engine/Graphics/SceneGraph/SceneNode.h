@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Graphics/SceneGraph/AudioEntity.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
@@ -25,18 +26,20 @@ private:
 
 private:
 
-    SceneNodeVec            m_sceneNodes;
+    SceneNodeVec                    m_sceneNodes;
 
-    NodeEffectPtr           m_nodeEffect;
+    NodeEffectPtr                   m_nodeEffect;
 
-    TransformableEntity *   m_transformable;
+    TransformableEntity *           m_transformable;
 
-    bool                    m_visible;
+    bool                            m_visible;
 
-    bool                    m_drawBoundingBox;
-    glm::vec4               m_boundingBoxColor;
+    bool                            m_drawBoundingBox;
+    glm::vec4                       m_boundingBoxColor;
 
-    const mathematics::Box * m_boundingBox;
+    const mathematics::Box *        m_boundingBox;
+
+    AudioEntity *                   m_audio;
 
 public:
 
@@ -54,6 +57,9 @@ public:
     bool                    HasChild            ( SceneNode * node ) const;
 
     TransformableEntity *   GetTransformable    ();
+
+    AudioEntity *           GetAudio            ();
+    void                    SetAudio            ( AudioEntity * audio );
    
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
@@ -69,6 +75,8 @@ private:
 
     void                    SetTransformable    ( TransformableEntity * transformable );
     void                    DeleteTransformable ();
+
+    void                    DeleteAudio         ();
 
 public:
 

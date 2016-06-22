@@ -310,6 +310,21 @@
     <Filter Include="Engine\Models\Plugins\Simple\VideoInput">
       <UniqueIdentifier>{96e84485-a1b2-485c-924f-be608057a1fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Channels\Audio">
+      <UniqueIdentifier>{15814e39-129e-47b9-9543-4f9a229cd7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{61cfe5f0-0d76-449a-8747-c43bd6ca339d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\Resources">
+      <UniqueIdentifier>{389a43f4-7073-4b2d-b85a-09059aa45dad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\OALRenderer">
+      <UniqueIdentifier>{12ce6341-8393-44df-8a54-4256f925b7dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\Logic">
+      <UniqueIdentifier>{f7d0d83e-2b2f-4d48-89e2-3d5c27d8f18e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -942,12 +957,6 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
@@ -986,12 +995,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp">
       <Filter>Assets</Filter>
@@ -1285,17 +1288,11 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.cpp">
-      <Filter>Assets\VideoStream</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.cpp">
       <Filter>Engine\Graphics\Rendering</Filter>
@@ -1507,9 +1504,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClCompile>
@@ -1596,6 +1590,69 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAudioDecoderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAVDecoderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\AVDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.cpp">
+      <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioBuffer.cpp">
+      <Filter>Engine\Audio\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrListener.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.cpp">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.cpp">
+      <Filter>Engine\Audio\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAsset.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2781,28 +2838,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRectPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
@@ -2967,23 +3006,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.h">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
@@ -3036,38 +3063,11 @@
     <ClInclude Include="..\..\..\Source\Assets\Assets.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.h">
       <Filter>Assets\Cache</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTorusPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSimpleCubePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpringPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h">
       <Filter>Engine\Models\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h">
       <Filter>Engine\Models\Plugins</Filter>
@@ -3090,9 +3090,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -3105,14 +3102,8 @@
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
       <Filter>Engine\Models\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h">
-      <Filter>Assets\VideoStream</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
@@ -3134,15 +3125,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IVideoDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
@@ -3536,9 +3518,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
@@ -3547,9 +3526,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.h">
-      <Filter>Assets\VideoStream</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h">
       <Filter>Engine\Graphics\Rendering</Filter>
@@ -3785,9 +3761,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClInclude>
@@ -3877,6 +3850,81 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAudioDecoderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAVDecoderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\AVDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDefs.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IAudioChannel.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.h">
+      <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioBuffer.h">
+      <Filter>Engine\Audio\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrListener.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.h">
+      <Filter>Engine\Audio\OALRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.h">
+      <Filter>Engine\Audio\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAsset.h">
+      <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h">
+      <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h">
+      <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h">
+      <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
