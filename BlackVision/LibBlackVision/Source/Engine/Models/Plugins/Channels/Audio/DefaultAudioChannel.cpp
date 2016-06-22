@@ -61,5 +61,19 @@ AudioFormat             DefaultAudioChannel::GetFormat      () const
     return m_format;
 }
 
+// ******************************
+//
+void                    DefaultAudioChannel::SetFrequency   ( Int32 frequency ) 
+{
+    m_frequency = frequency;
+}
+
+// ******************************
+//
+void                    DefaultAudioChannel::SetFormat      ( AudioFormat format )
+{
+    m_format = format;
+}
+
 } //model
 } //bv

@@ -24,13 +24,14 @@ private:
     bool                        m_videoEnabled;
     bool                        m_audioEnabled;
 
+    //video only data
+	TextureFormat				m_textureFormat;
+
 	//raw videos data
 	UInt32						m_width;
 	UInt32						m_height;
 	Float64						m_frameRate;
 	VideoPixelFormat			m_videoFormat;
-
-	TextureFormat				m_textureFormat;
 
 protected:
 

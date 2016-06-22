@@ -462,7 +462,7 @@ model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( model::ITimeEvaluato
 
 	assert( success );
 
-	success = model::LoadVideoStream( node->GetPlugin( "av_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
+	success = model::LoadAVStream( node->GetPlugin( "av_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
     
 	if( !alphaMask.empty() )
 	{

@@ -11,10 +11,12 @@ struct AVMediaData
 {
 	UInt32			frameIdx;
 	MemoryChunkPtr	frameData;
+    SizeType        nbSamples;
 
 	AVMediaData()
 		: frameIdx( 0 )
 		, frameData( nullptr )
+        , nbSamples( 0 )
 	{
     }
 };

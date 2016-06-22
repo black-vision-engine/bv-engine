@@ -6,7 +6,7 @@
 #include "Assets/VideoStream/AVAssetDescriptor.h"
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/VideoDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/AVDecoderThread.h"
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxerThread.h"
@@ -35,7 +35,7 @@ private:
 	FFmpegVideoStreamDecoderUPtr	m_videoDecoder;
 	FFmpegAudioStreamDecoderUPtr    m_audioDecoder;
 
-	VideoDecoderThreadUPtr			m_decoderThread;
+	AVDecoderThreadUPtr			    m_decoderThread;
 	mutable std::mutex				m_mutex;
 
     FFmpegDemuxerThreadUPtr         m_demuxerThread;
@@ -59,7 +59,7 @@ public:
 	virtual AVMediaData		    GetAudioMediaData		() override;
     virtual AVMediaData		    GetSingleFrame  		( TimeType frameTime) override;
 
-	virtual SizeType			GetFrameSize			() const override;
+	virtual SizeType			GetVideoFrameSize	    () const override;
 
 	virtual UInt32				GetWidth				() const override;
 	virtual UInt32				GetHeight				() const override;
@@ -86,7 +86,7 @@ public:
 protected:
 	
 	virtual bool				NextVideoDataReady		() override;
-	virtual bool				NextAudioDataReady		() override;
+	virtual SizeType		    NextAudioDataReady		() override;
 
 
     friend class FFmpegAudioStreamDecoderThread;

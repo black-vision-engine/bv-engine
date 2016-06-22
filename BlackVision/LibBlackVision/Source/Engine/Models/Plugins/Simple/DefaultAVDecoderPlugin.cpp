@@ -141,7 +141,6 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
-    //FIXME:
     m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
 
 	SetPrevPlugin( prev );
@@ -188,10 +187,18 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 
             if( m_decoder->HasVideo() )
             {
+                if( m_decoder->HasAudio() )
+                {
+                    m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
+                    m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
+
+                    m_prevAudioFrameIdx = -1;
+                }
+
                 while( !m_decoder->NextVideoDataReady() );
 
 		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
-                    MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
+                    MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
                     m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
                 if( vsDesc != nullptr )
@@ -206,7 +213,6 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 			        HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
                     m_prevFrameIdx = -1;
-                    m_prevAudioFrameIdx = -1;
 
 			        return true;
 		        }

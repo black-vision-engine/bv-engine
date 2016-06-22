@@ -11,6 +11,7 @@ namespace bv {
 class AudioEntity
 {
 private:
+
     typedef std::vector< audio::AudioBufferConstPtr > AudioBufferVec;
 
 protected:
@@ -26,6 +27,9 @@ public:
     virtual                     ~AudioEntity    ();
 
 public:
+
+    Int32                       GetFrequency    () const;
+    AudioFormat                 GetFormat       () const;
 
     bool                        IsEmpty         () const;
 

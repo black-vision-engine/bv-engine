@@ -23,21 +23,27 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
 	m_demuxer = std::unique_ptr< FFmpegDemuxer >( new FFmpegDemuxer( path ) );
     m_demuxerThread = std::unique_ptr< FFmpegDemuxerThread >( new FFmpegDemuxerThread( m_demuxer.get() ) );
 
-    auto vstreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO );
-    if( vstreamIdx >= 0 )
+    if( asset->IsVideoEnabled() )
     {
-	    m_videoDecoder = std::unique_ptr< FFmpegVideoStreamDecoder >( new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx ) );
-        m_hasVideo = true;
+        auto vstreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO );
+        if( vstreamIdx >= 0 )
+        {
+	        m_videoDecoder = std::unique_ptr< FFmpegVideoStreamDecoder >( new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx ) );
+            m_hasVideo = true;
+        }
     }
 
-    auto astreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_AUDIO );
-    if( astreamIdx >= 0 )
+    if( asset->IsAudioEnabled() )
     {
-        m_audioDecoder = std::unique_ptr< FFmpegAudioStreamDecoder >( new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx ) );
-        m_hasAudio = true;
+        auto astreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_AUDIO );
+        if( astreamIdx >= 0 )
+        {
+            m_audioDecoder = std::unique_ptr< FFmpegAudioStreamDecoder >( new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx ) );
+            m_hasAudio = true;
+        }
     }
 
-	m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( this ) );
+	m_decoderThread = std::unique_ptr< AVDecoderThread >( new AVDecoderThread( this ) );
    
     m_demuxerThread->Start();
 
@@ -54,7 +60,6 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
     }
 
     m_decoderThread->Start();
-    //m_decoderThread->Stop();
 }
 
 // *********************************
@@ -178,10 +183,10 @@ bool					FFmpegAVDecoder::NextVideoDataReady		()
             m_videoDecoderThread->Restart();
         }
 
-        AVMediaData videoMediaData;
-        if( m_videoDecoder->GetData( videoMediaData ) )
+        AVMediaData data;
+        if( m_videoDecoder->GetData( data ) )
         {
-            m_outVideoQueue.Push( videoMediaData );
+            m_outVideoQueue.Push( data );
 
             if( m_outVideoQueue.Size() > 1 )
             {
@@ -198,7 +203,7 @@ bool					FFmpegAVDecoder::NextVideoDataReady		()
 
 // *********************************
 //
-bool					FFmpegAVDecoder::NextAudioDataReady		()
+SizeType				FFmpegAVDecoder::NextAudioDataReady		    ()
 {
     if( m_hasAudio )
     {
@@ -212,27 +217,21 @@ bool					FFmpegAVDecoder::NextAudioDataReady		()
             m_audioDecoderThread->Restart();
         }
 
-        AVMediaData audioMediaData;
-        if( m_audioDecoder->GetData( audioMediaData ) )
+        AVMediaData data;
+        if( m_audioDecoder->GetData( data ) )
         {
-            //if( !m_outAudioQueue.IsEmpty() )
-            //{
-            //    AVMediaData del;
-            //    m_outAudioQueue.TryPop( del );
-            //}
+            m_outAudioQueue.Push( data );
 
-            m_outAudioQueue.Push( audioMediaData );
-
-            return true;
+            return data.nbSamples;
         }
     }
 
-    return false;
+    return 0;
 }
 
 // *********************************
 //
-SizeType				FFmpegAVDecoder::GetFrameSize			() const
+SizeType				FFmpegAVDecoder::GetVideoFrameSize		    () const
 {
     if( m_hasVideo )
     {

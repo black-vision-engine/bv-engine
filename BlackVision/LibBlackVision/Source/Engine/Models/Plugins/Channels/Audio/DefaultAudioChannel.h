@@ -35,6 +35,9 @@ public:
     virtual Int32                   GetFrequency            () const override;
     virtual AudioFormat             GetFormat               () const override;
 
+    virtual void                    SetFrequency            ( Int32 frequency );
+    virtual void                    SetFormat               ( AudioFormat format );
+
 };
 
 } //model

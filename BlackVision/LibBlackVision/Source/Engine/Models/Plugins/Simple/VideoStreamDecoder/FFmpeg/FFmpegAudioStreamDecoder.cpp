@@ -8,14 +8,14 @@
 
 namespace bv {
 
-const AVSampleFormat        FFmpegAudioStreamDecoder::DEFAULT_FORMAT  = AV_SAMPLE_FMT_S16;
+const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_U8 };
 
 // *******************************
 //
 FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
 	: m_swrCtx( nullptr )
     , m_maxQueueSize( maxQueueSize )
-    , m_frameSize( 0 )
+    , m_needConversion( false )
 {
     m_streamIdx = streamIdx;
 
@@ -27,37 +27,35 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, 
 	bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
 	assert( !error ); { error; }
     
-    m_swrCtx = swr_alloc();
-    m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, DEFAULT_FORMAT, m_codecCtx->sample_rate, 
-        m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
-    swr_init( m_swrCtx );
-
     m_sampleRate = m_codecCtx->sample_rate;
-	if( m_codecCtx->channels == 1 )
+    m_format = GetSupportedFormat( m_codecCtx->sample_fmt );
+    m_nbChannels = std::min( m_codecCtx->channels, 2 );
+
+    if( !IsSupportedFormat( m_codecCtx->sample_fmt ) )
     {
-		m_format = AudioFormat::MONO16;
-	}
-    else if( m_codecCtx->channels == 2 )
-    {
-		m_format = AudioFormat::STEREO16;
-	}
+        m_needConversion = true;
+
+        m_swrCtx = swr_alloc();
+        m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, m_format, m_codecCtx->sample_rate, 
+            m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
+        swr_init( m_swrCtx );
+    }
 
     m_frame = av_frame_alloc();
-
-    m_frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_codecCtx->channels, m_codecCtx->frame_size, DEFAULT_FORMAT, 0 );
-	m_outBuffer = ( uint8_t * )av_malloc( ( Int32 )m_frameSize );
-    memset( m_outBuffer, 0, ( Int32 )m_frameSize );
 }
 
 // *******************************
 //
 FFmpegAudioStreamDecoder::~FFmpegAudioStreamDecoder    ()
 {
-    swr_free( &m_swrCtx );
+    if( m_needConversion )
+    {
+        swr_free( &m_swrCtx );
+    }
+
 	avcodec_close( m_codecCtx );
 
     av_frame_free( &m_frame );
-    av_free( m_outBuffer );
 
     m_bufferQueue.Clear();
 }
@@ -73,7 +71,7 @@ Int32                   FFmpegAudioStreamDecoder::GetSampleRate     () const
 //
 AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 {
-    return m_format;
+    return ConvertFormat( m_format, m_nbChannels );
 }
 
 // *******************************
@@ -133,15 +131,23 @@ bool				FFmpegAudioStreamDecoder::DecodePacket		( AVPacket * packet )
 //
 AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 {
-    swr_convert( m_swrCtx, &m_outBuffer, m_frame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
-    
-    char * data = new char[ m_frameSize ];
-    memcpy( data, m_outBuffer, m_frameSize );
+    auto frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, m_frame->nb_samples, m_format, 0 );
+	auto outBuffer = new uint8_t[ frameSize ];
 
+    if( m_needConversion )
+    {
+        swr_convert( m_swrCtx, &outBuffer, m_frame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
+    }
+    else
+    {
+        memcpy( outBuffer, m_frame->data, frameSize );
+    }
+    
     AVMediaData mediaData;
 
     mediaData.frameIdx = ( UInt32 )m_frame->pkt_pts;
-    mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
+    mediaData.frameData = MemoryChunk::Create( ( char * )outBuffer, SizeType( frameSize ) );
+    mediaData.nbSamples = m_frame->nb_samples;
 
     return mediaData;
 }
@@ -159,6 +165,71 @@ void					FFmpegAudioStreamDecoder::Reset				()
 Int32					FFmpegAudioStreamDecoder::GetStreamIdx		() const
 {
 	return m_streamIdx;
+}
+
+// *******************************
+//
+AVSampleFormat          FFmpegAudioStreamDecoder::GetSupportedFormat    ( AVSampleFormat format )
+{
+    for( auto & supported : SUPPORTED_FORMATS )
+    {
+        if( supported == format )
+        {
+            return format;
+        }
+    }
+    return SUPPORTED_FORMATS[ 0 ];
+}
+
+// *******************************
+//
+bool                    FFmpegAudioStreamDecoder::IsSupportedFormat     ( AVSampleFormat format )
+{
+    for( auto & supported : SUPPORTED_FORMATS )
+    {
+        if( supported == format )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// *******************************
+//
+AudioFormat             FFmpegAudioStreamDecoder::ConvertFormat         ( AVSampleFormat format, Int32 nbChannels )
+{
+    if( nbChannels == 1 )
+    {
+        if( format == AV_SAMPLE_FMT_U8 )
+        {
+		    return AudioFormat::MONO8;
+        }
+
+        if( format == AV_SAMPLE_FMT_S16 )
+        {
+		    return AudioFormat::MONO16;
+        }
+
+        return AudioFormat::MONO16;
+    }
+
+    if( nbChannels == 2 )
+    {
+        if( format == AV_SAMPLE_FMT_U8 )
+        {
+		    return AudioFormat::STEREO8;
+        }
+
+        if( format == AV_SAMPLE_FMT_S16 )
+        {
+		    return AudioFormat::STEREO16;
+        }
+
+		return AudioFormat::STEREO16;
+    }
+
+    return AudioFormat::STEREO16;
 }
 
 } //bv

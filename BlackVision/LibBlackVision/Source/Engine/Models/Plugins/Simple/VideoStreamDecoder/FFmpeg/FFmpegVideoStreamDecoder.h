@@ -15,6 +15,11 @@ class FFmpegVideoStreamDecoder : public FFmpegStreamDecoder
 {
 private:
 
+    AVFrame *                           m_outFrame;
+    uint8_t *                           m_outBuffer;
+
+    SizeType                            m_frameSize;
+
     SwsContext *                        m_swsCtx;
 
     UInt32                              m_width;

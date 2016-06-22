@@ -19,10 +19,6 @@ protected:
     Int32                   m_streamIdx;
 
     AVFrame *               m_frame;
-    AVFrame *               m_outFrame;
-    uint8_t *               m_outBuffer;
-
-    SizeType                m_frameSize;
 
 public:
 

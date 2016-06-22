@@ -19,7 +19,7 @@ public:
 	virtual AVMediaData		        GetAudioMediaData		() = 0;
     virtual AVMediaData			    GetSingleFrame  		( TimeType frameTime) = 0;
 
-	virtual SizeType				GetFrameSize			() const = 0;
+	virtual SizeType				GetVideoFrameSize	    () const = 0;
 
 	virtual UInt32					GetWidth				() const = 0;
 	virtual UInt32					GetHeight				() const = 0;
@@ -45,9 +45,9 @@ public:
 //protected:
 
 	virtual bool					NextVideoDataReady		() = 0;
-	virtual bool					NextAudioDataReady		() = 0;
+	virtual SizeType				NextAudioDataReady		() = 0;
     
-	friend class VideoDecoderThread;
+	friend class AVDecoderThread;
 
 };
 

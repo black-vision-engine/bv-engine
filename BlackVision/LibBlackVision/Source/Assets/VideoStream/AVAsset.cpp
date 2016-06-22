@@ -7,7 +7,7 @@ namespace bv
 
 // ******************************
 //
-const std::string AVAsset::uid = "AVASSET";
+const std::string AVAsset::uid = "AV_ASSET";
 
 // ******************************
 //
@@ -19,12 +19,12 @@ AVAssetConstPtr AVAsset::Create( const std::string & streamPath, TextureFormat t
 // ******************************
 //
 AVAsset::AVAsset( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
-	: m_streamPath( streamPath ),
-    m_textureFormat( textureFormat ),
-    m_width( width ),
-    m_height( height ),
-    m_frameRate( frameRate ),
-    m_videoFormat( videoFormat )
+	: m_streamPath( streamPath )
+    , m_textureFormat( textureFormat )
+    , m_width( width )
+    , m_height( height )
+    , m_frameRate( frameRate )
+    , m_videoFormat( videoFormat )
 {
 }
 

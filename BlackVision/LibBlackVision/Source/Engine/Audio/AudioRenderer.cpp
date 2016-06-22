@@ -55,9 +55,8 @@ void    AudioRenderer::Play             ( AudioEntity * audio )
         source = new PdrSource();
         m_sources[ audio ] = source;
         
-        queue = new PdrAudioBuffersQueue();
+        queue = new PdrAudioBuffersQueue( audio->GetFrequency(), audio->GetFormat() );
         m_bufferMap[ source ] = queue;
-
     }
     else
     {

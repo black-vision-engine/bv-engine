@@ -14,20 +14,21 @@ class FFmpegAudioStreamDecoder : public FFmpegStreamDecoder
 {
 private:
 
-    static const AVSampleFormat         DEFAULT_FORMAT;
+    static const AVSampleFormat         SUPPORTED_FORMATS[];
 
 private:
 	
-    UInt32                              m_frameSize;
-
     SwrContext *			            m_swrCtx;
 
     Int32                               m_sampleRate;
-    AudioFormat                         m_format;
+    AVSampleFormat                      m_format;
+    Int32                               m_nbChannels;
 
 	QueueConcurrent< AVMediaData >      m_bufferQueue;
 
     UInt32                              m_maxQueueSize;
+
+    bool                                m_needConversion;
 
 public:
 
@@ -47,6 +48,13 @@ public:
 	void					Reset						();
 
 	virtual Int32			GetStreamIdx				() const override;
+
+private:
+
+    AVSampleFormat          GetSupportedFormat          ( AVSampleFormat format );
+
+    static bool             IsSupportedFormat           ( AVSampleFormat format );
+    static AudioFormat      ConvertFormat               ( AVSampleFormat format, Int32 nbChannels );
 
 };
 

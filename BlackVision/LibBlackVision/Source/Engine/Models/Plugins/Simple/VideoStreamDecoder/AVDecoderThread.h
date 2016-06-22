@@ -14,7 +14,7 @@
 namespace bv
 {
 
-class VideoDecoderThread : public Thread
+class AVDecoderThread : public Thread
 {
 
 private:
@@ -27,11 +27,12 @@ private:
 	std::atomic< bool >			m_stopped;
 	std::atomic< bool >			m_running;
 
-    SimpleTimer					m_timer;
+    SimpleTimer					m_videoTimer;
+    SimpleTimer					m_audioTimer;
 
 public:
-								VideoDecoderThread	( IAVDecoder * decoder );
-	virtual						~VideoDecoderThread	();
+								AVDecoderThread	    ( IAVDecoder * decoder );
+	virtual						~AVDecoderThread	();
 	void						Kill				();
 
 	void						Play				();
@@ -45,6 +46,6 @@ protected:
 
 };
 
-DEFINE_UPTR_TYPE( VideoDecoderThread )
+DEFINE_UPTR_TYPE( AVDecoderThread )
 
 } //bv

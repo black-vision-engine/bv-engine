@@ -22,6 +22,20 @@ AudioEntity::~AudioEntity           ()
 
 // ***********************
 //
+Int32                       AudioEntity::GetFrequency   () const
+{
+    return m_frequency;
+}
+
+// ***********************
+//
+AudioFormat                 AudioEntity::GetFormat      () const
+{
+    return m_format;
+}
+
+// ***********************
+//
 bool                        AudioEntity::IsEmpty        () const
 {
     return m_audioData.IsEmpty();
