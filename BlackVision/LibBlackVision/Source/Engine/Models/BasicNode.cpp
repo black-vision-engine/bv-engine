@@ -562,15 +562,10 @@ BoundingVolumePtr CreateBoundingVolume( DefaultPluginListFinalizedPtr pluginList
 {
     auto vac_ = pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
     auto param = pluginList->GetFinalizePlugin()->GetParamTransform();
-    assert( param );
 
-    if( vac_ )
-    {
-        auto vac = Cast< VertexAttributesChannel * >( RemoveConst( vac_.get() ) ); // FIXME
-        return std::make_shared< BoundingVolume >( vac, param.get() );
-    }
-    else
-        return std::make_shared< BoundingVolume >( nullptr, nullptr );
+    auto vac = ( vac_ ) ? Cast< VertexAttributesChannel * >( RemoveConst( vac_.get() ) ) : nullptr;
+
+    return std::make_shared< BoundingVolume >( vac, param.get() );
 }
 
 }

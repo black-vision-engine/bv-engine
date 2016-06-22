@@ -50,7 +50,7 @@
 namespace {
 
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
-    std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
+    std::string GSimplePlugins1[] = { /*"DEFAULT_TRANSFORM",*/ "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
     std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
     std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
@@ -558,12 +558,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeMultiGlobalEffectTest    ( mo
     e23node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
 
-	// NET_IMAGE_MASK
-	// NET_LIGHT_SCATTERING,
+    // NET_IMAGE_MASK
+    // NET_LIGHT_SCATTERING,
     // NET_SHADOW,
     // NET_BLUR,
 
-	//root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
+    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
 
     return root;
 }
@@ -1457,7 +1457,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     timeEvaluator->AddChild( localTimeline );
 
     //Plugin stuff
-    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 2 );
 
     if( useAlphaMask )
     {
@@ -1469,6 +1469,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
+#if 0
     SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.05f, 0.05f, 1.f ) );
     //SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
     //SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 0.f, 1.f, 0.f ), 70.f );
@@ -1481,6 +1482,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
     auto plugin = node->GetPlugin( "transform" );
     //auto param = plugin->GetParameter( "simple_transform" );
+#endif
 
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
 

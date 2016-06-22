@@ -37,11 +37,11 @@ public:
     enum class TestSceneSelector : int
     {
         TSS_ONE_SOLID_COLOR_RECTANGLE,
-		TSS_ONE_TEXTURED_RECTANGLE,
+        TSS_ONE_TEXTURED_RECTANGLE,
         TSS_TWO_TEXTURED_RECTANGLES,
-		TSS_TEXT,
-		TSS_ANIMATION_RECTANGLE,
-		TSS_SOLID_RECTANGLE,
+        TSS_TEXT,
+        TSS_ANIMATION_RECTANGLE,
+        TSS_SOLID_RECTANGLE,
         TSS_GLOBAL_EFFECT_05,
 
         TSS_TOTAL
@@ -96,8 +96,8 @@ public:
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 
-	static	model::BasicNodePtr		BasicShapesShowScene		    ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
-	static	model::BasicNodePtr		BasicShapesTest				    ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static	model::BasicNodePtr		BasicShapesShowScene		    ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static	model::BasicNodePtr		BasicShapesTest				    ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     AssetCacheTestScene             ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     RemoteEventsTestScene           ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
