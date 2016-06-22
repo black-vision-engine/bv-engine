@@ -185,7 +185,7 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
         ctx->GetRenderLogic()->DrawNodeOnly( renderer( ctx ), node );
     }
 
-    if( node->IsSelected() )
+    if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
         ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
 }
 

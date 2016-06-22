@@ -26,17 +26,17 @@ class BoundingVolume {
     glm::vec3                           m_center;
     //glm::mat4               m_transform; // apply unit cube to get bounding box :)
 
-    mutable VertexAttributesChannel *   m_vac;
+    const VertexAttributesChannel *     m_vac;
     UInt64                              m_lastTopologyID;
     UInt64                              m_lastAttribuetesID;
 
-    mutable const ParamTransform *      m_param;
+    const ParamTransform *              m_param;
 
 public:
-                                        BoundingVolume          ( VertexAttributesChannel * vac, ParamTransform * param );
+                                        BoundingVolume          ( const VertexAttributesChannel * vac, ParamTransform * param );
 
-    void                                UpdateVAC               ( const IVertexAttributesChannel * vac ) const;
-    void                                UpdateParam             ( const ParamTransform * param ) const;
+    void                                UpdateVAC               ( const IVertexAttributesChannel * vac );
+    void                                UpdateParam             ( const ParamTransform * param );
 
     const mathematics::Box *            GetBoundingBox          () const;
 

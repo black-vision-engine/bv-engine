@@ -18,7 +18,7 @@ VertexAttributesChannelDescriptor   DescriptorFromConnectedComponent( ConnectedC
 void                                ChannelFromConnectedComponents  ( VertexAttributesChannel * channel, const std::vector< ConnectedComponent * > & connectedComponents );
 void                                ChannelFromConnectedComponents  ( VertexAttributesChannel * channel, unsigned int numComponents, ... );
 
-mathematics::Box                    CalculateBoundingBox            ( IVertexAttributesChannel * vac );
+mathematics::Box                    CalculateBoundingBox            ( const IVertexAttributesChannel * vac );
 
 
 } //model

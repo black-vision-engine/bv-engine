@@ -19,6 +19,9 @@ model::ConnectedComponentPtr BuildBoxComponent( const mathematics::Box & box )
 {
     auto comp = model::ConnectedComponent::Create();
 
+    //if( box.m_empty )
+    //    return comp;
+
     auto * compVertDesc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
     auto vertArrtF3 = std::make_shared< model::Float3AttributeChannel >( compVertDesc, "boundingBox", false );
@@ -121,7 +124,7 @@ model::ConnectedComponentPtr BuildCenterComponent( const glm::vec3 & center )
 
 
 
-BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac, ParamTransform * param )
+BoundingVolume::BoundingVolume          ( const VertexAttributesChannel * vac, ParamTransform * param )
     : m_vac( vac )
     , m_lastAttribuetesID( 0 )
     , m_lastTopologyID( 0 )
@@ -179,15 +182,16 @@ IConnectedComponentPtr              BoundingVolume::BuildCenterRepresentation ()
 
 // ***********************
 //
-void                        BoundingVolume::UpdateVAC               ( const IVertexAttributesChannel * vac_ ) const
+void                        BoundingVolume::UpdateVAC               ( const IVertexAttributesChannel * vac_ )
 {
     if( vac_ == nullptr )
     {
         m_vac = nullptr;
+        m_box = mathematics::Box();
     }
     else
     {
-        auto vac = Cast< VertexAttributesChannel * const >( RemoveConst( vac_ ) );
+        auto vac = Cast< const VertexAttributesChannel * >( vac_);
 
         m_vac = vac;
     }
@@ -195,7 +199,7 @@ void                        BoundingVolume::UpdateVAC               ( const IVer
 
 // ***********************
 //
-void                                BoundingVolume::UpdateParam             ( const ParamTransform * param ) const
+void                                BoundingVolume::UpdateParam             ( const ParamTransform * param )
 {
     m_param = param;
 }

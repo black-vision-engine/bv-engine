@@ -1368,9 +1368,9 @@ void                    BVProjectEditor::RefreshNode        (  model::BasicNodeP
     BVProjectTools::ClearSingleNode( sceneNode, renderer );
     BVProjectTools::SyncSingleNode( modelNode, sceneNode );
 
-    auto bv = modelNode->GetBoundingVolume();
+    auto bv = RemoveConst( modelNode->GetBoundingVolume().get() );
     assert( bv );
-    bv->UpdateVAC( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() );
+    bv->UpdateVAC( RemoveConst( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() ) );
     bv->UpdateParam( modelNode->GetFinalizePlugin()->GetParamTransform().get() );
 }
 

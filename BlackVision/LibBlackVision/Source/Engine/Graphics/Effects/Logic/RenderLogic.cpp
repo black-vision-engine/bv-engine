@@ -391,7 +391,7 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
             effect->Render( node, ctx );
         }
 
-        if( IsSelected( node ) )
+        if( IsSelected( node ) && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr )
             RenderBoundingBox( node, ctx, BoundingBoxColor( node ) );
     }
 }
