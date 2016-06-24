@@ -99,7 +99,6 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
     , m_prevOffsetCounter( 1 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
-    , m_prevAudioFrameIdx( -1 )
     , m_isFinished( false )
 {
     m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
@@ -150,8 +149,6 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
             {
                 m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                 m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
-
-                m_prevAudioFrameIdx = -1;
 
 			    return true;
             }
@@ -270,12 +267,11 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
 void                                DefaultAudioDecoderPlugin::UploadAudioFrame         ()
 {
     //update audio data
-    auto mediaData = m_decoder->GetAudioMediaData();
-    if( mediaData.frameData && m_prevAudioFrameIdx != mediaData.frameIdx )
+    AVMediaData mediaData;
+    if( m_decoder->GetAudioMediaData( mediaData ) )
 	{
         m_audioChannel->PushPacket( mediaData.frameData );
 	}
-    m_prevAudioFrameIdx = mediaData.frameIdx;
 }
 
 // *************************************

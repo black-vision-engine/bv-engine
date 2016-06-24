@@ -29,11 +29,14 @@ private:
 
 	bool						m_isEOF;
 
-    UInt32                      m_maxQueueSize;
+    UInt32                      m_maxVideoQueueSize;
+    UInt32                      m_maxAudioQueueSize;
+
+	mutable std::mutex			m_mutex;
 
 public:
 
-								FFmpegDemuxer			( const std::string & streamPath, UInt32 maxQueueSize = 10 );
+								FFmpegDemuxer			( const std::string & streamPath );
 								~FFmpegDemuxer			();
 
 	bool					    ProcessPacket			();

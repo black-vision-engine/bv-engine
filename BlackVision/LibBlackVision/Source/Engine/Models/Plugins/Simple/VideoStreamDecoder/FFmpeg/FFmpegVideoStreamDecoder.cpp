@@ -30,7 +30,7 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr as
     assert( !error ); { error; }
 
     //raw video desc should provide width, height & format
-
+    
     if( m_codecCtx->width == 0 || m_codecCtx->height == 0 )
     {
         m_codecCtx->width = asset->GetWidth();
@@ -45,7 +45,17 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr as
     m_width = ( UInt32 )m_codecCtx->width;
     m_height = ( UInt32 )m_codecCtx->height;
     
-    m_frameRate = ( Float64 )av_q2d( m_stream->avg_frame_rate );
+    if( m_stream->avg_frame_rate.den && m_stream->avg_frame_rate.num )
+    {
+        m_frameRate = ( Float64 )av_q2d( m_stream->avg_frame_rate );
+    }
+    else
+    {
+        //invalid frame rate - assign default
+        m_frameRate = 25.;
+    }
+
+    m_duration = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_stream->duration );
 
     assert( m_width > 0 );
     assert( m_height > 0 );
@@ -86,6 +96,7 @@ bool                FFmpegVideoStreamDecoder::DecodePacket          ( AVPacket *
 
     int frameReady = 0;
     avcodec_decode_video2( m_codecCtx, m_frame, &frameReady, packet );
+
 	av_packet_unref( packet ); //FIXME
 
     return ( frameReady != 0 );
@@ -101,7 +112,7 @@ AVMediaData         FFmpegVideoStreamDecoder::ConvertFrame          ()
     memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
 
     AVMediaData mediaData;
-    mediaData.frameIdx = ( UInt32 )m_frame->pkt_pts;
+    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pkt_pts );
     mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
     
     return mediaData;
@@ -130,6 +141,15 @@ UInt32              FFmpegVideoStreamDecoder::GetHeight         () const
 
 // *******************************
 //
+UInt64              FFmpegVideoStreamDecoder::GetCurrentPTS     ()
+{
+    AVMediaData data;
+    m_bufferQueue.Front( data );
+    return data.framePTS;
+}
+
+// *******************************
+//
 bool		        FFmpegVideoStreamDecoder::GetData	        ( AVMediaData & data )
 {
     return m_bufferQueue.TryPop( data );
@@ -140,6 +160,13 @@ bool		        FFmpegVideoStreamDecoder::GetData	        ( AVMediaData & data )
 Float64             FFmpegVideoStreamDecoder::GetFrameRate      () const
 {
     return m_frameRate;
+}
+
+// *******************************
+//
+UInt64              FFmpegVideoStreamDecoder::GetDuration       () const
+{
+    return m_duration;
 }
 
 // *******************************
@@ -175,6 +202,13 @@ Int64               FFmpegVideoStreamDecoder::ConvertTime       ( Float64 time )
 void                FFmpegVideoStreamDecoder::Reset             ()
 {
     avcodec_flush_buffers( m_codecCtx );
+    Clear();
+}
+
+// *******************************
+//
+void                FFmpegVideoStreamDecoder::Clear             ()
+{
     m_bufferQueue.Clear();
 }
 

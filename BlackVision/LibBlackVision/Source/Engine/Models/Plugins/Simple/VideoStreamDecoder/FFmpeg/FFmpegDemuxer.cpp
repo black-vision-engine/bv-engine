@@ -13,11 +13,12 @@ const UInt32         FFmpegDemuxer::SAFE_SEEK_FRAMES = 10;
 
 // *******************************
 //FIXME: pass which stream we want - now only video
-FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQueueSize )
+FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	: m_streamPath( streamPath )
 	, m_formatCtx( nullptr )
 	, m_isEOF( false )
-    , m_maxQueueSize( maxQueueSize )
+    , m_maxVideoQueueSize( 5 )
+    , m_maxAudioQueueSize( 16 )
 {
 	av_register_all();
 
@@ -51,10 +52,18 @@ AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 //
 bool			FFmpegDemuxer::ProcessPacket			()
 {
+    std::lock_guard< std::mutex > lock( m_mutex );
+
     auto process = false;
     for( auto & queue : m_packetQueue )
     {
-        if( queue.second->Size() <= m_maxQueueSize )
+        if( m_formatCtx->streams[ queue.first ]->codec->codec_type == AVMediaType::AVMEDIA_TYPE_VIDEO &&
+            queue.second->Size() < m_maxVideoQueueSize )
+        {
+            process = true;
+        }
+        else if( m_formatCtx->streams[ queue.first ]->codec->codec_type == AVMediaType::AVMEDIA_TYPE_AUDIO &&
+            queue.second->Size() < m_maxAudioQueueSize )
         {
             process = true;
         }
@@ -64,11 +73,12 @@ bool			FFmpegDemuxer::ProcessPacket			()
     {
 	    auto packet = new AVPacket();
 
+
 	    auto error = av_read_frame( m_formatCtx, packet );
 	    if( error < 0 ) 
         {
 		    assert( error == AVERROR_EOF ); //error reading frame
-				
+	        	
 		    m_isEOF = true;
             av_packet_unref( packet );
             delete packet;
@@ -116,8 +126,10 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
         initTs = 0;
     }
 
+	std::lock_guard< std::mutex > lock( m_mutex );
+
 	av_seek_frame( m_formatCtx, streamIdx, initTs, AVSEEK_FLAG_BACKWARD );
-	ClearPacketQueue();
+	
 	m_isEOF = false; 
 }
 
@@ -125,6 +137,7 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 //
 void				FFmpegDemuxer::Reset				()
 {
+    ClearPacketQueue();
 	Seek( 0 );
 }
 
@@ -149,6 +162,7 @@ Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
 //
 bool				FFmpegDemuxer::IsEOF				() const
 {
+	std::lock_guard< std::mutex > lock( m_mutex );
 	return m_isEOF;
 }
 

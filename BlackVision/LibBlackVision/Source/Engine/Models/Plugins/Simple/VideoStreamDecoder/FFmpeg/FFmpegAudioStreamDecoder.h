@@ -23,6 +23,7 @@ private:
     Int32                               m_sampleRate;
     AVSampleFormat                      m_format;
     Int32                               m_nbChannels;
+    UInt64                              m_duration;
 
 	QueueConcurrent< AVMediaData >      m_bufferQueue;
 
@@ -37,6 +38,9 @@ public:
 
     Int32                   GetSampleRate               () const;
     AudioFormat             GetFormat                   () const;
+    UInt64                  GetDuration                 () const;   
+
+    UInt64                  GetCurrentPTS               ();
 
     bool                    GetData                     ( AVMediaData & data );
 
@@ -48,6 +52,8 @@ public:
 	void					Reset						();
 
 	virtual Int32			GetStreamIdx				() const override;
+
+	bool					IsDataQueueEmpty		    () const;
 
 private:
 

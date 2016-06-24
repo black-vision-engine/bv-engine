@@ -9,17 +9,16 @@ namespace bv {
 
 struct AVMediaData
 {
-	UInt32			frameIdx;
+	UInt64			framePTS;   //miliseconds
 	MemoryChunkPtr	frameData;
     SizeType        nbSamples;
 
 	AVMediaData()
-		: frameIdx( 0 )
+		: framePTS( 0 )
 		, frameData( nullptr )
         , nbSamples( 0 )
 	{
     }
 };
-
 
 } //bv

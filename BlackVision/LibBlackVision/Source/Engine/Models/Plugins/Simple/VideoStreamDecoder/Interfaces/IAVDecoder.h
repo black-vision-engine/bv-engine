@@ -15,18 +15,19 @@ public:
 	virtual void					Pause					() = 0;
 	virtual void					Stop					() = 0;
     
-	virtual AVMediaData			    GetVideoMediaData		() = 0;
-	virtual AVMediaData		        GetAudioMediaData		() = 0;
+	virtual bool			        GetVideoMediaData		( AVMediaData & data ) = 0;
+	virtual bool		            GetAudioMediaData		( AVMediaData & data ) = 0;
     virtual AVMediaData			    GetSingleFrame  		( TimeType frameTime) = 0;
 
 	virtual SizeType				GetVideoFrameSize	    () const = 0;
 
 	virtual UInt32					GetWidth				() const = 0;
 	virtual UInt32					GetHeight				() const = 0;
-	virtual Float64					GetFrameRate			() const = 0;
 
 	virtual Int32				    GetSampleRate			() const = 0;
     virtual AudioFormat			    GetAudioFormat			() const = 0;
+
+	virtual UInt64				    GetDuration			    () const = 0;
 
     virtual bool                    HasVideo                () const = 0;
     virtual bool                    HasAudio                () const = 0;
@@ -44,8 +45,8 @@ public:
     
 //protected:
 
-	virtual bool					NextVideoDataReady		() = 0;
-	virtual SizeType				NextAudioDataReady		() = 0;
+	virtual bool					NextVideoDataReady		( UInt64 t ) = 0;
+	virtual bool				    NextAudioDataReady		( UInt64 t ) = 0;
     
 	friend class AVDecoderThread;
 

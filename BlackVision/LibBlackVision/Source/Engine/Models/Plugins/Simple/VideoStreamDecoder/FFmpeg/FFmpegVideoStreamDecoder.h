@@ -25,6 +25,7 @@ private:
     UInt32                              m_width;
     UInt32                              m_height;
     Float64                             m_frameRate;
+    UInt64                              m_duration;
 
     QueueConcurrent< AVMediaData >      m_bufferQueue;
 
@@ -40,7 +41,10 @@ public:
     UInt32                  GetWidth                    () const;   
     UInt32                  GetHeight                   () const;   
     Float64                 GetFrameRate                () const;   
+    UInt64                  GetDuration                 () const;   
     
+    UInt64                  GetCurrentPTS               ();
+
     bool                    GetData                     ( AVMediaData & data );
 
     bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
@@ -52,6 +56,7 @@ public:
     virtual AVMediaData     ConvertFrame                ();
 
     void                    Reset                       ();
+    void                    Clear                       ();
 
     virtual Int32           GetStreamIdx                () const override;
 

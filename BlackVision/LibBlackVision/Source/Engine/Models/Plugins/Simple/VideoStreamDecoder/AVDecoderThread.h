@@ -26,9 +26,9 @@ private:
 
 	std::atomic< bool >			m_stopped;
 	std::atomic< bool >			m_running;
+	std::atomic< bool >			m_paused;
 
-    SimpleTimer					m_videoTimer;
-    SimpleTimer					m_audioTimer;
+    SimpleTimer					m_timer;
 
 public:
 								AVDecoderThread	    ( IAVDecoder * decoder );
@@ -37,7 +37,9 @@ public:
 
 	void						Play				();
 	void						Stop				();
+	void						Pause				();
 
+	bool						Paused				() const;
 	bool						Stopped				() const;
 
 protected:

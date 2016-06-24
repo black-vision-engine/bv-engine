@@ -30,6 +30,7 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, 
     m_sampleRate = m_codecCtx->sample_rate;
     m_format = GetSupportedFormat( m_codecCtx->sample_fmt );
     m_nbChannels = std::min( m_codecCtx->channels, 2 );
+    m_duration = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_stream->duration );
 
     if( !IsSupportedFormat( m_codecCtx->sample_fmt ) )
     {
@@ -73,6 +74,23 @@ AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 {
     return ConvertFormat( m_format, m_nbChannels );
 }
+
+// *******************************
+//
+UInt64                  FFmpegAudioStreamDecoder::GetDuration       () const
+{
+    return m_duration;
+}
+
+// *******************************
+//
+UInt64                  FFmpegAudioStreamDecoder::GetCurrentPTS     ()
+{
+    AVMediaData data;
+    m_bufferQueue.Front( data );
+    return data.framePTS;
+}
+
 
 // *******************************
 //
@@ -145,7 +163,7 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
     
     AVMediaData mediaData;
 
-    mediaData.frameIdx = ( UInt32 )m_frame->pkt_pts;
+    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pkt_pts );
     mediaData.frameData = MemoryChunk::Create( ( char * )outBuffer, SizeType( frameSize ) );
     mediaData.nbSamples = m_frame->nb_samples;
 
@@ -165,6 +183,13 @@ void					FFmpegAudioStreamDecoder::Reset				()
 Int32					FFmpegAudioStreamDecoder::GetStreamIdx		() const
 {
 	return m_streamIdx;
+}
+
+// *******************************
+//
+bool                    FFmpegAudioStreamDecoder::IsDataQueueEmpty  () const
+{
+    return m_bufferQueue.IsEmpty();
 }
 
 // *******************************

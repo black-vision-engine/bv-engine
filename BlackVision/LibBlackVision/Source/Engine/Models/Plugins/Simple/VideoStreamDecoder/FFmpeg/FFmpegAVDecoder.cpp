@@ -17,18 +17,23 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
     , m_audioDecoderThread( nullptr )
     , m_hasVideo( false )
     , m_hasAudio( false )
+    , m_prevVideoPTS( 0 )
+    , m_prevAudioPTS( 0 )
 {
 	auto path = asset->GetStreamPath();
 
 	m_demuxer = std::unique_ptr< FFmpegDemuxer >( new FFmpegDemuxer( path ) );
     m_demuxerThread = std::unique_ptr< FFmpegDemuxerThread >( new FFmpegDemuxerThread( m_demuxer.get() ) );
 
+    UInt64 videoDuration = 0, audioDuration = 0;
     if( asset->IsVideoEnabled() )
     {
         auto vstreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO );
         if( vstreamIdx >= 0 )
         {
 	        m_videoDecoder = std::unique_ptr< FFmpegVideoStreamDecoder >( new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx ) );
+            videoDuration = m_videoDecoder->GetDuration();
+
             m_hasVideo = true;
         }
     }
@@ -39,9 +44,13 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         if( astreamIdx >= 0 )
         {
             m_audioDecoder = std::unique_ptr< FFmpegAudioStreamDecoder >( new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx ) );
+            audioDuration = m_audioDecoder->GetDuration();
+            
             m_hasAudio = true;
         }
     }
+
+    m_duration = std::max( videoDuration, audioDuration );
 
 	m_decoderThread = std::unique_ptr< AVDecoderThread >( new AVDecoderThread( this ) );
    
@@ -128,24 +137,16 @@ void						FFmpegAVDecoder::Stop				()
 
 // *********************************
 //
-AVMediaData			        FFmpegAVDecoder::GetVideoMediaData		()
+bool			            FFmpegAVDecoder::GetVideoMediaData	( AVMediaData & mediaData )
 {
-	AVMediaData mediaData;
-    m_outVideoQueue.Front( mediaData );
-    return mediaData;
+    return m_outVideoQueue.TryPop( mediaData );
 }
 
 // *********************************
 //
-AVMediaData			        FFmpegAVDecoder::GetAudioMediaData		()
+bool			            FFmpegAVDecoder::GetAudioMediaData  ( AVMediaData & mediaData )
 {
-	AVMediaData mediaData;
-    mediaData.frameIdx = 0;
-    mediaData.frameData = nullptr;
-
-    m_outAudioQueue.TryPop( mediaData );
-
-    return mediaData;
+    return m_outAudioQueue.TryPop( mediaData );
 }
 
 // ***********************
@@ -158,75 +159,102 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  		( TimeType frameTime
     //if( DecodeNextFrame() )
     //{
     //    NextVideoDataReady();
-        return GetVideoMediaData();
+        //return GetVideoMediaData();
     //}
 
 	//VideoMediaData mediaData;
 	//mediaData.frameIdx = 0;
 	//mediaData.frameData = nullptr;
  //   return mediaData;
+    return AVMediaData();
 }
 
 // *********************************
 //
-bool					FFmpegAVDecoder::NextVideoDataReady		()
+bool				FFmpegAVDecoder::NextVideoDataReady	        ( UInt64 time )
 {
+    auto success = false;
+
     if( m_hasVideo )
     {
-        if( m_demuxerThread->Stopped() )
+        if( time <= m_duration )
         {
-            m_demuxerThread->Restart();
-        }
-
-        if( m_videoDecoderThread->Stopped() )
-        {
-            m_videoDecoderThread->Restart();
-        }
-
-        AVMediaData data;
-        if( m_videoDecoder->GetData( data ) )
-        {
-            m_outVideoQueue.Push( data );
-
-            if( m_outVideoQueue.Size() > 1 )
+            if( m_demuxerThread->Stopped() )
             {
-                AVMediaData del;
-                m_outVideoQueue.TryPop( del );
+                m_demuxerThread->Restart();
             }
 
-            return true;
+            if( m_videoDecoderThread->Stopped() )
+            {
+                m_videoDecoderThread->Restart();
+            }
+
+            auto currVideoPTS = m_videoDecoder->GetCurrentPTS();
+            while( !m_videoDecoder->IsDataQueueEmpty() &&
+                ( currVideoPTS <= time ) &&
+                m_prevVideoPTS <= currVideoPTS )
+            {
+                AVMediaData data;
+                if( m_videoDecoder->GetData( data ) )
+                {
+                    m_outVideoQueue.Push( data );
+                    m_prevVideoPTS = data.framePTS;
+                    success = true;
+                    currVideoPTS = m_videoDecoder->GetCurrentPTS();
+                }
+            }
+        }
+        else
+        {
+            m_prevVideoPTS = 0;
         }
     }
 
-    return false;
+    return success;
 }
 
 // *********************************
 //
-SizeType				FFmpegAVDecoder::NextAudioDataReady		    ()
+bool				FFmpegAVDecoder::NextAudioDataReady		    ( UInt64 time )
 {
+    auto success = false;
+
     if( m_hasAudio )
     {
-        if( m_demuxerThread->Stopped() )
+        if( time <= m_duration )
         {
-            m_demuxerThread->Restart();
+            if( m_demuxerThread->Stopped() )
+            {
+                m_demuxerThread->Restart();
+            }
+
+            if( m_audioDecoderThread->Stopped() )
+            {
+                m_audioDecoderThread->Restart();
+            }
+
+            auto currAudioPTS = m_audioDecoder->GetCurrentPTS();
+            while( !m_audioDecoder->IsDataQueueEmpty() &&
+                ( currAudioPTS <= time ) &&
+                m_prevAudioPTS <= currAudioPTS )
+            {
+                AVMediaData data;
+                if( m_audioDecoder->GetData( data ) )
+                {
+                    m_outAudioQueue.Push( data );
+                    m_prevAudioPTS = data.framePTS;
+                    success = true;
+                    currAudioPTS = m_videoDecoder->GetCurrentPTS();
+                }
+            }
         }
-
-        if( m_audioDecoderThread->Stopped() )
+        else
         {
-            m_audioDecoderThread->Restart();
-        }
-
-        AVMediaData data;
-        if( m_audioDecoder->GetData( data ) )
-        {
-            m_outAudioQueue.Push( data );
-
-            return data.nbSamples;
+            m_prevAudioPTS = 0;
         }
     }
 
-    return 0;
+    return success;
 }
 
 // *********************************
@@ -264,18 +292,7 @@ UInt32					FFmpegAVDecoder::GetHeight				() const
 
 // *********************************
 //
-Float64					FFmpegAVDecoder::GetFrameRate			() const
-{
-    if( m_hasVideo )
-	{
-	    return m_videoDecoder->GetFrameRate();
-    }
-    return 0;
-}
-
-// *********************************
-//
-Int32					FFmpegAVDecoder::GetSampleRate			() const
+Int32				    FFmpegAVDecoder::GetSampleRate			() const
 {
     if( m_hasAudio )
 	{
@@ -299,11 +316,17 @@ AudioFormat				FFmpegAVDecoder::GetAudioFormat			() const
 
 // *********************************
 //
+UInt64				    FFmpegAVDecoder::GetDuration		    () const
+{
+    return m_duration;
+}
+
+// *********************************
+//
 bool					FFmpegAVDecoder::HasVideo			    () const
 {
     return m_hasVideo ;
 }
-
 
 // *********************************
 //
@@ -325,23 +348,31 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
         while( !m_demuxerThread->Stopped() );
     }
 
-    auto ts = m_videoDecoder->ConvertTime( time );
-	m_demuxer->Seek( ts, m_videoDecoder->GetStreamIdx() );
-
-    Int64 currTs = 0;
-    while( currTs < ts )
+    if( m_hasVideo )
     {
-        m_demuxer->ProcessPacket();
-        auto packet = m_demuxer->GetPacket( m_videoDecoder->GetStreamIdx() );
-        if( packet != nullptr )
+        auto ts = m_videoDecoder->ConvertTime( time );
+	    m_demuxer->Seek( ts, m_videoDecoder->GetStreamIdx() );
+
+        Int64 currTs = 0;
+        while( currTs < ts )
         {
-            currTs = packet->dts;
-	        m_videoDecoder->DecodePacket( packet );
+            m_demuxer->ProcessPacket();
+            auto packet = m_demuxer->GetPacket( m_videoDecoder->GetStreamIdx() );
+            if( packet != nullptr )
+            {
+                currTs = packet->dts;
+	            m_videoDecoder->DecodePacket( packet );
+            }
+            else if( m_demuxer->IsEOF() )
+            {
+                break;
+            }
         }
-        else if( m_demuxer->IsEOF() )
-        {
-            break;
-        }
+    }
+
+    if( m_hasAudio )
+    {
+	    m_demuxer->Seek( 0, m_audioDecoder->GetStreamIdx() );
     }
 
     if( !stopped )

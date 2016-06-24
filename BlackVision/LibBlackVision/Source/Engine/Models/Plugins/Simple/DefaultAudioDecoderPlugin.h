@@ -58,8 +58,6 @@ private:
 
 	DecoderModeParamPtr                 m_decoderModeParam;
 
-    Int64                               m_prevAudioFrameIdx;
-
 	/** time in seconds from the beginning of video */
     ParamVec2Ptr                        m_offsetParam;                 
     Float32                             m_prevOffsetCounter;

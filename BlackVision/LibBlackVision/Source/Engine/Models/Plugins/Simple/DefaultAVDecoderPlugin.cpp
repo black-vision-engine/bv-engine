@@ -134,8 +134,6 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     , m_prevOffsetCounter( 1 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
-    , m_prevFrameIdx( -1 )
-    , m_prevAudioFrameIdx( -1 )
     , m_isFinished( false )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
@@ -191,11 +189,10 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                 {
                     m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                     m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
-
-                    m_prevAudioFrameIdx = -1;
                 }
 
-                while( !m_decoder->NextVideoDataReady() );
+                //get the first frame
+                while( !m_decoder->NextVideoDataReady( 0 ) );
 
 		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
@@ -211,8 +208,6 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 			        SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
 			        HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-
-                    m_prevFrameIdx = -1;
 
 			        return true;
 		        }
@@ -428,12 +423,11 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 void                                DefaultAVDecoderPlugin::UploadVideoFrame   ()
 {
     //update texture with video data
-	auto mediaData = m_decoder->GetVideoMediaData();
-    if( mediaData.frameData && m_prevFrameIdx != mediaData.frameIdx )
+    AVMediaData mediaData;
+	if( m_decoder->GetVideoMediaData( mediaData ) )
 	{
 	    std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
 	}
-    m_prevFrameIdx = mediaData.frameIdx;
 }
 
 // *************************************
@@ -441,12 +435,11 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame   (
 void                                DefaultAVDecoderPlugin::UploadAudioFrame   ()
 {
     //update audio data
-    auto mediaData = m_decoder->GetAudioMediaData();
-    if( mediaData.frameData && m_prevAudioFrameIdx != mediaData.frameIdx )
+    AVMediaData mediaData;
+    if( m_decoder->GetAudioMediaData( mediaData ) )
 	{
         m_audioChannel->PushPacket( mediaData.frameData );
 	}
-    m_prevAudioFrameIdx = mediaData.frameIdx;
 }
 
 // *************************************

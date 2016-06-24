@@ -27,24 +27,29 @@ class FFmpegAVDecoder : public IAVDecoder
 {
 private:
 
-    bool                            m_hasVideo;
-    bool                            m_hasAudio;
+    bool                                m_hasVideo;
+    bool                                m_hasAudio;
 
-	FFmpegDemuxerUPtr				m_demuxer;
+	FFmpegDemuxerUPtr				    m_demuxer;
 
-	FFmpegVideoStreamDecoderUPtr	m_videoDecoder;
-	FFmpegAudioStreamDecoderUPtr    m_audioDecoder;
+	FFmpegVideoStreamDecoderUPtr	    m_videoDecoder;
+	FFmpegAudioStreamDecoderUPtr        m_audioDecoder;
+	
+    UInt64                              m_duration;
 
-	AVDecoderThreadUPtr			    m_decoderThread;
-	mutable std::mutex				m_mutex;
+	AVDecoderThreadUPtr			        m_decoderThread;
+	mutable std::mutex				    m_mutex;
 
-    FFmpegDemuxerThreadUPtr         m_demuxerThread;
+    FFmpegDemuxerThreadUPtr             m_demuxerThread;
 
 	FFmpegVideoStreamDecoderThreadUPtr  m_videoDecoderThread;
 	FFmpegAudioStreamDecoderThreadUPtr  m_audioDecoderThread;
 
-	QueueConcurrent< AVMediaData >	m_outVideoQueue;
-	QueueConcurrent< AVMediaData > 	m_outAudioQueue;
+	QueueConcurrent< AVMediaData >	    m_outVideoQueue;
+	QueueConcurrent< AVMediaData > 	    m_outAudioQueue;
+
+    UInt64                              m_prevVideoPTS;
+    UInt64                              m_prevAudioPTS;
 
 public:
 
@@ -55,18 +60,19 @@ public:
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
-	virtual AVMediaData		    GetVideoMediaData		() override;
-	virtual AVMediaData		    GetAudioMediaData		() override;
+	virtual bool		        GetVideoMediaData		( AVMediaData & data ) override;
+	virtual bool		        GetAudioMediaData		( AVMediaData & data ) override;
     virtual AVMediaData		    GetSingleFrame  		( TimeType frameTime) override;
 
 	virtual SizeType			GetVideoFrameSize	    () const override;
 
 	virtual UInt32				GetWidth				() const override;
 	virtual UInt32				GetHeight				() const override;
-	virtual Float64				GetFrameRate			() const override;
 
 	virtual Int32				GetSampleRate			() const override;
     virtual AudioFormat			GetAudioFormat			() const override;
+    
+	virtual UInt64				GetDuration			    () const override;
 
     virtual bool                HasVideo                () const override;
     virtual bool                HasAudio                () const override;
@@ -85,8 +91,8 @@ public:
 
 protected:
 	
-	virtual bool				NextVideoDataReady		() override;
-	virtual SizeType		    NextAudioDataReady		() override;
+	virtual bool				NextVideoDataReady		( UInt64 t ) override;
+	virtual bool		        NextAudioDataReady		( UInt64 t ) override;
 
 
     friend class FFmpegAudioStreamDecoderThread;
