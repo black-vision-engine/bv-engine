@@ -33,7 +33,7 @@ public:
     void                MakeTriangles           ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
 
     IndexedGeometry     MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts );
-    IndexedGeometry     MakeIndexGeomFromTrinagles  ( Float3AttributeChannelPtr verts );
+    IndexedGeometry     MakeIndexGeomFromTriangles  ( Float3AttributeChannelPtr verts );
 };
 
 

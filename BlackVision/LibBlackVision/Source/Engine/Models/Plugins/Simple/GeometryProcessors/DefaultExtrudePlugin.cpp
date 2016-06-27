@@ -2,6 +2,7 @@
 #include "DefaultExtrudePlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/HelperIndexedGeometryConverter.h"
 
 
 namespace bv { namespace model {
@@ -71,11 +72,14 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
                                                                     std::vector< IConnectedComponentPtr > & /*allComponents*/,
                                                                     PrimitiveType topology )
 {
+    // Init parameters
     glm::vec3 translate = QueryTypedValue< ValueVec3Ptr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR ) )->GetValue();
 
+
+    // Get previous plugin geometry channels
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
-    auto normals = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_NORMAL ) );
-    auto uvs = std::static_pointer_cast< Float2AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
+    //auto normals = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_NORMAL ) );
+    //auto uvs = std::static_pointer_cast< Float2AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
 
     assert( positions );    if( !positions ) return;
     
@@ -85,79 +89,155 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     auto connComp = ConnectedComponent::Create();
     connComp->AddAttributeChannel( newPositions );
 
+    IndexedGeometry mesh;
+    IndexedGeometryConverter converter;
 
     if( topology == PrimitiveType::PT_TRIANGLE_STRIP )
     {
-        int numVerticies = positions->GetNumEntries();
-
-        newPositions->GetVertices().reserve( 2 * numVerticies + 2 );
-
-        for( int i = 0; i < numVerticies; ++i )
-        {
-            newPositions->AddAttribute( positions->GetVertices()[ i ] );
-        }
-
-        newPositions->AddAttribute( positions->GetVertices()[ numVerticies - 1 ] );
-        newPositions->AddAttribute( translate + positions->GetVertices()[ numVerticies - 1 ] );
-
-        for( int i = numVerticies - 1; i >= 0; --i )
-        {
-            newPositions->AddAttribute( translate + positions->GetVertices()[ i ] );
-        }
-
-        if( normals )
-        {
-            auto normChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-            auto newNormal = std::make_shared< model::Float3AttributeChannel >( normChannelDesc, normals->GetName(), true );
-            newNormal->GetVertices().reserve( 2 * numVerticies + 2 );
-
-            connComp->AddAttributeChannel( newNormal );
-
-            for( int i = 0; i < numVerticies; ++i )
-            {
-                newNormal->AddAttribute( normals->GetVertices()[ i ] );
-            }
-
-            newNormal->AddAttribute( normals->GetVertices()[ numVerticies - 1 ] );
-            newNormal->AddAttribute( -normals->GetVertices()[ numVerticies - 1 ] );
-
-            for( int i = numVerticies - 1; i >= 0; --i )
-            {
-                newNormal->AddAttribute( -normals->GetVertices()[ i] );
-            }
-        }
-
-        if( uvs )
-        {
-            auto uvChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-            auto newUVs = std::make_shared< model::Float2AttributeChannel >( uvChannelDesc, uvs->GetName(), true );
-            newUVs->GetVertices().reserve( 2 * numVerticies + 2 );
-
-            connComp->AddAttributeChannel( newUVs );
-
-            for( int i = 0; i < numVerticies; ++i )
-            {
-                newUVs->AddAttribute( uvs->GetVertices()[ i ] );
-            }
-
-            newUVs->AddAttribute( uvs->GetVertices()[ numVerticies - 1 ] );
-            newUVs->AddAttribute( uvs->GetVertices()[ numVerticies - 1 ] );
-
-            for( int i = numVerticies - 1; i >= 0; --i )
-            {
-                newUVs->AddAttribute( uvs->GetVertices()[ i ] );
-            }
-        }
-
+        mesh = converter.MakeIndexGeomFromStrips( positions );
+    }
+    else if( topology == PrimitiveType::PT_TRIANGLES )
+    {
+        mesh = converter.MakeIndexGeomFromTriangles( positions );
     }
     else
     {
         assert( !"This primitive topology is not supported yet" );
     }
 
+    AddSymetricalPlane( mesh, translate );
+
+    converter.MakeTriangles( mesh, newPositions );
+
+
+    //if( topology == PrimitiveType::PT_TRIANGLE_STRIP )
+    //{
+    //    int numVerticies = positions->GetNumEntries();
+
+    //    newPositions->GetVertices().reserve( 2 * numVerticies + 2 );
+
+    //    for( int i = 0; i < numVerticies; ++i )
+    //    {
+    //        newPositions->AddAttribute( positions->GetVertices()[ i ] );
+    //    }
+
+    //    newPositions->AddAttribute( positions->GetVertices()[ numVerticies - 1 ] );
+    //    newPositions->AddAttribute( translate + positions->GetVertices()[ numVerticies - 1 ] );
+
+    //    for( int i = numVerticies - 1; i >= 0; --i )
+    //    {
+    //        newPositions->AddAttribute( translate + positions->GetVertices()[ i ] );
+    //    }
+
+    //    if( normals )
+    //    {
+    //        auto normChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    //        auto newNormal = std::make_shared< model::Float3AttributeChannel >( normChannelDesc, normals->GetName(), true );
+    //        newNormal->GetVertices().reserve( 2 * numVerticies + 2 );
+
+    //        connComp->AddAttributeChannel( newNormal );
+
+    //        for( int i = 0; i < numVerticies; ++i )
+    //        {
+    //            newNormal->AddAttribute( normals->GetVertices()[ i ] );
+    //        }
+
+    //        newNormal->AddAttribute( normals->GetVertices()[ numVerticies - 1 ] );
+    //        newNormal->AddAttribute( -normals->GetVertices()[ numVerticies - 1 ] );
+
+    //        for( int i = numVerticies - 1; i >= 0; --i )
+    //        {
+    //            newNormal->AddAttribute( -normals->GetVertices()[ i] );
+    //        }
+    //    }
+
+    //    if( uvs )
+    //    {
+    //        auto uvChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    //        auto newUVs = std::make_shared< model::Float2AttributeChannel >( uvChannelDesc, uvs->GetName(), true );
+    //        newUVs->GetVertices().reserve( 2 * numVerticies + 2 );
+
+    //        connComp->AddAttributeChannel( newUVs );
+
+    //        for( int i = 0; i < numVerticies; ++i )
+    //        {
+    //            newUVs->AddAttribute( uvs->GetVertices()[ i ] );
+    //        }
+
+    //        newUVs->AddAttribute( uvs->GetVertices()[ numVerticies - 1 ] );
+    //        newUVs->AddAttribute( uvs->GetVertices()[ numVerticies - 1 ] );
+
+    //        for( int i = numVerticies - 1; i >= 0; --i )
+    //        {
+    //            newUVs->AddAttribute( uvs->GetVertices()[ i ] );
+    //        }
+    //    }
+
+    //}
+
+
     m_vaChannel->AddConnectedComponent( connComp );
 }
 
+// ***********************
+//
+void                                DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, glm::vec3 translate )
+{
+    auto & vertices = mesh.GetVerticies();
+    auto & indices = mesh.GetIndicies();
+    int numVerticies = (int)vertices.size();
+    auto numIndicies = indices.size();
+
+    // Add symetrical verticies
+    for( int i = numVerticies - 1; i >= 0; --i )
+    {
+        vertices.push_back( translate + vertices[ numVerticies - i - 1 ] );
+    }
+
+    for( int i = 0; i < numIndicies; ++i )
+    {
+        indices.push_back( indices[ i ] + (INDEX_TYPE)numVerticies );
+    }
+}
+
+// ========================================================================= //
+// Default Processing function override
+// ========================================================================= //
+
+// ***********************
+// Function always converts geometry channel to PrimitiveType::PT_TRIANGLES.
+// This is the only difference between base class function and this override.
+void                                DefaultExtrudePlugin::ProcessVertexAttributesChannel  ()
+{
+	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+	{
+		m_vaChannel = nullptr;
+		return;
+	}
+
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+
+    auto compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    VertexAttributesChannelDescriptor vaChannelDesc;
+    vaChannelDesc.AddAttrChannelDesc( compVertDesc );
+
+	if( !m_vaChannel )
+	{
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vaChannelDesc );
+	}
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->SetDescriptor( vaChannelDesc );
+	}
+
+	auto prevComponents = prevGeomChannel->GetComponents();
+    for( unsigned int i = 0; i < prevComponents.size(); ++i )
+    {
+        auto prevConnComp = std::static_pointer_cast< model::ConnectedComponent >( prevComponents[ i ] );
+        ProcessConnectedComponent( prevConnComp, prevComponents, prevGeomChannel->GetPrimitiveType() );
+    }
+}
 
 } // model
 } // bv

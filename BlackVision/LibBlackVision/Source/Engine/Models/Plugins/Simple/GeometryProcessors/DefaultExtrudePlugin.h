@@ -40,10 +40,14 @@ public:
                                                                             DefaultPluginParamValModelPtr model );
                         ~DefaultExtrudePlugin  ();
 
-
+    virtual void        ProcessVertexAttributesChannel  ();
     virtual void        ProcessConnectedComponent       (   model::ConnectedComponentPtr & currComponent,
                                                             std::vector< IConnectedComponentPtr > & allComponents,
                                                             PrimitiveType topology ) override;
+
+private:
+
+    void                AddSymetricalPlane      ( IndexedGeometry& mesh, glm::vec3 translate );
 };
 
 

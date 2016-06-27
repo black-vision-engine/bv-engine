@@ -65,6 +65,7 @@ public:
 
     void                            AddAttribute                    ( const glm::vec3 & v );
     void                            AddAttributes                   ( const std::vector< glm::vec3 > & v );
+    void                            ReplaceAttributes               ( std::vector< glm::vec3 > && v );
 
 };
 
