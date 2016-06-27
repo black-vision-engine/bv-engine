@@ -28,7 +28,8 @@ public:
 
     struct PARAMS
     {
-        static const std::string        ALPHA;
+        static const std::string        EXTRUDE_VECTOR;
+        static const std::string        SMOOTH_THRESHOLD_ANGLE;
     };
 
 public:

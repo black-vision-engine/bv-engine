@@ -42,9 +42,7 @@ void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 //
 DefaultGeometryProcessorBase::DefaultGeometryProcessorBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, model )
-{
-    SetPrevPlugin( prev );
-}
+{}
 
 // *************************************
 // 
@@ -87,17 +85,17 @@ void                                DefaultGeometryProcessorBase::ProcessVertexA
 
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 
- //   VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 
-	//if( !m_vaChannel )
-	//{
-	//	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-	//}
-	//else
-	//{
-	//	m_vaChannel->ClearAll();
-	//	m_vaChannel->SetDescriptor( vaChannelDesc );
-	//}
+	if( !m_vaChannel )
+	{
+		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+	}
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->SetDescriptor( vaChannelDesc );
+	}
 
 	auto prevComponents = prevGeomChannel->GetComponents();
     for( unsigned int i = 0; i < prevComponents.size(); ++i )

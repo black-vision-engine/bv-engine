@@ -104,6 +104,7 @@ public:
     static  model::BasicNodePtr     FontTestScene                   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     FadeRectTestScene               ( model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     ExtrudeTestScene                ( model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 // ********************************
