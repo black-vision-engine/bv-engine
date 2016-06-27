@@ -30,20 +30,21 @@ class HelperSmoothMesh
 private:
 	virtual float				computeCenterVertexWeight( unsigned short numNeighbours );
 protected:
-	void						privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, unsigned int tesselation, IndexedGeometry& resultMesh );
-	std::vector<INDEX_TYPE>		tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh, std::vector<INDEX_TYPE> sharpEdges );
-	void						moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh );
-	void						oldMoveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh );
-	bool						findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index, INDEX_TYPE startIndex );
-	std::vector<INDEX_TYPE>		findAllNeighbours( INDEX_TYPE index, const std::vector<INDEX_TYPE>& indicies, INDEX_TYPE maxIndex );
-	std::vector<float>			makeWeightTable( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours, std::vector<INDEX_TYPE>& sharpEdges, bool edgePoint );
-	std::vector<INDEX_TYPE>		findNeighboursForEdgeVertex( INDEX_TYPE index, const std::vector<INDEX_TYPE>& preIndicies, const std::vector<INDEX_TYPE>& postIndicies, INDEX_TYPE maxIndex );
-	glm::vec3					computeVertexNewPosition( INDEX_TYPE index, const std::vector<INDEX_TYPE>& vertexNeighbours, const std::vector<float>& vertexWeights, const std::vector<glm::vec3>& verticies, bool ignoreIndex );
-	void						addIfNotExists( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours );
-	VertexType					computeVertexType( int i, std::vector<INDEX_TYPE> sharpEdges );
-	float						computeVertexWeight( int vertexIndex, int secondVertexIndex, VertexType vertexType, std::vector<INDEX_TYPE> sharpEdges );
-	bool						isSharpEdge( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges );
-	float						computeEdgeVertexWeight( INDEX_TYPE edgeIndex1, INDEX_TYPE edgeIndex2, std::vector<VertexData>& vertexData );
+	void						privateSmooth       ( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, unsigned int tesselation, IndexedGeometry& resultMesh );
+	std::vector<INDEX_TYPE>		tesselate           ( IndexedGeometry& mesh, IndexedGeometry& resultMesh, std::vector<INDEX_TYPE> sharpEdges );
+	void						moveVerticies       ( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh );
+	void						oldMoveVerticies    ( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh );
+	bool						findVertex          ( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index, INDEX_TYPE startIndex );
+	std::vector<INDEX_TYPE>		findAllNeighbours   ( INDEX_TYPE index, const std::vector<INDEX_TYPE>& indicies, INDEX_TYPE maxIndex );
+	std::vector<float>			makeWeightTable     ( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours, std::vector<INDEX_TYPE>& sharpEdges, bool edgePoint );
+	
+    std::vector<INDEX_TYPE>		findNeighboursForEdgeVertex     ( INDEX_TYPE index, const std::vector<INDEX_TYPE>& preIndicies, const std::vector<INDEX_TYPE>& postIndicies, INDEX_TYPE maxIndex );
+	glm::vec3					computeVertexNewPosition        ( INDEX_TYPE index, const std::vector<INDEX_TYPE>& vertexNeighbours, const std::vector<float>& vertexWeights, const std::vector<glm::vec3>& verticies, bool ignoreIndex );
+	void						addIfNotExists                  ( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours );
+	VertexType					computeVertexType               ( int i, std::vector<INDEX_TYPE> sharpEdges );
+	float						computeVertexWeight             ( int vertexIndex, int secondVertexIndex, VertexType vertexType, std::vector<INDEX_TYPE> sharpEdges );
+	bool						isSharpEdge                     ( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges );
+	float						computeEdgeVertexWeight         ( INDEX_TYPE edgeIndex1, INDEX_TYPE edgeIndex2, std::vector<VertexData>& vertexData );
 public:
 	HelperSmoothMesh(void);
 	~HelperSmoothMesh(void);

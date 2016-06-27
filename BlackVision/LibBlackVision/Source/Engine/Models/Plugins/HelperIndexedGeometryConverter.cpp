@@ -6,8 +6,14 @@ namespace bv { namespace model {
 
 
 IndexedGeometryConverter::IndexedGeometryConverter()
-{}
+{
+    m_epsilon = ( Float32 )10e-5;
+}
 
+
+IndexedGeometryConverter::IndexedGeometryConverter( float epsilon )
+    :   m_epsilon( epsilon )
+{}
 
 IndexedGeometryConverter::~IndexedGeometryConverter()
 {}
@@ -186,6 +192,64 @@ void    IndexedGeometryConverter::MakeTriangles           ( IndexedGeometry & me
     }
 }
 
+// ========================================================================= //
+// Geometry indexer
+// ========================================================================= //
+
+// ***********************
+//
+IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts )
+{
+    IndexedGeometry mesh = MakeIndexGeomFromTrinagles( verts );
+
+    // Remove degenerated triangles.
+    auto & indices = mesh.GetIndicies();
+    for( auto i = indices.begin(); i < indices.end(); i +=3 )
+    {
+        if( indices[ *i ] == indices[ *i + 1 ]     ||
+            indices[ *i + 1 ] == indices[ *i + 2 ] ||
+            indices[ *i + 2 ] == indices[ *i ] )
+        {
+            i = indices.erase( i, i + 3 );
+        }
+    }
+
+    return mesh;
+}
+
+// ***********************
+//
+IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTrinagles  ( Float3AttributeChannelPtr verts )
+{
+    auto const & srcVertices = std::const_pointer_cast< Float3AttributeChannel >( verts )->GetVertices();
+
+    IndexedGeometry mesh;
+    auto & vertices = mesh.GetVerticies();
+    auto & indices = mesh.GetIndicies();
+    auto vertsNum = indices.size();
+
+    for( UInt32 i = 0; i < vertsNum; ++i )
+    {
+        auto it = std::find_if( vertices.begin(), vertices.end(), [ & ]( const glm::vec3 & vert ){
+            return glm::length( vert - srcVertices[ i ] ) < m_epsilon;
+        });
+
+        if( it == vertices.end() )
+        {
+            vertices.push_back( srcVertices[ i ] );
+            indices[ i ] = (INDEX_TYPE)( vertices.size() - 1 );
+            auto indiciesVec = std::vector< UInt32 >();
+            indiciesVec.push_back( i );
+        }
+        else
+        {
+            auto idx = ( UInt32 )( std::distance( vertices.begin(), it ) );
+            indices[ i ] = (INDEX_TYPE)idx;
+        }
+    }
+
+    return mesh;
+}
 
 
 }   // model

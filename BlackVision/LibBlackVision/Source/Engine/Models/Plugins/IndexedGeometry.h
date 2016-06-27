@@ -8,7 +8,7 @@
 namespace bv { namespace model {
 
 
-typedef UInt16 INDEX_TYPE;
+typedef UInt32 INDEX_TYPE;
 
 class IndexedGeometry
 {

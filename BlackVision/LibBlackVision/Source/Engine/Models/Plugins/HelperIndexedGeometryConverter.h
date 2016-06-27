@@ -11,6 +11,8 @@ class IndexedGeometryConverter
 {
 private:
 
+    float                   m_epsilon;              ///< Epsilon for comparing positions.
+
 	unsigned int			usedRangeIndex;			///< Points element in index table, that is the first unused element.
 	unsigned int			remainnigTriangles;		///< Number of traingles to use.
 	std::vector<bool>		usedTriangles;			///< Indicates which indicies(triangles) have been used.
@@ -24,10 +26,14 @@ protected:
 
 public:
 	IndexedGeometryConverter            ();
+    IndexedGeometryConverter            ( float epsilon );
 	~IndexedGeometryConverter           ();
 
-	void        MakeStrip               ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
-    void        MakeTriangles           ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
+	void                MakeStrip               ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
+    void                MakeTriangles           ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
+
+    IndexedGeometry     MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts );
+    IndexedGeometry     MakeIndexGeomFromTrinagles  ( Float3AttributeChannelPtr verts );
 };
 
 
