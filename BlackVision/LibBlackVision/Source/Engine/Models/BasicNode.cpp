@@ -655,7 +655,7 @@ void BasicNode::Update( TimeType t )
 
         if( m_boundingVolume )
         {
-            m_boundingVolume->Update();
+            m_boundingVolume->UpdateOwnBox();
         }
 
         if( m_nodeLogic )
@@ -667,6 +667,8 @@ void BasicNode::Update( TimeType t )
         {
             ch->Update( t );
         }
+
+        m_boundingVolume->IncludeChildrenBox( GetBoundingBoxRecursive() );
     }
 }
 

@@ -227,12 +227,12 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 inline  void    NodeUpdater::UpdatePositions     ()
 {
     UpdatePositionsImpl( m_renderable, m_vertexAttributesChannel );
-    
-    auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+    //
+    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
-    auto bv = node->GetBoundingVolume();
-    assert( bv );
-    UpdateBoundingBox( bv.get() );
+    //auto bv = node->GetBoundingVolume();
+    //assert( bv );
+    //UpdateBoundingBox();
 }
 
 // *****************************
@@ -240,12 +240,12 @@ inline  void    NodeUpdater::UpdatePositions     ()
 inline  void    NodeUpdater::UpdateTopology      ()
 {
     UpdateTopologyImpl( m_renderable, m_vertexAttributesChannel );
-    
-    auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+    //
+    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
-    auto bv = node->GetBoundingVolume();
-    assert( bv );
-    UpdateBoundingBox( bv.get() );
+    //auto bv = node->GetBoundingVolume();
+    //assert( bv );
+    //UpdateBoundingBox( bv.get() );
 }
 
 // *****************************

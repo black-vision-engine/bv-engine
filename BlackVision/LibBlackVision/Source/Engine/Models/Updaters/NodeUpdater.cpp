@@ -161,6 +161,8 @@ void    NodeUpdater::DoUpdate               ()
 
             UpdateTexturesData();
             UpdateRendererState();
+
+            UpdateBoundingBox();
         }
         else
         {
@@ -357,8 +359,13 @@ void	NodeUpdater::UpdateValue			( IValueConstPtr source, IValuePtr dest )
     }
 }
 
-void NodeUpdater::UpdateBoundingBox( const model::BoundingVolume * bv )
+void NodeUpdater::UpdateBoundingBox(/* const model::BoundingVolume * bv */)
 {
+    auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+    auto bv = node->GetBoundingVolume().get();
+    assert( bv );
+
     UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
     //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
     m_sceneNode->SetBoundingBox( bv->GetBoundingBox() );

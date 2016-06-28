@@ -136,7 +136,7 @@ BoundingVolume::BoundingVolume          ( const VertexAttributesChannel * vac, P
     //m_transform *= glm::scale( glm::mat4( 1.0f ), glm::vec3( box.xmax - box.xmin, box.ymax - box.ymin, box.zmax - box.zmin ) );
 }
 
-void                    BoundingVolume::Update                  ()
+void                    BoundingVolume::UpdateOwnBox                  ()
 {
     if( m_vac == nullptr )
         return;
@@ -157,6 +157,16 @@ void                    BoundingVolume::Update                  ()
         m_lastTopologyID = m_vac->GetTopologyUpdateID();
         assert( m_lastAttribuetesID == m_vac->GetAttributesUpdateID() );
     }
+
+    m_childrenBox = m_box;
+}
+
+
+// ***********************
+//
+void                                BoundingVolume::IncludeChildrenBox      ( const mathematics::Box & box )
+{
+    m_childrenBox.Include( box );
 }
 
 // ***********************
@@ -170,7 +180,8 @@ const mathematics::Box *           BoundingVolume::GetBoundingBox          () co
 //
 IConnectedComponentPtr      BoundingVolume::BuildBoxRepresentation () const
 {
-    return BuildBoxComponent( m_box );
+    //return BuildBoxComponent( m_box );
+    return BuildBoxComponent( m_childrenBox );
 }
 
 // ***********************
