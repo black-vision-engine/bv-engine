@@ -17,9 +17,10 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr as
     , m_width( 0 )
     , m_height( 0 )
     , m_frameRate( 0 )
-    , m_maxQueueSize( maxQueueSize )
 {
     m_streamIdx = streamIdx;
+
+    m_maxQueueSize = maxQueueSize;
 
     m_stream = formatCtx->streams[ streamIdx ];
     m_codecCtx = m_stream->codec;
@@ -141,32 +142,9 @@ UInt32              FFmpegVideoStreamDecoder::GetHeight         () const
 
 // *******************************
 //
-UInt64              FFmpegVideoStreamDecoder::GetCurrentPTS     ()
-{
-    AVMediaData data;
-    m_bufferQueue.Front( data );
-    return data.framePTS;
-}
-
-// *******************************
-//
-bool		        FFmpegVideoStreamDecoder::GetData	        ( AVMediaData & data )
-{
-    return m_bufferQueue.TryPop( data );
-}
-
-// *******************************
-//
 Float64             FFmpegVideoStreamDecoder::GetFrameRate      () const
 {
     return m_frameRate;
-}
-
-// *******************************
-//
-UInt64              FFmpegVideoStreamDecoder::GetDuration       () const
-{
-    return m_duration;
 }
 
 // *******************************
@@ -187,43 +165,6 @@ bool			    FFmpegVideoStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxer )
         }
     }
     return false;
-}
-
-// *******************************
-//
-Int64               FFmpegVideoStreamDecoder::ConvertTime       ( Float64 time )
-{
-    auto timeBase = av_q2d( m_stream->time_base );
-    return ( Int64 )( time / timeBase );
-}
-
-// *******************************
-//
-void                FFmpegVideoStreamDecoder::Reset             ()
-{
-    avcodec_flush_buffers( m_codecCtx );
-    Clear();
-}
-
-// *******************************
-//
-void                FFmpegVideoStreamDecoder::Clear             ()
-{
-    m_bufferQueue.Clear();
-}
-
-// *******************************
-//
-Int32               FFmpegVideoStreamDecoder::GetStreamIdx      () const
-{
-    return m_streamIdx;
-}
-
-// *******************************
-//
-bool                FFmpegVideoStreamDecoder::IsDataQueueEmpty      () const
-{
-    return m_bufferQueue.IsEmpty();
 }
 
 } //bv

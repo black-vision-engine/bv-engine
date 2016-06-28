@@ -6,10 +6,8 @@
 
 #include "Assets/Asset.h"
 
-#include <string>
 
-namespace bv
-{
+namespace bv {
 
 class AVAsset;
 DEFINE_CONST_PTR_TYPE( AVAsset )
@@ -17,6 +15,7 @@ DEFINE_CONST_PTR_TYPE( AVAsset )
 class AVAsset : public Asset, public std::enable_shared_from_this< AVAsset >
 {
 private:
+
 	static const std::string    uid;
 
 	std::string                 m_streamPath;
@@ -59,7 +58,5 @@ public:
 	static AVAssetConstPtr				        Create		        ( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
 };
-
-
 
 } // bv

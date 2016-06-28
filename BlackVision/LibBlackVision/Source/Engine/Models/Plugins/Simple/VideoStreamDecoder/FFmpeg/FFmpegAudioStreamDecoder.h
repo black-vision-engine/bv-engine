@@ -1,14 +1,11 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
 #include "Assets/VideoStream/AVAsset.h"
 
 
 namespace bv {
-
-class FFmpegDemuxer;
 
 class FFmpegAudioStreamDecoder : public FFmpegStreamDecoder
 {
@@ -23,11 +20,6 @@ private:
     Int32                               m_sampleRate;
     AVSampleFormat                      m_format;
     Int32                               m_nbChannels;
-    UInt64                              m_duration;
-
-	QueueConcurrent< AVMediaData >      m_bufferQueue;
-
-    UInt32                              m_maxQueueSize;
 
     bool                                m_needConversion;
 
@@ -38,22 +30,11 @@ public:
 
     Int32                   GetSampleRate               () const;
     AudioFormat             GetFormat                   () const;
-    UInt64                  GetDuration                 () const;   
 
-    UInt64                  GetCurrentPTS               ();
-
-    bool                    GetData                     ( AVMediaData & data );
-
-    bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
+    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) override;
 	
-	bool			        DecodePacket				( AVPacket * packet );
-	AVMediaData			    ConvertFrame				();
-
-	void					Reset						();
-
-	virtual Int32			GetStreamIdx				() const override;
-
-	bool					IsDataQueueEmpty		    () const;
+	virtual bool			DecodePacket				( AVPacket * packet ) override;
+	virtual AVMediaData		ConvertFrame				() override;
 
 private:
 
@@ -63,7 +44,5 @@ private:
     static AudioFormat      ConvertFormat               ( AVSampleFormat format, Int32 nbChannels );
 
 };
-
-DEFINE_UPTR_TYPE( FFmpegAudioStreamDecoder )
 
 } //bv

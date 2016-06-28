@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 
 #include "Assets/VideoStream/AVAsset.h"
 #include "DataTypes/QueueConcurrent.h"
@@ -9,8 +8,6 @@
 
 namespace bv {
     
-class FFmpegDemuxer;
-
 class FFmpegVideoStreamDecoder : public FFmpegStreamDecoder
 {
 private:
@@ -25,11 +22,6 @@ private:
     UInt32                              m_width;
     UInt32                              m_height;
     Float64                             m_frameRate;
-    UInt64                              m_duration;
-
-    QueueConcurrent< AVMediaData >      m_bufferQueue;
-
-    UInt32                              m_maxQueueSize;
 
 public:
 
@@ -41,29 +33,12 @@ public:
     UInt32                  GetWidth                    () const;   
     UInt32                  GetHeight                   () const;   
     Float64                 GetFrameRate                () const;   
-    UInt64                  GetDuration                 () const;   
-    
-    UInt64                  GetCurrentPTS               ();
 
-    bool                    GetData                     ( AVMediaData & data );
+    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) override;
 
-    bool                    ProcessPacket               ( FFmpegDemuxer * demuxer );
+    virtual bool            DecodePacket                ( AVPacket * packet ) override;
+    virtual AVMediaData     ConvertFrame                () override;
 
-    /** Converts time from seconds to the stream specific time base timestamp */
-    Int64                   ConvertTime                 ( Float64 time );
-
-    bool                    DecodePacket                ( AVPacket * packet );
-    virtual AVMediaData     ConvertFrame                ();
-
-    void                    Reset                       ();
-    void                    Clear                       ();
-
-    virtual Int32           GetStreamIdx                () const override;
-
-	bool					IsDataQueueEmpty		    () const;
-    
 };
-
-DEFINE_UPTR_TYPE( FFmpegVideoStreamDecoder )
 
 } //bv

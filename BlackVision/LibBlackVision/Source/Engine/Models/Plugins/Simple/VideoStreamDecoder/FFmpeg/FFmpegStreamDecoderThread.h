@@ -6,7 +6,7 @@
 #include "Threading/Thread.h"
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
 #include "DataTypes/QueueConcurrent.h"
 
@@ -17,13 +17,13 @@ namespace bv {
 class FFmpegAVDecoder;
 
 
-class FFmpegAudioStreamDecoderThread : public Thread
+class FFmpegStreamDecoderThread : public Thread
 {
 
 private:
 
-    FFmpegAVDecoder *        m_decoder;
-    FFmpegAudioStreamDecoder *  m_audioDecoder;
+    FFmpegAVDecoder *           m_decoder;
+    FFmpegStreamDecoder *       m_streamDecoder;
     FFmpegDemuxer *				m_demuxer;
 
 	mutable std::mutex			m_mutex;
@@ -32,12 +32,10 @@ private:
 	std::atomic< bool >			m_stopped;
 	std::atomic< bool >			m_running;
 
-	QueueConcurrent< AVMediaData >   m_bufferQueue;
-
 public:
 
-							    FFmpegAudioStreamDecoderThread	( FFmpegAVDecoder * decoder, FFmpegAudioStreamDecoder * audioDecoder, FFmpegDemuxer * demuxer );
-	virtual					    ~FFmpegAudioStreamDecoderThread	();
+							    FFmpegStreamDecoderThread	    ( FFmpegAVDecoder * decoder, FFmpegStreamDecoder * streamDecoder, FFmpegDemuxer * demuxer );
+	virtual					    ~FFmpegStreamDecoderThread	    ();
 	void						Kill				            ();
 
     void					    Restart				            ();
@@ -51,6 +49,6 @@ protected:
 
 };
 
-DEFINE_UPTR_TYPE( FFmpegAudioStreamDecoderThread )
+DEFINE_UPTR_TYPE( FFmpegStreamDecoderThread )
 
 } //bv

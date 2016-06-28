@@ -12,10 +12,8 @@
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxerThread.h"
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoStreamDecoderThread.h"
-
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoderThread.h"
 
 #include "DataTypes/QueueConcurrent.h"
 
@@ -27,29 +25,38 @@ class FFmpegAVDecoder : public IAVDecoder
 {
 private:
 
-    bool                                m_hasVideo;
-    bool                                m_hasAudio;
+    struct StreamData {
+    
+        FFmpegStreamDecoderUPtr         decoder;
+        FFmpegStreamDecoderThreadUPtr   decoderThread;
+        QueueConcurrent< AVMediaData >	outQueue;
+        UInt64                          prevPTS;
+
+    };
+
+private:
 
 	FFmpegDemuxerUPtr				    m_demuxer;
 
-	FFmpegVideoStreamDecoderUPtr	    m_videoDecoder;
-	FFmpegAudioStreamDecoderUPtr        m_audioDecoder;
+    std::map< AVMediaType, StreamData * > m_streams;
+
+	//FFmpegVideoStreamDecoderUPtr	    m_videoDecoder;
+	//FFmpegAudioStreamDecoderUPtr        m_audioDecoder;
 	
     UInt64                              m_duration;
 
 	AVDecoderThreadUPtr			        m_decoderThread;
-	mutable std::mutex				    m_mutex;
 
     FFmpegDemuxerThreadUPtr             m_demuxerThread;
 
-	FFmpegVideoStreamDecoderThreadUPtr  m_videoDecoderThread;
-	FFmpegAudioStreamDecoderThreadUPtr  m_audioDecoderThread;
+	//FFmpegStreamDecoderThreadUPtr       m_videoDecoderThread;
+	//FFmpegStreamDecoderThreadUPtr       m_audioDecoderThread;
 
-	QueueConcurrent< AVMediaData >	    m_outVideoQueue;
-	QueueConcurrent< AVMediaData > 	    m_outAudioQueue;
+	//QueueConcurrent< AVMediaData >	    m_outVideoQueue;
+	//QueueConcurrent< AVMediaData > 	    m_outAudioQueue;
 
-    UInt64                              m_prevVideoPTS;
-    UInt64                              m_prevAudioPTS;
+ //   UInt64                              m_prevVideoPTS;
+ //   UInt64                              m_prevAudioPTS;
 
 public:
 
@@ -62,7 +69,7 @@ public:
 
 	virtual bool		        GetVideoMediaData		( AVMediaData & data ) override;
 	virtual bool		        GetAudioMediaData		( AVMediaData & data ) override;
-    virtual AVMediaData		    GetSingleFrame  		( TimeType frameTime) override;
+    virtual AVMediaData		    GetSingleFrame  		( TimeType frameTime ) override;
 
 	virtual SizeType			GetVideoFrameSize	    () const override;
 
@@ -86,7 +93,6 @@ public:
 	virtual void				Reset					() override;
 
 	virtual bool				IsEOF					() const override;
-	virtual bool				IsPacketQueueEmpty		( Int32 streamIdx ) const;
 	virtual bool				IsFinished				() const override;
 
 protected:
@@ -94,8 +100,10 @@ protected:
 	virtual bool				NextVideoDataReady		( UInt64 t ) override;
 	virtual bool		        NextAudioDataReady		( UInt64 t ) override;
 
+private:
 
-    friend class FFmpegAudioStreamDecoderThread;
+	void				        Seek					( FFmpegStreamDecoder * decoder, Float64 time );
+	bool				        NextStreamDataReady		( AVMediaType type, UInt64 t );
 
 };
 

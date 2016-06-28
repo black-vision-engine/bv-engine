@@ -14,10 +14,11 @@ const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { 
 //
 FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
 	: m_swrCtx( nullptr )
-    , m_maxQueueSize( maxQueueSize )
     , m_needConversion( false )
 {
     m_streamIdx = streamIdx;
+    
+    m_maxQueueSize = maxQueueSize;
 
 	m_stream = formatCtx->streams[ streamIdx ];
 	m_codecCtx = m_stream->codec;
@@ -73,30 +74,6 @@ Int32                   FFmpegAudioStreamDecoder::GetSampleRate     () const
 AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 {
     return ConvertFormat( m_format, m_nbChannels );
-}
-
-// *******************************
-//
-UInt64                  FFmpegAudioStreamDecoder::GetDuration       () const
-{
-    return m_duration;
-}
-
-// *******************************
-//
-UInt64                  FFmpegAudioStreamDecoder::GetCurrentPTS     ()
-{
-    AVMediaData data;
-    m_bufferQueue.Front( data );
-    return data.framePTS;
-}
-
-
-// *******************************
-//
-bool		            FFmpegAudioStreamDecoder::GetData	        ( AVMediaData & data )
-{
-    return m_bufferQueue.TryPop( data );
 }
 
 // *******************************
@@ -168,28 +145,6 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
     mediaData.nbSamples = m_frame->nb_samples;
 
     return mediaData;
-}
-
-// *******************************
-//
-void					FFmpegAudioStreamDecoder::Reset				()
-{
-	avcodec_flush_buffers( m_codecCtx );
-    m_bufferQueue.Clear();
-}
-
-// *******************************
-//
-Int32					FFmpegAudioStreamDecoder::GetStreamIdx		() const
-{
-	return m_streamIdx;
-}
-
-// *******************************
-//
-bool                    FFmpegAudioStreamDecoder::IsDataQueueEmpty  () const
-{
-    return m_bufferQueue.IsEmpty();
 }
 
 // *******************************

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "FFmpegVideoStreamDecoderThread.h"
+#include "FFmpegStreamDecoderThread.h"
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 #include "Tools/HRTimer.h"
@@ -13,9 +13,9 @@ namespace bv
 
 // *******************************
 //
-FFmpegVideoStreamDecoderThread::FFmpegVideoStreamDecoderThread				( FFmpegAVDecoder * decoder, FFmpegVideoStreamDecoder * videoDecoder, FFmpegDemuxer * demuxer )
+FFmpegStreamDecoderThread::FFmpegStreamDecoderThread				( FFmpegAVDecoder * decoder, FFmpegStreamDecoder * streamDecoder, FFmpegDemuxer * demuxer )
 	: m_decoder( decoder )
-    , m_videoDecoder( videoDecoder )
+    , m_streamDecoder( streamDecoder )
     , m_demuxer( demuxer )
 	, m_stopped( false )
     , m_running( true )
@@ -24,13 +24,13 @@ FFmpegVideoStreamDecoderThread::FFmpegVideoStreamDecoderThread				( FFmpegAVDeco
 
 // *******************************
 //
-FFmpegVideoStreamDecoderThread::~FFmpegVideoStreamDecoderThread				()
+FFmpegStreamDecoderThread::~FFmpegStreamDecoderThread				()
 {
 }
 
 // *******************************
 //
-void				FFmpegVideoStreamDecoderThread::Kill	    ()
+void				FFmpegStreamDecoderThread::Kill	    ()
 {
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
@@ -42,7 +42,7 @@ void				FFmpegVideoStreamDecoderThread::Kill	    ()
 
 // *******************************
 //
-void				FFmpegVideoStreamDecoderThread::Restart	    ()
+void				FFmpegStreamDecoderThread::Restart	    ()
 {
 	{
 		std::unique_lock< std::mutex > lock( m_mutex );
@@ -53,7 +53,7 @@ void				FFmpegVideoStreamDecoderThread::Restart	    ()
 
 // *******************************
 //
-void				FFmpegVideoStreamDecoderThread::Stop		()
+void				FFmpegStreamDecoderThread::Stop		()
 {
 	{
 		std::unique_lock< std::mutex > lock( m_mutex );
@@ -64,7 +64,7 @@ void				FFmpegVideoStreamDecoderThread::Stop		()
 
 // *******************************
 //
-bool				FFmpegVideoStreamDecoderThread::Stopped		() const
+bool				FFmpegStreamDecoderThread::Stopped		() const
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
 	return m_stopped;
@@ -72,7 +72,7 @@ bool				FFmpegVideoStreamDecoderThread::Stopped		() const
 
 // *******************************
 //
-void				FFmpegVideoStreamDecoderThread::Run			()
+void				FFmpegStreamDecoderThread::Run			()
 {
 	{
 		std::unique_lock< std::mutex > lock( m_mutex );
@@ -89,7 +89,7 @@ void				FFmpegVideoStreamDecoderThread::Run			()
             break;
         }
 
-        if( !m_videoDecoder->ProcessPacket( m_demuxer ) )
+        if( !m_streamDecoder->ProcessPacket( m_demuxer ) )
         {
             m_stopped = true;
         }
