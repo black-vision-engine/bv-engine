@@ -325,6 +325,9 @@
     <Filter Include="Engine\Audio\Logic">
       <UniqueIdentifier>{f7d0d83e-2b2f-4d48-89e2-3d5c27d8f18e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\GeometryProcessors">
+      <UniqueIdentifier>{4519ac93-82db-4538-b157-a29a5658c153}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1653,6 +1656,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.cpp">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.cpp">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3851,6 +3863,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.h">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAudioDecoderPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -3922,6 +3943,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.h">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

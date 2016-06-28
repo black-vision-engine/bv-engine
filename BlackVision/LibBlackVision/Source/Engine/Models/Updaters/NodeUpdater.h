@@ -137,7 +137,7 @@ private:
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
 
-    void            UpdateBoundingBox   ( const model::BoundingVolume * bv );
+    inline  void    UpdateBoundingBox   ();
 
     inline	void	UpdateShaderParams  ();
     inline  void    UpdateTexturesData	();

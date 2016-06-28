@@ -422,7 +422,7 @@ VertexType HelperSmoothMesh::computeVertexType( int i, std::vector<INDEX_TYPE> s
 	int numSharpEdges = 0;
 
 	for( unsigned int j = 0; j < sharpEdges.size(); ++j )
-		if( sharpEdges[ j ] == i )
+		if( sharpEdges[ j ] == (INDEX_TYPE)i )
 			++numSharpEdges;
 
 	if( numSharpEdges < 2 )
@@ -455,7 +455,8 @@ float HelperSmoothMesh::computeVertexWeight( int vertexIndex, int secondVertexIn
 bool HelperSmoothMesh::isSharpEdge( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges )
 {
 	for( unsigned int i = 0; i < sharpEdges.size(); i += 2 )
-		if( sharpEdges[ i ] == index1 && sharpEdges[ i + 1 ] == index2 || sharpEdges[ i ] == index2 && sharpEdges[ i + 1 ] == index1 )
+		if( sharpEdges[ i ] == (INDEX_TYPE)index1 && sharpEdges[ i + 1 ] == (INDEX_TYPE)index2 ||
+            sharpEdges[ i ] == (INDEX_TYPE)index2 && sharpEdges[ i + 1 ] == (INDEX_TYPE)index1 )
 			return true;
 	return false;
 }

@@ -588,6 +588,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::FadeRectTestScene( timeline );
     }
+    else if( scene == "EXTRUDE_TEST_SCENE" )
+    {
+        node = TestScenesFactory::ExtrudeTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1986,6 +1990,31 @@ model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( mod
     model::SetParameter( fadePlugin->GetParameter( "FadeAlpha3" ), 3.0, 0.1f );
 
     model::SetParameter( fadePlugin->GetParameter( "FadeAlpha4" ), 0.0, 1.0f );
+
+    return root;
+}
+
+
+model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    // Root node
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_ROUNDEDRECT", timeEvaluator );
+    root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator );
+    root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+
+    auto material = root->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.1, 0.0, 0.2, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+    //auto rectPlugin = root->GetPlugin( "rectangle" );
+    //model::SetParameter( rectPlugin->GetParameter( "width" ), 0.0, 3.0f );
+    //model::SetParameter( rectPlugin->GetParameter( "height" ), 0.0, 2.0f );
 
     return root;
 }

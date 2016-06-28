@@ -153,6 +153,12 @@ void                    Float3AttributeChannel::AddAttributes( const std::vector
     m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
 }
 
+// ***********************
+//
+void                    Float3AttributeChannel::ReplaceAttributes( std::vector< glm::vec3 > && v )
+{
+    m_attributes = std::move( v );
+}
 
 //******************* Float2AttributeChannel *******************
 

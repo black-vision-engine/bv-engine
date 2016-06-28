@@ -6,8 +6,14 @@ namespace bv { namespace model {
 
 
 IndexedGeometryConverter::IndexedGeometryConverter()
-{}
+{
+    m_epsilon = ( Float32 )10e-5;
+}
 
+
+IndexedGeometryConverter::IndexedGeometryConverter( float epsilon )
+    :   m_epsilon( epsilon )
+{}
 
 IndexedGeometryConverter::~IndexedGeometryConverter()
 {}
@@ -186,6 +192,106 @@ void    IndexedGeometryConverter::MakeTriangles           ( IndexedGeometry & me
     }
 }
 
+// ========================================================================= //
+// Geometry indexer
+// ========================================================================= //
+
+// ***********************
+//
+IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts )
+{
+    auto const & srcVertices = std::const_pointer_cast< Float3AttributeChannel >( verts )->GetVertices();
+
+    IndexedGeometry mesh;
+    auto & vertices = mesh.GetVerticies();
+    auto & indices = mesh.GetIndicies();
+    auto vertsNum = srcVertices.size();
+
+    // I assume that first two verticies aren't degenerated.
+    vertices.push_back( srcVertices[ 0 ] );
+    vertices.push_back( srcVertices[ 1 ] );
+
+    UInt32 prevIdx = 1;
+    UInt32 prePrevIdx = 0;
+
+    for( UInt32 i = 2; i < vertsNum; ++i )
+    {
+        auto it = std::find_if( vertices.begin(), vertices.end(), [ & ]( const glm::vec3 & vert ){
+            return glm::length( vert - srcVertices[ i ] ) < m_epsilon;
+        });
+
+        if( it == vertices.end() )
+        {
+            vertices.push_back( srcVertices[ i ] );
+
+            // Beacause source geometry was triangle strip, we must emit 3 indicies instead of 1.
+            indices.push_back( (INDEX_TYPE)prePrevIdx );
+            indices.push_back( (INDEX_TYPE)prevIdx );
+            indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
+
+            prePrevIdx = prevIdx;
+            prevIdx = indices.back();
+        }
+        else
+        {
+            auto idx = ( UInt32 )( std::distance( vertices.begin(), it ) );
+
+            // Beacause source geometry was triangle strip, we must emit 3 indicies instead of 1.
+            indices.push_back( (INDEX_TYPE)prePrevIdx );
+            indices.push_back( (INDEX_TYPE)prevIdx );
+            indices.push_back( (INDEX_TYPE)idx );
+
+            prePrevIdx = prevIdx;
+            prevIdx = indices.back();
+        }
+    }
+
+    // Remove degenerated triangles.
+    for( int i = 0; i < indices.size(); i += 3 )
+    {
+        if( indices[ i ] == indices[ i + 1 ]     ||
+            indices[ i + 1 ] == indices[ i + 2 ] ||
+            indices[ i + 2 ] == indices[ i ] )
+        {
+            auto iter = indices.erase( indices.begin() + i, indices.begin() + ( i + 3 ) );
+            i = (int)std::distance( indices.begin(), iter );
+        }
+    }
+
+    return mesh;
+}
+
+// ***********************
+//
+IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Float3AttributeChannelPtr verts )
+{
+    auto const & srcVertices = std::const_pointer_cast< Float3AttributeChannel >( verts )->GetVertices();
+
+    IndexedGeometry mesh;
+    auto & vertices = mesh.GetVerticies();
+    auto & indices = mesh.GetIndicies();
+    auto vertsNum = srcVertices.size();
+
+    for( UInt32 i = 0; i < vertsNum; ++i )
+    {
+        auto it = std::find_if( vertices.begin(), vertices.end(), [ & ]( const glm::vec3 & vert ){
+            return glm::length( vert - srcVertices[ i ] ) < m_epsilon;
+        });
+
+        if( it == vertices.end() )
+        {
+            vertices.push_back( srcVertices[ i ] );
+            indices[ i ] = (INDEX_TYPE)( vertices.size() - 1 );
+        }
+        else
+        {
+            auto idx = ( UInt32 )( std::distance( vertices.begin(), it ) );
+            indices[ i ] = (INDEX_TYPE)idx;
+        }
+    }
+
+    return mesh;
+}
 
 
 }   // model

@@ -50,7 +50,7 @@ IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluator
 
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
+void BasePluginDescriptor::ModelHelper::CreateVacModel      ()
 {
     auto vacModel = std::make_shared< DefaultParamValModel >();
     m_model->SetVertexAttributesChannelModel( vacModel );
@@ -59,16 +59,23 @@ void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
 
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreateVSModel         ()
+void BasePluginDescriptor::ModelHelper::CreateVSModel       ()
 {
     auto psModel = std::make_shared< DefaultParamValModel >();
     m_model->SetVertexShaderChannelModel( psModel );
     m_lastParamValModel = psModel;
 }
 
+// ***********************
+//
+void BasePluginDescriptor::ModelHelper::CreateGSModel       ()
+{
+
+}
+
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreatePSModel         ()
+void BasePluginDescriptor::ModelHelper::CreatePSModel       ()
 {
     auto psModel = std::make_shared< DefaultParamValModel >();
     m_model->SetPixelShaderChannelModel( psModel );

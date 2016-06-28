@@ -4,6 +4,8 @@
 #include "Serialization/SerializationHelper.inl"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
 #include "Engine/Models/BasicNode.h"
 
@@ -13,7 +15,25 @@
 
 
 
-namespace bv { namespace nodelogic
+namespace bv {
+
+namespace SerializationHelper {
+
+std::pair< bv::nodelogic::Arrange::ArrangmentType, const char* > ArrangeTypeMapping[] = 
+{   std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Circle, "Circle" )
+    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Grid2D, "Grid2D" )
+    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Grid3D, "Grid3D" )
+    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Line, "Line" )
+    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Sphere, "Sphere" )
+    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Total, "" )      // default
+};
+
+template<> nodelogic::Arrange::ArrangmentType   String2T        ( const std::string & s, const bv::nodelogic::Arrange::ArrangmentType & defaultVal )    { return String2Enum( ArrangeTypeMapping, s, defaultVal ); }
+template<> std::string                          T2String        ( const bv::nodelogic::Arrange::ArrangmentType & t )                                    { return Enum2String( ArrangeTypeMapping, t ); }
+
+}   // SerializationHelper
+
+namespace nodelogic
 {
 
 const std::string       Arrange::m_type = "Arrange";
@@ -26,7 +46,33 @@ const std::string       Arrange::ACTION::GRID3D_ARRANGE     = "Grid3DArrange";
 const std::string       Arrange::ACTION::GET_PARAMETERS     = "GetParameters";
 const std::string       Arrange::ACTION::ARRANGE_AFTER_LOAD = "ArrangeAfterLoad";
 
-//const std::string       Arrange::PARAMETERS::PARAMETER_NAME = "ParamName";
+const std::string       Arrange::PARAMETERS::LINE_START_POINT       = "Line_StartPoint";
+const std::string       Arrange::PARAMETERS::LINE_END_POINT         = "Line_EndPoint";
+
+const std::string       Arrange::PARAMETERS::CIRCLE_RADIUS          = "Circle_Radius";
+const std::string       Arrange::PARAMETERS::CIRCLE_ROTATION        = "Circle_Rotation";
+const std::string       Arrange::PARAMETERS::CIRCLE_CENTER          = "Circle_Center";
+
+const std::string       Arrange::PARAMETERS::SPHERE_RADIUS          = "Sphere_Radius";
+const std::string       Arrange::PARAMETERS::SPHERE_ROTATION        = "Sphere_Rotation";
+const std::string       Arrange::PARAMETERS::SPHERE_CENTER          = "Sphere_Center";
+const std::string       Arrange::PARAMETERS::SPHERE_ROWS            = "Sphere_Rows";
+const std::string       Arrange::PARAMETERS::SPHERE_COLUMNS         = "Sphere_Columns";
+
+const std::string       Arrange::PARAMETERS::GRID2D_ROTATION        = "Grid2D_Rotation";
+const std::string       Arrange::PARAMETERS::GRID2D_CENTER          = "Grid2D_Center";
+const std::string       Arrange::PARAMETERS::GRID2D_ROWS            = "Grid2D_Rows";
+const std::string       Arrange::PARAMETERS::GRID2D_COLUMNS         = "Grid2D_Columns";
+const std::string       Arrange::PARAMETERS::GRID2D_INTERSPACES     = "Grid2D_Interspaces";
+
+const std::string       Arrange::PARAMETERS::GRID3D_ROTATION        = "Grid3D_Rotation";
+const std::string       Arrange::PARAMETERS::GRID3D_CENTER          = "Grid3D_Center";
+const std::string       Arrange::PARAMETERS::GRID3D_ROWS            = "Grid3D_Rows";
+const std::string       Arrange::PARAMETERS::GRID3D_COLUMNS         = "Grid3D_Columns";
+const std::string       Arrange::PARAMETERS::GRID3D_LAYERS          = "Grid3D_Layers";
+const std::string       Arrange::PARAMETERS::GRID3D_INTERSPACES     = "Grid3D_Interspaces";
+
+const std::string       Arrange::PARAMETERS::ARRANGE_AFTER_LOAD     = "ArrangeAfterLoad";
 
 
 // ***********************
@@ -47,12 +93,44 @@ const std::string &     Arrange::GetType             () const
 //
 Arrange::Arrange             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
-    ,   m_arrangeAfterLoad( true )
-{}
+{
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::LINE_START_POINT, glm::vec3( -1.0, 0.0, 0.0 ) );
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::LINE_END_POINT, glm::vec3( 1.0, 0.0, 0.0 ) );
+
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::CIRCLE_CENTER, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::CIRCLE_ROTATION, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddFloatParam( m_paramValModel, timeEvaluator, PARAMETERS::CIRCLE_RADIUS, 1.0f );
+
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::SPHERE_CENTER, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::SPHERE_ROTATION, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddFloatParam( m_paramValModel, timeEvaluator, PARAMETERS::SPHERE_RADIUS, 1.0f );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::SPHERE_COLUMNS, 3 );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::SPHERE_ROWS, 3 );
+
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::GRID2D_CENTER, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::GRID2D_ROTATION, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::GRID2D_ROWS, 3 );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::GRID2D_COLUMNS, 3 );
+    model::AddVec2Param( m_paramValModel, timeEvaluator, PARAMETERS::GRID2D_INTERSPACES, glm::vec2( 0.2, 0.2 ) );
+
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::GRID3D_CENTER, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::GRID3D_ROTATION, glm::vec3( 0.0, 0.0, 0.0 ) );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::GRID3D_ROWS, 3 );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::GRID3D_COLUMNS, 3 );
+    model::AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::GRID3D_LAYERS, 3 );
+    model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::GRID3D_INTERSPACES, glm::vec3( 0.2, 0.2, 0.2 ) );
+
+    model::AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::ARRANGE_AFTER_LOAD, true );
+}
 
 // ***********************
 //
 Arrange::~Arrange()
+{}
+
+// ***********************
+// Empty for purpose. Base class updates model here, but Arrange logic doesn't need this.
+void	                    Arrange::Update			( TimeType )
 {}
 
 // ========================================================================= //
@@ -72,9 +150,7 @@ void                        Arrange::Serialize       ( ISerializer & ser ) const
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
         NodeLogicBase::Serialize( ser );
-        m_lastArrangement->Serialize( ser );
-
-        ser.SetAttribute( "ArrangeAfterLoad", SerializationHelper::T2String( m_arrangeAfterLoad ) );
+        ser.SetAttribute( "ArrangementType", SerializationHelper::T2String( m_lastArrangementType ) );
     }
 
     ser.ExitChild();    // logic
@@ -97,38 +173,38 @@ ArrangePtr              Arrange::Create          ( const IDeserializer & deser, 
 void                    Arrange::Deserialize     ( const IDeserializer & ser )
 {
     NodeLogicBase::Deserialize( ser );
+    m_paramValModel->Update();
 
-    m_arrangeAfterLoad = SerializationHelper::String2T( ser.GetAttribute( "ArrangeAfterLoad" ), true );
+    bool arrangeAfterLoad = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::ARRANGE_AFTER_LOAD ) )->GetValue();
+    ArrangmentType type = SerializationHelper::String2T( ser.GetAttribute( "ArrangementType" ), ArrangmentType::Grid2D );
 
-    if( m_arrangeAfterLoad )
+    if( arrangeAfterLoad )
     {
-        if( ser.EnterChild( "CircleArrangeParams" ) )
+        if( type == ArrangmentType::Circle )
         {
-            m_lastArrangement = CircleArrangeParams::Create( ser );
+            m_lastArrangement = CircleArrangeParams::Create( m_paramValModel );
             ArrangeChildren( ArrangmentType::Circle, m_lastArrangement );
         }
-        else if( ser.EnterChild( "LineArrangeParams" ) )
+        else if( type == ArrangmentType::Line )
         {
-            m_lastArrangement = LineArrangeParams::Create( ser );
+            m_lastArrangement = LineArrangeParams::Create( m_paramValModel );
             ArrangeChildren( ArrangmentType::Line, m_lastArrangement );
         }
-        else if( ser.EnterChild( "Grid2DArrangeParams" ) )
+        else if( type == ArrangmentType::Grid2D )
         {
-            m_lastArrangement = Grid2DArrangeParams::Create( ser );
+            m_lastArrangement = Grid2DArrangeParams::Create( m_paramValModel );
             ArrangeChildren( ArrangmentType::Grid2D, m_lastArrangement );
         }
-        else if( ser.EnterChild( "Grid3DArrangeParams" ) )
+        else if( type == ArrangmentType::Grid3D )
         {
-            m_lastArrangement = Grid3DArrangeParams::Create( ser );
+            m_lastArrangement = Grid3DArrangeParams::Create( m_paramValModel );
             ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
         }
-        else if( ser.EnterChild( "SphereArrangeParams" ) )
+        else if( type == ArrangmentType::Sphere )
         {
-            m_lastArrangement = SphereArrangeParams::Create( ser );
+            m_lastArrangement = SphereArrangeParams::Create( m_paramValModel );
             ArrangeChildren( ArrangmentType::Sphere, m_lastArrangement );
         }
-
-        ser.ExitChild();
     }
     else
     {
@@ -136,6 +212,7 @@ void                    Arrange::Deserialize     ( const IDeserializer & ser )
         return;
     }
 }
+
 
 // ***********************
 //
@@ -165,6 +242,19 @@ std::unique_ptr< Arrange::CircleArrangeParams >   Arrange::CircleArrangeParams::
 
 // ***********************
 //
+std::unique_ptr< Arrange::CircleArrangeParams >     Arrange::CircleArrangeParams::Create          ( model::DefaultParamValModelPtr & model )
+{
+    std::unique_ptr< CircleArrangeParams > params = std::unique_ptr< CircleArrangeParams >( new CircleArrangeParams );
+
+    params->Center = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::CIRCLE_CENTER ) )->GetValue();
+    params->Radius = QueryTypedValue< ValueFloatPtr >( model->GetValue( PARAMETERS::CIRCLE_RADIUS ) )->GetValue();
+    params->Rotation = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::CIRCLE_ROTATION ) )->GetValue();
+    
+    return params;
+}
+
+// ***********************
+//
 void                            Arrange::LineArrangeParams::Serialize       ( ISerializer & ser ) const
 {
     ser.EnterChild( "LineArrangeParams" );
@@ -184,6 +274,18 @@ std::unique_ptr< Arrange::LineArrangeParams >     Arrange::LineArrangeParams::Cr
     params->StartPoint = SerializationHelper::String2T( deser.GetAttribute( "StartPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
     params->EndPoint = SerializationHelper::String2T( deser.GetAttribute( "EndPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
 
+    return params;
+}
+
+// ***********************
+//
+std::unique_ptr< Arrange::LineArrangeParams >     Arrange::LineArrangeParams::Create          ( model::DefaultParamValModelPtr & model )
+{
+    std::unique_ptr< LineArrangeParams > params = std::unique_ptr< LineArrangeParams >( new LineArrangeParams );
+
+    params->StartPoint = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::LINE_START_POINT ) )->GetValue();
+    params->EndPoint = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::LINE_END_POINT ) )->GetValue();
+    
     return params;
 }
 
@@ -219,6 +321,22 @@ std::unique_ptr< Arrange::Grid2DArrangeParams >   Arrange::Grid2DArrangeParams::
     params->Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec2( 1.0, 1.0 ) );
 
     //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    
+    return params;
+}
+
+// ***********************
+//
+std::unique_ptr< Arrange::Grid2DArrangeParams >     Arrange::Grid2DArrangeParams::Create          ( model::DefaultParamValModelPtr & model )
+{
+    std::unique_ptr< Grid2DArrangeParams > params = std::unique_ptr< Grid2DArrangeParams >( new Grid2DArrangeParams );
+
+    params->Center = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::GRID2D_CENTER ) )->GetValue();
+    params->Rotation = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::GRID2D_ROTATION ) )->GetValue();
+    params->Interspaces = QueryTypedValue< ValueVec2Ptr >( model->GetValue( PARAMETERS::GRID2D_INTERSPACES ) )->GetValue();
+
+    params->Rows = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::GRID2D_ROWS ) )->GetValue();
+    params->Columns = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::GRID2D_COLUMNS ) )->GetValue();
     
     return params;
 }
@@ -263,6 +381,23 @@ std::unique_ptr< Arrange::Grid3DArrangeParams >   Arrange::Grid3DArrangeParams::
 
 // ***********************
 //
+std::unique_ptr< Arrange::Grid3DArrangeParams >     Arrange::Grid3DArrangeParams::Create          ( model::DefaultParamValModelPtr & model )
+{
+    std::unique_ptr< Grid3DArrangeParams > params = std::unique_ptr< Grid3DArrangeParams >( new Grid3DArrangeParams );
+
+    params->Center = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::GRID3D_CENTER ) )->GetValue();
+    params->Rotation = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::GRID3D_ROTATION ) )->GetValue();
+    params->Interspaces = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::GRID3D_INTERSPACES ) )->GetValue();
+
+    params->Rows = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::GRID3D_ROWS ) )->GetValue();
+    params->Columns = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::GRID3D_COLUMNS ) )->GetValue();
+    params->Layers = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::GRID3D_LAYERS ) )->GetValue();
+    
+    return params;
+}
+
+// ***********************
+//
 void                            Arrange::SphereArrangeParams::Serialize       ( ISerializer & ser ) const
 {
     ser.EnterChild( "SphereArrangeParams" );
@@ -297,6 +432,22 @@ std::unique_ptr< Arrange::SphereArrangeParams >   Arrange::SphereArrangeParams::
     return params;
 }
 
+// ***********************
+//
+std::unique_ptr< Arrange::SphereArrangeParams >     Arrange::SphereArrangeParams::Create          ( model::DefaultParamValModelPtr & model )
+{
+    std::unique_ptr< SphereArrangeParams > params = std::unique_ptr< SphereArrangeParams >( new SphereArrangeParams );
+
+    params->Center = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::SPHERE_CENTER ) )->GetValue();
+    params->Rotation = QueryTypedValue< ValueVec3Ptr >( model->GetValue( PARAMETERS::SPHERE_ROTATION ) )->GetValue();
+
+    params->Rows = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::SPHERE_ROWS ) )->GetValue();
+    params->Columns = QueryTypedValue< ValueIntPtr >( model->GetValue( PARAMETERS::SPHERE_COLUMNS ) )->GetValue();
+
+    params->Radius = QueryTypedValue< ValueFloatPtr >( model->GetValue( PARAMETERS::SPHERE_RADIUS ) )->GetValue();
+    
+    return params;
+}
 
 // ========================================================================= //
 // Commands handling
@@ -306,60 +457,51 @@ std::unique_ptr< Arrange::SphereArrangeParams >   Arrange::SphereArrangeParams::
 //
 bool                        Arrange::HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
 {
+    m_paramValModel->Update();      // Update model before arranging, bacause we don't do it in Update function.
     std::string action = eventDeser.GetAttribute( "Action" );
 
     if( action == Arrange::ACTION::CIRCLE_ARRANGE )
     {
-        m_lastArrangement = CircleArrangeParams::Create( eventDeser );
+        m_lastArrangement = CircleArrangeParams::Create( m_paramValModel );
         ArrangeChildren( ArrangmentType::Circle, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::LINE_ARRANGE )
     {
-        m_lastArrangement = LineArrangeParams::Create( eventDeser );
+        m_lastArrangement = LineArrangeParams::Create( m_paramValModel );
         ArrangeChildren( ArrangmentType::Line, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::SPHERE_ARRANGE )
     {
-        m_lastArrangement = SphereArrangeParams::Create( eventDeser );
+        m_lastArrangement = SphereArrangeParams::Create( m_paramValModel );
         ArrangeChildren( ArrangmentType::Sphere, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::GRID2D_ARRANGE )
     {
-        m_lastArrangement = Grid2DArrangeParams::Create( eventDeser );
+        m_lastArrangement = Grid2DArrangeParams::Create( m_paramValModel );
         ArrangeChildren( ArrangmentType::Grid2D, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::GRID3D_ARRANGE )
     {
-        m_lastArrangement = Grid3DArrangeParams::Create( eventDeser );
+        m_lastArrangement = Grid3DArrangeParams::Create( m_paramValModel );
         ArrangeChildren( ArrangmentType::Grid3D, m_lastArrangement );
 
         return true;
     }
     else if( action == Arrange::ACTION::GET_PARAMETERS )
     {
-        m_lastArrangement->Serialize( response );
-
-        return true;
-    }
-    else if( action == Arrange::ACTION::ARRANGE_AFTER_LOAD )
-    {
-        Expected< bool > value = SerializationHelper::String2T< bool >( eventDeser.GetAttribute( "Value" ) );
-        
-        if( value.isValid )
+        if( m_lastArrangement )
         {
-            m_arrangeAfterLoad = value.ham;
+            m_lastArrangement->Serialize( response );
             return true;
         }
-        else
-            return false;
     }
 
     return false;
@@ -375,6 +517,7 @@ bool                        Arrange::HandleEvent     ( IDeserializer & eventDese
 void            Arrange::ArrangeChildren     ( ArrangmentType type, std::unique_ptr< ArrangeParamsBase > & params )
 {
     auto nodes = GetNodesToArrange();
+    m_lastArrangementType = type;
 
     if( type == ArrangmentType::Circle )
     {

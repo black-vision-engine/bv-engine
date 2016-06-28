@@ -26,6 +26,9 @@ class BoundingVolume {
     glm::vec3                           m_center;
     //glm::mat4               m_transform; // apply unit cube to get bounding box :)
 
+    mathematics::Box                    m_childrenBox;
+    //BoundingVolume *                    m_parent;
+
     const VertexAttributesChannel *     m_vac;
     UInt64                              m_lastTopologyID;
     UInt64                              m_lastAttribuetesID;
@@ -43,8 +46,8 @@ public:
     IConnectedComponentPtr              BuildBoxRepresentation  () const;
     IConnectedComponentPtr              BuildCenterRepresentation () const;
 
-    void                                Update                  ();
-
+    void                                UpdateOwnBox            ();
+    void                                IncludeChildrenBox      ( const mathematics::Box & box );
 };
 
 } // model

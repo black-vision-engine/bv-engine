@@ -66,8 +66,6 @@ public:
 private:
 
     void                                        InitVertexAttributesChannel ();
-    void                                        RecalculateUVChannel		();
-
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
