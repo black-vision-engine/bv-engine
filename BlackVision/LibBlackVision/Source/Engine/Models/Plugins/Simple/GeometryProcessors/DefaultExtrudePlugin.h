@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultGeometryProcessorBase.h"
+#include "Engine/Models/Plugins/IndexedGeometry.h"
 
 
 
@@ -47,7 +48,14 @@ public:
 
 private:
 
-    void                AddSymetricalPlane      ( IndexedGeometry& mesh, glm::vec3 translate );
+    void                            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
+    void                            AddSidePlanes           ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges );
+    
+    std::vector< INDEX_TYPE >       ExtractEdges            ( IndexedGeometry & mesh );
+    std::vector< INDEX_TYPE >       ExtractCorners          ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges, float angleThreshold );
+
+    int                             FindEdge                ( const std::vector< INDEX_TYPE > & indicies, INDEX_TYPE idx1, INDEX_TYPE idx2 );
+    void                            AddOrRemoveEdge         ( std::vector< INDEX_TYPE > & edges, INDEX_TYPE idx1, INDEX_TYPE idx2 );
 };
 
 

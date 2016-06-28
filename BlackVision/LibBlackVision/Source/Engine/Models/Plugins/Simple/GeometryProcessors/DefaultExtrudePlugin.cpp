@@ -37,7 +37,7 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     auto model = helper.GetModel();
     
     helper.CreateVacModel();
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.0, 0.0, -0.3 ), true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.0, 0.0, -0.9 ), true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE, 160.0f, true, true );
 
     return model;
@@ -105,7 +105,10 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         assert( !"This primitive topology is not supported yet" );
     }
 
+    auto edges = ExtractEdges( mesh );
+
     AddSymetricalPlane( mesh, translate );
+    AddSidePlanes( mesh, edges );
 
     converter.MakeTriangles( mesh, newPositions );
 
@@ -198,6 +201,95 @@ void                                DefaultExtrudePlugin::AddSymetricalPlane    
     {
         indices.push_back( indices[ i ] + (INDEX_TYPE)numVerticies );
     }
+}
+
+// ***********************
+// Function assumes that someone used function AddSymetricalPlane.
+void                                DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges )
+{
+    //auto & vertices = mesh.GetVerticies();
+    auto & indices = mesh.GetIndicies();
+    auto & verticies = mesh.GetVerticies();
+
+    int symPlaneOffset = (int)verticies.size() / 2;
+
+    // @todo In future we must add normals. That means we must add verticies too, bacause
+    // edge is sharp and normals can't be the same.
+
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
+        indices.push_back( edges[ i ] );
+        indices.push_back( edges[ i ] + symPlaneOffset );
+        indices.push_back( edges[ i + 1 ] );
+
+        indices.push_back( edges[ i ] + symPlaneOffset );
+        indices.push_back( edges[ i + 1 ] + symPlaneOffset );
+        indices.push_back( edges[ i + 1 ] );
+    }
+}
+
+// ***********************
+// Edge is a pair of verticies that builds only one triangle in whole mesh.
+// Note: Edges have their direction. Order of verticies counts. It's used later
+// to determine normal direction as cross product between edge vector and extrude vector.
+std::vector< INDEX_TYPE >           DefaultExtrudePlugin::ExtractEdges ( IndexedGeometry& mesh )
+{
+    std::vector< INDEX_TYPE >   edges;
+
+    auto & indicies = mesh.GetIndicies();
+    auto numIndicies = indicies.size();
+
+    edges.reserve( numIndicies / 3 );
+
+    for( int i = 0; i < numIndicies; i += 3 )
+    {
+        AddOrRemoveEdge( edges, indicies[ i ], indicies[ i + 1 ] );
+        AddOrRemoveEdge( edges, indicies[ i + 1 ], indicies[ i + 2 ] );
+        AddOrRemoveEdge( edges, indicies[ i + 2 ], indicies[ i ] );
+    }
+
+    return edges;
+}
+
+// ***********************
+// Returns max( SizeType ) if Edge coundn't be found.
+int                            DefaultExtrudePlugin::FindEdge  ( const std::vector< INDEX_TYPE > & indicies, INDEX_TYPE idx1, INDEX_TYPE idx2 )
+{
+    for( int i = (int)indicies.size() - 1; i >= 0; i -= 2 )
+    {
+        if( indicies[ i ] == idx2 && indicies[ i - 1 ] == idx1 )
+            return i - 1;
+    }
+    return std::numeric_limits< int >::max();
+}
+
+// ***********************
+//
+void                            DefaultExtrudePlugin::AddOrRemoveEdge   ( std::vector< INDEX_TYPE > & edges, INDEX_TYPE idx1, INDEX_TYPE idx2 )
+{
+    int searchResult = FindEdge( edges, idx1, idx2 );
+    if( searchResult == std::numeric_limits< int >::max() )
+    {
+        edges.push_back( idx1 );
+        edges.push_back( idx2 );
+    }
+    else
+    {
+        auto iter = edges.begin() + searchResult;
+        edges.erase( iter, iter + 2 );
+    }
+}
+
+// ***********************
+//
+std::vector< INDEX_TYPE >       DefaultExtrudePlugin::ExtractCorners          ( IndexedGeometry & /*mesh*/, const std::vector< INDEX_TYPE > & /*edges*/, float /*angleThreshold*/ )
+{
+    //auto & vertices = mesh.GetVerticies();
+    std::vector< INDEX_TYPE > corners;
+
+    assert( !"Implement me" );
+
+    return corners;
 }
 
 // ========================================================================= //

@@ -58,6 +58,7 @@ public:
     public:
         void                                            Serialize       ( ISerializer & ser ) const;
         static std::unique_ptr< CircleArrangeParams >   Create          ( const IDeserializer & deser );
+        static std::unique_ptr< CircleArrangeParams >   Create          ( model::DefaultParamValModelPtr & model );
     };
 
     struct SphereArrangeParams : public ArrangeParamsBase
@@ -72,6 +73,7 @@ public:
     public:
         void                                            Serialize       ( ISerializer & ser ) const;
         static std::unique_ptr< SphereArrangeParams >   Create          ( const IDeserializer & deser );
+        static std::unique_ptr< SphereArrangeParams >   Create          ( model::DefaultParamValModelPtr & model );
     };
 
     struct LineArrangeParams : public ArrangeParamsBase
@@ -80,8 +82,9 @@ public:
         glm::vec3       EndPoint;
 
     public:
-        void                                        Serialize       ( ISerializer & ser ) const;
-        static std::unique_ptr< LineArrangeParams > Create          ( const IDeserializer & deser );
+        void                                            Serialize       ( ISerializer & ser ) const;
+        static std::unique_ptr< LineArrangeParams >     Create          ( const IDeserializer & deser );
+        static std::unique_ptr< LineArrangeParams >     Create          ( model::DefaultParamValModelPtr & model );
     };
 
     struct Grid2DArrangeParams : public ArrangeParamsBase
@@ -96,6 +99,7 @@ public:
     public:
         void                                            Serialize       ( ISerializer & ser ) const;
         static std::unique_ptr< Grid2DArrangeParams >   Create          ( const IDeserializer & deser );
+        static std::unique_ptr< Grid2DArrangeParams >   Create          ( model::DefaultParamValModelPtr & model );
     };
 
     struct Grid3DArrangeParams : public ArrangeParamsBase
@@ -111,6 +115,7 @@ public:
     public:
         void                                            Serialize       ( ISerializer & ser ) const;
         static std::unique_ptr< Grid3DArrangeParams >   Create          ( const IDeserializer & deser );
+        static std::unique_ptr< Grid3DArrangeParams >   Create          ( model::DefaultParamValModelPtr & model );
     };
 
 private:
@@ -127,18 +132,49 @@ private:
         static const std::string    ARRANGE_AFTER_LOAD;
     };
 
-    struct PARAMETERS {};
+    struct PARAMETERS
+    {
+        static const std::string    LINE_START_POINT;
+        static const std::string    LINE_END_POINT;
+    
+        static const std::string    CIRCLE_RADIUS;
+        static const std::string    CIRCLE_ROTATION;
+        static const std::string    CIRCLE_CENTER;
+
+        static const std::string    SPHERE_RADIUS;
+        static const std::string    SPHERE_ROTATION;
+        static const std::string    SPHERE_CENTER;
+        static const std::string    SPHERE_ROWS;
+        static const std::string    SPHERE_COLUMNS;
+
+        static const std::string    GRID2D_ROTATION;
+        static const std::string    GRID2D_CENTER;
+        static const std::string    GRID2D_ROWS;
+        static const std::string    GRID2D_COLUMNS;
+        static const std::string    GRID2D_INTERSPACES;
+
+        static const std::string    GRID3D_ROTATION;
+        static const std::string    GRID3D_CENTER;
+        static const std::string    GRID3D_ROWS;
+        static const std::string    GRID3D_COLUMNS;
+        static const std::string    GRID3D_LAYERS;
+        static const std::string    GRID3D_INTERSPACES;
+
+        static const std::string    ARRANGE_AFTER_LOAD;
+    };
 
 private:
 
     bv::model::BasicNodePtr	                m_parentNode;
     std::unique_ptr< ArrangeParamsBase >    m_lastArrangement;
 
-    bool                                    m_arrangeAfterLoad;
+    ArrangmentType                          m_lastArrangementType;
 
 public:
     explicit                            Arrange			( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
                                         ~Arrange		();
+
+    virtual void	                    Update			( TimeType );
 
     virtual const std::string &         GetType         () const override;
     static const std::string &          Type            ();
