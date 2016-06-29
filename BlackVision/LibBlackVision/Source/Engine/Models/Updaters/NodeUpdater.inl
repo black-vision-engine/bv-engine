@@ -355,6 +355,12 @@ inline void		NodeUpdater::UpdateAudio				()
             packet = m_audioChannel->PopPacket();
         }
 
+        if( m_audioChannel->GetFormat() != m_audio->GetFormat() ||
+            m_audioChannel->GetFrequency() != m_audio->GetFrequency() )
+        {
+            m_audio->Reinitialize( m_audioChannel->GetFrequency(), m_audioChannel->GetFormat() );
+        }
+
         if( !data.empty() )
         {
             m_audio->PushData( data );

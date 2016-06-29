@@ -11,25 +11,25 @@ const UInt32 PdrAudioBuffersQueue::QUEUE_SIZE    = 3;
 
 // *******************************
 //
-PdrAudioBuffersQueue::PdrAudioBuffersQueue          ( Int32 frequency, AudioFormat format )
-    : m_frequency( frequency )
-    , m_format( OALConstantsMapper::ALConstant( format ) )
+PdrAudioBuffersQueue::PdrAudioBuffersQueue          ( ALuint sourceHandle, Int32 frequency, AudioFormat format )
+    : m_sourceHandle( sourceHandle )
 {
-    m_bufferHandles = new ALuint[ QUEUE_SIZE ];
-    BVAL::bvalGenBuffers( QUEUE_SIZE, m_bufferHandles );
-
-    for( UInt32 i = 0; i < QUEUE_SIZE; ++i )
-    {
-        m_unqueuedBufferHandles.Push( m_bufferHandles[ i ] );
-    }
+    InitBuffers( frequency, format );
 }
 
 // *******************************
 //
 PdrAudioBuffersQueue::~PdrAudioBuffersQueue         ()
 {
-    BVAL::bvalDeleteBuffers( QUEUE_SIZE, m_bufferHandles );
-    delete [] m_bufferHandles;
+    ClearBuffers();
+}
+
+// *******************************
+//
+void    PdrAudioBuffersQueue::Reinitialize  ( Int32 frequency, AudioFormat format )
+{
+    ClearBuffers();
+    InitBuffers( frequency, format );
 }
 
 // *******************************
@@ -47,19 +47,17 @@ void    PdrAudioBuffersQueue::PushData     ( const std::vector< AudioBufferConst
 
 // *******************************
 //
-bool    PdrAudioBuffersQueue::BufferData      ( const PdrSource * source )
+bool    PdrAudioBuffersQueue::BufferData      ()
 {
     auto success = false;
 
-    auto sourceHandle = source->GetHandle();
-
     UInt32 bufferId = 0;
     Int32 processed = 0;
-    BVAL::bvalGetSourcei( sourceHandle, AL_BUFFERS_PROCESSED, &processed );
+    BVAL::bvalGetSourcei( m_sourceHandle, AL_BUFFERS_PROCESSED, &processed );
 
     while( processed )
     {
-        BVAL::bvalSourceUnqueueBuffers( sourceHandle, 1, &bufferId );
+        BVAL::bvalSourceUnqueueBuffers( m_sourceHandle, 1, &bufferId );
         m_unqueuedBufferHandles.Push( bufferId );
         processed--;
     }
@@ -70,7 +68,7 @@ bool    PdrAudioBuffersQueue::BufferData      ( const PdrSource * source )
         bufferId = m_unqueuedBufferHandles.Front();
 
         BVAL::bvalBufferData( bufferId, m_format, ( const ALvoid * )buffer->Data(), ( Int32 )buffer->GetSize(), m_frequency );
-        BVAL::bvalSourceQueueBuffers( sourceHandle, 1, &bufferId );
+        BVAL::bvalSourceQueueBuffers( m_sourceHandle, 1, &bufferId );
         m_buffers.Pop();
         m_unqueuedBufferHandles.Pop();
 
@@ -78,6 +76,41 @@ bool    PdrAudioBuffersQueue::BufferData      ( const PdrSource * source )
     }
 
     return success;
+}
+
+// *******************************
+//
+void    PdrAudioBuffersQueue::InitBuffers   ( Int32 frequency, AudioFormat format )
+{
+    m_frequency = frequency;
+    m_format = OALConstantsMapper::ALConstant( format );
+
+    m_bufferHandles = new ALuint[ QUEUE_SIZE ];
+    BVAL::bvalGenBuffers( QUEUE_SIZE, m_bufferHandles );
+
+    for( UInt32 i = 0; i < QUEUE_SIZE; ++i )
+    {
+        m_unqueuedBufferHandles.Push( m_bufferHandles[ i ] );
+    }
+}
+
+// *******************************
+//
+void    PdrAudioBuffersQueue::ClearBuffers  ()
+{
+    Int32 queued = 0;
+    do
+    {
+        BufferData();
+        BVAL::bvalGetSourcei( m_sourceHandle, AL_BUFFERS_QUEUED, &queued );
+    }while( queued );
+
+    BVAL::bvalSourcei( m_sourceHandle, AL_BUFFER, 0 );
+    BVAL::bvalDeleteBuffers( QUEUE_SIZE, m_bufferHandles );
+    delete [] m_bufferHandles;
+
+    m_unqueuedBufferHandles.Clear();
+    m_buffers.Clear();
 }
 
 } // audio

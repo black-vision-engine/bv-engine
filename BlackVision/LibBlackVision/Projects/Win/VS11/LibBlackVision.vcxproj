@@ -173,6 +173,7 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.cpp" />
@@ -283,7 +284,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp" />
@@ -564,6 +564,7 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioEntity.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.h" />
@@ -604,7 +605,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\UniformBuffer.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h" />

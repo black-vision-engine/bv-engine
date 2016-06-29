@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
-#include "Engine/Graphics/SceneGraph/AudioEntity.h"
+#include "Engine/Audio/AudioEntity.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
@@ -39,7 +39,7 @@ private:
 
     const mathematics::Box *        m_boundingBox;
 
-    AudioEntity *                   m_audio;
+    audio::AudioEntity *            m_audio;
 
 public:
 
@@ -58,8 +58,8 @@ public:
 
     TransformableEntity *   GetTransformable    ();
 
-    AudioEntity *           GetAudio            ();
-    void                    SetAudio            ( AudioEntity * audio );
+    audio::AudioEntity *    GetAudio            ();
+    void                    SetAudio            ( audio::AudioEntity * audio );
    
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );

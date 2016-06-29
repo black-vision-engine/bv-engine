@@ -335,12 +335,12 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
 // ********************************
 //
-AudioEntity *           BVProjectTools::CreateAudioEntity                 ( const model::IPluginConstPtr & finalizer )
+audio::AudioEntity *    BVProjectTools::CreateAudioEntity                 ( const model::IPluginConstPtr & finalizer )
 {
     auto audioChannel = finalizer->GetAudioChannel();
     if( audioChannel )
     {
-        return new AudioEntity( audioChannel->GetFrequency(), audioChannel->GetFormat() );
+        return new audio::AudioEntity( audioChannel->GetFrequency(), audioChannel->GetFormat() );
     }
 
     return nullptr;

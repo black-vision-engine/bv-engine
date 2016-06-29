@@ -22,17 +22,26 @@ private:
     Queue< ALuint >                 m_unqueuedBufferHandles;
     Queue< AudioBufferConstPtr >    m_buffers;
 
+    ALuint                          m_sourceHandle;
+
     Int32                           m_frequency;
     ALenum                          m_format;
 
 public:
 
-            PdrAudioBuffersQueue    ( Int32 frequency, AudioFormat format );
+            PdrAudioBuffersQueue    ( ALuint sourceHandle, Int32 frequency, AudioFormat format );
             ~PdrAudioBuffersQueue   ();
 
+    void    Reinitialize            ( Int32 frequency, AudioFormat format );
+    
     void    PushData                ( const std::vector< AudioBufferConstPtr > & buffers );
     
-    bool    BufferData              ( const PdrSource * source );
+    bool    BufferData              ();
+
+private:
+
+    void    InitBuffers             ( Int32 frequency, AudioFormat format );
+    void    ClearBuffers            ();
 
 };
 

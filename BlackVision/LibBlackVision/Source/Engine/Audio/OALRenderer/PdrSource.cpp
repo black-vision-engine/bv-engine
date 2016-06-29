@@ -18,7 +18,6 @@ PdrSource::PdrSource        ()
 //
 PdrSource::~PdrSource       ()
 {
-    BVAL::bvalSourcei( m_sourceHandle, AL_BUFFER, 0 );
     BVAL::bvalDeleteSources( 1, &m_sourceHandle );
 }
 

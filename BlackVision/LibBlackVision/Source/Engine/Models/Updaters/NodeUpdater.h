@@ -17,7 +17,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
-#include "Engine/Graphics/SceneGraph/AudioEntity.h"
+#include "Engine/Audio/AudioEntity.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
@@ -82,7 +82,7 @@ private:
     model::IStatedValuePtr                      m_transformStatedValue;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
 
-    AudioEntity *                               m_audio;
+    audio::AudioEntity *                        m_audio;
     model::IAudioChannelPtr                     m_audioChannel;
     
     bool                                        m_timeInvariantVertexData;

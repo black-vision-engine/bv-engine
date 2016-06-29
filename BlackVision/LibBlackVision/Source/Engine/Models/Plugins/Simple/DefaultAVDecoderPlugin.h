@@ -101,6 +101,8 @@ public:
 
 private:
 
+    void                                        UpdateDecoderState          ( DecoderMode mode );
+
     void                                        UpdateDecoder               ();
     void                                        UploadVideoFrame            ();
     void                                        UploadAudioFrame            ();

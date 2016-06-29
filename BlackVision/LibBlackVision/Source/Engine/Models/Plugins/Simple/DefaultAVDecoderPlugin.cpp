@@ -56,7 +56,7 @@ VoidPtr    ParamEnumDM::QueryParamTyped  ()
 // *******************************
 //
 DefaultAVDecoderPluginDesc::DefaultAVDecoderPluginDesc			()
-    : BasePluginDescriptor( UID(), "av_decoder", "tx" )
+    : BasePluginDescriptor( UID(), "video_decoder", "tx" )
 {
 }
 
@@ -96,7 +96,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
 //
 std::string                     DefaultAVDecoderPluginDesc::UID                       ()
 {
-    return "DEFAULT_AV_DECODER";
+    return "DEFAULT_VIDEO_DECODER";
 }
 
 // *******************************
@@ -176,10 +176,10 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 {
 	m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
 
-    if ( m_assetDesc != nullptr )
+    if ( m_assetDesc )
     {
         auto asset = LoadTypedAsset<AVAsset>( assetDescr );
-        if( asset != nullptr )
+        if( asset )
         {
 		    m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
@@ -198,7 +198,7 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
                     m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
-                if( vsDesc != nullptr )
+                if( vsDesc )
 		        {
 			        vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
 
@@ -208,6 +208,8 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 			        SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
 			        HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+
+                    UpdateDecoderState( m_decoderMode );
 
 			        return true;
 		        }
@@ -373,17 +375,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 
         if( ParameterChanged( PARAM::DECODER_STATE ) )
         {
-            switch( m_decoderMode )
-            {
-            case DecoderMode::PLAY:
-                m_decoder->Play();
-                m_isFinished = false;
-                break;
-            case DecoderMode::STOP:
-                m_decoder->Stop(); break;
-            case DecoderMode::PAUSE:
-                m_decoder->Pause(); break;
-            }
+            UpdateDecoderState( m_decoderMode );
         }
 
         // handle perfect loops
@@ -415,6 +407,23 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
             m_isFinished = true;
         }
+    }
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::UpdateDecoderState   ( DecoderMode mode )
+{
+    switch( mode )
+    {
+        case DecoderMode::PLAY:
+            m_decoder->Play();
+            m_isFinished = false;
+            break;
+        case DecoderMode::STOP:
+            m_decoder->Stop(); break;
+        case DecoderMode::PAUSE:
+            m_decoder->Pause(); break;
     }
 }
 

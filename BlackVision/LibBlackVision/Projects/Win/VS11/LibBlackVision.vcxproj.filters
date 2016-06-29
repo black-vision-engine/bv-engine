@@ -1648,9 +1648,6 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp">
       <Filter>Assets\VideoStream</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.cpp">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
@@ -1665,6 +1662,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.cpp">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3863,9 +3863,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.h">
-      <Filter>Engine\Models\Plugins\Channels</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
@@ -3938,9 +3935,6 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h">
       <Filter>Assets\VideoStream</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\AudioEntity.h">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>
@@ -3952,6 +3946,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioEntity.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

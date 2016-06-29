@@ -12,7 +12,7 @@
 
 namespace bv {
 
-const std::string		AVAssetDesc::uid = "AVASSET_DESC";
+const std::string		AVAssetDesc::uid = "AV_ASSET_DESC";
 
 
 // ***********************

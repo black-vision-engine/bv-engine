@@ -132,7 +132,7 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 
 // ********************************
 //
-AudioEntity *           SceneNode::GetAudio             ()
+audio::AudioEntity *    SceneNode::GetAudio             ()
 {
     return m_audio;
 }
@@ -171,7 +171,7 @@ void            SceneNode::DeleteTransformable  ()
 
 // ********************************
 //
-void            SceneNode::SetAudio             ( AudioEntity * audio )
+void            SceneNode::SetAudio             ( audio::AudioEntity * audio )
 {
     DeleteAudio();
     m_audio = audio;

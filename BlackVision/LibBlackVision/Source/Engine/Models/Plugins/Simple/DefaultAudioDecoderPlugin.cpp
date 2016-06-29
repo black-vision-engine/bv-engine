@@ -138,10 +138,10 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
 {
 	m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
 
-    if ( m_assetDesc != nullptr )
+    if ( m_assetDesc )
     {
         auto asset = LoadTypedAsset< AVAsset >( assetDescr );
-        if( asset != nullptr )
+        if( asset )
         {
 		    m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
@@ -149,6 +149,8 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
             {
                 m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                 m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
+
+                UpdateDecoderState( m_decoderMode );
 
 			    return true;
             }
@@ -217,17 +219,7 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
 
         if( ParameterChanged( PARAM::DECODER_STATE ) )
         {
-            switch( m_decoderMode )
-            {
-            case DecoderMode::PLAY:
-                m_decoder->Play();
-                m_isFinished = false;
-                break;
-            case DecoderMode::STOP:
-                m_decoder->Stop(); break;
-            case DecoderMode::PAUSE:
-                m_decoder->Pause(); break;
-            }
+            UpdateDecoderState( m_decoderMode );
         }
 
         // handle perfect loops
@@ -259,6 +251,23 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
             SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
             m_isFinished = true;
         }
+    }
+}
+
+// *************************************
+//
+void                                DefaultAudioDecoderPlugin::UpdateDecoderState       ( DecoderMode mode )
+{
+    switch( mode )
+    {
+        case DecoderMode::PLAY:
+            m_decoder->Play();
+            m_isFinished = false;
+            break;
+        case DecoderMode::STOP:
+            m_decoder->Stop(); break;
+        case DecoderMode::PAUSE:
+            m_decoder->Pause(); break;
     }
 }
 

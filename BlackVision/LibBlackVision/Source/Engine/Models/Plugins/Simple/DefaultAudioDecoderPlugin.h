@@ -87,6 +87,8 @@ public:
 
 private:
 
+    void                                        UpdateDecoderState          ( DecoderMode mode );
+
     void                                        UpdateDecoder               ();
     void                                        UploadAudioFrame            ();
 

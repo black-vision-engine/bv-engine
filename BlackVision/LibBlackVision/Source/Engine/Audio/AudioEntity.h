@@ -5,7 +5,7 @@
 #include "Memory/MemoryChunk.h"
 
 
-namespace bv {
+namespace bv { namespace audio {
 
 
 class AudioEntity
@@ -21,12 +21,14 @@ protected:
     Int32                               m_frequency;
     AudioFormat                         m_format;
 
+	UInt32							    m_updateID;
+
 public:
 
                                 AudioEntity     ( Int32 frequency, AudioFormat format );
     virtual                     ~AudioEntity    ();
 
-public:
+    void                        Reinitialize    ( Int32 frequency, AudioFormat format );
 
     Int32                       GetFrequency    () const;
     AudioFormat                 GetFormat       () const;
@@ -36,6 +38,9 @@ public:
     void                        PushData        ( const std::vector< MemoryChunkConstPtr > & data );
     AudioBufferVec              PopData         ();
 
+    UInt32                      GetUpdateID     () const;
+
 };
 
-}
+} //audio
+} //bv

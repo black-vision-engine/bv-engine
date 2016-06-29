@@ -3,13 +3,15 @@
 #include "AudioEntity.h"
 
 
-namespace bv {
+namespace bv { namespace audio {
+
 
 // *********************************
 //
 AudioEntity::AudioEntity            ( Int32 frequency, AudioFormat format )
     : m_frequency( frequency )
     , m_format( format )
+    , m_updateID( 0 )
 {
 }
 
@@ -18,6 +20,18 @@ AudioEntity::AudioEntity            ( Int32 frequency, AudioFormat format )
 AudioEntity::~AudioEntity           ()
 {
     m_audioData.Clear();
+}
+
+// *********************************
+//
+void                        AudioEntity::Reinitialize   ( Int32 frequency, AudioFormat format )
+{
+    m_audioData.Clear();
+
+    m_frequency = frequency;
+    m_format = format;
+
+	m_updateID++;
 }
 
 // ***********************
@@ -65,4 +79,12 @@ AudioEntity::AudioBufferVec AudioEntity::PopData        ()
     return buffers;
 }
 
+// *******************************
+//
+UInt32                      AudioEntity::GetUpdateID    () const
+{
+    return m_updateID;
+}
+
+} //audio
 } //bv

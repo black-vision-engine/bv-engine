@@ -6,15 +6,12 @@
 #include "Engine/Audio/Resources/AudioBuffer.h"
 
 
-namespace bv { 
-    
-class AudioEntity;
-    
-namespace audio {
+namespace bv { namespace audio {
 
 class PdrAudioBuffersQueue;
 class PdrListener;
 class PdrSource;
+class AudioEntity;
 
 
 class AudioRenderer
@@ -24,9 +21,15 @@ private:
 
     typedef std::hash_map< const AudioEntity *, PdrSource * >       PdrSourceMap;
     typedef std::hash_map< PdrSource *, PdrAudioBuffersQueue * >    PdrAudioBufferMap;
+    
+    typedef std::hash_map< const AudioEntity *, UInt32 >			AudioEntityUpdateIDMap;
 
-    PdrSourceMap        m_sources;
-    PdrAudioBufferMap   m_bufferMap;
+private:
+
+    PdrSourceMap            m_sources;
+    PdrAudioBufferMap       m_bufferMap;
+
+    AudioEntityUpdateIDMap  m_audioEntityUpdateIDMap;
 
 public:
 
@@ -38,6 +41,11 @@ public:
     void	            Terminate			();
 
     void                Play                ( AudioEntity * audio );
+
+private:
+
+    PdrSource *             GetPdrSource            ( const AudioEntity * audio );
+    PdrAudioBuffersQueue *  GetPdrAudioBuffersQueue ( PdrSource * source, const AudioEntity * audio );
 
 };
 
