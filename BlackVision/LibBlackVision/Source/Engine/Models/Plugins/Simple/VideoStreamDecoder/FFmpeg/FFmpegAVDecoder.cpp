@@ -119,7 +119,16 @@ void						FFmpegAVDecoder::Pause				()
 {
     assert( m_decoderThread );
 	
+    m_demuxerThread->Stop();
+    while( !m_demuxerThread->Stopped() );
+    for( auto & stream : m_streams )
+    {
+        stream.second->decoderThread->Stop();
+        while( !stream.second->decoderThread->Stopped() );
+    }
+
     m_decoderThread->Stop();
+    while( !m_decoderThread->Stopped() );
 }
 
 // *********************************
@@ -303,6 +312,7 @@ void					FFmpegAVDecoder::FlushBuffers			()
     for( auto & stream : m_streams )
     {
         stream.second->outQueue.Clear();
+        stream.second->prevPTS = 0;
     }
 }
 
@@ -310,17 +320,13 @@ void					FFmpegAVDecoder::FlushBuffers			()
 //
 void					FFmpegAVDecoder::Reset					() 
 {
-	{
-	    m_demuxer->Reset();
-
-        for( auto & stream : m_streams )
-        {
-            stream.second->decoder->Reset();
-        }
-
-        FlushBuffers();
+	m_demuxer->Reset();
+    for( auto & stream : m_streams )
+    {
+        stream.second->decoder->Reset();
     }
 
+    FlushBuffers();
     Seek( 0.f );
 }
 
@@ -400,7 +406,8 @@ bool				FFmpegAVDecoder::NextStreamDataReady	        ( AVMediaType type, UInt64 
             }
 
             auto currVideoPTS = streamData->decoder->GetCurrentPTS();
-            while( !streamData->decoder->IsDataQueueEmpty() &&
+            while( streamData->outQueue.IsEmpty() &&
+                !streamData->decoder->IsDataQueueEmpty() &&
                 ( currVideoPTS <= time ) &&
                 ( streamData->prevPTS <= currVideoPTS ) )
             {

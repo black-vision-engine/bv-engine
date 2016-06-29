@@ -7,7 +7,7 @@
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Impl/Accessors/FontAssetAccessor.h"
 #include "Impl/Accessors/AnimationAssetAccessor.h"
-#include "Impl/Accessors/VideoAssetAccessor.h"
+#include "Impl/Accessors/AVAssetAccessor.h"
 #include "Impl/Accessors/MeshAssetAccessor.h"
 
 #include "IO/DirIO.h"
@@ -729,6 +729,7 @@ void				        ProjectManagerImpl::InitializeAssets	()
     auto faa = FontAssetAccessor::Create( GetRootDir() / "fonts", fontsExts );
     RegisterCategory( AssetCategory::Create( "fonts", faa ) );
 
+    // --- video ---
     StringVector videoExts;
     videoExts.push_back( ".*\\.bik" );
     videoExts.push_back( ".*\\.mov" );
@@ -737,8 +738,16 @@ void				        ProjectManagerImpl::InitializeAssets	()
     videoExts.push_back( ".*\\.avi" );
     videoExts.push_back( ".*\\.wmv" );
 
-    auto vsaa = VideoAssetAccessor::Create( GetRootDir() / "video", videoExts );
+    auto vsaa = AVAssetAccessor::Create( GetRootDir() / "video", videoExts );
     RegisterCategory( AssetCategory::Create( "video", vsaa ) );
+
+    // --- audio ---
+    StringVector audioExts;
+    audioExts.push_back( ".*\\.wav" );
+    audioExts.push_back( ".*\\.mp3" );
+
+    auto asaa = AVAssetAccessor::Create( GetRootDir() / "audio", audioExts );
+    RegisterCategory( AssetCategory::Create( "audio", asaa ) );
 
     // --- mesh ---
     StringVector meshExts;

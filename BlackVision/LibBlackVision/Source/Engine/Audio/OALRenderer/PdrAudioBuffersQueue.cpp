@@ -7,7 +7,7 @@
 namespace bv { namespace audio {
 
 
-const Int32 PdrAudioBuffersQueue::QUEUE_SIZE    = 3;
+const UInt32 PdrAudioBuffersQueue::QUEUE_SIZE    = 3;
 
 // *******************************
 //
@@ -18,7 +18,7 @@ PdrAudioBuffersQueue::PdrAudioBuffersQueue          ( Int32 frequency, AudioForm
     m_bufferHandles = new ALuint[ QUEUE_SIZE ];
     BVAL::bvalGenBuffers( QUEUE_SIZE, m_bufferHandles );
 
-    for( Int32 i = 0; i < QUEUE_SIZE; ++i )
+    for( UInt32 i = 0; i < QUEUE_SIZE; ++i )
     {
         m_unqueuedBufferHandles.Push( m_bufferHandles[ i ] );
     }
@@ -57,7 +57,7 @@ bool    PdrAudioBuffersQueue::BufferData      ( const PdrSource * source )
     Int32 processed = 0;
     BVAL::bvalGetSourcei( sourceHandle, AL_BUFFERS_PROCESSED, &processed );
 
-    while( processed > 0 )
+    while( processed )
     {
         BVAL::bvalSourceUnqueueBuffers( sourceHandle, 1, &bufferId );
         m_unqueuedBufferHandles.Push( bufferId );

@@ -1,4 +1,4 @@
-#include "VideoAssetAccessor.h"
+#include "AVAssetAccessor.h"
 
 #include "Assets/VideoStream/AVAssetDescriptor.h"
 #include "Assets/VideoStream/AVAsset.h"
@@ -19,14 +19,14 @@ namespace bv {
 
 // ********************************
 //
-VideoAssetAccessorConstPtr  VideoAssetAccessor::Create             ( const Path & rootPath, const StringVector & fileExts )
+AVAssetAccessorConstPtr  AVAssetAccessor::Create             ( const Path & rootPath, const StringVector & fileExts )
 {
-	return VideoAssetAccessorConstPtr( new VideoAssetAccessor( rootPath, fileExts ) );
+	return AVAssetAccessorConstPtr( new AVAssetAccessor( rootPath, fileExts ) );
 }
 
 // ***********************
 //
-                            VideoAssetAccessor::VideoAssetAccessor    ( const Path & rootPath, const StringVector & fileExts )
+                            AVAssetAccessor::AVAssetAccessor    ( const Path & rootPath, const StringVector & fileExts )
 	: m_rootPath( rootPath )
 	, m_fileExts( fileExts )
 {
@@ -38,13 +38,13 @@ VideoAssetAccessorConstPtr  VideoAssetAccessor::Create             ( const Path 
 
 // ***********************
 //
-VideoAssetAccessor::~VideoAssetAccessor()
+AVAssetAccessor::~AVAssetAccessor()
 {}
 
 
 // ********************************
 //
-AssetDescConstPtr	        VideoAssetAccessor::GetAssetDesc	    ( const Path & path ) const
+AssetDescConstPtr	        AVAssetAccessor::GetAssetDesc	    ( const Path & path ) const
 {
 	auto p = m_rootPath / path;
 
@@ -61,7 +61,7 @@ AssetDescConstPtr	        VideoAssetAccessor::GetAssetDesc	    ( const Path & pa
 
 // ********************************
 //
-void			 	        VideoAssetAccessor::AddAsset		    ( const Path & internalPath, const AssetDescConstPtr & assetDesc ) const
+void			 	        AVAssetAccessor::AddAsset		    ( const Path & internalPath, const AssetDescConstPtr & assetDesc ) const
 {
 	auto uid = assetDesc->GetUID();
 
@@ -81,21 +81,21 @@ void			 	        VideoAssetAccessor::AddAsset		    ( const Path & internalPath, 
 
 // ********************************
 //
-void			 	VideoAssetAccessor::RemoveAsset	( const Path & internalPath ) const
+void			 	AVAssetAccessor::RemoveAsset	( const Path & internalPath ) const
 {
 	Path::Remove( m_rootPath / internalPath );
 }
 
 // ********************************
 //
-void			 	VideoAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath ) const
+void			 	AVAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath ) const
 {
 	Path::Rename( m_rootPath / oldPath, m_rootPath / newPath );
 }
 
 // ********************************
 //
-void			 	VideoAssetAccessor::ExportAsset	( const Path & expAssetFilePath, const Path & internalPath) const
+void			 	AVAssetAccessor::ExportAsset	( const Path & expAssetFilePath, const Path & internalPath) const
 {
 	auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMWriteAppend );
 
@@ -108,7 +108,7 @@ void			 	VideoAssetAccessor::ExportAsset	( const Path & expAssetFilePath, const 
 
 // ********************************
 //
-void			 	VideoAssetAccessor::ExportAsset	( std::ostream & out, const Path & internalPath) const
+void			 	AVAssetAccessor::ExportAsset	( std::ostream & out, const Path & internalPath) const
 {
 	auto absPath = m_rootPath / internalPath;
 
@@ -133,7 +133,7 @@ void			 	VideoAssetAccessor::ExportAsset	( std::ostream & out, const Path & inte
 
 // ********************************
 //
-void			 	VideoAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path & importToPath ) const
+void			 	AVAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path & importToPath ) const
 {
 	auto impAsset = File::Open( impAssetFile.Str(), File::OpenMode::FOMReadOnly );
 
@@ -144,7 +144,7 @@ void			 	VideoAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path
 
 // ********************************
 //
-void				VideoAssetAccessor::ImportAsset	( std::istream & in, const Path &  importToPath ) const
+void				AVAssetAccessor::ImportAsset	( std::istream & in, const Path &  importToPath ) const
 {
 	auto absPath = m_rootPath / importToPath;
 
@@ -170,7 +170,7 @@ void				VideoAssetAccessor::ImportAsset	( std::istream & in, const Path &  impor
 
 // ********************************
 //
-void			 	VideoAssetAccessor::ExportAll		( std::ostream & out ) const
+void			 	AVAssetAccessor::ExportAll		( std::ostream & out ) const
 {
 	for( auto p : ListAllUnique( m_rootPath ) )
 	{
@@ -180,7 +180,7 @@ void			 	VideoAssetAccessor::ExportAll		( std::ostream & out ) const
 
 // ********************************
 //
-void			 	VideoAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
+void			 	AVAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 {
 	auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMWriteAppend );
 
@@ -193,7 +193,7 @@ void			 	VideoAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 
 // ********************************
 //
-PathVec              VideoAssetAccessor::ListAll		( const Path & path, bool recursive ) const
+PathVec              AVAssetAccessor::ListAll		( const Path & path, bool recursive ) const
 {
 	PathVec ret;
 	for( auto ext : m_fileExts )
@@ -213,7 +213,7 @@ PathVec              VideoAssetAccessor::ListAll		( const Path & path, bool recu
 
 // ********************************
 //
-PathVec	VideoAssetAccessor::ListAllUnique	( const Path & path ) const
+PathVec	AVAssetAccessor::ListAllUnique	( const Path & path ) const
 {
 	auto l = ListAll( path, true );
 
@@ -229,7 +229,7 @@ PathVec	VideoAssetAccessor::ListAllUnique	( const Path & path ) const
 
 // ********************************
 //
-UInt64 VideoAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+UInt64 AVAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
 {
     return File::GetSize( ( m_rootPath / path ).Str() );
 }

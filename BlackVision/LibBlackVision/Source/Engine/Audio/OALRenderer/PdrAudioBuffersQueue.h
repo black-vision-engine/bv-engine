@@ -14,7 +14,7 @@ class PdrAudioBuffersQueue
 {
 private:
 
-    static const Int32              QUEUE_SIZE;
+    static const UInt32             QUEUE_SIZE;
 
 private:
 

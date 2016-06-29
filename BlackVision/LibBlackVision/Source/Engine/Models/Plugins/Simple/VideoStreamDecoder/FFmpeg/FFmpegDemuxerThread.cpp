@@ -86,11 +86,6 @@ void				FFmpegDemuxerThread::Run			()
             break;
         }
 
-        if( !m_demuxer->ProcessPacket() || m_demuxer->IsEOF() )
-        {
-            m_stopped = true;
-        }
-
         if( m_stopped )
 		{
 			while( m_stopped )
@@ -98,6 +93,11 @@ void				FFmpegDemuxerThread::Run			()
 				m_cond.wait( lock );
 			}
 		}
+
+        if( !m_demuxer->ProcessPacket() || m_demuxer->IsEOF() )
+        {
+            m_stopped = true;
+        }
     }
 }
 

@@ -36,27 +36,14 @@ private:
 
 private:
 
-	FFmpegDemuxerUPtr				    m_demuxer;
+    std::map< AVMediaType, StreamData * >   m_streams;
 
-    std::map< AVMediaType, StreamData * > m_streams;
+	FFmpegDemuxerUPtr				        m_demuxer;
+    FFmpegDemuxerThreadUPtr                 m_demuxerThread;
 
-	//FFmpegVideoStreamDecoderUPtr	    m_videoDecoder;
-	//FFmpegAudioStreamDecoderUPtr        m_audioDecoder;
-	
-    UInt64                              m_duration;
+	AVDecoderThreadUPtr			            m_decoderThread;
 
-	AVDecoderThreadUPtr			        m_decoderThread;
-
-    FFmpegDemuxerThreadUPtr             m_demuxerThread;
-
-	//FFmpegStreamDecoderThreadUPtr       m_videoDecoderThread;
-	//FFmpegStreamDecoderThreadUPtr       m_audioDecoderThread;
-
-	//QueueConcurrent< AVMediaData >	    m_outVideoQueue;
-	//QueueConcurrent< AVMediaData > 	    m_outAudioQueue;
-
- //   UInt64                              m_prevVideoPTS;
- //   UInt64                              m_prevAudioPTS;
+    UInt64                                  m_duration;
 
 public:
 

@@ -89,11 +89,6 @@ void				FFmpegStreamDecoderThread::Run			()
             break;
         }
 
-        if( !m_streamDecoder->ProcessPacket( m_demuxer ) )
-        {
-            m_stopped = true;
-        }
-
         if( m_stopped )
 		{
 			while( m_stopped )
@@ -101,6 +96,11 @@ void				FFmpegStreamDecoderThread::Run			()
 				m_cond.wait( lock );
 			}
 		}
+
+        if( !m_streamDecoder->ProcessPacket( m_demuxer ) )
+        {
+            m_stopped = true;
+        }
     }
 }
 

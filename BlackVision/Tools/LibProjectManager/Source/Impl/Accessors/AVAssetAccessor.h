@@ -6,11 +6,11 @@
 
 namespace bv {
 
-class VideoAssetAccessor;
-DEFINE_CONST_PTR_TYPE( VideoAssetAccessor )
+class AVAssetAccessor;
+DEFINE_CONST_PTR_TYPE( AVAssetAccessor )
 
 
-class VideoAssetAccessor : public AssetAccessor
+class AVAssetAccessor : public AssetAccessor
 {
 private:
     
@@ -19,9 +19,9 @@ private:
 
 public:
 
-    static VideoAssetAccessorConstPtr Create        ( const Path & rootPath, const StringVector & fileExts );
+    static AVAssetAccessorConstPtr Create        ( const Path & rootPath, const StringVector & fileExts );
 
-                                ~VideoAssetAccessor ();
+                                ~AVAssetAccessor ();
 
 	virtual AssetDescConstPtr	GetAssetDesc		( const Path & path ) const override;
 
@@ -48,7 +48,7 @@ public:
 
 private:
 
-    explicit                    VideoAssetAccessor  ( const Path & rootPath, const StringVector & fileExts );
+    explicit                    AVAssetAccessor     ( const Path & rootPath, const StringVector & fileExts );
 
 };
 
