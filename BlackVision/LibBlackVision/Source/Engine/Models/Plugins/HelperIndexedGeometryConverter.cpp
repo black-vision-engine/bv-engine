@@ -186,6 +186,13 @@ void    IndexedGeometryConverter::MakeTriangles           ( IndexedGeometry & me
     auto & indicies = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
 
+    MakeTriangles( verticies, indicies, verts );
+}
+
+// ***********************
+//
+void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< INDEX_TYPE > & indicies, Float3AttributeChannelPtr verts )\
+{
     for( auto index : indicies )
     {
         verts->AddAttribute( verticies[ index ] );
@@ -225,24 +232,44 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Floa
             vertices.push_back( srcVertices[ i ] );
 
             // Beacause source geometry was triangle strip, we must emit 3 indicies instead of 1.
-            indices.push_back( (INDEX_TYPE)prePrevIdx );
-            indices.push_back( (INDEX_TYPE)prevIdx );
-            indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
+            if( i & 0x1 )   // Check parity.
+            {
+                // Triangles ordering in triangle strips changes evenry triangle.
+                indices.push_back( (INDEX_TYPE)prePrevIdx );
+                indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
+                indices.push_back( (INDEX_TYPE)prevIdx );
+            }
+            else
+            {
+                indices.push_back( (INDEX_TYPE)prePrevIdx );
+                indices.push_back( (INDEX_TYPE)prevIdx );
+                indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
+            }
 
             prePrevIdx = prevIdx;
-            prevIdx = indices.back();
+            prevIdx = (INDEX_TYPE)vertices.size() - 1;  // It's the newest vertex index.
         }
         else
         {
             auto idx = ( UInt32 )( std::distance( vertices.begin(), it ) );
 
             // Beacause source geometry was triangle strip, we must emit 3 indicies instead of 1.
-            indices.push_back( (INDEX_TYPE)prePrevIdx );
-            indices.push_back( (INDEX_TYPE)prevIdx );
-            indices.push_back( (INDEX_TYPE)idx );
+            if( i & 0x1 )   // Check parity.
+            {
+                // Triangles ordering in triangle strips changes evenry triangle.
+                indices.push_back( (INDEX_TYPE)prePrevIdx );
+                indices.push_back( (INDEX_TYPE)idx );
+                indices.push_back( (INDEX_TYPE)prevIdx );
+            }
+            else
+            {
+                indices.push_back( (INDEX_TYPE)prePrevIdx );
+                indices.push_back( (INDEX_TYPE)prevIdx );
+                indices.push_back( (INDEX_TYPE)idx );
+            }
 
             prePrevIdx = prevIdx;
-            prevIdx = indices.back();
+            prevIdx = idx;  // It's the newest vertex index.
         }
     }
 

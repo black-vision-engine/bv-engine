@@ -31,6 +31,7 @@ public:
 
 	void                MakeStrip               ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
     void                MakeTriangles           ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
+    void                MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< INDEX_TYPE > & indicies, Float3AttributeChannelPtr verts );
 
     IndexedGeometry     MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts );
     IndexedGeometry     MakeIndexGeomFromTriangles  ( Float3AttributeChannelPtr verts );

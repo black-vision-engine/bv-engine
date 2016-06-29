@@ -2001,12 +2001,12 @@ model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( mod
     auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    root->AddPlugin( "DEFAULT_ROUNDEDRECT", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRIANGLE", timeEvaluator );
     root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator );
     root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
 
     auto material = root->GetPlugin( "material" );
-    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 0, 0, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
     model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
     model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
     model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.1, 0.0, 0.2, 1.0 ) );
