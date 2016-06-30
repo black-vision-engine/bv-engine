@@ -116,13 +116,18 @@ void						FFmpegAVDecoder::Play				()
 //
 void						FFmpegAVDecoder::Pause				()
 {
-    if( !m_decoderThread->Paused() )
+    auto paused = m_decoderThread->Paused();
+    if( !paused )
     {
         StopDecoding();
     }
 
     m_decoderThread->Pause();
-    while( !m_decoderThread->Paused() );
+
+    if( !paused )
+    {
+        while( !m_decoderThread->Paused() );
+    }
 }
 
 // *********************************
@@ -366,6 +371,25 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
         m_decoderThread->Pause();
     }
+}
+
+
+// *********************************
+//
+void					FFmpegAVDecoder::ProcessFirstVideoFrame ()
+{
+    if( HasVideo() )
+    {
+        auto & videoStreamData = m_streams[ AVMEDIA_TYPE_VIDEO ];
+        while( !NextVideoDataReady( videoStreamData->decoder->GetCurrentPTS() ) )
+        {
+            if( IsFinished() )
+            {
+                break;
+            }
+        }
+    }
+
 }
 
 // *********************************

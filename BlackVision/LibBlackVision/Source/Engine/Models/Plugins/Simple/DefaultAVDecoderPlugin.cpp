@@ -78,7 +78,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
     helper.CreatePluginModel();
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultAVDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
-        ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
+        ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::PAUSE, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::MUTE, false, true, true );
@@ -195,8 +195,8 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                     m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
                 }
 
-                //get the first frame
-                while( !m_decoder->NextVideoDataReady( 0 ) );
+                //FIXME: decode first video frame
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
 
 		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 

@@ -86,6 +86,9 @@ public:
 
     virtual void                Mute                    ( bool mute ) override;
 
+    //FIXME: decode first video frame
+    void                        ProcessFirstVideoFrame  ();
+
 protected:
 	
 	virtual bool				NextVideoDataReady		( UInt64 t ) override;
