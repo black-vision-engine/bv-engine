@@ -83,6 +83,12 @@ std::string                 DefaultAudioDecoderPluginDesc::UID              ()
     return "DEFAULT_AUDIO_DECODER";
 }
 
+// *******************************
+//
+std::string                 DefaultAudioDecoderPluginDesc::AudioName        ()
+{
+    return "Audio0";
+}
 
 // ************************************************************************* PLUGIN *************************************************************************
 
@@ -149,6 +155,8 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
             {
                 m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                 m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
+
+			    SetAsset( 0, LAsset( DefaultAudioDecoderPluginDesc::AudioName(), assetDescr, nullptr ) );
 
                 UpdateDecoderState( m_decoderMode );
 
