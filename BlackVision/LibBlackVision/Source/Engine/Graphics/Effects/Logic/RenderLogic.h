@@ -31,6 +31,10 @@ class FullscreenEffectInstance;
 
 class RenderablePass;
 
+namespace audio {
+    class AudioRenderer;
+}
+
 class RenderLogic
 {
 private:
@@ -59,7 +63,7 @@ public:
             RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool renderToSharedMemory );
             ~RenderLogic    ();
 
-    void    RenderFrame     ( Renderer * renderer, const SceneVec & scenes );
+    void    RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
 
 //    //pablito
 //    void    SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
@@ -70,10 +74,13 @@ public:
 private:
 
 
-    void    RenderFrameImpl ( Renderer * renderer, const SceneVec & scenes );
+    void    RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
     void    FrameRendered   ( Renderer * renderer );
 
     void    RenderRootNode  ( Renderer * renderer, const SceneVec & scenes, RenderTarget * rt );
+
+    // ------ audio ------
+    void    RenderRootNode  ( audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
 
 public:
 
@@ -81,6 +88,9 @@ public:
     void    DrawNode        ( SceneNode * node, RenderLogicContext * ctx );
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
     void    RenderChildren  ( SceneNode * node, RenderLogicContext * ctx, int firstChildIdx = 0 );
+
+    // ------ audio ------
+    void    Play            ( audio::AudioRenderer * audioRenderer, SceneNode * node );
 
     // Moved from private for RenderingQueue logic
     void    RenderBoundingBox   ( SceneNode * node, RenderLogicContext * ctx, glm::vec4 color );

@@ -322,9 +322,6 @@
     <Filter Include="Engine\Audio\OALRenderer">
       <UniqueIdentifier>{12ce6341-8393-44df-8a54-4256f925b7dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Audio\Logic">
-      <UniqueIdentifier>{f7d0d83e-2b2f-4d48-89e2-3d5c27d8f18e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Plugins\Simple\GeometryProcessors">
       <UniqueIdentifier>{4519ac93-82db-4538-b157-a29a5658c153}</UniqueIdentifier>
     </Filter>
@@ -1629,9 +1626,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.cpp">
       <Filter>Engine\Audio\OALRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.cpp">
-      <Filter>Engine\Audio\Logic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp">
       <Filter>Engine\Audio</Filter>
@@ -3917,9 +3911,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.h">
       <Filter>Engine\Audio\OALRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.h">
-      <Filter>Engine\Audio\Logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
@@ -3937,9 +3928,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.h">
-      <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>

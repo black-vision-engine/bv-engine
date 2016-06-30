@@ -53,6 +53,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
 {
     std::lock_guard< std::mutex > lock( m_mutex );
 
+    //FIXME: sync with clock instead of maxQueueSize
     auto process = false;
     for( auto & queue : m_packetQueue )
     {

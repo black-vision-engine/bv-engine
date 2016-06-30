@@ -7,6 +7,7 @@
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Graphics/Effects/Utils/OffscreenDisplay.h"
+#include "Engine/Audio/AudioRenderer.h"
 
 #include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
@@ -73,11 +74,11 @@ RenderLogic::~RenderLogic    ()
 
 // *********************************
 //
-void    RenderLogic::RenderFrame    ( Renderer * renderer, const SceneVec & scenes )
+void    RenderLogic::RenderFrame    ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes )
 {
     renderer->PreDraw();
 
-    RenderFrameImpl( renderer, scenes );
+    RenderFrameImpl( renderer, audioRenderer, scenes );
     
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
@@ -241,11 +242,12 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, const SceneVec & scen
 //}
 // *********************************
 //
-void    RenderLogic::RenderFrameImpl ( Renderer * renderer, const SceneVec & scenes )
+void    RenderLogic::RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes )
 {
     auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
 
     RenderRootNode( renderer, scenes, rt );
+    RenderRootNode( audioRenderer, scenes );
     {
         HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
     }
@@ -292,7 +294,6 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     }
 
     BlitToPreview( prevRt, ctx );
-
 
     if( m_useVideoCardOutput )
     {
@@ -359,6 +360,17 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & sce
     disableBoundRT( ctx );
 }
 
+// *********************************
+//
+void    RenderLogic::RenderRootNode  ( audio::AudioRenderer * renderer, const SceneVec & scenes )
+{
+    for( auto & scene : scenes )
+    {
+        Play( renderer, scene->GetRoot() );
+    }
+}
+
+
 namespace {
 
 bool IsSelected( SceneNode * node ) 
@@ -421,6 +433,25 @@ void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ct
     {
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode  ( node->GetChild( i ), ctx ); 
+    }
+}
+
+// *********************************
+//
+void    RenderLogic::Play           ( audio::AudioRenderer * renderer, SceneNode * node )
+{
+    if ( node->IsVisible() )
+    {
+        auto audio = node->GetAudio();
+        if( audio )
+        {
+            renderer->Play( audio );
+        }
+
+        for( unsigned int i = 0; i < ( UInt32 )node->NumChildNodes(); ++i )
+        {
+            Play( renderer, node->GetChild( i ) );
+        }
     }
 }
 

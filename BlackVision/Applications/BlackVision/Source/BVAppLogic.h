@@ -35,10 +35,7 @@ class Renderer;
 class RemoteEventsHandlers;
 
 namespace audio {
-
     class AudioRenderer;
-    class AudioLogic;
-
 }
 
 enum class BVAppState : int
@@ -68,10 +65,9 @@ private:
     BVProjectPtr                    m_bvProject;
 
     Renderer *                      m_renderer;
-    RenderLogic *                   m_renderLogic;
-
     audio::AudioRenderer *          m_audioRenderer;
-    audio::AudioLogic *             m_audioLogic;
+    
+    RenderLogic *                   m_renderLogic;
 
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;

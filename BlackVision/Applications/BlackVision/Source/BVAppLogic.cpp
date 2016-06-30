@@ -11,7 +11,6 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
-#include "Engine/Audio/Logic/AudioLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/NodeLogicFactory.h"
@@ -289,10 +288,8 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
                 HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
 
-                m_renderLogic->RenderFrame( renderer, m_bvProject->GetScenes() );
+                m_renderLogic->RenderFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
-                m_audioLogic->Play( audioRenderer, m_bvProject->GetScenes() );
-     
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
                 {
                     //printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );

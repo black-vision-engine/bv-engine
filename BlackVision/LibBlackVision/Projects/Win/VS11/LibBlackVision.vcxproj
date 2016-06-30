@@ -175,7 +175,6 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrListener.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.cpp" />
@@ -566,7 +565,6 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioEntity.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Audio\Logic\AudioLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrListener.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.h" />
