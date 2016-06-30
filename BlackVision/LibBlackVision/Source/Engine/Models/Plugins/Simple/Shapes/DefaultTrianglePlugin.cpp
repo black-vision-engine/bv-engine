@@ -19,8 +19,8 @@ DefaultPluginParamValModelPtr   DefaultTrianglePluginDesc::CreateDefaultModel  (
 
 	h.CreateVacModel();
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTA, glm::vec3( 0, 1, 0 ), true, true );
-	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTB, glm::vec3( 1, 0, 0 ), true, true );
-	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTC, glm::vec3( -1, 0, 0 ), true, true );
+	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTB, glm::vec3( -1, 0, 0 ), true, true );
+	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTC, glm::vec3( 1, 0, 0 ), true, true );
 
     h.CreatePSModel();
 

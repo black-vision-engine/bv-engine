@@ -33,6 +33,12 @@ public:
         static const std::string        SMOOTH_THRESHOLD_ANGLE;
     };
 
+
+private:
+
+    int         m_numUniqueExtrudedVerticies;
+    int         m_numExtrudedVerticies;
+
 public:
 
     explicit            DefaultExtrudePlugin   (    const std::string & name,
@@ -50,6 +56,7 @@ private:
 
     void                            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
     void                            AddSidePlanes           ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges );
+    void                            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, glm::vec3 translate, bool fillDefaults );
     
     std::vector< INDEX_TYPE >       ExtractEdges            ( IndexedGeometry & mesh );
     std::vector< INDEX_TYPE >       ExtractCorners          ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges, float angleThreshold );
