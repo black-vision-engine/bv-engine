@@ -6,6 +6,7 @@ namespace bv { namespace model {
 
 
 IndexedGeometryConverter::IndexedGeometryConverter()
+    :   m_rememberConversion( false )
 {
     m_epsilon = ( Float32 )10e-5;
 }
@@ -13,11 +14,20 @@ IndexedGeometryConverter::IndexedGeometryConverter()
 
 IndexedGeometryConverter::IndexedGeometryConverter( float epsilon )
     :   m_epsilon( epsilon )
+    ,   m_rememberConversion( false )
 {}
 
 IndexedGeometryConverter::~IndexedGeometryConverter()
 {}
 
+// ***********************
+// Converter can hold conversion data. You can apply the same conversion to other geometry channels like normals or UVs.
+// This works only with functions MakeIndexGeomFromStrips and MakeIndexGeomFromTriangles.
+// Call ConvertFromMemory function to make conversion.
+void    IndexedGeometryConverter::RememberConversionIndicies  ( bool value )
+{
+    m_rememberConversion = value;
+}
 
 // ========================================================================= //
 // Stripifier
@@ -207,6 +217,8 @@ void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< g
 //
 IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts )
 {
+    m_conversionIndicies.clear();
+
     auto const & srcVertices = std::const_pointer_cast< Float3AttributeChannel >( verts )->GetVertices();
 
     IndexedGeometry mesh;
@@ -221,6 +233,12 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Floa
     UInt32 prevIdx = 1;
     UInt32 prePrevIdx = 0;
 
+    if( m_rememberConversion )
+    {
+        m_conversionIndicies.push_back( 0 );
+        m_conversionIndicies.push_back( 1 );
+    }
+
     for( UInt32 i = 2; i < vertsNum; ++i )
     {
         auto it = std::find_if( vertices.begin(), vertices.end(), [ & ]( const glm::vec3 & vert ){
@@ -230,6 +248,8 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Floa
         if( it == vertices.end() )
         {
             vertices.push_back( srcVertices[ i ] );
+            if( m_rememberConversion )
+                m_conversionIndicies.push_back( i );
 
             // Beacause source geometry was triangle strip, we must emit 3 indicies instead of 1.
             if( i & 0x1 )   // Check parity.
@@ -292,6 +312,8 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Floa
 //
 IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Float3AttributeChannelPtr verts )
 {
+    m_conversionIndicies.clear();
+
     auto const & srcVertices = std::const_pointer_cast< Float3AttributeChannel >( verts )->GetVertices();
 
     IndexedGeometry mesh;
@@ -308,6 +330,9 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Floa
         if( it == vertices.end() )
         {
             vertices.push_back( srcVertices[ i ] );
+            if( m_rememberConversion )
+                m_conversionIndicies.push_back( i );
+
             indices[ i ] = (INDEX_TYPE)( vertices.size() - 1 );
         }
         else
@@ -320,6 +345,37 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Floa
     return mesh;
 }
 
+// ***********************
+//
+template< typename ChannelType, typename AttribType >
+std::vector< AttribType >   IndexedGeometryConverter::ConvertFromMemoryImpl       ( ChannelType channel )
+{
+    std::vector< AttribType > destAttrib;
+    auto & srcAttrib = channel->GetVertices();
+
+    destAttrib.reserve( m_conversionIndicies.size() );
+
+    for( auto index : m_conversionIndicies )
+    {
+        destAttrib.push_back( srcAttrib[ index ] );
+    }
+
+    return destAttrib;
+}
+
+// ***********************
+//
+std::vector< glm::vec3 >    IndexedGeometryConverter::ConvertFromMemory           ( Float3AttributeChannelPtr channel )
+{
+    return ConvertFromMemoryImpl< Float3AttributeChannelPtr, glm::vec3 >( channel );
+}
+
+// ***********************
+//
+std::vector< glm::vec2 >    IndexedGeometryConverter::ConvertFromMemory           ( Float2AttributeChannelPtr channel )
+{
+    return ConvertFromMemoryImpl< Float2AttributeChannelPtr, glm::vec2 >( channel );
+}
 
 }   // model
 }   // bv

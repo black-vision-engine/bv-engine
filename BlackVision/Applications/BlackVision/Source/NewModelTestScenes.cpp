@@ -2001,7 +2001,7 @@ model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( mod
     auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    root->AddPlugin( "DEFAULT_TRIANGLE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_WALL", timeEvaluator );
     root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator );
     root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
 

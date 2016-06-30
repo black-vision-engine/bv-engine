@@ -17,6 +17,10 @@ private:
 	unsigned int			remainnigTriangles;		///< Number of traingles to use.
 	std::vector<bool>		usedTriangles;			///< Indicates which indicies(triangles) have been used.
 
+    // These variables can hold conversion data. You can apply the same conversion to other geometry channels.
+    bool                    m_rememberConversion;
+    std::vector< int >      m_conversionIndicies;
+
 protected:
 
 	void        moveRangeIndex          ();
@@ -35,6 +39,20 @@ public:
 
     IndexedGeometry     MakeIndexGeomFromStrips     ( Float3AttributeChannelPtr verts );
     IndexedGeometry     MakeIndexGeomFromTriangles  ( Float3AttributeChannelPtr verts );
+
+    // Converter can hold conversion data. You can apply the same conversion to other geometry channels like normals or UVs.
+    // This works only with functions MakeIndexGeomFromStrips and MakeIndexGeomFromTriangles.
+    // Call ConvertFromMemory function to make conversion.
+    void                RememberConversionIndicies  ( bool value );
+    
+    std::vector< glm::vec3 >    ConvertFromMemory           ( Float3AttributeChannelPtr channel );
+    std::vector< glm::vec2 >    ConvertFromMemory           ( Float2AttributeChannelPtr channel );
+
+private:
+
+    template< typename ChannelType, typename AttribType >
+    std::vector< AttribType >   ConvertFromMemoryImpl       ( ChannelType channel );
+
 };
 
 
