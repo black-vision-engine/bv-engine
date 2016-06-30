@@ -46,6 +46,7 @@ public:
         static const std::string SEEK_OFFSET;
         static const std::string LOOP_ENABLED;
         static const std::string LOOP_COUNT;
+        static const std::string MUTE;
     };
 
 private:
@@ -77,7 +78,9 @@ private:
     ParamIntPtr                         m_loopCountParam;
     UInt32                              m_loopCount;
 
-    AVAssetDescConstPtr        m_assetDesc;
+    ParamBoolPtr                        m_muteParam;                 
+
+    AVAssetDescConstPtr                 m_assetDesc;
 
     bool                                m_isFinished;
 
@@ -110,6 +113,8 @@ private:
     void                                        InitVertexAttributesChannel ();
 
     void                                        MarkOffsetChanges           ();
+
+    void                                        BroadcastHasFinishedEvent   ();
 
 };
 

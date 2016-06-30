@@ -92,13 +92,6 @@ SizeType                AVAssetDesc::EstimateMemoryUsage () const
 
 // ***********************
 //
-AVAssetDescConstPtr AVAssetDesc::Create	( const std::string & streamPath )
-{
-	return std::make_shared< AVAssetDesc >( streamPath );
-}
-
-// ***********************
-//
 AVAssetDescConstPtr AVAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat )
 {
 	return std::make_shared< AVAssetDesc >( streamPath, textureFormat );
@@ -109,13 +102,6 @@ AVAssetDescConstPtr AVAssetDesc::Create	( const std::string & streamPath, Textur
 AVAssetDescConstPtr AVAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
 {
 	return std::make_shared< AVAssetDesc >( streamPath, textureFormat, width, height, frameRate, videoFormat );
-}
-
-// ***********************
-//
-AVAssetDesc::AVAssetDesc					( const std::string & streamPath )
-	: m_streamPath( streamPath )
-{
 }
 
 // ***********************

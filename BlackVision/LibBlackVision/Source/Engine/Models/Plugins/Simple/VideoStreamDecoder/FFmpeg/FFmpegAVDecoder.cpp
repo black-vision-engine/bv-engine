@@ -11,6 +11,7 @@ namespace bv {
 // *********************************
 //
 FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
+    : m_muted( false )
 {
 	auto path = asset->GetStreamPath();
 
@@ -88,6 +89,8 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
 	m_demuxerThread->Join();
 	m_demuxerThread = nullptr;
 
+    FlushBuffers();
+
 	//force 
     for( auto & stream : m_streams )
     {
@@ -95,8 +98,6 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
     }
 
 	m_demuxer = nullptr;
-
-    FlushBuffers();
 
     for( auto & stream : m_streams )
     {
@@ -108,8 +109,6 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
 //
 void						FFmpegAVDecoder::Play				()
 {
-    assert( m_decoderThread );
-
     m_decoderThread->Play();
 }
 
@@ -117,25 +116,24 @@ void						FFmpegAVDecoder::Play				()
 //
 void						FFmpegAVDecoder::Pause				()
 {
-    assert( m_decoderThread );
-	
-    m_demuxerThread->Stop();
-    while( !m_demuxerThread->Stopped() );
-    for( auto & stream : m_streams )
+    if( !m_decoderThread->Paused() )
     {
-        stream.second->decoderThread->Stop();
-        while( !stream.second->decoderThread->Stopped() );
+        StopDecoding();
     }
 
-    m_decoderThread->Stop();
-    while( !m_decoderThread->Stopped() );
+    m_decoderThread->Pause();
+    while( !m_decoderThread->Paused() );
 }
 
 // *********************************
 //
 void						FFmpegAVDecoder::Stop				()
 {
-    Pause();
+    StopDecoding();
+
+    m_decoderThread->Stop();
+    while( !m_decoderThread->Stopped() );
+
 	Reset();
 }
 
@@ -179,7 +177,7 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
             m_demuxerThread->Restart();
         }
 
-        auto & videoStreamData = m_streams[ AVMEDIA_TYPE_AUDIO ];
+        auto & videoStreamData = m_streams[ AVMEDIA_TYPE_VIDEO ];
 
         if( videoStreamData->decoderThread->Stopped() )
         {
@@ -203,7 +201,11 @@ bool				FFmpegAVDecoder::NextVideoDataReady	        ( UInt64 time )
 //
 bool				FFmpegAVDecoder::NextAudioDataReady		    ( UInt64 time )
 {
-    return NextStreamDataReady( AVMEDIA_TYPE_AUDIO, time );
+    if( !m_muted )
+    {
+        return NextStreamDataReady( AVMEDIA_TYPE_AUDIO, time );
+    }
+    return false;
 }
 
 // *********************************
@@ -287,21 +289,11 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 //
 void					FFmpegAVDecoder::Seek					( Float64 time ) 
 {
-    auto stopped = m_demuxerThread->Stopped();
-    if( !stopped )
-    {
-        m_demuxerThread->Stop();
-        while( !m_demuxerThread->Stopped() );
-    }
+    StopDecoding();
 
     for( auto & stream : m_streams )
     {
         Seek( stream.second->decoder.get(), time );
-    }
-
-    if( !stopped )
-    {
-        m_demuxerThread->Restart();
     }
 }
 
@@ -311,9 +303,9 @@ void					FFmpegAVDecoder::FlushBuffers			()
 {
     for( auto & stream : m_streams )
     {
-        stream.second->outQueue.Clear();
-        stream.second->prevPTS = 0;
+        ClearStream( stream.second );
     }
+    m_demuxer->ClearPacketQueue();
 }
 
 // *********************************
@@ -321,11 +313,6 @@ void					FFmpegAVDecoder::FlushBuffers			()
 void					FFmpegAVDecoder::Reset					() 
 {
 	m_demuxer->Reset();
-    for( auto & stream : m_streams )
-    {
-        stream.second->decoder->Reset();
-    }
-
     FlushBuffers();
     Seek( 0.f );
 }
@@ -352,6 +339,56 @@ bool					FFmpegAVDecoder::IsFinished				() const
     }
 
     return finished;
+}
+
+// *********************************
+//
+void					FFmpegAVDecoder::Mute				        ( bool mute )
+{
+    if( HasAudio() )
+    {
+        auto audioStream = m_streams[ AVMEDIA_TYPE_AUDIO ];
+
+        Pause();
+    
+        if( mute )
+        {
+            ClearStream( audioStream );
+            m_demuxer->ClearPacketQueue( audioStream->decoder->GetStreamIdx() );
+            m_demuxer->DisableStream( AVMediaType::AVMEDIA_TYPE_AUDIO );
+        }
+        else
+        {
+            m_demuxer->GetStreamIndex( AVMediaType::AVMEDIA_TYPE_AUDIO );
+        }
+
+        m_muted = mute;
+
+        m_decoderThread->Pause();
+    }
+}
+
+// *********************************
+//
+void					FFmpegAVDecoder::StopDecoding           ()
+{
+    m_demuxerThread->Stop();
+    while( !m_demuxerThread->Stopped() );
+
+    for( auto & stream : m_streams )
+    {
+        stream.second->decoderThread->Stop();
+        while( !stream.second->decoderThread->Stopped() );
+    }
+}
+
+// *********************************
+//
+void					FFmpegAVDecoder::ClearStream           ( StreamData * streamData )
+{
+    streamData->outQueue.Clear();
+    streamData->decoder->Reset();
+    streamData->prevPTS = 0;
 }
 
 // *********************************

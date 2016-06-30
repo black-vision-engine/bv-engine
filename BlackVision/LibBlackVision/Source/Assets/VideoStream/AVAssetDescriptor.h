@@ -39,7 +39,6 @@ protected:
 
 public:
 
-	explicit									AVAssetDesc		( const std::string & streamPath );
 	explicit									AVAssetDesc		( const std::string & streamPath, TextureFormat textureFormat );
 	explicit									AVAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
@@ -64,7 +63,6 @@ public:
 
 	TextureFormat								GetTextureFormat			() const;
 	
-	static AVAssetDescConstPtr			        Create						( const std::string & streamPath );
 	static AVAssetDescConstPtr			        Create						( const std::string & streamPath, TextureFormat textureFormat );
 	static AVAssetDescConstPtr			        Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat  );
 

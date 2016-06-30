@@ -17,8 +17,7 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	: m_streamPath( streamPath )
 	, m_formatCtx( nullptr )
 	, m_isEOF( false )
-    , m_maxVideoQueueSize( 5 )
-    , m_maxAudioQueueSize( 16 )
+    , m_maxQueueSize( 5 )
 {
 	av_register_all();
 
@@ -57,13 +56,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
     auto process = false;
     for( auto & queue : m_packetQueue )
     {
-        if( m_formatCtx->streams[ queue.first ]->codec->codec_type == AVMediaType::AVMEDIA_TYPE_VIDEO &&
-            queue.second->Size() < m_maxVideoQueueSize )
-        {
-            process = true;
-        }
-        else if( m_formatCtx->streams[ queue.first ]->codec->codec_type == AVMediaType::AVMEDIA_TYPE_AUDIO &&
-            queue.second->Size() < m_maxAudioQueueSize )
+        if( queue.second->Size() < m_maxQueueSize )
         {
             process = true;
         }
@@ -160,6 +153,18 @@ Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
 
 // *******************************
 //
+void			    FFmpegDemuxer::DisableStream    ( AVMediaType type, UInt32 idx )
+{
+	auto streamIdx = FindStreamIndex( type, idx );
+	if( ( streamIdx >= 0 ) && m_packetQueue.count( streamIdx ) )
+	{
+        ClearPacketQueue( streamIdx );
+        m_packetQueue.erase( streamIdx );
+	}
+}
+
+// *******************************
+//
 bool				FFmpegDemuxer::IsEOF				() const
 {
 	std::lock_guard< std::mutex > lock( m_mutex );
@@ -170,7 +175,11 @@ bool				FFmpegDemuxer::IsEOF				() const
 //
 bool			    FFmpegDemuxer::IsPacketQueueEmpty	( Int32 streamIdx ) const
 {
-    return m_packetQueue.at( streamIdx )->IsEmpty();
+    if( m_packetQueue.count( streamIdx ) )
+    {
+        return m_packetQueue.at( streamIdx )->IsEmpty();
+    }
+    return true;
 }
 
 // *******************************
@@ -179,17 +188,22 @@ void				FFmpegDemuxer::ClearPacketQueue		()
 {
 	for( auto it = m_packetQueue.begin(); it != m_packetQueue.end(); ++it )
 	{
-		auto & queue = it->second;
-
-        while( !queue->IsEmpty() )
-        {
-            auto packet = new AVPacket();
-            queue->TryPop( packet );
-            av_packet_unref( packet );
-        }
-
-        queue->Clear();
+        ClearPacketQueue( it->first );
 	}
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::ClearPacketQueue		( Int32 streamIdx )
+{
+    auto & queue = m_packetQueue[ streamIdx ];
+    while( !queue->IsEmpty() )
+    {
+        auto packet = new AVPacket();
+        queue->TryPop( packet );
+        av_packet_unref( packet );
+    }
+    queue->Clear();
 }
 
 // *******************************

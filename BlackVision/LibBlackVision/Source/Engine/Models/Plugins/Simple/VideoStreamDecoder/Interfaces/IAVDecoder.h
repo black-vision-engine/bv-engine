@@ -43,6 +43,8 @@ public:
 	virtual bool					IsEOF					() const = 0;
 	virtual bool					IsFinished				() const = 0;
     
+    virtual void                    Mute                    ( bool mute ) = 0;
+
 //protected:
 
 	virtual bool					NextVideoDataReady		( UInt64 t ) = 0;

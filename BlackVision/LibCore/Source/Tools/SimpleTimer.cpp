@@ -50,7 +50,7 @@ void  SimpleTimer::Pause            ()
     if ( !m_paused )
     {
         m_paused = true;
-        m_startPause = ( unsigned long )Time::Now();
+        m_startPause = QueryMillis();
     }
 }
 

@@ -29,8 +29,7 @@ private:
 
 	bool						m_isEOF;
 
-    UInt32                      m_maxVideoQueueSize;
-    UInt32                      m_maxAudioQueueSize;
+    UInt32                      m_maxQueueSize;
 
 	mutable std::mutex			m_mutex;
 
@@ -43,12 +42,17 @@ public:
 
 	AVFormatContext *			GetFormatContext		() const;
 	AVPacket *					GetPacket				( Int32 streamIdx );
+
 	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
+	void						DisableStream			( AVMediaType type, UInt32 idx = 0 );
 
 	/** Accurate stream seeking.
     @param[timestamp] timestamp in stream time base 
     */
 	void						Seek					( Int64 timestamp, Int32 streamIdx = -1 );
+
+	void						ClearPacketQueue		();
+	void						ClearPacketQueue		( Int32 streamIdx );
 
 	void						Reset					();
 	
@@ -57,7 +61,6 @@ public:
 
 private:
 
-	void						ClearPacketQueue		();
 
     Int32						FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
 

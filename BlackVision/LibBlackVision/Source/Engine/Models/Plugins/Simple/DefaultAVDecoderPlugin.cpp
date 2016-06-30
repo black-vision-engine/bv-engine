@@ -29,6 +29,7 @@ const std::string        DefaultAVDecoderPlugin::PARAM::DECODER_STATE  = "state"
 const std::string        DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
+const std::string        DefaultAVDecoderPlugin::PARAM::MUTE          = "mute";
 
 typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamEnumDM;
 
@@ -80,6 +81,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
         ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
+    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::MUTE, false, true, true );
 
     helper.CreateVSModel();
     helper.AddTransformParam( DefaultAVDecoderPlugin::PARAM::TX_MAT, true );
@@ -154,6 +156,8 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
     m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
 
+    m_muteParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::MUTE ) );
+    
     m_decoderMode =  m_decoderModeParam->Evaluate();
 }
 
@@ -378,6 +382,11 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             UpdateDecoderState( m_decoderMode );
         }
 
+        if( ParameterChanged( PARAM::MUTE ) )
+        {
+            m_decoder->Mute( m_muteParam->Evaluate() );
+        }
+
         // handle perfect loops
         auto loopEnabled = m_loopEnabledParam->Evaluate();
         auto loopCount = m_loopCountParam->Evaluate();
@@ -399,12 +408,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
         {
-            auto evt = std::make_shared< VideoDecoderEvent >();
-            evt->AssetPath = m_assetDesc->GetStreamPath();
-            evt->EventCommand = VideoDecoderEvent::Command::HasFinished;
-            JsonSerializeObject ser;
-            evt->Serialize( ser );
-            SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+            BroadcastHasFinishedEvent();
             m_isFinished = true;
         }
     }
@@ -461,6 +465,18 @@ void                                DefaultAVDecoderPlugin::MarkOffsetChanges  (
     {
         m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
     }
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::BroadcastHasFinishedEvent   ()
+{
+    auto evt = std::make_shared< VideoDecoderEvent >();
+    evt->AssetPath = m_assetDesc->GetStreamPath();
+    evt->EventCommand = VideoDecoderEvent::Command::HasFinished;
+    JsonSerializeObject ser;
+    evt->Serialize( ser );
+    SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
 
 } //model

@@ -45,6 +45,8 @@ private:
 
     UInt64                                  m_duration;
 
+    bool                                    m_muted;
+
 public:
 
 								FFmpegAVDecoder		    ( AVAssetConstPtr asset );
@@ -82,12 +84,18 @@ public:
 	virtual bool				IsEOF					() const override;
 	virtual bool				IsFinished				() const override;
 
+    virtual void                Mute                    ( bool mute ) override;
+
 protected:
 	
 	virtual bool				NextVideoDataReady		( UInt64 t ) override;
 	virtual bool		        NextAudioDataReady		( UInt64 t ) override;
 
 private:
+
+    void                        StopDecoding            ();
+
+    void                        ClearStream             ( StreamData * streamData );
 
 	void				        Seek					( FFmpegStreamDecoder * decoder, Float64 time );
 	bool				        NextStreamDataReady		( AVMediaType type, UInt64 t );

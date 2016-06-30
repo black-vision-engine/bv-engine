@@ -94,6 +94,8 @@ private:
 
     void                                        MarkOffsetChanges           ();
 
+    void                                        BroadcastHasFinishedEvent   ();
+
 };
 
 // ***********************

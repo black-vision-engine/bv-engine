@@ -115,7 +115,7 @@ void				AVDecoderThread::Run			    ()
         }
 
         auto time = m_timer.ElapsedMillis();
-
+        
         m_decoder->NextVideoDataReady( time );
         m_decoder->NextAudioDataReady( time );
 
@@ -133,8 +133,9 @@ void				AVDecoderThread::Run			    ()
 		{
 			while( m_paused )
 			{
-				m_cond.wait( lock );
                 m_timer.Pause();
+				m_cond.wait( lock );
+                m_timer.UnPause();
 			}
 		}
 

@@ -243,12 +243,7 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
         {
-            auto evt = std::make_shared< VideoDecoderEvent >();
-            evt->AssetPath = m_assetDesc->GetStreamPath();
-            evt->EventCommand = VideoDecoderEvent::Command::HasFinished;
-            JsonSerializeObject ser;
-            evt->Serialize( ser );
-            SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+            BroadcastHasFinishedEvent();
             m_isFinished = true;
         }
     }
@@ -293,6 +288,18 @@ void                                DefaultAudioDecoderPlugin::MarkOffsetChanges
     {
         m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
     }
+}
+
+// *************************************
+//
+void                                DefaultAudioDecoderPlugin::BroadcastHasFinishedEvent    ()
+{
+    auto evt = std::make_shared< VideoDecoderEvent >();
+    evt->AssetPath = m_assetDesc->GetStreamPath();
+    evt->EventCommand = VideoDecoderEvent::Command::HasFinished;
+    JsonSerializeObject ser;
+    evt->Serialize( ser );
+    SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
 
 } //model

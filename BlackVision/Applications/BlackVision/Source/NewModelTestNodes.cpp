@@ -1737,8 +1737,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 15.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timeEvaluator->AddChild( localTimeline );
 
-    //std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
-    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins8, GSimplePlugins8 + 2 );
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
+    //std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins8, GSimplePlugins8 + 2 );
 
     auto node = model::BasicNode::Create( "video_node", timeEvaluator );
     //auto node2 = model::BasicNode::Create( "video_node2", timeEvaluator );
@@ -1760,7 +1760,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 
     //http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
     //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
-    //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/H264_test7_voiceclip_mp4_480x360.mp4", TextureFormat::F_A8R8G8B8 );
+    success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/H264_test7_voiceclip_mp4_480x360.mp4", TextureFormat::F_A8R8G8B8 );
     //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "adYze0j_460sv.mp4", TextureFormat::F_A8R8G8B8 );
     //success = model::LoadAVStream( node->GetPlugin( "audio_decoder" ), "rsrcy/stereo.wav", TextureFormat::F_A8R8G8B8 );
     //success = model::LoadAVStream( node->GetPlugin( "audio_decoder" ), "audio/HelixMobileProducer_test1_MPEG2_Mono_CBR_40kbps_16000Hz.mp3", TextureFormat::F_A8R8G8B8 );
@@ -1774,12 +1774,12 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     //http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
     //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
 
-    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 3.0f, model::DefaultAVDecoderPlugin::DecoderMode::PAUSE );
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
-    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
+    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
     
-    SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 3.0f, model::DefaultAudioDecoderPlugin::DecoderMode::STOP );
     //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );

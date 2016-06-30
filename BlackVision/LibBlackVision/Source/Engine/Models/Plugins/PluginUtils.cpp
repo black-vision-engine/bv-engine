@@ -51,20 +51,6 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 
 // *******************************
 //
-bool    LoadAudioStream ( IPluginPtr plugin, const std::string & streamPath )
-{
-    auto desc = AVAssetDesc::Create( streamPath );
-
-    if( desc == nullptr )
-    {
-        return false;
-    }
-
-    return plugin->LoadResource( desc );
-}
-
-// *******************************
-//
 bool    LoadAVStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat )
 {
     auto desc = AVAssetDesc::Create( streamPath, textureFormat );
