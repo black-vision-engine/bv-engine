@@ -270,7 +270,7 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
         // Copy and negate them to fill back plane.
         for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
         {
-            normals[ i ] = glm::vec3( 0.0, 0.0, -1.0 );
+            normals[ i ] = -normals[ i - m_numUniqueExtrudedVerticies ];
         }
     }
 
