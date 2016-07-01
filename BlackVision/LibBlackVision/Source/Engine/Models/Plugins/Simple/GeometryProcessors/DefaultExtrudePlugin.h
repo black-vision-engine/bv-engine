@@ -55,7 +55,7 @@ public:
 private:
 
     void                            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
-    void                            AddSidePlanes           ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges );
+    void                            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners );
     void                            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, glm::vec3 translate, bool fillDefaults );
     
     std::vector< INDEX_TYPE >       ExtractEdges            ( IndexedGeometry & mesh );

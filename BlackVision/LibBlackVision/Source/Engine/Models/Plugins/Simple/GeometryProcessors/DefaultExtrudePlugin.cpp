@@ -40,7 +40,7 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     auto model = helper.GetModel();
     
     helper.CreateVacModel();
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.4, 0.0, -0.9 ), true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.0, 0.0, -0.9 ), true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE, 160.0f, true, true );
 
     return model;
@@ -114,7 +114,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     auto corners = ExtractCorners( mesh, edges, cornerThreshold );
 
     AddSymetricalPlane( mesh, translate );
-    AddSidePlanes( mesh, edges );
+    AddSidePlanes( mesh, edges, corners );
 
 
     IndexedGeometry normals;
@@ -171,33 +171,70 @@ void    DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, g
 
 // ***********************
 // Function assumes that someone used function AddSymetricalPlane.
-void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges )
+void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners )
 {
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
     int numVerticies = (int)verticies.size();
 
-    int symPlaneOffset = (int)verticies.size() / 2;
+    int symPlaneOffset = numVerticies / 2;
 
     // In future we must add normals. That means we must add verticies too, bacause
     // edge is sharp and normals can't be the same.
-    // This solution produces unused verticies, because we copy not only edge verticies.
-    // That's no problem. When indexed geometry is convertet to triangles, all unused verticies disapear.
-    verticies.reserve( 2 * numVerticies );
-    for( int i = 0; i < numVerticies; i++ )
-    {
-        verticies.push_back( verticies[ i ] );
-    }
-
+    verticies.reserve( numVerticies + edges.size() + 2 * corners.size() );
 
     for( int i = 0; i < edges.size(); i += 2 )
     {
+        verticies.push_back( verticies[ edges[ i ] ] );
+        verticies.push_back( verticies[ edges[ i ] + symPlaneOffset ] );
+    }
+
+
+    // Duplicate corner verticies
+    for( auto corner : corners )
+    {
+        verticies.push_back( verticies[ corner ] );
+        verticies.push_back( verticies[ corner + symPlaneOffset ] );
+    }
+
+    // Replace edges indicies.
+    // Edges array contains closed curves. Thats mean that every index occure two times.
+    // We have to replace both with new indicies.
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
+        auto idx = edges[ i + 1 ];
+
+        // Find second appeariance of this vertex and replace it.
+        for( int j = 0; j < edges.size(); j += 2 )
+        {
+            if( edges[ j ] == idx )
+            {
+                edges[ j ] = j;
+                edges[ i + 1 ] = edges[ j ];
+            }
+        }
+
+        // Corner verticies are separated from their pairs so we must check if current index isn't
+        // corner vertex and replace it if it is. We replace always second index in pair (edges are directed!).
+        for( int j = 0; j < corners.size(); j++ )
+        {
+            if( idx == corners[ j ] )
+            {
+                // Additional corner verticies are at the end of array.
+                edges[ i + 1 ] = (int)edges.size() + ( j << 1 );
+            }
+        }
+    }
+
+    // Connect all verticies into triangles.
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
         indices.push_back( numVerticies + edges[ i ] );
-        indices.push_back( numVerticies + edges[ i ] + symPlaneOffset );
+        indices.push_back( numVerticies + edges[ i ] + 1 );
         indices.push_back( numVerticies + edges[ i + 1 ] );
 
-        indices.push_back( numVerticies + edges[ i ] + symPlaneOffset );
-        indices.push_back( numVerticies + edges[ i + 1 ] + symPlaneOffset );
+        indices.push_back( numVerticies + edges[ i ] + 1 );
+        indices.push_back( numVerticies + edges[ i + 1 ] + 1 );
         indices.push_back( numVerticies + edges[ i + 1 ] );
     }
 }
