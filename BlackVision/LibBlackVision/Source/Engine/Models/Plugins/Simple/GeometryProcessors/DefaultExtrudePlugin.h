@@ -71,6 +71,7 @@ private:
     void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners );
     void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, glm::vec3 translate );
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
+    void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
 
     void            ApplyFunction           (   ExtrudeCurve curve,
                                                 IndexedGeometry & mesh,

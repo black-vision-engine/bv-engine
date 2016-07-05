@@ -66,10 +66,10 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.CreateVacModel();
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.0, 0.0, -0.9 ), true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE, 160.0f, true, true );
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 5, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 13, true, true );
 
     helper.AddParam< IntInterpolator, DefaultExtrudePlugin::ExtrudeCurveType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamCurveType >
-        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::None, true, true );
+        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::Cosinus, true, true );
 
     return model;
 }
@@ -105,7 +105,9 @@ DefaultExtrudePlugin::~DefaultExtrudePlugin         ()
 // param is float value between 0 and 1.
 float       CosinusCurve      ( float param )
 {
-    return cos( 2.0f * glm::pi< float >() * param ) / 2.0f + 0.5f;
+    float arg = 2.0f * glm::pi< float >() * param;
+    float result = cos( arg ) / 2.0f + 0.5f;
+    return 1.0f - result;
 }
 
 // ========================================================================= //
@@ -123,7 +125,10 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     float cornerThreshold   = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE ) )->GetValue();
     m_tesselation           = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION ) )->GetValue();
     ExtrudeCurveType curve  = QueryTypedParam< std::shared_ptr< ParamEnum< ExtrudeCurveType > > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
-    m_curveScale            = 0.1f;
+    m_curveScale            = 0.3f;
+
+    if( m_tesselation < 0 )
+        m_tesselation = 1;
 
     // Get previous plugin geometry channels
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
@@ -186,6 +191,8 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     if( curve != ExtrudeCurveType::None )
     {
         ApplyFunction( CosinusCurve, mesh, normals, edges, corners );
+        ClampNormVecToDefaults( normals );
+        FillWithNormals( mesh, normals.GetVerticies(), translate );
     }
 
 
@@ -306,18 +313,20 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
     auto & verticies = mesh.GetVerticies();
     auto & normals = normalsVec.GetVerticies();
 
-    int extrudeVertsBegin = 2 * m_numExtrudedVerticies;
+    int extrudeVertsBegin = 2 * m_numUniqueExtrudedVerticies;
+    int edgeRowLength = (int)edges.size() / 2 + (int)corners.size();  // Number of verticies in single edge.
 
     // Add verticies between extruded planes.
     float delta = 1.0f / ( m_tesselation + 1 );
     for( int i = 1; i < m_tesselation + 1; ++i )
     {
         float division = i * delta;
+        float moveCoeff = curve( division ) * m_curveScale;
 
-        for( int j = extrudeVertsBegin; j < extrudeVertsBegin + (int)edges.size() + (int)corners.size(); j += 2 )
+        for( int j = extrudeVertsBegin; j < extrudeVertsBegin + edgeRowLength; j++ )
         {
-            glm::vec3 newVertex = verticies[ j ] * division + verticies[ j + 1 ] * ( 1 - division );
-            newVertex += -normals[ j ] * curve( division );
+            glm::vec3 newVertex = verticies[ j ] * ( 1.0f - division ) + verticies[ j + edgeRowLength ] * division;
+            newVertex += normals[ j ] * moveCoeff;
 
             verticies.push_back( newVertex );
         }
@@ -326,17 +335,15 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
     // Remove existing side plane.
     indices.erase( indices.begin() + ( 2 * m_numExtrudedVerticies ), indices.end() );
 
-    int edgeRowLength = (int)edges.size() / 2 + (int)corners.size();  // Number of verticies in single edge.
-
     // Connect all verticies
     ConnectVerticies( indices, edges, 0, 2 * edgeRowLength );
-    for( int i = 2; i < m_tesselation; ++i )
+    for( int i = 2; i < m_tesselation + 1; ++i )
     {
         int offset1 = i * edgeRowLength;
         int offset2 = offset1 + edgeRowLength;
         ConnectVerticies( indices, edges, offset1, offset2 );
     }
-    ConnectVerticies( indices, edges, m_tesselation * edgeRowLength, edgeRowLength );
+    ConnectVerticies( indices, edges, ( m_tesselation + 1 ) * edgeRowLength, edgeRowLength );
 }
 
 // ***********************
@@ -369,6 +376,7 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
     for( int i = 2 * m_numExtrudedVerticies; i < (int)indices.size(); i += 6 )
     {
         glm::vec3 edgeDir = verticies[ indices[ i + 2 ] ] - verticies[ indices[ i ] ];
+        translate = verticies[ indices[ i + 1 ] ] - verticies[ indices[ i ] ];
 
         glm::vec3 normal = -glm::cross( edgeDir, translate );
         if( normal != glm::vec3( 0.0, 0.0, 0.0 ) )
@@ -417,6 +425,14 @@ void    DefaultExtrudePlugin::DefaultNormals          ( IndexedGeometry & mesh, 
             normals[ i ] = glm::vec3( 0.0, 0.0, -1.0 );
         }
     }
+}
+
+// ***********************
+//
+void    DefaultExtrudePlugin::ClampNormVecToDefaults   ( IndexedGeometry & normals )
+{
+    auto & norm = normals.GetVerticies();
+    norm.erase( norm.begin() + ( 2 * m_numUniqueExtrudedVerticies ), norm.end() );
 }
 
 // ***********************
