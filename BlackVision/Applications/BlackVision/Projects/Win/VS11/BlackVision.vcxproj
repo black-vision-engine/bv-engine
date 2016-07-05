@@ -109,6 +109,7 @@
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -140,6 +141,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -172,6 +174,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -220,6 +223,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 

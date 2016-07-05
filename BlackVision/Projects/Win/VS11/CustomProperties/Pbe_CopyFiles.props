@@ -9,6 +9,7 @@
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
       <Message>Copying required dll files.</Message>
