@@ -97,6 +97,21 @@ DefaultExtrudePlugin::DefaultExtrudePlugin         ( const std::string & name, c
 DefaultExtrudePlugin::~DefaultExtrudePlugin         ()
 {}
 
+// ========================================================================= //
+// Extrude curve functions
+// ========================================================================= //
+
+// ***********************
+// param is float value between 0 and 1.
+float       CosinusCurve      ( float param )
+{
+    return cos( 2.0f * glm::pi< float >() * param ) / 2.0f + 0.5f;
+}
+
+// ========================================================================= //
+// Processing
+// ========================================================================= //
+
 // ***********************
 //
 void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::ConnectedComponentPtr & currComponent,
@@ -108,7 +123,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     float cornerThreshold   = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE ) )->GetValue();
     m_tesselation           = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION ) )->GetValue();
     ExtrudeCurveType curve  = QueryTypedParam< std::shared_ptr< ParamEnum< ExtrudeCurveType > > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
-
+    m_curveScale            = 0.1f;
 
     // Get previous plugin geometry channels
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
@@ -159,16 +174,18 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     if( prevNormals )
     {
         normals.GetVerticies() = converter.ConvertFromMemory( prevNormals );
-        FillWithNormals( mesh, normals.GetVerticies(), translate, false );
+        DefaultNormals( mesh, normals.GetVerticies(), true );
+        FillWithNormals( mesh, normals.GetVerticies(), translate );
     }
     else
     {
-        FillWithNormals( mesh, normals.GetVerticies(), translate, true );
+        DefaultNormals( mesh, normals.GetVerticies(), true );
+        FillWithNormals( mesh, normals.GetVerticies(), translate );
     }
 
     if( curve != ExtrudeCurveType::None )
     {
-        //ApplyFunction( 
+        ApplyFunction( CosinusCurve, mesh, normals, edges, corners );
     }
 
 
@@ -185,7 +202,7 @@ void    DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, g
     auto & vertices = mesh.GetVerticies();
     auto & indices = mesh.GetIndicies();
     int numVerticies = (int)vertices.size();
-    auto numIndicies = indices.size();
+    auto numIndicies = (int)indices.size();
 
     m_numUniqueExtrudedVerticies = numVerticies;
     m_numExtrudedVerticies = (int)numIndicies;
@@ -220,7 +237,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     verticies.reserve( numVerticies + 2 * edgeRowLength );
 
 // First row of verticies
-    for( int i = 0; i < edges.size(); i += 2 )
+    for( int i = 0; i < (int)edges.size(); i += 2 )
     {
         verticies.push_back( verticies[ edges[ i ] ] );
     }
@@ -231,7 +248,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     }
 
 // Second (translated) row of verticies
-    for( int i = 0; i < edges.size(); i += 2 )
+    for( int i = 0; i < (int)edges.size(); i += 2 )
     {
         verticies.push_back( verticies[ edges[ i ] + symPlaneOffset ] );
     }
@@ -245,49 +262,40 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     // Replace edges indicies.
     // Edges array contains closed curves. Thats mean that every index occure two times.
     // We have to replace both with new indicies, but at first we take second vertex in pair.
-    for( int i = 0; i < edges.size(); i += 2 )
+    for( int i = 0; i < (int)edges.size(); i += 2 )
     {
         auto idx = edges[ i + 1 ];
 
         // Find second appeariance of this vertex and replace it.
-        for( int j = 0; j < edges.size(); j += 2 )
+        for( int j = 0; j < (int)edges.size(); j += 2 )
         {
             if( edges[ j ] == idx )
             {
-                edges[ i + 1 ] = j / 2;
+                edges[ i + 1 ] = numVerticies + j / 2;
                 break;    // Consider using break here.
             }
         }
 
         // Corner verticies are separated from their pairs so we must check if current index isn't
         // corner vertex and replace it if it is. We replace always second index in pair (edges are directed!).
-        for( int k = 0; k < corners.size(); k++ )
+        for( int k = 0; k < (int)corners.size(); k++ )
         {
             if( idx == corners[ k ] )
             {
                 // Additional corner verticies are at the end of array.
-                edges[ i + 1 ] = ( (int)edges.size() >> 1 ) + k;
+                edges[ i + 1 ] = numVerticies + ( (int)edges.size() >> 1 ) + k;
             }
         }
     }
 
     // Now we replace first vertex in pair.
-    for( int i = 0; i < edges.size(); i += 2 )
+    for( int i = 0; i < (int)edges.size(); i += 2 )
     {
-        edges[ i ] = i / 2;
+        edges[ i ] = numVerticies + i / 2;
     }
 
     // Connect all verticies into triangles.
-    for( int i = 0; i < edges.size(); i += 2 )
-    {
-        indices.push_back( numVerticies + edges[ i ] );
-        indices.push_back( numVerticies + edges[ i ] + edgeRowLength );
-        indices.push_back( numVerticies + edges[ i + 1 ] );
-
-        indices.push_back( numVerticies + edges[ i ] + edgeRowLength );
-        indices.push_back( numVerticies + edges[ i + 1 ] + edgeRowLength );
-        indices.push_back( numVerticies + edges[ i + 1 ] );
-    }
+    ConnectVerticies( indices, edges, 0, edgeRowLength );
 }
 
 // ***********************
@@ -306,7 +314,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
     {
         float division = i * delta;
 
-        for( int j = extrudeVertsBegin; j < extrudeVertsBegin + edges.size() + corners.size(); j += 2 )
+        for( int j = extrudeVertsBegin; j < extrudeVertsBegin + (int)edges.size() + (int)corners.size(); j += 2 )
         {
             glm::vec3 newVertex = verticies[ j ] * division + verticies[ j + 1 ] * ( 1 - division );
             newVertex += -normals[ j ] * curve( division );
@@ -318,45 +326,47 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
     // Remove existing side plane.
     indices.erase( indices.begin() + ( 2 * m_numExtrudedVerticies ), indices.end() );
 
+    int edgeRowLength = (int)edges.size() / 2 + (int)corners.size();  // Number of verticies in single edge.
+
     // Connect all verticies
+    ConnectVerticies( indices, edges, 0, 2 * edgeRowLength );
+    for( int i = 2; i < m_tesselation; ++i )
+    {
+        int offset1 = i * edgeRowLength;
+        int offset2 = offset1 + edgeRowLength;
+        ConnectVerticies( indices, edges, offset1, offset2 );
+    }
+    ConnectVerticies( indices, edges, m_tesselation * edgeRowLength, edgeRowLength );
+}
+
+// ***********************
+//
+void    DefaultExtrudePlugin::ConnectVerticies        ( std::vector< INDEX_TYPE > & indicies, std::vector< INDEX_TYPE > & edges, int offset1, int offset2 )
+{
+    for( int i = 0; i < (int)edges.size(); i += 2 )
+    {
+        indicies.push_back( edges[ i ] + offset1 );
+        indicies.push_back( edges[ i ] + offset2 );
+        indicies.push_back( edges[ i + 1 ] + offset1 );
+
+        indicies.push_back( edges[ i ] + offset2 );
+        indicies.push_back( edges[ i + 1 ] + offset2 );
+        indicies.push_back( edges[ i + 1 ] + offset1);
+    }
 }
 
 // ***********************
 //
 void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
                                                        std::vector< glm::vec3 > & normals,
-                                                       glm::vec3 translate,
-                                                       bool fillDefaults )
+                                                       glm::vec3 translate )
 {
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
 
     normals.resize( verticies.size(), glm::vec3( 0.0, 0.0, 0.0 ) );
 
-    if( fillDefaults )
-    {
-        // Set default normals for both planes.
-        for( int i = 0; i < m_numUniqueExtrudedVerticies; ++i )
-        {
-            normals[ i ] = glm::vec3( 0.0, 0.0, 1.0 );
-        }
-
-        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
-        {
-            normals[ i ] = glm::vec3( 0.0, 0.0, -1.0 );
-        }
-    }
-    else
-    {
-        // Normals have been copied from vertex attribute channel.
-        // Copy and negate them to fill back plane.
-        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
-        {
-            normals[ i ] = -normals[ i - m_numUniqueExtrudedVerticies ];
-        }
-    }
-
-    for( int i = 2 * m_numExtrudedVerticies; i < indices.size(); i += 6 )
+    for( int i = 2 * m_numExtrudedVerticies; i < (int)indices.size(); i += 6 )
     {
         glm::vec3 edgeDir = verticies[ indices[ i + 2 ] ] - verticies[ indices[ i ] ];
 
@@ -379,6 +389,37 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
 }
 
 // ***********************
+//
+void    DefaultExtrudePlugin::DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting )
+{
+    auto & verticies = mesh.GetVerticies();
+    normals.resize( verticies.size(), glm::vec3( 0.0, 0.0, 0.0 ) );
+
+    if( useExisting )
+    {
+        // Normals have been copied from vertex attribute channel.
+        // Copy and negate them to fill back plane.
+        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
+        {
+            normals[ i ] = -normals[ i - m_numUniqueExtrudedVerticies ];
+        }
+    }
+    else
+    {
+        // Set default normals for both planes.
+        for( int i = 0; i < m_numUniqueExtrudedVerticies; ++i )
+        {
+            normals[ i ] = glm::vec3( 0.0, 0.0, 1.0 );
+        }
+
+        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
+        {
+            normals[ i ] = glm::vec3( 0.0, 0.0, -1.0 );
+        }
+    }
+}
+
+// ***********************
 // Edge is a pair of verticies that builds only one triangle in whole mesh.
 // Note: Edges have their direction. Order of verticies counts. It's used later
 // to determine normal direction as cross product between edge vector and extrude vector.
@@ -387,7 +428,7 @@ std::vector< INDEX_TYPE >           DefaultExtrudePlugin::ExtractEdges ( Indexed
     std::vector< INDEX_TYPE >   edges;
 
     auto & indicies = mesh.GetIndicies();
-    auto numIndicies = indicies.size();
+    auto numIndicies = (int)indicies.size();
 
     edges.reserve( numIndicies / 3 );
 
@@ -444,7 +485,7 @@ std::vector< INDEX_TYPE >       DefaultExtrudePlugin::ExtractCorners          ( 
     std::map< INDEX_TYPE, std::pair< glm::vec3, glm::vec3 > > edgeVectors;
 
     // Compute edge vectors.
-    for( int i = 0; i < edges.size(); i += 2 )
+    for( int i = 0; i < (int)edges.size(); i += 2 )
     {
         INDEX_TYPE idx1 = edges[ i ];
         INDEX_TYPE idx2 = edges[ i + 1 ];

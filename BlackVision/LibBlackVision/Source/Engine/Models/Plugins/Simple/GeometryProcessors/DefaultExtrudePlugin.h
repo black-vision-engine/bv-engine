@@ -38,7 +38,7 @@ public:
     enum ExtrudeCurveType
     {
         None,
-        Sinus,
+        Cosinus,
 
         Total
     };
@@ -50,6 +50,7 @@ private:
     int         m_numUniqueExtrudedVerticies;
     int         m_numExtrudedVerticies;
     int         m_tesselation;
+    float       m_curveScale;
 
 public:
 
@@ -66,22 +67,27 @@ public:
 
 private:
 
-    void                            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
-    void                            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners );
-    void                            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, glm::vec3 translate, bool fillDefaults );
+    void            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
+    void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners );
+    void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, glm::vec3 translate );
+    void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
 
-    void                            ApplyFunction           (   ExtrudeCurve curve,
-                                                                IndexedGeometry & mesh,
-                                                                IndexedGeometry & normalsVec,
-                                                                std::vector< INDEX_TYPE > & edges,
-                                                                std::vector< INDEX_TYPE > & corners
-                                                            );
-    
+    void            ApplyFunction           (   ExtrudeCurve curve,
+                                                IndexedGeometry & mesh,
+                                                IndexedGeometry & normalsVec,
+                                                std::vector< INDEX_TYPE > & edges,
+                                                std::vector< INDEX_TYPE > & corners
+                                            );
+   
+
+    int             FindEdge                ( const std::vector< INDEX_TYPE > & indicies, INDEX_TYPE idx1, INDEX_TYPE idx2 );
+    void            AddOrRemoveEdge         ( std::vector< INDEX_TYPE > & edges, INDEX_TYPE idx1, INDEX_TYPE idx2 );
+
+    void            ConnectVerticies        ( std::vector< INDEX_TYPE > & indicies, std::vector< INDEX_TYPE > & edges, int offset1, int offset2 );
+
+
     std::vector< INDEX_TYPE >       ExtractEdges            ( IndexedGeometry & mesh );
     std::vector< INDEX_TYPE >       ExtractCorners          ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges, float angleThreshold );
-
-    int                             FindEdge                ( const std::vector< INDEX_TYPE > & indicies, INDEX_TYPE idx1, INDEX_TYPE idx2 );
-    void                            AddOrRemoveEdge         ( std::vector< INDEX_TYPE > & edges, INDEX_TYPE idx1, INDEX_TYPE idx2 );
 };
 
 
