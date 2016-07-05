@@ -13,6 +13,30 @@ namespace bv { namespace model {
 
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR           = "extrude vector";
 const std::string        DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE   = "smooth threshold angle";
+const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE            = "extrude curve";
+const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION      = "tesselation";
+
+
+typedef ParamEnum< DefaultExtrudePlugin::ExtrudeCurveType> ParamCurveType;
+
+
+// ***********************
+//
+VoidPtr    ParamCurveType::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+// ***********************
+//
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultExtrudePlugin::ExtrudeCurveType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultExtrudePlugin::ExtrudeCurveType >( name, timeline );
+}
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -42,6 +66,10 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.CreateVacModel();
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.0, 0.0, -0.9 ), true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE, 160.0f, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 5, true, true );
+
+    helper.AddParam< IntInterpolator, DefaultExtrudePlugin::ExtrudeCurveType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamCurveType >
+        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::None, true, true );
 
     return model;
 }
@@ -78,6 +106,8 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     // Get parameters values.
     glm::vec3 translate     = QueryTypedValue< ValueVec3Ptr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR ) )->GetValue();
     float cornerThreshold   = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE ) )->GetValue();
+    m_tesselation           = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION ) )->GetValue();
+    ExtrudeCurveType curve  = QueryTypedParam< std::shared_ptr< ParamEnum< ExtrudeCurveType > > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
 
 
     // Get previous plugin geometry channels
@@ -136,6 +166,11 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         FillWithNormals( mesh, normals.GetVerticies(), translate, true );
     }
 
+    if( curve != ExtrudeCurveType::None )
+    {
+        //ApplyFunction( 
+    }
+
 
     converter.MakeTriangles( mesh, newPositions );
     converter.MakeTriangles( normals.GetVerticies(), mesh.GetIndicies(), normalsChannel );
@@ -177,29 +212,39 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     auto & verticies = mesh.GetVerticies();
     int numVerticies = (int)verticies.size();
 
-    int symPlaneOffset = numVerticies / 2;
+    int symPlaneOffset = numVerticies / 2;                  // Symmetrical plane verticies offset from beginning of vertex buffer.
+    int edgeRowLength = (int)edges.size() / 2 + (int)corners.size();  // Number of verticies in edge row.
 
     // In future we must add normals. That means we must add verticies too, bacause
     // edge is sharp and normals can't be the same.
-    verticies.reserve( numVerticies + edges.size() + 2 * corners.size() );
+    verticies.reserve( numVerticies + 2 * edgeRowLength );
 
+// First row of verticies
     for( int i = 0; i < edges.size(); i += 2 )
     {
         verticies.push_back( verticies[ edges[ i ] ] );
-        verticies.push_back( verticies[ edges[ i ] + symPlaneOffset ] );
     }
-
-
     // Duplicate corner verticies
     for( auto corner : corners )
     {
         verticies.push_back( verticies[ corner ] );
+    }
+
+// Second (translated) row of verticies
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
+        verticies.push_back( verticies[ edges[ i ] + symPlaneOffset ] );
+    }
+    // Duplicate corner verticies
+    for( auto corner : corners )
+    {
         verticies.push_back( verticies[ corner + symPlaneOffset ] );
     }
 
+
     // Replace edges indicies.
     // Edges array contains closed curves. Thats mean that every index occure two times.
-    // We have to replace both with new indicies.
+    // We have to replace both with new indicies, but at first we take second vertex in pair.
     for( int i = 0; i < edges.size(); i += 2 )
     {
         auto idx = edges[ i + 1 ];
@@ -209,34 +254,71 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
         {
             if( edges[ j ] == idx )
             {
-                edges[ j ] = j;
-                edges[ i + 1 ] = edges[ j ];
+                edges[ i + 1 ] = j / 2;
+                break;    // Consider using break here.
             }
         }
 
         // Corner verticies are separated from their pairs so we must check if current index isn't
         // corner vertex and replace it if it is. We replace always second index in pair (edges are directed!).
-        for( int j = 0; j < corners.size(); j++ )
+        for( int k = 0; k < corners.size(); k++ )
         {
-            if( idx == corners[ j ] )
+            if( idx == corners[ k ] )
             {
                 // Additional corner verticies are at the end of array.
-                edges[ i + 1 ] = (int)edges.size() + ( j << 1 );
+                edges[ i + 1 ] = ( (int)edges.size() >> 1 ) + k;
             }
         }
+    }
+
+    // Now we replace first vertex in pair.
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
+        edges[ i ] = i / 2;
     }
 
     // Connect all verticies into triangles.
     for( int i = 0; i < edges.size(); i += 2 )
     {
         indices.push_back( numVerticies + edges[ i ] );
-        indices.push_back( numVerticies + edges[ i ] + 1 );
+        indices.push_back( numVerticies + edges[ i ] + edgeRowLength );
         indices.push_back( numVerticies + edges[ i + 1 ] );
 
-        indices.push_back( numVerticies + edges[ i ] + 1 );
-        indices.push_back( numVerticies + edges[ i + 1 ] + 1 );
+        indices.push_back( numVerticies + edges[ i ] + edgeRowLength );
+        indices.push_back( numVerticies + edges[ i + 1 ] + edgeRowLength );
         indices.push_back( numVerticies + edges[ i + 1 ] );
     }
+}
+
+// ***********************
+//
+void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners )
+{
+    auto & indices = mesh.GetIndicies();
+    auto & verticies = mesh.GetVerticies();
+    auto & normals = normalsVec.GetVerticies();
+
+    int extrudeVertsBegin = 2 * m_numExtrudedVerticies;
+
+    // Add verticies between extruded planes.
+    float delta = 1.0f / ( m_tesselation + 1 );
+    for( int i = 1; i < m_tesselation + 1; ++i )
+    {
+        float division = i * delta;
+
+        for( int j = extrudeVertsBegin; j < extrudeVertsBegin + edges.size() + corners.size(); j += 2 )
+        {
+            glm::vec3 newVertex = verticies[ j ] * division + verticies[ j + 1 ] * ( 1 - division );
+            newVertex += -normals[ j ] * curve( division );
+
+            verticies.push_back( newVertex );
+        }
+    }
+
+    // Remove existing side plane.
+    indices.erase( indices.begin() + ( 2 * m_numExtrudedVerticies ), indices.end() );
+
+    // Connect all verticies
 }
 
 // ***********************
