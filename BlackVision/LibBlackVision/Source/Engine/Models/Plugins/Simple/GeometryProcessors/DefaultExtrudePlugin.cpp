@@ -14,6 +14,8 @@ namespace bv { namespace model {
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR           = "extrude vector";
 const std::string        DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE   = "smooth threshold angle";
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE            = "extrude curve";
+const std::string        DefaultExtrudePlugin::PARAMS::CURVE_SCALE              = "curve scale";
+const std::string        DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD     = "cosinus curve period";
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION      = "tesselation";
 
 
@@ -66,10 +68,13 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.CreateVacModel();
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR, glm::vec3( 0.0, 0.0, -0.9 ), true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE, 160.0f, true, true );
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 13, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::CURVE_SCALE, 0.2f, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 40, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD, 4, true, true );
+
 
     helper.AddParam< IntInterpolator, DefaultExtrudePlugin::ExtrudeCurveType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamCurveType >
-        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::Cosinus, true, true );
+        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::PeriodicCosinus, true, true );
 
     return model;
 }
@@ -103,11 +108,34 @@ DefaultExtrudePlugin::~DefaultExtrudePlugin         ()
 
 // ***********************
 // param is float value between 0 and 1.
-float       CosinusCurve      ( float param )
+float       DefaultExtrudePlugin::PeriodicCosinusCurve ( float param )
 {
-    float arg = 2.0f * glm::pi< float >() * param;
+    int period = m_cosinusPeriod;
+    float arg = 2.0f * period * glm::pi< float >() * param;
     float result = cos( arg ) / 2.0f + 0.5f;
     return 1.0f - result;
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::ParabolaCurve         ( float param )
+{
+    return -param * ( param - 1.0f );
+}
+
+// ***********************
+// Gauss function with center in 0.5. Function reaches 0 near param == 0.0 and param == 1.0
+float       DefaultExtrudePlugin::GaussCurve            ( float param )
+{
+    float exponent = -( param - 0.5f ) * ( param - 0.5f ) / ( 2.0f * 0.166666f * 0.166666f );
+    return exp( exponent );
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::CircleCurve           ( float param )
+{
+    return sqrt( 0.25f - ( param - 0.5f ) * ( param - 0.5f ) );
 }
 
 // ========================================================================= //
@@ -124,8 +152,9 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     glm::vec3 translate     = QueryTypedValue< ValueVec3Ptr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR ) )->GetValue();
     float cornerThreshold   = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE ) )->GetValue();
     m_tesselation           = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION ) )->GetValue();
+    m_curveScale            = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::CURVE_SCALE ) )->GetValue();
+    m_cosinusPeriod         = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD ) )->GetValue();
     ExtrudeCurveType curve  = QueryTypedParam< std::shared_ptr< ParamEnum< ExtrudeCurveType > > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
-    m_curveScale            = 0.3f;
 
     if( m_tesselation < 0 )
         m_tesselation = 1;
@@ -180,19 +209,36 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     {
         normals.GetVerticies() = converter.ConvertFromMemory( prevNormals );
         DefaultNormals( mesh, normals.GetVerticies(), true );
-        FillWithNormals( mesh, normals.GetVerticies(), translate );
+        FillWithNormals( mesh, normals.GetVerticies() );
     }
     else
     {
         DefaultNormals( mesh, normals.GetVerticies(), true );
-        FillWithNormals( mesh, normals.GetVerticies(), translate );
+        FillWithNormals( mesh, normals.GetVerticies() );
     }
 
     if( curve != ExtrudeCurveType::None )
     {
-        ApplyFunction( CosinusCurve, mesh, normals, edges, corners );
+        switch( curve )
+        {
+        case ExtrudeCurveType::Parabola:
+            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners );
+            break;
+        case ExtrudeCurveType::PeriodicCosinus:
+            ApplyFunction( &DefaultExtrudePlugin::PeriodicCosinusCurve, mesh, normals, edges, corners );
+            break;
+        case ExtrudeCurveType::Gauss:
+            ApplyFunction( &DefaultExtrudePlugin::GaussCurve, mesh, normals, edges, corners );
+            break;
+        case ExtrudeCurveType::Circle:
+            ApplyFunction( &DefaultExtrudePlugin::CircleCurve, mesh, normals, edges, corners );
+            break;
+        default:
+            assert( !"Shouldn't be here" );
+        }
+
         ClampNormVecToDefaults( normals );
-        FillWithNormals( mesh, normals.GetVerticies(), translate );
+        FillWithNormals( mesh, normals.GetVerticies() );
     }
 
 
@@ -321,7 +367,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
     for( int i = 1; i < m_tesselation + 1; ++i )
     {
         float division = i * delta;
-        float moveCoeff = curve( division ) * m_curveScale;
+        float moveCoeff = (this->*curve)( division ) * m_curveScale;
 
         for( int j = extrudeVertsBegin; j < extrudeVertsBegin + edgeRowLength; j++ )
         {
@@ -365,8 +411,7 @@ void    DefaultExtrudePlugin::ConnectVerticies        ( std::vector< INDEX_TYPE 
 // ***********************
 //
 void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
-                                                       std::vector< glm::vec3 > & normals,
-                                                       glm::vec3 translate )
+                                                       std::vector< glm::vec3 > & normals )
 {
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
@@ -376,9 +421,9 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
     for( int i = 2 * m_numExtrudedVerticies; i < (int)indices.size(); i += 6 )
     {
         glm::vec3 edgeDir = verticies[ indices[ i + 2 ] ] - verticies[ indices[ i ] ];
-        translate = verticies[ indices[ i + 1 ] ] - verticies[ indices[ i ] ];
+        glm::vec3 extrudeDir = verticies[ indices[ i + 1 ] ] - verticies[ indices[ i ] ];
 
-        glm::vec3 normal = -glm::cross( edgeDir, translate );
+        glm::vec3 normal = -glm::cross( edgeDir, extrudeDir );
         if( normal != glm::vec3( 0.0, 0.0, 0.0 ) )
             normal = glm::normalize( normal );
 

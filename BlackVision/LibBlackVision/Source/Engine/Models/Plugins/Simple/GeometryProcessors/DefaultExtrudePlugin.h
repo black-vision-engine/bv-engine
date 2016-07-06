@@ -33,17 +33,22 @@ public:
         static const std::string        SMOOTH_THRESHOLD_ANGLE;
         static const std::string        EXTRUDE_CURVE;
         static const std::string        EXTRUDE_TESSELATION;
+        static const std::string        CURVE_SCALE;
+        static const std::string        COSINUS_CURVE_PERIOD;
     };
 
     enum ExtrudeCurveType
     {
         None,
-        Cosinus,
+        Parabola,
+        PeriodicCosinus,
+        Gauss,
+        Circle,
 
         Total
     };
-
-    typedef float (*ExtrudeCurve)( float );
+    
+    typedef float (DefaultExtrudePlugin::* ExtrudeCurve)( float );
 
 private:
 
@@ -51,6 +56,7 @@ private:
     int         m_numExtrudedVerticies;
     int         m_tesselation;
     float       m_curveScale;
+    int         m_cosinusPeriod;
 
 public:
 
@@ -67,9 +73,17 @@ public:
 
 private:
 
+    // Curves
+    float           ParabolaCurve           ( float param );
+    float           PeriodicCosinusCurve    ( float param );
+    float           GaussCurve              ( float param );
+    float           CircleCurve             ( float param );
+
+private:
+
     void            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
     void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners );
-    void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, glm::vec3 translate );
+    void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals );
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
 
