@@ -70,11 +70,11 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE, 160.0f, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::CURVE_SCALE, 0.2f, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 40, true, true );
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD, 4, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD, 1, true, true );
 
 
     helper.AddParam< IntInterpolator, DefaultExtrudePlugin::ExtrudeCurveType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamCurveType >
-        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::PeriodicCosinus, true, true );
+        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::None, true, true );
 
     return model;
 }
@@ -222,7 +222,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         case ExtrudeCurveType::Parabola:
             ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners );
             break;
-        case ExtrudeCurveType::PeriodicCosinus:
+        case ExtrudeCurveType::Cosinus:
             ApplyFunction( &DefaultExtrudePlugin::PeriodicCosinusCurve, mesh, normals, edges, corners );
             break;
         case ExtrudeCurveType::Gauss:

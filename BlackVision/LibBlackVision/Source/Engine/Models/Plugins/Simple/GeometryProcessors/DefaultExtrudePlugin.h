@@ -41,7 +41,7 @@ public:
     {
         None,
         Parabola,
-        PeriodicCosinus,
+        Cosinus,
         Gauss,
         Circle,
 
