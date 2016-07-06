@@ -161,8 +161,6 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 
     // Get previous plugin geometry channels
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
-    //auto uvs = std::static_pointer_cast< Float2AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
-
     assert( positions );    if( !positions ) return;
     
     auto posChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
@@ -278,6 +276,12 @@ void    DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, g
 // Function assumes that someone used function AddSymetricalPlane.
 void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners )
 {
+    // We will create new corners vector containing indicies to new verticies which will
+    // be created in this function. Because each corner will have to separate verticies
+    // new vector consist of pairs of indicies.
+    std::vector< INDEX_TYPE > cornerPairs;
+    cornerPairs.resize( 2 * corners.size() );
+
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
     int numVerticies = (int)verticies.size();
@@ -320,7 +324,8 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
         auto idx = edges[ i + 1 ];
 
         // Find second appeariance of this vertex and replace it.
-        for( int j = 0; j < (int)edges.size(); j += 2 )
+        int j = 0;
+        for( ; j < (int)edges.size(); j += 2 )
         {
             if( edges[ j ] == idx )
             {
@@ -337,6 +342,10 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
             {
                 // Additional corner verticies are at the end of array.
                 edges[ i + 1 ] = numVerticies + ( (int)edges.size() >> 1 ) + k;
+
+                // Here we complete new corners array.
+                cornerPairs[ ( k << 1 ) + 1 ] = edges[ i + 1 ];
+                cornerPairs[ ( k << 1 ) ] = numVerticies + j / 2;
             }
         }
     }
@@ -349,18 +358,41 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
 
     // Connect all verticies into triangles.
     ConnectVerticies( indices, edges, 0, edgeRowLength );
+
+    // Replace content of old vector with new created corner vector.
+    corners = std::move( cornerPairs );
 }
 
 // ***********************
 //
-void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners )
+void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & cornerPairs )
 {
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
     auto & normals = normalsVec.GetVerticies();
 
     int extrudeVertsBegin = 2 * m_numUniqueExtrudedVerticies;
-    int edgeRowLength = (int)edges.size() / 2 + (int)corners.size();  // Number of verticies in single edge.
+    int edgeRowLength = (int)edges.size() / 2 + (int)cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double in comparision to previous functions.
+
+    // Merge normals for corner verticies. These normals will be recreated in next functions.
+    // We need this step to make special behavior of corner verticies possible.
+    for( int i = 0; i < cornerPairs.size(); i += 2 )
+    {
+        int idx1 = cornerPairs[ i ];
+        int idx2 = cornerPairs[ i + 1 ];
+
+        glm::vec3 v1 = normals[ idx1 ];
+        glm::vec3 v2 = normals[ idx2 ];
+
+        glm::vec3 translateNormal = glm::normalize( v1 + v2 );
+
+        float cos2Alpha = glm::dot( v1, v2 );
+        float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
+        float normalCoeff = glm::length( v1 ) / cosAlpha;
+
+        normals[ idx1 ] = normalCoeff * translateNormal;
+        normals[ idx2 ] = normals[ idx1 ];
+    }
 
     // Add verticies between extruded planes.
     float delta = 1.0f / ( m_tesselation + 1 );
