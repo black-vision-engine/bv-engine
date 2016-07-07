@@ -20,6 +20,8 @@ class FontAsset;
 class FontAssetDesc;
 class AVAsset;
 class AVAssetDesc;
+class DataArrayAsset;
+class DataArrayAssetDescriptor;
 
 DEFINE_CONST_PTR_TYPE( FontAssetDesc )
 DEFINE_CONST_PTR_TYPE( FontAsset )
@@ -34,6 +36,8 @@ DEFINE_CONST_PTR_TYPE( AnimationAssetDesc)
 DEFINE_CONST_PTR_TYPE( AnimationAsset )
 DEFINE_CONST_PTR_TYPE( AssetDesc )
 DEFINE_CONST_PTR_TYPE( Asset )
+DEFINE_CONST_PTR_TYPE( DataArrayAsset )
+DEFINE_CONST_PTR_TYPE( DataArrayAssetDescriptor )
 
 DEFINE_PTR_TYPE( AnimationAssetDesc )
 

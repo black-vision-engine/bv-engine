@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
+#include "Assets/Asset.h"
+#include "Assets/DataArray/DataArrayAsset.h"
 
 
 namespace bv { namespace model {
@@ -19,6 +21,9 @@ public:
     static  std::string                     UID                 ();
 };
 
+
+
+
 // ***************************** PLUGIN ********************************** 
 class DefaultLineChartPlugin : public DefaultGeometryPluginBase
 {
@@ -29,8 +34,12 @@ public:
         static const std::string        WIDTH;
     };
 
-protected:
+    static const std::string            AssetName;
 
+private:
+
+    DataArrayAssetConstPtr          m_asset;
+    bool                            m_assetUpdated;
 
 public:
 
@@ -38,9 +47,10 @@ public:
     ~DefaultLineChartPlugin  ();
 
 private:
-    virtual std::vector<IGeometryGeneratorPtr>	GetGenerators() override;
+    virtual std::vector<IGeometryGeneratorPtr>	GetGenerators               () override;
 
-    virtual bool                                NeedsTopologyUpdate() override;
+    virtual bool                                NeedsTopologyUpdate         () override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 };
 
 

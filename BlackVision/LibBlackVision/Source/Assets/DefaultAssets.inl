@@ -60,4 +60,17 @@ inline std::shared_ptr< const AVAssetDesc >    DefaultAssets::GetDefaultDesc   (
     return avDesc;
 }
 
+// ***********************
+//
+template<>
+inline std::shared_ptr< const DataArrayAssetDescriptor >    DefaultAssets::GetDefaultDesc   ()
+{
+    static DataArrayAssetDescriptorConstPtr daDesc;
+	if( !daDesc )
+    {
+        daDesc = DataArrayAssetDescriptor::Create( std::vector< std::string >(), std::vector< std::string >(), std::vector< ModelParamType >() );
+    }
+    return daDesc;
+}
+
 } // bv

@@ -23,6 +23,10 @@
 #include "Assets/Mesh/MeshAsset.h"
 #include "Assets/Mesh/MeshLoader.h"
 
+#include "Assets/DataArray/DataArrayLoader.h"
+#include "Assets/DataArray/DataArrayAssetDescriptor.h"
+#include "Assets/DataArray/DataArrayAsset.h"
+
 #include "Assets/AssetManager.h"
 
 namespace bv

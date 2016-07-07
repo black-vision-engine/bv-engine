@@ -325,6 +325,9 @@
     <Filter Include="Engine\Models\Plugins\Simple\GeometryProcessors">
       <UniqueIdentifier>{4519ac93-82db-4538-b157-a29a5658c153}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\DataArray">
+      <UniqueIdentifier>{5d32f185-ad80-48ea-9a8a-5e09c272806f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1662,6 +1665,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultLineChartPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayAssetDescriptor.cpp">
+      <Filter>Assets\DataArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayAsset.cpp">
+      <Filter>Assets\DataArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.cpp">
+      <Filter>Assets\DataArray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3943,6 +3955,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultLineChartPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayAssetDescriptor.h">
+      <Filter>Assets\DataArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayAsset.h">
+      <Filter>Assets\DataArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayRow.h">
+      <Filter>Assets\DataArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayTypedRows.h">
+      <Filter>Assets\DataArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.h">
+      <Filter>Assets\DataArray</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/DataArray/DataArrayAssetDescriptor.h"
 
 #include "Engine/Types/EnumsUtils.h"
 #include "ProjectManager.h"

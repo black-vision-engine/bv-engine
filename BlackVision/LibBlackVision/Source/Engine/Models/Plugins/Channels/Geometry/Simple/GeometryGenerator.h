@@ -22,7 +22,9 @@ public:
     };
 
     virtual Type    GetType                 () const = 0;
-
+    
+    
+    virtual ~IGeometryGenerator             () {}
 };
 
 

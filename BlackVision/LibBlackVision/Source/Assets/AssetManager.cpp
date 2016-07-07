@@ -148,6 +148,7 @@ void AssetManager::RegisterBasicLoaders()
     AssetManager::GetInstance().RegisterLoader( AnimationAssetDesc::UID(),	std::make_shared< AnimationLoader >() );
     AssetManager::GetInstance().RegisterLoader( AVAssetDesc::UID(),	std::make_shared< AVAssetLoader >() );
     AssetManager::GetInstance().RegisterLoader( MeshAssetDesc::UID(),	std::make_shared< MeshLoader >() );
+    AssetManager::GetInstance().RegisterLoader( DataArrayAssetDescriptor::UID(),	std::make_shared< DataArrayLoader >() );
 }
 
 

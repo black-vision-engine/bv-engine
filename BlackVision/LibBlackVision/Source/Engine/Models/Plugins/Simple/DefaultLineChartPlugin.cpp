@@ -1,13 +1,19 @@
 #include "stdafx.h"
 #include "DefaultLineChartPlugin.h"
 
+#include "Assets/DataArray/DataArrayAssetDescriptor.h"
+#include "Assets/DataArray/DataArrayAsset.h"
+
+#include "Assets/DefaultAssets.h"
 
 
 namespace bv { namespace model {
 
 
-const std::string        DefaultLineChartPlugin::PARAMS::WIDTH             = "width";
+const std::string       DefaultLineChartPlugin::PARAMS::WIDTH   = "width";
 
+
+const std::string       DefaultLineChartPlugin::AssetName       = "ChartData";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -55,33 +61,57 @@ std::string             DefaultLineChartPluginDesc::UID                       ()
 namespace DefaultLineChartPluginGenerator
 {
 
-    class MainGenerator : public IGeometryNormalsUVsGenerator
+    bool        CompareVec2 ( glm::vec2 & first, glm::vec2 & second )
+    {
+        if( first.x < second.x )
+            return true;
+        return false;
+    }
+
+
+    class MainGenerator : public IGeometryOnlyGenerator
     {
     protected:
+
+        DataArrayAssetConstPtr  m_data;
+
     public:
+        MainGenerator( DataArrayAssetConstPtr data )
+            :   m_data( data )
+        {}
 
-        virtual void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
+        virtual ~MainGenerator()
         {
-            verts->AddAttribute( glm::vec3( -1.0, 0.0, 0.0 ) );
-            verts->AddAttribute( glm::vec3( -0.9, 0.8, 0.0 ) );
+            m_data = nullptr;
+        }
 
-            verts->AddAttribute( glm::vec3( -0.9, 0.8, 0.0 ) );
-            verts->AddAttribute( glm::vec3( -0.2, 0.5, 0.0 ) );
 
-            verts->AddAttribute( glm::vec3( -0.2, 0.5, 0.0 ) );
-            verts->AddAttribute( glm::vec3( 0.2, 0.0, 0.0 ) );
-
-            verts->AddAttribute( glm::vec3( 0.2, 0.0, 0.0 ) );
-            verts->AddAttribute( glm::vec3( 0.5, 1.0, 0.0 ) );
-
-            verts->AddAttribute( glm::vec3( 0.5, 1.0, 0.0 ) );
-            verts->AddAttribute( glm::vec3( 1.0, 0.1, 0.0 ) );
-
-            for( unsigned int i = 0; i < verts->GetNumEntries(); ++i )
+        virtual void GenerateGeometry( Float3AttributeChannelPtr verts ) override
+        {
+            if( !m_data->IsEmpty() )
             {
-                normals->AddAttribute( glm::vec3( 0.0, 0.0, 0.0 ) );
-                uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+                auto plot = m_data->GetRow( "Plot" );
+                if( plot->GetType() == ModelParamType::MPT_VEC2 )
+                {
+                    auto typedPlot = static_cast< DataArrayRow< glm::vec2 >* >( plot );
+
+                    // Consciously coping vector.
+                    auto plotPoints = typedPlot->GetArray();
+                    std::sort( plotPoints.begin(), plotPoints.end(), CompareVec2 );
+
+                    for( int i = 0; i < plotPoints.size() - 1; i++ )
+                    {
+                        verts->AddAttribute( glm::vec3( plotPoints[ i ], 0.0f ) );
+                        verts->AddAttribute( glm::vec3( plotPoints[ i + 1 ], 0.0f ) );
+                    }
+
+                    return;
+                }
             }
+
+            // Engine demands non empty channel.
+            verts->AddAttribute( glm::vec3( 0.0f, 0.0f, 0.0f ) );
+            verts->AddAttribute( glm::vec3( 0.0f, 0.0f, 0.0f ) );
         }
 
     };
@@ -94,23 +124,31 @@ namespace DefaultLineChartPluginGenerator
 // *************************************
 // 
 DefaultLineChartPlugin::DefaultLineChartPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-: DefaultGeometryPluginBase( name, uid, prev, model )
+:   DefaultGeometryPluginBase( name, uid, prev, model )
+,   m_asset( nullptr )
 {
     m_pluginParamValModel->Update();
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< DataArrayAssetDescriptor >() );
+
     InitGeometry( PrimitiveType::PT_LINES );
+
+    // LoadResource sets this bool to true. Than we call InitGeometry and update isn't necessary anymore.
+    m_assetUpdated = false;
 }
 
 // *************************************
 // 
 DefaultLineChartPlugin::~DefaultLineChartPlugin         ()
-{}
+{
+    m_asset = nullptr;
+}
 
 
 std::vector<IGeometryGeneratorPtr>	DefaultLineChartPlugin::GetGenerators()
 {
     std::vector<IGeometryGeneratorPtr> gens;
     
-    gens.push_back( std::make_shared< DefaultLineChartPluginGenerator::MainGenerator >() );
+    gens.push_back( std::make_shared< DefaultLineChartPluginGenerator::MainGenerator >( m_asset ) );
     return gens;
 }
 
@@ -127,8 +165,35 @@ bool                                DefaultLineChartPlugin::NeedsTopologyUpdate(
             return true;
         }
     }
+
+    if( m_assetUpdated )
+    {
+        m_assetUpdated = false;
+        return true;
+    }
+
     return false;
 }
+
+// *************************************
+// 
+bool                                DefaultLineChartPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
+{
+    auto daAssetDescr = QueryTypedDesc< DataArrayAssetDescriptorConstPtr >( assetDescr );
+    
+    if ( daAssetDescr != nullptr )
+    {
+        m_asset = LoadTypedAsset< DataArrayAsset >( daAssetDescr );
+        SetAsset( 0, LAsset( AssetName, assetDescr, nullptr ) );
+        
+        m_assetUpdated = true;
+
+        return true;
+    }
+
+    return false;
+}
+
 
 
 } // model
