@@ -857,7 +857,8 @@ void    Renderer::DeletePDR                                 ( const RenderTarget
 void    Renderer::FreeAllPDResources                        ( RenderableEntity * renderable )
 {
     assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
-        renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
+            renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES ||
+            renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
 
     // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
     auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
