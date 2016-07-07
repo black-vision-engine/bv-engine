@@ -32,7 +32,9 @@ DataArrayRowBase *      CreateRow  ( DataArrayAssetDescriptorConstPtr desc, int 
         endIdx = row.find_first_of( separator, beginIdx );
         typedRow.push_back( SerializationHelper::String2T( std::string( row.begin() + beginIdx, row.begin() + endIdx ), std::numeric_limits< RowType >::quiet_NaN() ) );
 
-        beginIdx = endIdx;
+        // Omit separator.
+        beginIdx = endIdx + 1;
+        endIdx = beginIdx;
     }
 
     return new DataArrayRow< RowType >( names[ idx ], std::move( typedRow ) );
