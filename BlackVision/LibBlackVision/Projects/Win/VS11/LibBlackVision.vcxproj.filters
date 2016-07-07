@@ -1660,6 +1660,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultLineChartPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3937,6 +3940,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioEntity.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultLineChartPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

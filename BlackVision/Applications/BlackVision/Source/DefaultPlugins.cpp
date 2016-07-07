@@ -41,6 +41,7 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultBlendTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultFadePlugin.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultExtrudePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultLineChartPlugin.h"
 
 
 namespace bv { namespace model {
@@ -90,6 +91,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultBlendTexturePluginDesc() );
     descriptors.push_back( new DefaultFadePluginDesc() );
     descriptors.push_back( new DefaultExtrudePluginDesc() );
+    descriptors.push_back( new DefaultLineChartPluginDesc() );
 
     for( auto descr : descriptors )
     {

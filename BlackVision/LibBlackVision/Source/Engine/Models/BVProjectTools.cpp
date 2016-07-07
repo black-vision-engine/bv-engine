@@ -109,7 +109,7 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
     if( type == PrimitiveType::PT_TRIANGLE_STRIP )
         return new TriangleStrip( radasvb, nullptr, nullptr );
     else if( type == PrimitiveType::PT_LINES )
-        return new Lines( radasvb, nullptr );
+        return new Lines( radasvb, nullptr, nullptr );
     else
     {
         assert( false );
@@ -313,6 +313,16 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
                 if( radasvb )
                 {
                     renderable = new Triangles( radasvb, modelNode->GetBoundingVolume().get(), effect );
+                }
+                break;
+            }
+            case PrimitiveType::PT_LINES:
+            {
+                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip( modelNode, finalizer );
+
+                if( radasvb )
+                {
+                    renderable = new Lines( radasvb, modelNode->GetBoundingVolume().get(), effect );
                 }
                 break;
             }

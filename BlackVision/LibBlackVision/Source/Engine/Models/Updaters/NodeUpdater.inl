@@ -161,7 +161,8 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 {
     //FIXME: implement for other types of geometry as well
     assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
-        renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
+            renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES ||
+            renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
 
     //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;

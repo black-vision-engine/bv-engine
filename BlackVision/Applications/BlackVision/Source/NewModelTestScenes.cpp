@@ -592,6 +592,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::ExtrudeTestScene( timeline );
     }
+    else if( scene == "LINE_CHART_TEST_SCENE" )
+    {
+        node = TestScenesFactory::LineChartTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1994,7 +1998,8 @@ model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( mod
     return root;
 }
 
-
+// ***********************
+//
 model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
@@ -2015,6 +2020,20 @@ model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( mod
     //auto rectPlugin = root->GetPlugin( "rectangle" );
     //model::SetParameter( rectPlugin->GetParameter( "width" ), 0.0, 3.0f );
     //model::SetParameter( rectPlugin->GetParameter( "height" ), 0.0, 2.0f );
+
+    return root;
+}
+
+// ***********************
+//
+model::BasicNodePtr     TestScenesFactory::LineChartTestScene                ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    // Root node
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_LINE_CHART", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
 
     return root;
 }

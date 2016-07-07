@@ -69,6 +69,7 @@ void                                DefaultGeometryProcessorBase::Update        
         if( iter->second->StateChanged() )
         {
             ProcessVertexAttributesChannel();
+            break;
         }
     }
 }
