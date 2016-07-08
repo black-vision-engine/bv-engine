@@ -504,6 +504,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.cpp" />
@@ -989,6 +990,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\IRevertable.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.h" />

@@ -328,6 +328,9 @@
     <Filter Include="Assets\DataArray">
       <UniqueIdentifier>{5d32f185-ad80-48ea-9a8a-5e09c272806f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\UndoRedo">
+      <UniqueIdentifier>{dbc18cb6-546e-4347-ba0b-7674605fc186}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1674,6 +1677,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.cpp">
       <Filter>Assets\DataArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp">
+      <Filter>Engine\Models\UndoRedo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3970,6 +3976,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.h">
       <Filter>Assets\DataArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\IRevertable.h">
+      <Filter>Engine\Models\UndoRedo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h">
+      <Filter>Engine\Models\UndoRedo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
