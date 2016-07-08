@@ -151,7 +151,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
-        result = editor->DeleteChildNode( sceneName, nodePath );
+        result = editor->DeleteChildNode( sceneName, nodePath, true );
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
     {
@@ -206,7 +206,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         
-        result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
+        result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, true );
     }
     else if( command == NodeStructureEvent::Command::CopyNode )
     {
@@ -223,7 +223,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
 
-        auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
+        auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath, true );
         if( copyPtr == nullptr )
             result = false;
     }

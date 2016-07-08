@@ -90,7 +90,7 @@ public:
 
     /* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName, bool enableUndo = false );
-    bool                    DeleteChildNode     ( const std::string & sceneName, const std::string & nodePath );
+    bool                    DeleteChildNode     ( const std::string & sceneName, const std::string & nodePath, bool enableUndo = false );
 
     /** Insert node at the end. */
     bool                    AttachChildNode     ( const std::string & sceneName, const std::string & parentPath );
@@ -98,9 +98,9 @@ public:
     bool                    AttachChildNode     ( const std::string & sceneName, const std::string & parentPath, UInt32 posIdx );
     bool                    DetachChildNode     ( const std::string & sceneName, const std::string & nodeToDetachPath );
     
-    model::BasicNodePtr		AddNodeCopy			( const std::string & destSceneName, const std::string & destParentPath, const std::string & srcSceneName, const std::string & srcNodePath );
+    model::BasicNodePtr		AddNodeCopy			( const std::string & destSceneName, const std::string & destParentPath, const std::string & srcSceneName, const std::string & srcNodePath, bool enableUndo = false );
     
-    bool					MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath );
+    bool					MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, bool enableUndo = false );
 
     bool					SetNodeVisible		( const std::string & sceneName, const std::string & nodePath, bool visible );
     
@@ -110,7 +110,7 @@ public:
 
     /* objects */
     bool                    AddChildNode        ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode, bool enableUndo = false );
-    bool                    DeleteChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
+    bool                    DeleteChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode, bool enableUndo = false );
     
     /** Insert node at the end. */
     bool                    AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent );
@@ -121,9 +121,9 @@ public:
     /** Add a copy of node to the destParentNode from the given scene.
     @param[ destParentNode ] If nullptr, set node copy as root node of the scene.
     @return Returns copied node. */
-    model::BasicNodePtr		AddNodeCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode );
+    model::BasicNodePtr		AddNodeCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, bool enableUndo = false );
     
-    bool					MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, model::BasicNodePtr srcNode );
+    bool					MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, model::BasicNodePtr srcNode, bool enableUndo = false );
 
     bool					SetNodeVisible		( model::IModelNodePtr node, bool visible );
 
@@ -245,6 +245,10 @@ private:
     void                    SetSceneRootNode    ( model::SceneModelPtr modelScene, model::IModelNodePtr rootNode );
     void                    DeleteSceneRootNode ( model::SceneModelPtr modelScene );
 
+
+    /* Undo/Redo */
+
+    void                    AddMoveOperation        ( model::SceneModelPtr scene, model::IModelNodePtr srcParent, model::IModelNodePtr destParent, model::IModelNodePtr movedNode, UInt32 destIdx );
 
     /* renaming helpers */
     std::string             PrefixSceneName		( const std::string & name ) const;

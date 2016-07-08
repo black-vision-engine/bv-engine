@@ -36,6 +36,8 @@
 
 // Undo Redo operations
 #include "Engine/Models/UndoRedo/Nodes/AddNodeOperation.h"
+#include "Engine/Models/UndoRedo/Nodes/MoveNodeOperation.h"
+#include "Engine/Models/UndoRedo/Nodes/RemoveNodeOperation.h"
 
 #include <memory>
 
@@ -405,13 +407,13 @@ bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, c
 
 // *******************************
 //
-bool    BVProjectEditor::DeleteChildNode      ( const std::string & sceneName, const std::string & nodePath )
+bool    BVProjectEditor::DeleteChildNode      ( const std::string & sceneName, const std::string & nodePath, bool enableUndo )
 { 
     auto parentNode =  GetParentNode( sceneName, nodePath );
     auto node =  GetNode( sceneName, nodePath );
     auto scene = m_project->GetModelScene( sceneName );
 
-    return DeleteChildNode( scene, parentNode, node );
+    return DeleteChildNode( scene, parentNode, node, enableUndo );
 }
 
 // *******************************
@@ -444,34 +446,26 @@ bool                    BVProjectEditor::DetachChildNode     ( const std::string
 
 // *******************************
 //
-model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & destSceneName, const std::string & destParentPath, const std::string & srcSceneName, const std::string & srcNodePath )
+model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & destSceneName, const std::string & destParentPath, const std::string & srcSceneName, const std::string & srcNodePath, bool enableUndo )
 {
     auto destParent = QueryTyped( GetNode( destSceneName, destParentPath ) );
     auto srcNode = QueryTyped( GetNode( srcSceneName, srcNodePath ) );
     auto destScene = m_project->GetModelScene( destSceneName );
     auto srcScene = m_project->GetModelScene( srcSceneName );
-    return AddNodeCopy( destScene, destParent, srcScene, srcNode );
+    return AddNodeCopy( destScene, destParent, srcScene, srcNode, enableUndo );
 }
 
 // *******************************
 //
-bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath )
+bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, bool enableUndo )
 {
-    if( srcSceneName == destSceneName )
-    {
-        if( DetachChildNode( srcSceneName, srcNodePath ) )
-            return AttachChildNode( destSceneName, destNodePath, destIdx );
-    }
-    else
-    {
-        if( AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath ) )
-        {
-            DeleteChildNode( srcSceneName, srcNodePath );
-            DetachChildNode( destSceneName, destNodePath );
-            return AttachChildNode( destSceneName, destNodePath, destIdx );
-        }
-    }
-    return false;
+    auto destParent = QueryTyped( GetNode( destSceneName, destNodePath ) );
+    auto srcNode = QueryTyped( GetNode( srcSceneName, srcNodePath ) );
+    auto destScene = m_project->GetModelScene( destSceneName );
+    auto srcScene = m_project->GetModelScene( srcSceneName );
+    auto srcParent = QueryTyped( GetParentNode( srcSceneName, srcNodePath ) );
+
+    return MoveNode( destScene, destParent, destIdx, srcScene, srcParent, srcNode, enableUndo );
 }
 
 // *******************************
@@ -506,10 +500,14 @@ bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, mode
 
 // *******************************
 //
-bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr node )
+bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr node, bool enableUndo )
 {    
     if( scene && node )
     {
+        if( enableUndo )
+            scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeOperation >( new RemoveNodeOperation( scene, parentNode, node ) ) );
+
+
         if( node == scene->GetRootNode() )
         {
             DeleteSceneRootNode( scene );
@@ -612,7 +610,7 @@ bool            BVProjectEditor::RenameNode					( const std::string & sceneName,
 
 // *******************************
 //
-model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode )
+model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, bool enableUndo )
 {
     if( !srcScene || !destScene || !srcNode )
     {
@@ -630,14 +628,26 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
         CloneViaSerialization::UpdateTimelines( copy.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName(), true );
     }
 
-    AddChildNode( destScene, destParentNode, copy );
+    AddChildNode( destScene, destParentNode, copy, enableUndo );
 
     return copy;
 }
 
+// ***********************
+//
+void                    BVProjectEditor::AddMoveOperation        ( model::SceneModelPtr srcScene, model::IModelNodePtr srcParentNode, model::IModelNodePtr destParentNode, model::IModelNodePtr srcNode, UInt32 destIdx )
+{
+    UInt32 srcIdx = model::ModelState::GetInstance().GetNodeIndex( std::static_pointer_cast< model::IModelNode >( srcNode ).get() );
+    MoveNodeOperation * operation = new MoveNodeOperation( srcScene, srcParentNode, destParentNode, srcNode, srcIdx, destIdx );
+    std::unique_ptr< MoveNodeOperation > operationPtr = std::unique_ptr< MoveNodeOperation >( operation );
+
+    srcScene->GetHistory().AddOperation( std::move( operationPtr ) );
+}
+
+
 // *******************************
 //
-bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, model::BasicNodePtr srcNode )
+bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, model::BasicNodePtr srcNode, bool enableUndo )
 {
     if( !srcScene || !destScene )
     {
@@ -648,16 +658,35 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
     {
         if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
         {
-            return AttachChildNode( destScene, destParentNode, destIdx );
+            bool result = AttachChildNode( destScene, destParentNode, destIdx );
+
+            // Undo/Redo
+            if( result && enableUndo )
+            {
+                AddMoveOperation( srcScene, srcParentNode, destParentNode, srcNode, destIdx );
+            }
+
+            return result;
         }
     }
     else
     {
-        if( AddNodeCopy( destScene, destParentNode, srcScene, srcNode ) )
+        // When copying nodes between scenes, Undo/Redo is devided in 2 parts. First - adding node to scene
+        // and second - moving node to proper index.
+        // In source scene node is simply removed.
+        if( AddNodeCopy( destScene, destParentNode, srcScene, srcNode, enableUndo ) )
         {
-            DeleteChildNode( srcScene, srcParentNode, srcNode );
+            DeleteChildNode( srcScene, srcParentNode, srcNode, enableUndo );
             DetachChildNode( destScene, destParentNode, srcNode );
-            return AttachChildNode( destScene, destParentNode, destIdx );
+            bool result =  AttachChildNode( destScene, destParentNode, destIdx );
+
+            // Undo/Redo
+            if( result && enableUndo )
+            {
+                AddMoveOperation( srcScene, srcParentNode, destParentNode, srcNode, destIdx );
+            }
+
+            return result;
         }
     }
 

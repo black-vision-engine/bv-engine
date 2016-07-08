@@ -18,7 +18,7 @@ DEFINE_PTR_TYPE( IModelNode );
 } // model
 
 
-
+// Add node and copy node operation.
 class AddNodeOperation : public IRevertable
 {
 private:
@@ -29,7 +29,7 @@ private:
 
 public:
 
-    AddNodeOperation( model::SceneModelPtr scene, model::IModelNodePtr parent, model::IModelNodePtr addedNode );
+    AddNodeOperation            ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::IModelNodePtr addedNode );
 
 
     virtual bool        Undo    ( BVProjectEditor * editor );

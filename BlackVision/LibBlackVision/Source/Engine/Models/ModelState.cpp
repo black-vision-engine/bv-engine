@@ -86,6 +86,25 @@ std::string                         ModelState::BuildIndexPath  ( const IModelNo
     return "";
 }
 
+// ***********************
+//
+UInt32                              ModelState::GetNodeIndex    ( const IModelNode * node ) const
+{
+    auto parent = static_cast< const BasicNode * >( QueryNodeParent( node ) );
+    if( parent == nullptr )
+        return std::numeric_limits< UInt32 >::max();
+
+    for( UInt32 i = 0; i < parent->GetNumChildren(); ++i )
+    {
+        if( parent->GetChild( i ) == node )
+        {
+            return i;
+        }
+    }
+
+    return std::numeric_limits< UInt32 >::max();
+}
+
 // ********************************
 //
 namespace
