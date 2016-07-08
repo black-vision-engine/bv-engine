@@ -4,6 +4,7 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
+
 namespace bv {
 
 namespace model {
@@ -88,7 +89,7 @@ public:
     std::pair< model::BasicNodePtr, Float32 >	    FindIntersectingNode    ( const std::string & sceneName, glm::vec3 rayStart, glm::vec3 rayDirection );
 
     /* paths */
-    bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
+    bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName, bool enableUndo = false );
     bool                    DeleteChildNode     ( const std::string & sceneName, const std::string & nodePath );
 
     /** Insert node at the end. */
@@ -108,7 +109,7 @@ public:
     void                    DeleteDetachedNodes ( const std::string & sceneName );
 
     /* objects */
-    bool                    AddChildNode        ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
+    bool                    AddChildNode        ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode, bool enableUndo = false );
     bool                    DeleteChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
     
     /** Insert node at the end. */
@@ -214,6 +215,11 @@ public:
     bool                    AddCamera                   ( model::SceneModelPtr scene );
     bool                    RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx );
     bool                    SetCurrentCamera            ( model::SceneModelPtr scene, UInt32 idx );
+
+/* UNDO REDO */
+
+    bool                    Undo                        ( const std::string & sceneName, UInt16 numSteps );
+    bool                    Redo                        ( const std::string & sceneName, UInt16 numSteps );
 
 private:
 

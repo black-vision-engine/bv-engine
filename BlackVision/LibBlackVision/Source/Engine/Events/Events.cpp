@@ -115,6 +115,9 @@ std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
 const EventType ParamDescriptorEvent::m_sEventType  = 0x30000028;
 std::string ParamDescriptorEvent::m_sEventName      = "ParamDescriptorEvent";
 
+const EventType UndoRedoEvent::m_sEventType         = 0x30000029;
+std::string UndoRedoEvent::m_sEventName             = "UndoRedoEvent";
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -675,6 +678,25 @@ std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMappin
 
 template<> GridLineEvent::Command String2T       ( const std::string& s, const GridLineEvent::Command& defaultVal )     { return String2Enum( GridLineEventEventCommandMapping, s, defaultVal ); }
 template<> std::string T2String                 ( const GridLineEvent::Command & t )                                   { return Enum2String( GridLineEventEventCommandMapping, t ); }
+
+
+// ========================================================================= //
+// UndoRedoEvent
+// ========================================================================= //
+const std::string UNDO_REDO_NUM_STEPS_STRING            = "Steps";
+const std::string UNDO_REDO_OPERATION_BUFF_SIZE_STRING  = "MaxOperations";
+
+
+std::pair< UndoRedoEvent::Command, const char* > UndoRedoEventCommandMapping[] = 
+{
+    std::make_pair( UndoRedoEvent::Command::Redo, "Redo" )
+    , std::make_pair( UndoRedoEvent::Command::SetOperationsBufferSize, "SetOperationsBufferSize" )
+    , std::make_pair( UndoRedoEvent::Command::Undo, "Undo" )
+    , std::make_pair( UndoRedoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> UndoRedoEvent::Command String2T       ( const std::string& s, const UndoRedoEvent::Command& defaultVal )     { return String2Enum( UndoRedoEventCommandMapping, s, defaultVal ); }
+template<> std::string T2String                  ( const UndoRedoEvent::Command & t )                                   { return Enum2String( UndoRedoEventCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -2362,6 +2384,60 @@ const std::string&  GridLineEvent::GetName() const
 //
 EventType           GridLineEvent::GetEventType() const
 {   return this->m_sEventType; }
+
+
+//******************* GridLineEvent *************
+
+// *************************************
+//
+void                UndoRedoEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( UndoCommand ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+    ser.SetAttribute( SerializationHelper::UNDO_REDO_NUM_STEPS_STRING, SerializationHelper::T2String( (int)NumSteps ) );
+    ser.SetAttribute( SerializationHelper::UNDO_REDO_OPERATION_BUFF_SIZE_STRING, SerializationHelper::T2String( (int)Size ) );
+}
+
+// *************************************
+//
+IEventPtr           UndoRedoEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        UndoRedoEventPtr newEvent               = std::make_shared<UndoRedoEvent>();
+        newEvent->SceneName                     = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->NumSteps                      = (UInt16)SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::UNDO_REDO_NUM_STEPS_STRING ), 0 );
+        newEvent->Size                          = (UInt16)SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::UNDO_REDO_OPERATION_BUFF_SIZE_STRING ), 0 );
+        newEvent->UndoCommand                   = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), UndoRedoEvent::Command::Fail );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr           UndoRedoEvent::Clone             () const
+{   return IEventPtr( new UndoRedoEvent( *this ) );  }
+
+// *************************************
+//
+EventType           UndoRedoEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        UndoRedoEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  UndoRedoEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           UndoRedoEvent::GetEventType() const
+{   return this->m_sEventType; }
+
 
 
 

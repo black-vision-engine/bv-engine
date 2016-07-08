@@ -131,7 +131,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
     if( command == NodeStructureEvent::Command::AddNode )
     {
-        result = editor->AddChildNode( sceneName, nodePath, newNodeName );
+        result = editor->AddChildNode( sceneName, nodePath, newNodeName, true );
         
         bool AddTransformPlugin = false;
         if( request && request->GetAttribute( "AddTransformPlugin" ) == "true" )

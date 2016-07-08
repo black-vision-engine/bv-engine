@@ -10,6 +10,8 @@
 #include "Engine/Models/Cameras/CamerasLogic.h"
 #include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
+#include "Engine/Models/UndoRedo/OperationHistory.h"
+
 
 namespace bv { namespace model {
 
@@ -34,6 +36,8 @@ private:
     SceneVariables                  m_sceneVariables;       // Variables can be queried by editor.
     CamerasLogic                    m_camerasLogic;
     EndUserParamsLogic              m_endUserParams;
+    
+    OperationHistory                m_history;
 
     std::vector< IModelLightPtr >   m_lights; //could be unique_ptr but serialization doesn't support that
 
@@ -68,6 +72,7 @@ public:
     GridLinesLogic &        GetGridLinesLogic   ();
     CamerasLogic &          GetCamerasLogic     ();
     EndUserParamsLogic &    GetEndUserParams    ();
+    OperationHistory &      GetHistory          ();
 
     static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };

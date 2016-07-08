@@ -37,6 +37,14 @@ void        OperationHistory::AddOperation        ( IRevertableUPtr && operation
 
 // ***********************
 //
+void        OperationHistory::SetHistoryLength    ( UInt16 size )
+{
+    assert( !"Implement me" );
+    m_historyStack.reserve( size );
+}
+
+// ***********************
+//
 bool        OperationHistory::Undo                ( BVProjectEditor * editor, UInt16 numSteps )
 {
     bool result = true;

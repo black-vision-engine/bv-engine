@@ -79,9 +79,11 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::GridLines ), GridLineEvent::Type() );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_queryEvents, &QueryHandlers::Info ), InfoEvent::Type() );
+
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::EngineStateHandler ), EngineStateEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::MouseInteraction ), MouseEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::ConfigManagment ), ConfigEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::UndoRedoEvent ), UndoRedoEvent::Type() );
 
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_assetEvents, &AssetHandlers::CacheHandler ), AssetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_assetEvents, &AssetHandlers::LoadAsset ), LoadAssetEvent::Type() );

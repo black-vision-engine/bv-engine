@@ -28,6 +28,8 @@ public:
 
     bool                Undo                ( BVProjectEditor * editor, UInt16 numSteps );
     bool                Redo                ( BVProjectEditor * editor, UInt16 numSteps );
+
+    void                SetHistoryLength    ( UInt16 size );
 };
 
 

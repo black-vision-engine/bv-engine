@@ -288,6 +288,13 @@ EndUserParamsLogic &        SceneModel::GetEndUserParams    ()
     return m_endUserParams;
 }
 
+// ***********************
+//
+OperationHistory &          SceneModel::GetHistory          ()
+{
+    return m_history;
+}
+
 // *******************************
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )

@@ -504,6 +504,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.cpp" />
@@ -991,6 +994,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\IRevertable.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.h" />

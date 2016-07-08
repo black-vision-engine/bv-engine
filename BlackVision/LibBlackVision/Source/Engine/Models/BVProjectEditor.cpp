@@ -34,6 +34,12 @@
 #include "Engine/Models/BoundingVolume.h"
 
 
+// Undo Redo operations
+#include "Engine/Models/UndoRedo/Nodes/AddNodeOperation.h"
+
+#include <memory>
+
+
 
 namespace bv {
 
@@ -388,13 +394,13 @@ void    BVProjectEditor::DeleteSceneRootNode	    ( model::SceneModelPtr modelSce
 
 // *******************************
 //
-bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName )
+bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName, bool enableUndo )
 {
     auto newNode = model::BasicNode::Create( newNodeName, nullptr );
     auto parentNode = GetNode( sceneName, parentPath );
     auto scene = m_project->GetModelScene( sceneName );
 
-    return AddChildNode( scene, parentNode, newNode );
+    return AddChildNode( scene, parentNode, newNode, enableUndo );
 }
 
 // *******************************
@@ -470,12 +476,15 @@ bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const 
 
 // *******************************
 //
-bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
+bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode, bool enableUndo )
 {
     if( !scene || !childNode )
     {
         return false;
     }
+
+    if( enableUndo )
+        scene->GetHistory().AddOperation( std::unique_ptr< AddNodeOperation >( new AddNodeOperation( scene, parentNode, childNode ) ) );
 
     if( parentNode )
     {
@@ -1108,6 +1117,27 @@ bool            BVProjectEditor::SetCurrentCamera            ( model::SceneModel
     return false;
 }
 
+// ***********************
+//
+bool            BVProjectEditor::Undo                        ( const std::string & sceneName, UInt16 numSteps )
+{
+    auto modelScene = GetModelScene( sceneName );
+    if( modelScene )
+        return modelScene->GetHistory().Undo( this, numSteps );
+    else
+        return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::Redo                        ( const std::string & sceneName, UInt16 numSteps  )
+{
+    auto modelScene = GetModelScene( sceneName );
+    if( modelScene )
+        return modelScene->GetHistory().Redo( this, numSteps );
+    else
+        return false;
+}
 
 // *******************************
 //

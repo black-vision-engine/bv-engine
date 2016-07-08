@@ -331,6 +331,12 @@
     <Filter Include="Engine\Models\UndoRedo">
       <UniqueIdentifier>{dbc18cb6-546e-4347-ba0b-7674605fc186}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\UndoRedo\Nodes">
+      <UniqueIdentifier>{984470cd-42c7-456c-a709-fefb57ba1d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\UndoRedo\Plugins">
+      <UniqueIdentifier>{87e38c20-b06c-4d2b-b2c5-a37a39b12637}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1680,6 +1686,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp">
       <Filter>Engine\Models\UndoRedo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3982,6 +3997,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h">
       <Filter>Engine\Models\UndoRedo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.h">
+      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.h">
+      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.h">
+      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

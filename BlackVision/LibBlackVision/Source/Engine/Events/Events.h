@@ -1311,6 +1311,50 @@ DEFINE_PTR_TYPE( GridLineEvent )
 
 
 
+// ************************************* UndoRedoEvent *************************************
+class UndoRedoEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        Undo,
+        Redo,
+        SetOperationsBufferSize,
+
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+
+    Command         UndoCommand;
+    std::string     SceneName;
+    UInt16          NumSteps;             
+    UInt16          Size;
+
+public:
+
+    explicit                        UndoRedoEvent       () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> UndoRedoEvent::Command       SerializationHelper::String2T  ( const std::string& s, const UndoRedoEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const UndoRedoEvent::Command & t );
+
+DEFINE_PTR_TYPE( UndoRedoEvent )
+
+
+
 // ************************************* HightmapEvent *************************************
 class HightmapEvent : public RemoteEvent
 {

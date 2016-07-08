@@ -239,4 +239,46 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     SendResponse( ser, configEvent->SocketID, configEvent->EventID );
 }
 
+// ***********************
+//
+void    EngineStateHandlers::UndoRedoEvent            ( IEventPtr evt )
+{
+    if( evt->GetEventType() != UndoRedoEvent::Type() )
+        return;
+
+    bv::UndoRedoEventPtr undoEvent  = std::static_pointer_cast< bv::UndoRedoEvent >( evt );
+    auto command        = undoEvent->UndoCommand;
+    auto & scene        = undoEvent->SceneName;
+    auto numSteps       = undoEvent->NumSteps;
+    auto buffSize       = undoEvent->Size;
+
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    if( command == UndoRedoEvent::Command::Undo )
+    {
+        bool result = editor->Undo( scene, numSteps );
+        SendSimpleResponse( command, undoEvent->EventID, undoEvent->SocketID, result );
+    }
+    else if( command == UndoRedoEvent::Command::Redo )
+    {
+        bool result = editor->Redo( scene, numSteps );
+        SendSimpleResponse( command, undoEvent->EventID, undoEvent->SocketID, result );
+    }
+    else if( command == UndoRedoEvent::Command::SetOperationsBufferSize )
+    {
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+        auto modelScene = editor->GetModelScene( scene );
+        modelScene->GetHistory().SetHistoryLength( buffSize );
+
+        SendSimpleResponse( command, undoEvent->EventID, undoEvent->SocketID, true );
+    }
+    else
+    {
+        SendSimpleErrorResponse( command, undoEvent->EventID, undoEvent->SocketID, "Unknown command" );
+    }
+
+}
+
 } //bv

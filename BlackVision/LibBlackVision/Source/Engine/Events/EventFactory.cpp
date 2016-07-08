@@ -38,6 +38,7 @@ EventFactory::EventFactory()
     RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
     RegisterEvent( GridLineEvent::Name(), GridLineEvent::Create );
     RegisterEvent( ParamDescriptorEvent::Name(), ParamDescriptorEvent::Create );
+    RegisterEvent( UndoRedoEvent::Name(), UndoRedoEvent::Create );
 }
 
 // ***********************
