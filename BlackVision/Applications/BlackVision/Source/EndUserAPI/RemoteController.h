@@ -5,6 +5,7 @@
 #include "Tools/Logger/LoggerEnums.h"
 
 #include <unordered_map>
+#include <string>
 
 namespace bv
 {
@@ -24,6 +25,8 @@ public:
     virtual bool                        InitializeServer    ( int port ) = 0;
     virtual void                        DeinitializeServer  () = 0;
     virtual void                        SendResponse        ( const IEventPtr response ) = 0;
+
+    virtual void                        InitializeDebugLayer( const std::string & resultPath ) = 0;
 
 protected:
 
