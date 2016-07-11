@@ -337,6 +337,9 @@
     <Filter Include="Engine\Models\UndoRedo\Plugins">
       <UniqueIdentifier>{87e38c20-b06c-4d2b-b2c5-a37a39b12637}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\UndoRedo\Timelines">
+      <UniqueIdentifier>{33ef9e14-422b-46ea-ae62-c3d31d5c8383}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1701,6 +1704,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp">
       <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4018,6 +4027,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.h">
       <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.h">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.h">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

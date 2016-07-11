@@ -174,25 +174,32 @@ void				ModelNodeEditor::ReplaceTimeline	( const model::ITimeEvaluatorPtr & oldT
         }
     }
 
-    //replace timeevaluator in plugin model
-    auto plugins = m_node->GetPluginList();
-    for( UInt32 i = 0; i < plugins->NumPlugins(); ++i )
+    for( UInt32 i = 0; i < m_node->GetNumChildren(); ++i )
     {
-        auto pluginModel = plugins->GetPlugin( i )->GetPluginParamValModel();
-        if( pluginModel )
+        m_node->GetChild( i )->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
+    }
+}
+
+// ***********************
+//
+bool                ModelNodeEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
+{
+    for( auto & param : m_node->GetParameters() )
+    {
+        if( param->GetTimeEvaluator() == timeEval )
         {
-            if( pluginModel->GetTimeEvaluator() == oldTimeline )
-            {
-                //FIXME: cast
-                std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( newTimeline );
-            }
+            return true;
         }
     }
 
     for( UInt32 i = 0; i < m_node->GetNumChildren(); ++i )
     {
-        m_node->GetChild( i )->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
+        bool result = m_node->GetChild( i )->GetModelNodeEditor()->IsTimelineUsed( timeEval );
+        if( result )
+            return true;
     }
+
+    return false;
 }
 
 } //model

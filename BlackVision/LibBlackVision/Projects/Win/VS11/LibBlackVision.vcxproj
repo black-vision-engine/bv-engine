@@ -510,6 +510,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.cpp" />
@@ -1002,6 +1004,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.h" />

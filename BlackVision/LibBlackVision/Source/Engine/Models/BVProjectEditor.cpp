@@ -40,6 +40,8 @@
 #include "Engine/Models/UndoRedo/Nodes/RemoveNodeOperation.h"
 #include "Engine/Models/UndoRedo/Plugins/AddNodeLogicOperation.h"
 #include "Engine/Models/UndoRedo/Plugins/RemoveNodeLogicOperation.h"
+#include "Engine/Models/UndoRedo/Timelines/AssignTimelineOperation.h"
+#include "Engine/Models/UndoRedo/Timelines/AddTimelineOperation.h"
 
 #include <memory>
 
@@ -395,6 +397,7 @@ void    BVProjectEditor::DeleteSceneRootNode	    ( model::SceneModelPtr modelSce
     auto scene = m_scenesMapping[ modelScene.get() ];
     scene->SetRoot( nullptr );
 }
+
 
 // *******************************
 //
@@ -1321,22 +1324,30 @@ bool						BVProjectEditor::LoadGlobalEffectAsset( const std::string & sceneName,
 
 // *******************************
 //
-bool						BVProjectEditor::AddTimeline			( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType )
+bool						BVProjectEditor::AddTimeline			( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType, bool enableUndo )
 {
     auto timeline = model::TimelineHelper::CreateTimeEvaluator( timelineName, timelineType );
     auto parentTimeline = GetTimeEvaluator( parentTimelinePath );
 
-    return AddTimeline( parentTimeline, timeline );
+    return AddTimeline( parentTimeline, timeline, enableUndo );
 }
 
 // *******************************
 //
-bool						BVProjectEditor::AddTimeline			( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline )
+bool						BVProjectEditor::AddTimeline			( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline, bool enableUndo )
 {
     if( timeline && parentTimeline && 
         !parentTimeline->GetChild( timeline->GetName() ) ) //FIXME: don't allow duplicated timeline names
     {
         parentTimeline->AddChild( timeline );
+
+        if( enableUndo )
+        {
+            auto sceneName = model::TimelineHelper::GetSceneName( timeline.get() );
+            auto scene = GetModelScene( sceneName );
+            scene->GetHistory().AddOperation( std::unique_ptr< AddTimelineOperation >( new AddTimelineOperation( sceneName, parentTimeline, timeline ) ) );
+        }
+
         return true;
     }
 
@@ -1348,7 +1359,7 @@ bool						BVProjectEditor::AddTimeline			( model::ITimeEvaluatorPtr parentTimeli
 bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
 {
     auto timeEval = GetTimeEvaluator( timelinePath );
-    if( IsTimelineEditable( timeEval.get() ) && timeEval.use_count() == 2 ) //FIXME: maybe it's more safe to go through node tree..
+    if( IsTimelineEditable( timeEval.get() ) && !IsTimelineUsed( timeEval ) )
     {
         auto sceneName = model::TimelineHelper::GetSceneName( timeEval.get() );
         return model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, sceneName );
@@ -1384,12 +1395,88 @@ bool						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePat
             return false;
         }
         
-        scene->GetRootNode()->GetModelNodeEditor()->ReplaceTimeline( timeEval, newTimeEval );
+        ReplaceTimeline( scene, timeEval, newTimeEval );
         auto success = model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, sceneName );
     
-        assert( timeEval.use_count() == 1 );
+        assert( !IsTimelineUsed( timeEval ) );
         
         return success;
+    }
+
+    return false;
+}
+
+// ***********************
+//
+void				        BVProjectEditor::ReplaceTimeline        ( model::SceneModelPtr scene, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
+{
+    // Replace timeline in plugin, node logic and effect parameters.
+    scene->GetRootNode()->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
+
+    // Replace timeline in lights parameters.
+    for( int i = 0; i < scene->NumLights(); ++i )
+    {
+        auto light = scene->GetLight( i );
+        auto & lightParams = light->GetParameters();
+        for( auto lightParam : lightParams )
+        {
+            if( lightParam->GetTimeEvaluator() == oldTimeline )
+            {
+                lightParam->SetTimeEvaluator( newTimeline );
+            }
+        }
+    }
+
+    auto & cameraLogic = scene->GetCamerasLogic();
+    for( int i = 0; i < cameraLogic.GetNumCameras(); i++ )
+    {
+        auto & cameraParams = cameraLogic.GetCamera( i )->GetParameters();
+        for( auto cameraParam : cameraParams )
+        {
+            if( cameraParam->GetTimeEvaluator() == oldTimeline )
+            {
+                cameraParam->SetTimeEvaluator( newTimeline );
+            }
+        }
+    }
+
+}
+
+
+// ***********************
+//
+bool    BVProjectEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
+{
+    auto sceneName = model::TimelineHelper::GetSceneName( timeEval.get() );
+    auto scene = GetModelScene( sceneName );
+
+    if( scene->GetRootNode()->GetModelNodeEditor()->IsTimelineUsed( timeEval ) )
+        return true;
+
+    for( int i = 0; i < scene->NumLights(); ++i )
+    {
+        auto light = scene->GetLight( i );
+        auto & lightParams = light->GetParameters();
+        for( auto lightParam : lightParams )
+        {
+            if( lightParam->GetTimeEvaluator() == timeEval )
+            {
+                return true;
+            }
+        }
+    }
+
+    auto & cameraLogic = scene->GetCamerasLogic();
+    for( int i = 0; i < cameraLogic.GetNumCameras(); i++ )
+    {
+        auto & cameraParams = cameraLogic.GetCamera( i )->GetParameters();
+        for( auto cameraParam : cameraParams )
+        {
+            if( cameraParam->GetTimeEvaluator() == timeEval )
+            {
+                return true;
+            }
+        }
     }
 
     return false;
@@ -1411,6 +1498,38 @@ bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, 
     }
 
     return false;
+}
+
+// ***********************
+//
+bool                        BVProjectEditor::AssignTimeline              ( const std::string & sceneName, model::IParameterPtr param, const std::string & timeline, bool enableUndo )
+{
+    auto timeEval = GetTimeEvaluator( timeline );
+    return AssignTimeline( sceneName, param, timeEval, enableUndo );
+}
+
+// ***********************
+//
+bool                        BVProjectEditor::AssignTimeline              ( const std::string & sceneName, model::IParameterPtr param, model::ITimeEvaluatorPtr timeEval, bool enableUndo )
+{
+    // Don't allow setting scene timeline or timeline from other scene
+    if( !timeEval
+        || timeEval->GetName() == sceneName 
+        || model::TimelineHelper::GetSceneName( timeEval.get() ) != sceneName )
+    {
+        return false;
+    }
+
+    auto prevTimeEval = param->GetTimeEvaluator();
+    param->SetTimeEvaluator( timeEval );
+
+    if( enableUndo )
+    {
+        auto scene = GetModelScene( sceneName );
+        scene->GetHistory().AddOperation( std::unique_ptr< AssignTimelineOperation >( new AssignTimelineOperation( sceneName, timeEval, prevTimeEval, param ) ) );
+    }
+
+    return true;
 }
 
 // *******************************

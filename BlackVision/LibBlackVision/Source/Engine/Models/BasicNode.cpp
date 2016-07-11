@@ -340,6 +340,13 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
         ret.insert( ret.end(), params.begin(), params.end() );
     }
 
+    auto nodeLogic = GetLogic();
+    if( nodeLogic )
+    {
+        auto params =  nodeLogic->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
+
     return ret;
 }
 

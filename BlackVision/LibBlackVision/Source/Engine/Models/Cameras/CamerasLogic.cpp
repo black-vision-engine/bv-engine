@@ -133,7 +133,7 @@ CameraModelPtr          CamerasLogic::GetCamera               ( unsigned int ind
 {
     if( index < m_cameras.size() )
     {
-        m_cameras[ index ];
+        return m_cameras[ index ];
     }
     return nullptr;
 }

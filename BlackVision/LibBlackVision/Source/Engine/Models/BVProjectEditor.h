@@ -62,7 +62,7 @@ public:
 
     bool					SetSceneVisible		( const std::string & sceneName, bool visible );
 
-    model::SceneModelPtr    GetModelScene			( const std::string & sceneName ) const;
+    model::SceneModelPtr    GetModelScene       ( const std::string & sceneName ) const;
 
     bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
 
@@ -180,13 +180,17 @@ public:
 
 /* TIMELINES */
 
-    bool                    AddTimeline					( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType );
-    bool                    AddTimeline					( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline );
+    bool                    AddTimeline					( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType, bool enableUndo = false );
+    bool                    AddTimeline					( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline, bool enableUndo = false );
     
     bool                    DeleteTimeline				( const std::string & timelinePath );
     bool                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string() );
+    void				    ReplaceTimeline	            ( model::SceneModelPtr scene, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
 
     bool                    RenameTimeline				( const std::string & timelinePath, const std::string & newName );
+
+    bool                    AssignTimeline              ( const std::string & sceneName, model::IParameterPtr param, const std::string & timeline, bool enableUndo = false );
+    bool                    AssignTimeline              ( const std::string & sceneName, model::IParameterPtr param, model::ITimeEvaluatorPtr timeline, bool enableUndo = false );
 
     bool                    SetTimelineDuration			( const std::string & timelinePath, TimeType duration );
     bool                    SetTimelineWrapPreBehavior	( const std::string & timelinePath, TimelineWrapMethod preMethod );
@@ -248,6 +252,7 @@ private:
     void                    SetSceneRootNode    ( model::SceneModelPtr modelScene, model::IModelNodePtr rootNode );
     void                    DeleteSceneRootNode ( model::SceneModelPtr modelScene );
 
+    bool                    IsTimelineUsed      ( model::ITimeEvaluatorPtr timeEval );
 
     /* Undo/Redo */
 

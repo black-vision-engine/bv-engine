@@ -39,6 +39,7 @@ public:
     void					SetNodeEffect		( IModelNodeEffectPtr nodeEffect );
 
 	void                    ReplaceTimeline		( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
+    bool                    IsTimelineUsed      ( model::ITimeEvaluatorPtr timeEval );
 
 };
 

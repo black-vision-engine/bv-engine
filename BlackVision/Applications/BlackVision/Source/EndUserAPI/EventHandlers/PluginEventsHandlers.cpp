@@ -152,20 +152,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         result = SetWrapPostMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::AssignTimeline )
     {
-        auto timeEval = m_projectEditor->GetTimeEvaluator( value );
-            
-        //FIXME: logic below should be somewhere else - editor maybe
-        //don't allow setting scene timeline or timeline from other scene
-        if( !timeEval || timeEval->GetName() == sceneName 
-            || TimelineHelper::GetSceneName( timeEval.get() ) != sceneName )
-        {
-            SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Timeline not found" );
-            return;
-        }
-
-        param->SetTimeEvaluator( timeEval );
-
-        result = true;
+        result = m_projectEditor->AssignTimeline( sceneName, param, value, true );
     }
     else if( command == ParamKeyEvent::Command::SampleCurve )
     {

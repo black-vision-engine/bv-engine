@@ -98,7 +98,7 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
 
         if( command == TimeLineEvent::Command::AddTimeline )
 		{
-			success = editor->AddTimeline( timelinePath, timelineNewName, type );
+			success = editor->AddTimeline( timelinePath, timelineNewName, type, true );
 		}
 		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
