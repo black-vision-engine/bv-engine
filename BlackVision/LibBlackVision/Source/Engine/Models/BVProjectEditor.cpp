@@ -34,10 +34,12 @@
 #include "Engine/Models/BoundingVolume.h"
 
 
-// Undo Redo operations
+// Undo/Redo operations
 #include "Engine/Models/UndoRedo/Nodes/AddNodeOperation.h"
 #include "Engine/Models/UndoRedo/Nodes/MoveNodeOperation.h"
 #include "Engine/Models/UndoRedo/Nodes/RemoveNodeOperation.h"
+#include "Engine/Models/UndoRedo/Plugins/AddNodeLogicOperation.h"
+#include "Engine/Models/UndoRedo/Plugins/RemoveNodeLogicOperation.h"
 
 #include <memory>
 
@@ -1194,6 +1196,39 @@ bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, con
 
     return false;
 }
+
+// ***********************
+//
+bool                        BVProjectEditor::SetLogic            ( model::BasicNodePtr node, model::INodeLogicPtr logic, bool enableUndo )
+{
+    node->SetLogic( logic );
+
+    if( enableUndo )
+    {
+        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto scene = GetModelScene( sceneName );
+        scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic ) ) );
+    }
+
+    return true;
+}
+
+// ***********************
+//
+bool                        BVProjectEditor::RemoveLogic         ( model::BasicNodePtr node, bool enableUndo )
+{
+    node->RemoveLogic();
+
+    if( enableUndo )
+    {
+        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto scene = GetModelScene( sceneName );
+        scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeLogicOperation >( new RemoveNodeLogicOperation( scene, node, node->GetLogic() ) ) );
+    }
+
+    return true;
+}
+    
 
 // *******************************
 //

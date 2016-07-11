@@ -1696,6 +1696,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.cpp">
       <Filter>Engine\Models\UndoRedo\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4006,6 +4012,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.h">
       <Filter>Engine\Models\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.h">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.h">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

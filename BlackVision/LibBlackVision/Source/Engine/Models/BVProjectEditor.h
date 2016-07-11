@@ -167,6 +167,9 @@ public:
 
     bool					MovePlugin			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName );
 
+/* NODE LOGICS */
+    bool                    SetLogic            ( model::BasicNodePtr node, model::INodeLogicPtr logic, bool enableUndo = false );
+    bool                    RemoveLogic         ( model::BasicNodePtr node, bool enableUndo = false );
 
 /* EFFECTS */
 

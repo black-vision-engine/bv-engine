@@ -87,13 +87,13 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
             return;
         }
 
-        basicNode->SetLogic( logic );
+        editor->SetLogic( basicNode, logic, true );
 
         SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
     }
     else if( command == NodeLogicEvent::Command::DeleteNodeLogic )
     {
-        basicNode->RemoveLogic();
+        editor->RemoveLogic( basicNode, true );
     }
     else if ( command == NodeLogicEvent::Command::LogicAction )
     {
