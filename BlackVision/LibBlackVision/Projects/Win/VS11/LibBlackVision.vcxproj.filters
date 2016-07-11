@@ -1711,6 +1711,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.cpp">
       <Filter>Engine\Models\UndoRedo\Timelines</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\DeleteTimelineOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.cpp">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4032,6 +4038,12 @@
       <Filter>Engine\Models\UndoRedo\Timelines</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.h">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\DeleteTimelineOperation.h">
+      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.h">
       <Filter>Engine\Models\UndoRedo\Timelines</Filter>
     </ClInclude>
   </ItemGroup>

@@ -102,12 +102,12 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
 		}
 		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
-			success = editor->DeleteTimeline( timelinePath );
+			success = editor->DeleteTimeline( timelinePath, true );
         }
 		else if( command == TimeLineEvent::Command::ForceDeleteTimeline )
         {
 			//timelineNewName is more path of new timeline here..
-			success = editor->ForceDeleteTimeline( timelinePath, timelineNewName );
+			success = editor->ForceDeleteTimeline( timelinePath, timelineNewName, true );
         }
 		else if( command == TimeLineEvent::Command::RenameTimeline )
         {

@@ -35,13 +35,18 @@
 
 
 // Undo/Redo operations
+    // Nodes
 #include "Engine/Models/UndoRedo/Nodes/AddNodeOperation.h"
 #include "Engine/Models/UndoRedo/Nodes/MoveNodeOperation.h"
 #include "Engine/Models/UndoRedo/Nodes/RemoveNodeOperation.h"
+    // Node logics
 #include "Engine/Models/UndoRedo/Plugins/AddNodeLogicOperation.h"
 #include "Engine/Models/UndoRedo/Plugins/RemoveNodeLogicOperation.h"
+    // Timelines
 #include "Engine/Models/UndoRedo/Timelines/AssignTimelineOperation.h"
 #include "Engine/Models/UndoRedo/Timelines/AddTimelineOperation.h"
+#include "Engine/Models/UndoRedo/Timelines/DeleteTimelineOperation.h"
+#include "Engine/Models/UndoRedo/Timelines/RenameTimelineOperation.h"
 
 #include <memory>
 
@@ -1356,13 +1361,22 @@ bool						BVProjectEditor::AddTimeline			( model::ITimeEvaluatorPtr parentTimeli
 
 // *******************************
 //
-bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
+bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath, bool enableUndo )
 {
     auto timeEval = GetTimeEvaluator( timelinePath );
     if( IsTimelineEditable( timeEval.get() ) && !IsTimelineUsed( timeEval ) )
     {
         auto sceneName = model::TimelineHelper::GetSceneName( timeEval.get() );
-        return model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, sceneName );
+        bool result = model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, sceneName );
+
+        // Undo/Redo
+        if( result && enableUndo )
+        {
+            auto scene = GetModelScene( sceneName );
+            scene->GetHistory().AddOperation( std::unique_ptr< DeleteTimelineOperation >( new DeleteTimelineOperation( sceneName, scene->GetTimeline(), timeEval ) ) );
+        }
+
+        return result;
     }
 
     return false;
@@ -1370,7 +1384,7 @@ bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
 
 // *******************************
 //
-bool						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePath, const std::string & newTimelinePath )
+bool						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePath, const std::string & newTimelinePath, bool enableUndo )
 {
     auto timeEval = GetTimeEvaluator( timelinePath );
     if( IsTimelineEditable( timeEval.get() ) )
@@ -1399,6 +1413,12 @@ bool						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePat
         auto success = model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, sceneName );
     
         assert( !IsTimelineUsed( timeEval ) );
+
+        // Undo/Redo
+        if( success && enableUndo )
+        {
+            scene->GetHistory().AddOperation( std::unique_ptr< DeleteTimelineOperation >( new DeleteTimelineOperation( sceneName, scene->GetTimeline(), timeEval, true, newTimelinePath ) ) );
+        }
         
         return success;
     }
@@ -1484,7 +1504,7 @@ bool    BVProjectEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
     
 // *******************************
 //
-bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, const std::string & newName )
+bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, const std::string & newName, bool enableUndo )
 {
     auto timeline = GetTimeEvaluator( timelinePath );
     if( timeline && IsTimelineEditable( timeline.get() ) )
@@ -1492,7 +1512,15 @@ bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, 
         auto sceneName = model::TimelineHelper::GetSceneName( timeline.get() );
         if( !GetTimeEvaluator( sceneName )->GetChild( newName ) )
         {
+            auto prevName =  timeline->GetName();
             timeline->SetName( newName );
+
+            if( enableUndo )
+            {
+                auto scene = GetModelScene( sceneName );
+                scene->GetHistory().AddOperation( std::unique_ptr< RenameTimelineOperation >( new RenameTimelineOperation( timelinePath, newName, prevName ) ) );
+            }
+
             return true;
         }
     }

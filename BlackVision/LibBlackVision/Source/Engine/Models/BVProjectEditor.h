@@ -183,11 +183,11 @@ public:
     bool                    AddTimeline					( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType, bool enableUndo = false );
     bool                    AddTimeline					( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline, bool enableUndo = false );
     
-    bool                    DeleteTimeline				( const std::string & timelinePath );
-    bool                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string() );
+    bool                    DeleteTimeline				( const std::string & timelinePath, bool enableUndo = false );
+    bool                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string(), bool enableUndo = false );
     void				    ReplaceTimeline	            ( model::SceneModelPtr scene, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
 
-    bool                    RenameTimeline				( const std::string & timelinePath, const std::string & newName );
+    bool                    RenameTimeline				( const std::string & timelinePath, const std::string & newName, bool enableUndo = false );
 
     bool                    AssignTimeline              ( const std::string & sceneName, model::IParameterPtr param, const std::string & timeline, bool enableUndo = false );
     bool                    AssignTimeline              ( const std::string & sceneName, model::IParameterPtr param, model::ITimeEvaluatorPtr timeline, bool enableUndo = false );
