@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1100" Background="White">
+    <UserControl.Resources>
+        <layer:NotConverter x:Key="NotConverter" />
+    </UserControl.Resources>
+    
     <Expander Header="Tester/Debugger" Width="1069" >
         <Grid Margin="0, 10, 0, 0">
             <Grid.ColumnDefinitions>
@@ -14,14 +19,31 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Vertical" Grid.Column="0" Margin="2, 2, 2, 2" >
-                <!--List of tests in chosen directory-->
-                <ListView MinHeight="300">
 
+
+                <Grid Margin="0,2,0,0" Background="AntiqueWhite" Height="159">
+                    <TextBox Text="{Binding IpAddress}" IsEnabled="{Binding IsConnected, Converter={StaticResource NotConverter}}" HorizontalAlignment="Left" Height="23" Margin="17,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103"/>
+                    <TextBox Text="{Binding Port}" IsEnabled="{Binding IsConnected, Converter={StaticResource NotConverter}}" HorizontalAlignment="Left" Height="23" Margin="17,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103"/>
+                    <Label Content="IP address:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="137"/>
+                    <Label Content="Port:" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top" Width="103"/>
+                    <Button Content="Connect" Margin="118,120,10,10" Width="60" Height="25" Background="{Binding ConnectedBrush}" Command="{Binding ConnectCommand}"/>
+                </Grid>
+
+                <StackPanel Margin="0, 5, 0, 5">
+                    <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestDirectory}"/>
+                    <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}"/>
+                    <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
+                </StackPanel>
+                
+                <!--List of tests in chosen directory-->
+                <ListView MinHeight="300" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FileName}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
 
-                <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestsDirectory}"/>
-                <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}"/>
-                <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2, 2, 2, 2">

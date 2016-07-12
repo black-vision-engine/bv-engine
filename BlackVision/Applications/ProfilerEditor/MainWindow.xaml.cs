@@ -47,8 +47,6 @@ namespace ProfilerEditor
         bool                                                m_connected;
         const int                                           tcpReadBufferSize = 1000;
 
-        // Tester
-        ProfilerEditor.Tester.TesterMainLogic               m_testerLogic;
 
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
@@ -101,11 +99,6 @@ namespace ProfilerEditor
             m_connected = false;
             m_tcpClient = null;
             m_networkStream = null;
-
-            // Tester
-
-            m_testerLogic = new Tester.TesterMainLogic();
-            TesterControl.DataContext = m_testerLogic;
         }
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
