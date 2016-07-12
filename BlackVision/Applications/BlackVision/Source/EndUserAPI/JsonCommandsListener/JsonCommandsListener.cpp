@@ -5,8 +5,11 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "Threading/ScopedCriticalSection.h"
+
+
 #include "System/Path.h"
 #include "IO/FileIO.h"
+#include <ctime>
 
 
 #include "UseLoggerBVAppModule.h"
@@ -100,8 +103,7 @@ void JsonCommandsListener::InitializeDebugLayer( const std::string & resultPath 
     m_debugLayer = true;
     m_resultDirectory = resultPath;
 
-    auto resultFile = Path( m_resultDirectory ) / Path( "test1.bvtest" );
-    auto resultFileName = resultFile.Str();
+    auto resultFileName = MakeDebugResultFilePath();
 
     if( !Path::Exists( resultFileName ) )
     {
@@ -152,5 +154,23 @@ void JsonCommandsListener::DebugLayerProcessEvent      ( const std::string & eve
     m_resultFile << eventString << std::endl;
     m_resultFile << END_OF_INSCRIPTION;
 }
+
+#pragma warning( push )
+#pragma warning( disable : 4996 )
+
+// ***********************
+//
+std::string         JsonCommandsListener::MakeDebugResultFilePath     ()
+{
+    char timestamp[ 16];
+    time_t data = time( nullptr );
+    tm* now = localtime( &data );
+    strftime( timestamp, 16, "%y%m%d_%H%M%S", now );
+
+    auto resultFile = Path( m_resultDirectory ) / Path( "test_" + std::string( timestamp ) + ".bvtest" );
+    return resultFile.Str();
+}
+
+#pragma warning( pop )
 
 } //bv

@@ -40,6 +40,8 @@ public:
 private:
     void                DebugLayerProcessResponse   ( ResponseMsg & response );
     void                DebugLayerProcessEvent      ( const std::string & eventString );
+
+    std::string         MakeDebugResultFilePath     ();
 };
 
 } //bv
