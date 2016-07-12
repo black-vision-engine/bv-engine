@@ -92,9 +92,9 @@ void JsonCommandsListener::DeinitializeServer  ()
 // Debug layer
 // ========================================================================= //
 
-const char* EVENT_BEGIN_HEADER      = "#Event#\n";
-const char* RESPONSE_BEGIN_HEADER   = "#Response#\n";
-const char* END_OF_INSCRIPTION      = "#\n";
+const char* EVENT_BEGIN_HEADER      = "#Evt#\n";
+const char* RESPONSE_BEGIN_HEADER   = "#Res#\n";
+const char* END_OF_INSCRIPTION      = "#End#\n";
 
 // ***********************
 //

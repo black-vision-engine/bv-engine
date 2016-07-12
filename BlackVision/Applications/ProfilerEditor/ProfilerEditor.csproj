@@ -45,6 +45,9 @@
     <Reference Include="BlackBurstLibs">
       <HintPath>BlackBurstLibs\BlackBurstLibs.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Newtonsoft\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -73,7 +76,9 @@
     <Compile Include="ServerConnectionDialog.xaml.cs">
       <DependentUpon>ServerConnectionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tester\Event.cs" />
     <Compile Include="Tester\TesterMainLogic.cs" />
+    <Compile Include="Tester\TestError.cs" />
     <Compile Include="Tester\TestFile.cs" />
     <Compile Include="Tester\TestsManager.cs" />
     <Page Include="GUI\TesterControl.xaml">

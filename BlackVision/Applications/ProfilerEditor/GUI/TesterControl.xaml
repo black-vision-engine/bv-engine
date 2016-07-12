@@ -36,7 +36,7 @@
                 </StackPanel>
                 
                 <!--List of tests in chosen directory-->
-                <ListView MinHeight="300" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}">
+                <ListView MinHeight="300" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding FileName}" />
@@ -48,8 +48,15 @@
 
             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2, 2, 2, 2">
                 <!--List of errors in tests-->
-                <ListView MinHeight="400">
-
+                <ListView MinHeight="400" DataContext="{Binding SelectedFile}" ItemsSource="{Binding TestEvents}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding EventName}" />
+                                <TextBlock Text="{Binding CommandName}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </StackPanel>
 

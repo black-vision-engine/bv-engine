@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Input;
+using System.IO;
 using BlackBurst.Backend.TCP;
 
 
@@ -41,6 +41,7 @@ namespace ProfilerEditor.Tester
 
         public ICommand ConnectCommand { get; internal set; }
         public ICommand ChooseTestDirectory { get; internal set; }
+        public ICommand DebugCurrentTest { get; internal set; }
 
         #endregion
 
@@ -60,6 +61,7 @@ namespace ProfilerEditor.Tester
 
             ConnectCommand = new RelayCommand( ConnectClick );
             ChooseTestDirectory = new RelayCommand( ChooseTestDir, IsInitState );
+            DebugCurrentTest = new RelayCommand( DebugTest, IsInitState );
         }
 
 
@@ -111,12 +113,18 @@ namespace ProfilerEditor.Tester
         private void ChooseTestDir( object parameter )
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            dialog.SelectedPath = System.AppDomain.CurrentDomain.BaseDirectory;
 
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
             if( result == System.Windows.Forms.DialogResult.OK )
             {
                 m_testsManager.UpdateTestPath( dialog.SelectedPath );
             }
+        }
+
+        private void DebugTest( object parameter )
+        {
+            m_testsManager.DebugCurrentFile();
         }
 
 
