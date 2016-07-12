@@ -58,6 +58,9 @@ namespace ProfilerEditor.Tester
             while( startIdx < content.Length )
             {
                 startIdx = content.IndexOf( '#', startIdx );
+                if( startIdx < 0 )
+                    break;
+
                 string header = content.Substring( startIdx, 5 );
 
                 bool isEvent = header.Contains( START_EVENT );
@@ -80,7 +83,7 @@ namespace ProfilerEditor.Tester
                             if( isEvent )
                                 ParseSingleMessage( singleMsg, testFile.TestEvents );
                             else
-                                ParseSingleMessage( singleMsg, testFile.ReferenceResponses );
+                                ParseSingleResponse( singleMsg, testFile.ReferenceResponses );
 
                             endIdx += 6;  //END string + \n character
                             break;
@@ -100,8 +103,8 @@ namespace ProfilerEditor.Tester
 
         public void    ParseSingleMessage  ( string msgString, ObservableCollection< Event > eventsCollection )
         {
-            JArray json = JArray.Parse( msgString );
-            var eventsArray = json[ 0 ];
+            JObject json = JObject.Parse( msgString );
+            var eventsArray = json[ "Events" ];
 
             foreach( var evt in eventsArray )
             {
@@ -110,10 +113,34 @@ namespace ProfilerEditor.Tester
 
                 newEvent.EventName = evt[ "Event" ].ToString();
                 newEvent.CommandName = evt[ "Command" ].ToString();
-                newEvent.EventID = evt[ "EventID" ].Value< UInt32 >();
+
+                JToken eventID = evt[ "EventID" ];
+                if( eventID != null )
+                    newEvent.EventID = eventID.Value<UInt32>();
+                else
+                    newEvent.EventID = UInt32.MaxValue;
 
                 eventsCollection.Add( newEvent );
             }
+        }
+
+        public void ParseSingleResponse( string msgString, ObservableCollection<Event> eventsCollection )
+        {
+            JObject json = JObject.Parse( msgString );
+
+            Event newEvent = new Event();
+            newEvent.EventContent = msgString;
+
+            newEvent.EventName = "Response";
+            newEvent.CommandName = json[ "cmd" ].ToString();
+
+            JToken eventID = json[ "EventID" ];
+            if( eventID != null )
+                newEvent.EventID = eventID.Value<UInt32>();
+            else
+                newEvent.EventID = UInt32.MaxValue;
+
+            eventsCollection.Add( newEvent );
         }
 
 

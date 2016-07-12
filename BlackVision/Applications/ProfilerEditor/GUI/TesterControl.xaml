@@ -48,16 +48,18 @@
 
             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2, 2, 2, 2">
                 <!--List of errors in tests-->
-                <ListView MinHeight="400" DataContext="{Binding SelectedFile}" ItemsSource="{Binding TestEvents}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding EventName}" />
-                                <TextBlock Text="{Binding CommandName}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                <ListView MinHeight="400" DataContext="{Binding Path=TestsManager.SelectedFile}" ItemsSource="{Binding TestEvents}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                        </GridView>
+                    </ListView.View>
                 </ListView>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="2" Margin="2, 2, 2, 2" >
+                <TextBlock MinHeight="400" Text="{Binding}" />
             </StackPanel>
 
         </Grid>
