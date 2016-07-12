@@ -61,9 +61,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GUI\TesterControl.xaml.cs">
+      <DependentUpon>TesterControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ServerConnectionDialog.xaml.cs">
       <DependentUpon>ServerConnectionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tester\TesterMainLogic.cs" />
+    <Page Include="GUI\TesterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

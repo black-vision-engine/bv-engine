@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ProfilerEditor.GUI.TesterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1100" Background="White">
+    <Expander Header="Tester/Debugger" Width="1069" >
+        <Grid Margin="0, 10, 0, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*" />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="10*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Column="0" Margin="2, 2, 2, 2" >
+                <!--List of tests in chosen directory-->
+                <ListView MinHeight="300">
+
+                </ListView>
+
+                <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestsDirectory}"/>
+                <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}"/>
+                <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2, 2, 2, 2">
+                <!--List of errors in tests-->
+                <ListView MinHeight="400">
+
+                </ListView>
+            </StackPanel>
+
+        </Grid>
+    </Expander>
+</UserControl>
