@@ -17,12 +17,22 @@ namespace ProfilerEditor.Tester
         public string           Message { get; set; }
 
         public Event            EventRef;
-        public TestFile         FileRef;
+        public TestFile         FileRef { get; set; }
 
-        public TestError()
+        public          TestError()
         {
             EventRef = null;
             FileRef = null;
+        }
+
+        public          TestError( Event newEvent, bool isError = true )
+        {
+            EventID = newEvent.EventID;
+            EventName = newEvent.EventName;
+            CommandName = newEvent.CommandName;
+            IsError = isError;
+
+            EventRef = newEvent;
         }
     }
 }

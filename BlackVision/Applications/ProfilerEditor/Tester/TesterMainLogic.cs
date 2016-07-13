@@ -16,8 +16,7 @@ namespace ProfilerEditor.Tester
     enum TestsState
     {
         Init,
-        TestingAll,
-        DebugTest
+        Testing,
 
     }
 
@@ -36,12 +35,16 @@ namespace ProfilerEditor.Tester
 
         TestsManager                    m_testsManager;
 
+        // Hack: We need to make message from parts.
+        string  m_message;
+
 
         #region Commands
 
         public ICommand ConnectCommand { get; internal set; }
         public ICommand ChooseTestDirectory { get; internal set; }
         public ICommand DebugCurrentTest { get; internal set; }
+        public ICommand RunSingleTest { get; internal set; }
 
         #endregion
 
@@ -62,6 +65,7 @@ namespace ProfilerEditor.Tester
             ConnectCommand = new RelayCommand( ConnectClick );
             ChooseTestDirectory = new RelayCommand( ChooseTestDir, IsInitState );
             DebugCurrentTest = new RelayCommand( DebugTest, IsInitState );
+            RunSingleTest = new RelayCommand( TestSingleFile, IsInitState );
         }
 
 
@@ -90,16 +94,44 @@ namespace ProfilerEditor.Tester
         public void EngineConnectionFailed  ( int ClientId, EventArgs e )
         {
             IsConnected = false;
+            m_testsManager.EngineConnectionFailure();
         }
 
 
         public void EngineDisconnected      ( int ClientId, int ErrorCode, String Message )
         {
             IsConnected = false;
+            m_testsManager.EngineDisconnected( Message );
         }
 
-        public void MsgReceived             ( String data, EventArgs e )
+        public void MsgReceived             ( string data, EventArgs e )
         {
+            int startIdx = 0;
+            int length = data.Length;
+            bool msgEnd = false;
+
+            // Message contains 0x2 and 0x3 signs at beginning and end. We have to remove them.
+            if( data.First() == 0x2 )
+            {
+                startIdx = 1;
+                length -= 1;
+            }
+
+            if( data[ data.Length - 2 ] == 0x3 )
+            {
+                length -= 2;
+                msgEnd = true;
+            }
+
+            m_message += data.Substring( startIdx, length );
+
+            if( msgEnd )
+            {
+                m_testsManager.ReceivedReponse( m_message );
+                QueryAndSendNextMessage();
+
+                m_message = "";
+            }
         }
 
         private bool IsInitState( object parameter )
@@ -127,6 +159,24 @@ namespace ProfilerEditor.Tester
             m_testsManager.DebugCurrentFile();
         }
 
+        private void TestSingleFile( object parameter )
+        {
+            m_state = TestsState.Testing;
+            m_testsManager.TestSingleFile();
+
+            QueryAndSendNextMessage();
+        }
+
+
+        private void QueryAndSendNextMessage()
+        {
+            string eventToSend = m_testsManager.MakeTestStep();
+
+            if( eventToSend != null )
+                m_network.Write( eventToSend );
+            else
+                m_state = TestsState.Init;
+        }
 
         #region Properties
 

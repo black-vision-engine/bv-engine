@@ -9,24 +9,138 @@ using Newtonsoft.Json.Linq;
 
 namespace ProfilerEditor.Tester
 {
+
+    enum TestingMode
+    {
+        Uninitialized,
+        AllFiles,
+        SingleFile,
+        DebugFile
+    }
+
     public class TestsManager
     {
         private ObservableCollection< TestFile >    m_testFiles;
         private TestFile                            m_selectedFile;
         private string                              m_testsPath;
 
-        const string    START_EVENT     = "#Evt#";
-        const string    START_RESPONSE  = "#Res#";
-        const string    END             = "#End#";
+        private ObservableCollection< TestError >   m_errorList;
+
+        TestingMode                                 m_testMode;
+
 
         public TestsManager()
         {
+            m_testMode = TestingMode.Uninitialized;
+
             SelectedFile = null;
-            TestFiles = new ObservableCollection<TestFile>();
+            TestFiles = new ObservableCollection< TestFile >();
+            ErrorList = new ObservableCollection< TestError >();
+
+            //// Test
+            //TestError error = new TestError();
+            //error.CommandName = "TreeStructure";
+            //error.IsError = false;
+            //error.EventID = 1;
+            //error.EventName = "InfoEvent";
+            //error.Message = "No elements in tree";
+
+            //ErrorList.Add( error );
+        }
+
+        // ================================================= //
+
+        public void     DebugCurrentFile()
+        {
+            m_testMode = TestingMode.DebugFile;
+
+            if( SelectedFile != null )
+                ParseFile( SelectedFile );
+        }
+
+        public void     TestAllFiles()
+        {
+            m_testMode = TestingMode.AllFiles;
+        }
+
+        public void     TestSingleFile()
+        {
+            m_testMode = TestingMode.SingleFile;
+
+            if( SelectedFile != null )
+                ParseFile( SelectedFile );
         }
 
 
-        public void    UpdateTestPath( string newPath )
+        // ================================================= //
+
+        public string   MakeTestStep    ()
+        {
+            if( SelectedFile != null )
+            {
+                string msg = SelectedFile.SendingStep();
+                if( msg == null )
+                {
+                    // No more messages in file. Choose new file or send null.
+                    if( m_testMode == TestingMode.SingleFile )
+                    {
+                        m_testMode = TestingMode.Uninitialized;
+                        AddError( "Test ended", "", "Testing file ended.", 0, false, SelectedFile );
+                        return null;
+                    }
+                }
+
+                return msg;
+            }
+            else
+                return null;
+        }
+
+        public void     ReceivedReponse( string response )
+        {
+            var error = SelectedFile.ResponseStep( response );
+            if( error != null )
+                ErrorList.Add( error );
+        }
+
+        public void     EngineDisconnected( string message )
+        {
+            AddError( "Engine Connection failed", "", message, 0, true );
+        }
+
+        public void     EngineConnectionFailure()
+        {
+            AddError( "Engine Disconnected", "", "", 0, true );
+        }
+
+
+        // ================================================= //
+
+        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, bool isError )
+        {
+            AddError( cmdName, eventName, message, eventID, isError, null );
+        }
+
+        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, bool isError, TestFile testFile )
+        {
+            TestError error = new TestError();
+            error.CommandName = cmdName;
+            error.IsError = isError;
+            error.EventID = eventID;
+            error.EventName = eventName;
+            error.Message = message;
+            error.FileRef = testFile;
+
+            ErrorList.Add( error );
+        }
+
+        public void ParseFile( TestFile testFile )
+        {
+            string content = ReadFile( Path.Combine( m_testsPath, testFile.FileName ) );
+            testFile.ParseFile( content );
+        }
+
+        public void UpdateTestPath( string newPath )
         {
             TestFiles.Clear();
             m_testsPath = newPath;
@@ -40,107 +154,6 @@ namespace ProfilerEditor.Tester
                 TestFiles.Add( newFile );
             }
 
-        }
-
-        public void     DebugCurrentFile()
-        {
-            if( SelectedFile != null )
-                ParseFile( SelectedFile );
-        }
-
-        public void     ParseFile   ( TestFile testFile )
-        {
-            string content = ReadFile( Path.Combine( m_testsPath, testFile.FileName ) );
-
-            int startIdx = 0;
-            int endIdx = 0;
-
-            while( startIdx < content.Length )
-            {
-                startIdx = content.IndexOf( '#', startIdx );
-                if( startIdx < 0 )
-                    break;
-
-                string header = content.Substring( startIdx, 5 );
-
-                bool isEvent = header.Contains( START_EVENT );
-                bool isResponse = header.Contains( START_RESPONSE );
-
-                if( isEvent || isResponse )
-                {
-                    startIdx += 6;  // START_EVENT or START_RESPONSE string + \n character
-                    endIdx = startIdx;
-
-                    while( endIdx < content.Length )
-                    {
-                        endIdx = content.IndexOf( '#', endIdx );
-                        header = content.Substring( endIdx, 5 );
-
-                        if( header.Contains( END ) )
-                        {
-                            string singleMsg = content.Substring( startIdx, endIdx - startIdx - 2 );
-
-                            if( isEvent )
-                                ParseSingleMessage( singleMsg, testFile.TestEvents );
-                            else
-                                ParseSingleResponse( singleMsg, testFile.ReferenceResponses );
-
-                            endIdx += 6;  //END string + \n character
-                            break;
-                        }
-                        else
-                            endIdx++;
-                    }
-                }
-                else
-                    startIdx++;
-
-                startIdx = endIdx;
-            }
-
-            
-        }
-
-        public void    ParseSingleMessage  ( string msgString, ObservableCollection< Event > eventsCollection )
-        {
-            JObject json = JObject.Parse( msgString );
-            var eventsArray = json[ "Events" ];
-
-            foreach( var evt in eventsArray )
-            {
-                Event newEvent = new Event();
-                newEvent.EventContent = msgString;
-
-                newEvent.EventName = evt[ "Event" ].ToString();
-                newEvent.CommandName = evt[ "Command" ].ToString();
-
-                JToken eventID = evt[ "EventID" ];
-                if( eventID != null )
-                    newEvent.EventID = eventID.Value<UInt32>();
-                else
-                    newEvent.EventID = UInt32.MaxValue;
-
-                eventsCollection.Add( newEvent );
-            }
-        }
-
-        public void ParseSingleResponse( string msgString, ObservableCollection<Event> eventsCollection )
-        {
-            JObject json = JObject.Parse( msgString );
-
-            Event newEvent = new Event();
-            newEvent.EventContent = msgString;
-
-            newEvent.EventName = "Response";
-            newEvent.CommandName = json[ "cmd" ].ToString();
-
-            JToken eventID = json[ "EventID" ];
-            if( eventID != null )
-                newEvent.EventID = eventID.Value<UInt32>();
-            else
-                newEvent.EventID = UInt32.MaxValue;
-
-            eventsCollection.Add( newEvent );
         }
 
 
@@ -196,6 +209,19 @@ namespace ProfilerEditor.Tester
 
                 //    }
                 //}
+            }
+        }
+
+        public ObservableCollection<TestError> ErrorList
+        {
+            get
+            {
+                return m_errorList;
+            }
+
+            set
+            {
+                m_errorList = value;
             }
         }
         #endregion

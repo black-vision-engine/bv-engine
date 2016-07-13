@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
         xmlns:gui="clr-namespace:ProfilerEditor.GUI"
-        Title="Profiler Editor" Height="650" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1120" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
+        Title="Profiler Editor" Height="750" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1120" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
     <Window.Resources>
 
         <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
