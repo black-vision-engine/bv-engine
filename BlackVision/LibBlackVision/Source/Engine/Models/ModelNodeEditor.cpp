@@ -99,6 +99,7 @@ bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
     if ( plugin.first )
     {
         m_detachedPlugin = plugin.first;
+        m_detachedPluginIdx = plugin.second;
         return true;
     }
 
@@ -125,6 +126,14 @@ bool				ModelNodeEditor::DetachPlugin			( unsigned int idx )
 IPluginPtr			ModelNodeEditor::GetDetachedPlugin	()
 {
     return m_detachedPlugin;
+}
+
+
+// ***********************
+//
+int                     ModelNodeEditor::GetDetachedPluginIdx ()
+{
+    return m_detachedPluginIdx;
 }
 
 // ********************************

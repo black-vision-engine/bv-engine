@@ -2,11 +2,13 @@
 
 #include "PluginOperations.h"
 
+#include "Engine/Models/BVProjectEditor.h"
+
 namespace bv {
 
 // ***********************
 //
-AddPluginOperation::AddPluginOperation  ( model::IModelNodePtr parent, model::IPluginPtr plugin, int idx )
+AddPluginOperation::AddPluginOperation  ( model::BasicNodePtr parent, model::IPluginPtr plugin, int idx )
     : m_parent( parent ), m_plugin( plugin ), m_idx( idx )
 {
 }
@@ -15,22 +17,20 @@ AddPluginOperation::AddPluginOperation  ( model::IModelNodePtr parent, model::IP
 //
 bool            AddPluginOperation::Undo                ( BVProjectEditor * editor )
 {
-    editor; assert( false );
-    return false;
+    return editor->DetachPlugin( m_parent, m_idx );
 }
 
 // ***********************
 //
 bool            AddPluginOperation::Redo                ( BVProjectEditor * editor )
 {
-    editor; assert( false );
-    return false;
+    return editor->AddPlugin( m_parent, m_plugin, m_idx );
 }
 
 
 // ***********************
 //
-DeletePluginOperation::DeletePluginOperation ( model::IModelNodePtr parent, model::IPluginPtr plugin, int idx )
+DeletePluginOperation::DeletePluginOperation ( model::BasicNodePtr parent, model::IPluginPtr plugin, int idx )
     : m_parent( parent ), m_plugin( plugin ), m_idx( idx )
 {
 }
@@ -39,16 +39,14 @@ DeletePluginOperation::DeletePluginOperation ( model::IModelNodePtr parent, mode
 //
 bool            DeletePluginOperation::Undo                ( BVProjectEditor * editor )
 {
-    editor; assert( false );
-    return false;
+    return editor->AddPlugin( m_parent, m_plugin, m_idx );
 }
     
 // ***********************
 //
 bool            DeletePluginOperation::Redo                ( BVProjectEditor * editor )
 {
-    editor; assert( false );
-    return false;
+    return editor->DetachPlugin( m_parent, m_idx );
 }
 
 }

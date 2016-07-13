@@ -14,6 +14,7 @@ private:
 
     BasicNode *	        m_node;
     IPluginPtr			m_detachedPlugin;
+    int                 m_detachedPluginIdx;
 
 public:
 
@@ -33,6 +34,7 @@ public:
     IPluginPtr              CopyPlugin			( const std::string & name );
 
     IPluginPtr				GetDetachedPlugin	();
+    int                     GetDetachedPluginIdx ();
     void                    ResetDetachedPlugin	();
 
     IModelNodeEffectPtr		GetNodeEffect		();
