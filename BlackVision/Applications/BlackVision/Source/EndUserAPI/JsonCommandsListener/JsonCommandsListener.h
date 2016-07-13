@@ -6,6 +6,7 @@
 #include "Engine/Events/Events.h"
 
 #include <map>
+#include <fstream>
 
 namespace bv
 {
@@ -18,6 +19,12 @@ private:
 
     std::map<unsigned int, IEventPtr>   m_triggeredEvents;          ///< Events from this map are sent to EventsManager in requested frame.
     CriticalSection                     m_eventsMapLock;
+
+    // Debug layer
+    bool            m_debugLayer;
+    std::string     m_resultDirectory;
+    std::ofstream   m_resultFile;
+
 public:
     JsonCommandsListener();
     ~JsonCommandsListener();
@@ -26,6 +33,15 @@ public:
     bool                InitializeServer    ( int port ) override;
     void                DeinitializeServer  () override;
     void                SendResponse        ( const IEventPtr response ) override;
+
+    void                InitializeDebugLayer( const std::string & resultPath ) override;
+    void                DeinitDebugLayer    ();
+
+private:
+    void                DebugLayerProcessResponse   ( ResponseMsg & response );
+    void                DebugLayerProcessEvent      ( const std::string & eventString );
+
+    std::string         MakeDebugResultFilePath     ();
 };
 
 } //bv

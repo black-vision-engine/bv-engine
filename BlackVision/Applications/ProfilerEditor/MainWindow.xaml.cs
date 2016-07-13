@@ -47,6 +47,7 @@ namespace ProfilerEditor
         bool                                                m_connected;
         const int                                           tcpReadBufferSize = 1000;
 
+
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
 		{

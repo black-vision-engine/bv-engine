@@ -133,6 +133,7 @@ private:
 
     void                            InitializeKbdHandler();
     void                            InitializeRemoteCommunication();
+    void                            InitializeCommandsDebugLayer();
 
     std::string                     GetEnvScene();
 };

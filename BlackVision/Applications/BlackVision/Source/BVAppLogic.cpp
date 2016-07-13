@@ -152,6 +152,7 @@ void BVAppLogic::Initialize         ()
 
     InitializeKbdHandler();
     InitializeRemoteCommunication();
+    InitializeCommandsDebugLayer();
 }
 
 // *********************************
@@ -487,6 +488,16 @@ void                            BVAppLogic::InitializeRemoteCommunication()
 
     unsigned int editorPort = ConfigManager::GetInt( "Network/SocketServer/Port" );
     m_remoteController->InitializeServer( editorPort );
+}
+
+// ***********************
+//
+void                            BVAppLogic::InitializeCommandsDebugLayer()
+{
+    if( ConfigManager::GetBool( "Debug/CommandsDebugLayer/UseDebugLayer" ) )
+    {
+        m_remoteController->InitializeDebugLayer( ConfigManager::GetString( "Debug/CommandsDebugLayer/FilePath" ) );
+    }
 }
 
 // *********************************

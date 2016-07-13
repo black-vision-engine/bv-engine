@@ -4,7 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
-        Title="Profiler Editor" Height="650" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1120" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
+        xmlns:gui="clr-namespace:ProfilerEditor.GUI"
+        Title="Profiler Editor" Height="750" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1120" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
     <Window.Resources>
 
         <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
@@ -88,6 +89,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Expander Header="Profiler" Height="Auto" Width="1069" Grid.Row="0" Grid.ColumnSpan="2" Margin="12,0">
@@ -166,6 +168,8 @@
                         <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,197,0,0" VerticalAlignment="Top" Width="106" Click="ExpandButton_Click"/>
                     </Grid>
                 </Expander>
+                
+                
                 <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="12,0" Grid.ColumnSpan="2">
                     <Grid Height="546">
                         <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190" AcceptsTab="True" TextOptions.TextFormattingMode="Display"/>
@@ -197,6 +201,9 @@
                         </ListView>
                     </Grid>                
                 </Expander>
+
+                <gui:TesterControl x:Name="TesterControl" Grid.Row="2" Grid.ColumnSpan="2" Margin="12,0" />
+
             </Grid>
         </ScrollViewer>
     </Grid>
