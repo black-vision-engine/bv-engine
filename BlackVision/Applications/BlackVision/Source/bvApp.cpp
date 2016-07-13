@@ -28,7 +28,7 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			bv::BlackVisionApp::StaticInitializer	()
 {
-	
+    
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionApp();
 }
@@ -39,7 +39,7 @@ void			bv::BlackVisionApp::StaticInitializer	()
 bool			bv::BlackVisionApp::RegisterInitializer	()
 {
     bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::StaticInitializer );
-	bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
 
     return true;
 }
@@ -55,7 +55,7 @@ BlackVisionApp::BlackVisionApp	()
     , m_processManager( nullptr )
     , m_app( nullptr )
 {
-	ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
+    ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
 }
 
 // *********************************
@@ -104,7 +104,7 @@ bool BlackVisionApp::OnIdle		()
 
     UpdateSubsystems( millis );
 
-	ApplicationContext::Instance().SetTimestamp( millis );
+    ApplicationContext::Instance().SetTimestamp( millis );
 
     m_app->OnUpdate( millis, m_Renderer, m_audioRenderer );
 
@@ -128,7 +128,7 @@ void BlackVisionApp::OnPreMainLoop  ()
 bool BlackVisionApp::OnInitialize       ()
 {
     m_processManager = new ProcessManager();
-		//pablito
+        //pablito
     InitializeLicenses      ();
     InitializeConfig        ();
 
@@ -189,14 +189,14 @@ bool    BlackVisionApp::InitializeLicenses   ()
     LicenseManager::LoadLicenses();
     bool license = LicenseManager::VerifyLicense();
 
-	if( license )
-	{
+    if( license )
+    {
         LOG_MESSAGE( SeverityLevel::info ) << "License is valid. Proceeding...";
-	}
+    }
     else
     {
         LOG_MESSAGE( SeverityLevel::critical ) << "License is not valid. Please contact your administrator or sales representative";
-	}
+    }
     return license;
 }
 
@@ -211,7 +211,7 @@ void    BlackVisionApp::InitializeConfig  ()
     //ConfigManager::LoadXMLConfig();
     BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
 
-	BB::AssetManager::LoadSurfaces();
+    BB::AssetManager::LoadSurfaces();
 
 }
 
@@ -219,23 +219,23 @@ void    BlackVisionApp::InitializeConfig  ()
 //
 void    BlackVisionApp::InitializeAppLogic  ()
 {
-	std::wstring commandLineString = GetCommandLineW();
+    std::wstring commandLineString = GetCommandLineW();
 
-	if( IsProfilerEnabled( commandLineString ) )
-	{
-		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
-		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
-	}
-	else
-	{
-		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
-		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
-		HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
-	}
+    if( IsProfilerEnabled( commandLineString ) )
+    {
+        HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
+        HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
+    }
+    else
+    {
+        HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
+        HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
+        HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
+    }
 
     m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
 
-	m_app->SetVideoCardManager( &m_videoCardManager );
+    m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();
     m_app->LoadScene();
 }
@@ -258,7 +258,7 @@ void    BlackVisionApp::PostFrame           ( unsigned int millis )
     
     if( millis - startMillis > DefaultConfig.StatsRefreshMillisDelta() )
     {
-		SetWindowTextW( handle, FrameStatsFormatter::FPSStatsLine( m_app->FrameStats() ).c_str() );
+        SetWindowTextW( handle, FrameStatsFormatter::FPSStatsLine( m_app->FrameStats() ).c_str() );
         startMillis = millis;
     }
 #endif

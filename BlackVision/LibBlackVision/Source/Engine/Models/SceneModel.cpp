@@ -30,17 +30,17 @@ SceneModelPtr    SceneModel::Create		( const std::string & name )
 SceneModel::SceneModel	( const std::string & name )
     : m_name( name )
     , m_timeline( model::OffsetTimeEvaluator::Create( name, TimeType( 0.0 ) ) )
-	, m_modelSceneEditor( nullptr )
+    , m_modelSceneEditor( nullptr )
     , m_camerasLogic( m_timeline )
 {
-	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
+    m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
 
 // *******************************
 //
-				SceneModel::~SceneModel	()
+                SceneModel::~SceneModel	()
 {
-	delete m_modelSceneEditor;
+    delete m_modelSceneEditor;
 }
 
 // *******************************
@@ -98,7 +98,7 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
     bvDeserCo->SetAssets( assets );
 
-	//FIXME: pass nullptr as camera because we don't have camera model yet
+    //FIXME: pass nullptr as camera because we don't have camera model yet
     auto sceneName = deser.GetAttribute( "name" );
     auto obj = SceneModel::Create( sceneName );
 
@@ -106,15 +106,15 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     bvDeserCo->SetSceneName( sceneName );
 
 // timelines
-	auto sceneTimeline = obj->GetTimeline();
+    auto sceneTimeline = obj->GetTimeline();
     auto timelines = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "timelines" );
 
     for( auto timeline : timelines )
     {
-		sceneTimeline->AddChild( timeline );
+        sceneTimeline->AddChild( timeline );
     }
 
-	bvDeserCo->SetSceneTimeline( sceneTimeline );
+    bvDeserCo->SetSceneTimeline( sceneTimeline );
 
 // lights
     auto lights = SerializationHelper::DeserializeArray< model::ModelBaseLight >( deser, "lights" );
@@ -147,14 +147,14 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
         obj->SetRootNode( node );
     }
 
-	return obj;
+    return obj;
 }
 
 // *******************************
 //
 model::SceneModelPtr		SceneModel::Clone		() const
 {
-	return CloneViaSerialization::Clone( this, "scene", nullptr, nullptr ); // FIXME probably
+    return CloneViaSerialization::Clone( this, "scene", nullptr, nullptr ); // FIXME probably
 }
 
 // *******************************
@@ -177,35 +177,35 @@ void						SceneModel::Update	    ( TimeType t )
 //
 void						SceneModel::SetRootNode	( BasicNodePtr rootNode )
 {
-	m_sceneRootNode = rootNode;
+    m_sceneRootNode = rootNode;
 
-	if( m_modelSceneEditor )
-	{
-		delete m_modelSceneEditor;
-	}
-	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
+    if( m_modelSceneEditor )
+    {
+        delete m_modelSceneEditor;
+    }
+    m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
 
 // *******************************
 //
 BasicNodePtr				SceneModel::GetRootNode	() const
 {
-	return m_sceneRootNode;
+    return m_sceneRootNode;
 }
 
 // *******************************
 //
 void						SceneModel::SetName		( const std::string & name )
 {
-	m_name = name;
-	m_timeline->SetName( name );
+    m_name = name;
+    m_timeline->SetName( name );
 }
 
 // *******************************
 //
 const std::string &			SceneModel::GetName		() const
 {
-	return m_name;
+    return m_name;
 }
 
 // *******************************
@@ -257,7 +257,7 @@ SizeType                    SceneModel::NumLights            () const
 //
 ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 {
-	return m_modelSceneEditor;
+    return m_modelSceneEditor;
 }
 
 // *******************************
@@ -299,8 +299,8 @@ OperationHistory &          SceneModel::GetHistory          ()
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
-	//FIXME:camera can be nullptr because it's not used yet
-	return SceneModel::Create( name );
+    //FIXME:camera can be nullptr because it's not used yet
+    return SceneModel::Create( name );
 }
 
 } // model

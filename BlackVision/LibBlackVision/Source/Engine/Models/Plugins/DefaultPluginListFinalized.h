@@ -6,6 +6,8 @@
 
 namespace bv { namespace model {
 
+typedef std::pair< model::IPluginPtr, int > PluginWithIdx;
+
 class DefaultPluginListFinalized : public IPluginListFinalized
 {
 private:
@@ -36,7 +38,7 @@ public:
     void                            AttachPlugin        ( IPluginPtr plugin );
     bool                            AttachPlugin        ( IPluginPtr plugin, UInt32 idx );
     IPluginPtr                      DetachPlugin        ( UInt32 idx );
-    IPluginPtr                      DetachPlugin        ( const std::string & name );
+    PluginWithIdx                   DetachPlugin        ( const std::string & name );
 
 };
 

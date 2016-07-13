@@ -12,7 +12,7 @@ class ModelNodeEditor
 {
 private:
 
-	BasicNode *	        m_node;
+    BasicNode *	        m_node;
     IPluginPtr			m_detachedPlugin;
 
 public:
@@ -23,7 +23,7 @@ public:
 
     bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( unsigned int idx );
-    bool                    DeletePlugin		( const std::string & name );
+    model::PluginWithIdx    DeletePlugin		( const std::string & name );
 
     bool                    AttachPlugin		( unsigned int idx );
     bool                    AttachPlugin		( BasicNodePtr sourceNode, unsigned int idx );
@@ -32,13 +32,13 @@ public:
 
     IPluginPtr              CopyPlugin			( const std::string & name );
 
-	IPluginPtr				GetDetachedPlugin	();
+    IPluginPtr				GetDetachedPlugin	();
     void                    ResetDetachedPlugin	();
 
-	IModelNodeEffectPtr		GetNodeEffect		();
+    IModelNodeEffectPtr		GetNodeEffect		();
     void					SetNodeEffect		( IModelNodeEffectPtr nodeEffect );
 
-	void                    ReplaceTimeline		( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
+    void                    ReplaceTimeline		( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
     bool                    IsTimelineUsed      ( model::ITimeEvaluatorPtr timeEval );
 
 };

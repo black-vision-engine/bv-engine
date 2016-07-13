@@ -509,6 +509,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.cpp" />
@@ -1005,6 +1006,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.h" />

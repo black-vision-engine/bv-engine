@@ -114,7 +114,7 @@ IPluginPtr                DefaultPluginListFinalized::GetPlugin           ( UInt
 //
 void                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin )
 {
-	AttachPlugin( plugin, ( unsigned int )m_plugins.size() );
+    AttachPlugin( plugin, ( unsigned int )m_plugins.size() );
 }
 
 // *******************************
@@ -122,49 +122,49 @@ void                    DefaultPluginListFinalized::AttachPlugin        ( IPlugi
 bool                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin, UInt32 idx )
 {
     if( plugin == nullptr )
-	{
-		return false;
-	}
+    {
+        return false;
+    }
 
-	if( idx < m_plugins.size() )
-	{
-		m_plugins.insert( m_plugins.begin() + idx, plugin );
-	}
-	else
-	{
-		m_plugins.push_back( plugin );
-		idx = ( UInt32 )( m_plugins.size() - 1 );
-	}
+    if( idx < m_plugins.size() )
+    {
+        m_plugins.insert( m_plugins.begin() + idx, plugin );
+    }
+    else
+    {
+        m_plugins.push_back( plugin );
+        idx = ( UInt32 )( m_plugins.size() - 1 );
+    }
 
-	for( UInt32 i = idx; i < m_plugins.size(); ++i )
-	{
-		if( i == 0 )
-		{
-			m_plugins[ i ]->SetPrevPlugin( nullptr );
-		}
-		else
-		{
-			m_plugins[ i ]->SetPrevPlugin( m_plugins[ i - 1 ] );
-		}
-	}
+    for( UInt32 i = idx; i < m_plugins.size(); ++i )
+    {
+        if( i == 0 )
+        {
+            m_plugins[ i ]->SetPrevPlugin( nullptr );
+        }
+        else
+        {
+            m_plugins[ i ]->SetPrevPlugin( m_plugins[ i - 1 ] );
+        }
+    }
 
-	m_finalizePlugin->SetPrevPlugin( m_plugins.back() );
+    m_finalizePlugin->SetPrevPlugin( m_plugins.back() );
 
-	return true; //m_finalizePlugin->IsValid();
+    return true; //m_finalizePlugin->IsValid();
 }
 
 // *******************************
 //
-IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( const std::string & name )
+PluginWithIdx				DefaultPluginListFinalized::DetachPlugin	   ( const std::string & name )
 {
-	for( unsigned int i = 0; i < m_plugins.size(); ++i )
+    for( unsigned int i = 0; i < m_plugins.size(); ++i )
     {
-		if( m_plugins[ i ]->GetName() == name )
-		{
-			return DetachPlugin( i );
-		}
-	}
-	return nullptr;
+        if( m_plugins[ i ]->GetName() == name )
+        {
+            return std::make_pair( DetachPlugin( i ), i );
+        }
+    }
+    return std::make_pair( nullptr, -1 );
 }
 
 // *******************************
@@ -172,29 +172,29 @@ IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( const std::string & 
 IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( UInt32 idx )
 {
     if( idx >= m_plugins.size() )
-	{
-		return nullptr;
-	}
+    {
+        return nullptr;
+    }
 
-	auto plugin =  m_plugins[ idx ];
+    auto plugin =  m_plugins[ idx ];
     m_plugins.erase( m_plugins.begin() + idx );
-	plugin->SetPrevPlugin( nullptr );
+    plugin->SetPrevPlugin( nullptr );
 
-	for( UInt32 i = idx; i < m_plugins.size(); ++i )
-	{
-		if( i == 0 )
-		{
-			m_plugins[ i ]->SetPrevPlugin( nullptr );
-		}
-		else
-		{
-			m_plugins[ i ]->SetPrevPlugin( m_plugins[ i - 1 ] );
-		}
-	}
+    for( UInt32 i = idx; i < m_plugins.size(); ++i )
+    {
+        if( i == 0 )
+        {
+            m_plugins[ i ]->SetPrevPlugin( nullptr );
+        }
+        else
+        {
+            m_plugins[ i ]->SetPrevPlugin( m_plugins[ i - 1 ] );
+        }
+    }
 
-	m_finalizePlugin->SetPrevPlugin( m_plugins.empty() ? nullptr : m_plugins.back() );
+    m_finalizePlugin->SetPrevPlugin( m_plugins.empty() ? nullptr : m_plugins.back() );
 
-	//assert( m_finalizePlugin->IsValid() );
+    //assert( m_finalizePlugin->IsValid() );
 
     return plugin;
 }

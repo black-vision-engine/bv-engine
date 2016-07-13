@@ -26,12 +26,12 @@ const std::string           MeshLoader::ACTION::LOAD                 = "Load";
 const std::string           MeshLoader::ACTION::MESH_INFO            = "MeshInfo";
 const std::string           MeshLoader::ACTION::GET_ASSET_PATH       = "GetAssetPath";
 const std::string           MeshLoader::ACTION::SET_ASSET_PATH       = "SetAssetPath";
-	
+    
 // *******************************
 //
 MeshLoaderPtr	            MeshLoader::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
 {
-	return std::make_shared< MeshLoader >( parent, timeEval, assetPath );
+    return std::make_shared< MeshLoader >( parent, timeEval, assetPath );
 }
 
 // *******************************

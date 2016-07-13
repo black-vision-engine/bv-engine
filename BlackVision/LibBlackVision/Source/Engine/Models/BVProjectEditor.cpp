@@ -47,6 +47,8 @@
 #include "Engine/Models/UndoRedo/Timelines/AddTimelineOperation.h"
 #include "Engine/Models/UndoRedo/Timelines/DeleteTimelineOperation.h"
 #include "Engine/Models/UndoRedo/Timelines/RenameTimelineOperation.h"
+    // Plugins
+#include "Engine/Models/UndoRedo/Plugins/PluginOperations.h"
 
 #include <memory>
 
@@ -705,7 +707,7 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
 
 // *******************************
 //
-bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 idx )
+bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 idx, bool enableUndo )
 {
     auto scene = m_project->GetModelScene( sceneName );
 
@@ -724,7 +726,14 @@ bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std
     {
         auto plugin = model::PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
-        return AddPlugin( node, plugin, idx );
+        bool result = AddPlugin( node, plugin, idx );
+
+        if( result && enableUndo )
+        {
+            scene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation >( new AddPluginOperation( node, plugin, idx ) ) );
+        }
+
+        return result;
     }
 
     return false;
@@ -732,10 +741,16 @@ bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std
 
 // *******************************
 //
-bool					BVProjectEditor::DeletePlugin          ( const std::string & sceneName, const std::string & nodePath, const std::string & name )
+bool					BVProjectEditor::DeletePlugin          ( const std::string & sceneName, const std::string & nodePath, const std::string & name, bool enableUndo )
 {
     auto node =  QueryTyped( GetNode( sceneName, nodePath ) );
-    return DeletePlugin( node, name );
+    auto result = DeletePlugin( node, name );
+    if( result.first && enableUndo )
+    {
+        auto scene = m_project->GetModelScene( sceneName );
+        scene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( node, result.first, result.second ) ) );
+    }
+    return ( result.first != nullptr );
 }
 
 // *******************************
@@ -797,26 +812,26 @@ void					BVProjectEditor::ResetDetachedPlugin	( const std::string & sceneName, c
 
 // *******************************
 //
-model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginNameToCopy )
+model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginNameToCopy, bool enableUndo )
 {
     auto srcNode =  QueryTyped( GetNode( srcSceneName, srcNodePath ) );
     auto destNode =  QueryTyped( GetNode( destSceneName, destNodePath ) );
     auto destScene = m_project->GetModelScene( destSceneName );
     auto srcScene = m_project->GetModelScene( srcSceneName );
 
-    return AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginNameToCopy );
+    return AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginNameToCopy, enableUndo );
 }
 
 // *******************************
 //
-bool					BVProjectEditor::MovePlugin			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginName )
+bool					BVProjectEditor::MovePlugin			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginName, bool enableUndo )
 {
     auto srcNode =  QueryTyped( GetNode( srcSceneName, srcNodePath ) );
     auto destNode =  QueryTyped( GetNode( destSceneName, destNodePath ) );
     auto destScene = m_project->GetModelScene( destSceneName );
     auto srcScene = m_project->GetModelScene( srcSceneName );
 
-    return MovePlugin( destScene, destNode, destIdx, srcScene, srcNode, pluginName );
+    return MovePlugin( destScene, destNode, destIdx, srcScene, srcNode, pluginName, enableUndo );
 }
 
 // *******************************
@@ -837,18 +852,19 @@ bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPlugin
 
 // *******************************
 //
-bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, const std::string & name )
+model::PluginWithIdx					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, const std::string & name )
 {
     if( node )
     {
         auto editor = node->GetModelNodeEditor();
-        if( editor->DeletePlugin( name ) )
+        auto result = editor->DeletePlugin( name );
+        if( result.first )
         {
             RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
-            return true;
+            return result;
         }
     }
-    return false;
+    return std::make_pair( nullptr, -1 );
 }
 
 // *******************************
@@ -958,7 +974,7 @@ void					BVProjectEditor::ResetDetachedPlugin	( model::BasicNodePtr node )
 
 // *******************************
 //
-model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy )
+model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, bool enableUndo )
 {
     if( !srcScene || !destScene || !srcNode )
     {
@@ -981,6 +997,10 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
         }
 
         AddPlugin( destNode, copy, destIdx );
+        if( enableUndo )
+        {
+            destScene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation >( new AddPluginOperation( destNode, copy, destIdx ) ) );
+        }
 
         return copy;
     }
@@ -990,7 +1010,7 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
 
 // *******************************
 //
-bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName )
+bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName, bool enableUndo )
 {
     if( !srcScene || !destScene )
     {
@@ -1002,15 +1022,17 @@ bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::
     {
         if( DetachPlugin( srcNode, pluginName ) )
         {
+            assert( false ); // FIXME please ;)
             return AttachPlugin( destNode, destIdx );
         }
     }
     else
     {
-       if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName ) )
-       {
-            return DeletePlugin( srcNode, pluginName );
-       }
+        if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName, enableUndo ) )
+        {
+            auto result = DeletePlugin( srcNode, pluginName );
+            return ( result.first != nullptr );
+        }
     }
 
     return success;
