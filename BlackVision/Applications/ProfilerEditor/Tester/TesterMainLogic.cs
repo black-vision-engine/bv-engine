@@ -173,7 +173,9 @@ namespace ProfilerEditor.Tester
             string eventToSend = m_testsManager.MakeTestStep();
 
             if( eventToSend != null )
+            {
                 m_network.Write( eventToSend );
+            }
             else
                 m_state = TestsState.Init;
         }

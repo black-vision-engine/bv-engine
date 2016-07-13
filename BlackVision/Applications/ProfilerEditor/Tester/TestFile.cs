@@ -47,7 +47,7 @@ namespace ProfilerEditor.Tester
             if( m_testEventPtr >= TestEvents.Count )
                 return null;
 
-            string sendEvent = TestEvents[ (int)m_testEventPtr ].EventContent;
+            string sendEvent = TestEvents[ (int)m_testEventPtr ].GetUnformattedContent();
             m_testEventPtr++;
 
             return sendEvent;
