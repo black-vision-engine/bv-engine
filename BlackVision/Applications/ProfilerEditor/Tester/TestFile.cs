@@ -70,6 +70,7 @@ namespace ProfilerEditor.Tester
                 TestError error = new TestError( newEvent );
                 error.Message = "Reference data doesn't contain response to this message.";
                 error.FileRef = this;
+                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
 
                 return error;
             }
@@ -88,6 +89,7 @@ namespace ProfilerEditor.Tester
                 error.Message = "Response doesn't equals reference response.";
                 error.FileRef = this;
                 error.ReferenceReponse = expectedResponse;
+                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
 
                 return error;
             }
