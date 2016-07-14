@@ -28,6 +28,7 @@ namespace ProfilerEditor.Tester
         private ObservableCollection< TestError >   m_errorList;
 
         TestingMode                                 m_testMode;
+        ComparisionRules                            m_comparisionRules;
 
 
         public TestsManager()
@@ -38,6 +39,8 @@ namespace ProfilerEditor.Tester
             SelectedError = null;
             TestFiles = new ObservableCollection< TestFile >();
             ErrorList = new ObservableCollection< TestError >();
+
+            m_comparisionRules = new ComparisionRules();
         }
 
         // ================================================= //
@@ -90,9 +93,14 @@ namespace ProfilerEditor.Tester
 
         public void     ReceivedReponse( string response )
         {
-            var error = SelectedFile.ResponseStep( response );
-            if( error != null )
-                ErrorList.Add( error );
+            var errors = SelectedFile.ResponseStep( response, m_comparisionRules );
+            if( errors != null )
+            {
+                foreach( var error in errors )
+                {
+                    ErrorList.Add( error );
+                }
+            }
         }
 
         public void     EngineDisconnected( string message )

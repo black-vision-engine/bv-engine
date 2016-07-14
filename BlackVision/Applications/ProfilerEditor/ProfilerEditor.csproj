@@ -78,6 +78,7 @@
     <Compile Include="ServerConnectionDialog.xaml.cs">
       <DependentUpon>ServerConnectionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tester\ComparisionRules.cs" />
     <Compile Include="Tester\Event.cs" />
     <Compile Include="Tester\TesterMainLogic.cs" />
     <Compile Include="Tester\TestError.cs" />

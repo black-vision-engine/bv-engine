@@ -58,7 +58,7 @@ namespace ProfilerEditor.Tester
             return sendEvent;
         }
 
-        public TestError    ResponseStep( string response )
+        public List< TestError >    ResponseStep( string response, ComparisionRules rules )
         {
             Event newEvent = ParseResponse( response );
             int expectedRespPtr = (int)m_responsePtr;
@@ -72,26 +72,32 @@ namespace ProfilerEditor.Tester
                 error.FileRef = this;
                 error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
 
-                return error;
+                List < TestError > errorsList = new List< TestError >();
+                errorsList.Add( error );
+
+                return errorsList;
             }
 
             Event expectedResponse = ReferenceResponses[ (int)expectedRespPtr ];
 
-            // First simple version.
-            if( JToken.DeepEquals( newEvent.EventJSon, expectedResponse.EventJSon ) )
+
+            // Reference and reponse comparision.
+            List < TestError > errors = rules.Compare( expectedResponse, newEvent );
+            if( errors == null )
             {
                 // There's no error in this response.
                 return null;
             }
             else
             {
-                TestError error = new TestError( newEvent );
-                error.Message = "Response doesn't equals reference response.";
-                error.FileRef = this;
-                error.ReferenceReponse = expectedResponse;
-                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                // Complete error info.
+                foreach( var error in errors )
+                {
+                    error.FileRef = this;
+                    error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                }
 
-                return error;
+                return errors;
             }
         }
 
