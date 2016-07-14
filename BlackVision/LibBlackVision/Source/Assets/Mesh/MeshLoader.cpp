@@ -31,7 +31,7 @@ ThumbnailConstPtr MeshLoader::LoadThumbnail   ( const AssetDescConstPtr & desc )
 {
     auto typedDesc = QueryTypedDesc< MeshAssetDescConstPtr >( desc );
 
-	assert( typedDesc );
+    assert( typedDesc );
 
     return MeshUtils::LoadThumbnail( typedDesc );
 }

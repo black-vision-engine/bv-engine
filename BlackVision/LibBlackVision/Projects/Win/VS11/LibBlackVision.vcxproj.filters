@@ -1717,6 +1717,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.cpp">
       <Filter>Engine\Models\UndoRedo\Timelines</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.cpp">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4045,6 +4048,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.h">
       <Filter>Engine\Models\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.h">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

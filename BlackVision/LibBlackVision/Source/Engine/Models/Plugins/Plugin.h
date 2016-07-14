@@ -28,7 +28,7 @@ protected:
     ///////////////// Previous plugin ///////////
     IPluginPtr                                  m_prevPlugin;
 
-	UInt32										m_id;
+    UInt32										m_id;
 
     std::string                                 m_name;
     std::string                                 m_uid;
@@ -45,7 +45,7 @@ public:
     virtual void                                Serialize                   ( ISerializer& doc ) const override;
     static ISerializablePtr                     Create                      ( const IDeserializer& doc );
 
-	virtual IPluginPtr							Clone						() const override;
+    virtual IPluginPtr							Clone						() const override;
 
 
     virtual                                     ~BasePlugin                 ();
@@ -56,7 +56,7 @@ public:
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
     
-	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
+    virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
     virtual std::vector< IParameterPtr >        GetResourceStateModelParameters () const override;
     
     virtual std::vector< IParameterPtr >        GetParameters               () const override;
@@ -94,13 +94,13 @@ public:
     virtual IPluginPtr							GetPrevPlugin               () override;
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
+    virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr );
 
-	virtual ParamTransformPtr				    GetParamTransform			() const override { return nullptr; }
+    virtual ParamTransformPtr				    GetParamTransform			() const override { return nullptr; }
 
-	virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
+    virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
 
 protected:
 
@@ -123,21 +123,21 @@ void BasePlugin< Iface >::Update  ( TimeType t )
 {
     { t; } // FIXME: suppress unused warning
     
-	m_pluginParamValModel->Update();
-	
-	if( GetPixelShaderChannel() )
-	{
-		auto txData = GetPixelShaderChannel()->GetTexturesData();
-		for( auto tx : txData->GetTextures() )
-		{
-			tx->GetSamplerState()->Update();
-		}
+    m_pluginParamValModel->Update();
+    
+    if( GetPixelShaderChannel() )
+    {
+        auto txData = GetPixelShaderChannel()->GetTexturesData();
+        for( auto tx : txData->GetTextures() )
+        {
+            tx->GetSamplerState()->Update();
+        }
 
-		for( auto tx : txData->GetAnimations() )
-		{
-			tx->GetSamplerState()->Update();
-		}
-	}
+        for( auto tx : txData->GetAnimations() )
+        {
+            tx->GetSamplerState()->Update();
+        }
+    }
 
     //assert( !"Implement in derived class" );
 }
@@ -150,7 +150,7 @@ BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string 
     , m_name( name )
     , m_uid( uid )
     , m_pluginParamValModel( model )
-	, m_id( IDGenerator::Instance().GetID() )
+    , m_id( IDGenerator::Instance().GetID() )
 {
 }
 
@@ -166,7 +166,7 @@ BasePlugin< Iface >::~BasePlugin()
 template< class Iface >
 bool						BasePlugin< Iface >::IsValid				() const
 {
-	if( m_prevPlugin )
+    if( m_prevPlugin )
     {
         return m_prevPlugin->IsValid();
     }
@@ -247,25 +247,25 @@ IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::s
                                           GetVertexShaderChannel(),
                                           GetGeometryShaderChannel() };
     for( auto & channel : channels )
-	{
+    {
         if( !channel ) continue;
 
-		auto txData = channel->GetTexturesData();
-		for( auto tx : txData->GetTextures() )
-		{
-			if( tx->GetName() == name )
-			{
-				return tx->GetSamplerState();
-			}
-		}
+        auto txData = channel->GetTexturesData();
+        for( auto tx : txData->GetTextures() )
+        {
+            if( tx->GetName() == name )
+            {
+                return tx->GetSamplerState();
+            }
+        }
 
-		for( auto anim : txData->GetAnimations() )
-		{
-			if( anim->GetName() == name )
-			{
-				return anim->GetSamplerState();
-			}
-		}
+        for( auto anim : txData->GetAnimations() )
+        {
+            if( anim->GetName() == name )
+            {
+                return anim->GetSamplerState();
+            }
+        }
 
         for( auto font : txData->GetFonts() )
         {
@@ -274,8 +274,8 @@ IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::s
                 return font->GetStateModel();
             }
         }
-	}
-	return nullptr;
+    }
+    return nullptr;
 }
 
 // *******************************
@@ -293,17 +293,17 @@ std::vector< IParameterPtr >        BasePlugin< Iface >::GetResourceStateModelPa
         if( !channel ) continue;
 
         auto txData = channel->GetTexturesData();
-	    for( auto & tx : txData->GetTextures() )
+        for( auto & tx : txData->GetTextures() )
         {
             auto params = tx->GetSamplerState()->GetParameters();
             ret.insert( ret.end(), params.begin(), params.end() );
         }
-	    for( auto & anim : txData->GetAnimations() )
+        for( auto & anim : txData->GetAnimations() )
         {
             auto params = anim->GetSamplerState()->GetParameters();
             ret.insert( ret.end(), params.begin(), params.end() );
         }
-	    for( auto & font : txData->GetFonts() )
+        for( auto & font : txData->GetFonts() )
         {
             auto params = font->GetStateModel()->GetParameters();
             ret.insert( ret.end(), params.begin(), params.end() );
@@ -321,7 +321,7 @@ struct NullDeleter {template<typename T> void operator()(T*) {} };
 template< class Iface >
 ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
 {
-	assert( false ); // DEPRECATED
+    assert( false ); // DEPRECATED
     IParameterPtr param = GetParameter( name );
 
     //ParamBoolPtr qParam = std::static_pointer_cast< IParameterPtr, ParamBoolPtr >( param );
@@ -487,7 +487,7 @@ void								BasePlugin< Iface >::SetPrevPlugin                  ( IPluginPtr plu
 template< class Iface >
 mathematics::RectConstPtr			BasePlugin< Iface >::GetAABB						( const glm::mat4 & ) const
 {
-	return nullptr;
+    return nullptr;
 }
 
 // *******************************

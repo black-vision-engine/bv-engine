@@ -11,7 +11,7 @@ namespace bv {
 struct MeshUtils
 {
 
-	static MeshAssetConstPtr		    LoadMesh			    ( MeshAssetDescConstPtr desc );
+    static MeshAssetConstPtr		    LoadMesh			    ( MeshAssetDescConstPtr desc );
     static MeshAssetConstPtr            ConvertToMesh           ( FbxNode * node );
 
     static ThumbnailConstPtr            LoadThumbnail           ( const MeshAssetDescConstPtr & desc );

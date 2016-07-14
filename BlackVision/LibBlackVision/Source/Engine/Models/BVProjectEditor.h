@@ -132,9 +132,9 @@ public:
 /* PLUGINS */
     
     /* paths */
-    bool                    AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 posIdx );
+    bool                    AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 posIdx, bool enableUndo = false );
     bool                    DeletePlugin		( const std::string & sceneName, const std::string & nodePath, UInt32 pluginIdx );
-    bool                    DeletePlugin		( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName );
+    bool                    DeletePlugin		( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, bool enableUndo = false );
 
     bool                    AttachPlugin		( const std::string & sceneName, const std::string & nodePath, UInt32 posIdx );
     bool                    AttachPlugin		( const std::string & destSceneName, const std::string & destNodePath, const std::string & srcSceneName, const std::string & srcNodePath, UInt32 posIdx );
@@ -144,14 +144,14 @@ public:
     model::IPluginPtr		GetDetachedPlugin	( const std::string & sceneName, const std::string & nodePath );
     void                    ResetDetachedPlugin	( const std::string & sceneName, const std::string & nodePath );
 
-    model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginNameToCopy );
+    model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginNameToCopy, bool enableUndo = false );
 
-    bool					MovePlugin			( const std::string & destSceneName, const std::string & destParentNode, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcParentNode, const std::string & pluginName );
+    bool					MovePlugin			( const std::string & destSceneName, const std::string & destParentNode, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcParentNode, const std::string & pluginName, bool enableUndo = false );
 
     /* objects */
     bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 posIdx );
     bool                    DeletePlugin		( model::BasicNodePtr node, UInt32 pluginIdx );
-    bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
+    model::PluginWithIdx    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
 
     bool                    AttachPlugin		( model::BasicNodePtr node, UInt32 posIdx );
     bool                    AttachPlugin		( model::BasicNodePtr destNode, model::BasicNodePtr srcNode, UInt32 posIdx );
@@ -163,9 +163,9 @@ public:
 
     /** Add a copy of plugin from srcNode with given name to the destNode on destIdx position.
     @return Returns copied plugin. */
-    model::IPluginPtr		AddPluginCopy		( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy );
+    model::IPluginPtr		AddPluginCopy		( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, bool enableUndo = false );
 
-    bool					MovePlugin			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName );
+    bool					MovePlugin			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName, bool enableUndo = false );
 
 /* NODE LOGICS */
     bool                    SetLogic            ( model::BasicNodePtr node, model::INodeLogicPtr logic, bool enableUndo = false );
