@@ -175,7 +175,7 @@ public:
 
     model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node ) const;
     bool						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
-    bool                        SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName );
+    bool                        SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName, bool enableUndo = false );
     bool						LoadGlobalEffectAsset( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName, IDeserializer & serializedAssetData, SizeType idx );
 
 /* TIMELINES */
@@ -207,11 +207,11 @@ public:
 
 /* LIGHTS */
 
-    bool                    AddLight                    ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath );
-    bool                    RemoveLight                 ( const std::string & sceneName, UInt32 idx );
+    bool                    AddLight                    ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath, bool enableUndo = false );
+    bool                    RemoveLight                 ( const std::string & sceneName, UInt32 idx, bool enableUndo = false );
 
-    bool                    AddLight                    ( model::SceneModelPtr scene, LightType type, model::ITimeEvaluatorPtr timeline );
-    bool                    RemoveLight                 ( model::SceneModelPtr scene, UInt32 idx );
+    bool                    AddLight                    ( model::SceneModelPtr scene, LightType type, model::ITimeEvaluatorPtr timeline, bool enableUndo = false );
+    bool                    RemoveLight                 ( model::SceneModelPtr scene, UInt32 idx, bool enableUndo = false );
 
 /* CAMERAS */
 

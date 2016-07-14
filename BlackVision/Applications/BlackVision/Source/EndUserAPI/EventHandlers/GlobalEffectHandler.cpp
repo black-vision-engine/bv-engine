@@ -39,7 +39,7 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
 
         if( command == GlobalEffectEvent::Command::SetGlobalEffect )
         {
-            result = editor->SetNodeEffect( sceneName, nodePath, timelinePath, effectName );
+            result = editor->SetNodeEffect( sceneName, nodePath, timelinePath, effectName, true );
         }
         if( command == GlobalEffectEvent::Command::LoadGlobalEffectAsset )
         {

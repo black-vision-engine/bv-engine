@@ -340,6 +340,9 @@
     <Filter Include="Engine\Models\UndoRedo\Timelines">
       <UniqueIdentifier>{33ef9e14-422b-46ea-ae62-c3d31d5c8383}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\UndoRedo\Lights">
+      <UniqueIdentifier>{69432d55-d2af-4c7d-9b40-3f4a2c4205d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1719,6 +1722,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.cpp">
       <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\EffectsOperations.cpp">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.cpp">
+      <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4051,6 +4060,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.h">
       <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\EffectsOperations.h">
+      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.h">
+      <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

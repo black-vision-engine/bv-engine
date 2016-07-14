@@ -49,6 +49,10 @@
 #include "Engine/Models/UndoRedo/Timelines/RenameTimelineOperation.h"
     // Plugins
 #include "Engine/Models/UndoRedo/Plugins/PluginOperations.h"
+    // Effects
+#include "Engine/Models/UndoRedo/Plugins/EffectsOperations.h"
+    // Lights
+#include "Engine/Models/UndoRedo/Lights/LightOperations.h"
 
 #include <memory>
 
@@ -1082,31 +1086,33 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
 
 // *******************************
 //
-bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath )
+bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath, bool enableUndo )
 {
     auto modelScene = m_project->GetModelScene( sceneName );
     auto type = SerializationHelper::String2T< LightType >( lightType , LightType::LT_DIRECTIONAL );
     auto timeline = GetTimeEvaluator( timelinePath );
 
-    return AddLight( modelScene, type, timeline );
+    return AddLight( modelScene, type, timeline, enableUndo );
 }
 
 // *******************************
 //
-bool            BVProjectEditor::RemoveLight                ( const std::string & sceneName, UInt32 idx )
+bool            BVProjectEditor::RemoveLight                ( const std::string & sceneName, UInt32 idx, bool enableUndo )
 {
     auto modelScene = m_project->GetModelScene( sceneName );
-    return RemoveLight( modelScene, idx );
+    return RemoveLight( modelScene, idx, enableUndo );
 }
 
 // *******************************
 //
-bool            BVProjectEditor::AddLight                    ( model::SceneModelPtr modelScene, LightType type, model::ITimeEvaluatorPtr timeline )
+bool            BVProjectEditor::AddLight                    ( model::SceneModelPtr modelScene, LightType type, model::ITimeEvaluatorPtr timeline, bool enableUndo )
 {
     if( modelScene && timeline )
     {
-        auto light = model::HelperModelLights::CreateModelLight( type, timeline );
-        modelScene->AddLight( std::shared_ptr< model::IModelLight >( light ) );
+        auto light = std::shared_ptr< model::IModelLight >( model::HelperModelLights::CreateModelLight( type, timeline ) );
+        modelScene->AddLight( light );
+        if( enableUndo )
+            modelScene->GetHistory().AddOperation( std::unique_ptr< AddLightOperation >( new AddLightOperation( modelScene, light ) ) );
         
         return true;
     }
@@ -1116,14 +1122,16 @@ bool            BVProjectEditor::AddLight                    ( model::SceneModel
 
 // *******************************
 //
-bool            BVProjectEditor::RemoveLight                ( model::SceneModelPtr modelScene, UInt32 idx )
+bool            BVProjectEditor::RemoveLight                ( model::SceneModelPtr modelScene, UInt32 idx, bool enableUndo )
 {
     if( modelScene )
     {
         auto light = modelScene->GetLight( idx );
         if( light )
         {
-            return modelScene->RemoveLight( idx );
+            auto result = modelScene->RemoveLight( idx );
+            if( result && enableUndo )
+                modelScene->GetHistory().AddOperation( std::unique_ptr< DeleteLightOperation >( new DeleteLightOperation( modelScene, light, idx ) ) );
         }
     }
 
@@ -1301,7 +1309,7 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
 
 // ***********************
 //
-bool                        BVProjectEditor::SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName )
+bool                        BVProjectEditor::SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName, bool enableUndo )
 {
     auto scene = GetModelScene( sceneName );
 
@@ -1320,7 +1328,14 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
         auto effect = SerializationHelper::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = GetNode( sceneName, nodePath );
-        return SetNodeEffect( node, newEffect );
+        auto curEffect = node->GetNodeEffect();
+        auto result = SetNodeEffect( node, newEffect );
+        if( result && enableUndo )
+        {
+            auto scene = GetModelScene( sceneName );
+            scene->GetHistory().AddOperation( std::unique_ptr< SetEffectOperation >( new SetEffectOperation( QueryTyped( node ), curEffect, newEffect ) ) );
+        }
+        return result;
     }
 
     return false;
