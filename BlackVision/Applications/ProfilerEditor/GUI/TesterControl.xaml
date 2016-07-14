@@ -67,7 +67,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
-                                    <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                    <!--<GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />-->
                                     <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
                                     <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Message}" />
                                     <GridViewColumn Header="Test File" DisplayMemberBinding="{Binding Path=FileRef.FileName}" />
