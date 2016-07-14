@@ -54,7 +54,7 @@
                 <TabControl DataContext="{Binding TestsManager}">
                     <TabItem Header="Errors" >
                         <!--List of errors in tests-->
-                        <ListView MinHeight="400" ItemsSource="{Binding ErrorList}">
+                        <ListView MinHeight="400" DataContext="{Binding}" ItemsSource="{Binding ErrorList}" SelectedItem="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.SelectedError}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="" >
@@ -90,9 +90,9 @@
 
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Grid.Column="2" Margin="2, 2, 2, 2" DataContext="{Binding Path=TestsManager.SelectedFile}" >
-                <TextBox MinHeight="300" Text="{Binding Path=CurrentTestEvent.EventContent}" />
-                <TextBox MinHeight="300" Text="" />
+            <StackPanel Orientation="Vertical" Grid.Column="2" Margin="2, 2, 2, 2" DataContext="{Binding Path=TestsManager.SelectedError}" >
+                <TextBox MinHeight="300" Text="{Binding Path=ReferenceReponse.EventContent}" />
+                <TextBox MinHeight="300" Text="{Binding Path=ReceivedResponse.EventContent}" IsEnabled="False"/>
             </StackPanel>
 
         </Grid>

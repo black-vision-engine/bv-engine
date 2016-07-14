@@ -17,7 +17,7 @@ namespace ProfilerEditor.Tester
         private string      m_eventContent;
         public JObject      EventJSon;
 
-        public string EventContent
+        public string       EventContent
         {
             get
             {

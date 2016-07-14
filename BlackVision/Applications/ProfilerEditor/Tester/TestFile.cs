@@ -22,8 +22,13 @@ namespace ProfilerEditor.Tester
 
         public Event        CurrentTestEvent { get; set; }
         public Event        CurrentResponse { get; set; }
-        public Event        CurrentRealEvent { get; set; }
+        public Event        CurrentRealResponse { get; set; }
 
+
+        override public string ToString()
+        {
+            return "ProfilerEditor.Tester.TestFile";
+        }
 
         public              TestFile()
         {
@@ -64,6 +69,9 @@ namespace ProfilerEditor.Tester
                 // This should be warning only.
                 TestError error = new TestError( newEvent );
                 error.Message = "Reference data doesn't contain response to this message.";
+                error.FileRef = this;
+
+                return error;
             }
 
             Event expectedResponse = ReferenceResponses[ (int)expectedRespPtr ];
@@ -79,6 +87,7 @@ namespace ProfilerEditor.Tester
                 TestError error = new TestError( newEvent );
                 error.Message = "Response doesn't equals reference response.";
                 error.FileRef = this;
+                error.ReferenceReponse = expectedResponse;
 
                 return error;
             }

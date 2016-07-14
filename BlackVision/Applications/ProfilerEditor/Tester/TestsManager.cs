@@ -23,6 +23,7 @@ namespace ProfilerEditor.Tester
         private ObservableCollection< TestFile >    m_testFiles;
         private TestFile                            m_selectedFile;
         private string                              m_testsPath;
+        private TestError                           m_selectedError;
 
         private ObservableCollection< TestError >   m_errorList;
 
@@ -34,18 +35,9 @@ namespace ProfilerEditor.Tester
             m_testMode = TestingMode.Uninitialized;
 
             SelectedFile = null;
+            SelectedError = null;
             TestFiles = new ObservableCollection< TestFile >();
             ErrorList = new ObservableCollection< TestError >();
-
-            //// Test
-            //TestError error = new TestError();
-            //error.CommandName = "TreeStructure";
-            //error.IsError = false;
-            //error.EventID = 1;
-            //error.EventName = "InfoEvent";
-            //error.Message = "No elements in tree";
-
-            //ErrorList.Add( error );
         }
 
         // ================================================= //
@@ -222,6 +214,19 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_errorList = value;
+            }
+        }
+
+        public TestError SelectedError
+        {
+            get
+            {
+                return m_selectedError;
+            }
+
+            set
+            {
+                m_selectedError = value;
             }
         }
         #endregion
