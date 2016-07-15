@@ -32,23 +32,46 @@
                     <Button Content="Connect" Margin="115,120,10,10" Width="60" Height="25" Background="{Binding ConnectedBrush}" Command="{Binding ConnectCommand}"/>
                 </Grid>
 
-                <StackPanel Margin="0, 5, 0, 5">
-                    <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestDirectory}"/>
-                    <StackPanel Orientation="Horizontal" >
-                        <Button Content="Run Test" Width="80" Command="{Binding RunSingleTest}" />
-                        <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                    <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
+                <StackPanel Margin="0, 2, 0, 2">
+                    <Button Width="80" Command="{Binding ContinueDebugging}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Fill="Green" Margin="0, 0, 5, 0" Data="M 0 16 L 12 8 L 0 0 Z"/>
+                            <TextBlock Text="Continue" />
+                        </StackPanel>
+                    </Button>
+                    <Button Width="80" Command="{Binding DebugStep}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Fill="Blue" Margin="0, 0, 5, 0" Data="M 0 16 L 12 8 L 0 0 Z"/>
+                            <TextBlock Text="Step" />
+                        </StackPanel>
+                    </Button>
+                    <Button Width="80" Command="{Binding StopDebugging}">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="Red" Margin="0, 0, 5, 0" Height="12" Width="12" />
+                            <TextBlock Text="Stop" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
+
+                <StackPanel>
+                    <StackPanel Margin="0, 5, 0, 5">
+                        <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestDirectory}"/>
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Content="Run Test" Width="80" Command="{Binding RunSingleTest}" />
+                            <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                        <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
+                    </StackPanel>
                 
-                <!--List of tests in chosen directory-->
-                <ListView MinHeight="300" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding FileName}" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    <!--List of tests in chosen directory-->
+                    <ListView MinHeight="300" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FileName}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
 
             </StackPanel>
 

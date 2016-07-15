@@ -20,6 +20,9 @@ namespace ProfilerEditor.Tester
         private UInt32                          m_testEventPtr;
         private UInt32                          m_responsePtr;
 
+        private int                             m_numErrors;
+        private int                             m_numWarnings;      // For future use
+
         public Event        CurrentTestEvent { get; set; }
         public Event        CurrentResponse { get; set; }
         public Event        CurrentRealResponse { get; set; }
@@ -35,6 +38,9 @@ namespace ProfilerEditor.Tester
             m_testEvents = new ObservableCollection< Event >();
             m_referenceResponses = new ObservableCollection< Event >();
             m_realResponses = new ObservableCollection< Event >();
+
+            NumErrors = 0;
+            NumWarnings = 0;
         }
 
         public void         InitTest()
@@ -43,6 +49,9 @@ namespace ProfilerEditor.Tester
 
             m_testEventPtr = 0;
             m_responsePtr = 0;
+
+            NumErrors = 0;
+            NumWarnings = 0;
         }
 
         // ================================================= //
@@ -74,6 +83,7 @@ namespace ProfilerEditor.Tester
 
                 List < TestError > errorsList = new List< TestError >();
                 errorsList.Add( error );
+                CountErrorsWarnings( errorsList );
 
                 return errorsList;
             }
@@ -90,6 +100,8 @@ namespace ProfilerEditor.Tester
             }
             else
             {
+                CountErrorsWarnings( errors );
+
                 // Complete error info.
                 foreach( var error in errors )
                 {
@@ -99,6 +111,12 @@ namespace ProfilerEditor.Tester
 
                 return errors;
             }
+        }
+
+        private void        CountErrorsWarnings ( List< TestError > errorsList )
+        {
+            // Count warnings in future.
+            NumErrors += errorsList.Count;
         }
 
 
@@ -252,6 +270,32 @@ namespace ProfilerEditor.Tester
             }
         }
 
-    #endregion
+        public int NumErrors
+        {
+            get
+            {
+                return m_numErrors;
+            }
+
+            set
+            {
+                m_numErrors = value;
+            }
+        }
+
+        public int NumWarnings
+        {
+            get
+            {
+                return m_numWarnings;
+            }
+
+            set
+            {
+                m_numWarnings = value;
+            }
+        }
+
+        #endregion
     }
 }
