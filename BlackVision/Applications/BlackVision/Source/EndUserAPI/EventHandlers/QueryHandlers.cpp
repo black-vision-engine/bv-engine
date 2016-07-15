@@ -763,7 +763,7 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
     context->detailedInfo = false;
     context->pluginsInfo = true;
     
-    PrepareResponseTemplate( ser, InfoEvent::Command::MinimalTreeStructure, eventID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
 
     ser.EnterArray( "scenes" );
 
