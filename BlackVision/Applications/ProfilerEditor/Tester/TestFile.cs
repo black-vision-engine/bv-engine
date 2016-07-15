@@ -20,6 +20,9 @@ namespace ProfilerEditor.Tester
         private UInt32                          m_testEventPtr;
         private UInt32                          m_responsePtr;
 
+        private int                             m_numErrors;
+        private int                             m_numWarnings;      // For future use
+
         public Event        CurrentTestEvent { get; set; }
         public Event        CurrentResponse { get; set; }
         public Event        CurrentRealResponse { get; set; }
@@ -35,6 +38,9 @@ namespace ProfilerEditor.Tester
             m_testEvents = new ObservableCollection< Event >();
             m_referenceResponses = new ObservableCollection< Event >();
             m_realResponses = new ObservableCollection< Event >();
+
+            NumErrors = 0;
+            NumWarnings = 0;
         }
 
         public void         InitTest()
@@ -43,6 +49,9 @@ namespace ProfilerEditor.Tester
 
             m_testEventPtr = 0;
             m_responsePtr = 0;
+
+            NumErrors = 0;
+            NumWarnings = 0;
         }
 
         // ================================================= //
@@ -58,7 +67,7 @@ namespace ProfilerEditor.Tester
             return sendEvent;
         }
 
-        public TestError    ResponseStep( string response )
+        public List< TestError >    ResponseStep( string response, ComparisionRules rules )
         {
             Event newEvent = ParseResponse( response );
             int expectedRespPtr = (int)m_responsePtr;
@@ -72,27 +81,42 @@ namespace ProfilerEditor.Tester
                 error.FileRef = this;
                 error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
 
-                return error;
+                List < TestError > errorsList = new List< TestError >();
+                errorsList.Add( error );
+                CountErrorsWarnings( errorsList );
+
+                return errorsList;
             }
 
             Event expectedResponse = ReferenceResponses[ (int)expectedRespPtr ];
 
-            // First simple version.
-            if( JToken.DeepEquals( newEvent.EventJSon, expectedResponse.EventJSon ) )
+
+            // Reference and reponse comparision.
+            List < TestError > errors = rules.Compare( expectedResponse, newEvent );
+            if( errors == null )
             {
                 // There's no error in this response.
                 return null;
             }
             else
             {
-                TestError error = new TestError( newEvent );
-                error.Message = "Response doesn't equals reference response.";
-                error.FileRef = this;
-                error.ReferenceReponse = expectedResponse;
-                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                CountErrorsWarnings( errors );
 
-                return error;
+                // Complete error info.
+                foreach( var error in errors )
+                {
+                    error.FileRef = this;
+                    error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                }
+
+                return errors;
             }
+        }
+
+        private void        CountErrorsWarnings ( List< TestError > errorsList )
+        {
+            // Count warnings in future.
+            NumErrors += errorsList.Count;
         }
 
 
@@ -246,6 +270,32 @@ namespace ProfilerEditor.Tester
             }
         }
 
-    #endregion
+        public int NumErrors
+        {
+            get
+            {
+                return m_numErrors;
+            }
+
+            set
+            {
+                m_numErrors = value;
+            }
+        }
+
+        public int NumWarnings
+        {
+            get
+            {
+                return m_numWarnings;
+            }
+
+            set
+            {
+                m_numWarnings = value;
+            }
+        }
+
+        #endregion
     }
 }

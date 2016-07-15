@@ -30,10 +30,11 @@ private:
     model::SceneModelPtr        m_scene;
     model::BasicNodePtr         m_parentNode;
     model::INodeLogicPtr        m_logic;
+	model::INodeLogicPtr        m_prevLogic;
 
 public:
 
-    AddNodeLogicOperation       ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::INodeLogicPtr logic );
+    AddNodeLogicOperation       ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::INodeLogicPtr logic, model::INodeLogicPtr prevLogic );
 
 
     virtual bool        Undo    ( BVProjectEditor * editor );

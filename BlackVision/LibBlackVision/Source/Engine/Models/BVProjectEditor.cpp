@@ -1246,13 +1246,14 @@ bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, con
 //
 bool                        BVProjectEditor::SetLogic            ( model::BasicNodePtr node, model::INodeLogicPtr logic, bool enableUndo )
 {
+	auto prevLogic = node->GetLogic();
     node->SetLogic( logic );
 
     if( enableUndo )
     {
         auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
         auto scene = GetModelScene( sceneName );
-        scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic ) ) );
+        scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic, prevLogic ) ) );
     }
 
     return true;

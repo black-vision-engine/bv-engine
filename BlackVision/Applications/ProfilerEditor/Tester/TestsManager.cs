@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+
+
+
 
 namespace ProfilerEditor.Tester
 {
@@ -18,7 +22,7 @@ namespace ProfilerEditor.Tester
         DebugFile
     }
 
-    public class TestsManager
+    public class TestsManager : INotifyPropertyChanged
     {
         private ObservableCollection< TestFile >    m_testFiles;
         private TestFile                            m_selectedFile;
@@ -28,23 +32,26 @@ namespace ProfilerEditor.Tester
         private ObservableCollection< TestError >   m_errorList;
 
         TestingMode                                 m_testMode;
+        ComparisionRules                            m_comparisionRules;
 
 
         public TestsManager()
         {
-            m_testMode = TestingMode.Uninitialized;
+            TestMode = TestingMode.Uninitialized;
 
             SelectedFile = null;
             SelectedError = null;
             TestFiles = new ObservableCollection< TestFile >();
             ErrorList = new ObservableCollection< TestError >();
+
+            m_comparisionRules = new ComparisionRules();
         }
 
         // ================================================= //
 
         public void     DebugCurrentFile()
         {
-            m_testMode = TestingMode.DebugFile;
+            TestMode = TestingMode.DebugFile;
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
@@ -52,12 +59,18 @@ namespace ProfilerEditor.Tester
 
         public void     TestAllFiles()
         {
-            m_testMode = TestingMode.AllFiles;
+            TestMode = TestingMode.AllFiles;
+
+            if( TestFiles.Count != 0 )
+            {
+                SelectedFile = TestFiles[ 0 ];
+                ParseFile( SelectedFile );
+            }
         }
 
         public void     TestSingleFile()
         {
-            m_testMode = TestingMode.SingleFile;
+            TestMode = TestingMode.SingleFile;
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
@@ -65,6 +78,29 @@ namespace ProfilerEditor.Tester
 
 
         // ================================================= //
+
+        public bool     StepToNextFile  ()
+        {
+            for( int i = 0; i < TestFiles.Count; ++i )
+            {
+                if( TestFiles[ i ] == SelectedFile )
+                {
+                    // No more files on list.
+                    if( i + 1 >= TestFiles.Count )
+                        return false;
+
+                    // Choose next file as selected file.
+                    SelectedFile = TestFiles[ i + 1 ];
+                    ParseFile( SelectedFile );
+
+                    return true;
+                }
+            }
+
+            // Something very wrong ;)
+            return false;
+        }
+
 
         public string   MakeTestStep    ()
         {
@@ -74,12 +110,15 @@ namespace ProfilerEditor.Tester
                 if( msg == null )
                 {
                     // No more messages in file. Choose new file or send null.
-                    if( m_testMode == TestingMode.SingleFile )
+                    if( TestMode == TestingMode.SingleFile )
                     {
-                        m_testMode = TestingMode.Uninitialized;
-                        AddError( "Test ended", "", "Testing file ended.", 0, false, SelectedFile );
-                        return null;
+                        TestMode = TestingMode.Uninitialized;
                     }
+
+                    bool fileTestResult = SelectedFile.NumErrors == 0 ? false : true;
+
+                    AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
+                    return null;
                 }
 
                 return msg;
@@ -90,9 +129,14 @@ namespace ProfilerEditor.Tester
 
         public void     ReceivedReponse( string response )
         {
-            var error = SelectedFile.ResponseStep( response );
-            if( error != null )
-                ErrorList.Add( error );
+            var errors = SelectedFile.ResponseStep( response, m_comparisionRules );
+            if( errors != null )
+            {
+                foreach( var error in errors )
+                {
+                    ErrorList.Add( error );
+                }
+            }
         }
 
         public void     EngineDisconnected( string message )
@@ -194,13 +238,7 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_selectedFile = value;
-                //foreach( var file in TestFiles )
-                //{
-                //    if( m_selectedFile == file )
-                //    {
-
-                //    }
-                //}
+                NotifyPropertyChanged( "SelectedFile" );
             }
         }
 
@@ -227,8 +265,38 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_selectedError = value;
+                NotifyPropertyChanged( "SelectedError" );
+            }
+        }
+
+        internal TestingMode TestMode
+        {
+            get
+            {
+                return m_testMode;
+            }
+
+            set
+            {
+                m_testMode = value;
             }
         }
         #endregion
+
+        #region PropertyChangedImpl
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        private void NotifyPropertyChanged( String info )
+        {
+            if( PropertyChanged != null )
+            {
+                PropertyChanged( this, new PropertyChangedEventArgs( info ) );
+            }
+        }
+
+        #endregion
+
     }
 }

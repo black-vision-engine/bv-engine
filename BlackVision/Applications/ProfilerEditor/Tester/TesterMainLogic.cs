@@ -17,7 +17,7 @@ namespace ProfilerEditor.Tester
     {
         Init,
         Testing,
-
+        Break
     }
 
 
@@ -45,6 +45,11 @@ namespace ProfilerEditor.Tester
         public ICommand ChooseTestDirectory { get; internal set; }
         public ICommand DebugCurrentTest { get; internal set; }
         public ICommand RunSingleTest { get; internal set; }
+        public ICommand RunAllTests { get; internal set; }
+
+        public ICommand ContinueDebugging { get; internal set; }
+        public ICommand DebugStep { get; internal set; }
+        public ICommand StopDebugging { get; internal set; }
 
         #endregion
 
@@ -66,8 +71,11 @@ namespace ProfilerEditor.Tester
             ChooseTestDirectory = new RelayCommand( ChooseTestDir, IsInitState );
             DebugCurrentTest = new RelayCommand( DebugTest, IsInitState );
             RunSingleTest = new RelayCommand( TestSingleFile, IsInitState );
+            RunAllTests = new RelayCommand( TestAllFiles, IsInitState );
         }
 
+
+        #region Connection
 
         private void ConnectClick           ( object parameter )
         {
@@ -103,6 +111,8 @@ namespace ProfilerEditor.Tester
             IsConnected = false;
             m_testsManager.EngineDisconnected( Message );
         }
+
+        #endregion
 
         public void MsgReceived             ( string data, EventArgs e )
         {
@@ -167,6 +177,14 @@ namespace ProfilerEditor.Tester
             QueryAndSendNextMessage();
         }
 
+        private void TestAllFiles( object parameter )
+        {
+            m_state = TestsState.Testing;
+            m_testsManager.TestAllFiles();
+
+            QueryAndSendNextMessage();
+        }
+
 
         private void QueryAndSendNextMessage()
         {
@@ -177,7 +195,29 @@ namespace ProfilerEditor.Tester
                 m_network.Write( eventToSend );
             }
             else
-                m_state = TestsState.Init;
+            {
+                if( m_testsManager.TestMode == TestingMode.DebugFile )
+                {
+                    m_state = TestsState.Break;
+                }
+                else if( m_testsManager.TestMode == TestingMode.AllFiles )
+                {
+                    // Here BV should be restarted or cleaned.
+
+
+                    if( m_testsManager.StepToNextFile() )
+                    {
+                        eventToSend = m_testsManager.MakeTestStep();
+                        m_network.Write( eventToSend );
+                    }
+                    else
+                        m_state = TestsState.Init;
+                }
+                else
+                {
+                    m_state = TestsState.Init;
+                }
+            }
         }
 
         #region Properties

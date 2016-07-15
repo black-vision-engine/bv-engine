@@ -13,17 +13,18 @@ namespace bv
 
 // ***********************
 //
-AddNodeLogicOperation::AddNodeLogicOperation( model::SceneModelPtr scene, model::IModelNodePtr parent, model::INodeLogicPtr logic )
+AddNodeLogicOperation::AddNodeLogicOperation( model::SceneModelPtr scene, model::IModelNodePtr parent, model::INodeLogicPtr logic, model::INodeLogicPtr prevLogic )
     :   m_scene( scene )
     ,   m_parentNode( std::static_pointer_cast< model::BasicNode >( parent ) )
     ,   m_logic( logic )
+	,	m_prevLogic( prevLogic )
 {}
 
 // ***********************
 //
 bool        AddNodeLogicOperation::Undo    ( BVProjectEditor * editor )
 {
-    return editor->RemoveLogic( m_parentNode );
+    return editor->SetLogic( m_parentNode, m_prevLogic );
 }
 
 // ***********************
