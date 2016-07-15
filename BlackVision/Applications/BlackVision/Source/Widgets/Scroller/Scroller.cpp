@@ -580,11 +580,12 @@ void		Scroller::NotifyVisibilityChanged       ( bv::model::BasicNode * n, bool v
     JsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "NodeName", n->GetName() );
+	ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
 
 	if( visibility )
-        ser.SetAttribute( "Event", "ItemOnScreen" );
+        ser.SetAttribute( "cmd", "ItemOnScreen" );
 	else
-		ser.SetAttribute( "Event", "ItemOffScreen" );
+		ser.SetAttribute( "cmd", "ItemOffScreen" );
 
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
@@ -597,7 +598,8 @@ void		Scroller::NotifyNoMoreNodes ()
 
     JsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
-    ser.SetAttribute( "Event", "AllItemsOffScreen" );
+    ser.SetAttribute( "cmd", "AllItemsOffScreen" );
+	ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
 
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
@@ -610,7 +612,8 @@ void        Scroller::NotifyLowBuffer         ()
 
     JsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
-    ser.SetAttribute( "Event", "LowBuffer" );
+    ser.SetAttribute( "cmd", "LowBuffer" );
+	ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
 
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }

@@ -559,6 +559,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
     }
 
     JsonSerializeObject ser;
+	ser.SetAttribute( "TriggerEvent", "KeyframeTrigger" );
     ser.SetAttribute( "cmd", "KeyframeEvent" );
     ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );
     ser.SetAttribute( "KeyframeName", evt->GetName() );

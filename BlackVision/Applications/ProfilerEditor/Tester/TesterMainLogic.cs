@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Input;
 using System.IO;
 using BlackBurst.Backend.TCP;
+using System.Windows.Threading;
 
 
 namespace ProfilerEditor.Tester
@@ -30,10 +31,14 @@ namespace ProfilerEditor.Tester
         bool                            m_isConnected;
         SolidColorBrush                 m_connectedBrush;
 
-        string      m_ipAddress;
-        string      m_port;
+        DispatcherTimer                 m_timer;
+        int                             m_secondsTimeout = 5;
+
+        string                          m_ipAddress;
+        string                          m_port;
 
         TestsManager                    m_testsManager;
+
 
         // Hack: We need to make message from parts.
         string  m_message;
@@ -72,6 +77,10 @@ namespace ProfilerEditor.Tester
             DebugCurrentTest = new RelayCommand( DebugTest, IsInitState );
             RunSingleTest = new RelayCommand( TestSingleFile, IsInitState );
             RunAllTests = new RelayCommand( TestAllFiles, IsInitState );
+
+            m_timer = new DispatcherTimer();
+            m_timer.Tick += ReceivingTimeout;
+            m_timer.Interval = new TimeSpan( 0, 0, 0, m_secondsTimeout, 0 );
         }
 
 
@@ -114,6 +123,11 @@ namespace ProfilerEditor.Tester
 
         #endregion
 
+        private void ReceivingTimeout       ( object sender, EventArgs e )
+        {
+            m_testsManager.Timeout( m_secondsTimeout );
+        }
+
         public void MsgReceived             ( string data, EventArgs e )
         {
             int startIdx = 0;
@@ -138,6 +152,8 @@ namespace ProfilerEditor.Tester
             if( msgEnd )
             {
                 m_testsManager.ReceivedReponse( m_message );
+                m_timer.Stop();
+
                 QueryAndSendNextMessage();
 
                 m_message = "";
@@ -193,6 +209,7 @@ namespace ProfilerEditor.Tester
             if( eventToSend != null )
             {
                 m_network.Write( eventToSend );
+                m_timer.Start();
             }
             else
             {
@@ -209,6 +226,7 @@ namespace ProfilerEditor.Tester
                     {
                         eventToSend = m_testsManager.MakeTestStep();
                         m_network.Write( eventToSend );
+                        m_timer.Start();
                     }
                     else
                         m_state = TestsState.Init;

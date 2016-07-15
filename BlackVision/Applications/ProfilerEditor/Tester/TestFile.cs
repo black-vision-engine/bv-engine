@@ -61,6 +61,16 @@ namespace ProfilerEditor.Tester
             if( m_testEventPtr >= TestEvents.Count )
                 return null;
 
+            if( ReferenceResponses.Count <= m_responsePtr )
+                return null;
+
+            if( ReferenceResponses[ (int)m_responsePtr ].SyncEvent )
+            {
+                // Don't send next event before TriggerEvent comes.
+                return "{}";
+            }
+
+
             string sendEvent = TestEvents[ (int)m_testEventPtr ].GetUnformattedContent();
             m_testEventPtr++;
 
@@ -215,8 +225,19 @@ namespace ProfilerEditor.Tester
             newEvent.EventContent = msgString;
             newEvent.EventJSon = json;
 
-            newEvent.EventName = "Response";
             newEvent.CommandName = json[ "cmd" ].ToString();
+            var triggerEvent = json[ "TriggerEvent" ];
+
+            if( triggerEvent != null )
+            {
+                newEvent.EventName = triggerEvent.ToString();
+                newEvent.SyncEvent = true;
+            }
+            else
+            {
+                newEvent.EventName = "Response";
+            }
+            
 
             JToken eventID = json[ "EventID" ];
             if( eventID != null )

@@ -16,6 +16,7 @@ namespace ProfilerEditor.Tester
 
         private string      m_eventContent;
         public JObject      EventJSon;
+        public bool         SyncEvent { get; set; }
 
         public string       EventContent
         {
@@ -35,6 +36,11 @@ namespace ProfilerEditor.Tester
         public string GetUnformattedContent()
         {
             return m_eventContent;
+        }
+
+        public Event()
+        {
+            SyncEvent = false;
         }
     }
 }

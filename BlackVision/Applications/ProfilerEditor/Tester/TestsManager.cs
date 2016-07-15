@@ -127,6 +127,11 @@ namespace ProfilerEditor.Tester
                 return null;
         }
 
+        public bool     Timeout         ( int seconds )
+        {
+
+        }
+
         public void     ReceivedReponse( string response )
         {
             var errors = SelectedFile.ResponseStep( response, m_comparisionRules );

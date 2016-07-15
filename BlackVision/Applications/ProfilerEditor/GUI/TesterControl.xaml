@@ -56,15 +56,13 @@
                 <StackPanel>
                     <StackPanel Margin="0, 5, 0, 5">
                         <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestDirectory}"/>
-                        <StackPanel Orientation="Horizontal" >
-                            <Button Content="Run Test" Width="80" Command="{Binding RunSingleTest}" />
-                            <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}" HorizontalAlignment="Right"/>
-                        </StackPanel>
+                        <Button Content="Run Test" Width="80" Command="{Binding RunSingleTest}" />
+                        <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}" />
                         <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
                     </StackPanel>
                 
                     <!--List of tests in chosen directory-->
-                    <ListView MinHeight="300" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
+                    <ListView MinHeight="290" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding FileName}" />
