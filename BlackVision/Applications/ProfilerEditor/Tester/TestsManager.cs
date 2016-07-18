@@ -115,7 +115,7 @@ namespace ProfilerEditor.Tester
                         TestMode = TestingMode.Uninitialized;
                     }
 
-                    bool fileTestResult = SelectedFile.NumErrors == 0 ? false : true;
+                    ErrorRank fileTestResult = SelectedFile.NumErrors == 0 ? ErrorRank.ResultOk : ErrorRank.Error;
 
                     AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
                     return null;
@@ -151,23 +151,23 @@ namespace ProfilerEditor.Tester
 
         public void     EngineDisconnected( string message )
         {
-            AddError( "Engine Connection failed", "", message, 0, true );
+            AddError( "Engine Connection failed", "", message, 0, ErrorRank.Warning );
         }
 
         public void     EngineConnectionFailure()
         {
-            AddError( "Engine Disconnected", "", "", 0, true );
+            AddError( "Engine Disconnected", "", "", 0, ErrorRank.Warning );
         }
 
 
         // ================================================= //
 
-        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, bool isError )
+        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError )
         {
             AddError( cmdName, eventName, message, eventID, isError, null );
         }
 
-        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, bool isError, TestFile testFile )
+        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError, TestFile testFile )
         {
             TestError error = new TestError();
             error.CommandName = cmdName;

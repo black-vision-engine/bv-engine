@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace ProfilerEditor.Tester
 {
+    public enum ErrorRank
+    {
+        ResultOk,
+        Error,
+        Warning
+    }
+
+
     public class TestError
     {
-        public bool             IsError { get; set; }
+        public ErrorRank        IsError { get; set; }
 
         public string           EventName { get; set; }
         public string           CommandName { get; set; }
@@ -29,7 +37,7 @@ namespace ProfilerEditor.Tester
             FileRef = null;
         }
 
-        public          TestError( Event newEvent, bool isError = true )
+        public          TestError( Event newEvent, ErrorRank isError = ErrorRank.Error )
         {
             EventID = newEvent.EventID;
             EventName = newEvent.EventName;

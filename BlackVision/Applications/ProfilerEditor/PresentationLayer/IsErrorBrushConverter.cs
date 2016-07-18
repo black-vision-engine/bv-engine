@@ -16,9 +16,11 @@ namespace ProfilerEditor.PresentationLayer
     {
         public object Convert( object value, Type type, object parameter, CultureInfo culture )
         {
-            Nullable< bool > val = value as Nullable<bool>;
-            if( val.Value )
+            Nullable< ProfilerEditor.Tester.ErrorRank > val = value as Nullable< ProfilerEditor.Tester.ErrorRank >;
+            if( val.Value == ProfilerEditor.Tester.ErrorRank.Error )
                 return Brushes.Red;
+            else if( val.Value == ProfilerEditor.Tester.ErrorRank.Warning )
+                return Brushes.Orange;
             else
                 return Brushes.Green;
         }

@@ -67,8 +67,9 @@ namespace ProfilerEditor.Tester
                 var expResp = ReferenceResponses[ (int)m_responsePtr ];
 
                 TestError error = new TestError( expResp );
-                error.Message = "Message timeout: [ " + seconds.ToString() + " ] s";
+                error.Message = "Reponse timeout: [ " + seconds.ToString() + " ] s";
                 error.FileRef = this;
+                error.IsError = ErrorRank.Warning;
 
                 if( !expResp.SyncEvent )
                     error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
@@ -117,11 +118,11 @@ namespace ProfilerEditor.Tester
 
             if( expectedResponse == null )
             {
-                // This should be warning only.
                 TestError error = new TestError( newEvent );
                 error.Message = "Reference data doesn't contain response to this message.";
                 error.FileRef = this;
                 error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                error.IsError = ErrorRank.Warning;
 
                 List < TestError > errorsList = new List< TestError >();
                 errorsList.Add( error );
@@ -169,7 +170,14 @@ namespace ProfilerEditor.Tester
         private void        CountErrorsWarnings ( List< TestError > errorsList )
         {
             // Count warnings in future.
-            NumErrors += errorsList.Count;
+            foreach( var error in errorsList )
+            {
+                if( error.IsError == ErrorRank.Error )
+                    NumErrors++;
+                else if( error.IsError == ErrorRank.Error )
+                    NumWarnings++;
+            }
+            
         }
 
 
