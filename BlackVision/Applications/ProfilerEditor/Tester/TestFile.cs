@@ -20,6 +20,10 @@ namespace ProfilerEditor.Tester
         private UInt32                          m_testEventPtr;
         private UInt32                          m_responsePtr;
 
+        private int                             m_responseTimeout;
+        private static float                    m_timeoutScale = 1.5F;
+        private static int                      m_additionalWaitTime = 2;
+
         private int                             m_numErrors;
         private int                             m_numWarnings;      // For future use
 
@@ -56,6 +60,28 @@ namespace ProfilerEditor.Tester
 
         // ================================================= //
 
+        public TestError    Timeout     ( int seconds )
+        {
+            if( m_responseTimeout < seconds )
+            {
+                var expResp = ReferenceResponses[ (int)m_responsePtr ];
+
+                TestError error = new TestError( expResp );
+                error.Message = "Message timeout: [ " + seconds.ToString() + " ] s";
+                error.FileRef = this;
+
+                if( !expResp.SyncEvent )
+                    error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+
+                // Ignore expected mesage and take next in queue.
+                expResp.Used = false;
+                m_responsePtr++;
+
+                return error;
+            }
+            return null;
+        }
+
         public string       SendingStep ()
         {
             if( m_testEventPtr >= TestEvents.Count )
@@ -66,12 +92,19 @@ namespace ProfilerEditor.Tester
 
             if( ReferenceResponses[ (int)m_responsePtr ].SyncEvent )
             {
+                var timeDiff = ReferenceResponses[ (int)m_responsePtr ].Time - ReferenceResponses[ (int)m_responsePtr - 1 ].Time;
+                m_responseTimeout = (int)( timeDiff.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
+
                 // Don't send next event before TriggerEvent comes.
                 return "{}";
             }
 
 
             string sendEvent = TestEvents[ (int)m_testEventPtr ].GetUnformattedContent();
+
+            var timeDiff2 = ReferenceResponses[ (int)m_responsePtr ].Time - TestEvents[ (int)m_testEventPtr ].Time;
+            m_responseTimeout = (int)( timeDiff2.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
+
             m_testEventPtr++;
 
             return sendEvent;
@@ -80,10 +113,9 @@ namespace ProfilerEditor.Tester
         public List< TestError >    ResponseStep( string response, ComparisionRules rules )
         {
             Event newEvent = ParseResponse( response );
-            int expectedRespPtr = (int)m_responsePtr;
-            m_responsePtr++;
+            Event expectedResponse = FindCorespondingEvent( newEvent );
 
-            if( expectedRespPtr >= ReferenceResponses.Count )
+            if( expectedResponse == null )
             {
                 // This should be warning only.
                 TestError error = new TestError( newEvent );
@@ -98,29 +130,40 @@ namespace ProfilerEditor.Tester
                 return errorsList;
             }
 
-            Event expectedResponse = ReferenceResponses[ (int)expectedRespPtr ];
-
-
             // Reference and reponse comparision.
             List < TestError > errors = rules.Compare( expectedResponse, newEvent );
             if( errors == null )
             {
+                expectedResponse.Used = true;
                 // There's no error in this response.
                 return null;
             }
             else
             {
+                expectedResponse.Used = true;
                 CountErrorsWarnings( errors );
 
                 // Complete error info.
                 foreach( var error in errors )
                 {
                     error.FileRef = this;
-                    error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                    if( !expectedResponse.SyncEvent )
+                        error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
                 }
 
                 return errors;
             }
+        }
+
+        private Event       FindCorespondingEvent   ( Event newEvent )
+        {
+            int expectedRespPtr = (int)m_responsePtr;
+            m_responsePtr++;
+
+            if( expectedRespPtr >= ReferenceResponses.Count )
+                return null;
+
+            return ReferenceResponses[ (int)expectedRespPtr ];
         }
 
         private void        CountErrorsWarnings ( List< TestError > errorsList )
@@ -140,7 +183,7 @@ namespace ProfilerEditor.Tester
 
         public Event        ParseResponse( string content )
         {
-            ParseSingleResponse( content, RealResponses );
+            ParseSingleResponse( content, RealResponses, new TimeSpan() );
             return RealResponses.Last();
         }
 
@@ -162,8 +205,15 @@ namespace ProfilerEditor.Tester
 
                 if( isEvent || isResponse )
                 {
-                    startIdx += 6;  // START_EVENT or START_RESPONSE string + \n character
+                    startIdx += 5;  // START_EVENT or START_RESPONSE string
+
+                    // Now find timestamp
+                    endIdx = content.IndexOf( '#', startIdx );
+                    TimeSpan timestamp = ParseTimestamp( content.Substring( startIdx, endIdx - startIdx ) );
+
+                    startIdx = endIdx + 1;
                     endIdx = startIdx;
+
 
                     while( endIdx < content.Length )
                     {
@@ -175,9 +225,9 @@ namespace ProfilerEditor.Tester
                             string singleMsg = content.Substring( startIdx, endIdx - startIdx - 2 );
 
                             if( isEvent )
-                                ParseSingleMessage( singleMsg, TestEvents );
+                                ParseSingleMessage( singleMsg, TestEvents, timestamp );
                             else
-                                ParseSingleResponse( singleMsg, ReferenceResponses );
+                                ParseSingleResponse( singleMsg, ReferenceResponses, timestamp );
 
                             endIdx += 6;  //END string + \n character
                             break;
@@ -193,7 +243,7 @@ namespace ProfilerEditor.Tester
             }
         }
 
-        public void         ParseSingleMessage( string msgString, ObservableCollection<Event> eventsCollection )
+        public void         ParseSingleMessage( string msgString, ObservableCollection<Event> eventsCollection, TimeSpan time )
         {
             JObject json = JObject.Parse( msgString );
             var eventsArray = json[ "Events" ];
@@ -203,6 +253,7 @@ namespace ProfilerEditor.Tester
                 Event newEvent = new Event();
                 newEvent.EventContent = msgString;
                 newEvent.EventJSon = (JObject)evt;
+                newEvent.Time = time;
 
                 newEvent.EventName = evt[ "Event" ].ToString();
                 newEvent.CommandName = evt[ "Command" ].ToString();
@@ -217,13 +268,14 @@ namespace ProfilerEditor.Tester
             }
         }
 
-        public void         ParseSingleResponse( string msgString, ObservableCollection<Event> eventsCollection )
+        public void         ParseSingleResponse( string msgString, ObservableCollection<Event> eventsCollection, TimeSpan time )
         {
             JObject json = JObject.Parse( msgString );
 
             Event newEvent = new Event();
             newEvent.EventContent = msgString;
             newEvent.EventJSon = json;
+            newEvent.Time = time;
 
             newEvent.CommandName = json[ "cmd" ].ToString();
             var triggerEvent = json[ "TriggerEvent" ];
@@ -246,6 +298,17 @@ namespace ProfilerEditor.Tester
                 newEvent.EventID = UInt32.MaxValue;
 
             eventsCollection.Add( newEvent );
+        }
+
+        public TimeSpan     ParseTimestamp  ( string timeStr )
+        {
+            UInt16 hours = UInt16.Parse( timeStr.Substring( 0, 4 ) );
+            UInt16 minutes = UInt16.Parse( timeStr.Substring( 5, 2 ) );
+            UInt16 seconds = UInt16.Parse( timeStr.Substring( 8, 2 ) );
+            UInt16 millis = UInt16.Parse( timeStr.Substring( 11, 3 ) );
+
+            TimeSpan span = new TimeSpan( hours / 24, hours % 24, minutes, seconds, millis );
+            return span;
         }
 
         #endregion

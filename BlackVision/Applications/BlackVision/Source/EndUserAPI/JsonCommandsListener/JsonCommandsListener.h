@@ -42,6 +42,7 @@ private:
     void                DebugLayerProcessEvent      ( const std::string & eventString );
 
     std::string         MakeDebugResultFilePath     ();
+	std::string         GetFormattedTime			();
 };
 
 } //bv

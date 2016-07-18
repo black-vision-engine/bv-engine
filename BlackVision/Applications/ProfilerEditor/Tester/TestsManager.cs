@@ -129,7 +129,12 @@ namespace ProfilerEditor.Tester
 
         public bool     Timeout         ( int seconds )
         {
+            TestError error = SelectedFile.Timeout( seconds );
+            if( error == null )
+                return false;
 
+            ErrorList.Add( error );
+            return true;
         }
 
         public void     ReceivedReponse( string response )

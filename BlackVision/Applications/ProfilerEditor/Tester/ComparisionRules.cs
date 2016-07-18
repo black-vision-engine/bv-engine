@@ -38,8 +38,6 @@ namespace ProfilerEditor.Tester
 
                     TestError error = CreateTestError( expectedEvent, responseEvent, message );
                     errorsList.Add( error );
-
-                    return;
                 }
                 else
                 {

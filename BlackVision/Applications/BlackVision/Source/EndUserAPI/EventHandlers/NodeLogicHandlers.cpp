@@ -107,7 +107,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 
         bool result = logic->HandleEvent( action, ser, editor );
 
-        PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
+        PrepareResponseTemplate( ser, command, widgetEvent->EventID, result );
         SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
     }
     else

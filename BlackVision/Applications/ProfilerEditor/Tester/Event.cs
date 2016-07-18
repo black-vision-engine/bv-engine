@@ -18,6 +18,9 @@ namespace ProfilerEditor.Tester
         public JObject      EventJSon;
         public bool         SyncEvent { get; set; }
 
+        public TimeSpan     Time;
+        public bool         Used;
+
         public string       EventContent
         {
             get
@@ -41,6 +44,7 @@ namespace ProfilerEditor.Tester
         public Event()
         {
             SyncEvent = false;
+            Used = false;
         }
     }
 }

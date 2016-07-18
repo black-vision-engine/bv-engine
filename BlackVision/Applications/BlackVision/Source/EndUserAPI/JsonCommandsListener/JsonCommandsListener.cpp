@@ -6,7 +6,7 @@
 
 #include "Threading/ScopedCriticalSection.h"
 
-
+#include "System/Time.h"
 #include "System/Path.h"
 #include "IO/FileIO.h"
 #include <ctime>
@@ -92,8 +92,8 @@ void JsonCommandsListener::DeinitializeServer  ()
 // Debug layer
 // ========================================================================= //
 
-const char* EVENT_BEGIN_HEADER      = "#Evt#\n";
-const char* RESPONSE_BEGIN_HEADER   = "#Res#\n";
+const char* EVENT_BEGIN_HEADER      = "#Evt#";
+const char* RESPONSE_BEGIN_HEADER   = "#Res#";
 const char* END_OF_INSCRIPTION      = "#End#\n";
 
 // ***********************
@@ -139,7 +139,10 @@ void JsonCommandsListener::DebugLayerProcessResponse   ( ResponseMsg & response 
         return;
 
     m_resultFile << RESPONSE_BEGIN_HEADER;
+    m_resultFile << GetFormattedTime() << "#\n";
+
     m_resultFile << response.message << std::endl;
+
     m_resultFile << END_OF_INSCRIPTION;
 }
 
@@ -151,7 +154,10 @@ void JsonCommandsListener::DebugLayerProcessEvent      ( const std::string & eve
         return;
 
     m_resultFile << EVENT_BEGIN_HEADER;
+    m_resultFile << GetFormattedTime() << "#\n";
+
     m_resultFile << eventString << std::endl;
+
     m_resultFile << END_OF_INSCRIPTION;
 }
 
@@ -162,13 +168,43 @@ void JsonCommandsListener::DebugLayerProcessEvent      ( const std::string & eve
 //
 std::string         JsonCommandsListener::MakeDebugResultFilePath     ()
 {
-    char timestamp[ 16];
+    char timestamp[ 20 ];
     time_t data = time( nullptr );
     tm* now = localtime( &data );
-    strftime( timestamp, 16, "%y%m%d_%H%M%S", now );
+    strftime( timestamp, 20, "%Y.%m.%d_%H.%M.%S", now );
 
     auto resultFile = Path( m_resultDirectory ) / Path( "test_" + std::string( timestamp ) + ".bvtest" );
     return resultFile.Str();
+}
+
+
+
+// ***********************
+//
+std::string         JsonCommandsListener::GetFormattedTime()
+{
+    auto now = Time::Now();
+
+    int hours = static_cast< int >( now / (1000 * 60 * 60) );
+    int minutes = static_cast< int >( now / (1000 * 60) % 60 );
+    int seconds = static_cast< int >( now / 1000 ) % 60;
+    int millis = static_cast< int >( now % 1000 );
+
+    char timestamp[ 15 ];
+
+    sprintf( timestamp, "%04d", hours );
+    sprintf( timestamp + 5, "%02d", minutes );
+    sprintf( timestamp + 8, "%02d", seconds );
+    sprintf( timestamp + 11, "%03d", millis );
+
+    timestamp[ 4 ] = ':';
+    timestamp[ 7 ] = ':';
+    timestamp[ 10 ] = ':';
+    timestamp[ 14 ] = '\0';
+
+    std::string result = timestamp;
+
+    return result;
 }
 
 #pragma warning( pop )

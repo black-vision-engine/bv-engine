@@ -125,7 +125,10 @@ namespace ProfilerEditor.Tester
 
         private void ReceivingTimeout       ( object sender, EventArgs e )
         {
-            m_testsManager.Timeout( m_secondsTimeout );
+            if( m_testsManager.Timeout( m_secondsTimeout ) )
+            {
+                QueryAndSendNextMessage();
+            }
         }
 
         public void MsgReceived             ( string data, EventArgs e )
@@ -141,9 +144,10 @@ namespace ProfilerEditor.Tester
                 length -= 1;
             }
 
-            if( data[ data.Length - 2 ] == 0x3 )
+            int endOfStream = data.IndexOf( (char)0x3 );
+            if( endOfStream > 0 )
             {
-                length -= 2;
+                length = endOfStream - 1;
                 msgEnd = true;
             }
 
