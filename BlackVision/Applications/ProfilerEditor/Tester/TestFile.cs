@@ -63,10 +63,10 @@ namespace ProfilerEditor.Tester
 
         public bool         IsBreakPoint()
         {
-            if( m_testEventPtr >= TestEvents.Count )
+            if( m_testEventPtr + 1 >= TestEvents.Count )
                 return false;
 
-            if( TestEvents[ (int)m_testEventPtr ].Breakpoint )
+            if( TestEvents[ (int)m_testEventPtr - 1 ].Breakpoint )
                 return true;
 
             return false;

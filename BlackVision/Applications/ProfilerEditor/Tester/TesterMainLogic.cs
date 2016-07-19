@@ -253,6 +253,13 @@ namespace ProfilerEditor.Tester
             if( m_state != TestsState.Testing )
                 return;
 
+            // Check if we hit breakpoint and should wait for user input.
+            //if( m_testsManager.DebugBreak() )
+            //{
+            //    m_state = TestsState.WaitForInput;
+            //    return;
+            //}
+
             string eventToSend = m_testsManager.MakeTestStep();
 
             if( eventToSend != null )
