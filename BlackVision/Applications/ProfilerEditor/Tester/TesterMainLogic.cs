@@ -20,9 +20,6 @@ namespace ProfilerEditor.Tester
         Testing,
         WaitForInput,       // Debug
         WaitForResponse,
-        
-        Debugging,
-        Break
     }
 
 
@@ -83,6 +80,8 @@ namespace ProfilerEditor.Tester
             RunAllTests = new RelayCommand( TestAllFiles, IsInitState );
 
             DebugStepCommand = new RelayCommand( DebugStep, CanStep );
+            ContinueDebuggingCommand = new RelayCommand( ContinueDebug, CanStep );
+
 
             m_timer = new DispatcherTimer();
             m_timer.Tick += ReceivingTimeout;
@@ -176,10 +175,17 @@ namespace ProfilerEditor.Tester
 
         // ================================================= //
 
+        private void ContinueDebug( object parameter )
+        {
+            m_state = TestsState.Testing;
+            m_testsManager.ContinueToBreakPoint();
+
+            QueryAndSendNextMessage();
+        }
+
         private void DebugStep( object parameter )
         {
             m_state = TestsState.Testing;
-            //m_testsManager.PrepareDebugStep();
 
             QueryAndSendNextMessage();
         }
@@ -198,11 +204,7 @@ namespace ProfilerEditor.Tester
         {
             if( m_testsManager.Timeout( m_secondsTimeout ) )
             {
-                if( m_testsManager.TestMode == TestingMode.DebugFile )
-                    m_state = TestsState.WaitForInput;
-                else
-                    m_state = TestsState.Testing;
-
+                SetAfterReceiveState();
                 QueryAndSendNextMessage();
             }
         }
@@ -234,11 +236,7 @@ namespace ProfilerEditor.Tester
                 m_testsManager.ReceivedReponse( m_message );
                 m_timer.Stop();
 
-                if( m_testsManager.TestMode == TestingMode.DebugFile )
-                    m_state = TestsState.WaitForInput;
-                else
-                    m_state = TestsState.Testing;
-
+                SetAfterReceiveState();
                 QueryAndSendNextMessage();
 
                 m_message = "";
@@ -288,6 +286,14 @@ namespace ProfilerEditor.Tester
                     m_state = TestsState.Init;
                 }
             }
+        }
+
+        private void    SetAfterReceiveState()
+        {
+            if( m_testsManager.TestMode == TestingMode.DebugFile && m_testsManager.DebugBreak() )
+                m_state = TestsState.WaitForInput;
+            else
+                m_state = TestsState.Testing;
         }
 
         #region Properties

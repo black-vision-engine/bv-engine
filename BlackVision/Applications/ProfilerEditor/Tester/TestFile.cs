@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 
 
 namespace ProfilerEditor.Tester
 {
-    public class TestFile
+    public class TestFile : INotifyPropertyChanged
     {
         public string FileName { get; set; }
 
@@ -27,9 +28,11 @@ namespace ProfilerEditor.Tester
         private int                             m_numErrors;
         private int                             m_numWarnings;      // For future use
 
-        public Event        CurrentTestEvent { get; set; }
-        public Event        CurrentResponse { get; set; }
-        public Event        CurrentRealResponse { get; set; }
+
+
+        private Event        m_currentTestEvent;
+        private Event        m_currentResponse;
+        private Event        m_currentRealResponse;
 
 
         override public string ToString()
@@ -56,6 +59,17 @@ namespace ProfilerEditor.Tester
 
             NumErrors = 0;
             NumWarnings = 0;
+        }
+
+        public bool         IsBreakPoint()
+        {
+            if( m_testEventPtr >= TestEvents.Count )
+                return false;
+
+            if( TestEvents[ (int)m_testEventPtr ].Breakpoint )
+                return true;
+
+            return false;
         }
 
         // ================================================= //
@@ -106,6 +120,7 @@ namespace ProfilerEditor.Tester
             var timeDiff2 = ReferenceResponses[ (int)m_responsePtr ].Time - TestEvents[ (int)m_testEventPtr ].Time;
             m_responseTimeout = (int)( timeDiff2.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
 
+            CurrentTestEvent = TestEvents[ (int)m_testEventPtr ];
             m_testEventPtr++;
 
             return sendEvent;
@@ -115,6 +130,7 @@ namespace ProfilerEditor.Tester
         {
             Event newEvent = ParseResponse( response );
             Event expectedResponse = FindCorespondingEvent( newEvent );
+            CurrentResponse = expectedResponse;
 
             if( expectedResponse == null )
             {
@@ -385,6 +401,63 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_numWarnings = value;
+            }
+        }
+
+        public Event CurrentTestEvent
+        {
+            get
+            {
+                return m_currentTestEvent;
+            }
+
+            set
+            {
+                m_currentTestEvent = value;
+                NotifyPropertyChanged( "CurrentTestEvent" );
+            }
+        }
+
+        public Event CurrentResponse
+        {
+            get
+            {
+                return m_currentResponse;
+            }
+
+            set
+            {
+                m_currentResponse = value;
+                NotifyPropertyChanged( "CurrentResponse" );
+            }
+        }
+
+        public Event CurrentRealResponse
+        {
+            get
+            {
+                return m_currentRealResponse;
+            }
+
+            set
+            {
+                m_currentRealResponse = value;
+                NotifyPropertyChanged( "CurrentRealResponse" );
+            }
+        }
+
+        #endregion
+
+        #region PropertyChangedImpl
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        private void NotifyPropertyChanged( String info )
+        {
+            if( PropertyChanged != null )
+            {
+                PropertyChanged( this, new PropertyChangedEventArgs( info ) );
             }
         }
 

@@ -34,9 +34,10 @@ namespace ProfilerEditor.Tester
         TestingMode                                 m_testMode;
         ComparisionRules                            m_comparisionRules;
 
-        bool            m_debugWait;
         int             m_progressStepsMade;
         int             m_numProgressSteps;
+
+        bool            m_break;
 
 
         public TestsManager()
@@ -49,7 +50,7 @@ namespace ProfilerEditor.Tester
             ErrorList = new ObservableCollection< TestError >();
 
             m_comparisionRules = new ComparisionRules();
-            m_debugWait = true;
+            m_break = false;
         }
 
         // ================================================= //
@@ -57,6 +58,7 @@ namespace ProfilerEditor.Tester
         public void     DebugCurrentFile()
         {
             TestMode = TestingMode.DebugFile;
+            m_break = true;
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
@@ -87,6 +89,15 @@ namespace ProfilerEditor.Tester
             InitProgress();
         }
 
+        public void     ContinueToBreakPoint()
+        {
+            m_break = false;
+        }
+
+        public bool     DebugBreak()
+        {
+            return m_break;
+        }
 
         // ================================================= //
 
@@ -119,15 +130,7 @@ namespace ProfilerEditor.Tester
         {
             if( SelectedFile != null )
             {
-                string nextMsg = NormalStep(); ;
-                //if( m_testMode == TestingMode.DebugFile )
-                //{
-                //    nextMsg = DebugStep();
-                //}
-                //else
-                //{
-                //    nextMsg = NormalStep();
-                //}
+                string nextMsg = NormalStep();
 
                 if( nextMsg == null )
                 {
@@ -143,28 +146,17 @@ namespace ProfilerEditor.Tester
                 return null;
         }
 
-        private string  DebugStep       ()
-        {
-            if( !m_debugWait )
-            {
-                string nextMessage = SelectedFile.SendingStep();
-
-                m_debugWait = true;
-                return nextMessage;
-            }
-            return "{}";
-        }
 
         private string  NormalStep      ()
         {
             string msg = SelectedFile.SendingStep();
+
+            if( SelectedFile.IsBreakPoint() )
+                m_break = true;
+
             return msg;
         }
 
-        public void     PrepareDebugStep()
-        {
-            m_debugWait = false;
-        }
 
         public bool     Timeout         ( int seconds )
         {
@@ -203,12 +195,12 @@ namespace ProfilerEditor.Tester
 
         // ================================================= //
 
-        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError )
+        public void     AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError )
         {
             AddError( cmdName, eventName, message, eventID, isError, null );
         }
 
-        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError, TestFile testFile )
+        public void     AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError, TestFile testFile )
         {
             TestError error = new TestError();
             error.CommandName = cmdName;
@@ -221,13 +213,13 @@ namespace ProfilerEditor.Tester
             ErrorList.Add( error );
         }
 
-        public void ParseFile( TestFile testFile )
+        public void     ParseFile( TestFile testFile )
         {
             string content = ReadFile( Path.Combine( m_testsPath, testFile.FileName ) );
             testFile.ParseFile( content );
         }
 
-        public void UpdateTestPath( string newPath )
+        public void     UpdateTestPath( string newPath )
         {
             TestFiles.Clear();
             m_testsPath = newPath;
@@ -244,7 +236,7 @@ namespace ProfilerEditor.Tester
         }
 
 
-        private string ReadFile( string filePath )
+        private string  ReadFile( string filePath )
         {
             try
             {   // Open the text file using a stream reader.
