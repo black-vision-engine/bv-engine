@@ -34,6 +34,10 @@ namespace ProfilerEditor.Tester
         TestingMode                                 m_testMode;
         ComparisionRules                            m_comparisionRules;
 
+        bool            m_debugWait;
+        int             m_progressStepsMade;
+        int             m_numProgressSteps;
+
 
         public TestsManager()
         {
@@ -45,6 +49,7 @@ namespace ProfilerEditor.Tester
             ErrorList = new ObservableCollection< TestError >();
 
             m_comparisionRules = new ComparisionRules();
+            m_debugWait = true;
         }
 
         // ================================================= //
@@ -55,6 +60,8 @@ namespace ProfilerEditor.Tester
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
+
+            InitProgress();
         }
 
         public void     TestAllFiles()
@@ -66,6 +73,8 @@ namespace ProfilerEditor.Tester
                 SelectedFile = TestFiles[ 0 ];
                 ParseFile( SelectedFile );
             }
+
+            InitProgress();
         }
 
         public void     TestSingleFile()
@@ -74,6 +83,8 @@ namespace ProfilerEditor.Tester
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
+
+            InitProgress();
         }
 
 
@@ -93,6 +104,8 @@ namespace ProfilerEditor.Tester
                     SelectedFile = TestFiles[ i + 1 ];
                     ParseFile( SelectedFile );
 
+                    InitProgress();
+
                     return true;
                 }
             }
@@ -106,25 +119,51 @@ namespace ProfilerEditor.Tester
         {
             if( SelectedFile != null )
             {
-                string msg = SelectedFile.SendingStep();
-                if( msg == null )
+                string nextMsg = NormalStep(); ;
+                //if( m_testMode == TestingMode.DebugFile )
+                //{
+                //    nextMsg = DebugStep();
+                //}
+                //else
+                //{
+                //    nextMsg = NormalStep();
+                //}
+
+                if( nextMsg == null )
                 {
-                    // No more messages in file. Choose new file or send null.
-                    if( TestMode == TestingMode.SingleFile )
-                    {
-                        TestMode = TestingMode.Uninitialized;
-                    }
+                    TestMode = TestingMode.Uninitialized;
 
                     ErrorRank fileTestResult = SelectedFile.NumErrors == 0 ? ErrorRank.ResultOk : ErrorRank.Error;
-
                     AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
-                    return null;
                 }
 
-                return msg;
+                return nextMsg;
             }
             else
                 return null;
+        }
+
+        private string  DebugStep       ()
+        {
+            if( !m_debugWait )
+            {
+                string nextMessage = SelectedFile.SendingStep();
+
+                m_debugWait = true;
+                return nextMessage;
+            }
+            return "{}";
+        }
+
+        private string  NormalStep      ()
+        {
+            string msg = SelectedFile.SendingStep();
+            return msg;
+        }
+
+        public void     PrepareDebugStep()
+        {
+            m_debugWait = false;
         }
 
         public bool     Timeout         ( int seconds )
@@ -139,6 +178,8 @@ namespace ProfilerEditor.Tester
 
         public void     ReceivedReponse( string response )
         {
+            Progress = 1;   // In reality it's += 1. We add one step.
+
             var errors = SelectedFile.ResponseStep( response, m_comparisionRules );
             if( errors != null )
             {
@@ -222,6 +263,12 @@ namespace ProfilerEditor.Tester
             return null;
         }
 
+        private void    InitProgress    ()
+        {
+            m_numProgressSteps = SelectedFile.ReferenceResponses.Count;
+            m_progressStepsMade = 0;
+        }
+
 
         #region Properties
 
@@ -289,6 +336,20 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_testMode = value;
+            }
+        }
+
+        public float Progress
+        {
+            get
+            {
+                return (float)m_progressStepsMade / (float)m_numProgressSteps;
+            }
+
+            internal set
+            {
+                m_progressStepsMade += (int)value;
+                NotifyPropertyChanged( "Progress" );
             }
         }
         #endregion

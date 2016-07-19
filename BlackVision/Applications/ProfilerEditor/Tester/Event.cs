@@ -20,6 +20,7 @@ namespace ProfilerEditor.Tester
 
         public TimeSpan     Time;
         public bool         Used;
+        public bool         Breakpoint { get; set; }
 
         public string       EventContent
         {
@@ -45,6 +46,7 @@ namespace ProfilerEditor.Tester
         {
             SyncEvent = false;
             Used = false;
+            Breakpoint = false;
         }
     }
 }
