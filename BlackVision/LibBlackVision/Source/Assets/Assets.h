@@ -27,6 +27,9 @@
 #include "Assets/DataArray/DataArrayAssetDescriptor.h"
 #include "Assets/DataArray/DataArrayAsset.h"
 
+#include "Assets/SVG/SVGLoader.h"
+#include "Assets/SVG/SVGAssetDescriptor.h"
+
 #include "Assets/AssetManager.h"
 
 namespace bv

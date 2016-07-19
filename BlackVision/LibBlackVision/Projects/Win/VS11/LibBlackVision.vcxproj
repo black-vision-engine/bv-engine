@@ -152,6 +152,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationLoader.cpp" />
@@ -571,6 +574,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h" />
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h" />

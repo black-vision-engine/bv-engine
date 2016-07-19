@@ -118,6 +118,7 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
             }
         }
     }
+
     return false;
 }
 
