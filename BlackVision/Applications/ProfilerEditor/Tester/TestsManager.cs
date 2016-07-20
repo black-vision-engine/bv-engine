@@ -31,6 +31,8 @@ namespace ProfilerEditor.Tester
 
         private ObservableCollection< TestError >   m_errorList;
 
+        private EventsViewModel                     m_eventsView;
+
         TestingMode                                 m_testMode;
         ComparisionRules                            m_comparisionRules;
 
@@ -44,8 +46,10 @@ namespace ProfilerEditor.Tester
         {
             TestMode = TestingMode.Uninitialized;
 
+            m_eventsView = new EventsViewModel();
             SelectedFile = null;
             SelectedError = null;
+
             TestFiles = new ObservableCollection< TestFile >();
             ErrorList = new ObservableCollection< TestError >();
 
@@ -314,6 +318,7 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_selectedError = value;
+                EventsView.ErrorSelected( m_selectedError );
                 NotifyPropertyChanged( "SelectedError" );
             }
         }
@@ -342,6 +347,70 @@ namespace ProfilerEditor.Tester
             {
                 m_progressStepsMade += (int)value;
                 NotifyPropertyChanged( "Progress" );
+            }
+        }
+
+        public EventsViewModel EventsView
+        {
+            get
+            {
+                return m_eventsView;
+            }
+
+            set
+            {
+                m_eventsView = value;
+            }
+        }
+
+        public Event CurrentTestEvent
+        {
+            get
+            {
+                if( SelectedFile != null )
+                    return SelectedFile.CurrentTestEvent;
+                return null;
+            }
+
+            set
+            {
+                SelectedFile.CurrentTestEvent = value;
+                EventsView.SetTestEvent( SelectedFile.CurrentTestEvent );
+                NotifyPropertyChanged( "CurrentTestEvent" );
+            }
+        }
+
+        public Event CurrentReferenceResponse
+        {
+            get
+            {
+                if( SelectedFile != null )
+                    return SelectedFile.CurrentResponse;
+                return null;
+            }
+
+            set
+            {
+                SelectedFile.CurrentResponse = value;
+                EventsView.SetReferenceResponse( SelectedFile.CurrentResponse );
+                NotifyPropertyChanged( "CurrentReferenceResponse" );
+            }
+        }
+
+        public Event CurrentRealResponse
+        {
+            get
+            {
+                if( SelectedFile != null )
+                    return SelectedFile.CurrentRealResponse;
+                return null;
+            }
+
+            set
+            {
+                SelectedFile.CurrentRealResponse = value;
+                EventsView.SetRealResponse( SelectedFile.CurrentRealResponse );
+                NotifyPropertyChanged( "CurrentRealResponse" );
             }
         }
         #endregion
