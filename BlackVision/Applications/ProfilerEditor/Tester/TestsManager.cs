@@ -32,6 +32,7 @@ namespace ProfilerEditor.Tester
         private ObservableCollection< TestError >   m_errorList;
 
         private EventsViewModel                     m_eventsView;
+        int                                         m_tabItemIdx;
 
         TestingMode                                 m_testMode;
         ComparisionRules                            m_comparisionRules;
@@ -144,6 +145,7 @@ namespace ProfilerEditor.Tester
                     AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
                 }
 
+                Refresh();
                 return nextMsg;
             }
             else
@@ -184,6 +186,8 @@ namespace ProfilerEditor.Tester
                     ErrorList.Add( error );
                 }
             }
+
+            Refresh();
         }
 
         public void     EngineDisconnected( string message )
@@ -240,7 +244,7 @@ namespace ProfilerEditor.Tester
         }
 
 
-        private string  ReadFile( string filePath )
+        private string      ReadFile( string filePath )
         {
             try
             {   // Open the text file using a stream reader.
@@ -263,6 +267,23 @@ namespace ProfilerEditor.Tester
         {
             m_numProgressSteps = SelectedFile.ReferenceResponses.Count;
             m_progressStepsMade = 0;
+        }
+
+        private void    Refresh         ()
+        {
+            if( m_tabItemIdx == 0 )
+            {
+                SelectedError = SelectedError;
+            }
+            else
+            {
+                if( SelectedFile != null )
+                {
+                    CurrentTestEvent = SelectedFile.CurrentTestEvent;
+                    CurrentReferenceResponse = SelectedFile.CurrentResponse;
+                    CurrentRealResponse = SelectedFile.CurrentRealResponse;
+                }
+            }
         }
 
 
@@ -413,6 +434,39 @@ namespace ProfilerEditor.Tester
                 NotifyPropertyChanged( "CurrentRealResponse" );
             }
         }
+
+        public int TabItemIdx
+        {
+            get
+            {
+                return m_tabItemIdx;
+            }
+
+            set
+            {
+                m_tabItemIdx = value;
+            }
+        }
+
+        //public object TabItemIdx
+        //{
+        //    get
+        //    {
+        //        return m_tabItemIdx;
+        //    }
+
+        //    set
+        //    {
+        //        var tab = value as System.Windows.Controls.TabItem;
+        //        if( tab != null )
+        //        {
+        //            if( tab.DataContext == this )
+        //                m_tabItemIdx = 0;
+        //            else
+        //                m_tabItemIdx = 1;
+        //        }
+        //    }
+        //}
         #endregion
 
         #region PropertyChangedImpl

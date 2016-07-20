@@ -76,7 +76,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2, 2, 2, 2">
-                <TabControl DataContext="{Binding TestsManager}" Height="600">
+                <TabControl DataContext="{Binding TestsManager}" Height="600" SelectedIndex="{Binding TabItemIdx}">
                     <TabItem Header="Errors/Warnings/Infos" DataContext="{Binding}"  >
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                             <!--List of errors in tests-->
@@ -104,7 +104,7 @@
                     <TabItem Header="Test content (event / response / reference response)" >
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                             <StackPanel Orientation="Horizontal">
-                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.TestEvents}" SelectedItem="{Binding CurrentTestEvent}">
+                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.TestEvents}" SelectedItem="{Binding CurrentTestEvent}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="">
@@ -133,7 +133,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.RealResponses}" SelectedItem="{Binding CurrentRealResponse}">
+                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.RealResponses}" SelectedItem="{Binding CurrentRealResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
@@ -143,7 +143,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.ReferenceResponses}" SelectedItem="{Binding CurrentReferenceResponse}">
+                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.ReferenceResponses}" SelectedItem="{Binding CurrentReferenceResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
