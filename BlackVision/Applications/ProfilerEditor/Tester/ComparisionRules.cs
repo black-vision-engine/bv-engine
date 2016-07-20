@@ -49,14 +49,26 @@ namespace ProfilerEditor.Tester
 
         private void                CompareArrays       ( JArray expected, JArray response, List< TestError > errorsList, Event expectedEvent, Event responseEvent )
         {
-            for( int i = 0; i < expected.Count; ++i  )
+            int maxIdx = expected.Count;
+            if( maxIdx > response.Count )
+            {
+                string message = "[ " +  expected.Path + " ] Response array have more elements.";
+
+                TestError error = CreateTestError( expectedEvent, responseEvent, message );
+                errorsList.Add( error );
+
+                maxIdx = response.Count;
+            }
+
+
+            for( int i = 0; i < maxIdx; ++i  )
             {
                 JToken expChild = expected[ i ];
                 JToken resChild = response[ i ];
 
                 if( resChild == null )
                 {
-                    string message = "[ " +  expected.Path + " ] Reference array have more elements.";
+                    string message = "[ " + expected.Path + " ] Reference array have more elements.";
 
                     TestError error = CreateTestError( expectedEvent, responseEvent, message );
                     errorsList.Add( error );
@@ -72,7 +84,7 @@ namespace ProfilerEditor.Tester
         {
             if( expected.Value< string >() != response.Value< string >() )
             {
-                string message = "[ " +  expected.Path + " ] Attribute values are different [ expected = " + expected.ToString() + " ] [ response = " + response.ToString() + " ]";
+                string message = "[ " + expected.Path + " ] Attribute values are different [ expected = " + expected.ToString() + " ] [ response = " + response.ToString() + " ]";
 
                 TestError error = CreateTestError( expectedEvent, responseEvent, message );
                 errorsList.Add( error );
@@ -101,7 +113,7 @@ namespace ProfilerEditor.Tester
                 CompareAttributes( expected, response, errorsList, expectedEvent, responseEvent );
             else
             {
-                string message = "[ " +  expected.Path + "] Token is not array object or string. Other types are not supported.";
+                string message = "[ " + expected.Path + "] Token is not array object or string. Other types are not supported.";
 
                 TestError error = CreateTestError( expectedEvent, responseEvent, message );
                 errorsList.Add( error );
