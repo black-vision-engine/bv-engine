@@ -104,7 +104,7 @@ public:
 
     static MeshAssetPtr	        Create		    ( const std::string & key );
     
-private:
+protected:
 
     explicit					MeshAsset       ( const std::string & key );
 

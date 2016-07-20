@@ -30,12 +30,12 @@ void		AssetHandlers::CacheHandler			( bv::IEventPtr evt )
     {
         bv::AssetEventPtr assetEvent = std::static_pointer_cast< bv::AssetEvent >( evt );
         AssetEvent::Command command = assetEvent->AssetCommand;
-		
+        
         if( command == AssetEvent::Command::ClearUnusedCachedAssets )
-		{
-			GTexture2DCache.ClearUnused();
+        {
+            GTexture2DCache.ClearUnused();
             SendSimpleResponse( command, assetEvent->EventID, assetEvent->SocketID, true );
-		}
+        }
         else
             SendSimpleErrorResponse( command, assetEvent->EventID, assetEvent->SocketID, "Unknown command" );
     }
