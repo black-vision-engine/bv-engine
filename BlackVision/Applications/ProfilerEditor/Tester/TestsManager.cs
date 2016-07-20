@@ -34,6 +34,11 @@ namespace ProfilerEditor.Tester
         TestingMode                                 m_testMode;
         ComparisionRules                            m_comparisionRules;
 
+        int             m_progressStepsMade;
+        int             m_numProgressSteps;
+
+        bool            m_break;
+
 
         public TestsManager()
         {
@@ -45,6 +50,7 @@ namespace ProfilerEditor.Tester
             ErrorList = new ObservableCollection< TestError >();
 
             m_comparisionRules = new ComparisionRules();
+            m_break = false;
         }
 
         // ================================================= //
@@ -52,9 +58,12 @@ namespace ProfilerEditor.Tester
         public void     DebugCurrentFile()
         {
             TestMode = TestingMode.DebugFile;
+            m_break = true;
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
+
+            InitProgress();
         }
 
         public void     TestAllFiles()
@@ -66,6 +75,8 @@ namespace ProfilerEditor.Tester
                 SelectedFile = TestFiles[ 0 ];
                 ParseFile( SelectedFile );
             }
+
+            InitProgress();
         }
 
         public void     TestSingleFile()
@@ -74,8 +85,19 @@ namespace ProfilerEditor.Tester
 
             if( SelectedFile != null )
                 ParseFile( SelectedFile );
+
+            InitProgress();
         }
 
+        public void     ContinueToBreakPoint()
+        {
+            m_break = false;
+        }
+
+        public bool     DebugBreak()
+        {
+            return m_break;
+        }
 
         // ================================================= //
 
@@ -93,6 +115,8 @@ namespace ProfilerEditor.Tester
                     SelectedFile = TestFiles[ i + 1 ];
                     ParseFile( SelectedFile );
 
+                    InitProgress();
+
                     return true;
                 }
             }
@@ -106,26 +130,33 @@ namespace ProfilerEditor.Tester
         {
             if( SelectedFile != null )
             {
-                string msg = SelectedFile.SendingStep();
-                if( msg == null )
+                string nextMsg = NormalStep();
+
+                if( nextMsg == null )
                 {
-                    // No more messages in file. Choose new file or send null.
-                    if( TestMode == TestingMode.SingleFile )
-                    {
-                        TestMode = TestingMode.Uninitialized;
-                    }
+                    TestMode = TestingMode.Uninitialized;
 
                     ErrorRank fileTestResult = SelectedFile.NumErrors == 0 ? ErrorRank.ResultOk : ErrorRank.Error;
-
                     AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
-                    return null;
                 }
 
-                return msg;
+                return nextMsg;
             }
             else
                 return null;
         }
+
+
+        private string  NormalStep      ()
+        {
+            string msg = SelectedFile.SendingStep();
+
+            if( SelectedFile.IsBreakPoint() )
+                m_break = true;
+
+            return msg;
+        }
+
 
         public bool     Timeout         ( int seconds )
         {
@@ -139,6 +170,8 @@ namespace ProfilerEditor.Tester
 
         public void     ReceivedReponse( string response )
         {
+            Progress = 1;   // In reality it's += 1. We add one step.
+
             var errors = SelectedFile.ResponseStep( response, m_comparisionRules );
             if( errors != null )
             {
@@ -162,12 +195,12 @@ namespace ProfilerEditor.Tester
 
         // ================================================= //
 
-        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError )
+        public void     AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError )
         {
             AddError( cmdName, eventName, message, eventID, isError, null );
         }
 
-        public void AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError, TestFile testFile )
+        public void     AddError( string cmdName, string eventName, string message, UInt32 eventID, ErrorRank isError, TestFile testFile )
         {
             TestError error = new TestError();
             error.CommandName = cmdName;
@@ -180,13 +213,13 @@ namespace ProfilerEditor.Tester
             ErrorList.Add( error );
         }
 
-        public void ParseFile( TestFile testFile )
+        public void     ParseFile( TestFile testFile )
         {
             string content = ReadFile( Path.Combine( m_testsPath, testFile.FileName ) );
             testFile.ParseFile( content );
         }
 
-        public void UpdateTestPath( string newPath )
+        public void     UpdateTestPath( string newPath )
         {
             TestFiles.Clear();
             m_testsPath = newPath;
@@ -203,7 +236,7 @@ namespace ProfilerEditor.Tester
         }
 
 
-        private string ReadFile( string filePath )
+        private string  ReadFile( string filePath )
         {
             try
             {   // Open the text file using a stream reader.
@@ -220,6 +253,12 @@ namespace ProfilerEditor.Tester
                 Console.WriteLine( e.Message );
             }
             return null;
+        }
+
+        private void    InitProgress    ()
+        {
+            m_numProgressSteps = SelectedFile.ReferenceResponses.Count;
+            m_progressStepsMade = 0;
         }
 
 
@@ -289,6 +328,20 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_testMode = value;
+            }
+        }
+
+        public float Progress
+        {
+            get
+            {
+                return (float)m_progressStepsMade / (float)m_numProgressSteps;
+            }
+
+            internal set
+            {
+                m_progressStepsMade += (int)value;
+                NotifyPropertyChanged( "Progress" );
             }
         }
         #endregion

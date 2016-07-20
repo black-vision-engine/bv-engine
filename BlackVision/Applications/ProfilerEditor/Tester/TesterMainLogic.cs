@@ -18,7 +18,8 @@ namespace ProfilerEditor.Tester
     {
         Init,
         Testing,
-        Break
+        WaitForInput,       // Debug
+        WaitForResponse,
     }
 
 
@@ -52,9 +53,9 @@ namespace ProfilerEditor.Tester
         public ICommand RunSingleTest { get; internal set; }
         public ICommand RunAllTests { get; internal set; }
 
-        public ICommand ContinueDebugging { get; internal set; }
-        public ICommand DebugStep { get; internal set; }
-        public ICommand StopDebugging { get; internal set; }
+        public ICommand ContinueDebuggingCommand { get; internal set; }
+        public ICommand DebugStepCommand { get; internal set; }
+        public ICommand StopDebuggingCommand { get; internal set; }
 
         #endregion
 
@@ -77,6 +78,10 @@ namespace ProfilerEditor.Tester
             DebugCurrentTest = new RelayCommand( DebugTest, IsInitState );
             RunSingleTest = new RelayCommand( TestSingleFile, IsInitState );
             RunAllTests = new RelayCommand( TestAllFiles, IsInitState );
+
+            DebugStepCommand = new RelayCommand( DebugStep, CanStep );
+            ContinueDebuggingCommand = new RelayCommand( ContinueDebug, CanStep );
+
 
             m_timer = new DispatcherTimer();
             m_timer.Tick += ReceivingTimeout;
@@ -123,10 +128,83 @@ namespace ProfilerEditor.Tester
 
         #endregion
 
+
+        private bool IsInitState( object parameter )
+        {
+            if( m_state == TestsState.Init )
+                return true;
+            else
+                return false;
+        }
+
+        private void ChooseTestDir( object parameter )
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if( result == System.Windows.Forms.DialogResult.OK )
+            {
+                m_testsManager.UpdateTestPath( dialog.SelectedPath );
+            }
+        }
+
+        // ================================================= //
+
+        private void DebugTest( object parameter )
+        {
+            m_state = TestsState.WaitForInput;
+            m_testsManager.DebugCurrentFile();
+        }
+
+        private void TestSingleFile( object parameter )
+        {
+            m_state = TestsState.Testing;
+            m_testsManager.TestSingleFile();
+
+            QueryAndSendNextMessage();
+        }
+
+        private void TestAllFiles( object parameter )
+        {
+            m_state = TestsState.Testing;
+            m_testsManager.TestAllFiles();
+
+            QueryAndSendNextMessage();
+        }
+
+        // ================================================= //
+
+        private void ContinueDebug( object parameter )
+        {
+            m_state = TestsState.Testing;
+            m_testsManager.ContinueToBreakPoint();
+
+            QueryAndSendNextMessage();
+        }
+
+        private void DebugStep( object parameter )
+        {
+            m_state = TestsState.Testing;
+
+            QueryAndSendNextMessage();
+        }
+
+        private bool CanStep( object parameter )
+        {
+            if( m_state == TestsState.WaitForInput )
+                return true;
+            return false;
+        }
+
+
+        // ================================================= //
+
         private void ReceivingTimeout       ( object sender, EventArgs e )
         {
             if( m_testsManager.Timeout( m_secondsTimeout ) )
             {
+                SetAfterReceiveState();
                 QueryAndSendNextMessage();
             }
         }
@@ -158,70 +236,45 @@ namespace ProfilerEditor.Tester
                 m_testsManager.ReceivedReponse( m_message );
                 m_timer.Stop();
 
+                SetAfterReceiveState();
                 QueryAndSendNextMessage();
 
                 m_message = "";
             }
         }
 
-        private bool IsInitState( object parameter )
-        {
-            if( m_state == TestsState.Init )
-                return true;
-            else
-                return false;
-        }
-
-        private void ChooseTestDir( object parameter )
-        {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.SelectedPath = System.AppDomain.CurrentDomain.BaseDirectory;
-
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            if( result == System.Windows.Forms.DialogResult.OK )
-            {
-                m_testsManager.UpdateTestPath( dialog.SelectedPath );
-            }
-        }
-
-        private void DebugTest( object parameter )
-        {
-            m_testsManager.DebugCurrentFile();
-        }
-
-        private void TestSingleFile( object parameter )
-        {
-            m_state = TestsState.Testing;
-            m_testsManager.TestSingleFile();
-
-            QueryAndSendNextMessage();
-        }
-
-        private void TestAllFiles( object parameter )
-        {
-            m_state = TestsState.Testing;
-            m_testsManager.TestAllFiles();
-
-            QueryAndSendNextMessage();
-        }
 
 
         private void QueryAndSendNextMessage()
         {
+            // Invalidate commands canExecute function value.
+            CommandManager.InvalidateRequerySuggested();
+
+            if( m_state != TestsState.Testing )
+                return;
+
+            // Check if we hit breakpoint and should wait for user input.
+            //if( m_testsManager.DebugBreak() )
+            //{
+            //    m_state = TestsState.WaitForInput;
+            //    return;
+            //}
+
             string eventToSend = m_testsManager.MakeTestStep();
 
             if( eventToSend != null )
             {
-                m_network.Write( eventToSend );
-                m_timer.Start();
+                m_state = TestsState.WaitForResponse;
+
+                if( eventToSend != "{}" )
+                {
+                    m_network.Write( eventToSend );
+                    m_timer.Start();
+                }
             }
             else
             {
-                if( m_testsManager.TestMode == TestingMode.DebugFile )
-                {
-                    m_state = TestsState.Break;
-                }
-                else if( m_testsManager.TestMode == TestingMode.AllFiles )
+                if( m_testsManager.TestMode == TestingMode.AllFiles )
                 {
                     // Here BV should be restarted or cleaned.
 
@@ -240,6 +293,14 @@ namespace ProfilerEditor.Tester
                     m_state = TestsState.Init;
                 }
             }
+        }
+
+        private void    SetAfterReceiveState()
+        {
+            if( m_testsManager.TestMode == TestingMode.DebugFile && m_testsManager.DebugBreak() )
+                m_state = TestsState.WaitForInput;
+            else
+                m_state = TestsState.Testing;
         }
 
         #region Properties
