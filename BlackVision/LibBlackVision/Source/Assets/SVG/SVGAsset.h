@@ -12,4 +12,7 @@ public:
                                         SVGAsset        ( const std::string & key );
 };
 
+DEFINE_PTR_TYPE( SVGAsset );
+DEFINE_CONST_PTR_TYPE( SVGAsset );
+
 }

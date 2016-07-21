@@ -12,6 +12,7 @@
 
 #include "Assets/SVG/SVGAssetDescriptor.h"
 #include "Assets/SVG/SVGAsset.h"
+#include "Assets/Asset.h"
 
 namespace bv { namespace model {
 
@@ -129,11 +130,12 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
         auto mesh = LoadTypedAsset< SVGAsset >( svgAssetDescr );
         if( mesh )
         {
-            m_meshAsset = mesh->GetChild( meshAssetDescr->GetGroupName() );
+//            m_meshAsset = QueryTypedRes< SVGAssetConstPtr >( mesh ); //mesh->GetChild( svgAssetDescr->GetGroupName() );
+            m_meshAsset = std::dynamic_pointer_cast< const SVGAsset >( mesh );
 
             if( m_meshAsset )
             {
-                InitVertexAttributesChannel( meshAssetDescr->IsRecursive() );
+                InitVertexAttributesChannel( false /*meshAssetDescr->IsRecursive()*/ );
                 SetAsset( 0, LAsset( DefaultMeshPluginDesc::MeshName(), assetDescr, nullptr ) );
                 return true;
             }

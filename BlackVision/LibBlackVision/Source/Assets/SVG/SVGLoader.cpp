@@ -8,6 +8,8 @@
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h" // FIXME: this is...
 #include "Assets/AssetDescsWithUIDs.h" // FIXME: ...just shit
 
+#pragma warning( disable : 4996 )
+
 namespace bv {
 
 namespace {
@@ -76,8 +78,38 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
 
     auto geometry = std::make_shared< SVGAsset::MeshGeometry >();
 
-    for( unsigned int i = 0; i < n; i+=2 )
-        geometry->positions[ i ] = glm::vec3( p[ i ], p[ i + 1 ], 0 );
+    float x, y;
+    for( unsigned int i = 0; i < n; )
+        if( p[ i ] == svgtiny_PATH_MOVE )
+        {
+            x = p[ i + 1 ];
+            y = p[ i + 2 ];
+            i+=3;
+        }
+        else if( p[ i ] == svgtiny_PATH_LINE )
+        {
+            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
+            x = p[ i + 1 ];
+            y = p[ i + 2 ];
+            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
+            i+=3;
+        }
+        else if( p[ i ] == svgtiny_PATH_CLOSE )
+        {
+            i++;
+        }
+        else if( p[ i ] == svgtiny_PATH_BEZIER )
+        {
+            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
+            x = p[ i + 1 ];
+            y = p[ i + 2 ];
+            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
+            i+=7;
+        }
+        else
+        {
+            assert( false );
+        }
     //shape->path = p;
     //shape->path_length = n;
     //state->diagram->shape_count++;
@@ -105,7 +137,8 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
     //svgtiny_parse_transform_attributes(path, &state);
 
     /* read d attribute */
-    path_d_str = path.GetAttribute( "d" ).c_str();
+    auto d = path.GetAttribute( "d" );
+    path_d_str = d.c_str();
     //if (exc != DOM_NO_ERR) {
     //    state.diagram->error_line = -1; /* path->line; */
     //    state.diagram->error_message = "path: error retrieving d attribute";
@@ -172,7 +205,7 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
 
 
         /* moveto (M, m), lineto (L, l) (2 arguments) */
-        if (sscanf_s(s, " %1[MmLl] %f %f %n", command, &x, &y, &n) == 3) {
+        if (sscanf(s, " %1[MmLl] %f %f %n", command, &x, &y, &n) == 3) {
             /*LOG(("moveto or lineto"));*/
             if (*command == 'M' || *command == 'm')
                 plot_command = svgtiny_PATH_MOVE;
@@ -195,10 +228,10 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                         = y;
                 s += n;
                 plot_command = svgtiny_PATH_LINE;
-            } while (sscanf_s(s, "%f %f %n", &x, &y, &n) == 2);
+            } while (sscanf(s, "%f %f %n", &x, &y, &n) == 2);
 
         /* closepath (Z, z) (no arguments) */
-        } else if (sscanf_s(s, " %1[Zz] %n", command, &n) == 1) {
+        } else if (sscanf(s, " %1[Zz] %n", command, &n) == 1) {
             /*LOG(("closepath"));*/
                         ALLOC_PATH_ELEMENTS(1);
 
@@ -208,7 +241,7 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
             last_cubic_y = last_quad_y = last_y = subpath_first_y;
 
         /* horizontal lineto (H, h) (1 argument) */
-        } else if (sscanf_s(s, " %1[Hh] %f %n", command, &x, &n) == 2) {
+        } else if (sscanf(s, " %1[Hh] %f %n", command, &x, &n) == 2) {
             /*LOG(("horizontal lineto"));*/
             do {
                                 ALLOC_PATH_ELEMENTS(3);
@@ -220,10 +253,10 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                         = x;
                 p[i++] = last_cubic_y = last_quad_y = last_y;
                 s += n;
-            } while (sscanf_s(s, "%f %n", &x, &n) == 1);
+            } while (sscanf(s, "%f %n", &x, &n) == 1);
 
         /* vertical lineto (V, v) (1 argument) */
-        } else if (sscanf_s(s, " %1[Vv] %f %n", command, &y, &n) == 2) {
+        } else if (sscanf(s, " %1[Vv] %f %n", command, &y, &n) == 2) {
             /*LOG(("vertical lineto"));*/
             do {
                                 ALLOC_PATH_ELEMENTS(3);
@@ -235,10 +268,10 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                 p[i++] = last_cubic_y = last_quad_y = last_y
                         = y;
                 s += n;
-            } while (sscanf_s(s, "%f %n", &x, &n) == 1);
+            } while (sscanf(s, "%f %n", &x, &n) == 1);
 
         /* curveto (C, c) (6 arguments) */
-        } else if (sscanf_s(s, " %1[Cc] %f %f %f %f %f %f %n", command,
+        } else if (sscanf(s, " %1[Cc] %f %f %f %f %f %f %n", command,
                 &x1, &y1, &x2, &y2, &x, &y, &n) == 7) {
             /*LOG(("curveto"));*/
             do {
@@ -260,11 +293,11 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                 p[i++] = last_quad_x = last_x = x;
                 p[i++] = last_quad_y = last_y = y;
                 s += n;
-            } while (sscanf_s(s, "%f %f %f %f %f %f %n",
+            } while (sscanf(s, "%f %f %f %f %f %f %n",
                     &x1, &y1, &x2, &y2, &x, &y, &n) == 6);
 
         /* shorthand/smooth curveto (S, s) (4 arguments) */
-        } else if (sscanf_s(s, " %1[Ss] %f %f %f %f %n", command,
+        } else if (sscanf(s, " %1[Ss] %f %f %f %f %n", command,
                 &x2, &y2, &x, &y, &n) == 5) {
             /*LOG(("shorthand/smooth curveto"));*/
             do {
@@ -286,11 +319,11 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                 p[i++] = last_quad_x = last_x = x;
                 p[i++] = last_quad_y = last_y = y;
                 s += n;
-            } while (sscanf_s(s, "%f %f %f %f %n",
+            } while (sscanf(s, "%f %f %f %f %n",
                     &x2, &y2, &x, &y, &n) == 4);
 
         /* quadratic Bezier curveto (Q, q) (4 arguments) */
-        } else if (sscanf_s(s, " %1[Qq] %f %f %f %f %n", command,
+        } else if (sscanf(s, " %1[Qq] %f %f %f %f %n", command,
                 &x1, &y1, &x, &y, &n) == 5) {
             /*LOG(("quadratic Bezier curveto"));*/
             do {
@@ -312,12 +345,12 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                 p[i++] = last_cubic_x = last_x = x;
                 p[i++] = last_cubic_y = last_y = y;
                 s += n;
-            } while (sscanf_s(s, "%f %f %f %f %n",
+            } while (sscanf(s, "%f %f %f %f %n",
                     &x1, &y1, &x, &y, &n) == 4);
 
         /* shorthand/smooth quadratic Bezier curveto (T, t)
            (2 arguments) */
-        } else if (sscanf_s(s, " %1[Tt] %f %f %n", command,
+        } else if (sscanf(s, " %1[Tt] %f %f %n", command,
                 &x, &y, &n) == 3) {
             /*LOG(("shorthand/smooth quadratic Bezier curveto"));*/
             do {
@@ -341,11 +374,11 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                 p[i++] = last_cubic_x = last_x = x;
                 p[i++] = last_cubic_y = last_y = y;
                 s += n;
-            } while (sscanf_s(s, "%f %f %n",
+            } while (sscanf(s, "%f %f %n",
                     &x, &y, &n) == 2);
 
         /* elliptical arc (A, a) (7 arguments) */
-        } else if (sscanf_s(s, " %1[Aa] %f %f %f %f %f %f %f %n", command,
+        } else if (sscanf(s, " %1[Aa] %f %f %f %f %f %f %f %n", command,
                 &rx, &ry, &rotation, &large_arc, &sweep,
                 &x, &y, &n) == 8) {
             do {
@@ -361,7 +394,7 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
                 p[i++] = last_cubic_y = last_quad_y = last_y
                         = y;
                 s += n;
-            } while (sscanf_s(s, "%f %f %f %f %f %f %f %n",
+            } while (sscanf(s, "%f %f %f %f %f %f %f %n",
                 &rx, &ry, &rotation, &large_arc, &sweep,
                 &x, &y, &n) == 7);
 
