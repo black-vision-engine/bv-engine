@@ -10,6 +10,8 @@
 
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 
+#include "Assets/SVG/SVGAssetDescriptor.h"
+#include "Assets/SVG/SVGAsset.h"
 
 namespace bv { namespace model {
 
@@ -118,6 +120,26 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
             }
         }
     }
+
+
+    auto svgAssetDescr = QueryTypedDesc< SVGAssetDescriptorConstPtr >( assetDescr );
+
+    if( svgAssetDescr )
+    {
+        auto mesh = LoadTypedAsset< SVGAsset >( svgAssetDescr );
+        if( mesh )
+        {
+            m_meshAsset = mesh->GetChild( meshAssetDescr->GetGroupName() );
+
+            if( m_meshAsset )
+            {
+                InitVertexAttributesChannel( meshAssetDescr->IsRecursive() );
+                SetAsset( 0, LAsset( DefaultMeshPluginDesc::MeshName(), assetDescr, nullptr ) );
+                return true;
+            }
+        }
+    }
+
     return false;
 }
 

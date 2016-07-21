@@ -343,6 +343,9 @@
     <Filter Include="Engine\Models\UndoRedo\Lights">
       <UniqueIdentifier>{69432d55-d2af-4c7d-9b40-3f4a2c4205d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\SVG">
+      <UniqueIdentifier>{799c203d-e583-420c-ab09-d67756fda036}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1728,6 +1731,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.cpp">
       <Filter>Engine\Models\UndoRedo\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGLoader.cpp">
+      <Filter>Assets\SVG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp">
+      <Filter>Assets\SVG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
+      <Filter>Assets\SVG</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4066,6 +4078,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.h">
       <Filter>Engine\Models\UndoRedo\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h">
+      <Filter>Assets\SVG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h">
+      <Filter>Assets\SVG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h">
+      <Filter>Assets\SVG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
