@@ -22,6 +22,6 @@ namespace ProfilerEditor.Tester.ComparisionException
         /// <param name="responseEvent"></param>
         /// <returns>Returns true if objects were compared as exception. Otherwise you have to use other
         /// compare function.</returns>
-        bool CompareObjects( JToken expected, JToken response, List<TestError> errorsList, Event expectedEvent, Event responseEvent );
+        bool CompareObjects( KeyValuePair< string, JToken > expected, JToken response, List<TestError> errorsList, Event expectedEvent, Event responseEvent );
     }
 }

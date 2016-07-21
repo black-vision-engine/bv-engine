@@ -11,7 +11,15 @@ namespace ProfilerEditor.Tester
 {
     public class ComparisionRules
     {
+        private List< ComparisionException.CmpException >        m_compareExceptions;
 
+
+        public ComparisionRules()
+        {
+            m_compareExceptions = new List< ComparisionException.CmpException >();
+
+            m_compareExceptions.Add( new ComparisionException.TreatAsWarningException( "local_time", "TimeLines" ) );
+        }
 
 
         public List< TestError >    Compare ( Event expectedResponse, Event response )
@@ -32,6 +40,7 @@ namespace ProfilerEditor.Tester
             {
                 var respChild = response[ child.Key ];
 
+                
                 if( respChild == null )
                 {
                     string message = "[ " +  child.Value.Path + " ] Doesn't exists in response.";
@@ -41,7 +50,8 @@ namespace ProfilerEditor.Tester
                 }
                 else
                 {
-                    ComparatorSelector( child.Value, respChild, errorsList, expectedEvent, responseEvent );
+                    if( !FindMatchingException( child, respChild, errorsList, expectedEvent, responseEvent ) )
+                        ComparatorSelector( child.Value, respChild, errorsList, expectedEvent, responseEvent );
                 }
             }
                 
@@ -123,7 +133,19 @@ namespace ProfilerEditor.Tester
 
         }
 
-        private TestError           CreateTestError     ( Event expectedEvent, Event responseEvent, string message )
+        private bool                FindMatchingException   ( KeyValuePair<string, JToken> expected, JToken response, List<TestError> errorsList, Event expectedEvent, Event responseEvent )
+        {
+            foreach( var exception in m_compareExceptions )
+            {
+                if( exception.CompareObjects( expected, response, errorsList, expectedEvent, responseEvent ) )
+                    return true;
+            }
+
+            return false;
+        }
+
+
+        public static TestError     CreateTestError     ( Event expectedEvent, Event responseEvent, string message )
         {
             TestError error = new TestError( responseEvent );
             error.ReferenceReponse = expectedEvent;
