@@ -14,12 +14,12 @@ using System.Windows.Threading;
 
 namespace ProfilerEditor.Tester
 {
-    enum TestsState
+    public enum TestsState
     {
         Init,
         Testing,
-        WaitForInput,       // Debug
-        WaitForResponse,
+        WaitingForInput,       // Debug
+        WaitingForResponse,
     }
 
 
@@ -39,6 +39,7 @@ namespace ProfilerEditor.Tester
         string                          m_port;
 
         TestsManager                    m_testsManager;
+        BlackVisionProcess              m_process;
 
 
         // Hack: We need to make message from parts.
@@ -69,7 +70,7 @@ namespace ProfilerEditor.Tester
             m_ipAddress = "127.0.0.1";
             m_port = "11101";
 
-            m_state = TestsState.Init;
+            State = TestsState.Init;
             IsConnected = false;
             ConnectedBrush = Brushes.Red;
 
@@ -86,6 +87,8 @@ namespace ProfilerEditor.Tester
             m_timer = new DispatcherTimer();
             m_timer.Tick += ReceivingTimeout;
             m_timer.Interval = new TimeSpan( 0, 0, 0, m_secondsTimeout, 0 );
+
+            m_process = new BlackVisionProcess();
         }
 
 
@@ -131,7 +134,7 @@ namespace ProfilerEditor.Tester
 
         private bool IsInitState( object parameter )
         {
-            if( m_state == TestsState.Init )
+            if( State == TestsState.Init )
                 return true;
             else
                 return false;
@@ -153,13 +156,13 @@ namespace ProfilerEditor.Tester
 
         private void DebugTest( object parameter )
         {
-            m_state = TestsState.WaitForInput;
+            State = TestsState.WaitingForInput;
             m_testsManager.DebugCurrentFile();
         }
 
         private void TestSingleFile( object parameter )
         {
-            m_state = TestsState.Testing;
+            State = TestsState.Testing;
             m_testsManager.TestSingleFile();
 
             QueryAndSendNextMessage();
@@ -167,17 +170,32 @@ namespace ProfilerEditor.Tester
 
         private void TestAllFiles( object parameter )
         {
-            m_state = TestsState.Testing;
+            State = TestsState.Testing;
+
+            RestartProcess();
             m_testsManager.TestAllFiles();
 
             QueryAndSendNextMessage();
         }
 
+        private async void RestartProcess()
+        {
+            m_process.KillEmAll();
+            m_process.Start( "" );
+
+            await Task.Delay( 2000 );
+
+            ConnectClick( null );
+
+            await Task.Delay( 2000 );
+        }
+
+
         // ================================================= //
 
         private void ContinueDebug( object parameter )
         {
-            m_state = TestsState.Testing;
+            State = TestsState.Testing;
             m_testsManager.ContinueToBreakPoint();
 
             QueryAndSendNextMessage();
@@ -185,14 +203,14 @@ namespace ProfilerEditor.Tester
 
         private void DebugStep( object parameter )
         {
-            m_state = TestsState.Testing;
+            State = TestsState.Testing;
 
             QueryAndSendNextMessage();
         }
 
         private bool CanStep( object parameter )
         {
-            if( m_state == TestsState.WaitForInput )
+            if( State == TestsState.WaitingForInput )
                 return true;
             return false;
         }
@@ -260,14 +278,14 @@ namespace ProfilerEditor.Tester
             // Invalidate commands canExecute function value.
             CommandManager.InvalidateRequerySuggested();
 
-            if( m_state != TestsState.Testing )
+            if( State != TestsState.Testing )
                 return;
 
             string eventToSend = m_testsManager.MakeTestStep();
 
             if( eventToSend != null )
             {
-                m_state = TestsState.WaitForResponse;
+                State = TestsState.WaitingForResponse;
 
                 if( eventToSend != "{}" )
                 {
@@ -280,21 +298,21 @@ namespace ProfilerEditor.Tester
             {
                 if( m_testsManager.TestMode == TestingMode.AllFiles )
                 {
-                    // Here BV should be restarted or cleaned.
-
-
                     if( m_testsManager.StepToNextFile() )
                     {
+                        // Here BV should be restarted or cleaned.
+                        RestartProcess();
+
                         eventToSend = m_testsManager.MakeTestStep();
                         m_network.Write( eventToSend );
                         m_timer.Start();
                     }
                     else
-                        m_state = TestsState.Init;
+                        State = TestsState.Init;
                 }
                 else
                 {
-                    m_state = TestsState.Init;
+                    State = TestsState.Init;
                 }
             }
         }
@@ -302,9 +320,9 @@ namespace ProfilerEditor.Tester
         private void    SetAfterReceiveState()
         {
             if( m_testsManager.TestMode == TestingMode.DebugFile && m_testsManager.DebugBreak() )
-                m_state = TestsState.WaitForInput;
+                State = TestsState.WaitingForInput;
             else
-                m_state = TestsState.Testing;
+                State = TestsState.Testing;
         }
 
         #region Properties
@@ -379,6 +397,20 @@ namespace ProfilerEditor.Tester
             set
             {
                 m_testsManager = value;
+            }
+        }
+
+        public TestsState State
+        {
+            get
+            {
+                return m_state;
+            }
+
+            set
+            {
+                m_state = value;
+                NotifyPropertyChanged( "State" );
             }
         }
 

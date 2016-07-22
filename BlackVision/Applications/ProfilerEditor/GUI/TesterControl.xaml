@@ -10,6 +10,7 @@
         <layer:NotConverter x:Key="NotConverter" />
         <layer:IsErrorBrushConverter x:Key="IsErrorBrushConverter"></layer:IsErrorBrushConverter>
         <layer:BoolBrushConverter x:Key="BoolBrushConverter"></layer:BoolBrushConverter>
+        <layer:TesterStateToStringCoverter x:Key="TesterStateToStringCoverter"></layer:TesterStateToStringCoverter>
     </UserControl.Resources>
     
     <Expander Header="Tester/Debugger" Width="1069" HorizontalAlignment="Stretch">
