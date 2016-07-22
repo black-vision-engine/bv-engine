@@ -236,15 +236,17 @@ namespace ProfilerEditor.Tester
                 m_testsManager.ReceivedReponse( m_message );
                 m_timer.Stop();
 
-                SetAfterReceiveState();
-                QueryAndSendNextMessage();
-
                 m_message = "";
 
                 if( endOfStream < data.Length - 3 )
                 {
                     startIdx = data.IndexOf( (char)0x2, endOfStream );
                     MsgReceived( data.Substring( startIdx ), e );
+                }
+                else
+                {
+                    SetAfterReceiveState();
+                    QueryAndSendNextMessage();
                 }
             }
 
@@ -270,8 +272,9 @@ namespace ProfilerEditor.Tester
                 if( eventToSend != "{}" )
                 {
                     m_network.Write( eventToSend );
-                    m_timer.Start();
                 }
+
+                m_timer.Start();
             }
             else
             {

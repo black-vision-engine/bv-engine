@@ -140,8 +140,6 @@ namespace ProfilerEditor.Tester
 
                 if( nextMsg == null )
                 {
-                    TestMode = TestingMode.Uninitialized;
-
                     ErrorRank fileTestResult = SelectedFile.NumErrors == 0 ? ErrorRank.ResultOk : ErrorRank.Error;
                     AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
                 }
