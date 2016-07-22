@@ -149,22 +149,22 @@ namespace ProfilerEditor.Tester
 
             // Reference and reponse comparision.
             List < TestError > errors = rules.Compare( expectedResponse, newEvent );
+            expectedResponse.Used = true;
+
             if( errors == null )
-            {
-                expectedResponse.Used = true;
+            {    
                 // There's no error in this response.
                 return null;
             }
             else
             {
-                expectedResponse.Used = true;
                 CountErrorsWarnings( errors );
 
                 // Complete error info.
                 foreach( var error in errors )
                 {
                     error.FileRef = this;
-                    if( !expectedResponse.SyncEvent )
+                    //if( !expectedResponse.SyncEvent )
                         error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
                 }
 
@@ -180,7 +180,36 @@ namespace ProfilerEditor.Tester
             if( expectedRespPtr >= ReferenceResponses.Count )
                 return null;
 
-            return ReferenceResponses[ (int)expectedRespPtr ];
+
+            if( newEvent.SyncEvent )
+            {
+                if( ReferenceResponses[ (int)expectedRespPtr ].SyncEvent )
+                {
+                    if( newEvent.CommandName == ReferenceResponses[ (int)expectedRespPtr ].CommandName )
+                        return ReferenceResponses[ (int)expectedRespPtr ];
+                    else
+                        return null;
+                }
+                else
+                {
+                    m_responsePtr--;
+                }
+
+                return null;
+            }
+            else
+            {
+                while( ReferenceResponses[ (int)expectedRespPtr ].SyncEvent )
+                    expectedRespPtr++;
+
+                m_responsePtr = (uint)expectedRespPtr + 1;
+
+                var expectedResp = ReferenceResponses[ (int)expectedRespPtr ];
+                if( expectedResp.Used )
+                    return null;
+
+                return ReferenceResponses[ (int)expectedRespPtr ];
+            }
         }
 
         private void        CountErrorsWarnings ( List< TestError > errorsList )
@@ -190,7 +219,7 @@ namespace ProfilerEditor.Tester
             {
                 if( error.IsError == ErrorRank.Error )
                     NumErrors++;
-                else if( error.IsError == ErrorRank.Error )
+                else if( error.IsError == ErrorRank.Warning )
                     NumWarnings++;
             }
             

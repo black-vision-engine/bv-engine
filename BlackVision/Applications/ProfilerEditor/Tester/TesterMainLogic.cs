@@ -240,7 +240,15 @@ namespace ProfilerEditor.Tester
                 QueryAndSendNextMessage();
 
                 m_message = "";
+
+                if( endOfStream < data.Length - 3 )
+                {
+                    startIdx = data.IndexOf( (char)0x2, endOfStream );
+                    MsgReceived( data.Substring( startIdx ), e );
+                }
             }
+
+
         }
 
 

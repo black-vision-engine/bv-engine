@@ -66,9 +66,10 @@ namespace ProfilerEditor.Tester
             m_break = true;
 
             if( SelectedFile != null )
+            {
                 ParseFile( SelectedFile );
-
-            InitProgress();
+                InitProgress();
+            }
         }
 
         public void     TestAllFiles()
@@ -79,9 +80,8 @@ namespace ProfilerEditor.Tester
             {
                 SelectedFile = TestFiles[ 0 ];
                 ParseFile( SelectedFile );
+                InitProgress();
             }
-
-            InitProgress();
         }
 
         public void     TestSingleFile()
@@ -89,9 +89,10 @@ namespace ProfilerEditor.Tester
             TestMode = TestingMode.SingleFile;
 
             if( SelectedFile != null )
+            {
                 ParseFile( SelectedFile );
-
-            InitProgress();
+                InitProgress();
+            }
         }
 
         public void     ContinueToBreakPoint()
