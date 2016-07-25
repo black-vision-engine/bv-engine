@@ -137,6 +137,14 @@ namespace ProfilerEditor.Tester
             Application.Current.Dispatcher.BeginInvoke( DispatcherPriority.Background, new Action( () =>
             {
                 m_testsManager.EngineCrash();
+
+                if( m_testsManager.StepToNextFile() )
+                {
+                    // Here BV should be restarted or cleaned.
+                    RestartProcess();
+                }
+                else
+                    State = TestsState.Init;
             } ) );
         }
 
@@ -161,6 +169,11 @@ namespace ProfilerEditor.Tester
             {
                 m_testsManager.UpdateTestPath( dialog.SelectedPath );
             }
+        }
+
+        public void UpdateBVExecPath( string newPath )
+        {
+            m_process.BlackVisionPathName = newPath;
         }
 
         // ================================================= //

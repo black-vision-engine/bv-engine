@@ -201,7 +201,7 @@ void    IndexedGeometryConverter::MakeTriangles           ( IndexedGeometry & me
 
 // ***********************
 //
-void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< INDEX_TYPE > & indicies, Float3AttributeChannelPtr verts )\
+void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< INDEX_TYPE > & indicies, Float3AttributeChannelPtr verts )
 {
     for( auto index : indicies )
     {

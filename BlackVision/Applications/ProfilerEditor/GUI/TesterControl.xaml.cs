@@ -75,5 +75,10 @@ namespace ProfilerEditor.GUI
                 m_testerLogic.MsgReceived( data, e );
             } ) );
         }
+
+        public void UpdateBVExecPath( string newPath )
+        {
+            m_testerLogic.UpdateBVExecPath( newPath );
+        }
     }
 }
