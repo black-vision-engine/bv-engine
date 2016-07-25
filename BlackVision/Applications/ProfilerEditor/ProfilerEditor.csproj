@@ -74,6 +74,7 @@
       <DependentUpon>TesterControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PresentationLayer\BoolBrushConverter.cs" />
+    <Compile Include="PresentationLayer\EnableFileListConverter.cs" />
     <Compile Include="PresentationLayer\IsErrorBrushConverter.cs" />
     <Compile Include="PresentationLayer\NotConverter.cs" />
     <Compile Include="PresentationLayer\TesterStateToStringConverter.cs" />

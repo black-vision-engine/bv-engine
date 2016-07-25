@@ -22,7 +22,7 @@ namespace ProfilerEditor.Tester
         private UInt32                          m_responsePtr;
 
         private int                             m_responseTimeout;
-        private static float                    m_timeoutScale = 1.5F;
+        private static float                    m_timeoutScale = 2.5F;
         private static int                      m_additionalWaitTime = 2;
 
         private int                             m_numErrors;

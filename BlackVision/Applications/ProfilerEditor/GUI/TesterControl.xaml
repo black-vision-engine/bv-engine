@@ -11,6 +11,7 @@
         <layer:IsErrorBrushConverter x:Key="IsErrorBrushConverter"></layer:IsErrorBrushConverter>
         <layer:BoolBrushConverter x:Key="BoolBrushConverter"></layer:BoolBrushConverter>
         <layer:TesterStateToStringCoverter x:Key="TesterStateToStringCoverter"></layer:TesterStateToStringCoverter>
+        <layer:EnableFileListConverter x:Key="EnableFileListConverter"></layer:EnableFileListConverter>
     </UserControl.Resources>
     
     <Expander Header="Tester/Debugger" Width="1069" HorizontalAlignment="Stretch">
@@ -65,7 +66,7 @@
                     </StackPanel>
                 
                     <!--List of tests in chosen directory-->
-                    <ListView MinHeight="290" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
+                    <ListView MinHeight="290" ItemsSource="{Binding Path=TestsManager.TestFiles}" SelectedItem="{Binding Path=TestsManager.SelectedFile}" IsEnabled="{Binding State, Converter={StaticResource EnableFileListConverter}}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding FileName}" />

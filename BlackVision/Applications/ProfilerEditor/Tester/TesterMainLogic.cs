@@ -113,7 +113,8 @@ namespace ProfilerEditor.Tester
             }
 
             m_network.WritePlain( initMessage.ToString() );
-
+            
+            OnConnected();
         }
 
         public void EngineConnectionFailed  ( int ClientId, EventArgs e )
@@ -175,7 +176,13 @@ namespace ProfilerEditor.Tester
             RestartProcess();
             m_testsManager.TestAllFiles();
 
-            QueryAndSendNextMessage();
+            //QueryAndSendNextMessage();
+        }
+
+        private void OnConnected()
+        {
+            if( State == TestsState.Testing && m_testsManager.TestMode == TestingMode.AllFiles )
+                QueryAndSendNextMessage();
         }
 
         private async void RestartProcess()
@@ -413,6 +420,7 @@ namespace ProfilerEditor.Tester
                 NotifyPropertyChanged( "State" );
             }
         }
+
 
         #endregion
 
