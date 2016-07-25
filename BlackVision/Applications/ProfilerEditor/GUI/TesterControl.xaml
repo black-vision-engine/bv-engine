@@ -10,6 +10,8 @@
         <layer:NotConverter x:Key="NotConverter" />
         <layer:IsErrorBrushConverter x:Key="IsErrorBrushConverter"></layer:IsErrorBrushConverter>
         <layer:BoolBrushConverter x:Key="BoolBrushConverter"></layer:BoolBrushConverter>
+        <layer:TesterStateToStringCoverter x:Key="TesterStateToStringCoverter"></layer:TesterStateToStringCoverter>
+        <layer:EnableFileListConverter x:Key="EnableFileListConverter"></layer:EnableFileListConverter>
     </UserControl.Resources>
     
     <Expander Header="Tester/Debugger" Width="1069" HorizontalAlignment="Stretch">
@@ -46,7 +48,7 @@
                             <TextBlock Text="Step" />
                         </StackPanel>
                     </Button>
-                    <Button Width="80" Command="{Binding StopDebuggingCommand}">
+                    <Button Width="80" Command="{Binding StopDebuggingCommand}" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Rectangle Fill="Red" Margin="0, 0, 5, 0" Height="12" Width="12" />
                             <TextBlock Text="Stop" />
@@ -64,7 +66,7 @@
                     </StackPanel>
                 
                     <!--List of tests in chosen directory-->
-                    <ListView MinHeight="290" DataContext="{Binding TestsManager}" ItemsSource="{Binding TestFiles}" SelectedItem="{Binding Path=SelectedFile}">
+                    <ListView MinHeight="290" ItemsSource="{Binding Path=TestsManager.TestFiles}" SelectedItem="{Binding Path=TestsManager.SelectedFile}" IsEnabled="{Binding State, Converter={StaticResource EnableFileListConverter}}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding FileName}" />

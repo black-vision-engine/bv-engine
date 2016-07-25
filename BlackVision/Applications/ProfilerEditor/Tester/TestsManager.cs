@@ -66,9 +66,10 @@ namespace ProfilerEditor.Tester
             m_break = true;
 
             if( SelectedFile != null )
+            {
                 ParseFile( SelectedFile );
-
-            InitProgress();
+                InitProgress();
+            }
         }
 
         public void     TestAllFiles()
@@ -79,9 +80,8 @@ namespace ProfilerEditor.Tester
             {
                 SelectedFile = TestFiles[ 0 ];
                 ParseFile( SelectedFile );
+                InitProgress();
             }
-
-            InitProgress();
         }
 
         public void     TestSingleFile()
@@ -89,9 +89,10 @@ namespace ProfilerEditor.Tester
             TestMode = TestingMode.SingleFile;
 
             if( SelectedFile != null )
+            {
                 ParseFile( SelectedFile );
-
-            InitProgress();
+                InitProgress();
+            }
         }
 
         public void     ContinueToBreakPoint()
@@ -139,8 +140,6 @@ namespace ProfilerEditor.Tester
 
                 if( nextMsg == null )
                 {
-                    TestMode = TestingMode.Uninitialized;
-
                     ErrorRank fileTestResult = SelectedFile.NumErrors == 0 ? ErrorRank.ResultOk : ErrorRank.Error;
                     AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, fileTestResult, SelectedFile );
                 }
@@ -198,6 +197,11 @@ namespace ProfilerEditor.Tester
         public void     EngineConnectionFailure()
         {
             AddError( "Engine Disconnected", "", "", 0, ErrorRank.Warning );
+        }
+
+        public void     EngineCrash()
+        {
+            AddError( "Engine crashed", "", "", 0, ErrorRank.Error, SelectedFile );
         }
 
 

@@ -22,7 +22,7 @@ namespace ProfilerEditor.Tester
         private UInt32                          m_responsePtr;
 
         private int                             m_responseTimeout;
-        private static float                    m_timeoutScale = 1.5F;
+        private static float                    m_timeoutScale = 2.5F;
         private static int                      m_additionalWaitTime = 2;
 
         private int                             m_numErrors;
@@ -52,7 +52,7 @@ namespace ProfilerEditor.Tester
 
         public void         InitTest()
         {
-            m_realResponses.Clear();
+            RealResponses.Clear();
 
             m_testEventPtr = 0;
             m_responsePtr = 0;
@@ -76,6 +76,19 @@ namespace ProfilerEditor.Tester
 
         public TestError    Timeout     ( int seconds )
         {
+            if( ReferenceResponses.Count <= m_responsePtr )
+            {
+                TestError error = new TestError( TestEvents[ (int)m_testEventPtr - 1 ] );
+                error.Message = "No more responses in reference file";
+                error.FileRef = this;
+                error.IsError = ErrorRank.Warning;
+                error.EventSent = TestEvents[(int)m_testEventPtr - 1];
+                error.ReceivedResponse = null;
+
+                m_responsePtr++;
+                return error;
+            }
+
             if( m_responseTimeout < seconds )
             {
                 var expResp = ReferenceResponses[ (int)m_responsePtr ];
@@ -102,10 +115,11 @@ namespace ProfilerEditor.Tester
             if( m_testEventPtr >= TestEvents.Count )
                 return null;
 
+            bool responseExist = true;
             if( ReferenceResponses.Count <= m_responsePtr )
-                return null;
+                responseExist = false;
 
-            if( ReferenceResponses[ (int)m_responsePtr ].SyncEvent )
+            if( responseExist && ReferenceResponses[(int)m_responsePtr].SyncEvent )
             {
                 var timeDiff = ReferenceResponses[ (int)m_responsePtr ].Time - ReferenceResponses[ (int)m_responsePtr - 1 ].Time;
                 m_responseTimeout = (int)( timeDiff.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
@@ -117,8 +131,13 @@ namespace ProfilerEditor.Tester
 
             string sendEvent = TestEvents[ (int)m_testEventPtr ].GetUnformattedContent();
 
-            var timeDiff2 = ReferenceResponses[ (int)m_responsePtr ].Time - TestEvents[ (int)m_testEventPtr ].Time;
-            m_responseTimeout = (int)( timeDiff2.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
+            if( responseExist )
+            {
+                var timeDiff2 = ReferenceResponses[(int)m_responsePtr].Time - TestEvents[(int)m_testEventPtr].Time;
+                m_responseTimeout = (int)( timeDiff2.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
+            }
+            else
+                m_responseTimeout = 0;
 
             CurrentTestEvent = TestEvents[ (int)m_testEventPtr ];
             m_testEventPtr++;
@@ -149,22 +168,22 @@ namespace ProfilerEditor.Tester
 
             // Reference and reponse comparision.
             List < TestError > errors = rules.Compare( expectedResponse, newEvent );
+            expectedResponse.Used = true;
+
             if( errors == null )
-            {
-                expectedResponse.Used = true;
+            {    
                 // There's no error in this response.
                 return null;
             }
             else
             {
-                expectedResponse.Used = true;
                 CountErrorsWarnings( errors );
 
                 // Complete error info.
                 foreach( var error in errors )
                 {
                     error.FileRef = this;
-                    if( !expectedResponse.SyncEvent )
+                    //if( !expectedResponse.SyncEvent )
                         error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
                 }
 
@@ -180,7 +199,36 @@ namespace ProfilerEditor.Tester
             if( expectedRespPtr >= ReferenceResponses.Count )
                 return null;
 
-            return ReferenceResponses[ (int)expectedRespPtr ];
+
+            if( newEvent.SyncEvent )
+            {
+                if( ReferenceResponses[ (int)expectedRespPtr ].SyncEvent )
+                {
+                    if( newEvent.CommandName == ReferenceResponses[ (int)expectedRespPtr ].CommandName )
+                        return ReferenceResponses[ (int)expectedRespPtr ];
+                    else
+                        return null;
+                }
+                else
+                {
+                    m_responsePtr--;
+                }
+
+                return null;
+            }
+            else
+            {
+                while( ReferenceResponses[ (int)expectedRespPtr ].SyncEvent )
+                    expectedRespPtr++;
+
+                m_responsePtr = (uint)expectedRespPtr + 1;
+
+                var expectedResp = ReferenceResponses[ (int)expectedRespPtr ];
+                if( expectedResp.Used )
+                    return null;
+
+                return ReferenceResponses[ (int)expectedRespPtr ];
+            }
         }
 
         private void        CountErrorsWarnings ( List< TestError > errorsList )
@@ -190,7 +238,7 @@ namespace ProfilerEditor.Tester
             {
                 if( error.IsError == ErrorRank.Error )
                     NumErrors++;
-                else if( error.IsError == ErrorRank.Error )
+                else if( error.IsError == ErrorRank.Warning )
                     NumWarnings++;
             }
             

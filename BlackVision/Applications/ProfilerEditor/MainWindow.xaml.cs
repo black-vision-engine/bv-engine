@@ -35,7 +35,7 @@ namespace ProfilerEditor
 
 		string												m_pipeName;
 		string												m_BlackVisionPathName;
-		Process												m_BlackVisionProcess;
+		BlackVisionProcess									m_BlackVisionProcess;
 		string												m_commandLineArg;
 
 		public int											m_timeFormatUnits;
@@ -68,7 +68,7 @@ namespace ProfilerEditor
             InitializeComponent();
 
 			// BlackVision process handle and default names
-			m_BlackVisionProcess = null;
+			m_BlackVisionProcess = new BlackVisionProcess();
 			m_pipeName = "BlackVisionProfiler";
 			m_BlackVisionPathName = "..\\BlackVision\\BlackVision.exe";
 			m_BlackVisionPathName = System.IO.Path.GetFullPath( m_BlackVisionPathName );
@@ -119,15 +119,7 @@ namespace ProfilerEditor
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
-			if( m_BlackVisionProcess != null )
-			{
-				if( !m_BlackVisionProcess.HasExited )
-				{
-					m_BlackVisionProcess.CloseMainWindow();
-					m_BlackVisionProcess.WaitForExit();
-				}
-				m_BlackVisionProcess = null;
-			}
+            m_BlackVisionProcess.Kill();
 
 			if( m_pipedServer == null )
 				return;
@@ -341,11 +333,7 @@ namespace ProfilerEditor
 			if( !File.Exists( m_BlackVisionPathName ) )
 				return;
 
-			m_BlackVisionProcess = new Process();
-			m_BlackVisionProcess.StartInfo.FileName = m_BlackVisionPathName;
-			m_BlackVisionProcess.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName( m_BlackVisionPathName );
-			m_BlackVisionProcess.StartInfo.Arguments = m_commandLineArg;
-			m_BlackVisionProcess.Start();
+            m_BlackVisionProcess.Start( m_commandLineArg );
 
             ClearTree( true );
 		}

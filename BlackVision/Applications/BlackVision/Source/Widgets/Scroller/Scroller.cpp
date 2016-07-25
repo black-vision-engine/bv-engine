@@ -194,7 +194,7 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
 {
     AddFloatParam( m_paramValModel, timeEvaluator, "Speed", 0.4f );
     AddFloatParam( m_paramValModel, timeEvaluator, "Spacing", 0.4f );
-    AddFloatParam( m_paramValModel, timeEvaluator, "SmoothTime", 3000.0f );
+    AddFloatParam( m_paramValModel, timeEvaluator, "SmoothTime", 3.0f );
 
     AddBoolParam( m_paramValModel, timeEvaluator, "EnableEvents", false );
 }
