@@ -16,6 +16,10 @@ namespace ProfilerEditor
         int             m_killTimeOut;
 
 
+        public delegate void ProcessExitedDelegate();
+
+        public ProcessExitedDelegate       BVCrashed;
+
 
         public BlackVisionProcess()
         {
@@ -36,16 +40,31 @@ namespace ProfilerEditor
             m_blackVisionProcess.StartInfo.FileName = BlackVisionPathName;
             m_blackVisionProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName( BlackVisionPathName );
             m_blackVisionProcess.StartInfo.Arguments = commandLineArg;
-            //m_blackVisionProcess.Exited
+            m_blackVisionProcess.EnableRaisingEvents = true;
+            m_blackVisionProcess.Exited += ProcessExited;
 
             m_blackVisionProcess.Start();
         }
 
 
+        private void ProcessExited( object sender, EventArgs e )
+        {
+            if( m_blackVisionProcess.ExitCode != 0 )
+            {
+                BVCrashed();
+            }
+        }
+
         public void Kill()
         {
-            Kill( m_blackVisionProcess );
-            m_blackVisionProcess = null;
+            if( m_blackVisionProcess != null )
+            {
+                m_blackVisionProcess.Exited -= ProcessExited;
+
+                Kill( m_blackVisionProcess );
+
+                m_blackVisionProcess = null;
+            }
         }
 
         private void Kill( Process process )
@@ -64,10 +83,14 @@ namespace ProfilerEditor
         }
 
         /// <summary>
-        /// Finds all running BlackVision processes and kill them. 
+        /// Finds all running BlackVision processes and kills them. 
         /// </summary>
         public void KillEmAll()
         {
+            // Kill process spawned by this class.
+            Kill();
+
+            // Kill rest BV processes.
             string processName = Path.GetFileNameWithoutExtension( BlackVisionPathName );
             Process[] processes = Process.GetProcessesByName( processName );
             foreach( var process in processes )

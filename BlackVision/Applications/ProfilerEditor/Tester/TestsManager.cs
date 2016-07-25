@@ -199,6 +199,11 @@ namespace ProfilerEditor.Tester
             AddError( "Engine Disconnected", "", "", 0, ErrorRank.Warning );
         }
 
+        public void     EngineCrash()
+        {
+            AddError( "Engine crashed", "", "", 0, ErrorRank.Error, SelectedFile );
+        }
+
 
         // ================================================= //
 

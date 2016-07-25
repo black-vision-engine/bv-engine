@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -89,6 +90,7 @@ namespace ProfilerEditor.Tester
             m_timer.Interval = new TimeSpan( 0, 0, 0, m_secondsTimeout, 0 );
 
             m_process = new BlackVisionProcess();
+            m_process.BVCrashed += new BlackVisionProcess.ProcessExitedDelegate( EngineCrashed );
         }
 
 
@@ -128,6 +130,14 @@ namespace ProfilerEditor.Tester
         {
             IsConnected = false;
             m_testsManager.EngineDisconnected( Message );
+        }
+
+        public void EngineCrashed()
+        {
+            Application.Current.Dispatcher.BeginInvoke( DispatcherPriority.Background, new Action( () =>
+            {
+                m_testsManager.EngineCrash();
+            } ) );
         }
 
         #endregion
@@ -309,10 +319,6 @@ namespace ProfilerEditor.Tester
                     {
                         // Here BV should be restarted or cleaned.
                         RestartProcess();
-
-                        eventToSend = m_testsManager.MakeTestStep();
-                        m_network.Write( eventToSend );
-                        m_timer.Start();
                     }
                     else
                         State = TestsState.Init;

@@ -159,6 +159,8 @@ void JsonCommandsListener::DebugLayerProcessEvent      ( const std::string & eve
     m_resultFile << eventString << std::endl;
 
     m_resultFile << END_OF_INSCRIPTION;
+
+    m_resultFile.flush();
 }
 
 #pragma warning( push )
