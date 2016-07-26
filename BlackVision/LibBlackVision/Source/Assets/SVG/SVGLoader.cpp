@@ -114,6 +114,12 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
     //shape->path_length = n;
     //state->diagram->shape_count++;
 
+    auto size = geometry->positions.size();
+
+    geometry->normals.resize( size, glm::vec3( 1, 0, 0 ) );
+    geometry->tangents.resize( size, glm::vec4( 1, 0, 0, 0 ) );
+    geometry->uvs.resize( size, glm::vec2( 0, 0 ) );
+
     mesh->SetGeometry( geometry );
 
     return true;
@@ -453,6 +459,9 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
         do
         {
             svgtiny_parse_path( deser, mesh );
+//            auto geometry = mesh->GetGeometry();
+//            auto size = geometry->positions.size();
+//            geometry->normals.resize( size, glm::vec3( 1, 0, 0 ) );
         }while( deser.NextChild() );
         deser.ExitChild(); // path
     }
