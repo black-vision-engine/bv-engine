@@ -11,7 +11,6 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
-#include "Widgets/Scroller/ScrollerEvents.h"
 #include "Widgets/Counter/Counter.h"
 
 namespace bv

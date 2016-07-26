@@ -33,6 +33,9 @@
 
 #include "Engine/Models/BoundingVolume.h"
 
+#include "Engine/Events/EventManager.h"
+#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+
 
 // Undo/Redo operations
     // Nodes
@@ -521,7 +524,9 @@ bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, mode
     if( scene && node )
     {
         if( enableUndo )
+        {
             scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeOperation >( new RemoveNodeOperation( scene, parentNode, node ) ) );
+        }
 
 
         if( node == scene->GetRootNode() )
@@ -541,6 +546,7 @@ bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, mode
             success &= m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
         
             MappingsCleanup( modelChildNode );
+            NotifyRemovedNode( modelChildNode, modelParentNode );
 
             return success;
         }
@@ -1873,6 +1879,17 @@ std::string				BVProjectEditor::PrefixSceneName		( const std::string & name ) co
     }
 
     return PrefixHelper::PrefixCopy( num + 1 ) + name;
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyRemovedNode    ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode )
+{
+    auto removeEvent = std::make_shared< NodeRemovedEvent >();
+    removeEvent->RemovedNode = removedNode;
+    removeEvent->ParentNode = parentNode;
+
+    GetDefaultEventManager().TriggerEvent( removeEvent );
 }
 
 // CUSTOM DEFAULTS

@@ -14,7 +14,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "ScrollerEvents.h"
+#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
 #include "Tools/StringHeplers.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Widgets/NodeLogicHelper.h"
@@ -197,6 +197,20 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     AddFloatParam( m_paramValModel, timeEvaluator, "SmoothTime", 3.0f );
 
     AddBoolParam( m_paramValModel, timeEvaluator, "EnableEvents", false );
+}
+
+// ***********************
+//
+void        Scroller::Initialize		()
+{
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &Scroller::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+}
+
+// ***********************
+//
+void        Scroller::Deinitialize	    ()
+{
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &Scroller::NodeRemovedHandler ), NodeRemovedEvent::Type() );
 }
 
 
@@ -1459,6 +1473,29 @@ void            Scroller::ListTypedItems      ( std::vector< bv::model::BasicNod
         response.ExitChild();   // Item
     }
 }
+
+
+// ***********************
+//
+void            Scroller::NodeRemovedHandler  ( IEventPtr evt )
+{
+    if( evt->GetEventType() != NodeRemovedEvent::Type() )
+        return;
+
+    NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
+    
+    // Scroller uses only closest children.
+    if( removedEvt->ParentNode != m_parentNode )
+        return;
+
+    if( m_nodesStates.Exist( removedEvt->RemovedNode.get() ) )
+    {
+        m_nodesStates.Remove( removedEvt->RemovedNode.get() );
+        m_shifts.erase( removedEvt->RemovedNode.get() );
+        m_margins.erase( removedEvt->RemovedNode.get() );
+    }
+}
+
 
 } // nodelogic
 } // bv

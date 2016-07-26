@@ -3,6 +3,7 @@
 #include "CoreDEF.h"
 #include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
 #include "ScrollerNodesStates.h"
+#include "Engine/Events/Interfaces/IEvent.h"
 
 #include <string>
 #include <vector>
@@ -93,7 +94,6 @@ private:
 
 
 	typedef std::map< bv::model::BasicNode *, Float32 >     NodeFloatMap;
-	typedef std::map< bv::model::BasicNode *, bool >	    NodeBoolMap;
     typedef std::map< bv::model::BasicNode *, NodeMargin >  NodeMarginMap;
 
 private:
@@ -155,7 +155,7 @@ private:
 
 public:
 	explicit	Scroller            ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
-				~Scroller			() {}
+                ~Scroller			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
     bool		AddNext				( Int32 nodeIdx );
@@ -181,9 +181,9 @@ public:
 
 
 
-	virtual void	            Initialize		()				override {}
+	virtual void	            Initialize		()				override;
 	virtual void	            Update			( TimeType t )	override;
-	virtual void	            Deinitialize	()				override {}
+	virtual void	            Deinitialize	()				override;
 
 
     virtual const std::string &                             GetType         () const override;
@@ -228,6 +228,9 @@ private:
 
     model::BasicNodePtr     CreatePreset    ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
     bool                    AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
+
+
+    void                    NodeRemovedHandler  ( IEventPtr evt );
 };
 
 } 

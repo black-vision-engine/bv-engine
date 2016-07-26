@@ -254,6 +254,10 @@ private:
 
     bool                    IsTimelineUsed      ( model::ITimeEvaluatorPtr timeEval );
 
+    /* node helpers */
+
+    void                    NotifyRemovedNode    ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
+
     /* Undo/Redo */
 
     void                    AddMoveOperation        ( model::SceneModelPtr scene, model::IModelNodePtr srcParent, model::IModelNodePtr destParent, model::IModelNodePtr movedNode, UInt32 destIdx );

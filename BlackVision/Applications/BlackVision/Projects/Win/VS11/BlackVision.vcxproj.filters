@@ -170,9 +170,6 @@
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp">
       <Filter>Widgets\Scroller</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.cpp">
-      <Filter>Widgets\Scroller</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp">
       <Filter>Widgets\Scroller</Filter>
     </ClCompile>
@@ -322,9 +319,6 @@
       <Filter>Widgets</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h">
-      <Filter>Widgets\Scroller</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.h">
       <Filter>Widgets\Scroller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h">

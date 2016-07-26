@@ -11,7 +11,6 @@
 #include "NodeLogicHandlers.h"
 
 #include "Engine/Events/EventManager.h"
-#include "Widgets/Scroller/ScrollerEvents.h"
 
 
 namespace bv
