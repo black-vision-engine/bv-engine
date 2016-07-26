@@ -20,6 +20,7 @@
 #include "BVConfig.h"
 
 #include "Application/ApplicationContext.h"
+#include "Application/Win32/DisableCrashReport.h"
 
 // Log initializer
 #include "bvAppLogInitializer.inl"
@@ -231,6 +232,11 @@ void    BlackVisionApp::InitializeAppLogic  ()
         HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
         HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
         HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
+    }
+
+    if( IsDisableCrashReportFlagSet( commandLineString ) )
+    {
+        DisableCrashReport();
     }
 
     m_app = new BVAppLogic( m_Renderer, m_audioRenderer );

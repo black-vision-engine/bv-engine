@@ -41,11 +41,25 @@ namespace ProfilerEditor
             m_blackVisionProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName( BlackVisionPathName );
             m_blackVisionProcess.StartInfo.Arguments = commandLineArg;
             m_blackVisionProcess.EnableRaisingEvents = true;
+            m_blackVisionProcess.StartInfo.ErrorDialog = false;
             m_blackVisionProcess.Exited += ProcessExited;
 
             m_blackVisionProcess.Start();
         }
 
+        public bool IsSpawned()
+        {
+            if( m_blackVisionProcess != null )
+                return true;
+            return false;
+        }
+
+
+        public bool IsResponsive()
+        {
+            m_blackVisionProcess.Refresh();
+            return m_blackVisionProcess.Responding;
+        }
 
         private void ProcessExited( object sender, EventArgs e )
         {

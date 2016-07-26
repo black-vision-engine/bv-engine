@@ -126,6 +126,7 @@
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ConsoleApplication.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\Win32\DisableCrashReport.cpp" />
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\WindowedApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp" />
@@ -555,6 +556,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h" />
+    <ClInclude Include="..\..\..\Source\Application\Win32\DisableCrashReport.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />

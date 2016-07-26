@@ -137,9 +137,11 @@ namespace ProfilerEditor.Tester
             Application.Current.Dispatcher.BeginInvoke( DispatcherPriority.Background, new Action( () =>
             {
                 m_testsManager.EngineCrash();
+                m_timer.Stop();
 
                 if( m_testsManager.StepToNextFile() )
                 {
+                    State = TestsState.Testing;
                     // Here BV should be restarted or cleaned.
                     RestartProcess();
                 }
@@ -211,7 +213,7 @@ namespace ProfilerEditor.Tester
         private async void RestartProcess()
         {
             m_process.KillEmAll();
-            m_process.Start( "" );
+            m_process.Start( "-DisableCrashReport" );
 
             await Task.Delay( 2000 );
 

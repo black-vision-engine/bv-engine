@@ -1729,6 +1729,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.cpp">
       <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Application\Win32\DisableCrashReport.cpp">
+      <Filter>Application\Win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4066,6 +4069,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.h">
       <Filter>Engine\Models\UndoRedo\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\Win32\DisableCrashReport.h">
+      <Filter>Application\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

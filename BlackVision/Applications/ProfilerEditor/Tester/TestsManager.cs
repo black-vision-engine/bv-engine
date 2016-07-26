@@ -201,7 +201,10 @@ namespace ProfilerEditor.Tester
 
         public void     EngineCrash()
         {
-            AddError( "Engine crashed", "", "", 0, ErrorRank.Error, SelectedFile );
+            SelectedFile.NumErrors++;
+
+            AddError( "Engine crashed", "", "Engine crashed or became unresponsive", 0, ErrorRank.Error, SelectedFile );
+            AddError( "Test ended", "", "File [ " + SelectedFile.FileName + " ] Errors: [ " + SelectedFile.NumErrors + " ] Warnings: [ " + SelectedFile.NumWarnings + " ]", 0, ErrorRank.Error, SelectedFile );
         }
 
 

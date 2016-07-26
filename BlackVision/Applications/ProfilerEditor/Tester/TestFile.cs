@@ -154,10 +154,25 @@ namespace ProfilerEditor.Tester
             if( expectedResponse == null )
             {
                 TestError error = new TestError( newEvent );
-                error.Message = "Reference data doesn't contain response to this message.";
+                error.Message = "Reference data doesn't contain this response.";
                 error.FileRef = this;
                 error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
                 error.IsError = ErrorRank.Warning;
+
+                List < TestError > errorsList = new List< TestError >();
+                errorsList.Add( error );
+                CountErrorsWarnings( errorsList );
+
+                return errorsList;
+            }
+
+            if( expectedResponse.CommandName != newEvent.CommandName )
+            {
+                TestError error = new TestError( newEvent );
+                error.Message = "Command response from engine [ " + newEvent.CommandName + " ] and reference [ " + expectedResponse.CommandName + " ] are different";
+                error.FileRef = this;
+                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                error.IsError = ErrorRank.Error;
 
                 List < TestError > errorsList = new List< TestError >();
                 errorsList.Add( error );
