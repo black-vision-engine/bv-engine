@@ -596,6 +596,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::LineChartTestScene( timeline );
     }
+    else if( scene == "SVG_TEST_SCENE" )
+    {
+        node = TestScenesFactory::SVGTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -2033,6 +2037,26 @@ model::BasicNodePtr     TestScenesFactory::LineChartTestScene                ( m
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_LINE_CHART", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    return root;
+}
+
+
+// ***********************
+//
+model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    // Root node
+    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
+
+    auto plugin = root->GetPlugin( "mesh" );
+    assert( plugin );
+    plugin->LoadResource( SVGAssetDescriptor::Create( "kupa.svg" ) );
+
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
 
     return root;

@@ -23,41 +23,41 @@ enum {
     svgtiny_PATH_BEZIER
 };
 
-//void svgtiny_transform_path(float *p, unsigned int n, SVGAssetPtr mesh )
-//{
-//    float a = 1, c = 0, e = 0;
-//    float b = 0, d = 1, f = 0;
-//
-//    unsigned int j;
-//
-//    for (j = 0; j != n; ) {
-//        unsigned int points = 0;
-//        unsigned int k;
-//        switch ((int) p[j]) {
-//        case svgtiny_PATH_MOVE:
-//        case svgtiny_PATH_LINE:
-//            points = 1;
-//            break;
-//        case svgtiny_PATH_CLOSE:
-//            points = 0;
-//            break;
-//        case svgtiny_PATH_BEZIER:
-//            points = 3;
-//            break;
-//        default:
-//            assert(0);
-//        }
-//        j++;
-//        for (k = 0; k != points; k++) {
-//            float x0 = p[j], y0 = p[j + 1];
-//            float x = a * x0 + c * y0 + e;
-//            float y = b * x0 + d * y0 + f;
-//            p[j] = x;
-//            p[j + 1] = y;
-//            j += 2;
-//        }
-//    }
-//}
+void svgtiny_transform_path(float *p, unsigned int n, SVGAssetPtr mesh )
+{
+    float a = 0.01f, c = 0, e = 0;
+    float b = 0, d = -0.01f, f = 0;
+
+    unsigned int j;
+
+    for (j = 0; j != n; ) {
+        unsigned int points = 0;
+        unsigned int k;
+        switch ((int) p[j]) {
+        case svgtiny_PATH_MOVE:
+        case svgtiny_PATH_LINE:
+            points = 1;
+            break;
+        case svgtiny_PATH_CLOSE:
+            points = 0;
+            break;
+        case svgtiny_PATH_BEZIER:
+            points = 3;
+            break;
+        default:
+            assert(0);
+        }
+        j++;
+        for (k = 0; k != points; k++) {
+            float x0 = p[j], y0 = p[j + 1];
+            float x = a * x0 + c * y0 + e;
+            float y = b * x0 + d * y0 + f;
+            p[j] = x;
+            p[j + 1] = y;
+            j += 2;
+        }
+    }
+}
 
 typedef bool svgtiny_code;
 
@@ -68,7 +68,7 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
     //if (state->fill == svgtiny_LINEAR_GRADIENT)
     //    return svgtiny_add_path_linear_gradient(p, n, state);
 
-    //svgtiny_transform_path(p, n, state);
+    svgtiny_transform_path(p, n, mesh);
 
     //shape = svgtiny_add_shape(state);
     //if (!shape) {
@@ -101,8 +101,8 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
         else if( p[ i ] == svgtiny_PATH_BEZIER )
         {
             geometry->positions.push_back( glm::vec3( x, y, 0 ) );
-            x = p[ i + 1 ];
-            y = p[ i + 2 ];
+            x = p[ i + 1 + 4 ];
+            y = p[ i + 2 + 4 ];
             geometry->positions.push_back( glm::vec3( x, y, 0 ) );
             i+=7;
         }
