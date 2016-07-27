@@ -25,10 +25,10 @@ public:
     explicit                        DataArrayAsset  ();
                                     ~DataArrayAsset ();
 
-	static DataArrayAssetConstPtr	Create			();
-	static const std::string &	    UID				();
+    static DataArrayAssetConstPtr	Create			();
+    static const std::string &	    UID				();
 
-	virtual const std::string &	    GetUID			() const override;
+    virtual const std::string &	    GetUID			() const override;
 
     bool                            IsEmpty         () const;
     
@@ -46,7 +46,7 @@ public:
     static DataArrayAssetConstPtr	Create			( std::vector< DataArrayRowBase * > && rows );
 
 protected:
-	virtual VoidConstPtr            QueryThis		() const override;
+    virtual VoidConstPtr            QueryThis		() const override;
 
 
 private:
