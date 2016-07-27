@@ -98,13 +98,6 @@ void    PdrAudioBuffersQueue::InitBuffers   ( Int32 frequency, AudioFormat forma
 //
 void    PdrAudioBuffersQueue::ClearBuffers  ()
 {
-    Int32 queued = 0;
-    do
-    {
-        BufferData();
-        BVAL::bvalGetSourcei( m_sourceHandle, AL_BUFFERS_QUEUED, &queued );
-    }while( queued );
-
     BVAL::bvalSourcei( m_sourceHandle, AL_BUFFER, 0 );
     BVAL::bvalDeleteBuffers( QUEUE_SIZE, m_bufferHandles );
     delete [] m_bufferHandles;

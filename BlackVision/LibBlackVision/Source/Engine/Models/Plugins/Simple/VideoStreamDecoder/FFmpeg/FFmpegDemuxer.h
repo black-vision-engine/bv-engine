@@ -18,6 +18,7 @@ private:
 	typedef std::map< Int32, PacketQueue >			            PacketQueueMap;
 
     static const UInt32         SAFE_SEEK_FRAMES;
+    static const UInt32         MAX_QUEUE_SIZE;
 
 private:
 
@@ -35,7 +36,7 @@ private:
 
 public:
 
-								FFmpegDemuxer			( const std::string & streamPath );
+								FFmpegDemuxer			( const std::string & streamPath, UInt32 maxQueueSize = MAX_QUEUE_SIZE );
 								~FFmpegDemuxer			();
 
 	bool					    ProcessPacket			();

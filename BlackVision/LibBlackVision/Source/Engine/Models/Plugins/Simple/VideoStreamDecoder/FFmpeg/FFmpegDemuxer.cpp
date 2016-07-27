@@ -9,15 +9,16 @@ namespace bv {
 
 
 const UInt32         FFmpegDemuxer::SAFE_SEEK_FRAMES = 10;
+const UInt32         FFmpegDemuxer::MAX_QUEUE_SIZE = 5;
 
 
 // *******************************
 //FIXME: pass which stream we want - now only video
-FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
+FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQueueSize )
 	: m_streamPath( streamPath )
 	, m_formatCtx( nullptr )
 	, m_isEOF( false )
-    , m_maxQueueSize( 5 )
+    , m_maxQueueSize( maxQueueSize )
 {
 	av_register_all();
 

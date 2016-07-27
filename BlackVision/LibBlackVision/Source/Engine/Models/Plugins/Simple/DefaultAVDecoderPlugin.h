@@ -115,6 +115,7 @@ private:
     void                                        MarkOffsetChanges           ();
 
     void                                        BroadcastHasFinishedEvent   ();
+    void                                        TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command );
 
 };
 

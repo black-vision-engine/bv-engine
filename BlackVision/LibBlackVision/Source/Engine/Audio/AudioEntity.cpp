@@ -50,6 +50,16 @@ AudioFormat                 AudioEntity::GetFormat      () const
 
 // ***********************
 //
+void                        AudioEntity::Clear          ()
+{
+    while( !m_audioData.IsEmpty() )
+    {
+        m_audioData.Pop();
+    }
+}
+
+// ***********************
+//
 bool                        AudioEntity::IsEmpty        () const
 {
     return m_audioData.IsEmpty();

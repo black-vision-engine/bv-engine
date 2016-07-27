@@ -118,6 +118,10 @@ std::string ParamDescriptorEvent::m_sEventName      = "ParamDescriptorEvent";
 const EventType UndoRedoEvent::m_sEventType         = 0x30000029;
 std::string UndoRedoEvent::m_sEventName             = "UndoRedoEvent";
 
+const EventType AssetTrackerInternalEvent::m_sEventType     = 0x3000002A;
+std::string AssetTrackerInternalEvent::m_sEventName         = "AssetTrackerInternalEvent";
+
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -2494,6 +2498,64 @@ const std::string&  HightmapEvent::GetName() const
 //
 EventType           HightmapEvent::GetEventType() const
 {   return this->m_sEventType; }
+
+
+// ************************************* UnqueueAudioInternalEvent *************************************
+
+// *************************************
+//
+AssetTrackerInternalEvent::AssetTrackerInternalEvent        ( Command eventCommand )
+    : EventCommand( eventCommand )
+{
+}
+
+// *************************************
+//
+void                AssetTrackerInternalEvent::Serialize              ( ISerializer& ser ) const
+{    assert( !"Should not be serialized" );  }
+
+// *************************************
+//
+IEventPtr           AssetTrackerInternalEvent::Create                 ( IDeserializer& deser )
+{
+    assert( !"Should not be deserialized" );
+    return nullptr;    
+}
+
+// *************************************
+//
+IEventPtr           AssetTrackerInternalEvent::Clone                  () const
+{   
+    return IEventPtr( new AssetTrackerInternalEvent( *this ) );  
+}
+
+// *************************************
+//
+EventType           AssetTrackerInternalEvent::Type                   ()
+{   
+    return m_sEventType;   
+}
+
+// *************************************
+//
+std::string &       AssetTrackerInternalEvent::Name                   ()
+{   
+    return m_sEventName;   
+}
+
+// *************************************
+//
+const std::string & AssetTrackerInternalEvent::GetName                () const
+{   
+    return Name();   
+}
+
+// *************************************
+//
+EventType           AssetTrackerInternalEvent::GetEventType           () const
+{   
+    return this->m_sEventType; 
+}
 
 
 #pragma warning( pop )

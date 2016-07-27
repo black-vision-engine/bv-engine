@@ -3,6 +3,7 @@
 #include "BVProject.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/AudioRenderer.h"
 
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
@@ -26,7 +27,7 @@ const std::string	BVProject::GLOBAL_TIMELINE_NAME	= "global timeline";
 
 // *******************************
 //
-void                    BVProject::Serialize           ( ISerializer& ser ) const
+void                    BVProject::Serialize           ( ISerializer & ser ) const
 {
     ser.EnterArray( "scenes" );
 
@@ -40,16 +41,17 @@ void                    BVProject::Serialize           ( ISerializer& ser ) cons
 
 // *******************************
 //
-BVProjectPtr  BVProject::Create              ( Renderer * renderer )
+BVProjectPtr  BVProject::Create              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
-    struct make_shared_enabler_BVProject : public BVProject { make_shared_enabler_BVProject( Renderer * renderer ): BVProject( renderer ){} };
-    return std::make_shared< make_shared_enabler_BVProject >( renderer );
+    struct make_shared_enabler_BVProject : public BVProject { make_shared_enabler_BVProject( Renderer * renderer, audio::AudioRenderer * audioRenderer ): BVProject( renderer, audioRenderer ){} };
+    return std::make_shared< make_shared_enabler_BVProject >( renderer, audioRenderer );
 }
 
 // *******************************
 //
-BVProject::BVProject    ( Renderer * renderer )
+BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : m_renderer( renderer )
+    , m_audioRenderer( audioRenderer )
     , m_engineSceneRoot( nullptr )
     , m_timelineManager( std::make_shared < model::TimelineManager >() )
     , m_globalTimeline( model::OffsetTimeEvaluator::Create( GLOBAL_TIMELINE_NAME, TimeType( 0.0 ) ) )
@@ -60,6 +62,8 @@ BVProject::BVProject    ( Renderer * renderer )
     m_rootNode = model::BasicNode::Create( MAIN_ROOT_NAME, m_timelineManager->GetRootTimeline() );
 
     m_projectEditor = new BVProjectEditor( this );
+
+    m_assetTracker = std::unique_ptr< AssetTracker >( new AssetTracker( renderer, audioRenderer, m_projectEditor ) );
 }
 
 // *******************************

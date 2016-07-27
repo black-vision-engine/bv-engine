@@ -100,7 +100,7 @@ namespace
 
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
-    : m_bvProject( BVProject::Create( renderer ) )
+    : m_bvProject( BVProject::Create( renderer, audioRenderer ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
     , m_audioRenderer( nullptr )

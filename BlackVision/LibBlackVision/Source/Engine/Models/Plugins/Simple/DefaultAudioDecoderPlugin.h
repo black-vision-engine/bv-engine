@@ -10,6 +10,8 @@
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 
+#include "Engine/Events/Events.h"
+
 
 namespace bv { namespace model {
 
@@ -97,6 +99,7 @@ private:
     void                                        MarkOffsetChanges           ();
 
     void                                        BroadcastHasFinishedEvent   ();
+    void                                        TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command );
 
 };
 

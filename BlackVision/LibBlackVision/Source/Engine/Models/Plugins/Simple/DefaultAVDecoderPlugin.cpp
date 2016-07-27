@@ -15,7 +15,6 @@
 
 #include "Assets/DefaultAssets.h"
 
-#include "Engine/Events/EventManager.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
@@ -425,9 +424,13 @@ void                                DefaultAVDecoderPlugin::UpdateDecoderState  
             m_isFinished = false;
             break;
         case DecoderMode::STOP:
-            m_decoder->Stop(); break;
+            m_decoder->Stop();
+            TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
+            break;
         case DecoderMode::PAUSE:
-            m_decoder->Pause(); break;
+            m_decoder->Pause();
+            TriggerAudioEvent( AssetTrackerInternalEvent::Command::PauseAudio );
+            break;
     }
 }
 
@@ -477,6 +480,15 @@ void                                DefaultAVDecoderPlugin::BroadcastHasFinished
     JsonSerializeObject ser;
     evt->Serialize( ser );
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command )
+{
+    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
+    evt->PluginOwner = this;
+    GetDefaultEventManager().TriggerEvent( evt );
 }
 
 } //model

@@ -165,9 +165,9 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
 
 // *******************************
 //
-void                BVProjectTools::ReleaseUnusedResources                  ( Renderer * renderer )
+void                BVProjectTools::ReleaseUnusedResources                  ( Renderer * renderer, AssetTracker * assetTracker )
 {
-    auto assets = AssetTracker::Instance().GetUnusedAssets();
+    auto assets = assetTracker->GetUnusedAssets();
     for( auto asset : assets )
     {
         //FIXME: for now only texture2d are used

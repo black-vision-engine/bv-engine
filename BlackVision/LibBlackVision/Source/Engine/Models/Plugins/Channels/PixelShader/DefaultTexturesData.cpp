@@ -88,11 +88,12 @@ void                                            DefaultTexturesData::SetTexture 
 
     if( m_textureDescriptors[ idx ] )
     {
-        AssetTracker::Instance().UnregisterAsset( m_textureDescriptors[ idx ] );
+        TriggerEvent( AssetTrackerInternalEvent::Command::UnregisterAsset, m_textureDescriptors[ idx ] );
     }
 
 	m_textureDescriptors[ idx ] = textureDesc;
-    AssetTracker::Instance().RegisterAsset( textureDesc );
+
+    TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
 }
 
 // ******************************
@@ -100,7 +101,12 @@ void                                            DefaultTexturesData::SetTexture 
 void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptorPtr textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
-    AssetTracker::Instance().RegisterAsset( textureDesc );
+
+    auto assetTrackerEvt = std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset );
+    assetTrackerEvt->TextureAsset = textureDesc;
+    GetDefaultEventManager().TriggerEvent( assetTrackerEvt );
+
+    TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
 }
 
 // ******************************
@@ -177,12 +183,21 @@ void                                            DefaultTexturesData::ClearAll			
 {
     for( auto tx : m_textureDescriptors )
     {
-        AssetTracker::Instance().UnregisterAsset( tx );
+        TriggerEvent( AssetTrackerInternalEvent::Command::UnregisterAsset, tx );
     }
 
 	m_textureDescriptors.clear();
 	m_animationDescriptors.clear();
     m_fontDescriptors.clear();
+}
+
+// ******************************
+//
+void                                            DefaultTexturesData::TriggerEvent	        ( AssetTrackerInternalEvent::Command command, ITextureDescriptorPtr textureDesc )
+{
+    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
+    evt->TextureAsset = textureDesc;
+    GetDefaultEventManager().TriggerEvent( evt );
 }
 
 } //model
