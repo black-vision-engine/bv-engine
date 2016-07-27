@@ -1493,4 +1493,25 @@ void BVGL::bvglStencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail, G
     bvgl.StencilOpSeparate( face, sfail, dpfail, dppass );
 }
 
+void BVGL::bvglGenQueries                  ( GLsizei n, GLuint* ids )
+{
+    bvgl.GenQueries( n, ids );
+}
+
+void BVGL::bvglDeleteQueries                ( GLsizei n, const GLuint * ids )
+{
+    bvgl.DeleteQueries( n, ids );
+}
+
+void BVGL::bvglQueryCounter                ( GLuint id, GLenum target )
+{
+    bvgl.QueryCounter( id, target );
+}
+
+void BVGL::bvglGetQueryObjectui64v         ( GLuint id, GLenum pname, GLuint64 * params )
+{
+    bvgl.GetQueryObjectui64v( id, pname, params );
+}
+
+
 } // bv

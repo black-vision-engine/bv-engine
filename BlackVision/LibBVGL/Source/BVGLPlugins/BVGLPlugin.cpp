@@ -1480,4 +1480,26 @@ void BVGLPlugin::StencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail,
     glStencilOpSeparate( face, sfail, dpfail, dppass );
 }
 
+// Query
+
+void BVGLPlugin::GenQueries              ( GLsizei n, GLuint* ids )
+{
+    glGenQueries( n, ids );
+}
+
+void BVGLPlugin::DeleteQueries            ( GLsizei n, const GLuint * ids )
+{
+    glDeleteQueries( n, ids );
+}
+
+void BVGLPlugin::QueryCounter                ( GLuint id, GLenum target )
+{
+    glQueryCounter( id, target );
+}
+
+void BVGLPlugin::GetQueryObjectui64v         ( GLuint id, GLenum pname, GLuint64 * params )
+{
+    glGetQueryObjectui64v( id, pname, params );
+}
+
 } //bv

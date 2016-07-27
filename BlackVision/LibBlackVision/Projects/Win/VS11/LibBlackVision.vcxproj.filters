@@ -1738,6 +1738,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.cpp">
+      <Filter>Engine\Graphics\Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4081,6 +4087,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
+      <Filter>Engine\Graphics\Renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

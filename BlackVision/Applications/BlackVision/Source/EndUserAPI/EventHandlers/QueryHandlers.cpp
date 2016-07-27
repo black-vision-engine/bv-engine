@@ -10,6 +10,7 @@
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectTools.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Graphics/SceneGraph/SceneNodePerformance.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"
@@ -279,7 +280,61 @@ void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser
 
         ser.ExitChild();
     }
+
+    ser.EnterChild( "RenderingPerformance" );
+    RenderingPerformance( ser );
+    ser.ExitChild();    // Rendering Performance
 }
+
+// ***********************
+//
+void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser )
+{
+    auto & engineScenes = m_appLogic->GetBVProject()->GetScenes();
+    auto & modelScenes = m_appLogic->GetBVProject()->GetModelScenes();
+
+    ser.EnterArray( "Scenes" );
+
+    for( int i = 0; i < engineScenes.size(); ++i )
+    {
+        ser.EnterChild( "Scene" );
+
+        ser.SetAttribute( "SceneName", modelScenes[ i ]->GetName() );
+
+        auto engineNode = engineScenes[ i ]->GetRoot();
+        auto modelNode = modelScenes[ i ]->GetRootNode();
+
+        RenderingPerformance( ser, modelNode, engineNode );
+
+        ser.ExitChild();    // Scene
+    }
+
+    ser.ExitChild();    // Scenes
+}
+
+// ***********************
+//
+void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser, model::IModelNodePtr modelNode, SceneNode * sceneNode )
+{
+    ser.EnterChild( "Node" );
+
+    ser.SetAttribute( "Name", modelNode->GetName() );
+
+    auto millis = (double)sceneNode->GetPerformanceData()->GPURenderDuration / 1000000.0;
+
+    ser.SetAttribute( "GPU time", SerializationHelper::T2String( millis ) );
+
+    ser.EnterArray( "Children" );
+    for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )
+    {
+        BasicNodePtr modelBasicNode = std::static_pointer_cast< model::BasicNode >( modelNode );
+        RenderingPerformance( ser, modelBasicNode->GetChild( i ), sceneNode->GetChild( i ) );
+    }
+    ser.ExitChild();    // Children
+
+    ser.ExitChild();    // Node
+}
+
 
 // ***********************
 //
@@ -1065,6 +1120,7 @@ void    QueryHandlers::GetParamDescriptor       ( JsonSerializeObject & ser, IDe
         ErrorResponseTemplate( ser, InfoEvent::Command::GetParamDescriptor, eventID, "Descriptor not found" );
     }
 }
+
 
 //// ***********************
 ////

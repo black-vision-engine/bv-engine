@@ -7,6 +7,8 @@
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
+#include "SceneNodePerformance.h"
+
 #include "CoreDEF.h"
 
 
@@ -41,6 +43,8 @@ private:
 
     audio::AudioEntity *            m_audio;
 
+    SceneNodePerformance *          m_performanceData;
+
 public:
 
                             SceneNode           ( TransformableEntity * transformable = nullptr );
@@ -70,6 +74,8 @@ public:
     glm::vec4               GetBoundingBoxColor () const;
     void                    Select              ( glm::vec4 color );
     void                    Unselect            ();
+
+    SceneNodePerformance *  GetPerformanceData  ();
 
 private:
 

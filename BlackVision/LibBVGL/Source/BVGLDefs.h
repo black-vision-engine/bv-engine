@@ -399,11 +399,17 @@ namespace bv {
 #define GL_DEPTH_BUFFER_BIT				0x00000100
 
 
+// Query
+#define GL_TIMESTAMP                    0x8E28
+#define GL_QUERY_RESULT                 0x8866
+
+
 typedef unsigned int GLenum;
 typedef unsigned int GLbitfield;
 typedef unsigned int GLuint;
 typedef int GLint;
 typedef int GLsizei;
+typedef unsigned long long int GLuint64;
 typedef unsigned char GLboolean;
 typedef signed char GLbyte;
 typedef short GLshort;

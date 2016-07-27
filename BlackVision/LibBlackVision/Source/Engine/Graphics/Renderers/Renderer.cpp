@@ -865,6 +865,8 @@ void    Renderer::FreeAllPDResources                        ( RenderableEntity *
     
     FreeRADASVBPDR  ( radasvb );
     FreeEffectPDR   ( renderable->GetRenderableEffect().get() );
+
+    m_performance.FreeAllPDResources( renderable );
 }
 
 // *********************************

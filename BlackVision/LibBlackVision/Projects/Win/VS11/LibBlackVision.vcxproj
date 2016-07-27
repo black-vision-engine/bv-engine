@@ -260,12 +260,14 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrUniformBufferObject.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\Renderer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\WGLRenderer\WGLRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.cpp" />
@@ -625,7 +627,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderQueueStackAllocator.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrUniformBufferObject.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\UniformBuffer.h" />
@@ -634,6 +638,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamM.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixMV.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.h" />

@@ -383,6 +383,12 @@ public:
     static void					bvglStencilMaskSeparate			( GLenum face, GLuint mask );
     static void					bvglStencilOp					( GLenum sfail, GLenum dpfail, GLenum dppass );
     static void					bvglStencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass );
+
+// Query
+    static void                 bvglGenQueries                  ( GLsizei n, GLuint* ids );
+    static void                 bvglDeleteQueries               ( GLsizei n, const GLuint * ids );
+    static void                 bvglQueryCounter                ( GLuint id, GLenum target );
+    static void                 bvglGetQueryObjectui64v         ( GLuint id, GLenum pname, GLuint64 * params );
 };
 
 } //bv

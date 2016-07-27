@@ -9,6 +9,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
 
+
 namespace bv
 {
 
@@ -174,6 +175,8 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
     // and QueueSingleNode functions.
 
+    BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
+
     if( HasEffect( node ) )
     {
         auto effect = node->GetNodeEffect();
@@ -187,6 +190,8 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
 
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
         ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
+
+    END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
 }
 
 }	// bv

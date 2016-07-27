@@ -3,6 +3,9 @@
 #include "Engine/Events/Events.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Models/Interfaces/IModelNode.h"
+
 namespace bv
 {
 
@@ -58,8 +61,12 @@ private:
     void     GetCamerasInfo          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetPMItemStats          ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     
-    void    ListParamDescriptors     ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
-    void    GetParamDescriptor       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     ListParamDescriptors    ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     GetParamDescriptor      ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+
+
+    void     RenderingPerformance    ( JsonSerializeObject & ser );
+    void     RenderingPerformance    ( JsonSerializeObject & ser, model::IModelNodePtr modelNode, SceneNode * sceneNode );
 };
 
 } //bv

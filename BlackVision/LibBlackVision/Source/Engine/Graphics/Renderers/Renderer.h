@@ -8,6 +8,7 @@
 
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererInput.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
+#include "RendererPerformance.h"
 
 #include "Engine/Graphics/State/RendererStateInstance.h"
 
@@ -110,6 +111,8 @@ private:
     PdrUniformBufferObject *            m_lightsUBO;
     PdrUniformBufferObject *            m_cameraUBO;
 
+    RendererPerformance                 m_performance;
+
 public:
 
     void	Initialize			( int w, int h, TextureFormat colorFormat );
@@ -192,6 +195,8 @@ public:
     bool                        DrawTriangles                   ( Triangles * triangles );
     bool                        DrawLines                       ( Lines * lines );
 
+    RendererPerformance &       Performance                     ()  { return m_performance; }
+
 private:
 
     void                        SetAlphaState                   ( AlphaStateConstPtr as );
@@ -240,5 +245,14 @@ private:
     void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
+
+
+#define BEGIN_MESSURE_GPU_PERFORMANCE( renderer, sceneNode )        renderer->Performance().BeginGPUQuery( sceneNode );
+
+#define END_MESSURE_GPU_PERFORMANCE( renderer, sceneNode )          \
+renderer->Performance().EndGPUQuery( sceneNode );                   \
+renderer->Performance().QueryPreviousGPUResult( sceneNode );
+
+
 
 } // bv

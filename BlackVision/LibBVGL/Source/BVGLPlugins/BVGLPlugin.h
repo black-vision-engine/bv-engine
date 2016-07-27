@@ -353,6 +353,12 @@ public:
     virtual void				StencilMaskSeparate			( GLenum face, GLuint mask );
     virtual void				StencilOp					( GLenum sfail, GLenum dpfail, GLenum dppass );
     virtual void				StencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass );
+
+// Query
+    virtual void                GenQueries                  ( GLsizei n, GLuint* ids );
+    virtual void                DeleteQueries               ( GLsizei n, const GLuint * ids );
+    virtual void                QueryCounter                ( GLuint id, GLenum target );
+    virtual void                GetQueryObjectui64v         ( GLuint id, GLenum pname, GLuint64 * params );
 };
 
 } //bv

@@ -23,14 +23,16 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
     , m_audio( nullptr )
 {
     m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
+    m_performanceData = new SceneNodePerformance();
 }
 
 // ********************************
 //
 SceneNode::~SceneNode          ()
 {
+    delete m_performanceData;
+
     DeleteTransformable();
-    
     DeleteAudio();
 
     for ( auto node : m_sceneNodes )
@@ -254,6 +256,13 @@ void               SceneNode::Select              ( glm::vec4 color )
 void                    SceneNode::Unselect             ()
 {
     m_drawBoundingBox = false;
+}
+
+// ***********************
+//
+SceneNodePerformance *  SceneNode::GetPerformanceData  ()
+{
+    return m_performanceData;
 }
 
 } //bv
