@@ -84,7 +84,7 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
         {
             x = p[ i + 1 ];
             y = p[ i + 2 ];
-            i+=3;
+            i += 3;
         }
         else if( p[ i ] == svgtiny_PATH_LINE )
         {
@@ -92,7 +92,7 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
             x = p[ i + 1 ];
             y = p[ i + 2 ];
             geometry->positions.push_back( glm::vec3( x, y, 0 ) );
-            i+=3;
+            i += 3;
         }
         else if( p[ i ] == svgtiny_PATH_CLOSE )
         {
@@ -100,11 +100,29 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
         }
         else if( p[ i ] == svgtiny_PATH_BEZIER )
         {
-            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
+            glm::vec2 A( x, y ),
+                B( p[ i + 1 ], p[ i + 2 ] ),
+                C( p[ i + 3 ], p[ i + 4 ] ),
+                D( p[ i + 5 ], p[ i + 6 ] );
+
+            const int N = 10;
+
+            for( int j = 0; j <= N; j++ )
+            {
+                float t = float( j ) / N;
+
+                glm::vec2 P = pow( 1 - t, 3 ) * A +
+                            3 * t * pow( 1 - t, 2 ) * B +
+                            3 * pow( t, 2 ) * ( 1 - t ) * C +
+                            pow( t, 3 ) * D;
+                geometry->positions.push_back( glm::vec3( P[ 0 ], P[ 1 ], 0 ) );
+                if( j > 0 && j < N )
+                    geometry->positions.push_back( glm::vec3( P[ 0 ], P[ 1 ], 0 ) );
+            }
+
             x = p[ i + 1 + 4 ];
             y = p[ i + 2 + 4 ];
-            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
-            i+=7;
+            i += 7;
         }
         else
         {
