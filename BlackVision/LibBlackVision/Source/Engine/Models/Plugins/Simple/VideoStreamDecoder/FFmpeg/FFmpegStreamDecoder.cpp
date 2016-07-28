@@ -25,7 +25,7 @@ UInt64              FFmpegStreamDecoder::GetCurrentPTS      ()
 
 // *******************************
 //
-bool		        FFmpegStreamDecoder::GetData	        ( AVMediaData & data )
+bool		        FFmpegStreamDecoder::PopData	        ( AVMediaData & data )
 {
     return m_bufferQueue.TryPop( data );
 }

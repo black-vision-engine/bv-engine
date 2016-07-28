@@ -28,7 +28,7 @@ const std::string        DefaultAVDecoderPlugin::PARAM::DECODER_STATE  = "state"
 const std::string        DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
-const std::string        DefaultAVDecoderPlugin::PARAM::MUTE          = "mute";
+const std::string        DefaultAVDecoderPlugin::PARAM::MUTE           = "mute";
 
 typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamEnumDM;
 

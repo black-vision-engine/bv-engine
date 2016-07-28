@@ -44,11 +44,12 @@ void				FFmpegStreamDecoderThread::Kill	    ()
 //
 void				FFmpegStreamDecoderThread::Restart	    ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
+    if( m_stopped )
 	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-        m_stopped = false;
+		m_stopped = false;
+	    m_cond.notify_one();
 	}
-	m_cond.notify_one();
 }
 
 // *******************************

@@ -1732,12 +1732,12 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
 //
 model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
-//#define USE_AV
-#define USE_AUDIO
+#define USE_AV
+//#define USE_AUDIO
 
     { useAlphaMask; }
     //Timeline stuff
-    auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 25.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 100000.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timeEvaluator->AddChild( localTimeline );
 
 #ifdef USE_AV
@@ -1776,9 +1776,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
 
     SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
-    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 2.5f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
-    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 3.5f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
-    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 7.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
+    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultAVDecoderPlugin::DecoderMode::PAUSE );
+    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 6.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 10.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
+    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 11.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
     SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
 
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 5.f, 0.f ) );

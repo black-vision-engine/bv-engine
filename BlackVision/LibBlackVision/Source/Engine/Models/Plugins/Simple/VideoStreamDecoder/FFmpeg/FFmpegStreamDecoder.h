@@ -33,7 +33,7 @@ public:
     UInt64                  GetDuration                 () const;   
 
     virtual UInt64          GetCurrentPTS               ();
-    virtual bool            GetData                     ( AVMediaData & data );
+    virtual bool            PopData                     ( AVMediaData & data );
 	bool					IsDataQueueEmpty		    () const;
 
     void                    ClearDataQueue              ();

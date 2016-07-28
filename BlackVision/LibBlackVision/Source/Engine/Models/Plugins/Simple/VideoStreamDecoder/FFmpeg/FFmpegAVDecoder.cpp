@@ -177,19 +177,13 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
         Seek( frameTime );
         FlushBuffers();
 
-        if( m_demuxerThread->Stopped() )
-        {
-            m_demuxerThread->Restart();
-        }
+        m_demuxerThread->Restart();
 
         auto & videoStreamData = m_streams[ AVMEDIA_TYPE_VIDEO ];
 
-        if( videoStreamData->decoderThread->Stopped() )
-        {
-            videoStreamData->decoderThread->Restart();
-        }
+        videoStreamData->decoderThread->Restart();
 
-        videoStreamData->decoder->GetData( data );
+        videoStreamData->decoder->PopData( data );
     }
 
     return data;
@@ -425,10 +419,7 @@ void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Float64 t
     Int64 currTs = 0;
     while( currTs < ts )
     {
-        if( m_demuxerThread->Stopped() )
-        {
-            m_demuxerThread->Restart();
-        }
+        m_demuxerThread->Restart();
 
         decoder->ProcessPacket( m_demuxer.get() );
         auto packet = m_demuxer->GetPacket( decoder->GetStreamIdx() );
@@ -452,33 +443,31 @@ bool				FFmpegAVDecoder::NextStreamDataReady	        ( AVMediaType type, UInt64 
 
     if( m_streams.count( type ) )
     {
-        auto & streamData = m_streams[ type ];
+        auto streamData = m_streams[ type ];
 
         if( time <= m_duration )
         {
-            if( m_demuxerThread->Stopped() )
-            {
-                m_demuxerThread->Restart();
-            }
+            m_demuxerThread->Restart();
+            streamData->decoderThread->Restart();
 
-            if( streamData->decoderThread->Stopped() )
+            AVMediaData data;
+            if( streamData->outQueue.IsEmpty() )
             {
-                streamData->decoderThread->Restart();
-            }
+                auto currentPTS = streamData->decoder->GetCurrentPTS();
 
-            auto currVideoPTS = streamData->decoder->GetCurrentPTS();
-            while( streamData->outQueue.IsEmpty() &&
-                !streamData->decoder->IsDataQueueEmpty() &&
-                ( currVideoPTS <= time ) &&
-                ( streamData->prevPTS <= currVideoPTS ) )
-            {
-                AVMediaData data;
-                if( streamData->decoder->GetData( data ) )
+                // find the closest frame to given time
+                while( !streamData->decoder->IsDataQueueEmpty()
+                    && streamData->prevPTS <= currentPTS
+                    && currentPTS <= time )
+                {
+                    success = streamData->decoder->PopData( data );
+                    currentPTS = streamData->decoder->GetCurrentPTS();
+                }
+
+                if( success )
                 {
                     streamData->outQueue.Push( data );
                     streamData->prevPTS = data.framePTS;
-                    currVideoPTS = streamData->decoder->GetCurrentPTS();
-                    success = true;
                 }
             }
         }
