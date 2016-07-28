@@ -7,14 +7,25 @@ namespace bv
 
 struct SceneNodePerformance
 {
-    //UInt64      QueueNodeBegin;
-    //UInt64      QueueNodeEnd;
-    //UInt64      CPURenderBegin;
-    //UInt64      CPURenderEnd;
-    //UInt64      GPURenderBegin;
-    //UInt64      GPURedenderEnd;
+    double      GPURenderDuration;
+    double      CPURenderDuration;
+    double      SortNodeDuration;
 
-    UInt32      GPURenderDuration;
+    UInt64      GPURenderAccum;
+    double      CPURenderAccum;
+    double      SortNodeAccum;
+
+
+    SceneNodePerformance()
+    {
+        GPURenderDuration = 0;
+        CPURenderDuration = 0;
+        SortNodeDuration = 0;
+
+        GPURenderAccum = 0;
+        CPURenderAccum = 0;
+        SortNodeAccum = 0;
+    }
 };
 
 }   // bv

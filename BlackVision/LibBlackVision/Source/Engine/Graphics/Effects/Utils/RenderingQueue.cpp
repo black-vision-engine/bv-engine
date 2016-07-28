@@ -88,6 +88,8 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
     if( !node->IsVisible() )
         return;
 
+    BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node );
+
     float z = ComputeNodeZ( node, ctx );
     
     if( IsTransparent( node ) )
@@ -116,6 +118,8 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
 
         m_opaqueNodes.insert( iterator, std::make_pair( node, z ) );
     }
+
+    END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node );
 }
 
 // ***********************
@@ -176,6 +180,7 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
     // and QueueSingleNode functions.
 
     BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
+    BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
 
     if( HasEffect( node ) )
     {
@@ -191,6 +196,7 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
         ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
 
+    END_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
     END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
 }
 

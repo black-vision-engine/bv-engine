@@ -265,8 +265,8 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
         GownoWFormieKebaba( time, this );
 
         {
-            FRAME_STATS_SECTION( "Update" );
-            HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
+            FRAME_STATS_SECTION( "Update Model" );
+            HPROFILER_SECTION( "Update Model", PROFILER_THREAD1 );
 
             m_bvProject->Update( time );
         }

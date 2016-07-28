@@ -3,11 +3,22 @@
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTimeQuery.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
 
+#include "tools/HRTimer.h"
 
 namespace bv
 {
 
+extern HighResolutionTimer GTimer;
+
+// ***********************
+//
+RendererPerformance::RendererPerformance()
+{
+    m_windowSize = 100;
+    m_samplesAccumulated = 0;
+}
 
 
 // ***********************
@@ -42,7 +53,7 @@ void        RendererPerformance::QueryPreviousGPUResult      ( SceneNode * scene
     auto result = timer->QueryResult();
 
     auto perfData = sceneNode->GetPerformanceData();
-    perfData->GPURenderDuration = (UInt32)result;
+    perfData->GPURenderAccum += (UInt32)result;
 }
 
 
@@ -57,6 +68,68 @@ PdrTimeQuery *      RendererPerformance::GetTimeQuery        ( RenderableEntity 
     }
 
     return timer;
+}
+
+// ***********************
+//
+void                RendererPerformance::AverageScenePerformanceData  ( Scene * scene )
+{
+    if( m_samplesAccumulated >= m_windowSize )
+    {
+        AverageTreePerformanceData( scene->GetRoot() );
+        m_samplesAccumulated = 0;
+    }
+    else
+    {
+        m_samplesAccumulated++;
+    }
+}
+
+// ***********************
+//
+double      RendererPerformance::BeginCPURenderMessure       ()
+{
+    return GTimer.CurElapsed();
+}
+
+// ***********************
+//
+void        RendererPerformance::EndCPURenderMessure         ( SceneNode * sceneNode, double timeStart )
+{
+    sceneNode->GetPerformanceData()->CPURenderAccum += GTimer.CurElapsed() - timeStart;
+}
+
+// ***********************
+//
+double      RendererPerformance::BeginCPUQueueingMessure     ()
+{
+    return GTimer.CurElapsed();
+}
+
+// ***********************
+//
+void        RendererPerformance::EndCPUQueueingMessure       ( SceneNode * sceneNode, double timeStart )
+{
+    sceneNode->GetPerformanceData()->SortNodeAccum += GTimer.CurElapsed() - timeStart;
+}
+
+// ***********************
+//
+void                RendererPerformance::AverageTreePerformanceData  ( SceneNode * node )
+{
+    auto data = node->GetPerformanceData();
+    data->CPURenderDuration = (double)data->CPURenderAccum / m_windowSize;
+    data->GPURenderDuration = ( (double)data->GPURenderAccum / m_windowSize ) / 1000000000.0;   // Convert to seconds.
+    data->SortNodeDuration = (double)data->SortNodeAccum / m_windowSize;
+
+    data->CPURenderAccum = 0;
+    data->GPURenderAccum = 0;
+    data->SortNodeAccum = 0;
+
+    for( int i = 0; i < node->NumChildNodes(); ++i )
+    {
+        AverageTreePerformanceData( node->GetChild( i ) );
+    }
 }
 
 }	// bv

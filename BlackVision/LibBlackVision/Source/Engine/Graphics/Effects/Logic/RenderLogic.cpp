@@ -248,9 +248,6 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer
 
     RenderRootNode( renderer, scenes, rt );
     RenderRootNode( audioRenderer, scenes );
-    {
-        HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
-    }
 
     FrameRendered( renderer );
 
@@ -344,6 +341,8 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & sce
 
     for( auto & scene : scenes )
     {
+        renderer->Performance().AverageScenePerformanceData( scene );
+
         renderer->SetCamera( scene->GetCamera() );
 
         renderer->EnableScene( scene );

@@ -320,9 +320,13 @@ void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser, mod
 
     ser.SetAttribute( "Name", modelNode->GetName() );
 
-    auto millis = (double)sceneNode->GetPerformanceData()->GPURenderDuration / 1000000.0;
+    auto secondsGPU = (double)sceneNode->GetPerformanceData()->GPURenderDuration;
+    auto secondsCPU = (double)sceneNode->GetPerformanceData()->CPURenderDuration;
+    auto secondsQueue = (double)sceneNode->GetPerformanceData()->SortNodeDuration;
 
-    ser.SetAttribute( "GPU time", SerializationHelper::T2String( millis ) );
+    ser.SetAttribute( "GPU render time", SerializationHelper::T2String( secondsGPU ) );
+    ser.SetAttribute( "CPU render time", SerializationHelper::T2String( secondsCPU ) );
+    ser.SetAttribute( "CPU queueing time", SerializationHelper::T2String( secondsQueue ) );
 
     ser.EnterArray( "Children" );
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )
