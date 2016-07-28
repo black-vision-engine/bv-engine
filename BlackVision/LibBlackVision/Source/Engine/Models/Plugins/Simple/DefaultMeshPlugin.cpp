@@ -137,7 +137,7 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
 
             if( m_meshAsset )
             {
-                InitVertexAttributesChannel( false /*meshAssetDescr->IsRecursive()*/ );
+                InitVertexAttributesChannel( true /*meshAssetDescr->IsRecursive()*/ );
                 SetAsset( 0, LAsset( DefaultMeshPluginDesc::MeshName(), assetDescr, nullptr ) );
                 return true;
             }

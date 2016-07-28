@@ -78,12 +78,14 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
 
     auto geometry = std::make_shared< SVGAsset::MeshGeometry >();
 
+    float first_x, first_y;
+
     float x, y;
     for( unsigned int i = 0; i < n; )
         if( p[ i ] == svgtiny_PATH_MOVE )
         {
-            x = p[ i + 1 ];
-            y = p[ i + 2 ];
+            first_x = x = p[ i + 1 ];
+            first_y = y = p[ i + 2 ];
             i += 3;
         }
         else if( p[ i ] == svgtiny_PATH_LINE )
@@ -96,6 +98,8 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
         }
         else if( p[ i ] == svgtiny_PATH_CLOSE )
         {
+            geometry->positions.push_back( glm::vec3( x, y, 0 ) );
+            geometry->positions.push_back( glm::vec3( first_x, first_y, 0 ) );
             i++;
         }
         else if( p[ i ] == svgtiny_PATH_BEZIER )
@@ -476,10 +480,9 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
     {
         do
         {
-            svgtiny_parse_path( deser, mesh );
-//            auto geometry = mesh->GetGeometry();
-//            auto size = geometry->positions.size();
-//            geometry->normals.resize( size, glm::vec3( 1, 0, 0 ) );
+            auto child = std::make_shared< SVGAsset >( path );
+            svgtiny_parse_path( deser, child );
+            mesh->AddChild( child );
         }while( deser.NextChild() );
         deser.ExitChild(); // path
     }
@@ -489,7 +492,7 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
 
 // ***********************
 //
-AssetDescConstPtr	SVGLoader::CreateDescriptor( const IDeserializer& deser ) const
+AssetDescConstPtr	SVGLoader::CreateDescriptor( const IDeserializer & deser ) const
 {
     if( deser.GetAttribute( "type" ) != SVGAssetDescriptor::UID() )
         return nullptr;

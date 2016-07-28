@@ -37,22 +37,22 @@ private:
     bool                            m_textureEnabled;
     bool                            m_materialEnabled;
 
-	model::BasicNodePtr				m_parentNode;
+    model::BasicNodePtr				m_parentNode;
     model::ITimeEvaluatorPtr        m_timeEval;
 
 public:
 
-	explicit                        MeshLoader          ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath );
-	                                ~MeshLoader         ();
+    explicit                        MeshLoader          ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath );
+                                    ~MeshLoader         ();
 
-	static MeshLoaderPtr            Create              ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath );
+    static MeshLoaderPtr            Create              ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath );
 
     virtual void                    Serialize           ( ISerializer & ser ) const override;
     static MeshLoaderPtr            Create              ( const IDeserializer & deser, model::BasicNodePtr parent );
 
-	virtual void	                Initialize		    ()				override {}
-	virtual void	                Update			    ( TimeType t )	override;
-	virtual void	                Deinitialize	    ()				override {}
+    virtual void	                Initialize		    ()				override {}
+    virtual void	                Update			    ( TimeType t )	override;
+    virtual void	                Deinitialize	    ()				override {}
 
     virtual const std::string &     GetType             () const override;
     static const std::string &      Type                ();

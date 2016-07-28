@@ -9,7 +9,7 @@ class SVGLoader : public AssetLoader
 public:
 
     virtual AssetConstPtr		LoadAsset       ( const AssetDescConstPtr & desc )  const;
-    virtual AssetDescConstPtr	CreateDescriptor( const IDeserializer& deserializeObject ) const;
+    virtual AssetDescConstPtr	CreateDescriptor( const IDeserializer & deserializeObject ) const;
 
     virtual ThumbnailConstPtr   LoadThumbnail   ( const AssetDescConstPtr & desc ) const;
 
