@@ -50,7 +50,7 @@ public:
     std::string                                     GetValue                ( std::string name ) const;
 
     virtual std::string			                    GetAttribute            ( const std::string & name ) const override;
-	virtual std::string			                    GetParentAttribute      ( const std::string & parentName, const std::string & attName ) const override;
+    virtual std::string			                    GetParentAttribute      ( const std::string & parentName, const std::string & attName ) const override;
     
     virtual bool                                    EnterChild              ( const std::string & name ) const override;
     virtual bool                                    ExitChild               () const override;
@@ -58,7 +58,7 @@ public:
 
     std::wstring	        	                    GetAttribute            ( const std::wstring & name ) const override;
     virtual std::wstring		                    GetParentAttribute      ( const std::wstring & parentName, const std::wstring & attName ) const override;
-	bool                                            EnterChild              ( const std::wstring & name ) const override;
+    bool                                            EnterChild              ( const std::wstring & name ) const override;
 
     virtual IDeserializer*                          DetachBranch            ( const std::string & /*name*/ ) override { assert( false ); return nullptr; }
     virtual bool                                    AttachBranch            ( const std::string & /*name*/, ISerializer * /*ser*/ ) override { assert( false ); return false; };

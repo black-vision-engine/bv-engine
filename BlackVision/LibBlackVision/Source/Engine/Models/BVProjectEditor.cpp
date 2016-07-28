@@ -1252,7 +1252,7 @@ bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, con
 //
 bool                        BVProjectEditor::SetLogic            ( model::BasicNodePtr node, model::INodeLogicPtr logic, bool enableUndo )
 {
-	auto prevLogic = node->GetLogic();
+    auto prevLogic = node->GetLogic();
     node->SetLogic( logic );
 
     if( enableUndo )

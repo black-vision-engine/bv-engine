@@ -24,11 +24,11 @@ struct PN {
     static const std::string ROUNDEDTIPHEIGHT; // VecParam1 RoundedTipHeight (Bevel)
     static const std::string OPENANGLE; // VecParam1 OpenAngle
     static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
-	static const std::string WEIGHTCENTERY;
-	static const std::string WEIGHTCENTERZ;
+    static const std::string WEIGHTCENTERY;
+    static const std::string WEIGHTCENTERZ;
     static const std::string OPENANGLEMODE; // enum OpenAngleMode(Clockwise, CCW, symetric)
-	static const std::string BEVELTESSELATION;
-	static const std::string MAPPINGTYPE;
+    static const std::string BEVELTESSELATION;
+    static const std::string MAPPINGTYPE;
 };
 
 class DefaultConePlugin : public DefaultGeometryPluginBase
@@ -36,7 +36,7 @@ class DefaultConePlugin : public DefaultGeometryPluginBase
 public:
     enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
     enum WeightCenter : int { MAX, MIN, CENTER };
-	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
+    enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
 
     ValueIntPtr                                 m_tesselation, m_bevelTesselation;
     ValueFloatPtr                               m_innerRadius,
@@ -45,11 +45,11 @@ public:
                                                 m_roundedTipHeight,
                                                 m_openAngle,
                                                 m_height;
-	std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
-	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
-	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
-	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
-	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
+    std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
+    std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
+    std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
+    std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
+    std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
