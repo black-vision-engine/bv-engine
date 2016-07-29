@@ -8,6 +8,12 @@
 
 #include "Serialization/SerializationHelper.inl"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model
 {
 

@@ -6,6 +6,12 @@
 #include "Engine/Types/Values/ValuesFactory.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
     //IParamValEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleEvaluator           ( IParameterPtr param )

@@ -10,6 +10,12 @@ static std::string EMPTY_STRING = "";
 
 }
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 // ******************************

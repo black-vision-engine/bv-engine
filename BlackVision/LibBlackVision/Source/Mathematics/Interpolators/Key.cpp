@@ -7,6 +7,12 @@
 
 #include "Mathematics/glm_inc.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 #define INSTANTIATE( TIME_TYPE, TYPE ) \

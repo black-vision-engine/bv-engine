@@ -7,6 +7,12 @@
 
 #include "Mathematics/defines.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // ************************************************************************* DESCRIPTOR *************************************************************************

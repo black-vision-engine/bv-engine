@@ -5,6 +5,12 @@
 //FIXME: REMOVE after reimplementing access to values from shader channel implementation
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // ******************************

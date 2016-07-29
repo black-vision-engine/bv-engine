@@ -17,6 +17,12 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {

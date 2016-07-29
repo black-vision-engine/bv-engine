@@ -15,6 +15,12 @@
 
 #include <set>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ****************************

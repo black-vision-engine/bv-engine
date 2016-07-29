@@ -5,6 +5,12 @@
 
 //#include "Serialization/SerializationObjects.inl"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
 
 // serialization stuff

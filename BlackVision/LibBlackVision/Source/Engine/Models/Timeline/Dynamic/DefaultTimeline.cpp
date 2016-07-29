@@ -24,6 +24,12 @@
 #undef min
 #undef max
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
 
 namespace SerializationHelper {

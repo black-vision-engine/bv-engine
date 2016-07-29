@@ -2,6 +2,12 @@
 
 #include "GeneratedSingleTextureAssetDescriptor.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

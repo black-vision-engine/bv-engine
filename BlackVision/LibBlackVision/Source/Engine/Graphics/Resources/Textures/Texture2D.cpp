@@ -2,6 +2,12 @@
 
 #include "Texture2D.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************

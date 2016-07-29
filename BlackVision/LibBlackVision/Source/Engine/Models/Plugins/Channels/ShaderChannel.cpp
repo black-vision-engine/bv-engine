@@ -6,6 +6,12 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *********************************

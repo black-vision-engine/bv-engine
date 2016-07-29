@@ -11,6 +11,12 @@
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
     
 // serialization stuff

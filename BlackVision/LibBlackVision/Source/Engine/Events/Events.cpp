@@ -13,6 +13,12 @@
 
 #include <limits>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv 
 {
 

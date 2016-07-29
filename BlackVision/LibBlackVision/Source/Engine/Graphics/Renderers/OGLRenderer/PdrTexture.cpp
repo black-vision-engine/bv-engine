@@ -2,6 +2,12 @@
 
 #include "PdrTexture.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

@@ -21,6 +21,12 @@ using std::ostringstream;
 const bool GVerboseLogging = false;
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *******************************

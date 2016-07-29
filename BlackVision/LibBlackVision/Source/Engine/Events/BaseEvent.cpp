@@ -2,6 +2,12 @@
 
 #include "BaseEvent.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

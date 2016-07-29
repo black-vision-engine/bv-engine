@@ -11,6 +11,12 @@ namespace {
 
 } // anonymous
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // **************************

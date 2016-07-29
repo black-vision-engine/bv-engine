@@ -8,6 +8,12 @@
 #include <cassert>
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

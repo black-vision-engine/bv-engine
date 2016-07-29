@@ -3,6 +3,12 @@
 #include "RawDataCache.h"
 #include "HardDriveRawDataCache.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

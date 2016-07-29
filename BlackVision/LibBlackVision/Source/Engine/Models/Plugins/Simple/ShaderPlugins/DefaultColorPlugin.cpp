@@ -8,6 +8,12 @@
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 const std::string        DefaultColorPlugin::PARAM_BLEND_ENABLE   = "blend enable";

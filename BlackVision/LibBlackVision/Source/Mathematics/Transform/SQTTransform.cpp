@@ -3,6 +3,12 @@
 #include "Mathematics/Transform/SQTTransform.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *************************************

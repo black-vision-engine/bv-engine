@@ -11,6 +11,12 @@
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {

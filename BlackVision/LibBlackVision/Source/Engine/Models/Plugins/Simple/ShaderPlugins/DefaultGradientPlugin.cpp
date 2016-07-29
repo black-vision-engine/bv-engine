@@ -15,6 +15,12 @@
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 const std::string        DefaultGradientPlugin::PARAM_BLEND_ENABLE  = "blend enable";

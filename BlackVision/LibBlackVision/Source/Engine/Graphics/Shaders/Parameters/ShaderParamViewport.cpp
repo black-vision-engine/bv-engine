@@ -3,6 +3,12 @@
 #include "ShaderParamViewport.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ********************************

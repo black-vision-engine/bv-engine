@@ -24,6 +24,12 @@
 #include <map>
 #include <cmath>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
 
 struct GlyphDataInfo
@@ -271,7 +277,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 				//	imgHeight = (int)rect.Height(),
 				//	imgSize = imgWidth * imgHeight;
 
-				auto newGlyph = new Glyph();
+				auto newGlyph = new Glyph;
 
 				newGlyph->code = ch;
 				newGlyph->size = m_fontSize;

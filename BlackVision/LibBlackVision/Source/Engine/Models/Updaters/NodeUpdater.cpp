@@ -32,6 +32,12 @@
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv 
 {
 

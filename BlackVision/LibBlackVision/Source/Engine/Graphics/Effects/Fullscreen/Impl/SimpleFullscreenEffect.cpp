@@ -384,3 +384,9 @@ void            SimpleFullscreenEffect::GetRenderPasses     ( std::set< const Re
 }
 
 } //bv
+
+#include "Memory/MemoryLeaks.h"
+
+
+
+

@@ -4,6 +4,12 @@
 #include "Mathematics\Defines.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 const float CREASE_VERTEX_WEIGHT = 6.0f;

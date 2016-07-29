@@ -12,6 +12,12 @@
 #include "Serialization/SerializationHelper.inl"
 #include "Serialization/BV/BVSerializeContext.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

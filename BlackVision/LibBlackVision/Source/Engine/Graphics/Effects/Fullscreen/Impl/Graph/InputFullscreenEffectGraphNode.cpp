@@ -32,3 +32,9 @@ const std::vector< FullscreenEffectGraphNodePtr > & InputFullscreenEffectGraphNo
 }
 
 } //bv
+
+#include "Memory/MemoryLeaks.h"
+
+
+
+

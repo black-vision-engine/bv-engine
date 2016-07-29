@@ -2,6 +2,12 @@
 
 #include "DefaultTrianglePlugin.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 

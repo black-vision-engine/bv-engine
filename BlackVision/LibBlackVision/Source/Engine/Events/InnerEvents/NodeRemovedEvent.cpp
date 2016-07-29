@@ -2,6 +2,12 @@
 #include "NodeRemovedEvent.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

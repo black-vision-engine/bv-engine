@@ -5,6 +5,12 @@
 #include "Mathematics/Defines.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 const std::string DefaultCirclePlugin::PN_TESSELATION = "tesselation";

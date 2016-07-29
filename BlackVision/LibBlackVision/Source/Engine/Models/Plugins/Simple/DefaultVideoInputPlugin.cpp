@@ -8,6 +8,12 @@
 #include "VideoInput/DefaultVideoInputResourceDescr.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
     // ************************************************************************* DESCRIPTOR *************************************************************************

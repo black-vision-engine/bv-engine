@@ -3,6 +3,12 @@
 #include "TimelineEventLoop.h"
 #include "Serialization/SerializationHelper.inl"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
     
 namespace SerializationHelper {

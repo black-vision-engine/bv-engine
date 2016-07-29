@@ -11,6 +11,12 @@ bv::ApplicationBase * bv::ApplicationBase::ApplicationInstance		= nullptr;
 bv::ApplicationBase::ApplicationMain bv::ApplicationBase::MainFun	= nullptr;
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************

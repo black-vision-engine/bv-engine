@@ -5,6 +5,12 @@
 #include <cassert>
 #include <algorithm>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

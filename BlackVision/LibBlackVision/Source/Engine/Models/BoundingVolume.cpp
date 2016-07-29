@@ -11,6 +11,12 @@
 
 //#include <glm/gtc/matrix_transform.hpp>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 namespace {

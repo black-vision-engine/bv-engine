@@ -4,6 +4,12 @@
 
 #include "Application/ApplicationContext.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // ******************************

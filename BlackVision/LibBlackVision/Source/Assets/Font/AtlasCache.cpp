@@ -26,6 +26,12 @@
 
 #pragma warning(pop)
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
 
 // *********************************

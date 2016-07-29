@@ -10,6 +10,12 @@
 #include <cassert>
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 TimelineManager* TimelineManager::instance = nullptr; // FIXME: this may be moved to static initilizer

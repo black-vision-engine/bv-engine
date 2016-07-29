@@ -8,6 +8,12 @@
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

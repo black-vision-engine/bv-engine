@@ -7,6 +7,12 @@
 #include "tools/PrefixHelper.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 const std::string   TimelineHelper::PATH_SEPARATOR     = "%";

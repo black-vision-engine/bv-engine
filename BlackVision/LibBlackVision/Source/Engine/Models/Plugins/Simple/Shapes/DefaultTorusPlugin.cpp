@@ -2,6 +2,12 @@
 
 #include "DefaultTorusPlugin.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultTorus::Plugin::OpenAngleMode > ParamEnumOAM;

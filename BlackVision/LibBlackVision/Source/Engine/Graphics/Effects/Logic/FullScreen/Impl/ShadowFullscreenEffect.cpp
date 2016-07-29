@@ -8,6 +8,12 @@
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamVec2.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // **************************

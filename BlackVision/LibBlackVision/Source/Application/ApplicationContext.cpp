@@ -2,6 +2,12 @@
 
 #include "ApplicationContext.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 const UInt32	ApplicationContext::HD_WIDTH = 1920;

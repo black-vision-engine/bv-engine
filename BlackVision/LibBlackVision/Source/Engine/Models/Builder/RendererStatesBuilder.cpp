@@ -6,6 +6,12 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {

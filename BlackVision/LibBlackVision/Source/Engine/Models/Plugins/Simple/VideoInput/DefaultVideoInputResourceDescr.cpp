@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "DefaultVideoInputResourceDescr.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 std::string DefaultVideoInputResourceDescr::uid = "VIDEO_INPUT_DESC";

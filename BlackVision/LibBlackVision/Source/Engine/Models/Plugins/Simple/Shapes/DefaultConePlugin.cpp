@@ -3,6 +3,12 @@
 #include "DefaultConePlugin.h"
 #include "glm/gtx/vector_angle.hpp"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultCone::DefaultConePlugin::OpenAngleMode > ParamEnumOAM;

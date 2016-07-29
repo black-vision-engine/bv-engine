@@ -8,6 +8,12 @@
 #include "Engine/Types/Enums.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 //FIXME: move closer to the definition

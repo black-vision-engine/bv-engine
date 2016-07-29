@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "PdrTimeQuery.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

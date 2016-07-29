@@ -17,6 +17,12 @@
 #include "Engine/Graphics/Effects/Fullscreen/Impl/FSECreators/ImageMaskFSE.h"
 #include "Engine/Graphics/Effects/Fullscreen/Impl/FSECreators/LightScatteringFSE.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {

@@ -7,6 +7,12 @@
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererData.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {

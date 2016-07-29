@@ -2,6 +2,12 @@
 
 #include "MipMapAsset.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

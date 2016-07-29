@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "ShaderParamM.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

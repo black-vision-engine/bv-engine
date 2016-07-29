@@ -3,6 +3,12 @@
 #include "GeometryPlugin.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model { 
 
 // ***************************** PLUGIN ********************************** 

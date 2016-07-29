@@ -9,6 +9,12 @@
 #include "Tools/HRTimer.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 extern HighResolutionTimer GTimer;

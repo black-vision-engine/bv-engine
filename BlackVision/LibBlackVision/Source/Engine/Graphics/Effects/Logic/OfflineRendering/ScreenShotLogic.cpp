@@ -8,6 +8,12 @@
 #include "IO/DirIO.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

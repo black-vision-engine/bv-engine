@@ -10,6 +10,12 @@
 #include "CoreDEF.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 std::string DefaultFinalizePlugin::m_uid = "DEFAULT_FINALIZE";

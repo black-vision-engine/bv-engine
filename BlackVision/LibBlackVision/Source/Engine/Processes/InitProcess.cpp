@@ -2,6 +2,12 @@
 
 #include "InitProcess.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

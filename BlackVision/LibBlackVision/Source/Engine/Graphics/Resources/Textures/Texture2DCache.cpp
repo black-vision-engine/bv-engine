@@ -9,6 +9,12 @@
 
 #define PRINT_TEXTURE_CACHE_STATS
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

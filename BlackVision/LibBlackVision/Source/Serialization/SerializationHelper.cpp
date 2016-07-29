@@ -8,6 +8,12 @@
 
 #include <sstream>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace SerializationHelper {

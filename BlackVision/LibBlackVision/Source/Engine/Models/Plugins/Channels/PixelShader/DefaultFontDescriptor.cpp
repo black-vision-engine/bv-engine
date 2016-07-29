@@ -2,6 +2,12 @@
 
 #include "DefaultFontDescriptor.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 DefaultFontDescriptor::DefaultFontDescriptor( ITextureDescriptorPtr atlas, std::string name )

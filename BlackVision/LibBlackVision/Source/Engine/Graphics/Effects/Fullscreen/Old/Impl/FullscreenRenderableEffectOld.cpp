@@ -5,6 +5,12 @@
 #include "Engine/Graphics/Effects/FullScreen/Impl/FullscreenVSShader.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // **************************

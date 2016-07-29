@@ -12,6 +12,12 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *********************************

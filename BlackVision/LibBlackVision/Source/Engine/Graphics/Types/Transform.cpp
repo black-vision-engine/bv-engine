@@ -3,6 +3,12 @@
 #include "Transform.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 const Transform Transform::IDENTITY;

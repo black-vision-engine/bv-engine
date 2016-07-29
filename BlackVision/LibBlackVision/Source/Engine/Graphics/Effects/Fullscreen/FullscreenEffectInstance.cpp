@@ -8,6 +8,12 @@
 #include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
 #include "Engine/Graphics/Effects/FullScreen/Impl/Graph/InputFullscreenEffectGraphNode.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // **************************

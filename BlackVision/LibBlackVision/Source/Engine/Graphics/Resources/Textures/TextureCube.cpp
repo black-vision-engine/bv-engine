@@ -2,6 +2,12 @@
 
 #include "TextureCube.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 const UInt32	TextureCube::CUBEMAP_FACES_NUM = 6;

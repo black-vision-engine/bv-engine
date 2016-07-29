@@ -31,6 +31,12 @@
 #include <boost/lexical_cast.hpp>
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************

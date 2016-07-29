@@ -2,6 +2,12 @@
 #include "ShaderParamNormalMatrixM.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

@@ -12,6 +12,12 @@
 #include "Tools/HRTimer.h"
 #endif
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

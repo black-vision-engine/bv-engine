@@ -3,6 +3,12 @@
 
 #include "tools/Base64.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

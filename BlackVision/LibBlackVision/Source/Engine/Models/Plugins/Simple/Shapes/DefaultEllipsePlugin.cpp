@@ -4,6 +4,12 @@
 
 #include "Mathematics/Defines.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 const std::string DefaultEllipsePlugin::PN_QUALITY = "tesselation";

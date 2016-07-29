@@ -171,3 +171,9 @@ FullscreenEffectGraphNodePtr        FullscreenEffectGraph::FlattenNode   ( Fulls
 }
 
 } //bv
+
+#include "Memory/MemoryLeaks.h"
+
+
+
+

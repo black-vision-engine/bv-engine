@@ -13,6 +13,12 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

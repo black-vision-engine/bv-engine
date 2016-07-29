@@ -12,6 +12,12 @@
 
 #include "ImageMaskFSE.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

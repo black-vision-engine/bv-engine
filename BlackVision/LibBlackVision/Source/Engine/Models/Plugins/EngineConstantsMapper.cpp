@@ -2,6 +2,12 @@
 
 #include "EngineConstantsMapper.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 SamplerWrappingMode              EngineConstantsMapper::EngineConstant( TextureWrappingMode textureMappingMode )

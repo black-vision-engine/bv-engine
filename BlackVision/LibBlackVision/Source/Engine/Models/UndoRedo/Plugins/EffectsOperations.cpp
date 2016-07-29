@@ -4,6 +4,12 @@
 
 #include "Engine/Models/BVProjectEditor.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ***********************

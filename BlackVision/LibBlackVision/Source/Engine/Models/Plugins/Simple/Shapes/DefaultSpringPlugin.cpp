@@ -2,6 +2,12 @@
 
 #include "DefaultSpringPlugin.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultSpring::Plugin::WeightCenter > ParamEnumWC;

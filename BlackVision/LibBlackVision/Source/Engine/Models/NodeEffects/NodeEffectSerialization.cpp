@@ -5,6 +5,12 @@
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { 
     
 namespace SerializationHelper {

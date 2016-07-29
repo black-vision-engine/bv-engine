@@ -5,6 +5,12 @@
 #include <cassert>
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 
@@ -65,7 +71,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
 
     if( process )
     {
-	    auto packet = new AVPacket();
+	    auto packet = new AVPacket;
 
 
 	    auto error = av_read_frame( m_formatCtx, packet );
@@ -102,7 +108,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 
     if( !m_packetQueue.at( streamIdx )->IsEmpty() )
 	{
-        auto packet = new AVPacket();
+        auto packet = new AVPacket;
 		m_packetQueue.at( streamIdx )->TryPop( packet );
         return packet;
 	}
@@ -200,7 +206,7 @@ void				FFmpegDemuxer::ClearPacketQueue		( Int32 streamIdx )
     auto & queue = m_packetQueue[ streamIdx ];
     while( !queue->IsEmpty() )
     {
-        auto packet = new AVPacket();
+        auto packet = new AVPacket;
         queue->TryPop( packet );
         av_packet_unref( packet );
     }

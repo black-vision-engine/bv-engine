@@ -10,6 +10,12 @@
 static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache/";
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ******************************

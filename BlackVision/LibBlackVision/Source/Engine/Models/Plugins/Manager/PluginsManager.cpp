@@ -9,6 +9,12 @@
 
 #include <iostream>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 

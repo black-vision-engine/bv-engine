@@ -3,6 +3,12 @@
 #include "ShaderParamMat4.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ****************************

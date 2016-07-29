@@ -2,6 +2,12 @@
 
 #include "DefaultCubePlugin.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultCube::Plugin::WeightCenter > ParamEnumWC;

@@ -4,6 +4,12 @@
 #include "glm/gtx/vector_angle.hpp"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 typedef ParamEnum< DefaultCylinder::DefaultPlugin::OpenAngleMode > ParamEnumOAM;

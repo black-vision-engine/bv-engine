@@ -18,6 +18,12 @@
 
 #include "Mathematics/glm_inc.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace SerializationHelper {

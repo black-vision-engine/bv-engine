@@ -8,6 +8,12 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *******************************

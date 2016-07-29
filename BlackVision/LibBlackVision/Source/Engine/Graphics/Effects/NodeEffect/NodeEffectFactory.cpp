@@ -27,6 +27,12 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/BoundingBoxPostFullscreenEffectLogic.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {

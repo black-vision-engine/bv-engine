@@ -7,6 +7,12 @@
 #include "BVGL.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ******************************

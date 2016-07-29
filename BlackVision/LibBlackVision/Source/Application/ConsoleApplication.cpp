@@ -2,6 +2,12 @@
 
 #include "ConsoleApplication.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************

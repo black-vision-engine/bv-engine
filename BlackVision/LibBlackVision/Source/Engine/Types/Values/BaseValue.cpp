@@ -3,6 +3,12 @@
 #include "BaseValue.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *******************************

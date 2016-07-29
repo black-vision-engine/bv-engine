@@ -13,6 +13,12 @@
 //FIXME: remove
 //#include "Tools/HRTimer.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 //FIXME: remove

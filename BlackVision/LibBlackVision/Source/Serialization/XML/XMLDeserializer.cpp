@@ -9,6 +9,12 @@
 
 #include "rapidxml/RapidXml.hpp"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *******************************

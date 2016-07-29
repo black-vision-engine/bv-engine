@@ -5,6 +5,12 @@
 #include "../BVSerializeContext.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *******************************

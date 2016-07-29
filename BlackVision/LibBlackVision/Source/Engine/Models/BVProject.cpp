@@ -19,6 +19,12 @@
 #include "Engine/Models/Lights/HelperModelLights.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 const std::string	BVProject::MAIN_ROOT_NAME			= "main root";

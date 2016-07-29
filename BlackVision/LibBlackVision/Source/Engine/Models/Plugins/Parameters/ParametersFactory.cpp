@@ -5,6 +5,12 @@
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *******************************

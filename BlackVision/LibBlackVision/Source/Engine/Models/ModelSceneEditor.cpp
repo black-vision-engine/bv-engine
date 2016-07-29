@@ -3,6 +3,12 @@
 #include "ModelSceneEditor.h"
 #include "ModelState.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // ********************************

@@ -13,6 +13,12 @@
 #include <array>
 //#include <initializer_list>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace SerializationHelper {

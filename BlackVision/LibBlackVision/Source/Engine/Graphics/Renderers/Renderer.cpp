@@ -44,6 +44,12 @@
 
 //FIXME: add disable methods so that current state can be cleared after a frame is rendered
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 extern HighResolutionTimer GTimer;

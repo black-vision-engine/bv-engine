@@ -10,6 +10,12 @@
 #include "ProjectManager.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 const std::string		AVAssetDesc::uid = "AV_ASSET_DESC";

@@ -3,6 +3,12 @@
 #include "SimpleTypedParameters.h"
 #include "SimpleTypedParameters.inl"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 std::string Type2String( ModelParamType type )

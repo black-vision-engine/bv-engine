@@ -17,6 +17,12 @@
 #include <boost/filesystem/convenience.hpp>
 #include <assert.h>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 ///////////////////////////////

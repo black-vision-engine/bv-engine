@@ -2,6 +2,12 @@
 
 #include "FontAsset.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv
 {
 

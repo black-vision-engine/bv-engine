@@ -11,6 +11,12 @@
 
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *********************************

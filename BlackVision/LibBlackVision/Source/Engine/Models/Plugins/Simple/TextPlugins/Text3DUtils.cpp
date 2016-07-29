@@ -8,6 +8,12 @@
 #include FT_STROKER_H
 #include <FreeType/ftglyph.h>
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model
 {
 

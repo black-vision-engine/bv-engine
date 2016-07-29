@@ -10,6 +10,12 @@
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ********************************

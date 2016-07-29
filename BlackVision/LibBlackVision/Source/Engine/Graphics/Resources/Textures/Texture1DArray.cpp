@@ -2,6 +2,12 @@
 
 #include "Texture1DArray.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************

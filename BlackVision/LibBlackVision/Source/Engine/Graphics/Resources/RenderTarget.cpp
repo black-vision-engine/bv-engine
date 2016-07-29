@@ -8,6 +8,12 @@
 #include "Memory/MemoryChunk.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************

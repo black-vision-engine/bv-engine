@@ -10,6 +10,12 @@
 #include "DataTypes/Hash.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ******************************

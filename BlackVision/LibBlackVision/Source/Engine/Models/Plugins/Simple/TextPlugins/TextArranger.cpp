@@ -7,6 +7,12 @@
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 #include "glm/gtc/matrix_transform.inl"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model
 {
 // *********************************

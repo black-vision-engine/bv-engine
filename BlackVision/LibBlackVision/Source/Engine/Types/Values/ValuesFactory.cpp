@@ -3,6 +3,12 @@
 #include "ValuesFactory.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // ***********************

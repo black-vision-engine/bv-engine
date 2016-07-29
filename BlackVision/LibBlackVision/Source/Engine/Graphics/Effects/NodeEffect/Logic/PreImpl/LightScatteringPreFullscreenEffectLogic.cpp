@@ -8,6 +8,12 @@
 
 #include "PreFullscreenEffectLogicUtils.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *********************************
