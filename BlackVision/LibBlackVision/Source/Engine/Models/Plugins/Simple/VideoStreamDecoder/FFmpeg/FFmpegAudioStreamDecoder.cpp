@@ -13,25 +13,13 @@ const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { 
 // *******************************
 //
 FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
-	: m_swrCtx( nullptr )
+    : FFmpegStreamDecoder( formatCtx, streamIdx, maxQueueSize )
+    , m_swrCtx( nullptr )
     , m_needConversion( false )
 {
-    m_streamIdx = streamIdx;
-    
-    m_maxQueueSize = maxQueueSize;
-
-	m_stream = formatCtx->streams[ streamIdx ];
-	m_codecCtx = m_stream->codec;
-	m_codec = avcodec_find_decoder( m_codecCtx->codec_id );
-	assert( m_codec != nullptr );
-    
-	bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
-	assert( !error ); { error; }
-    
     m_sampleRate = m_codecCtx->sample_rate;
     m_format = GetSupportedFormat( m_codecCtx->sample_fmt );
-    m_nbChannels = std::min( m_codecCtx->channels, 2 );
-    m_duration = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_stream->duration );
+    m_nbChannels = ( std::min )( m_codecCtx->channels, 2 );
 
     if( !IsSupportedFormat( m_codecCtx->sample_fmt ) )
     {
@@ -42,8 +30,6 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, 
             m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
         swr_init( m_swrCtx );
     }
-
-    m_frame = av_frame_alloc();
 }
 
 // *******************************
@@ -54,12 +40,6 @@ FFmpegAudioStreamDecoder::~FFmpegAudioStreamDecoder    ()
     {
         swr_free( &m_swrCtx );
     }
-
-	avcodec_close( m_codecCtx );
-
-    av_frame_free( &m_frame );
-
-    m_bufferQueue.Clear();
 }
 
 // *******************************
@@ -90,6 +70,7 @@ bool			        FFmpegAudioStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxe
             {
                 auto data = ConvertFrame();
                 m_bufferQueue.Push( data );
+
                 return true;
             }
         }

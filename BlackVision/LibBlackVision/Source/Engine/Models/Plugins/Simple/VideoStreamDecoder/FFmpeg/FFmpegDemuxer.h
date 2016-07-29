@@ -47,8 +47,8 @@ public:
 	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
 	void						DisableStream			( AVMediaType type, UInt32 idx = 0 );
 
-	/** Accurate stream seeking.
-    @param[timestamp] timestamp in stream time base 
+	/** Non-accurate stream seeking (seek to keyframe).
+    @param[timestamp] in stream time base 
     */
 	void						Seek					( Int64 timestamp, Int32 streamIdx = -1 );
 

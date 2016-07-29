@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "FFmpegAVDecoder.h"
 
 #include "FFmpegUtils.h"
@@ -53,7 +52,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         }
     }
 
-    m_duration = std::max( videoDuration, audioDuration );
+    m_duration = ( std::max )( videoDuration, audioDuration );
 
 	m_decoderThread = std::unique_ptr< AVDecoderThread >( new AVDecoderThread( this ) );
    
@@ -290,9 +289,30 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
 {
     StopDecoding();
 
+    FlushBuffers();
+
+    // seek all streams to the nearest keyframe
     for( auto & stream : m_streams )
     {
-        Seek( stream.second->decoder.get(), time );
+        auto & decoder = stream.second->decoder;
+        auto timestamp = decoder->ConvertTime( time );
+
+	    m_demuxer->Seek( timestamp, decoder->GetStreamIdx() );
+    }
+
+    // accurate seek all stream to the given frame
+    for( auto & stream : m_streams )
+    {
+        auto & decoder = stream.second->decoder;
+        auto timestamp = decoder->ConvertTime( time );
+
+        Seek( decoder.get(), timestamp );
+
+        // add first frame to the buffer
+        if( decoder->ProcessPacket( m_demuxer.get() ) )
+        {
+            decoder->SetOffset( decoder->GetCurrentPTS() );
+        }
     }
 }
 
@@ -311,8 +331,6 @@ void					FFmpegAVDecoder::FlushBuffers			()
 //
 void					FFmpegAVDecoder::Reset					() 
 {
-	m_demuxer->Reset();
-    FlushBuffers();
     Seek( 0.f );
 }
 
@@ -377,7 +395,8 @@ void					FFmpegAVDecoder::ProcessFirstVideoFrame ()
         auto & videoStreamData = m_streams[ AVMEDIA_TYPE_VIDEO ];
         while( !NextVideoDataReady( videoStreamData->decoder->GetCurrentPTS() ) )
         {
-            if( IsFinished() )
+            if( !videoStreamData->outQueue.IsEmpty()
+                || IsFinished() )
             {
                 break;
             }
@@ -411,17 +430,14 @@ void					FFmpegAVDecoder::ClearStream           ( StreamData * streamData )
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Float64 time )
+void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 timestamp )
 {
-    auto ts = decoder->ConvertTime( time );
-	m_demuxer->Seek( ts, decoder->GetStreamIdx() );
-
     Int64 currTs = 0;
-    while( currTs < ts )
+    // decode packets till reaching frame with given timestamp
+    while( currTs < timestamp )
     {
         m_demuxerThread->Restart();
 
-        decoder->ProcessPacket( m_demuxer.get() );
         auto packet = m_demuxer->GetPacket( decoder->GetStreamIdx() );
         if( packet != nullptr )
         {
@@ -457,8 +473,8 @@ bool				FFmpegAVDecoder::NextStreamDataReady	        ( AVMediaType type, UInt64 
 
                 // find the closest frame to given time
                 while( !streamData->decoder->IsDataQueueEmpty()
-                    && streamData->prevPTS <= currentPTS
-                    && currentPTS <= time )
+                    && ( streamData->prevPTS <= currentPTS )
+                    && ( currentPTS <= time + streamData->decoder->GetOffset() ) )
                 {
                     success = streamData->decoder->PopData( data );
                     currentPTS = streamData->decoder->GetCurrentPTS();

@@ -13,23 +13,12 @@ namespace bv {
 // *******************************
 //
 FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
-    : m_swsCtx( nullptr )
+    : FFmpegStreamDecoder( formatCtx, streamIdx, maxQueueSize )
+    , m_swsCtx( nullptr )
     , m_width( 0 )
     , m_height( 0 )
     , m_frameRate( 0 )
 {
-    m_streamIdx = streamIdx;
-
-    m_maxQueueSize = maxQueueSize;
-
-    m_stream = formatCtx->streams[ streamIdx ];
-    m_codecCtx = m_stream->codec;
-    m_codec = avcodec_find_decoder( m_codecCtx->codec_id );
-    assert( m_codec != nullptr );
-
-    bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
-    assert( !error ); { error; }
-
     //raw video desc should provide width, height & format
     
     if( m_codecCtx->width == 0 || m_codecCtx->height == 0 )
@@ -56,16 +45,12 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr as
         m_frameRate = 25.;
     }
 
-    m_duration = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_stream->duration );
-
     assert( m_width > 0 );
     assert( m_height > 0 );
 
     auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
     m_swsCtx = sws_getCachedContext( m_swsCtx, m_width, m_height, m_codecCtx->pix_fmt,
         m_width, m_height, ffmpegFormat, SWS_BILINEAR, nullptr, nullptr, nullptr );
-
-    m_frame = av_frame_alloc();
 
     m_outFrame = av_frame_alloc();
     m_frameSize = ( SizeType )av_image_get_buffer_size( ffmpegFormat, m_width, m_height, 1 );
@@ -81,12 +66,7 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr as
 FFmpegVideoStreamDecoder::~FFmpegVideoStreamDecoder             ()
 {
     sws_freeContext( m_swsCtx );
-    avcodec_close( m_codecCtx );
-
-    av_frame_free( &m_frame );
     av_free( m_outBuffer );             // deallocation of m_outFrame 
-
-    m_bufferQueue.Clear();
 }
 
 // *******************************
@@ -160,6 +140,7 @@ bool			    FFmpegVideoStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxer )
             {
                 auto data = ConvertFrame();
                 m_bufferQueue.Push( data );
+
                 return true;
             }
         }

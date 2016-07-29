@@ -103,7 +103,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 
     if( !m_packetQueue.at( streamIdx )->IsEmpty() )
 	{
-        auto packet = new AVPacket();
+        AVPacket * packet = nullptr;
 		m_packetQueue.at( streamIdx )->TryPop( packet );
         return packet;
 	}

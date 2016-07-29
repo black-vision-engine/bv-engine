@@ -73,7 +73,7 @@ public:
     virtual bool                HasVideo                () const override;
     virtual bool                HasAudio                () const override;
 
-	/** Accurate seeking.
+	/** Accurate seeking of all attached streams.
 	@param[time] in seconds 
     */
 	virtual void				Seek					( Float64 time ) override;
@@ -100,7 +100,12 @@ private:
 
     void                        ClearStream             ( StreamData * streamData );
 
-	void				        Seek					( FFmpegStreamDecoder * decoder, Float64 time );
+    /** Manually seek from current keyframe to frame with at given timestamp.
+	@param[decoder]
+    @param[timestamp] in stream time base
+    */
+	void				        Seek					( FFmpegStreamDecoder * decoder, Int64 timestamp );
+
 	bool				        NextStreamDataReady		( AVMediaType type, UInt64 t );
 
 };

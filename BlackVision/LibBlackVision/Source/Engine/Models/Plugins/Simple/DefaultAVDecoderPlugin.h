@@ -104,6 +104,12 @@ public:
 
 private:
 
+    void                                        Play                        ();
+    void                                        Stop                        ();
+    void                                        Pause                       ();
+
+    void                                        HandlePerfectLoops          ();
+
     void                                        UpdateDecoderState          ( DecoderMode mode );
 
     void                                        UpdateDecoder               ();
