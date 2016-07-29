@@ -268,6 +268,10 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 //
 int WindowedApplication::MainFun	( int argc, char ** argv )
 {
+#ifdef _DEBUG
+	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
+
     { argc; argv; } // FIXME: suppress unused warning
     WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
 

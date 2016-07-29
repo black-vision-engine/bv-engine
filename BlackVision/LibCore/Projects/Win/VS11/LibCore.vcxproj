@@ -28,6 +28,7 @@
     <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
+    <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
     <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\InitSubsystem.h" />
     <ClInclude Include="..\..\..\Source\System\Path.h" />
