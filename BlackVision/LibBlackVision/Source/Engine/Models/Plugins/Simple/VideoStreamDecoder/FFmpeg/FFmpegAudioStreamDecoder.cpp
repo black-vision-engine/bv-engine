@@ -65,7 +65,7 @@ bool			        FFmpegAudioStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxe
         auto packet = demuxer->GetPacket( m_streamIdx );
         if( packet )
         {
-            auto success = DecodePacket( packet );
+            auto success = DecodePacket( packet->GetAVPacket() );
             if( success )
             {
                 auto data = ConvertFrame();
@@ -97,8 +97,6 @@ bool				FFmpegAudioStreamDecoder::DecodePacket		( AVPacket * packet )
         packet->size -= len;
         packet->data += len;
     }
-
-    av_packet_unref( packet ); //FIXME
 
     return ( frameReady != 0 );
 }

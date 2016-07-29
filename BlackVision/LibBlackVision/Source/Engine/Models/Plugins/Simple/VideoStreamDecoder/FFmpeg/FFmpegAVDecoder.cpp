@@ -438,7 +438,9 @@ void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 tim
     {
         m_demuxerThread->Restart();
 
-        auto packet = m_demuxer->GetPacket( decoder->GetStreamIdx() );
+        auto ffmpegPacket = m_demuxer->GetPacket( decoder->GetStreamIdx() );
+        auto packet = ffmpegPacket->GetAVPacket();
+
         if( packet != nullptr )
         {
             currTs = packet->dts;

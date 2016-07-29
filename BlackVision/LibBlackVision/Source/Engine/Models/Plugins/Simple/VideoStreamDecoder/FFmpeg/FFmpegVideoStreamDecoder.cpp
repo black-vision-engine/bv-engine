@@ -78,8 +78,6 @@ bool                FFmpegVideoStreamDecoder::DecodePacket          ( AVPacket *
     int frameReady = 0;
     avcodec_decode_video2( m_codecCtx, m_frame, &frameReady, packet );
 
-	av_packet_unref( packet ); //FIXME
-
     return ( frameReady != 0 );
 }
 
@@ -136,7 +134,7 @@ bool			    FFmpegVideoStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxer )
         auto packet = demuxer->GetPacket( m_streamIdx );
         if( packet )
         {
-            if( DecodePacket( packet ) )
+            if( DecodePacket( packet->GetAVPacket() ) )
             {
                 auto data = ConvertFrame();
                 m_bufferQueue.Push( data );
