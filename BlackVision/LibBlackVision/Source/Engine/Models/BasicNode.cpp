@@ -764,7 +764,7 @@ Int32                               BasicNode::TryParseIndex            ( std::s
     if( !str.empty() && str[ 0 ] == escapeChar )
     {
         Int32 result;
-        bool success = ( ( std::stringstream( str.substr( 1, str.length() ) ) >> result ) != nullptr );
+        bool success = ( !( std::stringstream( str.substr( 1, str.length() ) ) >> result ).fail() );
         if( success )
         {
             return result;

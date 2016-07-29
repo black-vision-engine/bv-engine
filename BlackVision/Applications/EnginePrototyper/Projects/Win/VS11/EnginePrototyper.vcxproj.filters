@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeArrayTest.cpp">
       <Filter>Prototypes\TextureTest\TextureTests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h">
@@ -249,6 +250,7 @@
     <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeArrayTest.h">
       <Filter>Prototypes\TextureTest\TextureTests</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">

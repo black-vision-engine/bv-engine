@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Tools/Logger/Logger.h"
 #include "CoreDEF.h"
+#include "Tools/Logger/Logger.h"
+
 
 //#include "Memory/MemoryLeaks.h"
 //#include <vld.h>
