@@ -69,13 +69,16 @@ void                                DefaultGeometryProcessorBase::Update        
         ProcessVertexAttributesChannel();
     }
 
-    auto & states = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetStates();
-    for( auto iter = states.begin(); iter != states.end(); ++iter )
+    if( m_pluginParamValModel->GetVertexAttributesChannelModel() )
     {
-        if( iter->second->StateChanged() )
+        auto & states = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetStates();
+        for( auto iter = states.begin(); iter != states.end(); ++iter )
         {
-            ProcessVertexAttributesChannel();
-            break;
+            if( iter->second->StateChanged() )
+            {
+                ProcessVertexAttributesChannel();
+                break;
+            }
         }
     }
 }
@@ -84,27 +87,27 @@ void                                DefaultGeometryProcessorBase::Update        
 //
 void                                DefaultGeometryProcessorBase::ProcessVertexAttributesChannel  ()
 {
-	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
-	{
-		m_vaChannel = nullptr;
-		return;
-	}
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 
     VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 
-	if( !m_vaChannel )
-	{
-		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-	}
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->SetDescriptor( vaChannelDesc );
-	}
+    if( !m_vaChannel )
+    {
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
 
-	auto prevComponents = prevGeomChannel->GetComponents();
+    auto prevComponents = prevGeomChannel->GetComponents();
     for( unsigned int i = 0; i < prevComponents.size(); ++i )
     {
         auto prevConnComp = std::static_pointer_cast< model::ConnectedComponent >( prevComponents[ i ] );

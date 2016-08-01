@@ -18,14 +18,14 @@ class DefaultAudioDecoderPluginDesc : public BasePluginDescriptor
 {
 public:
 
-	                            DefaultAudioDecoderPluginDesc   ();
+                                DefaultAudioDecoderPluginDesc   ();
 
-	virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
-	virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
-	static  std::string                     UID                 ();
+    static  std::string                     UID                 ();
 
-	static  std::string                     AudioName           ();
+    static  std::string                     AudioName           ();
 
 };
 
@@ -52,15 +52,15 @@ private:
 
     DefaultAudioChannelPtr              m_audioChannel;
 
-	IAVDecoderPtr				        m_decoder;
-	DecoderMode				            m_decoderMode;
+    IAVDecoderPtr				        m_decoder;
+    DecoderMode				            m_decoderMode;
 
     TimeType                            m_prevDecoderModeTime;
     TimeType                            m_prevOffsetTime;
 
-	DecoderModeParamPtr                 m_decoderModeParam;
+    DecoderModeParamPtr                 m_decoderModeParam;
 
-	/** time in seconds from the beginning of video */
+    /** time in seconds from the beginning of video */
     ParamVec2Ptr                        m_offsetParam;                 
     Float32                             m_prevOffsetCounter;
 

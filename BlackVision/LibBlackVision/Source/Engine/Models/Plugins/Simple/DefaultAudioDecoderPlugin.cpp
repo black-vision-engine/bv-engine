@@ -106,8 +106,8 @@ void					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
 // *************************************
 // 
 DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-	: BasePlugin< IPlugin >( name, uid, prev, model )
-	, m_decoder( nullptr )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
+    , m_decoder( nullptr )
     , m_prevOffsetCounter( 1 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
@@ -115,7 +115,7 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
 {
     m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
 
-	SetPrevPlugin( prev );
+    SetPrevPlugin( prev );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
 
@@ -141,32 +141,32 @@ DefaultAudioDecoderPlugin::~DefaultAudioDecoderPlugin				        ()
 // 
 bool							DefaultAudioDecoderPlugin::IsValid          () const
 {
-	return m_prevPlugin->IsValid();
+    return m_prevPlugin->IsValid();
 }
 
 // *************************************
 // 
 bool                            DefaultAudioDecoderPlugin::LoadResource		( AssetDescConstPtr assetDescr )
 {
-	m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
+    m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
 
     if ( m_assetDesc )
     {
         auto asset = LoadTypedAsset< AVAsset >( assetDescr );
         if( asset )
         {
-		    m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
+            m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
             if( m_decoder->HasAudio() )
             {
                 m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                 m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
 
-			    SetAsset( 0, LAsset( DefaultAudioDecoderPluginDesc::AudioName(), assetDescr, nullptr ) );
+                SetAsset( 0, LAsset( DefaultAudioDecoderPluginDesc::AudioName(), assetDescr, nullptr ) );
 
                 UpdateDecoderState( m_decoderMode );
 
-			    return true;
+                return true;
             }
         }
     }
@@ -185,7 +185,7 @@ IAudioChannelPtr                    DefaultAudioDecoderPlugin::GetAudioChannel  
 // 
 void                                DefaultAudioDecoderPlugin::Update                   ( TimeType t )
 {
-   	BasePlugin::Update( t );
+    BasePlugin::Update( t );
     m_decoderMode =  m_decoderModeParam->Evaluate();
 
     MarkOffsetChanges();
@@ -287,9 +287,9 @@ void                                DefaultAudioDecoderPlugin::UploadAudioFrame 
     //update audio data
     AVMediaData mediaData;
     if( m_decoder->GetAudioMediaData( mediaData ) )
-	{
+    {
         m_audioChannel->PushPacket( mediaData.frameData );
-	}
+    }
 }
 
 // *************************************

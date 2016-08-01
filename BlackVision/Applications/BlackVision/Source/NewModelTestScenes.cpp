@@ -2057,6 +2057,8 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
     assert( plugin );
     plugin->LoadResource( SVGAssetDescriptor::Create( "kupa.svg" ) );
 
+    root->AddPlugin( "TRIANGULATE", timeEvaluator );
+
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
 
     return root;

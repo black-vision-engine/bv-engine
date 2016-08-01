@@ -618,11 +618,11 @@ std::vector< INDEX_TYPE >       DefaultExtrudePlugin::ExtractCorners          ( 
 // This is the only difference between base class function and this override.
 void                                DefaultExtrudePlugin::ProcessVertexAttributesChannel  ()
 {
-	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
-	{
-		m_vaChannel = nullptr;
-		return;
-	}
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 
@@ -636,17 +636,17 @@ void                                DefaultExtrudePlugin::ProcessVertexAttribute
         vaChannelDesc.AddAttrChannelDesc( new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR ) );
     }
 
-	if( !m_vaChannel )
-	{
+    if( !m_vaChannel )
+    {
         m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vaChannelDesc );
-	}
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->SetDescriptor( vaChannelDesc );
-	}
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
 
-	auto prevComponents = prevGeomChannel->GetComponents();
+    auto prevComponents = prevGeomChannel->GetComponents();
     for( unsigned int i = 0; i < prevComponents.size(); ++i )
     {
         auto prevConnComp = std::static_pointer_cast< model::ConnectedComponent >( prevComponents[ i ] );

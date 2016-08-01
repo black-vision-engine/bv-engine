@@ -1756,6 +1756,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.cpp">
       <Filter>Engine\Graphics\Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4117,6 +4120,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
       <Filter>Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
