@@ -106,6 +106,7 @@ public:
     static  model::BasicNodePtr     FadeRectTestScene               ( model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     ExtrudeTestScene                ( model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     LineChartTestScene              ( model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     SVGTestScene                    ( model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 // ********************************

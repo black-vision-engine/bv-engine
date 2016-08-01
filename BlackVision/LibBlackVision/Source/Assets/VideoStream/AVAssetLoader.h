@@ -14,7 +14,7 @@ class AVAssetLoader : public AssetLoader
 {
 public:
 
-	AssetConstPtr		LoadAsset			( const AssetDescConstPtr & desc ) const override;
+    AssetConstPtr		LoadAsset			( const AssetDescConstPtr & desc ) const override;
     AssetDescConstPtr	CreateDescriptor	( const IDeserializer& deserializeObject ) const override;
 
     ThumbnailConstPtr   LoadThumbnail       ( const AssetDescConstPtr & desc ) const override;

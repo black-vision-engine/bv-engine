@@ -13,8 +13,8 @@ class MeshLoader : public AssetLoader
 {
 public:
 
-	AssetConstPtr						LoadAsset			( const AssetDescConstPtr & desc ) const override;
-	AssetDescConstPtr					CreateDescriptor	( const IDeserializer & deser ) const override;
+    AssetConstPtr						LoadAsset			( const AssetDescConstPtr & desc ) const override;
+    AssetDescConstPtr					CreateDescriptor	( const IDeserializer & deser ) const override;
 
     ThumbnailConstPtr                   LoadThumbnail       ( const AssetDescConstPtr & desc ) const override;
 

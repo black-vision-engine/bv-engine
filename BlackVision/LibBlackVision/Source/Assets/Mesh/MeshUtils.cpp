@@ -23,21 +23,21 @@ namespace bv {
 void                MeshUtils::ProcessNormals       ( std::vector< glm::vec3 > & normals, FbxMesh * fbxMesh, Int32 vertexIdx, Int32 ctrlIdx )
 {
     for( Int32 l = 0; l < fbxMesh->GetElementNormalCount(); ++l )
-	{
-		auto elNormal = fbxMesh->GetElementNormal( l );
+    {
+        auto elNormal = fbxMesh->GetElementNormal( l );
         switch ( elNormal->GetMappingMode() )
-		{
+        {
             case FbxGeometryElement::eByPolygonVertex:
             {
                 switch ( elNormal->GetReferenceMode() )
-		        {
+                {
                     case FbxGeometryElement::eDirect:
                     {
                         normals.push_back( FbxToGlm< glm::vec3 >( elNormal->GetDirectArray().GetAt( vertexIdx ) ) );
                     }
                     break;
 
-			        case FbxGeometryElement::eIndexToDirect:
+                    case FbxGeometryElement::eIndexToDirect:
                     {
                         int id = elNormal->GetIndexArray().GetAt( vertexIdx );
                         normals.push_back( FbxToGlm< glm::vec3 >( elNormal->GetDirectArray().GetAt( id ) ) );
@@ -53,14 +53,14 @@ void                MeshUtils::ProcessNormals       ( std::vector< glm::vec3 > &
             case FbxGeometryElement::eByControlPoint:
             {
                 switch ( elNormal->GetReferenceMode() )
-			    {
+                {
                     case FbxGeometryElement::eDirect:
                     {
                         normals.push_back( FbxToGlm< glm::vec3 >( elNormal->GetDirectArray().GetAt( ctrlIdx ) ) );
                     }
                     break;
 
-				    case FbxGeometryElement::eIndexToDirect:
+                    case FbxGeometryElement::eIndexToDirect:
                     {
                         int id = elNormal->GetIndexArray().GetAt( ctrlIdx );
                         normals.push_back( FbxToGlm< glm::vec3 >( elNormal->GetDirectArray().GetAt( id ) ) );
@@ -84,21 +84,21 @@ void                MeshUtils::ProcessNormals       ( std::vector< glm::vec3 > &
 void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > & uvs, FbxMesh * fbxMesh, Int32 vertexIdx, Int32 ctrlIdx )
 {
     for( Int32 l = 0; l < fbxMesh->GetElementUVCount(); ++l )
-	{
-		auto elUV = fbxMesh->GetElementUV( l );
+    {
+        auto elUV = fbxMesh->GetElementUV( l );
         switch( elUV->GetMappingMode() )
-		{
+        {
             case FbxGeometryElement::eByControlPoint:
             {
                 switch ( elUV->GetReferenceMode() )
-			    {
+                {
                     case FbxGeometryElement::eDirect:
                     {
                         uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( vertexIdx ) ) );
                     }
                     break;
 
-				    case FbxGeometryElement::eIndexToDirect:
+                    case FbxGeometryElement::eIndexToDirect:
                     {
                         int id = elUV->GetIndexArray().GetAt( vertexIdx );
                         uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( id ) ) );
@@ -114,9 +114,9 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
             case FbxGeometryElement::eByPolygonVertex:
             {
                 switch ( elUV->GetReferenceMode() )
-			    {
+                {
                     case FbxGeometryElement::eDirect:
-				    case FbxGeometryElement::eIndexToDirect:
+                    case FbxGeometryElement::eIndexToDirect:
                     {
                         uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( ctrlIdx ) ) );
                     }
@@ -138,31 +138,31 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
 void                MeshUtils::ProcessTangents      ( std::vector< glm::vec4 > & tangents, FbxMesh * fbxMesh, Int32 vertexIdx )
 {
     for( Int32 l = 0; l < fbxMesh->GetElementTangentCount(); ++l )
-	{
-		auto elTangent = fbxMesh->GetElementTangent( l );
+    {
+        auto elTangent = fbxMesh->GetElementTangent( l );
 
-		if( elTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex )
-		{
-			switch ( elTangent->GetReferenceMode() )
-			{
-			    case FbxGeometryElement::eDirect:
+        if( elTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex )
+        {
+            switch ( elTangent->GetReferenceMode() )
+            {
+                case FbxGeometryElement::eDirect:
                 {
                     tangents.push_back( FbxToGlm< glm::vec4 >( elTangent->GetDirectArray().GetAt( vertexIdx ) ) );
                 }
-				break;
+                break;
 
-			    case FbxGeometryElement::eIndexToDirect:
+                case FbxGeometryElement::eIndexToDirect:
                 {
                     int id = elTangent->GetIndexArray().GetAt( vertexIdx );
                     tangents.push_back( FbxToGlm< glm::vec4 >( elTangent->GetDirectArray().GetAt( id ) ) );
                 }
-				break;
+                break;
 
-			    default:
-				    break;
-			}
-		}
-	}
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 // ******************************
@@ -170,29 +170,29 @@ void                MeshUtils::ProcessTangents      ( std::vector< glm::vec4 > &
 void                MeshUtils::ProcessBinormals      ( std::vector< glm::vec3 > & binormals, FbxMesh * fbxMesh, Int32 vertexIdx )
 {
     for( Int32 l = 0; l < fbxMesh->GetElementBinormalCount(); ++l )
-	{
-		auto elBinormal = fbxMesh->GetElementBinormal( l );
+    {
+        auto elBinormal = fbxMesh->GetElementBinormal( l );
 
-		if( elBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex )
-		{
-			switch ( elBinormal->GetReferenceMode() )
-			{
-			case FbxGeometryElement::eDirect:
+        if( elBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex )
+        {
+            switch ( elBinormal->GetReferenceMode() )
+            {
+            case FbxGeometryElement::eDirect:
                 {
                     binormals.push_back( FbxToGlm< glm::vec3 >( elBinormal->GetDirectArray().GetAt( vertexIdx ) ) );
                 }
-				break;
-			case FbxGeometryElement::eIndexToDirect:
+                break;
+            case FbxGeometryElement::eIndexToDirect:
                 {
                     int id = elBinormal->GetIndexArray().GetAt( vertexIdx );
                     binormals.push_back( FbxToGlm< glm::vec3 >( elBinormal->GetDirectArray().GetAt( id ) ) );
                 }
-				break;
-			default:
-				break;
-			}
-		}
-	}
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 // ******************************
@@ -236,7 +236,7 @@ void                            MeshUtils::ProcessGeometry        ( MeshAssetPtr
         {
             auto polySize = fbxMesh->GetPolygonSize( i );
             for ( Int32 j = 0; j < polySize; ++j )
-		    {
+            {
                 auto ctrlIdx = fbxMesh->GetPolygonVertex( i, j );
                 
                 positions.push_back( FbxToGlm< glm::vec3 >( fbxMesh->GetControlPointAt( ctrlIdx ) ) );
@@ -403,7 +403,7 @@ MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc
     if( !importer->Initialize( path.c_str(), -1, manager->GetIOSettings() ) )
     {
         //FIXME: failed to load mesh
-	    return nullptr;
+        return nullptr;
     }
 
     auto scene = FbxScene::Create( manager, "" );
@@ -418,7 +418,7 @@ MeshAssetConstPtr   MeshUtils::LoadMesh             ( MeshAssetDescConstPtr desc
 
     manager->Destroy();
 
-	return mesh;
+    return mesh;
 }
 
 // ******************************

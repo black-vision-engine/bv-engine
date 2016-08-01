@@ -12,7 +12,7 @@ class AssetLoader
 {
 public:
 
-	virtual AssetConstPtr		LoadAsset       ( const AssetDescConstPtr & desc )  const = 0;
+    virtual AssetConstPtr		LoadAsset       ( const AssetDescConstPtr & desc )  const = 0;
     virtual AssetDescConstPtr	CreateDescriptor( const IDeserializer& deserializeObject ) const = 0;
 
     virtual ThumbnailConstPtr   LoadThumbnail   ( const AssetDescConstPtr & desc ) const = 0;

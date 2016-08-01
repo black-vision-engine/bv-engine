@@ -10,6 +10,9 @@
 
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 
+#include "Assets/SVG/SVGAssetDescriptor.h"
+#include "Assets/SVG/SVGAsset.h"
+#include "Assets/Asset.h"
 
 
 
@@ -124,6 +127,29 @@ bool                            DefaultMeshPlugin::LoadResource  ( AssetDescCons
             }
         }
     }
+
+
+    auto svgAssetDescr = QueryTypedDesc< SVGAssetDescriptorConstPtr >( assetDescr );
+
+    if( svgAssetDescr )
+    {
+        auto mesh = LoadTypedAsset< SVGAsset >( svgAssetDescr );
+        if( mesh )
+        {
+            m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_LINES );
+
+//            m_meshAsset = QueryTypedRes< SVGAssetConstPtr >( mesh ); //mesh->GetChild( svgAssetDescr->GetGroupName() );
+            m_meshAsset = std::dynamic_pointer_cast< const SVGAsset >( mesh );
+
+            if( m_meshAsset )
+            {
+                InitVertexAttributesChannel( true /*meshAssetDescr->IsRecursive()*/ );
+                SetAsset( 0, LAsset( DefaultMeshPluginDesc::MeshName(), assetDescr, nullptr ) );
+                return true;
+            }
+        }
+    }
+
     return false;
 }
 

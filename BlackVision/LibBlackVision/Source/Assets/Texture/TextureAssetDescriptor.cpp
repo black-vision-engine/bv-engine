@@ -162,28 +162,28 @@ ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& d
 //
 const std::string &	TextureAssetDesc::GetUID() const
 {
-	return TextureAssetDesc::UID();
+    return TextureAssetDesc::UID();
 }
 
 // ***********************
 //
 const std::string & TextureAssetDesc::UID()
 {
-	return TextureAssetDesc::uid;
+    return TextureAssetDesc::uid;
 }
 
 // ***********************
 //
 bool TextureAssetDesc::IsCacheable() const
 {
-	return true;
+    return true;
 }
 
 // ***********************
 //
 VoidConstPtr TextureAssetDesc::QueryThis() const
 {
-	return shared_from_this();
+    return shared_from_this();
 }
 
 // ***********************
@@ -192,12 +192,12 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 {
     auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
-	if( !props.error.empty() )
-	{
-		return nullptr;
-	}
+    if( !props.error.empty() )
+    {
+        return nullptr;
+    }
 
-	return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ) );
+    return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ) );
 }
 
 // ***********************
@@ -206,132 +206,132 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 {
     auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
-	if( !props.error.empty() )
-	{
-		return nullptr;
-	}
+    if( !props.error.empty() )
+    {
+        return nullptr;
+    }
 
-	return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmFilter );
+    return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmFilter );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable )
 {
-	auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
-	if( !props.error.empty() )
-	{
-		return nullptr;
-	}
+    if( !props.error.empty() )
+    {
+        return nullptr;
+    }
 
-	std::vector< SingleTextureAssetDescConstPtr > mmDescs;
+    std::vector< SingleTextureAssetDescConstPtr > mmDescs;
 
-	for( auto mmFilePath : mipMapsPaths )
-	{
-		auto mmProps = image::GetImageProps( mmFilePath );
+    for( auto mmFilePath : mipMapsPaths )
+    {
+        auto mmProps = image::GetImageProps( mmFilePath );
 
-		if( !mmProps.error.empty() )
-		{
-			return nullptr;
-		}
+        if( !mmProps.error.empty() )
+        {
+            return nullptr;
+        }
 
-		mmDescs.push_back( SingleTextureAssetDesc::Create( mmFilePath, mmProps.width, mmProps.height, EnumsUtils::Convert( mmProps.format ), isCacheable ) );
-	}
+        mmDescs.push_back( SingleTextureAssetDesc::Create( mmFilePath, mmProps.width, mmProps.height, EnumsUtils::Convert( mmProps.format ), isCacheable ) );
+    }
 
-	auto mmResDesc = MipMapAssetDesc::Create( mmDescs );
+    auto mmResDesc = MipMapAssetDesc::Create( mmDescs );
 
-	return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmResDesc );
+    return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmResDesc );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc )
 {
-	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mipmapsDesc ) );
+    return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mipmapsDesc ) );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter )
 {
-	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mmFilter ) );
+    return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mmFilter ) );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc )
 {
-	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc ) );
+    return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc ) );
 }
 
 // ***********************
 //
 TextureAssetDesc::TextureAssetDesc( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc )
-	: m_originalTextureDesc( origDesc )
-	, m_mipMapsDescs( mipmapsDesc )
+    : m_originalTextureDesc( origDesc )
+    , m_mipMapsDescs( mipmapsDesc )
 {
-	 if( !mipmapsDesc )
-	 {
-		 m_loadingType = TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
-	 }
-	 else
-	 {
-		 m_loadingType = TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS;
-	 }
+     if( !mipmapsDesc )
+     {
+         m_loadingType = TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
+     }
+     else
+     {
+         m_loadingType = TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS;
+     }
 }
 
 // ***********************
 //
 TextureAssetDesc::TextureAssetDesc( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter )
-	: m_originalTextureDesc( origDesc )
-	, m_mipMapsDescs()
+    : m_originalTextureDesc( origDesc )
+    , m_mipMapsDescs()
 {
-	m_loadingType = TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS;
-	m_mipMapsDescs = MipMapAssetDesc::Create( mmFilter, origDesc );
+    m_loadingType = TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS;
+    m_mipMapsDescs = MipMapAssetDesc::Create( mmFilter, origDesc );
 }
 
 // ***********************
 //
 TextureAssetDesc::TextureAssetDesc( const SingleTextureAssetDescConstPtr & origDesc )
-	: m_originalTextureDesc( origDesc )
-	, m_mipMapsDescs()
+    : m_originalTextureDesc( origDesc )
+    , m_mipMapsDescs()
 {
-	m_loadingType = TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
+    m_loadingType = TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
 }
 
 // ***********************
 //
 TextureAssetLoadingType TextureAssetDesc::GetLoadingType() const
 {
-	return m_loadingType;
+    return m_loadingType;
 }
 
 // ***********************
 //
 std::string				TextureAssetDesc::GetKey		() const
 {
-	switch( GetLoadingType() )
-	{
-		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
-			return this->GetOrigTextureDesc()->GetKey();
-		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
-			return this->GetOrigTextureDesc()->GetKey() + "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
-		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
-		{
-			auto ret = this->GetOrigTextureDesc()->GetKey();
+    switch( GetLoadingType() )
+    {
+        case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+            return this->GetOrigTextureDesc()->GetKey();
+        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+            return this->GetOrigTextureDesc()->GetKey() + "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+        {
+            auto ret = this->GetOrigTextureDesc()->GetKey();
 
-			for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
-				ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
+            for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
+                ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
 
-			ret += "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+            ret += "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
 
-			return ret;
-		}
-		default:
-			assert( !"Imposible enum value" );
-			return "";
-	}
+            return ret;
+        }
+        default:
+            assert( !"Imposible enum value" );
+            return "";
+    }
 }
 
 // ***********************
@@ -374,14 +374,14 @@ SizeType                TextureAssetDesc::EstimateMemoryUsage () const
 //
 SingleTextureAssetDescConstPtr TextureAssetDesc::GetOrigTextureDesc() const
 {
-	return m_originalTextureDesc;
+    return m_originalTextureDesc;
 }
 
 // ***********************
 //
 MipMapAssetDescConstPtr TextureAssetDesc::GetMipMapsDesc() const
 {
-	return m_mipMapsDescs;
+    return m_mipMapsDescs;
 }
 
 //// ***********************

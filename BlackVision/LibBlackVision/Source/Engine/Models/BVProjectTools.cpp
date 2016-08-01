@@ -115,7 +115,7 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
     if( type == PrimitiveType::PT_TRIANGLE_STRIP )
         return new TriangleStrip( radasvb, nullptr, nullptr );
     else if( type == PrimitiveType::PT_LINES )
-        return new Lines( radasvb, nullptr, nullptr );
+        return new Lines( radasvb, nullptr, nullptr, 2.f );
     else
     {
         assert( false );
@@ -328,7 +328,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
                 if( radasvb )
                 {
-                    renderable = new Lines( radasvb, modelNode->GetBoundingVolume().get(), effect );
+                    renderable = new Lines( radasvb, modelNode->GetBoundingVolume().get(), effect, 3.f ); // FIXME this width should be stored in VAO somehow
                 }
                 break;
             }
