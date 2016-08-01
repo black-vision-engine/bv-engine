@@ -26,7 +26,7 @@ TextureAssetConstPtr	AnimationLoader::LoadFrame( const TextureAssetDescConstPtr 
 {
     auto asset = AssetManager::GetInstance().LoadAsset( frameDesc );
 
-	auto texRes = QueryTypedRes< TextureAssetConstPtr >( asset );
+    auto texRes = QueryTypedRes< TextureAssetConstPtr >( asset );
 
     if ( texRes == nullptr )
     {
@@ -41,9 +41,9 @@ TextureAssetConstPtr	AnimationLoader::LoadFrame( const TextureAssetDescConstPtr 
 //
 AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 {
-	auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( desc );
+    auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( desc );
 
-	assert( typedDesc );
+    assert( typedDesc );
 
     auto p = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetPath() );
     auto files = bv::Path::List( p.Str(), false, typedDesc->GetFilter() );
@@ -52,39 +52,39 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
     if ( files.size() > 0 )
     {
-	    for( auto f : files )
-	    {
+        for( auto f : files )
+        {
             framesDesc.push_back( TextureAssetDesc::Create( "file:/" + f.Str(), true ) );
         }
     }
 
-	if ( framesDesc.size() == 0 )
+    if ( framesDesc.size() == 0 )
     {
         return nullptr;
     }
 
-	std::vector< TextureAssetConstPtr > framesAssets;
-	
+    std::vector< TextureAssetConstPtr > framesAssets;
+    
     printf( "Loading animation\n" );
 
-	auto i = 0;
-	for( auto f : framesDesc )
-	{
-		framesAssets.push_back( LoadFrame( f ) );
-		printf( "\rLoaded %d out of %d total frames                ", i + 1, framesDesc.size() );
-		++i;
-	}
+    auto i = 0;
+    for( auto f : framesDesc )
+    {
+        framesAssets.push_back( LoadFrame( f ) );
+        printf( "\rLoaded %d out of %d total frames                ", i + 1, framesDesc.size() );
+        ++i;
+    }
 
-	printf( "\n" );
+    printf( "\n" );
 
-	return AnimationAsset::Create( framesAssets );
+    return AnimationAsset::Create( framesAssets );
 }
 
 // ******************************
 //
 AssetDescConstPtr	AnimationLoader::CreateDescriptor	( const IDeserializer& deserializeObject ) const
 {
-	return std::static_pointer_cast<const AssetDesc>( AnimationAssetDesc::Create( deserializeObject ) );
+    return std::static_pointer_cast<const AssetDesc>( AnimationAssetDesc::Create( deserializeObject ) );
 }
 
 namespace 
@@ -112,7 +112,7 @@ TextureAssetDescVec ListSingleDescriptors( const AnimationAssetDescConstPtr & ty
         auto s = files.size();
 
         for( SizeType i = 0; i < s; i += s / div )
-	    {
+        {
             framesDesc.push_back( TextureAssetDesc::Create( "file:/" + files[ i ].Str(), true ) );
         }
     }
@@ -128,11 +128,11 @@ std::vector< SingleTextureAssetConstPtr > LoadFrames( const AnimationAssetDescCo
 
     std::vector< SingleTextureAssetConstPtr > framesAssets;
 
-	for( auto f : framesDesc )
-	{
+    for( auto f : framesDesc )
+    {
         auto t = TextureUtils::LoadSingleTexture( f->GetOrigTextureDesc(), false );
-		framesAssets.push_back( t );
-	}
+        framesAssets.push_back( t );
+    }
 
     return framesAssets;
 }
@@ -161,7 +161,7 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
 {
     auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( desc );
 
-	assert( typedDesc );
+    assert( typedDesc );
     
     auto p = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetPath() );
 

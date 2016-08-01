@@ -19,7 +19,7 @@ namespace bv
 std::string			AssetDesc::GetKey		() const
 {
     assert( false );
-	return "";
+    return "";
 }
 
 

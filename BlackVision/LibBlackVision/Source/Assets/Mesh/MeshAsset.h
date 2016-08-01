@@ -64,7 +64,7 @@ public:
 
 private:
 
-	static const std::string	        uid;
+    static const std::string	        uid;
     std::string			                m_key;
 
     MeshTransformConstPtr               m_transform;
@@ -76,14 +76,14 @@ private:
 
 protected:
 
-	virtual VoidConstPtr		QueryThis		() const override;
+    virtual VoidConstPtr		QueryThis		() const override;
 
 public:
 
-	static const std::string &	UID			    ();
-	const std::string &			GetUID		    () const override;
+    static const std::string &	UID			    ();
+    const std::string &			GetUID		    () const override;
 
-	const std::string &			GetKey		    () const;
+    const std::string &			GetKey		    () const;
 
     void                        SetTransform    ( MeshTransformConstPtr transform );
     void                        SetGeometry     ( MeshGeometryConstPtr geometry );
@@ -102,11 +102,11 @@ public:
     MeshAssetConstPtr           GetChild        ( UInt32 idx ) const;
     UInt32                      NumChildren     () const;
 
-	static MeshAssetPtr	        Create		    ( const std::string & key );
-	
-private:
+    static MeshAssetPtr	        Create		    ( const std::string & key );
+    
+protected:
 
-	explicit					MeshAsset       ( const std::string & key );
+    explicit					MeshAsset       ( const std::string & key );
 
 };
 

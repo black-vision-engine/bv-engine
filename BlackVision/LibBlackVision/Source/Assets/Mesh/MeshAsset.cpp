@@ -44,21 +44,21 @@ MeshAsset::MeshAsset                                ( const std::string & key )
 //
 const std::string &	    MeshAsset::GetKey           () const
 {
-	return m_key;
+    return m_key;
 }
 
 // *******************************
 // 
 const std::string &	    MeshAsset::GetUID           () const
 {
-	return MeshAsset::uid;
+    return MeshAsset::uid;
 }
 
 // *******************************
 // 
 const std::string &	    MeshAsset::UID              ()
 {
-	return MeshAsset::uid;
+    return MeshAsset::uid;
 }
 
 // *******************************
@@ -169,7 +169,7 @@ UInt32	    MeshAsset::NumChildren      () const
 // 
 VoidConstPtr            MeshAsset::QueryThis        () const
 {
-	return shared_from_this();
+    return shared_from_this();
 }
 
 } // bv

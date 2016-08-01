@@ -27,7 +27,7 @@ namespace bv {
 // @todo Raplace all references with LoadTypedAsset
 FontAssetConstPtr      TextHelper::LoadFont( const FontAssetDescConstPtr & fontAssetDesc )
 {
-	return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );
+    return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );
 }
 
 // *********************************
@@ -40,7 +40,7 @@ model::VertexAttributesChannelPtr   TextHelper::CreateEmptyVACForText()
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-	return std::make_shared< model::VertexAttributesChannel>( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc );
+    return std::make_shared< model::VertexAttributesChannel>( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc );
 }
 
 namespace
@@ -105,9 +105,9 @@ TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & ass
 
     if( f )
     {
-		return f->GetAtlas();
-	}
-	else
+        return f->GetAtlas();
+    }
+    else
     {
         return nullptr;
     }
@@ -121,14 +121,14 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     assert( textAtlas );
 
     glm::vec3 translate(0.f);
-	glm::vec3 translateDot(0.f);
+    glm::vec3 translateDot(0.f);
     glm::vec3 interspace( spacing, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
 
-	bool outline = false;
+    bool outline = false;
 
-	if( outlineSize != 0 )
-		outline = true;
+    if( outlineSize != 0 )
+        outline = true;
 
     float aspectRatio = float( std::min( viewWidth, viewHeight ) ) / 2.f;
 
@@ -142,9 +142,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
     float texPadding = 1.f;
 
-	// Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
+    // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
     auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / aspectRatio  + spacing;
-	auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
+    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
 
     for( unsigned int i = 0; i < text.size(); ++i )
     {
@@ -189,7 +189,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
             // XYZ
 
-			{
+            {
                 quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
                 quadBottomRight    = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
                 quadTopLeft        = glm::vec3( 0.f, (float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
@@ -250,19 +250,19 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
-			if(wch==L'.' && tat==TextAlignmentType::Dot)
-			{
-				translateDot = translate;
-			}
+            if(wch==L'.' && tat==TextAlignmentType::Dot)
+            {
+                translateDot = translate;
+            }
 
             {
-				translate += glm::vec3( ( glyph->advanceX ) / aspectRatio, 0.f, 0.f ) + interspace;
+                translate += glm::vec3( ( glyph->advanceX ) / aspectRatio, 0.f, 0.f ) + interspace;
             }
 
         }
         else
         {
-			translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f )+ interspace;
+            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f )+ interspace;
             //assert( !( "Cannot find glyph for char " + wch) );
         }
     }
@@ -276,7 +276,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
         case TextAlignmentType::Right:
             alignmentTranslation = -translate.x;
             break;
-		case TextAlignmentType::Dot: 
+        case TextAlignmentType::Dot: 
             alignmentTranslation = -translateDot.x;
             break;
 

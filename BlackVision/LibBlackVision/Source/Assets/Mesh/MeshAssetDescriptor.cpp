@@ -24,9 +24,9 @@ void                MeshAssetDesc::Serialize       ( ISerializer & ser ) const
 
     ser.SetAttribute( "type", UID() );
 
-	ser.SetAttribute( "path", m_path );
-	ser.SetAttribute( "groupName", m_groupName );
-	ser.SetAttribute( "recursive", SerializationHelper::T2String( m_recursive ) );
+    ser.SetAttribute( "path", m_path );
+    ser.SetAttribute( "groupName", m_groupName );
+    ser.SetAttribute( "recursive", SerializationHelper::T2String( m_recursive ) );
 
     ser.ExitChild();
 }
@@ -35,9 +35,9 @@ void                MeshAssetDesc::Serialize       ( ISerializer & ser ) const
 //
 ISerializableConstPtr MeshAssetDesc::Create          ( const IDeserializer & deser )
 {
-	auto path = deser.GetAttribute( "path" );
-	auto groupName = deser.GetAttribute( "groupName" );
-	auto recursive = SerializationHelper::String2T< bool >( deser.GetAttribute( "recursive" ), true );
+    auto path = deser.GetAttribute( "path" );
+    auto groupName = deser.GetAttribute( "groupName" );
+    auto recursive = SerializationHelper::String2T< bool >( deser.GetAttribute( "recursive" ), true );
 
     return Create( path, groupName, recursive );
 }
@@ -61,28 +61,28 @@ MeshAssetDescConstPtr MeshAssetDesc::Create         ( const std::string & path, 
 //
 const std::string &	MeshAssetDesc::GetUID() const
 {
-	return MeshAssetDesc::UID();
+    return MeshAssetDesc::UID();
 }
 
 // ***********************
 //
 const std::string & MeshAssetDesc::UID()
 {
-	return MeshAssetDesc::uid;
+    return MeshAssetDesc::uid;
 }
 
 // ***********************
 //
 bool MeshAssetDesc::IsCacheable() const
 {
-	return true;
+    return true;
 }
 
 // ***********************
 //
 VoidConstPtr MeshAssetDesc::QueryThis() const
 {
-	return shared_from_this();
+    return shared_from_this();
 }
 
 // ***********************
@@ -105,21 +105,21 @@ std::string				MeshAssetDesc::GetKey		() const
 //
 std::string				MeshAssetDesc::GetPath		() const
 {
-	return m_path;
+    return m_path;
 }
 
 // ***********************
 //
 std::string				MeshAssetDesc::GetGroupName	() const
 {
-	return m_groupName;
+    return m_groupName;
 }
 
 // ***********************
 //
 bool				    MeshAssetDesc::IsRecursive	() const
 {
-	return m_recursive;
+    return m_recursive;
 }
 
 // ***********************
