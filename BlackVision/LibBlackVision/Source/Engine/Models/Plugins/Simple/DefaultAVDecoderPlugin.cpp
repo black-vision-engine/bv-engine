@@ -132,7 +132,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 	, m_vsc( nullptr )
 	, m_vaChannel( nullptr )
 	, m_decoder( nullptr )
-    , m_prevOffsetCounter( 1 )
+    , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
@@ -365,15 +365,10 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
         if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
         {
             m_decoder->Seek( offset[ 0 ] );
-            if( m_decoderMode == DecoderMode::PLAY )
-            {
-                Play();
-            }
-            else
+            if( m_decoderMode != DecoderMode::PLAY )
             {
                 std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
             }
-
             m_prevOffsetCounter = offset[ 1 ];
         }
 
@@ -434,7 +429,7 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
 
     if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
     {
-        m_decoder->Seek( 0.f );     // do not stop decoder - clear buffer
+        m_decoder->Seek( 0.f, false );     // do not clear buffer
         m_loopCount--;
     }
 }

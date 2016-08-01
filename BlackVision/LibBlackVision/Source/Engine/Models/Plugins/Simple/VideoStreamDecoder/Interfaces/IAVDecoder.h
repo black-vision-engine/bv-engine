@@ -35,10 +35,8 @@ public:
 	/** Accurate seeking.
 	@param[time] in seconds 
     */
-	virtual void					Seek					( Float64 time ) = 0;
+	virtual void					Seek					( Float64 time, bool flushBuffers = true ) = 0;
 	virtual void				    FlushBuffers			() = 0;
-
-	virtual void					Reset					() = 0;
 
 	virtual bool					IsEOF					() const = 0;
 	virtual bool					IsFinished				() const = 0;

@@ -68,17 +68,10 @@ bool                FFmpegStreamDecoder::IsDataQueueEmpty   () const
 
 // *******************************
 //
-void                FFmpegStreamDecoder::ClearDataQueue     ()
-{
-    m_bufferQueue.Clear();
-}
-
-// *******************************
-//
 void				FFmpegStreamDecoder::Reset				()
 {
+    m_bufferQueue.Clear();
 	avcodec_flush_buffers( m_codecCtx );
-    ClearDataQueue();
 }
 
 // *********************************

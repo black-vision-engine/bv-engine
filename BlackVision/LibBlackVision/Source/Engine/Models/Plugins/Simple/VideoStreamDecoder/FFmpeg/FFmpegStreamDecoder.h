@@ -42,7 +42,6 @@ public:
     virtual bool            PopData                     ( AVMediaData & data );
 	bool					IsDataQueueEmpty		    () const;
 
-    void                    ClearDataQueue              ();
 	virtual void			Reset						();
 
     virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) = 0;

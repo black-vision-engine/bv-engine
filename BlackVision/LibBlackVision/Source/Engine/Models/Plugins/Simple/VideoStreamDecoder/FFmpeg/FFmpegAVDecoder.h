@@ -76,10 +76,8 @@ public:
 	/** Accurate seeking of all attached streams.
 	@param[time] in seconds 
     */
-	virtual void				Seek					( Float64 time ) override;
+	virtual void				Seek					( Float64 time, bool flushBuffers = true ) override;
 	virtual void				FlushBuffers			() override;
-
-	virtual void				Reset					() override;
 
 	virtual bool				IsEOF					() const override;
 	virtual bool				IsFinished				() const override;

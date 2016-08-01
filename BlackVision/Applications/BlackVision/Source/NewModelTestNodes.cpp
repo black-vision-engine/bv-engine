@@ -1757,10 +1757,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     //success = node2->AddPlugins( GSimplePluginsUIDS, localTimeline );
     //assert( success );
 
+
+#ifdef USE_AV
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 2.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-#ifdef USE_AV
     //http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
     //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
 
@@ -1775,12 +1776,12 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     //http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
     //success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
 
-    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 2.f, 0.f ) );
-    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "offset" ), 0.5f, glm::vec2( 2.f, 0.f ) );
+    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 1.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultAVDecoderPlugin::DecoderMode::PAUSE );
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 6.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
-    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 10.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
-    //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 11.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
+    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 3.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
+    SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 4.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
     //SetParameter( node->GetPlugin( "video_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
 
@@ -1806,12 +1807,15 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     //success = model::LoadAVStream( node->GetPlugin( "audio_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
     
     SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 0.5, model::DefaultAudioDecoderPlugin::DecoderMode::PAUSE );
+    //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "offset" ), 1.0f, glm::vec2( 55.0f, 0.f ) );
+    //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 1.5f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
     SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PAUSE );
     SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 6.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
     SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 10.0f, model::DefaultAudioDecoderPlugin::DecoderMode::STOP );
     SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 11.0f, model::DefaultAudioDecoderPlugin::DecoderMode::PLAY );
-    SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultAudioDecoderPlugin::DecoderMode::STOP );
-    SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
+    //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultAudioDecoderPlugin::DecoderMode::STOP );
+    //SetParameter( node->GetPlugin( "audio_decoder" )->GetParameter( "loopEnabled" ), 0.0f, true );
     
     //success = model::LoadAVStream( node2->GetPlugin( "audio_decoder" ), "HelixMobileProducer_test2_MPEG1_Stereo_CBR_96kbps_32000Hz.mp3", TextureFormat::F_A8R8G8B8 );
     //SetParameter( node2->GetPlugin( "audio_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );

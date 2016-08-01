@@ -100,7 +100,7 @@ void					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
 DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, uid, prev, model )
 	, m_decoder( nullptr )
-    , m_prevOffsetCounter( 1 )
+    , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
@@ -127,7 +127,6 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
 // 
 DefaultAudioDecoderPlugin::~DefaultAudioDecoderPlugin				        ()
 {
-
 }
 
 // *************************************
@@ -179,12 +178,11 @@ IAudioChannelPtr                    DefaultAudioDecoderPlugin::GetAudioChannel  
 void                                DefaultAudioDecoderPlugin::Update                   ( TimeType t )
 {
    	BasePlugin::Update( t );
-    m_decoderMode =  m_decoderModeParam->Evaluate();
 
     MarkOffsetChanges();
 
-    UploadAudioFrame();
     UpdateDecoder();
+    UploadAudioFrame();
 }
 
 // *************************************
@@ -193,59 +191,31 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
 {
     if( m_decoder )
     {
-        //order matters - update offset first then mode
-        auto offset = m_offsetParam->Evaluate();
-
-        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-
-        //edge case - loop
-        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( m_decoderMode == DecoderMode::PLAY ) )
-        {
-            m_decoder->Play();
-            m_prevOffsetCounter = 0;
-        }
-        m_prevDecoderModeTime = decoderModeTime;
-
-        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
-        {
-            //edge case - eof
-            if( m_decoderMode == DecoderMode::PLAY )
-            {
-                m_decoder->Play();
-                m_decoder->Seek( offset[ 0 ] );
-            }
-            else
-            {
-                m_decoder->Seek( offset[ 0 ] );
-                m_decoder->FlushBuffers();
-            }
-
-            m_prevOffsetCounter = offset[ 1 ];
-        }
+        m_decoderMode =  m_decoderModeParam->Evaluate();
 
         if( ParameterChanged( PARAM::DECODER_STATE ) )
         {
             UpdateDecoderState( m_decoderMode );
         }
 
-        // handle perfect loops
-        auto loopEnabled = m_loopEnabledParam->Evaluate();
-        auto loopCount = m_loopCountParam->Evaluate();
-        if( ParameterChanged( PARAM::LOOP_COUNT ) )
+        // edge case - looped timeline
+        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
+        if( decoderModeTime < m_prevDecoderModeTime )
         {
-            if( loopCount == 0 )
-            {
-                loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
-            }
-            m_loopCount = loopCount;
+            m_prevOffsetCounter = 0;
+        }
+        m_prevDecoderModeTime = decoderModeTime;
+
+        // update offset 
+        auto offset = m_offsetParam->Evaluate();
+        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
+        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
+        {
+            m_decoder->Seek( offset[ 0 ] );
+            m_prevOffsetCounter = offset[ 1 ];
         }
 
-        if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
-        {
-            m_decoder->Seek( 0.f );
-            m_loopCount--;
-        }
+        HandlePerfectLoops();
 
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
@@ -258,22 +228,62 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
 
 // *************************************
 //
+void                                DefaultAudioDecoderPlugin::Play                     ()
+{
+    m_decoder->Play();
+    m_isFinished = false;
+}
+
+// *************************************
+//
+void                                DefaultAudioDecoderPlugin::Stop                     ()
+{
+    m_decoder->Stop();
+    TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
+}
+
+// *************************************
+//
+void                                DefaultAudioDecoderPlugin::Pause                    ()
+{
+    m_decoder->Pause();
+    TriggerAudioEvent( AssetTrackerInternalEvent::Command::PauseAudio );
+}
+
+// *************************************
+//
+void                                DefaultAudioDecoderPlugin::HandlePerfectLoops       ()
+{
+    auto loopEnabled = m_loopEnabledParam->Evaluate();
+    auto loopCount = m_loopCountParam->Evaluate();
+    if( ParameterChanged( PARAM::LOOP_COUNT ) )
+    {
+        if( loopCount == 0 )
+        {
+            loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
+        }
+        m_loopCount = loopCount;
+    }
+
+    if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
+    {
+        m_decoder->Seek( 0.f, false );     // do not clear buffer
+        m_loopCount--;
+    }
+}
+
+// *************************************
+//
 void                                DefaultAudioDecoderPlugin::UpdateDecoderState       ( DecoderMode mode )
 {
     switch( mode )
     {
         case DecoderMode::PLAY:
-            m_decoder->Play();
-            m_isFinished = false;
-            break;
+            Play(); break;
         case DecoderMode::STOP:
-            m_decoder->Stop();
-            TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
-            break;
+            Stop(); break;
         case DecoderMode::PAUSE:
-            m_decoder->Pause();
-            TriggerAudioEvent( AssetTrackerInternalEvent::Command::PauseAudio );
-            break;
+            Pause(); break;
     }
 }
 

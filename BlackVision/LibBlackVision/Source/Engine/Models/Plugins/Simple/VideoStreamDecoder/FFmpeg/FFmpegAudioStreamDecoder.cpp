@@ -62,10 +62,10 @@ bool			        FFmpegAudioStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxe
 {
     if( m_bufferQueue.Size() < m_maxQueueSize )
     {
-        auto packet = demuxer->GetPacket( m_streamIdx );
-        if( packet )
+        auto ffmpegPacket = demuxer->GetPacket( m_streamIdx );
+        if( ffmpegPacket )
         {
-            auto success = DecodePacket( packet->GetAVPacket() );
+            auto success = DecodePacket( ffmpegPacket->GetAVPacket() );
             if( success )
             {
                 auto data = ConvertFrame();

@@ -138,7 +138,12 @@ void						FFmpegAVDecoder::Stop				()
     m_decoderThread->Stop();
     while( !m_decoderThread->Stopped() );
 
-	Reset();
+	Seek( 0.f );
+
+    for( auto & stream : m_streams )
+    {
+        stream.second->prevPTS = 0;
+    }
 }
 
 // *********************************
@@ -285,11 +290,18 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek					( Float64 time ) 
+void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
 {
-    StopDecoding();
+    auto paused = m_decoderThread->Paused();
+    if( !paused )
+    {
+        Pause();    // pause decoding threads
+    }
 
-    FlushBuffers();
+    if( flushBuffers )
+    {
+        FlushBuffers();
+    }
 
     // seek all streams to the nearest keyframe
     for( auto & stream : m_streams )
@@ -311,8 +323,15 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
         // add first frame to the buffer
         if( decoder->ProcessPacket( m_demuxer.get() ) )
         {
-            decoder->SetOffset( decoder->GetCurrentPTS() );
+            auto currPTS = decoder->GetCurrentPTS();
+            decoder->SetOffset( currPTS );
+            stream.second->prevPTS = currPTS;
         }
+    }
+
+    if( !paused )
+    {
+        Pause();    // unpause decoding threads
     }
 }
 
@@ -320,18 +339,11 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
 //
 void					FFmpegAVDecoder::FlushBuffers			() 
 {
+    m_demuxer->ClearPacketQueue();
     for( auto & stream : m_streams )
     {
         ClearStream( stream.second );
     }
-    m_demuxer->ClearPacketQueue();
-}
-
-// *********************************
-//
-void					FFmpegAVDecoder::Reset					() 
-{
-    Seek( 0.f );
 }
 
 // *********************************
@@ -381,7 +393,7 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
         m_muted = mute;
 
-        m_decoderThread->Pause();
+        Pause();
     }
 }
 
@@ -425,7 +437,6 @@ void					FFmpegAVDecoder::ClearStream           ( StreamData * streamData )
 {
     streamData->outQueue.Clear();
     streamData->decoder->Reset();
-    streamData->prevPTS = 0;
 }
 
 // *********************************
@@ -439,10 +450,9 @@ void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 tim
         m_demuxerThread->Restart();
 
         auto ffmpegPacket = m_demuxer->GetPacket( decoder->GetStreamIdx() );
-        auto packet = ffmpegPacket->GetAVPacket();
-
-        if( packet != nullptr )
+        if( ffmpegPacket )
         {
+            auto packet = ffmpegPacket->GetAVPacket();
             currTs = packet->dts;
 	        decoder->DecodePacket( packet );
         }
