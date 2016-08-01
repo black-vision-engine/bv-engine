@@ -89,6 +89,7 @@ void                                AssetTracker::ProcessEvent          ( IEvent
                 }
             }
             break;
+
         case AssetTrackerInternalEvent::Command::StopAudio:
             {
                 auto modelNode = m_projectEditor->FindModelNodeByPlugin( typedEvent->PluginOwner );
@@ -96,6 +97,17 @@ void                                AssetTracker::ProcessEvent          ( IEvent
                 {
                     auto sceneNode = m_projectEditor->GetEngineNode( modelNode );
                     m_audioRenderer->Stop( sceneNode->GetAudio() );
+                }
+            }
+            break;
+
+        case AssetTrackerInternalEvent::Command::ReleaseAudioResource:
+            {
+                auto sceneNode = typedEvent->SceneNodeOwner;
+                if( sceneNode )
+                {
+                    auto audioEntity = sceneNode->GetAudio();
+                    m_audioRenderer->DeletePDR( audioEntity );
                 }
             }
             break;

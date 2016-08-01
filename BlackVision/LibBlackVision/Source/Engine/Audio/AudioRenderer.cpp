@@ -155,6 +155,7 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
         auto source = m_sources[ audio ];
         DeleteSinglePDR( m_sources, audio );
         DeleteSinglePDR( m_bufferMap, source );
+        m_audioEntityUpdateIDMap.erase( audio );
     }
 }
 

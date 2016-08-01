@@ -29,7 +29,7 @@ private:
     Renderer *                              m_renderer;
     audio::AudioRenderer *                  m_audioRenderer;
 
-    BVProjectEditor * m_projectEditor;
+    BVProjectEditor *                       m_projectEditor;
 
     std::map< TextureConstPtr, UInt32 >     m_registeredAssetsMap;
     std::set< TextureConstPtr >             m_unregisteredAssets;

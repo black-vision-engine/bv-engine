@@ -401,7 +401,7 @@ void                                DefaultAVDecoderPlugin::Play                
 void                                DefaultAVDecoderPlugin::Stop                ()
 {
     m_decoder->Stop();
-    TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
+    TriggerEvent( AssetTrackerInternalEvent::Command::StopAudio );
 }
 
 // *************************************
@@ -409,7 +409,7 @@ void                                DefaultAVDecoderPlugin::Stop                
 void                                DefaultAVDecoderPlugin::Pause               ()
 {
     m_decoder->Pause();
-    TriggerAudioEvent( AssetTrackerInternalEvent::Command::PauseAudio );
+    TriggerEvent( AssetTrackerInternalEvent::Command::PauseAudio );
 }
 
 // *************************************
@@ -436,7 +436,7 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::UpdateDecoderState   ( DecoderMode mode )
+void                                DefaultAVDecoderPlugin::UpdateDecoderState          ( DecoderMode mode )
 {
     switch( mode )
     {
@@ -451,7 +451,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoderState  
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::UploadVideoFrame   ()
+void                                DefaultAVDecoderPlugin::UploadVideoFrame            ()
 {
     //update texture with video data
     AVMediaData mediaData;
@@ -463,7 +463,7 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame   (
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::UploadAudioFrame   ()
+void                                DefaultAVDecoderPlugin::UploadAudioFrame            ()
 {
     //update audio data
     AVMediaData mediaData;
@@ -475,7 +475,7 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame   (
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::MarkOffsetChanges  ()
+void                                DefaultAVDecoderPlugin::MarkOffsetChanges           ()
 {
     auto counter = 0;
     const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
@@ -499,7 +499,7 @@ void                                DefaultAVDecoderPlugin::BroadcastHasFinished
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command )
+void                                DefaultAVDecoderPlugin::TriggerEvent                ( AssetTrackerInternalEvent::Command command )
 {
     auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
     evt->PluginOwner = this;

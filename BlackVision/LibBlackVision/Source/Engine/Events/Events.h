@@ -1411,6 +1411,7 @@ public:
         UnregisterAsset,
         PauseAudio,
         StopAudio,
+        ReleaseAudioResource,
         Fail            ///< Wrong command
     } Command;
 
@@ -1425,6 +1426,7 @@ public:
 
     Command                         EventCommand;
     const model::IPlugin *          PluginOwner;
+    const SceneNode *               SceneNodeOwner;
 
     ITextureDescriptorConstPtr      TextureAsset;
 
