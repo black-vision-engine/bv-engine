@@ -4096,13 +4096,13 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h">
       <Filter>Assets\SVG</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\Win32\DisableCrashReport.h">
       <Filter>Application\Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h">
       <Filter>Assets\SVG</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents</Filter>
     </ClInclude>
