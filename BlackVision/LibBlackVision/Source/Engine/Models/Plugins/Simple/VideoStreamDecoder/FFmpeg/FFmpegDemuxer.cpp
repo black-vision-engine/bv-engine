@@ -72,7 +72,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
 
     if( process )
     {
-        auto ffmpegPacket = std::make_shared< FFmpegPacket >( new AVPacket );
+        auto ffmpegPacket = std::make_shared< FFmpegPacket >();
         auto packet = ffmpegPacket->GetAVPacket();
         auto error = av_read_frame( m_formatCtx, packet );
 	    if( error < 0 ) 

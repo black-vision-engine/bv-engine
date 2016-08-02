@@ -13,7 +13,7 @@ private:
 
 public:
     
-                    FFmpegPacket    ( AVPacket * packet );
+                    FFmpegPacket    ();
                     ~FFmpegPacket   ();
 
     AVPacket *      GetAVPacket     () const;

@@ -76,7 +76,7 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
 //
 BVProject::~BVProject         ()
 {
-    m_assetTracker = nullptr;
+    m_assetTracker = nullptr;       // force asset tracker destructor first
 
     delete m_engineSceneRoot;
     delete m_projectEditor;

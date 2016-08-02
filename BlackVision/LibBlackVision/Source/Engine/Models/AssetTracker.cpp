@@ -95,7 +95,7 @@ void                                AssetTracker::ProcessEvent          ( IEvent
         case AssetTrackerInternalEvent::Command::PauseAudio:
             {
                 auto audio = GetAudio( typedEvent->PluginOwner );
-                if( m_audioRenderer && audio )
+                if( audio )
                 {
                     m_audioRenderer->Pause( audio );
                 }
@@ -105,7 +105,7 @@ void                                AssetTracker::ProcessEvent          ( IEvent
         case AssetTrackerInternalEvent::Command::StopAudio:
             {
                 auto audio = GetAudio( typedEvent->PluginOwner );
-                if( m_audioRenderer && audio )
+                if( audio )
                 {
                     m_audioRenderer->Stop( audio );
                 }
@@ -115,7 +115,7 @@ void                                AssetTracker::ProcessEvent          ( IEvent
         case AssetTrackerInternalEvent::Command::ReleaseAudioResource:
             {
                 auto audio = GetAudio( typedEvent->SceneNodeOwner );
-                if( m_audioRenderer && audio )
+                if( audio )
                 {
                     m_audioRenderer->DeletePDR( audio );
                 }

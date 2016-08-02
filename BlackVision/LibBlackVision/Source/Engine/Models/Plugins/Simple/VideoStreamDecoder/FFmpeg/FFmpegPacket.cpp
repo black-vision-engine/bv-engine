@@ -8,16 +8,16 @@ namespace bv {
 
 // *******************************
 //
-FFmpegPacket::FFmpegPacket              ( AVPacket * packet )
-	: m_packet( packet )
+FFmpegPacket::FFmpegPacket              ()
 {
+    m_packet = av_packet_alloc();
 }
 
 // *******************************
 //
 FFmpegPacket::~FFmpegPacket             ()
 {
-    av_packet_unref( m_packet );
+    av_packet_free( &m_packet );
 }
 
 // *******************************
