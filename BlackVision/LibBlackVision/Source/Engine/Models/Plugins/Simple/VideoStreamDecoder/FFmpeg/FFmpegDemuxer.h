@@ -4,6 +4,7 @@
 
 #include "FFmpegDef.h"
 #include "DataTypes/QueueConcurrent.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegPacket.h"
 
 
 namespace bv {
@@ -14,10 +15,11 @@ class FFmpegDemuxer
 
 private:
 
-    typedef std::shared_ptr< QueueConcurrent< AVPacket * > >    PacketQueue;
+    typedef std::shared_ptr< QueueConcurrent< FFmpegPacketPtr > >    PacketQueue;
 	typedef std::map< Int32, PacketQueue >			            PacketQueueMap;
 
     static const UInt32         SAFE_SEEK_FRAMES;
+    static const UInt32         MAX_QUEUE_SIZE;
 
 private:
 
@@ -35,19 +37,19 @@ private:
 
 public:
 
-								FFmpegDemuxer			( const std::string & streamPath );
+								FFmpegDemuxer			( const std::string & streamPath, UInt32 maxQueueSize = MAX_QUEUE_SIZE );
 								~FFmpegDemuxer			();
 
 	bool					    ProcessPacket			();
 
 	AVFormatContext *			GetFormatContext		() const;
-	AVPacket *					GetPacket				( Int32 streamIdx );
+	FFmpegPacketPtr				GetPacket				( Int32 streamIdx );
 
 	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
 	void						DisableStream			( AVMediaType type, UInt32 idx = 0 );
 
-	/** Accurate stream seeking.
-    @param[timestamp] timestamp in stream time base 
+	/** Non-accurate stream seeking (seek to keyframe).
+    @param[timestamp] in stream time base 
     */
 	void						Seek					( Int64 timestamp, Int32 streamIdx = -1 );
 

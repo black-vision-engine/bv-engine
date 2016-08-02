@@ -51,9 +51,12 @@ void				AVDecoderThread::Play	    ()
 {
 	{
 		std::unique_lock< std::mutex > lock( m_mutex );
-        m_paused = false;
+        if( !m_paused )
+        {
+            m_timer.Start();
+        }
 		m_stopped = false;
-        m_timer.Start();
+        m_paused = false;
 	}
 	m_cond.notify_one();
 }

@@ -38,10 +38,11 @@ public:
     
     bool    BufferData              ();
 
+    void    ClearBuffers            ();
+
 private:
 
     void    InitBuffers             ( Int32 frequency, AudioFormat format );
-    void    ClearBuffers            ();
 
 };
 

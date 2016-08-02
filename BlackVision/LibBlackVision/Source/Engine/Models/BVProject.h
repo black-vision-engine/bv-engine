@@ -12,6 +12,8 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
+#include "Engine/Models/AssetTracker.h"
+
 
 namespace bv {
 
@@ -20,6 +22,10 @@ class Camera;
 class BasicNode;
 class BVProjectEditor;
 class BVProject;
+
+namespace audio {
+    class AudioRenderer;
+}
 
 DEFINE_PTR_TYPE(BVProject)
 DEFINE_CONST_PTR_TYPE(BVProject)
@@ -33,49 +39,51 @@ private:
     
 private:
 
-    BVProjectEditor *       m_projectEditor;
-    Renderer *              m_renderer;
+    BVProjectEditor *               m_projectEditor;
+    Renderer *                      m_renderer;
+    audio::AudioRenderer *          m_audioRenderer;
 
     model::TimelineManagerPtr		m_timelineManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    model::SceneModelVec	m_sceneModelVec;
-    SceneVec                m_sceneVec;
+    model::SceneModelVec	        m_sceneModelVec;
+    SceneVec                        m_sceneVec;
     
-    model::BasicNodePtr     m_rootNode;
-    SceneNode *             m_engineSceneRoot;
+    model::BasicNodePtr             m_rootNode;
+    SceneNode *                     m_engineSceneRoot;
 
+    AssetTrackerUPtr                m_assetTracker;
 
 private:
 
-    explicit                BVProject           ( Renderer * renderer );
+    explicit                    BVProject           ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
-    void                    DetachEffect        ( SceneNode * engineNode );
+    void                        DetachEffect        ( SceneNode * engineNode );
 
 public:
 
-                            ~BVProject            ();
+                                ~BVProject          ();
 
-    static BVProjectPtr     Create              ( Renderer * renderer );
+    static BVProjectPtr         Create              ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
-    model::SceneModelPtr         GetModelScene  ( const std::string & name ) const;
-    model::SceneModelPtr         GetModelScene  ( UInt32 idx ) const;
+    model::SceneModelPtr         GetModelScene      ( const std::string & name ) const;
+    model::SceneModelPtr         GetModelScene      ( UInt32 idx ) const;
 
-    const model::SceneModelVec & GetModelScenes () const;
-    const SceneVec &             GetScenes      () const;
+    const model::SceneModelVec & GetModelScenes     () const;
+    const SceneVec &             GetScenes          () const;
 
-    StringVector            ListScenesNames     () const;
+    StringVector                ListScenesNames     () const;
 
-    void                    Serialize           ( ISerializer& ser ) const;
+    void                        Serialize           ( ISerializer & ser ) const;
 
-    virtual void            Update              ( TimeType t );
+    virtual void                Update              ( TimeType t );
 
-    model::BasicNodePtr		GetModelSceneRoot   () const;
-    SceneNode *             GetEngineSceneRoot  () const;
+    model::BasicNodePtr		    GetModelSceneRoot   () const;
+    SceneNode *                 GetEngineSceneRoot  () const;
 
-    BVProjectEditor *       GetProjectEditor    () const;
+    BVProjectEditor *           GetProjectEditor    () const;
 
-    void					SetStartTime		( unsigned long millis );
+    void					    SetStartTime		( unsigned long millis );
 
 private:
 

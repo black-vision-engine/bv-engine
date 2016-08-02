@@ -26,6 +26,10 @@ public:
     void    Stop                ();
     void    Rewind              ();
 
+    bool    IsPlaying           () const;
+    bool    IsPaused            () const;
+    bool    IsStopped           () const;
+
 };
 
 } // audio

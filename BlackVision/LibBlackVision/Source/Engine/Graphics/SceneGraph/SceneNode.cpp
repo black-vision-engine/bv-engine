@@ -9,6 +9,9 @@
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
+#include "Engine/Events/EventHandlerHelpers.h"
+#include "Engine/Events/Events.h"
+
 
 
 
@@ -140,7 +143,7 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 
 // ********************************
 //
-audio::AudioEntity *    SceneNode::GetAudio             ()
+audio::AudioEntity *    SceneNode::GetAudio             () const
 {
     return m_audio;
 }
@@ -189,8 +192,16 @@ void            SceneNode::SetAudio             ( audio::AudioEntity * audio )
 //
 void            SceneNode::DeleteAudio          ()
 {
-    delete m_audio;
-    m_audio = nullptr;
+    if( m_audio )
+    {
+        // release allocated memory for this node audio entity
+        auto evt = std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::ReleaseAudioResource );
+        evt->SceneNodeOwner = this;
+        GetDefaultEventManager().TriggerEvent( evt );
+
+        delete m_audio;
+        m_audio = nullptr;
+    }
 }
 
 // ********************************

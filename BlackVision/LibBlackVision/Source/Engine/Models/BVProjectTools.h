@@ -21,6 +21,7 @@ class RenderableArrayDataArraysSingleVertexBuffer;
 class VertexDescriptor;
 class Scene;
 class UniformBuffer;
+class AssetTracker;
 
 namespace audio {
     class AudioEntity;
@@ -67,7 +68,7 @@ public:
 
     static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
     
-    static void                 ReleaseUnusedResources              ( Renderer * renderer );
+    static void                 ReleaseUnusedResources              ( Renderer * renderer, AssetTracker * assetTracker );
 
     static ParamsOfTimelinesMap GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimeEvaluatorPtr sceneTimeline );
 

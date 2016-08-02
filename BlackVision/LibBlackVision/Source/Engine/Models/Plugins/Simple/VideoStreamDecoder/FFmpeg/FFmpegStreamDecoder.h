@@ -28,15 +28,20 @@ protected:
 
     UInt64                              m_duration;
 
+    /** Starting frame timestamp (in stream time base), updated on seeking. */
+    UInt64                              m_offset;
+
 public:
+
+    explicit                FFmpegStreamDecoder         ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize );
+    virtual                 ~FFmpegStreamDecoder        ();
 
     UInt64                  GetDuration                 () const;   
 
     virtual UInt64          GetCurrentPTS               ();
-    virtual bool            GetData                     ( AVMediaData & data );
+    virtual bool            PopData                     ( AVMediaData & data );
 	bool					IsDataQueueEmpty		    () const;
 
-    void                    ClearDataQueue              ();
 	virtual void			Reset						();
 
     virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) = 0;
@@ -44,6 +49,8 @@ public:
     virtual bool            DecodePacket                ( AVPacket * packet ) = 0;
     virtual AVMediaData     ConvertFrame                () = 0;
 
+    void                    SetOffset                   ( UInt64 offset );
+    UInt64                  GetOffset                   () const;
 
     Int32                   GetStreamIdx                () const;
 
