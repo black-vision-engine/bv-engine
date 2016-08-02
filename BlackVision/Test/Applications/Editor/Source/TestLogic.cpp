@@ -21,12 +21,12 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::RegisterConsoleInitializer();
 
 // ****************************
 //
-				TestLogic::TestLogic			( Renderer * renderer )
+				TestLogic::TestLogic			( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 	: m_renderer( renderer )
 {
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( TestSceneUtils::DefaultBVPluginDescriptors() );
 
-	m_project = BVProject::Create( m_renderer );
+	m_project = BVProject::Create( m_renderer, audioRenderer );
 
 	m_scene = std::make_shared< TestScene >( m_project.get(), renderer );
 	
@@ -98,9 +98,9 @@ void			TestLogic::Draw					( SceneNode * node )
 
 // **************************
 //
-IBasicLogicUnqPtr    TestLogic::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    TestLogic::Create  ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
-	return IBasicLogicUnqPtr( new TestLogic( renderer ) );
+	return IBasicLogicUnqPtr( new TestLogic( renderer, audioRenderer ) );
 }
 
 } // bv

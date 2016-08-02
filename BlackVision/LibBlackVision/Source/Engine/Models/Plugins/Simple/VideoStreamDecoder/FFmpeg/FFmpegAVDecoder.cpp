@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "FFmpegAVDecoder.h"
 
 #include "FFmpegUtils.h"
@@ -59,7 +58,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         }
     }
 
-    m_duration = std::max( videoDuration, audioDuration );
+    m_duration = ( std::max )( videoDuration, audioDuration );
 
 	m_decoderThread = std::unique_ptr< AVDecoderThread >( new AVDecoderThread( this ) );
    
@@ -145,7 +144,12 @@ void						FFmpegAVDecoder::Stop				()
     m_decoderThread->Stop();
     while( !m_decoderThread->Stopped() );
 
-	Reset();
+	Seek( 0.f );
+
+    for( auto & stream : m_streams )
+    {
+        stream.second->prevPTS = 0;
+    }
 }
 
 // *********************************
@@ -183,19 +187,13 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
         Seek( frameTime );
         FlushBuffers();
 
-        if( m_demuxerThread->Stopped() )
-        {
-            m_demuxerThread->Restart();
-        }
+        m_demuxerThread->Restart();
 
         auto & videoStreamData = m_streams[ AVMEDIA_TYPE_VIDEO ];
 
-        if( videoStreamData->decoderThread->Stopped() )
-        {
-            videoStreamData->decoderThread->Restart();
-        }
+        videoStreamData->decoderThread->Restart();
 
-        videoStreamData->decoder->GetData( data );
+        videoStreamData->decoder->PopData( data );
     }
 
     return data;
@@ -298,13 +296,48 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek					( Float64 time ) 
+void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
 {
-    StopDecoding();
+    auto paused = m_decoderThread->Paused();
+    if( !paused )
+    {
+        Pause();    // pause decoding threads
+    }
 
+    if( flushBuffers )
+    {
+        FlushBuffers();
+    }
+
+    // seek all streams to the nearest keyframe
     for( auto & stream : m_streams )
     {
-        Seek( stream.second->decoder.get(), time );
+        auto & decoder = stream.second->decoder;
+        auto timestamp = decoder->ConvertTime( time );
+
+	    m_demuxer->Seek( timestamp, decoder->GetStreamIdx() );
+    }
+
+    // accurate seek all stream to the given frame
+    for( auto & stream : m_streams )
+    {
+        auto & decoder = stream.second->decoder;
+        auto timestamp = decoder->ConvertTime( time );
+
+        Seek( decoder.get(), timestamp );
+
+        // add first frame to the buffer
+        if( decoder->ProcessPacket( m_demuxer.get() ) )
+        {
+            auto currPTS = decoder->GetCurrentPTS();
+            decoder->SetOffset( currPTS );
+            stream.second->prevPTS = currPTS;
+        }
+    }
+
+    if( !paused )
+    {
+        Pause();    // unpause decoding threads
     }
 }
 
@@ -312,20 +345,11 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
 //
 void					FFmpegAVDecoder::FlushBuffers			() 
 {
+    m_demuxer->ClearPacketQueue();
     for( auto & stream : m_streams )
     {
         ClearStream( stream.second );
     }
-    m_demuxer->ClearPacketQueue();
-}
-
-// *********************************
-//
-void					FFmpegAVDecoder::Reset					() 
-{
-	m_demuxer->Reset();
-    FlushBuffers();
-    Seek( 0.f );
 }
 
 // *********************************
@@ -375,7 +399,7 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
         m_muted = mute;
 
-        m_decoderThread->Pause();
+        Pause();
     }
 }
 
@@ -389,7 +413,8 @@ void					FFmpegAVDecoder::ProcessFirstVideoFrame ()
         auto & videoStreamData = m_streams[ AVMEDIA_TYPE_VIDEO ];
         while( !NextVideoDataReady( videoStreamData->decoder->GetCurrentPTS() ) )
         {
-            if( IsFinished() )
+            if( !videoStreamData->outQueue.IsEmpty()
+                || IsFinished() )
             {
                 break;
             }
@@ -418,28 +443,22 @@ void					FFmpegAVDecoder::ClearStream           ( StreamData * streamData )
 {
     streamData->outQueue.Clear();
     streamData->decoder->Reset();
-    streamData->prevPTS = 0;
 }
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Float64 time )
+void					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 timestamp )
 {
-    auto ts = decoder->ConvertTime( time );
-	m_demuxer->Seek( ts, decoder->GetStreamIdx() );
-
     Int64 currTs = 0;
-    while( currTs < ts )
+    // decode packets till reaching frame with given timestamp
+    while( currTs < timestamp )
     {
-        if( m_demuxerThread->Stopped() )
-        {
-            m_demuxerThread->Restart();
-        }
+        m_demuxerThread->Restart();
 
-        decoder->ProcessPacket( m_demuxer.get() );
-        auto packet = m_demuxer->GetPacket( decoder->GetStreamIdx() );
-        if( packet != nullptr )
+        auto ffmpegPacket = m_demuxer->GetPacket( decoder->GetStreamIdx() );
+        if( ffmpegPacket )
         {
+            auto packet = ffmpegPacket->GetAVPacket();
             currTs = packet->dts;
 	        decoder->DecodePacket( packet );
         }
@@ -458,33 +477,31 @@ bool				FFmpegAVDecoder::NextStreamDataReady	        ( AVMediaType type, UInt64 
 
     if( m_streams.count( type ) )
     {
-        auto & streamData = m_streams[ type ];
+        auto streamData = m_streams[ type ];
 
         if( time <= m_duration )
         {
-            if( m_demuxerThread->Stopped() )
-            {
-                m_demuxerThread->Restart();
-            }
+            m_demuxerThread->Restart();
+            streamData->decoderThread->Restart();
 
-            if( streamData->decoderThread->Stopped() )
+            AVMediaData data;
+            if( streamData->outQueue.IsEmpty() )
             {
-                streamData->decoderThread->Restart();
-            }
+                auto currentPTS = streamData->decoder->GetCurrentPTS();
 
-            auto currVideoPTS = streamData->decoder->GetCurrentPTS();
-            while( streamData->outQueue.IsEmpty() &&
-                !streamData->decoder->IsDataQueueEmpty() &&
-                ( currVideoPTS <= time ) &&
-                ( streamData->prevPTS <= currVideoPTS ) )
-            {
-                AVMediaData data;
-                if( streamData->decoder->GetData( data ) )
+                // find the closest frame to given time
+                while( !streamData->decoder->IsDataQueueEmpty()
+                    && ( streamData->prevPTS <= currentPTS )
+                    && ( currentPTS <= time + streamData->decoder->GetOffset() ) )
+                {
+                    success = streamData->decoder->PopData( data );
+                    currentPTS = streamData->decoder->GetCurrentPTS();
+                }
+
+                if( success )
                 {
                     streamData->outQueue.Push( data );
                     streamData->prevPTS = data.framePTS;
-                    currVideoPTS = streamData->decoder->GetCurrentPTS();
-                    success = true;
                 }
             }
         }

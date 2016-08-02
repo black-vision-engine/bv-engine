@@ -117,7 +117,7 @@ bool BasicWindowApp::OnInitialize       ()
 
     m_Renderer->SetCamera( cam );
 
-	m_appLogic = CreateLogic( m_Renderer );
+	m_appLogic = CreateLogic( m_Renderer, m_audioRenderer );
 	m_appLogic->Initialize();
 
     return true;

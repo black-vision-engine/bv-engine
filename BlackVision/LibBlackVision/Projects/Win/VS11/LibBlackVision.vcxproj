@@ -489,6 +489,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp" />
@@ -991,6 +992,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h" />

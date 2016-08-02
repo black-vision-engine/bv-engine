@@ -16,9 +16,8 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::RegisterConsoleInitializer();
 
 // ****************************
 //
-				TestLogic::TestLogic			( Renderer * renderer )
+				TestLogic::TestLogic			( Renderer *, audio::AudioRenderer * )
 {
-	{ renderer; }
 }
 
 // ****************************
@@ -64,9 +63,9 @@ void			TestLogic::Resize				( UInt32 w, UInt32 h )
 
 // **************************
 //
-IBasicLogicUnqPtr    TestLogic::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    TestLogic::Create  ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
-	return IBasicLogicUnqPtr( new TestLogic( renderer ) );
+	return IBasicLogicUnqPtr( new TestLogic( renderer, audioRenderer ) );
 }
 
 } // bv

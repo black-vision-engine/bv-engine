@@ -8,7 +8,7 @@ namespace bv {
 class BasicWindowApp : public WindowedApplication
 {
 public:
-	typedef IBasicLogicUnqPtr ( * CreateLogicFunc )( bv::Renderer * );
+    typedef IBasicLogicUnqPtr ( * CreateLogicFunc )( bv::Renderer *, bv::audio::AudioRenderer * );
 
 private:
 	static	ApplicationBase *	AppInstance;

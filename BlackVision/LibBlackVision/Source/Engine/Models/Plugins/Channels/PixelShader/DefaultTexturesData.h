@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITexturesData.h"
+#include "Engine/Events/Events.h"
+
 
 namespace bv { namespace model {
 
@@ -41,6 +43,11 @@ public:
 	void													UpdateResourceModels();
 
 	void													ClearAll			();
+
+private:
+
+    void                                                    TriggerEvent        ( AssetTrackerInternalEvent::Command command, ITextureDescriptorPtr textureDesc );
+
 };
 
 DEFINE_PTR_TYPE(DefaultTexturesData)

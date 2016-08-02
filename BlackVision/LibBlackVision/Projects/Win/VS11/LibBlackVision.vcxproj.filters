@@ -1747,6 +1747,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
       <Filter>Assets\SVG</Filter>
     </ClCompile>
@@ -4120,6 +4123,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
       <Filter>Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
+      <Filter>Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>

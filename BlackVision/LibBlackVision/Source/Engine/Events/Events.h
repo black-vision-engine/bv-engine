@@ -1400,4 +1400,47 @@ template<> std::string                  SerializationHelper::T2String      ( con
 
 DEFINE_PTR_TYPE( HightmapEvent )
 
+
+// ***************************** AssetTrackerInternalEvent *************************
+class AssetTrackerInternalEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        RegisterAsset,
+        UnregisterAsset,
+        PauseAudio,
+        StopAudio,
+        ReleaseAudioResource,
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+    
+public:
+
+    explicit                        AssetTrackerInternalEvent     ( Command eventCommand );
+
+    Command                         EventCommand;
+    const model::IPlugin *          PluginOwner;
+    const SceneNode *               SceneNodeOwner;
+
+    ITextureDescriptorConstPtr      TextureAsset;
+
+    virtual void                    Serialize           ( ISerializer & ser ) const;
+    static IEventPtr                Create              ( IDeserializer & deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string &            Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+};
+
+DEFINE_PTR_TYPE( AssetTrackerInternalEvent )
+
 } //bv

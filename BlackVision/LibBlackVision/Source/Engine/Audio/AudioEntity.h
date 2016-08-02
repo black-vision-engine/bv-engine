@@ -33,6 +33,7 @@ public:
     Int32                       GetFrequency    () const;
     AudioFormat                 GetFormat       () const;
 
+    void                        Clear           ();
     bool                        IsEmpty         () const;
 
     void                        PushData        ( const std::vector< MemoryChunkConstPtr > & data );

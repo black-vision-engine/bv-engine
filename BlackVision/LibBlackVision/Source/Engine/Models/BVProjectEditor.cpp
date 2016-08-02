@@ -1085,7 +1085,7 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
     if( plugin && assetDesc )
     {
         auto success = plugin->LoadResource( assetDesc );
-        BVProjectTools::ReleaseUnusedResources( m_project->m_renderer );
+        BVProjectTools::ReleaseUnusedResources( m_project->m_renderer, m_project->m_assetTracker.get() );
         return success;
     }
 
@@ -1865,9 +1865,41 @@ model::ITimelinePtr         BVProjectEditor::GetTimeline                ( const 
 
 // *******************************
 //
-SceneNode *             BVProjectEditor::GetEngineNode      ( model::IModelNodePtr node ) const
+SceneNode *             BVProjectEditor::GetEngineNode          ( model::IModelNodePtr node ) const
 {
     return m_nodesMapping.at( node.get() );
+}
+
+// *******************************
+//
+model::BasicNodePtr    BVProjectEditor::FindModelNodeByPlugin   ( const model::IPlugin * plugin ) const
+{
+    return FindModelNodeByPlugin( m_rootNode, plugin );
+}
+
+// *******************************
+//
+model::BasicNodePtr    BVProjectEditor::FindModelNodeByPlugin   ( model::BasicNodePtr root, const model::IPlugin * plugin ) const
+{
+    auto plugins = root->GetPluginList();
+    for( UInt32 i = 0; i < plugins->NumPlugins(); ++i )
+    {
+        if( plugins->GetPlugin( i ).get() == plugin )
+        {
+            return root;
+        }
+    }
+
+    for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+    {
+        auto node = FindModelNodeByPlugin( root->GetChild( i ), plugin );
+        if( node )
+        {
+            return node;
+        }
+    }
+
+    return nullptr;
 }
 
 // *******************************

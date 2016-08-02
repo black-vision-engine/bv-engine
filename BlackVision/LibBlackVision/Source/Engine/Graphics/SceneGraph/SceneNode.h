@@ -62,7 +62,7 @@ public:
 
     TransformableEntity *   GetTransformable    ();
 
-    audio::AudioEntity *    GetAudio            ();
+    audio::AudioEntity *    GetAudio            () const;
     void                    SetAudio            ( audio::AudioEntity * audio );
    
     NodeEffectPtr           GetNodeEffect       ();

@@ -10,6 +10,8 @@
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 
+#include "Engine/Events/Events.h"
+
 
 namespace bv { namespace model {
 
@@ -89,6 +91,12 @@ public:
 
 private:
 
+    void                                        Play                        ();
+    void                                        Stop                        ();
+    void                                        Pause                       ();
+
+    void                                        HandlePerfectLoops          ();
+
     void                                        UpdateDecoderState          ( DecoderMode mode );
 
     void                                        UpdateDecoder               ();
@@ -97,6 +105,7 @@ private:
     void                                        MarkOffsetChanges           ();
 
     void                                        BroadcastHasFinishedEvent   ();
+    void                                        TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command );
 
 };
 

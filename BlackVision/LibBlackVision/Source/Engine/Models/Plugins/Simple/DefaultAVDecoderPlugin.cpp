@@ -15,7 +15,6 @@
 
 #include "Assets/DefaultAssets.h"
 
-#include "Engine/Events/EventManager.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
@@ -35,7 +34,7 @@ const std::string        DefaultAVDecoderPlugin::PARAM::DECODER_STATE  = "state"
 const std::string        DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
-const std::string        DefaultAVDecoderPlugin::PARAM::MUTE          = "mute";
+const std::string        DefaultAVDecoderPlugin::PARAM::MUTE           = "mute";
 
 typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamEnumDM;
 
@@ -139,7 +138,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 	, m_vsc( nullptr )
 	, m_vaChannel( nullptr )
 	, m_decoder( nullptr )
-    , m_prevOffsetCounter( 1 )
+    , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
@@ -263,7 +262,6 @@ IAudioChannelPtr                    DefaultAVDecoderPlugin::GetAudioChannel     
 void                                DefaultAVDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
-    m_decoderMode =  m_decoderModeParam->Evaluate();
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
@@ -276,9 +274,9 @@ void                                DefaultAVDecoderPlugin::Update              
 	}
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
+    UpdateDecoder();
     UploadVideoFrame();
     UploadAudioFrame();
-    UpdateDecoder();
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -352,40 +350,32 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 {
     if( m_decoder )
     {
-        //order matters - update offset first then mode
-        auto offset = m_offsetParam->Evaluate();
-
-        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-
-        //edge case - loop
-        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( m_decoderMode == DecoderMode::PLAY ) )
-        {
-            m_decoder->Play();
-            m_prevOffsetCounter = 0;
-        }
-        m_prevDecoderModeTime = decoderModeTime;
-
-        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
-        {
-            //edge case - eof
-            if( m_decoderMode == DecoderMode::PLAY )
-            {
-                m_decoder->Play();
-                m_decoder->Seek( offset[ 0 ] );
-            }
-            else
-            {
-                m_decoder->Seek( offset[ 0 ] );
-                m_decoder->FlushBuffers();
-            }
-
-            m_prevOffsetCounter = offset[ 1 ];
-        }
+        m_decoderMode =  m_decoderModeParam->Evaluate();
 
         if( ParameterChanged( PARAM::DECODER_STATE ) )
         {
             UpdateDecoderState( m_decoderMode );
+        }
+
+        // edge case - looped timeline
+        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
+        if( decoderModeTime < m_prevDecoderModeTime )
+        {
+            m_prevOffsetCounter = 0;
+        }
+        m_prevDecoderModeTime = decoderModeTime;
+
+        // update offset 
+        auto offset = m_offsetParam->Evaluate();
+        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
+        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
+        {
+            m_decoder->Seek( offset[ 0 ] );
+            if( m_decoderMode != DecoderMode::PLAY )
+            {
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
+            }
+            m_prevOffsetCounter = offset[ 1 ];
         }
 
         if( ParameterChanged( PARAM::MUTE ) )
@@ -393,23 +383,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             m_decoder->Mute( m_muteParam->Evaluate() );
         }
 
-        // handle perfect loops
-        auto loopEnabled = m_loopEnabledParam->Evaluate();
-        auto loopCount = m_loopCountParam->Evaluate();
-        if( ParameterChanged( PARAM::LOOP_COUNT ) )
-        {
-            if( loopCount == 0 )
-            {
-                loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
-            }
-            m_loopCount = loopCount;
-        }
-
-        if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
-        {
-            m_decoder->Seek( 0.f );
-            m_loopCount--;
-        }
+        HandlePerfectLoops();
 
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
@@ -422,24 +396,68 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::UpdateDecoderState   ( DecoderMode mode )
+void                                DefaultAVDecoderPlugin::Play                ()
 {
-    switch( mode )
+    m_decoder->Play();
+    m_isFinished = false;
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::Stop                ()
+{
+    m_decoder->Stop();
+    TriggerEvent( AssetTrackerInternalEvent::Command::StopAudio );
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::Pause               ()
+{
+    m_decoder->Pause();
+    TriggerEvent( AssetTrackerInternalEvent::Command::PauseAudio );
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::HandlePerfectLoops  ()
+{
+    auto loopEnabled = m_loopEnabledParam->Evaluate();
+    auto loopCount = m_loopCountParam->Evaluate();
+    if( ParameterChanged( PARAM::LOOP_COUNT ) )
     {
-        case DecoderMode::PLAY:
-            m_decoder->Play();
-            m_isFinished = false;
-            break;
-        case DecoderMode::STOP:
-            m_decoder->Stop(); break;
-        case DecoderMode::PAUSE:
-            m_decoder->Pause(); break;
+        if( loopCount == 0 )
+        {
+            loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
+        }
+        m_loopCount = loopCount;
+    }
+
+    if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
+    {
+        m_decoder->Seek( 0.f, false );     // do not clear buffer
+        m_loopCount--;
     }
 }
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::UploadVideoFrame   ()
+void                                DefaultAVDecoderPlugin::UpdateDecoderState          ( DecoderMode mode )
+{
+    switch( mode )
+    {
+        case DecoderMode::PLAY:
+            Play(); break;
+        case DecoderMode::STOP:
+            Stop(); break;
+        case DecoderMode::PAUSE:
+            Pause(); break;
+    }
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::UploadVideoFrame            ()
 {
     //update texture with video data
     AVMediaData mediaData;
@@ -451,7 +469,7 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame   (
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::UploadAudioFrame   ()
+void                                DefaultAVDecoderPlugin::UploadAudioFrame            ()
 {
     //update audio data
     AVMediaData mediaData;
@@ -463,7 +481,7 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame   (
 
 // *************************************
 //
-void                                DefaultAVDecoderPlugin::MarkOffsetChanges  ()
+void                                DefaultAVDecoderPlugin::MarkOffsetChanges           ()
 {
     auto counter = 0;
     const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
@@ -483,6 +501,15 @@ void                                DefaultAVDecoderPlugin::BroadcastHasFinished
     JsonSerializeObject ser;
     evt->Serialize( ser );
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+}
+
+// *************************************
+//
+void                                DefaultAVDecoderPlugin::TriggerEvent                ( AssetTrackerInternalEvent::Command command )
+{
+    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
+    evt->PluginOwner = this;
+    GetDefaultEventManager().TriggerEvent( evt );
 }
 
 } //model

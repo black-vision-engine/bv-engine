@@ -42,10 +42,21 @@ public:
 
     void                Play                ( AudioEntity * audio );
 
+    void                Pause               ( AudioEntity * audio );
+    void                Stop                ( AudioEntity * audio );
+
+
+    void                DeletePDR                   ( const AudioEntity * audio );
+
 private:
 
-    PdrSource *             GetPdrSource            ( const AudioEntity * audio );
-    PdrAudioBuffersQueue *  GetPdrAudioBuffersQueue ( PdrSource * source, const AudioEntity * audio );
+    PdrSource *             GetPdrSource                ( const AudioEntity * audio, bool autoCreate = true );
+    PdrAudioBuffersQueue *  GetPdrAudioBuffersQueue     ( PdrSource * source, const AudioEntity * audio,  bool autoCreate = true );
+
+private:
+
+    template< typename MapType >
+    void                    DeleteSinglePDR         ( MapType & resMap, typename MapType::key_type & key );
 
 };
 

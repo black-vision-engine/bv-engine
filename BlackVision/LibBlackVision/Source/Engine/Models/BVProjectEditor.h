@@ -228,6 +228,12 @@ public:
     bool                    Undo                        ( const std::string & sceneName, UInt16 numSteps );
     bool                    Redo                        ( const std::string & sceneName, UInt16 numSteps );
 
+/* HELPERS */
+
+    SceneNode *             GetEngineNode               ( model::IModelNodePtr node ) const;
+    model::BasicNodePtr     FindModelNodeByPlugin       ( const model::IPlugin * plugin ) const;
+    model::BasicNodePtr     FindModelNodeByPlugin       ( model::BasicNodePtr node, const model::IPlugin * plugin ) const;
+
 private:
 
     /* scene helpers */
@@ -240,8 +246,6 @@ private:
     void                    MappingsCleanup     ( model::SceneModelPtr modelScene );
     void                    RemoveSceneMapping  ( model::SceneModelPtr modelScene );
     void                    UnregisterUpdaters  ( model::SceneModelPtr modelScene );
-
-    SceneNode *             GetEngineNode       ( model::IModelNodePtr node ) const;
     
     void                    AddModelScene       ( model::SceneModelPtr modelScene, UInt32 idx );
     void                    AddEngineScene      ( model::SceneModelPtr modelScene, UInt32 idx );
