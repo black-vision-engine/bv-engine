@@ -318,7 +318,7 @@ IPluginPtr                      TriangulatePluginDesc::CreatePlugin            (
 // ***********************
 //
 TriangulatePlugin::TriangulatePlugin	        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : DefaultGeometryProcessorBase( name, uid, prev, model )
+    : DefaultGeometryProcessorBase( name, uid, prev, model, PrimitiveType::PT_TRIANGLES )
 {
 }
 
@@ -331,9 +331,38 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
     if( topology != PrimitiveType::PT_LINES )
         return;
 
-    //auto chan = currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION );
+    auto chan = Cast< Float3AttributeChannel * >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ).get() );
 
-    m_vaChannel->AddConnectedComponent( currComponent );
+    auto data = chan->GetVertices();
+    assert( data.size() % 2 == 0 );
+
+    Triangulate triangulate; triangulate;
+
+
+    Vector2dVector in, out;
+    for( int i = 0; i < data.size(); i += 2 )
+    {
+        if( i == 0 || data[ i - 1 ] == data[ i ] )
+        {
+            in.push_back( Vector2d( data[ i ].x, data[ i ].y ) );
+        }
+        else
+        {
+            triangulate.Process( in, out );
+
+            auto connComp = ConnectedComponent::Create();
+            auto desc = Cast< const AttributeChannelDescriptor * >( chan->GetDescriptor() );
+            auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert",  false );
+
+            for( auto & vertex : out )
+                vertChannel->AddAttribute( glm::vec3( vertex.GetX(), vertex.GetY(), 0 ) );
+
+            connComp->AddAttributeChannel( vertChannel );
+            m_vaChannel->AddConnectedComponent( currComponent );
+        }
+    }
+        
+
 }
 
 } }

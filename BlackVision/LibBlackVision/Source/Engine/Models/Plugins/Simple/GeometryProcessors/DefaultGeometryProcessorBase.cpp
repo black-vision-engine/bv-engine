@@ -46,8 +46,9 @@ void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 
 // *************************************
 //
-DefaultGeometryProcessorBase::DefaultGeometryProcessorBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
+DefaultGeometryProcessorBase::DefaultGeometryProcessorBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model, PrimitiveType pt )
     : BasePlugin< IPlugin >( name, uid, prev, model )
+    , m_pt( pt )
 {}
 
 // *************************************
@@ -99,7 +100,7 @@ void                                DefaultGeometryProcessorBase::ProcessVertexA
 
     if( !m_vaChannel )
     {
-        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( ( m_pt == PrimitiveType::PT_TOTAL ) ? m_pt : prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
     }
     else
     {
