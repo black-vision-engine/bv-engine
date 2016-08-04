@@ -318,8 +318,23 @@ IPluginPtr                      TriangulatePluginDesc::CreatePlugin            (
 // ***********************
 //
 TriangulatePlugin::TriangulatePlugin	        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : DefaultGeometryProcessorBase( name, uid, prev, model, PrimitiveType::PT_TRIANGLES )
+    : DefaultGeometryProcessorBase( name, uid, prev, model )
 {
+}
+
+// ***********************
+//
+void TriangulatePlugin::InitializeVertexAttributesChannel()
+{
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+
+//    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+
+
+    VertexAttributesChannelDescriptor vaChannelDesc;
+    vaChannelDesc.AddAttrChannelDesc( Cast< const AttributeChannelDescriptor * >( prevGeomChannel->GetDescriptor()->GetAttrChannelDescriptor( 0 ) ) );
+
+    m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
 }
 
 // ***********************
@@ -340,9 +355,9 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
 
 
     Vector2dVector in, out;
-    for( int i = 0; i < data.size(); i += 2 )
+    for( int i = 0; i <= data.size(); i += 2 )
     {
-        if( i == 0 || data[ i - 1 ] == data[ i ] )
+        if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
         {
             in.push_back( Vector2d( data[ i ].x, data[ i ].y ) );
         }
@@ -358,11 +373,9 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
                 vertChannel->AddAttribute( glm::vec3( vertex.GetX(), vertex.GetY(), 0 ) );
 
             connComp->AddAttributeChannel( vertChannel );
-            m_vaChannel->AddConnectedComponent( currComponent );
+            m_vaChannel->AddConnectedComponent( connComp );
         }
     }
-        
-
 }
 
 } }

@@ -483,7 +483,7 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
             auto child = std::make_shared< SVGAsset >( path );
             svgtiny_parse_path( deser, child );
             mesh->AddChild( child );
-        }while( deser.NextChild() );
+        }while( deser.NextChild() ); // FIXME when Triangulate is done
         deser.ExitChild(); // path
     }
 

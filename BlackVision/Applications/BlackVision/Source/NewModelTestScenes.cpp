@@ -2060,6 +2060,8 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
     root->AddPlugin( "TRIANGULATE", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    auto success = model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    assert( success );
 
     return root;
 }

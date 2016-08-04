@@ -46,9 +46,8 @@ void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 
 // *************************************
 //
-DefaultGeometryProcessorBase::DefaultGeometryProcessorBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model, PrimitiveType pt )
+DefaultGeometryProcessorBase::DefaultGeometryProcessorBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, model )
-    , m_pt( pt )
 {}
 
 // *************************************
@@ -86,6 +85,17 @@ void                                DefaultGeometryProcessorBase::Update        
 
 // ***********************
 //
+void                                DefaultGeometryProcessorBase::InitializeVertexAttributesChannel ()
+{
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+
+    m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+}
+
+// ***********************
+//
 void                                DefaultGeometryProcessorBase::ProcessVertexAttributesChannel  ()
 {
     if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
@@ -96,16 +106,16 @@ void                                DefaultGeometryProcessorBase::ProcessVertexA
 
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 
-    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+//    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 
     if( !m_vaChannel )
     {
-        m_vaChannel = std::make_shared< VertexAttributesChannel >( ( m_pt == PrimitiveType::PT_TOTAL ) ? m_pt : prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+        InitializeVertexAttributesChannel();        
     }
     else
     {
         m_vaChannel->ClearAll();
-        m_vaChannel->SetDescriptor( vaChannelDesc );
+//        m_vaChannel->SetDescriptor( vaChannelDesc );
     }
 
     auto prevComponents = prevGeomChannel->GetComponents();

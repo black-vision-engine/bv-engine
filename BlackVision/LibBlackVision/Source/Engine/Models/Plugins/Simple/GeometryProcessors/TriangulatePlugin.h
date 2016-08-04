@@ -30,6 +30,7 @@ protected:
                                                                                     std::vector< IConnectedComponentPtr > & allComponents,
                                                                                     PrimitiveType topology );
 
+    virtual void                            InitializeVertexAttributesChannel ();
 
 public:
     explicit							    TriangulatePlugin	        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

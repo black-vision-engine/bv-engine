@@ -26,7 +26,6 @@ class DefaultGeometryProcessorBase : public BasePlugin< IPlugin >
 protected:
 
     VertexAttributesChannelPtr                  m_vaChannel;
-    PrimitiveType                               m_pt;
 
 protected:
 
@@ -38,9 +37,11 @@ protected:
                                                                                     std::vector< IConnectedComponentPtr > & allComponents,
                                                                                     PrimitiveType topology ) = 0;
 
+    virtual void                                InitializeVertexAttributesChannel ();
+
 public:
 
-    DefaultGeometryProcessorBase                ( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model, PrimitiveType pt = PrimitiveType::PT_TOTAL ); // pt = PT_TOTAL means we should keep the primitive type of previous plugin
+    DefaultGeometryProcessorBase                ( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
