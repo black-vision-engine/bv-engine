@@ -56,6 +56,9 @@
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
       <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Tools\TCPServer\Projects\Win\VS11\TCPServer.vcxproj">
       <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
     </ProjectReference>
@@ -139,7 +142,7 @@
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;$(LibBlackVisionDir);../../../../Tools/TCPServer/Source;$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -152,7 +155,7 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;$(LibBlackVisionDir);../../../../Tools/TCPServer/Source;$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -167,7 +170,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;$(LibBlackVisionDir);../../../../Tools/TCPServer/Source;$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,7 +183,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;$(LibBlackVisionDir);../../../../Tools/TCPServer/Source;$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/VideoCards/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -19,7 +19,6 @@ using namespace std;
 VideoCardManager::VideoCardManager(void)
 {
     m_SuperMagic=false;
-    bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &VideoCardManager::OnEventReceived ), bv::VideoCardEvent::Type() );
     m_Midgard = new VideoMidgard();
     m_IsEnding = false;
 	m_Enabled = false;
@@ -435,11 +434,11 @@ VideoMidgard* VideoCardManager::GetMidgard()
 
 //**************************************
 //
-void VideoCardManager::GetBufferFromRenderer	( Texture2DConstPtr buffer )
+void VideoCardManager::GetBufferFromRenderer	( MemoryChunkConstPtr data )
 {
 	auto mid = GetMidgard();
 	
-	mid->GetBufferFromRenderer( buffer );
+	mid->GetBufferFromRenderer( data );
 }
 
 //**************************************
@@ -507,7 +506,6 @@ void VideoCardManager::DisableVideoCard(int i)
 
 //**************************************
 //
-
 void VideoCardManager::Black()
 {
     //DO NOT USE WHILE CLOSING APP OR WHILE DELETING VIDEOCARDS MANAGER
@@ -519,7 +517,14 @@ void VideoCardManager::Black()
 
 //**************************************
 //
-bool VideoCardManager::InitVideoCards( const std::vector<int> & hackBuffersUids )
+void VideoCardManager::SetKey           ( bool active )
+{
+    m_key_active=active;
+}
+
+//**************************************
+//
+bool VideoCardManager::InitVideoCards   ( const std::vector<int> & hackBuffersUids )
 {
     bool result = false;
     for(unsigned int i =	0	;	i < m_VideoCards.size()	;	i++)
@@ -590,43 +595,12 @@ bool VideoCardManager::UpdateReferenceOffset( unsigned int VideoCardID, std::str
 	return GetVideoCard(VideoCardID)->UpdateReferenceOffset( ChannelName, refH, refV );
 }
 
-
-}
-}
-
 //**************************************
 //
-
-void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::IEventPtr evt )
+bool VideoCardManager::IsEnabled    () const
 {
-    if( evt->GetEventType() == bv::VideoCardEvent::Type() )
-    {
-		bv::VideoCardEventPtr videoEvent = std::static_pointer_cast<bv::VideoCardEvent>( evt );
-        VideoCardEvent::Command command = videoEvent->VideoCommand;
-
-        cout << "video : " << bv::SerializationHelper::T2String<VideoCardEvent::Command>( command ) << endl;
-
-
-        if( command == VideoCardEvent::Command::EnableOutput )
-        {
-            for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-            {
-                m_VideoCards[i]->Enable();
-            }
-        }
-        else  if( command == VideoCardEvent::Command::DisableOutput )
-        {
-            for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-            {
-                m_VideoCards[i]->Black();
-                m_VideoCards[i]->Disable();
-            }
-        }
-        else if( command == VideoCardEvent::Command::EnableKey )
-            SetKey( true );
-        else if( command == VideoCardEvent::Command::DisableKey )
-            SetKey( false );
-
-    }
-
+    return m_Enabled;
 }
+
+} //videocards
+} //bv

@@ -9,12 +9,12 @@
 #include "GlobalEffectHandler.h"
 #include "TimelineHandlers.h"
 #include "NodeLogicHandlers.h"
+#include "VideoCardEventsHandlers.h"
 
 #include "Engine/Events/EventManager.h"
 
 
-namespace bv
-{
+namespace bv {
 
 // ***********************
 //
@@ -26,7 +26,8 @@ RemoteEventsHandlers::RemoteEventsHandlers()
         m_heightmapEvents( nullptr ),
 		m_assetEvents( nullptr ),
         m_timelineHandlers( nullptr ),
-        m_nodeLogicHandlers( nullptr )
+        m_nodeLogicHandlers( nullptr ),
+        m_videoCardHandlers( nullptr )
 {}
 
 RemoteEventsHandlers::~RemoteEventsHandlers()
@@ -47,6 +48,8 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
         delete m_timelineHandlers;
     if( m_nodeLogicHandlers )
         delete m_nodeLogicHandlers;
+    if( m_videoCardHandlers )
+        delete m_videoCardHandlers;
 }
 
 // ***********************
@@ -62,6 +65,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     m_globalEffectEvents= new GlobalEffectHandler( appLogic );
     m_timelineHandlers  = new TimelineHandlers( appLogic );
     m_nodeLogicHandlers = new NodeLogicHandlers( appLogic );
+    m_videoCardHandlers = new VideoCardEventsHandlers( appLogic );
 
     
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::ParamHandler ), ParamKeyEvent::Type() );
@@ -92,8 +96,9 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineKeyframe ), TimelineKeyframeEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineHandler ), TimeLineEvent::Type() );
 
-
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::WidgetHandler ), NodeLogicEvent::Type() );
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_videoCardHandlers, &VideoCardEventsHandlers::EventHandler ), VideoCardEvent::Type() );
 
 }
 

@@ -1,48 +1,63 @@
-#include <iostream>
 #include "VideoMidgard.h"
 #include "Models/BlueFish/CFrame.h"
-namespace bv
+
+
+namespace bv { namespace videocards {
+
+//**************************************
+//
+Texture2D::Texture2D( MemoryChunkConstPtr data )
+    : m_data( data )
 {
-    namespace videocards{
+}
 
-        //**************************************
+//**************************************
+//
+MemoryChunkConstPtr     Texture2D::GetData      () const
+{
+    return m_data;
+}
 
-        VideoMidgard::VideoMidgard(void)
-        {            
-        }
+//**************************************
+//
+VideoMidgard::VideoMidgard()
+{            
+}
 
-        //**************************************
+//**************************************
 
-        VideoMidgard::~VideoMidgard(void)
-        {
-        }
+VideoMidgard::~VideoMidgard()
+{
+}
             
-        //**************************************
+//**************************************
 
-        void VideoMidgard::GetBufferFromRenderer ( Texture2DConstPtr buffer )
-        {
-            static bool makekillerframe = true;
-            m_threadsafebuffer.push( buffer );
+void VideoMidgard::GetBufferFromRenderer ( MemoryChunkConstPtr data )
+{
+    static bool makekillerframe = true;
+
+    auto buffer = std::make_shared< Texture2D >( data );
+    m_threadsafebuffer.push( buffer );
             
-			if( makekillerframe )
-            {
-                m_killerFrame = buffer;
-                makekillerframe = false;
-            }
-        }
-
-        //**************************************
-
-        void VideoMidgard::PushKillerFrame()
-        {
-            m_threadsafebuffer.push( m_killerFrame );
-        }
-       
-		ThreadSafeQueue<Texture2DConstPtr,1> & VideoMidgard::Buffer()
-		{
-			return m_threadsafebuffer;
-		}
-
+	if( makekillerframe )
+    {
+        m_killerFrame = buffer;
+        makekillerframe = false;
     }
 }
+
+//**************************************
+
+void VideoMidgard::PushKillerFrame()
+{
+    m_threadsafebuffer.push( m_killerFrame );
+}
+       
+ThreadSafeQueue< Texture2DConstPtr, 1 > & VideoMidgard::Buffer()
+{
+	return m_threadsafebuffer;
+}
+
+} //videocards
+} //bv
 

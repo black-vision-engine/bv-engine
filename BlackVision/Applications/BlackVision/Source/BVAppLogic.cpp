@@ -365,7 +365,7 @@ void BVAppLogic::ShutDown           ()
 }
 
 //pablito:
-void	BVAppLogic::SetVideoCardManager( bv::videocards::VideoCardManager* videoCardManager )
+void	                BVAppLogic::SetVideoCardManager     ( videocards::VideoCardManager * videoCardManager )
 {
         m_videoCardManager = videoCardManager;
 //        m_renderLogic->SetVideoCardManager( videoCardManager );
@@ -405,6 +405,13 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 
 // *********************************
 //
+FrameStatsCalculator *  BVAppLogic::GetStatsCalculator  ()
+{
+    return &m_statsCalculator;
+}
+
+// *********************************
+//
 const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 {
     return m_statsCalculator;
@@ -429,7 +436,7 @@ void                            BVAppLogic::ReloadScene     ()
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-BVProjectPtr                  BVAppLogic::GetBVProject              ()
+BVProjectPtr                  BVAppLogic::GetBVProject          () const
 {
     return m_bvProject;
 }
@@ -443,9 +450,23 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-RenderLogic *                   BVAppLogic::GetRenderLogic      ()
+RenderLogic *                   BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
+}
+
+// *********************************
+//
+videocards::VideoCardManager *  BVAppLogic::GetVideoCardManager      () const
+{
+    return m_videoCardManager;
+}
+
+// *********************************
+//
+RenderMode &                    BVAppLogic::GetRenderMode        () 
+{
+    return m_renderMode;
 }
 
 // *********************************

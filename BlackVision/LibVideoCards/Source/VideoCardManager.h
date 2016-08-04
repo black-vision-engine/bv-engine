@@ -5,22 +5,18 @@
 #include "VideoCardBase.h"
 #include "VideoMidgard.h"
 
-#include "Engine/Events/Interfaces/IEventManager.h"
-#include "Engine/Events/Events.h"
-#include "Engine/Events/BaseEvent.h"
 
+namespace bv { namespace videocards {
 
-namespace bv
-{
-
-namespace videocards{
 using namespace std;
+
 
 struct InputConfig
 {
     string type;
     bool playthrough;
 };
+
 
 struct OutputConfig
 {   
@@ -33,6 +29,7 @@ struct OutputConfig
     bool interlaced;
     bool flipped;
 };
+
 
 struct ChannelConfig
 {
@@ -49,6 +46,8 @@ struct ChannelConfig
         inputConfig = InputConfig();
     }
 };
+
+
 struct VideoCardConfig
 {
     string name;
@@ -56,6 +55,8 @@ struct VideoCardConfig
     unsigned int channelCount;
     vector<ChannelConfig>	channelConfigVector;
 };
+
+
 struct VideoConfig
 {
     bool ReadbackFlag;
@@ -71,19 +72,17 @@ struct VideoConfig
 };
 
 
-
-
 class VideoCardManager
 {
 private:
 
-    vector<VideoCardBase*>	m_VideoCards;
-    VideoMidgard*			m_Midgard;
-    HANDLE					m_midgardThreadHandle;
-    unsigned int			m_midgardThreadID;
-    bool					m_midgardThreadStopping;
-    bool					m_Enabled;
-    bool					m_key_active;
+    vector< VideoCardBase * >   m_VideoCards;
+    VideoMidgard *			    m_Midgard;
+    HANDLE					    m_midgardThreadHandle;
+    unsigned int			    m_midgardThreadID;
+    bool					    m_midgardThreadStopping;
+    bool					    m_Enabled;
+    bool					    m_key_active;
 
     
 public:
@@ -94,8 +93,9 @@ public:
     VideoCard_RAM_GPU       m_CurrentTransferMode;
     
     bool                    m_IsEnding;
-    void					Black();
-    void					SetKey(bool active){m_key_active=active;};
+
+    void					Black                   ();
+    void					SetKey                  ( bool active );
 
                             VideoCardManager        (void);
                             ~VideoCardManager       (void);
@@ -111,19 +111,19 @@ public:
     void                    ResumeVideoCards		();
     VideoCardBase*          GetVideoCard			(int i);
     size_t		            GetVideoCardsSize		();
-    void                    OnEventReceived         (bv::IEventPtr evt);
     void                    DeliverFrameFromRAM     (unsigned char * buffer);
     void                    DeliverFrameFromRAM     (std::shared_ptr<CFrame> buffer);
     VideoMidgard *          GetMidgard				();
-    void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
+    void					GetBufferFromRenderer	( MemoryChunkConstPtr data );
     unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     bool	                CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     void	                UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
     bool					UpdateReferenceMode		(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
     bool					UpdateReferenceOffset	(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
-    bool                    IsEnabled               (){return m_Enabled;}
+    bool                    IsEnabled               () const;
 
 private:
+
     void                    DetectVideoCards        ();
     void                    DisableVideoCard        (int i);
     void                    DisableVideoCards       ();
@@ -137,8 +137,8 @@ private:
     void                    RegisterBlackMagicCards ();    
     bool                    StopMidgardThread       ();
     unsigned int static __stdcall copy_buffer_thread      (void *args);
+
 };
 
-
-}
-}
+} //videocards
+} //bv

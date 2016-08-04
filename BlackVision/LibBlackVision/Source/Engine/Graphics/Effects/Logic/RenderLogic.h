@@ -10,6 +10,8 @@
 #include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
+#include "Mathematics/glm_inc.h"
+
 
 namespace bv {
 
@@ -39,7 +41,7 @@ class RenderLogic
 {
 private:
 
-    bv::videocards::VideoCardManager *      m_VideoCardManager;
+    videocards::VideoCardManager *  m_VideoCardManager;
     RenderTargetStackAllocator      m_rtStackAllocator;
     RenderQueueStackAllocator       m_renderQueueAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
@@ -65,11 +67,13 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
 
-//    //pablito
-//    void    SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
-//private:
-//    void    InitVideoCards      ();
-//    // pablito end
+    //pablito
+    void    SetVideoCardManager ( videocards::VideoCardManager* videoCardManager );
+
+private:
+
+    void    InitVideoCards      ();
+    // pablito end
 
 private:
 
@@ -101,7 +105,7 @@ private:
        
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 
-    //void                            PushToVideoCard         ( Texture2DConstPtr frame );
+    void                            PushToVideoCard         ( Texture2DConstPtr frame );
     void                            BlitToPreview           ( RenderTarget * rt, RenderLogicContext * ctx );
 
     void                            UpdateOffscreenState    ();

@@ -41,7 +41,8 @@ private:
     SimpleTimer                 m_timer;
 
     //pablito
-    bv::videocards::VideoCardManager m_videoCardManager;
+    videocards::VideoCardManager m_videoCardManager;
+
 public:
 
     static bool			m_sWindowedApplicationInitialized;
