@@ -206,12 +206,12 @@ bool BlackMagicVideoCard::InitVideoCard( const std::vector<int> & hackBuffersUid
 {
 	{ hackBuffersUids;}
     cout << "Initializing BlackMagic VideoCard..." << endl;
-    if(this->transferMode==GPU)
-    {
-        int result = InitSDKGPUDirect();
-        return result>0;
-    }
-    else 
+    //if(this->transferMode==GPU)
+    //{
+    //    int result = InitSDKGPUDirect();
+    //    return result>0;
+    //}
+    //else 
     {
         int result = InitSDK();
         return result>0;
@@ -238,13 +238,6 @@ bool BlackMagicVideoCard::DirectGPUPreRender()
 }
 bool BlackMagicVideoCard::DirectGPUPostRender()
 {
-    return true;
-}
-//**************************************
-//
-bool BlackMagicVideoCard::ActivateVideoCard()
-{
-
     return true;
 }
 
@@ -576,13 +569,6 @@ int BlackMagicVideoCard::InitSDK()
         return true;
 }
 
-//**************************************
-//
-bool BlackMagicVideoCard::DeactivateVideoCard()
-{
-
-    return true;
-}
 //**************************************
 //
 void BlackMagicVideoCard::InitOutputChannel()

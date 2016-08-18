@@ -1,62 +1,255 @@
 #include "VideoCardManager.h"
 #include "Tools/HRTimer.h"
-#include "models/BlackMagic/BlackMagicVideoCard.h"
-#include "models/BlueFish/BlueFishVideoCard.h"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
 
+
+#include "Models/BlackMagic/BlackMagicVideoCard.h"
+//#include "Models/BlackMagic/BlackMagicVideoCardDescriptor.h"
+#include "Models/BlueFish/BlueFishVideoCard.h"
+//#include "Models/BlackMagic/BlueFishVideoCardDescriptor.h"
+
 #include "UseLoggerVideoModule.h"
 
-namespace bv
-{
 
-namespace videocards{
-using namespace std;
+namespace bv { namespace videocards {
+
+
+//**************************************
+//
+std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
+{
+    std::vector< IVideoCardDesc * > descriptors;
+    
+    //descriptors.push_back( new BlackMagic::VideoCardDesc() );
+    //descriptors.push_back( new BlueFish::VideoCardDesc() );
+
+    return descriptors;
+}
+
+
+//**************************************
+//
+VideoCardManager VideoCardManager::m_instance;
+
+
+const UInt32    VideoCardManager::FRAMES_COUNT  = 2;
+const UInt32    VideoCardManager::FHD           = 1920 * 1080 * 4;
+const UInt32    VideoCardManager::WIDTH_BYTES   = 1920 * 4;
+
+
+//**************************************
+//
+VideoCardManager::VideoCardManager      ()
+    : m_enabled( false )
+    , m_enableInterlace( false )
+    , m_keyActive( true )
+    , m_dislpayMode( DisplayMode::HD )
+{
+    m_processingThread = std::unique_ptr< ProcessingThread >( new ProcessingThread( this ) );
+}
+
+//**************************************
+//
+VideoCardManager::~VideoCardManager     ()
+{
+    for( auto desc : m_descVec )
+    {
+        delete desc;
+    }
+}
+
+// *********************************
+//
+void                        VideoCardManager::RegisterDescriptors   ( const std::vector< IVideoCardDesc * > & descriptors )
+{
+    for( auto desc : descriptors )
+    {
+        if( !IsRegistered( desc->GetVideoCardUID() ) )
+        {
+            m_descMap[ desc->GetVideoCardUID() ] = desc;
+            m_descVec.push_back( desc );
+        }
+    }
+}
+
+// *********************************
+//
+bool                        VideoCardManager::IsRegistered          ( const std::string & uid ) const
+{
+    return ( m_descMap.find( uid ) != m_descMap.end() );
+}
+
+//**************************************
+//
+bool                        VideoCardManager::IsEnabled             () const
+{
+    return m_enabled;
+}
+
+//**************************************
+//
+void                        VideoCardManager::SetKey                ( bool active )
+{
+    m_keyActive = active;
+}
+
+//**************************************
+//
+void                        VideoCardManager::Start                 ()
+{
+    m_enabled = true;
+ //   printf("VideoCard INFO Starting video playback");
+
+    if( GetVideoCardsSize() > 0)
+    {
+        m_processingThread->Start( Thread::ThreadPriotity::TIME_CRITICAL );
+    }
+
+  //  for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+  //  {
+  //      m_VideoCards[i]->Enable();
+        //m_VideoCards[i]->StartVideoCardProccessing();
+  //  }
+}
+
+// *********************************
+//
+void                        VideoCardManager::ProcessBuffer         ()
+{
+    //static unsigned char buf[ fhd * frames_count ];
+    //static unsigned int cur_buf = 0;
+
+    MemoryChunkConstPtr data = nullptr;
+    //m_dataQueue.WaitAndPop( data );
+    while( !m_dataQueue.TryPop( data ) );
+
+    auto frameBuf = ( unsigned char * )data->Get();
+
+    //if( m_enableInterlace )
+    //{
+    //  unsigned int next_buf = ( cur_buf + 1 ) % FRAMES_COUNT;
+
+    //  memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
+    //  unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+
+    //  for( unsigned int i = 0;  i < 1080; i += 2 )
+    //  {
+    //      unsigned int cur_i = i + 1;
+    //      unsigned int prev_i = i + 1;
+
+    //      unsigned int cur_scanline = WIDTH_BYTES * cur_i;
+    //      unsigned int prev_scanline = WIDTH_BYTES * prev_i;
+
+    //      memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], WIDTH_BYTES );
+
+    //  }
+    //}
+    //cur_buf = ( cur_buf + 1 ) % frames_count; 
+
+    if( !m_keyActive )
+    {
+        for( UInt32 i = 0; i < FHD; i += 4 )
+        {
+            /*[ +i+0]=0;
+            frameBuf[ cur_scanline+i+1]=0;
+            frameBuf[ cur_scanline+i+2]=0;*/
+            frameBuf[ i + 3 ] = 0;
+        }
+    }
+       
+    DeliverFrameFromRAM( frameBuf ); 
+}
+
+// *********************************
+//
+const VideoCardManager &    VideoCardManager::Instance             ()
+{
+    return m_instance;
+}
+
+// *********************************
+//
+void                        VideoCardManager::ReadConfig            ()
+{
+    for( auto desc : m_descVec )
+    {
+        auto quantity = ConfigManager::GetInt( "VideoCards/" + desc->GetVideoCardUID() );
+
+        for( Int32 i = 0; i < quantity; ++i )
+        {
+            
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //**************************************
 //
 VideoCardManager::VideoCardManager(void)
 {
     m_SuperMagic=false;
-    m_Midgard = new VideoMidgard();
-    m_IsEnding = false;
-	m_Enabled = false;
-    m_CurrentDislpayMode = VideoCard_Modes::HD;
-    m_CurrentTransferMode = VideoCard_RAM_GPU::RAM;
     m_VideoCardConfig = VideoConfig();
-	m_key_active= true;
-	
+    
 }
 
 //**************************************
 //
 VideoCardManager::~VideoCardManager(void)
-{	
-	m_Enabled = false;
-    m_IsEnding = true;
-	if( m_midgardThreadStopping == false )
-	{
-        m_Midgard->PushKillerFrame();
-        m_Midgard->PushKillerFrame();
+{   
+    m_enabled = false;
+    //if( m_midgardThreadStopping == false )
+    {
+        //m_Midgard->PushKillerFrame();
+        //m_Midgard->PushKillerFrame();
 
-		m_midgardThreadStopping = TRUE;
-        StopMidgardThread();
+        //m_midgardThreadStopping = TRUE;
+        //StopMidgardThread();
         
         cout << "Deleting videoCards.... " << endl;
-       	for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-		{
-			m_VideoCards[i]->Disable();
-		}
+        for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+        {
+            m_VideoCards[i]->Disable();
+        }
 
-		for(auto &it:m_VideoCards) delete it; 
-		m_VideoCards.clear();
+        for(auto &it:m_VideoCards) delete it; 
+        m_VideoCards.clear();
 
-        delete m_Midgard;
-
-		cout << "VideoCardManager deleted" << endl;
+        cout << "VideoCardManager deleted" << endl;
         //system("pause");
-	}
+    }
 
 }
 
@@ -64,45 +257,18 @@ VideoCardManager::~VideoCardManager(void)
 //
 bool VideoCardManager::StopMidgardThread()
 {
-    if(m_midgardThreadHandle)
-	{
-		DWORD dw = 0;
-		cout << "Stopping Midgard Thread..." << endl;
-		dw = WaitForSingleObject(m_midgardThreadHandle, 0);
-		CloseHandle(m_midgardThreadHandle);
-		m_midgardThreadHandle = NULL;
+    //if(m_midgardThreadHandle)
+    {
+        DWORD dw = 0;
+        cout << "Stopping Midgard Thread..." << endl;
+        //dw = WaitForSingleObject(m_midgardThreadHandle, 0);
+        //CloseHandle(m_midgardThreadHandle);
+        //m_midgardThreadHandle = NULL;
     }
     return true;
 }
 
-//**************************************
-//
-void VideoCardManager::DestroyVideoCardManager()
-{
-	m_Enabled = false;
-    m_IsEnding = true;
-	if( m_midgardThreadStopping == false )
-	{
-        m_Midgard->PushKillerFrame();
-        m_Midgard->PushKillerFrame();
 
-		m_midgardThreadStopping = TRUE;
-        StopMidgardThread();
-        
-        cout << "Deleting videoCards.... " << endl;
-       	for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-		{
-			m_VideoCards[i]->Disable();
-		}
-
-		for(auto &it:m_VideoCards) delete it; 
-		m_VideoCards.clear();
-
-        delete m_Midgard;
-
-		cout << "VideoCardManager deleted" << endl;
-	}
-}
 //**************************************
 //
 
@@ -110,19 +276,19 @@ void VideoCardManager::DestroyVideoCardManager()
 bool VideoCardManager::InitVideoCardManager(const std::vector<int> & hackBuffersUids)
 {
     SetupVideoChannels();
-	if(GetVideoCardsSize() > 0)
-	{        
-		InitVideoCards( hackBuffersUids );
+    if(GetVideoCardsSize() > 0)
+    {        
+        InitVideoCards( hackBuffersUids );
     
         LOG_MESSAGE( SeverityLevel::info ) << "Detected " + to_string( GetVideoCardsSize() ) + " videocard(s)";
-		
-		return true;
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "NO VIDEO CARDS DETECTED";
-		return false;
-	}
+        
+        return true;
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "NO VIDEO CARDS DETECTED";
+        return false;
+    }
 }
 
 
@@ -130,8 +296,7 @@ bool VideoCardManager::InitVideoCardManager(const std::vector<int> & hackBuffers
 //
 void VideoCardManager::Enable()
 {
-    m_IsEnding = false;
-    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+    for( UInt32 i = 0; i < m_VideoCards.size(); ++i )
     {
         m_VideoCards[i]->Enable();
     }
@@ -141,8 +306,7 @@ void VideoCardManager::Enable()
 //
 void VideoCardManager::Disable()
 {
-    m_IsEnding = true;
-    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+    for( UInt32 i = 0; i < m_VideoCards.size(); ++i )
     {
         m_VideoCards[i]->Black();
         m_VideoCards[i]->Disable();
@@ -180,7 +344,7 @@ void VideoCardManager::SetupVideoChannels()
                     m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].playback,
                     m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].capture,
                     m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].inputConfig.playthrough,
-					m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].inputConfig.type,
+                    m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].inputConfig.type,
                     m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.referenceMode,
                     m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.refH,
                     m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.refV);
@@ -222,145 +386,119 @@ void VideoCardManager::ReadConfig()
 
     if(m_VideoCardConfig.resolutionOld=="SD")
     {
-        m_CurrentDislpayMode =  VideoCard_Modes::SD;
+        m_dislpayMode =  DisplayMode::SD;
     }
-
-    if(m_VideoCardConfig.transferMode=="GPU")
-    {
-        m_CurrentTransferMode =  VideoCard_RAM_GPU::GPU;
-    }
-
 }
 
-//**************************************
+
 //
-void VideoCardManager::StartVideoCards()
-{
-	m_Enabled = true;
-    printf("VideoCard INFO Starting video playback");
+////**************************************
+////
+//void VideoCardManager::StopVideoCards()
+//{
+//    Disable();
+//}
 
-    if(m_CurrentTransferMode == RAM && GetVideoCardsSize() > 0)
-    {
-		m_midgardThreadID = 0;  
-		m_midgardThreadHandle = (HANDLE)_beginthreadex(NULL, 0, &copy_buffer_thread, this, NULL, &m_midgardThreadID);  
-		m_midgardThreadStopping = FALSE;
-		SetThreadPriority(m_midgardThreadHandle, THREAD_PRIORITY_TIME_CRITICAL);
-		ResumeThread(m_midgardThreadHandle);
-    }
-
-    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-    {
-        m_VideoCards[i]->Enable();
-		m_VideoCards[i]->StartVideoCardProccessing();
-    }
-}
-
-
-//**************************************
+////**************************************
+////
+//void VideoCardManager::SuspendVideoCards()
+//{
+//    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+//    {
+//      m_VideoCards[i]->SuspendVideoCardProccessing();
+//    }
+//}
 //
-void VideoCardManager::StopVideoCards()
-{
-    Disable();
-}
-
-//**************************************
+////**************************************
+////
+//void VideoCardManager::ResumeVideoCards()
+//{
+//    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+//    {
+//      m_VideoCards[i]->ResumeVideoCardProccessing();
+//    }
+//}
+////**************************************
+////
+//unsigned int __stdcall VideoCardManager::copy_buffer_thread( void * args )
+//{
+//  VideoCardManager* pParams = (VideoCardManager*)args;
+//    static const unsigned int frames_count = 2;
+//    static const unsigned int fhd = 1920 * 1080 * 4;
+//    static const unsigned int width_bytes = 1920 * 4;
+//    static unsigned char buf[ fhd * frames_count ];
+//    static unsigned int cur_buf = 0;
+//    static int counter=0;
 //
-void VideoCardManager::SuspendVideoCards()
-{
-    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-    {
-		m_VideoCards[i]->SuspendVideoCardProccessing();
-    }
-}
-
-//**************************************
+//    static double max_readback=0;
+//    bv::HighResolutionTimer GTimer;
+//    //unsigned char * FinalFrame = new unsigned char[fhd];
 //
-void VideoCardManager::ResumeVideoCards()
-{
-    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-    {
-		m_VideoCards[i]->ResumeVideoCardProccessing();
-    }
-}
-//**************************************
+//    while( !pParams->m_midgardThreadStopping )
+//    {
+//        //double writeStart = GTimer.CurElapsed();
 //
-unsigned int __stdcall VideoCardManager::copy_buffer_thread( void * args )
-{
-	VideoCardManager* pParams = (VideoCardManager*)args;
-    static const unsigned int frames_count = 2;
-    static const unsigned int fhd = 1920 * 1080 * 4;
-    static const unsigned int width_bytes = 1920 * 4;
-    static unsigned char buf[ fhd * frames_count ];
-    static unsigned int cur_buf = 0;
-    static int counter=0;
-
-    static double max_readback=0;
-    bv::HighResolutionTimer GTimer;
-    //unsigned char * FinalFrame = new unsigned char[fhd];
-
-    while( !pParams->m_midgardThreadStopping )
-    {
-        //double writeStart = GTimer.CurElapsed();
-
-		auto mid = pParams->GetMidgard();
-		auto & buf_ = mid->Buffer();
-		auto frame = buf_.pop();
-
-		assert( frame );
-
-		auto data = frame->GetData();
-
-		assert( data );
-
-		auto rawData = (unsigned char*)data->Get();
-
-        unsigned char *  frameBuf = rawData;
-
-		bool enable_interlace = false;
-		if(enable_interlace)
-		{
-			 unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
-
-			memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
-			unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
-
-			for( unsigned int i = 0;  i < 1080; i += 2 )
-			{
-				unsigned int cur_i = i + 1;
-				unsigned int prev_i = i + 1;
-
-				unsigned int cur_scanline = width_bytes * cur_i;
-				unsigned int prev_scanline = width_bytes * prev_i;
-
-				memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
-
-			}
-		}
-		if(!pParams->m_key_active)
-			{
-				for(int i=0;i<1920*1080*4;i+=4)
-				{
-					/*[ +i+0]=0;
-					frameBuf[ cur_scanline+i+1]=0;
-					frameBuf[ cur_scanline+i+2]=0;*/
-					frameBuf[ i+3 ]=0;
-				}
-			}
-       
-		pParams->DeliverFrameFromRAM( frameBuf ); 
-
-        cur_buf = ( cur_buf + 1 ) % frames_count; 
-    }
-	cout << "Midgard Thread stopped..." << endl;
-    _endthreadex(0);
-    return true;
-}
+//      auto mid = pParams->GetMidgard();
+//      auto & buf_ = mid->Buffer();
+//      auto frame = buf_.pop();
+//
+//      assert( frame );
+//
+//      auto data = frame->GetData();
+//
+//      assert( data );
+//
+//      auto rawData = (unsigned char*)data->Get();
+//
+//        unsigned char *  frameBuf = rawData;
+//
+//      bool enable_interlace = false;
+//      if(enable_interlace)
+//      {
+//           unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
+//
+//          memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
+//          unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+//
+//          for( unsigned int i = 0;  i < 1080; i += 2 )
+//          {
+//              unsigned int cur_i = i + 1;
+//              unsigned int prev_i = i + 1;
+//
+//              unsigned int cur_scanline = width_bytes * cur_i;
+//              unsigned int prev_scanline = width_bytes * prev_i;
+//
+//              memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
+//
+//          }
+//      }
+//      if(!pParams->m_key_active)
+//          {
+//              for(int i=0;i<1920*1080*4;i+=4)
+//              {
+//                  /*[ +i+0]=0;
+//                  frameBuf[ cur_scanline+i+1]=0;
+//                  frameBuf[ cur_scanline+i+2]=0;*/
+//                  frameBuf[ i+3 ]=0;
+//              }
+//          }
+//       
+//      pParams->DeliverFrameFromRAM( frameBuf ); 
+//
+//        cur_buf = ( cur_buf + 1 ) % frames_count; 
+//    }
+//  cout << "Midgard Thread stopped..." << endl;
+//    _endthreadex(0);
+//    return true;
+//}
 
 
 //**************************************
 //
 void VideoCardManager::RegisterBlueFishCards()
 {
+    //CBlueVelvet4Ptr pSDK( BlueVelvetFactory4() );
+
     int numCards=0;
     CBlueVelvet4* BlueFishSDK = BlueVelvetFactory4();
     BlueFishSDK->device_enumerate(numCards);
@@ -379,12 +517,12 @@ void VideoCardManager::RegisterBlackMagicCards()
     int numCards = 0;
     //IDeckLink *deckLink=NULL;
     //CoInitialize(NULL);
-    //IDeckLinkIterator* pDLIterator = NULL;	
+    //IDeckLinkIterator* pDLIterator = NULL;    
     //CoCreateInstance(CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, (void**)&pDLIterator);
     //while (pDLIterator->Next(&deckLink) == S_OK)
    // {
         m_VideoCards.push_back((VideoCardBase*) new BlackMagicVideoCard(numCards+1));
-        numCards++;	
+        numCards++; 
     //}
 
 
@@ -392,117 +530,104 @@ void VideoCardManager::RegisterBlackMagicCards()
 
     printf("VideoCards INFO Registered Black Magic video cards: %d \n", numCards);
 }
-//**************************************
+////**************************************
+////
+//void VideoCardManager::RegisterVideoCards()
+//{
+//    RegisterBlueFishCards();   
+//    RegisterBlackMagicCards();
+//}
+
+////**************************************
+////
+//void VideoCardManager::DetectVideoCards()
+//{
+//    int numCards = 0;
+//    CBlueVelvet4* BlueFishSDK = BlueVelvetFactory4();
+//    BlueFishSDK->device_enumerate(numCards);
+//    printf("VideoCards INFO Detected BlueFish video cards: %d \n",numCards);
+//    delete BlueFishSDK;
+//    numCards = 0;
 //
-void VideoCardManager::RegisterVideoCards()
-{
-    RegisterBlueFishCards();   
-    RegisterBlackMagicCards();
-}
-
-//**************************************
-//
-void VideoCardManager::DetectVideoCards()
-{
-    int numCards = 0;
-    CBlueVelvet4* BlueFishSDK = BlueVelvetFactory4();
-    BlueFishSDK->device_enumerate(numCards);
-    printf("VideoCards INFO Detected BlueFish video cards: %d \n",numCards);
-    delete BlueFishSDK;
-    numCards = 0;
-
-    IDeckLink *deckLink=NULL;
-    CoInitialize(NULL);
-    IDeckLinkIterator* pDLIterator = NULL;	
-    CoCreateInstance(CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, (void**)&pDLIterator);
-    while (pDLIterator->Next(&deckLink) == S_OK)
-    {
-        numCards++;	
-    }
-    pDLIterator->Release();
-    delete deckLink;
-    printf("VideoCards INFO Detected BlueFish video cards: %d \n",numCards);
-}
-
-//**************************************
-//
-
-VideoMidgard* VideoCardManager::GetMidgard()
-{
-	return m_Midgard;
-}
+//    IDeckLink *deckLink=NULL;
+//    CoInitialize(NULL);
+//    IDeckLinkIterator* pDLIterator = NULL;    
+//    CoCreateInstance(CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, (void**)&pDLIterator);
+//    while (pDLIterator->Next(&deckLink) == S_OK)
+//    {
+//        numCards++;   
+//    }
+//    pDLIterator->Release();
+//    delete deckLink;
+//    printf("VideoCards INFO Detected BlueFish video cards: %d \n",numCards);
+//}
 
 //**************************************
 //
-void VideoCardManager::GetBufferFromRenderer	( MemoryChunkConstPtr data )
+void VideoCardManager::PushDataFromRenderer     ( MemoryChunkConstPtr data )
 {
-	auto mid = GetMidgard();
-	
-	mid->GetBufferFromRenderer( data );
+    m_dataQueue.Push( data );
 }
 
 //**************************************
 //
 void VideoCardManager::DeliverFrameFromRAM(unsigned char * buffer)
 {
-	if(m_VideoCards[0]!=nullptr)
-	{		 
-		for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-		{
-			//if(m_VideoCards[i]->IsActive())
-				m_VideoCards[i]->DeliverFrameFromRAM(buffer);
-		}    
-	}
-}
-
-//**************************************
-//
-void VideoCardManager::DeliverFrameFromRAM(shared_ptr<CFrame> buffer)
-{
-	if(m_VideoCards[0]!=nullptr)
-	{		 
-		for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-		{
-			//if(m_VideoCards[i]->IsActive())
-				m_VideoCards[i]->DeliverFrameFromRAM(buffer);
-		}    
-	}
-}
-
-
-//**************************************
-//
-void VideoCardManager::EnableVideoCards()
-{
     for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
     {
-        m_VideoCards[i]->Enable();
-    }
+        //if(m_VideoCards[i]->IsActive())
+            m_VideoCards[i]->DeliverFrameFromRAM(buffer);
+    }    
 }
-
-//**************************************
 //
-void VideoCardManager::EnableVideoCard(int i)
-{
-    m_VideoCards[i]->Enable(); 
-}
+////**************************************
+////
+//void VideoCardManager::DeliverFrameFromRAM(shared_ptr<CFrame> buffer)
+//{
+//  if(m_VideoCards[0]!=nullptr)
+//  {        
+//      for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+//      {
+//          //if(m_VideoCards[i]->IsActive())
+//              m_VideoCards[i]->DeliverFrameFromRAM(buffer);
+//      }    
+//  }
+//}
 
-//**************************************
-//
-void VideoCardManager::DisableVideoCards()
-{
-    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
-    {
-        m_VideoCards[i]->Disable();
-    }
-}
 
-//**************************************
+////**************************************
+////
+//void VideoCardManager::EnableVideoCards()
+//{
+//    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+//    {
+//        m_VideoCards[i]->Enable();
+//    }
+//}
 //
-void VideoCardManager::DisableVideoCard(int i)
-{
-    m_VideoCards[i]->Disable();
-}
+////**************************************
+////
+//void VideoCardManager::EnableVideoCard(int i)
+//{
+//    m_VideoCards[i]->Enable(); 
+//}
+//
+////**************************************
+////
+//void VideoCardManager::DisableVideoCards()
+//{
+//    for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+//    {
+//        m_VideoCards[i]->Disable();
+//    }
+//}
+//
+////**************************************
+////
+//void VideoCardManager::DisableVideoCard(int i)
+//{
+//    m_VideoCards[i]->Disable();
+//}
 
 //**************************************
 //
@@ -515,23 +640,16 @@ void VideoCardManager::Black()
     }
 }
 
-//**************************************
-//
-void VideoCardManager::SetKey           ( bool active )
-{
-    m_key_active=active;
-}
 
 //**************************************
 //
 bool VideoCardManager::InitVideoCards   ( const std::vector<int> & hackBuffersUids )
 {
     bool result = false;
-    for(unsigned int i =	0	;	i < m_VideoCards.size()	;	i++)
+    for(unsigned int i =    0   ;   i < m_VideoCards.size() ;   i++)
     {
         m_VideoCards[i]->SuperMagic = this->m_SuperMagic;
-        m_VideoCards[i]->mode = this->m_CurrentDislpayMode;
-        m_VideoCards[i]->SetTransferMode(this->m_CurrentTransferMode);
+        m_VideoCards[i]->mode = this->m_dislpayMode;
 
         result = m_VideoCards[i]->InitVideoCard( hackBuffersUids );
     }
@@ -539,18 +657,17 @@ bool VideoCardManager::InitVideoCards   ( const std::vector<int> & hackBuffersUi
     return result;
 }
 
-//**************************************
+////**************************************
+////
+//bool VideoCardManager::InitVideoCard( int i, const std::vector<int> & hackBuffersUids )
+//{
+//    bool result = false;
+//    m_VideoCards[i]->SuperMagic = this->m_SuperMagic;
+//    m_VideoCards[i]->mode = this->m_dislpayMode;
 //
-bool VideoCardManager::InitVideoCard( int i, const std::vector<int> & hackBuffersUids )
-{
-    bool result = false;
-    m_VideoCards[i]->SuperMagic = this->m_SuperMagic;
-    m_VideoCards[i]->mode = this->m_CurrentDislpayMode;
-    m_VideoCards[i]->SetTransferMode(this->m_CurrentTransferMode);
-
-    result = m_VideoCards[i]->InitVideoCard( hackBuffersUids );
-    return result;
-}
+//    result = m_VideoCards[i]->InitVideoCard( hackBuffersUids );
+//    return result;
+//}
 
 //**************************************
 //
@@ -570,7 +687,7 @@ size_t VideoCardManager::GetVideoCardsSize()
 //
 unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/ )
 {
-	return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
+    return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
 }
   
 bool VideoCardManager::CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
@@ -585,21 +702,14 @@ void   VideoCardManager::UnblockCaptureQueue                     (unsigned int V
 //
 bool VideoCardManager::UpdateReferenceMode( unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ )
 {
-	return GetVideoCard(VideoCardID)->UpdateReferenceMode( ChannelName, ReferenceModeName );
+    return GetVideoCard(VideoCardID)->UpdateReferenceMode( ChannelName, ReferenceModeName );
 }
 
 //**************************************
 //
 bool VideoCardManager::UpdateReferenceOffset( unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV )
 {
-	return GetVideoCard(VideoCardID)->UpdateReferenceOffset( ChannelName, refH, refV );
-}
-
-//**************************************
-//
-bool VideoCardManager::IsEnabled    () const
-{
-    return m_Enabled;
+    return GetVideoCard(VideoCardID)->UpdateReferenceOffset( ChannelName, refH, refV );
 }
 
 } //videocards

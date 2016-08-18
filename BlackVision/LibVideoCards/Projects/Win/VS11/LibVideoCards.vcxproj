@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h" />
@@ -28,6 +30,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoCapture.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Utils.h" />
+    <ClInclude Include="..\..\..\Source\ProcessingThread.h" />
     <ClInclude Include="..\..\..\Source\ThreadSafeQueue.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
     <ClInclude Include="..\..\..\Source\VideoCardBase.h" />
@@ -46,6 +49,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoCapture.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp" />
+    <ClCompile Include="..\..\..\Source\ProcessingThread.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardBase.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
     <ClCompile Include="..\..\..\Source\VideoMidgard.cpp" />
@@ -101,29 +105,37 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

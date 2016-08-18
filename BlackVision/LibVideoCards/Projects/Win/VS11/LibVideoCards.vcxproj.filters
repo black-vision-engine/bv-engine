@@ -10,6 +10,9 @@
     <Filter Include="Models\BlueFish">
       <UniqueIdentifier>{8d68cc69-43b9-4206-be28-41a412ead2cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{889608f3-1e44-4bad-8852-04d42962c23a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Utils.h">
@@ -46,6 +49,13 @@
     <ClInclude Include="..\..\..\Source\VideoCardBase.h" />
     <ClInclude Include="..\..\..\Source\ThreadSafeQueue.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProcessingThread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp">
@@ -80,5 +90,6 @@
     <ClCompile Include="..\..\..\Source\VideoMidgard.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardBase.cpp" />
+    <ClCompile Include="..\..\..\Source\ProcessingThread.cpp" />
   </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@ public:
 	BLUE_INT32						Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer);
 	void							RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType);
 	unsigned int static __stdcall	CaptureThread(void * pArg);
-	unsigned int static __stdcall	InputMidgardThread( void * pArg );
+	//unsigned int static __stdcall	InputMidgardThread( void * pArg );
 	BLUE_INT32						InitThread();
 	void							StartCaptureThread();
 	void							ResumeCaptureThread();

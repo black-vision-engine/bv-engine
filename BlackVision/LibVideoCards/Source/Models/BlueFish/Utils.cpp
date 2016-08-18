@@ -2,10 +2,39 @@
 #include "win_sock.h"
 #include "BLueFish/Inc/BlueVelvet4.h"
 #include "Utils.h"
-namespace bv
-{
 
-namespace videocards{
+
+namespace bv { namespace videocards { namespace bluefish {
+    
+//**************************************
+//
+template< typename T >
+T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s )
+{
+    int i = 0;
+    while( strcmp( t2s[i].second, "" ) )
+    {
+        if( t2s[i].second == s )
+            return t2s[i].first;
+        ++i;
+    }
+    return T(0);
+}
+
+//**************************************
+//
+template< typename T >
+std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
+{
+    for( int i = 0; ; i++ )
+        if( t2s[i].first == t )
+            return t2s[i].second;
+        else if( strcmp( t2s[i].second, "" ) == 0 )
+            return "";
+}
+
+//**************************************
+//
 struct blue_videomode_info gVideoModeInfo[] = {
 	{false,4.0,3.0,"PAL",VID_FMT_PAL,576,720,25,false,false,{1920,1920,1920,1920,1920}},
 	{false,4.0,3.0,"NTSC",VID_FMT_NTSC,486,720,30,true,false,{1602,1601,1602,1601,1602}},
@@ -101,5 +130,7 @@ void BlueMemZero(void* pData, size_t size)
 		memset(pData, 0, size);
 	}
 }
-}
-}
+
+} //bluefish
+} //videocards
+} //bv

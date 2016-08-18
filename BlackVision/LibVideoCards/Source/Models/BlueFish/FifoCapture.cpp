@@ -327,59 +327,60 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 }
 
 
-unsigned int __stdcall CFifoCapture::InputMidgardThread(void * pArg)
-{
-	static const unsigned int frames_count = 2;
-    static const unsigned int fhd = 1920 * 1080 * 4;
-    static const unsigned int width_bytes = 1920 * 4;
-    static unsigned char buf[ fhd * frames_count ];
-    static unsigned int cur_buf = 0;
-    static int counter=0;
+//unsigned int __stdcall CFifoCapture::InputMidgardThread(void * pArg)
+//{
+//	static const unsigned int frames_count = 2;
+//    static const unsigned int fhd = 1920 * 1080 * 4;
+//    static const unsigned int width_bytes = 1920 * 4;
+//    static unsigned char buf[ fhd * frames_count ];
+//    static unsigned int cur_buf = 0;
+//    static int counter=0;
+//
+//	CFifoCapture* pThis = (CFifoCapture*)pArg;
+//
+//	std::shared_ptr<CFrame> Frame1 = std::make_shared<CFrame>(1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine);
+//	std::shared_ptr<CFrame> Frame2 = std::make_shared<CFrame>(1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine);
+//
+//	unsigned char* FinalFrame = (unsigned char*)VirtualAlloc(NULL, fhd, MEM_COMMIT, PAGE_READWRITE);
+//	if(FinalFrame)
+//		VirtualLock(FinalFrame, fhd);
+//
+//	bool mix = false;
+//	while(!pThis->m_nMidgardInputThreadStopping)
+//	{	
+//		if(mix)
+//		{
+//			Frame1 =  pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
+//			for( unsigned int i = 0; i < 1080; i += 2 )
+//			{
+//				//unsigned int cur_i = i + 1;
+//
+//				unsigned int cur_scanline = width_bytes * i;
+//				memcpy(&Frame2->m_pBuffer[ cur_scanline ], &Frame1->m_pBuffer[ cur_scanline ], width_bytes );
+//			}
+//			pThis->m_InputMidgardFifoBuffer->m_threadsafebuffer.push(std::make_shared<CFrame>(Frame2->m_pBuffer,1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine));	
+//			mix = false;
+//		}
+//		else
+//		{
+//			Frame2 =  pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
+//			for( unsigned int i = 1; i < 1080; i += 2 )
+//			{
+//				//unsigned int cur_i = i + 1;
+//
+//				unsigned int cur_scanline = width_bytes * i;
+//				memcpy(&Frame1->m_pBuffer[ cur_scanline ], &Frame2->m_pBuffer[ cur_scanline ], width_bytes );
+//			}
+//			pThis->m_InputMidgardFifoBuffer->m_threadsafebuffer.push(std::make_shared<CFrame>(Frame1->m_pBuffer,1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine));	
+//			mix = true;
+//		}
+//	}
+//
+//	Frame1.reset();
+//	Frame2.reset();
+//	_endthreadex(0);
+//	return 0;
+//}
 
-	CFifoCapture* pThis = (CFifoCapture*)pArg;
-
-	std::shared_ptr<CFrame> Frame1 = std::make_shared<CFrame>(1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine);
-	std::shared_ptr<CFrame> Frame2 = std::make_shared<CFrame>(1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine);
-
-	unsigned char* FinalFrame = (unsigned char*)VirtualAlloc(NULL, fhd, MEM_COMMIT, PAGE_READWRITE);
-	if(FinalFrame)
-		VirtualLock(FinalFrame, fhd);
-
-	bool mix = false;
-	while(!pThis->m_nMidgardInputThreadStopping)
-	{	
-		if(mix)
-		{
-			Frame1 =  pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
-			for( unsigned int i = 0; i < 1080; i += 2 )
-			{
-				//unsigned int cur_i = i + 1;
-
-				unsigned int cur_scanline = width_bytes * i;
-				memcpy(&Frame2->m_pBuffer[ cur_scanline ], &Frame1->m_pBuffer[ cur_scanline ], width_bytes );
-			}
-			pThis->m_InputMidgardFifoBuffer->m_threadsafebuffer.push(std::make_shared<CFrame>(Frame2->m_pBuffer,1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine));	
-			mix = false;
-		}
-		else
-		{
-			Frame2 =  pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
-			for( unsigned int i = 1; i < 1080; i += 2 )
-			{
-				//unsigned int cur_i = i + 1;
-
-				unsigned int cur_scanline = width_bytes * i;
-				memcpy(&Frame1->m_pBuffer[ cur_scanline ], &Frame2->m_pBuffer[ cur_scanline ], width_bytes );
-			}
-			pThis->m_InputMidgardFifoBuffer->m_threadsafebuffer.push(std::make_shared<CFrame>(Frame1->m_pBuffer,1,pThis->m_pFifoBuffer->m_GoldenSize,pThis->m_pFifoBuffer->m_BytesPerLine));	
-			mix = true;
-		}
-	}
-
-	Frame1.reset();
-	Frame2.reset();
-	_endthreadex(0);
-	return 0;
-}
 }
 }
