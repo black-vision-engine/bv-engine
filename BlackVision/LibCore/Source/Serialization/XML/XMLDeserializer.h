@@ -35,11 +35,14 @@ private:
 
 public:
 
-    XMLDeserializer     ( const std::string & filename, DeserializeContext * context );
-    XMLDeserializer     ( std::istream & in, SizeType numBytes, DeserializeContext * context );
+                                                    XMLDeserializer         ();
+                                                    XMLDeserializer         ( const std::string & filename, DeserializeContext * context );
+                                                    XMLDeserializer         ( std::istream & in, SizeType numBytes, DeserializeContext * context );
     
-    virtual ~XMLDeserializer    ();
+    virtual                                         ~XMLDeserializer        ();
 
+    bool                                            LoadFile                ( const std::string & fileName );
+    bool						                    Load                    ( const std::string & xmlString );
 
     virtual DeserializeContext *                    GetDeserializeContext   () const;
 

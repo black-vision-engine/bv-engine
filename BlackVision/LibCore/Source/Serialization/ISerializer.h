@@ -4,6 +4,7 @@
 
 #include <string>
 
+
 namespace bv {
 
 
@@ -14,13 +15,10 @@ enum FormatStyle
 };
 
 
-
-
 class ISerializer
 {
-    friend class IDeserializer;
-private:
-protected:
+friend class IDeserializer;
+
 public:
     virtual ~ISerializer() {};
 
@@ -51,7 +49,5 @@ public:
     virtual bool                AttachBranch        ( const std::string & name, const IDeserializer * ser ) = 0;
 };
 
-
-
-};
+} //bv
 

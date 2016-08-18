@@ -1,21 +1,20 @@
-#include "stdafx.h"
-
 #include "XMLDeserializer.h"
 
 #include "System/Path.h"
 #include "IO/FileIO.h"
 
-#include "Serialization/BV/BVDeserializeContext.h"
-
 #include "rapidxml/RapidXml.hpp"
 
 
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
+
+// *******************************
+//
+XMLDeserializer::XMLDeserializer()
+    : m_rootDoc( new rapidxml::xml_document<> )
+    , m_context( nullptr )
+{
+}
 
 // *******************************
 //
@@ -23,21 +22,7 @@ XMLDeserializer::XMLDeserializer        ( const std::string & fileName, Deserial
     : m_rootDoc( new rapidxml::xml_document<> )
     , m_context( std::unique_ptr< DeserializeContext >( context ) ) 
 { 
-    assert( Path::Exists( fileName ) );
-
-    auto size = File::Size( fileName );
-
-    m_buf = new char[ size + 1 ];
-
-    auto bytesRead = File::Read( m_buf, fileName );
-    { bytesRead; }
-
-    m_buf[ size ] = '\0';
-
-    m_rootDoc->parse<0>( m_buf );
-    m_doc = m_rootDoc;
-
-    m_nodes.push( m_doc );
+    LoadFile( fileName );
 }
 
 // *******************************
@@ -64,6 +49,47 @@ XMLDeserializer::~XMLDeserializer()
 {
     delete m_rootDoc;
     delete [] m_buf;
+}
+
+// ***********************
+//
+bool XMLDeserializer::LoadFile        ( const std::string & fileName )
+{
+    if( Path::Exists( fileName ) )
+    {
+        auto size = File::Size( fileName );
+
+        m_buf = new char[ size + 1 ];
+
+        auto bytesRead = File::Read( m_buf, fileName );
+        { bytesRead; }
+
+        m_buf[ size ] = '\0';
+
+        m_rootDoc->parse< 0 >( m_buf );
+        m_doc = m_rootDoc;
+
+        m_nodes.push( m_doc );
+
+        return true;
+    }
+
+    return false;
+}
+
+// ***********************
+//
+bool XMLDeserializer::Load                ( const std::string & xmlString )
+{
+    m_buf = new char[ xmlString.size() + 1 ];
+    m_buf[ xmlString.size() ] = '\0';
+
+    m_rootDoc->parse< 0 >( m_buf );
+    m_doc = m_rootDoc;
+
+    m_nodes.push( m_doc );
+
+    return true;
 }
 
 // *******************************

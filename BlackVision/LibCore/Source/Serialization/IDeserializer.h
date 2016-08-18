@@ -4,13 +4,13 @@
 
 #include <string>
 
+
 namespace bv {
 
 class IDeserializer
 {
-    friend class ISerializer;
-private:
-protected:
+friend class ISerializer;
+
 public:
     virtual ~IDeserializer() {};
 
@@ -40,6 +40,4 @@ public:
     virtual ISerializer *       CreateSerializer    () const = 0;
 };
 
-
-
-};
+} //bv

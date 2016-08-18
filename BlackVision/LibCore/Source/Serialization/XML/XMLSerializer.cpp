@@ -1,6 +1,3 @@
-#include "stdafx.h"
-
-#include "stdafx.h"
 #include "XMLSerializer.h"
 
 #include <rapidxml/RapidXml.hpp>
@@ -9,11 +6,6 @@
 #include <stack>
 
 #include "System/Path.h"
-
-
-
-#include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv {
