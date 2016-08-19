@@ -199,6 +199,18 @@ bool                                                    XMLDeserializer::NextChi
 
 // *******************************
 //
+void                                                    XMLDeserializer::Reset                  () const
+{
+    m_doc = m_rootDoc;
+    while( !m_nodes.empty() )
+    {
+        m_nodes.pop();
+    }
+    m_nodes.push( m_doc );
+}
+
+// *******************************
+//
 std::wstring                                            XMLDeserializer::GetAttribute           ( const std::wstring & /*name*/ ) const
 {    
     assert( !"This serializer doesn't supports wstrings" );

@@ -3,69 +3,83 @@
 #include <fstream>
 #include <process.h>
 
+#include "Serialization/SerializationHelper.inl"
+
 
 namespace bv { namespace videocards { namespace bluefish {
 
 
 //**************************************
 //
-BlueFishVideoCardDesc::BlueFishVideoCardDesc( UInt32 deviceID )
+                        BlueFishVideoCardDesc::BlueFishVideoCardDesc    ()
     : m_uid( "BlueFish" )
-    , m_deviceID( deviceID )
 {
 }
 
 //**************************************
 //
-IVideoCardPtr           BlueFishVideoCardDesc::CreateVideoCard() const
+IVideoCardPtr           BlueFishVideoCardDesc::CreateVideoCard          ( const IDeserializer & deser ) const
 {
-    auto card = std::make_shared< BlueFishVideoCard >( m_deviceID );
+    auto deviceID = 0;
+    if( deser.EnterChild( "deviceID" ) )
+    {
+        deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
+        
+        deser.ExitChild(); //deviceID
+    }
 
+    auto card = std::make_shared< BlueFishVideoCard >( deviceID );
 
-	if(card != 0 && card->SetupDevice(deviceIndex) == false)
-		card.reset();
+    //check input / output count
+
+    if( deser.EnterChild( "channels" ) )
+    {
+        if( deser.EnterChild( "channel" ) )
+        {
+            do
+            {
+                Channel::InputDataUPtr input = nullptr;
+                Channel::OutputDataUPtr output = nullptr;
+
+                auto name = String2T< ChannelName >( deser.GetAttribute( "name" ) );
+                //auto renderer = deser.GetAttribute( "renderer" );
+
+                if( deser.EnterChild( "input" ) )
+                {
+                    input = std::unique_ptr< Channel::InputData >( new Channel::InputData() );
+                    input->type = String2T< IOType >( deser.GetAttribute( "type" ) );
+                    input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
+                    
+                    deser.ExitChild(); //input
+                }
+
+                if( deser.EnterChild( "output" ) )
+                {
+                    output = std::unique_ptr< Channel::OutputData >( new Channel::OutputData() );
+                    output->type = String2T< IOType >( deser.GetAttribute( "type" ) );
+                    output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
+                    output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
+                    output->interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
+                    output->flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
+                    output->referenceMode = ReferenceModeMap[ String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
+                    output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ) );
+                    output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ) );
+                    output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
+
+                    deser.ExitChild(); //output
+                }
+
+                card->AddChannel( new Channel( name, input, output ) );
+
+            } while( deser.NextChild() );
+
+            deser.ExitChild(); //channel
+        }
+
+        deser.ExitChild(); //channels
+    }
 
     return card;
-}
-
-//**************************************
-//
-void     BlueFishVideoCardDesc::ReadConfig()
-{
-	//m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelCount = bv::ConfigManager::GetInt("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/ChannelAmount");
-
-            
-	//if(m_VideoCardManager->GetVideoCard(i)->DetectOutputs() < m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelCount)
-	//{
-	//	printf("VideoCards","ERROR", "Too many Channels to configure");                
-	//	return;
-	//}
-
-	//for(unsigned int i = 0;  i < m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelCount; i++)
-	//{
-	//	m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector.push_back(bv::videocards::ChannelConfig());
-	//}
-
-            
-
-	for(unsigned int z = 0; z < m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelCount;z++)
-	{
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].name = bv::ConfigManager::GetString("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z));
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.type =  bv::ConfigManager::GetString("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Type");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].renderer = (unsigned short)bv::ConfigManager::GetInt("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Renderer");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.resolution =  (unsigned short)bv::ConfigManager::GetInt("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Resolution");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.refresh = (unsigned short)bv::ConfigManager::GetInt("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Refresh");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.interlaced =  bv::ConfigManager::GetBool("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Interlaced");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.flipped = bv::ConfigManager::GetBool("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Flipped");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].playback = bv::ConfigManager::GetBool("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].capture = bv::ConfigManager::GetBool("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Input");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].inputConfig.playthrough = bv::ConfigManager::GetBool("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Input/Playthrough");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].inputConfig.type = bv::ConfigManager::GetBool("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Input/Type");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.referenceMode = bv::ConfigManager::GetString("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Reference");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.refH = bv::ConfigManager::GetInt("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Reference/H");
-		m_VideoCardManager->m_VideoCardConfig.m_BlueFishConfig[bln-1].channelConfigVector[z].m_outputConfig.refV =  bv::ConfigManager::GetInt("VideoCards/BlueFish/"+boost::lexical_cast<std::string>(bln)+"/Channel"+ boost::lexical_cast<std::string>(z)+"/Output/Reference/V");
-																	 
-	}
 }
 
 //**************************************
@@ -84,16 +98,9 @@ BlueFishVideoCard::BlueFishVideoCard        ( UInt32 deviceID )
 
     InitVideoCard();
 
-
-    UpdateFormat = UPD_FMT_FRAME;
-    MemoryFormat = MEM_FMT_BGRA;
-    VideoEngine = VIDEO_ENGINE_DUPLEX;
-
-    varVal.vt = VT_UI4;
-
-    m_referenceMode = BlueFreeRunning;
-    m_refH = 0;
-    m_refV = 0;
+    //m_referenceMode = BlueFreeRunning;
+    //m_refH = 0;
+    //m_refV = 0;
 
     ChannelOption A;
     A.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_A;
@@ -210,6 +217,14 @@ void            BlueFishVideoCard::DisableVideoOutput       ()
     }
 }
 
+
+//**************************************
+//
+void            BlueFishVideoCard::AddChannel               ( Channel * channel )
+{
+    m_channels.push_back( channel );
+}
+
 //
 ////**************************************
 ////
@@ -310,11 +325,13 @@ void            BlueFishVideoCard::DisableVideoOutput       ()
 //
 void BlueFishVideoCard::DeliverFrameFromRAM(unsigned char * buffer)
 {
-    for(unsigned int i = 0; i < Channels.size(); i++)
+    for( UInt32 i = 0; i < m_channels.size(); ++i )
 	{
-		if(Channels[i]->m_playthrough==false && Channels[i]->m_Playback==true /*&& isKilled==false*/)
+        if( m_channels[i]->GetPlaybackChannel() && 
+            ( !m_channels[i]->GetCaptureChannel() || ( m_channels[i]->GetCaptureChannel() ) ) )
+            m_playthrough==false && Channels[i]->m_Playback==true /*&& isKilled==false*/)
 		{
-			Channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(std::make_shared<CFrame>(buffer,1,Channels[i]->GetPlaybackBuffer()->m_GoldenSize,Channels[i]->GetPlaybackBuffer()->m_BytesPerLine));
+			m_channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(std::make_shared<CFrame>(buffer,1,Channels[i]->GetPlaybackBuffer()->m_GoldenSize,Channels[i]->GetPlaybackBuffer()->m_BytesPerLine));
 		}
 	}   
 }
@@ -853,21 +870,21 @@ CBlueVelvet4* BlueFishVideoCard::GetBlueFishSDK()
     return this->pSDK;
 }
 
-//**************************************
-//
-void BlueFishVideoCard::SetReferenceModeValue(std::string refMode)
-{
-    if(refMode=="FREERUN") m_referenceMode=BlueFreeRunning;
-    else if(refMode=="IN_A") m_referenceMode=BlueSDI_A_BNC;
-    else if(refMode=="IN_B") m_referenceMode=BlueSDI_B_BNC;
-    else if(refMode=="ANALOG") m_referenceMode=BlueAnalog_BNC;
-    else if(refMode=="GENLOCK") m_referenceMode=BlueGenlockBNC;
-    else 
-    {
-        std::cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << std::endl;
-        m_referenceMode=BlueFreeRunning;
-    }
-}
+////**************************************
+////
+//void BlueFishVideoCard::SetReferenceModeValue(std::string refMode)
+//{
+//    if(refMode=="FREERUN") m_referenceMode=BlueFreeRunning;
+//    else if(refMode=="IN_A") m_referenceMode=BlueSDI_A_BNC;
+//    else if(refMode=="IN_B") m_referenceMode=BlueSDI_B_BNC;
+//    else if(refMode=="ANALOG") m_referenceMode=BlueAnalog_BNC;
+//    else if(refMode=="GENLOCK") m_referenceMode=BlueGenlockBNC;
+//    else 
+//    {
+//        std::cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << std::endl;
+//        m_referenceMode=BlueFreeRunning;
+//    }
+//}
 
 //**************************************
 //
@@ -1053,23 +1070,6 @@ Channel* BlueFishVideoCard::GetChannelByName(std::string Name)
 }
 
 
-//**************************************
-//
-void BlueFishVideoCard::AddChannel( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, std::string referenceMode, int refH, int refV )
-{
-	if(referenceMode=="FREERUN") m_referenceMode = BlueFreeRunning;
-    else if(referenceMode=="IN_A") m_referenceMode = BlueSDI_A_BNC;
-    else if(referenceMode=="IN_B") m_referenceMode = BlueSDI_B_BNC;
-    else if(referenceMode=="ANALOG") m_referenceMode = BlueAnalog_BNC;
-    else if(referenceMode=="GENLOCK") m_referenceMode = BlueGenlockBNC;
-    else 
-    {
-        std::cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << std::endl;
-        m_referenceMode = BlueFreeRunning;
-    }
-
-	Channels.push_back(new Channel(name, type, renderer, resolution, refresh, interlaced, flipped, playback, capture, playthrough, inputType, m_referenceMode, refH, refV )); 
-}
 //**************************************
 //
 bool	BlueFishVideoCard::CheckIfNewFrameArrived(std::string ChannelName/*A,B,C,D,E,F*/)

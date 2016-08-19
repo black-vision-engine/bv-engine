@@ -56,6 +56,9 @@
       <Filter>Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ProcessingThread.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp">
@@ -91,5 +94,8 @@
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardBase.cpp" />
     <ClCompile Include="..\..\..\Source\ProcessingThread.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

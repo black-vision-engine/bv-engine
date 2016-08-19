@@ -4,7 +4,6 @@
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
 
-
 #include "Models/BlackMagic/BlackMagicVideoCard.h"
 //#include "Models/BlackMagic/BlackMagicVideoCardDescriptor.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
@@ -164,6 +163,19 @@ void                        VideoCardManager::ProcessBuffer         ()
 
 // *********************************
 //
+IVideoCardPtr               VideoCardManager::CreateVideoCard       ( const std::string & uid, const IDeserializer & deser )
+{
+    auto desc = m_descMap.find( uid )->second;
+    if( desc )
+    {
+        return desc->CreateVideoCard();
+    }
+
+    return nullptr;
+}
+
+// *********************************
+//
 const VideoCardManager &    VideoCardManager::Instance             ()
 {
     return m_instance;
@@ -171,16 +183,22 @@ const VideoCardManager &    VideoCardManager::Instance             ()
 
 // *********************************
 //
-void                        VideoCardManager::ReadConfig            ()
+void                        VideoCardManager::ReadConfig            ( const IDeserializer & deser )
 {
-    for( auto desc : m_descVec )
+    if( deser.EnterChild( "videocard" ) )
     {
-        auto quantity = ConfigManager::GetInt( "VideoCards/" + desc->GetVideoCardUID() );
-
-        for( Int32 i = 0; i < quantity; ++i )
+        do
         {
-            
-        }
+            auto name = deser.GetAttribute( "name" );
+            if( IsRegistered( name ) )
+            {
+                auto videocard = 
+
+                m_videoCards.push_back( videocard );
+            }
+        } while( deser.NextChild() );
+
+        deser.ExitChild(); //videocard
     }
 }
 

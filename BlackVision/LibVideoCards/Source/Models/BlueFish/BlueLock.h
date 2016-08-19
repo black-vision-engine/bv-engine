@@ -1,15 +1,14 @@
 #pragma once
-#ifndef H_GUARD_BLUELOCK
-#define H_GUARD_BLUELOCK
 
 #include "win_sock.h"
-namespace bv
-{
 
-namespace videocards{
+
+namespace bv { namespace videocards { namespace bluefish {
+
 class BlueLock
 {
 public:
+
 	BlueLock();
 	~BlueLock();
 
@@ -17,8 +16,11 @@ public:
 	void unlock();
 
 private:
+
 	HANDLE	m_hMutex;
+
 };
-}
-}
-#endif //H_GUARD_BLUELOCK
+
+} //bluefish
+} //videocards
+} //bv

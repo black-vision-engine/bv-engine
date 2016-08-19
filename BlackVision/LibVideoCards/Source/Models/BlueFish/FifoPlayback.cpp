@@ -1,9 +1,9 @@
 #include "FifoPlayback.h"
-namespace bv
-{
 
-namespace videocards{
-using namespace std;
+
+namespace bv { namespace videocards { namespace bluefish {
+
+
 extern struct blue_videomode_info gVideoModeInfo[];
 
 CFifoPlayback::CFifoPlayback() :
@@ -18,14 +18,14 @@ CFifoPlayback::CFifoPlayback() :
 	m_nThreadStopping(TRUE)
 {
 	m_pSDK = BlueVelvetFactory4();
-	if(!m_pSDK)
-		cout << "No Bluefish SDK" << endl;
+	//if(!m_pSDK)
+	//	cout << "No Bluefish SDK" << endl;
 
 	if(m_pSDK)
 	{
 		m_pSDK->device_enumerate(m_iDevices);
-		if(!m_iDevices)
-			cout << "No Bluefish card" << endl;
+		//if(!m_iDevices)
+		//	cout << "No Bluefish card" << endl;
 	}
 }
 
@@ -54,7 +54,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 
 	if(CardNumber <= 0 || CardNumber > m_iDevices)
 	{
-		cout << "Card " << CardNumber << " not available; maximum card number is: " << m_iDevices << endl;
+		//cout << "Card " << CardNumber << " not available; maximum card number is: " << m_iDevices << endl;
 		return -1;
 	}
 
@@ -68,16 +68,15 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 	varVal.ulVal = 0;
 	m_pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal);
 
-	/*unsigned int nOutputStreams = CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
-	if(nOutputStreams < 2)
+	unsigned int nOutputStreams = CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
+	if(!nOutputStreams)
 	{
-		cout << "Card does not support two output channels" << endl;
+		//cout << "Card does not support output channels" << endl;
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
 		return -1;
-	}*/
+	}
 
-	m_pSDK->video_playback_stop(0, 0);
 	varVal.vt = VT_UI4;
 	m_pSDK->QueryCardProperty(INVALID_VIDEO_MODE_FLAG, varVal);
 	m_InvalidVideoModeFlag = varVal.ulVal;
@@ -88,7 +87,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 	
 	if(VideoMode >= m_InvalidVideoModeFlag)
 	{
-		cout << "Not a valid video mode" << endl;
+		//cout << "Not a valid video mode" << endl;
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
 		return -1;
@@ -99,7 +98,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 	m_pSDK->QueryCardProperty(VIDEO_MODE, varVal);
 	if(VideoMode != varVal.ulVal)
 	{
-		cout << "Can't set video mode: " << gVideoModeInfo[m_nVideoMode].strVideoModeFriendlyName.c_str() << endl;
+		//cout << "Can't set video mode: " << gVideoModeInfo[m_nVideoMode].strVideoModeFriendlyName.c_str() << endl;
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
 		return -1;
@@ -145,7 +144,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 	VARIANT vProp;
     vProp.vt = VT_UI4;
     m_pSDK->QueryCardProperty(EPOCH_AVAIL_VIDEO_SCALER_COUNT,vProp);
-    cout << "Available Scaler Count: " << vProp.ulVal << endl;
+    //cout << "Available Scaler Count: " << vProp.ulVal << endl;
     if(vProp.ulVal > 0)
     {
         UINT32 nAvailableScalers = vProp.ulVal;
@@ -154,7 +153,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
         {
             vProp.ulVal = scalerID;
             m_pSDK->QueryCardProperty(EPOCH_ENUM_AVAIL_VIDEO_SCALERS_ID, vProp);
-            cout << "Available Scaler ID: " << vProp.ulVal << endl;
+            //cout << "Available Scaler ID: " << vProp.ulVal << endl;
         }
     }
 
@@ -182,83 +181,76 @@ BLUE_INT32 CFifoPlayback::InitThread()
 
 	if(m_hThread)
 	{
-		cout << "Playback Thread already started" << endl;
+		//cout << "Playback Thread already started" << endl;
 		return 0;
 	}
 	
-	cout << "Starting Playback Thread..." << endl;
+	//cout << "Starting Playback Thread..." << endl;
 	m_hThread = (HANDLE)_beginthreadex(NULL, 0, &PlaybackThread, this, CREATE_SUSPENDED, &ThreadId);
 
 	if(!m_hThread)
 	{
-		cout << "Error starting Playback Thread" << endl;
+		//cout << "Error starting Playback Thread" << endl;
 		return -1;
 	}
 
 	m_nThreadStopping = FALSE;
 	SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
-	cout << "...done." << endl;
+	//cout << "...done." << endl;
 	return 0;
 }
 
-BLUE_INT32 CFifoPlayback::InitNotSyncedThread()
-{ 
-	unsigned int ThreadId = 0;
+//BLUE_INT32 CFifoPlayback::InitNotSyncedThread()
+//{ 
+//	unsigned int ThreadId = 0;
+//
+//	if(m_hThread)
+//	{
+//		//cout << "Playback Thread already started" << endl;
+//		return 0;
+//	}
+//	
+//	//cout << "Starting Not Synced Playback Thread..." << endl;
+//	m_hThread = (HANDLE)_beginthreadex(NULL, 0, &PlaybackThreadNotSynchronised, this, CREATE_SUSPENDED, &ThreadId);
+//    
+//	if(!m_hThread)
+//	{
+//		//cout << "Error starting Playback Thread" << endl;
+//		return -1;
+//	}
+//
+//	m_nThreadStopping = FALSE;
+//	SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
+//	cout << "...done." << endl;
+//	return 0;
+//}
 
-	if(m_hThread)
-	{
-		cout << "Playback Thread already started" << endl;
-		return 0;
-	}
-	
-	cout << "Starting Not Synced Playback Thread..." << endl;
-	m_hThread = (HANDLE)_beginthreadex(NULL, 0, &PlaybackThreadNotSynchronised, this, CREATE_SUSPENDED, &ThreadId);
-    
-	if(!m_hThread)
-	{
-		cout << "Error starting Playback Thread" << endl;
-		return -1;
-	}
 
-	m_nThreadStopping = FALSE;
-	SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
-	cout << "...done." << endl;
-	return 0;
-}
-
-
-void CFifoPlayback::StartPlaybackThread()
+void CFifoPlayback::StartThread()
 {
 	ResumeThread(m_hThread);
 }
 
-void CFifoPlayback::ResumePlaybackThread()
+void CFifoPlayback::SuspendThread()
 {
-	ResumeThread(m_hThread);
+	::SuspendThread(m_hThread);
 }
 
-void CFifoPlayback::SuspendPlaybackThread()
-{
-	SuspendThread(m_hThread);
-}
-
-void CFifoPlayback::StopPlaybackThread()
+void CFifoPlayback::StopThread()
 {
 	DWORD dw = 0;
 
 	if(m_hThread)
 	{
-        m_pFifoBuffer->PushKillerFrame();
-        m_pFifoBuffer->PushKillerFrame();
+		//cout << "Stopping Playback Thread..." << endl;
 		m_nThreadStopping = TRUE;
-		cout << "Stopping Playback Thread..." << endl;
 		dw = WaitForSingleObject(m_hThread, INFINITE);
 		CloseHandle(m_hThread);
 	}
 	else
 	{
 		m_hThread = NULL;
-		cout << "...done." << endl;
+		//cout << "...done." << endl;
 	}
 	return;
 }
@@ -278,7 +270,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	unsigned int nFramesTobuffer = 1;
 	unsigned int nFramesPlayed = 0;
 	BOOL bPlaybackStarted = FALSE;
-	std::shared_ptr<CFrame> pFrame = NULL;
+	CFrame* pFrame = NULL;
 
 	//make sure FIFO is not running
 	pThis->m_pSDK->video_playback_stop(0, 0);
@@ -287,13 +279,17 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 
 	while(!pThis->m_nThreadStopping)
 	{
-			pFrame = pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
 		if(!pFrame)
+			pFrame = pThis->m_pFifoBuffer->GetLiveBuffer();
+
+        if(!pFrame)
 		{
-			cout << "Couldn't get buffer from Live queue (playback)" << endl;
-			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+			//cout << "Couldn't get buffer from Live queue (playback)" << endl;
+			pThis->m_pSDK->wait_output_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
 			continue;
 		}
+
+
 		if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
 		{
 			pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
@@ -304,9 +300,30 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 			pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
             nFramesPlayed++;
 
-			if(bPlaybackStarted && Underrun != LastUnderrun)
-				cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
+            pThis->m_pFifoBuffer->PutFreeBuffer(pFrame);
+			pFrame = NULL;
+
+			//if(bPlaybackStarted && Underrun != LastUnderrun)
+			//	cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
 			LastUnderrun = Underrun;
+
+			if(nFramesTobuffer == nFramesPlayed)	//make sure that there is at least one frame buffered on the card before playback
+			{
+				//cout << "Starting playback" << endl;
+				pThis->m_pSDK->video_playback_start(0, 0);
+				bPlaybackStarted = TRUE;
+			}
+
+			if(bPlaybackStarted)
+				pThis->m_pSDK->wait_output_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
+		}
+		else
+			pThis->m_pSDK->wait_output_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
+	}
+
+			//if(bPlaybackStarted && Underrun != LastUnderrun)
+			//	cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
+			/*LastUnderrun = Underrun;
             if(nFramesTobuffer > 0)
             { 
                 nFramesTobuffer--;
@@ -341,96 +358,97 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
             pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
         }
     }
-	cout << "Playback Thread Stopped..." << endl;
+	cout << "Playback Thread Stopped..." << endl;*/
     
     pThis->m_pSDK->video_playback_stop(100, 1);
+
 	_endthreadex(0);
 	return 0;
 }
 
-
-unsigned int __stdcall CFifoPlayback::PlaybackThreadNotSynchronised(void * pArg)
-{
-	CFifoPlayback* pThis = (CFifoPlayback*)pArg;
-	ULONG BufferId = 0;
-	ULONG CurrentFieldCount = 0;
-	ULONG LastFieldCount = 0;
-	unsigned long* NotUsedAddress = NULL;
-	unsigned long Underrun = 0;
-	unsigned long LastUnderrun = 0;
-	unsigned long UniqueId = 0;
-	unsigned int nFramesTobuffer = 1;
-	unsigned int nFramesPlayed = 0;
-	BOOL bPlaybackStarted = FALSE;
-	std::shared_ptr<CFrame> pFrame = NULL;
-
-	//make sure FIFO is not running
-	pThis->m_pSDK->video_playback_stop(0, 0);
-
-	LastFieldCount = CurrentFieldCount;
-
-	while(!pThis->m_nThreadStopping)
-	{
-			pFrame = pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
-		if(!pFrame)
-		{
-			cout << "Couldn't get buffer from Live queue (playback)" << endl;
-			continue;
-		}
-		if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
-		{
-			pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-																	pFrame->m_nSize,
-																	NULL, 
-																	BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
-
-			pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
-            nFramesPlayed++;
-
-			if(bPlaybackStarted && Underrun != LastUnderrun)
-				cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
-			LastUnderrun = Underrun;
-            if(nFramesTobuffer > 0)
-            { 
-                nFramesTobuffer--;
-                if(nFramesTobuffer == 0)
-                {
-				    pThis->m_pSDK->video_playback_start(0, 0);
-                }
-            }
-		}
-        else
-        {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
-        }
-	}
-    
-	bool blackout = false;
-	pFrame = std::make_shared<CFrame>(0,pThis->GoldenSize,pThis->BytesPerLine);
-    while(!blackout)
-    {
-	    if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
-	    {
-		    pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-																    pFrame->m_nSize,
-																    NULL, 
-																    BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
-        
-	        cout << "Playback Black..." << endl;
-		    pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
-            blackout = true;
-	    }
-        else
-        {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
-        }
-    }
-	cout << "Playback Thread Stopped..." << endl;
-
-    pThis->m_pSDK->video_playback_stop(100, 1);
-	_endthreadex(0);
-	return 0;
-}
+//
+//unsigned int __stdcall CFifoPlayback::PlaybackThreadNotSynchronised(void * pArg)
+//{
+//	CFifoPlayback* pThis = (CFifoPlayback*)pArg;
+//	ULONG BufferId = 0;
+//	ULONG CurrentFieldCount = 0;
+//	ULONG LastFieldCount = 0;
+//	unsigned long* NotUsedAddress = NULL;
+//	unsigned long Underrun = 0;
+//	unsigned long LastUnderrun = 0;
+//	unsigned long UniqueId = 0;
+//	unsigned int nFramesTobuffer = 1;
+//	unsigned int nFramesPlayed = 0;
+//	BOOL bPlaybackStarted = FALSE;
+//	std::shared_ptr<CFrame> pFrame = NULL;
+//
+//	//make sure FIFO is not running
+//	pThis->m_pSDK->video_playback_stop(0, 0);
+//
+//	LastFieldCount = CurrentFieldCount;
+//
+//	while(!pThis->m_nThreadStopping)
+//	{
+//			pFrame = pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
+//		if(!pFrame)
+//		{
+//			cout << "Couldn't get buffer from Live queue (playback)" << endl;
+//			continue;
+//		}
+//		if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
+//		{
+//			pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
+//																	pFrame->m_nSize,
+//																	NULL, 
+//																	BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
+//
+//			pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
+//            nFramesPlayed++;
+//
+//			if(bPlaybackStarted && Underrun != LastUnderrun)
+//				cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
+//			LastUnderrun = Underrun;
+//            if(nFramesTobuffer > 0)
+//            { 
+//                nFramesTobuffer--;
+//                if(nFramesTobuffer == 0)
+//                {
+//				    pThis->m_pSDK->video_playback_start(0, 0);
+//                }
+//            }
+//		}
+//        else
+//        {
+//            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+//        }
+//	}
+//    
+//	bool blackout = false;
+//	pFrame = std::make_shared<CFrame>(0,pThis->GoldenSize,pThis->BytesPerLine);
+//    while(!blackout)
+//    {
+//	    if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
+//	    {
+//		    pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
+//																    pFrame->m_nSize,
+//																    NULL, 
+//																    BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
+//        
+//	        cout << "Playback Black..." << endl;
+//		    pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
+//            blackout = true;
+//	    }
+//        else
+//        {
+//            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+//        }
+//    }
+//	cout << "Playback Thread Stopped..." << endl;
+//
+//    pThis->m_pSDK->video_playback_stop(100, 1);
+//	_endthreadex(0);
+//	return 0;
+//}
 
 //**************************************
 //
@@ -447,7 +465,7 @@ bool CFifoPlayback::UpdateReferenceOffset(int refH, int refV)
     }
     else
     {
-        cout << "BlueFish SDK not INITIALISED (UpdateReferenceOffset in CFifoPlayback)" << endl;
+        //cout << "BlueFish SDK not INITIALISED (UpdateReferenceOffset in CFifoPlayback)" << endl;
 		return false;
 	}
 }
@@ -466,11 +484,11 @@ bool CFifoPlayback::UpdateReferenceMode(long referenceMode)
     }
     else
 	{
-        cout << "BlueFish SDK not INITIALISED (UpdateReferenceMode in CFifoPlayback)" << endl;
+        //cout << "BlueFish SDK not INITIALISED (UpdateReferenceMode in CFifoPlayback)" << endl;
 		return false;
 	}
 }
 
-
-}
-}
+} //bluefish
+} //videocards
+} //bv

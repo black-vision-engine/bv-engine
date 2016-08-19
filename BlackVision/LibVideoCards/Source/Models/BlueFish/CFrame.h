@@ -1,23 +1,30 @@
 #pragma once
-namespace bv
-{
 
-namespace videocards{
+#include "win_sock.h"
+#include "BlueFish/inc/BlueVelvet4.h"
+
+
+namespace bv { namespace videocards { namespace bluefish {
+
 class CFrame
 {
 public:
-	CFrame(unsigned int ID, unsigned int Size, unsigned int BytesPerLine);
-	CFrame(unsigned char* buffer, unsigned int ID, unsigned int Size, unsigned int BytesPerLine);
+
+	CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
+    //CFrame(unsigned char* buffer, unsigned int ID, unsigned int Size, unsigned int BytesPerLine);
 	~CFrame();
 
 public:
-	unsigned int	m_nFrameID;
-	unsigned int	m_nCardBufferID;
-	unsigned int	m_nSize;
-	unsigned int	m_nBytesPerLine;
-	unsigned char*	m_pBuffer;
-	unsigned long	m_lFieldCount;
+
+	BLUE_UINT32	m_nFrameID;
+	BLUE_UINT32	m_nCardBufferID;
+	BLUE_UINT32	m_nSize;
+	BLUE_UINT32	m_nBytesPerLine;
+	BLUE_UINT8*	m_pBuffer;
+	ULONG		m_lFieldCount;
 
 };
-}
-}
+
+} //bluefish
+} //videocards
+} //bv

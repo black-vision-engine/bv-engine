@@ -1,8 +1,10 @@
-#include "BlueLock.h"
-namespace bv
-{
+#include "stdafx.h"
 
-namespace videocards{
+#include "BlueLock.h"
+
+
+namespace bv { namespace videocards { namespace bluefish {
+
 BlueLock::BlueLock() :
 	m_hMutex(NULL)
 {
@@ -16,12 +18,14 @@ BlueLock::~BlueLock()
 
 void BlueLock::lock()
 {
-	WaitForSingleObject(m_hMutex, (DWORD)-1);
+	WaitForSingleObject(m_hMutex, INFINITE);
 }
 
 void BlueLock::unlock()
 {
 	ReleaseMutex(m_hMutex);
 }
-}
-}
+
+} //bluefish
+} //videocards
+} //bv

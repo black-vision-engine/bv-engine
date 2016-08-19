@@ -11,6 +11,8 @@
 #include "FifoCapture.h"
 #include "FifoPlayback.h"
 
+#include "CoreDEF.h"
+
 
 namespace bv { namespace videocards { namespace bluefish {
 
@@ -19,7 +21,6 @@ struct MainThreadArgs
 {
     CFifoBuffer*    pInputFifo;
     CFifoBuffer*    pOutputFifo;
-    std::string     strChannel;
     BOOL            bDoRun;
 };
 
@@ -28,22 +29,47 @@ class Channel
 private:
 
     MainThreadArgs  m_PlaythroughThreadArgs;
-    CFifoBuffer     m_CaptureFifoBuffer;
-    CFifoBuffer     m_PlaybackFifoBuffer;
-    CFifoCapture*   m_CaptureChannel;
-    CFifoPlayback*  m_PlaybackChannel;
+
+    CFifoBuffer     m_captureFifoBuffer;
+    CFifoCapture *  m_captureChannel;
+
+    CFifoBuffer     m_playbackFifoBuffer;
+    CFifoPlayback * m_playbackChannel;
+
     ChannelName     m_channelName;
-    IOType          m_inputType;
-    IOType          m_outputType;
+
     unsigned int    m_PlaythroughThreadID;
     
 public:
 
-    bool            m_playback;
-    bool            m_capture;
-    bool            m_playthrough;
+    struct InputData
+    {
+        IOType                  type;
+        bool                    playthrough;
+    };
 
-    ULONG           m_videoMode;
+    DEFINE_UPTR_TYPE( InputData )
+
+    struct OutputData
+    {
+        IOType                  type;
+        UInt32                  resolution;
+	    UInt32                  refresh;
+        bool                    interlaced;
+        bool                    flipped;
+        _EVideoMode             videoMode;
+        _EBlueGenlockSource     referenceMode;
+        Int32                   referenceH;
+        Int32                   referenceV;
+    };
+
+    DEFINE_UPTR_TYPE( OutputData )
+
+public:
+
+    InputDataUPtr   m_captureData;
+    OutputDataUPtr  m_playbackData;
+
     HANDLE          m_PlaythroughThreadHandle;
 
     std::shared_ptr<CFrame>         pFrameOut;
@@ -53,19 +79,21 @@ public:
 
 public:
 
-    Channel( std::string name, std::string type, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, long referenceMode, int refH, int refV);
-    ~Channel();
+                    Channel             ( ChannelName name, InputDataUPtr & input, OutputDataUPtr & output );
+                    ~Channel            ();
 
     ChannelName     GetName             () const;
+
     IOType          GetOutputType       () const;
     IOType          GetInputType        () const;
 
-    CFifoBuffer*    GetCaptureBuffer    ();
-    CFifoBuffer*    GetPlaybackBuffer   ();
-    CFifoCapture*   GetCaptureChannel   ();
-    CFifoPlayback*  GetPlaybackChannel  ();
+    CFifoBuffer*    GetCaptureBuffer    () const;
+    CFifoBuffer*    GetPlaybackBuffer   () const;
+    CFifoCapture*   GetCaptureChannel   () const;
+    CFifoPlayback*  GetPlaybackChannel  () const;
 
-    ULONG           ParseVideoMode      ( unsigned short resolution, unsigned short refresh, bool interlaced );
+    bool            HasPlaythroughChannel () const;
+
     void            InitThreads         ();
     void            StartThreads        ();
     void            StopThreads         ();

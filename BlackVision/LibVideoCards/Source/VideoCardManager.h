@@ -13,6 +13,8 @@
 #include "Memory/MemoryChunk.h"
 #include "DataTypes/QueueConcurrent.h"
 
+#include "Serialization/IDeserializer.h"
+
 #include "ProcessingThread.h"
 
 
@@ -137,13 +139,13 @@ public:
 
     void                                ProcessBuffer           ();
 
-
+    IVideoCardPtr                       CreateVideoCard         ( const std::string & uid, const IDeserializer & deser );
 
     static const VideoCardManager &     Instance                ();
 
 private:
 
-    void                                ReadConfig              ();
+    void                                ReadConfig              ( const IDeserializer & deser );
 
 
 private:

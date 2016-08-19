@@ -66,6 +66,8 @@ public:
     virtual IDeserializer*                          DetachBranch            ( const std::string & /*name*/ ) override { assert( false ); return nullptr; }
     virtual bool                                    AttachBranch            ( const std::string & /*name*/, ISerializer * /*ser*/ ) override { assert( false ); return false; };
 
+    void                                            Reset                   () const;
+
     virtual ISerializer *                           CreateSerializer        () const override { assert( false ); return nullptr; }
 };
 

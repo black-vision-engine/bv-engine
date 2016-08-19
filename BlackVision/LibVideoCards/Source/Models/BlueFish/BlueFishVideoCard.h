@@ -20,17 +20,14 @@ class BlueFishVideoCardDesc : public IVideoCardDesc
 private:
 
     std::string     m_uid;
-    UInt32          m_deviceID;
 
 public:
 
-                                            BlueFishVideoCardDesc   ( UInt32 deviceID );
+                                            BlueFishVideoCardDesc   ();
 
-    virtual IVideoCardPtr                   CreateVideoCard         () const override;
+    virtual IVideoCardPtr                   CreateVideoCard         ( const IDeserializer & deser ) const override;
 
     virtual const std::string &             GetVideoCardUID         () const override;
-
-    void                                    ReadConfig              ();
 
 };
 
@@ -60,7 +57,7 @@ private:
 
 	std::map< ChannelName, ChannelOption > m_channelOptions;
 
-	std::vector< Channel* >	m_channels;
+	std::vector< Channel * >	m_channels;
 
 public:
 	                    BlueFishVideoCard               ( UInt32 deviceID );
@@ -75,6 +72,9 @@ public:
     void                EnableVideoOutput               ();
     void                DisableVideoOutput              ();
 
+	void				AddChannel						( Channel * channel );
+
+
 
     virtual unsigned int DetectInputs                   () override;      
     virtual unsigned int DetectOutputs                  () override;    
@@ -88,12 +88,11 @@ public:
 	void                DeliverFrameFromRAM             (std::shared_ptr<CFrame> Frame );
     bool                DeactivateVideoCard             ();
     void                Black                           ();
-    void                SetReferenceModeValue           (std::string refMode);
+    //void                SetReferenceModeValue           (std::string refMode);
     void                UpdateReferenceOffset           ();
     void                UpdateReferenceMode             ();      
     void                StartDuplexPlayback             ();
 	int					InitDuplexPlayback		        ();
-	void				AddChannel						( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, std::string referenceMode, int refH, int refV );
 	Channel*			GetChannelByName				( std::string Name );   
     void                StartVideoCardProccessing                   ();
     //void              StopVideoCardProccessing                    ();
