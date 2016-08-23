@@ -1,43 +1,62 @@
 #include "BVConfig.h"
 
+#include <functional>
+
+#include "Serialization/SerializationHelper.inl"
+#include "VideoCardManager.h"
+
 #define USE_READBACK_API
 //#define FULLSCREEN_MODE
 //#define DISPLAY_VIDEO_CARD_OUTPUT
 #define PERSPECTIVE_CAMERA
 
-namespace bv
-{
+
+namespace bv {
+
+
+// *********************************
+//
+const std::string   BVConfig::CONFIG_PATH = "config.xml";
+
 
 // *********************************
 //FIXME: read default values from a configuration file
 BVConfig::BVConfig                      ()
 {
-    ConfigManager::LoadXMLConfig();
+    m_deserializer.LoadFile( CONFIG_PATH );
 
-    m_defaultWidth      = 1920;
-    m_defaultHeight     = 1080;
-
-	
-	m_renderToSharedMemory	= bv::ConfigManager::GetBool("Renderer/RenderToSharedMemory");
-
-    if( ConfigManager::GetString( "Resolution" ) == "SD" )
+    if( m_deserializer.EnterChild( "config" ) )
     {
-        m_defaultWidth      = 720;
-        m_defaultHeight     = 576;
+        LoadProperties( m_deserializer );
+
+        m_deserializer.ExitChild();  // config
     }
 
-    if( ConfigManager::GetBool( "FullScreen" ) )
+    m_defaultWidth = 1920;
+    m_defaultHeight = 1080;
+
+    m_pmFolder = m_properties[ "PMFolder" ];
+    m_fullscreeMode = SerializationHelper::String2T< bool >( m_properties[ "FullScreen" ], true );
+    m_isCameraPerspective = SerializationHelper::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
+    m_readbackOn = SerializationHelper::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
+    m_renderToSharedMemory = SerializationHelper::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
+    m_sockerServerPort = SerializationHelper::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
+
+    m_useDebugLayer = SerializationHelper::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ] );
+    
+    if( m_properties[ "Resolution" ] == "SD" )
     {
-        m_fullscreeMode         = true;
-	    m_windowMode            = WindowMode::FULLSCREEN;
-        m_defaultWindowWidth    = m_defaultWidth;
-    	m_defaultWindowHeight   = m_defaultHeight;
+        m_defaultWidth = 720;
+        m_defaultHeight = 576;
+    }
+
+    if( m_fullscreeMode )
+    {
+        m_windowMode = WindowMode::FULLSCREEN;
     }
     else
     {
-        m_fullscreeMode         = false;
-        
-        if( ConfigManager::GetString( "Application/Window/Mode" ) == "MULTIPLE_SCREENS" )
+        if( m_properties[ "Application/Window/Mode" ] == "MULTIPLE_SCREENS" )
         {
             m_windowMode = WindowMode::MULTIPLE_SCREENS;
         }
@@ -45,40 +64,37 @@ BVConfig::BVConfig                      ()
         {
             m_windowMode = WindowMode::WINDOWED;
         }
+        
+        m_defaultWindowWidth = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Window/Size/Width" ], m_defaultWidth );
+        m_defaultWindowHeight = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Window/Size/Height" ], m_defaultHeight );
 
-        m_defaultWindowWidth    = ConfigManager::GetInt( "Application/Window/Size/Width" );
-        m_defaultWindowHeight   = ConfigManager::GetInt( "Application/Window/Size/Height" );
-
-		m_defaultWidth    = ConfigManager::GetInt( "Application/Renderer/FrameBufferSize/Width" );
-        m_defaultHeight   = ConfigManager::GetInt( "Application/Renderer/FrameBufferSize/Height" );
+        m_defaultWidth = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Width" ], m_defaultWidth );
+        m_defaultHeight = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Height" ], m_defaultHeight );
     }
 
-	
+    m_vsync = SerializationHelper::String2T< bool >( m_properties[ "Application/VSYNC" ], true );
+    if( m_vsync )
+    {
+        m_rendererInput.m_DisableVerticalSync = false;
+        m_rendererInput.m_EnableGLFinish = true;
+        m_rendererInput.m_EnableGLFlush = true;
+        m_rendererInput.m_VerticalBufferFrameCount = 1;
+    }
+    else
+    {
+        m_rendererInput.m_DisableVerticalSync = true;
+        m_rendererInput.m_EnableGLFinish = false;
+        m_rendererInput.m_EnableGLFlush = false;
+        m_rendererInput.m_VerticalBufferFrameCount = 0;
+    }
 
-	 if( ConfigManager::GetBool( "Application/VSYNC" ) )
-	 {
-		m_RendererInput.m_DisableVerticalSync	= false;
-		m_RendererInput.m_EnableGLFinish		= true;
-		m_RendererInput.m_EnableGLFlush			= true;
-		m_RendererInput.m_VerticalBufferFrameCount = 1;
-	 }
-     else
-     {
-		m_RendererInput.m_DisableVerticalSync	= true;
-		m_RendererInput.m_EnableGLFinish		= false;
-		m_RendererInput.m_EnableGLFlush			= false;
-		m_RendererInput.m_VerticalBufferFrameCount = 0;
-	 }
+    m_rendererInput.m_WindowHandle = nullptr;
+    m_rendererInput.m_PixelFormat = 0;
+    m_rendererInput.m_RendererDC = 0;
 
-	m_RendererInput.m_WindowHandle			= nullptr;
-    m_RendererInput.m_PixelFormat			= 0;
-    m_RendererInput.m_RendererDC			= 0;
-
-
-    m_fps               = ConfigManager::GetInt( "Renderer/MaxFPS" );
-    m_frameTimeMillis   = 1000 / m_fps;
-
-    m_readbackOn        = ConfigManager::GetBool( "USE_READBACK_API" );
+    m_fps = SerializationHelper::String2T< Int32 >( m_properties[ "Renderer/MaxFPS" ], 60 );
+    m_frameTimeMillis = 1000 / m_fps;
+    m_timerFPS = SerializationHelper::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
 
 #ifdef DISPLAY_VIDEO_CARD_OUTPUT
     m_displayVideoCardOutput = true;
@@ -86,34 +102,48 @@ BVConfig::BVConfig                      ()
     m_displayVideoCardOutput = false;
 #endif
 
-    m_isCameraPerspective = ConfigManager::GetBool( "PERSPECTIVE_CAMERA" );
-
     m_eventLoopUpdateMillis = 20;
 
-    m_defaultFOV                = 90.f;
-    m_defaultNearClippingPlane  = 0.1f;
-    m_defaultFarClippingPlane   = 100.f;
+    m_defaultFOV = 90.f;
+    m_defaultNearClippingPlane = 0.1f;
+    m_defaultFarClippingPlane = 100.f;
 
-	m_defaultFOV = ConfigManager::GetFloat( "camera/fov" );
-	if(m_defaultFOV==0.0f)
-		m_defaultFOV = 90.0f;
+    m_defaultFOV = SerializationHelper::String2T< Float32 >( m_properties[ "camera/fov" ] );
+    if( m_defaultFOV == 0.0f )
+    {
+        m_defaultFOV = 90.0f;
+    }
 
-    m_defaultCameraPosition  = glm::vec3( ConfigManager::GetFloat( "camera/position/x" ), ConfigManager::GetFloat( "camera/position/y" ), ConfigManager::GetFloat( "camera/position/z" ) );
-    m_defaultCameraDirection = glm::vec3( ConfigManager::GetFloat( "camera/direction/x" ), ConfigManager::GetFloat( "camera/direction/y" ), ConfigManager::GetFloat( "camera/direction/z" ) );
-    m_defaultCameraUp        = glm::vec3( 0.f, 1.f, 0.f );
+    m_defaultCameraPosition = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
+                                                 SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
+                                                 SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
+    m_defaultCameraDirection = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/x" ], 0.f ),
+                                                 SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
+                                                 SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
+    m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
 
-    m_defaultStatsMovingAverageWindowSize   = 500; //500
-    m_defaultWarmupRoundsStatsMAV           = 10; //10
-    m_defaultStatsRefreshMillisDelta        = 1000;
-    m_defaultStatsRecalcFramesDelta         = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
-    m_defaultProfilerDisplayWaitMillis      = 10000; //1000
+    m_defaultStatsMovingAverageWindowSize = 500; //500
+    m_defaultWarmupRoundsStatsMAV = 10; //10
+    m_defaultStatsRefreshMillisDelta = 1000;
+    m_defaultStatsRecalcFramesDelta = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
+    m_defaultProfilerDisplayWaitMillis = 10000; //1000
 
-    m_numRedbackBuffersPerRenderTarget      = 4; //up to 200+, when 32 bit build is enabled
+    m_numRedbackBuffersPerRenderTarget = 4; //up to 200+, when 32 bit build is enabled
 
-    m_defaultClearColor     = glm::vec4( ConfigManager::GetFloat( "Renderer/ClearColor/r" ), ConfigManager::GetFloat( "Renderer/ClearColor/g" ), ConfigManager::GetFloat( "Renderer/ClearColor/b" ), ConfigManager::GetFloat( "Renderer/ClearColor/a" ) );
-    m_defaultClearDepth     = 1.0f;
+    m_defaultClearColor = glm::vec4( SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
+                                            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
+                                            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
+                                            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
+    m_defaultClearDepth = 1.0f;
 
-    m_defaultSceneEnvVarName    = "BV_DEFAULT_SCENE";
+    m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
+    m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
+    m_loadSceneFromEnv = SerializationHelper::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
+    m_useVideoInputFeeding = SerializationHelper::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
+
+    m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
+
+
 }
 
 // *********************************
@@ -124,7 +154,60 @@ BVConfig::~BVConfig                     ()
 
 // *********************************
 //
-const BVConfig & BVConfig::Instance     ()
+void BVConfig::LoadProperties           ( const IDeserializer & deser, std::string path )
+{
+    auto name = deser.GetAttribute( "name" );
+    auto value = deser.GetAttribute( "value" );
+    if( value != "" )
+    {
+        m_properties[ name ] = value;
+    }
+    else
+    {
+        if( deser.EnterChild( "property" ) )
+        {
+            do
+            {
+                if( path != "" )
+                {
+                    path += "/";
+                }
+                path += name;
+
+                LoadProperties( deser, path + "/" + name );
+            } while( deser.NextChild() );
+
+            deser.ExitChild();  //property
+        }
+    }
+}
+
+// *********************************
+//
+const std::string &     BVConfig::PropertyValue         ( const std::string & key ) const
+{
+    return m_properties.at( key );
+}
+
+// *********************************
+//
+void                    BVConfig::SetPropertyValue      ( const std::string & key, const std::string & value )
+{
+    m_properties[ key ] = value;;
+}
+
+// *********************************
+//
+const IDeserializer &   BVConfig::GetNode               ( const std::string & nodeName ) const
+{
+    m_deserializer.Reset();
+    m_deserializer.EnterChild( nodeName );
+    return m_deserializer;
+}
+
+// *********************************
+//
+BVConfig & BVConfig::Instance     ()
 {
     static BVConfig instance;
 

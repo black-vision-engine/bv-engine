@@ -18,7 +18,6 @@
 
 //pablito
 #include "Solution.h"
-#include "VideoCardManager.h"
 #include "structure/AssetManager.h"
 
 //hackvideoinput
@@ -53,9 +52,6 @@ class BVAppLogic
 {
 private:
 
-    //hackvideoinput
-    TestVideoInput*                  VideoInput;
-
     BVAppState                      m_state;
 
     FrameStatsCalculator            m_statsCalculator;
@@ -79,7 +75,6 @@ private:
 
 	//pablito
 	Solution						m_solution;
-	videocards::VideoCardManager *  m_videoCardManager;
     
     void            RefreshVideoInputScene  ();
 
@@ -94,9 +89,6 @@ public:
     void            LoadScene       ( void );
 
     void            SetStartTime    ( unsigned long millis );
-
-	//pablito:
-	void			SetVideoCardManager ( videocards::VideoCardManager * videoCardManager );
 
     virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer );
     virtual void    OnKey           ( unsigned char c );
@@ -124,7 +116,6 @@ public:
     BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
     RenderLogic *                   GetRenderLogic      () const;
-    videocards::VideoCardManager *  GetVideoCardManager () const;
     RenderMode &                    GetRenderMode       ();
 
     void                            LoadScenes          ( const PathVec & pathVec );

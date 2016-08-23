@@ -55,7 +55,6 @@
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\ProcessingThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
@@ -93,7 +92,6 @@
     <ClCompile Include="..\..\..\Source\VideoMidgard.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardBase.cpp" />
-    <ClCompile Include="..\..\..\Source\ProcessingThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp">
       <Filter>Models\BlueFish</Filter>
     </ClCompile>

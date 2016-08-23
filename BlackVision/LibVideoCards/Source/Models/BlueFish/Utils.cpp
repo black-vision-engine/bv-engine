@@ -5,7 +5,15 @@
 
 
 namespace bv { namespace videocards { namespace bluefish {
-    
+  
+//**************************************
+//
+std::map< std::size_t, _EVideoMode >    VideoModeMap = CreateVideoModeMap();
+
+//**************************************
+//
+std::map< ReferenceMode, _EBlueGenlockSource >  ReferenceModeMap = CreateReferenceModeMap();
+
 //**************************************
 //
 std::pair< ChannelName, const char * > ChannelNameMapping[] = 

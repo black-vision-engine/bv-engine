@@ -34,6 +34,9 @@
     <Filter Include="Serialization\XML">
       <UniqueIdentifier>{c09a5317-3f03-4950-b688-edd1cfe4a1b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mathematics">
+      <UniqueIdentifier>{685a3969-2774-4166-8983-7caa43abd050}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -155,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
       <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
+      <Filter>Mathematics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

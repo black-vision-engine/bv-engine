@@ -54,10 +54,10 @@ std::string Enum2String ( const std::pair< T, const char* > t2s[], const T& t );
 _EVideoMode                             ConvertVideoMode    ( UInt32 resolution, UInt32 refresh, bool interlaced );
 std::map< std::size_t, _EVideoMode >    CreateVideoModeMap  ();
 std::size_t                             VideoModeHash       ( UInt32 resolution, UInt32 refresh, bool interlaced );
-std::map< std::size_t, _EVideoMode >    VideoModeMap = CreateVideoModeMap();
+extern  std::map< std::size_t, _EVideoMode >    VideoModeMap;
 
 std::map< ReferenceMode, _EBlueGenlockSource >  CreateReferenceModeMap  ();
-std::map< ReferenceMode, _EBlueGenlockSource >  ReferenceModeMap = CreateReferenceModeMap();
+extern  std::map< ReferenceMode, _EBlueGenlockSource >  ReferenceModeMap;
 
 
 //**************************************

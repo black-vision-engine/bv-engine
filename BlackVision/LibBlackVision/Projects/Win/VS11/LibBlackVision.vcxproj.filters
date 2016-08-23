@@ -2349,9 +2349,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h">
       <Filter>Engine\Types</Filter>
     </ClInclude>

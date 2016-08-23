@@ -9,7 +9,6 @@
 
 //pablito
 //#include "SocketWrapper.h"
-#include "ConfigManager.h"
 #include "structure/AssetManager.h"
 #include "LicenseManager.h"
 #include "VideoCardManager.h"
@@ -39,9 +38,6 @@ private:
     ProcessManager *            m_processManager; //FIXME: move to engine object
 
     SimpleTimer                 m_timer;
-
-    //pablito
-    videocards::VideoCardManager m_videoCardManager;
 
 public:
 

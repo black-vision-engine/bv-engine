@@ -67,16 +67,7 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
 
-    //pablito
-    void    SetVideoCardManager ( videocards::VideoCardManager* videoCardManager );
-
 private:
-
-    void    InitVideoCards      ();
-    // pablito end
-
-private:
-
 
     void    RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
     void    FrameRendered   ( Renderer * renderer );

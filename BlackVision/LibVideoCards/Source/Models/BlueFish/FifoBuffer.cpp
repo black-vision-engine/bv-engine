@@ -137,6 +137,15 @@ CFrame* CFifoBuffer::GetLiveBuffer()
 	return pFrame;
 }
 
+bool    CFifoBuffer::IsLiveBufferEmpty()
+{
+	m_LiveLock.lock();
+    auto isEmpty = m_qLiveBuffers.empty();
+	m_LiveLock.unlock();
+
+    return isEmpty;
+}
+
 } //bluefish
 } //videocards
 } //bv

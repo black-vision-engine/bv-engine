@@ -11,14 +11,14 @@ namespace bv { namespace videocards { namespace bluefish {
 
 //**************************************
 //
-                        BlueFishVideoCardDesc::BlueFishVideoCardDesc    ()
+                        VideoCardDesc::VideoCardDesc    ()
     : m_uid( "BlueFish" )
 {
 }
 
 //**************************************
 //
-IVideoCardPtr           BlueFishVideoCardDesc::CreateVideoCard          ( const IDeserializer & deser ) const
+IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeserializer & deser ) const
 {
     auto deviceID = 0;
     if( deser.EnterChild( "deviceID" ) )
@@ -28,7 +28,7 @@ IVideoCardPtr           BlueFishVideoCardDesc::CreateVideoCard          ( const 
         deser.ExitChild(); //deviceID
     }
 
-    auto card = std::make_shared< BlueFishVideoCard >( deviceID );
+    auto card = std::make_shared< VideoCard >( deviceID );
 
     //check input / output count
 
@@ -84,14 +84,14 @@ IVideoCardPtr           BlueFishVideoCardDesc::CreateVideoCard          ( const 
 
 //**************************************
 //
-const std::string &     BlueFishVideoCardDesc::GetVideoCardUID() const
+const std::string &     VideoCardDesc::GetVideoCardUID() const
 {
     return m_uid;
 }
 
 //**************************************
 //
-BlueFishVideoCard::BlueFishVideoCard        ( UInt32 deviceID )
+VideoCard::VideoCard        ( UInt32 deviceID )
 {
     m_SDK = CBlueVelvet4Ptr( BlueVelvetFactory4() );
     m_deviceID = deviceID;
@@ -142,14 +142,14 @@ BlueFishVideoCard::BlueFishVideoCard        ( UInt32 deviceID )
 
 //**************************************
 //
-BlueFishVideoCard::~BlueFishVideoCard()
+VideoCard::~VideoCard()
 {
     DeactivateVideoCard();
 }
 
 //**************************************
 //
-Int32           BlueFishVideoCard::EnumerateDevices         ()
+Int32           VideoCard::EnumerateDevices         ()
 {
     Int32 deviceCount = 0;
     
@@ -164,7 +164,7 @@ Int32           BlueFishVideoCard::EnumerateDevices         ()
 
 //**************************************
 //
-bool            BlueFishVideoCard::InitVideoCard            ()
+bool            VideoCard::InitVideoCard            ()
 {
     if( BLUE_FAIL( m_SDK->device_attach( m_deviceID, FALSE ) ) )
     {
@@ -178,54 +178,174 @@ bool            BlueFishVideoCard::InitVideoCard            ()
 
     DisableVideoOutput();
 
-    
+	//ToDo unhack nasfeter
+	/*if(Channels[GetChannelByName("A")]->GetType()=="FILL_KEY") 
+	{
+		Channels.erase(Channels.begin()+GetChannelByName("B"));
+		cout << "YOU CANNOT USE CHANNEL B WHEN CHANNEL A TYPE IS FILL_KEY" << endl;
+		system("pause");
+		//return 0;
+	}
+
+	if(Channels[GetChannelByName("C")]->GetType()=="FILL_KEY") 
+	{
+		Channels.erase(Channels.begin()+GetChannelByName("D"));
+		cout << "YOU CANNOT USE CHANNEL D WHEN CHANNEL C TYPE IS FILL_KEY" << endl;
+		system("pause");
+		//return 0;
+	}
+
+	if(Channels[GetChannelByName("E")]->GetType()=="FILL_KEY") 
+	{
+		Channels.erase(Channels.begin()+GetChannelByName("F"));
+		cout << "YOU CANNOT USE CHANNEL F WHEN CHANNEL E TYPE IS FILL_KEY" << endl;
+		system("pause");
+		//return 0;
+	}*/
+	////
+
+	//unsigned int playback_counter = 0;
+	for( auto & channel : m_channels )
+	{
+        auto captureChannel = channel->GetCaptureChannel();
+        if( captureChannel )
+		{
+            if( channel->GetInputType() != IOType::FILL_KEY )
+            {
+                captureChannel->Init( m_deviceID, m_channelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
+				captureChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochSDIInput, m_channelOptions[ channel->GetName() ].EpochInputMemInterface, BLUE_CONNECTOR_PROP_SINGLE_LINK );
+            }
+            else
+            {
+                captureChannel->InitDualLink( m_deviceID, m_channelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
+            }
+
+            //channel->GetCaptureChannel()->m_playthrough = channel->m_playthrough;
+
+			captureChannel->InitThread();
+		}
+
+        auto playbackChannel = channel->GetPlaybackChannel();
+        if( playbackChannel )
+		{
+            playbackChannel->Init( m_deviceID, m_channelOptions[ channel->GetName() ].OutputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetVideoMode(), 
+                channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped() );
+
+			if( channel->GetInputType() == IOType::FILL || channel->GetInputType() == IOType::KEY )
+			{
+				playbackChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_SINGLE_LINK );
+			}
+			else if( channel->GetInputType() == IOType::FILL_KEY )
+			{						
+				playbackChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
+				playbackChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
+			}
+
+            /*if(channel->m_playthrough)
+            {
+                if(channel->GetPlaybackChannel()->InitThread())
+			    {
+				    std::cout << "Error on Playback InitThread A" << std::endl;
+				    system("pause");
+				    return 0;
+			    }
+            }*/
+
+            playbackChannel->InitThread();
+
+       //     {
+       //         if(playback_counter > 0)
+       //         {
+       //             if(channel->GetPlaybackChannel()->InitNotSyncedThread())
+			    //    {
+				   //     std::cout << "Error on Playback InitThread A" << std::endl;
+				   //     system("pause");
+				   //     return 0;
+			    //    }
+       //         }
+       //         else
+       //         {
+			    //    if(channel->GetPlaybackChannel()->InitThread())
+			    //    {
+				   //     std::cout << "Error on Playback InitThread A" << std::endl;
+				   //     system("pause");
+				   //     return 0;
+			    //    }
+       //         }
+			    //playback_counter++;
+       //     }
+		}			
+	}
+    //return true;
 
     EnableVideoOutput();
+
+    return true;
 }
 
 //**************************************
 //
-void            BlueFishVideoCard::EnableVideoOutput        ()
+void            VideoCard::EnableVideoOutput        ()
 {
-    if( m_SDK )
-	{
-		VARIANT value;
-		value.vt = VT_UI4;
-
-		value.ulVal = ENUM_BLACKGENERATOR_OFF;
-        if( !BLUE_PASS( m_SDK->SetCardProperty( VIDEO_BLACKGENERATOR, value ) ) ) 
-        {
-            std::cout << "Failed to enable video output Device ID: " << m_deviceID << std::endl;
-		}
+    for( auto channel : m_channels )
+    {
+        channel->EnableVideoOutput();
     }
 }
 
 //**************************************
 //
-void            BlueFishVideoCard::DisableVideoOutput       ()
+void            VideoCard::DisableVideoOutput       ()
 {
-    if( m_SDK )
-	{
-		VARIANT value;
-		value.vt = VT_UI4;
-
-		value.ulVal = ENUM_BLACKGENERATOR_ON;
-		if( !BLUE_PASS( m_SDK->SetCardProperty( VIDEO_BLACKGENERATOR, value ) ) ) 
-        {
-            std::cout << "Failed to disable video output Device ID: " << m_deviceID << std::endl;
-		}
+    for( auto channel : m_channels )
+    {
+        channel->DisableVideoOutput();
     }
 }
 
-
 //**************************************
 //
-void            BlueFishVideoCard::AddChannel               ( Channel * channel )
+void            VideoCard::AddChannel               ( Channel * channel )
 {
     m_channels.push_back( channel );
 }
 
+//**************************************
 //
+void            VideoCard::RouteChannel             ( ULONG source, ULONG destination, ULONG linkType )
+{
+    VARIANT varVal;
+    varVal.vt = VT_UI4;
+
+    varVal.ulVal = EPOCH_SET_ROUTING( source, destination, linkType );
+    m_SDK->SetCardProperty( MR2_ROUTING, varVal );
+}
+
+//**************************************
+//
+Channel *       VideoCard::GetChannelByName         ( ChannelName channelName ) const
+{
+    for( auto channel : m_channels )
+	{
+		if( channel->GetName() == channelName )
+        {
+            return channel;
+        }
+	}
+
+    return nullptr;
+}
+
+//**************************************
+//
+void                VideoCard::Start                ()
+{
+    for( auto channel : m_channels )
+	{
+		channel->StartThreads();
+	}
+}
+
 ////**************************************
 ////
 //void BlueFishVideoCard::DeliverFrameFromGPU(unsigned int bufferPointer)
@@ -323,28 +443,16 @@ void            BlueFishVideoCard::AddChannel               ( Channel * channel 
 
 //**************************************
 //
-void BlueFishVideoCard::DeliverFrameFromRAM(unsigned char * buffer)
+void VideoCard::DeliverFrameFromRAM( unsigned char * buffer)
 {
     for( UInt32 i = 0; i < m_channels.size(); ++i )
 	{
-        if( m_channels[i]->GetPlaybackChannel() && 
-            ( !m_channels[i]->GetCaptureChannel() || ( m_channels[i]->GetCaptureChannel() ) ) )
-            m_playthrough==false && Channels[i]->m_Playback==true /*&& isKilled==false*/)
+        auto playbackChannel = m_channels[ i ]->GetPlaybackChannel();
+        auto captureChannel = m_channels[ i ]->GetCaptureChannel();
+        if( playbackChannel && 
+            ( !captureChannel /*|| ( captureChannel && m_playthrough==false )*/ ) )
 		{
-			m_channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(std::make_shared<CFrame>(buffer,1,Channels[i]->GetPlaybackBuffer()->m_GoldenSize,Channels[i]->GetPlaybackBuffer()->m_BytesPerLine));
-		}
-	}   
-}
-
-//**************************************
-//
-void BlueFishVideoCard::DeliverFrameFromRAM (std::shared_ptr<CFrame> Frame )
-{
-    for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		if(Channels[i]->m_playthrough==false && Channels[i]->m_Playback==true /*&& isKilled==false*/)
-		{
-            Channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(Frame);
+			playbackChannel->m_pFifoBuffer->PutLiveBuffer( new CFrame( buffer, 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
 		}
 	}   
 }
@@ -353,10 +461,10 @@ void BlueFishVideoCard::DeliverFrameFromRAM (std::shared_ptr<CFrame> Frame )
 //
 
 
-void BlueFishVideoCard::StartVideoCardProccessing()
-{
-    StartDuplexPlayback();
-}
+//void VideoCard::StartVideoCardProccessing()
+//{
+//    StartDuplexPlayback();
+//}
 /*
 void BlueFishVideoCard::StopVideoCardProccessing()
 {
@@ -366,101 +474,29 @@ void BlueFishVideoCard::StopVideoCardProccessing()
 	}
 }*/
 
-void BlueFishVideoCard::SuspendVideoCardProccessing()
-{
-    for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		Channels[i]->SuspendThreads();
-	}
-}
-
-void BlueFishVideoCard::ResumeVideoCardProccessing()
-{
-    for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		Channels[i]->ResumeThreads();
-	}
-}
-
-//**************************************
+//void VideoCard::SuspendVideoCardProccessing()
+//{
+//    for( UInt32 i = 0; i < m_channels.size(); ++i )
+//	{
+//		m_channels[ i ]->SuspendThreads();
+//	}
+//}
 //
-void BlueFishVideoCard::BailOut(CBlueVelvet4* pSDK)
-{
-	
+//void VideoCard::ResumeVideoCardProccessing()
+//{
+//    for( UInt32 i = 0; i < m_channels.size(); ++i )
+//	{
+//		m_channels[ i ]->ResumeThreads();
+//	}
+//}
 
-    if(this->transferMode==GPU) 
-    {
-        if(g_pAudioScratch)
-        {
-            delete [] g_pAudioScratch;
-            g_pAudioScratch = NULL;
-        }
-
-        if(g_pHancFrame)
-        {
-            VirtualUnlock(g_pHancFrame, 256*1024);
-            VirtualFree(g_pHancFrame, 0, MEM_RELEASE);
-            g_pHancFrame = NULL;
-        }
-
-        if(g_pVancData)
-        {
-            VirtualUnlock(g_pVancData, nVancBufferSize);
-            VirtualFree(g_pVancData, 0, MEM_RELEASE);
-            g_pHancFrame = NULL;
-        }
-
-        BVGL::bvglBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-        BVGL::bvglBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
-
-        BVGL::bvglDeleteFramebuffersEXT(1, &frameBufferTest);
-
-        BVGL::bvglDeleteRenderbuffersEXT(1, &depth_rb);
-
-        bfGpuDirect_Destroy(pGpuDirectOut);
-    }
-    pSDK->device_detach();
-    BlueVelvetDestroy(pSDK);
-}
-
-//**************************************
-//
-void BlueFishVideoCard::RouteChannel(CBlueVelvet4* pSDK, ULONG Source, ULONG Destination, ULONG LinkType)
-{
-    VARIANT varVal;
-    varVal.vt = VT_UI4;
-
-    varVal.ulVal = EPOCH_SET_ROUTING(Source, Destination, LinkType);
-    pSDK->SetCardProperty(MR2_ROUTING, varVal);
-}
-
-//**************************************
-//
-bool BlueFishVideoCard::InitVideoCard( const std::vector<int> & hackBuffersUids )
-{
-
-    std::cout << "Initializing BlueFish VideoCard..." << std::endl;
-    //if(this->transferMode==GPU)
-    //{
-    //    int result = InitSDKGPUDirect( hackBuffersUids );
-    //    return result>0;
-    //}
-    //else 
-    {
-		int result = InitDuplexPlayback();// InitSDK();
-        return result>0;
-    }
-
-
-}
-
-//**************************************
-//
-void BlueFishVideoCard::Black()
-{
-    for(auto &it:Channels) it->GenerateBlack(); 
-    DeactivateVideoCard();
-}
+////**************************************
+////
+//void BlueFishVideoCard::BailOut(CBlueVelvet4* pSDK)
+//{
+//    pSDK->device_detach();
+//    BlueVelvetDestroy(pSDK);
+//}
 
 ////**************************************
 ////
@@ -822,53 +858,49 @@ void BlueFishVideoCard::Black()
 
 //**************************************
 //
-bool BlueFishVideoCard::DeactivateVideoCard()
+bool VideoCard::DeactivateVideoCard()
 {    
     //isKilled = true;
-	for(auto &it:Channels) delete it; 
-    Channels.clear();
+	for( auto & channel: m_channels )
+    {
+        delete channel;
+    }
+    m_channels.clear();
     std::cout << "BlueFishVideoCard Killed" << std::endl;
     return true;
 }
 
-//**************************************
+////**************************************
+////
+//void BlueFishVideoCard::InitBuffer(BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines)
+//{
+//    //For the test purpose of this sample we simply fill the buffer with a solid color
+//    BLUE_UINT8* pTmp = (BLUE_UINT8*)pVideoBuffer;
 //
-void BlueFishVideoCard::InitBuffer(BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines)
-{
-    //For the test purpose of this sample we simply fill the buffer with a solid color
-    BLUE_UINT8* pTmp = (BLUE_UINT8*)pVideoBuffer;
-
-    for(ULONG i=0; i<PixelsPerLine*VideoLines/3; i++)
-    {
-        //BLUE
-        *pTmp = 0x00; pTmp++;
-        *pTmp = 0x00; pTmp++;
-        *pTmp = 0x00; pTmp++;
-    }
-
-    for(ULONG i=0; i<PixelsPerLine*VideoLines/3; i++)
-    {
-        //GREEN
-        *pTmp = 0x00; pTmp++;
-        *pTmp = 0x00; pTmp++;
-        *pTmp = 0x00; pTmp++;
-    }
-
-    for(ULONG i=0; i<PixelsPerLine*VideoLines/3; i++)
-    {
-        //RED
-        *pTmp = 0x00; pTmp++;
-        *pTmp = 0x00; pTmp++;
-        *pTmp = 0x00; pTmp++;
-    }
-}
-
-//**************************************
+//    for(ULONG i=0; i<PixelsPerLine*VideoLines/3; i++)
+//    {
+//        //BLUE
+//        *pTmp = 0x00; pTmp++;
+//        *pTmp = 0x00; pTmp++;
+//        *pTmp = 0x00; pTmp++;
+//    }
 //
-CBlueVelvet4* BlueFishVideoCard::GetBlueFishSDK()
-{
-    return this->pSDK;
-}
+//    for(ULONG i=0; i<PixelsPerLine*VideoLines/3; i++)
+//    {
+//        //GREEN
+//        *pTmp = 0x00; pTmp++;
+//        *pTmp = 0x00; pTmp++;
+//        *pTmp = 0x00; pTmp++;
+//    }
+//
+//    for(ULONG i=0; i<PixelsPerLine*VideoLines/3; i++)
+//    {
+//        //RED
+//        *pTmp = 0x00; pTmp++;
+//        *pTmp = 0x00; pTmp++;
+//        *pTmp = 0x00; pTmp++;
+//    }
+//}
 
 ////**************************************
 ////
@@ -888,233 +920,94 @@ CBlueVelvet4* BlueFishVideoCard::GetBlueFishSDK()
 
 //**************************************
 //
-UINT BlueFishVideoCard::DetectInputs()
+bool	VideoCard::CheckIfNewFrameArrived( ChannelName channelName )
 {
-    
-    varVal.ulVal = 0;
-    if(BLUE_FAIL(pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal)))
+    auto channel = GetChannelByName( channelName );
+    if( channel && channel->GetCaptureBuffer() )
     {
-        std::cout << "Function not supported; need driver 5.10.2.x" << std::endl;
-        system("pause");
-        BailOut(pSDK);
-        return 0;
+        return !channel->GetCaptureBuffer()->IsLiveBufferEmpty();
     }
-
-    return CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
+    return false;
 }
-
 //**************************************
 //
-UINT BlueFishVideoCard::DetectOutputs()
-{    
-    varVal.ulVal = 0;
-    if(BLUE_FAIL(pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal)))
+unsigned char *	VideoCard::GetCaptureBufferForShaderProccessing( ChannelName channelName )
+{
+    auto channel = GetChannelByName( channelName );
+    if( channel && channel->GetCaptureChannel() )
     {
-        std::cout << "Function not supported; need driver 5.10.2.x" << std::endl;
-        system("pause");
-        BailOut(pSDK);
-        return 0;
+        return channel->GetCaptureChannel()->m_pFifoBuffer->GetLiveBuffer()->m_pBuffer;
     }
-
-    return CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
-}
-
-//**************************************
-//
-int BlueFishVideoCard::InitDuplexPlayback()
-{
-	//ToDo unhack nasfeter
-	/*if(Channels[GetChannelByName("A")]->GetType()=="FILL_KEY") 
-	{
-		Channels.erase(Channels.begin()+GetChannelByName("B"));
-		cout << "YOU CANNOT USE CHANNEL B WHEN CHANNEL A TYPE IS FILL_KEY" << endl;
-		system("pause");
-		//return 0;
-	}
-
-	if(Channels[GetChannelByName("C")]->GetType()=="FILL_KEY") 
-	{
-		Channels.erase(Channels.begin()+GetChannelByName("D"));
-		cout << "YOU CANNOT USE CHANNEL D WHEN CHANNEL C TYPE IS FILL_KEY" << endl;
-		system("pause");
-		//return 0;
-	}
-
-	if(Channels[GetChannelByName("E")]->GetType()=="FILL_KEY") 
-	{
-		Channels.erase(Channels.begin()+GetChannelByName("F"));
-		cout << "YOU CANNOT USE CHANNEL F WHEN CHANNEL E TYPE IS FILL_KEY" << endl;
-		system("pause");
-		//return 0;
-	}*/
-	////
-
-	unsigned int playback_counter = 0;
-	for(unsigned int i = 0; i < m_channels.size(); i++)
-	{
-        auto channel = Channels[ i ];
-		if( channel->m_Capture )
-		{
-            auto failure = 0;
-            if( channel->GetInputType() != InputType::FILL_KEY )
-            {
-                failure = channel->GetCaptureChannel()->Init( m_deviceID, m_channelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
-				channel->GetCaptureChannel()->RouteChannel((m_channelOptions[ channel->GetName() ].EpochSDIInput, ( m_channelOptions[ channel->GetName() ].EpochInputMemInterface, BLUE_CONNECTOR_PROP_SINGLE_LINK);
-            }
-            else
-            {
-                failure = channel->GetCaptureChannel()->InitDualLink( m_deviceID, m_channelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
-            }
-
-            if( failure )
-            {
-                std::cout << "Error on Init CHANNEL " /*<< channel->GetName()*/ << " INPUT" << std::endl;
-                channel->m_playthrough = false;
-                channel->m_Capture = false;
-                return -1;
-            }
-
-            channel->GetCaptureChannel()->m_playthrough = channel->m_playthrough;
-
-			if( channel->GetCaptureChannel()->InitThread())
-			{
-				std::cout << "Error on Capture InitThread Channel " << Channels[i]->GetName()  << std::endl;
-                
-                channel->m_playthrough = false;
-                channel->m_Capture = false;
-				system("pause");
-				return 0;
-			}
-            
-		}
-
-		if( channel->m_Playback )
-		{
-            if( channel->GetPlaybackChannel()->Init( m_deviceID, m_channelOptions[ channel->GetName() ].OutputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, ( channel->m_Capture) ? channel->GetCaptureChannel()->m_nVideoMode : channel->m_VideoMode, channel->GetPlaybackBuffer(), channel->m_referenceMode, channel->m_refH, channel->m_refV, channel->m_Flipped ) )
-			{
-				std::cout << "Error on Init CHANNEL A INPUT" << std::endl;
-				return 0;
-			}
-
-			if( channel->GetType() == "FILL")
-			{
-				Channels[i]->GetPlaybackChannel()->RouteChannel((m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, (m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_SINGLE_LINK);
-			}
-			else if(channel->GetType()=="KEY")
-			{				
-				Channels[i]->GetPlaybackChannel()->RouteChannel((m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, (m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_SINGLE_LINK);
-			}
-			else if(channel->GetType()=="FILL_KEY")
-			{						
-				Channels[i]->GetPlaybackChannel()->RouteChannel((m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, (m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1);
-				Channels[i]->GetPlaybackChannel()->RouteChannel((m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, (m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2);
-			}
-
-            if(channel->m_playthrough)
-            {
-                if(channel->GetPlaybackChannel()->InitThread())
-			    {
-				    std::cout << "Error on Playback InitThread A" << std::endl;
-				    system("pause");
-				    return 0;
-			    }
-            }
-            else
-            {
-                if(playback_counter > 0)
-                {
-                    if(channel->GetPlaybackChannel()->InitNotSyncedThread())
-			        {
-				        std::cout << "Error on Playback InitThread A" << std::endl;
-				        system("pause");
-				        return 0;
-			        }
-                }
-                else
-                {
-			        if(channel->GetPlaybackChannel()->InitThread())
-			        {
-				        std::cout << "Error on Playback InitThread A" << std::endl;
-				        system("pause");
-				        return 0;
-			        }
-                }
-			    playback_counter++;
-            }
-		}			
-	}
-    return true;
-}
-
-//**************************************
-//
-void BlueFishVideoCard::StartDuplexPlayback()
-{
-	for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		Channels[i]->StartDuplexThread();
-	}
-}
-
-//**************************************
-//
-Channel* BlueFishVideoCard::GetChannelByName(std::string Name)
-{
-	for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		if(Channels[i]->GetName() == Name) return Channels[i];
-	}
-	std::cout << "CHANNEL " << Name << " DOES NOT EXIST" << std::endl;
-    system("pause");
     return nullptr;
 }
 
-
-//**************************************
+////**************************************
+////
+//void	BlueFishVideoCard::UnblockCaptureQueue( ChannelName channelName )
+//{
+//    return GetChannelByName( channelName )->GetCaptureBuffer()->m_threadsafebuffer.unblockPush();
+//}
 //
-bool	BlueFishVideoCard::CheckIfNewFrameArrived(std::string ChannelName/*A,B,C,D,E,F*/)
-{
-    return (GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.getSize() > 0 ? true : false);
-}
-//**************************************
+////**************************************
+////
+//bool VideoCard::UpdateReferenceOffset(std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)
+//{
+//	return GetChannelByName(ChannelName)->GetPlaybackChannel()->UpdateReferenceOffset(refH, refV);
+//}
 //
-unsigned char*	BlueFishVideoCard::GetCaptureBufferForShaderProccessing(std::string ChannelName/*A,B,C,D,E,F*/)
-{
-    return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.TakeDeleteDontWait()->m_pBuffer;
-}
-//**************************************
+////**************************************
+////
+//bool VideoCard::UpdateReferenceMode(std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)
+//{
+//	long referenceMode = 0;
 //
-void	BlueFishVideoCard::UnblockCaptureQueue(std::string ChannelName/*A,B,C,D,E,F*/)
-{
-    return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.unblockPush();
-}
-
-//**************************************
+//	if(ReferenceModeName=="FREERUN") referenceMode = BlueFreeRunning;
+//    else if(ReferenceModeName=="IN_A") referenceMode = BlueSDI_A_BNC;
+//    else if(ReferenceModeName=="IN_B") referenceMode = BlueSDI_B_BNC;
+//    else if(ReferenceModeName=="ANALOG") referenceMode = BlueAnalog_BNC;
+//    else if(ReferenceModeName=="GENLOCK") referenceMode = BlueGenlockBNC;
+//    else 
+//    {
+//        std::cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << std::endl;
+//        referenceMode = BlueFreeRunning;
+//    }
 //
-bool BlueFishVideoCard::UpdateReferenceOffset(std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)
-{
-	return GetChannelByName(ChannelName)->GetPlaybackChannel()->UpdateReferenceOffset(refH, refV);
-}
+//	return GetChannelByName(ChannelName)->GetPlaybackChannel()->UpdateReferenceMode(referenceMode);
+//}
 
-//**************************************
+////**************************************
+////
+//UInt32  BlueFishVideoCard::DetectInputs         ()
+//{
+//    VARIANT varVal;
+//    varVal.ulVal = 0;
+//    if( BLUE_FAIL( m_SDK->QueryCardProperty( CARD_FEATURE_STREAM_INFO, varVal ) ) )
+//    {
+//        std::cout << "Function not supported; need driver 5.10.2.x" << std::endl;
+//        system("pause");
+//        BailOut(pSDK);
+//        return 0;
+//    }
 //
-bool BlueFishVideoCard::UpdateReferenceMode(std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)
-{
-	long referenceMode = 0;
-
-	if(ReferenceModeName=="FREERUN") referenceMode = BlueFreeRunning;
-    else if(ReferenceModeName=="IN_A") referenceMode = BlueSDI_A_BNC;
-    else if(ReferenceModeName=="IN_B") referenceMode = BlueSDI_B_BNC;
-    else if(ReferenceModeName=="ANALOG") referenceMode = BlueAnalog_BNC;
-    else if(ReferenceModeName=="GENLOCK") referenceMode = BlueGenlockBNC;
-    else 
-    {
-        std::cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << std::endl;
-        referenceMode = BlueFreeRunning;
-    }
-
-	return GetChannelByName(ChannelName)->GetPlaybackChannel()->UpdateReferenceMode(referenceMode);
-}
+//    return CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
+//}
+//
+////**************************************
+////
+//UInt32  BlueFishVideoCard::DetectOutputs        ()
+//{    
+//    VARIANT varVal;
+//    varVal.ulVal = 0;
+//    if(BLUE_FAIL( m_SDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal)))
+//    {
+//        std::cout << "Function not supported; need driver 5.10.2.x" << std::endl;
+//        system("pause");
+//        BailOut(pSDK);
+//        return 0;
+//    }
+//
+//    return CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
+//}
 
 } //bluefish
 } //videovcards

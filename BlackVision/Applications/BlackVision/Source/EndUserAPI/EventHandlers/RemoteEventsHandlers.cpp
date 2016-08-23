@@ -54,7 +54,7 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
 
 // ***********************
 //
-void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
+void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic * appLogic )
 {
     m_pluginEvents      = new PluginEventsHandlers( appLogic );
     m_sceneEvents       = new SceneEventsHandlers( appLogic );

@@ -293,9 +293,9 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 		if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
 		{
 			pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-																	pFrame->m_nSize,
-																	NULL, 
-																	BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
+													pFrame->m_nSize,
+													NULL, 
+													BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
 
 			pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
             nFramesPlayed++;

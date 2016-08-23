@@ -24,6 +24,7 @@ public:
 	void	PutLiveBuffer(CFrame* pFrame);
 	CFrame* GetFreeBuffer();
 	CFrame* GetLiveBuffer();
+    bool    IsLiveBufferEmpty();
 
 private:
 

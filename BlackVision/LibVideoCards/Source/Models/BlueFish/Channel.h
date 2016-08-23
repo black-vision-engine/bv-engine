@@ -19,8 +19,8 @@ namespace bv { namespace videocards { namespace bluefish {
 
 struct MainThreadArgs
 {
-    CFifoBuffer*    pInputFifo;
-    CFifoBuffer*    pOutputFifo;
+    CFifoBuffer *   pInputFifo;
+    CFifoBuffer *   pOutputFifo;
     BOOL            bDoRun;
 };
 
@@ -30,10 +30,10 @@ private:
 
     MainThreadArgs  m_PlaythroughThreadArgs;
 
-    CFifoBuffer     m_captureFifoBuffer;
+    CFifoBuffer *   m_captureFifoBuffer;
     CFifoCapture *  m_captureChannel;
 
-    CFifoBuffer     m_playbackFifoBuffer;
+    CFifoBuffer *   m_playbackFifoBuffer;
     CFifoPlayback * m_playbackChannel;
 
     ChannelName     m_channelName;
@@ -72,10 +72,10 @@ public:
 
     HANDLE          m_PlaythroughThreadHandle;
 
-    std::shared_ptr<CFrame>         pFrameOut;
-    long            m_referenceMode;
-    int             m_refH;
-    int             m_refV;
+    //std::shared_ptr<CFrame>         pFrameOut;
+    //long            m_referenceMode;
+    //int             m_refH;
+    //int             m_refV;
 
 public:
 
@@ -87,20 +87,28 @@ public:
     IOType          GetOutputType       () const;
     IOType          GetInputType        () const;
 
-    CFifoBuffer*    GetCaptureBuffer    () const;
-    CFifoBuffer*    GetPlaybackBuffer   () const;
-    CFifoCapture*   GetCaptureChannel   () const;
-    CFifoPlayback*  GetPlaybackChannel  () const;
+    CFifoCapture *  GetCaptureChannel   () const;
+    CFifoPlayback * GetPlaybackChannel  () const;
 
-    bool            HasPlaythroughChannel () const;
+    CFifoBuffer *   GetCaptureBuffer    ();
+    CFifoBuffer *   GetPlaybackBuffer   ();
+    
+    UInt32          GetVideoMode        () const;
+    UInt32          GetReferenceMode    () const;
+    UInt32          GetReferenceH       () const;
+    UInt32          GetReferenceV       () const;
+    bool            GetFlipped          () const;
 
-    void            InitThreads         ();
+    //bool            HasPlaythroughChannel () const;
+
     void            StartThreads        ();
     void            StopThreads         ();
     void            SuspendThreads      ();
     void            ResumeThreads       ();
-    void            StartDuplexThread   ();
-    void            GenerateBlack       ();
+
+    void            EnableVideoOutput   ();
+    void            DisableVideoOutput  ();
+
     unsigned int static __stdcall PlaythroughThread ( void * pArg );
 
 };

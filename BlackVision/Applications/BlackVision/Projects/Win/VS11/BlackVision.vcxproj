@@ -58,7 +58,9 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -68,8 +70,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -79,8 +83,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -90,8 +96,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -252,6 +260,9 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
       <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibVideoCards\Projects\Win\VS11\LibVideoCards.vcxproj">
+      <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
       <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>

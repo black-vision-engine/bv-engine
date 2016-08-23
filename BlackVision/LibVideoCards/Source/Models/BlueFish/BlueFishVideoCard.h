@@ -15,7 +15,7 @@ DEFINE_PTR_TYPE( CBlueVelvet4 )
 
 // ***************************** DESCRIPTOR **********************************
 //
-class BlueFishVideoCardDesc : public IVideoCardDesc
+class VideoCardDesc : public IVideoCardDesc
 {
 private:
 
@@ -23,7 +23,7 @@ private:
 
 public:
 
-                                            BlueFishVideoCardDesc   ();
+                                            VideoCardDesc           ();
 
     virtual IVideoCardPtr                   CreateVideoCard         ( const IDeserializer & deser ) const override;
 
@@ -31,7 +31,7 @@ public:
 
 };
 
-class BlueFishVideoCard : IVideoCard
+class VideoCard : public IVideoCard
 {
 private:
 
@@ -60,8 +60,8 @@ private:
 	std::vector< Channel * >	m_channels;
 
 public:
-	                    BlueFishVideoCard               ( UInt32 deviceID );
-	virtual             ~BlueFishVideoCard              () override; 
+	                    VideoCard                       ( UInt32 deviceID );
+	virtual             ~VideoCard                      () override; 
 
 
 
@@ -73,36 +73,32 @@ public:
     void                DisableVideoOutput              ();
 
 	void				AddChannel						( Channel * channel );
+	void                RouteChannel                    ( ULONG source, ULONG destination, ULONG linkType );
+	Channel *			GetChannelByName				( ChannelName channelName ) const;   
+
+    virtual void        Start                           () override;
 
 
-
-    virtual unsigned int DetectInputs                   () override;      
-    virtual unsigned int DetectOutputs                  () override;    
-	void                BailOut                         (CBlueVelvet4* pSDK);
-	void                RouteChannel                    (CBlueVelvet4* pSDK, ULONG Source, ULONG Destination, ULONG LinkType);
-	void                InitBuffer                      (BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines);
-	void                InitOutputChannel               (CBlueVelvet4* pSDK, ULONG DefaultOutputChannel, ULONG VideoMode, ULONG UpdateFormat, ULONG MemoryFormat, ULONG VideoEngine);
-	int                 InitSDK                         ();
-	bool                Init                            ();
-    void                DeliverFrameFromRAM             (unsigned char * );
-	void                DeliverFrameFromRAM             (std::shared_ptr<CFrame> Frame );
+	//void                BailOut                         (CBlueVelvet4* pSDK);
+	//void                InitBuffer                      (BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines);
+	//void                InitOutputChannel               (CBlueVelvet4* pSDK, ULONG DefaultOutputChannel, ULONG VideoMode, ULONG UpdateFormat, ULONG MemoryFormat, ULONG VideoEngine);
+    void                DeliverFrameFromRAM             ( unsigned char * buffer );
     bool                DeactivateVideoCard             ();
-    void                Black                           ();
     //void                SetReferenceModeValue           (std::string refMode);
-    void                UpdateReferenceOffset           ();
-    void                UpdateReferenceMode             ();      
-    void                StartDuplexPlayback             ();
-	int					InitDuplexPlayback		        ();
-	Channel*			GetChannelByName				( std::string Name );   
-    void                StartVideoCardProccessing                   ();
+/*    void                UpdateReferenceOffset           ();
+    void                UpdateReferenceMode             ();  */    
+    //void                StartVideoCardProccessing                   ();
     //void              StopVideoCardProccessing                    ();
-    void                SuspendVideoCardProccessing                ();
-    void                ResumeVideoCardProccessing                  ();
-	unsigned char *		GetCaptureBufferForShaderProccessing    (std::string ChannelName/*A,B,C,D,E,F*/);
-    bool	            CheckIfNewFrameArrived                  (std::string ChannelName/*A,B,C,D,E,F*/);
-    void	            UnblockCaptureQueue                     (std::string ChannelName/*A,B,C,D,E,F*/);
-	virtual bool        UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)		override;
-    virtual bool        UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	override;
+    //void                SuspendVideoCardProccessing                ();
+    //void                ResumeVideoCardProccessing                  ();
+	unsigned char *		GetCaptureBufferForShaderProccessing    ( ChannelName channelName );
+    bool	            CheckIfNewFrameArrived                  ( ChannelName channelName );
+    //void	            UnblockCaptureQueue                     ( ChannelName channelName );
+	//virtual bool        UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)		override;
+    //virtual bool        UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	override;
+
+    //static UInt32       DetectInputs                   ();
+    //static UInt32       DetectOutputs                  ();
 
 //    ///GPUDirect
 //private:    
@@ -142,11 +138,10 @@ public:
 //    bool                DirectGPUPreRender              ();
 //    bool                DirectGPUPostRender             ();
 //    void                DeliverFrameFromGPU             (unsigned int bufferPointer);
-//    CBlueVelvet4*       GetBlueFishSDK                  ();
 	
 };
 
-DEFINE_PTR_TYPE( BlueFishVideoCard )
+DEFINE_PTR_TYPE( VideoCard )
 
 } //bluefish
 } //videocards

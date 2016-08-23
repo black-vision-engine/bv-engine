@@ -210,7 +210,7 @@ void    BlackVisionApp::InitializeConfig  ()
     // Code commented to avoid double keys in config.
     //ConfigManager::LoadConfig();
     //ConfigManager::LoadXMLConfig();
-    BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
+    //BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
 
     BB::AssetManager::LoadSurfaces();
 
@@ -241,7 +241,6 @@ void    BlackVisionApp::InitializeAppLogic  ()
 
     m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
 
-    m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();
     m_app->LoadScene();
 }

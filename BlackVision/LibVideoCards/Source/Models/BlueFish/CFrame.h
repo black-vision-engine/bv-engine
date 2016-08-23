@@ -11,7 +11,7 @@ class CFrame
 public:
 
 	CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
-    //CFrame(unsigned char* buffer, unsigned int ID, unsigned int Size, unsigned int BytesPerLine);
+    CFrame(BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
 	~CFrame();
 
 public:
@@ -22,6 +22,10 @@ public:
 	BLUE_UINT32	m_nBytesPerLine;
 	BLUE_UINT8*	m_pBuffer;
 	ULONG		m_lFieldCount;
+
+private:
+
+    void        Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
 
 };
 

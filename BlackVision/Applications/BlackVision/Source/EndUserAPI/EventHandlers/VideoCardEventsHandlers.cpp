@@ -33,7 +33,7 @@ void		VideoCardEventsHandlers::EventHandler   ( IEventPtr evt )
         {
             videoCardManager->Enable();
         }
-        else  if( command == VideoCardEvent::Command::DisableOutput )
+        else if( command == VideoCardEvent::Command::DisableOutput )
         {
             videoCardManager->Disable();
         }

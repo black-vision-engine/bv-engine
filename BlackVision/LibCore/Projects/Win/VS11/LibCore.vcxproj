@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\..\Source\IO\DirIO.h" />
     <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
     <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />

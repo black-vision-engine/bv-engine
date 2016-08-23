@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "SerializationHelper.h"
 
 #include "Tools/StringHeplers.h"
