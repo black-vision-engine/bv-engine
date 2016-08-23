@@ -630,8 +630,8 @@ void                                DefaultExtrudePlugin::ProcessVertexAttribute
     VertexAttributesChannelDescriptor vaChannelDesc;
     vaChannelDesc.AddAttrChannelDesc( compVertDesc );
 
-    auto normalChannelDesc = static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() )->GetAttrChannelDescriptor( AttributeSemantic::AS_NORMAL );
-    if( normalChannelDesc )
+    //auto normalChannelDesc = static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() )->GetAttrChannelDescriptor( AttributeSemantic::AS_NORMAL );
+//    if( normalChannelDesc )
     {
         vaChannelDesc.AddAttrChannelDesc( new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR ) );
     }

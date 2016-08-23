@@ -339,12 +339,12 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Floa
             if( m_rememberConversion )
                 m_conversionIndicies.push_back( i );
 
-            indices[ i ] = (INDEX_TYPE)( vertices.size() - 1 );
+            indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
         }
         else
         {
             auto idx = ( UInt32 )( std::distance( vertices.begin(), it ) );
-            indices[ i ] = (INDEX_TYPE)idx;
+            indices.push_back( (INDEX_TYPE)idx );
         }
     }
 

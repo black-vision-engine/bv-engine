@@ -2056,12 +2056,26 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
     auto plugin = root->GetPlugin( "mesh" );
     assert( plugin );
     plugin->LoadResource( SVGAssetDescriptor::Create( "kupa.svg" ) );
-
+    
     root->AddPlugin( "TRIANGULATE", timeEvaluator );
 
-    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
-    auto success = model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    auto success = root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator );
     assert( success );
+    
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //success = model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    //assert( success );
+
+    root->AddPlugin( "DEFAULT_MATERIAL", timeEvaluator );
+
+    auto material = root->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 1, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.1, 0.0, 0.2, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+//    root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
 
     return root;
 }
