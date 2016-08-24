@@ -1,6 +1,10 @@
 #pragma once
 
 #include <map>
+
+#include "win_sock.h"
+#include "BlueFish/Inc/BlueVelvet4.h"
+
 #include "CoreDEF.h"
 
 

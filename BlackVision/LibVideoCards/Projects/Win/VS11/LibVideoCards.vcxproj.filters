@@ -42,12 +42,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\VideoOutputsManager.h" />
-    <ClInclude Include="..\..\..\Source\VideoOutput.h" />
-    <ClInclude Include="..\..\..\Source\VideoMidgard.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
-    <ClInclude Include="..\..\..\Source\VideoCardBase.h" />
-    <ClInclude Include="..\..\..\Source\ThreadSafeQueue.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h">
       <Filter>Interfaces</Filter>
@@ -87,11 +82,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp">
       <Filter>Models\BlackMagic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\VideoOutputsManager.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoOutput.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoMidgard.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoCardBase.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp">
       <Filter>Models\BlueFish</Filter>
     </ClCompile>

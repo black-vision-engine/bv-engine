@@ -42,7 +42,7 @@ BVConfig::BVConfig                      ()
     m_renderToSharedMemory = SerializationHelper::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
     m_sockerServerPort = SerializationHelper::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
 
-    m_useDebugLayer = SerializationHelper::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ] );
+    m_useDebugLayer = SerializationHelper::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );
     
     if( m_properties[ "Resolution" ] == "SD" )
     {
@@ -108,11 +108,7 @@ BVConfig::BVConfig                      ()
     m_defaultNearClippingPlane = 0.1f;
     m_defaultFarClippingPlane = 100.f;
 
-    m_defaultFOV = SerializationHelper::String2T< Float32 >( m_properties[ "camera/fov" ] );
-    if( m_defaultFOV == 0.0f )
-    {
-        m_defaultFOV = 90.0f;
-    }
+    m_defaultFOV = SerializationHelper::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
 
     m_defaultCameraPosition = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
                                                  SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
@@ -142,8 +138,6 @@ BVConfig::BVConfig                      ()
     m_useVideoInputFeeding = SerializationHelper::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
 
     m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
-
-
 }
 
 // *********************************
@@ -158,9 +152,16 @@ void BVConfig::LoadProperties           ( const IDeserializer & deser, std::stri
 {
     auto name = deser.GetAttribute( "name" );
     auto value = deser.GetAttribute( "value" );
+
+    if( path != "" )
+    {
+        path += "/";
+    }
+    path += name;
+
     if( value != "" )
     {
-        m_properties[ name ] = value;
+        m_properties[ path ] = value;
     }
     else
     {
@@ -168,13 +169,7 @@ void BVConfig::LoadProperties           ( const IDeserializer & deser, std::stri
         {
             do
             {
-                if( path != "" )
-                {
-                    path += "/";
-                }
-                path += name;
-
-                LoadProperties( deser, path + "/" + name );
+                LoadProperties( deser, path );
             } while( deser.NextChild() );
 
             deser.ExitChild();  //property

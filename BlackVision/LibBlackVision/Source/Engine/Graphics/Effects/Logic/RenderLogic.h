@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 #include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
-#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
+//#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
 #include "Mathematics/glm_inc.h"
@@ -41,7 +41,6 @@ class RenderLogic
 {
 private:
 
-    videocards::VideoCardManager *  m_VideoCardManager;
     RenderTargetStackAllocator      m_rtStackAllocator;
     RenderQueueStackAllocator       m_renderQueueAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
@@ -53,7 +52,7 @@ private:
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
-    SharedMemoryVideoBuffer*        m_SharedMemoryVideoBuffer;
+    //SharedMemoryVideoBuffer*        m_SharedMemoryVideoBuffer;
 
     glm::vec4                       m_clearColor;
     bool                            m_renderToSharedMemory;
@@ -96,7 +95,6 @@ private:
        
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 
-    void                            PushToVideoCard         ( Texture2DConstPtr frame );
     void                            BlitToPreview           ( RenderTarget * rt, RenderLogicContext * ctx );
 
     void                            UpdateOffscreenState    ();

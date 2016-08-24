@@ -1,5 +1,7 @@
 #include "FifoPlayback.h"
 
+#include <process.h>
+
 
 namespace bv { namespace videocards { namespace bluefish {
 

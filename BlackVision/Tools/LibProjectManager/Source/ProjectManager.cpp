@@ -4,6 +4,7 @@
 
 namespace bv {
 
+std::string                       ProjectManager::m_pmFolder = "DefaultPMDir";
 
 std::shared_ptr< ProjectManager > ProjectManager::_instance = nullptr;
 
@@ -33,11 +34,6 @@ ProjectManager *	        ProjectManager::GetInstance		()
 {
     if( !_instance )
     {
-        if( m_pmFolder.empty() )
-        {
-            m_pmFolder = "DefaultPMDir";
-        }
-
         _instance = std::shared_ptr< ProjectManager >( new ProjectManager( m_pmFolder ) );
     }
 

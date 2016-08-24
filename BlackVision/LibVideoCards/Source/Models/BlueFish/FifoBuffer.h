@@ -4,10 +4,10 @@
 
 #include "win_sock.h"
 #include "BlueFish/inc/BlueVelvet4.h"
-#include "Utils.h"
-//#include "../../ThreadSafeQueue.h"
+
 #include "CFrame.h"
 #include "BlueLock.h"
+#include "Utils.h"
 
 
 namespace bv { namespace videocards { namespace bluefish {

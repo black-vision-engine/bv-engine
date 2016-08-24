@@ -1,12 +1,8 @@
 #pragma once
+
 #include "win_sock.h"
-#include <string>
-
 #include "BlueFish/inc/BlueVelvet4.h"
-#include "BlueFish/inc/BlueGpuDirect.h"
-#include "BlueFish/inc/BlueHancUtils.h"
 
-#include "Utils.h"
 #include "FifoBuffer.h"
 #include "FifoCapture.h"
 #include "FifoPlayback.h"
@@ -106,8 +102,7 @@ public:
     void            SuspendThreads      ();
     void            ResumeThreads       ();
 
-    void            EnableVideoOutput   ();
-    void            DisableVideoOutput  ();
+    void            SetVideoOutput      ( bool enable );
 
     unsigned int static __stdcall PlaythroughThread ( void * pArg );
 

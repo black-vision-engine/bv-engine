@@ -61,8 +61,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -74,8 +76,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -87,8 +91,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -100,8 +106,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -113,6 +121,11 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
       <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,9 @@
 #pragma once
 
-#include "Channel.h"
-#include "BVGL.h"
-#include <map>
+#include "Interfaces/IVideoCard.h"
+#include "Interfaces/IVideoCardDescriptor.h"
 
-//FIXME
-#include "../../Interfaces/IVideoCard.h"
-#include "../../Interfaces/IVideoCardDescriptor.h"
+#include "Channel.h"
 
 
 namespace bv { namespace videocards { namespace bluefish {
@@ -35,6 +32,10 @@ class VideoCard : public IVideoCard
 {
 private:
 
+    typedef std::map< ChannelName, ChannelOption > ChannelOptionMap;
+
+private:
+
 	CBlueVelvet4Ptr         m_SDK;
 	UInt32                  m_deviceID;
 
@@ -55,35 +56,37 @@ private:
 	ULONG					VideoLines;
     ULONG                   FieldCount;
 
-	std::map< ChannelName, ChannelOption > m_channelOptions;
+	std::vector< Channel * > m_channels;
 
-	std::vector< Channel * >	m_channels;
+	static ChannelOptionMap ChannelOptions;
 
 public:
-	                    VideoCard                       ( UInt32 deviceID );
-	virtual             ~VideoCard                      () override; 
+
+	static UInt32           AvailableVideoCards;
 
 
+public:
+	                        VideoCard                   ( UInt32 deviceID );
+	virtual                 ~VideoCard                  () override; 
 
-    static Int32        EnumerateDevices                ();
+	bool                    InitVideoCard               ();
 
-	bool                InitVideoCard                   ();
+    void                    SetVideoOutput              ( bool enable );
 
-    void                EnableVideoOutput               ();
-    void                DisableVideoOutput              ();
+	void				    AddChannel					( Channel * channel );
+	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
+	Channel *			    GetChannelByName			( ChannelName channelName ) const;   
 
-	void				AddChannel						( Channel * channel );
-	void                RouteChannel                    ( ULONG source, ULONG destination, ULONG linkType );
-	Channel *			GetChannelByName				( ChannelName channelName ) const;   
+    virtual void            Start                       () override;
 
-    virtual void        Start                           () override;
+    virtual void            ProcessFrame                ( MemoryChunkConstPtr data ) override;
 
+    static ChannelOptionMap CreateChannelOptionMap      ();
+    static UInt32           EnumerateDevices            ();
 
 	//void                BailOut                         (CBlueVelvet4* pSDK);
 	//void                InitBuffer                      (BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines);
 	//void                InitOutputChannel               (CBlueVelvet4* pSDK, ULONG DefaultOutputChannel, ULONG VideoMode, ULONG UpdateFormat, ULONG MemoryFormat, ULONG VideoEngine);
-    void                DeliverFrameFromRAM             ( unsigned char * buffer );
-    bool                DeactivateVideoCard             ();
     //void                SetReferenceModeValue           (std::string refMode);
 /*    void                UpdateReferenceOffset           ();
     void                UpdateReferenceMode             ();  */    

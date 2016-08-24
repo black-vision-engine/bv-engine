@@ -2,12 +2,8 @@
 
 #include "win_sock.h"
 #include "BlueFish/inc/BlueVelvet4.h"
+
 #include "FifoBuffer.h"
-#include <stdio.h>
-#include <tchar.h>
-#include <iostream>
-#include <process.h>
-#include <chrono>
 
 
 namespace bv { namespace videocards { namespace bluefish {

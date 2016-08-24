@@ -31,13 +31,8 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoCapture.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Utils.h" />
-    <ClInclude Include="..\..\..\Source\ThreadSafeQueue.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
-    <ClInclude Include="..\..\..\Source\VideoCardBase.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
-    <ClInclude Include="..\..\..\Source\VideoMidgard.h" />
-    <ClInclude Include="..\..\..\Source\VideoOutput.h" />
-    <ClInclude Include="..\..\..\Source\VideoOutputsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />
@@ -50,11 +45,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoCapture.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoCardBase.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoMidgard.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoOutput.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoOutputsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">

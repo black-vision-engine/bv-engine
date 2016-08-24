@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Memory/MemoryChunk.h"
 #include "CoreDEF.h"
 
 
@@ -13,8 +14,9 @@ public:
 
 	virtual void                Start                   () = 0;
 
-	virtual void                EnableVideoOutput       () = 0;
-	virtual void                DisableVideoOutput      () = 0;
+	virtual void                SetVideoOutput          ( bool enable ) = 0;
+
+    virtual void                ProcessFrame            ( MemoryChunkConstPtr data ) = 0;
 
 	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;
 	//virtual void                EnableVideoOutput       () = 0;

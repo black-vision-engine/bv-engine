@@ -1,19 +1,12 @@
 #pragma once
 
-#include "win_sock.h"
-#include <vector>
-#include "VideoCardBase.h"
-#include "VideoMidgard.h"
-
 #include <hash_map>
-#include <string>
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
-#include "Memory/MemoryChunk.h"
-#include "DataTypes/QueueConcurrent.h"
-
 #include "Serialization/IDeserializer.h"
+
+#include "Memory/MemoryChunk.h"
 
 
 namespace bv { namespace videocards {
@@ -49,69 +42,18 @@ struct OutputConfig
 };
 
 
-//struct ChannelConfig
-//{
-//    string name;
-//    unsigned short renderer;
-//    bool playback;
-//    bool capture;
-//    OutputConfig m_outputConfig;
-//    InputConfig inputConfig;
-//
-//    ChannelConfig()
-//    {
-//        m_outputConfig = OutputConfig();
-//        inputConfig = InputConfig();
-//    }
-//};
-//
-//
-//struct VideoCardConfig
-//{
-//    string name;
-//    string type;
-//    unsigned int channelCount;
-//    vector<ChannelConfig>   channelConfigVector;
-//};
-
-
-//struct VideoConfig
-//{
-//    bool ReadbackFlag;
-//    bool superMagic;
-//    string resolutionOld;
-//    string transferMode;
-//    unsigned int blueFishCount;
-//    unsigned int blackMagicCount;
-//    vector<VideoCardConfig> m_BlueFishConfig;
-//    vector<VideoCardConfig> m_BlackMagicConfig;
-//};
-
-
 class VideoCardManager
 {
-private:
-
-    static const UInt32         FRAMES_COUNT;
-    static const UInt32         FHD;
-    static const UInt32         WIDTH_BYTES;
-
 private:
 
     std::hash_map< std::string, const IVideoCardDesc * >    m_descMap;
     std::vector< const IVideoCardDesc * >                   m_descVec;
 
-    std::vector< IVideoCardPtr >            m_videoCards;
+    std::vector< IVideoCardPtr >        m_videoCards;
 
-    QueueConcurrent< MemoryChunkConstPtr >  m_dataQueue;
+    bool                                m_keyActive;
 
-    //ProcessingThreadUPtr                    m_processingThread;
-
-    bool                                    m_enabled;
-    bool                                    m_enableInterlace;
-    bool                                    m_keyActive;
-
-    DisplayMode                             m_dislpayMode;
+    DisplayMode                         m_dislpayMode;
 
 private:
 
@@ -124,14 +66,14 @@ public:
     void                                RegisterDescriptors     ( const std::vector< IVideoCardDesc * > & descriptors );
 
     bool                                IsRegistered            ( const std::string & uid ) const;
-    bool                                IsEnabled               () const;
 
+    void                                SetVideoOutput          ( bool enable );
     void                                SetKey                  ( bool active );
 
 
     void                                Start                   ();
 
-    void                                ProcessBuffer           ();
+    void                                ProcessFrame            ( MemoryChunkConstPtr data );
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
@@ -155,14 +97,12 @@ public:
     
 
 
-    //void                    Enable                  ();
-    //void                    Disable                 ();
+
     //void                    StopVideoCards            ();
     //void                    SuspendVideoCards     ();
     //void                    ResumeVideoCards      ();
     //size_t                  GetVideoCardsSize       ();
     
-    void                    PushDataFromRenderer    ( MemoryChunkConstPtr data );
 
     unsigned char *         GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     bool                    CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    

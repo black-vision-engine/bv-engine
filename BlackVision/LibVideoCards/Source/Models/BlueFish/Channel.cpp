@@ -1,6 +1,6 @@
 #include "Channel.h"
 
-#include <map>
+#include <process.h>
 
 
 namespace bv { namespace videocards { namespace bluefish {
@@ -202,7 +202,7 @@ void Channel::StartThreads()
         m_PlaythroughThreadHandle = ( HANDLE )_beginthreadex( NULL, 0, &PlaythroughThread, &m_PlaythroughThreadArgs, CREATE_SUSPENDED, &m_PlaythroughThreadID );
         if( !m_PlaythroughThreadHandle )
         {
-            std::cout << "Error starting Main Thread StartDuplexThread" << std::endl;
+            //std::cout << "Error starting Main Thread StartDuplexThread" << std::endl;
             /*delete m_captureChannel;
             delete m_playbackChannel;*/
             return;
@@ -277,28 +277,14 @@ void Channel::ResumeThreads()
 
 //**************************************
 //
-void Channel::EnableVideoOutput     ()
+void Channel::SetVideoOutput        ( bool enable )
 {    
     if( GetPlaybackChannel() && GetPlaybackChannel()->m_pSDK )
     {
         VARIANT value;       
 		value.vt = VT_UI4;
 
-        value.ulVal = ENUM_BLACKGENERATOR_OFF;
-        GetPlaybackChannel()->m_pSDK->SetCardProperty( VIDEO_BLACKGENERATOR, value );
-    }
-}
-
-//**************************************
-//
-void Channel::DisableVideoOutput     ()
-{    
-    if( GetPlaybackChannel() && GetPlaybackChannel()->m_pSDK )
-    {
-        VARIANT value;       
-		value.vt = VT_UI4;
-
-        value.ulVal = ENUM_BLACKGENERATOR_ON;
+        value.ulVal = enable;
         GetPlaybackChannel()->m_pSDK->SetCardProperty( VIDEO_BLACKGENERATOR, value );
     }
 }

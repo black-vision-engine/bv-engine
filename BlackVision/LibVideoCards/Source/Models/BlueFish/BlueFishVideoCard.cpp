@@ -1,7 +1,4 @@
 #include "BlueFishVideoCard.h"
-#include <iostream>
-#include <fstream>
-#include <process.h>
 
 #include "Serialization/SerializationHelper.inl"
 
@@ -20,66 +17,73 @@ namespace bv { namespace videocards { namespace bluefish {
 //
 IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeserializer & deser ) const
 {
-    auto deviceID = 0;
-    if( deser.EnterChild( "deviceID" ) )
+    if( VideoCard::AvailableVideoCards > 0 )
     {
-        deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
-        
-        deser.ExitChild(); //deviceID
-    }
-
-    auto card = std::make_shared< VideoCard >( deviceID );
-
-    //check input / output count
-
-    if( deser.EnterChild( "channels" ) )
-    {
-        if( deser.EnterChild( "channel" ) )
+        auto deviceID = 0;
+        if( deser.EnterChild( "deviceID" ) )
         {
-            do
-            {
-                Channel::InputDataUPtr input = nullptr;
-                Channel::OutputDataUPtr output = nullptr;
-
-                auto name = String2T< ChannelName >( deser.GetAttribute( "name" ) );
-                //auto renderer = deser.GetAttribute( "renderer" );
-
-                if( deser.EnterChild( "input" ) )
-                {
-                    input = std::unique_ptr< Channel::InputData >( new Channel::InputData() );
-                    input->type = String2T< IOType >( deser.GetAttribute( "type" ) );
-                    input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
-                    
-                    deser.ExitChild(); //input
-                }
-
-                if( deser.EnterChild( "output" ) )
-                {
-                    output = std::unique_ptr< Channel::OutputData >( new Channel::OutputData() );
-                    output->type = String2T< IOType >( deser.GetAttribute( "type" ) );
-                    output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                    output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
-                    output->interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
-                    output->flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
-                    output->referenceMode = ReferenceModeMap[ String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
-                    output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ) );
-                    output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ) );
-                    output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
-
-                    deser.ExitChild(); //output
-                }
-
-                card->AddChannel( new Channel( name, input, output ) );
-
-            } while( deser.NextChild() );
-
-            deser.ExitChild(); //channel
+            deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
+        
+            deser.ExitChild(); //deviceID
         }
 
-        deser.ExitChild(); //channels
+        auto card = std::make_shared< VideoCard >( deviceID );
+
+        //check input / output count
+
+        if( deser.EnterChild( "channels" ) )
+        {
+            if( deser.EnterChild( "channel" ) )
+            {
+                do
+                {
+                    Channel::InputDataUPtr input = nullptr;
+                    Channel::OutputDataUPtr output = nullptr;
+
+                    auto name = String2T< ChannelName >( deser.GetAttribute( "name" ) );
+                    //auto renderer = deser.GetAttribute( "renderer" );
+
+                    if( deser.EnterChild( "input" ) )
+                    {
+                        input = std::unique_ptr< Channel::InputData >( new Channel::InputData() );
+                        input->type = String2T< IOType >( deser.GetAttribute( "type" ) );
+                        input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
+                    
+                        deser.ExitChild(); //input
+                    }
+
+                    if( deser.EnterChild( "output" ) )
+                    {
+                        output = std::unique_ptr< Channel::OutputData >( new Channel::OutputData() );
+                        output->type = String2T< IOType >( deser.GetAttribute( "type" ) );
+                        output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
+                        output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
+                        output->interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
+                        output->flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
+                        output->referenceMode = ReferenceModeMap[ String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
+                        output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ), -1 );
+                        output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ), -1 );
+                        output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
+
+                        deser.ExitChild(); //output
+                    }
+
+                    card->AddChannel( new Channel( name, input, output ) );
+
+                } while( deser.NextChild() );
+
+                deser.ExitChild(); //channel
+            }
+
+            deser.ExitChild(); //channels
+        }
+
+        VideoCard::AvailableVideoCards--;
+
+        return card;
     }
 
-    return card;
+    return nullptr;
 }
 
 //**************************************
@@ -88,6 +92,12 @@ const std::string &     VideoCardDesc::GetVideoCardUID() const
 {
     return m_uid;
 }
+
+
+//**************************************
+//
+UInt32                          VideoCard::AvailableVideoCards = EnumerateDevices();
+VideoCard::ChannelOptionMap     VideoCard::ChannelOptions = CreateChannelOptionMap();
 
 //**************************************
 //
@@ -101,65 +111,17 @@ VideoCard::VideoCard        ( UInt32 deviceID )
     //m_referenceMode = BlueFreeRunning;
     //m_refH = 0;
     //m_refV = 0;
-
-    ChannelOption A;
-    A.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_A;
-    A.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_A;
-    A.EpochSDIInput = EPOCH_SRC_SDI_INPUT_A;
-    A.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_A;
-    A.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHA;
-    A.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA;
-
-    ChannelOption B;
-    B.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_B;
-    B.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_B;
-    B.EpochSDIInput = EPOCH_SRC_SDI_INPUT_B;
-    B.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_B;
-    B.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHB;
-    B.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHB;
-
-    ChannelOption C;
-    C.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_C;
-    C.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_C;
-    C.EpochSDIInput = EPOCH_SRC_SDI_INPUT_C;
-    C.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_C;
-    C.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHC;
-    C.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHC;
-
-    ChannelOption D;
-    D.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_D;
-    D.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_D;
-    D.EpochSDIInput = EPOCH_SRC_SDI_INPUT_D;
-    D.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_D;
-    D.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHD;
-    D.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHD;
-
-    m_channelOptions[ ChannelName::A ] = A;
-    m_channelOptions[ ChannelName::B ] = B;
-    m_channelOptions[ ChannelName::C ] = C;
-    m_channelOptions[ ChannelName::D ] = D;
 }
 
 //**************************************
 //
 VideoCard::~VideoCard()
 {
-    DeactivateVideoCard();
-}
-
-//**************************************
-//
-Int32           VideoCard::EnumerateDevices         ()
-{
-    Int32 deviceCount = 0;
-    
-    CBlueVelvet4Ptr SDK( BlueVelvetFactory4() );
-    if( SDK ) 
+	for( auto & channel: m_channels )
     {
-		SDK->device_enumerate( deviceCount );
-	}
-
-    return deviceCount;
+        delete channel;
+    }
+    m_channels.clear();
 }
 
 //**************************************
@@ -168,7 +130,7 @@ bool            VideoCard::InitVideoCard            ()
 {
     if( BLUE_FAIL( m_SDK->device_attach( m_deviceID, FALSE ) ) )
     {
-        std::cout << "Error on device attach Device ID: " << m_deviceID << std::endl;
+        //std::cout << "Error on device attach Device ID: " << m_deviceID << std::endl;
         return false;
     }
 
@@ -176,7 +138,7 @@ bool            VideoCard::InitVideoCard            ()
     m_memFmt = MEM_FMT_BGRA;
     m_engineMode = VIDEO_ENGINE_DUPLEX;
 
-    DisableVideoOutput();
+    SetVideoOutput( false );
 
 	//ToDo unhack nasfeter
 	/*if(Channels[GetChannelByName("A")]->GetType()=="FILL_KEY") 
@@ -212,12 +174,12 @@ bool            VideoCard::InitVideoCard            ()
 		{
             if( channel->GetInputType() != IOType::FILL_KEY )
             {
-                captureChannel->Init( m_deviceID, m_channelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
-				captureChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochSDIInput, m_channelOptions[ channel->GetName() ].EpochInputMemInterface, BLUE_CONNECTOR_PROP_SINGLE_LINK );
+                captureChannel->Init( m_deviceID, ChannelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
+				captureChannel->RouteChannel( ChannelOptions[ channel->GetName() ].EpochSDIInput, ChannelOptions[ channel->GetName() ].EpochInputMemInterface, BLUE_CONNECTOR_PROP_SINGLE_LINK );
             }
             else
             {
-                captureChannel->InitDualLink( m_deviceID, m_channelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
+                captureChannel->InitDualLink( m_deviceID, ChannelOptions[ channel->GetName() ].InputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetCaptureBuffer() );
             }
 
             //channel->GetCaptureChannel()->m_playthrough = channel->m_playthrough;
@@ -228,17 +190,17 @@ bool            VideoCard::InitVideoCard            ()
         auto playbackChannel = channel->GetPlaybackChannel();
         if( playbackChannel )
 		{
-            playbackChannel->Init( m_deviceID, m_channelOptions[ channel->GetName() ].OutputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetVideoMode(), 
+            playbackChannel->Init( m_deviceID, ChannelOptions[ channel->GetName() ].OutputChannel, UPD_FMT_FRAME, MEM_FMT_BGRA, channel->GetVideoMode(), 
                 channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped() );
 
 			if( channel->GetInputType() == IOType::FILL || channel->GetInputType() == IOType::KEY )
 			{
-				playbackChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_SINGLE_LINK );
+				playbackChannel->RouteChannel( ChannelOptions[ channel->GetName() ].EpochOutputMemInterface, ChannelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_SINGLE_LINK );
 			}
 			else if( channel->GetInputType() == IOType::FILL_KEY )
 			{						
-				playbackChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
-				playbackChannel->RouteChannel( m_channelOptions[ channel->GetName() ].EpochOutputMemInterface, m_channelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
+				playbackChannel->RouteChannel( ChannelOptions[ channel->GetName() ].EpochOutputMemInterface, ChannelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
+				playbackChannel->RouteChannel( ChannelOptions[ channel->GetName() ].EpochOutputMemInterface, ChannelOptions[ channel->GetName() ].EpochSDIOutput, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
 			}
 
             /*if(channel->m_playthrough)
@@ -278,28 +240,18 @@ bool            VideoCard::InitVideoCard            ()
 	}
     //return true;
 
-    EnableVideoOutput();
+    SetVideoOutput( true );
 
     return true;
 }
 
 //**************************************
 //
-void            VideoCard::EnableVideoOutput        ()
+void            VideoCard::SetVideoOutput        ( bool enable )
 {
     for( auto channel : m_channels )
     {
-        channel->EnableVideoOutput();
-    }
-}
-
-//**************************************
-//
-void            VideoCard::DisableVideoOutput       ()
-{
-    for( auto channel : m_channels )
-    {
-        channel->DisableVideoOutput();
+        channel->SetVideoOutput( enable );
     }
 }
 
@@ -443,18 +395,79 @@ void                VideoCard::Start                ()
 
 //**************************************
 //
-void VideoCard::DeliverFrameFromRAM( unsigned char * buffer)
+void VideoCard::ProcessFrame( MemoryChunkConstPtr data )
 {
-    for( UInt32 i = 0; i < m_channels.size(); ++i )
+    for( auto channel : m_channels )
 	{
-        auto playbackChannel = m_channels[ i ]->GetPlaybackChannel();
-        auto captureChannel = m_channels[ i ]->GetCaptureChannel();
+        auto playbackChannel = channel->GetPlaybackChannel();
+        auto captureChannel = channel->GetCaptureChannel();
         if( playbackChannel && 
             ( !captureChannel /*|| ( captureChannel && m_playthrough==false )*/ ) )
 		{
-			playbackChannel->m_pFifoBuffer->PutLiveBuffer( new CFrame( buffer, 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
+            playbackChannel->m_pFifoBuffer->PutLiveBuffer( new CFrame( reinterpret_cast< const unsigned char * >( data->Get() ), 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
 		}
 	}   
+}
+
+//**************************************
+//
+VideoCard::ChannelOptionMap VideoCard::CreateChannelOptionMap   ()
+{
+    ChannelOptionMap channelOptionMap;
+
+    ChannelOption A;
+    A.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_A;
+    A.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_A;
+    A.EpochSDIInput = EPOCH_SRC_SDI_INPUT_A;
+    A.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_A;
+    A.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHA;
+    A.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA;
+
+    ChannelOption B;
+    B.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_B;
+    B.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_B;
+    B.EpochSDIInput = EPOCH_SRC_SDI_INPUT_B;
+    B.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_B;
+    B.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHB;
+    B.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHB;
+
+    ChannelOption C;
+    C.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_C;
+    C.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_C;
+    C.EpochSDIInput = EPOCH_SRC_SDI_INPUT_C;
+    C.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_C;
+    C.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHC;
+    C.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHC;
+
+    ChannelOption D;
+    D.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_D;
+    D.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_D;
+    D.EpochSDIInput = EPOCH_SRC_SDI_INPUT_D;
+    D.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_D;
+    D.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHD;
+    D.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHD;
+
+    channelOptionMap[ ChannelName::A ] = A;
+    channelOptionMap[ ChannelName::B ] = B;
+    channelOptionMap[ ChannelName::C ] = C;
+    channelOptionMap[ ChannelName::D ] = D;
+
+    return channelOptionMap;
+}
+
+//**************************************
+//
+UInt32          VideoCard::EnumerateDevices         ()
+{
+    Int32 deviceCount = 0;
+    
+    CBlueVelvet4Ptr SDK( BlueVelvetFactory4() );
+    if( SDK ) 
+    {
+		SDK->device_enumerate( deviceCount );
+	}
+
+    return ( UInt32 )deviceCount;
 }
 
 //**************************************
@@ -855,20 +868,6 @@ void BlueFishVideoCard::StopVideoCardProccessing()
 //		pSDK->wait_output_video_synch(UpdateFormat, FieldCount);	//start on correct field
 //    return true;
 //}
-
-//**************************************
-//
-bool VideoCard::DeactivateVideoCard()
-{    
-    //isKilled = true;
-	for( auto & channel: m_channels )
-    {
-        delete channel;
-    }
-    m_channels.clear();
-    std::cout << "BlueFishVideoCard Killed" << std::endl;
-    return true;
-}
 
 ////**************************************
 ////

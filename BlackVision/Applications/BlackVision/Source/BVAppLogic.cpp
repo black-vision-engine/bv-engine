@@ -322,8 +322,8 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
 //
 void BVAppLogic::RefreshVideoInputScene()
 {
-    if( DefaultConfig.UseVideoInputFeeding() && videocards::VideoCardManager::Instance().IsEnabled() )
-    {
+    //if( DefaultConfig.UseVideoInputFeeding() )
+    //{
     //    if( m_videoCardManager->CheckIfNewFrameArrived( 0, "A" ) )
     //    {
     //        BB::AssetManager::VideoInput->RefreshData( m_videoCardManager->GetCaptureBufferForShaderProccessing( 0, "A" ) );
@@ -332,7 +332,7 @@ void BVAppLogic::RefreshVideoInputScene()
     //    {
     //        //m_videoCardManager->UnblockCaptureQueue(0,"A");
     //    }
-    }
+    //}
 }
 
 // *********************************

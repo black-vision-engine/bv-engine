@@ -9,7 +9,7 @@ CFrame::CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
     Init( ID, Size, BytesPerLine );
 }
 
-CFrame::CFrame(BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
+CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
 {
     Init( ID, Size, BytesPerLine );
     memcpy(m_pBuffer, buffer, Size);

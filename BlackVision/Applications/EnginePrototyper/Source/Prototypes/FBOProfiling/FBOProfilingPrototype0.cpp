@@ -292,7 +292,7 @@ void	FBOProfilingPrototype0::DisableFrameBuffer	()
 
 // **************************
 //
-IBasicLogicUnqPtr    FBOProfilingPrototype0::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    FBOProfilingPrototype0::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
 	return IBasicLogicUnqPtr( new FBOProfilingPrototype0( renderer ) );
 }

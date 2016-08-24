@@ -1,13 +1,7 @@
 #include "VideoCardManager.h"
-#include "Tools/HRTimer.h"
-#include <iostream>
-#include <boost/lexical_cast.hpp>
-//#include <..\dep\vld\include\vld.h>
 
 //#include "Models/BlackMagic/BlackMagicVideoCard.h"
-//#include "Models/BlackMagic/BlackMagicVideoCardDescriptor.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
-//#include "Models/BlackMagic/BlueFishVideoCardDescriptor.h"
 
 #include "UseLoggerVideoModule.h"
 
@@ -21,8 +15,8 @@ std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
 {
     std::vector< IVideoCardDesc * > descriptors;
     
-    //descriptors.push_back( new BlackMagic::VideoCardDesc() );
     descriptors.push_back( new bluefish::VideoCardDesc() );
+    //descriptors.push_back( new blackmagic::VideoCardDesc() );
 
     return descriptors;
 }
@@ -30,31 +24,19 @@ std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
 
 //**************************************
 //
-const UInt32    VideoCardManager::FRAMES_COUNT  = 2;
-const UInt32    VideoCardManager::FHD           = 1920 * 1080 * 4;
-const UInt32    VideoCardManager::WIDTH_BYTES   = 1920 * 4;
-
-
-//**************************************
-//
 VideoCardManager::VideoCardManager      ()
-    : m_enabled( false )
-    , m_enableInterlace( false )
-    , m_keyActive( true )
+    : m_keyActive( true )
     , m_dislpayMode( DisplayMode::HD )
 {
-    //m_processingThread = std::unique_ptr< ProcessingThread >( new ProcessingThread( this ) );
 }
 
 //**************************************
 //
 VideoCardManager::~VideoCardManager     ()
 {
-    m_enabled = false;
-
     for( auto & videoCard : m_videoCards )
     {
-        videoCard->DisableVideoOutput();
+        videoCard->SetVideoOutput( false );
     }
 
     m_videoCards.clear();
@@ -69,19 +51,27 @@ VideoCardManager::~VideoCardManager     ()
 //
 void                        VideoCardManager::ReadConfig            ( const IDeserializer & deser )
 {
-    if( deser.EnterChild( "videocard" ) )
+    if( deser.EnterChild( "videocards" ) )
     {
-        do
+        if( deser.EnterChild( "videocard" ) )
         {
-            auto name = deser.GetAttribute( "name" );
-            if( IsRegistered( name ) )
+            do
             {
-                auto videocard = m_descMap[ name ]->CreateVideoCard( deser );
-                m_videoCards.push_back( videocard );
-            }
-        } while( deser.NextChild() );
+                auto name = deser.GetAttribute( "name" );
+                if( IsRegistered( name ) )
+                {
+                    auto videocard = m_descMap[ name ]->CreateVideoCard( deser );
+                    if( videocard )
+                    {
+                        m_videoCards.push_back( videocard );
+                    }
+                }
+            } while( deser.NextChild() );
 
-        deser.ExitChild(); //videocard
+            deser.ExitChild(); //videocard
+        }
+
+        deser.ExitChild(); //videocards
     }
 }
 
@@ -108,9 +98,12 @@ bool                        VideoCardManager::IsRegistered          ( const std:
 
 //**************************************
 //
-bool                        VideoCardManager::IsEnabled             () const
+void VideoCardManager::SetVideoOutput   ( bool enable )
 {
-    return m_enabled;
+    for( auto & videoCard : m_videoCards )
+    {
+        videoCard->SetVideoOutput( enable );
+    }
 }
 
 //**************************************
@@ -124,67 +117,20 @@ void                        VideoCardManager::SetKey                ( bool activ
 //
 void                        VideoCardManager::Start                 ()
 {
-    m_enabled = true;
-    //if( GetVideoCardsSize() > 0)
-    //{
-    //    m_processingThread->Start( Thread::ThreadPriotity::TIME_CRITICAL );
-    //}
-
-    for( UInt32 i = 0; i < m_videoCards.size(); ++i )
+    for( auto & videoCard : m_videoCards )
     {
-		m_videoCards[ i ]->Start();
+		videoCard->Start();
     }
 }
 
 // *********************************
 //
-void                        VideoCardManager::ProcessBuffer         ()
+void                        VideoCardManager::ProcessFrame          ( MemoryChunkConstPtr data )
 {
-    //static unsigned char buf[ fhd * frames_count ];
-    //static unsigned int cur_buf = 0;
-
-    MemoryChunkConstPtr data = nullptr;
-    //m_dataQueue.WaitAndPop( data );
-    while( !m_dataQueue.TryPop( data ) );
-
-    auto frameBuf = ( unsigned char * )data->Get();
-
-    //if( m_enableInterlace )
-    //{
-    //  unsigned int next_buf = ( cur_buf + 1 ) % FRAMES_COUNT;
-
-    //  memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
-    //  unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
-
-    //  for( unsigned int i = 0;  i < 1080; i += 2 )
-    //  {
-    //      unsigned int cur_i = i + 1;
-    //      unsigned int prev_i = i + 1;
-
-    //      unsigned int cur_scanline = WIDTH_BYTES * cur_i;
-    //      unsigned int prev_scanline = WIDTH_BYTES * prev_i;
-
-    //      memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], WIDTH_BYTES );
-
-    //  }
-    //}
-    //cur_buf = ( cur_buf + 1 ) % frames_count; 
-
-    if( !m_keyActive )
-    {
-        for( UInt32 i = 0; i < FHD; i += 4 )
-        {
-            /*[ +i+0]=0;
-            frameBuf[ cur_scanline+i+1]=0;
-            frameBuf[ cur_scanline+i+2]=0;*/
-            frameBuf[ i + 3 ] = 0;
-        }
-    }
-       
-    for( UInt32 i = 0; i < m_videoCards.size(); ++i )
-    {
-        //m_videoCards[ i ]->DeliverFrameFromRAM( frameBuf );
-    }
+    for( auto & videoCard : m_videoCards )
+	{
+		videoCard->ProcessFrame( data );
+	}    
 }
 
 //**************************************
@@ -236,27 +182,6 @@ VideoCardManager &      VideoCardManager::Instance             ()
 
 
 
-//
-////**************************************
-////
-//void VideoCardManager::Enable()
-//{
-//    for( UInt32 i = 0; i < m_videoCards.size(); ++i )
-//    {
-//        m_videoCards[ i ]->Enable();
-//    }
-//}
-//
-////**************************************
-////
-//void VideoCardManager::Disable()
-//{
-//    for( UInt32 i = 0; i < m_videoCards.size(); ++i )
-//    {
-//        m_videoCards[ i ]->Black();
-//        m_videoCards[ i ]->Disable();
-//    }
-//}
 
 ////**************************************
 ////
@@ -507,12 +432,12 @@ VideoCardManager &      VideoCardManager::Instance             ()
 //    printf("VideoCards INFO Detected BlueFish video cards: %d \n",numCards);
 //}
 
-//**************************************
-//
-void VideoCardManager::PushDataFromRenderer     ( MemoryChunkConstPtr data )
-{
-    m_dataQueue.Push( data );
-}
+////**************************************
+////
+//void VideoCardManager::PushDataFromRenderer     ( MemoryChunkConstPtr data )
+//{
+//    m_dataQueue.Push( data );
+//}
 
 ////**************************************
 ////
