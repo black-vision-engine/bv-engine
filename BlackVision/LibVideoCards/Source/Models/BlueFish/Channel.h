@@ -1,86 +1,113 @@
 #pragma once
-#include "../../VideoCardBase.h"
+
 #include "win_sock.h"
-#include <string>
-#include <queue>
-#include <stdio.h>
-#include <tchar.h>
-#include <iostream>
-#include <process.h>
-
 #include "BlueFish/inc/BlueVelvet4.h"
-#include "BlueFish/inc/BlueGpuDirect.h"
-#include "BlueFish/inc/BlueHancUtils.h"
 
-#include "Utils.h"
 #include "FifoBuffer.h"
 #include "FifoCapture.h"
 #include "FifoPlayback.h"
 
-namespace bv
-{
+#include "CoreDEF.h"
 
-namespace videocards{
-using namespace std;
+
+namespace bv { namespace videocards { namespace bluefish {
+
+
 struct MainThreadArgs
 {
-	CFifoBuffer*	pInputFifo;
-	CFifoBuffer*	pOutputFifo;
-	string			strChannel;
-	BOOL			bDoRun;
+    CFifoBuffer *   pInputFifo;
+    CFifoBuffer *   pOutputFifo;
+    BOOL            bDoRun;
 };
 
 class Channel
 {
 private:
-	MainThreadArgs	m_PlaythroughThreadArgs;
-	CFifoBuffer		m_CaptureFifoBuffer;
-	CFifoBuffer		m_PlaybackFifoBuffer;
-	CFifoCapture*	m_CaptureChannel;
-	CFifoPlayback*	m_PlaybackChannel;
-	std::string		m_Name;
-	std::string		m_Type;
-	std::string		m_InputType;
-	unsigned int	m_PlaythroughThreadID;
-	
-public:
-	unsigned short	m_Renderer;
-	unsigned short	m_Resolution;
-	unsigned short	m_Refresh;
-	bool			m_Interlaced;
-	bool			m_Flipped;
-	bool			m_Playback;
-	bool			m_Capture;
-	bool			m_playthrough;
-	ULONG			m_VideoMode;
-	HANDLE			m_PlaythroughThreadHandle;
-	std::shared_ptr<CFrame>			pFrameOut;
-    long            m_referenceMode;
-    int             m_refH;
-    int             m_refV;
 
+    MainThreadArgs  m_PlaythroughThreadArgs;
+
+    CFifoBuffer *   m_captureFifoBuffer;
+    CFifoCapture *  m_captureChannel;
+
+    CFifoBuffer *   m_playbackFifoBuffer;
+    CFifoPlayback * m_playbackChannel;
+
+    ChannelName     m_channelName;
+
+    unsigned int    m_PlaythroughThreadID;
+    
 public:
 
-	Channel( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short	refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, long referenceMode, int refH, int refV);
-	~Channel();
+    struct InputData
+    {
+        IOType                  type;
+        bool                    playthrough;
+    };
 
-	std::string		GetName				();
-	std::string		GetType 			();
-	std::string		GetInputType		();
-	CFifoBuffer*	GetCaptureBuffer	();
-	CFifoBuffer*	GetPlaybackBuffer	();
-	CFifoCapture*	GetCaptureChannel	();
-	CFifoPlayback*	GetPlaybackChannel	();
-	ULONG			ParseVideoMode		( unsigned short resolution, unsigned short	refresh, bool interlaced );
-	void			InitThreads			();
-	void			StartThreads		();
-	void			StopThreads			();
-	void			SuspendThreads		();
-	void			ResumeThreads		();
-	void			StartDuplexThread	();
-    void            GenerateBlack       ();
-	unsigned int static __stdcall PlaythroughThread	( void * pArg );
+    DEFINE_UPTR_TYPE( InputData )
+
+    struct OutputData
+    {
+        IOType                  type;
+        UInt32                  resolution;
+	    UInt32                  refresh;
+        bool                    interlaced;
+        bool                    flipped;
+        _EVideoMode             videoMode;
+        _EBlueGenlockSource     referenceMode;
+        Int32                   referenceH;
+        Int32                   referenceV;
+    };
+
+    DEFINE_UPTR_TYPE( OutputData )
+
+public:
+
+    InputDataUPtr   m_captureData;
+    OutputDataUPtr  m_playbackData;
+
+    HANDLE          m_PlaythroughThreadHandle;
+
+    //std::shared_ptr<CFrame>         pFrameOut;
+    //long            m_referenceMode;
+    //int             m_refH;
+    //int             m_refV;
+
+public:
+
+                    Channel             ( ChannelName name, InputDataUPtr & input, OutputDataUPtr & output );
+                    ~Channel            ();
+
+    ChannelName     GetName             () const;
+
+    IOType          GetOutputType       () const;
+    IOType          GetInputType        () const;
+
+    CFifoCapture *  GetCaptureChannel   () const;
+    CFifoPlayback * GetPlaybackChannel  () const;
+
+    CFifoBuffer *   GetCaptureBuffer    ();
+    CFifoBuffer *   GetPlaybackBuffer   ();
+    
+    UInt32          GetVideoMode        () const;
+    UInt32          GetReferenceMode    () const;
+    UInt32          GetReferenceH       () const;
+    UInt32          GetReferenceV       () const;
+    bool            GetFlipped          () const;
+
+    //bool            HasPlaythroughChannel () const;
+
+    void            StartThreads        ();
+    void            StopThreads         ();
+    void            SuspendThreads      ();
+    void            ResumeThreads       ();
+
+    void            SetVideoOutput      ( bool enable );
+
+    unsigned int static __stdcall PlaythroughThread ( void * pArg );
 
 };
-}
-}
+
+} //bluefish
+} //videocards
+} //bv

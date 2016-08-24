@@ -107,7 +107,7 @@ bool    SimpleVAOPrototype0::PrepareShader  ()
 
 // **************************
 //
-IBasicLogicUnqPtr    SimpleVAOPrototype0::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    SimpleVAOPrototype0::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
     return IBasicLogicUnqPtr( new SimpleVAOPrototype0( renderer ) );
 }

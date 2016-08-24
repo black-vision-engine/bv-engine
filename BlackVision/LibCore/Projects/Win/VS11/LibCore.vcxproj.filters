@@ -28,6 +28,15 @@
     <Filter Include="Util">
       <UniqueIdentifier>{65e8b6fd-9954-403b-afb9-796cfe42452d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization">
+      <UniqueIdentifier>{096691c0-1b91-409d-a3bb-9c50c39f62de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\XML">
+      <UniqueIdentifier>{c09a5317-3f03-4950-b688-edd1cfe4a1b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mathematics">
+      <UniqueIdentifier>{685a3969-2774-4166-8983-7caa43abd050}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -126,6 +135,33 @@
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
+      <Filter>Serialization\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h">
+      <Filter>Serialization\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -194,10 +230,22 @@
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp">
+      <Filter>Serialization\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
+      <Filter>Serialization\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">
       <Filter>Tools\Profiler</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
+      <Filter>Serialization</Filter>
     </None>
   </ItemGroup>
 </Project>

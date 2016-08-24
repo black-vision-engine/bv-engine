@@ -9,7 +9,6 @@
 
 //pablito
 //#include "SocketWrapper.h"
-#include "ConfigManager.h"
 #include "structure/AssetManager.h"
 #include "LicenseManager.h"
 #include "VideoCardManager.h"
@@ -40,8 +39,6 @@ private:
 
     SimpleTimer                 m_timer;
 
-    //pablito
-    bv::videocards::VideoCardManager m_videoCardManager;
 public:
 
     static bool			m_sWindowedApplicationInitialized;

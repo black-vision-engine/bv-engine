@@ -2,19 +2,16 @@
 
 #include "win_sock.h"
 #include "BlueFish/inc/BlueVelvet4.h"
-#include "FifoBuffer.h"
-#include <stdio.h>
-#include <tchar.h>
-#include <iostream>
-#include <process.h>
-#include <chrono>
-namespace bv
-{
 
-namespace videocards{
+#include "FifoBuffer.h"
+
+
+namespace bv { namespace videocards { namespace bluefish {
+
 class CFifoPlayback
 {
 public:
+
 	CFifoPlayback();
 	~CFifoPlayback();
 
@@ -23,15 +20,15 @@ public:
 	unsigned int static __stdcall	PlaybackThread(void * pArg);
 	unsigned int static __stdcall	PlaybackThreadNotSynchronised(void * pArg);
 	BLUE_INT32						InitThread();
-	BLUE_INT32                      InitNotSyncedThread();
-	void							StartPlaybackThread();
-	void							SuspendPlaybackThread();
-	void							ResumePlaybackThread();
-	void							StopPlaybackThread();
+	//BLUE_INT32                      InitNotSyncedThread();
+	void							StartThread();
+	void							SuspendThread();
+	void							StopThread();
 	bool							UpdateReferenceOffset(int refH, int refV);
 	bool							UpdateReferenceMode(long referenceMode);
 
 public:
+
 	CBlueVelvet4*	m_pSDK;
 	BLUE_INT32		m_iDevices;
 	BLUE_INT32		m_nIsAttached;
@@ -46,8 +43,9 @@ public:
 
 	HANDLE			m_hThread;
 	BLUE_UINT32		m_nThreadStopping;
+
 };
 
- 
-}
-}
+} //bluefish
+} //videocards
+} //bv

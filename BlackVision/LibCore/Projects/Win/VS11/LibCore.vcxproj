@@ -27,8 +27,17 @@
     <ClInclude Include="..\..\..\Source\IO\DirIO.h" />
     <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
     <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\InitSubsystem.h" />
     <ClInclude Include="..\..\..\Source\System\Path.h" />
@@ -60,6 +69,9 @@
     <ClCompile Include="..\..\..\Source\IO\FileIO.cpp" />
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\System\Env.cpp" />
     <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp" />
     <ClCompile Include="..\..\..\Source\System\Path.cpp" />
@@ -79,6 +91,7 @@
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

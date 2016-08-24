@@ -279,7 +279,7 @@ void	FBOProfilingPrototype2::AddTextureForAttachment( SizeType i )
 
 // **************************
 //
-IBasicLogicUnqPtr    FBOProfilingPrototype2::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    FBOProfilingPrototype2::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
 	return IBasicLogicUnqPtr( new FBOProfilingPrototype2( renderer ) );
 }

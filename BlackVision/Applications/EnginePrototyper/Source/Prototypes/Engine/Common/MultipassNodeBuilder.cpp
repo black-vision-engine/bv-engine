@@ -1,7 +1,7 @@
 #include "MultipassNodeBuilder.h"
 #include "Prototypes/Engine/Common/GeometryBuilder.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
-#include "Engine/Graphics/Effects/DefaultMultipassEffect.h"
+//#include "Engine/Graphics/Effects/DefaultMultipassEffect.h"
 
 
 namespace bv {
@@ -40,13 +40,13 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 
 	float alfa =  1.0;
 
-    DefaultMultipassEffectPtr effect;
+    //DefaultMultipassEffectPtr effect;
 
 	//IShaderDataSourceConstPtr fsds;
 	IShaderDataSourceConstPtr vsds;
 	
-	RenderablePass* newPass;
-	RendererStateInstance* stateInstance;
+	//RenderablePass* newPass;
+	//RendererStateInstance* stateInstance;
 
 
 	for( unsigned short pass = 0; pass < passes; pass++ )
@@ -63,14 +63,14 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 			vsds = ShaderDataSourceCreator::VertexShader( sdst );
 			dummyFuckerReferenceKeeper.push_back( vsds );
 
-			effect = std::make_shared<DefaultMultipassEffect>( fsds.get(), vsds.get(), nullptr );
+			//effect = std::make_shared<DefaultMultipassEffect>( fsds.get(), vsds.get(), nullptr );
 
-			stateInstance = effect->GetPass( 0 )->GetStateInstance();
+			//stateInstance = effect->GetPass( 0 )->GetStateInstance();
 		}
 		else
 		{
-			newPass = effect->addPass( fsds.get(), vsds.get(), nullptr );
-			stateInstance = newPass->GetStateInstance();
+			//newPass = effect->addPass( fsds.get(), vsds.get(), nullptr );
+			//stateInstance = newPass->GetStateInstance();
 		}
 		
 		AlphaState alfaState;
@@ -79,10 +79,11 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 		alfaState.dstRGBBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
 		alfaState.srcRGBBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
 		
-		stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
+		//stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
 	}
 
-	return effect;
+	//return effect;
+    return nullptr;
 }
 
 
