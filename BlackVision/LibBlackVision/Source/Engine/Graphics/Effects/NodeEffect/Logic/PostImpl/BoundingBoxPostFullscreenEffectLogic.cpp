@@ -22,7 +22,7 @@
 
 namespace bv {
 
-BoundingBoxEffect *   BoundingBoxPostFullscreenEffectLogic::m_effect = new BoundingBoxEffect();
+std::unique_ptr< BoundingBoxEffect >   BoundingBoxPostFullscreenEffectLogic::m_effect = std::unique_ptr< BoundingBoxEffect >( new BoundingBoxEffect() );
 
 
 // *********************************

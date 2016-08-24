@@ -16,7 +16,7 @@ class BoundingBoxPostFullscreenEffectLogic : public PostFullscreenEffectLogic
 private:
     ValueVec4Ptr                        m_colorValue;
 
-    static BoundingBoxEffect *          m_effect;
+    static std::unique_ptr< BoundingBoxEffect > m_effect;
 
 public:
 

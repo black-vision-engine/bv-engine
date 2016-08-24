@@ -26,7 +26,7 @@ UniformBuffer::UniformBuffer ( const UniformBlockLayout * blockLayout, DataBuffe
     , m_layout( blockLayout )
 {
     assert( m_layout->size > 0 );
-	m_data = new char[ m_layout->size ];
+    m_data = new char[ m_layout->size ];
 }
 
 // *********************************

@@ -13,9 +13,9 @@ private:
 
     float                   m_epsilon;              ///< Epsilon for comparing positions.
 
-	unsigned int			usedRangeIndex;			///< Points element in index table, that is the first unused element.
-	unsigned int			remainnigTriangles;		///< Number of traingles to use.
-	std::vector<bool>		usedTriangles;			///< Indicates which indicies(triangles) have been used.
+    unsigned int			usedRangeIndex;			///< Points element in index table, that is the first unused element.
+    unsigned int			remainnigTriangles;		///< Number of traingles to use.
+    std::vector<bool>		usedTriangles;			///< Indicates which indicies(triangles) have been used.
 
     // These variables can hold conversion data. You can apply the same conversion to other geometry channels.
     bool                    m_rememberConversion;
@@ -23,17 +23,17 @@ private:
 
 protected:
 
-	void        moveRangeIndex          ();
-	bool        findNeighbour           ( unsigned int index1, unsigned int index2, unsigned int& foundIndex, std::vector<INDEX_TYPE>& indicies );
-	bool        findNeighbourPair       ( unsigned int index1, unsigned int& foundIndex1, unsigned int& foundIndex2, std::vector<INDEX_TYPE>& indicies );
-	void        findFirstUnusedTriangle ( unsigned int& index1, std::vector<INDEX_TYPE>& indicies );
+    void        moveRangeIndex          ();
+    bool        findNeighbour           ( unsigned int index1, unsigned int index2, unsigned int& foundIndex, std::vector<INDEX_TYPE>& indicies );
+    bool        findNeighbourPair       ( unsigned int index1, unsigned int& foundIndex1, unsigned int& foundIndex2, std::vector<INDEX_TYPE>& indicies );
+    void        findFirstUnusedTriangle ( unsigned int& index1, std::vector<INDEX_TYPE>& indicies );
 
 public:
-	IndexedGeometryConverter            ();
+    IndexedGeometryConverter            ();
     IndexedGeometryConverter            ( float epsilon );
-	~IndexedGeometryConverter           ();
+    ~IndexedGeometryConverter           ();
 
-	void                MakeStrip               ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
+    void                MakeStrip               ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
     void                MakeTriangles           ( IndexedGeometry & mesh, Float3AttributeChannelPtr verts );
     void                MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< INDEX_TYPE > & indicies, Float3AttributeChannelPtr verts );
 

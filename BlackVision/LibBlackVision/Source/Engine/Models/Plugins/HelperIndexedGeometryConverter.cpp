@@ -327,6 +327,8 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Floa
     auto & indices = mesh.GetIndicies();
     auto vertsNum = srcVertices.size();
 
+    indices.reserve( vertsNum );
+
     for( UInt32 i = 0; i < vertsNum; ++i )
     {
         auto it = std::find_if( vertices.begin(), vertices.end(), [ & ]( const glm::vec3 & vert ){
@@ -347,6 +349,8 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Floa
             indices.push_back( (INDEX_TYPE)idx );
         }
     }
+
+    assert( indices.size() == vertsNum );
 
     return mesh;
 }

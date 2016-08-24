@@ -24,6 +24,7 @@
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultBlendTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultExtrudePlugin.h"
 
 #include "Widgets/MeshLoader/MeshLoader.h"
 
@@ -2061,6 +2062,9 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
 
     auto success = root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator );
     assert( success );
+    auto extrude = root->GetPlugin( "extrude" );
+    assert( extrude );
+    model::SetParameter( extrude->GetParameter( model::DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE ), 0, model::DefaultExtrudePlugin::ExtrudeCurveType::Circle );    
     
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //success = model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
