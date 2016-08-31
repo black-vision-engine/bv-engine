@@ -49,7 +49,7 @@ bool  AttributeChannel::IsReadOnly              ()  const
 
 // *********************************
 //
-const IAttributeChannelDescriptor *   AttributeChannel::GetDescriptor           ()  const
+IAttributeChannelDescriptorConstPtr   AttributeChannel::GetDescriptor           ()  const
 {
     return m_desc;
 }

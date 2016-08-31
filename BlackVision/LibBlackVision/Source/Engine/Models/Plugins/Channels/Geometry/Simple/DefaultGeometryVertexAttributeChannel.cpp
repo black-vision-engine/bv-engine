@@ -33,20 +33,20 @@ void    DefaultGeometryVertexAttributeChannel::AddAttributeChannelDescriptors   
     auto type = generator.GetType();
 
     // always generate positions
-    m_compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    m_compVertDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     m_desc.AddAttrChannelDesc( m_compVertDesc );
 
     // add normals
     if( type >= IGeometryGenerator::GEOMETRY_NORMALS )
     {
-        m_compNormDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
+        m_compNormDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
         m_desc.AddAttrChannelDesc( m_compNormDesc );
     }
 
     // add uvs
     if( type >= IGeometryGenerator::GEOMETRY_NORMALS_UVS )
     {
-        m_compUVDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR ); // possibly unused
+        m_compUVDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR ); // possibly unused
         m_desc.AddAttrChannelDesc( m_compUVDesc );
     }
 }
@@ -59,20 +59,20 @@ void    DefaultGeometryVertexAttributeChannel::GenerateAndAddConnectedComponent 
 
     AddAttributeChannelDescriptors( generator );
     
-    auto vertChannel = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
+    auto vertChannel = std::make_shared< Float3AttributeChannel >( m_compVertDesc.get(), m_compVertDesc->SuggestedDefaultName( 0 ), false );
     comp->AddAttributeChannel( vertChannel );
     
     Float3AttributeChannelPtr normChannel = nullptr;
     if( m_compNormDesc )
     {
-        normChannel = std::make_shared< Float3AttributeChannel >( m_compNormDesc, m_compNormDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
+        normChannel = std::make_shared< Float3AttributeChannel >( m_compNormDesc.get(), m_compNormDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
         comp->AddAttributeChannel( normChannel );
     }
 
     Float2AttributeChannelPtr uvChannel = nullptr;
     if( m_compUVDesc )
     {
-        uvChannel = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
+        uvChannel = std::make_shared< Float2AttributeChannel >( m_compUVDesc.get(), m_compUVDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
         comp->AddAttributeChannel( uvChannel );
     }
  

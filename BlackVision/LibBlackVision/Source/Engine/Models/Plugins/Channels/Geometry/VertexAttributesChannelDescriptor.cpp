@@ -71,7 +71,7 @@ bool	VertexAttributesChannelDescriptor::HasIndexChannel		() const
 
 // ************************************
 //
-const IAttributeChannelDescriptor *	VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( int channelIndex ) const
+IAttributeChannelDescriptorConstPtr	VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( int channelIndex ) const
 {
     assert( channelIndex >= 0 );
     assert( channelIndex < (int) m_attributeChannelDescriptors.size() );
@@ -114,9 +114,9 @@ unsigned int                                VertexAttributesChannelDescriptor::S
 
 // ************************************
 //
-const AttributeChannelDescriptor *  VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
+AttributeChannelDescriptorConstPtr  VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
 {
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( attrType, attrSemantic, channelRole );
+    auto desc = std::make_shared< AttributeChannelDescriptor >( attrType, attrSemantic, channelRole );
     AddAttrChannelDesc( desc );
 
     return desc;
@@ -124,7 +124,7 @@ const AttributeChannelDescriptor *  VertexAttributesChannelDescriptor::AddAttrCh
 
 // ************************************
 //
-void    VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( const AttributeChannelDescriptor * desc )
+void    VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeChannelDescriptorConstPtr desc )
 {
     m_attributeChannelDescriptors.push_back( desc );
 }
@@ -153,9 +153,9 @@ void    VertexAttributesChannelDescriptor::SetIndexChannelDesc     ( IndexChanne
 
 // *************************************
 //
-const AttributeChannelDescriptor *      VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx ) const
+AttributeChannelDescriptorConstPtr      VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx ) const
 {
-    const AttributeChannelDescriptor * ret = nullptr;
+    AttributeChannelDescriptorConstPtr ret = nullptr;
     if( !m_attributeChannelDescriptors.empty() )
     {
         for( auto desc : m_attributeChannelDescriptors )

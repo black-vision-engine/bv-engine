@@ -27,7 +27,7 @@ VertexAttributesChannelDescriptor   DescriptorFromConnectedComponent( ConnectedC
 
     for( auto compDesc : cc->GetAttributeChannels() )
     {
-        desc.AddAttrChannelDesc( static_cast< const model::AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+        desc.AddAttrChannelDesc( std::dynamic_pointer_cast< const model::AttributeChannelDescriptor >( compDesc->GetDescriptor() ) );
     }
 
     return desc;

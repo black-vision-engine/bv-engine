@@ -8,15 +8,17 @@ namespace bv { namespace model
 {
 
 class AttributeChannelDescriptor;
+DEFINE_PTR_TYPE( AttributeChannelDescriptor );
+DEFINE_CONST_PTR_TYPE( AttributeChannelDescriptor );
 
 class AttributeChannel : public IAttributeChannel
 {
 private:
 
-    const AttributeChannelDescriptor *  m_desc;
-    std::string                         m_name;
+    AttributeChannelDescriptorConstPtr              m_desc;
+    std::string                                     m_name;
 
-    bool                                m_readOnly;
+    bool                                            m_readOnly;
 
 public:
     
@@ -26,7 +28,7 @@ public:
     void                                            SetReadOnly         ( bool readOnly );               
     virtual bool                                    IsReadOnly          ()  const;
 
-    virtual const IAttributeChannelDescriptor *     GetDescriptor       ()  const;
+    virtual IAttributeChannelDescriptorConstPtr     GetDescriptor       ()  const;
     virtual std::string                             GetName             ()  const;
 };
 

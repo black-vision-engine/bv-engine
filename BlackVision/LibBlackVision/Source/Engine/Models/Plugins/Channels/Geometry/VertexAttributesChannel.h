@@ -19,20 +19,20 @@ class VertexAttributesChannel : public IVertexAttributesChannel
 {
 protected:
 
-    VertexAttributesChannelDescriptor               m_desc;
+    VertexAttributesChannelDescriptor                   m_desc;
 
-    PrimitiveType                                   m_primitiveType;
-    std::vector< ConnectedComponentPtr >            m_connectedComponents;
+    PrimitiveType                                       m_primitiveType;
+    std::vector< ConnectedComponentPtr >                m_connectedComponents;
 
-    bool                                            m_isReadOnly;
-    bool                                            m_isTimeInvariant;
+    bool                                                m_isReadOnly;
+    bool                                                m_isTimeInvariant;
 
-    UInt64											m_attributesUpdateID;
-    UInt64											m_topologyUpdateID;
+    UInt64											    m_attributesUpdateID;
+    UInt64											    m_topologyUpdateID;
 
 public:
                                                         VertexAttributesChannel         ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
-                                                        VertexAttributesChannel         ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly = false, bool isTimeInvariant = false );
+                                                        VertexAttributesChannel         ( PrimitiveType type, const VertexAttributesChannelDescriptor & desc, bool isReadOnly = false, bool isTimeInvariant = false );
     virtual                                             ~VertexAttributesChannel        ();
 
     //IChannel

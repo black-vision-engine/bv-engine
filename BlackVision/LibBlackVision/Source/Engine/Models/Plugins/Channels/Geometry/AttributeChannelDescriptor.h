@@ -8,6 +8,9 @@
 namespace bv { namespace model
 {
 
+class AttributeChannelDescriptor;
+DEFINE_PTR_TYPE( AttributeChannelDescriptor );
+
 // FIXME: Czy kazdy typ moze miec kazda semantyke? I jak ewentualnie wymusic ograniczenia/wiezy?
 class AttributeChannelDescriptor : public IAttributeChannelDescriptor
 {

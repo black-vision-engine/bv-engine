@@ -15,9 +15,9 @@ class DefaultGeometryVertexAttributeChannel : public VertexAttributesChannel
 {
 private:
 
-    AttributeChannelDescriptor * m_compVertDesc;
-    AttributeChannelDescriptor * m_compNormDesc;
-    AttributeChannelDescriptor * m_compUVDesc;
+    AttributeChannelDescriptorPtr m_compVertDesc;
+    AttributeChannelDescriptorPtr m_compNormDesc;
+    AttributeChannelDescriptorPtr m_compUVDesc;
 
 public:
 
