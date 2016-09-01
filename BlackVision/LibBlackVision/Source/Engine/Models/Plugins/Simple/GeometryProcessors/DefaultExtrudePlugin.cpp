@@ -217,7 +217,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     }
     else
     {
-        DefaultNormals( mesh, normals.GetVerticies(), true );
+        DefaultNormals( mesh, normals.GetVerticies(), false );
         FillWithNormals( mesh, normals.GetVerticies() );
     }
 

@@ -77,6 +77,7 @@ void                                DefaultGeometryProcessorBase::Update        
             if( iter->second->StateChanged() )
             {
                 ProcessVertexAttributesChannel();
+                HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
                 break;
             }
         }

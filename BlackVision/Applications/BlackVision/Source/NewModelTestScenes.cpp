@@ -2065,7 +2065,13 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
     auto extrude = root->GetPlugin( "extrude" );
     assert( extrude );
     model::SetParameter( extrude->GetParameter( model::DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE ), 0, model::DefaultExtrudePlugin::ExtrudeCurveType::Circle );    
+    model::SetParameter( extrude->GetParameter( model::DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE ), 0, 160.0f );    
+    model::SetParameter( extrude->GetParameter( model::DefaultExtrudePlugin::PARAMS::CURVE_SCALE ), 0, 0.01f );
+    model::SetParameter( extrude->GetParameter( model::DefaultExtrudePlugin::PARAMS::CURVE_SCALE ), 3, 0.2f );
     
+    static_cast< model::DefaultTimeline* >( timeEvaluator.get() )->SetWrapBehavior( TimelineWrapMethod::TWM_MIRROR, TimelineWrapMethod::TWM_MIRROR );
+    static_cast< model::DefaultTimeline* >( timeEvaluator.get() )->SetDuration( 3.0f );
+
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //success = model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
     //assert( success );
