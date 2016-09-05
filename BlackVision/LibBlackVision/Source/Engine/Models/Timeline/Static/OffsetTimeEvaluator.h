@@ -7,6 +7,10 @@
 
 namespace bv { namespace model {
 
+class OffsetTimeEvaluator;
+DEFINE_PTR_TYPE(OffsetTimeEvaluator)
+
+
 class OffsetTimeEvaluator : public TimeEvaluatorBase< ITimeEvaluator >
 {
 private:
@@ -16,24 +20,27 @@ private:
 private:
 
     TimeType        m_timeOffset;
+    TimeType        m_timeScale;
     TimeType        m_globalTime;
 
+                                                    OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime, TimeType scale );
 public:
 
-            OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime );
-            ~OffsetTimeEvaluator                    ();
+                                                    ~OffsetTimeEvaluator                    ();
 
-    virtual void                Serialize           ( ISerializer& sob ) const;
-    static ISerializablePtr     Create              ( const IDeserializer& dob );
+    static OffsetTimeEvaluatorPtr                   Create                                  ( const std::string & name, TimeType offsetTime, TimeType scale = 1 );
 
-    void    SetTimeOffset                           ( TimeType t );
+    virtual void                                    Serialize                               ( ISerializer& sob ) const;
+    static OffsetTimeEvaluatorPtr                   Create                                  ( const IDeserializer& dob );
 
-    virtual void                SetGlobalTimeImpl   ( TimeType t ) override;
-    virtual TimeType            GetLocalTime        () const override;
+    void                                            SetTimeOffset                           ( TimeType t );
 
+    virtual void                                    SetGlobalTimeImpl                       ( TimeType t ) override;
+    virtual TimeType                                GetLocalTime                            () const override;
+
+    virtual const std::string&                      GetType                                 () override;
+    static const std::string&                       Type                                    ();
 };
-
-DEFINE_PTR_TYPE(OffsetTimeEvaluator)
 
 } //model
 } //bv

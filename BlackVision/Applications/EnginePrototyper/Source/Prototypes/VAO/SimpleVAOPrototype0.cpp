@@ -9,7 +9,7 @@ SimpleVAOPrototype0::SimpleVAOPrototype0    ( Renderer * renderer )
     : m_rct( 1.f, 1.f )
     , m_paused( false )
 {
-	{ renderer; }
+    { renderer; }
 
     if( !PrepareShader() )
     {
@@ -109,7 +109,7 @@ bool    SimpleVAOPrototype0::PrepareShader  ()
 //
 IBasicLogicUnqPtr    SimpleVAOPrototype0::Create  ( Renderer * renderer )
 {
-	return IBasicLogicUnqPtr( new SimpleVAOPrototype0( renderer ) );
+    return IBasicLogicUnqPtr( new SimpleVAOPrototype0( renderer ) );
 }
 
 } // bv

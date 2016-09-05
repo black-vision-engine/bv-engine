@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultEffect.h"
 
 #include <cassert>
@@ -10,12 +12,17 @@
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -48,17 +55,7 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
 // *********************************
 //
 DefaultEffect::~DefaultEffect   ()
-{
-    //FIXME: this suxx as this class cleans up shaders from passes and passes itself are deleted in the base class (delete pass should delete shaders as well) - to be fixed
-    for( unsigned int i = 0; i < NumPasses(); ++i )
-    {
-        auto pass = GetPass( i );
-
-        delete pass->GetPixelShader();
-        delete pass->GetVertexShader();
-        delete pass->GetGeometryShader();
-    }
-}
+{}
 
 // *********************************
 //
@@ -115,11 +112,20 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const IShaderDataSour
 
     auto mvpParam   = ShaderParamFactory::CreateMVPParameter();
     auto mvParam    = ShaderParamFactory::CreateMVParameter ();
-    auto pParam     = ShaderParamFactory::CreatePParameter  ();
+    auto mParam     = ShaderParamFactory::CreateMParameter  ();
+    auto vParam     = ShaderParamFactory::CreateVParameter  ();
+    //auto pParam     = ShaderParamFactory::CreatePParameter  ();       // This parameter was never used, but you can uncommment it in future.
+    auto normParamMV= ShaderParamFactory::CreateNormalMatrixMVParameter  ();
+    auto normParamM = ShaderParamFactory::CreateNormalMatrixMParameter  ();
 
     params->AddParameter( mvpParam );
     params->AddParameter( mvParam );
-    params->AddParameter( pParam );
+    params->AddParameter( mParam );
+    params->AddParameter( vParam );
+    //params->AddParameter( pParam );
+    params->AddParameter( normParamMV );
+    params->AddParameter( normParamM );
+
 
     return params;
 }
@@ -149,14 +155,14 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
         auto params     = shader->GetParameters ();
         auto textures   = txData->GetTextures   ();
         auto animations = txData->GetAnimations ();
-
+        
         for( auto tx : textures )
         {
             auto sampler = CreateSampler( tx, samplerNum );
             auto texture = GetTexture( tx );
 
             shader->AddTextureSampler( sampler );
-            params->AddTexture( texture );
+            params->AddTexture( texture, CreateSamplerParameters( tx ) );
 
             samplerNum++;
         }
@@ -169,7 +175,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
                 auto sequence   = GetSequence( anim );
 
                 shader->AddTextureSampler( sampler );
-                params->AddTexture( sequence );
+                params->AddTexture( sequence, CreateSamplerParameters( anim ) );
 
                 samplerNum++;
             }
@@ -201,57 +207,66 @@ ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDa
 
 // *********************************
 //
-TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * txParams, unsigned int samplerNum ) const
+TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParamsPtr & txParams, unsigned int samplerNum ) const
 {
-    auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
-    auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );
-	auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
+ //   auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
+ //   auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );
+    //auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
 
-	auto w = txParams->GetWidth();
-	auto h = txParams->GetHeight();
-	auto d = txParams->GetDepth();
+    auto w = txParams->GetWidth();
+    auto h = txParams->GetHeight();
+    auto d = txParams->GetDepth();
 
-	assert( w > 0 && h > 0 && d > 0 );
+    assert( w > 0 && h > 0 && d > 0 );
 
     SamplerSamplingMode samplingMode = SamplerSamplingMode::ST_TOTAL;
 
-	if( w >= 1 && h == 1 && d == 1 )
-	{
-		samplingMode = SamplerSamplingMode::SSM_MODE_1D;
-	}
+    if( w >= 1 && h == 1 && d == 1 )
+    {
+        samplingMode = SamplerSamplingMode::SSM_MODE_1D;
+    }
 
-	if( w >= 1 && h > 1 && d == 1 )
-	{
-		samplingMode = SamplerSamplingMode::SSM_MODE_2D;
-	}
+    if( w >= 1 && h > 1 && d == 1 )
+    {
+        samplingMode = SamplerSamplingMode::SSM_MODE_2D;
+    }
 
-	if( w >= 1 && h > 1 && d > 1 )
-	{
-		samplingMode = SamplerSamplingMode::SSM_MODE_3D;
-	}
+    if( w >= 1 && h > 1 && d > 1 )
+    {
+        samplingMode = SamplerSamplingMode::SSM_MODE_3D;
+    }
 
-    auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
-    auto borderColor    = txParams->BorderColor();
+    //auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
+    //auto borderColor    = txParams->BorderColor();
 
-    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, wrapZ };
+    //SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, wrapZ };
 
-    auto sampler = new TextureSampler( samplerNum, txParams->GetName(), samplingMode, filteringMode, wrappingMode, borderColor ); 
+    auto sampler = new TextureSampler( samplerNum, txParams->GetName(), samplingMode ); 
 
     return sampler;
 }
 
 // *********************************
 //
-Texture2DPtr            DefaultEffect::GetTexture           ( const ITextureDescriptor * txParams ) const
+Texture2DPtr            DefaultEffect::GetTexture           ( const ITextureDescriptorPtr & txParams ) const
 {
-    return GTexture2DCache.GetTexture( txParams );
+    return GTexture2DCache.GetTexture( txParams.get() );
 }
 
 // *********************************
 //
-Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDescriptor * animParams ) const
+Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDescriptorPtr & animParams ) const
 {
-    return GTexture2DCache.GetSequence( animParams );
+    return GTexture2DCache.GetSequence( animParams.get() );
+}
+
+// *********************************
+//
+SamplerShaderParametersPtr	DefaultEffect::CreateSamplerParameters  ( const ITextureParamsPtr & txParams ) const
+{
+    auto samplerState = txParams->GetSamplerState();
+    return std::make_shared< SamplerShaderParameters >( ( SamplerWrappingMode )samplerState->GetWrappingModeX(), ( SamplerWrappingMode )samplerState->GetWrappingModeY(), 
+                        ( SamplerWrappingMode )samplerState->GetWrappingModeZ(), ( SamplerFilteringMode )samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
 }
 
 } //bv

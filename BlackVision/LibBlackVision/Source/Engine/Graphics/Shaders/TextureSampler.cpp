@@ -1,7 +1,31 @@
+#include "stdafx.h"
+
 #include "TextureSampler.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
+
+// ******************************
+//
+TextureSampler::TextureSampler  ( int id, const std::string & name,  SamplerSamplingMode ssm )
+    : m_id( id )
+    , m_name( name )
+    , m_samplingMode( ssm )
+{
+	//Set default values - they will be overwritten in Shader
+    for( int i = 0; i < (int) SamplerWrapDirection::SWD_TOTAL; ++i )
+	{
+        m_wrappingMode[ i ] = SamplerWrappingMode::SWM_CLAMP_BORDER;
+	}
+	m_filteringMode = SamplerFilteringMode::SFM_LINEAR;
+	m_borderColor = glm::vec4( 0.f, 0.f, 0.f, 0.f );
+}
 
 // ******************************
 //
@@ -69,14 +93,23 @@ const glm::vec4 &       TextureSampler::GetBorderColor  () const
 
 // ******************************
 //
-void                    TextureSampler::SetBorderColor  ( const glm::vec4 & bc ) const
+void                    TextureSampler::SetBorderColor  ( const glm::vec4 & bc )
 {
-    const_cast<TextureSampler*>(this)->m_borderColor = bc;
+    m_borderColor = bc;
 }
 
-void					TextureSampler::SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction ) const
+// ******************************
+//
+void					TextureSampler::SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction )
 {
-	const_cast<TextureSampler*>(this)->m_wrappingMode[ (int) wrap_direction ] = mode;
+	m_wrappingMode[ (int) wrap_direction ] = mode;
+}
+
+// ******************************
+//
+void                    TextureSampler::SetFilteringMode  ( SamplerFilteringMode mode )
+{
+	m_filteringMode = mode;
 }
 
 }

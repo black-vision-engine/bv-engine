@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "FontAsset.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {

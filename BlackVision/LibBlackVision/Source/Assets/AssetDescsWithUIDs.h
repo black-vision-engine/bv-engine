@@ -4,39 +4,13 @@
 
 #include "AssetDescriptor.h"
 #include "AssetManager.h"
-#include "Serialization/SerializationHelper.h"
+
+//#include "Engine/Models/BasicNode.h" // FIXME this is only important for GetAssetsWithUIDs
 
 namespace bv {
 
-class AssetDescWithUID : public ISerializable
-{
-    AssetDescConstPtr desc;
-    std::string uid;
-public:
-    AssetDescWithUID( AssetDescConstPtr desc, std::string uid ) : desc( desc ), uid( uid ) { }
-
-    virtual void                            Serialize       ( ISerializer& sob ) const
-    {
-        sob.EnterChild( "uid" );
-        sob.SetAttribute( "uid", uid );
-        desc->Serialize( sob );
-        sob.ExitChild();
-    }
-
-    static ISerializablePtr                 Create          ( const IDeserializer& dob )
-    {
-        auto uid = dob.GetAttribute( "uid" );
-        
-        //auto desc = DeserializeObjectLoadImpl< const SerializedAssetDesc >( dob, "asset" );
-        auto desc = AssetManager::GetInstance().CreateDesc( dob );
-        //dob.ExitChild(); // FIXME this so f***ing wrong
-        
-        return std::make_shared< AssetDescWithUID >( desc, uid );
-    }
-
-    AssetDescConstPtr                       GetDesc() const { return desc; }
-    std::string                             GetUID() const { return uid; }
-};
+class AssetDescsWithUIDs;
+DEFINE_PTR_TYPE( AssetDescsWithUIDs );
 
 class AssetDescsWithUIDs : public ISerializable
 {
@@ -45,29 +19,16 @@ class AssetDescsWithUIDs : public ISerializable
     std::map< std::string, AssetDescConstPtr >              m_uid2asset;
     std::map< std::string, std::string >                    m_key2uid;
 
-    void                                                    AddAssetDescWithUID( const AssetDescWithUID& asset );
+    void                                                    AddAssetDescWithUID( AssetDescConstPtr desc, std::string uid );
+
 public:
-    static AssetDescsWithUIDs&                              GetInstance() { return instance; }
-    static void                                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
 
-    virtual void                                            Serialize       ( ISerializer& sob ) const
-    {
-        sob.EnterChild( "assets" );
-        for( auto asset : m_uid2asset )
-        {
-            AssetDescWithUID( asset.second, asset.first ).Serialize( sob );
-        }
-        sob.ExitChild();
-    }
-    static ISerializablePtr                                 Create          ( const IDeserializer& dob )
-    {
-        auto assetsWithUIDs = SerializationHelper::DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( dob, "uid" );
+    //static AssetDescsWithUIDs &                             GetInstance() { return instance; }
+    //static void                                             SetInstance( AssetDescsWithUIDs & i ) { instance = i; }
 
-        auto assets = std::make_shared< AssetDescsWithUIDs >();
-        for( auto asset : assetsWithUIDs )
-            assets->AddAssetDescWithUID( *asset );
-        return assets;
-    }
+    virtual void                                            Serialize       ( ISerializer & ser ) const;
+    static AssetDescsWithUIDsPtr                            Create          ( const IDeserializer & deser );
+    static AssetDescsWithUIDsPtr                            Create          ();
 
     void                                                    AddAssetDesc( AssetDescConstPtr asset );
 
@@ -76,5 +37,16 @@ public:
     std::string                                             Key2UID( std::string key ) { return m_key2uid[ key ]; }
     AssetDescConstPtr                                       UID2Asset( std::string uid ) { return m_uid2asset[ uid ]; }
 };
+
+DEFINE_PTR_TYPE( AssetDescsWithUIDs );
+
+namespace model {
+class BasicNode;
+class IPlugin;
+}
+
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, bool recursive = false );
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin );
+
 
 } // bv

@@ -8,6 +8,8 @@ uniform vec4 color2;
 uniform vec2 point1;
 uniform vec2 point2;
 
+uniform float alpha;
+
 in vec2 uvCoord;
 
 void main()
@@ -17,5 +19,6 @@ void main()
 
 	float factor = dot(v1,v2) / dot(v2, v2);
 
-	FragColor = color1 * factor + color2 * (1 - factor);
+	// vec4( uvCoord, 0.0, 1.0 );
+	FragColor = vec4( uvCoord, 0.0, 1.0 ); //alpha * ( color1 * factor + color2 * (1 - factor) );
 }

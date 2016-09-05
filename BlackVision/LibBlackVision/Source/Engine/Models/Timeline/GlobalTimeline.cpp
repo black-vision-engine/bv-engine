@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "GlobalTimeline.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 

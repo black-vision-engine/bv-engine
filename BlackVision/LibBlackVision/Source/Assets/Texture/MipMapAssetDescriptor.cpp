@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "MipMapAssetDescriptor.h"
 #include "MipMapBuilder.h"
 #include "Serialization/ISerializer.h"
@@ -6,6 +8,12 @@
 #include <sstream>
 #include <cassert>
 #include <algorithm>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -16,7 +24,7 @@ const std::string MipMapAssetDesc::uid = "MIP_MAP_ASSET_DESC";
 //
 void                MipMapAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-ser.EnterChild( "mipmaps" );
+ser.EnterArray( "mipmaps" );
     for( auto desc : m_mipMapDescs )
         desc->Serialize( ser );
 ser.ExitChild();
@@ -124,6 +132,18 @@ const std::string &	MipMapAssetDesc::UID()
 {
 	return MipMapAssetDesc::uid;
 }
+
+// ***********************
+//
+SizeType            MipMapAssetDesc::EstimateMemoryUsage () const
+{
+    SizeType memUsage = 0;
+    for( auto & desc : m_mipMapDescs )
+        memUsage += desc->EstimateMemoryUsage();
+    
+    return memUsage;
+}
+
 
 
 // ******************************

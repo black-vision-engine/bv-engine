@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexBuffer.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -5,6 +7,12 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 #include "Tools/HRTimer.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

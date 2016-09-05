@@ -10,7 +10,10 @@ std::hash_map< GLenum, std::string > BVGLTranslator::ms_bufferUsage;
 std::hash_map< GLenum, std::string > BVGLTranslator::ms_bufferTarget;
 std::hash_map< GLenum, std::string > BVGLTranslator::ms_textureTarget;
 std::hash_map< GLenum, std::string > BVGLTranslator::ms_textureFormat;
+std::hash_map< GLenum, std::string > BVGLTranslator::ms_textureInternalFormat;
 std::hash_map< GLenum, std::string > BVGLTranslator::ms_attribPointerType;
+
+std::hash_map< GLenum, unsigned int > BVGLTranslator::ms_pixelSize;
 
 BVGLTranslator BVGLTranslator::ms_instance;
 
@@ -56,10 +59,25 @@ BVGLTranslator::BVGLTranslator                                      ()
 	ms_textureFormat[ (GLenum) GL_LUMINANCE ]	= "GL_LUMINANCE";
 	ms_textureFormat[ (GLenum) GL_R32F ]		= "GL_R32F";
 
+	ms_textureInternalFormat[ (GLenum) GL_ALPHA8 ]		= "GL_ALPHA8"; 
+	ms_textureInternalFormat[ (GLenum) GL_LUMINANCE8 ]	= "GL_LUMINANCE8"; 
+	ms_textureInternalFormat[ (GLenum) GL_RGB8 ]		= "GL_RGB8"; 
+	ms_textureInternalFormat[ (GLenum) GL_RGBA8 ]		= "GL_RGBA8"; 
+	ms_textureInternalFormat[ (GLenum) GL_RGB32F ]		= "GL_RGB32F";
+	ms_textureInternalFormat[ (GLenum) GL_RGBA32F ]		= "GL_RGBA32F";
+
     ms_attribPointerType[ (GLenum) GL_FLOAT ]           = "GL_FLOAT";
     ms_attribPointerType[ (GLenum) GL_UNSIGNED_BYTE ]   = "GL_UNSIGNED_BYTE";
     ms_attribPointerType[ (GLenum) GL_UNSIGNED_SHORT ]	= "GL_UNSIGNED_SHORT";
     ms_attribPointerType[ (GLenum) GL_UNSIGNED_INT ]	= "GL_UNSIGNED_INT";
+
+	ms_pixelSize[ (GLenum) GL_ALPHA8 ]		=	1;
+	ms_pixelSize[ (GLenum) GL_LUMINANCE8 ]	=	1;
+	ms_pixelSize[ (GLenum) GL_RGB8 ]		=	3;
+	ms_pixelSize[ (GLenum) GL_RGBA8 ]		=	4;
+	ms_pixelSize[ (GLenum) GL_RGB32F ]		=	12;
+	ms_pixelSize[ (GLenum) GL_RGBA32F ]		=	16;
+
 }
 
 // ****************************
@@ -96,6 +114,15 @@ std::string     BVGLTranslator::TranslateTextureFormat              ( GLenum for
 	assert( ms_textureFormat.find( format ) != ms_textureFormat.end() );
 
     return ms_textureFormat[ format ];
+}
+
+// ****************************
+//
+std::string     BVGLTranslator::TranslateTextureInternalFormat      ( GLenum format )
+{
+    assert( ms_textureInternalFormat.count( format ) != 0 );
+
+    return ms_textureInternalFormat[ format ];
 }
 
 // ****************************
@@ -147,6 +174,15 @@ std::string     BVGLTranslator::TranslateAttribPointerType          ( GLenum typ
     assert( ms_attribPointerType.find( type ) != ms_attribPointerType.end() );
 
     return ms_attribPointerType[ type ];
+}
+
+// ****************************
+//
+unsigned int	BVGLTranslator::GetPixelSize						( GLenum format )
+{
+    assert( ms_pixelSize.count( format ) != 0 );
+
+    return ms_pixelSize[ format ];
 }
 
 // ****************************

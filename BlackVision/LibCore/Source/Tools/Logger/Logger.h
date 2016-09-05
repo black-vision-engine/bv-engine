@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-
+#include "DataTypes/QueueConcurrent.h"
+#include "LogMsgStruct.h"
 
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
@@ -9,41 +10,17 @@
 // warning: unreferenced formal parameter x
 
 
-#include <boost/log/sources/severity_channel_logger.hpp>
-#include <boost\log\sources\record_ostream.hpp>
-//#include <boost\log\sinks\sync_frontend.hpp>
-#include <boost\log\sinks\async_frontend.hpp>
+#include "boost/log/sources/severity_channel_logger.hpp"
+#include "boost/log/sources/record_ostream.hpp"
+#include "boost/log/sinks/async_frontend.hpp"
 
 
+#include "LoggerEnums.h"
 
-namespace bv{
+namespace bv
+{
 
 class Logger;
-
-enum SeverityLevel : int
-{
-	debug			= 0,
-	info			= 1,
-	warning			= 2,
-	error			= 3,
-	critical		= 4
-};
-
-enum ModuleEnum : int
-{
-	ME_LibBlackVision	= 1 << 0,
-	ME_LibCore			= 1 << 1,
-	ME_LibImage			= 1 << 2,
-	ME_Prototyper		= 1 << 3,
-	ME_BlackVisionApp	= 1 << 4,
-	ME_LibProjectManager= 1 << 5
-};
-
-/**Adding new modules - instruction:
-- Add new constant to ModuleEnum
-- Add string with the name of module in InitializeModuleMapping function (.cpp file).
-- Uncomment line with module number in function SetFilter. Otherwise all messages from new module
-will be filtered.*/
 
 
 BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", ::bv::SeverityLevel)
@@ -57,10 +34,13 @@ opening record and creating record pump. Otherwise warnings occur.*/
 class LoggingHelper
 {
 private:
+
 	boost::log::record										m_record;
-	LoggerType&												m_logger;
+	LoggerType &									        m_logger;
+
 public:
-	LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module );
+
+    LoggingHelper( LoggerType & logger, SeverityLevel level, ModuleEnum module );
 
 	::boost::log::aux::record_pump< LoggerType > 		recordPump();
 	bool												operator!()	{ return !m_record; }
@@ -70,8 +50,8 @@ public:
 namespace LogHelperString
 {
 
-extern const char* FILE_DESC_STRING;
-extern const char* LINE_DESC_STRING;
+extern const char * FILE_DESC_STRING;
+extern const char * LINE_DESC_STRING;
 
 }
 
@@ -87,33 +67,39 @@ for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, 
 class Logger
 {
 private:
-	LoggerType				m_logger;
+
+    LoggerType				m_logger;
 
 	boost::log::formatter	m_formatter;
 
 	unsigned int			m_fileRotationSize;
+
 private:
+
 	Logger();
 	~Logger();
 
 	void						InitForamatter		();
-public:
-	void						AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
-	void						AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
+public:
+
+    int						    AddLogFile			( const std::string & fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+	int						    AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+
+    /// You must ensure someone gets messages from queue.
+    QueueConcurrent<LogMsg>&    AddLogQueue         ( int& logID, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+    void                        RemoveLog           ( int logID );
 
 	/// Affects all files, that will be added after this call.
 	void						SetFileRotationSize	( unsigned int newSize )	{ m_fileRotationSize = newSize; }
 	
-	LoggerType&					Get					()							{ return m_logger; }
-	static Logger&				GetLogger			();
+	LoggerType &				Get					()							{ return m_logger; }
+
+    static Logger &				GetLogger			();
+
 };
 
-
-
 } // bv
-
-
 
 #pragma warning( default : 4512 )
 #pragma warning( default : 4100 )

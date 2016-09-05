@@ -1,6 +1,6 @@
 #pragma once
 
-#include "win_sock.h"
+#include "win_sock.h" // FIXME for God's sake
 
 namespace bv
 {
@@ -13,9 +13,9 @@ public:
     HDC		m_RendererDC;
     int		m_PixelFormat;
     bool	m_DisableVerticalSync;
-	bool	m_EnableGLFinish;
-	bool	m_EnableGLFlush;
-	int		m_VerticalBufferFrameCount;
+    bool	m_EnableGLFinish;
+    bool	m_EnableGLFlush;
+    int		m_VerticalBufferFrameCount;
 
 };
 

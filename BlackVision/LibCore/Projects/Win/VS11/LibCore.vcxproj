@@ -23,24 +23,35 @@
     <ClInclude Include="..\..\..\Source\DataTypes\Hash.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\Queue.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h" />
+    <ClInclude Include="..\..\..\Source\Expected.h" />
     <ClInclude Include="..\..\..\Source\IO\DirIO.h" />
     <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
+    <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
     <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\InitSubsystem.h" />
     <ClInclude Include="..\..\..\Source\System\Path.h" />
+    <ClInclude Include="..\..\..\Source\System\Time.h" />
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Base64.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h" />
+    <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h" />
+    <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h" />
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
-    <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\Util\IObservable.h" />
+    <ClInclude Include="..\..\..\Source\Util\IObserver.h" />
+    <ClInclude Include="..\..\..\Source\Util\Observable.h" />
     <ClInclude Include="..\..\..\Source\win_sock.h" />
   </ItemGroup>
   <ItemGroup>
@@ -52,15 +63,20 @@
     <ClCompile Include="..\..\..\Source\System\Env.cpp" />
     <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp" />
     <ClCompile Include="..\..\..\Source\System\Path.cpp" />
+    <ClCompile Include="..\..\..\Source\System\Time.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Base64.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\Observable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl" />

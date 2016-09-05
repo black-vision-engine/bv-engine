@@ -1,7 +1,15 @@
+#include "stdafx.h"
+
 #include "ShaderChannel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {

@@ -1,7 +1,15 @@
+#include "stdafx.h"
+
 #include "AttributeChannelDescriptor.h"
 
 #include <sstream>
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model
@@ -92,6 +100,9 @@ std::string     AttributeChannelDescriptor::DefaultName                         
             break;
         case AttributeSemantic::AS_NORMAL:
             oss << "norm";
+            break;
+        case AttributeSemantic::AS_TANGENT:
+            oss << "tang";
             break;
         case AttributeSemantic::AS_BINORMAL:
             oss << "binorm";

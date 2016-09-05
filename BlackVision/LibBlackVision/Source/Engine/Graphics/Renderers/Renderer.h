@@ -4,13 +4,13 @@
 
 #include "Mathematics/glm_inc.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererInput.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
+#include "RendererPerformance.h"
 
 #include "Engine/Graphics/State/RendererStateInstance.h"
-
 
 namespace bv {
 
@@ -18,6 +18,8 @@ class Camera;
 
 class RenderableEntity;
 class TriangleStrip;
+class Triangles;
+class Lines;
 
 class PixelShader;
 class VertexShader;
@@ -37,6 +39,7 @@ class Shader;
 
 class PdrTexture2D;
 class PdrVertexBuffer;
+class PdrUniformBufferObject;
 class PdrShader;
 class PdrIndexBuffer;
 class PdrVertexArrayObject;
@@ -44,7 +47,9 @@ class PdrVertexArrayObjectSingleVB;
 class PdrVertexDescriptor;
 class PdrVertexArrayObject;
 class PdrRenderTarget;
-class PdrPBOMemTransfer;
+class PdrDownloadPBO;
+class NodeEffect;
+class Scene;
 
 class TransformableEntity;
 
@@ -53,6 +58,11 @@ enum class FaceKind : int;
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 class Renderer
 {
+private:
+
+    static const UInt32         LIGHTS_UBO_BINDING_IDX;
+    static const UInt32         CAMERA_UBO_BINDING_IDX;
+
 private:
 
     RendererStateInstance       m_currentStateInstance;
@@ -79,6 +89,8 @@ private:
     typedef std::hash_map<const Texture2D *, PdrTexture2D * >                                   PdrTexture2DMap;
     typedef std::hash_map<const RenderTarget *, PdrRenderTarget * >                             PdrRenderTargetMap;
 
+    typedef std::hash_map<const Texture *, UInt32 >												TextureUpdateIDMapType;
+
     PdrShaderMapType                    m_PdrShaderMap;
     PdrVertexBufferMapType              m_PdrVertexBufferMap;
     PdrIndexBufferMapType               m_PdrIndexBufferMap;
@@ -88,10 +100,18 @@ private:
     PdrVertexArrayObjectSingleVBMapType m_PdrVertexArrayObjectSingleVBMap;
     PdrRenderTargetMap                  m_PdrRenderTargetMap;
 
-    PdrPBOMemTransfer *                 m_PdrPBOMemTransferRT;
+    TextureUpdateIDMapType              m_TextureUpdateIDMap;
 
-	bool								m_EnableGLFinish;
-	bool								m_EnableGLFlush;
+    PdrDownloadPBO *					m_PdrPBOMemTransferRT;
+    PdrDownloadPBO *					m_PdrPBOMemTransferSyncRT;
+
+    bool								m_EnableGLFinish;
+    bool								m_EnableGLFlush;
+
+    PdrUniformBufferObject *            m_lightsUBO;
+    PdrUniformBufferObject *            m_cameraUBO;
+
+    RendererPerformance                 m_performance;
 
 public:
 
@@ -119,7 +139,12 @@ public:
     void    NaiveReadback       ( char * buf, int w, int h );
 
     void    SetCamera           ( Camera * cam );
-	Camera * GetCamera           ();
+    Camera * GetCamera          ();
+
+    void    SetVSync            ( bool enable, int verticalBufferFrameCount );
+    void    SetFlushFinish      ( bool flush, bool finish );
+
+    void    EnableScene         ( Scene * scene );
 
 public:
 
@@ -153,6 +178,7 @@ public:
     void    Disable             ( const RenderTarget * rt );
 
     void    ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );
+    void    ReadColorTexturSync ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );
 
 public:
 
@@ -166,6 +192,10 @@ public:
 
     bool                        DrawRenderable                  ( RenderableEntity * ent );
     bool                        DrawTriangleStrips              ( TriangleStrip * strip );
+    bool                        DrawTriangles                   ( Triangles * triangles );
+    bool                        DrawLines                       ( Lines * lines );
+
+    RendererPerformance &       Performance                     ()  { return m_performance; }
 
 private:
 
@@ -202,6 +232,8 @@ public:
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
 
+    void                        FreeNodeEffectPDR               ( const NodeEffect * nodeEffect );
+
 private:
 
     template< typename MapType >
@@ -213,5 +245,14 @@ private:
     void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
+
+
+#define BEGIN_MESSURE_GPU_PERFORMANCE( renderer, sceneNode )        renderer->Performance().BeginGPUQuery( sceneNode );
+
+#define END_MESSURE_GPU_PERFORMANCE( renderer, sceneNode )          \
+renderer->Performance().EndGPUQuery( sceneNode );                   \
+renderer->Performance().QueryPreviousGPUResult( sceneNode );
+
+
 
 } // bv

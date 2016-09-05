@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Project.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager.cpp" />
@@ -35,9 +38,11 @@
     <ClInclude Include="..\..\..\Source\AssetCategory.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
     <ClInclude Include="..\..\..\Source\Project.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager.h" />

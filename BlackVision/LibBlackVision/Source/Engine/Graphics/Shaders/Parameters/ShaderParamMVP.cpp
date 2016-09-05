@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "ShaderParamMVP.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -33,11 +41,9 @@ void            ShaderParamMVP::Update      ( RenderableEntity * renderable, Cam
         assert( camera != nullptr );
         assert( renderable != nullptr );
 
-        auto projMat = camera->GetProjectionMatrix();
+        auto & viewProjMat = camera->GetViewProjectionMatrix();
 
-        //FIXME: add proper loop here
-        auto worldTrans = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
-        m_mvp        = projMat * worldTrans;
+        m_mvp = viewProjMat * renderable->WorldTransform().Matrix();
     }
 }
 

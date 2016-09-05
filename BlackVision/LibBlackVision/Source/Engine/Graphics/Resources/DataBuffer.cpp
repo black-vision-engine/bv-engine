@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "DataBuffer.h"
 
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -25,8 +33,8 @@ DataBuffer::DataBuffer	( unsigned int numElts, unsigned int eltSize, DataBuffer:
 	, m_size( numElts * eltSize )
 	, m_data( nullptr )	
 {
-	assert( numElts > 0 );
-	assert( eltSize > 0 );
+	//assert( numElts > 0 );
+	//assert( eltSize > 0 );
 
 	m_data = new char[ m_size ];
 }

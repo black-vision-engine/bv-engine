@@ -1,5 +1,13 @@
+#include "stdafx.h"
+
 #include "HelperSmoothMesh.h"
 #include "Mathematics\Defines.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {
@@ -49,9 +57,9 @@ tesselation = 0, function would move content of mesh to resultMesh, leaving mesh
 @return resultMesh Result of smooth.*/
 IndexedGeometry HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, unsigned int tesselation )
 {
-	IndexedGeometry new_mesh;
-	smooth( mesh, edges, tesselation, new_mesh );
-	return std::move( new_mesh );
+	IndexedGeometry newMesh;
+	smooth( mesh, edges, tesselation, newMesh );
+	return std::move( newMesh );
 }
 
 /**This the real smooth function. Look at the description of smooth, if you want to know more.
@@ -71,22 +79,22 @@ void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_T
 	if( sharpEdges.size() % 2 )	// If true, something wrong with edges.
 		sharpEdges.pop_back();		
 
-	IndexedGeometry new_mesh;
+	IndexedGeometry newMesh;
 
-	std::vector<INDEX_TYPE> newSharpEdges =  tesselate( mesh, new_mesh, sharpEdges );
-	moveVerticies( mesh, sharpEdges, new_mesh );
+	std::vector<INDEX_TYPE> newSharpEdges =  tesselate( mesh, newMesh, sharpEdges );
+	moveVerticies( mesh, sharpEdges, newMesh );
 
-	privateSmooth( new_mesh, newSharpEdges, tesselation - 1, resultMesh );
+	privateSmooth( newMesh, newSharpEdges, tesselation - 1, resultMesh );
 	// Remember! You can't do anything with new_mesh after smooth call. It have been already moved to resultMesh.
 }
 
 /**Tesselates given mesh one time.*/
 std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh, std::vector<INDEX_TYPE> sharpEdges )
 {
-	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
-	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.GetVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.GetIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.GetVerticies();
 	std::vector<INDEX_TYPE> newSharpEdges;
 
 	resultIndicies.reserve( 4 * indicies.size() );
@@ -128,8 +136,8 @@ std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, Inde
 		for( int j = 0; j < 3; ++j )	// Outer triangles.
 		{
 			resultIndicies.push_back( static_cast<INDEX_TYPE>( indicies[ i + j ] ) );
-			resultIndicies.push_back( newIndicies[ k++ % 3 ] );
-			resultIndicies.push_back( newIndicies[ k % 3 ] );
+			resultIndicies.push_back( newIndicies[ ++k % 3 ] );
+			resultIndicies.push_back( newIndicies[ ( k - 1 ) % 3 ] );
 		}
 		for( int j = 0; j < 3; ++j )	// Middle triangle.
 			resultIndicies.push_back( newIndicies[j] );
@@ -143,10 +151,10 @@ std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, Inde
 Old version. New is more efficient, but can have problems with not closed meshes.*/
 void HelperSmoothMesh::oldMoveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
 {
-	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
-	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.GetVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.GetIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.GetVerticies();
 	
 	std::vector<INDEX_TYPE> vertexNeighbours;
 	std::vector<float> vertexWeights;
@@ -169,10 +177,10 @@ void HelperSmoothMesh::oldMoveVerticies( IndexedGeometry& mesh, std::vector<INDE
 /**Moves verticies of the new mesh to appropriate positions.*/
 void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
 {
-	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
-	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
-	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.GetVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.GetIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.GetVerticies();
 
 
 	std::vector<VertexData> vertexData;
@@ -187,6 +195,7 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 
 	// We iterate through edges and add position with weight to verticies.
 	for( unsigned int i = 0; i < indicies.size(); i += 3 )
+    {
 		for( INDEX_TYPE j = 0; j < 3; ++j )
 		{
 			INDEX_TYPE index1 = indicies[ i + j ];
@@ -203,6 +212,8 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 			vertexData[ index1 ].sumWeigths += weight1;
 			vertexData[ index2 ].sumWeigths += weight2;
 		}
+    }
+
 	// We add center vertex position.
 	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
 	{
@@ -222,18 +233,20 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	size_t verticiesOffset = verticies.size();
 	for( size_t i = verticiesOffset; i < resultVerticies.size(); ++i )
 		resultVerticies[ i ] = glm::vec3( 0.0, 0.0, 0.0 );
+
 	// We need sum of weights
 	std::vector<float> sumWeights;
 	sumWeights.resize( resultVerticies.size() - verticiesOffset, 0.0f );
 
 	// We iterate added verticies.
 	for( unsigned int i = 0; i < resultIndicies.size(); i += 12 )
+    {
 		for( INDEX_TYPE j = 0; j < 9; j += 3 )
 		{
 			INDEX_TYPE edgeIndex1 = resultIndicies[ i + j ];
 			INDEX_TYPE edgeIndex2 = resultIndicies[ i + (j + 3) % 9 ];
 			INDEX_TYPE index3 = resultIndicies[ i + (j + 6) % 9 ];
-			INDEX_TYPE edgeVertex = resultIndicies[ i + j + 2 ];		// We use our knowledge about order of verticies after tessellation.
+			INDEX_TYPE edgeVertex = resultIndicies[ i + j + 1 ];		// We use our knowledge about order of verticies after tessellation.
 
 			float weight1;
 			float weight2;
@@ -256,6 +269,7 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 			resultVerticies[ edgeVertex ] += verticies[ edgeIndex1 ] * weight1 + verticies[ edgeIndex2 ] * weight2 + verticies[ index3 ] * weight3;
 			sumWeights[ edgeVertex - verticiesOffset ] += weight1 + weight2 + weight3;
 		}
+    }
 
 	for( size_t i = verticiesOffset; i < resultVerticies.size(); ++i )
 		resultVerticies[ i ] = float( 1.0 / sumWeights[ i - verticiesOffset ] ) * resultVerticies[ i ];
@@ -267,11 +281,13 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index, INDEX_TYPE startIndex )
 {
 	for( unsigned int i = startIndex; i < verticies.size(); ++i )
+    {
 		if( verticies[ i ] == vertex )
 		{
 			index = (INDEX_TYPE)i;
 			return true;
 		}
+    }
 
 	index = 0;
 	return false;
@@ -412,7 +428,7 @@ VertexType HelperSmoothMesh::computeVertexType( int i, std::vector<INDEX_TYPE> s
 	int numSharpEdges = 0;
 
 	for( unsigned int j = 0; j < sharpEdges.size(); ++j )
-		if( sharpEdges[ j ] == i )
+		if( sharpEdges[ j ] == (INDEX_TYPE)i )
 			++numSharpEdges;
 
 	if( numSharpEdges < 2 )
@@ -445,7 +461,8 @@ float HelperSmoothMesh::computeVertexWeight( int vertexIndex, int secondVertexIn
 bool HelperSmoothMesh::isSharpEdge( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges )
 {
 	for( unsigned int i = 0; i < sharpEdges.size(); i += 2 )
-		if( sharpEdges[ i ] == index1 && sharpEdges[ i + 1 ] == index2 || sharpEdges[ i ] == index2 && sharpEdges[ i + 1 ] == index1 )
+		if( sharpEdges[ i ] == (INDEX_TYPE)index1 && sharpEdges[ i + 1 ] == (INDEX_TYPE)index2 ||
+            sharpEdges[ i ] == (INDEX_TYPE)index2 && sharpEdges[ i + 1 ] == (INDEX_TYPE)index1 )
 			return true;
 	return false;
 }

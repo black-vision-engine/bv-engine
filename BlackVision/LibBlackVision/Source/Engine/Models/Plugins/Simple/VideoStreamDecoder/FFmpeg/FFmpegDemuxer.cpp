@@ -1,17 +1,30 @@
+#include "stdafx.h"
+
 #include "FFmpegDemuxer.h"
 
 #include <cassert>
 
-namespace bv
-{
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
+namespace bv {
+
+
+const UInt32         FFmpegDemuxer::SAFE_SEEK_FRAMES = 10;
+const UInt32         FFmpegDemuxer::MAX_QUEUE_SIZE = 5;
+
 
 // *******************************
 //FIXME: pass which stream we want - now only video
-FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
-	: m_formatCtx( nullptr )
-	, m_streamPath( streamPath )
-	, m_isOpened( false )
-	, m_lastPacket( nullptr )
+FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQueueSize )
+	: m_streamPath( streamPath )
+	, m_formatCtx( nullptr )
+	, m_isEOF( false )
+    , m_maxQueueSize( maxQueueSize )
 {
 	av_register_all();
 
@@ -21,107 +34,75 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	assert( !error );
 
 	error = avformat_find_stream_info( m_formatCtx, nullptr ) < 0;
-	assert( !error );
+	//assert( !error ); //raw video
 
-	//FIXME: handle raw
-	/*bool error = avformat_find_stream_info( formatCtx, nullptr ) < 0;
-	if( error && 
-		desc->GetWidth() > 0 && 
-		desc->GetHeight() > 0 &&
-		desc->GetFrameRate() > 0 )
-	{
-		m_codecCtx->width = desc->GetWidth();
-		m_codecCtx->height = desc->GetHeight();
-
-		AVRational frameRate;
-		frameRate.num = desc->GetFrameRate();
-		frameRate.den = 1;
-		m_codecCtx->framerate = frameRate;
-
-		error = false;
-	}
-	assert( !error );*/
-
-	m_isOpened = true;
-
-	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 );
-	
-	auto videoIdx = FindStreamIndex( AVMEDIA_TYPE_VIDEO );
-	m_streams[ AVMEDIA_TYPE_VIDEO ].push_back( videoIdx );
-	m_packetQueue[ videoIdx ] = PacketQueue();
+	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 ); //log
 }
 
 // *******************************
 //
 FFmpegDemuxer::~FFmpegDemuxer    ()
 {
-	if ( m_lastPacket )
-	{
-        av_free_packet( m_lastPacket );
-    }
-
 	avformat_close_input( &m_formatCtx );
-
-	for( auto it = m_packetQueue.begin(); it != m_packetQueue.end(); ++it )
-	{
-		auto queue = it->second;
-
-		for( auto qit = queue.begin(); qit != queue.end(); ++qit )
-		{
-			av_free_packet( *qit );
-			delete *qit;
-		}
-
-		queue.clear();
-	}
+	ClearPacketQueue();
 }
 
 // *******************************
 //
-AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
+AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 {
+	return m_formatCtx;
+}
+
+// *******************************
+//
+bool			FFmpegDemuxer::ProcessPacket			()
+{
+    std::lock_guard< std::mutex > lock( m_mutex );
+
+    //FIXME: sync with clock instead of maxQueueSize
+    auto process = false;
+    for( auto & queue : m_packetQueue )
+    {
+        if( queue.second->Size() < m_maxQueueSize )
+        {
+            process = true;
+        }
+    }
+
+    if( process )
+    {
+        auto ffmpegPacket = std::make_shared< FFmpegPacket >();
+        auto packet = ffmpegPacket->GetAVPacket();
+        auto error = av_read_frame( m_formatCtx, packet );
+	    if( error < 0 ) 
+        {
+		    assert( error == AVERROR_EOF ); //error reading frame
+		    m_isEOF = true;
+            return false;
+        }
+
+	    auto currStream = packet->stream_index;
+        if ( m_packetQueue.count( currStream ) > 0 )
+	    {
+            m_packetQueue.at( currStream )->Push( ffmpegPacket );
+            return true;
+	    }
+    }
+    return false;
+}
+
+// *******************************
+//
+FFmpegPacketPtr		FFmpegDemuxer::GetPacket				( Int32 streamIdx )
+{
+    FFmpegPacketPtr packet = nullptr;
+
 	assert( m_packetQueue.count( streamIdx ) > 0 );
 
-	AVPacket * packet = nullptr;
-
-	if( !m_packetQueue.at( streamIdx ).empty() )
+    if( !m_packetQueue.at( streamIdx )->IsEmpty() )
 	{
-		packet = m_packetQueue.at( streamIdx ).front();
-		m_packetQueue.at( streamIdx ).pop_front();
-	}
-	else 
-	{
-		Int32 currStream = -1;
-		while( currStream != streamIdx )
-		{
-			packet = new AVPacket();
-			auto error = av_read_frame( m_formatCtx, packet );
-			if( error < 0 ) {
-				assert( error == AVERROR_EOF );	//FIXME: error decoding video
-                av_free_packet( packet );
-                delete packet;
-                return nullptr;
-            }
-
-			currStream = packet->stream_index;
-			if ( currStream != streamIdx )
-			{
-                if ( m_packetQueue.count( packet->stream_index ) <= 0 )
-				{
-                    av_dup_packet( packet );
-					m_packetQueue[ packet->stream_index ].push_back( packet );
-				}
-				else
-				{
-                    av_free_packet( packet );
-                }
-            }
-			else
-			{
-                av_dup_packet( packet );
-				//queue packet?
-            }
-		}
+		m_packetQueue.at( streamIdx )->TryPop( packet );
 	}
 
 	return packet;
@@ -129,11 +110,98 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 
 // *******************************
 //
-void				FFmpegDemuxer::Seek					( Float32 time )
+void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 {
-	//FIXME
-	int flags = AVSEEK_FLAG_BACKWARD;
-	av_seek_frame( m_formatCtx, -1, ( long long )( time * AV_TIME_BASE ), flags );
+    auto initTs = timestamp - SAFE_SEEK_FRAMES;
+    if( initTs < 0 )
+    {
+        initTs = 0;
+    }
+
+	std::lock_guard< std::mutex > lock( m_mutex );
+
+	av_seek_frame( m_formatCtx, streamIdx, initTs, AVSEEK_FLAG_BACKWARD );
+	
+	m_isEOF = false; 
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::Reset				()
+{
+    ClearPacketQueue();
+	Seek( 0 );
+}
+
+// *******************************
+//
+Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
+{
+	auto streamIdx = FindStreamIndex( type, idx );
+
+    if( streamIdx >= 0 )
+    {
+	    if( m_packetQueue.count( streamIdx ) == 0 )
+	    {
+            m_packetQueue.insert( std::make_pair( streamIdx, std::make_shared< QueueConcurrent< FFmpegPacketPtr > >() ) );
+	    }
+    }
+
+	return streamIdx;
+}
+
+// *******************************
+//
+void			    FFmpegDemuxer::DisableStream    ( AVMediaType type, UInt32 idx )
+{
+	auto streamIdx = FindStreamIndex( type, idx );
+	if( ( streamIdx >= 0 ) && m_packetQueue.count( streamIdx ) )
+	{
+        ClearPacketQueue( streamIdx );
+        m_packetQueue.erase( streamIdx );
+	}
+}
+
+// *******************************
+//
+bool				FFmpegDemuxer::IsEOF				() const
+{
+	std::lock_guard< std::mutex > lock( m_mutex );
+	return m_isEOF;
+}
+
+// *********************************
+//
+bool			    FFmpegDemuxer::IsPacketQueueEmpty	( Int32 streamIdx ) const
+{
+    if( m_packetQueue.count( streamIdx ) )
+    {
+        return m_packetQueue.at( streamIdx )->IsEmpty();
+    }
+    return true;
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::ClearPacketQueue		()
+{
+	for( auto it = m_packetQueue.begin(); it != m_packetQueue.end(); ++it )
+	{
+        ClearPacketQueue( it->first );
+	}
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::ClearPacketQueue		( Int32 streamIdx )
+{
+    auto & queue = m_packetQueue[ streamIdx ];
+    while( !queue->IsEmpty() )
+    {
+        FFmpegPacketPtr packet = nullptr;
+        queue->TryPop( packet );
+    }
+    queue->Clear();
 }
 
 // *******************************
@@ -155,37 +223,6 @@ Int32				FFmpegDemuxer::FindStreamIndex		( AVMediaType type, UInt32 idx ) const
 		}
 	}
 	return last;
-}
-
-
-// *******************************
-//
-bool				FFmpegDemuxer::IsOpened				() const
-{
-	return m_isOpened;
-}
-
-// *******************************
-//
-bool				FFmpegDemuxer::HasVideoStream		() const
-{
-	return ( m_streams.count( AVMEDIA_TYPE_VIDEO ) > 0 );
-}
-
-// *******************************
-//
-Int32				FFmpegDemuxer::GetVideoStreamIndex	( UInt32 idx ) const
-{
-	assert( m_streams.count( AVMEDIA_TYPE_VIDEO ) > 0 );
-	assert( m_streams.at( AVMEDIA_TYPE_VIDEO ).size() >= idx );
-	return m_streams.at( AVMEDIA_TYPE_VIDEO ).at( idx );
-}
-
-// *******************************
-//
-AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
-{
-	return m_formatCtx;
 }
 
 } //bv

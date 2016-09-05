@@ -4,9 +4,14 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Serialization/XML/XMLDeserializer.h"
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
+
+#include "Serialization/SerializationHelper.h"
+
+#include "UseLoggerLibBlackVision.h"
 
 #include <fstream>
 
@@ -16,91 +21,93 @@ namespace bv
 // ********************************
 //
 SceneDescriptor::SceneDescriptor( const Path & path )
-	: m_path( path )
+    : m_path( path )
 {}
 
 // ********************************
 //
 Path SceneDescriptor::GetPath() const
 {
-	return m_path;
+    return m_path;
 }
 
 // ********************************
 //
-void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, const Path & outputFilePath )
+void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, const Path & outputFilePath )
 {
     File::Touch( outputFilePath.Str() );
 
     auto f = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-    SaveScene( scene, tm, *f.StreamBuf() );
-    f.Close();
+    if( f.Good() )
+    {
+        SaveScene( scene, *f.StreamBuf() );
+        f.Close();
+    }
 }
 
 // ********************************
 //
-model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( const Path & inputFilePath, model::TimelineManager * tm )
+model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePath )
 {
     auto f = File::Open( inputFilePath.Str() );
 
-    auto size = File::Size( inputFilePath.Str() );
+    if( f.Good() )
+    {
+        LOG_MESSAGE( SeverityLevel::info ) << "Loading scene from file: " << inputFilePath;
 
-    auto ret = LoadScene( *f.StreamBuf(), size, tm );
-    f.Close();
+        auto size = File::Size( inputFilePath.Str() );
 
-    return ret;
+        auto ret = LoadScene( *f.StreamBuf(), size );
+        f.Close();
+
+        return ret;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 namespace 
 {
-// *******************************
+//// *******************************
+////
+//void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
+//{
+//    auto plugins = root->GetPlugins();
+//    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
+//    {
+//        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
+//        for( auto asset : assets )
+//            map.AddAssetDesc( asset );
+//    }
 //
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
-{
-    auto plugins = root->GetPlugins();
-    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
-    {
-        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
-        for( auto asset : assets )
-            map.AddAssetDesc( asset );
-    }
-
-    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
-        GetAssetsWithUIDs( map, root->GetChild( i ) );
-}
+//    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+//        GetAssetsWithUIDs( map, root->GetChild( i ) );
+//}
 
 } // anonymous
 // ********************************
 //
-void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, std::ostream & out )
+void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-	auto sob = SerializeObject();
+    auto ser = BVXMLSerializer();
 
-    sob.EnterChild( "scene" );
+    scene->Serialize( ser );
 
-    AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, std::const_pointer_cast< model::BasicNode >( scene ) );
-    AssetDescsWithUIDs::SetInstance( assets );
-
-    assets.Serialize( sob );
-
-    tm->Serialize( sob );
-    scene->Serialize( sob );
-
-    sob.ExitChild();
-    sob.Save( out );
+    ser.Save( out );
 }
 
 // ********************************
 //
-model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * )
+model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
 {
-    auto deser = DeserializeObject( in, numBytes );
+    auto deser = XMLDeserializer( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
-    auto scene = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
+    auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
 
-    return scene->m_pModelSceneRoot;
+    return scene;
 }
 
 // ********************************
@@ -109,22 +116,29 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 {
     auto f = File::Open( sceneFile.Str() );
 
-    auto size = File::Size( sceneFile.Str() );
+    if( f.Good() )
+    {
+        auto size = File::Size( sceneFile.Str() );
 
-    auto ret = ListSceneAssets( *f.StreamBuf(), size );
-    f.Close();
+        auto ret = ListSceneAssets( *f.StreamBuf(), size );
+        f.Close();
 
-    return ret;
+        return ret;
+    }
+    else
+    {
+        return AssetDescVec();
+    }
 }
 
 // ********************************
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    auto deser = DeserializeObject( in, numBytes );
+    auto deser = XMLDeserializer( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
     // assets
-    auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
+    auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
 
     return assets->GetAssetsDescs();
 }

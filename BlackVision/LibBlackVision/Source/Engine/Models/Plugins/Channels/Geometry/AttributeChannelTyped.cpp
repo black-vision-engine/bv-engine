@@ -1,10 +1,98 @@
+#include "stdafx.h"
+
 #include "AttributeChannelTyped.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model
 {
+
+
+//******************* Float4AttributeChannel *******************
+
+
+// *********************************
+//
+Float4AttributeChannel::Float4AttributeChannel      ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+    : AttributeChannel( desc, name, readOnly )
+{
+    //FIXME: typed instances should be created via factories
+    assert( desc->GetType() == AttributeType::AT_FLOAT4 );
+    assert( sizeof( glm::vec4 ) == desc->GetEntrySize() );
+}
+
+// *********************************
+//
+Float4AttributeChannel::~Float4AttributeChannel     ()
+{
+}
+
+// *********************************
+//
+void                    Float4AttributeChannel::Update          ( TimeType t )
+{
+    { t; }
+}
+
+// *********************************
+//
+bool                    Float4AttributeChannel::IsReadOnly      () const
+{
+    return false;
+}
+
+// *********************************
+//
+unsigned int            Float4AttributeChannel::GetNumEntries   () const
+{
+    return (unsigned int) m_attributes.size();
+}
+
+// *********************************
+//FIXME: this suxxxxx - of course vector is guaranteed to work this way (and reintepreted cast works) but this is a shitty practice and a sign of poorly designed code
+const char *            Float4AttributeChannel::GetData         () const
+{
+    if( m_attributes.empty() )
+    {
+        return nullptr;
+    }
+    else
+    {
+        return reinterpret_cast< const char * >( &m_attributes[ 0 ] );
+    }
+}
+
+// *********************************
+//
+std::vector< glm::vec4 > &  Float4AttributeChannel::GetVertices ()
+{
+    return m_attributes;
+}
+
+// *********************************
+//
+void                    Float4AttributeChannel::AddAttribute    ( const glm::vec4 & v )
+{
+    m_attributes.push_back( v );
+}
+
+// *********************************
+//
+void                    Float4AttributeChannel::AddAttributes   ( const std::vector< glm::vec4 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
+}
+
+
+//******************* Float3AttributeChannel *******************
+
 
 // *********************************
 //
@@ -64,6 +152,21 @@ void                    Float3AttributeChannel::AddAttribute( const glm::vec3 & 
     m_attributes.push_back( v );
 }
 
+// *********************************
+//
+void                    Float3AttributeChannel::AddAttributes( const std::vector< glm::vec3 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
+}
+
+// ***********************
+//
+void                    Float3AttributeChannel::ReplaceAttributes( std::vector< glm::vec3 > && v )
+{
+    m_attributes = std::move( v );
+}
+
+//******************* Float2AttributeChannel *******************
 
 
 // *********************************
@@ -116,6 +219,13 @@ std::vector< glm::vec2 > &  Float2AttributeChannel::GetVertices()
 void                    Float2AttributeChannel::AddAttribute ( const glm::vec2 & v )
 {
     m_attributes.push_back(v);
+}
+
+// *********************************
+//
+void                    Float2AttributeChannel::AddAttributes ( const std::vector< glm::vec2 > & v )
+{
+    m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
 }
 
 } // model

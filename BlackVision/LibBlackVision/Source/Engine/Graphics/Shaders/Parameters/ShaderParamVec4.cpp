@@ -1,37 +1,36 @@
+#include "stdafx.h"
+
 #include "ShaderParamVec4.h"
 
-#include <cassert>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
 
 // ****************************
 //
-ShaderParamVec4::ShaderParamVec4                ( const std::string & name, const ValueVec4 * value )
+ShaderParamVec4::ShaderParamVec4                ( const std::string & name, const glm::vec4 & value )
     : GenericShaderParam( ShaderParamTypeTraits< ValueVec4::ValueType >::paramType, name )
-    , m_valModel( value )
-{
-    assert( value != nullptr );
-}
-
-// ****************************
-//
-ShaderParamVec4::~ShaderParamVec4               ()
+    , m_val( value )
 {
 }
 
 // ****************************
 //
-void            ShaderParamVec4::SetModelValue  ( const ValueVec4 * value )
+void            ShaderParamVec4::SetValue		( const glm::vec4 & value )
 {
-    m_valModel = value;
+    m_val = value;
 }
 
 // ****************************
 //
 const void *    ShaderParamVec4::GetValuePtr    () const
 {
-    return &m_valModel->GetValue();
+    return &m_val;
 }
 
 } //bv

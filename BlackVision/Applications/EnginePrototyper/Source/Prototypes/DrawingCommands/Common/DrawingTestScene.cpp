@@ -7,14 +7,14 @@ namespace bv {
 
 // *************************
 //
-							DrawingTestScene::~DrawingTestScene			()
+                            DrawingTestScene::~DrawingTestScene			()
 {
     BVGL::bvglBindVertexArray( 0 );
     BVGL::bvglDeleteVertexArrays( 1, &m_vaoHandle );
-	BVGL::bvglDeleteBuffers( 1, &m_vboHandle );
-	BVGL::bvglDeleteBuffers( 1, &m_indexBuffer );
-	BVGL::bvglDeleteBuffers( 1, &m_indirectArraysBuffer );
-	BVGL::bvglDeleteBuffers( 1, &m_indirectElementsBuffer );
+    BVGL::bvglDeleteBuffers( 1, &m_vboHandle );
+    BVGL::bvglDeleteBuffers( 1, &m_indexBuffer );
+    BVGL::bvglDeleteBuffers( 1, &m_indirectArraysBuffer );
+    BVGL::bvglDeleteBuffers( 1, &m_indirectElementsBuffer );
 }
 
 // *************************
@@ -22,28 +22,28 @@ namespace bv {
 void						DrawingTestScene::Bind						()
 {
     BVGL::bvglBindVertexArray( m_vaoHandle );
-	m_prog.Use();
+    m_prog.Use();
 }
 
 // *************************
 //
 void						DrawingTestScene::BindIndirectArrays		()
 {
-	BVGL::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectArraysBuffer );
+    BVGL::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectArraysBuffer );
 }
 
 // *************************
 //
 void						DrawingTestScene::BindIndirectElements		()
 {
-	BVGL::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectElementsBuffer );
+    BVGL::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectElementsBuffer );
 }
 
 // *************************
 //
 const DrawingModeData&		DrawingTestScene::GetDrawingModeData		()
 {
-	return m_drawingModeData;
+    return m_drawingModeData;
 }
 
 // **************************
@@ -88,26 +88,26 @@ unsigned int				DrawingTestScene::m_currentScene;
 template<typename T> 
 DrawingTestScene *			DrawingTestScene::CreateInstance()
 {
-	return new T;
+    return new T;
 }
 
 // *************************
 //
 DrawingTestScene *			DrawingTestScene::GetNextScene				()
 {
-	m_currentScene = (m_currentScene + 1) % m_scenes.size();
-	return m_scenes[ m_currentScene ]();
+    m_currentScene = (m_currentScene + 1) % m_scenes.size();
+    return m_scenes[ m_currentScene ]();
 }
 
 // *************************
 //
 void						DrawingTestScene::Initialize				()
 {
-	m_scenes[0] = &DrawingTestScene::CreateInstance< DrawingTestScene0 >;
-	//m_scenes[1] = &DrawingTestScene::CreateInstance< DrawingTestScene1 >;
-	//add more scenes...
+    m_scenes[0] = &DrawingTestScene::CreateInstance< DrawingTestScene0 >;
+    //m_scenes[1] = &DrawingTestScene::CreateInstance< DrawingTestScene1 >;
+    //add more scenes...
 
-	m_currentScene = (unsigned int)m_scenes.size() - 1;
+    m_currentScene = (unsigned int)m_scenes.size() - 1;
 }
 
 

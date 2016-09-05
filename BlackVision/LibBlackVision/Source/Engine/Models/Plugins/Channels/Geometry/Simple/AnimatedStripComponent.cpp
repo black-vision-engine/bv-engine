@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AnimatedStripComponent.h"
 
 #include <cassert>
@@ -5,6 +7,12 @@
 #include "Mathematics/defines.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {

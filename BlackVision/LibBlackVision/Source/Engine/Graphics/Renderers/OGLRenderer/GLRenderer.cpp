@@ -1,8 +1,16 @@
+#include "stdafx.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "BVGL.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -27,13 +35,16 @@ void Renderer::SetAlphaState ( AlphaStateConstPtr as )
         {
             BVGL::bvglEnable( GL_BLEND );
         }
-        
-        if( as->srcBlendMode != cur->srcBlendMode || as->dstBlendMode != cur->dstBlendMode )
+
+        if( as->srcRGBBlendMode != cur->srcRGBBlendMode || as->dstRGBBlendMode != cur->dstRGBBlendMode || 
+			as->srcAlphaBlendMode != cur->srcAlphaBlendMode || as->dstAlphaBlendMode != cur->dstAlphaBlendMode )
         {
-            GLuint srcBlendMode = ConstantsMapper::GLConstant( as->srcBlendMode );
-            GLuint dstBlendMode = ConstantsMapper::GLConstant( as->dstBlendMode );
+            GLuint srcBlendMode = ConstantsMapper::GLConstant( as->srcRGBBlendMode );
+            GLuint dstBlendMode = ConstantsMapper::GLConstant( as->dstRGBBlendMode );
+			GLuint srcAlphaBlendMode = ConstantsMapper::GLConstant( as->srcAlphaBlendMode );
+			GLuint dstAlphaBlendMode = ConstantsMapper::GLConstant( as->dstAlphaBlendMode );
             
-            BVGL::bvglBlendFunc( srcBlendMode, dstBlendMode );
+            BVGL::bvglBlendFuncSeparate( srcBlendMode, dstBlendMode, srcAlphaBlendMode, dstAlphaBlendMode );
         }
 
         if( as->blendColor != cur->blendColor )

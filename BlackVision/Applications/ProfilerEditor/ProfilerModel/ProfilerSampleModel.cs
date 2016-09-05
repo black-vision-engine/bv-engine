@@ -167,6 +167,13 @@ namespace ProfilerEditor.ProfilerModel
 				child.ClearTotalTime();
 		}
 
+        public void ClearAverageDuration()
+        {
+            AverageDuration = 0.0f;
+            foreach( var child in m_childSamples )
+                child.ClearAverageDuration();
+        }
+
 		public void Refresh()
 		{
 			OnPropertyChanged( "" );

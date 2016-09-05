@@ -41,6 +41,8 @@ public:
     void                operator << ( std::istream & );
     void                operator >> ( std::ostream & );
 
+    bool                Good        () const;
+
 	std::fstream *		StreamBuf	();
 
     virtual             ~File       ();
@@ -55,7 +57,9 @@ public:
 	static SizeType     Size        ( const std::string & fileName );
     static std::string  GetAbsolutPath( const std::string & fileName );
     static std::string  GetDirName  ( const std::string & path );
-	static std::string  GetFileName ( const std::string & path );
+	static std::string  GetFileName ( const std::string & path, bool withExt = false );
+    static std::string  GetExtension( const std::string & path );
+    static UInt64       GetSize     ( const std::string & path );
 
     friend class FileImpl;
 };

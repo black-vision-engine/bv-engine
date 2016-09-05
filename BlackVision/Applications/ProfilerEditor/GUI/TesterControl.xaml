@@ -1,0 +1,183 @@
+﻿<UserControl x:Class="ProfilerEditor.GUI.TesterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1100" Background="White">
+    <UserControl.Resources>
+        <layer:NotConverter x:Key="NotConverter" />
+        <layer:IsErrorBrushConverter x:Key="IsErrorBrushConverter"></layer:IsErrorBrushConverter>
+        <layer:BoolBrushConverter x:Key="BoolBrushConverter"></layer:BoolBrushConverter>
+        <layer:TesterStateToStringCoverter x:Key="TesterStateToStringCoverter"></layer:TesterStateToStringCoverter>
+        <layer:EnableFileListConverter x:Key="EnableFileListConverter"></layer:EnableFileListConverter>
+    </UserControl.Resources>
+    
+    <Expander Header="Tester/Debugger" Width="1069" HorizontalAlignment="Stretch">
+        <Grid Margin="0, 10, 0, 0" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*" />
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Margin="2, 2, 2, 2" >
+
+
+                <Grid Margin="0,2,0,0" Background="AntiqueWhite" Height="159">
+                    <TextBox Text="{Binding IpAddress}" IsEnabled="{Binding IsConnected, Converter={StaticResource NotConverter}}" HorizontalAlignment="Left" Height="23" Margin="17,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103"/>
+                    <TextBox Text="{Binding Port}" IsEnabled="{Binding IsConnected, Converter={StaticResource NotConverter}}" HorizontalAlignment="Left" Height="23" Margin="17,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103"/>
+                    <Label Content="IP address:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="137"/>
+                    <Label Content="Port:" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top" Width="103"/>
+                    <Button Content="Connect" Margin="115,120,10,10" Width="60" Height="25" Background="{Binding ConnectedBrush}" Command="{Binding ConnectCommand}"/>
+                </Grid>
+
+                <StackPanel Margin="0, 2, 0, 2">
+                    <Button Width="80" Command="{Binding ContinueDebuggingCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Fill="Green" Margin="0, 0, 5, 0" Data="M 0 16 L 12 8 L 0 0 Z"/>
+                            <TextBlock Text="Continue" />
+                        </StackPanel>
+                    </Button>
+                    <Button Width="80" Command="{Binding DebugStepCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Fill="Blue" Margin="0, 0, 5, 0" Data="M 0 16 L 12 8 L 0 0 Z"/>
+                            <TextBlock Text="Step" />
+                        </StackPanel>
+                    </Button>
+                    <Button Width="80" Command="{Binding StopDebuggingCommand}" IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="Red" Margin="0, 0, 5, 0" Height="12" Width="12" />
+                            <TextBlock Text="Stop" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel>
+                    <StackPanel Margin="0, 5, 0, 5">
+                        <Button Content="Choose Dir" Width="80" Command="{Binding ChooseTestDirectory}"/>
+                        <Button Content="Run Test" Width="80" Command="{Binding RunSingleTest}" />
+                        <Button Content="Run All Tests" Width="80" Command="{Binding RunAllTests}" />
+                        <Button Content="Debug Test" Width="80" Command="{Binding DebugCurrentTest}" />
+                        <ProgressBar Width="180" Height="20" Value="{Binding Path=TestsManager.Progress}" Maximum="1" />
+                    </StackPanel>
+                
+                    <!--List of tests in chosen directory-->
+                    <ListView MinHeight="290" ItemsSource="{Binding Path=TestsManager.TestFiles}" SelectedItem="{Binding Path=TestsManager.SelectedFile}" IsEnabled="{Binding State, Converter={StaticResource EnableFileListConverter}}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FileName}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="1" Margin="2, 2, 2, 2">
+                <TabControl DataContext="{Binding TestsManager}" Height="600" SelectedIndex="{Binding TabItemIdx}">
+                    <TabItem Header="Errors/Warnings/Infos" DataContext="{Binding}"  >
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                            <!--List of errors in tests-->
+                            <ListView MinHeight="400" ItemsSource="{Binding ErrorList}" SelectedItem="{Binding SelectedError}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="" >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Ellipse Fill="{Binding IsError, Converter={StaticResource IsErrorBrushConverter}}" Stroke="Black" StrokeThickness="2" Width="15" Height="15"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                        <!--<GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />-->
+                                        <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                        <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Message}" />
+                                        <GridViewColumn Header="Test File" DisplayMemberBinding="{Binding Path=FileRef.FileName}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <TabItem Header="Test content (event / response / reference response)" >
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Horizontal">
+                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.TestEvents}" SelectedItem="{Binding CurrentTestEvent}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox IsChecked="{Binding Breakpoint}" >
+                                                            <CheckBox.Resources>
+                                                                <Style TargetType="{x:Type CheckBox}">
+                                                                    <Setter Property="Template" >
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type CheckBox}">
+                                                                                <Ellipse Fill="{Binding Breakpoint, Converter={StaticResource BoolBrushConverter}}" Stroke="White" StrokeThickness="1" Width="15" Height="15"/>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </CheckBox.Resources>
+                                                        </CheckBox>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.RealResponses}" SelectedItem="{Binding CurrentRealResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.ReferenceResponses}" SelectedItem="{Binding CurrentReferenceResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </TabItem>
+                </TabControl>
+
+                <TextBlock Text="Event sent to engine" />
+                <TextBox DataContext="{Binding Path=TestsManager.EventsView}" Text="{Binding Path=CurrentTestEvent.EventContent}" IsReadOnly="True" MinHeight="160"/>
+
+            </StackPanel>
+
+            <GridSplitter Grid.Column="2" Width="3" Height="700" VerticalAlignment="Top" HorizontalAlignment="Stretch" ResizeDirection="Columns"/>
+
+
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Grid.Column="3" Margin="2, 2, 2, 2" DataContext="{Binding Path=TestsManager.EventsView}" >
+                <TextBlock Text="Reference response from test file" />
+                <TextBox MinHeight="300" MaxHeight="500" Text="{Binding Path=CurrentReferenceResponse.EventContent}" IsReadOnly="True" />
+                <TextBlock Text="Real response from engine" />
+                <TextBox MinHeight="300" MaxHeight="500" Text="{Binding Path=CurrentRealResponse.EventContent}" IsReadOnly="True" />
+            </StackPanel>
+
+            <GridSplitter Grid.Column="4" Width="3" Height="700" VerticalAlignment="Top" HorizontalAlignment="Stretch" ResizeDirection="Columns"/>
+            
+        </Grid>
+    </Expander>
+</UserControl>

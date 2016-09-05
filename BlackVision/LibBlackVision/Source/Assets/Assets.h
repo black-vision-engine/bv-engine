@@ -15,8 +15,20 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/FontAsset.h"
 
-#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
-#include "Assets/VideoStream/VideoStreamAsset.h"
+#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/VideoStream/AVAsset.h"
+#include "Assets//VideoStream/AVAssetLoader.h"
+
+#include "Assets/Mesh/MeshAssetDescriptor.h"
+#include "Assets/Mesh/MeshAsset.h"
+#include "Assets/Mesh/MeshLoader.h"
+
+#include "Assets/DataArray/DataArrayLoader.h"
+#include "Assets/DataArray/DataArrayAssetDescriptor.h"
+#include "Assets/DataArray/DataArrayAsset.h"
+
+#include "Assets/SVG/SVGLoader.h"
+#include "Assets/SVG/SVGAssetDescriptor.h"
 
 #include "Assets/AssetManager.h"
 
@@ -42,9 +54,4 @@ FontAssetConstPtr		LoadFontAsset	(	const std::string & fontFileName,
 											UInt32 blurSize,
 											UInt32 outlineSize,
 											bool generateMipmaps );
-
-// ***********************
-//
-AnimationAssetConstPtr	LoadAnimationAsset( const std::string & path, const std::string & filter );
-
 } // bv

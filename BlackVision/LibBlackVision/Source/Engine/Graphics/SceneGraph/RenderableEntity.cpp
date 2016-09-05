@@ -1,7 +1,15 @@
+#include "stdafx.h"
+
 #include "RenderableEntity.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayData.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

@@ -79,26 +79,26 @@ private:
 
     vector<VideoCardBase*>	m_VideoCards;
     VideoMidgard*			m_Midgard;
-	HANDLE					m_midgardThreadHandle;
-	unsigned int			m_midgardThreadID;
-	bool					m_midgardThreadStopping;
-	bool					m_Enabled;
-	bool					m_key_active;
+    HANDLE					m_midgardThreadHandle;
+    unsigned int			m_midgardThreadID;
+    bool					m_midgardThreadStopping;
+    bool					m_Enabled;
+    bool					m_key_active;
 
     
 public:
-	
+    
     bool                    m_SuperMagic;
     VideoConfig             m_VideoCardConfig;
     VideoCard_Modes         m_CurrentDislpayMode;
     VideoCard_RAM_GPU       m_CurrentTransferMode;
     
     bool                    m_IsEnding;
-	void					Black();
-	void					SetKey(bool active){m_key_active=active;};
+    void					Black();
+    void					SetKey(bool active){m_key_active=active;};
 
-	                        VideoCardManager        (void);
-	                        ~VideoCardManager       (void);
+                            VideoCardManager        (void);
+                            ~VideoCardManager       (void);
 
     bool                    InitVideoCardManager    (const std::vector<int> & hackBuffersUids);
     void                    DestroyVideoCardManager ();
@@ -112,31 +112,31 @@ public:
     VideoCardBase*          GetVideoCard			(int i);
     size_t		            GetVideoCardsSize		();
     void                    OnEventReceived         (bv::IEventPtr evt);
-	void                    DeliverFrameFromRAM     (unsigned char * buffer);
-	void                    DeliverFrameFromRAM     (std::shared_ptr<CFrame> buffer);
-	VideoMidgard*           GetMidgard				();
-	void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
-	unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
+    void                    DeliverFrameFromRAM     (unsigned char * buffer);
+    void                    DeliverFrameFromRAM     (std::shared_ptr<CFrame> buffer);
+    VideoMidgard *          GetMidgard				();
+    void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
+    unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     bool	                CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     void	                UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
-	bool					UpdateReferenceMode		(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
-	bool					UpdateReferenceOffset	(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
+    bool					UpdateReferenceMode		(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
+    bool					UpdateReferenceOffset	(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
     bool                    IsEnabled               (){return m_Enabled;}
 
 private:
-	void                    DetectVideoCards        ();
-	void                    DisableVideoCard        (int i);
+    void                    DetectVideoCards        ();
+    void                    DisableVideoCard        (int i);
     void                    DisableVideoCards       ();
-	void                    EnableVideoCard         (int i);
+    void                    EnableVideoCard         (int i);
     void                    EnableVideoCards        ();
     void                    SetupVideoChannels      ();
-	bool                    InitVideoCard           ( int i, const std::vector<int> & hackBuffersUids );
+    bool                    InitVideoCard           ( int i, const std::vector<int> & hackBuffersUids );
     bool                    InitVideoCards          ( const std::vector<int> & hackBuffersUids );
-	void                    RegisterVideoCards      ();
+    void                    RegisterVideoCards      ();
     void                    RegisterBlueFishCards   ();
     void                    RegisterBlackMagicCards ();    
     bool                    StopMidgardThread       ();
-	unsigned int static __stdcall copy_buffer_thread      (void *args);
+    unsigned int static __stdcall copy_buffer_thread      (void *args);
 };
 
 

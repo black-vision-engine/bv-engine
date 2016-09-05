@@ -1,9 +1,17 @@
+#include "stdafx.h"
+
 #include "DefaultPieChartPlugin.h"
 
-//#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Mathematics/defines.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 
@@ -18,24 +26,6 @@ DefaultPieChartPluginDesc::DefaultPieChartPluginDesc                            
 
 // *******************************
 //
-bool                            DefaultPieChartPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
-{
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
-
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 IPluginPtr                      DefaultPieChartPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultPieChartPlugin >( name, prev, timeEvaluator );
@@ -45,7 +35,7 @@ IPluginPtr                      DefaultPieChartPluginDesc::CreatePlugin         
 //
 DefaultPluginParamValModelPtr   DefaultPieChartPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     //ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
@@ -134,7 +124,7 @@ void GenerateSide( Float3AttributeChannelPtr verts )
 
 // geometry&uv generators - functors FTW!!!
 
-class GenerateBaseUV : public IGeometryAndUVsGenerator 
+class GenerateBaseUV : public IGeometryNormalsUVsGenerator 
 {
 private:
 
@@ -145,9 +135,7 @@ public:
 
     GenerateBaseUV( double z_ ) : z( z_ ) { }
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
-
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
         double angle = angleStart;
 
@@ -165,19 +153,19 @@ public:
         angle = angleEnd;
         verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
         uvs->AddAttribute( glm::vec2( angle, z ) );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
-class GenerateSideUV : public IGeometryAndUVsGenerator {
+class GenerateSideUV : public IGeometryNormalsUVsGenerator {
     double z1, z2;
     double angle;
 
 public:
     GenerateSideUV( double z1_, double z2_, double angle_ ) : z1( z1_ ), z2( z2_ ), angle( angle_ ) {}
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
-
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
         verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
         verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
@@ -188,19 +176,19 @@ public:
         uvs->AddAttribute( glm::vec2( angle, z2 ) );
         uvs->AddAttribute( glm::vec2( 0, z1 ) );
         uvs->AddAttribute( glm::vec2( 0, z2 ) );
+    
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
-class GenerateRoundSideUV : public IGeometryAndUVsGenerator {
+class GenerateRoundSideUV : public IGeometryNormalsUVsGenerator {
     double angleStart, angleEnd;
     double z1, z2;
 public:
     GenerateRoundSideUV( double as, double ae, double z1_, double z2_ ) :
         angleStart( as ), angleEnd( ae ), z1( z1_ ), z2( z2_ ) {}
 
-    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
-
-    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
         double angle = angleStart;
 
@@ -219,21 +207,22 @@ public:
 
         verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
         uvs->AddAttribute( glm::vec2( angle, z2 ) );
+
+        GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 };
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
-    DefaultGeometryAndUVsVertexAttributeChannel* channel;
-    if( m_vaChannel==NULL ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryVertexAttributeChannel
     {
-        channel = new DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType::PT_TRIANGLE_STRIP );
-        m_vaChannel = VertexAttributesChannelPtr( (VertexAttributesChannel*) channel );
-    } else
-    {
-        channel = (DefaultGeometryAndUVsVertexAttributeChannel*) m_vaChannel.get();
-        channel->ClearAll();
+		m_vaChannel = std::make_shared< DefaultGeometryVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
+	else
+	{
+		m_vaChannel->ClearAll();
+	}
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 
     z1 = 0; z2 = 1; // FIXME: variable?
 
@@ -247,6 +236,7 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
     auto gen3 = GenerateSideUV( z1, z2, angleEnd );
     auto gen4 = GenerateRoundSideUV( angleStart, angleEnd, z1, z2 );
 
+	auto channel = std::static_pointer_cast< DefaultGeometryVertexAttributeChannel >( m_vaChannel );
     channel->GenerateAndAddConnectedComponent( gen0 );
     channel->GenerateAndAddConnectedComponent( gen1 );
     channel->GenerateAndAddConnectedComponent( gen2 );
@@ -272,7 +262,10 @@ void                                DefaultPieChartPlugin::Update               
     if( asVal != m_angleStart || aeVal != m_angleEnd )
     {
         InitGeometry( asVal, aeVal );
-        m_vaChannel->SetNeedsTopologyUpdate( true );
+
+		//HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+        //m_vaChannel->SetNeedsTopologyUpdate( true );
+
         m_angleStart = asVal; m_angleEnd = aeVal;
     }
 }

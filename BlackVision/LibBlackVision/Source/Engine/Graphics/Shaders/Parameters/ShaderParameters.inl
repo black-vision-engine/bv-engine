@@ -21,7 +21,7 @@ inline const GenericShaderParam *   ShaderParameters::GetParam          ( unsign
 inline const GenericShaderParam *   ShaderParameters::GetParam          ( const std::string & name ) const
 {
     for( auto param : m_shaderParams )
-    {
+    {\
         if( param->Name() == name )
         {
             return param;
@@ -68,7 +68,16 @@ inline Texture2DPtr                 ShaderParameters::GetTexture        ( unsign
 {
     assert( idx < NumTextures() );
 
-    return m_textures[ idx ];
+    return m_textures[ idx ].first;
+}
+
+// ***************************
+//
+inline SamplerShaderParametersPtr	ShaderParameters::GetSamplerParameters        ( unsigned int idx ) const
+{
+    assert( idx < NumTextures() );
+
+    return m_textures[ idx ].second;
 }
 
 } //bv

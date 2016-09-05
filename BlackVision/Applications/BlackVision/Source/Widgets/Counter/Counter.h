@@ -1,9 +1,11 @@
 #pragma once
+
+
 #include "CoreDEF.h"
-#include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Types/Values/TypedValues.h"
-#include "Engine/Models/Plugins/Parameters/CachedSimpleTypedParameters.h"
-#include "Engine/Models/Interfaces/ITimeEvaluator.h"
+
+#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+
 
 namespace bv {
 namespace model {
@@ -14,7 +16,7 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 } // model
 } // bv
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 
 	class WidgetCounter;
@@ -22,24 +24,42 @@ namespace bv { namespace widgets {
 DEFINE_PTR_TYPE( WidgetCounter )
 DEFINE_CONST_PTR_TYPE( WidgetCounter )
 
-class WidgetCounter:  public model::INodeLogic, public std::enable_shared_from_this< WidgetCounter >
+class WidgetCounter:  public model::NodeLogicBase, public std::enable_shared_from_this< WidgetCounter >
 {
 private:
-	bv::model::BasicNode *					m_parentNode;
-	bool									m_isFinalized;
-	bv::model::ParamFloatPtr				m_param;
-	bv::ValueFloatPtr						m_value;
+    static const std::string        m_type;
+
+    struct PARAMETERS
+    {
+        static const std::string    PRECISION;
+        static const std::string    VALUE;
+    };
+
+private:
+	bv::model::BasicNode *      m_parentNode;
+
+    ValueIntPtr                 m_precision;
+    ValueFloatPtr               m_value;
 
 public:
-	explicit WidgetCounter(bv::model::BasicNode * parent, bv::model:: ITimeEvaluatorPtr timeEvaluator);
-	~WidgetCounter(void);
+	explicit        WidgetCounter   ( bv::model::BasicNode * parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
+	                ~WidgetCounter  ();
 
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
-	static		WidgetCounterPtr Create	( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
-	bv::model::IParameterPtr       GetValueParam       ();
+
+    virtual const std::string &     GetType             () const override;
+    static const std::string &      Type                ();
+
+	static WidgetCounterPtr         Create              ( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
+
+
+    virtual void                Serialize       ( ISerializer & ser ) const override;
+    static WidgetCounterPtr     Create          ( const IDeserializer & deser, bv::model::BasicNode * parent );
+
+    virtual bool                HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor  ) override;
 };
 
 }

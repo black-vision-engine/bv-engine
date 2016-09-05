@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "BVGL.h"
@@ -5,9 +7,18 @@
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererData.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 namespace {
+
+typedef BOOL (APIENTRY * PFNWGLSWAPINTERVALEXTPROC)(int);
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr;
 
 // *********************************
 //
@@ -82,8 +93,6 @@ bool	InitializeGL	()
 bool	InitializeVSync( const RendererInput & ri )
 {
     // Load wglSwapIntervalExt
-    typedef BOOL (APIENTRY * PFNWGLSWAPINTERVALEXTPROC)(int);
-    PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr; 
     wglSwapIntervalEXT = reinterpret_cast< PFNWGLSWAPINTERVALEXTPROC >( wglGetProcAddress( "wglSwapIntervalEXT" ) );
 
     if ( !wglSwapIntervalEXT )
@@ -95,7 +104,8 @@ bool	InitializeVSync( const RendererInput & ri )
     if ( ri.m_DisableVerticalSync )
     {
         wglSwapIntervalEXT( 0 );
-    }else{
+    }else
+    {
 		wglSwapIntervalEXT( ri.m_VerticalBufferFrameCount );
 	}
 
@@ -103,6 +113,28 @@ bool	InitializeVSync( const RendererInput & ri )
 }
 
 } //anonymous namespace
+
+// ***********************
+//
+void Renderer::SetVSync ( bool enable, int verticalBufferFrameCount )
+{
+    if ( !enable )
+    {
+        wglSwapIntervalEXT( 0 );
+    }
+    else
+    {
+		wglSwapIntervalEXT( verticalBufferFrameCount );
+	}
+}
+
+// ***********************
+//
+void Renderer::SetFlushFinish      ( bool flush, bool finish )
+{
+    m_EnableGLFinish = finish;
+	m_EnableGLFlush = flush;
+}
 
 // *********************************
 //

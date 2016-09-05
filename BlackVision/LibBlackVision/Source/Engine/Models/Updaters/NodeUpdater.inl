@@ -1,3 +1,9 @@
+#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/BoundingVolume.h"
+#include "UpdatersHelpers.h"
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h" // FIXME
+
 namespace bv {
 
 namespace {
@@ -15,29 +21,6 @@ inline void UpdateState( const ContextType * ctxState, StateTypePtr rendererStat
     }
 }
 
-// *********************************
-//FIXME: this should be implemented via VBOAcessor in one place only (VBO utils or some more generic utils) - right now it is copied here and in BasicNode (as AddVertexDataToVBO)
-inline void    WriteVertexDataToVBO( char * data, model::IConnectedComponentPtr cc )
-{
-    unsigned int numVertices = cc->GetNumVertices();
-    unsigned int offset = 0;
-
-    for( unsigned int i = 0; i < numVertices; ++i )
-    {
-        for( auto vach : cc->GetAttributeChannels() )
-        {
-            assert( vach->GetNumEntries() == numVertices );
-
-            auto eltSize = vach->GetDescriptor()->GetEntrySize(); //FIXME: most probably not required here (can be safely read from other location)
-            const char * eltData = vach->GetData();
-
-            memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
-
-            offset += eltSize;
-        }
-    }
-}
-
 } //anonymous
 
 
@@ -48,11 +31,23 @@ inline  void    NodeUpdater::UpdateTransform     ()
     //FIXME: rili rili
     m_renderable->ResetLocalTransform();
 
-    for( auto t : m_transformChannel->GetTransformValues() )
+    auto transform = m_transformChannel->GetTransformValue();
+    if( transform )
     {
-        const glm::mat4 & mat = t->GetValue();
+        const glm::mat4 & mat = transform->GetValue();
 
         m_renderable->SetLocalTransform( m_renderable->LocalTransform() * Transform( mat, glm::inverse( mat ) ) );
+
+        auto state = Cast< model::SimpleState< glm::mat4 >* >( m_transformStatedValue.get() );
+        state->Update( mat );
+    }
+
+    if( m_transformStatedValue->StateChanged() )
+    {
+        auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+        auto bv = node->GetBoundingVolume();
+        assert( bv );
+        UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
     }
 }
 
@@ -60,14 +55,16 @@ inline  void    NodeUpdater::UpdateTransform     ()
 //
 inline  void    NodeUpdater::UpdateGeometry      ()
 {
-    if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
-    {
-        assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
-        UpdatePositions();
-    }
-    else if ( m_vertexAttributesChannel->NeedsTopologyUpdate() )
+    if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
     {
         UpdateTopology();
+        m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+    }
+    else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
+    {
+        UpdatePositions();
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
     }
     else
     {
@@ -97,12 +94,15 @@ inline  void    NodeUpdater::UpdateRendererState ()
     }
 }
 
+namespace {
+
 // *****************************
 //
-inline  void    NodeUpdater::UpdatePositions     ()
+inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+        m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES );
 
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
@@ -113,7 +113,6 @@ inline  void    NodeUpdater::UpdatePositions     ()
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
     // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
-    auto vaChannel  = m_vertexAttributesChannel;
     auto components = vaChannel->GetComponents();
     auto geomDesc   = vaChannel->GetDescriptor();
 
@@ -127,7 +126,7 @@ inline  void    NodeUpdater::UpdatePositions     ()
         //This is update only, so the number of vertices must match
         assert( cc->GetNumVertices() == vao->GetNumVertices( k ) );
  
-        WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
+        UpdatersHelpers::WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
 
@@ -136,24 +135,44 @@ inline  void    NodeUpdater::UpdatePositions     ()
 
     vao->SetNeedsUpdateMemUpload( true );
 }
-
-// *****************************
 //
-inline  void    NodeUpdater::UpdateTopology      ()
+//// *****************************
+////
+//inline  void    UpdateBoxPositions     ( RenderableEntity * renderable, model::IConnectedComponentPtr cc )
+//{
+//    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
+//
+//    RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
+//
+//    VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
+//    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
+//
+//    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+//
+//    //This is update only, so the number of vertices must match
+//    assert( cc->GetNumVertices() == vao->GetNumVertices( 0 ) );
+// 
+//    UpdatersHelpers::WriteVertexDataToVBO( vbData, cc );
+//
+//    vao->SetNeedsUpdateMemUpload( true );
+//}
+
+inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAttributesChannelConstPtr vaChannel )
 {
     //FIXME: implement for other types of geometry as well
-    assert( m_renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP || 
+            renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLES ||
+            renderable->GetType() == RenderableEntity::RenderableType::RT_LINES );
 
     //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
 
-    auto vaChannel  = m_vertexAttributesChannel;
     auto components = vaChannel->GetComponents();
     auto geomDesc   = vaChannel->GetDescriptor();
 
     if( components.empty() )
     {
-        assert( false ); //FIXME: at this point empty geometry is not allowed
+        //assert( false ); //FIXME: at this point empty geometry is not allowed
         return;
     }
 
@@ -162,14 +181,28 @@ inline  void    NodeUpdater::UpdateTopology      ()
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)
-    RenderableArrayDataArraysSingleVertexBuffer * radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
+    RenderableArrayDataArraysSingleVertexBuffer * radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
     vao->ResetState();
+
+    // recreate vertex descriptor
+    VertexDescriptor * vd = new VertexDescriptor( geomDesc->GetNumVertexChannels() );
+    unsigned int attributeOffset = 0;
+
+    for( unsigned int i = 0; i < geomDesc->GetNumVertexChannels(); ++i )
+    {
+        auto channelDesc = geomDesc->GetAttrChannelDescriptor( i );
+        vd->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );
+        attributeOffset += channelDesc->GetEntrySize();     
+    }
+
+    vd->SetStride( attributeOffset );
+    vao->SetVertexDescriptor( vd );
+
 
     char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
     unsigned int currentOffset = 0;
@@ -180,20 +213,59 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
         vao->AddCCEntry( cc->GetNumVertices() );
 
-        WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
+        UpdatersHelpers::WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
     }
-
+    
     vao->SetNeedsUpdateRecreation( true );
+}
+
+} //anonymous
+
+// *****************************
+//
+inline  void    NodeUpdater::UpdatePositions     ()
+{
+    UpdatePositionsImpl( m_renderable, m_vertexAttributesChannel );
+    //
+    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+    //auto bv = node->GetBoundingVolume();
+    //assert( bv );
+    //UpdateBoundingBox();
 }
 
 // *****************************
 //
-inline void    NodeUpdater::UpdateTexturesData  ()
+inline  void    NodeUpdater::UpdateTopology      ()
 {
-    for( auto txDataPair : m_texDataMappingVec )
+    UpdateTopologyImpl( m_renderable, m_vertexAttributesChannel );
+    //
+    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+    //auto bv = node->GetBoundingVolume();
+    //assert( bv );
+    //UpdateBoundingBox( bv.get() );
+}
+
+// *****************************
+//
+inline void     NodeUpdater::UpdateShaderParams				()
+{
+    for( auto & pair : m_paramsMappingVec )
     {
+        UpdateShaderParam( pair.first, pair.second );
+    }
+}
+
+// *****************************
+//
+inline void		NodeUpdater::UpdateTexturesData				()
+{
+    for( unsigned int txIdx = 0; txIdx < ( unsigned int )m_texDataMappingVec.size(); ++txIdx )
+    {
+        auto txDataPair		= m_texDataMappingVec [ txIdx ];
         auto texData        = txDataPair.first;
         auto shaderParams   = txDataPair.second;
     
@@ -206,40 +278,111 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         {
             auto texDesc    = textures[ i ];
 
-            if ( texDesc->BitsChanged() )
+            if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
-                auto tex2D  = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
-
-                 //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
-                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc ) )
+                auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
+                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
                 {
-                    auto newTex2D = GTexture2DCache.GetTexture( texDesc );
-
+                    auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
                     shaderParams->SetTexture( j, newTex2D );
                 }
                 else //Some other texture type which just requires contents to be swapped
                 {
-                    auto format = texDesc->GetFormat();
-
-					tex2D->SetRawData( texDesc->GetBits(), format, texDesc->GetWidth(), texDesc->GetHeight() );
+                    tex2D->SetData( texDesc->GetBits(), texDesc->GetFormat(), texDesc->GetWidth(), texDesc->GetHeight(), texDesc->GetNumLevels() );
                 }
 
-                texDesc->ResetBitsChanged();
+                m_texDataUpdateID[ txIdx ][ j ] = texDesc->GetUpdateID();
             }
+
+            auto samplerState = texDesc->GetSamplerState();
+            auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+
+            //update sampler values
+            shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+            shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
         }
+
 
         for( unsigned int i = 0; i < animations.size(); ++i, ++j )
         {
-            auto tex2DSeq   = std::static_pointer_cast< Texture2DSequenceImpl >( shaderParams->GetTexture( j ) );
+            auto tex2D   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
 
-            if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
+            auto currFrame = animDesc->CurrentFrame();
+            auto numTextures = animDesc->NumTextures();
+
+            assert( currFrame <= numTextures );
+
+            if( m_texDataUpdateID[ txIdx ][ j ] < animDesc->GetUpdateID() )
             {
-                tex2DSeq->SetActiveTexture( animDesc->CurrentFrame() );
+                if( currFrame < numTextures )
+                {
+                    tex2D->SetData( animDesc->GetBits( currFrame ), animDesc->GetFormat(), animDesc->GetWidth(), animDesc->GetHeight() );
+                }
+                else if ( currFrame == numTextures )
+                {
+                    tex2D->ForceUpdate();
+                }
+                m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
             }
+
+            auto samplerState = animDesc->GetSamplerState();
+            auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+
+            //update sampler values
+            shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+            shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+            shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
+        }
+    }
+}
+
+// *****************************
+//
+inline void		NodeUpdater::UpdateAudio				()
+{
+    if( m_audio && m_audioChannel )
+    {
+        std::vector< MemoryChunkConstPtr > data;
+        auto packet = m_audioChannel->PopPacket();
+        while( packet )
+        {
+            data.push_back( packet );
+            packet = m_audioChannel->PopPacket();
         }
 
+        if( m_audioChannel->GetFormat() != m_audio->GetFormat() ||
+            m_audioChannel->GetFrequency() != m_audio->GetFrequency() )
+        {
+            m_audio->Reinitialize( m_audioChannel->GetFrequency(), m_audioChannel->GetFormat() );
+        }
+
+        if( !data.empty() )
+        {
+            m_audio->PushData( data );
+        }
     }
+}
+
+// *******************************
+//
+template< typename ValType, typename ShaderParamType >
+void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
+{
+    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+}
+
+// *******************************
+//
+template< typename ValType >
+void	NodeUpdater::UpdateTypedValue   ( IValueConstPtr source, IValuePtr dest )
+{
+    QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
 }
 
 } //bv

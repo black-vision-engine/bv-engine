@@ -1,21 +1,47 @@
+#include "stdafx.h"
+
 #include "JsonSerializeObject.h"
+#include "JsonDeserializeObject.h"
+#include "Serialization/BV/BVSerializeContext.h"
+#include "Assets/AssetDescsWithUIDs.h"
+
 #include <cassert>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
 
-// ******************************************************************************************
+// ***********************
 //
 JsonSerializeObject::JsonSerializeObject()
+    :   m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) ),
+        m_root( Json::objectValue )
 {
     m_currentNode = &m_root;
 }
+
+// ***********************
+//
+JsonSerializeObject::JsonSerializeObject( Json::Value && initValue )
+    :   m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) ),
+        m_root( initValue )
+{
+    m_currentNode = &m_root;
+}
+
+// ***********************
+//
 JsonSerializeObject::~JsonSerializeObject()
 {}
 
 // ***********************
 //
-void JsonSerializeObject::Save( const std::string& filename )
+void JsonSerializeObject::Save( const std::string& filename, FormatStyle /*style*/ )
 {
 	std::ofstream file;
 	file.open( filename, std::ios_base::out );
@@ -23,9 +49,32 @@ void JsonSerializeObject::Save( const std::string& filename )
 	file.close();
 }
 
+// ***********************
+//
 void JsonSerializeObject::Save( std::ostream& out )
 {
 	out << m_root;
+}
+
+// *******************************
+//
+SerializeContext* JsonSerializeObject::GetSerializeContext() const
+{
+    return m_context.get();
+}
+
+// ***********************
+//
+Json::Value JsonSerializeObject::GetJson() const
+{
+    return m_root;
+}
+
+// ***********************
+//
+std::string JsonSerializeObject::GetString()
+{
+    return m_root.toStyledString();
 }
 
 // ***********************
@@ -34,38 +83,44 @@ void JsonSerializeObject::EnterChild( const std::string& name )
 {
 	m_nodeStack.push( m_currentNode );
 
-    if( (*m_currentNode)[ name ].isArray() )
-    {
-        auto size = (*m_currentNode)[ name ].size();
-        
-        //(*m_currentNode)[ name ][ size ];
-        m_currentNode = &(*m_currentNode)[ name ][ size ];
-        
-    }
-    else if( (*m_currentNode)[ name ].isObject() )
-    {
-        auto tempNode = Json::Value( (*m_currentNode)[ name ] );       //Remember node. (deep copy)
-        
-        (*m_currentNode)[ name ] = Json::Value( Json::ValueType::arrayValue );
-        (*m_currentNode)[ name ][ 0 ] = tempNode;
+//    assert( !(*m_currentNode)[ name ].isArray() );
 
-        m_currentNode = &(*m_currentNode)[ name ][ 1 ];
+    if( m_currentNode->isArray() )
+    {
+        m_currentNode = &( ( *m_currentNode ).append( Json::ValueType::objectValue ) );
     }
     else
+    {
+        assert( !m_currentNode->isMember( name ) ); // if this assert fails, we've got two EnterChild's with the same name which leads to destroyed JSON!!!
+        (*m_currentNode)[ name ] = Json::ValueType::objectValue;
         m_currentNode = &(*m_currentNode)[ name ];
+    }
+
+    
 }
 
 // ***********************
 //
 void JsonSerializeObject::SetAttribute( const std::string& name, const std::string& value )
 {
-	(*m_currentNode)[ name ] = value;
+    //assert( (*m_currentNode).isObject() || (*m_currentNode).isArray() );
+
+    if( (*m_currentNode).isObject() )
+	    (*m_currentNode)[ name ] = value;
+    else if( (*m_currentNode).isArray() )
+        (*m_currentNode).append( value );
+    else
+    {
+        assert( false );
+    }
 }
 
 // ***********************
 //
 std::string JsonSerializeObject::GetAttribute( const std::string& name )
 {
+    assert( (*m_currentNode).isObject() );
+
     return (*m_currentNode)[ name ].asString();
 }
 
@@ -81,6 +136,70 @@ bool JsonSerializeObject::ExitChild()
 
     return true;
 }
+// ***********************
+//
+void                JsonSerializeObject::EnterArray          ( const std::string& name )
+{
+	m_nodeStack.push( m_currentNode );
+
+    if( m_currentNode->isMember( name ) )
+    {
+        assert( false );
+    }
+    else
+    {
+        ( *m_currentNode )[ name ] = Json::ValueType::arrayValue;
+    }
+
+    m_currentNode = &( ( *m_currentNode )[ name ] );
+
+    //unsigned int size = 0;  // Default value, when array doesn't exist yet.
+    //if( (*m_currentNode)[ name ].isArray() )
+    //    size = (*m_currentNode)[ name ].size();
+    //else if( (*m_currentNode)[ name ].isObject() )
+    //{
+    //    assert( !"It's not an array!" );
+    //}
+
+    //(*m_currentNode)[ name ][ size ] = Json::ValueType::objectValue;
+    
+}
+
+
+// ***********************
+//
+bool                JsonSerializeObject::AttachBranch        ( const std::string & name, const ISerializer * ser )
+{
+    assert( typeid( *ser ) == typeid( *this ) );
+    auto typedSer = static_cast< const JsonSerializeObject * >( ser );
+
+    assert( m_currentNode->isObject() );
+    assert( (*m_currentNode)[ name ] == Json::Value( Json::nullValue ) );
+
+    (*m_currentNode)[ name ] = typedSer->GetJson();
+
+    return true;
+}
+
+// ***********************
+//
+bool                JsonSerializeObject::AttachBranch        ( const std::string & name, const IDeserializer * ser )
+{
+    assert( typeid( *ser ) == typeid( *this ) );
+    auto typedSer = static_cast< const JsonDeserializeObject * >( ser );
+
+    assert( m_currentNode->isObject() );
+    assert( (*m_currentNode)[ name ] == Json::Value( Json::nullValue ) );
+
+    (*m_currentNode)[ name ] = typedSer->GetJson();
+
+    return true;
+}
+
+// ***********************
+//
+void                JsonSerializeObject::EnterArray          ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
 
 // ***********************
 //

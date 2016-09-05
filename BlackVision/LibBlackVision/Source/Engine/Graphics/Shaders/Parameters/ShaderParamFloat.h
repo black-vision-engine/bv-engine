@@ -9,20 +9,17 @@ class ShaderParamFloat : public GenericShaderParam
 {
 private:
 
-    const ValueFloat *   m_valModel;
+    Float32					m_val;
     
 public:
 
-                            ShaderParamFloat    ( const std::string & name, const ValueFloat * value );
-                            ~ShaderParamFloat   ();
+                            ShaderParamFloat    ( const std::string & name, Float32 value = 0.f );
 
-    void                    SetModelValue       ( const ValueFloat * value );
+    void                    SetValue			( Float32 value );
+
+private:
 
     virtual const void *    GetValuePtr         () const override;
-    virtual void *          AccessValuePtr      () override //FIXME: temporary, REMOVE
-    {
-        return const_cast<ValueFloat*>(m_valModel);
-    }
 
 };
 

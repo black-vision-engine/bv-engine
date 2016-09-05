@@ -1,18 +1,17 @@
 #include "LibEffect.h"
 
-#include "EffectRenderLogic.h"
+#include <cassert>
 
 #include "Application/WindowedApplication.h"
 
 #include "Effects/BlurEffect.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include <cassert>
 
 namespace bv { namespace effect
 {
@@ -47,23 +46,24 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 
     { bpp; }
 
+    assert( false );
+
     assert( in->Size() == width * height * bpp / 8 );
-	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
+	auto tex = std::make_shared< Texture2D >( TextureFormat::F_A8R8G8B8, width, height, DataBuffer::Semantic::S_TEXTURE_STATIC, 1 );
 
-	std::vector< MemoryChunkConstPtr > d;
-	d.push_back( in );
-
-	tex->SetRawData( d, TextureFormat::F_A8R8G8B8, width, height );
+	tex->SetData( in );
 
 	auto effect = GetBlurEffect( blurLength, 1.f / width, 1.f / height, tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_EDGE, TextureWrappingMode::TWM_CLAMP_EDGE, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-	auto renderLogic = new EffectRenderLogic( width, height, effect, new Camera() );
+    // FIXME: REIMPLEMENT
+	//auto renderLogic = new EffectRenderLogic( width, height, effect, new Camera() );
 
-	renderLogic->Draw( GetRenderer() );
+	//renderLogic->Draw( GetRenderer() );
 
-	auto texOut = renderLogic->ReadTarget( GetRenderer() );
+	//auto texOut = renderLogic->ReadTarget( GetRenderer() );
 
-	return texOut->GetData();
+	//return texOut->GetData();
+    return nullptr;
 }
 
 

@@ -1,6 +1,15 @@
+#include "stdafx.h"
+
 #include "UpdatersManager.h"
 
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Models/SceneModel.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -31,40 +40,42 @@ void UpdatersManager::UpdateStep        ()
 //
 bool    UpdatersManager::IsRegistered       ( const model::IModelNode * node )
 {
-    return m_updatersMapping.find( node ) != m_updatersMapping.end();
+    return m_nodeUpdatersMapping.find( node ) != m_nodeUpdatersMapping.end();
 }
 
 // *******************************
 //
 void    UpdatersManager::RegisterUpdater    ( const model::IModelNode * node, IUpdaterPtr updater )
 {
-    assert( m_updatersMapping.find( node ) == m_updatersMapping.end() );
-
-    m_updatersMapping[ node ] = updater;
-    m_updaters.push_back( updater );
+    RegisterUpdater< model::IModelNode >( node, updater, m_nodeUpdatersMapping );
 }
 
 // *******************************
 //
 void    UpdatersManager::RemoveNodeUpdater  ( const model::IModelNode * node )
 {
-    auto itToRemove = m_updatersMapping.find( node );
-    assert( itToRemove != m_updatersMapping.end() );
+    RemoveUpdater( node, m_nodeUpdatersMapping );
+}
 
-    auto updaterToRemove = itToRemove->second;
+// *******************************
+//
+bool    UpdatersManager::IsRegistered       ( const model::SceneModel * scene )
+{
+    return m_sceneUpdatersMapping.find( scene ) != m_sceneUpdatersMapping.end();
+}
 
-    for( auto it = m_updaters.begin(); it != m_updaters.end(); ++it )
-    {
-        if( updaterToRemove == *it )
-        {
-            m_updaters.erase( it );
-            m_updatersMapping.erase( itToRemove );
-        
-            return;
-        }
-    }
+// *******************************
+//
+void    UpdatersManager::RegisterUpdater    ( const model::SceneModel * scene, IUpdaterPtr updater )
+{
+    RegisterUpdater( scene, updater, m_sceneUpdatersMapping );
+}
 
-    assert( false );
+// *******************************
+//
+void    UpdatersManager::RemoveSceneUpdater ( const model::SceneModel * scene )
+{
+    RemoveUpdater( scene, m_sceneUpdatersMapping );
 }
 
 // *******************************
@@ -80,6 +91,41 @@ UpdatersManager & UpdatersManager::Get  ()
 {
     static UpdatersManager instance = UpdatersManager();
     return instance;
+}
+
+// *******************************
+//
+template< typename T >
+void            UpdatersManager::RegisterUpdater    ( const T * obj, IUpdaterPtr updater, std::hash_map< const T *, IUpdaterPtr > & mapping )
+{
+    assert( mapping.find( obj ) == mapping.end() );
+
+    mapping[ obj ] = updater;
+    m_updaters.push_back( updater );
+}
+
+// *******************************
+//
+template< typename T >
+void            UpdatersManager::RemoveUpdater      ( const T * obj, std::hash_map< const T *, IUpdaterPtr > & mapping )
+{
+    auto itToRemove = mapping.find( obj );
+    assert( itToRemove != mapping.end() );
+
+    auto updaterToRemove = itToRemove->second;
+
+    for( auto it = m_updaters.begin(); it != m_updaters.end(); ++it )
+    {
+        if( updaterToRemove == *it )
+        {
+            m_updaters.erase( it );
+            mapping.erase( itToRemove );
+        
+            return;
+        }
+    }
+
+    assert( false );
 }
 
 } //bv

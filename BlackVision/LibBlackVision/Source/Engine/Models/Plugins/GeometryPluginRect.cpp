@@ -1,7 +1,15 @@
+#include "stdafx.h"
+
 #include "GeometryPluginRect.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {

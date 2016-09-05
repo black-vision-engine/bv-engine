@@ -1,5 +1,6 @@
 #pragma once
-#include "../VideoInput/IVideoInput.h"
+
+#include "Engine/Models/Plugins/Simple/VideoInput/IVideoInput.h"
 
 namespace bv {
 
@@ -8,10 +9,12 @@ namespace bv {
     {
         float m_fps;
         MemoryChunkPtr bits;
-        model::DefaultTextureDescriptor* desc;
+        model::DefaultTextureDescriptorPtr desc;
 
         int m_maskAnd;
         int m_maskOr;
+
+        UInt64 m_updateID;
     
         void		GenerateBits( int x, int y );
     public:
@@ -21,17 +24,16 @@ namespace bv {
         ~TestVideoInput(void);
 
         virtual MemoryChunkConstPtr     GetBits             () const;
-        virtual bool                    BitsChanged         () const;
-        virtual void                    ResetBitsChanged    () const;
+        virtual UInt64                  GetUpdateID         () const;
 
         virtual unsigned int            GetWidth			() const;
         virtual unsigned int            GetHeight			() const;
         virtual TextureFormat           GetFormat			() const;
 
-        virtual model::DefaultTextureDescriptor* GetTexture		() const;
+        virtual model::DefaultTextureDescriptorPtr GetTexture		() const;
         virtual void					Update				() override;
 
-        virtual model::DefaultTextureDescriptor* GetTextureDesc	() const; // THIS IS SO UGLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        virtual model::DefaultTextureDescriptorPtr GetTextureDesc	() const; // THIS IS SO UGLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     };
 
 }

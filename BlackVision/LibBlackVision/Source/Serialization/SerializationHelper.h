@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ISerializable.h"
-#include "ISerializer.h"
-#include "IDeserializer.h"
+#include "Serialization/ISerializable.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
-#include "Mathematics/glm_inc.h"
+#include "Expected.h"
 
 namespace bv {
 
@@ -13,19 +13,34 @@ namespace SerializationHelper {
 // *************************************
 //
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer& deser, std::string name )
+std::shared_ptr< T >                                        DeserializeObject( const IDeserializer& deser, std::string name )
 {
     auto sucess = deser.EnterChild( name );
-    assert( sucess ); // FIXME error handling
-    auto obj = T::Create( deser );
-    deser.ExitChild();
-    return std::static_pointer_cast< T >( obj );
+
+    if( sucess )
+    {
+        auto obj = T::Create( deser );
+        deser.ExitChild();
+        return std::static_pointer_cast< T >( obj );
+    }
+    else
+    {
+        return nullptr;
+    }
 }
+
+//// *************************************
+////
+//template< typename T >
+//std::shared_ptr< T >                                        DeserializeObjectPtr( const IDeserializer& deser, std::string name )
+//{
+//    return std::shared_ptr< T >( DeserializeObject< T >( deser, name ) );
+//}
 
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& deser, std::string nameParent, std::string nameChild="" )
+std::vector< std::shared_ptr< T > >                         DeserializeArray( const IDeserializer& deser, std::string nameParent, std::string nameChild="" )
 {
     std::vector< std::shared_ptr< T > > ret;
 
@@ -44,7 +59,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     {
         do
         {
-            auto obj = T::Create( deser );
+            auto obj = ISerializablePtr( T::Create( deser ) );
             ret.push_back( std::static_pointer_cast< T >( obj ) );
         }while( deser.NextChild() );
         deser.ExitChild(); // nameChild
@@ -57,7 +72,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& deser, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeProperties( const IDeserializer& deser, std::string name )
 {
     std::vector< std::shared_ptr< T > > ret;
 
@@ -65,7 +80,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     {
         do
         {
-            auto obj = T::Create( deser );
+            auto obj = ISerializablePtr( T::Create( deser ) );
 
             ret.push_back( std::static_pointer_cast< T >( obj ) );
         }while( deser.NextChild( ) );
@@ -103,40 +118,14 @@ std::shared_ptr< T > Create( const IDeserializer& deser )
 
 // glm stuff
 
-glm::vec4               String2Vec4( std::string s );
-glm::vec3               String2Vec3( std::string s );
-glm::vec2               String2Vec2( std::string s );
+template< typename T >
+std::string T2String( const T & t );
 
 template< typename T >
-std::string T2String( const std::pair< T, const char* > t2s[], const T& t )
-{
-    for( int i = 0; ; i++ ) // FIXME so much
-        if( t2s[i].first == t )
-            return t2s[i].second;
-}
+Expected<T> String2T( const std::string & s );
 
 template< typename T >
-T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
-{
-    for( int i = 0; ; i++ ) // FIXME so much
-        if( t2s[i].second == s )
-            return t2s[i].first;
-}
-
-template< typename T >
-T String2T( std::string s );
-
-template< typename T, typename U >
-std::pair< T, U > String2Pair( std::string s );
+T String2T( const std::string & s, const T & defaultVal );
 
 } // SerializationHelper
 } // bv
-
-namespace std
-{
-    string to_string( const glm::vec2 & v );
-    string to_string( const glm::vec3 & v );
-    string to_string( const glm::vec4 & v );
-    string to_string( const std::string & val );
-    string to_string( const std::wstring & val );
-}

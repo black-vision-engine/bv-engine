@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "WindowedApplication.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Application/ApplicationContext.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -17,8 +25,9 @@ WindowedApplication::WindowedApplication			( const char * title, int x, int y, i
     , m_MultipleMonitors(false)
     , m_ClearColor( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
     , m_Renderer( nullptr )
+    , m_audioRenderer( nullptr )
 {
-	 if(windowMode==WindowMode::WINDOWED)
+	if(windowMode==WindowMode::WINDOWED)
         m_AllowResize = true;
     else
         m_AllowResize = false;
@@ -159,6 +168,15 @@ const Renderer * WindowedApplication::Renderer		() const
     return m_Renderer;
 }
 
+
+// *********************************
+//
+const audio::AudioRenderer * WindowedApplication::AudioRenderer		() const
+{
+    return m_audioRenderer;
+}
+
+
 // *********************************
 //
 bool	WindowedApplication::OnInitialize			()
@@ -181,6 +199,14 @@ void	WindowedApplication::OnTerminate			()
 void	WindowedApplication::OnKey					( unsigned char c )
 {
     { c; } // FIXME: suppress unused warning
+    //To be implemented in derived class
+}
+
+// ***********************
+//
+void    WindowedApplication::OnMouse                ( MouseAction action, int posX, int posY )
+{
+    { action; posX; posY; } // FIXME: suppress unused warning
     //To be implemented in derived class
 }
 
@@ -232,9 +258,10 @@ void	WindowedApplication::OnDisplay				()
 
 // *********************************
 //
-void	WindowedApplication::OnIdle					()
+bool	WindowedApplication::OnIdle					()
 {
     //To be implemented in derived classes
+    return false;
 }
 
 // *********************************

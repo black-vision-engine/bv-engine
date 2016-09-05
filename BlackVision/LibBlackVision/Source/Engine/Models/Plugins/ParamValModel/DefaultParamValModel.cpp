@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultParamValModel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
@@ -5,7 +7,17 @@
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
+
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 
@@ -19,6 +31,16 @@ DefaultParamValModel::DefaultParamValModel                                      
 //
 DefaultParamValModel::~DefaultParamValModel                                         ()
 {
+}
+
+// *******************************
+//
+void                                        DefaultParamValModel::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterArray( "params" );
+    for( auto param : m_parameters )
+        param->Serialize( ser );
+ser.ExitChild();
 }
 
 // *******************************
@@ -40,6 +62,13 @@ const std::vector< bv::IValueConstPtr > &   DefaultParamValModel::GetValues     
 std::vector< IParamValEvaluatorPtr > &      DefaultParamValModel::GetEvaluators     ()
 {
     return m_evaluators;
+}
+
+// ***********************
+//
+const std::map< std::string, IStatedValuePtr > &    DefaultParamValModel::GetStates       ()
+{
+    return m_states;
 }
 
 // *******************************
@@ -88,18 +117,17 @@ void                                        DefaultParamValModel::Update        
         evaluator->Evaluate();
     }
 
-    for( auto updater : m_stateUpdaters )
+    for( auto & updater : m_stateUpdaters )
     {
         updater->DoUpdate();
     }
 }
 
-void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget about copying timelines!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
-    assert( out->GetType() == in->GetType() ); // FIXME: uncomment when parameter deserialization is finished
-    
-    //if( out->GetType() != in->GetType() )
-    //    return;
+    assert( out->GetType() == in->GetType() );
+
+    out->SetTimeEvaluator( in->GetTimeEvaluator() );
 
     if( out->GetType() == ModelParamType::MPT_VEC4 )
     {
@@ -143,17 +171,6 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     } 
-    else if( out->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
-    {
-        auto inT = QueryTypedParam< ParamTransformVecPtr >( in );
-        auto outT = QueryTypedParam< ParamTransformVecPtr >( out );
-
-        for( unsigned int i = 0; i < inT->NumTransforms(); i++ )
-        {
-            auto trans = inT->Transform( i );
-            outT->InsertTransform( i, trans );
-        }
-    } 
     else if( out->GetType() == ModelParamType::MPT_TRANSFORM )
     {
         auto inT = QueryTypedParam< ParamTransformPtr >( in );
@@ -163,7 +180,10 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
     }
     else if( out->GetType() == ModelParamType::MPT_ENUM )
     {
-        // FIXME so much :)
+        auto inTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( in );
+        auto outTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( out );
+
+        outTypedParam->AccessInterpolator() = inTypedParam->AccessInterpolator();
     }
     else if( out->GetType() == ModelParamType::MPT_STRING )
     {
@@ -183,6 +203,49 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
     {
         assert( false );
         return;
+    }
+}
+
+// ***********************
+//
+void                                        DefaultParamValModel::RemoveParamVal  ( const std::string & name )
+{
+    // Remove parameters
+    for( int i = 0; i < m_parameters.size(); ++i )
+    {
+        if( m_parameters[ i ]->GetName() == name )
+            m_parameters.erase( m_parameters.begin() + i );
+    }
+
+    // Remove values
+    for( int i = 0; i < m_values.size(); ++i )
+    {
+        if( m_values[ i ]->GetName() == name )
+            m_values.erase( m_values.begin() + i );
+    }
+
+    for( int i = 0; i < m_valuesNC.size(); ++i )
+    {
+        if( m_valuesNC[ i ]->GetName() == name )
+            m_valuesNC.erase( m_valuesNC.begin() + i );
+    }
+
+    //Remove evaluators
+    for( int i = 0; i < m_evaluators.size(); ++i )
+    {
+        auto & evalVec = m_evaluators[ i ]->GetParameters();
+        if( evalVec[ 0 ]->GetName() == name )
+            m_evaluators.erase( m_evaluators.begin() + i );
+    }
+
+    // Remove states
+    m_states.erase( name );
+
+    // Remove updaters
+    for( int i = 0; i < m_stateUpdaters.size(); ++i )
+    {
+        if( m_stateUpdaters[ i ]->GetName() == name )
+            m_stateUpdaters.erase( m_stateUpdaters.begin() + i );
     }
 }
 
@@ -245,7 +308,7 @@ void                                        DefaultParamValModel::RegisterAll   
 
 // *******************************
 //
-void                                                DefaultParamValModel::AddState        ( const std::string & name, IStatedValuePtr state, IUpdaterPtr updater )
+void                                                DefaultParamValModel::AddState        ( const std::string & name, IStatedValuePtr state, IStateUpdaterPtr updater )
 {
     m_states[ name ] = state;
     m_stateUpdaters.push_back( updater );

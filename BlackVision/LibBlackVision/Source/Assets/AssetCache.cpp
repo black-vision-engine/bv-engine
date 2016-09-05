@@ -1,14 +1,25 @@
+#include "stdafx.h"
+
 #include "AssetCache.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv
 {
 
+// ******************************
+//
 AssetCache::AssetCache()
 {
 }
 
-
+// ******************************
+//
 AssetCache::~AssetCache()
 {
 }

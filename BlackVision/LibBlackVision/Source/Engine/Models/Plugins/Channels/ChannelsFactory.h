@@ -11,14 +11,14 @@ namespace bv { namespace model {
 
 class TransformChannel;
 class VertexAttributesChannel;
-class ParamTransformVec;
+class ParamTransform;
 
 class ChannelsFactory
 {
 public:
 
     static VertexAttributesChannelPtr           CreateVertexAttributesChannel       ( ConnectedComponentPtr connComp, bool isTimeInvariant );
-    static TransformChannelPtr                  CreateTransformChannel              ( const ParamTransformVec & transformVec );
+    static TransformChannelPtr                  CreateTransformChannel              ( const ParamTransform & transform );
     static IGeometryShaderChannelPtr            CreateGeometryShaderExtrude         ( float scale, ITimeEvaluatorPtr timeEvaluator );
 
 };

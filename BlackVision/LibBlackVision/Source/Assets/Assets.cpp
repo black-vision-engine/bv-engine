@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "Assets.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -37,13 +45,6 @@ FontAssetConstPtr	LoadFontAsset	(	const std::string & fontFileName,
 										blurSize,
 										outlineSize,
 										generateMipmaps ) ) );
-}
-
-// ***********************
-//
-AnimationAssetConstPtr LoadAnimationAsset( const std::string & path, const std::string & filter )
-{
-	return std::static_pointer_cast< const AnimationAsset >( AssetManager::GetInstance().LoadAsset( AnimationAssetDesc::Create( path, filter ) ) );
 }
 
 } // bv

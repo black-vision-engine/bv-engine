@@ -34,6 +34,8 @@ public:
     void                Write       ( const char * in , SizeType numBytes );
 	void                Write       ( const std::string & str );
 
+    bool                Good        () const;
+
 	std::fstream *		StreamBuf	();
 
     void                Close       ();
@@ -176,6 +178,13 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 
     ret = stat( fileName.c_str(), &info );
     return 0 == ret;
+}
+
+// *******************************
+//
+bool        FileImpl::Good        () const
+{
+    return m_fileHandle->good();
 }
 
 // *******************************
@@ -362,6 +371,13 @@ std::fstream *	File::StreamBuf	()
 
 // *******************************
 //
+bool             File::Good      () const
+{
+    return m_impl->Good();
+}
+
+// *******************************
+//
 SizeType    File::Size        ( const std::string & fileName )
 {
     return FileImpl::Size( fileName );
@@ -427,10 +443,26 @@ std::string  File::GetDirName  ( const std::string & path )
 
 // *******************************
 //
-std::string  File::GetFileName ( const std::string & path )
+std::string  File::GetFileName ( const std::string & path, bool withExt )
 {
 	boost::filesystem::path p( path );
-	return p.stem().string();
+
+    if( !withExt )
+    {
+        return p.stem().string();
+    }
+    else
+    {
+        return p.filename().string();
+    }
+}
+
+// *******************************
+//
+std::string  File::GetExtension( const std::string & path )
+{
+    auto ext = boost::filesystem::extension( path );
+    return ext;
 }
 
 // *******************************
@@ -442,6 +474,13 @@ void         File::Touch       ( const std::string & fileName )
         auto f = File::Open( fileName, OpenMode::FOMReadWrite );
         f.Close();
     }
+}
+
+// *******************************
+//
+UInt64       File::GetSize     ( const std::string & path )
+{
+    return boost::filesystem::file_size( path );
 }
 
 } //bv

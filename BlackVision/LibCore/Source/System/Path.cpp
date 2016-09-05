@@ -3,9 +3,9 @@
 
 #include "Path.h"
 #include "IO/DirIO.h"
+#include "IO/FileIO.h"
 
-#include "Tools/Logger/Logger.h"
-#define LOG_MODULE ModuleEnum::ME_LibCore
+#include "UseLoggerLibCoreModule.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4100)
@@ -244,41 +244,60 @@ PathVec			Path::List				( const Path & path, bool recursive, const std::string e
 {
     if( Path::Exists( path ) )
     {
-	    boost::filesystem::path cp( path.Str() ); 
-	    boost::regex pattern( exp );
-
-	    PathVec ret;
-
-        if( recursive )
+        try
         {
-	        for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
-			        iter != end;
-			        ++iter)
-	        {
-		        std::string name = iter->path().filename().string();
-		        if (regex_match(name, pattern))
-		        {
-			        auto p = iter->path();
-			        ret.push_back( Path( iter->path().string() ) );
-		        }
-            }
-        }
-        else
-        {
-            for (	boost::filesystem::directory_iterator iter( cp ), end;
-			        iter != end;
-			        ++iter)
-	        {
-		        std::string name = iter->path().filename().string();
-		        if (regex_match(name, pattern))
-		        {
-			        auto p = iter->path();
-			        ret.push_back( Path( iter->path().string() ) );
-		        }
-            }
-        }
+	        boost::filesystem::path cp( path.Str() ); 
+	        boost::regex pattern( exp );
 
-        return ret;
+	        PathVec ret;
+
+            if( IsFile( path ) )
+            {
+                if( regex_match( path.Str(), pattern ) )
+                {
+                    ret.push_back( path );
+                }
+
+                return ret;
+            }
+
+            if( recursive )
+            {
+	            for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
+			            iter != end;
+			            ++iter )
+	            {
+		            std::string name = iter->path().filename().string();
+		            if ( regex_match( name, pattern ) )
+		            {
+			            auto p = iter->path();
+			            ret.push_back( Path( iter->path().string() ) );
+		            }
+                }
+            }
+            else
+            {
+                for (	boost::filesystem::directory_iterator iter( cp ), end;
+			            iter != end;
+			            ++iter )
+	            {
+		            std::string name = iter->path().filename().string();
+		            if ( regex_match( name, pattern ) )
+		            {
+			            auto p = iter->path();
+			            ret.push_back( Path( iter->path().string() ) );
+		            }
+                }
+            }
+
+            return ret;
+        } 
+        catch( const std::exception & exc )
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "Cannot list files in folder: " << path << " with filter " << exp;
+            LOG_MESSAGE( SeverityLevel::error ) << exc.what();
+            return PathVec(); 
+        }
     }
     else
     {
@@ -298,10 +317,20 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 
 // *********************************
 //
+bool            Path::IsValisPathName   ( const std::string & path )
+{
+    auto dirName = File::GetDirName( path );
+    auto fileName = File::GetFileName( path, true );
+
+    return boost::filesystem::windows_name( fileName ) && ( dirName.empty() || boost::filesystem::portable_directory_name( dirName ) );
+}
+
+// *********************************
+//
 StringVector    Path::Split				() const
 {
     StringVector results;
-    boost::split(results, m_path, boost::is_any_of("//"));
+    boost::split(results, m_path, boost::is_any_of("\\"));
 
 	return results;
 }

@@ -11,10 +11,12 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "TextureInfo.h"
+
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
+
+#include "Engine/Models/IDGenerator.h"
 
 #include "Serialization/ISerializable.h"
-//#include "Engine/Models/Plugins/PluginsFactory.h"
 
 namespace bv { namespace model {
 
@@ -26,11 +28,14 @@ protected:
     ///////////////// Previous plugin ///////////
     IPluginPtr                                  m_prevPlugin;
 
+    UInt32										m_id;
+
     std::string                                 m_name;
     std::string                                 m_uid;
 
     IPluginParamValModelPtr                     m_pluginParamValModel;
-    std::vector< AssetDescConstPtr >            m_assets;
+    
+    std::vector< LAsset >                       m_assets;
 
 protected:
 
@@ -40,6 +45,9 @@ public:
     virtual void                                Serialize                   ( ISerializer& doc ) const override;
     static ISerializablePtr                     Create                      ( const IDeserializer& doc );
 
+    virtual IPluginPtr							Clone						() const override;
+
+
     virtual                                     ~BasePlugin                 ();
 
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;
@@ -48,39 +56,51 @@ public:
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
     
-    virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
-    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
-    virtual void                                AddAsset                    ( AssetDescConstPtr asset ); // FIXME: ugly hack for serialization
+    virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
+    virtual std::vector< IParameterPtr >        GetResourceStateModelParameters () const override;
+    
+    virtual std::vector< IParameterPtr >        GetParameters               () const override;
+
+    virtual std::vector< LAsset >               GetLAssets                  () const;
+    virtual void                                SetAsset                    ( int i, LAsset lasset );
 
     virtual void                                Update                      ( TimeType t );
 
+    UInt32										GetID		                () const override   { return m_id; }
+
     const std::string &                         GetName                     () const override   { return m_name; } 
     const std::string &                         GetTypeUid                  () const override   { return m_uid; } 
+
+    virtual bool								IsValid						() const override;
 
     virtual void                                SetGeometryChannel          ( VertexAttributesChannelPtr vaChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannelPtr transformChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannelPtr pShCh )         { assert(!"Implement in derived class"); }
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannelPtr vShCh )        { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannelPtr gShCh )      { assert(!"Implement in derived class"); }
+    virtual void                                SetAudioChannel             ( IAudioChannelPtr audioChannel )        { assert(!"Implement in derived class"); }
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
+    virtual IAudioChannelPtr                    GetAudioChannel             () const override;
 
     virtual RendererContextConstPtr             GetRendererContext          () const override;
+    virtual void                                SetRendererContext          ( RendererContextPtr context ) override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
     virtual IPluginPtr							GetPrevPlugin               () override;
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
+    virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr );
 
-	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
+    virtual ParamTransformPtr				    GetParamTransform			() const override { return nullptr; }
 
+    virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
 
 protected:
 
@@ -102,7 +122,24 @@ template< class Iface >
 void BasePlugin< Iface >::Update  ( TimeType t )
 {
     { t; } // FIXME: suppress unused warning
-    assert( !"Implement in derived class" );
+    
+    m_pluginParamValModel->Update();
+    
+    if( GetPixelShaderChannel() )
+    {
+        auto txData = GetPixelShaderChannel()->GetTexturesData();
+        for( auto tx : txData->GetTextures() )
+        {
+            tx->GetSamplerState()->Update();
+        }
+
+        for( auto tx : txData->GetAnimations() )
+        {
+            tx->GetSamplerState()->Update();
+        }
+    }
+
+    //assert( !"Implement in derived class" );
 }
 
 // *******************************
@@ -113,6 +150,7 @@ BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string 
     , m_name( name )
     , m_uid( uid )
     , m_pluginParamValModel( model )
+    , m_id( IDGenerator::Instance().GetID() )
 {
 }
 
@@ -121,6 +159,18 @@ BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string 
 template< class Iface >
 BasePlugin< Iface >::~BasePlugin()
 {
+}
+
+// *******************************
+//
+template< class Iface >
+bool						BasePlugin< Iface >::IsValid				() const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->IsValid();
+    }
+    return true;
 }
 
 // *******************************
@@ -190,12 +240,88 @@ IStatedValuePtr             BasePlugin< Iface >::GetState               ( const 
 
 // *******************************
 //
+template< class Iface >
+IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::string & name ) const
+{
+    IShaderChannelConstPtr channels[] = { GetPixelShaderChannel(),
+                                          GetVertexShaderChannel(),
+                                          GetGeometryShaderChannel() };
+    for( auto & channel : channels )
+    {
+        if( !channel ) continue;
+
+        auto txData = channel->GetTexturesData();
+        for( auto tx : txData->GetTextures() )
+        {
+            if( tx->GetName() == name )
+            {
+                return tx->GetSamplerState();
+            }
+        }
+
+        for( auto anim : txData->GetAnimations() )
+        {
+            if( anim->GetName() == name )
+            {
+                return anim->GetSamplerState();
+            }
+        }
+
+        for( auto font : txData->GetFonts() )
+        {
+            if( font->GetName() == name )
+            {
+                return font->GetStateModel();
+            }
+        }
+    }
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+std::vector< IParameterPtr >        BasePlugin< Iface >::GetResourceStateModelParameters () const
+{
+    IShaderChannelConstPtr channels[] = { GetPixelShaderChannel(),
+                                          GetVertexShaderChannel(),
+                                          GetGeometryShaderChannel() };
+    std::vector< IParameterPtr > ret;
+
+    for( auto & channel : channels )
+    {
+        if( !channel ) continue;
+
+        auto txData = channel->GetTexturesData();
+        for( auto & tx : txData->GetTextures() )
+        {
+            auto params = tx->GetSamplerState()->GetParameters();
+            ret.insert( ret.end(), params.begin(), params.end() );
+        }
+        for( auto & anim : txData->GetAnimations() )
+        {
+            auto params = anim->GetSamplerState()->GetParameters();
+            ret.insert( ret.end(), params.begin(), params.end() );
+        }
+        for( auto & font : txData->GetFonts() )
+        {
+            auto params = font->GetStateModel()->GetParameters();
+            ret.insert( ret.end(), params.begin(), params.end() );
+        }
+    }
+
+    return ret;
+}
+
+
+// *******************************
+//
 struct NullDeleter {template<typename T> void operator()(T*) {} };
 
 template< class Iface >
 ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
 {
-	assert( false ); // DEPRECATED
+    assert( false ); // DEPRECATED
     IParameterPtr param = GetParameter( name );
 
     //ParamBoolPtr qParam = std::static_pointer_cast< IParameterPtr, ParamBoolPtr >( param );
@@ -267,7 +393,7 @@ ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel    
 // *******************************
 //
 template< class Iface >
-IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
+IPixelShaderChannelPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
 {
     if( m_prevPlugin )
     {
@@ -298,6 +424,19 @@ IGeometryShaderChannelConstPtr      BasePlugin< Iface >::GetGeometryShaderChanne
     if( m_prevPlugin )
     {
         return m_prevPlugin->GetGeometryShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IAudioChannelPtr                    BasePlugin< Iface >::GetAudioChannel       () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetAudioChannel();
     }
 
     return nullptr;
@@ -348,7 +487,7 @@ void								BasePlugin< Iface >::SetPrevPlugin                  ( IPluginPtr plu
 template< class Iface >
 mathematics::RectConstPtr			BasePlugin< Iface >::GetAABB						( const glm::mat4 & ) const
 {
-	return nullptr;
+    return nullptr;
 }
 
 // *******************************
@@ -418,9 +557,16 @@ bool                                        BasePlugin< Iface >::ParameterChange
     return state->StateChanged();
 }
 
-ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
+ParamTransformPtr						    GetCurrentParamTransform( const IPlugin * pl );
 
 typedef std::shared_ptr< const BasePlugin< IPlugin > > BasePluginConstPtr;
 
 } // model
+
+namespace CloneViaSerialization {
+
+void					UpdateTimelines				( const model::IPlugin * obj, const std::string & prefix, const std::string & destScene );
+
+} //CloneViaSerialization
+
 } // bv

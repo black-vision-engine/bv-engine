@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "TextureAsset.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {

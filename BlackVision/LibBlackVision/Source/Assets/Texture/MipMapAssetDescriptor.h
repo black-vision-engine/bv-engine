@@ -41,6 +41,8 @@ public:
 	SingleTextureAssetDescConstPtr		GetLevelDesc		( SizeType level ) const;
 	SizeType							GetLevelsNum		() const;
 
+    virtual SizeType                    EstimateMemoryUsage () const override;
+
 	MipMapFilterType					GetFilter			() const;
 
 	static MipMapAssetDescConstPtr		Create				( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum = -1 );

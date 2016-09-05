@@ -139,6 +139,7 @@
     <ClInclude Include="..\..\..\Source\plugins\logic\PluginCounter.h">
       <Filter>plugins\logic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\UseLoggerXMLModule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\structure\SurfaceDescriptor.cpp">

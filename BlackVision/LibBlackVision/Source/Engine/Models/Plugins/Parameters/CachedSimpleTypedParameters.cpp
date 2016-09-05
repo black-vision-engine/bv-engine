@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "CachedSimpleTypedParameters.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 

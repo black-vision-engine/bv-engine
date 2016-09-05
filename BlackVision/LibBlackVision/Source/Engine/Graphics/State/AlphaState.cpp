@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "AlphaState.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -7,8 +15,10 @@ namespace bv {
 //
 AlphaState::AlphaState      ()
     : blendEnabled  ( false )
-    , srcBlendMode  ( AlphaSrcBlendMode::ASBM_ONE )
-    , dstBlendMode  ( AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA )
+    , srcRGBBlendMode  ( AlphaSrcBlendMode::ASBM_ONE )
+    , dstRGBBlendMode  ( AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA )
+    , srcAlphaBlendMode  ( AlphaSrcBlendMode::ASBM_ONE )
+	, dstAlphaBlendMode  ( AlphaDstBlendMode::ADBM_ONE )
     , blendColor    ( glm::vec4( 0.f, 0.f, 0.f, 0.f ) )    
 {
 }

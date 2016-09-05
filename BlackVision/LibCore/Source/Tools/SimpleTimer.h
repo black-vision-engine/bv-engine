@@ -1,12 +1,8 @@
 #pragma once
 
-#include "win_sock.h"
-
-
 #include "CoreDEF.h"
 
-
-//#define QPF_TIMER
+#define QPF_TIMER
 
       
 namespace bv
@@ -23,7 +19,7 @@ private:
     unsigned long   m_totalPausedTime;
 
 #ifdef QPF_TIMER
-	unsigned long	m_timerFrequency;
+	UInt64	        m_timerFrequency;
 #endif
 public:
 
@@ -40,7 +36,7 @@ public:
 
 private:
 
-	unsigned long queryMillis() const;
+	unsigned long           QueryMillis() const;
 
     inline TimeType         MillisToTime    ( unsigned long millis ) const
     {
@@ -66,7 +62,7 @@ unsigned long    SimpleTimer::ElapsedMillis   () const
     }
 
 
-	return queryMillis() - m_startMillis - m_totalPausedTime;
+	return QueryMillis() - m_startMillis - m_totalPausedTime;
 }
 
 } //bv

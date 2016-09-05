@@ -51,22 +51,18 @@ RenderableEffectPtr  SimpleNodeBuilder::CreateRenderableEffect  ( ShaderDataSour
 //
 RenderableEntity *   SimpleNodeBuilder::CreateRenderableTriStrip( RenderableArrayDataArraysSingleVertexBuffer * vaobuf, RenderableEffectPtr effect )
 {
-    RenderableEntity * re = new TriangleStrip( vaobuf, effect );
+    RenderableEntity * re = new TriangleStrip( vaobuf, nullptr, effect );
 
-    re->SetWorldTransforms( DefaultTransform() );
+    re->SetWorldTransform( DefaultTransform() );
 
     return re;
 }
 
 // *****************************
 //
-TTransformVec        SimpleNodeBuilder::DefaultTransform        ()
+Transform           SimpleNodeBuilder::DefaultTransform        ()
 {
-    TTransformVec   transforms;
-
-    transforms.push_back( Transform() );
-
-    return transforms;
+    return Transform();
 }
 
 } // bv

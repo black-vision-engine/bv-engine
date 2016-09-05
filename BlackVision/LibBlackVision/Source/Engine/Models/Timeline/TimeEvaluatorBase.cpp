@@ -1,22 +1,32 @@
+#include "stdafx.h"
+
 #include "TimeEvaluatorBase.h"
 
 #include "Dynamic/DefaultTimeline.h"
 #include "Static/ConstTimeEvaluator.h"
 #include "Static/OffsetTimeEvaluator.h"
 
-//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/IDeserializer.h"
+
+#include "Serialization/BV/CloneViaSerialization.h"
+#include "Assets/AssetDescsWithUIDs.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { 
     
 // serialization stuff
-//template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( const IDeserializer&, std::string name );
+//template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeArray( const IDeserializer&, std::string name );
 
 namespace model {
 
 // *******************************
 //
-ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
+ITimeEvaluatorPtr            TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
 {
     auto type = dob.GetAttribute( "type" );
 
@@ -32,5 +42,36 @@ ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( 
         return nullptr;
     }
 }
+
+// *******************************
+//
+ITimeEvaluatorPtr           TimeEvaluatorBase< ITimeEvaluator >::CloneTyped    () const
+{
+    return CloneViaSerialization::Clone( this, "timeline", nullptr, nullptr );
+}
+
+// *******************************
+//
+ICloneablePtr               TimeEvaluatorBase< ITimeEvaluator >::Clone          () const
+{
+    return CloneTyped();
+}
+
+// *******************************
+//
+ITimeEvaluatorPtr           TimeEvaluatorBase< ITimeline >::CloneTyped          () const
+{
+    auto thisTE = reinterpret_cast< const TimeEvaluatorBase< ITimeEvaluator >* >( this );
+    auto clone = CloneViaSerialization::Clone< TimeEvaluatorBase< ITimeEvaluator > >( thisTE, "timeline", nullptr, nullptr );
+    return clone;
+}
+
+// *******************************
+//
+ICloneablePtr               TimeEvaluatorBase< ITimeline >::Clone               () const
+{
+    return CloneTyped();
+}
+
 
 } }

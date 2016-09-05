@@ -1,0 +1,44 @@
+#version 420
+
+// *** LIGHTS *** (Assets/Shaders/UniformBlockDefs/lights)
+
+#define MAX_LIGTHS 8
+
+struct DirectionalLight
+{
+	vec3 	color;
+    vec3 	direction;
+};
+
+struct PointLight
+{
+	vec3 	color;
+	vec3	position;
+	vec3 	attenuation;
+};
+
+struct SpotLight
+{
+	vec3 	color;
+	vec3 	direction;
+	vec3 	position;
+	vec3 	attenuation;
+	
+	float 	cutOff;
+	int 	exponent;
+};
+
+
+layout ( std140, binding = 0 ) uniform Lights 
+{
+	uniform	DirectionalLight[ MAX_LIGTHS ] 	directionalLight;
+	uniform int 							directionalLightNum;
+	uniform PointLight[ MAX_LIGTHS ] 		pointLight;
+	uniform int 							pointLightNum;	
+	uniform SpotLight[ MAX_LIGTHS ] 		spotLight;
+	uniform int 							spotLightNum;
+};
+
+// *** LIGHTS ***
+
+void main() {}

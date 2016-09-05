@@ -1,45 +1,44 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoder.h"
 
-#include "FFmpegDef.h"
+#include "Assets/VideoStream/AVAsset.h"
+#include "DataTypes/QueueConcurrent.h"
 
-namespace bv
+
+namespace bv {
+    
+class FFmpegVideoStreamDecoder : public FFmpegStreamDecoder
 {
-
-class FFmpegVideoStreamDecoder : public IVideoStreamDecoder
-{
-
 private:
-	AVCodecContext *			m_codecCtx;
-	AVCodec *					m_codec;
 
-	SwsContext *				m_swsCtx;
+    AVFrame *                           m_outFrame;
+    uint8_t *                           m_outBuffer;
 
-	UInt32						m_width;
-	UInt32						m_height;
-	UInt32						m_frameRate;
+    SizeType                            m_frameSize;
 
-	UInt32						m_currFrame;
+    SwsContext *                        m_swsCtx;
 
-	Int32						m_streamIdx;
+    UInt32                              m_width;
+    UInt32                              m_height;
+    Float64                             m_frameRate;
 
 public:
-									FFmpegVideoStreamDecoder	( AVFormatContext * formatCtx, Int32 streamIdx );
-    virtual							~FFmpegVideoStreamDecoder	();
 
-	virtual UInt32					GetWidth					() const override;	
-	virtual UInt32					GetHeight					() const override;	
-	virtual UInt32					GetFrameRate				() const override;	
+                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
+                            ~FFmpegVideoStreamDecoder   ();
 
-	//FIXME...
-	bool							DecodePacket				( AVPacket * packet, AVFrame * frame );
-	void							ConvertFrame				( AVFrame * inFrame, AVFrame * outFrame );
+    SizeType                GetFrameSize                () const;   
 
-	//virtual MemoryChunkConstPtr		GetFrameData				( UInt32 & outFrameId ) const override;
-	
-	virtual Int32					GetStreamIdx				() const override;
-	virtual UInt32					GetCurrentFrameId			() const override;	
+    UInt32                  GetWidth                    () const;   
+    UInt32                  GetHeight                   () const;   
+    Float64                 GetFrameRate                () const;   
+
+    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) override;
+
+    virtual bool            DecodePacket                ( AVPacket * packet ) override;
+    virtual AVMediaData     ConvertFrame                () override;
+
 };
 
 } //bv

@@ -1,139 +1,155 @@
+#include "stdafx.h"
+
 #include "FFmpegVideoStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
 
 #include <cassert>
+#include "FFmpegUtils.h"
 
-namespace bv
-{
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
+namespace bv {
+
 
 // *******************************
 //
-FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( AVFormatContext * formatCtx, Int32 streamIdx )
-	: m_codecCtx( nullptr )
-	, m_codec( nullptr )
-	, m_swsCtx( nullptr )
-	, m_width( 0 )
-	, m_height( 0 )
-	, m_frameRate( 0 )
-	, m_currFrame( 0 )
-	, m_streamIdx( streamIdx )
+FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder          ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
+    : FFmpegStreamDecoder( formatCtx, streamIdx, maxQueueSize )
+    , m_swsCtx( nullptr )
+    , m_width( 0 )
+    , m_height( 0 )
+    , m_frameRate( 0 )
 {
-	m_codecCtx = formatCtx->streams[ streamIdx ]->codec;
+    //raw video desc should provide width, height & format
+    
+    if( m_codecCtx->width == 0 || m_codecCtx->height == 0 )
+    {
+        m_codecCtx->width = asset->GetWidth();
+        m_codecCtx->height = asset->GetHeight();
 
-	m_codec = avcodec_find_decoder( m_codecCtx->codec_id );
-	assert( m_codec != nullptr );
+        m_stream->avg_frame_rate = av_d2q( asset->GetFrameRate(), INT_MAX );
+        m_stream->time_base = av_inv_q( m_stream->avg_frame_rate );
 
-	bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
-	assert( !error ); { error; }
+        m_codecCtx->pix_fmt = FFmpegUtils::ToFFmpegPixelFormat( asset->GetVideoFormat() );
+    }
 
-	//FIXME
-	m_swsCtx = sws_getContext( 
-		m_codecCtx->width,
-		m_codecCtx->height,
-		m_codecCtx->pix_fmt,
-		m_codecCtx->width,
-		m_codecCtx->height,
-		AV_PIX_FMT_BGRA,
-		SWS_BILINEAR,
-		nullptr,
-		nullptr,
-		nullptr
-	);
+    m_width = ( UInt32 )m_codecCtx->width;
+    m_height = ( UInt32 )m_codecCtx->height;
+    
+    if( m_stream->avg_frame_rate.den && m_stream->avg_frame_rate.num )
+    {
+        m_frameRate = ( Float64 )av_q2d( m_stream->avg_frame_rate );
+    }
+    else
+    {
+        //invalid frame rate - assign default
+        m_frameRate = 25.;
+    }
 
-	m_width = ( UInt32 )m_codecCtx->width;
-	m_height = ( UInt32 )m_codecCtx->height;
-	m_frameRate = 25; //FIXME
+    assert( m_width > 0 );
+    assert( m_height > 0 );
 
-	/*m_frame = av_frame_alloc();
+    auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
+    m_swsCtx = sws_getCachedContext( m_swsCtx, m_width, m_height, m_codecCtx->pix_fmt,
+        m_width, m_height, ffmpegFormat, SWS_BILINEAR, nullptr, nullptr, nullptr );
 
-	m_outFrame = new AVPicture();
-	avpicture_alloc( m_outFrame, AV_PIX_FMT_BGRA, m_width, m_height );
-	int size = avpicture_get_size( AV_PIX_FMT_BGRA, m_width, m_height );
-	m_frameData = MemoryChunk::Create( ( char * )m_outFrame->data[ 0 ], SizeType( size ) );
-
-	m_swsCtx = sws_getContext( m_codecCtx->width,
-		m_codecCtx->height,
-		m_codecCtx->pix_fmt,
-		m_codecCtx->width,
-		m_codecCtx->height,
-		AV_PIX_FMT_BGRA,
-		SWS_BILINEAR,
-		nullptr,
-		nullptr,
-		nullptr
-	);
-	*/
+    m_outFrame = av_frame_alloc();
+    m_frameSize = ( SizeType )av_image_get_buffer_size( ffmpegFormat, m_width, m_height, 1 );
+    m_outBuffer = ( uint8_t * )av_malloc( ( Int32 )m_frameSize * sizeof( uint8_t ) );
+    av_image_fill_arrays( ( uint8_t ** ) m_outFrame->data, m_outFrame->linesize, m_outBuffer, ffmpegFormat, m_width, m_height, 1 );
+    m_outFrame->width = m_width;
+    m_outFrame->height = m_height;
+    m_outFrame->format = ( int )ffmpegFormat;
 }
 
 // *******************************
 //
-FFmpegVideoStreamDecoder::~FFmpegVideoStreamDecoder    ()
+FFmpegVideoStreamDecoder::~FFmpegVideoStreamDecoder             ()
 {
-	sws_freeContext( m_swsCtx );
-
-	avcodec_close( m_codecCtx );
+    sws_freeContext( m_swsCtx );
+    av_free( m_outBuffer );             // deallocation of m_outFrame 
 }
 
 // *******************************
 //
-bool				FFmpegVideoStreamDecoder::DecodePacket		( AVPacket * packet, AVFrame * frame )
+bool                FFmpegVideoStreamDecoder::DecodePacket          ( AVPacket * packet )
 {
-	assert( packet != nullptr );
+    assert( packet != nullptr );
 
-	int frameReady = 0;
-	avcodec_decode_video2( m_codecCtx, frame, &frameReady, packet );
-	if ( frameReady )
-	{
-		m_currFrame++;
-	}
+    int frameReady = 0;
+    avcodec_decode_video2( m_codecCtx, m_frame, &frameReady, packet );
 
-    av_free_packet( packet );
     return ( frameReady != 0 );
 }
 
 // *******************************
 //
-void				FFmpegVideoStreamDecoder::ConvertFrame		( AVFrame * inFrame, AVFrame * outFrame )
+AVMediaData         FFmpegVideoStreamDecoder::ConvertFrame          ()
 {
-	//FIXME
-	m_swsCtx = sws_getCachedContext( m_swsCtx, inFrame->width, inFrame->height, static_cast< AVPixelFormat >( inFrame->format ),
-		outFrame->width, outFrame->height, static_cast< AVPixelFormat >( outFrame->format ), SWS_BILINEAR, nullptr, nullptr, nullptr );
+    sws_scale( m_swsCtx, m_frame->data, m_frame->linesize, 0, m_frame->height, m_outFrame->data, m_outFrame->linesize );
 
-	sws_scale( m_swsCtx, ( const uint8_t ** const )inFrame->data, inFrame->linesize, 0,	inFrame->height, outFrame->data, outFrame->linesize );
+    char * data = new char[ m_frameSize ];
+    memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
+
+    AVMediaData mediaData;
+    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pkt_pts );
+    mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
+    
+    return mediaData;
 }
 
 // *******************************
 //
-UInt32					FFmpegVideoStreamDecoder::GetWidth	() const
+SizeType            FFmpegVideoStreamDecoder::GetFrameSize      () const
 {
-	return m_width;
+    return m_frameSize;
 }
 
 // *******************************
 //
-UInt32					FFmpegVideoStreamDecoder::GetHeight	() const
+UInt32              FFmpegVideoStreamDecoder::GetWidth          () const
 {
-	return m_height;
+    return m_width;
 }
 
 // *******************************
 //
-UInt32					FFmpegVideoStreamDecoder::GetFrameRate	() const
+UInt32              FFmpegVideoStreamDecoder::GetHeight         () const
 {
-	return m_frameRate;
+    return m_height;
 }
 
 // *******************************
 //
-Int32					FFmpegVideoStreamDecoder::GetStreamIdx	() const
+Float64             FFmpegVideoStreamDecoder::GetFrameRate      () const
 {
-	return m_streamIdx;
+    return m_frameRate;
 }
 
 // *******************************
 //
-UInt32					FFmpegVideoStreamDecoder::GetCurrentFrameId	() const
+bool			    FFmpegVideoStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxer )
 {
-	return m_currFrame;
+    if( m_bufferQueue.Size() < m_maxQueueSize )
+    {
+        auto packet = demuxer->GetPacket( m_streamIdx );
+        if( packet )
+        {
+            if( DecodePacket( packet->GetAVPacket() ) )
+            {
+                auto data = ConvertFrame();
+                m_bufferQueue.Push( data );
+
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } //bv

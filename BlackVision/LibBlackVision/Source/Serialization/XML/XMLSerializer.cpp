@@ -1,3 +1,6 @@
+#include "stdafx.h"
+
+#include "stdafx.h"
 #include "XMLSerializer.h"
 
 #include <rapidxml/RapidXml.hpp>
@@ -7,24 +10,31 @@
 
 #include "System/Path.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
 // *******************************
 //
-SerializeObject::SerializeObject()
+XMLSerializer::XMLSerializer( SerializeContext* context )
+    : m_context( context )
 {
     m_roots.push( &m_doc );
 }
 
 // *******************************
 //
-SerializeObject::~SerializeObject()
+XMLSerializer::~XMLSerializer()
 {
 }
 
 // *******************************
 //
-void SerializeObject::Save( const std::string & filename )
+void XMLSerializer::Save( const std::string & filename )
 {
     std::ofstream file( filename );
     //file << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
@@ -35,14 +45,28 @@ void SerializeObject::Save( const std::string & filename )
 
 // *******************************
 //
-void SerializeObject::Save( std::ostream & out )
+void XMLSerializer::Save( std::ostream & out )
 {
     out << m_doc;
 }
 
 // *******************************
 //
-void                                                    SerializeObject::SetName( const std::string & name )
+SerializeContext* XMLSerializer::GetSerializeContext() const
+{
+    return m_context.get();
+}
+
+// *******************************
+//
+void                        XMLSerializer::SetSerializeContext ( SerializeContext* context )
+{
+    m_context = std::unique_ptr< SerializeContext >( context );
+}
+
+// *******************************
+//
+void                                                    XMLSerializer::SetName( const std::string & name )
 {
     char *node_name = m_doc.allocate_string( name.c_str() );
     rapidxml::xml_node<>* node = m_doc.allocate_node( rapidxml::node_element, node_name );
@@ -53,7 +77,7 @@ void                                                    SerializeObject::SetName
 
 // *******************************
 //
-void                                                    SerializeObject::SetValue( const std::string & name, const std::string & value )
+void                                                    XMLSerializer::SetValue( const std::string & name, const std::string & value )
 {
     auto attr = m_doc.allocate_attribute( m_doc.allocate_string( name.c_str() ), m_doc.allocate_string( value.c_str() ) );
     m_roots.top()->append_attribute( attr );
@@ -61,7 +85,7 @@ void                                                    SerializeObject::SetValu
 
 // *******************************
 //
-void                                                    SerializeObject::SetContent( const std::string & value )
+void                                                    XMLSerializer::SetContent( const std::string & value )
 {
     char * node_name = m_doc.allocate_string( value.c_str() );
     m_roots.top()->value( node_name, value.size() );
@@ -70,28 +94,28 @@ void                                                    SerializeObject::SetCont
 
 // *******************************
 //
-void                                                    SerializeObject::Pop()
+void                                                    XMLSerializer::Pop()
 {
     m_roots.pop();
 }
 
-void				SerializeObject::SetAttribute        ( const std::string& name, const std::string& value )
+void				XMLSerializer::SetAttribute        ( const std::string& name, const std::string& value )
 {
     SetValue( name, value );
 }
 
-std::string			SerializeObject::GetAttribute        ( const std::string& name )
+std::string			XMLSerializer::GetAttribute        ( const std::string& name )
 {
     return GetAttribute( name );
 }
 
-void                SerializeObject::EnterChild          ( const std::string& name )
+void                XMLSerializer::EnterChild          ( const std::string& name )
 {
     SetName( name );
     return ;
 }
 
-bool                SerializeObject::ExitChild           ()
+bool                XMLSerializer::ExitChild           ()
 {
     Pop();
     return true;
@@ -99,18 +123,29 @@ bool                SerializeObject::ExitChild           ()
 
 // ***********************
 //
-void                SerializeObject::SetAttribute        ( const std::wstring& /*name*/, const std::wstring& /*value*/ )
+void                XMLSerializer::SetAttribute        ( const std::wstring& /*name*/, const std::wstring& /*value*/ )
 {    assert( !"This serializer doesn't supports wstrings" );    }
 
 // ***********************
 //
-std::wstring        SerializeObject::GetAttribute        ( const std::wstring& /*name*/ )
+std::wstring        XMLSerializer::GetAttribute        ( const std::wstring& /*name*/ )
 {    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
 
 // ***********************
 //
-void                SerializeObject::EnterChild          ( const std::wstring& /*name*/ )
+void                XMLSerializer::EnterChild          ( const std::wstring& /*name*/ )
 {    assert( !"This serializer doesn't supports wstrings" );    }
 
+// ***********************
+//
+void                XMLSerializer::EnterArray          ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
+
+// ***********************
+//
+void                XMLSerializer::EnterArray          ( const std::string& name )
+{
+    SetName( name );
+}
 
 } // bv

@@ -4,7 +4,6 @@
 
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 
-
 namespace bv {
 
 class RenderableEffect

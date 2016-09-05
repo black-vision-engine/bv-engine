@@ -14,6 +14,35 @@ namespace bv { namespace model
 {
 
 //FIXME: typed instances should be created via factories
+class Float4AttributeChannel : public AttributeChannel
+{
+private:
+
+    std::vector< glm::vec4 >        m_attributes;
+
+public:
+
+    explicit                        Float4AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
+    virtual                         ~Float4AttributeChannel         ();
+
+    virtual void                    Update                          ( TimeType t );
+    virtual bool                    IsReadOnly                      () const;
+
+    virtual unsigned int            GetNumEntries                   ()                      const;
+    virtual const char *            GetData                         ()                      const;
+
+    std::vector< glm::vec4 > &      GetVertices                     ();
+
+    void                            AddAttribute                    ( const glm::vec4 & v );
+    void                            AddAttributes                   ( const std::vector< glm::vec4 > & v );
+
+};
+
+DEFINE_PTR_TYPE(Float4AttributeChannel)
+DEFINE_CONST_PTR_TYPE(Float4AttributeChannel)
+
+
+//FIXME: typed instances should be created via factories
 class Float3AttributeChannel : public AttributeChannel
 {
 private:
@@ -34,14 +63,15 @@ public:
 
     std::vector< glm::vec3 > &      GetVertices                     ();
 
-    //virtual int                     GetEntrySize                    ()                      const;
-
     void                            AddAttribute                    ( const glm::vec3 & v );
+    void                            AddAttributes                   ( const std::vector< glm::vec3 > & v );
+    void                            ReplaceAttributes               ( std::vector< glm::vec3 > && v );
 
 };
 
 DEFINE_PTR_TYPE(Float3AttributeChannel)
 DEFINE_CONST_PTR_TYPE(Float3AttributeChannel)
+
 
 //FIXME: typed instances should be created via factories
 class Float2AttributeChannel : public AttributeChannel
@@ -59,11 +89,11 @@ public:
 
     virtual unsigned int            GetNumEntries                   ()                      const;
     virtual const char *            GetData                         ()                      const;
+    
     std::vector< glm::vec2 > &      GetVertices                     ();
 
-    //virtual int                     GetEntrySize                    ()                      const;
-
     void                            AddAttribute                    ( const glm::vec2 & v );
+    void                            AddAttributes                   ( const std::vector< glm::vec2 > & v );
 
 };
 

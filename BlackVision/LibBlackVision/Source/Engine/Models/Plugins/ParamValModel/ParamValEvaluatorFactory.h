@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.h"
-#include "Engine/Models/Plugins/ParamValModel/TransformVecParamValEvaluator.h"
 
 
 namespace bv { namespace model {
@@ -21,6 +20,11 @@ public:
         > >( param, value );
     }
 
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( ParamBoolPtr param, ValueBoolPtr value );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( ParamBoolPtr param, const std::string & valueName );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( ParamBoolPtr param );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
+    static SimpleBoolEvaluatorPtr       CreateSimpleBoolEvaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
 
     static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, ValueIntPtr value );
     static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, const std::string & valueName );
@@ -63,17 +67,7 @@ public:
     static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( ParamTransformPtr param );
     static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
     static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
-
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4Ptr value );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( ParamTransformVecPtr param, ValueMat4PtrVec values );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( ParamTransformVecPtr param, const std::string & valueName );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( ParamTransformVecPtr param, const std::vector< std::string > & valueNames );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( ParamTransformVecPtr param );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, unsigned int numTransformations );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName, unsigned int numTransformations );
-    static TransformVecParamValEvaluatorPtr  CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::vector< std::string > & valueNames );
+    static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4Ptr value );
 
     static SimpleStringEvaluatorPtr         CreateSimpleStringEvaluator ( ParamStringPtr param, ValueStringPtr value );
     static SimpleStringEvaluatorPtr         CreateSimpleStringEvaluator ( ParamStringPtr param, const std::string & valueName );

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 #include "ApplicationBase.h"
 #include <string>
 #include "Mathematics/glm_inc.h"
@@ -11,6 +12,11 @@ namespace bv
 {
 
 class Renderer;
+
+namespace audio {
+    class AudioRenderer;
+}
+
 //pablito
 enum WindowMode {FULLSCREEN=0,WINDOWED=1,MULTIPLE_SCREENS=2};
 
@@ -36,7 +42,8 @@ protected:
 
     glm::vec4		m_ClearColor;
 
-    Renderer *		m_Renderer;
+    Renderer *		        m_Renderer;
+    audio::AudioRenderer *  m_audioRenderer;
 	
 	bool			m_EnableGLFinish;
 	bool			m_EnableGLFlush;
@@ -75,18 +82,20 @@ public:
     void			SetClearColor	( const glm::vec4 & col );
     glm::vec4		ClearColor		() const;
 
-    const Renderer* Renderer		() const;
+    const Renderer *             Renderer		() const;
+    const audio::AudioRenderer * AudioRenderer	() const;
 
     virtual bool	OnInitialize	();
     virtual void	OnTerminate		();
     virtual void	OnMove			( int x, int y );
     virtual void	OnKey		    ( unsigned char c );
+    virtual void    OnMouse         ( MouseAction action, int posX, int posY );
     virtual void	OnResize		( int w, int h );
 
     virtual bool	OnPrecreate     ();
     virtual void	OnPreidle	    ();
     virtual void	OnDisplay	    ();
-    virtual void	OnIdle		    ();
+    virtual bool	OnIdle		    ();
     virtual void    OnPreMainLoop   ();
 
 protected:

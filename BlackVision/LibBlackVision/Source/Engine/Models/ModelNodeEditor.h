@@ -11,25 +11,37 @@ namespace bv { namespace model {
 class ModelNodeEditor
 {
 private:
-	BasicNodePtr		m_model;
+
+    BasicNode *	        m_node;
     IPluginPtr			m_detachedPlugin;
+    int                 m_detachedPluginIdx;
 
 public:
-                            ModelNodeEditor		( BasicNodePtr model ); 
+
+                            ModelNodeEditor		( BasicNode * node ); 
+
+    BasicNodePtr			CopyNode			();
 
     bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( unsigned int idx );
-    bool                    DeletePlugin		( const std::string & name );
+    model::PluginWithIdx    DeletePlugin		( const std::string & name );
 
     bool                    AttachPlugin		( unsigned int idx );
     bool                    AttachPlugin		( BasicNodePtr sourceNode, unsigned int idx );
     bool                    DetachPlugin		( unsigned int idx );
     bool                    DetachPlugin		( const std::string & name );
 
-	IPluginPtr				GetDetachedPlugin	();
+    IPluginPtr              CopyPlugin			( const std::string & name );
+
+    IPluginPtr				GetDetachedPlugin	();
+    int                     GetDetachedPluginIdx ();
     void                    ResetDetachedPlugin	();
 
-	void					RefreshNode			( SceneNode * sceneNode, Renderer * renderer );
+    IModelNodeEffectPtr		GetNodeEffect		();
+    void					SetNodeEffect		( IModelNodeEffectPtr nodeEffect );
+
+    void                    ReplaceTimeline		( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
+    bool                    IsTimelineUsed      ( model::ITimeEvaluatorPtr timeEval );
 
 };
 

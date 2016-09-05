@@ -1,35 +1,36 @@
 #pragma warning(disable :4996)
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/BasicNode.h"
 //#include "Engine/Models/Resources/TextHelpers.h"
 #include <boost/lexical_cast.hpp>
 
 // default plugins 
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultColorPlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultAnimationPlugin.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Assets/Font/TextHelper.h"
 //FIXME: as you can see - THIS IS A HACK
-#include "../../../../Applications/BlackVision/Source/Widgets/Crawler/Crawler.h"
+#include "../../../../Applications/BlackVision/Source/Widgets/Scroller/Scroller.h"
 #include "../../../../Applications/BlackVision/Source/Widgets/Counter/Counter.h"
 //#include "Helpers/RectNodeBuilder.h"
 
 
 //video input
-#include "../../../../Applications/BlackVision/Source/VideoInput/DefaultVideoInputResourceDescr.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "../../../../Applications/BlackVision/Source/hack_videoinput/TestVideoInput.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/DefaultCubePlugin.h"
 
 // Log
-#include "Log.h"
+#include "UseLoggerXMLModule.h"
 //#include "../BVConfig.h"
 
 // ---------
@@ -184,10 +185,10 @@ namespace bv{
     //
     bool TreeBuilder::AttachAlphaPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
 	{
-        auto newEffect = std::make_shared< bv::model::ModelNodeEffectAlphaMask >( GetTimeline(plugin->timeline) );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_ALPHA_MASK, "alpha mask", GetTimeline( plugin->timeline ) );
         node->SetNodeEffect( newEffect );
 
-        auto alpha = newEffect->GetParamAlpha();
+        auto alpha = newEffect->GetParameter( "alpha" );
 
         alpha->SetTimeEvaluator(GetTimeline(plugin->timeline));
         
@@ -253,11 +254,11 @@ namespace bv{
 
         if(ProcessedNode->blend_mode==BLEND_MODES::ADD)
         {
-            node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-            node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+            node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+            node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
         }else{
-			node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-            node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+			node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+            node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 		}
 
         return true;
@@ -296,11 +297,11 @@ namespace bv{
 
 		if(ProcessedNode->blend_mode==BLEND_MODES::ADD)
         {
-            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
         }else{
-			node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+			node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 		}
 
         return result;
@@ -326,6 +327,8 @@ namespace bv{
     //**********************************
     bool SetTransformParams(IParameterPtr transform, XMLPlugin* plugin, bool ZeroParam=true)
     {
+        { ZeroParam; }
+
         bool result = true;
         for(unsigned int i=0;i<plugin->properties.size();i++)
 		{
@@ -369,33 +372,17 @@ namespace bv{
                 }
                 if(propertyName=="position")
                 {
-                    if(ZeroParam)
-                        result = result && SetParameterTranslation (transform, 0, tF, glm::vec3(x,y,z));
-                    else
-                        result = result && SetParameterTranslation (transform, tF, glm::vec3(x,y,z));
+                    result = result && SetParameterTranslation (transform, tF, glm::vec3(x,y,z));
                 }else if(propertyName=="rotation")
                 {
-                     if(ZeroParam)
-                     {
-                         result = result && SetParameterRotation ( transform,0, tF, glm::vec3( x,y,z ), angle );
-                     }
-                     else
-                     {
-                         result = result && SetParameterRotation ( transform, tF, glm::vec3( x,y,z ), angle );
-                         
-                     }
+                    assert( false ); //fixme? axis-angle changed to angles
+                    //result = result && SetParameterRotation ( transform, tF, glm::vec3( x,y,z ), angle );
                 }else if(propertyName=="scaling")
                 {
-                    if(ZeroParam)
-                        result = result && SetParameterScale (transform, 0, tF, glm::vec3(x,y,z));
-                    else
-                        result = result && SetParameterScale (transform, tF, glm::vec3(x,y,z));
+                    result = result && SetParameterScale (transform, tF, glm::vec3(x,y,z));
                 }else if(propertyName=="weight")
                 {
-                    if(ZeroParam)
-                        result = SetParameterCenterMass( transform, 0, tF, glm::vec3( x,y,z ) );
-                    else
-                        result = result && SetParameterCenterMass (transform, tF, glm::vec3(x,y,z));
+                    result = result && SetParameterCenterMass (transform, tF, glm::vec3(x,y,z));
                 }
                 
             }
@@ -612,7 +599,6 @@ namespace bv{
 		result = result && SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( rF,gF,bF,aF) );
 
         //todo: unhack 1.25 size
-        result = result && SetParameter( txt->GetParameter( "fontSize" ), TimeType( 0.0 ), size );
         result = result && model::LoadFont( node->GetPlugin( "text" ), font, (UInt32) size, blurSize, outlineSize, false );
 
 		
@@ -640,7 +626,7 @@ namespace bv{
         SetParameter( txt->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );
         
         //FIXME: another set text hack
-        model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), text->Text ); 
+        SetParameter( txt->GetParameter( "text" ), 0.0, text->Text );
        
         bv::model::DefaultColorPlugin* color =  (bv::model::DefaultColorPlugin*)node->GetPlugin( "solid color" ).get();
 
@@ -663,20 +649,20 @@ namespace bv{
 		//float size = (float)atof(crawl->size.c_str());
 		float interspace = (float)atof(crawl->interspace.c_str());
 		float speed = (float)atof(crawl->speed.c_str());
-		int	freq = (int)atoi(crawl->promo_freq.c_str());
+		//int	freq = (int)atoi(crawl->promo_freq.c_str());
 		int count = (int)atoi(crawl->count.c_str());
 		bool autostart=false;
 		if(crawl->autostart=="true")autostart=true;
 
-		auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
+		auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ), nullptr );
 
-		node->SetLogic(crawler);
+		node->SetLogic(Scroller);
 		
 
-		crawler->SetSpeed( speed );
-		crawler->SetPromoFrequency(freq);
-		crawler->SetPromoMessage(crawl->promo_msg);
-		crawler->SetInterspace( interspace );
+		Scroller->SetSpeed( speed );
+		//Scroller->SetPromoFrequency(freq);
+		//Scroller->SetPromoMessage(crawl->promo_msg);
+		Scroller->SetInterspace( interspace );
 		for(int i=0;i<count;i++)
 		{
 
@@ -714,47 +700,47 @@ namespace bv{
 
 			separatorNode->AddChildToModelOnly(textNode);
 
-			crawler->AddNext(separatorNode);
+			Scroller->AddNext(separatorNode);
 		}
 
-	    crawler->Finalize();
+	    Scroller->Finalize();
 
 	    if(autostart)
-		    crawler->Start();
+		    Scroller->Start();
 
         return true;
 	}
 
 	//**********************************
-	bool TreeBuilder::AttachCounterPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
+	bool TreeBuilder::AttachCounterPlugin(model::BasicNodePtr /*node*/,XMLPlugin* /*plugin*/)
 	{		 
-		PluginCounter * counter_meta	= (PluginCounter*)plugin;
+		//PluginCounter * counter_meta	= (PluginCounter*)plugin;
 
-		{counter_meta;}
-      
-		auto counter = widgets::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
-		node->SetLogic(counter);
+		//{counter_meta;}
+  //    
+		//auto counter = nodelogic::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
+		//node->SetLogic(counter);
 
-		 auto counter_param = counter->GetValueParam();
+		// auto counter_param = counter->GetValueParam();
 
-		for(unsigned int i=0;i<plugin->properties.size();i++)
-		{
-            vector<TimeProperty> *timevals  = plugin->properties[i].timeproperty;				
-			string propertyName             = plugin->properties[i].name;
-            if(propertyName		==	"values")
-			{
-                for(unsigned int h=0;h<timevals->size();h++)
-				{
-					
-					auto tF		        =	atof(timevals->operator[](h).time.c_str());
-					string temp	        =	timevals->operator[](h).value;
-                    float counter_value   =   (float)atof(temp.c_str());
-                    
-					SetParameter( counter_param, (bv::TimeType)tF, counter_value );
-                }
-            }
-             
-        }
+		//for(unsigned int i=0;i<plugin->properties.size();i++)
+		//{
+  //          vector<TimeProperty> *timevals  = plugin->properties[i].timeproperty;				
+		//	string propertyName             = plugin->properties[i].name;
+  //          if(propertyName		==	"values")
+		//	{
+  //              for(unsigned int h=0;h<timevals->size();h++)
+		//		{
+		//			
+		//			auto tF		        =	atof(timevals->operator[](h).time.c_str());
+		//			string temp	        =	timevals->operator[](h).value;
+  //                  float counter_value   =   (float)atof(temp.c_str());
+  //                  
+		//			SetParameter( counter_param, (bv::TimeType)tF, counter_value );
+  //              }
+  //          }
+  //           
+  //      }
 
 
 		 //
@@ -780,7 +766,6 @@ namespace bv{
         bv::model::DefaultTimerPlugin * timer =  (bv::model::DefaultTimerPlugin*)node->GetPlugin( "timer" ).get();
 
         //todo: unhack 1.25 size
-        result = result && SetParameter( timer->GetParameter( "fontSize" ), TimeType( 0.0 ), size );
         result = result && model::LoadFont( node->GetPlugin( "timer" ),font, (UInt32) size, 0, 0, false  );
 
         if(text->Align=="center")
@@ -895,8 +880,8 @@ namespace bv{
                 WrapMethod = TimelineWrapMethod::TWM_REPEAT;
             }
             float duration = (float)atof(Tree.Scene.Timelines[i]->duration.c_str());
-            DefaultTimelinePtr timeline = timelineManager->CreateDefaultTimelineImpl( Tree.Scene.Meta.SceneName+"*"+ Tree.Scene.Timelines[i]->name, TimeType( duration ), WrapMethod, WrapMethod );
-            auto timeline_offset = timelineManager->CreateOffsetTimeEvaluator( Tree.Scene.Meta.SceneName+"*"+Tree.Scene.Timelines[i]->name , TimeType( 0.0 ) );
+            DefaultTimelinePtr timeline = model::TimelineHelper::CreateDefaultTimeline( Tree.Scene.Meta.SceneName+"*"+ Tree.Scene.Timelines[i]->name, TimeType( duration ), WrapMethod, WrapMethod );
+            auto timeline_offset = model::TimelineHelper::CreateOffsetTimeEvaluator( Tree.Scene.Meta.SceneName+"*"+Tree.Scene.Timelines[i]->name , TimeType( 0.0 ) );
             timeline->AddChild(timeline_offset);
 
             for(size_t j=0;j<Tree.Scene.Timelines[i]->keyframes.size();j++)
@@ -938,14 +923,11 @@ namespace bv{
 
         if(FileExists(path))
         {
-            Log::A("Load","info","Loading scene file "+path);
+            LOG_MESSAGE( SeverityLevel::info ) << "Loading scene file " + path;
 		    Tree.LoadFromFile(path);
         }else{
             model::BasicNodePtr newNode = BasicNode::Create("root",timeline_default_alpha);
-            bool result = newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeline_default ); 
-            assert( result );
-			{ result; }
-			Log::A("Load","error","scene file "+path+" does not exist.");
+            LOG_MESSAGE( SeverityLevel::error ) << "scene file "+path+" does not exist.";
             return newNode;
         }
         
@@ -956,7 +938,7 @@ namespace bv{
         }
 
 		BasicNodePtr root = SendTree(Tree.Scene.MainNode);
-		Log::A("Load","info","XML scene has been parsed and loaded into engine");
+		LOG_MESSAGE( SeverityLevel::info ) << "info","XML scene has been parsed and loaded into engine";
         printf("Scene loaded\n");
         printf("Total nodes : %d\n",TotalNodesCount);
 		return root;

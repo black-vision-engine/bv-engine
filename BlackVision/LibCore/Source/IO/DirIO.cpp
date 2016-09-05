@@ -34,10 +34,14 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
  
     for(;;)
     {
-        fs::path fullFilePath = rootDir / fs::path( WStringToString( fd.cFileName ) );
+        auto fileName = WStringToString( fd.cFileName ).ham;
 
-        foundFiles.push_back( fullFilePath.string() );
- 
+        if( fileName != "." && fileName != ".." )
+        {
+            fs::path fullFilePath = rootDir / fs::path( fileName );
+            foundFiles.push_back( fullFilePath.string() );
+        }
+
         if( FindNextFile( h, &fd ) == FALSE )
             break;
     }
@@ -55,71 +59,173 @@ std::string                  Dir::WorkingDirectory  ()
 
     if( bytes == 0 )
     {
-	    return std::string( "" );
+        return std::string( "" );
     }
     else
     {
-	    return WStringToString( std::wstring( pBuf ) );
+        return WStringToString( std::wstring( pBuf ) );
     }
 }
 
 // *******************************
 //
-bool						Dir::Exists				( const std::string & path )
+bool                        Dir::Exists                ( const std::string & path )
 {
-	auto ftyp = GetFileAttributesA( path.c_str() );
-	
-	if ( ftyp == INVALID_FILE_ATTRIBUTES )
-	{
-		return false;
-	}
+    auto ftyp = GetFileAttributesA( path.c_str() );
+    
+    if ( ftyp == INVALID_FILE_ATTRIBUTES )
+    {
+        return false;
+    }
 
-	if ( ftyp & FILE_ATTRIBUTE_DIRECTORY )
-	{
-		return true;
-	}
+    if ( ftyp & FILE_ATTRIBUTE_DIRECTORY )
+    {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 // *******************************
 //
-bool						Dir::CreateDir			( const std::string & path, bool createRecusive )
+bool                        Dir::CreateDir            ( const std::string & path, bool createRecusive )
 {
-	if( Exists( path ) )
-	{
-		return true;
-	}
+    if( Exists( path ) )
+    {
+        return true;
+    }
 
     boost::system::error_code ec;
-	boost::filesystem::path p( path );
+    boost::filesystem::path p( path );
 
 
-	if( createRecusive )
-	{    
+    if( createRecusive )
+    {    
         boost::filesystem::create_directories( path, ec );
 
-		if( ec )
-		{
-			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
-			return false;
-		}
+        if( ec )
+        {
+            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            return false;
+        }
 
-		return true;
-	}
-	else
-	{
-		boost::filesystem::create_directory( path, ec );
-		if( ec )
-		{
-			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
+        return true;
+    }
+    else
+    {
+        boost::filesystem::create_directory( path, ec );
+        if( ec )
+        {
+            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+}
+
+// *******************************
+//
+bool                    Dir::RemoveDir          ( const std::string & path )
+{
+    if( Exists( path ) )
+    {
+        boost::system::error_code ec;
+        boost::filesystem::path p( path );
+
+        boost::filesystem::remove_all( path, ec );
+
+        if( ec )
+        {
+            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// *******************************
+//
+bool                    Dir::RenameDir          ( const std::string & path,const std::string & newName )
+{
+    if( Exists( path ) )
+    {
+        boost::system::error_code ec;
+        boost::filesystem::path p( path );
+
+
+        boost::filesystem::rename( path,newName, ec );
+
+        if( ec )
+        {
+            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// *******************************
+//
+bool                    Dir::CopyDir            ( const std::string & path, const std::string & newName )
+{
+    if( Exists( path ) )
+    {
+        boost::system::error_code ec;
+        boost::filesystem::path p( path );
+
+
+        boost::filesystem::copy_directory( path, newName, ec );
+
+        if( ec )
+        {
+            std::cout << "[File::CopyDir] copy_directory error: " << ec << std::endl;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// *******************************
+//
+UInt64                  Dir::GetSize            ( const std::string & path )
+{
+    UInt64 size = 0;
+
+    for(    boost::filesystem::recursive_directory_iterator it( path );
+            it != boost::filesystem::recursive_directory_iterator();
+            ++it )
+    {   
+        if( !is_directory( *it ) )
+        {
+            size += boost::filesystem::file_size( *it );
+        }
+    }
+
+    return size;
 }
 
 } //bv

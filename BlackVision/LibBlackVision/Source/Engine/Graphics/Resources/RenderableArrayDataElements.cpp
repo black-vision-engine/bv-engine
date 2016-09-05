@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "RenderableArrayDataElements.h"
 
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv

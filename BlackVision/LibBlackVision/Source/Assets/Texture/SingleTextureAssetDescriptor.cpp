@@ -1,8 +1,17 @@
+#include "stdafx.h"
+
 #include "SingleTextureAssetDescriptor.h"
+#include "TextureUtils.h"
 
 #include <assert.h>
 
 #include "Serialization/ISerializer.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -15,7 +24,7 @@ void                SingleTextureAssetDesc::Serialize       ( ISerializer& ser )
 {
 ser.EnterChild( "asset" );
     
-    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "type", UID() );
     ser.SetAttribute( "path", GetImagePath() );
 
 ser.ExitChild();
@@ -107,6 +116,15 @@ TextureFormat SingleTextureAssetDesc::GetFormat() const
 {
 	return m_format;
 }
+
+// ***********************
+//
+SizeType        SingleTextureAssetDesc::EstimateMemoryUsage () const
+{
+    UInt32 pixelSize = TextureUtils::ToBPP( m_format ) / 8;
+    return m_width * m_height * pixelSize;
+}
+
 
 
 } // bv

@@ -9,7 +9,6 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
-
 namespace bv { namespace model
 {
 
@@ -20,21 +19,20 @@ class VertexAttributesChannel : public IVertexAttributesChannel
 {
 protected:
 
-    VertexAttributesChannelDescriptor               m_desc;
+    VertexAttributesChannelDescriptor                   m_desc;
 
-    std::vector< ConnectedComponentPtr >            m_connectedComponents;
-    PrimitiveType                                   m_primitiveType;
+    PrimitiveType                                       m_primitiveType;
+    std::vector< ConnectedComponentPtr >                m_connectedComponents;
 
-    bool                                            m_isReadOnly;
-    bool                                            m_isTimeInvariant;
-    bool                                            m_needsAttributesUpdate;
-    bool                                            m_needsTopologyUpdate;
+    bool                                                m_isReadOnly;
+    bool                                                m_isTimeInvariant;
 
-    bool                                            m_needsInitialization;
+    UInt64											    m_attributesUpdateID;
+    UInt64											    m_topologyUpdateID;
 
 public:
                                                         VertexAttributesChannel         ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
-                                                        VertexAttributesChannel         ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly = false, bool isTimeInvariant = false );
+                                                        VertexAttributesChannel         ( PrimitiveType type, const VertexAttributesChannelDescriptor & desc, bool isReadOnly = false, bool isTimeInvariant = false );
     virtual                                             ~VertexAttributesChannel        ();
 
     //IChannel
@@ -43,11 +41,12 @@ public:
 
     //IVertexAttributesChannel
     virtual bool                                        IsTimeInvariant         () const override;
-    virtual bool                                        NeedsAttributesUpdate   () const override;
-    virtual bool                                        NeedsTopologyUpdate     () const override;
 
-    void                                                SetNeedsAttributesUpdate( bool b );
-    void                                                SetNeedsTopologyUpdate  ( bool b );
+    virtual UInt64										GetAttributesUpdateID	() const override;
+    virtual UInt64										GetTopologyUpdateID		() const override;
+
+    void												SetAttributesUpdateID	( UInt64 updateID );
+    void												SetTopologyUpdateID		( UInt64 updateID );
 
     virtual unsigned int                                TotalNumVertices        () const override;
 
@@ -57,7 +56,6 @@ public:
     virtual PrimitiveType                               GetPrimitiveType        () const override;
 
     void                                                AddConnectedComponent   ( ConnectedComponentPtr cc );
-    void                                                ClearConnectedComponent ( );
 
     virtual int                                         GetNumPrimitives        ( IConnectedComponentPtr cc ) const override;
     virtual std::vector< IConnectedComponentPtr >       GetComponents           () const override;
@@ -68,7 +66,7 @@ public:
     ConnectedComponentPtr                               GetConnectedComponent   ( unsigned int idx );
 
     void                                                ClearAll                ();
-    bool                                                NeedsInitialization     () const;
+    
     void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
 
 protected:

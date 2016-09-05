@@ -1,12 +1,14 @@
 #include "ProjectManagerImpl.h"
 
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Impl/Accessors/FontAssetAccessor.h"
 #include "Impl/Accessors/AnimationAssetAccessor.h"
+#include "Impl/Accessors/AVAssetAccessor.h"
+#include "Impl/Accessors/MeshAssetAccessor.h"
 
 #include "IO/DirIO.h"
 
@@ -24,21 +26,21 @@ namespace bv
 //
 ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
     : m_rootPath( rootPath.Absolute() )
-	, m_projectsPath( m_rootPath / "projects" )
-	, m_scenesPath( m_rootPath / "scenes" )
+    , m_projectsPath( m_rootPath / "projects" )
+    , m_scenesPath( m_rootPath / "scenes" )
     , m_presetsPath( m_rootPath / "presets" )
 {
-	if( Path::Exists( rootPath ) )
-	{
-		InitializeProjects();
-	}
-	else
-	{
-		Dir::CreateDir( rootPath.Str(), true );
-		Dir::CreateDir( m_projectsPath.Str() );
-	}
+    if( Path::Exists( rootPath ) )
+    {
+        InitializeProjects();
+    }
+    else
+    {
+        Dir::CreateDir( rootPath.Str(), true );
+        Dir::CreateDir( m_projectsPath.Str() );
+    }
 
-	InitializeScenes();
+    InitializeScenes();
     InitializePresets();
     InitializeAssets();
 }
@@ -52,26 +54,21 @@ ProjectManagerImpl::~ProjectManagerImpl	()
 //
 PathVec			ProjectManagerImpl::ListProjectsNames	() const
 {
-	PathVec ret;
-	for( auto it : m_projects )
-	{
-		ret.push_back( it.first );
-	}
+    PathVec ret;
+    for( auto it : m_projects )
+    {
+        ret.push_back( it.first );
+    }
 
-	return ret;
+    return ret;
 }
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
+PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const
 {
-	auto pathInScenes = TranslateToPathCategory( projectName, "" );
-	auto scenes = m_sceneAccessor->ListScenes( pathInScenes );
-
-    for( auto & s : scenes )
-    {
-        s = Path( "scenes" ) / s;
-    }
+    auto pathInScenes = TranslateToPathCategory( projectName, path );
+    auto scenes = m_sceneAccessor->ListScenes( pathInScenes, recursive );
 
     return scenes;
 }
@@ -80,171 +77,171 @@ PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) cons
 //
 StringVector	ProjectManagerImpl::ListCategoriesNames	() const
 {
-	StringVector ret;
-	for( auto it : m_categories )
-	{
-		ret.push_back( it.first );
-	}
+    StringVector ret;
+    for( auto it : m_categories )
+    {
+        ret.push_back( it.first );
+    }
 
-	return ret;
+    return ret;
 }
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
+PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const
 {
-	if( !categoryName.empty() )
-	{
-		auto cit = m_categories.find( categoryName );
+    if( !categoryName.empty() )
+    {
+        auto cit = m_categories.find( categoryName );
 
-		if( cit != m_categories.end() )
-		{
-			auto pathInCategory = TranslateToPathCategory( projectName, "" );
-			auto cv = cit->second->ListAssets( pathInCategory );
+        if( cit != m_categories.end() )
+        {
+            auto pathInCategory = TranslateToPathCategory( projectName, path );
+            auto cv = cit->second->ListAssets( pathInCategory, recursive );
             for( auto & p : cv )
             {
                 p = Path( categoryName ) / p;
             }
 
             return cv;
-		}
-		else
-		{
-			LOG_MESSAGE( SeverityLevel::error ) << "Category '" << categoryName << " doesn't exist.";
-			return PathVec();
-		}
-	}
-	else
-	{
-		PathVec ret;
-		for( auto c : m_categories )
-		{
-			auto pathInCategory = TranslateToPathCategory( projectName, "" );
-			auto cv = c.second->ListAssets( pathInCategory );
+        }
+        else
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "Category '" << categoryName << " doesn't exist.";
+            return PathVec();
+        }
+    }
+    else
+    {
+        PathVec ret;
+        for( auto c : m_categories )
+        {
+            auto pathInCategory = TranslateToPathCategory( projectName, path );
+            auto cv = c.second->ListAssets( pathInCategory, recursive );
 
             for( auto & p : cv )
             {
                 p = Path( c.second->GetId() ) / p;
             }
 
-			ret.insert( ret.end(), cv.begin(), cv.end() );
-		}
-		return ret;
-	}
+            ret.insert( ret.end(), cv.begin(), cv.end() );
+        }
+        return ret;
+    }
 }
 
 // ********************************
 //
 Path				ProjectManagerImpl::GetRootDir			() const
 {
-	return m_rootPath;
+    return m_rootPath;
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::AddNewProject		( const Path & projectName )
 {
-	auto it = m_projects.find( projectName.Str() );
-	
-	if( it == m_projects.end() )
-	{
+    auto it = m_projects.find( projectName.Str() );
+    
+    if( it == m_projects.end() )
+    {
         auto p = Project::Create( projectName, m_projectsPath );
         if( Path::Exists( m_projectsPath / projectName ) )
         {
             m_projects[ projectName.Str() ] = p;
         }
-	}
+    }
 }
 
 // ********************************
 //
 ProjectConstPtr				ProjectManagerImpl::GetProject			( const Path & projectName ) const
 {
-	auto it = m_projects.find( projectName.Str() );
-	if( it != m_projects.end() )
-	{
-		return it->second;
-	}
-	else
-	{
-		return nullptr;
-	}
+    auto it = m_projects.find( projectName.Str() );
+    if( it != m_projects.end() )
+    {
+        return it->second;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::SetCurrentProject	( const Path & projectName )
 {
-	auto p = GetProject( projectName );
-	if( p )
-	{
-		m_currentProject = p;
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Cannot set current project: " << projectName.Str() << ". It doesn't exist.";
-	}
+    auto p = GetProject( projectName );
+    if( p )
+    {
+        m_currentProject = p;
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot set current project: " << projectName.Str() << ". It doesn't exist.";
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDescConstPtr & assetDesc )
 {
-	auto cit = m_categories.find( categoryName );
+    auto cit = m_categories.find( categoryName );
 
-	if( cit != m_categories.end() )
-	{
-		auto pInCategory = TranslateToPathCategory( projectName, path );
-		cit->second->AddAsset( pInCategory, assetDesc );
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Cannot add asset to category '" << categoryName << "'. Category doesn't exist.";
-	}
+    if( cit != m_categories.end() )
+    {
+        auto pInCategory = TranslateToPathCategory( projectName, path );
+        cit->second->AddAsset( pInCategory, assetDesc );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot add asset to category '" << categoryName << "'. Category doesn't exist.";
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	auto a = GetAssetDesc( inProjectName, inCategoryName, inPath );
+    auto a = GetAssetDesc( inProjectName, inCategoryName, inPath );
 
-	if( a )
-	{
-		auto cit = m_categories.find( inCategoryName );
+    if( a )
+    {
+        auto cit = m_categories.find( inCategoryName );
 
-		auto pInCategory = TranslateToPathCategory( outProjectName, outPath );
-		cit->second->AddAsset( pInCategory, a );
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Asset '" << ( inProjectName / inCategoryName / inPath ).Str() << "' doesn't exist.";
-	}
+        auto pInCategory = TranslateToPathCategory( outProjectName, outPath );
+        cit->second->AddAsset( pInCategory, a );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Asset '" << ( inProjectName / inCategoryName / inPath ).Str() << "' doesn't exist.";
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path ) const
 {
-	auto cit = m_categories.find( categoryName );
+    auto cit = m_categories.find( categoryName );
 
-	if( cit != m_categories.end() )
-	{
-		auto pInCategory = TranslateToPathCategory( projectName, path );
-		cit->second->RemoveAsset( pInCategory );
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Cannot remove. Category " << categoryName << " doesn't exist.";
-	}
+    if( cit != m_categories.end() )
+    {
+        auto pInCategory = TranslateToPathCategory( projectName, path );
+        cit->second->RemoveAsset( pInCategory );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot remove. Category " << categoryName << " doesn't exist.";
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	CopyAsset( inProjectName, inCategoryName, inPath, outProjectName, outPath );
-	RemoveAsset( inProjectName, inCategoryName, inPath );
+    CopyAsset( inProjectName, inCategoryName, inPath, outProjectName, outPath );
+    RemoveAsset( inProjectName, inCategoryName, inPath );
 }
 
 // ********************************
@@ -257,9 +254,9 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName, con
     {
         if( it != m_categories.end() )
         {
-            auto assetsInCategory = it->second->ListAssets( projectName );
+            auto assetsInCategory = it->second->ListAssets( projectName, true );
 
-            auto scenes = m_sceneAccessor->ListScenes( "" );
+            auto scenes = m_sceneAccessor->ListScenes( "", true );
 
             std::set< Path > usedAssets;
 
@@ -308,80 +305,94 @@ void						ProjectManagerImpl::RemoveUnusedAssets	() const
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath )
 {
-	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
+    auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
-	m_sceneAccessor->AddScene( scene, pathInScenes );
+    m_sceneAccessor->AddScene( scene, pathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	auto inPathInScenes = TranslateToPathCategory( inProjectName, inPath );
-	auto outPathInScenes = TranslateToPathCategory( outProjectName, outPath );
+    auto inPathInScenes = TranslateToPathCategory( inProjectName, inPath );
+    auto outPathInScenes = TranslateToPathCategory( outProjectName, outPath );
 
-	auto sceneDesc = m_sceneAccessor->GetSceneDesc( inPathInScenes );
+    auto sceneDesc = m_sceneAccessor->GetSceneDesc( inPathInScenes );
 
-	Path::Copy( sceneDesc.GetPath(), outPathInScenes );
+    Path::Copy( sceneDesc.GetPath(), m_rootPath / "scenes" / outPathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveScene			( const Path & projectName, const Path & path )
 {
-	auto pathInScenes = TranslateToPathCategory( projectName, path );
+    auto pathInScenes = TranslateToPathCategory( projectName, path );
 
-	Path::Remove( m_rootPath / pathInScenes );
+    Path::Remove( m_rootPath / "scenes" / pathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	CopyScene( inProjectName, inPath, outProjectName, outPath );
-	RemoveScene( inProjectName, inPath );
+    CopyScene( inProjectName, inPath, outProjectName, outPath );
+    RemoveScene( inProjectName, inPath );
+}
+
+// ********************************
+//
+model::SceneModelPtr        ProjectManagerImpl::LoadScene           ( const Path & projectName, const Path & path ) const
+{
+    return m_sceneAccessor->GetScene( projectName / path );
+}
+
+// ***********************
+//
+ThumbnailConstPtr           ProjectManagerImpl::GetSceneThumbnail   ( const Path & projectName, const Path & path ) const
+{
+    return m_sceneAccessor->GetSceneThumbnail( projectName / path );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RegisterCategory( const AssetCategoryConstPtr & category )
 {
-	auto it = m_categories.find( category->GetId() );
+    auto it = m_categories.find( category->GetId() );
 
-	if( it == m_categories.end() )
-	{
-		m_categories[ category->GetId() ] = category;
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Cannot register category: " << category->GetId() << ". Already registered.";
-	}
+    if( it == m_categories.end() )
+    {
+        m_categories[ category->GetId() ] = category;
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot register category: " << category->GetId() << ". Already registered.";
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ExportAssetToFile	( const Path & projectName, const std::string & categoryName, const Path & assetPath, const Path & outputFile )
 {
-	auto it = m_categories.find( categoryName );
-	
-	if( it != m_categories.end() )
-	{
-		it->second->ExportAsset( outputFile, projectName / assetPath );
-	}
+    auto it = m_categories.find( categoryName );
+    
+    if( it != m_categories.end() )
+    {
+        it->second->ExportAsset( outputFile, projectName / assetPath );
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProjectName, const std::string & importToCategoryName, const Path & importToPath, const Path & importAssetFilePath )
 {
-	auto it = m_categories.find( importToCategoryName );
-	
-	if( it != m_categories.end() )
-	{
-		it->second->ImportAsset( importAssetFilePath, importToProjectName / importToPath );
-	}
+    auto it = m_categories.find( importToCategoryName );
+    
+    if( it != m_categories.end() )
+    {
+        it->second->ImportAsset( importAssetFilePath, importToProjectName / importToPath );
+    }
 }
 
 // ********************************
@@ -408,7 +419,7 @@ void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, cons
         auto loc = Path2Location( ua );
 
         if( loc.categoryName == "scenes" ) 
-	        assert( false );
+            assert( false );
 
         out << loc.categoryName << '\n';
 
@@ -420,7 +431,7 @@ void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, cons
     out << '\n';
 
     m_sceneAccessor->ExportScene( out, projectName, scenePath );
-  	f.Close();
+    f.Close();
 }
 
 // ********************************
@@ -465,57 +476,62 @@ void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProject
         in.seekg( 0 );
     }
 
-	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
+    m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, const Path & outputFilePath ) const
 {
-	auto project = GetProject( projectName );
+    auto project = GetProject( projectName );
 
-	if( project )
-	{
-		auto projectAssets = ListAssetsPaths( projectName );
-		auto projectScenes = ListScenesNames( projectName );
+    if( project )
+    {
+        auto projectAssets = ListAssetsPaths( projectName, "", "", true );
+        auto projectScenes = ListScenesNames( projectName, "", true );
 
-		std::set< Path > uniqueAssets;
+        for( auto & s : projectScenes )
+        {
+            s = Path( "scenes" ) / s;
+        }
 
-		uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
+        std::set< Path > uniqueAssets;
 
-		for( auto ps : projectScenes )
-		{
+        uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
+
+        for( auto ps : projectScenes )
+        {
             auto loc = Path2Location( ps );
             auto sa = m_sceneAccessor->ListAllUsedAssets( loc.projectName / loc.path );
-			uniqueAssets.insert( sa.begin(), sa.end() );
-		}
+            uniqueAssets.insert( sa.begin(), sa.end() );
+        }
 
         auto assetsFile = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-		auto & out = *assetsFile.StreamBuf();
+        auto & out = *assetsFile.StreamBuf();
 
         out << "assets" << '\n';
 
         out << std::to_string( uniqueAssets.size() ) << '\n';
 
-		for( auto ua : uniqueAssets)
-		{
+        for( auto ua : uniqueAssets)
+        {
             if( IsExternalPath( ua ) )
             {
                 continue;
             }
 
-			auto loc = Path2Location( ua );
+            auto loc = Path2Location( ua );
 
-			if( loc.categoryName == "scenes" ) 
-				assert( false );
+            if( loc.categoryName == "scenes" ) 
+                assert( false );
 
             out << loc.categoryName << '\n';
 
             out << loc.path << '\n';
 
-			m_categories.at( loc.categoryName )->ExportAsset( out, loc.projectName / loc.path );
-		}
+            m_categories.at( loc.categoryName )->ExportAsset( out, loc.projectName / loc.path );
+        }
 
         out << '\n';
         
@@ -523,21 +539,21 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
         out << std::to_string( projectScenes.size() ) << '\n';
 
-		for( auto s : projectScenes )
-		{
+        for( auto s : projectScenes )
+        {
             auto loc = Path2Location( s );
 
             out << loc.path << '\n';
 
-			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path );
-		}
+            m_sceneAccessor->ExportScene( out, loc.projectName, loc.path );
+        }
 
         assetsFile.Close();
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Cannot export project '" << projectName << "'. It doesn't exist.";
-	}
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot export project '" << projectName << "'. It doesn't exist.";
+    }
 }
 
 // ********************************
@@ -616,24 +632,24 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 //
 AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const
 {
-	auto it = m_categories.find( categoryName );
-	
-	if( it != m_categories.end() )
-	{
-		return it->second->GetAssetDesc( projectName / pathInProject );
-	}
-	else
-	{
-		return AssetDescConstPtr();
-	}
+    auto it = m_categories.find( categoryName );
+    
+    if( it != m_categories.end() )
+    {
+        return it->second->GetAssetDesc( projectName / pathInProject );
+    }
+    else
+    {
+        return AssetDescConstPtr();
+    }
 }
 
 // ********************************
 //
 SceneDescriptor				ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
-	auto pathInCategory = TranslateToPathCategory( projectName, pathInProject );
-	return m_sceneAccessor->GetSceneDesc( pathInCategory );
+    auto pathInCategory = TranslateToPathCategory( projectName, pathInProject );
+    return m_sceneAccessor->GetSceneDesc( pathInCategory );
 }
 
 // ********************************
@@ -642,7 +658,7 @@ SceneDescriptor			    ProjectManagerImpl::GetSceneDesc		( const Path & path ) co
 {
     auto loc = Path2Location( path );
     auto pathInCategory = TranslateToPathCategory( loc.projectName, loc.path );
-	return m_sceneAccessor->GetSceneDesc( pathInCategory );
+    return m_sceneAccessor->GetSceneDesc( pathInCategory );
 }
 
 
@@ -650,31 +666,31 @@ SceneDescriptor			    ProjectManagerImpl::GetSceneDesc		( const Path & path ) co
 //
 void						ProjectManagerImpl::InitializeProjects	()
 {
-	if( Path::Exists( m_projectsPath ) )
-	{
-		auto l = Path::List( m_projectsPath, true, "\\.bvproj" );
+    if( Path::Exists( m_projectsPath ) )
+    {
+        auto l = Path::List( m_projectsPath, true, "\\.bvproj" );
 
-		for( auto p : l )
-		{
-			auto n = Path::RelativePath( p, m_projectsPath );
+        for( auto p : l )
+        {
+            auto n = Path::RelativePath( p, m_projectsPath );
             auto newProjectName = n.ParentPath();
             AddNewProject( newProjectName );
-		}
-	}
-	else
-	{
-		Dir::CreateDir( m_projectsPath.Str() );
-	}
+        }
+    }
+    else
+    {
+        Dir::CreateDir( m_projectsPath.Str() );
+    }
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::InitializeScenes	()
 {
-	if( !Path::Exists( m_scenesPath ) )
-	{
-		Dir::CreateDir( m_scenesPath.Str() );
-	}
+    if( !Path::Exists( m_scenesPath ) )
+    {
+        Dir::CreateDir( m_scenesPath.Str() );
+    }
 
     m_sceneAccessor = SceneAccessor::Create( m_rootPath );
 }
@@ -683,10 +699,10 @@ void						ProjectManagerImpl::InitializeScenes	()
 //
 void						ProjectManagerImpl::InitializePresets	()
 {
-	if( !Path::Exists( m_presetsPath ) )
-	{
-		Dir::CreateDir( m_presetsPath.Str() );
-	}
+    if( !Path::Exists( m_presetsPath ) )
+    {
+        Dir::CreateDir( m_presetsPath.Str() );
+    }
 
     m_presetAccessor = PresetAccessor::Create( m_presetsPath );
 }
@@ -695,56 +711,86 @@ void						ProjectManagerImpl::InitializePresets	()
 //
 void				        ProjectManagerImpl::InitializeAssets	()
 {
-	StringVector exts;
-	exts.push_back( ".*\\.jpg" );
-	exts.push_back( ".*\\.tga" );
-	exts.push_back( ".*\\.png" );
+    StringVector exts;
+    exts.push_back( ".*\\.jpg" );
+    exts.push_back( ".*\\.tga" );
+    exts.push_back( ".*\\.png" );
+    exts.push_back( ".*\\.bmp" );
 
-	auto taa = TextureAssetAccessor::Create( GetRootDir() / "textures", exts );
-	RegisterCategory( AssetCategory::Create( "textures", taa ) );
+    auto taa = TextureAssetAccessor::Create( GetRootDir() / "textures", exts );
+    RegisterCategory( AssetCategory::Create( "textures", taa ) );
 
     auto aaa = AnimationAssetAccessor::Create( GetRootDir() / "sequences", exts );
-	RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+    RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
 
     StringVector fontsExts;
-	fontsExts.push_back( ".*\\.ttf" );
+    fontsExts.push_back( ".*\\.ttf" );
 
     auto faa = FontAssetAccessor::Create( GetRootDir() / "fonts", fontsExts );
-	RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+    RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+
+    // --- video ---
+    StringVector videoExts;
+    videoExts.push_back( ".*\\.bik" );
+    videoExts.push_back( ".*\\.mov" );
+    videoExts.push_back( ".*\\.mp4" );
+    videoExts.push_back( ".*\\.yuv" );
+    videoExts.push_back( ".*\\.avi" );
+    videoExts.push_back( ".*\\.wmv" );
+
+    auto vsaa = AVAssetAccessor::Create( GetRootDir() / "video", videoExts );
+    RegisterCategory( AssetCategory::Create( "video", vsaa ) );
+
+    // --- audio ---
+    StringVector audioExts;
+    audioExts.push_back( ".*\\.wav" );
+    audioExts.push_back( ".*\\.mp3" );
+
+    auto asaa = AVAssetAccessor::Create( GetRootDir() / "audio", audioExts );
+    RegisterCategory( AssetCategory::Create( "audio", asaa ) );
+
+    // --- mesh ---
+    StringVector meshExts;
+    videoExts.push_back( ".*\\.obj" );
+    videoExts.push_back( ".*\\.fbx" );
+    videoExts.push_back( ".*\\.dae" );
+
+    auto maa = MeshAssetAccessor::Create( GetRootDir() / "meshes", meshExts );
+    RegisterCategory( AssetCategory::Create( "meshes", maa ) );
 }
 
 // ********************************
 //
 Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectName, const Path & path ) const
 {
-	if( !projectName.Str().empty() )
-	{
-		if( projectName.Str() == "." )
-		{
-			if( m_currentProject )
-			{
-				return m_currentProject->GetName() / path;
-			}
-			else
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Current project's not set.";
+    if( !projectName.Str().empty() )
+    {
+        if( projectName.Str() == "." )
+        {
+            if( m_currentProject )
+            {
+                return m_currentProject->GetName() / path;
+            }
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "Current project's not set.";
                 return "";
-			}
-		}
-		else
-		{
-			auto p = GetProject( projectName );
-			if( p )
-			{
-				return projectName / path;
-			}
-			else
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Project '" << projectName.Str() << "' doesn't exist.";
-				return "";
-			}
-		}
-	}
+            }
+        }
+        else
+        {
+            auto p = GetProject( projectName );
+            if( p )
+            {
+                return projectName / path;
+            }
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "Project '" << projectName.Str() << "' doesn't exist.";
+                return "";
+            }
+        }
+    }
     else
     {
         return path;
@@ -755,17 +801,17 @@ Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectNa
 //
 Path						ProjectManagerImpl::TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const
 {
-	auto ret = TranslateToPathCategory( projectName, path );
+    auto ret = TranslateToPathCategory( projectName, path );
 
-	if( !categoryName.empty() )
-	{
-		return Path( categoryName ) / ret;
-	}
-	else
-	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Category name cannot be empty.";
-		return Path();
-	}
+    if( !categoryName.empty() )
+    {
+        return Path( categoryName ) / ret;
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Category name cannot be empty.";
+        return Path();
+    }
 }
 
 // ********************************
@@ -777,23 +823,24 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
         return Location();
     }
 
-	auto strPath = path.Str();
+    auto strPath = path.Str();
 
-	auto categoriesNames = ListCategoriesNames();
+    auto categoriesNames = ListCategoriesNames();
 
-	categoriesNames.push_back( "scenes" ); // Adding scenes to categories
+    categoriesNames.push_back( "scenes" ); // Adding scenes to categories
+    categoriesNames.push_back( "presets" ); // Adding scenes to categories
 
-	std::string categoryName = "";
+    std::string categoryName = "";
 
-	for( auto cn : categoriesNames )
-	{
-		auto pos = strPath.find( cn );
-		if( pos == 0 )
-		{
-			categoryName = cn;
-			break;
-		}
-	}
+    for( auto cn : categoriesNames )
+    {
+        auto pos = strPath.find( cn );
+        if( pos == 0 )
+        {
+            categoryName = cn;
+            break;
+        }
+    }
 
     if( categoryName.empty() )
     {
@@ -801,41 +848,41 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
         return Location();
     }
 
-	Path projectName = "";
+    Path projectName = "";
 
-	for( auto pn : ListProjectsNames() )
-	{
-		auto pos = strPath.find( "\\" + pn.Str() + "\\" );
-		if( pos == categoryName.size() )
-		{
-			projectName = pn;
-			break;
-		}
-	}
+    for( auto pn : ListProjectsNames() )
+    {
+        auto pos = strPath.find( "\\" + pn.Str() + "\\" );
+        if( pos == categoryName.size() )
+        {
+            projectName = pn;
+            break;
+        }
+    }
 
-	Location lok = { categoryName, projectName, strPath.substr( projectName.Str().size() + categoryName.size() + 2 ) };
-	
-	return lok;
+    Location lok = { categoryName, projectName, strPath.substr( projectName.Str().size() + categoryName.size() + 2 ) };
+    
+    return lok;
 }
 
 // ********************************
 //
 Path						ProjectManagerImpl::Location2Path( const Location & loc ) const
 {
-	return Path( loc.categoryName ) / loc.projectName / loc.path;
+    return Path( loc.categoryName ) / loc.projectName / loc.path;
 }
 
 // ********************************
 //
-model::BasicNodeConstPtr    ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path ) const
+model::BasicNodePtr        ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
-    return m_presetAccessor->LoadPreset( pathInCategory );
+    return m_presetAccessor->LoadPreset( pathInCategory, timeline );
 }
 
 // ********************************
 //
-void                        ProjectManagerImpl::SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const
+void                        ProjectManagerImpl::SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
     return m_presetAccessor->SavePreset( node, pathInCategory );
@@ -843,10 +890,10 @@ void                        ProjectManagerImpl::SavePreset          ( const mode
 
 // ********************************
 //
-PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName, const Path & path ) const
+PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
-    return m_presetAccessor->ListPresets( pathInCategory );
+    return m_presetAccessor->ListPresets( pathInCategory, recursive );
 }
 
 // ********************************
@@ -854,14 +901,21 @@ PathVec                     ProjectManagerImpl::ListPresets         ( const Path
 PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, "" );
-    return m_presetAccessor->ListPresets( pathInCategory );
+    return m_presetAccessor->ListPresets( pathInCategory, true );
 }
 
 // ********************************
 //
 PathVec                     ProjectManagerImpl::ListPresets         () const
 {
-    return m_presetAccessor->ListPresets( "" );
+    return m_presetAccessor->ListPresets( "", true );
+}
+
+// ***********************
+//
+ThumbnailConstPtr           ProjectManagerImpl::GetPresetThumbnail  ( const Path & projectName, const Path & path ) const
+{
+    return m_presetAccessor->GetPresetThumbnail( projectName / path );
 }
 
 // ********************************
@@ -874,7 +928,7 @@ Path                        ProjectManagerImpl::ToAbsPath           ( const Path
     }
     else if ( path.Str().find( "seq:/" ) == 0 )
     {
-        return path.Str().substr( 4 );
+        return path.Str().substr( 5 );
     }
     else if ( path.Str().find( "stream:/" ) == 0 )
     {
@@ -935,6 +989,264 @@ bool                        ProjectManagerImpl::PathExistsInPM      ( const Path
     {
         return false;
     }
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
+{
+    return ListDirs( categoryName, path, m_rootPath / categoryName );
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListScenesDirs      ( const Path & path ) const
+{
+    return ListDirs( "scenes", path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListPresetsDirs      ( const Path & path ) const
+{
+    return ListDirs( "presets", path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
+{
+    return CreateDir( categoryName, path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateSceneDir      ( const Path & path, bool recursive ) const
+{
+    return CreateDir( "scenes", path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreatePresetDir     ( const Path & path, bool recursive ) const
+{
+    return CreateDir( "presets", path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
+{
+    return RemoveDir( categoryName, path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveSceneDir      ( const Path & path ) const
+{
+    return RemoveDir( "scenes", path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemovePresetDir     ( const Path & path ) const
+{
+    return RemoveDir( "presets", path );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameAssetDir      ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    return RenameDir( categoryName, path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameSceneDir      ( const Path & path,const std::string & newName ) const
+{
+    return RenameDir( "scenes", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenamePresetDir     ( const Path & path,const std::string & newName ) const
+{
+    return RenameDir( "presets", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopyAssetDir        ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    return CopyDir( categoryName, path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopySceneDir        ( const Path & path,const std::string & newName ) const
+{
+    return CopyDir( "scenes", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopyPresetDir       ( const Path & path,const std::string & newName ) const
+{
+    return CopyDir( "presets", path, newName );
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateDir           ( const std::string & categoryName, const Path & path, bool recursive ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( !Path::Exists( p ) )
+    {
+        return Dir::CreateDir( p.Str(), recursive );
+    }
+    else
+    {
+        return false;
+    }
+}
+  
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveDir           ( const std::string & categoryName, const Path & path ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        return Dir::RemoveDir( p.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RenameDir           ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        auto p2 = p.ParentPath() / Path(newName);
+        return Dir::RenameDir( p.Str(), p2.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CopyDir             ( const std::string & categoryName, const Path & path,const std::string & newName ) const
+{
+    auto p = m_rootPath / Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        auto p2 = p.ParentPath() / Path(newName);
+        return Dir::CopyDir( p.Str(), p2.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListDirs            ( const std::string & categoryName, const Path & path, const Path & relativeTo ) const
+{
+    auto paths = Path::List( m_rootPath / Path( categoryName ) / path, true );
+
+    PathVec ret;
+
+    for( auto p : paths )
+    {
+        if( Path::IsDir( p ) )
+        {
+            ret.push_back( relativeTo.Str().empty() ? p : Path::RelativePath( p, relativeTo ) );
+        }
+    }
+
+    return ret;
+}
+
+// ********************************
+//
+UInt64                      ProjectManagerImpl::GetAssetSize        ( const std::string & categoryName, const Path & path ) const
+{
+    if( categoryName.empty() )
+    {
+        UInt64 size = 0 ;
+        for( auto cat : m_categories )
+        {
+            size += GetAssetSize( cat.first, path );
+        }
+
+        return size;
+    }
+    else
+    {
+        auto it = m_categories.find( categoryName );
+
+        if( it != m_categories.end() )
+        {
+            return (*it).second->GetAssetSizeInBytes( TranslateToPathCategory( "", path ) );
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+
+// ********************************
+//
+UInt32                      ProjectManagerImpl::GetAssetCount       ( const std::string & categoryName, const Path & path ) const
+{
+    if( categoryName.empty() )
+    {
+        UInt32 size = 0 ;
+        for( auto cat : m_categories )
+        {
+            size += GetAssetCount( cat.first, path );
+        }
+
+        return size;
+    }
+    else
+    {
+        auto it = m_categories.find( categoryName );
+
+        if( it != m_categories.end() )
+        {
+            return UInt32( (*it).second->ListAssets( TranslateToPathCategory( "", path ), true ).size() );
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+
+// ********************************
+//
+UInt32                      ProjectManagerImpl::GetScenesCount      ( const Path & path ) const
+{
+    return UInt32( m_sceneAccessor->ListScenes( path, true ).size() );
+}
+
+// ********************************
+//
+UInt32                      ProjectManagerImpl::GetPresetsCount     ( const Path & path ) const
+{
+    return UInt32( m_presetAccessor->ListPresets( path, true ).size() );
 }
 
 } // bv

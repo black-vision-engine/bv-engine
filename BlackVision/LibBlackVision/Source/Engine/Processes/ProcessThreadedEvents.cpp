@@ -1,8 +1,18 @@
+#include "stdafx.h"
+
 #include "ProcessThreadedEvents.h"
 
 #include <cassert>
+#include <thread>
+#include <chrono>
 
 #include "Engine/Events/Interfaces/IEventManager.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -24,7 +34,7 @@ void ProcessThreadedEventSender::Run                    ()
     { 
         IEventPtr e; //FIXME: some concrete event
         m_eventManager->ConcurrentQueueEvent( e );
-        Sleep( 10 ); //FIXME: wait for another event to be sent
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) ); //FIXME: wait for another event to be sent
     } 
 
     Succeed();
@@ -61,7 +71,7 @@ void ProcessThreadedEventReceiver::Run                ()
         }
         else
         {
-            Sleep( 2 ); //FIXME: wait for other events
+            std::this_thread::sleep_for( std::chrono::milliseconds( 2 ) ); //FIXME: wait for other events
         }
     }
 

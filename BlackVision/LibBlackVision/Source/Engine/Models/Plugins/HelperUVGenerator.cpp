@@ -1,5 +1,13 @@
+#include "stdafx.h"
+
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 //#include "../Dep/Common/glm/glm/core/func_geometric.hpp"
+
+
+
+
+
+#include "Memory/MemoryLeaks.h"
 
 
 

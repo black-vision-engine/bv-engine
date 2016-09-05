@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "Camera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv
@@ -9,13 +17,15 @@ namespace bv
 // *********************************
 //
 Camera::Camera( bool isPerspective )
-    : m_position( 0.f, 0.f, 0.f )
+    : m_viewportWidth( 0 )
+    , m_viewportHeight( 0 )
+    , m_position( 0.f, 0.f, 0.f )
     , m_direction( 0.f, 0.f, -1.f )
     , m_up( 0.f, 1.f, 0.f )
     , m_FOV( 90.f )
     , m_nearClippingPlane( 0.1f )
     , m_farClippingPlane( 100.f )
-    , m_isPrespactive( isPerspective )
+    , m_isPerspective( isPerspective )
 {
     if( isPerspective )
     {
@@ -34,17 +44,14 @@ Camera::~Camera()
 //
 void Camera::SetPerspective                         ( float fov, float aspectRatio, float near, float far )
 {
-    assert( IsPerspective() );
+    m_isPerspective = true;
 
-    if( IsPerspective() )
-    {
-        m_FOV = fov;
-        m_nearClippingPlane = near;
-        m_farClippingPlane = far;
+    m_FOV = fov;
+    m_nearClippingPlane = near;
+    m_farClippingPlane = far;
 
-        auto m = glm::perspective( fov, aspectRatio, near, far );
-        SetProjectionMatrix( m );
-    }
+    auto m = glm::perspective( fov, aspectRatio, near, far );
+    SetProjectionMatrix( m );
 }
 
 // *********************************
@@ -64,12 +71,30 @@ void  Camera::SetPerspective                        ( float aspectRatio )
     SetPerspective( m_FOV, aspectRatio, m_nearClippingPlane, m_farClippingPlane );
 }
 
+// ***********************
+//
+void Camera::SetOrthogonal           ( unsigned int w, unsigned int h, float near, float far )
+{
+    m_isPerspective = false;
+
+    m_viewportWidth = w;
+    m_viewportHeight = h;
+    m_nearClippingPlane = near;
+    m_farClippingPlane = far;
+
+    auto m = glm::ortho( -(float)m_viewportWidth / 2.0f, (float)m_viewportWidth / 2.0f, -(float)m_viewportHeight / 2.0f, (float)m_viewportHeight / 2.0f, near, far );
+    SetProjectionMatrix( m );
+}
+
 // *********************************
 //
 void Camera::SetViewportSize                        ( unsigned int w, unsigned int h )
 {
     assert( w > 0 );
     assert( h > 0 );
+
+    m_viewportWidth = w;
+    m_viewportHeight = h;
 
     float aspect = float( w ) / float( h );
 
@@ -109,9 +134,8 @@ void Camera::SetFrustum                             ( float left, float right, f
 //
 void Camera::SetFrame                               ( const glm::vec3 & position, const glm::vec3 & direction, const glm::vec3 & up )
 {
-    m_position = position;
-    m_direction = direction;
-    m_up = up;
+    SetPosition( position );
+    SetAxes( direction, up );
 
     UpdatePVMatrix();
 }
@@ -129,8 +153,10 @@ void Camera::SetPosition                            ( const glm::vec3 & position
 //
 void Camera::SetAxes                                ( const glm::vec3 & direction, const glm::vec3 & up )
 {
-    m_direction = direction;
-    m_up = up;
+    m_direction = glm::normalize( direction );
+    m_up = glm::normalize( up );
+    m_up = glm::normalize( up - m_direction * glm::dot( m_up, m_direction ) );
+    m_right = glm::cross( m_direction, m_up );
 
     UpdatePVMatrix();
 }
@@ -142,6 +168,27 @@ void Camera::SetProjectionMatrix                    ( const glm::mat4 & projecti
     m_projection = projectionMatrix;
 
     UpdatePVMatrix();
+}
+
+// *********************************
+//
+unsigned int        Camera::GetViewportWidth        () const
+{
+    return m_viewportWidth;
+}
+
+// *********************************
+//
+unsigned int        Camera::GetViewportHeight       () const
+{
+    return m_viewportHeight;
+}
+
+// ***********************
+//
+float               Camera::GetFOV                  () const
+{
+    return m_FOV;
 }
 
 // *********************************
@@ -183,7 +230,7 @@ const glm::vec3 &   Camera::GetUp                   () const
 //
 bool                Camera::IsPerspective           () const
 {
-    return m_isPrespactive;
+    return m_isPerspective;
 }
 
 // *********************************
@@ -197,7 +244,7 @@ const glm::mat4 &   Camera::GetViewProjectionMatrix () const
 //
 void Camera::UpdatePVMatrix                         ()
 {
-    m_view = glm::lookAt( m_position, m_direction, m_up );
+    m_view = glm::lookAt( m_position, m_position + m_direction, m_up );
 
     m_viewProj = m_projection * m_view;
 }

@@ -1,10 +1,19 @@
+#include "stdafx.h"
+
 #include "DefaultPrismPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include <tuple>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 
@@ -19,24 +28,6 @@ DefaultPrismPluginDesc::DefaultPrismPluginDesc                                ()
 
 // *******************************
 //
-bool                            DefaultPrismPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
-{
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
-
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 IPluginPtr                      DefaultPrismPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultPrismPlugin >( name, prev, timeEvaluator );
@@ -46,7 +37,7 @@ IPluginPtr                      DefaultPrismPluginDesc::CreatePlugin         ( c
 //
 DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     ParamIntPtr paramN             = ParametersFactory::CreateParameterInt( "n", timeEvaluator );
@@ -134,6 +125,7 @@ void DefaultPrismPlugin::InitGeometry( int n, PrismComponent::PrismUVType t )
         m_vaChannel->ClearAll();
         m_vaChannel->AddConnectedComponent( prism1 );
     }
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 
     m_vaChannel->AddConnectedComponent( prism2 );
     m_vaChannel->AddConnectedComponent( prism3 );
@@ -157,7 +149,10 @@ void                                DefaultPrismPlugin::Update                  
     if( n != m_lastN || uvType != m_uvType )
     {
         InitGeometry( n, uvType );
-        m_vaChannel->SetNeedsTopologyUpdate( true );
+
+		//HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+        //m_vaChannel->SetNeedsTopologyUpdate( true );
+
         m_lastN = n;
         m_uvType = uvType;
     }

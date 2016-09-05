@@ -12,27 +12,27 @@ class TransformableEntity
 private:
 
     Transform                   m_localTransform;
-    std::vector< Transform >    m_worldTransforms;
+    Transform                   m_worldTransform;
 
 public:
 
-                        TransformableEntity                     ();
-    virtual             ~TransformableEntity                    ();
+                                TransformableEntity                     ();
+    virtual                     ~TransformableEntity                    ();
 
-    inline const Transform &   LocalTransform                   () const;
-    inline void         SetLocalTransform                       ( const Transform & t );
+    inline const Transform &    LocalTransform                          () const;
+    virtual inline void         SetLocalTransform                       ( const Transform & t );
 
-    inline const std::vector< Transform > &  WorldTransforms    () const;
-    inline void         SetWorldTransforms                      ( const std::vector< Transform > & transforms );
+    inline const Transform &    WorldTransform                          () const;
+    inline void                 SetWorldTransform                       ( const Transform & transform );
     
-    virtual void        UpdateTransforms                        ( const std::vector< Transform > & transforms );
+    virtual void                UpdateTransform                         ( const Transform & transform );
 
-    inline void         ResetLocalTransform                     ();
-    inline void         ResetWorldTransforms                    ();
+    inline void                 ResetLocalTransform                     ();
+    inline void                 ResetWorldTransform                     ();
 
 private:
 
-    void                UpdateSetWorldTransform                 ( const std::vector< Transform > & parentTransforms );
+    void                        UpdateSetWorldTransform                 ( const Transform & parentTransform );
 
 };
 

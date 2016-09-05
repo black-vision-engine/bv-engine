@@ -7,9 +7,9 @@ namespace bv
 // NOTE: used by GLConstantTextureFormat and GLConstantTextureType (PdrConstants.cpp)
 enum class TextureFormat : int
 {
-	F_A32FR32FG32FB32F = 0	,
-	F_R32FG32FB32F			,
-	F_A32F					,
+    F_A32FR32FG32FB32F = 0	,
+    F_R32FG32FB32F			,
+    F_A32F					,
     F_A8R8G8B8				,
     F_R8G8B8				,
     F_A8					,
@@ -20,6 +20,8 @@ enum class TextureFormat : int
 enum class TextureType : int
 {
     T_2D = 0        ,
+    T_3D = 0        ,
+    T_1D = 0        ,
     T_CUBE          ,
 
     T_TOTAL
@@ -43,16 +45,6 @@ enum class ParamType : int
     PT_TOTAL
 };
 
-enum class NodeEffectType : int
-{
-	NET_DEFAULT = 0,
-	NET_ALPHA_MASK,
-	NET_NODE_MASK,
-    NET_WIREFRAME,
-	
-	NET_TOTAL
-};
-
 enum class ModelParamType : int
 {
     MPT_FLOAT = 0,
@@ -61,7 +53,6 @@ enum class ModelParamType : int
     MPT_VEC3,
     MPT_VEC4,
     MPT_TRANSFORM,
-    MPT_TRANSFORM_VEC,
     MPT_INT,
     MPT_BOOL,
     MPT_ENUM,
@@ -86,6 +77,7 @@ enum class AttributeSemantic : int
     AS_TEXCOORD,
     AS_COLOR,
     AS_NORMAL,        
+    AS_TANGENT,        
     AS_BINORMAL,        
     AS_CUSTOM,
 
@@ -151,10 +143,10 @@ enum class TextureFilteringMode : int
 {
     TFM_POINT = 0,
     TFM_LINEAR,
-	TFM_POINT_MIPMAP_POINT,
-	TFM_LINEAR_MIPMAP_POINT,
-	TFM_POINT_MIPMAP_LINEAR,
-	TFM_LINEAR_MIPMAP_LINEAR,
+    TFM_POINT_MIPMAP_POINT,
+    TFM_LINEAR_MIPMAP_POINT,
+    TFM_POINT_MIPMAP_LINEAR,
+    TFM_LINEAR_MIPMAP_LINEAR,
     TFM_TOTAL
 };
 
@@ -163,15 +155,25 @@ enum class PluginResourceType : int
     PRT_TEXTURE = 0,
     PRT_ANIMATION,
     PRT_FONT,
-	PRT_VIDEOINPUT,
+    PRT_VIDEOINPUT,
 
     PRT_TOTAL
+};
+
+enum class TimelineType : int
+{
+    TT_DEFAULT = 0,
+    TT_OFFSET,
+    TT_CONST,
+
+    TT_TOTAL
 };
 
 enum class TimelineEventType : int
 {
     TET_STOP = 0,
     TET_LOOP,
+    TET_TRIGGER,
     TET_NULL,
 
     TET_TOTAL
@@ -205,14 +207,61 @@ enum class LoopEventAction : int
 
 enum class MipMapFilterType : int
 {
-	BOX = 0,
-	BILINEAR,
-	B_SPLINE,
-	BICUBIC,
-	CATMULL_ROM,
-	LANCZOS,
+    BOX = 0,
+    BILINEAR,
+    B_SPLINE,
+    BICUBIC,
+    CATMULL_ROM,
+    LANCZOS,
 
     MMFT_TOTAL
+};
+
+enum class VideoPixelFormat : int 
+{
+    //RGB
+    VPF_RGBA = 0,
+    VPF_RGB24,
+    VPF_RGB8,
+    VPF_RGB4,
+    VPF_BGRA,
+    VPF_BGR24,
+    VPF_BGR8,
+    VPF_BGR4,
+
+    //planar YUV
+    VPF_YUV420P,
+    VPF_YUV422P,
+    VPF_YUV444P,
+    VPF_YUV410P,
+    VPF_YUV411P,
+    VPF_YUVA420P,
+    VPF_YUVA422P,
+    VPF_YUVA444P,
+
+    //packed YUV
+    VPF_YVYU422,
+    VPF_YUYV422,
+    VPF_UYVY422,
+};
+
+enum class AudioFormat : int
+{
+    MONO8 = 0,
+    STEREO8,
+    MONO16,
+    STEREO16,
+
+    AF_TOTAL
+};
+
+enum class LightType : int 
+{
+    LT_DIRECTIONAL = 0,
+    LT_POINT,
+    LT_SPOT,
+
+    LT_TOTAL
 };
 
 } // bv

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AtlasCache.h"
 
 #include "System/Path.h"
@@ -23,6 +25,12 @@
 #include "hashlibpp.h"
 
 #pragma warning(pop)
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { 
 

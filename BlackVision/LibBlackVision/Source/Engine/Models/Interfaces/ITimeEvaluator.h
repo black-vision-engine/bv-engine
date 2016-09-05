@@ -7,15 +7,17 @@
 #include "CoreDEF.h" //FIXME: store in PCH
 
 #include "Serialization/ISerializable.h"
+#include "Engine/Interfaces/ICloneable.h"
 
 namespace bv { namespace model {
 
 class ITimeEvaluator;
 DEFINE_PTR_TYPE(ITimeEvaluator)
 
-class ITimeEvaluator : public ISerializable
+class ITimeEvaluator : public ISerializable, public ICloneable
 {
 public:
+    virtual void				                        SetName         ( std::string )					= 0;
     virtual const std::string &                         GetName         () const						= 0;
 
     virtual void                                        SetGlobalTime   ( TimeType t )					= 0;
@@ -31,6 +33,8 @@ public:
 
     virtual                                             ~ITimeEvaluator () {}
 
+
+    virtual const std::string&                          GetType         () = 0;
 };
 
 } //model

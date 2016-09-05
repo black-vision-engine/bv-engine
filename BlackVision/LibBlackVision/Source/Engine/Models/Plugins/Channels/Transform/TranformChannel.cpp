@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "TransformChannel.h"
 
 #include "Mathematics/Transform/MatTransform.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model
 {
@@ -21,9 +29,9 @@ bool                                    TransformChannel::IsReadOnly          ()
 
 // ***********************************
 //
-const std::vector< TransformPtr >&      TransformChannel::GetTransformChannels() const
+TransformPtr                             TransformChannel::GetTransformChannels() const
 {
-    return m_transformations;
+    return m_transformation;
 }
 
 // ***********************************

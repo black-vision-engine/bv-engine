@@ -6,6 +6,7 @@
 #include <stack>
 #include <fstream>
 #include <string>
+#include <memory>
 
 
 namespace bv
@@ -20,12 +21,19 @@ private:
 	
     std::stack<Json::Value*>	m_nodeStack;
 
+    std::unique_ptr< SerializeContext >     m_context;
+
 public:
 	JsonSerializeObject();
+    JsonSerializeObject( Json::Value && initValue );
 	~JsonSerializeObject();
 
-	void						Save                ( const std::string& filename );
+    SerializeContext*           GetSerializeContext () const override;
+
+	void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
 	void						Save                ( std::ostream& out );
+    Json::Value                 GetJson             () const;
+    std::string                 GetString           ();
 
 	void						SetAttribute        ( const std::string& name, const std::string& value ) override;
     std::string                 GetAttribute        ( const std::string& name ) override;
@@ -35,7 +43,13 @@ public:
 
     void						EnterChild          ( const std::string& name ) override;
     void                        EnterChild          ( const std::wstring& /*name*/ ) override;
+    void                        EnterArray          ( const std::string& name ) override;
+    void                        EnterArray          ( const std::wstring& /*name*/ ) override;
+
 	bool						ExitChild           () override;
+
+    bool                        AttachBranch        ( const std::string & name, const ISerializer * ser ) override;
+    bool                        AttachBranch        ( const std::string & name, const IDeserializer * ser ) override;
 };
 
 

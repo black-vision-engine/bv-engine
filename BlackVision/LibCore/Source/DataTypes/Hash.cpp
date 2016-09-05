@@ -5,6 +5,7 @@
 #pragma warning(disable : 4512) // assignment operator could not be generated
 #pragma warning(disable : 4267) // conversion from 'size_t' to 'type', possible loss of data
 #pragma warning(disable : 4996) // fopen is deprecated, consider using fopen_s instead
+#pragma warning(disable : 4706) // assignment within conditional expression
 
 #include "hashlibpp.h"
 
@@ -29,6 +30,17 @@ Hash						Hash::FromString( const std::string & str )
 {
 	auto md5 = md5wrapper();
 	auto res = Hash( md5.getHashFromString( str ) );
+
+	return res;
+}
+
+// ******************************
+//
+Hash						Hash::FromFile( const std::string & path )
+{
+	auto md5 = md5wrapper();
+
+    auto res = Hash( md5.getHashFromFile( path ) );
 
 	return res;
 }

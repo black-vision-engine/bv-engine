@@ -21,25 +21,38 @@ public:
 
 protected:
 
-    InterpolatorType        m_interpolator;
+    InterpolatorType            m_interpolator;
 
 public:
 
-    explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
-                            ~SimpleParameterImpl();
+    explicit                    SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
+                                ~SimpleParameterImpl();
 
-    void                    Serialize       ( ISerializer& doc ) const;
+    void                        Serialize               ( ISerializer& doc ) const;
 
-    void                    SetCurveType        ( CurveType type );
+    virtual void                SetAddedKeyCurveType    ( CurveType type ) override;
+    virtual void                SetGlobalCurveType      ( CurveType type ) override;
+    virtual CurveType           GetCurveType            () override;
 
-    inline  ValueType       Evaluate            () const;
-    inline  void            SetVal              ( const ValueType & val, TimeType t );
+    virtual void                SetWrapPostMethod       ( WrapMethod method );
+    virtual void                SetWrapPreMethod        ( WrapMethod method );
+    virtual WrapMethod          GetWrapPostMethod       ();
+    virtual WrapMethod          GetWrapPreMethod        ();
 
-	InterpolatorType &		AccessInterpolator	();
+    virtual int                 GetNumKeys              ();
 
-	virtual VoidPtr         QueryParamTyped     () override;
+    inline  ValueType           Evaluate                () const;
+    inline  void                SetVal                  ( const ValueType & val, TimeType t );
+    inline  bool                RemoveVal               ( TimeType t );
+    inline  bool                MoveKey                 ( TimeType t, TimeType newTime );
 
-	inline static  ModelParamType  Type         ();
+    virtual  std::string         EvaluateToString        ( TimeType t ) const;
+
+	InterpolatorType &		    AccessInterpolator	    ();
+
+	virtual VoidPtr             QueryParamTyped         () override;
+
+	inline static  ModelParamType  Type                 ();
 
 };
 

@@ -1,15 +1,24 @@
+#include "stdafx.h"
+
 #include "TriangleStrip.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
+
+#include "Mathematics/Box.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
 
 // **************************
 //
-TriangleStrip::TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, RenderableEffectPtr effect )
-    : Triangles( static_cast< RenderableArrayDataSingleVertexBuffer * >( rad ), effect, RenderableType::RT_TRIANGLE_STRIP )
+TriangleStrip::TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect )
+    : Triangles( static_cast< RenderableArrayDataSingleVertexBuffer * >( rad ), boundingBox, effect, RenderableType::RT_TRIANGLE_STRIP )
 {
 }
 

@@ -1,9 +1,17 @@
+#include "stdafx.h"
+
 #include "VertexArray.h"
 
 #include <cassert>
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h"
 #include "Engine/Graphics/Resources/VertexBuffer.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv
@@ -111,6 +119,18 @@ VertexDescriptor *          VertexArraySingleVertexBuffer::GetVertexDescriptor  
 {
     return m_vertexDescriptor;
 }
+
+// *******************************
+//
+void         VertexArraySingleVertexBuffer::SetVertexDescriptor             ( VertexDescriptor * desc )
+{
+    if( m_vertexDescriptor )
+    {
+        delete m_vertexDescriptor;
+    }
+    m_vertexDescriptor = desc;
+}
+
 
 // *******************************
 //

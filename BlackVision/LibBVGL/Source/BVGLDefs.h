@@ -189,6 +189,15 @@ namespace bv {
 #define GL_TEXTURE_BINDING_1D					0x8068
 #define GL_TEXTURE_BINDING_2D					0x8069
 #define GL_TEXTURE_BINDING_3D					0x806A
+#define GL_TEXTURE_BINDING_1D_ARRAY				0x8C1C
+#define GL_TEXTURE_BINDING_2D_ARRAY				0x8C1D
+#define GL_TEXTURE_BINDING_CUBE_MAP				0x8514
+#define GL_TEXTURE_BINDING_CUBE_MAP_ARRAY		0x900A
+
+#define GL_SAMPLER_BINDING						0x8919
+
+#define	GL_TEXTURE_CUBE_MAP_SEAMLESS			0x884F
+
 #define GL_TEXTURE_BORDER_COLOR					0x1004
 #define GL_READ_WRITE					0x88BA
 #define GL_STREAM_DRAW					0x88E0
@@ -256,6 +265,7 @@ namespace bv {
 // // todo
 //#define GL_MIRROR_CLAMP_TO_EDGE
 
+#define GL_TEXTURE_BASE_LEVEL			0x813C
 #define GL_TEXTURE_MAX_LEVEL			0x813D
 
 #define GL_TEXTURE0						0x84C0
@@ -360,6 +370,25 @@ namespace bv {
 #define GL_CULL_FACE					0x0B44
 #define GL_CULL_FACE_MODE				0x0B45
 
+#define GL_BOOL                         0x8B56
+#define GL_FLOAT_VEC2                   0x8B50
+#define GL_FLOAT_VEC3                   0x8B51
+#define GL_FLOAT_VEC4                   0x8B52
+#define GL_FLOAT_MAT2                   0x8B5A
+#define GL_FLOAT_MAT3                   0x8B5B
+#define GL_FLOAT_MAT4                   0x8B5C
+
+#define GL_UNIFORM_TYPE                         0x8A37
+#define GL_UNIFORM_SIZE                         0x8A38
+#define GL_UNIFORM_OFFSET                       0x8A3B
+#define GL_UNIFORM_ARRAY_STRIDE                 0x8A3C
+#define GL_UNIFORM_MATRIX_STRIDE                0x8A3D
+#define GL_UNIFORM_BLOCK_DATA_SIZE              0x8A40
+#define GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS        0x8A42
+#define GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES 0x8A43
+
+#define GL_INVALID_INDEX                0xFFFFFFFF
+
 //pablito
 #define GL_FRAMEBUFFER_EXT 0x8D40
 #define GL_RENDERBUFFER_EXT 0x8D41
@@ -370,11 +399,17 @@ namespace bv {
 #define GL_DEPTH_BUFFER_BIT				0x00000100
 
 
+// Query
+#define GL_TIMESTAMP                    0x8E28
+#define GL_QUERY_RESULT                 0x8866
+
+
 typedef unsigned int GLenum;
 typedef unsigned int GLbitfield;
 typedef unsigned int GLuint;
 typedef int GLint;
 typedef int GLsizei;
+typedef unsigned long long int GLuint64;
 typedef unsigned char GLboolean;
 typedef signed char GLbyte;
 typedef short GLshort;

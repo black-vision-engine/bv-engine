@@ -4,40 +4,14 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
+#include "InterpolatorBasicTypes.h"
+
 #include "Serialization/ISerializable.h"
+
+#include "Key.h"
 
 namespace bv
 {
-
-enum class WrapMethod : int
-{
-    clamp = 0,
-    repeat = 1,
-    pingPong = 2,
-};
-
-template<class TimeValueT/* = bv::TimeType*/, class ValueT>
-class Key : public ISerializable
-{
-public:
-
-    TimeValueT  t;
-    ValueT      val;
-
-public:
-
-    explicit Key( TimeValueT t, ValueT val );
-
-    virtual void                Serialize       ( ISerializer& doc ) const override;
-    static ISerializablePtr     Create          ( const IDeserializer& doc );
-
-    Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, ValueT( val + that.val ) ); }
-    Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, ValueT( val - that.val ) ); }
-    void operator=( const std::pair< TimeValueT, ValueT >& p ) { t = p.first; val = p.second; }
-};
-
-template<class TimeValueT, class ValueT>
-Key< TimeValueT, ValueT > operator*( const TimeValueT & a, const Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( TimeValueT( a * that.t ), ValueT( a * that.val ) ); }
 
 template<class TimeValueT>
 class Interpolator
@@ -77,10 +51,13 @@ public:
     virtual ~BasicInterpolator  () {};
 
     virtual void                Serialize       ( ISerializer& doc ) const override;
-    static ISerializablePtr     Create          ( const IDeserializer& doc );
+    static BasicInterpolator< TimeValueT, ValueT, FloatT >*     Create          ( const IDeserializer& doc );
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
+
+    bool RemoveKey          ( TimeValueT t );
+    bool MoveKey            ( TimeValueT t, TimeValueT newTime );
 
     ValueT Evaluate         ( TimeValueT t ) const;
     ValueT EvaluatePoint    ( TimeValueT t ) const;
@@ -102,7 +79,14 @@ public:
 
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;
+    const std::vector< KeyType > &      GetKeys() const;
+    std::vector< KeyType > &        GetKeys();
 
+    int                                                 GetNumKeys      ();
+
+    void                                                SetGlobalCurveType  ( CurveType /*type*/ ) { assert( false ); }
+    void                                                SetAddedKeyCurveType ( CurveType /*type*/ ) { assert( false ); }
+    CurveType                                           GetCurveType    () { assert( false ); return CurveType::CT_TOTAL; }
 };
 
 } //bv

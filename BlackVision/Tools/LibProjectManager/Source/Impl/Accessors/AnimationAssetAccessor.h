@@ -34,7 +34,9 @@ public:
 	virtual void			 	ExportAll			( std::ostream & out ) const override;
     virtual void				ExportAll			( const Path & expAssetFilePath ) const override;
 
-    virtual PathVec				ListAll				( const Path & path ) const override;
+    virtual UInt64              GetAssetSizeInBytes ( const Path & path ) const override;
+
+    virtual PathVec				ListAll				( const Path & path, bool recursive ) const override;
 
     virtual PathVec				ListAllUnique		( const Path & path ) const override;
 
@@ -43,7 +45,7 @@ public:
 private:
     explicit                    AnimationAssetAccessor( const Path & rootPath, const StringVector & fileExts );
 
-    std::string                 PathContainsAnimation( const Path & path ) const;
+    bool                        PathContainsAnimation( const Path & path ) const;
 
     void				        CreateDir           () const;
 

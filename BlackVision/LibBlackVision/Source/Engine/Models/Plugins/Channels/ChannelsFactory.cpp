@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ChannelsFactory.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
@@ -7,33 +9,39 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *******************************
 //
 VertexAttributesChannelPtr       ChannelsFactory::CreateVertexAttributesChannel               ( ConnectedComponentPtr connComp, bool isTimeInvariant )
 {
-	VertexAttributesChannelDescriptor desc;
+    VertexAttributesChannelDescriptor desc;
 
-	for( auto compDesc : connComp->GetAttributeChannels() )
-	{
-		desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-	}
+    for( auto compDesc : connComp->GetAttributeChannels() )
+    {
+        desc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( compDesc->GetDescriptor() ) );
+    }
 
     VertexAttributesChannelPtr ret = std::make_shared< model::VertexAttributesChannel >( PrimitiveType::PT_TRIANGLE_STRIP, desc, false, isTimeInvariant );
 
-	ret->AddConnectedComponent( connComp );
+    ret->AddConnectedComponent( connComp );
 
-	return ret;
+    return ret;
 }
 
 // *******************************
 //
-TransformChannelPtr              ChannelsFactory::CreateTransformChannel              ( const ParamTransformVec & transformVec )
+TransformChannelPtr              ChannelsFactory::CreateTransformChannel              ( const ParamTransform & transform )
 {
 
-    { transformVec; } // FIXME: suppress unused variable
-	//SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel( transformVec );
+    { transform; } // FIXME: suppress unused variable
+    //SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel( transformVec );
     SimpleTransformChannelPtr      trasformChannel  = nullptr; //FIXME: NM_CONFORMANCE
     return trasformChannel;
 }

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderablePass.h"
 
 #include "Engine/Graphics/Shaders/PixelShader.h"
@@ -5,6 +7,12 @@
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv
@@ -27,6 +35,10 @@ RenderablePass::RenderablePass( PixelShader * ps, VertexShader * vs, GeometrySha
 RenderablePass::~RenderablePass         ()
 {
     delete m_stateInstance;
+
+    delete m_pixelShader;
+    delete m_vertexShader;
+    delete m_geometryShader;
 }
 
 // *********************************

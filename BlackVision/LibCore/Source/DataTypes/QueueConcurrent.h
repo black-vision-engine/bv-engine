@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <queue>
+#include <condition_variable>
 
 #include "Threading/ScopedCriticalSection.h"
 
@@ -16,10 +17,10 @@ class QueueConcurrent
 {
 private:
 
-    CriticalSection     m_criticalSection;
+    mutable std::condition_variable     m_conditionVariable;
+    mutable CriticalSection             m_criticalSection;
 
     std::queue< T >     m_queue;
-    HANDLE              m_dataPushed;
 
 public:
 
@@ -30,6 +31,9 @@ public:
     size_t      Size                () const;
 
     void        Push                ( const T & val );
+    void        Push                ( const T && val );
+
+    bool        Front               ( T & val );
 
     bool        TryPop              ( T & val );
     void        WaitAndPop          ( T & val );
@@ -42,17 +46,13 @@ public:
 //
 template< typename T >
 QueueConcurrent< T >::QueueConcurrent     ()
-{
-    m_dataPushed = CreateEvent( NULL, TRUE, FALSE, NULL );
-}
+{}
 
 // *************************************
 //
 template< typename T >
 QueueConcurrent< T >::~QueueConcurrent    ()
-{
-    CloseHandle( m_dataPushed );
-}
+{}
 
 // *************************************
 //
@@ -79,13 +79,40 @@ size_t      QueueConcurrent< T >::Size                () const
 template< typename T >
 void        QueueConcurrent< T >::Push        ( const T & val )
 {
-    {
-        ScopedCriticalSection lock( m_criticalSection );
+    ScopedCriticalSection lock( m_criticalSection );
 
-        m_queue.push( val );
+    m_queue.push( val );
+
+    m_conditionVariable.notify_one();
+}
+
+// ***********************
+//
+template< typename T >
+void        QueueConcurrent< T >::Push                ( const T && val )
+{
+    ScopedCriticalSection lock( m_criticalSection );
+    
+    m_queue.push( val );
+
+    m_conditionVariable.notify_one();
+}
+
+// *************************************
+//
+template< typename T >
+bool        QueueConcurrent< T >::Front       ( T & val )
+{
+    ScopedCriticalSection lock( m_criticalSection );
+
+    if( m_queue.empty() )
+    {
+        return false;
     }
 
-    PulseEvent( m_dataPushed );
+    val = m_queue.front();
+
+    return true;
 }
 
 // *************************************
@@ -111,12 +138,7 @@ bool        QueueConcurrent< T >::TryPop      ( T & val )
 template< typename T >
 void        QueueConcurrent< T >::WaitAndPop    ( T & val )
 {
-    ScopedCriticalSection lock( m_criticalSection );
-
-    while( m_queue.empty() )
-    {
-        WaitForSingleObject( m_dataPushed );
-    }
+    m_conditionVariable.wait();
 
     val = m_queue.front();
     m_queue.pop();
@@ -131,9 +153,8 @@ void        QueueConcurrent< T >::Clear         ()
 
     while( !m_queue.empty() )
     {
-        auto val = m_queue.front();
+        //auto val = m_queue.front();
         m_queue.pop();
-
     }
 }
 

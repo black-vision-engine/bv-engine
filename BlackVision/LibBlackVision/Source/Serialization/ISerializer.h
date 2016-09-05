@@ -1,17 +1,30 @@
 #pragma once
 
+#include "SerializeContext.h"
 
 #include <string>
 
 namespace bv {
 
 
+enum FormatStyle
+{
+    FORMATSTYLE_SPARING,
+    FORMATSTYLE_READABLE
+};
+
+
+
+
 class ISerializer
 {
+    friend class IDeserializer;
 private:
 protected:
 public:
     virtual ~ISerializer() {};
+
+    virtual SerializeContext*   GetSerializeContext () const = 0;
 
     // Serializer on string
 	virtual void				SetAttribute        ( const std::string& name, const std::string& value ) = 0;
@@ -27,9 +40,15 @@ public:
     If deserializing, returns false if child does not exist.*/
     virtual void                EnterChild          ( const std::string& name ) = 0;
     virtual void                EnterChild          ( const std::wstring& name ) = 0;
+
+    virtual void                EnterArray          ( const std::string& name ) = 0;
+    virtual void                EnterArray          ( const std::wstring& name ) = 0;
     
     /**@brief Pop.*/
     virtual bool                ExitChild           () = 0;
+
+    virtual bool                AttachBranch        ( const std::string & name, const ISerializer * ser ) = 0;
+    virtual bool                AttachBranch        ( const std::string & name, const IDeserializer * ser ) = 0;
 };
 
 

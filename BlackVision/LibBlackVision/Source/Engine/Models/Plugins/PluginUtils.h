@@ -12,9 +12,12 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, co
 
 bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter );
 
-bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath );
+bool    LoadAVStream    ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat );
+bool    LoadAVStream    ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps );
+
+bool    LoadMesh        ( IPluginPtr plugin, const std::string & meshPath, const std::string & meshName = "", bool recursive = true );
 
 } //model
 } //bv

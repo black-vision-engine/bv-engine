@@ -13,6 +13,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <cassert>
 
 #define DEFINE_PTR_TYPE(Type) typedef std::shared_ptr< Type > Type##Ptr;
 #define DEFINE_CONST_PTR_TYPE(Type) typedef std::shared_ptr< const Type > Type##ConstPtr;
@@ -24,6 +25,8 @@
 
 typedef std::shared_ptr< void > VoidPtr;
 typedef std::shared_ptr< const void > VoidConstPtr;
+
+enum MouseAction { RIGHT_DOWN, RIGHT_UP, LEFT_DOWN, LEFT_UP, MOVE };
 
 namespace bv {
 
@@ -44,5 +47,23 @@ typedef size_t				SizeType;
 typedef Float32				TimeType;
 
 typedef std::vector< std::string > StringVector;
+
+
+// ************************
+//
+template< class DestType, class SrcType >
+DestType Cast( SrcType * ptr )
+{
+    assert( dynamic_cast< DestType >( ptr ) );
+    return static_cast< DestType >( ptr );
+}
+
+// ************************
+//
+template< class Type >
+Type * RemoveConst( const Type * ptr )
+{
+    return const_cast< Type * >( ptr );
+}
 
 } //bv

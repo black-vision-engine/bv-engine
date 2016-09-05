@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "PdrConstants.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv {
 
@@ -25,7 +33,9 @@ namespace
     GLuint RenderableTypeGL[] =
     {
         GL_TRIANGLES,
-        GL_TRIANGLE_STRIP
+        GL_TRIANGLE_STRIP,
+        GL_TRIANGLES, // FIXME: this is RT_TRIANGLE_MESH
+        GL_LINES
     };
 
     GLuint WrappingModeGL[] = 
@@ -41,10 +51,10 @@ namespace
     {
         GL_NEAREST,					// SFM_POINT = 0,
         GL_LINEAR,					// SFM_LINEAR,
-		GL_NEAREST_MIPMAP_NEAREST,	// SFM_POINT_MIPMAP_POINT,
-		GL_LINEAR_MIPMAP_NEAREST,	// SFM_LINEAR_MIPMAP_LINEAR,
-		GL_NEAREST_MIPMAP_LINEAR,	// SFM_POINT_MIPMAP_LINEAR,
-		GL_LINEAR_MIPMAP_LINEAR		// SFM_LINEAR_MIPMAP_LINEAR
+        GL_NEAREST_MIPMAP_NEAREST,	// SFM_POINT_MIPMAP_POINT,
+        GL_LINEAR_MIPMAP_NEAREST,	// SFM_LINEAR_MIPMAP_LINEAR,
+        GL_NEAREST_MIPMAP_LINEAR,	// SFM_POINT_MIPMAP_LINEAR,
+        GL_LINEAR_MIPMAP_LINEAR		// SFM_LINEAR_MIPMAP_LINEAR
     };
 
     GLuint AlphaSrcBlendModeGL[] =
@@ -113,35 +123,35 @@ namespace
 
     GLuint TextureFormatGL[] =
     {
-		GL_RGBA,		// F_A32FR32FG32FB32F
-		GL_BGR,			// F_R32FG32FB32F
-		GL_R32F,		// F_A32F
-		GL_BGRA,		// F_A8R8G8B8
-		GL_BGR,			// F_R8G8B8
-		GL_ALPHA,		// F_A8
-		GL_LUMINANCE,	// F_L8
+        GL_RGBA,		// F_A32FR32FG32FB32F
+        GL_BGR,			// F_R32FG32FB32F
+        GL_R32F,		// F_A32F
+        GL_BGRA,		// F_A8R8G8B8
+        GL_BGR,			// F_R8G8B8
+        GL_ALPHA,		// F_A8
+        GL_LUMINANCE,	// F_L8
     };
 
     GLuint TextureInternalFormatGL[] =
     {
-		GL_RGBA32F,		// F_A32FR32FG32FB32F
-		GL_RGB32F,		// F_R32FG32FB32F
-		GL_R32F,		// F_A32F
-		GL_RGBA8,		// F_A8R8G8B8
-		GL_RGB8,		// F_R8G8B8
-		GL_ALPHA8,		// F_A8
-		GL_LUMINANCE8,	// F_L8
+        GL_RGBA32F,		// F_A32FR32FG32FB32F
+        GL_RGB32F,		// F_R32FG32FB32F
+        GL_R32F,		// F_A32F
+        GL_RGBA8,		// F_A8R8G8B8
+        GL_RGB8,		// F_R8G8B8
+        GL_ALPHA8,		// F_A8
+        GL_LUMINANCE8,	// F_L8
     };
 
     GLuint TextureTypeGL[] = 
     {
-		GL_FLOAT,			// F_A32FR32FG32FB32F
-		GL_FLOAT,			// F_R32FG32FB32F
-		GL_FLOAT,			// F_A32F
-		GL_UNSIGNED_BYTE,	// F_A8R8G8B8
-		GL_UNSIGNED_BYTE,	// F_R8G8B8
-		GL_UNSIGNED_BYTE,	// F_A8
-		GL_UNSIGNED_BYTE,	// F_L8
+        GL_FLOAT,			// F_A32FR32FG32FB32F
+        GL_FLOAT,			// F_R32FG32FB32F
+        GL_FLOAT,			// F_A32F
+        GL_UNSIGNED_BYTE,	// F_A8R8G8B8
+        GL_UNSIGNED_BYTE,	// F_R8G8B8
+        GL_UNSIGNED_BYTE,	// F_A8
+        GL_UNSIGNED_BYTE,	// F_L8
     };
 
 } //anonymous

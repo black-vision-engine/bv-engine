@@ -2,7 +2,7 @@
 
 #include <string>
 #include "rapidxml.hpp" //"rapidxml.hpp"
-#include "Log.h"
+#include "UseLoggerXMLModule.h"
 #include <boost/algorithm/string.hpp>
 
 using namespace rapidxml;
@@ -184,7 +184,7 @@ namespace bv{
 			return true;
 		}
 		else{
-			Log::A("ERROR", "[ERROR]", "ERROR: LoadSurfaceDefinition" + surface_path);
+			LOG_MESSAGE( SeverityLevel::error ) << "LoadSurfaceDefinition" + surface_path;
 			return false;
 		}
 		

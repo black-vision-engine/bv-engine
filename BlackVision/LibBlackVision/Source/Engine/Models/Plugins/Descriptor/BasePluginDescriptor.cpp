@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "BasePluginDescriptor.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 
@@ -41,14 +49,6 @@ const std::string &     BasePluginDescriptor::GetPluginTypeAbbrv() const
 
 // *********************************
 //
-bool                    BasePluginDescriptor::CanBeAttachedTo   ( IPluginConstPtr plugin )  const
-{
-    //By default assume that plugin can be connected just to any other plugin
-    return true;
-}
-
-// *********************************
-//
 IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreateDefaultModel( timeEvaluator );
@@ -56,12 +56,47 @@ IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluator
 
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
+void BasePluginDescriptor::ModelHelper::CreateVacModel      ()
 {
     auto vacModel = std::make_shared< DefaultParamValModel >();
     m_model->SetVertexAttributesChannelModel( vacModel );
     m_lastParamValModel = vacModel;
 }
+
+// *********************************
+//
+void BasePluginDescriptor::ModelHelper::CreateVSModel       ()
+{
+    auto psModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetVertexShaderChannelModel( psModel );
+    m_lastParamValModel = psModel;
+}
+
+// ***********************
+//
+void BasePluginDescriptor::ModelHelper::CreateGSModel       ()
+{
+
+}
+
+// *********************************
+//
+void BasePluginDescriptor::ModelHelper::CreatePSModel       ()
+{
+    auto psModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetPixelShaderChannelModel( psModel );
+    m_lastParamValModel = psModel;
+}
+
+// ***********************
+//
+void BasePluginDescriptor::ModelHelper::CreatePluginModel   ()
+{
+    auto psModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetPluginModel( psModel );
+    m_lastParamValModel = psModel;
+}
+
 
 } //model
 } //bv

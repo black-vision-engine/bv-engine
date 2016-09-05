@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrRenderTarget.h"
 
 #include <cassert>
@@ -10,6 +12,12 @@
 
 //FIXME: remove
 //#include "Tools/HRTimer.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv {
 
@@ -109,7 +117,7 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 
 // ****************************
 // FIXME: dodac streaming flag do bufora (dla multi PBO)
-void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2DPtr & outputTex )
+void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex )
 {
     assert( i < m_numTargets );
 
@@ -155,12 +163,9 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     //double readStart = GTimer.CurElapsed();
     Enable( renderer );
 
-    auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
-    auto type   = ConstantsMapper::GLConstantTextureType( format );
-
-    void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], ( GLuint )m_width, ( GLuint )m_height, fmt, type );
-    memcpy( buffer->GetWritable(), data, outputTex->RawFrameSize() );
-    pboMem->UnlockRenderTarget();
+	pboMem->LockDownload();
+	PBODownloadData( i );
+    pboMem->UnlockDownload( buffer->GetWritable(), outputTex->RawFrameSize() );
 
     Disable( renderer );
     //double readTime = GTimer.CurElapsed() - readStart;
@@ -183,7 +188,8 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const
     for( unsigned int i = 0; i < rt->NumTargets(); ++i )
     {
         Texture2DPtr tx = rt->ColorTexture( i );
-        assert( !renderer->IsRegistered( tx.get() ) );
+        //FIXME: is this really necessary (maybe already attached texture cannot be used as render target texture - i don't know - check this at some point)
+        assert( !renderer->IsRegistered( tx.get() ) ); 
 
         PdrTexture2D * pdrTx = PdrTexture2D::Create( tx.get() );
         renderer->RegisterTexture2D( tx.get(), pdrTx );
@@ -228,6 +234,18 @@ bool            PdrRenderTarget::FramebuferStatusOK () const
     }
 
     return true;
+}
+
+// ****************************
+//
+void          PdrRenderTarget::PBODownloadData     ( unsigned int i )
+{
+    auto format = m_textureFormats[ i ];
+    auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
+    auto type   = ConstantsMapper::GLConstantTextureType( format );
+	
+	BVGL::bvglReadBuffer( m_drawBuffers[ i ] );
+	BVGL::bvglReadPixels( 0, 0, ( GLuint )m_width, ( GLuint )m_height, fmt, type, 0 );
 }
 
 } //bv

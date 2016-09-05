@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITimelineEvent.h"
-
+#include "Engine/Models/Interfaces/ITimeline.h"
 
 namespace bv { namespace model {
 
@@ -35,7 +35,7 @@ public:
     
     virtual const ITimeline *   GetOwnerTimeline    () const override;
 
-    void                        SetOwnerTimeline    ( const ITimeline * owner );
+    //void                        SetOwnerTimeline    ( const ITimelinePtr & owner );
     void                        SetEventTime        ( TimeType eventTime );
 
     virtual ~TimelineEventBaseMixin() {}

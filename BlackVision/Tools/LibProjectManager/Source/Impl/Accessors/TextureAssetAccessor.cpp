@@ -48,7 +48,9 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 	{
 		auto props = image::GetImageProps( p.Str() );
 	
-		return SingleTextureAssetDesc::Create( ( Path( "textures" ) / path ).Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+		auto origTextureDesc = SingleTextureAssetDesc::Create( ( Path( "textures" ) / path ).Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+
+        return TextureAssetDesc::Create( origTextureDesc );
 	}
 	else
 	{
@@ -191,12 +193,12 @@ void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) cons
 
 // ********************************
 //
-PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
+PathVec	TextureAssetAccessor::ListAll		( const Path & path, bool recursive ) const
 {
 	PathVec ret;
 	for( auto ext : m_fileExts )
 	{
-		auto l = Path::List( m_rootPath / path, true, ext );
+		auto l = Path::List( m_rootPath / path, recursive, ext );
 
         for( auto & p : l )
         {
@@ -213,7 +215,7 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 //
 PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 {
-	auto l = ListAll( path );
+	auto l = ListAll( path, true );
 
 	std::set< Path  > unique;
 
@@ -233,6 +235,13 @@ void				TextureAssetAccessor::CreateDir		() const
 	{
 		Dir::CreateDir( m_rootPath.Str(), true );
 	}
+}
+
+// ********************************
+//
+UInt64              TextureAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return File::GetSize( ( m_rootPath / path ).Str() );
 }
 
 } // bv

@@ -121,6 +121,9 @@
     <ProjectReference Include="..\..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS11\LibWindowApp.vcxproj">
       <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

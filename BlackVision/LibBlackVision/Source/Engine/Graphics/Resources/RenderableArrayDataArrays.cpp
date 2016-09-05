@@ -1,8 +1,16 @@
+#include "stdafx.h"
+
 #include "RenderableArrayDataArrays.h"
 
 #include <cassert>
 
 #include "Engine/Graphics/Resources/VertexArray.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {

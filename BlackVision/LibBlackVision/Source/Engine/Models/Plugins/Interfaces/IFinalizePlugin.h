@@ -10,7 +10,6 @@ class IFinalizePlugin : public IPlugin
 public:
 
     virtual                         ~IFinalizePlugin    () {}
-    virtual bool                    IsValid             () = 0;
 
 };
 

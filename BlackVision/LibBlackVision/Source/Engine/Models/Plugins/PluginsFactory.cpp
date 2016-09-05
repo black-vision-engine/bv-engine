@@ -1,11 +1,19 @@
+#include "stdafx.h"
+
 #include "PluginsFactory.h"
 
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 #include "Simple/DefaultTransformPlugin.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv
@@ -152,7 +160,7 @@ GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin           
 //    return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
 //}
 
-ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl )
+ParamTransformPtr					    GetCurrentParamTransform( const IPlugin * pl )
 {
 	if( pl )
 	{	

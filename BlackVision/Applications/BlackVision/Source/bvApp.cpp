@@ -2,6 +2,7 @@
 #include "bvApp.h"
 
 #include "System/InitSubsystem.h"
+#include "EndUserAPI/RemoteController.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -18,6 +19,9 @@
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
+#include "Application/ApplicationContext.h"
+#include "Application/Win32/DisableCrashReport.h"
+
 // Log initializer
 #include "bvAppLogInitializer.inl"
 
@@ -25,7 +29,7 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			bv::BlackVisionApp::StaticInitializer	()
 {
-	
+    
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionApp();
 }
@@ -36,7 +40,7 @@ void			bv::BlackVisionApp::StaticInitializer	()
 bool			bv::BlackVisionApp::RegisterInitializer	()
 {
     bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::StaticInitializer );
-	bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
 
     return true;
 }
@@ -52,6 +56,7 @@ BlackVisionApp::BlackVisionApp	()
     , m_processManager( nullptr )
     , m_app( nullptr )
 {
+    ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
 }
 
 // *********************************
@@ -73,6 +78,13 @@ void BlackVisionApp::OnKey( unsigned char c )
     m_app->OnKey( c );
 }
 
+// ***********************
+//
+void BlackVisionApp::OnMouse    ( MouseAction action, int posX, int posY )
+{
+    m_app->OnMouse( action, posX, posY );
+}
+
 // *********************************
 //
 void BlackVisionApp::OnPreidle  ()
@@ -84,7 +96,7 @@ void BlackVisionApp::OnPreidle  ()
 
 // *********************************
 //
-void BlackVisionApp::OnIdle		()
+bool BlackVisionApp::OnIdle		()
 {
     HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
     HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
@@ -93,9 +105,15 @@ void BlackVisionApp::OnIdle		()
 
     UpdateSubsystems( millis );
 
-    m_app->OnUpdate( millis, m_Renderer );
+    ApplicationContext::Instance().SetTimestamp( millis );
+
+    m_app->OnUpdate( millis, m_Renderer, m_audioRenderer );
 
     PostFrame( millis );
+
+    if( m_app->GetState() == BVAppState::BVS_CLOSING )
+        return false;
+    return true;
 }
 
 // *********************************
@@ -111,10 +129,8 @@ void BlackVisionApp::OnPreMainLoop  ()
 bool BlackVisionApp::OnInitialize       ()
 {
     m_processManager = new ProcessManager();
-		//pablito
-    InitializeLogger        ();
+        //pablito
     InitializeLicenses      ();
-    InitializeSocketServer  ();
     InitializeConfig        ();
 
 
@@ -132,6 +148,14 @@ bool BlackVisionApp::OnInitialize       ()
 void BlackVisionApp::OnTerminate        ()
 {
     WindowedApplication::OnTerminate();
+}
+
+// ***********************
+//
+void	BlackVisionApp::OnResize        ( int w, int h )
+{
+    WindowedApplication::OnResize( w, h );
+    ApplicationContext::Instance().SetResolution( w, h );
 }
 
 // *********************************
@@ -158,15 +182,6 @@ void    BlackVisionApp::InitializeConsole   ()
     }
 }
 
-//pablito
-// *********************************
-//`
-void BlackVisionApp::InitializeLogger        ()
-{
-    //Log::Connect();
-    Log::EnableConsoleOutput();
-    Log::A(L"Connection Initialized");
-}
 
 // *********************************
 //
@@ -175,34 +190,29 @@ bool    BlackVisionApp::InitializeLicenses   ()
     LicenseManager::LoadLicenses();
     bool license = LicenseManager::VerifyLicense();
 
-    Log::A(L"license");
-	if(license)
-	{
-        Log::A(L"tools",L"license",L"License is valid. Proceeding...");
-	}else{
-        Log::A(L"tools",L"license",L"License is not valid. Please contact your administrator or sales representative");
-
-	}
+    if( license )
+    {
+        LOG_MESSAGE( SeverityLevel::info ) << "License is valid. Proceeding...";
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::critical ) << "License is not valid. Please contact your administrator or sales representative";
+    }
     return license;
 }
 
-// *********************************
-//
-void    BlackVisionApp::InitializeSocketServer  ()
-{
-    SocketWrapper Server;
-	Server.InitServer();
-}
 
 // *********************************
 //
 void    BlackVisionApp::InitializeConfig  ()
 {
+    // Function BVConfig::Instance() have already initialized this config.
+    // Code commented to avoid double keys in config.
     //ConfigManager::LoadConfig();
-    ConfigManager::LoadXMLConfig();
+    //ConfigManager::LoadXMLConfig();
     BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
 
-	BB::AssetManager::LoadSurfaces();
+    BB::AssetManager::LoadSurfaces();
 
 }
 
@@ -210,27 +220,30 @@ void    BlackVisionApp::InitializeConfig  ()
 //
 void    BlackVisionApp::InitializeAppLogic  ()
 {
-	std::wstring commandLineString = GetCommandLineW();
+    std::wstring commandLineString = GetCommandLineW();
 
-	if( IsProfilerEnabled( commandLineString ) )
-	{
-		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
-		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
-	}
-	else
-	{
-		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
-		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
-		HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
-	}
+    if( IsProfilerEnabled( commandLineString ) )
+    {
+        HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
+        HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
+    }
+    else
+    {
+        HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
+        HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
+        HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
+    }
 
-    m_app = new BVAppLogic( m_Renderer );
+    if( IsDisableCrashReportFlagSet( commandLineString ) )
+    {
+        DisableCrashReport();
+    }
 
-    // FIXME: InitCamera depends implicitly ond LoadScene - which suxx (as camera is created by LoadScene and passed to bvScene)
-	m_app->SetVideoCardManager(&m_videoCardManager);
+    m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
+
+    m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();
     m_app->LoadScene();
-    m_app->InitCamera( m_Width, m_Height );
 }
 
 // *********************************
@@ -251,7 +264,7 @@ void    BlackVisionApp::PostFrame           ( unsigned int millis )
     
     if( millis - startMillis > DefaultConfig.StatsRefreshMillisDelta() )
     {
-		SetWindowTextW( handle, FrameStatsFormatter::FPSStatsLine( m_app->FrameStats() ).c_str() );
+        SetWindowTextW( handle, FrameStatsFormatter::FPSStatsLine( m_app->FrameStats() ).c_str() );
         startMillis = millis;
     }
 #endif

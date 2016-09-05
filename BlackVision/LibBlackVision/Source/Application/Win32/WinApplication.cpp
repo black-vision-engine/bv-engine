@@ -1,12 +1,21 @@
+#include "stdafx.h"
+
 #include "Application/WindowedApplication.h"
 
 #include "System/InitSubsystem.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 
 LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wParam, LPARAM lParam );
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv {
 
@@ -77,6 +86,41 @@ LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wPara
 
             app->OnKey( key );
 
+            return 0;
+        }
+        case WM_LBUTTONDOWN:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::LEFT_DOWN, w, h );
+            return 0;
+        }
+        case WM_LBUTTONUP:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::LEFT_UP, w, h );
+            return 0;
+        }
+        case WM_RBUTTONDOWN:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::RIGHT_DOWN, w, h );
+            return 0;
+        }
+        case WM_RBUTTONUP:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::RIGHT_UP, w, h );
+            return 0;
+        }
+        case WM_MOUSEMOVE:
+        {
+            int w = (int)(LOWORD(lParam));
+            int h = (int)(HIWORD(lParam));
+            app->OnMouse( MouseAction::MOVE, w, h );
             return 0;
         }
         case WM_DESTROY:
@@ -230,6 +274,10 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 //
 int WindowedApplication::MainFun	( int argc, char ** argv )
 {
+#ifdef _DEBUG
+	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
+
     { argc; argv; } // FIXME: suppress unused warning
     WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
 
@@ -261,6 +309,9 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     
     assert( !m_Renderer );
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
+
+    assert( !m_audioRenderer );
+    m_audioRenderer = new audio::AudioRenderer();
 
     if ( app->OnInitialize() )
     {
@@ -297,7 +348,8 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
             }
             else
             {
-                app->OnIdle();
+                // Returns false if application wants to quit itself.
+                quit = !app->OnIdle();
             }
         }
     }
@@ -305,6 +357,7 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     app->OnTerminate();
 
     delete m_Renderer;
+    delete m_audioRenderer;
 
     DestroyApplicationWindow( app, handle );
 

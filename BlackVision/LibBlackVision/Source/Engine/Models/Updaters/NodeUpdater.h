@@ -17,46 +17,52 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Audio/AudioEntity.h"
+
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 //FIXME: this part suxx as hell
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IAudioChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Resources/VertexDescriptor.h"
 
 #include "Engine/Graphics/Resources/VertexArray.h"
 
-
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 namespace bv {
 
 class SceneNode;
-class RenderableEntity;
 class RendererStateInstance;
 class ShaderParameters;
 class IShaderDataSource;
-class ITextureDescriptor;
-class IAnimationDescriptor;
-class Texture2DImpl;
-class Texture2DSequenceImpl;
+class Texture2D;
+
 
 namespace model
 {
     class IModelNode;
     class ITransformChannel;
     class IVertexAttributesChannel;
+
+    class HelperVertexAttributesChannel;
+
+    class BoundingVolume;
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
-typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
-typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
+typedef std::pair< IValueConstPtr, GenericShaderParam * > Value2ShaderParam;
+
+//typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
+//typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
 
 class NodeUpdater;
 DEFINE_CONST_PTR_TYPE(NodeUpdater)
@@ -70,8 +76,14 @@ private:
     model::IModelNodeConstPtr                   m_modelNode;
 
     RenderableEntity *                          m_renderable;
+    RenderableEntity *                          m_boundingBox;
+    RenderableEntity *                          m_centerOfMass;
     model::ITransformChannelConstPtr            m_transformChannel;
+    model::IStatedValuePtr                      m_transformStatedValue;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
+
+    audio::AudioEntity *                        m_audio;
+    model::IAudioChannelPtr                     m_audioChannel;
     
     bool                                        m_timeInvariantVertexData;
     bool                                        m_hasEffect;
@@ -79,12 +91,17 @@ private:
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     model::RendererContextConstPtr              m_rendererContext;
 
-    std::vector< Tex2Tex2DPair >                m_texMappingVec;
-    std::vector< Anim2Tex2DPair >               m_animMappingVec;
+    //std::vector< Tex2Tex2DPair >                m_texMappingVec;
+    //std::vector< Anim2Tex2DPair >               m_animMappingVec;
 
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
+    std::vector< std::vector< UInt64 > >		m_texDataUpdateID;
 
-private:
+    std::vector< Value2ShaderParam >			m_paramsMappingVec;
+
+    UInt64										m_attributesUpdateID;
+    UInt64										m_topologyUpdateID;
+
 
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
 
@@ -96,8 +113,6 @@ public:
     virtual void            DoUpdate            () override;
 
 private:
-
-    void            UpdateNodeEffect    ();
 
     void            RegisterTexturesData( IShaderDataSourceConstPtr psTxData, IShaderDataSourceConstPtr vsTxData, IShaderDataSourceConstPtr gsTxData, RenderablePass * pass );
     bool            MustBeRegistered    ( IShaderDataSourceConstPtr shaderDataSrc, ShaderParameters * shaderParams );
@@ -113,6 +128,8 @@ private:
 
     void            RegisterTex2Params  ( ITexturesDataConstPtr texturesData, ShaderParameters * shaderParams );
 
+    void            UpdateNodeEffect    ();
+
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();
     inline  void    UpdateRendererState ();
@@ -120,7 +137,29 @@ private:
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
 
-    inline  void    UpdateTexturesData  ();
+    inline  void    UpdateBoundingBox   ();
+
+    inline	void	UpdateShaderParams  ();
+    inline  void    UpdateTexturesData	();
+
+    inline  void    UpdateAudio     	();
+
+private:
+
+    void            RegisterShaderParams	( IValueSetConstPtr values, Shader * shader );
+    
+    
+    void			UpdateShaderParam		( IValueConstPtr source, GenericShaderParam * dest );
+
+    template< typename ValType, typename ShaderParamType >
+    void			UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest );
+
+private:
+    
+    void			UpdateValue			( IValueConstPtr source, IValuePtr dest );
+
+    template< typename ValType >
+    void			UpdateTypedValue    ( IValueConstPtr source, IValuePtr dest );
 
 };
 

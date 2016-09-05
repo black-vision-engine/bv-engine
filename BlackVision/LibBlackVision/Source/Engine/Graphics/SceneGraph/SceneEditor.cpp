@@ -1,9 +1,17 @@
+#include "stdafx.h"
+
 #include "SceneEditor.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -19,42 +27,21 @@ SceneEditor::SceneEditor					( Renderer * renderer, SceneNode * & rootNode )
 
 // *******************************
 //
-void		SceneEditor::SetRootNode		( SceneNode * rootNode )
-{
-	if( m_rootNode != rootNode )
-	{
-		if( m_rootNode != nullptr )
-		{
-			DeleteRootNode();
-		}
-	}
-
-	m_rootNode = rootNode;
-}
-
-// *******************************
-//
-bool		SceneEditor::DeleteRootNode     ()
-{
-	if( m_rootNode != nullptr )
-	{
-		DeleteNode( m_rootNode, m_renderer );
-	
-		m_rootNode = nullptr;
-
-		return true;
-	}
-
-	return false;
-}
-
-// *******************************
-//
 void		SceneEditor::AddChildNode       ( SceneNode * parentNode, SceneNode * childNode )
 {
     if( parentNode != nullptr && childNode != nullptr )
     {
         parentNode->AddChildNode( childNode );
+    }
+}
+
+// *******************************
+//
+void		SceneEditor::AddChildNode       ( SceneNode * parentNode, SceneNode * childNode, UInt32 idx )
+{
+    if( parentNode != nullptr && childNode != nullptr )
+    {
+        parentNode->AddChildNode( childNode, idx );
     }
 }
 
@@ -82,43 +69,18 @@ bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * chil
 
 // *******************************
 //
-void		SceneEditor::AttachRootNode     ()
-{
-    if( m_rootNode != nullptr )
-    {
-        DeleteNode( m_rootNode, m_renderer );
-    }
-
-    m_rootNode = m_detachedNode;
-
-    m_detachedNode = nullptr;
-}
-
-// *******************************
-//
-bool		SceneEditor::DetachRootNode     ()
-{
-    DeleteDetachedNode();
-    
-    if( m_rootNode != nullptr )
-    {
-        m_detachedNode = m_rootNode;
-
-        m_rootNode = nullptr;
-
-        return true;
-    }
-
-    return false;
-}
-
-// *******************************
-//
 bool		SceneEditor::AttachChildNode    ( SceneNode * parentNode )
+{
+	return AttachChildNode( parentNode, ( UInt32 )parentNode->NumChildNodes() );
+}
+
+// *******************************
+//
+bool		SceneEditor::AttachChildNode    ( SceneNode * parentNode, UInt32 idx )
 {
     if( parentNode && m_detachedNode )
     {
-        parentNode->AddChildNode( m_detachedNode );
+        parentNode->AddChildNode( m_detachedNode, idx );
 
         m_detachedNode = nullptr;
     
@@ -127,6 +89,7 @@ bool		SceneEditor::AttachChildNode    ( SceneNode * parentNode )
 
 	return false;
 }
+
 
 // *******************************
 //

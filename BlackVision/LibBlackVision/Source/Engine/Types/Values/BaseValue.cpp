@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "BaseValue.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

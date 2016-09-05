@@ -8,7 +8,7 @@ namespace bv {
 class BasicWindowApp : public WindowedApplication
 {
 public:
-	typedef IBasicLogicUnqPtr ( * CreateLogicFunc )( bv::Renderer * );
+    typedef IBasicLogicUnqPtr ( * CreateLogicFunc )( bv::Renderer *, bv::audio::AudioRenderer * );
 
 private:
 	static	ApplicationBase *	AppInstance;
@@ -28,7 +28,7 @@ protected:
 
     virtual void    OnKey               ( unsigned char c ) override;
     virtual void    OnPreidle	        ()					override;
-    virtual void    OnIdle              ()					override;
+    virtual bool    OnIdle              ()					override;
     virtual void    OnPreMainLoop       ()					override;
     virtual bool    OnInitialize        ()					override;
     virtual void    OnResize            ( int w, int h )	override;

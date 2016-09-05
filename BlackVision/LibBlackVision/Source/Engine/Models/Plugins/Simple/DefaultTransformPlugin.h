@@ -26,6 +26,14 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultTransformPlugin : public BasePlugin< IPlugin >
 {
+
+public:
+    
+    struct PARAM
+    {
+        static const std::string    SIMPLE_TRANSFORM;
+    };
+
 private:
 
     //FIXME: move to base class
@@ -40,8 +48,7 @@ public:
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
     virtual void                                Update                      ( TimeType t ) override;
 
-	virtual ParamTransformVecPtr				GetParamTransform			() const override;
-
+	virtual ParamTransformPtr				    GetParamTransform			() const override;
 
 };
 

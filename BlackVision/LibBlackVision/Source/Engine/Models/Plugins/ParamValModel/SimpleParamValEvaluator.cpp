@@ -1,4 +1,13 @@
+#include "stdafx.h"
+
 #include "SimpleParamValEvaluator.h"
+
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {
@@ -10,6 +19,7 @@ namespace bv { namespace model {
 
 
 //Explicit instantiation - this way class' implementation can be stored in cpp file (like here)
+template class bv::model::SimpleParamValEvaluator<bv::model::ParamBoolPtr, bv::ValueBoolPtr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamIntPtr, bv::ValueIntPtr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamFloatPtr, bv::ValueFloatPtr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamVec4Ptr, bv::ValueVec4Ptr>;

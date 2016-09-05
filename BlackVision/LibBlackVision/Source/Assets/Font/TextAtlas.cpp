@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Text.h"
 
 #include <iostream>
@@ -25,6 +27,12 @@
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 #include "MipMapBuilder.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { 

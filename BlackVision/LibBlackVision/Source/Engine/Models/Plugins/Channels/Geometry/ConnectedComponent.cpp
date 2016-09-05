@@ -1,8 +1,17 @@
+#include "stdafx.h"
+
 #include "ConnectedComponent.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model
@@ -86,6 +95,28 @@ void                                        ConnectedComponent::AddAttributeChan
     m_attributeChannels.push_back( attr );
 }
 
+// *************************************
+//
+AttributeChannelPtr							ConnectedComponent::GetAttrChannel				( AttributeSemantic semantic, Int32 occuranceIdx ) const
+{
+    AttributeChannelPtr ret = nullptr;
+    if( !m_attributeChannels.empty() )
+    {
+        for( auto channel : m_attributeChannels )
+        {
+            if( channel->GetDescriptor()->GetSemantic() == semantic )
+            {
+                if( occuranceIdx == 0 )
+                {
+                    return channel;
+                }
+                ret = channel;
+                occuranceIdx--;
+            }
+        }
+    }
+    return ret;
+}
 
 } // model
 } // bv

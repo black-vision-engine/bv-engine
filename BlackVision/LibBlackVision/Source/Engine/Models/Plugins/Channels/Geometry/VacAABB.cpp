@@ -1,8 +1,16 @@
+#include "stdafx.h"
+
 #include "VacAABB.h"
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 

@@ -1,4 +1,11 @@
+#include "stdafx.h"
+
 #include "GenericParameterSetters.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {
@@ -7,14 +14,14 @@ namespace {
 
 // *******************************
 //
-bool SetRotation                ( ParamTransformPtr pt, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool SetRotation                ( ParamTransformPtr pt, TimeType t, const glm::vec3 & eulerAngles )
 {
     if( pt == nullptr )
     {
         return false;
     }
 
-    pt->SetRotation( rotAxis, angle, t );
+    pt->SetRotation( eulerAngles, t );
 
     return true;
 }
@@ -61,70 +68,109 @@ bool SetCenterMass              ( ParamTransformPtr pt, TimeType t, const glm::v
     return true;
 }
 
-// *******************************
+// ***********************
 //
-bool SetRotation                ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool    RemoveRotationKey       ( ParamTransformPtr parameter, TimeType t )
 {
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
+    if( parameter == nullptr )
         return false;
-    }
 
-    pt->SetRotation( idx, rotAxis, angle, t );
+    parameter->RemoveRotation( t );
 
     return true;
 }
 
-// *******************************
+// ***********************
 //
-bool SetScale                   ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & scale )
+bool    RemoveScaleKey          ( ParamTransformPtr parameter, TimeType t )
 {
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
+    if( parameter == nullptr )
         return false;
-    }
 
-    pt->SetScale( idx, scale, t );
+    parameter->RemoveScale( t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveTranslationKey    ( ParamTransformPtr parameter, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveTranslation( t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( ParamTransformPtr parameter, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveCenter( t );
+    return true;
+}
+
+//
+//
+//
+
+// ***********************
+//
+bool    MoveRotationKey       ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveRotation( t, newTime );
 
     return true;
 }
 
-// *******************************
+// ***********************
 //
-bool SetTranslation             ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & translation )
+bool    MoveScaleKey          ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
 {
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
+    if( parameter == nullptr )
         return false;
-    }
 
-    pt->SetTranslation( idx, translation, t );
-
+    parameter->MoveScale( t, newTime );
     return true;
 }
 
-// *******************************
+// ***********************
 //
-bool SetCenterMass              ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & center )
+bool    MoveTranslationKey    ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
 {
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
+    if( parameter == nullptr )
         return false;
-    }
 
-    pt->SetCenter( idx, center, t );
-
+    parameter->MoveTranslation( t, newTime );
     return true;
 }
+
+// ***********************
+//
+bool    MoveCenterMassKey     ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveCenter( t, newTime );
+    return true;
+}
+
 
 } //anonymous
 
 
 // *******************************
 //
-bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & eulerAngles )
 {
-    return SetRotation( QueryTypedParam< ParamTransformPtr >( parameter ), t, rotAxis, angle );
+    return SetRotation( QueryTypedParam< ParamTransformPtr >( parameter ), t, eulerAngles );
 }
 
 // *******************************
@@ -148,32 +194,238 @@ bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm
     return SetCenterMass( QueryTypedParam< ParamTransformPtr >( parameter ), t, center );
 }
 
+
+// ***********************
+//
+bool    RemoveRotationKey       ( IParameterPtr parameter, TimeType t )
+{    return RemoveRotationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
+// ***********************
+//
+bool    RemoveScaleKey          ( IParameterPtr parameter, TimeType t )
+{    return RemoveScaleKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+// ***********************
+//
+bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t )
+{    return RemoveTranslationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t )
+{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
+
+// ========================================================================= //
+// Move transformation key
+// ========================================================================= //
+
+// ***********************
+//
+bool    MoveRotationKey       ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveRotationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+
+// ***********************
+//
+bool    MoveScaleKey          ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveScaleKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+// ***********************
+//
+bool    MoveTranslationKey    ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveTranslationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+
+// ***********************
+//
+bool    MoveCenterMassKey     ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveCenterMassKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+
+
+// ========================================================================= //
+// Curve types and wrap methods
+// ========================================================================= //
+
 // *******************************
 //
-bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool                                                BezierSetGlobalCurveType( IParameterPtr parameter, CurveType type )
 {
-    return SetRotation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, rotAxis, angle );
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetGlobalCurveType( type );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *******************************
 //
-bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale )
+bool                                                BezierSetAddedKeyCurveType( IParameterPtr parameter, CurveType type )
 {
-    return SetScale( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, scale );
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetAddedKeyCurveType( type );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *******************************
 //
-bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation )
+CurveType                                           BezierGetCurveType( IParameterPtr parameter )
 {
-    return SetTranslation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, translation );
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetCurveType();
+    else
+        return CurveType::CT_TOTAL;
 }
 
 // *******************************
 //
-bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center )
+bool                                                SetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method )
 {
-    return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetWrapPostMethod( method );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+bool                                                SetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetWrapPreMethod( method );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+WrapMethod                                          GetWrapPostMethod  ( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetWrapPostMethod();
+    else
+        return WrapMethod( -1 );
+}
+
+// *******************************
+//
+WrapMethod                                          GetWrapPreMethod   ( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetWrapPreMethod();
+    else
+        return WrapMethod( -1 );
+}
+
+// *******************************
+//
+int                                                 BezierParameterGetNumKeys( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetNumKeys();
+    else
+        return -1;
+}
+
+// ***********************
+//
+bool RemoveParameterKey ( IParameterPtr parameter, TimeType t )
+{
+    auto paramType = parameter->GetType();
+    switch( paramType )
+    {
+        case ModelParamType::MPT_FLOAT:
+            return RemoveTypedParamKey<ModelParamType::MPT_FLOAT>( parameter, t );
+        case ModelParamType::MPT_VEC2:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC2>( parameter, t );
+        case ModelParamType::MPT_VEC3:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC3>( parameter, t );
+        case ModelParamType::MPT_VEC4:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC4>( parameter, t );
+        case ModelParamType::MPT_WSTRING:
+            return RemoveTypedParamKey<ModelParamType::MPT_WSTRING>( parameter, t );
+        case ModelParamType::MPT_STRING:
+            return RemoveTypedParamKey<ModelParamType::MPT_STRING>( parameter, t );
+        case ModelParamType::MPT_INT:
+            return RemoveTypedParamKey<ModelParamType::MPT_INT>( parameter, t );
+        case ModelParamType::MPT_BOOL:
+            return RemoveTypedParamKey<ModelParamType::MPT_BOOL>( parameter, t );
+        case ModelParamType::MPT_ENUM:
+            return RemoveTypedParamKey<ModelParamType::MPT_ENUM>( parameter, t );
+        case ModelParamType::MPT_MAT2:
+            return RemoveTypedParamKey<ModelParamType::MPT_MAT2>( parameter, t );
+    }
+    return false;
+}
+
+// ***********************
+//
+bool MoveParameterKey   ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{
+    auto paramType = parameter->GetType();
+    switch( paramType )
+    {
+        case ModelParamType::MPT_FLOAT:
+            return MoveTypedParamKey<ModelParamType::MPT_FLOAT>( parameter, t, newTime );
+        case ModelParamType::MPT_VEC2:
+            return MoveTypedParamKey<ModelParamType::MPT_VEC2>( parameter, t, newTime );
+        case ModelParamType::MPT_VEC3:
+            return MoveTypedParamKey<ModelParamType::MPT_VEC3>( parameter, t, newTime );
+        case ModelParamType::MPT_VEC4:
+            return MoveTypedParamKey<ModelParamType::MPT_VEC4>( parameter, t, newTime );
+        case ModelParamType::MPT_WSTRING:
+            return MoveTypedParamKey<ModelParamType::MPT_WSTRING>( parameter, t, newTime );
+        case ModelParamType::MPT_STRING:
+            return MoveTypedParamKey<ModelParamType::MPT_STRING>( parameter, t, newTime );
+        case ModelParamType::MPT_INT:
+            return MoveTypedParamKey<ModelParamType::MPT_INT>( parameter, t, newTime );
+        case ModelParamType::MPT_BOOL:
+            return MoveTypedParamKey<ModelParamType::MPT_BOOL>( parameter, t, newTime );
+        case ModelParamType::MPT_ENUM:
+            return MoveTypedParamKey<ModelParamType::MPT_ENUM>( parameter, t, newTime );
+        case ModelParamType::MPT_MAT2:
+            return MoveTypedParamKey<ModelParamType::MPT_MAT2>( parameter, t, newTime );
+    }
+    return false;
+}
+
+// ***********************
+//
+std::string                                         EvaluateParamToString( IParameterPtr parameter, TimeType t )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->EvaluateToString( t );
+    else
+    {
+        assert( false );
+        return "";
+    }
 }
 
 } //model

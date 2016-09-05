@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VertexAttributesChannelUtils.h"
 
 #include <cassert>
@@ -10,6 +12,11 @@
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
 
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
 
 // *********************************
@@ -20,7 +27,7 @@ VertexAttributesChannelDescriptor   DescriptorFromConnectedComponent( ConnectedC
 
     for( auto compDesc : cc->GetAttributeChannels() )
     {
-        desc.AddAttrChannelDesc( static_cast< const model::AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+        desc.AddAttrChannelDesc( std::dynamic_pointer_cast< const model::AttributeChannelDescriptor >( compDesc->GetDescriptor() ) );
     }
 
     return desc;
@@ -63,6 +70,31 @@ void        ChannelFromConnectedComponents  ( VertexAttributesChannelPtr channel
 
     va_end( args );
 }
+
+mathematics::Box    CalculateBoundingBox( const IVertexAttributesChannel * vac )
+{
+    mathematics::Box box;
+
+    for( auto comp : vac->GetComponents() )
+    {
+        for( auto channel : comp->GetAttributeChannels() )
+        {
+            auto desc = channel->GetDescriptor();
+            if( desc->GetSemantic() == AttributeSemantic::AS_POSITION )
+            {
+                assert( desc->GetType() == AttributeType::AT_FLOAT3 );
+                
+                const glm::vec3 * data = reinterpret_cast< const glm::vec3 * >( channel->GetData() );
+
+                for( UInt32 i = 0; i < channel->GetNumEntries(); i++ )
+                    box.Include( data[ i ] );
+            }
+        }
+    }
+
+    return box;
+}
+
 
 }
 }

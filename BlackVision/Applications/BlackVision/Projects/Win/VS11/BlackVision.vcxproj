@@ -105,8 +105,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
-xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -134,8 +137,11 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       </SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
-xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -164,8 +170,11 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
-xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -210,8 +219,11 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
-xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 
@@ -264,15 +276,22 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
-    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.cpp" />
-    <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp" />
-    <ClCompile Include="..\..\..\Source\EventHandlers\SceneEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
@@ -287,14 +306,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
-    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
@@ -303,25 +315,45 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\bvApp.h" />
     <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
-    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h" />
-    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.h" />
-    <ClInclude Include="..\..\..\Source\EventHandlers\EventHelpers.h" />
-    <ClInclude Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.h" />
-    <ClInclude Include="..\..\..\Source\EventHandlers\SceneEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
+    <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
@@ -335,14 +367,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
-    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
@@ -352,14 +376,26 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h" />
-    <ClInclude Include="..\..\..\Source\UseLogger.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />

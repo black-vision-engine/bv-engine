@@ -41,11 +41,12 @@ private:
 public:
 
 	SceneDescriptor		GetSceneDesc			( const Path & path ) const;
-	model::BasicNodeConstPtr GetScene			( const Path & path ) const;
+	model::SceneModelPtr GetScene			    ( const Path & path ) const;
 
 	void				AddSceneFromFile		( const Path & srcPath, const Path & path ) const;
-	void				AddScene				( const model::BasicNodeConstPtr & scene, const Path & path ) const;
+	void				AddScene				( const model::SceneModelPtr & scene, const Path & path ) const;
 	void				RemoveScene				( const Path & path ) const;
+    ThumbnailConstPtr   GetSceneThumbnail       ( const Path & path ) const;
 
 	void				ImportScene				( std::istream & in,  const Path & importToProject, const Path & importToPath ) const;
 	void				ExportScene				( std::ostream & out, const Path & projectName, const Path & path ) const;
@@ -53,7 +54,7 @@ public:
 	void				ImportSceneFromFile		( const Path & expFilePath, const Path & importToProject, const Path & importToPath ) const;
 	void				ExportSceneToFile		( const Path & projectName, const Path & outputFileName, const Path & path ) const;
 
-	PathVec				ListScenes				( const Path & path ) const;
+	PathVec				ListScenes				( const Path & path, bool recursive ) const;
 
 	PathVec				ListAllUsedAssets		( const Path & path ) const;
 

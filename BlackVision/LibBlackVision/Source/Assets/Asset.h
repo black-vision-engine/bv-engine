@@ -10,16 +10,16 @@ namespace bv {
 class Asset
 {
 protected:
-	virtual VoidConstPtr					QueryThis	() const = 0;
+    virtual VoidConstPtr					QueryThis	() const = 0;
 
 public:
 
-	virtual const std::string &				GetUID		() const = 0;
+    virtual const std::string &				GetUID		() const = 0;
 
     virtual ~Asset(){}
 
-	template< typename AssetTypeConstPtr >
-	friend AssetTypeConstPtr  QueryTypedRes( AssetTypeConstPtr asset );
+    template< typename AssetTypeConstPtr >
+    friend AssetTypeConstPtr  QueryTypedRes( AssetTypeConstPtr asset );
 };
 
 // ****************************
@@ -27,7 +27,7 @@ public:
 template< typename AssetTypeConstPtr >
 AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset )
 {
-	if( asset->GetUID() != AssetTypeConstPtr::element_type::UID() )
+    if( asset->GetUID() != AssetTypeConstPtr::element_type::UID() )
     {
         return nullptr;
     }

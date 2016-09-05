@@ -153,7 +153,6 @@
     <ClCompile Include="..\..\..\Source\MultipassTest.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\BVConfig.cpp" />
-    <ClCompile Include="..\..\..\Source\VisualTester\OffscreenRenderLogicTst.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\RenderLogicTst.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\WinApplicationTester.cpp" />
@@ -180,7 +179,6 @@
     <ClInclude Include="..\..\..\Source\Common\VBORect.h" />
     <ClInclude Include="..\..\..\Source\MultipassTest.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\BVConfig.h" />
-    <ClInclude Include="..\..\..\Source\VisualTester\OffscreenRenderLogicTst.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\RenderLogicTst.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\WinApplicationTester.h" />

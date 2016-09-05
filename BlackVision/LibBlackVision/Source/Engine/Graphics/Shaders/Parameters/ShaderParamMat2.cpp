@@ -1,36 +1,36 @@
+#include "stdafx.h"
+
 #include "ShaderParamMat2.h"
 
-#include <cassert>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
 
 // ****************************
 //
-ShaderParamMat2::ShaderParamMat2                ( const std::string & name, const ValueMat2 * value )
+ShaderParamMat2::ShaderParamMat2                ( const std::string & name, const glm::mat2 & value )
     : GenericShaderParam( ShaderParamTypeTraits< ValueMat2::ValueType >::paramType, name )
-    , m_valModel( value )
+    , m_val( value )
 {
 }
 
 // ****************************
 //
-ShaderParamMat2::~ShaderParamMat2               ()
+void            ShaderParamMat2::SetValue		( const glm::mat2 & value )
 {
-}
-
-// ****************************
-//
-void            ShaderParamMat2::SetModelValue  ( const ValueMat2 * value )
-{
-    m_valModel = value;
+    m_val = value;
 }
 
 // ****************************
 //
 const void *    ShaderParamMat2::GetValuePtr    () const
 {
-    return &m_valModel->GetValue();
+    return &m_val;
 }
 
 } //bv

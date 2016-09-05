@@ -1,20 +1,26 @@
 #pragma once
 
+#include "DeserializeContext.h"
 
 #include <string>
 
 namespace bv {
 
-
 class IDeserializer
 {
+    friend class ISerializer;
 private:
 protected:
 public:
     virtual ~IDeserializer() {};
 
-	virtual std::string			GetAttribute        ( const std::string& name ) const = 0;
+    virtual DeserializeContext* GetDeserializeContext() const = 0;
+
+    virtual std::string			GetAttribute        ( const std::string& name ) const = 0;
     virtual std::wstring		GetAttribute        ( const std::wstring& name ) const = 0;
+
+    virtual std::string			GetParentAttribute  ( const std::string& parentName, const std::string& attName ) const = 0;
+    virtual std::wstring		GetParentAttribute  ( const std::wstring& parentName, const std::wstring& attName ) const = 0;
 
     /**@brief Push.
     @param[in] name Nazwa wêz³a dziecka.
@@ -27,6 +33,11 @@ public:
 
     /**@brief Pop.*/
     virtual bool                ExitChild           () const = 0;
+
+    virtual IDeserializer*      DetachBranch        ( const std::string & name ) = 0;
+    virtual bool                AttachBranch        ( const std::string & name, ISerializer * ser ) = 0;
+
+    virtual ISerializer *       CreateSerializer    () const = 0;
 };
 
 

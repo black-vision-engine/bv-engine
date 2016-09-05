@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Text.h"
 #include "TextAtlas.h"
 
@@ -24,6 +26,12 @@
 #include "Assets/Assets.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 #include "Assets/Texture/TextureUtils.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { 

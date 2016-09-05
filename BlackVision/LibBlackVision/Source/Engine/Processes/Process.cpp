@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "Process.h"
 
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv

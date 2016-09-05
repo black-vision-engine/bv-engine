@@ -1,17 +1,26 @@
+#include "stdafx.h"
+
 #include "OffsetTimeEvaluator.h"
 #include "Serialization/ISerializer.h"
+
 #include "Serialization/SerializationHelper.h"
-//#include "Serialization/SerializationObjects.h"
-//#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.inl"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 
 // *******************************
 //
-OffsetTimeEvaluator::OffsetTimeEvaluator                    ( const std::string & name, TimeType offsetTime )
+OffsetTimeEvaluator::OffsetTimeEvaluator                    ( const std::string & name, TimeType offsetTime, TimeType scale )
     : Parent( name )
     , m_globalTime( 0.f )
     , m_timeOffset( offsetTime )
+    , m_timeScale( scale )
 {
 }
 
@@ -23,29 +32,40 @@ OffsetTimeEvaluator::~OffsetTimeEvaluator                   ()
 
 // *******************************
 //
-void                OffsetTimeEvaluator::Serialize           ( ISerializer& sob ) const
+void                OffsetTimeEvaluator::Serialize           ( ISerializer& ser ) const
 {
-    sob.EnterChild( "timeline" );
-    sob.SetAttribute( "name", GetName() );
-    sob.SetAttribute( "type", "offset" );
+    ser.EnterChild( "timeline" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "offset" );
+    SerializationHelper::SerializeAttribute( ser, m_timeOffset, "offset" );
 
-    sob.EnterChild( "children" );
+    ser.EnterArray( "children" );
     for( auto child : m_children )
-        child->Serialize( sob );
-    sob.ExitChild(); // children
+        child->Serialize( ser );
+    ser.ExitChild(); // children
 
-    sob.ExitChild();
+    ser.ExitChild();
 }
 
 // *******************************
 //
-ISerializablePtr     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
+OffsetTimeEvaluatorPtr     OffsetTimeEvaluator::Create             ( const std::string & name, TimeType offsetTime, TimeType scale )
+{
+    return OffsetTimeEvaluatorPtr( new OffsetTimeEvaluator( name, offsetTime, scale ) );
+}
+
+// *******************************
+//
+OffsetTimeEvaluatorPtr     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
 {
     auto name = dob.GetAttribute( "name" );
 
-    auto te = std::make_shared< OffsetTimeEvaluator >( name, 0.f ); // FIXME load offset
+    auto offset = SerializationHelper::String2T< float >( dob.GetAttribute( "offset" ), 0.f );
+    auto scale = SerializationHelper::String2T< float >( dob.GetAttribute( "scale" ), 1.f );
 
-    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
+    auto te = OffsetTimeEvaluator::Create( name, offset, scale );
+
+    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );
@@ -71,7 +91,27 @@ void                OffsetTimeEvaluator::SetGlobalTimeImpl  ( TimeType t )
 //
 TimeType            OffsetTimeEvaluator::GetLocalTime       () const
 {
-    return m_globalTime + m_timeOffset;
+    return ( m_globalTime + m_timeOffset ) * m_timeScale;
+}
+
+// ***********************
+//
+const std::string&        OffsetTimeEvaluator::GetType             ()
+{
+    return Type();
+}
+
+// ***********************
+//
+namespace {
+const std::string OffsetTimeEvaluatorType = "OffsetTimeEvaluator";
+} //annonymous
+
+// ***********************
+//
+const std::string&        OffsetTimeEvaluator::Type                ()
+{
+    return OffsetTimeEvaluatorType;
 }
 
 } //model

@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "IndexBuffer.h"
 
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

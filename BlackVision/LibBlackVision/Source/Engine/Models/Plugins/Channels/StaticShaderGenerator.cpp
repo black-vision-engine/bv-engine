@@ -1,9 +1,19 @@
+#include "stdafx.h"
+
 #include "StaticShaderGenerator.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 
 #include "System/Path.h"
+
+#include "UseLoggerLibBlackVision.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { namespace model {
 
@@ -14,12 +24,14 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
     std::string filename = GenerateFilename( uids );
     if( Path::Exists( filename ) )
     {
-        std::cout << "Loading pixel shader from: " << filename << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "Loading pixel shader from: " << filename;
         return ReadShaderContentsFromFile( filename );
     }
+    else if( uids.size() == 1 && uids[ 0 ] == "DEFAULT_TRANSFORM" ) // FIXME (?)
+        return "";
     else
     {
-        std::cout << "File: " << filename << " does not exist. Loading default shader." << std::endl;
+        LOG_MESSAGE( SeverityLevel::error ) << "File: " << filename << " does not exist. Loading default shader.";
 		
 		filename = m_shadersDir + "default." + m_shaderExtension;
 
@@ -27,7 +39,7 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
 			return ReadShaderContentsFromFile( filename );
 		else
 		{
-			std::cout << "File: " << filename << " does not exist. Loading default shader failed!!!" << std::endl;
+            LOG_MESSAGE( SeverityLevel::critical ) << "File: " << filename << " does not exist. Loading default shader failed!!!";
 			assert( false );
 			return "";
 		}

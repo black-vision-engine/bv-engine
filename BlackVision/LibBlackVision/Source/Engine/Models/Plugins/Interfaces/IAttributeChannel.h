@@ -11,12 +11,13 @@ namespace bv { namespace model
 {
 
 class IAttributeChannelDescriptor;
+DEFINE_CONST_PTR_TYPE( IAttributeChannelDescriptor );
 
 class IAttributeChannel : public IChannel
 {
 public:
 
-    virtual const IAttributeChannelDescriptor *     GetDescriptor   ()  const = 0;
+    virtual IAttributeChannelDescriptorConstPtr     GetDescriptor   ()  const = 0;
 
     virtual std::string                             GetName         ()  const = 0;
     

@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "DefaultFinalizePixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {
@@ -22,6 +30,13 @@ DefaultFinalizePixelShaderChannel::~DefaultFinalizePixelShaderChannel   ()
 
 // *********************************
 //
+IPixelShaderChannelPtr	DefaultFinalizePixelShaderChannel::GetChannel			() const
+{
+	return m_channel;
+}
+
+// *********************************
+//
 RendererContextConstPtr  DefaultFinalizePixelShaderChannel::GetRendererContext  () const
 {
     return m_channel->GetRendererContext();
@@ -32,6 +47,20 @@ RendererContextConstPtr  DefaultFinalizePixelShaderChannel::GetRendererContext  
 std::string     DefaultFinalizePixelShaderChannel::GetShaderSource  ( const std::vector< std::string > & uids ) const
 {
     return m_staticShaderGenerator.GenerateShaderSource( uids );
+}
+
+// *********************************
+//
+UInt64			DefaultFinalizePixelShaderChannel::GetTexturesDataUpdateID		() const
+{
+	return m_channel->GetTexturesDataUpdateID();
+}
+
+// *********************************
+//
+UInt64			DefaultFinalizePixelShaderChannel::GetRendererContextUpdateID	() const
+{
+	return m_channel->GetRendererContextUpdateID();
 }
 
 } //model

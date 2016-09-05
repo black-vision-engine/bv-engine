@@ -43,7 +43,7 @@ public:
 	UInt32										GetHeight					() const;
 	TextureFormat								GetFormat					() const;
 
-
+    virtual SizeType                            EstimateMemoryUsage         () const override;
 
 	virtual bool								IsCacheable					() const override;
 

@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "BaseEvent.h"
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -19,18 +27,10 @@ TimeType    BaseEvent::GetTimeStamp     () const
 
 // *************************************
 //
-void        BaseEvent::Serialize        ( std::ostringstream & out ) const
+void        BaseEvent::Serialize        ( ISerializer& /*ser*/ ) const
 {
-    { out; } // FIXME: suppress unused warning
     //Default implemenation is empty
 }
 
-// *************************************
-//
-void        BaseEvent::Deserialize      ( std::istringstream & in )
-{
-    { in; } // FIXME: suppress unused warning
-    //Default implemenation is empty
-}
 
 } //bv

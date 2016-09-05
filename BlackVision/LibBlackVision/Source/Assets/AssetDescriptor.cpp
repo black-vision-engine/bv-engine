@@ -1,7 +1,15 @@
+#include "stdafx.h"
+
 #include "AssetDescriptor.h"
 
 #include <cassert>
 #include <algorithm>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -11,7 +19,7 @@ namespace bv
 std::string			AssetDesc::GetKey		() const
 {
     assert( false );
-	return "";
+    return "";
 }
 
 

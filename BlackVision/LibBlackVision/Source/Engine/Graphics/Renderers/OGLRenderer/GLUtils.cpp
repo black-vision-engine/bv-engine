@@ -1,8 +1,16 @@
+#include "stdafx.h"
+
 #include "glutils.h"
 
 #include <cstdio>
 
 #include "BVGL.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

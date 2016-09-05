@@ -1,10 +1,22 @@
+#include "stdafx.h"
+
 #include "TextureUtils.h"
 
 #include "MipMapBuilder.h"
 #include "Assets/Cache/RawDataCache.h"
 #include "ProjectManager.h"
+#include "Assets/Thumbnail/Impl/TextureAssetThumbnail.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "DataTypes/Hash.h"
 
 #include <cassert>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv {
 
@@ -350,7 +362,7 @@ SingleTextureAssetConstPtr	TextureUtils::GetFromRawDataCache	( const SingleTextu
 
 	if( mChunk )
 	{
-		return SingleTextureAsset::Create( mChunk, key, desc->GetWidth(), desc->GetHeight(), desc->GetFormat(), true );
+        return SingleTextureAsset::Create( mChunk, key, desc->GetWidth(), desc->GetHeight(), TextureUtils::NearestSupportedTextureFormat( desc->GetFormat() ), true );
 	}
 	else
 	{
@@ -411,6 +423,49 @@ void TextureUtils::AddToRawDataCache( const TextureAssetConstPtr & textureRes )
 			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData(),  mm->GetLevel( i )->GetCacheOnHardDrive() );
 		}
 	}
+}
+
+// ******************************
+//
+ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & desc )
+{
+    auto texPath = desc->GetOrigTextureDesc()->GetImagePath();
+
+    auto absTexPath = ProjectManager::GetInstance()->ToAbsPath( texPath );
+
+    auto thumbPath = AssetAccessor::GetThumbnailPath( absTexPath );
+
+    auto h = Hash::FromFile( absTexPath.Str() );
+
+    if( Path::Exists( thumbPath ) )
+    {
+        JsonDeserializeObject deser;
+        deser.LoadFile( thumbPath.Str() );
+
+        auto thumb = TextureAssetThumbnail::Create( deser );
+
+        if( h == thumb->GetHash() )
+        {
+            return thumb;
+        }
+
+    }
+
+    auto t = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
+
+    auto resized = image::MakeThumbnai( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128 );
+
+    auto compresed = image::SaveTGAToHandle( resized, 128, 128, 32 );
+
+    auto thumb = TextureAssetThumbnail::Create( compresed, h );
+
+    JsonSerializeObject ser;
+
+    thumb->Serialize( ser );
+
+    ser.Save( thumbPath.Str() );
+
+    return thumb;
 }
 
 }  // bv

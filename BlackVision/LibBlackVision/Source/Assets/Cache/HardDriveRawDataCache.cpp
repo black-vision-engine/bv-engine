@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HardDriveRawDataCache.h"
 
 #include "System/Path.h"
@@ -6,6 +8,12 @@
 
 
 static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache/";
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -28,8 +36,6 @@ void		HardDriveRawDataCache::ScanCacheDir	()
 	else
 	{
 		auto files = Dir::ListFiles( RAW_DATA_CACHE_DIR, "*" );
-
-		files.erase( files.begin() , files.begin() + 2 ); // Removing . and ..
 
 		for( auto f : files )
 		{

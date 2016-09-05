@@ -1,7 +1,18 @@
+#include "stdafx.h"
+
 #include "EventManager.h"
+
+#include "System/Time.h"
 
 #include <cassert>
 #include <list>
+#include <chrono>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv
 {
@@ -11,6 +22,7 @@ namespace bv
 EventManager::EventManager                  ()
     : m_activeQueue( 0 )
     , m_activeconcurrentQueue( 0 )
+    , m_numLockedFrames( 0 )
 {
 }
 
@@ -156,8 +168,11 @@ bool    EventManager::AbortEvent            ( const EventType & type, bool allOf
 //
 bool    EventManager::Update                ( unsigned long maxEvaluationMillis )
 {
-	unsigned long curMillis = timeGetTime();
-    unsigned long maxMillis = ( ( maxEvaluationMillis == IEventManager::millisINFINITE ) ? ( IEventManager::millisINFINITE ) : ( curMillis + maxEvaluationMillis ) );
+    auto curMillis = Time::Now();
+    auto maxMillis = ( ( maxEvaluationMillis == IEventManager::millisINFINITE ) ? ( IEventManager::millisINFINITE ) : ( curMillis + maxEvaluationMillis ) );
+
+    if( m_numLockedFrames > 0 )
+        m_numLockedFrames--;
 
     //Multithreaded part
     unsigned int activeConcurrentQueue = m_activeconcurrentQueue;
@@ -171,7 +186,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     {
         QueueEvent( concurrentEvent );
         
-        curMillis = timeGetTime();
+        curMillis = Time::Now();
 
         if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
@@ -185,7 +200,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
 
     m_queues[ m_activeQueue ].Clear();
 
-    while( !m_queues[ activeQueue ].IsEmpty() )
+    while( !m_queues[ activeQueue ].IsEmpty() && m_numLockedFrames == 0 )
     {
         IEventPtr evt = m_queues[ activeQueue ].Front();
         m_queues[ activeQueue ].Pop();
@@ -199,7 +214,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
             listener( evt );
         }
 
-        curMillis = timeGetTime();
+        curMillis = Time::Now();
 
         if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
@@ -238,6 +253,21 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     return pendingEvents;
 }
 
+// *******************************
+//
+void EventManager::QueueResponse       ( const IEventPtr evt )
+{
+    ConcurrentQueueEvent( evt );
+}
+
+
+void EventManager::LockEvents           ( unsigned int numFrames )
+{
+    if( numFrames > 0 )
+        m_numLockedFrames = numFrames;
+}
+
+
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services
 IEventManager &     GetDefaultEventManager  ()
 {
@@ -252,6 +282,11 @@ IEventManager &     GetDefaultEventManager  ()
     }
 
     return instance;
+}
+
+const EventFactory &            EventManager::GetEventFactory()
+{
+    return m_eventFactory;
 }
 
 } //bv

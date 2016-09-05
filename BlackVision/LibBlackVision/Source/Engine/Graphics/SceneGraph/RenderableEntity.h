@@ -18,6 +18,8 @@ public:
         RT_TRIANGLE_STRIP,
         RT_TRIANGLE_MESH,
 
+        RT_LINES,
+
         RT_TOTAL
     };
 

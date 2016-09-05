@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Utils.h" />
     <ClInclude Include="..\..\..\Source\ThreadSafeQueue.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
     <ClInclude Include="..\..\..\Source\VideoCardBase.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
     <ClInclude Include="..\..\..\Source\VideoMidgard.h" />

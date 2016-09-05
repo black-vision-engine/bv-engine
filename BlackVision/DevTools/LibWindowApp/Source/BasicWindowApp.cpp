@@ -6,11 +6,15 @@
 
 #include "System/InitSubsystem.h"
 
+#include "System/Time.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Tools/HRTimer.h"
+
+#include "Application/ApplicationContext.h"
 
 namespace bv {
 
@@ -83,16 +87,20 @@ void BasicWindowApp::OnPreidle  ()
 
 // *********************************
 //
-void BasicWindowApp::OnIdle		()
+bool BasicWindowApp::OnIdle		()
 {
-    static DWORD curMillis = timeGetTime();
+    static auto curMillis = Time::Now();
+	auto timeDiff = Time::Now() - curMillis;
 
-    m_appLogic->Update( float( timeGetTime() - curMillis ) * 0.001f );
+	ApplicationContext::Instance().SetTimestamp( timeDiff );
+
+    m_appLogic->Update( float( timeDiff ) * 0.001f );
 
 	m_appLogic->Render();
 
     m_Renderer->DisplayColorBuffer();
 	
+    return true;
 }
 
 // *********************************
@@ -109,7 +117,7 @@ bool BasicWindowApp::OnInitialize       ()
 
     m_Renderer->SetCamera( cam );
 
-	m_appLogic = CreateLogic( m_Renderer );
+	m_appLogic = CreateLogic( m_Renderer, m_audioRenderer );
 	m_appLogic->Initialize();
 
     return true;

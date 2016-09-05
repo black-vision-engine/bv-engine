@@ -5,75 +5,97 @@ namespace bv { namespace model {
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
-inline   void       ParamTransform::SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t )
+inline   void       ParamTransform::SetRotation     ( const glm::vec3 & eulerAngles, TimeType t )
 {
-    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
-    {
-        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::rotation )
-        {
-            static_cast< RotationF * >( m_transformModel[ i ] )->SetRotation( t, rotAxis, angle );
-
-            return;
-        }
-    }
+    m_transformModel.SetRotation( eulerAngles, t );
 }
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
 inline   void       ParamTransform::SetScale        ( const glm::vec3 & scale, TimeType t )
 {
-    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
-    {
-        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::scale )
-        {
-            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->SetVecVal( t, scale );
-
-            return;
-        }
-    }
+    m_transformModel.SetScale( scale, t );
 }
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
 inline   void       ParamTransform::SetTranslation  ( const glm::vec3 & translation, TimeType t )
 {
-    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
-    {
-        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::translation )
-        {
-            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->SetVecVal( t, translation );
-
-            return;
-        }
-    }
+    m_transformModel.SetTranslation( translation, t );
 }
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
 inline  void        ParamTransform::SetCenter       ( const glm::vec3 & center, TimeType t )
 {
-    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
-    {
-        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::fwd_center )
-        {
-            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->SetVecVal( t, center );
-        }
-        else if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::inv_center )
-        {
-            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->SetVecVal( t, -center );
-        }
-    }
+    m_transformModel.SetCenter( center, t );
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveRotation      ( TimeType t )
+{
+    m_transformModel.RemoveRotation( t );
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveScale         ( TimeType t )
+{
+    m_transformModel.RemoveScale( t );
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveTranslation   ( TimeType t )
+{
+    m_transformModel.RemoveTranslation( t );
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveCenter        ( TimeType t )
+{
+    m_transformModel.RemoveCenter( t );
+}
+
+// ***********************
+//
+inline  bool ParamTransform::MoveRotation      ( TimeType t, TimeType newTime )
+{
+    return m_transformModel.MoveRotation( t, newTime );
+}
+
+// ***********************
+//
+inline  bool ParamTransform::MoveScale         ( TimeType t, TimeType newTime )
+{
+    return m_transformModel.MoveScale( t, newTime );
+}
+
+// ***********************
+//
+inline  bool ParamTransform::MoveTranslation   ( TimeType t, TimeType newTime )
+{
+    return m_transformModel.MoveTranslation( t, newTime );
+}
+
+// ***********************
+//
+inline  bool ParamTransform::MoveCenter        ( TimeType t, TimeType newTime )
+{
+    return m_transformModel.MoveCenter( t, newTime );
 }
 
 // *******************************
-// FIXME: reimplement with SQT paramter model
-inline  TransformF& ParamTransform::Transform       ()
+//
+inline  CompositeTransform & ParamTransform::Transform       ()
 {
     return m_transformModel;
 }
 
 // *******************************
-// FIXME: reimplement with SQT paramter model
+//
 inline  glm::mat4   ParamTransform::Evaluate        () const
 {
     auto t = AbstractModelParameter::GetLocalEvaluationTime();
@@ -81,139 +103,11 @@ inline  glm::mat4   ParamTransform::Evaluate        () const
     return m_transformModel.Evaluate( t );
 }
 
-// ****************************************************************************************************************************
-
-//// *******************************
-////
-//inline void                ParamTransformVec::SetInterpolationMethod ( IParameter::InterpolationMethod method )
-//{
-//    __super::SetInterpolationMethod( method );
-//    for( auto& transform : m_transformModelVec )
-//    {
-//        for( unsigned int i = 0; i < transform.Size(); ++i )
-//        {
-//            transform[ i ]->GetP0MotylaNoga().SetInterpolationMethod( method );
-//            transform[ i ]->GetP1MotylaNoga().SetInterpolationMethod( method );
-//            transform[ i ]->GetP2MotylaNoga().SetInterpolationMethod( method );
-//        }
-//    }
-//}
+// *************************************
 //
-//// *******************************
-////
-//inline IParameter::InterpolationMethod ParamTransformVec::GetInterpolationMethod () const
-//{
-//    auto method = __super::GetInterpolationMethod();
-//
-//    // just to make sure
-//    for( auto& transform : m_transformModelVec )
-//    {
-//        for( unsigned int i = 0; i < transform.Size(); ++i )
-//        {
-//            assert( transform[ i ]->GetP0MotylaNoga().GetInterpolationMethod() == method );
-//            assert( transform[ i ]->GetP1MotylaNoga().GetInterpolationMethod() == method );
-//            assert( transform[ i ]->GetP2MotylaNoga().GetInterpolationMethod() == method );
-//        }
-//    }
-//
-//    return method;
-//}
-
-// *******************************
-//
-inline unsigned int  ParamTransformVec::NumTransforms   () const
+inline ModelParamType ParamTransform::Type          ()
 {
-    return (unsigned int) m_transformModelVec.size();
-}
-
-// *******************************
-// FIXME: reimplement with SQT paramter model
-inline  void        ParamTransformVec::SetRotation      ( unsigned int transformNum, const glm::vec3 & rotAxis, float angle, TimeType t )
-{
-    assert( transformNum < NumTransforms() );
-
-    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
-    {
-        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::rotation )
-        {
-            static_cast< RotationF * >( m_transformModelVec[ transformNum ][ i ] )->SetRotation( t, rotAxis, angle );
-
-            return;
-        }
-    }
-}
-
-// *******************************
-// FIXME: reimplement with SQT paramter model
-inline  void        ParamTransformVec::SetScale         ( unsigned int transformNum, const glm::vec3 & scale, TimeType t )
-{
-    assert( transformNum < NumTransforms() );
-
-    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
-    {
-        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::scale )
-        {
-            static_cast< RotationF * >( m_transformModelVec[ transformNum ][ i ] )->SetVecVal( t, scale );
-
-            return;
-        }
-    }
-}
-
-// *******************************
-// FIXME: reimplement with SQT paramter model
-inline  void        ParamTransformVec::SetTranslation   ( unsigned int transformNum, const glm::vec3 & translation, TimeType t )
-{
-    assert( transformNum < NumTransforms() );
-
-    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
-    {
-        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::translation )
-        {
-            static_cast< RotationF * >( m_transformModelVec[ transformNum ][ i ] )->SetVecVal( t, translation );
-
-            return;
-        }
-    }
-}
-
-// *******************************
-// FIXME: reimplement with SQT paramter model
-inline  void        ParamTransformVec::SetCenter   ( unsigned int transformNum, const glm::vec3 & center, TimeType t )
-{
-    assert( transformNum < NumTransforms() );
-
-    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
-    {
-        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::fwd_center )
-        {
-            static_cast< RotationF * >( m_transformModelVec[ transformNum ][ i ] )->SetVecVal( t, center );
-        }
-        else if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::inv_center )
-        {
-            static_cast< RotationF * >( m_transformModelVec[ transformNum ][ i ] )->SetVecVal( t, -center );
-        }
-    }
-}
-
-// *******************************
-// FIXME: reimplement with SQT paramter model
-inline  TransformF & ParamTransformVec::Transform       ( unsigned int transformNum )
-{
-    assert( transformNum < NumTransforms() );
-
-    return m_transformModelVec[ transformNum ];
-}
-
-// *******************************
-// FIXME: reimplement with SQT paramter model
-inline  glm::mat4   ParamTransformVec::Evaluate         ( unsigned int transformNum ) const
-{
-    assert( transformNum < NumTransforms() );
-
-    auto t = AbstractModelParameter::GetLocalEvaluationTime();
-
-    return m_transformModelVec[ transformNum ].Evaluate( t );
+    return ModelParamType::MPT_TRANSFORM;
 }
 
 } //model

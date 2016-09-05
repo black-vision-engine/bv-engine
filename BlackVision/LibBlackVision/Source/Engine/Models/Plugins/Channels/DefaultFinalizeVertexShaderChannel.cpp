@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "DefaultFinalizeVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {

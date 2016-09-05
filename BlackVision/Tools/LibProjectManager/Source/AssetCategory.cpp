@@ -88,9 +88,16 @@ void					AssetCategory::ExportAll	( const Path & expAssetFilePath ) const
 
 // ********************************
 //
-PathVec					AssetCategory::ListAssets	( const Path & path ) const
+PathVec					AssetCategory::ListAssets	( const Path & path, bool recursive ) const
 {
-	return m_assetAccessor->ListAll( path );
+	return m_assetAccessor->ListAll( path, recursive );
+}
+
+// ********************************
+//
+UInt64                  AssetCategory::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return m_assetAccessor->GetAssetSizeInBytes( path );
 }
 
 } // bv

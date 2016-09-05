@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FreeTypeEngine.h"
 
 #include "Assets/Font/Glyph.h"
@@ -21,6 +23,12 @@
 #include <vector>
 #include <map>
 #include <cmath>
+
+
+
+#include "Memory/MemoryLeaks.h"
+
+
 
 namespace bv { 
 
@@ -269,7 +277,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 				//	imgHeight = (int)rect.Height(),
 				//	imgSize = imgWidth * imgHeight;
 
-				auto newGlyph = new Glyph();
+				auto newGlyph = new Glyph;
 
 				newGlyph->code = ch;
 				newGlyph->size = m_fontSize;
@@ -313,7 +321,7 @@ size_t GetSizeOfFile( const std::wstring& path )
 	_wstat(path.c_str(), &fileinfo);
 	return fileinfo.st_size;
 }
-
+} // anonymous
 // *******************************
 //
 std::wstring LoadUtf8FileToString(const std::wstring & _filename)
@@ -348,7 +356,7 @@ std::wstring LoadUtf8FileToString(const std::wstring & _filename)
 
 	return buffer;
 }
-} // anonymous
+
 
 // *********************************
 //

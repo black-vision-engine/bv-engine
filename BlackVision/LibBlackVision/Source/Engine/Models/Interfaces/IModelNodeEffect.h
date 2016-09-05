@@ -2,17 +2,33 @@
 
 #include "CoreDEF.h"
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Types//Enums.h"
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Interfaces/IValue.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
+#include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
+#include "Assets/AssetDescriptor.h"
 
 namespace bv { namespace model {
 
-class IModelNodeEffect : public bv::IUpdatable
+class IModelNodeEffect : public bv::IUpdatable, public bv::ISerializable
 {
 public:
 
-    virtual NodeEffectType  GetType             () const = 0;
+    virtual                                         ~IModelNodeEffect       () {};
 
-    virtual                 ~IModelNodeEffect   () {};
+    virtual void                                    Serialize               ( ISerializer & ser ) const = 0;
+
+    virtual void                                    Update                  ( TimeType t ) = 0;
+    virtual NodeEffectType			                GetType			        () const = 0;
+
+    virtual UInt32                                  NumRequiredAssets       () const = 0;
+    virtual bool                                    RemoveAsset             ( SizeType idx ) = 0;
+    virtual bool                                    AddAsset                ( const AssetDescConstPtr & assetDesc, SizeType idx ) = 0;
+    virtual AssetDescVec                            GetAssets               () const = 0;
+    virtual void                                    RegisterEvaluator       ( IParamValEvaluatorPtr paramEval ) = 0;
+    virtual IParameterPtr                           GetParameter            ( const std::string & name ) const = 0;
+    virtual const std::vector< IParameterPtr > &    GetParameters           () const = 0;
+    virtual const std::vector< IValueConstPtr > &   GetValues               () const = 0;
 
 };
 

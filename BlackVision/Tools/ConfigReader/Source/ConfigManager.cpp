@@ -2,10 +2,20 @@
 
 #include "rapidxml.hpp"
 
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+
+#include "rapidxml_print.hpp"
+
+#pragma warning( pop )
+
 #include "win_sock.h"
 #include "INIReader.h"
 #include <iostream>
 #include <direct.h>
+
+#include "Tools/StringHeplers.h"
+#include "IO/FileIO.h"
 
 #define GetCurrentDir _getcwd
 
@@ -113,6 +123,75 @@ wstring ExePath()
          return true;
     }
 
+
+    void AppendConfigNode( xml_document<>* document, xml_node<>* parentNode, const KeyValue& keyValue, StrVec& configPathVec )
+    {
+        std::string& pathElement = configPathVec[ 0 ];
+
+
+        xml_node<>* childNode = nullptr;
+
+        //Find node with attribute name set to pathElement.c_str()
+        xml_node<>* tmpNode = parentNode->first_node();
+        while( tmpNode )
+        {
+            if( auto nameAttrib = tmpNode->first_attribute( "name" ) )
+            {
+                if( nameAttrib->value() == pathElement )
+                {
+                    childNode = tmpNode;
+                    break;
+                }
+            }
+
+            tmpNode = tmpNode->next_sibling();
+        }
+
+
+        if( !childNode )
+        {
+            childNode = document->allocate_node( node_element, "property" );
+            childNode->append_attribute( document->allocate_attribute( "name", document->allocate_string( pathElement.c_str() ) ) );
+            parentNode->append_node( childNode );
+        }
+
+        configPathVec.erase( configPathVec.begin() );
+        if( configPathVec.empty() )
+        {
+            childNode->append_attribute( document->allocate_attribute( "value", keyValue.value.c_str() ) );
+        }
+        else
+        {
+            AppendConfigNode( document, childNode, keyValue, configPathVec );
+        }
+    }
+
+    bool ConfigManager::SaveXMLConfig()
+    {
+        xml_document<> document;
+        xml_node<>* config = document.allocate_node( node_element, "config", "" );
+
+        document.append_node( config );
+
+        for( auto& keyValue : Properties )
+        {
+            auto configPathVec = Split( keyValue.key, "/" );
+            AppendConfigNode( &document, config, keyValue, configPathVec );
+        }
+
+        std::string configContent;
+        print( std::back_inserter( configContent ), document, 0);
+
+        wstring wExePath = ExePath();
+		std::string configFilePath = std::string( wExePath.begin(), wExePath.end() ) + "/config.xml";
+
+        File configFile = File::Open( configFilePath, File::FOMReadWrite );
+        configFile.Write( configContent );
+        configFile.Close();
+
+        return true;
+    }
+
     KeyValue ConfigManager::GetValue(std::string key)
     {
         for(unsigned int i=0;i<Properties.size();i++)
@@ -165,5 +244,51 @@ wstring ExePath()
 		MediaFolder = path;
 		return true;
 	};
+
+    // ***********************
+    //
+    KeyValue&       ConfigManager::GetOrCreateValue            ( const std::string& key )
+    {
+        for( unsigned int i = 0; i < Properties.size(); i++ )
+        {
+            if( Properties[i].key == key )
+                return Properties[i];
+        }
+
+        Properties.push_back( KeyValue( key, "" ) );
+        return Properties.back();
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetBool     ( const std::string& key, bool value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = std::to_string( value );
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetInt      ( const std::string& key, int value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = std::to_string( value );
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetString   ( const std::string& key, const std::string& value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = value;
+    }
+
+    // ***********************
+    //
+    void             ConfigManager::SetFloat    ( const std::string& key, float value )
+    {
+        auto& keyValue = GetOrCreateValue( key );
+        keyValue.value = std::to_string( value );
+    }
     
 }

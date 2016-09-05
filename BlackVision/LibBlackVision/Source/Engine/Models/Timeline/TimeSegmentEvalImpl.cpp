@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #include "TimeSegmentEvalImpl.h"
 
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {
@@ -145,6 +153,7 @@ TimeType    TimeSegmentEvalImpl::GlobalToLocal      ( TimeType t ) const
 void        TimeSegmentEvalImpl::SetWrapBehaviorPre  ( TimelineWrapMethod method )
 {
     SetWrapEvaluatorPre( method );
+	m_wrapPreBehavior = method;
 }
 
 // *********************************
@@ -152,6 +161,7 @@ void        TimeSegmentEvalImpl::SetWrapBehaviorPre  ( TimelineWrapMethod method
 void        TimeSegmentEvalImpl::SetWrapBehaviorPost ( TimelineWrapMethod method )
 {
     SetWrapEvaluatorPost( method );
+	m_wrapPostBehavior = method;
 }
 
 // *********************************
@@ -174,6 +184,13 @@ TimelineWrapMethod      TimeSegmentEvalImpl::GetWrapPre          () const
 TimelineWrapMethod      TimeSegmentEvalImpl::GetWrapPost         () const
 {
     return m_wrapPostBehavior;
+}
+
+// *********************************
+//
+void		TimeSegmentEvalImpl::SetDuration         ( TimeType duration )
+{
+    m_duration = duration;
 }
 
 // *********************************

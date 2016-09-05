@@ -12,7 +12,11 @@ public:
 
 public:
 
-    CullContext();
+							CullContext		();
+
+    CullContext *			Clone			() const;
+
+    void			        SetContext	    ( const CullContext * ctx );
 
 };
 

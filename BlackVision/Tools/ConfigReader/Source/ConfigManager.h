@@ -20,14 +20,22 @@ public:
 	static bool LoadConfig();
 
     static bool LoadXMLConfig();
+    static bool SaveXMLConfig();
 
-    static KeyValue GetValue(std::string key);
-    static bool GetBool(std::string key);
-    static int GetInt(std::string key);
-    static std::string GetString(std::string key);
-    static float GetFloat(std::string key);
+    static KeyValue&        GetOrCreateValue    ( const std::string& key );
+    static KeyValue         GetValue            ( std::string key );
 
-	static std::string GetPath(){return MediaFolder;}
+    static bool             GetBool     ( std::string key );
+    static int              GetInt      ( std::string key );
+    static std::string      GetString   ( std::string key );
+    static float            GetFloat    ( std::string key );
+
+    static void             SetBool     ( const std::string& key, bool value );
+    static void             SetInt      ( const std::string& key, int value );
+    static void             SetString   ( const std::string& key, const std::string& value );
+    static void             SetFloat    ( const std::string& key, float value );
+
+	static std::string      GetPath     ()  { return MediaFolder;   }
     
 
 	ConfigManager(void);

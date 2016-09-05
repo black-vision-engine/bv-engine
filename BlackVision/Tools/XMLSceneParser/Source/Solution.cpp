@@ -1,6 +1,6 @@
 #include "Solution.h"
 #include "structure/AssetManager.h"
-#include "Log.h"
+#include "UseLoggerXMLModule.h"
 #include <iostream>
 
 using namespace std;
@@ -19,7 +19,7 @@ namespace bv
 		}
 		else {
 			f.close();
-			Log::A("error", "Error LoadSolution() solution [" + BB::AssetManager::GetSolution(solution) + "] not found");
+			LOG_MESSAGE( SeverityLevel::error ) << "Error LoadSolution() solution [" + BB::AssetManager::GetSolution(solution) + "] not found";
 			return false;
 		}
 
@@ -63,10 +63,10 @@ namespace bv
 
         // create scenes
 
-        auto TimeLineDefault = timelineManager->CreateDefaultTimelineImpl( "default", TimeType( 50.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+        auto TimeLineDefault =model::TimelineHelper::CreateDefaultTimeline( "default", TimeType( 50.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
         timelineManager->AddStopEventToTimeline( TimeLineDefault, "stop1", TimeType( 0.0 ) );
-        auto timeline_default = timelineManager->CreateOffsetTimeEvaluator( "timeline_default" , TimeType( 0.0 ) );
-        auto timeline_default_alpha = timelineManager->CreateOffsetTimeEvaluator( "timeline_default_alpha" , TimeType( 0.0 ) );
+        auto timeline_default = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline_default" , TimeType( 0.0 ) );
+        auto timeline_default_alpha = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline_default_alpha" , TimeType( 0.0 ) );
         TimeLineDefault->AddChild( timeline_default );
         TimeLineDefault->AddChild( timeline_default_alpha );
         timelineManager->AddTimeline(TimeLineDefault);
@@ -77,8 +77,6 @@ namespace bv
         // root node
 
         root = BasicNode::Create( "root",timeline_default_alpha );
-        root->AddPlugin( "DEFAULT_TRANSFORM", "transform", TimeLineDefault ); 
-
 
         for(unsigned int i=0;i<ScenesToLoad.size();i++)
         {

@@ -19,11 +19,12 @@ namespace bv
             
         //**************************************
 
-        void VideoMidgard::GetBufferFromRenderer (Texture2DConstPtr buffer)
+        void VideoMidgard::GetBufferFromRenderer ( Texture2DConstPtr buffer )
         {
             static bool makekillerframe = true;
-            m_threadsafebuffer.push(buffer);
-            if(makekillerframe)
+            m_threadsafebuffer.push( buffer );
+            
+			if( makekillerframe )
             {
                 m_killerFrame = buffer;
                 makekillerframe = false;
@@ -34,9 +35,14 @@ namespace bv
 
         void VideoMidgard::PushKillerFrame()
         {
-            m_threadsafebuffer.push(m_killerFrame);
+            m_threadsafebuffer.push( m_killerFrame );
         }
        
+		ThreadSafeQueue<Texture2DConstPtr,1> & VideoMidgard::Buffer()
+		{
+			return m_threadsafebuffer;
+		}
+
     }
 }
 

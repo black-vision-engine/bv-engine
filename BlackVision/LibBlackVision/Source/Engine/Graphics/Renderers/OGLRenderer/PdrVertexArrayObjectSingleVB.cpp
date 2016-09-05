@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexArrayObjectSingleVB.h"
 
 #include "Engine/Graphics/Resources/VertexArray.h"
@@ -9,6 +11,12 @@
 #include "Tools/HRTimer.h"
 
 #include <cassert>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv

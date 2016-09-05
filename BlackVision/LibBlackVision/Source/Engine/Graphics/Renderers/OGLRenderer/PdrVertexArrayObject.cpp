@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexArrayObject.h"
 
 #include <cassert>
@@ -9,6 +11,12 @@
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv

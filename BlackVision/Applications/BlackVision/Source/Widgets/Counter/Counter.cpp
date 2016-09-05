@@ -1,12 +1,28 @@
 #include "Counter.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Types/Values/ValuesFactory.h"
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+
+#include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Serialization/BV/BVDeserializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
+
+#include "Engine/Events/EventHandlerHelpers.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
+#include "Widgets/NodeLogicHelper.h"
+#include "Tools/StringHeplers.h"
+
 #include <string>
 #include <iostream>
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+
+
 namespace bv {
-namespace widgets {
+namespace nodelogic {
+
+
+const std::string   WidgetCounter::m_type = "counter";
+
+const std::string   WidgetCounter::PARAMETERS::VALUE        = "value";
+const std::string   WidgetCounter::PARAMETERS::PRECISION    = "precision";
 
 	
 // *******************************
@@ -18,46 +34,98 @@ WidgetCounterPtr	WidgetCounter::Create				( bv::model::BasicNode * parent,bv::mo
 
 }
 
-// ****************************
-//
-bv::model::IParameterPtr        WidgetCounter::GetValueParam       ()
+
+WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator)
+    : m_parentNode( parent )
 {
-    return m_param;
+    m_precision = AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::PRECISION, 3 )->Value();
+    auto valueEval = AddFloatParam( m_paramValModel, timeEvaluator, PARAMETERS::VALUE, 0.0 );
+
+    m_value = valueEval->Value();
+    valueEval->Parameter()->SetGlobalCurveType( CurveType::CT_LINEAR );
 }
 
 
-WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator): m_parentNode( parent )
-{
-	m_param = bv::model::ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
-	m_value = ValuesFactory::CreateValueFloat("alpha" );
-	m_isFinalized = true;
-    m_param->SetCurveType( CurveType::COSINE_LIKE );
-}
-
-
-WidgetCounter::~WidgetCounter(void)
-{
-}
+WidgetCounter::~WidgetCounter()
+{}
 
 
 // *******************************
 //
 void		WidgetCounter::Update				( TimeType T)
 {
-	{T;}
-	 m_value->SetValue( m_param->Evaluate() );
-	 //printf( "counter %f - %f - %f\r\n", T, m_param->Evaluate(),m_value->GetValue());
-	 bv::model::DefaultTextPlugin* txt = dynamic_cast< bv::model::DefaultTextPlugin* >( m_parentNode->GetPlugin("text").get() );
-	 std::wstring text;
-	 wchar_t buffer[12];
-	 swprintf(buffer,12,L"%.1f",m_value->GetValue());
-	 text = std::wstring(buffer);
-	 if( txt != nullptr )
-	 {
-	 	 model::DefaultTextPlugin::SetText( m_parentNode->GetPlugin("text"), text );
-	 }
+    NodeLogicBase::Update( T );
+
+    auto textPlugin = m_parentNode->GetPlugin( "text" );
+    if( textPlugin )
+    {
+        float value = m_value->GetValue();
+        int precision = m_precision->GetValue();
+        if( precision < 0 )
+            precision = 0;
+
+        std::wstringstream converter;
+        converter.precision( precision );
+        converter << std::fixed << value;
+
+        SetParameter( textPlugin->GetParameter( "text" ), 0.0, converter.str() );
+    }
 }
 
+
+// ***********************
+//
+void                WidgetCounter::Serialize       ( ISerializer & ser ) const
+{
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    assert( context != nullptr );
+
+    ser.EnterChild( "logic" );
+
+        ser.SetAttribute( "type", m_type );
+
+        if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
+        {
+            NodeLogicBase::Serialize( ser );
+        }
+
+    ser.ExitChild();
+}
+
+// ***********************
+//
+WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, bv::model::BasicNode * parent )
+{
+    auto timeline = SerializationHelper::GetDefaultTimeline( deser );
+
+    auto newCounter = WidgetCounter::Create( parent, timeline );
+    newCounter->Deserialize( deser );
+    
+    return newCounter;
+}
+
+// ***********************
+//
+bool                WidgetCounter::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& response, BVProjectEditor * /*editor*/ )
+{
+    response.SetAttribute( ERROR_INFO_STRING, "This logic supports no commands." );
+    return false;
+}
+
+
+// ***********************
+//
+const std::string &  WidgetCounter::Type            ()
+{
+    return m_type;
+}
+
+// ***********************
+//
+const std::string & WidgetCounter::GetType             () const
+{
+    return Type();
+}
 
 }
 }

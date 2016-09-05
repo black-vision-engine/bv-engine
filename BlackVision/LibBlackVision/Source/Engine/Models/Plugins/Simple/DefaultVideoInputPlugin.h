@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 //#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "CompositeVideoInputResourceDescr.h"
 
@@ -16,8 +16,6 @@ public:
 
 	virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
 	virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
-
-	virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
 
 	static  std::string                     UID                 ();
 

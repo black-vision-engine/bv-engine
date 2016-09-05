@@ -3,33 +3,31 @@
 #include "Engine/Models/BasicNode.h"
 #include "TestAI/TestKeyboardHandler.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
-
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffect.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 
 namespace bv {
 
-namespace model {
-
-class ModelNodeEffectDefault;
-class ModelNodeEffectAlphaMask;
-class ModelNodeEffectNodeMask;
-
-} // model
-
-
 class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 {
 private:
+	
+    BVProjectEditor *		 m_editor;
 
-    NodeEffectType          m_curSelectedNode;
+    model::ITimeEvaluatorPtr m_timeEval;
 
-    std::shared_ptr< model::ModelNodeEffectDefault >    m_defaultEffect;
-    std::shared_ptr< model::ModelNodeEffectAlphaMask >  m_alphaMaskEffect;
-    std::shared_ptr< model::ModelNodeEffectNodeMask >   m_nodeMaskEffect;
+    NodeEffectType           m_curSelectedNode;
+    
+    unsigned int            m_curWireframeNodeIdx;
+    unsigned int            m_curMixChannelsPreset;
+    bool                    m_wireframeDisabled;
+
+    model::IModelNodeEffectPtr  m_defaultEffect;
+    model::IModelNodeEffectPtr  m_alphaMaskEffect;
+    model::IModelNodeEffectPtr  m_nodeMaskEffect;
+    model::IModelNodeEffectPtr  m_wireframeEffect;
+    model::IModelNodeEffectPtr  m_mixChannelsEffect;
 
 public:
 
@@ -39,21 +37,27 @@ public:
         
 private:
 
-    void                    HandleIncrement     ( BVAppLogic * logic );
-    void                    HandleDecrement     ( BVAppLogic * logic );
-    void                    HandleSpace         ( BVAppLogic * logic );
-    void                    HandleToggleEffect  ( BVAppLogic * logic );
+    void                    HandleIncrement         ( BVAppLogic * logic );
+    void                    HandleDecrement         ( BVAppLogic * logic );
+    void                    HandleSpace             ( BVAppLogic * logic );
+    void                    HandleToggleEffect      ( BVAppLogic * logic );
+    void                    HandleMixChannels       ( BVAppLogic * logic );
 
-    model::BasicNodePtr     GetRootNode         ( BVAppLogic * logic );
-    model::BasicNodePtr     GetNodeByPath       ( BVAppLogic * logic, const std::string & path );
+    void                    SetNextMixChannelsPreset();
 
-    model::BasicNodePtr     GetVanillaNode      ( BVAppLogic * logic );
-    model::BasicNodePtr     GetAlphaMaskNode    ( BVAppLogic * logic );
-    model::BasicNodePtr     GetNodeMaskNode     ( BVAppLogic * logic );
-    model::BasicNodePtr     GetWireframeNode    ( BVAppLogic * logic );
+    model::BasicNodePtr     GetRootNode             ( BVAppLogic * logic );
+    model::BasicNodePtr     GetNodeByPath           ( BVAppLogic * logic, const std::string & path );
 
-    model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect   ( BVAppLogic * logic );
-    model::IModelNodeEffectPtr  GetNodeMaskNodeEffect    ( BVAppLogic * logic );
+    model::BasicNodePtr     GetVanillaNode          ( BVAppLogic * logic );
+    model::BasicNodePtr     GetAlphaMaskNode        ( BVAppLogic * logic );
+    model::BasicNodePtr     GetNodeMaskNode         ( BVAppLogic * logic );
+    model::BasicNodePtr     GetWireframeNode        ( BVAppLogic * logic );
+
+    model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect  ( BVAppLogic * logic );
+    model::IModelNodeEffectPtr  GetNodeMaskNodeEffect   ( BVAppLogic * logic );
+    model::IModelNodeEffectPtr  GetNodeWireframeEffect  ( BVAppLogic * logic, unsigned int idx );
+
+    model::BasicNodePtr         GetWireframeNode        ( BVAppLogic * logic, unsigned int idx );
 
 };
 

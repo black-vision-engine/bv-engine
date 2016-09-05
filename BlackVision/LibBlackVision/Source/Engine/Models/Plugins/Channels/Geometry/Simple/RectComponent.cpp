@@ -1,8 +1,16 @@
+#include "stdafx.h"
+
 #include "RectComponent.h"
 
 #include <cassert>
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model

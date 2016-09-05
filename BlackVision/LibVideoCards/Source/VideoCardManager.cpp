@@ -5,6 +5,9 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
+
+#include "UseLoggerVideoModule.h"
+
 namespace bv
 {
 
@@ -112,13 +115,13 @@ bool VideoCardManager::InitVideoCardManager(const std::vector<int> & hackBuffers
 	{        
 		InitVideoCards( hackBuffersUids );
     
-		Log::A("VideoCards","INFO","Detected " + to_string(GetVideoCardsSize()) + " videocard(s)");
+        LOG_MESSAGE( SeverityLevel::info ) << "Detected " + to_string( GetVideoCardsSize() ) + " videocard(s)";
 		
 		return true;
 	}
 	else
 	{
-		Log::A("VideoCards","ERROR","NO VIDEO CARDS DETECTED");
+		LOG_MESSAGE( SeverityLevel::error ) << "NO VIDEO CARDS DETECTED";
 		return false;
 	}
 }
@@ -282,7 +285,7 @@ void VideoCardManager::ResumeVideoCards()
 }
 //**************************************
 //
-unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
+unsigned int __stdcall VideoCardManager::copy_buffer_thread( void * args )
 {
 	VideoCardManager* pParams = (VideoCardManager*)args;
     static const unsigned int frames_count = 2;
@@ -296,29 +299,44 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
     bv::HighResolutionTimer GTimer;
     //unsigned char * FinalFrame = new unsigned char[fhd];
 
-    while(!pParams->m_midgardThreadStopping)
+    while( !pParams->m_midgardThreadStopping )
     {
         //double writeStart = GTimer.CurElapsed();
 
-        unsigned char *  frameBuf = (unsigned char*)pParams->m_Midgard->m_threadsafebuffer.pop().get()->GetData()->Get();// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
-        //unsigned char *  frameBuf = (unsigned char*)(m_Midgard->m_threadsafebufferSimple.getLast().get()->m_pBuffer);// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
-        unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
+		auto mid = pParams->GetMidgard();
+		auto & buf_ = mid->Buffer();
+		auto frame = buf_.pop();
 
-        memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
-        unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+		assert( frame );
 
-        for( unsigned int i = 0; i < 1080; i += 2 )
-        {
-            unsigned int cur_i = i + 1;
-            unsigned int prev_i = i + 1;
+		auto data = frame->GetData();
 
-            unsigned int cur_scanline = width_bytes * cur_i;
-            unsigned int prev_scanline = width_bytes * prev_i;
+		assert( data );
 
-            memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
-			
+		auto rawData = (unsigned char*)data->Get();
 
-        }
+        unsigned char *  frameBuf = rawData;
+
+		bool enable_interlace = false;
+		if(enable_interlace)
+		{
+			 unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
+
+			memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
+			unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+
+			for( unsigned int i = 0;  i < 1080; i += 2 )
+			{
+				unsigned int cur_i = i + 1;
+				unsigned int prev_i = i + 1;
+
+				unsigned int cur_scanline = width_bytes * cur_i;
+				unsigned int prev_scanline = width_bytes * prev_i;
+
+				memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
+
+			}
+		}
 		if(!pParams->m_key_active)
 			{
 				for(int i=0;i<1920*1080*4;i+=4)
@@ -329,8 +347,7 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
 					frameBuf[ i+3 ]=0;
 				}
 			}
-        //std::shared_ptr<CFrame>  LastFrame = std::make_shared<CFrame>(frameBuf, 1, fhd, width_bytes);
-
+       
 		pParams->DeliverFrameFromRAM( frameBuf ); 
 
         cur_buf = ( cur_buf + 1 ) % frames_count; 
@@ -418,9 +435,11 @@ VideoMidgard* VideoCardManager::GetMidgard()
 
 //**************************************
 //
-void VideoCardManager::GetBufferFromRenderer	(Texture2DConstPtr buffer)
+void VideoCardManager::GetBufferFromRenderer	( Texture2DConstPtr buffer )
 {
-	GetMidgard()->GetBufferFromRenderer(buffer);
+	auto mid = GetMidgard();
+	
+	mid->GetBufferFromRenderer( buffer );
 }
 
 //**************************************
@@ -580,19 +599,22 @@ bool VideoCardManager::UpdateReferenceOffset( unsigned int VideoCardID, std::str
 
 void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::VideoCardEvent::m_sEventType)
+    if( evt->GetEventType() == bv::VideoCardEvent::Type() )
     {
-		
-		bv::VideoCardEventPtr evtVideo = std::static_pointer_cast<bv::VideoCardEvent>( evt );
-        wcout<<"video : "<<evtVideo->command<<endl;
-        if(evtVideo->command==L"ON")
+		bv::VideoCardEventPtr videoEvent = std::static_pointer_cast<bv::VideoCardEvent>( evt );
+        VideoCardEvent::Command command = videoEvent->VideoCommand;
+
+        cout << "video : " << bv::SerializationHelper::T2String<VideoCardEvent::Command>( command ) << endl;
+
+
+        if( command == VideoCardEvent::Command::EnableOutput )
         {
             for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
             {
                 m_VideoCards[i]->Enable();
             }
         }
-        else  if(evtVideo->command==L"OFF")
+        else  if( command == VideoCardEvent::Command::DisableOutput )
         {
             for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
             {
@@ -600,6 +622,11 @@ void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::I
                 m_VideoCards[i]->Disable();
             }
         }
+        else if( command == VideoCardEvent::Command::EnableKey )
+            SetKey( true );
+        else if( command == VideoCardEvent::Command::DisableKey )
+            SetKey( false );
+
     }
 
 }

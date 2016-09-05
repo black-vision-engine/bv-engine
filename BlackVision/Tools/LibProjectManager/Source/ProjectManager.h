@@ -4,7 +4,7 @@
 #include "Project.h"
 #include "SceneDescriptor.h"
 
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 
 #include "Assets/FwdDecls.h"
 
@@ -19,6 +19,9 @@ class Project;
 class AssetCategory;
 class ProjectManagerImpl;
 
+class Thumbnail;
+DEFINE_CONST_PTR_TYPE( Thumbnail )
+
 namespace model 
 {
 	class BasicNode;
@@ -31,9 +34,9 @@ public:
 
 	// listing
 	PathVec					ListProjectsNames	() const;
-	PathVec					ListScenesNames		( const Path & projectName = Path("") ) const;
+	PathVec					ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const;
 	StringVector			ListCategoriesNames	() const;
-	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName = "" ) const;
+	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const;
 
 	PathVec					ListAllUsedAssets	() const;
 	PathVec					ListAllUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
@@ -56,10 +59,12 @@ public:
     void					RemoveUnusedAssets	( const Path & projectName );
 	void					RemoveUnusedAssets	();
 
-	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+    model::SceneModelPtr    LoadScene           ( const Path & projectName, const Path & path ) const;
+    ThumbnailConstPtr       GetSceneThumbnail   ( const Path & projectName, const Path & path ) const;
 
 	// categories
 	void					RegisterCategory	( const AssetCategoryConstPtr & category);
@@ -92,22 +97,53 @@ public:
 
 	// *********************************
 	// loading, saving presets
-    model::BasicNodeConstPtr LoadPreset          ( const Path & projectName, const Path & path ) const;
-    void                    SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const;
-    PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
+    model::BasicNodePtr     LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const;
+    void                    SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const;
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
+
+    ThumbnailConstPtr       GetPresetThumbnail  ( const Path & projectName, const Path & path ) const;
+
+    // *********************************
+    // handling directories
+    PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;
+    PathVec                 ListScenesDirs      ( const Path & path ) const;
+    PathVec                 ListPresetsDirs     ( const Path & path ) const;
+
+    bool                    CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const;
+    bool                    CreateSceneDir      ( const Path & path, bool recursive ) const;
+    bool                    CreatePresetDir     ( const Path & path, bool recursive) const;
+
+    bool                    RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const;
+    bool                    RemoveSceneDir      ( const Path & path ) const;
+    bool                    RemovePresetDir     ( const Path & path ) const;
+
+    bool                    RenameAssetDir      ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
+    bool                    RenameSceneDir      ( const Path & path, const std::string &newName ) const;
+    bool                    RenamePresetDir     ( const Path & path, const std::string &newName ) const;
+
+    bool                    CopyAssetDir        ( const std::string & categoryName, const Path & path, const std::string &newName ) const;
+    bool                    CopySceneDir        ( const Path & path, const std::string &newName ) const;
+    bool                    CopyPresetDir       ( const Path & path, const std::string &newName ) const;
+
+    // *********************************
+    // categories statistics
+    UInt64                  GetAssetSize        ( const std::string & categoryName, const Path & path ) const;
+    UInt32                  GetAssetCount       ( const std::string & categoryName, const Path & path ) const;
+    UInt32                  GetScenesCount      ( const Path & path ) const;
+    UInt32                  GetPresetsCount     ( const Path & path ) const;
 
     Path                    ToAbsPath           ( const Path & path ) const;
 
     static ProjectManager *	GetInstance			(  );
 
-	~ProjectManager	();
+    ~ProjectManager	();
 
 private:
-	ProjectManagerImpl * m_impl;
+    ProjectManagerImpl * m_impl;
 
-	ProjectManager	( const Path & rootPath );
+    ProjectManager	( const Path & rootPath );
 
     static std::shared_ptr< ProjectManager > _instance;
 

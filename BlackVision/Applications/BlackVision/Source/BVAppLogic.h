@@ -2,14 +2,17 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
+#include "RenderMode.h"
 
 #include "TestAI/TestKeyboardHandler.h"
 
 #include "FrameStatsService.h"
+
+#include "EndUserAPI/RemoteController.h"
 
 //#define HIDE_PROFILE_STATS
 
@@ -19,23 +22,27 @@
 #include "structure/AssetManager.h"
 
 //hackvideoinput
-#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "hack_videoinput/TestVideoInput.h"
 
 
 
-namespace bv
-{
+namespace bv {
 
 class SimpleTimer;
 class RenderLogic;
 class Renderer;
-class RemoteControlInterface;
+class RemoteEventsHandlers;
+
+namespace audio {
+    class AudioRenderer;
+}
 
 enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
     BVS_RUNNING,
+    BVS_CLOSING,
     BVS_INVALID,
 
     BVS_TOTAL
@@ -53,36 +60,38 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
-    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    BVScenePtr                      m_bvScene;
+    BVProjectPtr                    m_bvProject;
 
     Renderer *                      m_renderer;
+    audio::AudioRenderer *          m_audioRenderer;
+    
     RenderLogic *                   m_renderLogic;
+
+    //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
-    unsigned long                   m_startTime;
+    RemoteEventsHandlers*           m_remoteHandlers;
+    RemoteController*               m_remoteController;
+
+    RenderMode                      m_renderMode;
 
 	//pablito
-	RemoteControlInterface*			m_RemoteControl;
 	Solution						m_solution;
 	bv::videocards::VideoCardManager* m_videoCardManager;
-	std::string                     m_grabFramePath;
     
     void            RefreshVideoInputScene  ();
 
 public:
 
-                    BVAppLogic      ( Renderer * renderer );
+                    BVAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
                     ~BVAppLogic     ();
 
     void            Initialize      ();
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     void            LoadScene       ( void );
-    void            InitCamera      ( unsigned int w, unsigned int h );
 
     void            SetStartTime    ( unsigned long millis );
 
@@ -90,14 +99,14 @@ public:
 	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
 	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
 
-    virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
+    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer );
     virtual void    OnKey           ( unsigned char c );
-    
-    virtual void    ChangeState     ( BVAppState state );
+    virtual void    OnMouse         ( MouseAction action, int posX, int posY );
 
     virtual void    ShutDown        ();
 
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
+    void            UpdateFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
     const FrameStatsCalculator &     FrameStats () const;
 
@@ -105,32 +114,28 @@ public:
     void            ReloadScene     ();
 
 	void            GrabCurrentFrame(  const std::string & path );
-	void            SetKey			( bool active);
 
-private:
-
-    void            OnUpdateParam   ( IEventPtr evt );
-	void            OnNodeAppearing ( IEventPtr evt );
-	void            OnNodeLeaving   ( IEventPtr evt );
-	void            OnNoMoreNodes   ( IEventPtr evt );
+    virtual void            ChangeState     ( BVAppState state );
+    virtual BVAppState      GetState        ();
 
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *        GetTimelineManager  ();
-    model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
-    BVScenePtr                      GetBVScene          ();
+    BVProjectPtr                    GetBVProject          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
+    RenderMode&                     GetRenderMode       ()  { return m_renderMode; }
 
-    model::BasicNodePtr LoadScenes( const PathVec & pathVec );
+    void            LoadScenes      ( const PathVec & pathVec );
+    RenderLogic *                   GetRenderLogic      ();
 
 private:
 
     void                            InitializeKbdHandler();
+    void                            InitializeRemoteCommunication();
+    void                            InitializeCommandsDebugLayer();
 
     std::string                     GetEnvScene();
-
 };
 
 } //bv

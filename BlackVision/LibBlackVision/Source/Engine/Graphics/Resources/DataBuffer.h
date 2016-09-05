@@ -23,14 +23,14 @@ public:
 
 protected:
 
-	unsigned int	m_numElts;
+    unsigned int	m_numElts;
     unsigned int	m_eltSize;
 
     Semantic	    m_semantic;
 
-	unsigned int    m_size;
+    unsigned int    m_size;
     
-	char *		    m_data;
+    char *		    m_data;
 
 protected:
 

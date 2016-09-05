@@ -5,6 +5,8 @@
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 
+#include "LibImage.h"
+
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibBlackVision
 
@@ -39,18 +41,26 @@ AnimationAssetAccessorConstPtr AnimationAssetAccessor::Create( const Path & root
 //
 AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) const
 {
-    if( Path::Exists( path ) )
+	auto p = m_rootPath / path;
+
+    if( Path::Exists( p ) )
     {
         for( auto fe : m_fileExts )
         {
-            if( Path::List( path, false, fe ).size() > 0 )
+            auto pathList = Path::List( p, false, fe );
+
+            if( !pathList.empty() )
             {
-                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), fe );
+                auto numFrames = pathList.size();
+
+                auto props = image::GetImageProps( pathList[ 0 ].Str() );
+
+                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, props.width, props.height, fe );
             }
         }
     }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Asset '" << path << "' doesn't exist.";
+    LOG_MESSAGE( SeverityLevel::warning ) << "Asset '" << p.Str() << "' doesn't exist.";
     
     return nullptr;
 }
@@ -223,22 +233,33 @@ void				AnimationAssetAccessor::ExportAll			( const Path & expAssetFilePath ) co
 
 // ********************************
 //
-PathVec				AnimationAssetAccessor::ListAll				( const Path & path ) const
+PathVec				AnimationAssetAccessor::ListAll				( const Path & path, bool recursive ) const
 {
-    auto pathList = Path::List( m_rootPath / path, true );
+    PathVec ret;
 
-    PathVec ret; 
+    if( PathContainsAnimation( m_rootPath / path ) )
+    {
+        ret.push_back( path );
+        return ret;
+    }
+
+    auto pathList = Path::List( m_rootPath / path, recursive );
+
 
     for( auto p : pathList )
     {
         if( Path::IsDir( p ) )
         {
-            auto ext = PathContainsAnimation( p );
-            if( !ext.empty() )
+            if( PathContainsAnimation( p ) )
             {
                 ret.push_back( p );
             }
         }
+    }
+
+    for( auto & p : ret )
+    {
+        p = Path::RelativePath( p, m_rootPath );
     }
     
     return ret;
@@ -249,7 +270,7 @@ PathVec				AnimationAssetAccessor::ListAll				( const Path & path ) const
 //
 PathVec				AnimationAssetAccessor::ListAllUnique		( const Path & path ) const
 {
-	auto l = ListAll( path );
+	auto l = ListAll( path, true );
 
 	std::set< Path  > unique;
 
@@ -263,7 +284,7 @@ PathVec				AnimationAssetAccessor::ListAllUnique		( const Path & path ) const
 
 // ********************************
 //
-std::string         AnimationAssetAccessor::PathContainsAnimation( const Path & path ) const
+bool                AnimationAssetAccessor::PathContainsAnimation( const Path & path ) const
 {
     for( auto fe : m_fileExts )
     {
@@ -271,11 +292,11 @@ std::string         AnimationAssetAccessor::PathContainsAnimation( const Path & 
 
         if( l.size() > 0 )
         {
-            return fe;
+            return true;
         }
     }
 
-    return "";
+    return false;
 }
 
 // ********************************
@@ -286,6 +307,13 @@ void				AnimationAssetAccessor::CreateDir() const
 	{
 		Dir::CreateDir( m_rootPath.Str(), true );
 	}
+}
+
+// ********************************
+//
+UInt64              AnimationAssetAccessor::GetAssetSizeInBytes ( const Path & path ) const
+{
+    return Dir::GetSize( ( m_rootPath / path ).Str() );
 }
 
 } // bv

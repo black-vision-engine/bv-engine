@@ -1,5 +1,4 @@
 #include "TestVideoInput.h"
-//#include "Engine\Models\Resources\TextureLoader.h"
 
 namespace bv {
 
@@ -13,9 +12,8 @@ TestVideoInput::TestVideoInput( int x, int y, float fps, int maskAnd, int maskOr
 
 	auto asset = TextureAsset::Create( SingleTextureAsset::Create( bits, "key", x, y, TextureFormat::F_A8R8G8B8, false ), nullptr );
 
-    desc = new model::DefaultTextureDescriptor( TextureAssetConstPtr( asset ),
-		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-        "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+    desc = std::make_shared< model::DefaultTextureDescriptor >( TextureAssetConstPtr( asset ), "Tex0", DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+	//desc->SetSamplerState( model::SamplerStateModelPtr::Create( TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1 ) ) ); 
 }
 
 
@@ -62,6 +60,8 @@ void		TestVideoInput::GenerateBits( int x, int y )
 
 	MemoryChunkPtr chunk = std::make_shared < MemoryChunk >( mem, size );
 	bits = chunk;
+
+	m_updateID++;
 }
 
 MemoryChunkConstPtr     TestVideoInput::GetBits             () const
@@ -70,14 +70,9 @@ MemoryChunkConstPtr     TestVideoInput::GetBits             () const
 	return bits;
 }
 
-bool                    TestVideoInput::BitsChanged         () const
+UInt64                  TestVideoInput::GetUpdateID         () const
 {
-	return true; // ;)
-}
-
-void                    TestVideoInput::ResetBitsChanged    () const
-{
-	return; // :P
+	return m_updateID;
 }
 
 unsigned int            TestVideoInput::GetWidth			() const
@@ -119,20 +114,15 @@ public:
         return *v;
 	}
 
-	virtual bool                    BitsChanged         () const override
+	UInt64                  GetUpdateID         () const
 	{
-		return input->BitsChanged();
-	}
-
-	virtual void                    ResetBitsChanged    () const override
-	{
-		return input->ResetBitsChanged();
+		return input->GetUpdateID();
 	}
 };
 
-model::DefaultTextureDescriptor* TestVideoInput::GetTexture		() const
+model::DefaultTextureDescriptorPtr TestVideoInput::GetTexture		() const
 {
-	return new TestVideoInputWrapper( this );
+	return std::make_shared< TestVideoInputWrapper >( this );
 }
 
 void					TestVideoInput::Update				()
@@ -142,7 +132,7 @@ void					TestVideoInput::Update				()
     i=1;
 }
 
-model::DefaultTextureDescriptor* TestVideoInput::GetTextureDesc	() const
+model::DefaultTextureDescriptorPtr TestVideoInput::GetTextureDesc	() const
 {
 	return desc;
 }

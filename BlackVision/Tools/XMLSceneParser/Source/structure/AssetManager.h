@@ -4,7 +4,7 @@
 #include "SurfaceDescriptor.h"
 #include "helpers/auxiliary.hpp"
 #include "win_sock.h"
-#include "../../../../Applications/BlackVision/Source/VideoInput/DefaultVideoInputResourceDescr.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "../../../../Applications/BlackVision/Source/hack_videoinput/TestVideoInput.h"
 
 namespace bv{

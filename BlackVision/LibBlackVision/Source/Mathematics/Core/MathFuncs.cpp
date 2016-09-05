@@ -1,7 +1,15 @@
+#include "stdafx.h"
+
 #include "mathfuncs.h"
 
 #include <cmath>
 #include <cstdio>
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

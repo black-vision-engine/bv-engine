@@ -16,6 +16,9 @@ uniform float   time;
 uniform float   transformEffectVal1;
 uniform float   transformEffectVal2;
 
+uniform float   animScale;
+uniform float   animScaleOffset;
+
 uniform vec2    explosionCenter;
 uniform int     transformTextEffectId;
 
@@ -86,9 +89,41 @@ mat4 translateMatrix( vec3 transVec )
                 transVec.x,  transVec.y,  transVec.z,  1.0);
 }
 
+mat4 animLetterTransform()
+{
+    float lf  = animScaleOffset * float( cc_num_total + 1 );
+    int l = int( floor( lf ) );
+    
+    if( l < 0 )
+    {
+        l = -l;
+    }
+    
+    if( lf < 0.0 )
+    {
+        lf = -lf;
+    }
+    
+    if( cc_num == l )
+    {
+        float so = lf - float( l );
+        float realScale = so + animScale * ( 1.0 - so );
+        
+        return scaleMatrix( vec3( realScale, realScale, 1.0 ) );
+    }
+    else if( cc_num > l ) 
+    {
+        return scaleMatrix( vec3( animScale, animScale, 1.0 ) );        
+    }
+    else if( cc_num < l )
+    {
+        return scaleMatrix( vec3( 1.0, 1.0, 1.0 ) );
+    }
+}
+
 void main()
 {
-    mat4 transform = MVP;
+    mat4 transform = mat4( 1.0 );
     
     switch( transformTextEffectId )
     {
@@ -101,11 +136,15 @@ void main()
     case 3:
         transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
+    case 4:
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * animLetterTransform() * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+         break;
+
     default:
         break;
     }
     
-       
+    transform = MVP * transform;
     
     gl_Position = transform * vec4( vertexPosition, 1.0 );
     uvCoord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;

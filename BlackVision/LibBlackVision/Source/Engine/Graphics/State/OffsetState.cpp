@@ -1,4 +1,12 @@
+#include "stdafx.h"
+
 #include "OffsetState.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

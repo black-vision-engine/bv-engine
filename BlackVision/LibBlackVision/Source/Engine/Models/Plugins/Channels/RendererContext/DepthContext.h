@@ -15,6 +15,10 @@ public:
 
     DepthContext();
 
+    DepthContext *			Clone			() const;
+
+    void			        SetContext	    ( const DepthContext * ctx );
+
 };
 
 } //model

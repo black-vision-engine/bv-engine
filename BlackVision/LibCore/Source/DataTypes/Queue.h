@@ -129,7 +129,7 @@ void        Queue< T >::Clear       ()
 {
     while( !m_queue.empty() )
     {
-        auto val = m_queue.front();
+        //auto val = m_queue.front();
         m_queue.pop();
 
     }

@@ -1,8 +1,18 @@
+#include "stdafx.h"
+
 #include "WireframeEffect.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
-#include "Engine/Graphics/Effects/WireframeShaders.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
+
+#include "Engine/Graphics/Effects/Utils/ShaderSourceProvider.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -17,7 +27,7 @@ WireframeEffect::WireframeEffect ()
 
     RenderablePass * pass = new RenderablePass( ps, vs, gs );
     auto sinst = pass->GetStateInstance();
-
+    
     RendererStatesBuilder::Create( sinst );
 
     auto as = RenderStateAccessor::AccessAlphaState( sinst );
@@ -34,21 +44,15 @@ WireframeEffect::WireframeEffect ()
 // ****************************
 //
 WireframeEffect::~WireframeEffect()
-{
-    auto pass = GetPass( 0 );
-
-    delete pass->GetPixelShader();
-    delete pass->GetVertexShader();
-    delete pass->GetGeometryShader();
-}
+{}
 
 // ****************************
 //
 PixelShader *       WireframeEffect::CreatePS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new PixelShader( GetWireframePixelShaderCode(), new ShaderParameters() );
-
+    //FIXM: register additional parameters here
+    auto shader = new PixelShader( CustomShaderSourceProvider->ReadShader( "wireframe.frag" ), new ShaderParameters() );
+    
     return shader;
 }
 
@@ -56,8 +60,12 @@ PixelShader *       WireframeEffect::CreatePS        ()
 //
 VertexShader *      WireframeEffect::CreateVS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new VertexShader( GetWireframeVertexShaderCode(), new ShaderParameters() );
+    auto params = new ShaderParameters();
+
+    params->AddParameter( ShaderParamFactory::CreateMVPParameter() );
+    params->AddParameter( ShaderParamFactory::CreateMVParameter() );
+
+    auto shader = new VertexShader( CustomShaderSourceProvider->ReadShader( "wireframe.vert" ), params );
 
     return shader;
 }
@@ -66,8 +74,11 @@ VertexShader *      WireframeEffect::CreateVS        ()
 //
 GeometryShader *    WireframeEffect::CreateGS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new GeometryShader( GetWireframeGeometryShaderCode(), new ShaderParameters() );
+    auto params = new ShaderParameters();
+
+    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
+
+    auto shader = new GeometryShader( CustomShaderSourceProvider->ReadShader( "wireframe.geom" ), params );
 
     return shader;
 }

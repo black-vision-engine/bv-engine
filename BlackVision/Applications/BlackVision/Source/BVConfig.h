@@ -17,6 +17,7 @@ private:
     int             m_defaultWindowWidth;
     int             m_defaultWindowHeight;
 
+
     int             m_defaultWidth;
     int             m_defaultHeight;
 
@@ -30,7 +31,9 @@ private:
 
     bool            m_fullscreeMode;
     bool            m_readbackOn;
+    bool            m_displayVideoCardOutput;
     bool            m_isCameraPerspective;
+	bool			m_renderToSharedMemory;
 
     float           m_defaultFOV;
     float           m_defaultNearClippingPlane;
@@ -70,7 +73,9 @@ public:
 	inline RendererInput        GetRendererInput	        () const;
 	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
+    inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
+	inline bool                 RenderToSharedMemory    () const;
 
     inline unsigned int         EventLoopUpdateMillis   () const;
     inline unsigned int         FPS                     () const;

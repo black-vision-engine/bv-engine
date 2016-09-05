@@ -1,7 +1,33 @@
+#include "stdafx.h"
+
 #include "ValuesFactory.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
+
+// ***********************
+//
+ValueBoolPtr         ValuesFactory::CreateValueBool     ( const std::string & name )
+{
+    return std::make_shared< ValueBool >( name );
+}
+
+// ***********************
+//
+ValueBoolPtr         ValuesFactory::CreateValueBool     ( const std::string & name, bool initVal )
+{
+    auto val = CreateValueBool( name );
+
+    val->SetValue( initVal );
+
+    return val;
+}
 
 // *******************************
 //
@@ -12,9 +38,31 @@ ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name 
 
 // *******************************
 //
+ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name, int initVal )
+{
+    auto val = CreateValueInt( name );
+
+    val->SetValue( initVal );
+
+    return val;
+}
+
+// *******************************
+//
 ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name )
 {
-    return std::make_shared< ValueFloat >( name );
+   return std::make_shared< ValueFloat >( name );
+}
+
+// *******************************
+//
+ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name, float initVal )
+{
+    auto val = CreateValueFloat( name );
+
+    val ->SetValue( initVal );
+
+    return val;
 }
 
 // *******************************

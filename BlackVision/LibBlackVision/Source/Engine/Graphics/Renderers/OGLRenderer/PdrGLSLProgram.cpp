@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrGLSLProgram.h"
 
 #include <sys/stat.h>
@@ -17,6 +19,12 @@ using std::ios;
 using std::ostringstream;
 
 const bool GVerboseLogging = false;
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {

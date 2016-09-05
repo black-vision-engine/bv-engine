@@ -1,4 +1,14 @@
+#include "stdafx.h"
+
 #include "ParametersFactory.h"
+
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model {
@@ -40,17 +50,9 @@ ParamFloat                          ParametersFactory::CreateParameter          
 
 // *******************************
 //
-ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline )
+ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const CompositeTransform & interpolator, ITimeEvaluatorPtr timeline )
 {
     return ParamTransform( name, interpolator, timeline );
-}
-
-// *******************************
-//
-ParamTransformVec                   ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy )
-{
-    { dummy; } // FIXME: suppress unused variable
-    return ParamTransformVec( name, interpolator, timeline );
 }
 
 // *******************************
@@ -106,21 +108,7 @@ ParamFloatPtr                        ParametersFactory::CreateParameterFloat    
 //
 ParamTransformPtr                    ParametersFactory::CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return std::make_shared< ParamTransform >( name, TransformF(), timeline );
-}
-
-// *******************************
-//
-ParamTransformVecPtr                 ParametersFactory::CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms )
-{
-    ParamTransformVecPtr ptv = std::make_shared< ParamTransformVec >( name, timeline );
-
-    for( int i = 0; i < numTransforms; ++i )
-    {
-        ptv->AppendTransform( TransformF() );
-    }
-
-    return ptv;
+    return std::make_shared< ParamTransform >( name, CompositeTransform(), timeline );
 }
 
 // *******************************

@@ -4,14 +4,20 @@
 
 #include "CoreDEF.h" //FIXME: store in PCH
 #include "Engine/Types/Enums.h"
+#include "Serialization/ISerializable.h"
 
 
 namespace bv { namespace model {
 
 class ITimeline;
+DEFINE_CONST_PTR_TYPE(ITimeline)
+
+class ITimelineEvent;
+DEFINE_PTR_TYPE(ITimelineEvent)
+DEFINE_CONST_PTR_TYPE(ITimelineEvent)
 
 // **********************************
-class ITimelineEvent
+class ITimelineEvent : public ISerializable
 {
 public:
 

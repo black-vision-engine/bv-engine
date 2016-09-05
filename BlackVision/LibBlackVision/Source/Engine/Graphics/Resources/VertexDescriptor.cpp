@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VertexDescriptor.h"
 
 #include <cassert>
@@ -6,9 +8,15 @@
 #include "Engine/Types/Enums.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv {
 
-//FIXME: move closer to definition
+//FIXME: move closer to the definition
 unsigned int VertexDescriptor::m_sComponentSize[ (int) AttributeType::AT_TOTAL ] =
 {
     //0,  // AT_NONE
@@ -30,7 +38,7 @@ unsigned int VertexDescriptor::m_sNumComponents[ (int) AttributeType::AT_TOTAL ]
 unsigned int VertexDescriptor::m_sTypeSize[ (int) AttributeType::AT_TOTAL ] =
 {
     //0,  // AT_NONE
-    sizeof( float ),      // AT_FLOAT1
+    1 * sizeof( float ),  // AT_FLOAT1
     2 * sizeof( float ),  // AT_FLOAT2
     3 * sizeof( float ),  // AT_FLOAT3
     4 * sizeof( float ),  // AT_FLOAT4
@@ -43,7 +51,7 @@ VertexDescriptor::VertexDescriptor ( unsigned int numAttrs )
     : m_numAttrs( numAttrs )
     , m_stride(0)
 {
-    assert( numAttrs > 0 );
+    //assert( numAttrs > 0 );
 
     for( unsigned int i = 0; i < numAttrs; ++i )
     {
@@ -110,7 +118,7 @@ void VertexDescriptor::SetAttribute ( unsigned int attr, unsigned int channelLoc
 //
 void VertexDescriptor::SetStride ( unsigned int stride )
 {
-    assert( stride > 0 );
+    //assert( stride > 0 );
     
     m_stride = stride;
 }

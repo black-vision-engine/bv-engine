@@ -5,10 +5,12 @@
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -40,25 +42,28 @@ bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, co
     return plugin->LoadResource( TextureAssetDesc::Create( texDesc ) );
 }
 
-bv::model::BasicNodeConstPtr CreateTestScene0()
+bv::model::SceneModelPtr CreateTestScene0()
 {
+	auto sceneName = "textured_rect";
+	auto scene = bv::model::SceneModel::Create( sceneName );
+	auto timeline = scene->GetTimeline();
+
     std::vector< model::IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new model::DefaultTransformPluginDesc() );
-    descriptors.push_back( new model::DefaultRectPluginDesc() );
+    descriptors.push_back( new model::DefaultRect::PluginDesc() );
     descriptors.push_back( new model::DefaultTexturePluginDesc() );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );
 
-    auto globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
-    auto root = model::BasicNode::Create( "textured_rect", globalTimeline );
+	auto root = model::BasicNode::Create( "textured_rect", timeline );
 
     StringVector plugins;
     plugins.push_back( "DEFAULT_TRANSFORM" );
     plugins.push_back( "DEFAULT_RECTANGLE" );
     plugins.push_back( "DEFAULT_TEXTURE" );
 
-    auto success = root->AddPlugins( plugins, globalTimeline );
+    auto success = root->AddPlugins( plugins, timeline );
     assert( success );
 
     auto wp = root->GetPlugin( "rectangle" )->GetParameter( "width" );
@@ -67,12 +72,16 @@ bv::model::BasicNodeConstPtr CreateTestScene0()
 
     success &= SetParameter( wp, 0.f, 1.f );
     success &= SetParameter( hp, 0.f, 1.f );
-    success &= SetParameterTranslation( tr, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+    success &= SetParameterTranslation( tr, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
 
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    
 
-    return root;
+	assert( false );
+
+	scene->SetRootNode( root );
+
+    return scene;
 }
 
 TEST( CleanAll, ProjectManager )
@@ -91,7 +100,7 @@ TEST( CleanAll, ProjectManager )
 
 TEST( CreatingPM, ProjectManager )
 {
-    model::TimelineManager::GetInstance()->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
+    model::TimelineManager::GetInstance()->RegisterRootTimeline( model::OffsetTimeEvaluator::Create( "global timeline", TimeType( 0.0 ) ) );
 
     ChangeProjectManagerInstanceTo( "d:\\bv_media" );
 
@@ -168,7 +177,7 @@ TEST( AddingAssets, ProjectManager )
 	g_pm0->AddAsset( "proj01", "textures", "flagi/ger.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 	g_pm0->AddAsset( "proj02", "textures", "flagi/rus.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 
-	auto assets = g_pm0->ListAssetsPaths( "", "" );
+	auto assets = g_pm0->ListAssetsPaths( "", "", "", true );
 
 	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/pol.jpg" ) );
 	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/ger.jpg" ) );
@@ -205,22 +214,22 @@ TEST( RemovingUnusedAssets, ProjectManager )
 
 TEST( SavingPresets, ProjectManager )
 {
-    g_pm0->SavePreset( CreateTestScene0(), "proj00", "pres/proj1.bvpreset" );
+    g_pm0->SavePreset( CreateTestScene0()->GetRootNode(), "proj00", "pres/proj1.bvpreset" );
 }
 
 TEST( ListingPresets, ProjectManager )
 {
-    ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres" ).size() == 1 );
+    ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres", true ).size() == 1 );
     ASSERT_TRUE( g_pm0->ListPresets( "proj00" ).size() == 1 );
     ASSERT_TRUE( g_pm0->ListPresets().size() == 1 );
 
     ASSERT_TRUE( g_pm0->ListPresets( "proj01" ).size() == 0 );
-    ASSERT_TRUE( g_pm0->ListPresets( "proj01", "pres" ).size() == 0 );
+    ASSERT_TRUE( g_pm0->ListPresets( "proj01", "pres", true ).size() == 0 );
 }
 
 TEST( LoadingPresets, ProjectManager )
 {
-    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset" ) );
+    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", nullptr ) ); // FIXME: 
 }
 
 TEST( CreatingSecondPM, ProjectManager )

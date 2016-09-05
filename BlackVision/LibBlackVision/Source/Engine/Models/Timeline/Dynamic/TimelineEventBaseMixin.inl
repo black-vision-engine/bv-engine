@@ -7,10 +7,11 @@ inline TimelineEventBaseMixin< ITimelineEventIface >::TimelineEventBaseMixin    
     : m_name( name )
     , m_type( type )
     , m_active( true )
+    , m_owner( owner )
 {
     SetEventTime( eventTime );
     //SetLastTriggerTime( -1.f ); //FIXME: magic number - negative time seems to be good enough for this purpose though (as negative global time id not allowed)
-    SetOwnerTimeline( owner );
+    //SetOwnerTimeline( owner );
 }
 
 // *********************************
@@ -72,18 +73,18 @@ inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetEventT
 // *********************************
 //
 template< typename ITimelineEventIface >
-const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline         () const
+const ITimeline *           TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline         () const
 {
     return m_owner;
 }
 
-// *********************************
-//
-template< typename ITimelineEventIface >
-inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetOwnerTimeline     ( const ITimeline * owner )
-{
-    m_owner = owner;
-}
+//// *********************************
+////
+//template< typename ITimelineEventIface >
+//inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetOwnerTimeline     ( const ITimeline * owner )
+//{
+//    m_owner = owner;
+//}
 
 // *********************************
 //

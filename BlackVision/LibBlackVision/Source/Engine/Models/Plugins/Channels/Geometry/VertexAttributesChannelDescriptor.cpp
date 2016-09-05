@@ -1,9 +1,17 @@
+#include "stdafx.h"
+
 #include "VertexAttributesChannelDescriptor.h"
 
 #include <cassert>
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/IndexChannelDescriptor.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv { namespace model
@@ -19,8 +27,25 @@ VertexAttributesChannelDescriptor::VertexAttributesChannelDescriptor    ()
 
 // ************************************
 //
+VertexAttributesChannelDescriptor::VertexAttributesChannelDescriptor	( const VertexAttributesChannelDescriptor & other )
+{
+    for( auto attDesc : other.m_attributeChannelDescriptors )
+    {
+        AddAttrChannelDesc( attDesc->GetType(), attDesc->GetSemantic(), attDesc->GetChannelRole()  );
+    }
+
+    m_indexChannelDescriptor = nullptr;
+    if( other.m_indexChannelDescriptor )
+    {
+        SetIndexChannelDesc( other.m_indexChannelDescriptor->GetType() );
+    }
+}
+
+// ************************************
+//
 VertexAttributesChannelDescriptor::~VertexAttributesChannelDescriptor   ()
 {
+    //FIXME this really needs fixing..
     //FIXME make sure that this is the owner of all descriptors
     //delete m_indexChannelDescriptor;
 
@@ -46,7 +71,7 @@ bool	VertexAttributesChannelDescriptor::HasIndexChannel		() const
 
 // ************************************
 //
-const IAttributeChannelDescriptor *	VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( int channelIndex ) const
+IAttributeChannelDescriptorConstPtr	VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( int channelIndex ) const
 {
     assert( channelIndex >= 0 );
     assert( channelIndex < (int) m_attributeChannelDescriptors.size() );
@@ -89,9 +114,9 @@ unsigned int                                VertexAttributesChannelDescriptor::S
 
 // ************************************
 //
-const AttributeChannelDescriptor *  VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
+AttributeChannelDescriptorConstPtr  VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
 {
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( attrType, attrSemantic, channelRole );
+    auto desc = std::make_shared< AttributeChannelDescriptor >( attrType, attrSemantic, channelRole );
     AddAttrChannelDesc( desc );
 
     return desc;
@@ -99,7 +124,7 @@ const AttributeChannelDescriptor *  VertexAttributesChannelDescriptor::AddAttrCh
 
 // ************************************
 //
-void    VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( const AttributeChannelDescriptor * desc )
+void    VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeChannelDescriptorConstPtr desc )
 {
     m_attributeChannelDescriptors.push_back( desc );
 }
@@ -124,6 +149,29 @@ void    VertexAttributesChannelDescriptor::SetIndexChannelDesc     ( IndexChanne
     }
 
     m_indexChannelDescriptor = desc;
+}
+
+// *************************************
+//
+AttributeChannelDescriptorConstPtr      VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx ) const
+{
+    AttributeChannelDescriptorConstPtr ret = nullptr;
+    if( !m_attributeChannelDescriptors.empty() )
+    {
+        for( auto desc : m_attributeChannelDescriptors )
+        {
+            if( desc->GetSemantic() == semantic )
+            {
+                if( occuranceIdx == 0 )
+                {
+                    return desc;
+                }
+                ret = desc;
+                occuranceIdx--;
+            }
+        }
+    }
+    return ret;
 }
 
 } //model

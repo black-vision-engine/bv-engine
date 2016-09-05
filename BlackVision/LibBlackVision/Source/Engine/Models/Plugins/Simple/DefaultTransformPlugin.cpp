@@ -1,10 +1,22 @@
+#include "stdafx.h"
+
 #include "DefaultTransformPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 
+
+
+#include "Memory/MemoryLeaks.h"
+
+
+
 namespace bv { namespace model {
+
+
+const std::string        DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM  = "simple_transform";
+
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -26,15 +38,15 @@ IPluginPtr              DefaultTransformPluginDesc::CreatePlugin                
 //
 DefaultPluginParamValModelPtr   DefaultTransformPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr model         = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model         = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr trModel             = std::make_shared< DefaultParamValModel >();
-    auto evaluator                              = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform", timeEvaluator );
+    auto evaluator                              = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "simple_transform", timeEvaluator );
 
     trModel->RegisterAll( evaluator );
     model->SetTransformChannelModel( trModel );
 
     //Set default values
-    evaluator->Parameter()->Transform( 0 ).InitializeDefaultSRT();
+    evaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     return model;
 }
@@ -60,14 +72,9 @@ DefaultTransformPlugin::DefaultTransformPlugin  ( const std::string & name, cons
 
     assert( trModel );
 
-    ValueMat4PtrVec typedVals;
+    auto trans = QueryTypedValue< ValueMat4Ptr >( trModel->GetValuesNC()[ 0 ] );
 
-    for( auto val : trModel->GetValuesNC() )
-    {
-        typedVals.push_back( QueryTypedValue< ValueMat4Ptr >( val ) );
-    }
-
-    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, typedVals, false ) ); //<3
+    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, trans, false ) ); //<3
 }
 
 // *************************************
@@ -87,18 +94,17 @@ ITransformChannelConstPtr           DefaultTransformPlugin::GetTransformChannel 
 //
 void                                DefaultTransformPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
+
     m_transformChannel->PostUpdate();
 }
 
 // *************************************
 //
-ParamTransformVecPtr				DefaultTransformPlugin::GetParamTransform			() const
+ParamTransformPtr				    DefaultTransformPlugin::GetParamTransform			() const
 {
-	return std::static_pointer_cast< ParamTransformVec >( m_paramValModel->GetTransformChannelModel()->GetParameters()[ 0 ] );
+	return std::static_pointer_cast< ParamTransform >( m_paramValModel->GetTransformChannelModel()->GetParameters()[ 0 ] );
 }
-
 
 } // model
 } // bv

@@ -1,6 +1,14 @@
+#include "stdafx.h"
+
 #pragma once
 
 #include "GenericShaderParam.h"
+
+
+
+
+#include "Memory/MemoryLeaks.h"
+
 
 
 namespace bv {
@@ -41,12 +49,6 @@ void    GenericShaderParam::Update          ( RenderableEntity * renderable, Cam
 {
     { camera; renderable; } // FIXME: suppress unused variable
     //Intentionally left empty
-}
-
-//FIXME: temporary, REMOVE
-void *  GenericShaderParam::AccessValuePtr  ()
-{
-    return nullptr;
 }
 
 } //bv

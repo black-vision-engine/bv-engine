@@ -1,55 +1,73 @@
 #pragma once
 
 #include <map>
-#include <deque>
-
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IDemuxer.h"
 
 #include "FFmpegDef.h"
+#include "DataTypes/QueueConcurrent.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegPacket.h"
 
-namespace bv
+
+namespace bv {
+
+
+class FFmpegDemuxer
 {
 
-class FFmpegDemuxer : public IDemuxer
-{
 private:
-	typedef std::map< AVMediaType, std::vector< Int32 > >	StreamMap;
-	typedef std::deque< AVPacket * >						PacketQueue;
-	typedef std::map< Int32, PacketQueue >					PacketQueueMap;
+
+    typedef std::shared_ptr< QueueConcurrent< FFmpegPacketPtr > >    PacketQueue;
+	typedef std::map< Int32, PacketQueue >			            PacketQueueMap;
+
+    static const UInt32         SAFE_SEEK_FRAMES;
+    static const UInt32         MAX_QUEUE_SIZE;
 
 private:
-	//FIXME: threadsafety
+
+	std::string					m_streamPath;
 
 	AVFormatContext *			m_formatCtx;
 
-	std::string					m_streamPath;
-	bool						m_isOpened;
+	std::map< Int32, PacketQueue >  m_packetQueue;
 
-	StreamMap					m_streams;
-	
-	PacketQueueMap				m_packetQueue;
+	bool						m_isEOF;
 
-	//FIXEME: shared_ptr
-	AVPacket *					m_lastPacket;
+    UInt32                      m_maxQueueSize;
+
+	mutable std::mutex			m_mutex;
 
 public:
-									FFmpegDemuxer			( const std::string & streamPath );
-    virtual							~FFmpegDemuxer			();
 
-	AVPacket *						GetPacket				( Int32 streamIdx );
+								FFmpegDemuxer			( const std::string & streamPath, UInt32 maxQueueSize = MAX_QUEUE_SIZE );
+								~FFmpegDemuxer			();
 
-	virtual bool					IsOpened				() const override;
+	bool					    ProcessPacket			();
 
-	virtual bool					HasVideoStream			() const override;
-    virtual Int32					GetVideoStreamIndex		( UInt32 idx = 0 ) const override;
+	AVFormatContext *			GetFormatContext		() const;
+	FFmpegPacketPtr				GetPacket				( Int32 streamIdx );
+
+	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
+	void						DisableStream			( AVMediaType type, UInt32 idx = 0 );
+
+	/** Non-accurate stream seeking (seek to keyframe).
+    @param[timestamp] in stream time base 
+    */
+	void						Seek					( Int64 timestamp, Int32 streamIdx = -1 );
+
+	void						ClearPacketQueue		();
+	void						ClearPacketQueue		( Int32 streamIdx );
+
+	void						Reset					();
 	
-	virtual void					Seek					( Float32 time ) override;
-
-	AVFormatContext *				GetFormatContext		() const;
+	bool						IsEOF					() const;
+	bool						IsPacketQueueEmpty		( Int32 streamIdx ) const;
 
 private:
 
-    Int32							FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
+
+    Int32						FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
+
 };
+
+DEFINE_UPTR_TYPE( FFmpegDemuxer )
 
 } //bv
