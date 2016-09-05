@@ -101,7 +101,7 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
 {
     auto attrChan = cc->GetAttributeChannels()[ 0 ];
 
-    auto compDesc = Cast< const model::AttributeChannelDescriptor * >( attrChan->GetDescriptor() );
+    auto compDesc = std::dynamic_pointer_cast< const model::AttributeChannelDescriptor >( attrChan->GetDescriptor() );
 
     auto vaDesc = new model::VertexAttributesChannelDescriptor();
     vaDesc->AddAttrChannelDesc( compDesc );
@@ -468,7 +468,7 @@ VertexDescriptor *      BVProjectTools::CreateVertexDescriptor            ( cons
 
     for( unsigned int i = 0; i < desc->GetNumVertexChannels(); ++i )
     {
-        auto * channelDesc = desc->GetAttrChannelDescriptor( i );
+        auto channelDesc = desc->GetAttrChannelDescriptor( i );
 
         //FIXME: default channel location just copied from model channel ordering (maybe it should be a permutation or something)
         vertexDescriptor->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );

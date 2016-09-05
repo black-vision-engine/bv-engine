@@ -332,7 +332,7 @@ void TriangulatePlugin::InitializeVertexAttributesChannel()
 
 
     VertexAttributesChannelDescriptor vaChannelDesc;
-    vaChannelDesc.AddAttrChannelDesc( Cast< const AttributeChannelDescriptor * >( prevGeomChannel->GetDescriptor()->GetAttrChannelDescriptor( 0 ) ) );
+    vaChannelDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( prevGeomChannel->GetDescriptor()->GetAttrChannelDescriptor( 0 ) ) );
 
     m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
 }
@@ -346,7 +346,7 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
     if( topology != PrimitiveType::PT_LINES )
         return;
 
-    auto chan = Cast< Float3AttributeChannel * >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ).get() );
+    auto chan = std::dynamic_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
 
     auto data = chan->GetVertices();
     assert( data.size() % 2 == 0 );
@@ -366,7 +366,7 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
             triangulate.Process( in, out );
 
             auto connComp = ConnectedComponent::Create();
-            auto desc = Cast< const AttributeChannelDescriptor * >( chan->GetDescriptor() );
+            auto desc = new AttributeChannelDescriptor( *std::dynamic_pointer_cast< const AttributeChannelDescriptor >( chan->GetDescriptor() ) );
             auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert",  false );
 
             for( auto & vertex : out )

@@ -195,7 +195,7 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
     for( unsigned int i = 0; i < geomDesc->GetNumVertexChannels(); ++i )
     {
-        auto * channelDesc = geomDesc->GetAttrChannelDescriptor( i );
+        auto channelDesc = geomDesc->GetAttrChannelDescriptor( i );
         vd->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );
         attributeOffset += channelDesc->GetEntrySize();     
     }

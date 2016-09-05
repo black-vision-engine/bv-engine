@@ -199,20 +199,20 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
 
         if( pos->GetNumEntries() > 0 )
         {
-            vacDesc.AddAttrChannelDesc( posDesc );
+            vacDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( pos->GetDescriptor() ) );
             cc->AddAttributeChannel( pos );
 
             assert( norm->GetNumEntries() > 0 );
             assert( uv->GetNumEntries() > 0 );
             assert( tangent->GetNumEntries() > 0 );
 
-            vacDesc.AddAttrChannelDesc( normDesc );
+            vacDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( norm->GetDescriptor() ) );
             cc->AddAttributeChannel( norm );
 
-            vacDesc.AddAttrChannelDesc( uvDesc );
+            vacDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( uv->GetDescriptor() ) );
             cc->AddAttributeChannel( uv );
 
-            vacDesc.AddAttrChannelDesc( tangentDesc );
+            vacDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( tangent->GetDescriptor() ) );
             cc->AddAttributeChannel( tangent );
 
             m_vaChannel->ClearAll();
