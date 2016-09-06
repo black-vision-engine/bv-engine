@@ -349,6 +349,15 @@
     <Filter Include="Engine\Events\InnerEvents">
       <UniqueIdentifier>{9f842784-55d8-48e5-8140-4e4c9ab6634a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Font\Engines\FTGL">
+      <UniqueIdentifier>{aecba050-3451-400c-bf5a-9bd96168b1ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Font\Engines\FTGL\common">
+      <UniqueIdentifier>{1a699fbc-e334-4868-9732-85b11671e13c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Font\Engines\FTGL\sweep">
+      <UniqueIdentifier>{d72c8530-bfb8-425e-bad9-edde210d7bcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">

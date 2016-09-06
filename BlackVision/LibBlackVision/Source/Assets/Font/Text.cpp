@@ -256,4 +256,11 @@ void Text::BlurAtlas()
 	}
 }
 
+// ***********************
+//
+std::vector< glm::vec3 >            Text::CreateCharacter3D    ( wchar_t ch ) const
+{
+    return m_fontEngine->Create3dVerticies( ch );
+}
+
 } // bv

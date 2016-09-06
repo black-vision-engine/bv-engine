@@ -17,6 +17,7 @@
 #include FT_OUTLINE_H
 #include FT_STROKER_H
 #include <FreeType/ftglyph.h>
+#include "FTVectoriser.h"
 
 #include <fstream>
 #include <iostream>
@@ -490,7 +491,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		
 	atlas->m_textureAsset = atlasTextureRes;
 
-	image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
+	//image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
@@ -503,6 +504,43 @@ TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstrin
 {
 	return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
+
+// ***********************
+//
+std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch )
+{
+    // Load the glyph we are looking for.
+    FT_UInt gindex = FT_Get_Char_Index( m_face, ch );
+
+    if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
+    {
+        FTVectoriser vectorizer( m_face->glyph );
+        vectorizer.MakeMesh();
+
+        const auto & mesh = vectorizer.GetMesh();
+        const auto & pointList = mesh->Tesselation( 0 );
+
+        std::vector< glm::vec3 > verticies;
+        verticies.reserve( pointList->PointCount() );
+
+        for( int i = 0; i < pointList->PointCount(); ++i )
+        {
+            glm::vec3 vertex;
+            auto & point = pointList->Point( i );
+            
+            vertex.x = point.Xf();
+            vertex.y = point.Yf();
+            vertex.z = point.Zf();
+
+            verticies.push_back( vertex );
+        }
+
+        return verticies;
+    }
+
+    return std::vector< glm::vec3 >();
+}
+
 
 } // bv
 

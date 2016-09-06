@@ -13,6 +13,9 @@
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Events/BaseEvent.h"
+#include "Assets/Font/Text.h"
+
+
 
 namespace bv { namespace model {
 
@@ -50,15 +53,14 @@ private:
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
-    ParamFloatPtr                   m_timeParam;
 	ValueMat4Ptr					m_scaleValue;
 
-    //delegates
-    void                                        OnSetText                   ( IEventPtr evt );
+    TextConstPtr                    m_text;
 
     void                                        SetText                     ( const std::wstring & newText );
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
+    void                                        RebuildText                 ();
 
 public:
 

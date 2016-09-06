@@ -601,6 +601,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::SVGTestScene( timeline );
     }
+    else if( scene == "TEXT_3D_TEST_SCENE" )
+    {
+        node = TestScenesFactory::Text3DTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -2088,6 +2092,38 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
 //    root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
 
     return root;
+}
+
+// ***********************
+//
+model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    //Plugin stuff
+    std::vector< std::string > uids;
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_COLOR" );
+    uids.push_back( "DEFAULT_TEXT3D" );
+
+
+    auto node = model::BasicNode::Create( "Text3D", timeEvaluator );
+    auto success = node->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+    //SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.0, 0.0, 0.0 ) );
+    //SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+    
+
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0, 0.6, 0.3, 1.0 ) );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+
+    success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/Astera.ttf", 30, 0, 0, true );
+    assert( success );
+
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"a" ) );
+
+    return node;    
 }
 
 } //bv
