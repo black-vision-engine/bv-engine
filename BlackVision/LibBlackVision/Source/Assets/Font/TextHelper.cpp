@@ -59,9 +59,9 @@ model::ConnectedComponentPtr         CreateEmptyCC()
 {
     model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
 
-    model::AttributeChannelDescriptor * desc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    auto desc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-    auto posAttribChannel = new model::Float3AttributeChannel( desc, "vertexPosition", true );
+    auto posAttribChannel = std::make_shared< model::Float3AttributeChannel >( desc, "vertexPosition", true );
 
     posAttribChannel->AddAttribute( glm::vec3() );
     posAttribChannel->AddAttribute( glm::vec3() );
@@ -70,9 +70,9 @@ model::ConnectedComponentPtr         CreateEmptyCC()
 
     connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
 
-    model::AttributeChannelDescriptor * desc1 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    auto desc1 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
+    auto verTex0AttrChannel = std::make_shared< model::Float2AttributeChannel >( desc1, "textAtlasPosition", true );
 
     verTex0AttrChannel->AddAttribute( glm::vec2() );
     verTex0AttrChannel->AddAttribute( glm::vec2() );
@@ -81,9 +81,9 @@ model::ConnectedComponentPtr         CreateEmptyCC()
 
     connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
 
-    model::AttributeChannelDescriptor * desc2 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    auto desc2 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    auto ccCenterChannel = new model::Float2AttributeChannel( desc2, "ccCenter", true );
+    auto ccCenterChannel = std::make_shared< model::Float2AttributeChannel >( desc2, "ccCenter", true );
 
     ccCenterChannel->AddAttribute( glm::vec2() );
     ccCenterChannel->AddAttribute( glm::vec2() );
@@ -165,9 +165,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
         model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
 
-        model::AttributeChannelDescriptor * desc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        auto desc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-        auto posAttribChannel = new model::Float3AttributeChannel( desc, "vertexPosition", true );
+        auto posAttribChannel = std::make_shared< model::Float3AttributeChannel >( desc, "vertexPosition", true );
 
         if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
@@ -205,9 +205,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             
             // UV
 
-            model::AttributeChannelDescriptor * desc1 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            auto desc1 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
+            auto verTex0AttrChannel = std::make_shared< model::Float2AttributeChannel >( desc1, "textAtlasPosition", true );
 
             float texLeft;
             float texTop;
@@ -231,9 +231,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
             // CC CENTER
 
-            model::AttributeChannelDescriptor * desc2 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            auto desc2 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            auto ccCenterAttrChannel = new model::Float2AttributeChannel( desc2, "ccCenter", true );
+            auto ccCenterAttrChannel = std::make_shared< model::Float2AttributeChannel >( desc2, "ccCenter", true );
 
             auto bottomLeft = ( quadBottomLeft + translate + bearing + newLineTranslation );
             auto topRight   = ( quadTopRight   + translate + bearing + newLineTranslation );

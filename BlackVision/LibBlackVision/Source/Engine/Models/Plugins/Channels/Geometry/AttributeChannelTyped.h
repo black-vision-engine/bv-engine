@@ -22,7 +22,7 @@ private:
 
 public:
 
-    explicit                        Float4AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
+    explicit                        Float4AttributeChannel          ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly );
     virtual                         ~Float4AttributeChannel         ();
 
     virtual void                    Update                          ( TimeType t );
@@ -51,7 +51,7 @@ private:
 
 public:
 
-    explicit                        Float3AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
+    explicit                        Float3AttributeChannel          ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly );
     virtual                         ~Float3AttributeChannel         ();
 
     virtual void                    Update                          ( TimeType t ){ { t; } } // FIXME: suppress unused warning // FIXME: implement
@@ -82,7 +82,7 @@ private:
 
 public:
 
-    explicit                        Float2AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
+    explicit                        Float2AttributeChannel          ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly );
 
     virtual void                    Update                          ( TimeType t ){ { t; } } // FIXME: suppress unused warning // FIXME: implement
     virtual bool                    IsReadOnly                      () const;

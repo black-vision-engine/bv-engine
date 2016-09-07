@@ -187,7 +187,7 @@ ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
 {
     auto comp = model::ConnectedComponent::Create();
 
-    auto * compVertDesc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    auto compVertDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
     auto lineVerts = std::make_shared< model::Float3AttributeChannel >( compVertDesc, "gridLines", false );
     comp->AddAttributeChannel( lineVerts );

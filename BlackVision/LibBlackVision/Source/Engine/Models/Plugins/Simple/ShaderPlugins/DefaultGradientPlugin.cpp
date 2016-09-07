@@ -108,7 +108,7 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 
     InitVertexAttributesChannel();
 
-	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     m_psc->GetRendererContext()->cullCtx->enabled = false;
 }
 
@@ -120,10 +120,10 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
 {
-	m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
-	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
-	SetPrevPlugin( prev );
+    SetPrevPlugin( prev );
 }
 
 // *************************************
@@ -157,7 +157,7 @@ IVertexShaderChannelConstPtr        DefaultGradientPlugin::GetVertexShaderChanne
 // 
 void                                DefaultGradientPlugin::Update                      ( TimeType t )
 {
-	BasePlugin::Update( t );
+    BasePlugin::Update( t );
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
@@ -168,14 +168,14 @@ void                                DefaultGradientPlugin::Update               
 
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
     }
-	
+    
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
     {
         InitVertexAttributesChannel();
     }
 
-	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
@@ -185,30 +185,30 @@ void                                DefaultGradientPlugin::Update               
 //
 void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 {
-	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
-	{
-		m_vaChannel = nullptr;
-		return;
-	}
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
-	auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
-	
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    
     //add gradient texture desc
-	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
-	vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-	
-	if( !m_vaChannel )
-	{
-		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-	}
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->SetDescriptor( vaChannelDesc );
-	}
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    
+    if( !m_vaChannel )
+    {
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
 
-	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is that right?
-	auto prevCC = prevGeomChannel->GetComponents();
+    auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is that right?
+    auto prevCC = prevGeomChannel->GetComponents();
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
@@ -220,7 +220,7 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-		//add gradient uv channel
+        //add gradient uv channel
         auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
         if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
         {

@@ -169,7 +169,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
     assert( positions );    if( !positions ) return;
     
-    auto posChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
+    auto posChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
     auto newPositions = std::make_shared< model::Float3AttributeChannel >( posChannelDesc, positions->GetName(), true );
 
     auto connComp = ConnectedComponent::Create();
@@ -202,7 +202,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 
     IndexedGeometry normals;
 
-    auto normChannelDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR );
+    auto normChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR );
     Float3AttributeChannelPtr normalsChannel = std::make_shared< Float3AttributeChannel >( normChannelDesc, normChannelDesc->SuggestedDefaultName( 0 ), true );
     normalsChannel->GetVertices().reserve( mesh.GetVerticies().size() );
 

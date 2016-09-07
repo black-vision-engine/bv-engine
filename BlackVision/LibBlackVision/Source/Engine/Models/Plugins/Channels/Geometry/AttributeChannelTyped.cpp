@@ -20,7 +20,7 @@ namespace bv { namespace model
 
 // *********************************
 //
-Float4AttributeChannel::Float4AttributeChannel      ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+Float4AttributeChannel::Float4AttributeChannel      ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly )
     : AttributeChannel( desc, name, readOnly )
 {
     //FIXME: typed instances should be created via factories
@@ -96,7 +96,7 @@ void                    Float4AttributeChannel::AddAttributes   ( const std::vec
 
 // *********************************
 //
-Float3AttributeChannel::Float3AttributeChannel  ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+Float3AttributeChannel::Float3AttributeChannel  ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly )
     : AttributeChannel( desc, name, readOnly )
 {
     //FIXME: typed instances should be created via factories
@@ -171,7 +171,7 @@ void                    Float3AttributeChannel::ReplaceAttributes( std::vector< 
 
 // *********************************
 //
-Float2AttributeChannel::Float2AttributeChannel  ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+Float2AttributeChannel::Float2AttributeChannel  ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly )
     : AttributeChannel( desc, name, readOnly )
 {
     //FIXME: typed instances should be created via factories

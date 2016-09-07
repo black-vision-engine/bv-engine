@@ -31,14 +31,14 @@ namespace bv { namespace model
         ConnectedComponentPtr comp_up = PrismComponentPtr( new PrismComponent() );
         ConnectedComponentPtr comp_down = PrismComponentPtr( new PrismComponent() );
 
-        const AttributeChannelDescriptor * descUV = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
+        auto descUV = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
 
         Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( descUV, descUV->SuggestedDefaultName( 0 ), false );
         Float2AttributeChannelPtr up_vertArrtUV = std::make_shared< Float2AttributeChannel >( descUV, descUV->SuggestedDefaultName( 0 ), false );
         Float2AttributeChannelPtr down_vertArrtUV = std::make_shared< Float2AttributeChannel >( descUV, descUV->SuggestedDefaultName( 0 ), false );
 
         //FIXME: not null desc should be created via factory
-        const AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
         Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( desc, desc->SuggestedDefaultName( 0 ), false );
         Float3AttributeChannelPtr up_vertArrtF3 = std::make_shared< Float3AttributeChannel >( desc, desc->SuggestedDefaultName( 0 ), false );

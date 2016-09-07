@@ -201,7 +201,7 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_hmRawData( nullptr )
-	, m_currTextureIdx( 0 )
+    , m_currTextureIdx( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -217,9 +217,9 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
-	m_currTextureIdx = 0;
+    m_currTextureIdx = 0;
     
-	m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
+    m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
     m_GroundLevelHeight = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmGroundLevelHeight" ) );
     m_MaxHeightValue    = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmMaxHeightValue" ) );
     m_totalDistInMeters = QueryTypedParam< ParamFloatPtr >( GetParameter( "totalDistanceInMeters" ) );
@@ -255,7 +255,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
 
     assert( curNumTextures < 4 ); //FIXME: Second one may be added by a mask
 
-	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
+    auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
 
     if ( txAssetDescr == nullptr )
     {
@@ -293,19 +293,19 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
         }
 */
 
-		if( ( TextureSlot ) curNumTextures == TextureSlot::TS_HEIGHT_MAP )
-		{
-			assert( txDesc->GetHeight() == 1 );
-		}
+        if( ( TextureSlot ) curNumTextures == TextureSlot::TS_HEIGHT_MAP )
+        {
+            assert( txDesc->GetHeight() == 1 );
+        }
 
-		auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
-		txDesc->SetSamplerState( SamplerStateModel::Create( timeEval, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, 
-			TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 0.f ) ) );
-		txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-		txData->SetTexture( m_currTextureIdx, txDesc );
-		m_currTextureIdx++;
+        auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
+        txDesc->SetSamplerState( SamplerStateModel::Create( timeEval, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, 
+            TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 0.f ) ) );
+        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+        txData->SetTexture( m_currTextureIdx, txDesc );
+        m_currTextureIdx++;
 
-		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+        HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
         return true;
     }
@@ -338,10 +338,10 @@ IVertexShaderChannelConstPtr        DefaultHeightMapPlugin::GetVertexShaderChann
 // 
 void                                DefaultHeightMapPlugin::Update                      ( TimeType t )
 {
-	BasePlugin::Update( t );
+    BasePlugin::Update( t );
 
-	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     //m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 
@@ -383,7 +383,7 @@ glm::vec2                           DefaultHeightMapPlugin::QueryEdgePosition   
 void    DefaultHeightMapPlugin::InitAttributesChannel( IPluginPtr prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {

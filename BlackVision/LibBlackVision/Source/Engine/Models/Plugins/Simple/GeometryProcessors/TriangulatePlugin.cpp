@@ -366,7 +366,7 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
             triangulate.Process( in, out );
 
             auto connComp = ConnectedComponent::Create();
-            auto desc = new AttributeChannelDescriptor( *std::dynamic_pointer_cast< const AttributeChannelDescriptor >( chan->GetDescriptor() ) );
+            auto desc = std::make_shared< AttributeChannelDescriptor >( *std::dynamic_pointer_cast< const AttributeChannelDescriptor >( chan->GetDescriptor() ) );
             auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert",  false );
 
             for( auto & vertex : out )

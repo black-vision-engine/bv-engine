@@ -59,20 +59,20 @@ void    DefaultGeometryVertexAttributeChannel::GenerateAndAddConnectedComponent 
 
     AddAttributeChannelDescriptors( generator );
     
-    auto vertChannel = std::make_shared< Float3AttributeChannel >( m_compVertDesc.get(), m_compVertDesc->SuggestedDefaultName( 0 ), false );
+    auto vertChannel = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
     comp->AddAttributeChannel( vertChannel );
     
     Float3AttributeChannelPtr normChannel = nullptr;
     if( m_compNormDesc )
     {
-        normChannel = std::make_shared< Float3AttributeChannel >( m_compNormDesc.get(), m_compNormDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
+        normChannel = std::make_shared< Float3AttributeChannel >( m_compNormDesc, m_compNormDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
         comp->AddAttributeChannel( normChannel );
     }
 
     Float2AttributeChannelPtr uvChannel = nullptr;
     if( m_compUVDesc )
     {
-        uvChannel = std::make_shared< Float2AttributeChannel >( m_compUVDesc.get(), m_compUVDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
+        uvChannel = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
         comp->AddAttributeChannel( uvChannel );
     }
  

@@ -183,10 +183,10 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
     {
         auto cc = ConnectedComponent::Create();
 
-        auto posDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-        auto normDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
-        auto uvDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
-        auto tangentDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT4, AttributeSemantic::AS_TANGENT, ChannelRole::CR_GENERATOR );
+        auto posDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        auto normDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
+        auto uvDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
+        auto tangentDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT4, AttributeSemantic::AS_TANGENT, ChannelRole::CR_GENERATOR );
         
         auto pos = std::make_shared< Float3AttributeChannel >( posDesc, posDesc->SuggestedDefaultName( 0 ), false );
         auto norm = std::make_shared< Float3AttributeChannel >( normDesc, normDesc->SuggestedDefaultName( 0 ), false );

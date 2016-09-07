@@ -22,7 +22,7 @@ private:
 
 public:
     
-    explicit                                        AttributeChannel    ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly = false );
+    explicit                                        AttributeChannel    ( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly = false );
                                                     ~AttributeChannel   ();
 
     void                                            SetReadOnly         ( bool readOnly );               

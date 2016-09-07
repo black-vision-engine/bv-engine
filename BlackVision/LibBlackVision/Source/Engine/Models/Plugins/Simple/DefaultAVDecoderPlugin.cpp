@@ -120,9 +120,9 @@ void					DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-	InitVertexAttributesChannel();
+    InitVertexAttributesChannel();
 
-	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
@@ -133,22 +133,22 @@ void					DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
 // *************************************
 // 
 DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-	: BasePlugin< IPlugin >( name, uid, prev, model )
-	, m_psc( nullptr )
-	, m_vsc( nullptr )
-	, m_vaChannel( nullptr )
-	, m_decoder( nullptr )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
+    , m_psc( nullptr )
+    , m_vsc( nullptr )
+    , m_vaChannel( nullptr )
+    , m_decoder( nullptr )
     , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
-	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
 
-	SetPrevPlugin( prev );
+    SetPrevPlugin( prev );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
 
@@ -176,21 +176,21 @@ DefaultAVDecoderPlugin::~DefaultAVDecoderPlugin					()
 // 
 bool							DefaultAVDecoderPlugin::IsValid     () const
 {
-	return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************
 // 
 bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDescConstPtr assetDescr )
 {
-	m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
+    m_assetDesc = QueryTypedDesc< AVAssetDescConstPtr >( assetDescr );
 
     if ( m_assetDesc )
     {
         auto asset = LoadTypedAsset<AVAsset>( assetDescr );
         if( asset )
         {
-		    m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
+            m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
             if( m_decoder->HasVideo() )
             {
@@ -203,25 +203,25 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                 //FIXME: decode first video frame
                 std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
 
-		        auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
+                auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
                     m_assetDesc->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
                 if( vsDesc )
-		        {
-			        vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+                {
+                    vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
 
-			        auto txData = m_psc->GetTexturesDataImpl();
-			        txData->SetTexture( 0, vsDesc );
+                    auto txData = m_psc->GetTexturesDataImpl();
+                    txData->SetTexture( 0, vsDesc );
 
-			        SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
+                    SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
-			        HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+                    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
                     UpdateDecoderState( m_decoderMode );
 
-			        return true;
-		        }
+                    return true;
+                }
             }
         }
     }
@@ -261,18 +261,18 @@ IAudioChannelPtr                    DefaultAVDecoderPlugin::GetAudioChannel     
 // 
 void                                DefaultAVDecoderPlugin::Update                      ( TimeType t )
 {
-   	BasePlugin::Update( t );
+    BasePlugin::Update( t );
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
     MarkOffsetChanges();
 
-	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
-	{
-		InitVertexAttributesChannel();
-	}
-	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    {
+        InitVertexAttributesChannel();
+    }
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     UpdateDecoder();
     UploadVideoFrame();
@@ -286,33 +286,33 @@ void                                DefaultAVDecoderPlugin::Update              
 //
 void									DefaultAVDecoderPlugin::InitVertexAttributesChannel		()
 {
-	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
-	{
-		m_vaChannel = nullptr;
-		return;
-	}
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
-	auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
-	auto prevCC = prevGeomChannel->GetComponents();
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevCC = prevGeomChannel->GetComponents();
 
     //Only one texture
-	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
-	if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
-	{
-		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-	}
-	
-	if( !m_vaChannel )
-	{		
-		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-	}
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->SetDescriptor( vaChannelDesc );
-	}
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
+    {
+        vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    }
+    
+    if( !m_vaChannel )
+    {		
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
 
-	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
@@ -325,22 +325,22 @@ void									DefaultAVDecoderPlugin::InitVertexAttributesChannel		()
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-		if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
-		{
-			//FIXME: only one texture - convex hull calculations
-			auto uvs = new model::Float2AttributeChannel( desc, DefaultAVDecoderPluginDesc::TextureName(), true );
-			auto uvsPtr = Float2AttributeChannelPtr( uvs );
-			
-			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
-											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, -1.0, 0.0 ), true );
+        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        {
+            //FIXME: only one texture - convex hull calculations
+            auto uvs = new model::Float2AttributeChannel( desc, DefaultAVDecoderPluginDesc::TextureName(), true );
+            auto uvsPtr = Float2AttributeChannelPtr( uvs );
+            
+            Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
+                                            uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, -1.0, 0.0 ), true );
 
-			connComp->AddAttributeChannel( uvsPtr );
-		}
+            connComp->AddAttributeChannel( uvsPtr );
+        }
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-	
+    
     assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
@@ -461,10 +461,10 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame    
 {
     //update texture with video data
     AVMediaData mediaData;
-	if( m_decoder->GetVideoMediaData( mediaData ) )
-	{
-	    std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
-	}
+    if( m_decoder->GetVideoMediaData( mediaData ) )
+    {
+        std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
+    }
 }
 
 // *************************************
@@ -474,9 +474,9 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
     //update audio data
     AVMediaData mediaData;
     if( m_decoder->GetAudioMediaData( mediaData ) )
-	{
+    {
         m_audioChannel->PushPacket( mediaData.frameData );
-	}
+    }
 }
 
 // *************************************

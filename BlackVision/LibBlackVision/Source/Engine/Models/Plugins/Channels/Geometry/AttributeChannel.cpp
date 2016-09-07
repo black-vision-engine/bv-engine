@@ -18,7 +18,7 @@ namespace bv { namespace model
 
 // *********************************
 //
-AttributeChannel::AttributeChannel( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+AttributeChannel::AttributeChannel( AttributeChannelDescriptorConstPtr desc, const std::string & name, bool readOnly )
     : m_desc( desc )
     , m_name( name )
     , m_readOnly( readOnly )
