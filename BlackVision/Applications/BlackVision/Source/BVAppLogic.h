@@ -18,7 +18,6 @@
 
 //pablito
 #include "Solution.h"
-#include "VideoCardManager.h"
 #include "structure/AssetManager.h"
 
 //hackvideoinput
@@ -53,9 +52,6 @@ class BVAppLogic
 {
 private:
 
-    //hackvideoinput
-    TestVideoInput*                  VideoInput;
-
     BVAppState                      m_state;
 
     FrameStatsCalculator            m_statsCalculator;
@@ -72,14 +68,13 @@ private:
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
-    RemoteEventsHandlers*           m_remoteHandlers;
-    RemoteController*               m_remoteController;
+    RemoteEventsHandlers *          m_remoteHandlers;
+    RemoteController *              m_remoteController;
 
     RenderMode                      m_renderMode;
 
 	//pablito
 	Solution						m_solution;
-	bv::videocards::VideoCardManager* m_videoCardManager;
     
     void            RefreshVideoInputScene  ();
 
@@ -95,10 +90,6 @@ public:
 
     void            SetStartTime    ( unsigned long millis );
 
-	//pablito:
-	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
-	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
-
     virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer );
     virtual void    OnKey           ( unsigned char c );
     virtual void    OnMouse         ( MouseAction action, int posX, int posY );
@@ -108,7 +99,8 @@ public:
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
     void            UpdateFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
-    const FrameStatsCalculator &     FrameStats () const;
+	FrameStatsCalculator *          GetStatsCalculator  ();
+    const FrameStatsCalculator &    FrameStats          () const;
 
     void            ResetScene      ();
     void            ReloadScene     ();
@@ -121,13 +113,12 @@ public:
 public:
 
     //Convenience API - generalized model accessors
-    BVProjectPtr                    GetBVProject          ();
+    BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
+    RenderLogic *                   GetRenderLogic      () const;
+    RenderMode &                    GetRenderMode       ();
 
-    RenderMode&                     GetRenderMode       ()  { return m_renderMode; }
-
-    void            LoadScenes      ( const PathVec & pathVec );
-    RenderLogic *                   GetRenderLogic      ();
+    void                            LoadScenes          ( const PathVec & pathVec );
 
 private:
 
@@ -136,6 +127,7 @@ private:
     void                            InitializeCommandsDebugLayer();
 
     std::string                     GetEnvScene();
+
 };
 
 } //bv

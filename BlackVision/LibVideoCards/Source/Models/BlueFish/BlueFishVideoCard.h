@@ -1,121 +1,151 @@
 #pragma once
 
+#include "Interfaces/IVideoCard.h"
+#include "Interfaces/IVideoCardDescriptor.h"
+
 #include "Channel.h"
-#include "BVGL.h"
-#include <map>
-namespace bv
-{
 
-namespace videocards{
 
-class BlueFishVideoCard : VideoCardBase
+namespace bv { namespace videocards { namespace bluefish {
+
+DEFINE_PTR_TYPE( CBlueVelvet4 )
+
+// ***************************** DESCRIPTOR **********************************
+//
+class VideoCardDesc : public IVideoCardDesc
 {
 private:
 
-	CBlueVelvet4*           pSDK;
-	int                     iDevices;
-	ULONG                   VideoMode;
-	ULONG                   UpdateFormat;
-	ULONG                   MemoryFormat;
-    int                     FramesToBuffer;
-	ULONG                   VideoEngine;
+    std::string     m_uid;
+
+public:
+
+                                            VideoCardDesc           ();
+
+    virtual IVideoCardPtr                   CreateVideoCard         ( const IDeserializer & deser ) const override;
+
+    virtual const std::string &             GetVideoCardUID         () const override;
+
+};
+
+class VideoCard : public IVideoCard
+{
+private:
+
+    typedef std::map< ChannelName, ChannelOption > ChannelOptionMap;
+
+private:
+
+	CBlueVelvet4Ptr         m_SDK;
+	UInt32                  m_deviceID;
+
+	UInt32                  m_updFmt;
+	UInt32                  m_memFmt;
+	UInt32                  m_engineMode;
+
+
+	UInt32                  m_resolution;
+	UInt32                  m_refresh;
+    bool                    m_interlaced;
+    bool                    m_flipped;
+
 
 	VARIANT                 varVal;
-    unsigned char*          pVideoBufferA_0;
-    unsigned char*          pVideoBufferA_1;
-    unsigned char*          pBufferArrayA[2];
-    OVERLAPPED              OverlapChA;
-    void*                   pAddressNotUsedChA;
-    ULONG                   VideoFrameIndex;
     ULONG                   GoldenSize;
 	ULONG					PixelsPerLine;
 	ULONG					VideoLines;
-    ULONG                   UniqueIdChA;
-    ULONG                   UnderrunChA;
-	ULONG                   LastUnderrunChA;
     ULONG                   FieldCount;
-    ULONG                   BufferIdChA;
-	std::map<std::string, vector<ULONG>> ChannelOptions;
 
-	vector<Channel*>		Channels;
+	std::vector< Channel * > m_channels;
+
+	static ChannelOptionMap ChannelOptions;
 
 public:
-	                    BlueFishVideoCard               (void);
-                        BlueFishVideoCard               (unsigned int id);
-	virtual             ~BlueFishVideoCard              () override; 
-	virtual bool        InitVideoCard                   ( const std::vector<int> & hackBuffersUids ) override;
-    virtual unsigned int DetectInputs                   () override;      
-    virtual unsigned int DetectOutputs                  () override;    
-	void                BailOut                         (CBlueVelvet4* pSDK);
-	void                RouteChannel                    (CBlueVelvet4* pSDK, ULONG Source, ULONG Destination, ULONG LinkType);
-	void                InitBuffer                      (BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines);
-	void                InitOutputChannel               (CBlueVelvet4* pSDK, ULONG DefaultOutputChannel, ULONG VideoMode, ULONG UpdateFormat, ULONG MemoryFormat, ULONG VideoEngine);
-	int                 InitSDK                         ();
-	bool                Init                            ();
-	bool                DetectVideoCard                 ();
-    void                DeliverFrameFromRAM             (unsigned char * );
-	void                DeliverFrameFromRAM             (std::shared_ptr<CFrame> Frame );
-    bool                ActivateVideoCard               ();
-    bool                DeactivateVideoCard             ();
-    void                Black                           ();
-    void                SetReferenceModeValue           (string refMode);
-    void                UpdateReferenceOffset           ();
-    void                UpdateReferenceMode             ();      
-    void                StartDuplexPlayback             ();
-	int					InitDuplexPlayback		        ();
-	void				AddChannel						( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, string referenceMode, int refH, int refV );
-	Channel*			GetChannelByName				( std::string Name );   
-    void                StartVideoCardProccessing                   ();
+
+	static UInt32           AvailableVideoCards;
+
+
+public:
+	                        VideoCard                   ( UInt32 deviceID );
+	virtual                 ~VideoCard                  () override; 
+
+	bool                    InitVideoCard               ();
+
+    void                    SetVideoOutput              ( bool enable );
+
+	void				    AddChannel					( Channel * channel );
+	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
+	Channel *			    GetChannelByName			( ChannelName channelName ) const;   
+
+    virtual void            Start                       () override;
+
+    virtual void            ProcessFrame                ( MemoryChunkConstPtr data ) override;
+
+    static ChannelOptionMap CreateChannelOptionMap      ();
+    static UInt32           EnumerateDevices            ();
+
+	//void                BailOut                         (CBlueVelvet4* pSDK);
+	//void                InitBuffer                      (BLUE_UINT8* pVideoBuffer, ULONG PixelsPerLine, ULONG VideoLines);
+	//void                InitOutputChannel               (CBlueVelvet4* pSDK, ULONG DefaultOutputChannel, ULONG VideoMode, ULONG UpdateFormat, ULONG MemoryFormat, ULONG VideoEngine);
+    //void                SetReferenceModeValue           (std::string refMode);
+/*    void                UpdateReferenceOffset           ();
+    void                UpdateReferenceMode             ();  */    
+    //void                StartVideoCardProccessing                   ();
     //void              StopVideoCardProccessing                    ();
-    void                SuspendVideoCardProccessing                ();
-    void                ResumeVideoCardProccessing                  ();
-	unsigned char *		GetCaptureBufferForShaderProccessing    (std::string ChannelName/*A,B,C,D,E,F*/);
-    bool	            CheckIfNewFrameArrived                  (std::string ChannelName/*A,B,C,D,E,F*/);
-    void	            UnblockCaptureQueue                     (std::string ChannelName/*A,B,C,D,E,F*/);
-	virtual bool        UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)		override;
-    virtual bool        UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	override;
+    //void                SuspendVideoCardProccessing                ();
+    //void                ResumeVideoCardProccessing                  ();
+	unsigned char *		GetCaptureBufferForShaderProccessing    ( ChannelName channelName );
+    bool	            CheckIfNewFrameArrived                  ( ChannelName channelName );
+    //void	            UnblockCaptureQueue                     ( ChannelName channelName );
+	//virtual bool        UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)		override;
+    //virtual bool        UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	override;
 
-    ///GPUDirect
-private:    
-    GLuint                  frameBufferTest;
-    GLuint                  depth_rb;
-    BLUE_GPUDIRECT_HANDLE   pGpuDirectOut;
-    unsigned int*           g_pAudioScratch;
-    BLUE_UINT8*             g_pHancFrame;
-    BLUE_UINT8*             g_pVancData;
-    unsigned int            nCardType;
-	unsigned long           BufferSelect;
-	unsigned long           TextureSelect;
-	unsigned long           DMABufferIdVideo;
-	unsigned long           DMABufferIdHanc;
-	unsigned long           DMABufferIdVanc;
-	unsigned int            nOglTexID;
-	int                     nVancBufferSize;
-    BOOL                    bUseAudio;
-	BOOL                    bUseVanc;
-    GLuint                  glFrameTexOut;
-	BOOL                    bDoHanc;
-	void*                   pAddress;
-	unsigned long           ulUnderrun;
-	unsigned long           ulUniqueId;
-    int                     iFramesToBuffer;
-    bool                    wait;
-    std::vector<int>        glOutputBuffersHack;
+    //static UInt32       DetectInputs                   ();
+    //static UInt32       DetectOutputs                  ();
 
-public:
-    void                processAudioOutput              (unsigned int nCardType, void* pAudioOut, unsigned int VideoMode);
-    void                Fill50                          (unsigned short* pAudio16, unsigned int Samples, unsigned int Channels);
-    void                AdjustProcessWorkingSet         ();
-	int					InitSDKGPUDirect				( const std::vector<int> & hackBuffersUids );
-	BOOL				IsInputChannel					(EBlueVideoChannel VideoChannel);
-	BOOL				IsOutputChannel					(EBlueVideoChannel VideoChannel);
-	void        		InitBluefish					(CBlueVelvet4* tempSDK, int CardId, EBlueVideoChannel VideoChannel, EVideoMode VideoMode, EUpdateMethod UpdFmt, EMemoryFormat MemoryFormat, EEngineMode VideoEngine);
-    bool                DirectGPUPreRender              ();
-    bool                DirectGPUPostRender             ();
-    void                DeliverFrameFromGPU             (unsigned int bufferPointer);
-    CBlueVelvet4*       GetBlueFishSDK                  ();
+//    ///GPUDirect
+//private:    
+//    GLuint                  frameBufferTest;
+//    GLuint                  depth_rb;
+//    BLUE_GPUDIRECT_HANDLE   pGpuDirectOut;
+//    unsigned int*           g_pAudioScratch;
+//    BLUE_UINT8*             g_pHancFrame;
+//    BLUE_UINT8*             g_pVancData;
+//    unsigned int            nCardType;
+//	unsigned long           BufferSelect;
+//	unsigned long           TextureSelect;
+//	unsigned long           DMABufferIdVideo;
+//	unsigned long           DMABufferIdHanc;
+//	unsigned long           DMABufferIdVanc;
+//	unsigned int            nOglTexID;
+//	int                     nVancBufferSize;
+//    BOOL                    bUseAudio;
+//	BOOL                    bUseVanc;
+//    GLuint                  glFrameTexOut;
+//	BOOL                    bDoHanc;
+//	void*                   pAddress;
+//	unsigned long           ulUnderrun;
+//	unsigned long           ulUniqueId;
+//    int                     iFramesToBuffer;
+//    bool                    wait;
+//    std::vector<int>        glOutputBuffersHack;
+//
+//public:
+//    void                processAudioOutput              (unsigned int nCardType, void* pAudioOut, unsigned int VideoMode);
+//    void                Fill50                          (unsigned short* pAudio16, unsigned int Samples, unsigned int Channels);
+//    void                AdjustProcessWorkingSet         ();
+//	int					InitSDKGPUDirect				( const std::vector<int> & hackBuffersUids );
+//	BOOL				IsInputChannel					(EBlueVideoChannel VideoChannel);
+//	BOOL				IsOutputChannel					(EBlueVideoChannel VideoChannel);
+//	void        		InitBluefish					(CBlueVelvet4* tempSDK, int CardId, EBlueVideoChannel VideoChannel, EVideoMode VideoMode, EUpdateMethod UpdFmt, EMemoryFormat MemoryFormat, EEngineMode VideoEngine);
+//    bool                DirectGPUPreRender              ();
+//    bool                DirectGPUPostRender             ();
+//    void                DeliverFrameFromGPU             (unsigned int bufferPointer);
 	
 };
 
-}
-}
+DEFINE_PTR_TYPE( VideoCard )
+
+} //bluefish
+} //videocards
+} //bv

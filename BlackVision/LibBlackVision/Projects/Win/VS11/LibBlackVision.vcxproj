@@ -554,9 +554,6 @@
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp" />
-    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
-    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
-    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -1053,7 +1050,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
@@ -1072,16 +1068,8 @@
     <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h" />
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
     <ClInclude Include="..\..\..\Source\stdafx.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>
@@ -1107,7 +1095,6 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl" />
-    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVAL\Projects\Win\VS11\LibBVAL.vcxproj">
@@ -1121,6 +1108,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\LibImage\Projects\Win\VS11\LibImage.vcxproj">
       <Project>{33e2cc63-2591-46b1-9b24-2a284566f1d6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibVideoCards\Projects\Win\VS11\LibVideoCards.vcxproj">
+      <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
       <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>

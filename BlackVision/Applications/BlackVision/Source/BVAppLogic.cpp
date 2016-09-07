@@ -18,6 +18,7 @@
 #include "System/Env.h"
 #include "BVConfig.h"
 #include "ProjectManager.h"
+#include "VideoCardManager.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
@@ -45,7 +46,6 @@
 
 //pablito
 #define XML
-#include "ConfigManager.h"
 
 #define HIDE_PROFILE_STATS
 
@@ -145,6 +145,7 @@ void BVAppLogic::Initialize         ()
     m_renderMode.Init( m_renderLogic, m_renderer );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
+
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
     bv::effect::InitializeLibEffect( m_renderer );
@@ -153,6 +154,17 @@ void BVAppLogic::Initialize         ()
     InitializeKbdHandler();
     InitializeRemoteCommunication();
     InitializeCommandsDebugLayer();
+
+    ProjectManager::SetPMFolder( DefaultConfig.PMFolder() );
+
+    if( DefaultConfig.ReadbackFlag() )
+    {
+        //FIXME: maybe config should be read by bvconfig
+        auto & videoCardManager = videocards::VideoCardManager::Instance();
+        videoCardManager.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+        videoCardManager.ReadConfig( DefaultConfig.GetNode( "config" ) );
+        videoCardManager.Start();
+    }
 }
 
 // *********************************
@@ -174,39 +186,39 @@ void BVAppLogic::LoadScene          ( void )
 {
     auto projectEditor = m_bvProject->GetProjectEditor();
 
-    if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
-    {
-        if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
-        {
-            //m_solution.SetTimeline(m_timelineManager);
-            m_solution.LoadSolution( ConfigManager::GetString("solution") );
+    //if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
+    //{
+    //    //if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
+    //    //{
+    //    //    //m_solution.SetTimeline(m_timelineManager);
+    //    //    m_solution.LoadSolution( ConfigManager::GetString("solution") );
 
-            auto sceneModel = SceneModel::Create( "root" );
-            projectEditor->AddScene( sceneModel );
+    //    //    auto sceneModel = SceneModel::Create( "root" );
+    //    //    projectEditor->AddScene( sceneModel );
 
-            projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
+    //    //    projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
 
-            //if(ConfigManager::GetBool("hm"))
-            //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
-        }
-        else
-        {
-            auto pm = ProjectManager::GetInstance();
+    //    //    //if(ConfigManager::GetBool("hm"))
+    //    //    //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+    //    //}
+    //    //else
+    //    //{
+    //        auto pm = ProjectManager::GetInstance();
 
-            auto projectName = ConfigManager::GetString( "default_project_name" );
-            
-            if( !projectName.empty() )
-            {
-                auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
+    //        auto projectName = ConfigManager::GetString( "default_project_name" );
+    //        
+    //        if( !projectName.empty() )
+    //        {
+    //            auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
 
-                if( !projectScenesNames.empty() )
-                {
-                    LoadScenes( projectScenesNames );
-                }
-            }
-        }
-    }
-    else
+    //            if( !projectScenesNames.empty() )
+    //            {
+    //                LoadScenes( projectScenesNames );
+    //            }
+    //        }
+    //    //}
+    //}
+    if( DefaultConfig.LoadSceneFromEnv() )
     {
         model::SceneModelPtr sceneModel = nullptr;
 
@@ -310,17 +322,17 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
 //
 void BVAppLogic::RefreshVideoInputScene()
 {
-    if(ConfigManager::GetBool("Debug/UseVideoInputFeeding") && m_videoCardManager->IsEnabled())
-    {
-        if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
-        {
-            BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
-        }
-        else
-        {
-            m_videoCardManager->UnblockCaptureQueue(0,"A");
-        }
-    }
+    //if( DefaultConfig.UseVideoInputFeeding() )
+    //{
+    //    if( m_videoCardManager->CheckIfNewFrameArrived( 0, "A" ) )
+    //    {
+    //        BB::AssetManager::VideoInput->RefreshData( m_videoCardManager->GetCaptureBufferForShaderProccessing( 0, "A" ) );
+    //    }
+    //    else
+    //    {
+    //        //m_videoCardManager->UnblockCaptureQueue(0,"A");
+    //    }
+    //}
 }
 
 // *********************************
@@ -364,13 +376,6 @@ void BVAppLogic::ShutDown           ()
     m_remoteController->DeinitializeServer();
 }
 
-//pablito:
-void	BVAppLogic::SetVideoCardManager( bv::videocards::VideoCardManager* videoCardManager )
-{
-        m_videoCardManager = videoCardManager;
-//        m_renderLogic->SetVideoCardManager( videoCardManager );
-}
-
 // *********************************
 //
 void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
@@ -405,6 +410,13 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 
 // *********************************
 //
+FrameStatsCalculator *  BVAppLogic::GetStatsCalculator  ()
+{
+    return &m_statsCalculator;
+}
+
+// *********************************
+//
 const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 {
     return m_statsCalculator;
@@ -429,7 +441,7 @@ void                            BVAppLogic::ReloadScene     ()
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-BVProjectPtr                  BVAppLogic::GetBVProject              ()
+BVProjectPtr                  BVAppLogic::GetBVProject          () const
 {
     return m_bvProject;
 }
@@ -443,9 +455,16 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-RenderLogic *                   BVAppLogic::GetRenderLogic      ()
+RenderLogic *                   BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
+}
+
+// *********************************
+//
+RenderMode &                    BVAppLogic::GetRenderMode        () 
+{
+    return m_renderMode;
 }
 
 // *********************************
@@ -486,7 +505,7 @@ void                            BVAppLogic::InitializeRemoteCommunication()
 {
     m_remoteHandlers->InitializeHandlers( this );
 
-    unsigned int editorPort = ConfigManager::GetInt( "Network/SocketServer/Port" );
+    auto editorPort = DefaultConfig.SockerServerPort();
     m_remoteController->InitializeServer( editorPort );
 }
 
@@ -494,9 +513,9 @@ void                            BVAppLogic::InitializeRemoteCommunication()
 //
 void                            BVAppLogic::InitializeCommandsDebugLayer()
 {
-    if( ConfigManager::GetBool( "Debug/CommandsDebugLayer/UseDebugLayer" ) )
+    if( DefaultConfig.UseDebugLayer() )
     {
-        m_remoteController->InitializeDebugLayer( ConfigManager::GetString( "Debug/CommandsDebugLayer/FilePath" ) );
+        m_remoteController->InitializeDebugLayer( DefaultConfig.DebugFilePath() );
     }
 }
 
@@ -504,7 +523,7 @@ void                            BVAppLogic::InitializeCommandsDebugLayer()
 //
 std::string                     BVAppLogic::GetEnvScene()
 {
-    auto s = ConfigManager::GetString( "Debug/SceneFromEnvName" );
+    auto s = DefaultConfig.SceneFromEnvName();
     if( s != "" )
         return s;
     else

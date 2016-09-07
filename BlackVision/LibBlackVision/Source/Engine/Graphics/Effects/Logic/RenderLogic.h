@@ -7,8 +7,10 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 #include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
-#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
+//#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
+
+#include "Mathematics/glm_inc.h"
 
 
 namespace bv {
@@ -39,7 +41,6 @@ class RenderLogic
 {
 private:
 
-    bv::videocards::VideoCardManager *      m_VideoCardManager;
     RenderTargetStackAllocator      m_rtStackAllocator;
     RenderQueueStackAllocator       m_renderQueueAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
@@ -51,7 +52,7 @@ private:
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
-    SharedMemoryVideoBuffer*        m_SharedMemoryVideoBuffer;
+    //SharedMemoryVideoBuffer*        m_SharedMemoryVideoBuffer;
 
     glm::vec4                       m_clearColor;
     bool                            m_renderToSharedMemory;
@@ -65,14 +66,7 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
 
-//    //pablito
-//    void    SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
-//private:
-//    void    InitVideoCards      ();
-//    // pablito end
-
 private:
-
 
     void    RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
     void    FrameRendered   ( Renderer * renderer );
@@ -101,7 +95,6 @@ private:
        
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 
-    //void                            PushToVideoCard         ( Texture2DConstPtr frame );
     void                            BlitToPreview           ( RenderTarget * rt, RenderLogicContext * ctx );
 
     void                            UpdateOffscreenState    ();

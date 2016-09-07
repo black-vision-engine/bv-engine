@@ -1,5 +1,8 @@
 #include "TextureTest.h"
 
+#include "Engine/Audio/AudioRenderer.h"
+
+
 namespace bv {
 
 // *****************************
@@ -83,7 +86,7 @@ void    TextureTest::Render              ()
 
 // **************************
 //
-IBasicLogicUnqPtr    TextureTest::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    TextureTest::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
 	return IBasicLogicUnqPtr( new TextureTest( renderer ) );
 }
