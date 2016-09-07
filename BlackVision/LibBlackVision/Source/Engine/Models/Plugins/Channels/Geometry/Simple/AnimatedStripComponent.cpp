@@ -30,7 +30,7 @@ AnimatedStripComponent::AnimatedStripComponent                  ( float w, float
     , m_sizeZ( sizeZ )
 {
     //FIXME: not null desc should be created via factory
-    const AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( desc, desc->SuggestedDefaultName( 0 ), false );
 
     float xStart    = -w * 0.5f;
