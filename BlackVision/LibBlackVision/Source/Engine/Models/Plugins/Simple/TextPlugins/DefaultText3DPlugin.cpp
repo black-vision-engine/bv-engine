@@ -244,6 +244,8 @@ bool                            DefaultText3DPlugin::LoadResource  ( AssetDescCo
         m_fontSize = fontAssetDesc->GetFontSize();
         m_outlineSize = fontAssetDesc->GetOutlineSize();
 
+        SetAsset( 0, LAsset( "Font3D", assetDescr, nullptr ) );
+
         RebuildText();
 
         return true;
