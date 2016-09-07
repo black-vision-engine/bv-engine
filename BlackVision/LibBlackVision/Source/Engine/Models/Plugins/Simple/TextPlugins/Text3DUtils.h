@@ -18,10 +18,10 @@ public:
     /*static Float3AttributeChannelConstPtr           CreateAttrChannel           ( const wchar_t & wch, const std::string & fontPath, SizeType size );*/
     static VertexAttributesChannelPtr               CreateEmptyVACForText3D     ();
 
-    static std::vector< ConnectedComponentPtr >     CreateText                  ( const std::wstring& text, TextConstPtr textAsset );
+    static std::vector< ConnectedComponentPtr >     CreateText                  ( const std::wstring& text, TextConstPtr textAsset, float size );
 
 private:
-    static ConnectedComponentPtr                    CreateLetter                ( const wchar_t character, TextConstPtr& textAsset );
+    static ConnectedComponentPtr                    CreateLetter                ( const wchar_t character, TextConstPtr& textAsset, float size );
 };
 
 

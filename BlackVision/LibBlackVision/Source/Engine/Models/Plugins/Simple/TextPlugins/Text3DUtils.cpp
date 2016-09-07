@@ -63,7 +63,7 @@ VertexAttributesChannelPtr   Text3DUtils::CreateEmptyVACForText3D()
 
 // ***********************
 //
-std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                  ( const std::wstring& text, TextConstPtr textAsset )
+std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                  ( const std::wstring& text, TextConstPtr textAsset, float size )
 {
     std::vector< ConnectedComponentPtr > letters;
 
@@ -84,7 +84,7 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
         // Component not found in previously used letters. We must crate it.
         if( component == nullptr )
         {
-            component = CreateLetter( text[ l ], textAsset );
+            component = CreateLetter( text[ l ], textAsset, size );
             assert( component );
         }
 
@@ -96,7 +96,7 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
 
 // ***********************
 //
-ConnectedComponentPtr                    Text3DUtils::CreateLetter                ( const wchar_t character, TextConstPtr& textAsset )
+ConnectedComponentPtr                    Text3DUtils::CreateLetter                ( const wchar_t character, TextConstPtr& textAsset, float size )
 {
     ConnectedComponentPtr       component = ConnectedComponent::Create();
 
@@ -109,7 +109,7 @@ ConnectedComponentPtr                    Text3DUtils::CreateLetter              
     component->AddAttributeChannel( positions );
     component->AddAttributeChannel( normals );
 
-    auto positionsVec = textAsset->CreateCharacter3D( character );
+    auto positionsVec = textAsset->CreateCharacter3D( character, size );
     auto numVerticies = positionsVec.size();
     positions->ReplaceAttributes( std::move( positionsVec ) );
 

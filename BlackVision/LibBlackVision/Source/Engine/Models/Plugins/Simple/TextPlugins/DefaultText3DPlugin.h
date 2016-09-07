@@ -38,6 +38,16 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultText3DPlugin : public BasePlugin< IPlugin >
 {
+public:
+    struct PARAMS
+    {
+        static const std::string        TEXT;
+        static const std::string        FONT_SIZE;
+        static const std::string        SPACING;
+        static const std::string        MAX_TEXT_LENGTH;
+        static const std::string        ALIGNEMENT;
+    };
+
 private:
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
@@ -47,12 +57,10 @@ private:
 
     ParamWStringPtr                 m_textParam;
 
-    UInt32		                    m_fontSize;
-	UInt32		                    m_outlineSize;
-
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
+    ValueFloatPtr                   m_fontSize;
 	ValueMat4Ptr					m_scaleValue;
 
     TextConstPtr                    m_text;

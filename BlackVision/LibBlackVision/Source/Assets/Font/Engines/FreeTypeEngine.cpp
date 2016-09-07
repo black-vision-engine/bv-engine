@@ -507,15 +507,18 @@ TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstrin
 
 // ***********************
 //
-std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch )
+std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float size )
 {
     // Load the glyph we are looking for.
     FT_UInt gindex = FT_Get_Char_Index( m_face, ch );
+    //FT_Set_Char_Size( m_face, 0, (int)( size * 64 ), 1000, 1000 );
+
+    float sizeFactor = size * 0.001f;
 
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
     {
         FTVectoriser vectorizer( m_face->glyph );
-        vectorizer.MakeMesh();
+        vectorizer.MakeMesh( 1.0f, 0, size );
 
         const auto & mesh = vectorizer.GetMesh();
         const auto & pointList = mesh->Tesselation( 0 );
@@ -528,9 +531,9 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch )
             glm::vec3 vertex;
             auto & point = pointList->Point( i );
             
-            vertex.x = point.Xf();
-            vertex.y = point.Yf();
-            vertex.z = point.Zf();
+            vertex.x = sizeFactor * point.Xf();
+            vertex.y = sizeFactor * point.Yf();
+            vertex.z = sizeFactor * point.Zf();
 
             verticies.push_back( vertex );
         }
