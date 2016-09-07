@@ -2114,14 +2114,14 @@ model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( mod
     
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0, 0.6, 0.3, 1.0 ) );
-    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    //SetParameter( node->GetPlugin( "text3d" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text3d" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 
     success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/Astera.ttf", 30, 0, 0, true );
     assert( success );
 
-    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"a" ) );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"b" ) );
 
     return node;    
 }

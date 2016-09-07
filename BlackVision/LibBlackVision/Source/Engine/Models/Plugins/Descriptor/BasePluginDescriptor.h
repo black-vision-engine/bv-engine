@@ -164,6 +164,13 @@ protected:
                 ( model, timeEvaluator, name, defaultValue, addValue, isState );
         }
 
+        template<>
+        inline void                             AddSimpleParam< std::wstring > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const std::wstring& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< WStringInterpolator, std::wstring, ModelParamType::MPT_WSTRING, ParamType::PT_WSTRING, ParamWString >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
         template< typename ValueType >
         inline void                             AddSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
         {

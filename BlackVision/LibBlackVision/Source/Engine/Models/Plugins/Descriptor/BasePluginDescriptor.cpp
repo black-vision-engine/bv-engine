@@ -76,7 +76,7 @@ void BasePluginDescriptor::ModelHelper::CreateVSModel       ()
 //
 void BasePluginDescriptor::ModelHelper::CreateGSModel       ()
 {
-
+    assert( false );
 }
 
 // *********************************

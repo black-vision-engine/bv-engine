@@ -110,11 +110,12 @@ ConnectedComponentPtr                    Text3DUtils::CreateLetter              
     component->AddAttributeChannel( normals );
 
     auto positionsVec = textAsset->CreateCharacter3D( character );
+    auto numVerticies = positionsVec.size();
     positions->ReplaceAttributes( std::move( positionsVec ) );
 
     // Generate normals along z axis.
     auto & normalsVec = normals->GetVertices();
-    normalsVec.resize( positionsVec.size(), glm::vec3( 0.0f, 0.0f, -1.0f ) );
+    normalsVec.resize( numVerticies, glm::vec3( 0.0f, 0.0f, -1.0f ) );
 
     return component;
 }
