@@ -1,5 +1,8 @@
 #include "Utils.h"
 
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
+
 
 namespace bv { namespace videocards { namespace bluefish {
   
@@ -19,76 +22,6 @@ std::pair< ChannelName, const char * > ChannelNameMapping[] =
     , std::make_pair( ChannelName::C, "C" )
     , std::make_pair( ChannelName::D, "D" )
 };
-
-//**************************************
-//
-std::pair< IOType, const char * > IOTypeMapping[] = 
-{   std::make_pair( IOType::FILL_KEY, "FILL_KEY" )
-    , std::make_pair( IOType::FILL, "FILL" )
-    , std::make_pair( IOType::KEY, "KEY" )
-};
-
-//**************************************
-//
-std::pair< ReferenceMode, const char * > ReferenceModeMapping[] = 
-{   std::make_pair( ReferenceMode::FREERUN, "FREERUN" )
-    , std::make_pair( ReferenceMode::IN_A, "IN_A" )
-    , std::make_pair( ReferenceMode::IN_B, "IN_B" )
-    , std::make_pair( ReferenceMode::ANALOG, "ANALOG" )
-    , std::make_pair( ReferenceMode::GENLOCK, "GENLOCK" )
-};
-
-//**************************************
-//
-template<> ChannelName          String2T        ( const std::string & s )   {  return String2Enum( ChannelNameMapping, s ); }
-
-//**************************************
-//
-template<> std::string          T2String        ( const ChannelName & t )   { return Enum2String( ChannelNameMapping, t ); }
-
-//**************************************
-//
-template<> IOType               String2T        ( const std::string & s )   { return String2Enum( IOTypeMapping, s ); }
-
-//**************************************
-//
-template<> std::string          T2String        ( const IOType & t )        { return Enum2String( IOTypeMapping, t ); }
-
-//**************************************
-//
-template<> ReferenceMode        String2T        ( const std::string & s )   { return String2Enum( ReferenceModeMapping, s ); }
-
-//**************************************
-//
-template<> std::string          T2String        ( const ReferenceMode & t ) { return Enum2String( ReferenceModeMapping, t ); }
-
-
-//**************************************
-//
-template< typename T >
-T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s )
-{
-    int i = 0;
-    while( strcmp( t2s[i].second, "" ) )
-    {
-        if( t2s[i].second == s )
-            return t2s[i].first;
-        ++i;
-    }
-    return T(0);
-}
-
-//**************************************
-//
-template< typename T >
-std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
-{
-    for( int i = 0; ; i++ )
-        if( t2s[i].first == t )
-            return t2s[i].second;
-        else if( strcmp( t2s[i].second, "" ) == 0 )
-            return "";
-}
 
 //**************************************
 //
@@ -266,4 +199,24 @@ void BlueMemZero(void* pData, size_t size)
 
 } //bluefish
 } //videocards
+
+
+namespace SerializationHelper {
+    
+//**************************************
+//
+template<> Expected< videocards::bluefish::ChannelName >    String2T        ( const std::string & s )
+{
+    return String2Enum( videocards::bluefish::ChannelNameMapping, s );
+}
+
+//**************************************
+//
+template<> std::string                                      T2String        ( const videocards::bluefish::ChannelName & t )
+{
+    return Enum2String( videocards::bluefish::ChannelNameMapping, t );
+}
+
+} //SerializationHelper
+
 } //bv

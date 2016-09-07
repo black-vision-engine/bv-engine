@@ -1,6 +1,6 @@
 #include "BlueFishVideoCard.h"
 
-#include "Serialization/SerializationHelper.inl"
+#include "Serialization/SerializationHelper.h"
 
 
 namespace bv { namespace videocards { namespace bluefish {
@@ -40,13 +40,13 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                     Channel::InputDataUPtr input = nullptr;
                     Channel::OutputDataUPtr output = nullptr;
 
-                    auto name = String2T< ChannelName >( deser.GetAttribute( "name" ) );
+                    auto name = SerializationHelper::String2T< ChannelName >( deser.GetAttribute( "name" ) );
                     //auto renderer = deser.GetAttribute( "renderer" );
 
                     if( deser.EnterChild( "input" ) )
                     {
                         input = std::unique_ptr< Channel::InputData >( new Channel::InputData() );
-                        input->type = String2T< IOType >( deser.GetAttribute( "type" ) );
+                        input->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
                         input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
                     
                         deser.ExitChild(); //input
@@ -55,12 +55,12 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                     if( deser.EnterChild( "output" ) )
                     {
                         output = std::unique_ptr< Channel::OutputData >( new Channel::OutputData() );
-                        output->type = String2T< IOType >( deser.GetAttribute( "type" ) );
+                        output->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
                         output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
                         output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
                         output->interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
                         output->flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
-                        output->referenceMode = ReferenceModeMap[ String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
+                        output->referenceMode = ReferenceModeMap[ SerializationHelper::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
                         output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ), -1 );
                         output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ), -1 );
                         output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
@@ -122,6 +122,8 @@ VideoCard::~VideoCard()
         delete channel;
     }
     m_channels.clear();
+
+    m_SDK->device_detach();
 }
 
 //**************************************
@@ -290,7 +292,7 @@ Channel *       VideoCard::GetChannelByName         ( ChannelName channelName ) 
 
 //**************************************
 //
-void                VideoCard::Start                ()
+void                            VideoCard::Start                    ()
 {
     for( auto channel : m_channels )
 	{
@@ -298,104 +300,9 @@ void                VideoCard::Start                ()
 	}
 }
 
-////**************************************
-////
-//void BlueFishVideoCard::DeliverFrameFromGPU(unsigned int bufferPointer)
-//{
-//    //static unsigned int idxSel[3] = { 0, 1, 2 };
-//
-//    if(pGpuDirectOut)
-//    {
-//
-//        bDoHanc = TRUE;
-//        pAddress = NULL;
-//        ulUnderrun = 100;
-//        ulUniqueId = 0;
-//
-//        if(BLUE_OK(pSDK->video_playback_allocate(&pAddress, BufferSelect, ulUnderrun)))
-//        {
-//            //select proper card buffer ID
-//            if(bUseAudio && bDoHanc && bUseVanc)
-//            {
-//                DMABufferIdVideo = BlueImage_VBI_HANC_DMABuffer(BufferSelect, BLUE_DATA_FRAME);
-//                DMABufferIdHanc = BlueImage_VBI_HANC_DMABuffer(BufferSelect, BLUE_DATA_HANC);
-//                DMABufferIdVanc = BlueImage_VBI_HANC_DMABuffer(BufferSelect, BLUE_DATA_VBI);
-//            }
-//            else if(bUseAudio && bDoHanc)
-//            {
-//                DMABufferIdVideo = BlueImage_HANC_DMABuffer(BufferSelect, BLUE_DATA_FRAME);
-//                DMABufferIdHanc = BlueImage_HANC_DMABuffer(BufferSelect, BLUE_DATA_HANC);
-//            }
-//            else if(bUseVanc)
-//            {
-//                DMABufferIdVideo = BlueImage_VBI_DMABuffer(BufferSelect, BLUE_DATA_FRAME);
-//                DMABufferIdVanc = BlueImage_VBI_DMABuffer(BufferSelect, BLUE_DATA_VBI);
-//            }
-//            else
-//            {
-//                DMABufferIdVideo = BlueImage_DMABuffer(BufferSelect, BLUE_DATA_FRAME);
-//            }
-//
-//
-//            //HANC
-//            if(bUseAudio && bDoHanc)
-//            {
-//                if((UpdateFormat == UPD_FMT_FIELD) && (FieldCount & 0x1) || (UpdateFormat == UPD_FMT_FRAME))
-//                    processAudioOutput(nCardType, g_pHancFrame, VideoMode);
-//
-//                pSDK->system_buffer_write_async((unsigned char*)g_pHancFrame,
-//                    256*1024,
-//                    NULL,
-//                    DMABufferIdHanc,
-//                    0);
-//            }
-//
-//            //VANC
-//            if(bUseVanc)
-//            {
-//                pSDK->system_buffer_write_async((unsigned char*)g_pVancData,
-//                    nVancBufferSize,
-//                    NULL,
-//                    DMABufferIdVanc,
-//                    0);
-//            }
-//
-//            //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-//           // glBindTexture(GL_TEXTURE_2D,bufferPointer);
-//
-//            bfGpuDirect_TransferOutputFrameToSDI(pGpuDirectOut, DMABufferIdVideo, (&glOutputBuffersHack[bufferPointer]));
-//
-//                        
-//            if(bUseAudio && bDoHanc && bUseVanc)
-//                pSDK->video_playback_present(ulUniqueId, BlueBuffer_Image_VBI_HANC(BufferSelect), 1, 0);
-//            else if(bUseAudio && bDoHanc)
-//                pSDK->video_playback_present(ulUniqueId, BlueBuffer_Image_HANC(BufferSelect), 1, 0);
-//            else if(bUseVanc)
-//                pSDK->video_playback_present(ulUniqueId, BlueBuffer_Image_VBI(BufferSelect), 1, 0);
-//            else
-//                pSDK->video_playback_present(ulUniqueId, BlueBuffer_Image(BufferSelect), 1, 0);
-//
-//            
-//			//BufferSelect = (++BufferSelect)%NUMBER_BF_CARD_BUFFERS;
-//            if(iFramesToBuffer)
-//            {
-//                iFramesToBuffer--;
-//                if(iFramesToBuffer == 0)
-//                    pSDK->video_playback_start(0, 0);
-//            }
-//        }
-//        //else
-//         //   pSDK->wait_output_video_synch(UpdateFormat, FieldCount);
-//    }
-//    else
-//    {
-//        std::cout << "Init failed!" << std::endl;
-//    }
-//}
-
 //**************************************
 //
-void VideoCard::ProcessFrame( MemoryChunkConstPtr data )
+void                            VideoCard::ProcessFrame             ( MemoryChunkConstPtr data )
 {
     for( auto channel : m_channels )
 	{
@@ -411,7 +318,7 @@ void VideoCard::ProcessFrame( MemoryChunkConstPtr data )
 
 //**************************************
 //
-VideoCard::ChannelOptionMap VideoCard::CreateChannelOptionMap   ()
+VideoCard::ChannelOptionMap     VideoCard::CreateChannelOptionMap   ()
 {
     ChannelOptionMap channelOptionMap;
 
@@ -457,7 +364,7 @@ VideoCard::ChannelOptionMap VideoCard::CreateChannelOptionMap   ()
 
 //**************************************
 //
-UInt32          VideoCard::EnumerateDevices         ()
+UInt32                          VideoCard::EnumerateDevices         ()
 {
     Int32 deviceCount = 0;
     
@@ -469,47 +376,6 @@ UInt32          VideoCard::EnumerateDevices         ()
 
     return ( UInt32 )deviceCount;
 }
-
-//**************************************
-//
-
-
-//void VideoCard::StartVideoCardProccessing()
-//{
-//    StartDuplexPlayback();
-//}
-/*
-void BlueFishVideoCard::StopVideoCardProccessing()
-{
-    for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		Channels[i]->StopThreads();
-	}
-}*/
-
-//void VideoCard::SuspendVideoCardProccessing()
-//{
-//    for( UInt32 i = 0; i < m_channels.size(); ++i )
-//	{
-//		m_channels[ i ]->SuspendThreads();
-//	}
-//}
-//
-//void VideoCard::ResumeVideoCardProccessing()
-//{
-//    for( UInt32 i = 0; i < m_channels.size(); ++i )
-//	{
-//		m_channels[ i ]->ResumeThreads();
-//	}
-//}
-
-////**************************************
-////
-//void BlueFishVideoCard::BailOut(CBlueVelvet4* pSDK)
-//{
-//    pSDK->device_detach();
-//    BlueVelvetDestroy(pSDK);
-//}
 
 ////**************************************
 ////

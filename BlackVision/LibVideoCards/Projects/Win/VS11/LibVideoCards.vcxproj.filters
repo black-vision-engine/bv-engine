@@ -53,6 +53,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp">
@@ -86,5 +87,6 @@
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp">
       <Filter>Models\BlueFish</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoCardManagerUtils.cpp" />
   </ItemGroup>
 </Project>
