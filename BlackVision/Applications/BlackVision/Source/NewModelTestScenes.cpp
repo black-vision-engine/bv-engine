@@ -2101,27 +2101,35 @@ model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( mod
     //Plugin stuff
     std::vector< std::string > uids;
     uids.push_back( "DEFAULT_TRANSFORM" );
-    uids.push_back( "DEFAULT_COLOR" );
     uids.push_back( "DEFAULT_TEXT3D" );
+    uids.push_back( "DEFAULT_EXTRUDE_PLUGIN" );
+    uids.push_back( "DEFAULT_MATERIAL" );
 
 
     auto node = model::BasicNode::Create( "Text3D", timeEvaluator );
     auto success = node->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-    //SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.0, 0.0, 0.0 ) );
-    //SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
-    
 
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0, 0.6, 0.3, 1.0 ) );
-    //SetParameter( node->GetPlugin( "text3d" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    auto material = node->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 0.5, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.1, 0.0, 0.2, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+
+
+    SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.001f, 0.001f, 0.001f ) );
+
     SetParameter( node->GetPlugin( "text3d" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"a" ) );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 
-    success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/Astera.ttf", 30, 0, 0, true );
-    assert( success );
+    SetParameter( node->GetPlugin( "extrude" )->GetParameter( "extrude vector" ), 0.0, glm::vec3( 0.0, 0.0, 1000.0f ) );
 
-    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"b" ) );
+    success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/StarWars.ttf", 30, 0, 0, true );
+    assert( success );
 
     return node;    
 }
