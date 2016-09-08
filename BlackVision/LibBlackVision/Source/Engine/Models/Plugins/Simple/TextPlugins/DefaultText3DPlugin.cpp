@@ -17,6 +17,7 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "Assets/DefaultAssets.h"
+#include "Application/ApplicationContext.h"
 
 #include "Assets/Font/TextHelper.h"
 #include "Text3DUtils.h"
@@ -167,7 +168,19 @@ bool                            DefaultText3DPlugin::LoadResource  ( AssetDescCo
 //
 void                                DefaultText3DPlugin::RebuildText                 ()
 {
-    auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_text, m_fontSize->GetValue() );
+    Text3DUtils::TextLayout layout;
+    layout.Arranger = nullptr;
+    layout.Size = m_fontSize->GetValue();
+    layout.BlurSize = 0;
+    layout.OutlineSize = 0;
+    layout.Spacing = 0.8f;
+    layout.Tat = TextAlignmentType::Center;
+    layout.TextAsset = m_text;
+    layout.UseKerning = false;
+    layout.ViewWidth = ApplicationContext::Instance().GetWidth();
+    layout.ViewHeight = ApplicationContext::Instance().GetHeight();
+
+    auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_text, layout );
 
     m_vaChannel->ClearAll();
     for( auto & component : connectedComponents )

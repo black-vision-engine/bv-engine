@@ -513,7 +513,7 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
     FT_UInt gindex = FT_Get_Char_Index( m_face, ch );
     //FT_Set_Char_Size( m_face, 0, (int)( size * 64 ), 1000, 1000 );
 
-    float sizeFactor = size * 0.001f;
+    float sizeFactor = 1.0f;    // size * 0.001f;
 
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
     {
