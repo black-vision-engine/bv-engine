@@ -6,7 +6,7 @@
 
 namespace bv {
 
-namespace { const std::string           uid = "svg"; }
+namespace { const std::string           uid = "SVG_ASSET_DESC"; }
 
 // ***********************
 //
