@@ -1829,7 +1829,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     return root;
 }
 
-    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
+    //static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
 
 /**All basic shapes in one scene*/
 model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )

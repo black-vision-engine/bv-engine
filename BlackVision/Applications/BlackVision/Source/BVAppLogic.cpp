@@ -212,8 +212,8 @@ void BVAppLogic::LoadScene          ( void )
 
         if( GetEnvScene() == "SERIALIZED_TEST" )
         {
-            sceneModel = TestScenesFactory::CreateSerializedTestScene( m_pluginsManager );
-            projectEditor->AddScene( sceneModel );
+            //sceneModel = TestScenesFactory::CreateSerializedTestScene( m_pluginsManager );
+            //projectEditor->AddScene( sceneModel );
         }
         else
         {

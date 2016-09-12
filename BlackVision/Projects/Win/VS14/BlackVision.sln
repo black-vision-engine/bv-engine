@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{7A2AC84D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBlackVision", "..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj", "{78C1F0D1-BD43-4162-8F54-FEA184B03C36}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBlackVision", "..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj", "{78C1F0D1-BD43-4162-8F54-FEA184B03C36}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlackVision", "..\..\..\Applications\BlackVision\Projects\Win\VS11\BlackVision.vcxproj", "{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlackVision", "..\..\..\Applications\BlackVision\Projects\Win\VS14\BlackVision.vcxproj", "{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMipMapBuilder", "..\..\..\Test\Tools\MipMapBuilder\Projects\Win\VS11\TestMipMapBuilder.vcxproj", "{9D72E88B-3DA9-4B56-A703-29641FA82479}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -22,50 +22,50 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnginePrototyper", "..\..\.
 		{6A33F496-E3C1-4C91-A4E1-049C0C3B762E} = {6A33F496-E3C1-4C91-A4E1-049C0C3B762E}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibImage", "..\..\..\LibImage\Projects\Win\VS11\LibImage.vcxproj", "{33E2CC63-2591-46B1-9B24-2A284566F1D6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibImage", "..\..\..\LibImage\Projects\Win\VS14\LibImage.vcxproj", "{33E2CC63-2591-46B1-9B24-2A284566F1D6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVGL", "..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj", "{B0E6C314-5B08-40F7-87EF-17141A389BA5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVGL", "..\..\..\LibBVGL\Projects\Win\VS14\LibBVGL.vcxproj", "{B0E6C314-5B08-40F7-87EF-17141A389BA5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibCore", "..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj", "{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibCore", "..\..\..\LibCore\Projects\Win\VS14\LibCore.vcxproj", "{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestAssetManager", "..\..\..\Test\Applications\AssetManager\Projects\Win\VS11\TestAssetManager.vcxproj", "{C8FE17FB-A0B8-4069-B88A-855CC14D9810}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibVideoCards", "..\..\..\LibVideoCards\Projects\Win\VS11\LibVideoCards.vcxproj", "{C3A7884F-3133-4C87-ACE7-B8BC935426CC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibVideoCards", "..\..\..\LibVideoCards\Projects\Win\VS14\LibVideoCards.vcxproj", "{C3A7884F-3133-4C87-ACE7-B8BC935426CC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{78C1F0D1-BD43-4162-8F54-FEA184B03C36} = {78C1F0D1-BD43-4162-8F54-FEA184B03C36}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RapidXML", "..\..\..\Tools\RapidXML\Projects\Win\VS11\RapidXML.vcxproj", "{09C5EE56-18D0-4625-B632-B4980A620F4E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RapidXML", "..\..\..\Tools\RapidXML\Projects\Win\VS14\RapidXML.vcxproj", "{09C5EE56-18D0-4625-B632-B4980A620F4E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibEffect", "..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj", "{E3611A8A-25FC-4C0E-89AE-89611FC3427A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibEffect", "..\..\..\Tools\LibEffect\Projects\Win\VS14\LibEffect.vcxproj", "{E3611A8A-25FC-4C0E-89AE-89611FC3427A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigReader", "..\..\..\Tools\ConfigReader\Projects\Win\VS11\ConfigReader.vcxproj", "{00218970-E820-4BCC-B1DA-48348059F6FE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigReader", "..\..\..\Tools\ConfigReader\Projects\Win\VS14\ConfigReader.vcxproj", "{00218970-E820-4BCC-B1DA-48348059F6FE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPServer", "..\..\..\Tools\TCPServer\Projects\Win\VS11\TCPServer.vcxproj", "{1457450D-CBF9-4073-A406-5DC5C89BD065}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPServer", "..\..\..\Tools\TCPServer\Projects\Win\VS14\TCPServer.vcxproj", "{1457450D-CBF9-4073-A406-5DC5C89BD065}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XMLSceneParser", "..\..\..\Tools\XMLSceneParser\Projects\Win\VS11\XMLSceneParser.vcxproj", "{1BC9456B-BA4B-4218-9C0C-1596717BD3F3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XMLSceneParser", "..\..\..\Tools\XMLSceneParser\Projects\Win\VS14\XMLSceneParser.vcxproj", "{1BC9456B-BA4B-4218-9C0C-1596717BD3F3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestModelNodeEditor", "..\..\..\Test\Applications\ModelNodeEditor\Projects\Win\VS11\TestModelNodeEditor.vcxproj", "{B054F6A0-06EC-44E7-AE4E-DA8663237E92}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibMipMapBuilder", "..\..\..\Tools\LibMipMapBuilder\Projects\Win\VS11\LibMipMapBuilder.vcxproj", "{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibMipMapBuilder", "..\..\..\Tools\LibMipMapBuilder\Projects\Win\VS14\LibMipMapBuilder.vcxproj", "{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMultipass", "..\..\..\Test\Applications\Multipass\Projects\Win\VS11\TestMultipass.vcxproj", "{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfilerEditor", "..\..\..\Applications\ProfilerEditor\ProfilerEditor.csproj", "{DDD0A366-9A5F-4FA6-B1D2-F452B80BAC8C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibProjectManager", "..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj", "{9FA5A3B8-FA25-4AA0-A3AC-DFCA1283D6D2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibProjectManager", "..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj", "{9FA5A3B8-FA25-4AA0-A3AC-DFCA1283D6D2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProjectManager", "..\..\..\Test\Tools\ProjectManager\Projects\Win\VS11\TestProjectManager.vcxproj", "{C7749607-3EB2-4F74-B453-FD859F41E8C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevTools", "DevTools", "{42BED5C7-ABA5-4BFD-AC21-2356DDD56684}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibWindowApp", "..\..\..\DevTools\LibWindowApp\Projects\Win\VS11\LibWindowApp.vcxproj", "{BFD61862-778E-4636-9143-97D8262B7F6E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibWindowApp", "..\..\..\DevTools\LibWindowApp\Projects\Win\VS14\LibWindowApp.vcxproj", "{BFD61862-778E-4636-9143-97D8262B7F6E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestWindowApp", "..\..\..\Test\Tools\WindowApp\Projects\Win\VS11\TestWindowApp.vcxproj", "{0CC731C6-148D-4BEF-A579-DC5428FBF688}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestEditor", "..\..\..\Test\Applications\Editor\Projects\Win\VS11\TestEditor.vcxproj", "{614EAC49-973C-4EF7-9464-6CE4DA2A16C1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVAL", "..\..\..\LibBVAL\Projects\Win\VS11\LibBVAL.vcxproj", "{F07363F7-EBCF-4F56-852F-57357E2A020F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVAL", "..\..\..\LibBVAL\Projects\Win\VS14\LibBVAL.vcxproj", "{F07363F7-EBCF-4F56-852F-57357E2A020F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
