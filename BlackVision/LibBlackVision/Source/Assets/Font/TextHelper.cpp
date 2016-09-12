@@ -250,7 +250,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
-            if(wch==L'.' && tat==TextAlignmentType::Dot)
+            if( wch==L'.' && tat==TextAlignmentType::Dot )
             {
                 translateDot = translate;
             }

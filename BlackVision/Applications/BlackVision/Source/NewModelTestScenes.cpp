@@ -2123,11 +2123,11 @@ model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( mod
     //SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.001f, 0.001f, 0.001f ) );
 
     SetParameter( node->GetPlugin( "text3d" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
-    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 1.0f );
-    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"pi¿mowó³" ) );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 200.0f );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"nocny wombat" ) );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 
-    SetParameter( node->GetPlugin( "extrude" )->GetParameter( "extrude vector" ), 0.0, glm::vec3( 0.0, 0.0, 1.0f ) );
+    SetParameter( node->GetPlugin( "extrude" )->GetParameter( "extrude vector" ), 0.0, glm::vec3( 0.0, 0.0, 0.3f ) );
 
     success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/StarWars.ttf", 30, 0, 0, true );
     assert( success );

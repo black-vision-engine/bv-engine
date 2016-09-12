@@ -76,17 +76,22 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
 
     for( int l = 0; l < text.size(); ++l )
     {
+        if( text[ l ] == L' ' ||
+            text[ l ] == L'\n' ||
+            text[ l ] == L'\r' )
+            continue;
+
         ConnectedComponentPtr component = nullptr;
 
-        // Find previous use of this letter.
-        for( int i = 0; i < l; ++i )
-        {
-            if( text[ i ] == text[ l ] )
-            {
-                component = letters[ i ];
-                break;
-            }
-        }
+        //// Find previous use of this letter.
+        //for( int i = 0; i < l; ++i )
+        //{
+        //    if( text[ i ] == text[ l ] )
+        //    {
+        //        component = letters[ i ];
+        //        break;
+        //    }
+        //}
 
         // Component not found in previously used letters. We must crate it.
         if( component == nullptr )
@@ -152,7 +157,9 @@ void                                     Text3DUtils::ArrangeText               
     if( outlineSize != 0 )
         outline = true;
 
-    float aspectRatio = float( std::min( viewWidth, viewHeight ) ) / 2.f;
+    // Note: Atlas was created with specific font size. We must tak it into consideration while rescaling geometry.
+    float fontRatio = layout.Size / layout.TextAsset->GetFontSize();
+    float aspectRatio = float( std::min( viewWidth, viewHeight ) ) / ( 2.f * fontRatio );
 
     //float blurTexSize = float( blurSize );
     //float blurLenghtX = float( blurSize ) / aspectRatio;
@@ -168,14 +175,14 @@ void                                     Text3DUtils::ArrangeText               
     auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / aspectRatio  + spacing;
     auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
 
-
+    unsigned int componentIdx = 0;
     for( unsigned int i = 0; i < text.size(); ++i )
     {
         auto wch = text[ i ];
 
         if( wch == L' ' )
         {
-            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f )+ interspace;
+            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
             continue;
         }
 
@@ -207,12 +214,12 @@ void                                     Text3DUtils::ArrangeText               
 
             glm::vec3 letterTranslate = translate + bearing + newLineTranslation;
 
-            auto attributeChannel = components[ i ]->GetAttributeChannels();
+            auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
             auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
             assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
 
-
-            glm::vec3 scaleFactor( layout.Size / viewWidth, layout.Size / viewHeight, 1.0f );
+            // Note: FreeType unit is 1/64th of a pixel.
+            glm::vec3 scaleFactor( 1.0f / ( aspectRatio * 64.0f ), 1.0f / ( aspectRatio * 64.0f ), 1.0f );
 
             for( auto & pos : posChannel->GetVertices() )
             {
@@ -227,6 +234,8 @@ void                                     Text3DUtils::ArrangeText               
             {
                 translate += glm::vec3( ( glyph->advanceX ) / aspectRatio, 0.f, 0.f ) + interspace;
             }
+
+            componentIdx++;
         }
         else
         {

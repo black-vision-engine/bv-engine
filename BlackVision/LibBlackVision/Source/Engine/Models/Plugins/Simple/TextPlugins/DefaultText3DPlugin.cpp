@@ -173,7 +173,7 @@ void                                DefaultText3DPlugin::RebuildText            
     layout.Size = m_fontSize->GetValue();
     layout.BlurSize = 0;
     layout.OutlineSize = 0;
-    layout.Spacing = 0.8f;
+    layout.Spacing = m_spacingParam->Evaluate();
     layout.Tat = TextAlignmentType::Center;
     layout.TextAsset = m_text;
     layout.UseKerning = false;

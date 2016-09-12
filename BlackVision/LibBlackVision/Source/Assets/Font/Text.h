@@ -52,6 +52,9 @@ public:
 											, UInt32 blurSize
 											, UInt32 outlineSize
 											, bool withMipmaps );
+
+
+    UInt32                              GetFontSize         () const    { return m_fontSize; }
 };
 
 } // bv
