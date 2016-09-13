@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultText3DPlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultAlphaMaskPlugin.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
@@ -94,6 +95,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultExtrudePluginDesc() );
     descriptors.push_back( new DefaultLineChartPluginDesc() );
     descriptors.push_back( new TriangulatePluginDesc() );
+    descriptors.push_back( new DefaultText3DPluginDesc() );
 
     for( auto descr : descriptors )
     {
