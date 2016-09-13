@@ -308,26 +308,59 @@ void FTVectoriser::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
                 
         }
 
-        if( !cdt )
+
+        if( contour->IsOuterContour() )
+        {
+            if( cdt )
+            {
+                // Triangulate last contour with his holes.
+                cdt->Triangulate();
+
+                mesh->Begin( GL_TRIANGLES );
+
+                for( auto t : cdt->GetTriangles() )
+                {
+                    auto p0 = t->GetPoint( 0 );
+                    auto p1 = t->GetPoint( 1 );
+                    auto p2 = t->GetPoint( 2 );
+                    mesh->AddPoint( p0->x, p0->y, 0.0 );
+                    mesh->AddPoint( p1->x, p1->y, 0.0 );
+                    mesh->AddPoint( p2->x, p2->y, 0.0 );
+                }
+
+                mesh->End();
+
+                delete cdt;
+                cdt = nullptr;
+            }
+
             cdt = new p2t::CDT( polyline );
+        }
         else
+        {
+            assert( cdt );
             cdt->AddHole( polyline );
+        }
     }
 
-    cdt->Triangulate();
-
-    mesh->Begin( GL_TRIANGLES );
-
-    for( auto t : cdt->GetTriangles() )
+    // FIXME: This is the same part of code which is executed in loop. It's awfull.
+    if( cdt )
     {
-        auto p0 =  t->GetPoint( 0 );
-        auto p1 =  t->GetPoint( 1 );
-        auto p2 =  t->GetPoint( 2 );
-        mesh->AddPoint( p0->x, p0->y, 0.0 );
-        mesh->AddPoint( p1->x, p1->y, 0.0 );
-        mesh->AddPoint( p2->x, p2->y, 0.0 );
+        cdt->Triangulate();
+
+        mesh->Begin( GL_TRIANGLES );
+
+        for( auto t : cdt->GetTriangles() )
+        {
+            auto p0 = t->GetPoint( 0 );
+            auto p1 = t->GetPoint( 1 );
+            auto p2 = t->GetPoint( 2 );
+            mesh->AddPoint( p0->x, p0->y, 0.0 );
+            mesh->AddPoint( p1->x, p1->y, 0.0 );
+            mesh->AddPoint( p2->x, p2->y, 0.0 );
+        }
+
+        mesh->End();
     }
-    
-    mesh->End();
 }
 

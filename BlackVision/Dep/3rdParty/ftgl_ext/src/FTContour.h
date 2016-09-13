@@ -127,6 +127,8 @@ class FTContour
         void buildFrontOutset(float outset);
         void buildBackOutset(float outset);
 
+        inline bool IsOuterContour() const { return clockwise; }
+
     private:
         /**
          * Add a point to this contour. This function tests for duplicate

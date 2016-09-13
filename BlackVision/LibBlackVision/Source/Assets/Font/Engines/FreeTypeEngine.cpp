@@ -520,22 +520,33 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
         FTVectoriser vectorizer( m_face->glyph );
         vectorizer.MakeMesh( 1.0f, 0, size );
 
-        const auto & mesh = vectorizer.GetMesh();
-        const auto & pointList = mesh->Tesselation( 0 );
-
         std::vector< glm::vec3 > verticies;
-        verticies.reserve( pointList->PointCount() );
+        const auto & mesh = vectorizer.GetMesh();
+        auto tessCount = mesh->TesselationCount();
 
-        for( int i = 0; i < pointList->PointCount(); ++i )
+        // Reserve memory in vector.
+        SizeType numVerticies = 0;
+        for( int i = 0; i < tessCount; ++i )
         {
-            glm::vec3 vertex;
-            auto & point = pointList->Point( i );
-            
-            vertex.x = sizeFactor * point.Xf();
-            vertex.y = sizeFactor * point.Yf();
-            vertex.z = sizeFactor * point.Zf();
+            numVerticies += mesh->Tesselation( i )->PointCount();
+        }
+        verticies.reserve( numVerticies );
 
-            verticies.push_back( vertex );
+
+        for( int i = 0; i < tessCount; ++i )
+        {
+            const auto & pointList = mesh->Tesselation( i );
+            for( int i = 0; i < pointList->PointCount(); ++i )
+            {
+                glm::vec3 vertex;
+                auto & point = pointList->Point( i );
+
+                vertex.x = sizeFactor * point.Xf();
+                vertex.y = sizeFactor * point.Yf();
+                vertex.z = sizeFactor * point.Zf();
+
+                verticies.push_back( vertex );
+            }
         }
 
         return verticies;

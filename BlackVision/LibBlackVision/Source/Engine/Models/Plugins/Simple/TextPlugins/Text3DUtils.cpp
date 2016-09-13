@@ -195,13 +195,6 @@ void                                     Text3DUtils::ArrangeText               
 
         if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
-            glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / scaleRatio, (float)( glyph->bearingY - (int)glyph->height ) / scaleRatio, 0.f );
-
-            glm::vec3 quadBottomLeft;
-            glm::vec3 quadBottomRight;
-            glm::vec3 quadTopLeft;
-            glm::vec3 quadTopRight;
-
             auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
 
             if( useKerning && i > 0 )
@@ -211,7 +204,7 @@ void                                     Text3DUtils::ArrangeText               
                 translate += kerningShift;
             }
 
-            glm::vec3 letterTranslate = translate + /*bearing +*/ newLineTranslation - glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
+            glm::vec3 letterTranslate = translate + newLineTranslation - glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
 
             auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
             auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
