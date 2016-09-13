@@ -129,7 +129,7 @@ ConnectedComponentPtr                    Text3DUtils::CreateLetter              
 
     // Generate normals along z axis.
     auto & normalsVec = normals->GetVertices();
-    normalsVec.resize( numVerticies, glm::vec3( 0.0f, 0.0f, -1.0f ) );
+    normalsVec.resize( numVerticies, glm::vec3( 0.0f, 0.0f, 1.0f ) );
 
     return component;
 }
@@ -159,21 +159,20 @@ void                                     Text3DUtils::ArrangeText               
 
     // Note: Atlas was created with specific font size. We must tak it into consideration while rescaling geometry.
     float fontRatio = layout.Size / layout.TextAsset->GetFontSize();
-    float aspectRatio = float( std::min( viewWidth, viewHeight ) ) / ( 2.f * fontRatio );
+    float aspectRatio = float( std::min( viewWidth, viewHeight ) ) / 2.f;
+    float scaleRatio = aspectRatio / fontRatio;
 
     //float blurTexSize = float( blurSize );
     //float blurLenghtX = float( blurSize ) / aspectRatio;
     //float blurLenghtY = float( blurSize ) / aspectRatio;
 
 
-    //float ccPaddingX = 1.f / aspectRatio;
-    //float ccPaddingY = 1.f / aspectRatio;
-
-    //float texPadding = 1.f;
+    float ccPaddingX = 1.f / aspectRatio;
+    float ccPaddingY = 1.f / aspectRatio;
 
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
-    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / aspectRatio  + spacing;
-    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
+    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / scaleRatio + spacing;
+    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / scaleRatio;
 
     unsigned int componentIdx = 0;
     for( unsigned int i = 0; i < text.size(); ++i )
@@ -196,7 +195,7 @@ void                                     Text3DUtils::ArrangeText               
 
         if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
-            glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / aspectRatio, (float)( glyph->bearingY - (int)glyph->height ) / aspectRatio, 0.f );
+            glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / scaleRatio, (float)( glyph->bearingY - (int)glyph->height ) / scaleRatio, 0.f );
 
             glm::vec3 quadBottomLeft;
             glm::vec3 quadBottomRight;
@@ -208,18 +207,18 @@ void                                     Text3DUtils::ArrangeText               
             if( useKerning && i > 0 )
             {
                 auto kerShift = textAtlas->GetKerning( text[ i - 1 ], text[ i ] );
-                kerningShift.x = kerShift / aspectRatio;
+                kerningShift.x = kerShift / scaleRatio;
                 translate += kerningShift;
             }
 
-            glm::vec3 letterTranslate = translate + bearing + newLineTranslation;
+            glm::vec3 letterTranslate = translate + /*bearing +*/ newLineTranslation - glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
 
             auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
             auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
             assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
 
             // Note: FreeType unit is 1/64th of a pixel.
-            glm::vec3 scaleFactor( 1.0f / ( aspectRatio * 64.0f ), 1.0f / ( aspectRatio * 64.0f ), 1.0f );
+            glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
 
             for( auto & pos : posChannel->GetVertices() )
             {
@@ -232,7 +231,7 @@ void                                     Text3DUtils::ArrangeText               
             }
 
             {
-                translate += glm::vec3( ( glyph->advanceX ) / aspectRatio, 0.f, 0.f ) + interspace;
+                translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
             }
 
             componentIdx++;
