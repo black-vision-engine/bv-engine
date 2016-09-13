@@ -149,13 +149,13 @@ AssetManager::~AssetManager()
 //
 void AssetManager::RegisterBasicLoaders()
 {
-    AssetManager::GetInstance().RegisterLoader( TextureAssetDesc::UID(),	std::make_shared< TextureLoader >() );
-    AssetManager::GetInstance().RegisterLoader( FontAssetDesc::UID(),		std::make_shared< FontLoader >() );
-    AssetManager::GetInstance().RegisterLoader( AnimationAssetDesc::UID(),	std::make_shared< AnimationLoader >() );
-    AssetManager::GetInstance().RegisterLoader( AVAssetDesc::UID(),	std::make_shared< AVAssetLoader >() );
-    AssetManager::GetInstance().RegisterLoader( MeshAssetDesc::UID(),	std::make_shared< MeshLoader >() );
-    AssetManager::GetInstance().RegisterLoader( DataArrayAssetDescriptor::UID(),	std::make_shared< DataArrayLoader >() );
-    AssetManager::GetInstance().RegisterLoader( SVGAssetDescriptor::UID(),  std::make_shared< SVGLoader >() );
+    RegisterLoader( TextureAssetDesc::UID(),	        std::make_shared< TextureLoader >() );
+    RegisterLoader( FontAssetDesc::UID(),		        std::make_shared< FontLoader >() );
+    RegisterLoader( AnimationAssetDesc::UID(),	        std::make_shared< AnimationLoader >() );
+    RegisterLoader( AVAssetDesc::UID(),	                std::make_shared< AVAssetLoader >() );
+    RegisterLoader( MeshAssetDesc::UID(),	            std::make_shared< MeshLoader >() );
+    RegisterLoader( DataArrayAssetDescriptor::UID(),	std::make_shared< DataArrayLoader >() );
+    RegisterLoader( SVGAssetDescriptor::UID(),          std::make_shared< SVGLoader >() );
 }
 
 
