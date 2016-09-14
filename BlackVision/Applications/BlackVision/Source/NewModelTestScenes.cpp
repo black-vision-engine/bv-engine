@@ -2124,7 +2124,7 @@ model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( mod
 
     SetParameter( node->GetPlugin( "text3d" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
     SetParameter( node->GetPlugin( "text3d" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 200.0f );
-    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"pi¿mowó³ z¿era\nœciêt¹ kiœæ" ) );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"pi¿mowó³ z¿era\nz¿ó³k³¹\nœciêt¹ kiœæ!?!\n%%@#$^&*()" ) );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 
     SetParameter( node->GetPlugin( "extrude" )->GetParameter( "extrude vector" ), 0.0, glm::vec3( 0.0, 0.0, -0.3f ) );

@@ -183,67 +183,17 @@ void FTVectoriser::ProcessContours()
         startIndex = endIndex + 1;
     }
 
+    auto orient = FT_Outline_Get_Orientation( &outline );
+
     // Compute each contour's parity. FIXME: see if FT_Outline_Get_Orientation
     // can do it for us.
     for(int i = 0; i < ftContourCount; i++)
     {
         FTContour *c1 = contourList[i];
 
-        // 1. Find the leftmost point.
-        FTPoint leftmost(65536.0, 0.0);
-
-        for(size_t n = 0; n < c1->PointCount(); n++)
-        {
-            FTPoint p = c1->Point(n);
-            if(p.X() < leftmost.X())
-            {
-                leftmost = p;
-            }
-        }
-
-        // 2. Count how many other contours we cross when going further to
-        // the left.
-        int parity = 0;
-
-        for(int j = 0; j < ftContourCount; j++)
-        {
-            if(j == i)
-            {
-                continue;
-            }
-
-            FTContour *c2 = contourList[j];
-
-            for(size_t n = 0; n < c2->PointCount(); n++)
-            {
-                FTPoint p1 = c2->Point(n);
-                FTPoint p2 = c2->Point((n + 1) % c2->PointCount());
-
-                /* FIXME: combinations of >= > <= and < do not seem stable */
-                if((p1.Y() < leftmost.Y() && p2.Y() < leftmost.Y())
-                    || (p1.Y() >= leftmost.Y() && p2.Y() >= leftmost.Y())
-                    || (p1.X() > leftmost.X() && p2.X() > leftmost.X()))
-                {
-                    continue;
-                }
-                else if(p1.X() < leftmost.X() && p2.X() < leftmost.X())
-                {
-                    parity++;
-                }
-                else
-                {
-                    FTPoint a = p1 - leftmost;
-                    FTPoint b = p2 - leftmost;
-                    if(b.X() * a.Y() > b.Y() * a.X())
-                    {
-                        parity++;
-                    }
-                }
-            }
-        }
-
-        // 3. Make sure the glyph has the proper parity.
-        c1->SetParity(parity);
+        // Make sure the glyph has the proper orientation.
+        if( orient == FT_ORIENTATION_POSTSCRIPT )
+            c1->SetParity( true );
     }
 }
 
@@ -275,77 +225,72 @@ void FTVectoriser::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
 
     mesh = new FTMesh;
 
-    p2t::CDT * cdt = nullptr;
+    std::vector< const FTContour* > outerContours;      // Contours which must be filled. Other contours will be treated as holes.
+    std::vector< int > ocIdx;                           // Indicies of outer contours.
+    std::vector< std::vector< p2t::Point * > > contoursVecPointsVec;
+    
+    outerContours.reserve( ftContourCount );
+    ocIdx.reserve( ftContourCount );
+    contoursVecPointsVec.resize( ftContourCount );
 
-    for(size_t c = 0; c < ContourCount(); ++c)
+
+    for( size_t c = 0; c < ContourCount(); ++c )
     {
-        /* Build the */
-        switch(outsetType)
-        {
-            case 1 : contourList[c]->buildFrontOutset(outsetSize); break;
-            case 2 : contourList[c]->buildBackOutset(outsetSize); break;
-        }
-        const FTContour* contour = contourList[c];
+        const FTContour* contour = contourList[ c ];
 
-        std::vector< p2t::Point * > polyline;
-            
-        for(size_t p = 0; p < contour->PointCount(); ++p)
+        if( contour->IsOuterContour() )
+        {
+            outerContours.push_back( contour );
+            ocIdx.push_back( c );
+        }
+
+        switch( outsetType )
+        {
+            case 1: contourList[ c ]->buildFrontOutset( outsetSize ); break;
+            case 2: contourList[ c ]->buildBackOutset( outsetSize ); break;
+        }
+
+        std::vector< p2t::Point * >& polyline = contoursVecPointsVec[ c ];
+        polyline.reserve( contour->PointCount() );
+
+        for( size_t p = 0; p < contour->PointCount(); ++p )
         {
             p2t::Point * d = nullptr;
-            switch(outsetType)
+            switch( outsetType )
             {
-                case 1: d = new p2t::Point( contour->FrontPoint(p).X(), contour->FrontPoint(p).Y() );
+                case 1: d = new p2t::Point( contour->FrontPoint( p ).X(), contour->FrontPoint( p ).Y() );
                     break;
-                case 2: d = new p2t::Point( contour->BackPoint(p).X(), contour->BackPoint(p).Y() );
+                case 2: d = new p2t::Point( contour->BackPoint( p ).X(), contour->BackPoint( p ).Y() );
                     break;
                 case 0:
                 default:
-                    d = new p2t::Point( contour->Point(p).X(), contour->Point(p).Y() );
+                    d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
                     break;
             }
 
             polyline.push_back( d );
-                
-        }
 
-
-        if( contour->IsOuterContour() )
-        {
-            if( cdt )
-            {
-                // Triangulate last contour with his holes.
-                cdt->Triangulate();
-
-                mesh->Begin( GL_TRIANGLES );
-
-                for( auto t : cdt->GetTriangles() )
-                {
-                    auto p0 = t->GetPoint( 0 );
-                    auto p1 = t->GetPoint( 1 );
-                    auto p2 = t->GetPoint( 2 );
-                    mesh->AddPoint( p0->x, p0->y, 0.0 );
-                    mesh->AddPoint( p1->x, p1->y, 0.0 );
-                    mesh->AddPoint( p2->x, p2->y, 0.0 );
-                }
-
-                mesh->End();
-
-                delete cdt;
-                cdt = nullptr;
-            }
-
-            cdt = new p2t::CDT( polyline );
-        }
-        else
-        {
-            assert( cdt );
-            cdt->AddHole( polyline );
         }
     }
 
-    // FIXME: This is the same part of code which is executed in loop. It's awfull.
-    if( cdt )
+    // Process only outer contours. Check intersections with rest countours and add as holes
+    // only this ones, that are inside bounding box. 
+    for( int i = 0; i < outerContours.size(); ++i )
     {
+        p2t::CDT * cdt = new p2t::CDT( contoursVecPointsVec[ ocIdx[ i ] ] );
+
+        for( int c = ocIdx[ i ] + 1; c < ContourCount(); ++c )
+        {
+            const FTContour* contour = contourList[ c ];
+            if( contour->IsOuterContour() )
+                break;
+
+            if( outerContours[ i ]->Intersects( contour ) )
+            {
+                cdt->AddHole( contoursVecPointsVec[ c ] );
+            }
+        }
+
         cdt->Triangulate();
 
         mesh->Begin( GL_TRIANGLES );
@@ -361,6 +306,10 @@ void FTVectoriser::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
         }
 
         mesh->End();
+
+        delete cdt;
     }
+
+
 }
 

@@ -120,14 +120,23 @@ class FTContour
          * outset contour.
          *
          * @param parity  The contour's parity within the glyph.
+         * @attention Insted of parity, now there's variable inverse. Whole outset was loaded with good
+         * orientation, but sometimes we have to inverse points order, because font format uses other filling orientation.
          */
-        void SetParity(int parity);
+        void SetParity( bool inverse );
 
         // FIXME: this should probably go away.
         void buildFrontOutset(float outset);
         void buildBackOutset(float outset);
 
         inline bool IsOuterContour() const { return clockwise; }
+
+        double GetMinX() const { return minX; }
+        double GetMinY() const { return minY; }
+        double GetMaxX() const { return maxX; }
+        double GetMaxY() const { return maxY; }
+
+        bool Intersects( const FTContour* other ) const;
 
     private:
         /**
@@ -205,6 +214,10 @@ class FTContour
          *  Is this contour clockwise or anti-clockwise?
          */
         bool clockwise;
+
+        // Bounding box.
+        double minX, minY;
+        double maxX, maxY;
 };
 
 #endif // __FTContour__

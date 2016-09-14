@@ -507,7 +507,7 @@ TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstrin
 
 // ***********************
 //
-std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float size )
+std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*size*/ )
 {
     // Load the glyph we are looking for.
     FT_UInt gindex = FT_Get_Char_Index( m_face, ch );
@@ -518,7 +518,7 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
     {
         FTVectoriser vectorizer( m_face->glyph );
-        vectorizer.MakeMesh( 1.0f, 0, size );
+        vectorizer.MakeMesh( 1.0f, 0 );
 
         std::vector< glm::vec3 > verticies;
         const auto & mesh = vectorizer.GetMesh();

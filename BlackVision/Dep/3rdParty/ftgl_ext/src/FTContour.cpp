@@ -130,12 +130,12 @@ FTPoint FTContour::ComputeOutsetPoint(FTPoint A, FTPoint B, FTPoint C)
 }
 
 
-void FTContour::SetParity(int parity)
+void FTContour::SetParity( bool inverse )
 {
     size_t size = PointCount();
     FTPoint vOutset;
 
-    if(((parity & 1) && clockwise) || (!(parity & 1) && !clockwise))
+    if( inverse )
     {
         // Contour orientation is wrong! We must reverse all points.
         // FIXME: could it be worth writing FTVector::reverse() for this?
@@ -163,12 +163,25 @@ void FTContour::SetParity(int parity)
 }
 
 
+bool FTContour::Intersects( const FTContour* other ) const
+{
+    return	( minX < other->maxX && maxX > other->minX &&
+              minY < other->maxY && maxY > other->minY
+              );
+}
+
+
 FTContour::FTContour(FT_Vector* contour, char* tags, unsigned int n)
 {
     FTPoint prev, cur(contour[(n - 1) % n]), next(contour[0]);
     FTPoint a, b = next - cur;
     double olddir, dir = atan2((next - cur).Y(), (next - cur).X());
     double angle = 0.0;
+
+    minX = HUGE;
+    minY = HUGE;
+    maxX = -HUGE;
+    maxY = -HUGE;
 
     // See http://freetype.sourceforge.net/freetype2/docs/glyphs/glyphs-6.html
     // for a full description of FreeType tags.
@@ -179,6 +192,13 @@ FTContour::FTContour(FT_Vector* contour, char* tags, unsigned int n)
         next = FTPoint(contour[(i + 1) % n]);
         olddir = dir;
         dir = atan2((next - cur).Y(), (next - cur).X());
+
+        // Compute control box.
+        if( cur.X() < minX )    minX = cur.X();
+        if( cur.X() > maxX )    maxX = cur.X();
+        if( cur.Y() < minY )    minY = cur.Y();
+        if( cur.Y() > maxY )    maxY = cur.Y();
+
 
         // Compute our path's new direction.
         double t = dir - olddir;
