@@ -9,6 +9,7 @@
 #include "Impl/Accessors/AnimationAssetAccessor.h"
 #include "Impl/Accessors/AVAssetAccessor.h"
 #include "Impl/Accessors/MeshAssetAccessor.h"
+#include "Impl/Accessors/SVGAssetAccessor.h"
 
 #include "IO/DirIO.h"
 
@@ -711,6 +712,8 @@ void						ProjectManagerImpl::InitializePresets	()
 //
 void				        ProjectManagerImpl::InitializeAssets	()
 {
+    // --- textures and sequences ---
+
     StringVector exts;
     exts.push_back( ".*\\.jpg" );
     exts.push_back( ".*\\.tga" );
@@ -722,6 +725,8 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     auto aaa = AnimationAssetAccessor::Create( GetRootDir() / "sequences", exts );
     RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+
+    // --- font ---
 
     StringVector fontsExts;
     fontsExts.push_back( ".*\\.ttf" );
@@ -757,6 +762,13 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     auto maa = MeshAssetAccessor::Create( GetRootDir() / "meshes", meshExts );
     RegisterCategory( AssetCategory::Create( "meshes", maa ) );
+
+    // --- svg ---
+    StringVector svgExts;
+    svgExts.push_back( ".*\\.svg" );
+
+    auto saa = SVGAssetAccessor::Create( GetRootDir() / "svgs", svgExts );
+    RegisterCategory( AssetCategory::Create( "svgs", saa ) );
 }
 
 // ********************************

@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />

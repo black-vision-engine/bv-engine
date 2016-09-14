@@ -41,7 +41,7 @@ AnimationAssetAccessorConstPtr AnimationAssetAccessor::Create( const Path & root
 //
 AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) const
 {
-	auto p = m_rootPath / path;
+    auto p = m_rootPath / path;
 
     if( Path::Exists( p ) )
     {
@@ -71,9 +71,9 @@ void				AnimationAssetAccessor::AddAsset( const Path & internalPath, const Asset
 {
     auto uid = assetDesc->GetUID();
 
-	if( uid == AnimationAssetDesc::UID() )
-	{
-		auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDesc );
+    if( uid == AnimationAssetDesc::UID() )
+    {
+        auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDesc );
 
         auto files = Dir::ListFiles( typedDesc->GetPath(), typedDesc->GetFilter() );
 
@@ -81,8 +81,8 @@ void				AnimationAssetAccessor::AddAsset( const Path & internalPath, const Asset
 
         if ( files.size() > 0 )
         {
-	        for( auto f : files )
-	        {
+            for( auto f : files )
+            {
                 framesDesc.push_back( TextureAssetDesc::Create( f, true ) );
             }
         }
@@ -92,11 +92,11 @@ void				AnimationAssetAccessor::AddAsset( const Path & internalPath, const Asset
             auto path = f->GetOrigTextureDesc()->GetImagePath();
             Path::Copy( path, m_rootPath / internalPath );
         }
-	}
-	else
-	{
-		assert( !"Wrong asset descriptor type" );
-	}
+    }
+    else
+    {
+        assert( !"Wrong asset descriptor type" );
+    }
 }
 
 // ********************************
@@ -118,9 +118,9 @@ void				AnimationAssetAccessor::RenameAsset	        ( const Path & oldPath, cons
 //
 void				AnimationAssetAccessor::ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) const
 {
-	auto impAsset = File::Open( impAssetFile.Str(), File::OpenMode::FOMReadOnly );
+    auto impAsset = File::Open( impAssetFile.Str(), File::OpenMode::FOMReadOnly );
 
-	ImportAsset( *impAsset.StreamBuf(), importToPath );
+    ImportAsset( *impAsset.StreamBuf(), importToPath );
 }
 
 // ********************************
@@ -129,7 +129,7 @@ void				AnimationAssetAccessor::ImportAsset			( std::istream & in, const Path & 
 {
     auto absPath = m_rootPath / importToPath;
 
-	Dir::CreateDir( absPath.Str(), true );
+    Dir::CreateDir( absPath.Str(), true );
 
     std::stringbuf buf;
     in.get( buf, '\n' );
@@ -172,7 +172,7 @@ void				AnimationAssetAccessor::ExportAsset			( const Path & expAssetFilePath, c
 
     ExportAsset( *expFile.StreamBuf(), internalPath );
 
-	expFile.Close();
+    expFile.Close();
 }
 
 // ********************************
@@ -214,10 +214,10 @@ void				AnimationAssetAccessor::ExportAsset			( std::ostream & out, const Path &
 //
 void			 	AnimationAssetAccessor::ExportAll			( std::ostream & out ) const
 {
-	for( auto p : ListAllUnique( m_rootPath ) )
-	{
-		ExportAsset( out, p );
-	}
+    for( auto p : ListAllUnique( m_rootPath ) )
+    {
+        ExportAsset( out, p );
+    }
 }
 
 // ********************************
@@ -226,9 +226,9 @@ void				AnimationAssetAccessor::ExportAll			( const Path & expAssetFilePath ) co
 {
     auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-	ExportAll( *expFile.StreamBuf() );
+    ExportAll( *expFile.StreamBuf() );
 
-	expFile.Close();
+    expFile.Close();
 }
 
 // ********************************
@@ -270,16 +270,16 @@ PathVec				AnimationAssetAccessor::ListAll				( const Path & path, bool recursiv
 //
 PathVec				AnimationAssetAccessor::ListAllUnique		( const Path & path ) const
 {
-	auto l = ListAll( path, true );
+    auto l = ListAll( path, true );
 
-	std::set< Path  > unique;
+    std::set< Path  > unique;
 
-	for( auto p : l )
-	{
-		unique.insert( p );
-	}
+    for( auto p : l )
+    {
+        unique.insert( p );
+    }
 
-	return PathVec( unique.begin(), unique.end() );	
+    return PathVec( unique.begin(), unique.end() );	
 }
 
 // ********************************
@@ -303,10 +303,10 @@ bool                AnimationAssetAccessor::PathContainsAnimation( const Path & 
 //
 void				AnimationAssetAccessor::CreateDir() const
 {
-	if( !Dir::Exists( m_rootPath.Str() ) )
-	{
-		Dir::CreateDir( m_rootPath.Str(), true );
-	}
+    if( !Dir::Exists( m_rootPath.Str() ) )
+    {
+        Dir::CreateDir( m_rootPath.Str(), true );
+    }
 }
 
 // ********************************

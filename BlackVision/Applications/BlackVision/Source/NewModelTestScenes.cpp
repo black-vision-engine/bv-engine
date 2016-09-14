@@ -2056,7 +2056,9 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
 
     auto plugin = root->GetPlugin( "mesh" );
     assert( plugin );
-    plugin->LoadResource( SVGAssetDescriptor::Create( "kupa.svg" ) );
+    auto assetDesc = ProjectManager::GetInstance()->GetAssetDesc( "", "svgs", "kupa_twarz.svg" );
+    assert( assetDesc );
+    plugin->LoadResource( assetDesc );
     
     root->AddPlugin( "TRIANGULATE", timeEvaluator );
 
