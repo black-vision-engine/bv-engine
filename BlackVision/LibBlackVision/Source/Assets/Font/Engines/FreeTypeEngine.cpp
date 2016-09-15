@@ -17,7 +17,7 @@
 #include FT_OUTLINE_H
 #include FT_STROKER_H
 #include <FreeType/ftglyph.h>
-#include "FTVectoriser.h"
+#include "Triangulator.h"
 
 #include <fstream>
 #include <iostream>

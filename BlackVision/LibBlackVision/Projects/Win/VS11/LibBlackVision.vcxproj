@@ -143,6 +143,7 @@
     <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Font\Engines\Triangulator.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontLoader.cpp" />
@@ -575,6 +576,7 @@
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayTypedRows.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
+    <ClInclude Include="..\..\..\Source\Assets\Font\Engines\Triangulator.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h" />

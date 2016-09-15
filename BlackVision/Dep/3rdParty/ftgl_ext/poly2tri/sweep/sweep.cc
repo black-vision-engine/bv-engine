@@ -705,7 +705,7 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
   if (&ot == NULL) {
     // If we want to integrate the fillEdgeEvent do it here
     // With current implementation we should never get here
-    //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
+    throw new std::runtime_error( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
   }
 
@@ -766,7 +766,7 @@ Point& Sweep::NextFlipPoint(Point& ep, Point& eq, Triangle& ot, Point& op)
     // Left
     return *ot.PointCW(op);
   } else{
-    //throw new RuntimeException("[Unsupported] Opposing point on constrained edge");
+    throw new std::runtime_error("[Unsupported] Opposing point on constrained edge");
     assert(false);
   }
 }
@@ -780,7 +780,7 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
   if (&t.NeighborAcross(p) == NULL) {
     // If we want to integrate the fillEdgeEvent do it here
     // With current implementation we should never get here
-    //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
+    throw new std::runtime_error( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
   }
 

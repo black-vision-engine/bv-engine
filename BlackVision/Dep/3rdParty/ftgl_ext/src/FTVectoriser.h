@@ -32,6 +32,7 @@
 #include "FTContour.h"
 #include "FTList.h"
 #include "FTVector.h"
+#include <vector>
 
 
 #ifndef CALLBACK
@@ -288,6 +289,9 @@ class FTGL_EXPORT FTVectoriser
          * The list of contours in the glyph
          */
         FTContour** contourList;
+
+        std::vector< int >                  contoursNesting;
+        std::vector< std::vector< bool > >  contoursIncuding;
 
         /**
          * A Mesh for tesselations
