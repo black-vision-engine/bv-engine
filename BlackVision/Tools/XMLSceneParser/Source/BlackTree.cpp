@@ -854,7 +854,7 @@ bool BlackTree::CreateNode(BlackNode &parrent, xml_node<> *NewNode, string node_
             bool ommit=false;
             if(attr!=NULL)
             {
-                string node_name    =   attr->value();
+                node_name    =   attr->value();
                 for(unsigned int j=0;j<ActiveReplicators.size();j++)
                 {
                     if(ActiveReplicators[j]->target_name == node_name)
@@ -866,7 +866,7 @@ bool BlackTree::CreateNode(BlackNode &parrent, xml_node<> *NewNode, string node_
                             std::vector<std::string> tok;
                             split(tok, indexes, boost::is_any_of(L","));
                             
-                            bool ommit = false;
+                            ommit = false;
                             for(std::vector<std::string>::iterator tok_iter = tok.begin(); tok_iter != tok.end(); ++tok_iter)
                             {
                                

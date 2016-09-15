@@ -267,8 +267,6 @@ void    EngineStateHandlers::UndoRedoEvent            ( IEventPtr evt )
     }
     else if( command == UndoRedoEvent::Command::SetOperationsBufferSize )
     {
-        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
-
         auto modelScene = editor->GetModelScene( scene );
         modelScene->GetHistory().SetHistoryLength( buffSize );
 

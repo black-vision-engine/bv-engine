@@ -127,7 +127,7 @@ namespace bv{
 				xml_node<> *color = surface->first_node("color");
 				while (color != NULL)
 				{
-					string isNameOk = color->name();
+					isNameOk = color->name();
 					if (isNameOk != "color")
 					{
 						color = color->next_sibling();
@@ -145,7 +145,7 @@ namespace bv{
 					xml_node<> *component = color->first_node("component");
 					while (component != NULL)
 					{
-						string isNameOk = component->name();
+						isNameOk = component->name();
 						if (isNameOk != "component")
 						{
 							component = component->next_sibling();
