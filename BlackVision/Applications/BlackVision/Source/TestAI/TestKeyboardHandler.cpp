@@ -1,6 +1,8 @@
 #include "TestKeyboardHandler.h"
 
 #include "BVAppLogic.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 

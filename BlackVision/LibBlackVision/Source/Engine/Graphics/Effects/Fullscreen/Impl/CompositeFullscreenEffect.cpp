@@ -165,11 +165,11 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
 
     if( effect != nullptr ) // Don't render special node which is input form PreLogic (PreLogic output)
     {
-        auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator, 0 );
-        ctx.SetInputRenderTargets( &inputResults );
+        auto fsectx = FullscreenEffectContext( renderer, outputRenderTarget, allocator, 0 );
+        fsectx.SetInputRenderTargets( &inputResults );
 
         renderer->Enable( outputRenderTarget );
-        effect->Render( &ctx );
+        effect->Render( &fsectx );
         renderer->Disable( outputRenderTarget );
     }
 }

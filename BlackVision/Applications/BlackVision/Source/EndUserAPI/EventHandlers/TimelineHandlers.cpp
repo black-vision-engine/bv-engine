@@ -48,12 +48,12 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
         return;
     }
 
-    if( timeEvaluator->GetType() != DefaultTimeline::Type() )
+    if( timeEvaluator->GetType() != model::DefaultTimeline::Type() )
     {
         SendSimpleErrorResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, "Time evaluator can't be casted to DefaultTimeline" );
         return;
     }
-    auto timeline = std::static_pointer_cast<DefaultTimeline>( timeEvaluator );
+    auto timeline = std::static_pointer_cast< model::DefaultTimeline >( timeEvaluator );
 
     bool result;
     if( command == TimelineKeyframeEvent::Command::AddKeyframe )
@@ -205,17 +205,17 @@ bool        TimelineHandlers::AddKeyframe     ( TimelineKeyframeEvent::KeyframeT
     bool result;
 
     if( keyframeType == TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe )
-        result = TimelineManager::GetInstance()->AddLoopJumpEventToTimeline( timeline, eventName, eventTime, totalLoopCount, jumpToTime );
+        result = model::TimelineManager::GetInstance()->AddLoopJumpEventToTimeline( timeline, eventName, eventTime, totalLoopCount, jumpToTime );
     else if( keyframeType == TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe )
-        result = TimelineManager::GetInstance()->AddLoopRestartEventToTimeline( timeline, eventName, eventTime, totalLoopCount );
+        result = model::TimelineManager::GetInstance()->AddLoopRestartEventToTimeline( timeline, eventName, eventTime, totalLoopCount );
     else if( keyframeType == TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe )
-        result = TimelineManager::GetInstance()->AddLoopReverseEventToTimeline( timeline, eventName, eventTime, totalLoopCount );
+        result = model::TimelineManager::GetInstance()->AddLoopReverseEventToTimeline( timeline, eventName, eventTime, totalLoopCount );
     else if( keyframeType == TimelineKeyframeEvent::KeyframeType::NullKeyframe )
-        result = TimelineManager::GetInstance()->AddNullEventToTimeline( timeline, eventName, eventTime );
+        result = model::TimelineManager::GetInstance()->AddNullEventToTimeline( timeline, eventName, eventTime );
     else if( keyframeType == TimelineKeyframeEvent::KeyframeType::StopKeyframe )
-        result = TimelineManager::GetInstance()->AddStopEventToTimeline( timeline, eventName, eventTime );
+        result = model::TimelineManager::GetInstance()->AddStopEventToTimeline( timeline, eventName, eventTime );
     else if( keyframeType == TimelineKeyframeEvent::KeyframeType::TriggerEventKeyframe )
-        result = TimelineManager::GetInstance()->AddTriggerEventToTimeline( timeline, eventName, eventTime, triggerEvents );
+        result = model::TimelineManager::GetInstance()->AddTriggerEventToTimeline( timeline, eventName, eventTime, triggerEvents );
     else
         return false;
     return result;

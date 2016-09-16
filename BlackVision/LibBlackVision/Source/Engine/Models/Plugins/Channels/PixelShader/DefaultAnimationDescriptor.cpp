@@ -249,7 +249,7 @@ DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::LoadAnimation  ( const
 
 	for ( SizeType i = 1; i < animRes->GetFramesNum(); ++i )
     {
-        auto texResource = animRes->GetFrame( i );
+        texResource = animRes->GetFrame( i );
 
         //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
         //{ extraKind; } // FIXME: suppress unused warning

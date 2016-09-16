@@ -172,7 +172,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         if( autoSelect )
             result = editor->SelectNode( std::static_pointer_cast< model::BasicNode >( node ), mouseEvent->AutoSelectColor );
         
-        std::string nodePath = ModelState::GetInstance().BuildIndexPath( node.get() );
+        std::string nodePath = model::ModelState::GetInstance().BuildIndexPath( node.get() );
         //std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
 
         JsonSerializeObject ser;

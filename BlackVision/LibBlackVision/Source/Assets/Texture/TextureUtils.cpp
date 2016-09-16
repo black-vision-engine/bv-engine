@@ -310,7 +310,7 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
 
 			for(SizeType i = 1; i < mmDesc->GetLevelsNum(); ++i )
 			{
-				auto cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ), true );
+				cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ), true );
 				if( cachedMMAsset )
 				{
 					mipMapsRes[ i ] = cachedMMAsset;

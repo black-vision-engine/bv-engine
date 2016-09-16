@@ -70,11 +70,11 @@ void    GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips   
         uniqueNormals[ indices[ i + 3 ] ] += normal;
     }
 
-    for( auto & normal : uniqueNormals )
+    for( auto & uniqueNormal : uniqueNormals )
     {
-        if( normal != glm::vec3( 0.0f ) )
+        if( uniqueNormal != glm::vec3( 0.0f ) )
         {
-            normal = glm::normalize( normal ); 
+            uniqueNormal = glm::normalize( uniqueNormal );
         }
     }
 
@@ -104,11 +104,11 @@ void     GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangles       
         uniqueNormals[ indices[ i + 2 ] ] += normal;
     }
 
-    for( auto & normal : uniqueNormals )
+    for( auto & uniqueNormal : uniqueNormals )
     {
-        if( normal != glm::vec3( 0.0f ) )
+        if( uniqueNormal != glm::vec3( 0.0f ) )
         {
-            normal = glm::normalize( normal ); 
+            uniqueNormal = glm::normalize( uniqueNormal );
         }
     }
 

@@ -129,7 +129,7 @@ void            HightmapHandlers::UpdateCyclistPosition    ( int cyclistPos, flo
 
     model::DefaultHeightMapPlugin *  tp = static_cast< model::DefaultHeightMapPlugin * > ( hmplugin.get() );
 
-    auto cyclistNode = root->GetChild( "cyclistNode" + to_string( cyclistPos - 1 ) );
+    auto cyclistNode = root->GetChild( "cyclistNode" + std::to_string( cyclistPos - 1 ) );
     if( cyclistNode )
     {
         //if( cyclistPos == 1 )
@@ -142,7 +142,7 @@ void            HightmapHandlers::UpdateCyclistPosition    ( int cyclistPos, flo
         float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
         float y = ( 2.f * pos.y - 1.f );
 
-        SetParameterTranslation( param, 0.0f, glm::vec3( x, y, 0.f ) );
+        model::SetParameterTranslation( param, 0.0f, glm::vec3( x, y, 0.f ) );
 
     }
 }
@@ -538,7 +538,7 @@ void    HightmapHandlers::UpdateHM        ()
         {
             for( int i = 0; i < 100; ++i )
             {
-                auto distPoint = markTextRoot->GetChild( "markText" + to_string( i ) );
+                auto distPoint = markTextRoot->GetChild( "markText" + std::to_string( i ) );
                 if( distPoint )
                 {
                     auto transformPlugin = distPoint->GetPlugin( "transform" );
@@ -569,11 +569,11 @@ void    HightmapHandlers::UpdateHM        ()
         {
             for( int i = 0; i < 9; ++i )
             {
-                auto markConcentratedNode = markTextConcentratedRoot->GetChild( "markTextConcentrated" + to_string( i ) );
+                auto markConcentratedNode = markTextConcentratedRoot->GetChild( "markTextConcentrated" + std::to_string( i ) );
      
                 float p = m_concentrateDistMarks[ i ];
 
-                SetParameter( markConcentratedNode->GetPlugin( "text" )->GetParameter( "text" ), 0.0, to_wstring( int( p ) ) + L" km" );
+                model::SetParameter( markConcentratedNode->GetPlugin( "text" )->GetParameter( "text" ), 0.0, std::to_wstring( int( p ) ) + L" km" );
 
                 auto pos = tp->QueryEdgePosition( p * 1000.f );
                 float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );

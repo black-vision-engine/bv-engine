@@ -289,7 +289,7 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
         
     if( childIdx >= 0 )
     {
-        if( childIdx < m_children.size() )
+        if( childIdx < ( Int32 )m_children.size() )
         {
             return m_children[ childIdx ]->GetNode( childPath, separator );
         }

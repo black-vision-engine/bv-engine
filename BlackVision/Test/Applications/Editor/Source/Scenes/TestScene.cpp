@@ -1280,8 +1280,8 @@ void					TestScene::InitCopyNodeTest	()
 
         for( unsigned int i = 0; i < 2; ++i )
         {
-            auto child = TestSceneUtils::ColoredRectangle( timeline1, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-            auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+            child = TestSceneUtils::ColoredRectangle( timeline1, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+            childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
             SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )i * 0.25f, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root->GetChild( "child0" ), child );
         }

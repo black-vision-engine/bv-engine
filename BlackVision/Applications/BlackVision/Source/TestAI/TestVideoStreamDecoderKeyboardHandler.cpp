@@ -25,15 +25,15 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
     auto plugin = node->GetPlugin( "av_decoder" );
 	if( c == 'q' )
     {
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::PLAY );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
     }
     else if( c == 'w' )
     {
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::PAUSE );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PAUSE );
     }
 	else if( c == 'e' )
 	{
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::STOP );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
     }
 	else if( c == 'a' )
     {
@@ -48,10 +48,10 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
     }
 	else if( c == 'x' )
     {
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::STOP );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::STOP );
 		auto desc = AVAssetDesc::Create( "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
         editor->LoadAsset( plugin, desc );
-        SetParameter( plugin->GetParameter( "state" ), 0.0f, DefaultAVDecoderPlugin::DecoderMode::PLAY );
+        SetParameter( plugin->GetParameter( "state" ), 0.0f, model::DefaultAVDecoderPlugin::DecoderMode::PLAY );
     }
 	else if( c == 'z' )
     {

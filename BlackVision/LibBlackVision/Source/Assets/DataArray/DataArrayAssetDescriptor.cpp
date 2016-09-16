@@ -43,7 +43,7 @@ ser.EnterChild( "asset" );
 
     ser.EnterArray( "dataRows" );
         
-    for( int i = 0; i < m_rows.size(); ++i )
+    for( SizeType i = 0; i < m_rows.size(); ++i )
     {
         ser.EnterChild( "row" );
             

@@ -71,7 +71,7 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 	for( auto f : framesDesc )
 	{
 		framesAssets.push_back( LoadFrame( f ) );
-		printf( "\rLoaded %d out of %d total frames                ", i + 1, framesDesc.size() );
+		printf( "\rLoaded %d out of %lld total frames                ", i + 1, ( Int64 )framesDesc.size() );
 		++i;
 	}
 

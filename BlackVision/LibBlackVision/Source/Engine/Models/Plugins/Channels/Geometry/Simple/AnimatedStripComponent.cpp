@@ -77,10 +77,10 @@ void                     AnimatedStripComponent::Update         ( TimeType t )
         glm::vec3 & vt = vx[ i ];
         glm::vec3 & vb = vx[ i + 1 ];
 
-        float t = vt.x * sclSine + dSine;
+        float r = vt.x * sclSine + dSine;
         float s = vt.x * sclCosine + dCosine;
 
-        float dy = m_sizeY * sin( t );
+        float dy = m_sizeY * sin( r );
         float dz = m_sizeZ * cos( s );
 
         vt.y = yStart + m_h + dy;

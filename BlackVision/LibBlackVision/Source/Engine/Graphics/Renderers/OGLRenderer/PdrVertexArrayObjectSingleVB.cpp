@@ -124,10 +124,9 @@ void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * rende
     {
         unsigned int channel        = desc->ChannelLocation( index );
         unsigned int numComponents  = desc->NumComponents( index );
-        GLubyte * ptrOffset         = (GLubyte*)(locOffset);
 
         //FIXME: not general enough: component type and normalized to be implemented
-        BVGL::bvglVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, ptrOffset );
+        BVGL::bvglVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, &locOffset );
 
         locOffset += desc->ComponentSize( index ) * numComponents;
     }

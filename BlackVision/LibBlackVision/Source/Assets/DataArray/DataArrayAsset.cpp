@@ -52,7 +52,7 @@ DataArrayRowBase *      DataArrayAsset::GetRow          ( const std::string & ro
 //
 DataArrayRowBase *      DataArrayAsset::GetRow          ( int idx ) const
 {
-    assert( idx < m_rows.size() );
+    assert( idx < ( Int32 )m_rows.size() );
     return m_rows[ idx ];
 }
 

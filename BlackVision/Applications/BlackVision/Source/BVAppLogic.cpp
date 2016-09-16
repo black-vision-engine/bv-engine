@@ -107,7 +107,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
-    , m_solution( model::TimelineManager::GetInstance() )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -176,33 +175,17 @@ void BVAppLogic::LoadScene          ( void )
 
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
-        if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
-        {
-            //m_solution.SetTimeline(m_timelineManager);
-            m_solution.LoadSolution( ConfigManager::GetString("solution") );
+        auto pm = ProjectManager::GetInstance();
 
-            auto sceneModel = SceneModel::Create( "root" );
-            projectEditor->AddScene( sceneModel );
-
-            projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
-
-            //if(ConfigManager::GetBool("hm"))
-            //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
-        }
-        else
-        {
-            auto pm = ProjectManager::GetInstance();
-
-            auto projectName = ConfigManager::GetString( "default_project_name" );
+        auto projectName = ConfigManager::GetString( "default_project_name" );
             
-            if( !projectName.empty() )
-            {
-                auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
+        if( !projectName.empty() )
+        {
+            auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
 
-                if( !projectScenesNames.empty() )
-                {
-                    LoadScenes( projectScenesNames );
-                }
+            if( !projectScenesNames.empty() )
+            {
+                LoadScenes( projectScenesNames );
             }
         }
     }
@@ -310,17 +293,17 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
 //
 void BVAppLogic::RefreshVideoInputScene()
 {
-    if(ConfigManager::GetBool("Debug/UseVideoInputFeeding") && m_videoCardManager->IsEnabled())
-    {
-        if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
-        {
-            BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
-        }
-        else
-        {
-            m_videoCardManager->UnblockCaptureQueue(0,"A");
-        }
-    }
+    //if(ConfigManager::GetBool("Debug/UseVideoInputFeeding") && m_videoCardManager->IsEnabled())
+    //{
+    //    if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
+    //    {
+    //        BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+    //    }
+    //    else
+    //    {
+    //        m_videoCardManager->UnblockCaptureQueue(0,"A");
+    //    }
+    //}
 }
 
 // *********************************

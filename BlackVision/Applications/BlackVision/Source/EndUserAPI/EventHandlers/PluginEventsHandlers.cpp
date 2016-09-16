@@ -54,7 +54,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     
     TimeType keyTime           = setParamEvent->Time;
 
-    IParameterPtr param = nullptr;
+    model::IParameterPtr param = nullptr;
 
     //<------- preserve compatibility code - delete me later & uncomment code below -------
     if( paramSubName.empty() )
@@ -201,7 +201,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {
             auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
-            QueryTypedParam< ParamTransformPtr >( param )->Serialize( responseJSON, transformKind );
+            model::QueryTypedParam< model::ParamTransformPtr >( param )->Serialize( responseJSON, transformKind );
         }
         else
         {
@@ -444,7 +444,7 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
         {
             int enumValue = SerializationHelper::String2T( stringValue, 0 );
 
-            return SetParameter( param, ( TimeType )keyTime, static_cast< GenericEnumType >( enumValue ) );
+            return SetParameter( param, ( TimeType )keyTime, static_cast< model::GenericEnumType >( enumValue ) );
         }
         case ModelParamType::MPT_MAT2:
         {
@@ -613,7 +613,7 @@ void        PluginEventsHandlers::ParamDescHandler    ( bv::IEventPtr eventPtr )
 
     if( command == ParamDescriptorEvent::AddParamDescriptor )
     {
-        IParameterPtr param = nullptr;
+        model::IParameterPtr param = nullptr;
         param = GetParameter( paramDescEvent->ParamAddress );
 
         if( param )

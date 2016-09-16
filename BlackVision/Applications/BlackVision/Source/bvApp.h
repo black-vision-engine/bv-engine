@@ -75,7 +75,6 @@ private:
     void            InitializeSelfState			();
     // pablito
     bool			InitializeLicenses      ();
-    void			InitializeConfig        ();
 
     void            PostFrame					( unsigned int millis );
 };
