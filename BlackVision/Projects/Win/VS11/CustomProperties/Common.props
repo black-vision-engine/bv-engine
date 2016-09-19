@@ -20,12 +20,6 @@
     <AssetsDir>$(SolutionRoot)\Assets</AssetsDir>
     <TestsResultsDir>$(SolutionRoot)\_TestsResults\</TestsResultsDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(PlatformToolset)'=='v110'">
-    <PlatformName>VS11</PlatformName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(PlatformToolset)'=='v140'">
-    <PlatformName>VS14</PlatformName>
-  </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</OutDir>
     <IntDir>$(TempDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</IntDir>

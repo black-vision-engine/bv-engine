@@ -101,7 +101,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -133,7 +133,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       </SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -166,7 +166,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -212,7 +212,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -269,106 +269,11 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
   <ItemDefinitionGroup Label="CustomXML">
     <ClCompile>
       <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;4996;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings/>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4458;4459;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4458;4459;4714;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
-<ItemGroup><ClCompile Include="..\..\..\Source\AnotherTestScene.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp"/>
     <ClCompile Include="..\..\..\Source\bvApp.cpp"/>
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp"/>
     <ClCompile Include="..\..\..\Source\BVConfig.cpp"/>
@@ -425,7 +330,9 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp"/>
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp"/>
     <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\bvApp.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\bvApp.h"/>
     <ClInclude Include="..\..\..\Source\BVAppLogic.h"/>
     <ClInclude Include="..\..\..\Source\BVConfig.h"/>
     <ClInclude Include="..\..\..\Source\BVForwards.h"/>
@@ -486,7 +393,10 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h"/>
     <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h"/>
     <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h"/>
-  </ItemGroup><ItemGroup><None Include="..\..\..\Source\bvAppLogInitializer.inl"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\bvAppLogInitializer.inl"/>
     <None Include="..\..\..\Source\BVConfig.inl"/>
     <None Include="..\..\..\Source\FrameStatsService.inl"/>
-  </ItemGroup><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup></Project>
+  </ItemGroup>
+</Project>

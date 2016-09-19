@@ -9,14 +9,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="DetectLeaks|Win32">
-      <Configuration>DetectLeaks</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="DetectLeaks|x64">
-      <Configuration>DetectLeaks</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -29,7 +21,6 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9D72E88B-3DA9-4B56-A703-29641FA82479}</ProjectGuid>
     <RootNamespace>TestMipMapBuilder</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -38,23 +29,11 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -86,33 +65,7 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Test.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Test.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props"/>
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
@@ -151,21 +104,6 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
-  <PropertyGroup/>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningVersion>16</WarningVersion>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningVersion>16</WarningVersion>
-      <TreatWarningAsError>false</TreatWarningAsError>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
@@ -174,5 +112,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-<ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings/>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup><ClCompile Include="..\..\..\Source\TestMain.cpp"/>
-  </ItemGroup><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup></Project>
+<ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+<ItemGroup><ClCompile Include="..\..\..\Source\TestMain.cpp"/>
+  </ItemGroup>
+</Project>

@@ -22,11 +22,12 @@ CUSTOM_XML = '\
   <ItemDefinitionGroup Label="CustomXML">\
     <ClCompile>\
       <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>\
-      <DisableSpecificWarnings>4458;4459;4714;</DisableSpecificWarnings>\
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>\
     </ClCompile>\
   </ItemDefinitionGroup>'
 
 def update_includes(src_path, dst_path):
+    ''' Copies source/include items from source to destination vcxproj. '''
     with open(src_path, 'r', encoding='utf-8-sig') as f:
         xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
         src_root = etree.XML(xml_str)
@@ -57,6 +58,7 @@ def update_includes(src_path, dst_path):
     etree.ElementTree(dst_root).write(dst_path, xml_declaration=True, pretty_print=True)
 
 def clone_and_modify_vcxproj(src_path, dst_path, src_version, dst_version):
+    ''' Make a copy of existing vcxproj and replace source version occurrences with destination version. '''
     with open(src_path, 'r', encoding='utf-8-sig') as f:
         file_data = f.read()
 
@@ -73,6 +75,7 @@ def clone_and_modify_vcxproj(src_path, dst_path, src_version, dst_version):
 
 
 def append_xml(path, custom_xml):
+    ''' Append custom xml to all vcxprojs. '''
     with open(path, 'r', encoding='utf-8') as f:
         xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
         root = etree.XML(xml_str)
@@ -88,6 +91,7 @@ def append_xml(path, custom_xml):
     etree.ElementTree(root).write(path, xml_declaration=True, pretty_print=True)
 
 def process_projects_xml(src_version=SRC_VERSION, dst_version=DST_VERSION, custom_xml=CUSTOM_XML, append_custom_xml=True):
+    ''' Find all vcxproj in source version and create/update destination version. '''
     for src_path in glob.iglob("./**/"+src_version+"/*.vcxproj", recursive=True):
         print(src_path)
         dst_path = src_path.replace(src_version, dst_version)

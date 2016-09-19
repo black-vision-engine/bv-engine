@@ -10,7 +10,6 @@
 //pablito
 //#include "SocketWrapper.h"
 #include "ConfigManager.h"
-#include "structure/AssetManager.h"
 #include "LicenseManager.h"
 #include "VideoCardManager.h"
 

@@ -76,7 +76,7 @@
     <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
   </ImportGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-<ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings/>    </ClCompile>  </ItemDefinitionGroup><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup><ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp"/>
+  <ItemGroup><ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp"/>
     <ClCompile Include="..\..\..\Source\IO\DirIO.cpp"/>
     <ClCompile Include="..\..\..\Source\IO\FileIO.cpp"/>
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp"/>
@@ -132,5 +132,9 @@
     <ClInclude Include="..\..\..\Source\Util\IObserver.h"/>
     <ClInclude Include="..\..\..\Source\Util\Observable.h"/>
     <ClInclude Include="..\..\..\Source\win_sock.h"/>
-  </ItemGroup><ItemGroup><None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl"/>
-  </ItemGroup><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup></Project>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl"/>
+  </ItemGroup>
+  <ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+</Project>
