@@ -246,8 +246,9 @@ void FTVectoriser::ProcessContours()
                 {
                     FTPoint a = p1 - leftmost;
                     FTPoint b = p2 - leftmost;
-                    if( b.X() * a.Y() > b.Y() * a.X() )
+                    if( b.X() * a.Y() <= b.Y() * a.X() )
                     {
+                        // Check cross product between vectors (on plane, which means result is only z value).
                         parity++;
                     }
                 }
