@@ -10,7 +10,6 @@
 //pablito
 //#include "SocketWrapper.h"
 #include "ConfigManager.h"
-#include "structure/AssetManager.h"
 #include "LicenseManager.h"
 #include "VideoCardManager.h"
 
@@ -75,7 +74,6 @@ private:
     void            InitializeSelfState			();
     // pablito
     bool			InitializeLicenses      ();
-    void			InitializeConfig        ();
 
     void            PostFrame					( unsigned int millis );
 };

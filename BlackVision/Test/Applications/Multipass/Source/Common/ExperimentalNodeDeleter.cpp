@@ -15,12 +15,12 @@ namespace bv
 
 // **************************
 //
-void    ExperimentalDeleteAndCleanup( SceneNode * node, Renderer * renderer )
+void    ExperimentalDeleteAndCleanup( SceneNode * sceneNode, Renderer * renderer )
 {
     std::vector< SceneNode * > nodes;
-    while( node->NumChildNodes() > 0 )
+    while( sceneNode->NumChildNodes() > 0 )
     {
-        nodes.push_back( node->DetachChildNode( (unsigned int) 0 ) );
+        nodes.push_back( sceneNode->DetachChildNode( (unsigned int) 0 ) );
     }
 
     for( auto node : nodes )
@@ -28,7 +28,7 @@ void    ExperimentalDeleteAndCleanup( SceneNode * node, Renderer * renderer )
         ExperimentalDeleteAndCleanup( node, renderer );
     }
 
-    ExperimentalDeleteSingleNode( node, renderer );
+    ExperimentalDeleteSingleNode( sceneNode, renderer );
 }
 
 // **************************

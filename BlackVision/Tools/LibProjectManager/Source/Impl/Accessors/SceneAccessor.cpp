@@ -269,12 +269,14 @@ PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
 AssetDescVec SceneAccessor::UnpackSimpleAssets( const AssetDescConstPtr & assetDesc )
 {
     std::vector< AssetDescConstPtr > simpleAssets;
-    if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
+    if( std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
     {
-        simpleAssets.push_back( stad );
+        simpleAssets.push_back( std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) );
     }
-    else if( auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
+    else if( std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
     {
+        auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc );
+
         auto stad = tad->GetOrigTextureDesc();
         if( stad )
         {

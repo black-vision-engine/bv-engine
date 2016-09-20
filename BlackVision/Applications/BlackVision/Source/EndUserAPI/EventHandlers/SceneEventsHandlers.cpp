@@ -440,7 +440,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 forceSave = true;
             }
 
-            SceneModelPtr scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
+            model::SceneModelPtr scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
 
             if( scene != nullptr )
             {
@@ -549,7 +549,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto inSceneName = request.GetAttribute( "inSceneName" );
         auto projectName = request.GetAttribute( "projectName" );
 
-        auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str() );
+        auto scene = model::SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str() );
 
         pm->AddScene( scene, projectName, inSceneName );
 
@@ -931,8 +931,8 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
     auto & sceneName    = gridLineEvent->SceneName;
     auto & gridName     = gridLineEvent->GridLineName;
     auto gridLineIdx    = gridLineEvent->GridLineIndex;
-    auto gridType       = SerializationHelper::String2T( gridLineEvent->GridLineType, GridLineType::TST_Horizontal );
-    auto alignement     = SerializationHelper::String2T( gridLineEvent->AlignementType, GridLineAlignement::TSA_WeightCenter );
+    auto gridType       = SerializationHelper::String2T( gridLineEvent->GridLineType, model::GridLineType::TST_Horizontal );
+    auto alignement     = SerializationHelper::String2T( gridLineEvent->AlignementType, model::GridLineAlignement::TSA_WeightCenter );
 
     auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
     if( scene == nullptr )
@@ -1171,18 +1171,18 @@ glm::vec3   SceneEventsHandlers::GetMeshTranslationToFitCamera            ( mode
         bbRadius = (std::max)( dist, bbRadius );
     }
 
-    auto camFOV = glm::radians( QueryTypedParam< ParamFloatPtr >( camera->GetParameter( CameraModel::PARAMETERS::FOV ) )->Evaluate() );
-    auto camPos = QueryTypedParam< ParamVec3Ptr >( camera->GetParameter( CameraModel::PARAMETERS::POSITION ) )->Evaluate();
-    auto camDir = QueryTypedParam< ParamVec3Ptr >( camera->GetParameter( CameraModel::PARAMETERS::DIRECTION ) )->Evaluate();
+    auto camFOV = glm::radians( model::QueryTypedParam< model::ParamFloatPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::FOV ) )->Evaluate() );
+    auto camPos = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::POSITION ) )->Evaluate();
+    auto camDir = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::DIRECTION ) )->Evaluate();
     
-    auto camViewportW = QueryTypedParam< ParamIntPtr >( camera->GetParameter( CameraModel::PARAMETERS::VIEWPORT_WIDTH ) )->Evaluate();
-    auto camViewportH = QueryTypedParam< ParamIntPtr >( camera->GetParameter( CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) )->Evaluate();
+    auto camViewportW = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) )->Evaluate();
+    auto camViewportH = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) )->Evaluate();
     
     auto ratio = ( Float32 )(std::max)( camViewportW, camViewportH ) / ( Float32 )(std::min)( camViewportW, camViewportH );
 
     auto camDist = ratio * bbRadius / ( 2.f * glm::tan( camFOV / 2.0f ) );
 
-    SetParameter( camera->GetParameter( CameraModel::PARAMETERS::FAR_CLIPPING_PLANE ), 0.f, camDist + (std::max)( boundingBox.Width(), boundingBox.Height() ) / 2.f );
+    SetParameter( camera->GetParameter( model::CameraModel::PARAMETERS::FAR_CLIPPING_PLANE ), 0.f, camDist + (std::max)( boundingBox.Width(), boundingBox.Height() ) / 2.f );
 
     return camPos + camDir * camDist - bbCenter;
 }

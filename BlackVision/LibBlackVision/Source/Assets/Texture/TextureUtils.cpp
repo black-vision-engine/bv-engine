@@ -308,20 +308,20 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
             }
 
 
-            for(SizeType i = 1; i < mmDesc->GetLevelsNum(); ++i )
-            {
-                auto cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ), true );
-                if( cachedMMAsset )
-                {
-                    mipMapsRes[ i ] = cachedMMAsset;
-                }
-                else
-                {
-                    auto textureWithMipMap =TextureUtils::GenerateMipMaps( mipMapsRes[ i - 1 ], 2, mmDesc->GetFilter() );
-                    //auto data	= mipMapsRes[ i - 1 ]->GetData();
-                    //auto w		= mipMapsRes[ i - 1 ]->GetWidth();
-                    //auto h		= mipMapsRes[ i - 1 ]->GetHeight();
-                    //auto bpp	= TextureLoader::ToBPP( mipMapsRes[ i - 1 ]->GetFormat() );
+			for(SizeType i = 1; i < mmDesc->GetLevelsNum(); ++i )
+			{
+				cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ), true );
+				if( cachedMMAsset )
+				{
+					mipMapsRes[ i ] = cachedMMAsset;
+				}
+				else
+				{
+					auto textureWithMipMap =TextureUtils::GenerateMipMaps( mipMapsRes[ i - 1 ], 2, mmDesc->GetFilter() );
+					//auto data	= mipMapsRes[ i - 1 ]->GetData();
+					//auto w		= mipMapsRes[ i - 1 ]->GetWidth();
+					//auto h		= mipMapsRes[ i - 1 ]->GetHeight();
+					//auto bpp	= TextureLoader::ToBPP( mipMapsRes[ i - 1 ]->GetFormat() );
 
                     //tools::Image img = { data, w, h, bpp };
                     //auto mm = tools::GenerateMipmaps(	img,

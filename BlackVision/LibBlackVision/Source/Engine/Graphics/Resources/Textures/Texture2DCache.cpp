@@ -51,7 +51,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         if( it != m_tex2DCache.end() )
         {
 #ifdef PRINT_TEXTURE_CACHE_STATS
-            printf( "Reading texture %08X from cache\n", it->first );
+            printf( "Reading texture %08X from cache\n", ( UInt32 )it->first );
 #endif 
             return it->second;
         }
@@ -66,7 +66,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
 
 #ifdef PRINT_TEXTURE_CACHE_STATS
-        printf( "Registering texture %08X in cache\n", txParams->GetUID() );
+        printf( "Registering texture %08X in cache\n", ( UInt32 )txParams->GetUID() );
 #endif 
         m_tex2DCache[ txParams->GetUID() ] = tx;
         m_tex2DSet.insert( tx.get() );
@@ -109,7 +109,7 @@ bool            Texture2DCache::IsStored                ( Texture2DConstPtr tex 
 void            Texture2DCache::ClearCache              ()
 {
 #ifdef PRINT_TEXTURE_CACHE_STATS
-    printf( "Removing %d entries from texture cache\n", m_tex2DCache.size() );
+    printf( "Removing %lld entries from texture cache\n", ( UInt64 )m_tex2DCache.size() );
 #endif 
     m_tex2DCache.clear();
     m_tex2DSet.clear();
@@ -120,7 +120,6 @@ void            Texture2DCache::ClearCache              ()
 void            Texture2DCache::ClearUnused				()
 {
 	auto unused = 0;
-	auto it = m_tex2DCache.begin();
 	for( auto it = m_tex2DCache.begin(); it != m_tex2DCache.end(); )
 	{
 		auto & tx = it->second;

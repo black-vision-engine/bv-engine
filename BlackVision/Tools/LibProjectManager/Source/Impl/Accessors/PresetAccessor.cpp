@@ -40,7 +40,7 @@ PresetAccessor::PresetAccessor	( const Path & path )
 //
 void                        PresetAccessor::SavePreset ( const model::BasicNodePtr node, const Path & path ) const
 {    
-    auto ser = BVXMLSerializer();
+    BVXMLSerializer ser;
 
     auto bvSerCo = ser.GetBVSerializeContext();
     bvSerCo->sceneNameInTimeline = false;

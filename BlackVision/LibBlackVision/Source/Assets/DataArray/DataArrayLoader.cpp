@@ -59,7 +59,7 @@ AssetConstPtr DataArrayLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
     std::vector< DataArrayRowBase * > typedRows;
 
-    for( int i = 0; i < rows.size(); i++ )
+    for( Int32 i = 0; i < ( Int32 )rows.size(); i++ )
     {
         if( types[ i ] == ModelParamType::MPT_FLOAT )
         {

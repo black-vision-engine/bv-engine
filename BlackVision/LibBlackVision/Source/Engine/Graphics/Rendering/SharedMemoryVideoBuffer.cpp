@@ -46,8 +46,7 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer()
 
 		if (m_pBuf == NULL)
 		{
-			printf("Could not map view of file (%d).\n"),
-					GetLastError();
+			printf( "Could not map view of file (%d).\n", GetLastError() );
 
 			CloseHandle(m_hMapFile);
 		}else{

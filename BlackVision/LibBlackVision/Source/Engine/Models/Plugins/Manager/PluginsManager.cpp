@@ -194,7 +194,7 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
 
     if( uids.size() != names.size() )
     {
-        printf( "Number of uids %d differs from number of names %d \n", uids.size(), names.size() );
+        printf( "Number of uids %lld differs from number of names %lld \n", ( Int64 )uids.size(), ( Int64 )names.size() );
 
         return nullptr;
     }

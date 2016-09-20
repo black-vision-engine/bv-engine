@@ -211,27 +211,27 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 void                                        DefaultParamValModel::RemoveParamVal  ( const std::string & name )
 {
     // Remove parameters
-    for( int i = 0; i < m_parameters.size(); ++i )
+    for( int i = 0; i < ( Int32 )m_parameters.size(); ++i )
     {
         if( m_parameters[ i ]->GetName() == name )
             m_parameters.erase( m_parameters.begin() + i );
     }
 
     // Remove values
-    for( int i = 0; i < m_values.size(); ++i )
+    for( int i = 0; i < ( Int32 )m_values.size(); ++i )
     {
         if( m_values[ i ]->GetName() == name )
             m_values.erase( m_values.begin() + i );
     }
 
-    for( int i = 0; i < m_valuesNC.size(); ++i )
+    for( int i = 0; i < ( Int32 )m_valuesNC.size(); ++i )
     {
         if( m_valuesNC[ i ]->GetName() == name )
             m_valuesNC.erase( m_valuesNC.begin() + i );
     }
 
     //Remove evaluators
-    for( int i = 0; i < m_evaluators.size(); ++i )
+    for( int i = 0; i < ( Int32 )m_evaluators.size(); ++i )
     {
         auto & evalVec = m_evaluators[ i ]->GetParameters();
         if( evalVec[ 0 ]->GetName() == name )
@@ -242,7 +242,7 @@ void                                        DefaultParamValModel::RemoveParamVal
     m_states.erase( name );
 
     // Remove updaters
-    for( int i = 0; i < m_stateUpdaters.size(); ++i )
+    for( int i = 0; i < ( Int32 )m_stateUpdaters.size(); ++i )
     {
         if( m_stateUpdaters[ i ]->GetName() == name )
             m_stateUpdaters.erase( m_stateUpdaters.begin() + i );

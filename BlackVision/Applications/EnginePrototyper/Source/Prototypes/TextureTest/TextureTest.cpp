@@ -4,7 +4,7 @@ namespace bv {
 
 // *****************************
 //
-TextureTest::TextureTest      ( Renderer * renderer )
+TextureTest::TextureTest      ( Renderer * renderer, audio::AudioRenderer * )
 	: m_renderer( renderer )
 	, m_camera( new Camera( true ) )
 	, m_width( 0 )
@@ -83,9 +83,9 @@ void    TextureTest::Render              ()
 
 // **************************
 //
-IBasicLogicUnqPtr    TextureTest::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    TextureTest::Create  ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
-	return IBasicLogicUnqPtr( new TextureTest( renderer ) );
+	return IBasicLogicUnqPtr( new TextureTest( renderer, audioRenderer ) );
 }
 
 } // bv

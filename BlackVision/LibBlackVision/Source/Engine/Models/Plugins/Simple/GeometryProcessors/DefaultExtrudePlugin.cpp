@@ -382,7 +382,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
 
     // Merge normals for corner verticies. These normals will be recreated in next functions.
     // We need this step to make special behavior of corner verticies possible.
-    for( int i = 0; i < cornerPairs.size(); i += 2 )
+    for( UInt32 i = 0; i < ( UInt32 )cornerPairs.size(); i += 2 )
     {
         int idx1 = cornerPairs[ i ];
         int idx2 = cornerPairs[ i + 1 ];

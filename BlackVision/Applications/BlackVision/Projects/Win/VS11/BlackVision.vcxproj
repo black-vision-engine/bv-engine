@@ -105,7 +105,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -137,7 +137,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       </SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -170,7 +170,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -219,7 +219,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -270,9 +270,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\TCPServer\Projects\Win\VS11\TCPServer.vcxproj">
       <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Tools\XMLSceneParser\Projects\Win\VS11\XMLSceneParser.vcxproj">
-      <Project>{1bc9456b-ba4b-4218-9c0c-1596717bd3f3}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -40,7 +40,7 @@ void            CamerasLogic::Deserialize             ( const IDeserializer & de
 
     auto cameras = SerializationHelper::DeserializeArray< CameraModel >( deser, "cameras" );
 
-    for( int i = 0; i < cameras.size(); ++i )
+    for( SizeType i = 0; i < cameras.size(); ++i )
     {
         if( cameras[ i ] != nullptr )
             m_cameras.push_back( cameras[ i ] );
@@ -54,7 +54,7 @@ void            CamerasLogic::Deserialize             ( const IDeserializer & de
         m_cameras.push_back( std::make_shared< CameraModel >( m_defaultTimeline ) );
 
     // Set current camera. Add first camera, when camera at currCameraIdx doesn't exists.
-    if( currCameraIdx < m_cameras.size() )
+    if( currCameraIdx < ( Int32 )m_cameras.size() )
         m_currentCamera = m_cameras[ currCameraIdx ];
     else
         m_currentCamera = m_cameras[ 0 ];
@@ -71,7 +71,7 @@ void            CamerasLogic::Serialize               ( ISerializer & ser ) cons
 
     int currCameraIdx = -1;
 
-    for( int i = 0; i < m_cameras.size(); ++i )
+    for( Int32 i = 0; i < ( Int32 )m_cameras.size(); ++i )
     {
         m_cameras[ i ]->Serialize( ser );
         if( m_cameras[ i ] == m_currentCamera )

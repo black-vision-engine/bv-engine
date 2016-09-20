@@ -30,7 +30,7 @@ RenderingQueue *    RenderQueueStackAllocator::Allocate                    ()
 {
     ++m_currentIdx;
 
-    if( m_currentIdx >= m_renderQueues.size() )
+    if( m_currentIdx >= ( Int32 )m_renderQueues.size() )
     {
         m_renderQueues.push_back( RenderingQueue() );
     }
@@ -42,7 +42,7 @@ RenderingQueue *    RenderQueueStackAllocator::Allocate                    ()
 //
 RenderingQueue *    RenderQueueStackAllocator::Top                         ()
 {
-    assert( m_currentIdx < m_renderQueues.size() );
+    assert( m_currentIdx < ( Int32 )m_renderQueues.size() );
     assert( m_currentIdx >= 0 );
     return &m_renderQueues[ m_currentIdx ];
 }

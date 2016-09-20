@@ -289,7 +289,7 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
         
     if( childIdx >= 0 )
     {
-        if( childIdx < m_children.size() )
+        if( childIdx < ( Int32 )m_children.size() )
         {
             return m_children[ childIdx ]->GetNode( childPath, separator );
         }
@@ -764,7 +764,7 @@ Int32                               BasicNode::TryParseIndex            ( std::s
     if( !str.empty() && str[ 0 ] == escapeChar )
     {
         Int32 result;
-        bool success = ( ( std::stringstream( str.substr( 1, str.length() ) ) >> result ) != nullptr );
+        bool success = ( !( std::stringstream( str.substr( 1, str.length() ) ) >> result ).fail() );
         if( success )
         {
             return result;
