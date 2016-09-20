@@ -136,7 +136,7 @@ struct Edge {
         p = &p2;
       } else if (p1.x == p2.x) {
         // Repeat points
-        assert(false);
+        throw new std::runtime_error( "[Unsupported] Repeated points." );
       }
     }
 

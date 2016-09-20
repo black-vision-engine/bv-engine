@@ -32,6 +32,12 @@
 
 #include "poly2tri.h"
 
+// Debug
+#include <fstream>
+#define PRINT_CONTOURS_TO_FILE
+
+// end Debug
+
 #ifndef CALLBACK
 #define CALLBACK
 #endif
@@ -337,6 +343,41 @@ void FTVectoriser::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
 
         }
     }
+
+#ifdef PRINT_CONTOURS_TO_FILE
+
+    std::fstream file( "Contours.txt", std::ios_base::app );
+    assert( !file.fail() );
+
+    file << std::endl << std::endl << "Next shape" << std::endl;
+
+    for( int c = 0; c < contoursVecPointsVec.size(); c++ )
+    {
+        file << std::endl << "Contour number " << c << std::endl;
+        file << "Nesting: " << contoursNesting[ c ] << std::endl;
+        file << "Is clockwise: " << contourList[ c ]->IsOuterContour() << std::endl;
+        file << "Includes contours: ";
+        for( int i = 0; i < ftContourCount; ++i )
+        {
+            if( contoursIncuding[ c ][ i ] )
+            {
+                file << i << " ";
+            }
+        }
+        file << std::endl << std::endl;;
+
+        auto & contour = contoursVecPointsVec[ c ];
+        for( int i = 0; i < contoursVecPointsVec[ c ].size(); i++ )
+        {
+            file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
+        }
+    }
+
+    file.close();
+
+#endif // PRINT_CONTOURS_TO_FILE
+
+
 
     // Process only outer contours. Check intersections with rest countours and add as holes
     // only this ones, that are inside bounding box. 

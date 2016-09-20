@@ -30,6 +30,7 @@
 #include "FTContour.h"
 
 #include <math.h>
+#include <assert.h>
 
 static const unsigned int BEZIER_STEPS = 5;
 
@@ -243,6 +244,7 @@ FTContour::FTContour(FT_Vector* contour, char* tags, unsigned int n)
     // If final angle is positive (+2PI), it's an anti-clockwise contour,
     // otherwise (-2PI) it's clockwise.
     clockwise = (angle < 0.0);
+    //assert( abs( abs( angle ) - 2 * M_PI ) < 0.1f );
 }
 
 
