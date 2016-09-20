@@ -117,8 +117,8 @@ void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * rende
         EnableVertexAttribArray( location );
     }
 
-    unsigned int stride         = desc->Stride();
-    unsigned int locOffset      = 0;
+    unsigned int stride                 = desc->Stride();
+    unsigned long long int locOffset    = 0;
 
     for( GLuint index = 0; index < numChannels; ++index )
     {
@@ -126,7 +126,7 @@ void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * rende
         unsigned int numComponents  = desc->NumComponents( index );
 
         //FIXME: not general enough: component type and normalized to be implemented
-        BVGL::bvglVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, &locOffset );
+        BVGL::bvglVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, ( GLvoid * )locOffset );
 
         locOffset += desc->ComponentSize( index ) * numComponents;
     }

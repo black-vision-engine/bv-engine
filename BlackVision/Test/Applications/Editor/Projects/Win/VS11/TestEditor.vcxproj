@@ -111,6 +111,7 @@
   </ImportGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Scenes\TestScene2.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp" />
     <ClCompile Include="..\..\..\Source\TestLogic.cpp" />
   </ItemGroup>

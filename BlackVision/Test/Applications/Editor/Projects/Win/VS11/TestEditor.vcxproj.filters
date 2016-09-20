@@ -8,6 +8,9 @@
     <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Scenes\TestScene2.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\TestLogic.h" />
