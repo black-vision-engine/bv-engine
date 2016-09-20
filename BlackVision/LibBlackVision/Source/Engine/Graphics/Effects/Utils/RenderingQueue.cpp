@@ -139,7 +139,7 @@ void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, Rend
         // Don't render children if node has effect.
         if( !HasEffect( node ) )
         {
-            for( int i = 0; i < node->NumChildNodes(); ++i )
+            for( Int32 i = 0; i < ( Int32 )node->NumChildNodes(); ++i )
             {
                 QueueNodeSubtree( node->GetChild( i ), ctx );
             }

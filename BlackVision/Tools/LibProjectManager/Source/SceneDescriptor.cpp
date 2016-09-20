@@ -92,7 +92,7 @@ namespace
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-    auto ser = BVXMLSerializer();
+    BVXMLSerializer ser;
 
     scene->Serialize( ser );
 
@@ -103,7 +103,7 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 //
 model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
 {
-    auto deser = XMLDeserializer( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
+    XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
     auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
 
@@ -135,7 +135,7 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    auto deser = XMLDeserializer( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
+    XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
     // assets
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );

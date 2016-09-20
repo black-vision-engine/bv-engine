@@ -145,7 +145,7 @@ void QueryParametersGeneric    ( const std::vector< model::IParameterPtr > & par
 
     for( auto param : params )
     {
-        printf( "%s : %s\n", param->GetName(), param->GetType() );
+        printf( "%s : %i\n", param->GetName().c_str(), ( Int32 )param->GetType() );
     }
 }
 
@@ -157,7 +157,7 @@ void QueryValuesGeneric    ( const std::vector< IValueConstPtr > & values )
 
     for( auto value : values )
     {
-        printf( "%s : %s\n", value->GetName(), value->GetType() );
+        printf( "%s : %i\n", value->GetName().c_str(), ( Int32 )value->GetType() );
     }
 }
 
@@ -182,7 +182,7 @@ void QueryModelPropertiesGeneric    ( model::IParamValModelPtr model, const std:
 //
 void QueryPluginPropertiesGeneric   ( model::IPluginConstPtr plugin )
 {
-    printf ( "Plugin: %s %s", plugin->GetTypeUid(), plugin->GetName() );
+    printf ( "Plugin: %s %s", plugin->GetTypeUid().c_str(), plugin->GetName().c_str() );
 
     auto model = plugin->GetPluginParamValModel();
 
@@ -198,7 +198,7 @@ void QueryPluginPropertiesGeneric   ( model::IPluginConstPtr plugin )
 //
 void  QueryPluginsNodesGeneric      ( model::BasicNodePtr node )
 {
-    printf( "Inspecting node: %s\n", node->GetName() );
+    printf( "Inspecting node: %s\n", node->GetName().c_str() );
 
     printf( "Plugins: \n" );
 
@@ -1834,7 +1834,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     return root;
 }
 
-    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
+    //static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
 
 /**All basic shapes in one scene*/
 model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )

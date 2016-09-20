@@ -109,10 +109,9 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Scenes\TestScene2.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp" />
     <ClCompile Include="..\..\..\Source\TestLogic.cpp" />
   </ItemGroup>
@@ -130,6 +129,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
 </Project>

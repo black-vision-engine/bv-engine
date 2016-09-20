@@ -77,7 +77,7 @@ inline void    FrameStatsCalculator::EndSection     ( const char * name )
     MovingAverageData * data = nullptr;
     if( m_samplers.find( name ) == m_samplers.end() )
     {
-        MovingAverageData * data = new MovingAverageData( m_windowSize );
+        data = new MovingAverageData( m_windowSize );
         m_samplers[ name ] = data;
         m_sectionsNames.push_back( name );
     }

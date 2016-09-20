@@ -10,9 +10,6 @@ class CriticalSection
 {
     std::mutex                      m_mtx;
 
-protected:
-    std::unique_lock<std::mutex>    m_criticalSection;
-
 private:
 
     //Cannot be copied

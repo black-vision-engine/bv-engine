@@ -98,7 +98,7 @@ void            GridLinesLogic::Deserialize             ( const IDeserializer & 
 //
 void            GridLinesLogic::SerializeGridArray      ( ISerializer & ser, const std::vector< GridLine * > & gridArray ) const
 {
-    for( int i = 0; i < gridArray.size(); ++i )
+    for( int i = 0; i < ( Int32 )gridArray.size(); ++i )
     {
         if( gridArray[ i ] )
         {
@@ -217,7 +217,7 @@ ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
 // Allocates new grid line if it doesn't exists at gridIndex.
 void            GridLinesLogic::AllocGridLine   ( GridLineType gridType, int gridIndex, std::vector< GridLine* >& gridLinesVec )
 {
-    if( gridIndex >= gridLinesVec.size() )
+    if( gridIndex >= ( Int32 )gridLinesVec.size() )
     {
         gridLinesVec.resize( gridIndex + 1, nullptr );
     }

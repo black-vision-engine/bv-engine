@@ -105,7 +105,7 @@ namespace DefaultLineChartPluginGenerator
                     auto plotPoints = typedPlot->GetArray();
                     std::sort( plotPoints.begin(), plotPoints.end(), CompareVec2 );
 
-                    for( int i = 0; i < plotPoints.size() - 1; i++ )
+                    for( UInt32 i = 0; i < ( UInt32 )plotPoints.size() - 1; i++ )
                     {
                         verts->AddAttribute( glm::vec3( plotPoints[ i ], 0.0f ) );
                         verts->AddAttribute( glm::vec3( plotPoints[ i + 1 ], 0.0f ) );

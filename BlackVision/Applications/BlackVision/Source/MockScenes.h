@@ -82,7 +82,7 @@ public:
     static  model::BasicNodePtr     SimpleMultiCCScene              ();
                             
                             
-    static  model::BasicNodePtr     AnotherTestScene                ();
+    //static  model::BasicNodePtr     AnotherTestScene                ();
                             
     static  model::BasicNodePtr     GreenRectTestScene              ();
     static  model::BasicNodePtr     TexturedRectTestScene           ();
@@ -92,7 +92,7 @@ public:
     static  model::BasicNodePtr     NonGeometryParent               ();
                             
     static  model::BasicNodePtr     XMLTestScene                    ();
-    static  model::SceneModelPtr    CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
+    //static  model::SceneModelPtr    CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 

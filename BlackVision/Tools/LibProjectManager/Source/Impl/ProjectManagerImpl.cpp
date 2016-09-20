@@ -450,24 +450,24 @@ void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProject
 
     if( buf.str() == "assets" )
     {
-        std::stringbuf buf;
-        in.get( buf, '\n');
+        std::stringbuf assetsBuf;
+        in.get( assetsBuf, '\n');
         in.ignore();
 
-        auto size = stoul( buf.str() );
+        auto size = stoul( assetsBuf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
-            std::stringbuf buf;
-            in.get( buf, '\n');
+            std::stringbuf categoryBuf;
+            in.get( categoryBuf, '\n');
             in.ignore();
 
-            auto categoryName = buf.str();
+            auto categoryName = categoryBuf.str();
             buf.str("");
 
-            in.get( buf, '\n');
+            in.get( categoryBuf, '\n');
             in.ignore();
-            auto path = Path( buf.str() );
+            auto path = Path( categoryBuf.str() );
 
             m_categories.at( categoryName )->ImportAsset( in, importToProjectName / importToPath );
         }
@@ -574,24 +574,24 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 
     if( buf.str() == "assets" )
     {
-        std::stringbuf buf;
-        in.get( buf, '\n');
+        std::stringbuf assetsBuf;
+        in.get( assetsBuf, '\n');
         in.ignore();
 
-        auto size = stoul( buf.str() );
+        auto size = stoul( assetsBuf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
-            std::stringbuf buf;
-            in.get( buf, '\n');
+            std::stringbuf categoryBuf;
+            in.get( categoryBuf, '\n');
             in.ignore();
 
-            auto categoryName = buf.str();
-            buf.str("");
+            auto categoryName = categoryBuf.str();
+            categoryBuf.str("");
 
-            in.get( buf, '\n');
+            in.get( categoryBuf, '\n');
             in.ignore();
-            auto path = Path( buf.str() );
+            auto path = Path( categoryBuf.str() );
 
             m_categories.at( categoryName )->ImportAsset( in, projectName / path );
         }

@@ -40,7 +40,7 @@ bool SocketServer::InitializeServer( const QueueEventCallback& callback, int por
         return false;
 
     m_sendCommandCallback = callback;
-    std::thread waitForConnectionThread = std::thread( &SocketServer::WaitForConnection, std::ref( *this ) );
+    std::thread waitForConnectionThread = std::thread( &SocketServer::WaitForConnection, this );
     waitForConnectionThread.detach();
 
     return true;

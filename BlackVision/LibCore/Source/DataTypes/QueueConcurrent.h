@@ -26,6 +26,7 @@ public:
 
     explicit    QueueConcurrent     ();
                 ~QueueConcurrent    ();
+                QueueConcurrent     ( const QueueConcurrent< T > & );
 
     bool        IsEmpty             () const;
     size_t      Size                () const;
@@ -53,6 +54,16 @@ QueueConcurrent< T >::QueueConcurrent     ()
 template< typename T >
 QueueConcurrent< T >::~QueueConcurrent    ()
 {}
+
+// *************************************
+//
+template< typename T >
+QueueConcurrent< T >::QueueConcurrent     ( const QueueConcurrent< T > & other )
+{
+    m_queue = other.m_queue;
+    m_conditionVariable = other.m_conditionVariable;
+    m_criticalSection = other.m_criticalSection;
+}
 
 // *************************************
 //

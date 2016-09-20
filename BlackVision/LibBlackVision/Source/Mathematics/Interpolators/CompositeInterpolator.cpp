@@ -390,8 +390,8 @@ void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValue
     }
 
 // update interpolators
-    for( int j = int( i-2 ); j <= int( i+1 ); j++ )
-        if( j >= 0 && j < interpolators.size() )
+    for( auto j = ( UInt32 )( i-2 ); j <= ( UInt32 )( i+1 ); j++ )
+        if( j >= 0 && j < ( UInt32 )interpolators.size() )
             UpdateInterpolator( interpolators, j, m_type );
 }
 
@@ -647,7 +647,7 @@ void                                                CompositeInterpolator< TimeV
         nextKey++;
     }
 
-    for( int i = 0; i < interpolators.size(); i++ )
+    for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
         UpdateInterpolator( interpolators, i, type );
 
     SetAddedKeyCurveType( type );

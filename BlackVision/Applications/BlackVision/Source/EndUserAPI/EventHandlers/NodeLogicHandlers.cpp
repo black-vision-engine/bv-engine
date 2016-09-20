@@ -72,7 +72,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 		
     if( command == NodeLogicEvent::Command::AddNodeLogic )
     {
-        context->SetSceneTimeline( std::static_pointer_cast< model::OffsetTimeEvaluator >( TimelineManager::GetInstance()->GetTimeEvaluator( sceneName ) ) );
+        context->SetSceneTimeline( std::static_pointer_cast< model::OffsetTimeEvaluator >( model::TimelineManager::GetInstance()->GetTimeEvaluator( sceneName ) ) );
 
         action.EnterChild( "logic" );
         
@@ -96,7 +96,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     }
     else if ( command == NodeLogicEvent::Command::LogicAction )
     {
-        INodeLogic* logic = basicNode->GetLogic().get();
+        model::INodeLogic* logic = basicNode->GetLogic().get();
         if( logic == nullptr )
         {
             LOG_MESSAGE( SeverityLevel::warning ) << "Error NodeLogicEvent node [" + nodePath + "] , logic [] not found";

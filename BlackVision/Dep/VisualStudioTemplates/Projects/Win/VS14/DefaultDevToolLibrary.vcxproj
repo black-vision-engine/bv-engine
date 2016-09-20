@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='ASCII'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BFD61862-778E-4636-9143-97D8262B7F6E}</ProjectGuid>
+    <RootNamespace>LibDefaultDevToolLibrary_change_this_name</RootNamespace>
+    <ProjectName>LibDefaultDevToolLibrary_change_this_name</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_DevToolLib.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_DevToolLib.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_DevToolLib.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_DevToolLib.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>LibDefaultDevToolLibraryD_change_this_name</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>LibDefaultDevToolLibraryD_change_this_name</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>LibDefaultDevToolLibrary_change_this_name</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>LibDefaultDevToolLibrary_change_this_name</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+<ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings/>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemGroup/><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup></Project>
