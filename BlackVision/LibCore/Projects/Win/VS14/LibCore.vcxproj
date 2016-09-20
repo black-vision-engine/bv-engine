@@ -76,7 +76,8 @@
     <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
   </ImportGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup><ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp"/>
     <ClCompile Include="..\..\..\Source\IO\DirIO.cpp"/>
     <ClCompile Include="..\..\..\Source\IO\FileIO.cpp"/>
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp"/>
@@ -98,7 +99,9 @@
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp"/>
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp"/>
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\CoreDEF.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\CoreDEF.h"/>
     <ClInclude Include="..\..\..\Source\DataTypes\Hash.h"/>
     <ClInclude Include="..\..\..\Source\DataTypes\Queue.h"/>
     <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h"/>
@@ -136,5 +139,10 @@
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl"/>
   </ItemGroup>
-  <ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

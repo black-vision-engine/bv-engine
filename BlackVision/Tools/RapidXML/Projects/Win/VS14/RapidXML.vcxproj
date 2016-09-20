@@ -136,12 +136,21 @@
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup><ClCompile Include="..\..\..\Source\helpers\auxiliary.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\helpers\auxiliary.hpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\helpers\auxiliary.cpp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\helpers\auxiliary.hpp"/>
     <ClInclude Include="..\..\..\Source\helpers\KeyValue.h"/>
     <ClInclude Include="..\..\..\Source\rapidxml.hpp"/>
     <ClInclude Include="..\..\..\Source\rapidxml_iterators.hpp"/>
     <ClInclude Include="..\..\..\Source\rapidxml_print.hpp"/>
     <ClInclude Include="..\..\..\Source\rapidxml_utils.hpp"/>
-  </ItemGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+  </ItemGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

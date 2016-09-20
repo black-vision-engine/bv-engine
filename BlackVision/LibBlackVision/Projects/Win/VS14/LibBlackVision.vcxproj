@@ -141,7 +141,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup><ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp"/>
     <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp"/>
     <ClCompile Include="..\..\..\Source\Application\ConsoleApplication.cpp"/>
     <ClCompile Include="..\..\..\Source\Application\Win32\DisableCrashReport.cpp"/>
@@ -171,6 +172,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp"/>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp"/>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp"/>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp"/>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp"/>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGLoader.cpp"/>
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp"/>
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.cpp"/>
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationLoader.cpp"/>
@@ -468,6 +472,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.cpp"/>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAnimationPlugin.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultBlendTexturePlugin.cpp"/>
@@ -503,6 +508,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.cpp"/>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.cpp"/>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp"/>
@@ -574,7 +580,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\Application\ApplicationContext.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h"/>
     <ClInclude Include="..\..\..\Source\Application\Win32\DisableCrashReport.h"/>
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h"/>
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h"/>
@@ -592,6 +600,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h"/>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h"/>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h"/>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h"/>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h"/>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h"/>
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h"/>
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h"/>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h"/>
@@ -964,6 +975,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.h"/>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAnimationPlugin.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultBlendTexturePlugin.h"/>
@@ -999,6 +1011,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.h"/>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.h"/>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h"/>
@@ -1090,7 +1103,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h"/>
     <ClInclude Include="..\..\..\Source\stdafx.h"/>
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h"/>
-  </ItemGroup><ItemGroup><None Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.inl"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.inl"/>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl"/>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl"/>
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl"/>
@@ -1113,5 +1128,10 @@
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl"/>
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl"/>
   </ItemGroup>
-  <ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

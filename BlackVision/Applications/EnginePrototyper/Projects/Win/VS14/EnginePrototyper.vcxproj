@@ -9,14 +9,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="DetectLeaks|Win32">
-      <Configuration>DetectLeaks</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="DetectLeaks|x64">
-      <Configuration>DetectLeaks</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -37,23 +29,11 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -83,29 +63,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_DevTools.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_DevTools.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
@@ -140,19 +98,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros"/>
   <PropertyGroup/>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningVersion>16</WarningVersion>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningVersion>16</WarningVersion>
-      <TreatWarningAsError>false</TreatWarningAsError>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS14\LibWindowApp.vcxproj">
       <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>
@@ -167,7 +112,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-<ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4456;4457;4458;4459;4477;4473;4312;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings/>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup><ItemGroup><ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp"/>
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp"/>
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp"/>
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp"/>
@@ -207,7 +153,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeTest.cpp"/>
     <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\VBOCube.cpp"/>
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\Common\GLSLprogram.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h"/>
     <ClInclude Include="..\..\..\Source\Common\PrototyperCore.h"/>
     <ClInclude Include="..\..\..\Source\Common\VBORect.h"/>
     <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h"/>
@@ -251,4 +199,11 @@
     <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeTest.h"/>
     <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\VBOCube.h"/>
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h"/>
-  </ItemGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup></Project>
+  </ItemGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

@@ -5,6 +5,7 @@ import os.path
 import re
 
 from lxml import etree
+from io import StringIO
 from shutil import copyfile
 
 
@@ -15,26 +16,26 @@ INCLUDE_ATTR = "Include"
 LABEL_ATTR = "Label"
 
 ITEM_GROUP_TAG = "ItemGroup"
+ITEM_DEFINITION_GROUP_TAG = "ItemDefinitionGroup"
 INCLUDE_TAGS = ["ClCompile", "ClInclude", "None"]
 
 CUSTOM_XML_ATTR_VALUE = "CustomXML"
-CUSTOM_XML = '\
-  <ItemDefinitionGroup Label="CustomXML">\
-    <ClCompile>\
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>\
-      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>\
-    </ClCompile>\
-  </ItemDefinitionGroup>'
+CUSTOM_XML = '<ItemDefinitionGroup Label="CustomXML"><ClCompile><PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions><DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings></ClCompile></ItemDefinitionGroup>'
 
+   
 def update_includes(src_path, dst_path):
     ''' Copies source/include items from source to destination vcxproj. '''
-    with open(src_path, 'r', encoding='utf-8-sig') as f:
-        xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
-        src_root = etree.XML(xml_str)
-    with open(dst_path, 'r', encoding='utf-8') as f:
-        xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
-        dst_root = etree.XML(xml_str)
-
+    #with open(src_path, 'r', encoding='utf-8-sig') as f:
+     #   xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
+    parser = etree.XMLParser(remove_blank_text=True)
+    src_tree = etree.parse(src_path, parser)
+    src_root = src_tree.getroot()
+    #with open(dst_path, 'r', encoding='utf-8') as f:
+     #   xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
+    parser = etree.XMLParser(remove_blank_text=True)
+    dst_tree = etree.parse(dst_path, parser)
+    dst_root = dst_tree.getroot()
+    
     src_nodes = []
     for include_tag in INCLUDE_TAGS:
         item_groups = set()
@@ -44,18 +45,19 @@ def update_includes(src_path, dst_path):
 
         for child_node in dst_include_tags:
             item_groups.add(child_node.getparent())
-            child_node.getparent().remove(child_node)
+            #child_node.getparent().remove(child_node)
         
         for item_group in item_groups:
             item_group.getparent().remove(item_group)
         
-        item_group_node = etree.Element(ITEM_GROUP_TAG)
-        for child_node in src_include_nodes:
-            item_group_node.append(child_node)
+        if len(src_include_nodes) > 0:
+            item_group_node = etree.Element(ITEM_GROUP_TAG)
+            for child_node in src_include_nodes:
+                item_group_node.append(child_node)
                 
-        dst_root.append(item_group_node)
+            dst_root.append(item_group_node)
         
-    etree.ElementTree(dst_root).write(dst_path, xml_declaration=True, pretty_print=True)
+    dst_tree.write(dst_path, xml_declaration=True, pretty_print=True)
 
 def clone_and_modify_vcxproj(src_path, dst_path, src_version, dst_version):
     ''' Make a copy of existing vcxproj and replace source version occurrences with destination version. '''
@@ -74,21 +76,23 @@ def clone_and_modify_vcxproj(src_path, dst_path, src_version, dst_version):
         f.close()
 
 
-def append_xml(path, custom_xml):
+def append_xml(path, custom_xml, tag):
     ''' Append custom xml to all vcxprojs. '''
-    with open(path, 'r', encoding='utf-8') as f:
-        xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
-        root = etree.XML(xml_str)
+    #with open(path, 'r', encoding='utf-8') as f:
+        #xml_str = bytes(bytearray(f.read(), encoding='utf-8'))
+    parser = etree.XMLParser(remove_blank_text=True)
+    tree = etree.parse(path, parser)
+    root = tree.getroot()
     
-    item_groups = root.findall("{{{0}}}{1}[@{2}]".format(root.nsmap[None], ITEM_GROUP_TAG, LABEL_ATTR))
-    for item_group in item_groups:
-        if(item_group.attrib[LABEL_ATTR] == CUSTOM_XML_ATTR_VALUE):
-            item_group.getparent().remove(item_group)
+    children = root.findall("{{{0}}}{1}[@{2}]".format(root.nsmap[None], tag, LABEL_ATTR))
+    for child in children:
+        if(child.attrib[LABEL_ATTR] == CUSTOM_XML_ATTR_VALUE):
+            child.getparent().remove(child)
             
     node = etree.fromstring(custom_xml)
     root.append(node)
 
-    etree.ElementTree(root).write(path, xml_declaration=True, pretty_print=True)
+    tree.write(path, xml_declaration=True, pretty_print=True)
 
 def process_projects_xml(src_version=SRC_VERSION, dst_version=DST_VERSION, custom_xml=CUSTOM_XML, append_custom_xml=True):
     ''' Find all vcxproj in source version and create/update destination version. '''
@@ -109,8 +113,8 @@ def process_projects_xml(src_version=SRC_VERSION, dst_version=DST_VERSION, custo
             update_includes(src_path, dst_path)
 
         if append_custom_xml and custom_xml:
-            append_xml(dst_path, custom_xml)
-
+            append_xml(dst_path, custom_xml, ITEM_DEFINITION_GROUP_TAG)
+   
 
 #FIXME: add arguments handling
 if __name__ == '__main__':

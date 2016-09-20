@@ -266,12 +266,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp"/>
     <ClCompile Include="..\..\..\Source\bvApp.cpp"/>
@@ -399,4 +393,10 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <None Include="..\..\..\Source\BVConfig.inl"/>
     <None Include="..\..\..\Source\FrameStatsService.inl"/>
   </ItemGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

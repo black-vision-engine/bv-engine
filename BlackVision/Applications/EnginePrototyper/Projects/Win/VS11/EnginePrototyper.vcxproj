@@ -9,14 +9,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="DetectLeaks|Win32">
-      <Configuration>DetectLeaks</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="DetectLeaks|x64">
-      <Configuration>DetectLeaks</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -37,23 +29,11 @@
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -83,29 +63,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
@@ -140,19 +98,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningVersion>16</WarningVersion>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DetectLeaks|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningVersion>16</WarningVersion>
-      <TreatWarningAsError>false</TreatWarningAsError>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS11\LibWindowApp.vcxproj">
       <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>

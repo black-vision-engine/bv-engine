@@ -158,7 +158,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup><ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp"/>
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c"/>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp"/>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp"/>
@@ -172,7 +173,9 @@
     <ClCompile Include="..\..\..\Source\VideoMidgard.cpp"/>
     <ClCompile Include="..\..\..\Source\VideoOutput.cpp"/>
     <ClCompile Include="..\..\..\Source\VideoOutputsManager.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h"/>
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h"/>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h"/>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h"/>
@@ -189,5 +192,10 @@
     <ClInclude Include="..\..\..\Source\VideoOutput.h"/>
     <ClInclude Include="..\..\..\Source\VideoOutputsManager.h"/>
   </ItemGroup>
-  <ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

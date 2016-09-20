@@ -343,6 +343,9 @@
     <Filter Include="Engine\Models\UndoRedo\Lights">
       <UniqueIdentifier>{69432d55-d2af-4c7d-9b40-3f4a2c4205d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\SVG">
+      <UniqueIdentifier>{799c203d-e583-420c-ab09-d67756fda036}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Events\InnerEvents">
       <UniqueIdentifier>{9f842784-55d8-48e5-8140-4e4c9ab6634a}</UniqueIdentifier>
     </Filter>
@@ -1732,17 +1735,32 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.cpp">
       <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGLoader.cpp">
+      <Filter>Assets\SVG</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\Win32\DisableCrashReport.cpp">
       <Filter>Application\Win32</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp">
+      <Filter>Assets\SVG</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
+      <Filter>Assets\SVG</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.cpp">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.cpp">
       <Filter>Engine\Graphics\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4082,11 +4100,20 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.h">
       <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h">
+      <Filter>Assets\SVG</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\Win32\DisableCrashReport.h">
       <Filter>Application\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h">
+      <Filter>Assets\SVG</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h">
+      <Filter>Assets\SVG</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -4096,6 +4123,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
       <Filter>Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
+      <Filter>Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

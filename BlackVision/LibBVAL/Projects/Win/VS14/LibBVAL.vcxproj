@@ -89,12 +89,21 @@
     <TargetName>LibBVAL</TargetName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup><ClCompile Include="..\..\..\Source\BVAL.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVAL.cpp"/>
     <ClCompile Include="..\..\..\Source\BVALPlugins\BVALPlugin.cpp"/>
     <ClCompile Include="..\..\..\Source\BVALPlugins\BVALPluginFactory.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\BVAL.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVAL.h"/>
     <ClInclude Include="..\..\..\Source\BVALDefs.h"/>
     <ClInclude Include="..\..\..\Source\BVALPlugins\BVALPlugin.h"/>
     <ClInclude Include="..\..\..\Source\BVALPlugins\BVALPluginFactory.h"/>
   </ItemGroup>
-  <ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup></Project>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

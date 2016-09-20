@@ -38,6 +38,9 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.cpp">
       <Filter>Impl\Accessors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.cpp">
+      <Filter>Impl\Accessors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
@@ -67,6 +70,9 @@
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.h">
+      <Filter>Impl\Accessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.h">
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
   </ItemGroup>

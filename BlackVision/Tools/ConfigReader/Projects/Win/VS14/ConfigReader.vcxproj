@@ -156,14 +156,23 @@
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup><ClCompile Include="..\..\..\Source\ConfigManager.cpp"/>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\ConfigManager.cpp"/>
     <ClCompile Include="..\..\..\Source\ini.c"/>
     <ClCompile Include="..\..\..\Source\INIReader.cpp"/>
     <ClCompile Include="..\..\..\Source\LicenseManager.cpp"/>
-  </ItemGroup><ItemGroup><ClInclude Include="..\..\..\Source\ConfigManager.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\ConfigManager.h"/>
     <ClInclude Include="..\..\..\Source\ini.h"/>
     <ClInclude Include="..\..\..\Source\INIReader.h"/>
     <ClInclude Include="..\..\..\Source\LicenseManager.h"/>
     <ClInclude Include="..\..\..\Source\Rockey2.h"/>
-  </ItemGroup><ItemGroup/><ItemDefinitionGroup Label="CustomXML">    <ClCompile>      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>    </ClCompile>  </ItemDefinitionGroup>
+  </ItemGroup>
+  <ItemDefinitionGroup Label="CustomXML">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

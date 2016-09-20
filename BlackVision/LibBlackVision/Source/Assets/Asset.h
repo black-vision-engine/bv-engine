@@ -19,7 +19,7 @@ public:
     virtual ~Asset(){}
 
     template< typename AssetTypeConstPtr >
-    friend AssetTypeConstPtr  QueryTypedRes( AssetTypeConstPtr asset );
+    friend AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset );
 
 };
 
