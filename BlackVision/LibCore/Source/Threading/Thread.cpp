@@ -1,18 +1,22 @@
 #include "Thread.h"
 
+#include <Windows.h>
+
 #pragma warning(push)
 #pragma warning(disable : 4100)
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
 #pragma warning(pop)
 
-namespace bv
-{
+
+namespace bv {
 
 // *******************************
 //
 void     Thread::RunnerFunc  ( Thread * obj )
 {
+    SetThreadPriority( GetCurrentThread(), ( int )obj->m_priority );
+    
     obj->Run();
 }
 
@@ -32,8 +36,9 @@ Thread::~Thread ()
 
 // *******************************
 //
-void Thread::Start   ()
+void Thread::Start   ( ThreadPriotity priority )
 {
+    m_priority = priority;
     m_thread = new boost::thread( &Thread::RunnerFunc, this );
 }
 

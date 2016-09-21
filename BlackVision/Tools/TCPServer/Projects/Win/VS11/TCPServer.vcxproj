@@ -28,8 +28,8 @@
     <ClCompile Include="..\..\..\Source\SocketServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
-      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
+    <ProjectReference Include="..\..\..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">

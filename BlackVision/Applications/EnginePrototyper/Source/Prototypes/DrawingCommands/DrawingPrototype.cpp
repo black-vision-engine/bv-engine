@@ -79,7 +79,7 @@ void    DrawingPrototype::Render              ()
 
 // **************************
 //
-IBasicLogicUnqPtr    DrawingPrototype::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    DrawingPrototype::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
 	return IBasicLogicUnqPtr( new DrawingPrototype( renderer ) );
 }

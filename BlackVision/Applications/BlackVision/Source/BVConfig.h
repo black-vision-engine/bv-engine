@@ -1,11 +1,17 @@
 #pragma once
 
-#include <string>
+#include <map>
 
 #include "Mathematics/glm_inc.h"
-#include "ConfigManager.h"  
 
 #include "Application/WindowedApplication.h" // enum WindowMode
+
+#include "Serialization/XML/XMLDeserializer.h"
+#include "Serialization/IDeserializer.h"
+#include "Serialization/ISerializable.h"
+
+#include "CoreDEF.h"
+
 
 namespace bv
 {
@@ -13,61 +19,91 @@ namespace bv
 class BVConfig
 {
 private:
+    
+    typedef std::map< std::string, std::string >    KVMap;
 
-    int             m_defaultWindowWidth;
-    int             m_defaultWindowHeight;
+    static const std::string                CONFIG_PATH;
 
+private:
 
-    int             m_defaultWidth;
-    int             m_defaultHeight;
+    XMLDeserializer m_deserializer;
+
+    KVMap           m_properties;
+
+    Int32           m_defaultWindowWidth;
+    Int32           m_defaultWindowHeight;
+
+    Int32           m_defaultWidth;
+    Int32           m_defaultHeight;
 
 	//pablito
 	WindowMode      m_windowMode;
-	RendererInput	m_RendererInput;
+	RendererInput	m_rendererInput;
 
-    unsigned int    m_eventLoopUpdateMillis;
-    unsigned int    m_fps;
-    unsigned int    m_frameTimeMillis;
+    UInt32          m_eventLoopUpdateMillis;
+    UInt32          m_fps;
+    UInt32          m_frameTimeMillis;
+    UInt32          m_timerFPS;
 
     bool            m_fullscreeMode;
     bool            m_readbackOn;
     bool            m_displayVideoCardOutput;
     bool            m_isCameraPerspective;
 	bool			m_renderToSharedMemory;
+    bool            m_vsync;
 
-    float           m_defaultFOV;
-    float           m_defaultNearClippingPlane;
-    float           m_defaultFarClippingPlane;
+    Float32         m_defaultFOV;
+    Float32         m_defaultNearClippingPlane;
+    Float32         m_defaultFarClippingPlane;
 
     glm::vec3       m_defaultCameraPosition;
     glm::vec3       m_defaultCameraUp;
     glm::vec3       m_defaultCameraDirection;
 
-    unsigned int    m_defaultStatsMovingAverageWindowSize;
-    unsigned int    m_defaultWarmupRoundsStatsMAV;
-    unsigned int    m_defaultStatsRefreshMillisDelta;
-    unsigned int    m_defaultStatsRecalcFramesDelta;
-    unsigned int    m_defaultProfilerDisplayWaitMillis;
+    UInt32          m_defaultStatsMovingAverageWindowSize;
+    UInt32          m_defaultWarmupRoundsStatsMAV;
+    UInt32          m_defaultStatsRefreshMillisDelta;
+    UInt32          m_defaultStatsRecalcFramesDelta;
+    UInt32          m_defaultProfilerDisplayWaitMillis;
 
-    unsigned int    m_numRedbackBuffersPerRenderTarget;
+    UInt32          m_numRedbackBuffersPerRenderTarget;
 
     glm::vec4       m_defaultClearColor;
-    float           m_defaultClearDepth;
+    Float32         m_defaultClearDepth;
 
+    std::string     m_sceneFromEnvName;
     std::string     m_defaultSceneEnvVarName;
+
+    std::string     m_pmFolder;
+
+    Int32           m_sockerServerPort;
+
+    bool            m_useDebugLayer;
+    std::string     m_debugFilePath;
+    bool            m_loadSceneFromEnv;
+    bool            m_useVideoInputFeeding;
+
+    bool            m_enableQueueLocking;
 
 private:
 
     BVConfig    ();
     ~BVConfig   ();
 
+    void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
+
 public:
 
-    inline int                  DefaultwindowWidth      () const;
-    inline int                  DefaultWindowHeight     () const;
+    const std::string &         PropertyValue           ( const std::string & key ) const;
+    void                        SetPropertyValue        ( const std::string & key, const std::string & value );
 
-    inline int                  DefaultWidth            () const;
-    inline int                  DefaultHeight           () const;
+    const IDeserializer &       GetNode                 ( const std::string & node ) const;
+
+    inline Int32                DefaultwindowWidth      () const;
+    inline Int32                DefaultWindowHeight     () const;
+
+    inline Int32                DefaultWidth            () const;
+    inline Int32                DefaultHeight           () const;
 
     inline WindowMode           GetWindowMode	        () const;
 	inline RendererInput        GetRendererInput	        () const;
@@ -77,9 +113,10 @@ public:
     inline bool                 IsCameraPerspactive     () const;
 	inline bool                 RenderToSharedMemory    () const;
 
-    inline unsigned int         EventLoopUpdateMillis   () const;
-    inline unsigned int         FPS                     () const;
-    inline unsigned int         FrameTimeMillis         () const;
+    inline UInt32               EventLoopUpdateMillis   () const;
+    inline UInt32               FPS                     () const;
+    inline UInt32               FrameTimeMillis         () const;
+    inline UInt32               TimerFPS                () const;
 
     inline float                FOV                     () const;
     inline float                NearClippingPlane       () const;
@@ -92,20 +129,32 @@ public:
     inline const glm::vec4 &    ClearColor              () const;
     inline float                ClearDepth              () const;
 
-    inline unsigned int         StatsMAWindowSize       () const;
-    inline unsigned int         MAVWarmupRounds         () const;
-    inline unsigned int         StatsRefreshMillisDelta () const;
-    inline unsigned int         StatsRecalcFramesDelta  () const;
+    inline UInt32               StatsMAWindowSize       () const;
+    inline UInt32               MAVWarmupRounds         () const;
+    inline UInt32               StatsRefreshMillisDelta () const;
+    inline UInt32               StatsRecalcFramesDelta  () const;
 
-    inline unsigned int         NumRedbackBuffersPerRT  () const;
+    inline UInt32               NumRedbackBuffersPerRT  () const;
 
-    inline unsigned int         ProfilerDispWaitMillis  () const;
+    inline UInt32               ProfilerDispWaitMillis  () const;
 
     inline const char *         FrameStatsSection       () const;
 
+    inline const std::string &  SceneFromEnvName        () const;
     inline std::string          DefaultSceneEnvVarName  () const;
 
-    static const BVConfig & Instance  ();
+    inline const std::string &  PMFolder                () const;
+
+    inline Int32                SockerServerPort        () const;
+
+    inline bool                 UseDebugLayer           () const;
+    inline const std::string &  DebugFilePath           () const;
+    inline bool                 LoadSceneFromEnv        () const;
+    inline bool                 UseVideoInputFeeding    () const;
+
+    inline bool                 EnableLockingQueue      () const;
+
+    static BVConfig &           Instance  ();
 
 };
 

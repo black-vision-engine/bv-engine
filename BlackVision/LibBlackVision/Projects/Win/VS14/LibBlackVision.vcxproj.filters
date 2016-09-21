@@ -187,9 +187,6 @@
     <Filter Include="Serialization\BV\XML">
       <UniqueIdentifier>{719969e2-b26b-4293-85e3-d733a281968c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Serialization\XML">
-      <UniqueIdentifier>{f466eb44-fb34-4f32-82d1-72e9c5507e55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Serialization\Json">
       <UniqueIdentifier>{9808fb8b-72bf-4e2b-9a3b-859201009653}</UniqueIdentifier>
     </Filter>
@@ -1023,9 +1020,6 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp">
-      <Filter>Serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
@@ -1277,12 +1271,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.cpp">
       <Filter>Serialization\BV\XML</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp">
-      <Filter>Serialization\XML</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
-      <Filter>Serialization\XML</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp">
       <Filter>Serialization\Json</Filter>
@@ -2361,9 +2349,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h">
       <Filter>Engine\Types</Filter>
     </ClInclude>
@@ -3240,12 +3225,6 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -3395,12 +3374,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
       <Filter>Engine\Models\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
-      <Filter>Serialization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
@@ -3577,23 +3550,11 @@
     <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h">
       <Filter>Serialization\BV</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h">
       <Filter>Serialization\BV\XML</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.h">
       <Filter>Serialization\BV\XML</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
-      <Filter>Serialization\XML</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h">
-      <Filter>Serialization\XML</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
       <Filter>Serialization\Json</Filter>
@@ -4200,9 +4161,6 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.h">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
-    </None>
-    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
-      <Filter>Serialization</Filter>
     </None>
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl">
       <Filter>Mathematics\Interpolators</Filter>

@@ -1,45 +1,56 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <map>
+
+#include "Serialization/XML/XMLDeserializer.h"
 
 #include "helpers/auxiliary.hpp"
-#include "helpers/KeyValue.h"
 
-namespace bv
-{
+
+namespace bv { namespace config {
 
 class ConfigManager
 {
 private:
-	static std::string MediaFolder;
+
+    static XMLDeserializer  m_deserializer;
+
+    typedef std::map< std::string, std::string >    PropertyMap;
+
+	static std::string      MediaFolder;
+	static std::string      ConfigFile;
 	
 public:
     
-    static std::vector<KeyValue> Properties; 
-	static bool LoadConfig();
+    static PropertyMap      Properties; 
 
-    static bool LoadXMLConfig();
-    static bool SaveXMLConfig();
+                            ConfigManager       ();
+	                        ~ConfigManager      ();
 
-    static KeyValue&        GetOrCreateValue    ( const std::string& key );
-    static KeyValue         GetValue            ( std::string key );
+	//static bool             LoadConfig          ();
 
-    static bool             GetBool     ( std::string key );
-    static int              GetInt      ( std::string key );
-    static std::string      GetString   ( std::string key );
-    static float            GetFloat    ( std::string key );
+    static bool             LoadXMLConfig       ();
+    static bool             SaveXMLConfig       ();
 
-    static void             SetBool     ( const std::string& key, bool value );
-    static void             SetInt      ( const std::string& key, int value );
-    static void             SetString   ( const std::string& key, const std::string& value );
-    static void             SetFloat    ( const std::string& key, float value );
+    static bool             GetBool             ( const std::string & name );
+    static int              GetInt              ( const std::string & name );
+    static std::string      GetString           ( const std::string & name );
+    static float            GetFloat            ( const std::string & name );
 
-	static std::string      GetPath     ()  { return MediaFolder;   }
-    
+    static void             SetBool             ( const std::string & name, bool value );
+    static void             SetInt              ( const std::string & name, int value );
+    static void             SetString           ( const std::string & name, const std::string & value );
+    static void             SetFloat            ( const std::string & name, float value );
 
-	ConfigManager(void);
-	~ConfigManager(void);
+	static std::string      GetPath             ();
+
+private:
+
+    static void             SetProperty         ( const std::string & name, const std::string & value );
+    static std::string      GetProperty         ( const std::string & name );
+   
 };
 
-}
+} //config
+} //bv
