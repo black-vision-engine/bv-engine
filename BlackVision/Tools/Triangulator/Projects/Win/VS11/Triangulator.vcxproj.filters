@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\..\Source\FTContour.cpp" />
     <ClCompile Include="..\..\..\Source\FTPoint.cpp" />
     <ClCompile Include="..\..\..\Source\Triangulator.cpp" />
+    <ClCompile Include="..\..\..\Source\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\poly2tri\common\shapes.h">
@@ -59,5 +60,6 @@
     <ClInclude Include="..\..\..\Source\FTVector.h" />
     <ClInclude Include="..\..\..\Source\Triangulator.h" />
     <ClInclude Include="..\..\..\Source\FTList.h" />
+    <ClInclude Include="..\..\..\Source\Mesh.h" />
   </ItemGroup>
 </Project>

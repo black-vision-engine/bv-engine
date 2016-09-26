@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\FTContour.cpp" />
     <ClCompile Include="..\..\..\Source\FTPoint.cpp" />
+    <ClCompile Include="..\..\..\Source\Mesh.cpp" />
     <ClCompile Include="..\..\..\Source\poly2tri\common\shapes.cc" />
     <ClCompile Include="..\..\..\Source\poly2tri\sweep\advancing_front.cc" />
     <ClCompile Include="..\..\..\Source\poly2tri\sweep\cdt.cc" />
@@ -34,6 +35,7 @@
     <ClInclude Include="..\..\..\Source\FTList.h" />
     <ClInclude Include="..\..\..\Source\FTPoint.h" />
     <ClInclude Include="..\..\..\Source\FTVector.h" />
+    <ClInclude Include="..\..\..\Source\Mesh.h" />
     <ClInclude Include="..\..\..\Source\poly2tri\common\shapes.h" />
     <ClInclude Include="..\..\..\Source\poly2tri\common\utils.h" />
     <ClInclude Include="..\..\..\Source\poly2tri\poly2tri.h" />

@@ -38,106 +38,10 @@
 
 // end Debug
 
-//#ifndef CALLBACK
-//#define CALLBACK
-//#endif
-
-typedef float GLfloat;
-#define GL_TRIANGLES                      0x0004
-
-//#if defined __APPLE_CC__ && __APPLE_CC__ < 5465
-//    typedef GLvoid (*GLUTesselatorFunction) (...);
-//#elif defined WIN32 && !defined __CYGWIN__
-//    typedef GLvoid (CALLBACK *GLUTesselatorFunction) ();
-//#else
-//    typedef GLvoid (*GLUTesselatorFunction) ();
-//#endif
-
-
-//void CALLBACK ftglError(GLenum errCode, FTMesh* mesh)
-//{
-//    mesh->Error(errCode);
-//}
-//
-//
-//void CALLBACK ftglVertex(void* data, FTMesh* mesh)
-//{
-//    FTGL_DOUBLE* vertex = static_cast<FTGL_DOUBLE*>(data);
-//    mesh->AddPoint(vertex[0], vertex[1], vertex[2]);
-//}
-//
-//
-//void CALLBACK ftglCombine(FTGL_DOUBLE coords[3], void* vertex_data[4], GLfloat weight[4], void** outData, FTMesh* mesh)
-//{
-//    const FTGL_DOUBLE* vertex = static_cast<const FTGL_DOUBLE*>(coords);
-//    *outData = const_cast<FTGL_DOUBLE*>(mesh->Combine(vertex[0], vertex[1], vertex[2]));
-//}
-//
-//void CALLBACK ftglBegin(GLenum type, FTMesh* mesh)
-//{
-//    mesh->Begin(type);
-//}
-//
-//
-//void CALLBACK ftglEnd(FTMesh* mesh)
-//{
-//    mesh->End();
-//}
-
-
-FTMesh::FTMesh()
-: currentTesselation(0),
-    err(0)
-{
-    tesselationList.reserve(16);
-}
-
-
-FTMesh::~FTMesh()
-{
-    for(size_t t = 0; t < tesselationList.size(); ++t)
-    {
-        delete tesselationList[t];
-    }
-
-    tesselationList.clear();
-}
-
-
-void FTMesh::AddPoint(const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z)
-{
-    currentTesselation->AddPoint(x, y, z);
-}
-
-
-const FTGL_DOUBLE* FTMesh::Combine(const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z)
-{
-    tempPointList.push_back(FTPoint(x, y,z));
-    return static_cast<const FTGL_DOUBLE*>(tempPointList.back());
-}
-
-
-void FTMesh::Begin(GLenum meshType)
-{
-    currentTesselation = new FTTesselation(meshType);
-}
-
-
-void FTMesh::End()
-{
-    tesselationList.push_back(currentTesselation);
-}
-
-
-const FTTesselation* const FTMesh::Tesselation(size_t index) const
-{
-    return (index < tesselationList.size()) ? tesselationList[index] : NULL;
-}
 
 
 Triangulator::Triangulator(const FT_GlyphSlot glyph)
 :   contourList(0),
-    mesh(0),
     ftContourCount(0),
     contourFlag(0)
 {
@@ -146,7 +50,6 @@ Triangulator::Triangulator(const FT_GlyphSlot glyph)
         outline = glyph->outline;
 
         ftContourCount = outline.n_contours;
-        contourList = 0;
         contourFlag = outline.flags;
 
         ProcessContours();
@@ -160,9 +63,6 @@ Triangulator::~Triangulator()
     {
         delete contourList[c];
     }
-
-    delete [] contourList;
-    delete mesh;
 }
 
 
@@ -172,7 +72,7 @@ void Triangulator::ProcessContours()
     short startIndex = 0;
     short endIndex = 0;
 
-    contourList = new FTContour*[ ftContourCount ];
+	contourList.resize( ftContourCount );
     contoursIncuding.resize( ftContourCount );
     contoursNesting.resize( ftContourCount, 0 );
 
@@ -298,14 +198,9 @@ const FTContour* const Triangulator::Contour(size_t index) const
 }
 
 
-void Triangulator::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSize)
+Mesh Triangulator::MakeMesh()
 {
-    if( mesh )
-    {
-        delete mesh;
-    }
-
-    mesh = new FTMesh;
+	Mesh mesh( true );
 
     std::vector< std::vector< p2t::Point * > > contoursVecPointsVec;
     contoursVecPointsVec.resize( ftContourCount );
@@ -315,32 +210,13 @@ void Triangulator::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
     {
         const FTContour* contour = contourList[ c ];
 
-        switch( outsetType )
-        {
-            case 1: contourList[ c ]->buildFrontOutset( outsetSize ); break;
-            case 2: contourList[ c ]->buildBackOutset( outsetSize ); break;
-        }
-
         std::vector< p2t::Point * >& polyline = contoursVecPointsVec[ c ];
         polyline.reserve( contour->PointCount() );
 
         for( size_t p = 0; p < contour->PointCount(); ++p )
         {
-            p2t::Point * d = nullptr;
-            switch( outsetType )
-            {
-                case 1: d = new p2t::Point( contour->FrontPoint( p ).X(), contour->FrontPoint( p ).Y() );
-                    break;
-                case 2: d = new p2t::Point( contour->BackPoint( p ).X(), contour->BackPoint( p ).Y() );
-                    break;
-                case 0:
-                default:
-                    d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
-                    break;
-            }
-
+            p2t::Point * d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
             polyline.push_back( d );
-
         }
     }
 
@@ -410,23 +286,23 @@ void Triangulator::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
 
         cdt->Triangulate();
 
-        mesh->Begin( GL_TRIANGLES );
+        mesh.Begin();
 
         for( auto t : cdt->GetTriangles() )
         {
             auto p0 = t->GetPoint( 0 );
             auto p1 = t->GetPoint( 1 );
             auto p2 = t->GetPoint( 2 );
-            mesh->AddPoint( p0->x, p0->y, 0.0 );
-            mesh->AddPoint( p1->x, p1->y, 0.0 );
-            mesh->AddPoint( p2->x, p2->y, 0.0 );
+            mesh.AddPoint( (float)p0->x, (float)p0->y, 0.0 );
+            mesh.AddPoint( (float)p1->x, (float)p1->y, 0.0 );
+            mesh.AddPoint( (float)p2->x, (float)p2->y, 0.0 );
         }
 
-        mesh->End();
+        mesh.End();
 
         delete cdt;
     }
 
-
+	return mesh;
 }
 
