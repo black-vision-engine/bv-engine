@@ -49,7 +49,7 @@ std::string EncodeBase64( MemoryChunkConstPtr data )
 
     auto res = os.str();
 
-    for( auto i = 0; i < padding; ++i )
+    for( UInt32 i = 0; i < padding; ++i )
     {
         res.append( "=" );
     }

@@ -131,7 +131,6 @@ bool BlackVisionApp::OnInitialize       ()
     m_processManager = new ProcessManager();
         //pablito
     InitializeLicenses      ();
-    InitializeConfig        ();
 
 
     InitializeConsole       ();
@@ -199,21 +198,6 @@ bool    BlackVisionApp::InitializeLicenses   ()
         LOG_MESSAGE( SeverityLevel::critical ) << "License is not valid. Please contact your administrator or sales representative";
     }
     return license;
-}
-
-
-// *********************************
-//
-void    BlackVisionApp::InitializeConfig  ()
-{
-    // Function BVConfig::Instance() have already initialized this config.
-    // Code commented to avoid double keys in config.
-    //ConfigManager::LoadConfig();
-    //ConfigManager::LoadXMLConfig();
-    BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
-
-    BB::AssetManager::LoadSurfaces();
-
 }
 
 // *********************************

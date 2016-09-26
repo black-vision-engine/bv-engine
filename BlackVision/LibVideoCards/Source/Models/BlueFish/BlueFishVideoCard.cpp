@@ -431,7 +431,7 @@ void BlueFishVideoCard::processAudioOutput(unsigned int nCardType, void* pAudioO
 {
     if(!pAudioOut)
     {
-        cout << "AUDIO ERROR: Out: " << (unsigned int)pAudioOut << endl; 
+        //cout << "AUDIO ERROR: Out: " << (unsigned int)pAudioOut << endl; 
         return;
     }
 

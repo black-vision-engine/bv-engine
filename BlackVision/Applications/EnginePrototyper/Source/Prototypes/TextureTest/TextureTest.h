@@ -5,6 +5,7 @@
 #include "Interfaces/IBasicLogic.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "BaseTextureTest.h"
@@ -27,7 +28,7 @@ private:
 
 public:
 
-						TextureTest         ( Renderer * renderer );
+						TextureTest         ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 						~TextureTest        ();
 
     virtual     void    Initialize          ()                      override;
@@ -36,7 +37,7 @@ public:
     virtual     void    Key                 ( unsigned char c )     override;
     virtual     void    Resize              ( UInt32 w, UInt32 h )  override;
 
-	static IBasicLogicUnqPtr	Create		( Renderer * renderer );
+    static IBasicLogicUnqPtr	Create( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 };
 
 } //bv

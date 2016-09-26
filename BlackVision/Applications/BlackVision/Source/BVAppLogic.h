@@ -17,9 +17,7 @@
 //#define HIDE_PROFILE_STATS
 
 //pablito
-#include "Solution.h"
 #include "VideoCardManager.h"
-#include "structure/AssetManager.h"
 
 //hackvideoinput
 #include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
@@ -78,7 +76,6 @@ private:
     RenderMode                      m_renderMode;
 
 	//pablito
-	Solution						m_solution;
 	bv::videocards::VideoCardManager* m_videoCardManager;
     
     void            RefreshVideoInputScene  ();

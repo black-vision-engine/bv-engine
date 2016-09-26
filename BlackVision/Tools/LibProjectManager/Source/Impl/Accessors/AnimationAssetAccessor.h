@@ -26,12 +26,12 @@ public:
     virtual void				RenameAsset			( const Path & oldPath, const Path & newPath) const override;
 
     virtual void				ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) const override;
-	virtual void				ImportAsset			( std::istream & in, const Path &  importToPath ) const override;
+    virtual void				ImportAsset			( std::istream & in, const Path &  importToPath ) const override;
 
     virtual void				ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const override;
-	virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const override;
+    virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const override;
 
-	virtual void			 	ExportAll			( std::ostream & out ) const override;
+    virtual void			 	ExportAll			( std::ostream & out ) const override;
     virtual void				ExportAll			( const Path & expAssetFilePath ) const override;
 
     virtual UInt64              GetAssetSizeInBytes ( const Path & path ) const override;
@@ -40,7 +40,7 @@ public:
 
     virtual PathVec				ListAllUnique		( const Path & path ) const override;
 
-	virtual						~AnimationAssetAccessor		();
+    virtual						~AnimationAssetAccessor		();
 
 private:
     explicit                    AnimationAssetAccessor( const Path & rootPath, const StringVector & fileExts );

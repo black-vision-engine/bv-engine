@@ -179,13 +179,13 @@ TEST( AddingAssets, ProjectManager )
 
 	auto assets = g_pm0->ListAssetsPaths( "", "", "", true );
 
-	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/pol.jpg" ) );
-	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/ger.jpg" ) );
-	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj02", "textures", "flagi/rus.jpg" ) );
+	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/pol.jpg" ) != nullptr );
+	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/ger.jpg" ) != nullptr  );
+	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj02", "textures", "flagi/rus.jpg" ) != nullptr  );
 
-	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj02", "textures", "flagi/pol.jpg" ) );
-	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/ger.jpg" ) );
-	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/rus.jpg" ) );
+	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj02", "textures", "flagi/pol.jpg" ) != nullptr );
+	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/ger.jpg" ) != nullptr );
+	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/rus.jpg" ) != nullptr );
 
 	ASSERT_TRUE( assets.size() == 3 );
 }
@@ -229,7 +229,7 @@ TEST( ListingPresets, ProjectManager )
 
 TEST( LoadingPresets, ProjectManager )
 {
-    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", nullptr ) ); // FIXME: 
+    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", nullptr ) != nullptr ); // FIXME: 
 }
 
 TEST( CreatingSecondPM, ProjectManager )

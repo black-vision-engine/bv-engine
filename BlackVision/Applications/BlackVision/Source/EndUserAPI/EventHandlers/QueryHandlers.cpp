@@ -5,6 +5,7 @@
 #include "Tools/IncludeJSON.h"
 #include "PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "ProjectManager.h"
@@ -331,7 +332,7 @@ void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser, mod
     ser.EnterArray( "Children" );
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )
     {
-        BasicNodePtr modelBasicNode = std::static_pointer_cast< model::BasicNode >( modelNode );
+        model::BasicNodePtr modelBasicNode = std::static_pointer_cast< model::BasicNode >( modelNode );
         RenderingPerformance( ser, modelBasicNode->GetChild( i ), sceneNode->GetChild( i ) );
     }
     ser.ExitChild();    // Children
@@ -868,7 +869,7 @@ void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, ID
 
     PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, true );
 
-    auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( iplugin );
+    auto plugin = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( iplugin );
     plugin->Serialize( ser );
 }
 
@@ -893,12 +894,12 @@ void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser
         return;
     }
 
-    if( timeEvaluator->GetType() != DefaultTimeline::Type() )
+    if( timeEvaluator->GetType() != model::DefaultTimeline::Type() )
     {
         ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, eventID, "Time evaluator can't be casted to DefaultTimeline" );
         return;
     }
-    auto timeline = std::static_pointer_cast<DefaultTimeline>( timeEvaluator );
+    auto timeline = std::static_pointer_cast< model::DefaultTimeline >( timeEvaluator );
     
     PrepareResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, eventID, true );
 

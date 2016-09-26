@@ -17,7 +17,7 @@ namespace {
 model::IModelNodePtr CreateTestModelNodeInSomeSpecificScope( BVAppLogic * logic, const std::string & name )
 {
     auto pluginsManager = logic->GetPluginsManager();
-	auto timelineManager = TimelineManager::GetInstance();
+	auto timelineManager = model::TimelineManager::GetInstance();
 	auto globalTimeline = timelineManager->GetRootTimeline();
 
     model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, pluginsManager, globalTimeline );

@@ -132,7 +132,7 @@ void                RendererPerformance::AverageTreePerformanceData  ( SceneNode
     data->GPURenderAccum = 0;
     data->SortNodeAccum = 0;
 
-    for( int i = 0; i < node->NumChildNodes(); ++i )
+    for( Int32 i = 0; i < ( Int32 )node->NumChildNodes(); ++i )
     {
         AverageTreePerformanceData( node->GetChild( i ) );
     }

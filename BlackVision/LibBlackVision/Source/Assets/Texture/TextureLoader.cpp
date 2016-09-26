@@ -20,40 +20,40 @@ namespace bv {
 //
 AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 {
-	auto typedDesc = QueryTypedDesc< TextureAssetDescConstPtr >( desc );
+    auto typedDesc = QueryTypedDesc< TextureAssetDescConstPtr >( desc );
 
-	assert( typedDesc );
+    assert( typedDesc );
 
-	switch( typedDesc->GetLoadingType() )
-	{
-		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
-		{
-			return TextureUtils::LoadOrginalTextureOnly( typedDesc );
-		}
+    switch( typedDesc->GetLoadingType() )
+    {
+        case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+        {
+            return TextureUtils::LoadOrginalTextureOnly( typedDesc );
+        }
 
-		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
-		{
-			return TextureUtils::LoadTextureAndMipMaps( typedDesc );
-		}
+        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+        {
+            return TextureUtils::LoadTextureAndMipMaps( typedDesc );
+        }
 
-		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
-		{
-			return TextureUtils::LoadTextureAndGenerateMipMaps( typedDesc );
-		}
+        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+        {
+            return TextureUtils::LoadTextureAndGenerateMipMaps( typedDesc );
+        }
 
-		default:
-		{
-			assert( !"Should never be here" );
-			return nullptr;
-		}
-	}
+        default:
+        {
+            assert( !"Should never be here" );
+            return nullptr;
+        }
+    }
 }
 
 // ******************************
 //
 AssetDescConstPtr TextureLoader::CreateDescriptor( const IDeserializer& deserializeObject ) const
 {
-	return std::static_pointer_cast<const AssetDesc>( TextureAssetDesc::Create( deserializeObject ) );
+    return std::static_pointer_cast<const AssetDesc>( TextureAssetDesc::Create( deserializeObject ) );
 }
 
 // ******************************
@@ -62,7 +62,7 @@ ThumbnailConstPtr TextureLoader::LoadThumbnail   ( const AssetDescConstPtr & des
 {
     auto typedDesc = QueryTypedDesc< TextureAssetDescConstPtr >( desc );
 
-	assert( typedDesc );
+    assert( typedDesc );
 
     return TextureUtils::LoadThumbnail( typedDesc );
 }

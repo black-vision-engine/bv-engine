@@ -9,6 +9,7 @@
 #include "Impl/Accessors/AnimationAssetAccessor.h"
 #include "Impl/Accessors/AVAssetAccessor.h"
 #include "Impl/Accessors/MeshAssetAccessor.h"
+#include "Impl/Accessors/SVGAssetAccessor.h"
 
 #include "IO/DirIO.h"
 
@@ -449,24 +450,24 @@ void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProject
 
     if( buf.str() == "assets" )
     {
-        std::stringbuf buf;
-        in.get( buf, '\n');
+        std::stringbuf assetsBuf;
+        in.get( assetsBuf, '\n');
         in.ignore();
 
-        auto size = stoul( buf.str() );
+        auto size = stoul( assetsBuf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
-            std::stringbuf buf;
-            in.get( buf, '\n');
+            std::stringbuf categoryBuf;
+            in.get( categoryBuf, '\n');
             in.ignore();
 
-            auto categoryName = buf.str();
+            auto categoryName = categoryBuf.str();
             buf.str("");
 
-            in.get( buf, '\n');
+            in.get( categoryBuf, '\n');
             in.ignore();
-            auto path = Path( buf.str() );
+            auto path = Path( categoryBuf.str() );
 
             m_categories.at( categoryName )->ImportAsset( in, importToProjectName / importToPath );
         }
@@ -573,24 +574,24 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 
     if( buf.str() == "assets" )
     {
-        std::stringbuf buf;
-        in.get( buf, '\n');
+        std::stringbuf assetsBuf;
+        in.get( assetsBuf, '\n');
         in.ignore();
 
-        auto size = stoul( buf.str() );
+        auto size = stoul( assetsBuf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
-            std::stringbuf buf;
-            in.get( buf, '\n');
+            std::stringbuf categoryBuf;
+            in.get( categoryBuf, '\n');
             in.ignore();
 
-            auto categoryName = buf.str();
-            buf.str("");
+            auto categoryName = categoryBuf.str();
+            categoryBuf.str("");
 
-            in.get( buf, '\n');
+            in.get( categoryBuf, '\n');
             in.ignore();
-            auto path = Path( buf.str() );
+            auto path = Path( categoryBuf.str() );
 
             m_categories.at( categoryName )->ImportAsset( in, projectName / path );
         }
@@ -711,6 +712,8 @@ void						ProjectManagerImpl::InitializePresets	()
 //
 void				        ProjectManagerImpl::InitializeAssets	()
 {
+    // --- textures and sequences ---
+
     StringVector exts;
     exts.push_back( ".*\\.jpg" );
     exts.push_back( ".*\\.tga" );
@@ -722,6 +725,8 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     auto aaa = AnimationAssetAccessor::Create( GetRootDir() / "sequences", exts );
     RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+
+    // --- font ---
 
     StringVector fontsExts;
     fontsExts.push_back( ".*\\.ttf" );
@@ -757,6 +762,13 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     auto maa = MeshAssetAccessor::Create( GetRootDir() / "meshes", meshExts );
     RegisterCategory( AssetCategory::Create( "meshes", maa ) );
+
+    // --- svg ---
+    StringVector svgExts;
+    svgExts.push_back( ".*\\.svg" );
+
+    auto saa = SVGAssetAccessor::Create( GetRootDir() / "svgs", svgExts );
+    RegisterCategory( AssetCategory::Create( "svgs", saa ) );
 }
 
 // ********************************

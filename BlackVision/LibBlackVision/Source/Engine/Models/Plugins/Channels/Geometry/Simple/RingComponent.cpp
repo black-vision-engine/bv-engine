@@ -25,12 +25,13 @@ RingComponent::RingComponent( float startAngle, float endAngle, float innerRadiu
 
     Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( desc, desc->SuggestedDefaultName( 0 ), false );
 
-    glm::vec2 xyInner = glm::vec2( innerRadius * cos(startAngle), innerRadius * sin(startAngle) );
-    glm::vec2 xyOuter = glm::vec2( outerRadius * cos(startAngle), outerRadius * sin(startAngle) );
+    {
+        glm::vec2 xyInner = glm::vec2( innerRadius * cos( startAngle ), innerRadius * sin( startAngle ) );
+        glm::vec2 xyOuter = glm::vec2( outerRadius * cos( startAngle ), outerRadius * sin( startAngle ) );
 
-
-    vertArrtF3->AddAttribute(glm::vec3(xyOuter.x, xyOuter.y, 0.f) );
-    vertArrtF3->AddAttribute(glm::vec3(xyInner.x, xyInner.y, 0.f) );
+        vertArrtF3->AddAttribute( glm::vec3( xyOuter.x, xyOuter.y, 0.f ) );
+        vertArrtF3->AddAttribute( glm::vec3( xyInner.x, xyInner.y, 0.f ) );
+    }
 
     float angleDev = endAngle - startAngle;
 

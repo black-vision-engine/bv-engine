@@ -1345,7 +1345,6 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
         auto result = SetNodeEffect( node, newEffect );
         if( result && enableUndo )
         {
-            auto scene = GetModelScene( sceneName );
             scene->GetHistory().AddOperation( std::unique_ptr< SetEffectOperation >( new SetEffectOperation( QueryTyped( node ), curEffect, newEffect ) ) );
         }
         return result;
@@ -1491,7 +1490,7 @@ void				        BVProjectEditor::ReplaceTimeline        ( model::SceneModelPtr s
     scene->GetRootNode()->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
 
     // Replace timeline in lights parameters.
-    for( int i = 0; i < scene->NumLights(); ++i )
+    for( Int32 i = 0; i < ( Int32 )scene->NumLights(); ++i )
     {
         auto light = scene->GetLight( i );
         auto & lightParams = light->GetParameters();
@@ -1505,7 +1504,7 @@ void				        BVProjectEditor::ReplaceTimeline        ( model::SceneModelPtr s
     }
 
     auto & cameraLogic = scene->GetCamerasLogic();
-    for( int i = 0; i < cameraLogic.GetNumCameras(); i++ )
+    for( Int32 i = 0; i < ( Int32 )cameraLogic.GetNumCameras(); i++ )
     {
         auto & cameraParams = cameraLogic.GetCamera( i )->GetParameters();
         for( auto cameraParam : cameraParams )
@@ -1530,7 +1529,7 @@ bool    BVProjectEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
     if( scene->GetRootNode()->GetModelNodeEditor()->IsTimelineUsed( timeEval ) )
         return true;
 
-    for( int i = 0; i < scene->NumLights(); ++i )
+    for( Int32 i = 0; i < ( Int32 )scene->NumLights(); ++i )
     {
         auto light = scene->GetLight( i );
         auto & lightParams = light->GetParameters();
@@ -1544,7 +1543,7 @@ bool    BVProjectEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
     }
 
     auto & cameraLogic = scene->GetCamerasLogic();
-    for( int i = 0; i < cameraLogic.GetNumCameras(); i++ )
+    for( Int32 i = 0; i < ( Int32 )cameraLogic.GetNumCameras(); i++ )
     {
         auto & cameraParams = cameraLogic.GetCamera( i )->GetParameters();
         for( auto cameraParam : cameraParams )

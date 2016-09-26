@@ -421,7 +421,9 @@ bool BlackMagicVideoCard::InitHardwareOutputs()
         }
         if(this->InitVideoOuput(HardwareOutputs[hdVideo],output->Channels[i]))
         {
-            printf("VideoCard","INFO", "BlackMagic video output ["+to_string(hdVideo+1)+"] initialised! \n");
+            printf("VideoCard INFO BlackMagic video output [");
+            printf(to_string(hdVideo + 1).c_str());
+            printf("] initialised! \n");
         }else{
             printf("VideoCard ERROR BlackMagic video output [");
 			printf(to_string(hdVideo+1).c_str());
@@ -550,7 +552,7 @@ int BlackMagicVideoCard::InitSDK()
 
 
         // buffers for frames
-        for(int i=0;i<ChannelsCount;i++)
+        for(i=0;i<ChannelsCount;i++)
         {
             InitializeCriticalSection(&Mutex[i]);
             pFrame[i] = _aligned_malloc(1920*1080*4,128);

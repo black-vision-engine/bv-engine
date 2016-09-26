@@ -32,7 +32,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
     if( !m_editor ) 
 	{
         m_editor = logic->GetBVProject()->GetProjectEditor();
-        m_timeEval = TimelineManager::GetInstance()->GetRootTimeline();
+        m_timeEval = model::TimelineManager::GetInstance()->GetRootTimeline();
     }
 
     if( !m_defaultEffect )

@@ -67,13 +67,13 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
     
     printf( "Loading animation\n" );
 
-    auto i = 0;
-    for( auto f : framesDesc )
-    {
-        framesAssets.push_back( LoadFrame( f ) );
-        printf( "\rLoaded %d out of %d total frames                ", i + 1, framesDesc.size() );
-        ++i;
-    }
+	auto i = 0;
+	for( auto f : framesDesc )
+	{
+		framesAssets.push_back( LoadFrame( f ) );
+		printf( "\rLoaded %d out of %lld total frames                ", i + 1, ( Int64 )framesDesc.size() );
+		++i;
+	}
 
     printf( "\n" );
 

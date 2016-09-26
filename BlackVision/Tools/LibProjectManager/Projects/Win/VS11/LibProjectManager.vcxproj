@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
@@ -85,8 +87,6 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
@@ -132,22 +132,5 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>LibProjectManager</TargetName>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile />
-    <ClCompile />
-    <ClCompile />
-    <ClCompile />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile />
-  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
 </Project>

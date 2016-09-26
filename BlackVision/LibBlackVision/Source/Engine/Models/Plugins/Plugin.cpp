@@ -99,9 +99,9 @@ std::vector< LAsset >    BasePlugin< IPlugin >::GetLAssets                   () 
 //
 void                                BasePlugin< IPlugin >::SetAsset                    ( int i, LAsset lasset )
 {
-    if( m_assets.size() < i )
+    if( ( Int32 )m_assets.size() < i )
         assert( false );
-    else if( m_assets.size() == i )
+    else if( ( Int32 )m_assets.size() == i )
         m_assets.push_back( lasset );
     else
         m_assets[ i ] = lasset;
@@ -155,11 +155,11 @@ ser.EnterChild( "plugin" );
         }
         ser.ExitChild(); // params
 
-        auto assets = GetLAssets();
-        if( assets.size() > 0 )
+        auto lassets = GetLAssets();
+        if( lassets.size() > 0 )
         {
             ser.EnterArray( "assets" );
-            for( auto lasset : assets )
+            for( auto lasset : lassets )
             {
                 auto assetDesc = lasset.assetDesc;
                 ser.EnterChild( "asset" );
@@ -216,16 +216,18 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );           // FIXME Add to deserialization context
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
-    // params
-    auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-    for( auto param : params )
     {
-        if( plugin->GetParameter( param->GetName() ) == nullptr )
+        // params
+        auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
+        for( auto param : params )
         {
-            LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " does not have parameter " << param->GetName() << ", which is serialized.";
-        }
+            if( plugin->GetParameter( param->GetName() ) == nullptr )
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " does not have parameter " << param->GetName() << ", which is serialized.";
+            }
 
-        SetParameter( plugin->GetPluginParamValModel(), param );
+            SetParameter( plugin->GetPluginParamValModel(), param );
+        }
     }
 
     // assets

@@ -1,5 +1,6 @@
 #include "BaseTextureTest.h"
 
+#include <algorithm>
 
 #include "TextureTests\Texture1DTest.h"
 #include "TextureTests\Texture2DTest.h"
@@ -51,7 +52,7 @@ GLuint					BaseTextureTest::Checkboard				( GLubyte * data, unsigned int width, 
 	BVGL::bvglBindTexture( GL_TEXTURE_2D, checkboard );
 
 	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	unsigned int numLevels = 1 + ( unsigned int )( log( std::max( ( double )width, ( double )height ) ) / log ( 2.0 ) );
+	unsigned int numLevels = 1 + ( unsigned int )( log( ( std::max )( ( double )width, ( double )height ) ) / log ( 2.0 ) );
 	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, numLevels );
 
 	BVGL::bvglTexStorage2D( GL_TEXTURE_2D, numLevels, GL_RGBA8, ( GLsizei )width, ( GLsizei )height );
