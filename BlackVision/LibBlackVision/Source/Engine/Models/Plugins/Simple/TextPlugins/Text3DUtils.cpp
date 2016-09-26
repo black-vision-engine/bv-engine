@@ -11,7 +11,7 @@
 #include FT_OUTLINE_H
 #include FT_STROKER_H
 #include <FreeType/ftglyph.h>
-#include "FTGL/ftgl.h"
+
 
 #include "Assets/Font/TextAtlas.h"
 

@@ -517,11 +517,11 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
 
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
     {
-        FTVectoriser vectorizer( m_face->glyph );
-        vectorizer.MakeMesh( 1.0f, 0 );
+        Triangulator triangulator( m_face->glyph );
+        triangulator.MakeMesh( 1.0f, 0 );
 
         std::vector< glm::vec3 > verticies;
-        const auto & mesh = vectorizer.GetMesh();
+        const auto & mesh = triangulator.GetMesh();
         auto tessCount = mesh->TesselationCount();
 
         // Reserve memory in vector.
