@@ -17,6 +17,10 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "Assets/DefaultAssets.h"
+#include "Application/ApplicationContext.h"
+
+#include "Assets/Font/TextHelper.h"
+#include "Text3DUtils.h"
 
 
 
@@ -33,7 +37,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultText3DPluginDesc::DefaultText3DPluginDesc                            ()
-    : BasePluginDescriptor( UID(), "text3d", "txt3d" )
+    : BasePluginDescriptor( UID(), "text3d", "" )
 {
 }
 
@@ -48,105 +52,26 @@ IPluginPtr              DefaultText3DPluginDesc::CreatePlugin             ( cons
 //
 DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
+    ModelHelper h( timeEvaluator );
+    h.CreateVacModel();
 
+    h.AddSimpleParam( "text", std::wstring( L"" ), true, true );
+    h.AddSimpleParam( "spacing", 0.0f, true, true );
+    h.AddSimpleParam( "alignment", 0.0f, true, true );
+    h.AddSimpleParam( "maxTextLenght", 0.0f, true, true );
+    h.AddSimpleParam( "fontSize", 8.0f, true, true );
 
-    //Create all parameters and evaluators
-    SimpleWStringEvaluatorPtr   textEvaluator           = ParamValEvaluatorFactory::CreateSimpleWStringEvaluator( "text", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+    h.CreatePSModel();
+    h.CreateVSModel();
 
-    SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
-	SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
-	SimpleVec4EvaluatorPtr      outlineColorEvaluator   = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "outlineColor", timeEvaluator );
-
-    SimpleVec4EvaluatorPtr      rccBeginColorEvaluator  = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_beginColor", timeEvaluator );
-    SimpleVec4EvaluatorPtr      rccEndColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_endColor", timeEvaluator );
-    SimpleIntEvaluatorPtr       colTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "colTextEffectId", timeEvaluator );
-    SimpleIntEvaluatorPtr       transformTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "transformTextEffectId", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     timeValEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
-    SimpleFloatEvaluatorPtr     transformEffectVal1Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal1", timeEvaluator );
-    SimpleFloatEvaluatorPtr     transformEffectVal2Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal2", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
-    SimpleFloatEvaluatorPtr     maxTextLenghtEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "maxTextLenght", timeEvaluator );
-
-    SimpleVec2EvaluatorPtr      explosionCenterEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "explosionCenter", timeEvaluator );
-
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
-    vsModel->RegisterAll( transformEffectVal1Evaluator );
-    vsModel->RegisterAll( transformEffectVal2Evaluator );
-	psModel->RegisterAll( outlineColorEvaluator );
-    psModel->RegisterAll( alphaEvaluator );
-
-    psModel->RegisterAll( rccBeginColorEvaluator );
-    psModel->RegisterAll( rccEndColorEvaluator );
-    psModel->RegisterAll( timeValEvaluator );
-    psModel->RegisterAll( explosionCenterEvaluator );
-    psModel->RegisterAll( colTextEffectIdEvaluator );
-    psModel->RegisterAll( transformTextEffectIdEvaluator );
-
-    plModel->RegisterAll( textEvaluator );
-    plModel->RegisterAll( blurSizeEvaluator );
-	plModel->RegisterAll( outlineSizeEvaluator );
-    plModel->RegisterAll( spacingEvaluator );
-    plModel->RegisterAll( alignmentEvaluator );
-    plModel->RegisterAll( fontSizeEvaluator );
-    plModel->RegisterAll( maxTextLenghtEvaluator );
-
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
-    model->SetPluginModel( plModel );
-
-    //Set default values of all parameters
-    textEvaluator->Parameter()->SetVal( L"", TimeType( 0.f ) );
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-
-    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
-    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 1.f ), TimeType( 0.f ) );
-
-    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 1.f, 0.f, 1.f ), TimeType( 10.f ) );
-    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 10.f ) );
-
-    colTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
-    transformTextEffectIdEvaluator->Parameter()->SetVal( 3, TimeType( 0.f ) );
-
-    explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
-
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
-    maxTextLenghtEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
-
-    transformEffectVal1Evaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
-
-    transformEffectVal1Evaluator->Parameter()->SetVal( 0.1f, TimeType( 10.f ) );
-
-    transformEffectVal2Evaluator->Parameter()->SetVal( 2.f, TimeType( 0.f ) );
-
-    transformEffectVal2Evaluator->Parameter()->SetVal( 5.f, TimeType( 10.f ) );
-
-    return model;
+    return h.GetModel();
 }
 
 // *******************************
 //
 std::string             DefaultText3DPluginDesc::UID                      ()
 {
-    return "DEFAULT_TEXT";
+    return "DEFAULT_TEXT3D";
 }
 
 // *************************************
@@ -190,22 +115,19 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
-	//m_vaChannel = TextHelper::CreateEmptyVACForText();
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+    m_vaChannel = Text3DUtils::CreateEmptyVACForText3D();
     
 	SetPrevPlugin( prev );
 
-    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+    m_fontSize              = QueryTypedValue< ValueFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetValue( "fontSize" ) );
+    m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "spacing" ) );
+    m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "alignment" ) );
+    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "maxTextLenght" ) );
+    m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "text" ) );
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultText3DPlugin::OnSetText ), KeyPressedEvent::Type() );
-
-    m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
-    m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
-    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLenght" ) );
-    m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "text" ) );
-    
-    m_timeParam             = QueryTypedParam< ParamFloatPtr >( GetParameter( "time" ) );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
 
 // *************************************
@@ -218,31 +140,78 @@ DefaultText3DPlugin::~DefaultText3DPlugin         ()
 // 
 bool                            DefaultText3DPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-    assert( false );  // TODO: Implement
-    return false;
+    auto fontAssetDesc = QueryTypedDesc< FontAssetDescConstPtr >( assetDescr );
+
+    if ( fontAssetDesc != nullptr )
+    {
+        auto fontResource = LoadTypedAsset<FontAsset>( fontAssetDesc );
+        if( fontResource == nullptr )
+        {
+            return false;
+        }
+
+        m_text = fontResource->GetText();
+
+        SetAsset( 0, LAsset( "Font3D", assetDescr, nullptr ) );
+
+        RebuildText();
+
+        return true;
+    }    
+    else
+    {
+        return false;
+    }
 }
+
+// ***********************
+//
+void                                DefaultText3DPlugin::RebuildText                 ()
+{
+    Text3DUtils::TextLayout layout;
+    layout.Arranger = nullptr;
+    layout.Size = m_fontSize->GetValue();
+    layout.BlurSize = 0;
+    layout.OutlineSize = 0;
+    layout.Spacing = m_spacingParam->Evaluate();
+    layout.Tat = TextAlignmentType::Center;
+    layout.TextAsset = m_text;
+    layout.UseKerning = false;
+    layout.ViewWidth = ApplicationContext::Instance().GetWidth();
+    layout.ViewHeight = ApplicationContext::Instance().GetHeight();
+
+    auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_text, layout );
+
+    m_vaChannel->ClearAll();
+    for( auto & component : connectedComponents )
+    {
+        m_vaChannel->AddConnectedComponent( component );
+    }
+}
+
 
 // *************************************
 // 
-IVertexAttributesChannelConstPtr    DefaultText3DPlugin::GetVertexAttributesChannel  () const
+void                                DefaultText3DPlugin::Update                      ( TimeType t )
 {
-    return m_vaChannel;
-}
+    BasePlugin::Update( t );
 
-// *************************************
-// 
-IPixelShaderChannelPtr              DefaultText3DPlugin::GetPixelShaderChannel       () const
-{
-    return m_psc;
-}
+    if( ParameterChanged( "text" ) || 
+        ParameterChanged( "alignment" ) ||
+        ParameterChanged( "spacing" ) ||
+        ParameterChanged( "fontSize" ) )
+    {
+        RebuildText();
+        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+    }
 
-// *************************************
-// 
-IVertexShaderChannelConstPtr        DefaultText3DPlugin::GetVertexShaderChannel      () const
-{
-    return m_vsc;
-}
+    //assumption that text plugin provides vertices, so no need for backward topology propagation
+    //HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
+    m_vsc->PostUpdate();
+    m_psc->PostUpdate();
+}
 
 // *************************************
 // 
@@ -253,52 +222,6 @@ mathematics::RectConstPtr			DefaultText3DPlugin::GetAABB						( const glm::mat4 
 		return rect;
 	else
 		return nullptr;
-}
-
-// *************************************
-// 
-void                                DefaultText3DPlugin::Update                      ( TimeType t )
-{
-    { t; } // FIXME: suppress unused warning
-    assert( false );  // TODO: Implement
-}
-
-namespace {
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-} //anonymous
-
-// *************************************
-//
-void DefaultText3DPlugin::OnSetText                   ( IEventPtr evt )
-{
-    if( evt->GetEventType() == KeyPressedEvent::Type() )
-    {
-        KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
-        wchar_t c[2] = {evtTyped->GetChar() , '\0'};
-
-        if( c[0] == L'\b' )
-        {
-            if( !m_textParam->Evaluate().empty() )
-            {
-                auto text = m_textParam->Evaluate();
-                text.pop_back();
-                SetText( text );
-            }
-        }
-        else
-		{
-			SetText( m_textParam->Evaluate() + std::wstring( c ) );
-		}
-    }
 }
 
 namespace 
@@ -384,6 +307,29 @@ bool DefaultText3DPlugin::SetText( IPluginPtr textPlugin, const std::wstring& te
     else
         return false;
 }
+
+
+// *************************************
+// 
+IVertexAttributesChannelConstPtr    DefaultText3DPlugin::GetVertexAttributesChannel  () const
+{
+    return m_vaChannel;
+}
+
+// *************************************
+// 
+IPixelShaderChannelPtr              DefaultText3DPlugin::GetPixelShaderChannel       () const
+{
+    return m_psc;
+}
+
+// *************************************
+// 
+IVertexShaderChannelConstPtr        DefaultText3DPlugin::GetVertexShaderChannel      () const
+{
+    return m_vsc;
+}
+
 
 } // model
 } // bv

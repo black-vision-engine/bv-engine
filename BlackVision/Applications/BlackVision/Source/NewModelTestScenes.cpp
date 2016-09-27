@@ -601,6 +601,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::SVGTestScene( timeline );
     }
+    else if( scene == "TEXT_3D_TEST_SCENE" )
+    {
+        node = TestScenesFactory::Text3DTestScene( timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -2090,6 +2094,47 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
 //    root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
 
     return root;
+}
+
+// ***********************
+//
+model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    //Plugin stuff
+    std::vector< std::string > uids;
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_TEXT3D" );
+    uids.push_back( "DEFAULT_EXTRUDE_PLUGIN" );
+    uids.push_back( "DEFAULT_MATERIAL" );
+
+
+    auto node = model::BasicNode::Create( "Text3D", timeEvaluator );
+    auto success = node->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+
+    auto material = node->GetPlugin( "material" );
+    model::SetParameter( material->GetParameter( "mtlDiffuse" ), 0.0, glm::vec4( 1, 0.5, 1, 1 ) );
+    model::SetParameter( material->GetParameter( "mtlAmbient" ), 0.0, glm::vec4( 0, 0, 0, 0 ) );
+    model::SetParameter( material->GetParameter( "mtlSpecular" ), 0.0, glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlEmission" ), 0.0, glm::vec4( 0.1, 0.0, 0.2, 1.0 ) );
+    model::SetParameter( material->GetParameter( "mtlShininess" ), 0.0, 128 );
+
+
+
+    //SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.001f, 0.001f, 0.001f ) );
+
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 200.0f );
+    SetParameter( node->GetPlugin( "text3d" )->GetParameter( "text" ), 0.0, std::wstring( L"pi¿mowó³ z¿era\nz¿ó³k³¹\nœciêt¹ kiœæ!?!\n%%@#$^&*()" ) );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+
+    SetParameter( node->GetPlugin( "extrude" )->GetParameter( "extrude vector" ), 0.0, glm::vec3( 0.0, 0.0, -0.3f ) );
+
+    success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/proj00/arial.ttf", 30, 0, 0, true );
+    assert( success );
+
+    return node;    
 }
 
 } //bv

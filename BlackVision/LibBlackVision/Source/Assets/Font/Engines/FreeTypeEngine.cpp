@@ -17,6 +17,7 @@
 #include FT_OUTLINE_H
 #include FT_STROKER_H
 #include <FreeType/ftglyph.h>
+#include "Triangulator.h"
 
 #include <fstream>
 #include <iostream>
@@ -490,7 +491,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		
 	atlas->m_textureAsset = atlasTextureRes;
 
-	image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
+	//image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
@@ -503,6 +504,102 @@ TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstrin
 {
 	return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
+
+// ***********************
+//
+std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*size*/ )
+{
+    // Load the glyph we are looking for.
+    FT_UInt gindex = FT_Get_Char_Index( m_face, ch );
+    //FT_Set_Char_Size( m_face, 0, (int)( size * 64 ), 1000, 1000 );
+
+
+    if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
+    {
+        Triangulator triangulator( MakeContours( m_face->glyph ) );
+        Mesh mesh = triangulator.MakeMesh();
+
+		if( mesh.GetMeshSegments().size() == 1 )
+		{
+			return std::move( mesh.GetMeshSegments()[ 0 ] );
+		}
+		else
+		{
+			auto & meshSegments = mesh.GetMeshSegments();
+
+			std::vector< glm::vec3 > verticies;
+			auto tessCount = meshSegments.size();
+
+			// Reserve memory in vector.
+			SizeType numVerticies = 0;
+			for( int i = 0; i < tessCount; ++i )
+			{
+				numVerticies += meshSegments[ i ].size();
+			}
+			verticies.reserve( numVerticies );
+
+
+			for( int i = 0; i < tessCount; ++i )
+			{
+				const auto & pointList = meshSegments[ i ];
+				for( int i = 0; i < pointList.size(); ++i )
+				{
+					verticies.push_back( pointList[ i ] );
+				}
+			}
+
+			return verticies;
+		}
+    }
+
+    return std::vector< glm::vec3 >();
+}
+
+// ================================ //
+//
+std::vector<std::unique_ptr<FTContour>>		FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
+{
+	if( glyph )
+	{
+		std::vector< std::unique_ptr< FTContour > > contourList;
+
+		auto outline = glyph->outline;
+		auto ftContourCount = outline.n_contours;
+
+		short contourLength = 0;
+		short startIndex = 0;
+		short endIndex = 0;
+
+		auto orient = FT_Outline_Get_Orientation( &outline );
+		// Make sure the glyph has the proper orientation.
+		// Some formats use CCW order and other 
+		bool inverse = false;
+		if( orient == FT_ORIENTATION_POSTSCRIPT )
+			inverse = true;
+
+		for( int i = 0; i < ftContourCount; ++i )
+		{
+			FT_Vector* pointList = &outline.points[ startIndex ];
+			char* tagList = &outline.tags[ startIndex ];
+
+			endIndex = outline.contours[ i ];
+			contourLength = ( endIndex - startIndex ) + 1;
+
+			std::unique_ptr< FTContour > contour = std::unique_ptr< FTContour >( new FTContour( pointList, tagList, contourLength ) );
+
+			contour->SetParity( inverse );
+
+			contourList.push_back( std::move( contour ) );
+
+			startIndex = endIndex + 1;
+		}
+
+		return contourList;
+	}
+
+	return std::vector< std::unique_ptr< FTContour > >();
+}
+
 
 } // bv
 

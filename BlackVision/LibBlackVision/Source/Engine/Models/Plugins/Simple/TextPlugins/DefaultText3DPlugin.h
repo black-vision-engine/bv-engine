@@ -13,6 +13,9 @@
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Events/BaseEvent.h"
+#include "Assets/Font/Text.h"
+
+
 
 namespace bv { namespace model {
 
@@ -35,6 +38,16 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultText3DPlugin : public BasePlugin< IPlugin >
 {
+public:
+    struct PARAMS
+    {
+        static const std::string        TEXT;
+        static const std::string        FONT_SIZE;
+        static const std::string        SPACING;
+        static const std::string        MAX_TEXT_LENGTH;
+        static const std::string        ALIGNEMENT;
+    };
+
 private:
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
@@ -44,21 +57,18 @@ private:
 
     ParamWStringPtr                 m_textParam;
 
-    UInt32		                    m_fontSize;
-	UInt32		                    m_outlineSize;
-
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
-    ParamFloatPtr                   m_timeParam;
+    ValueFloatPtr                   m_fontSize;
 	ValueMat4Ptr					m_scaleValue;
 
-    //delegates
-    void                                        OnSetText                   ( IEventPtr evt );
+    TextConstPtr                    m_text;
 
     void                                        SetText                     ( const std::wstring & newText );
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
+    void                                        RebuildText                 ();
 
 public:
 

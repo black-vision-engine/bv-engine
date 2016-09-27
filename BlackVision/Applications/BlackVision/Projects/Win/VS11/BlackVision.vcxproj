@@ -106,6 +106,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -138,6 +139,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -171,6 +173,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
@@ -220,6 +223,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y

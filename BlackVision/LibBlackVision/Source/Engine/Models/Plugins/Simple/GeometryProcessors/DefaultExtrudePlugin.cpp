@@ -601,6 +601,9 @@ std::vector< INDEX_TYPE >       DefaultExtrudePlugin::ExtractCorners          ( 
     // Compute angles between edge vectors and compare with threshold.
     for( auto iter = edgeVectors.begin(); iter != edgeVectors.end(); iter++ )
     {
+        if( iter->second.first == glm::vec3( 0.0, 0.0, 0.0 ) || iter->second.second == glm::vec3( 0.0, 0.0, 0.0 ) )
+            continue;
+
         float angle = glm::angle( glm::normalize( iter->second.first ), glm::normalize( iter->second.second ) );
         if( angle < angleThreshold )
             corners.push_back( iter->first );

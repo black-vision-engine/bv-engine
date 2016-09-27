@@ -11,6 +11,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_STROKER_H
+#include "FTContour.h"
+
 
 namespace bv { 
 
@@ -41,8 +43,12 @@ public:
 	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false )					override;
 	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, UInt32 outline, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false )	override;
 
+    virtual std::vector< glm::vec3 >    Create3dVerticies   ( wchar_t ch, float size )                                                          override;
 
 	static FreeTypeEnginePtr	Create( const std::string & fontFilePath, size_t fontSize );
+
+private:
+	std::vector< std::unique_ptr< FTContour > >			MakeContours		( const FT_GlyphSlot glyph );
 };
 
 } // bv
