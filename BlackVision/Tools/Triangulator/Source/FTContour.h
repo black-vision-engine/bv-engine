@@ -34,7 +34,7 @@
 
 
 /**
- * FTContour class is a container of points that describe a vector font
+ * Contour class is a container of points that describe a vector font
  * outline. It is used as a container for the output of the bezier curve
  * evaluator in FTVectoriser.
  *
@@ -55,14 +55,16 @@ class FTContour
         FTContour(FT_Vector* contour, char* pointTags, unsigned int numberOfPoints);
 
         /**
+         * Create contour manually. Use AddPoint function.
+         */
+		FTContour( bool orientationClockwise );
+
+        /**
          * Destructor
          */
         ~FTContour()
         {
             pointList.clear();
-            outsetPointList.clear();
-            frontPointList.clear();
-            backPointList.clear();
         }
 
         /**
@@ -73,40 +75,6 @@ class FTContour
          */
         const FTPoint& Point(size_t index) const { return pointList[index]; }
 
-        /**
-         * Return a point at index.
-         *
-         * @param index of the point in the outset curve.
-         * @return const point reference
-         */
-        const FTPoint& Outset(size_t index) const { return outsetPointList[index]; }
-
-        /**
-         * Return a point at index of the front outset contour.
-         *
-         * @param index of the point in the curve.
-         * @return const point reference
-         */
-        const FTPoint& FrontPoint(size_t index) const
-        {
-            if(frontPointList.size() == 0)
-                return Point(index);
-            return frontPointList[index];
-        }
-
-
-        /**
-         * Return a point at index of the back outset contour.
-         *
-         * @param index of the point in the curve.
-         * @return const point reference
-         */
-        const FTPoint& BackPoint(size_t index) const
-        {
-            if(backPointList.size() == 0)
-                return Point(index);
-             return backPointList[index];
-        }
 
         /**
          * How many points define this contour
@@ -125,9 +93,9 @@ class FTContour
          */
         void SetParity( bool inverse );
 
-        // FIXME: this should probably go away.
-        void buildFrontOutset(float outset);
-        void buildBackOutset(float outset);
+        //// FIXME: this should probably go away.
+        //void buildFrontOutset(float outset);
+        //void buildBackOutset(float outset);
 
         inline bool IsOuterContour() const { return clockwise; }
 
@@ -138,31 +106,16 @@ class FTContour
 
         bool Intersects( const FTContour* other ) const;
 
-    private:
+
         /**
          * Add a point to this contour. This function tests for duplicate
-         * points.
+         * points. <- Not true
          *
          * @param point The point to be added to the contour.
          */
         inline void AddPoint(FTPoint point);
 
-        /**
-         * Add a point to this contour. This function tests for duplicate
-         * points.
-         *
-         * @param point The point to be added to the contour.
-         */
-        inline void AddOutsetPoint(FTPoint point);
-
-        /*
-         * Add a point to this outset contour. This function tests for duplicate
-         * points.
-         *
-         * @param point The point to be added to the contour outset.
-         */
-        inline void AddFrontPoint(FTPoint point);
-        inline void AddBackPoint(FTPoint point);
+    private:
 
         /**
          * De Casteljau (bezier) algorithm contributed by Jed Soane
@@ -206,9 +159,6 @@ class FTContour
          */
         typedef FTVector<FTPoint> PointVector;
         PointVector pointList;
-        PointVector outsetPointList;
-        PointVector frontPointList;
-        PointVector backPointList;
 
         /**
          *  Is this contour clockwise or anti-clockwise?

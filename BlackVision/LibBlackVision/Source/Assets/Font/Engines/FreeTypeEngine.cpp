@@ -516,7 +516,7 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
 
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
     {
-        Triangulator triangulator( m_face->glyph );
+        Triangulator triangulator( MakeContours( m_face->glyph ) );
         Mesh mesh = triangulator.MakeMesh();
 
 		if( mesh.GetMeshSegments().size() == 1 )
@@ -553,6 +553,51 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
     }
 
     return std::vector< glm::vec3 >();
+}
+
+// ================================ //
+//
+std::vector<std::unique_ptr<FTContour>>		FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
+{
+	if( glyph )
+	{
+		std::vector< std::unique_ptr< FTContour > > contourList;
+
+		auto outline = glyph->outline;
+		auto ftContourCount = outline.n_contours;
+
+		short contourLength = 0;
+		short startIndex = 0;
+		short endIndex = 0;
+
+		auto orient = FT_Outline_Get_Orientation( &outline );
+		// Make sure the glyph has the proper orientation.
+		// Some formats use CCW order and other 
+		bool inverse = false;
+		if( orient == FT_ORIENTATION_POSTSCRIPT )
+			inverse = true;
+
+		for( int i = 0; i < ftContourCount; ++i )
+		{
+			FT_Vector* pointList = &outline.points[ startIndex ];
+			char* tagList = &outline.tags[ startIndex ];
+
+			endIndex = outline.contours[ i ];
+			contourLength = ( endIndex - startIndex ) + 1;
+
+			std::unique_ptr< FTContour > contour = std::unique_ptr< FTContour >( new FTContour( pointList, tagList, contourLength ) );
+
+			contour->SetParity( inverse );
+
+			contourList.push_back( std::move( contour ) );
+
+			startIndex = endIndex + 1;
+		}
+
+		return contourList;
+	}
+
+	return std::vector< std::unique_ptr< FTContour > >();
 }
 
 

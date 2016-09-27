@@ -42,26 +42,15 @@ void FTContour::AddPoint(FTPoint point)
                               && point != pointList[0]))
     {
         pointList.push_back(point);
+
+        // Compute bounding box.
+        if( point.X() < minX )    minX = point.X();
+        if( point.X() > maxX )    maxX = point.X();
+        if( point.Y() < minY )    minY = point.Y();
+        if( point.Y() > maxY )    maxY = point.Y();
     }
 }
 
-
-void FTContour::AddOutsetPoint(FTPoint point)
-{
-    outsetPointList.push_back(point);
-}
-
-
-void FTContour::AddFrontPoint(FTPoint point)
-{
-    frontPointList.push_back(point);
-}
-
-
-void FTContour::AddBackPoint(FTPoint point)
-{
-    backPointList.push_back(point);
-}
 
 
 void FTContour::evaluateQuadraticCurve(FTPoint A, FTPoint B, FTPoint C)
@@ -150,18 +139,6 @@ void FTContour::SetParity( bool inverse )
 
         clockwise = !clockwise;
     }
-
-    for(size_t i = 0; i < size; i++)
-    {
-        size_t prev, cur, next;
-
-        prev = (i + size - 1) % size;
-        cur = i;
-        next = (i + size + 1) % size;
-
-        vOutset = ComputeOutsetPoint(Point(prev), Point(cur), Point(next));
-        AddOutsetPoint(vOutset);
-    }
 }
 
 
@@ -170,6 +147,16 @@ bool FTContour::Intersects( const FTContour* other ) const
     return	( minX < other->maxX && maxX > other->minX &&
               minY < other->maxY && maxY > other->minY
               );
+}
+
+
+FTContour::FTContour( bool orientationClockwise )
+	:	clockwise( orientationClockwise )
+{
+    minX = HUGE;
+    minY = HUGE;
+    maxX = -HUGE;
+    maxY = -HUGE;
 }
 
 
@@ -246,23 +233,5 @@ FTContour::FTContour(FT_Vector* contour, char* tags, unsigned int n)
     // otherwise (-2PI) it's clockwise.
     clockwise = (angle < 0.0);
     //assert( abs( abs( angle ) - 2 * M_PI ) < 0.1f );
-}
-
-
-void FTContour::buildFrontOutset(float outset)
-{
-    for(size_t i = 0; i < PointCount(); ++i)
-    {
-        AddFrontPoint(Point(i) + Outset(i) * outset);
-    }
-}
-
-
-void FTContour::buildBackOutset(float outset)
-{
-    for(size_t i = 0; i < PointCount(); ++i)
-    {
-        AddBackPoint(Point(i) + Outset(i) * outset);
-    }
 }
 

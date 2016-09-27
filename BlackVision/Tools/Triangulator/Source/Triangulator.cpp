@@ -39,70 +39,43 @@
 // end Debug
 
 
-
-Triangulator::Triangulator(const FT_GlyphSlot glyph)
-:   contourList(0),
-    ftContourCount(0),
-    contourFlag(0)
+// ================================ //
+//
+Triangulator::Triangulator( std::vector< std::unique_ptr< FTContour > > && contours )
+	:	m_contoursList( std::move( contours ) )
 {
-    if(glyph)
-    {
-        outline = glyph->outline;
-
-        ftContourCount = outline.n_contours;
-        contourFlag = outline.flags;
-
-        ProcessContours();
-    }
+	ProcessContours();
 }
 
-
+// ================================ //
+//
 Triangulator::~Triangulator()
-{
-    for(size_t c = 0; c < ContourCount(); ++c)
-    {
-        delete contourList[c];
-    }
-}
+{}
 
-
+// ================================ //
+//
 void Triangulator::ProcessContours()
 {
     short contourLength = 0;
     short startIndex = 0;
     short endIndex = 0;
 
-	contourList.resize( ftContourCount );
-    contoursIncuding.resize( ftContourCount );
-    contoursNesting.resize( ftContourCount, 0 );
+	auto ftContourCount = m_contoursList.size();
+
+	m_contoursList.resize( ftContourCount );
+    m_contoursIncuding.resize( ftContourCount );
+    m_contoursNesting.resize( ftContourCount, 0 );
 
     for( int i = 0; i < ftContourCount; ++i )
     {
-        contoursIncuding[ i ].resize( ftContourCount, false );
+        m_contoursIncuding[ i ].resize( ftContourCount, false );
     }
 
-
-    for( int i = 0; i < ftContourCount; ++i )
-    {
-        FT_Vector* pointList = &outline.points[ startIndex ];
-        char* tagList = &outline.tags[ startIndex ];
-
-        endIndex = outline.contours[ i ];
-        contourLength = ( endIndex - startIndex ) + 1;
-
-        FTContour* contour = new FTContour( pointList, tagList, contourLength );
-
-        contourList[ i ] = contour;
-
-        startIndex = endIndex + 1;
-    }
-
-    auto orient = FT_Outline_Get_Orientation( &outline );
 
     // Compute contour nesting.
     for( int i = 0; i < ftContourCount; i++ )
     {
-        FTContour *c1 = contourList[ i ];
+        auto & c1 = m_contoursList[ i ];
         int contourNesting = 0;
 
         // 1. Find the leftmost point.
@@ -126,10 +99,10 @@ void Triangulator::ProcessContours()
                 continue;
             }
 
-            FTContour *c2 = contourList[ j ];
+            auto & c2 = m_contoursList[ j ];
             int parity = 0;
 
-            if( !c1->Intersects( c2 ) )
+            if( !c1->Intersects( c2.get() ) )
                 continue;
 
             for( size_t n = 0; n < c2->PointCount(); n++ )
@@ -164,43 +137,33 @@ void Triangulator::ProcessContours()
             // we must add level of nesting to variable contourNesting for c1.
             contourNesting += parity % 2;
             // Contour i is included by j.
-            contoursIncuding[ j ][ i ] = parity % 2 != 0;   // != used to avoid warning C4800.
+            m_contoursIncuding[ j ][ i ] = parity % 2 != 0;   // != used to avoid warning C4800.
         }
 
-        // Make sure the glyph has the proper orientation.
-        // Some formats use CCW order and other 
-        bool inverse = false;
-        if( orient == FT_ORIENTATION_POSTSCRIPT )
-            inverse = true;
-
-        c1->SetParity( inverse );
-        contoursNesting[ i ] = contourNesting;
+        m_contoursNesting[ i ] = contourNesting;
 
     }
 }
 
-
+// ================================ //
+//
 size_t Triangulator::PointCount()
 {
     size_t s = 0;
     for(size_t c = 0; c < ContourCount(); ++c)
     {
-        s += contourList[c]->PointCount();
+        s += m_contoursList[c]->PointCount();
     }
 
     return s;
 }
 
-
-const FTContour* const Triangulator::Contour(size_t index) const
-{
-    return (index < ContourCount()) ? contourList[index] : NULL;
-}
-
-
+// ================================ //
+//
 Mesh Triangulator::MakeMesh()
 {
 	Mesh mesh( true );
+	auto ftContourCount = m_contoursList.size();
 
     std::vector< std::vector< p2t::Point * > > contoursVecPointsVec;
     contoursVecPointsVec.resize( ftContourCount );
@@ -208,7 +171,7 @@ Mesh Triangulator::MakeMesh()
 
     for( size_t c = 0; c < ContourCount(); ++c )
     {
-        const FTContour* contour = contourList[ c ];
+        const auto & contour = m_contoursList[ c ];
 
         std::vector< p2t::Point * >& polyline = contoursVecPointsVec[ c ];
         polyline.reserve( contour->PointCount() );
@@ -230,12 +193,12 @@ Mesh Triangulator::MakeMesh()
     for( size_t c = 0; c < contoursVecPointsVec.size(); c++ )
     {
         file << std::endl << "Contour number " << c << std::endl;
-        file << "Nesting: " << contoursNesting[ c ] << std::endl;
-        file << "Is clockwise: " << contourList[ c ]->IsOuterContour() << std::endl;
+        file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
+        file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
         file << "Includes contours: ";
         for( int i = 0; i < ftContourCount; ++i )
         {
-            if( contoursIncuding[ c ][ i ] )
+            if( m_contoursIncuding[ c ][ i ] )
             {
                 file << i << " ";
             }
@@ -259,25 +222,25 @@ Mesh Triangulator::MakeMesh()
     // only this ones, that are inside bounding box. 
     for( size_t i = 0; i < ContourCount(); ++i )
     {
-        const FTContour* c1 = contourList[ i ];
+        const auto & c1 = m_contoursList[ i ];
         // We make meshes only for outer contours.
         if( !c1->IsOuterContour() )
             continue;
 
-        int c1Nesting = contoursNesting[ i ];
+        int c1Nesting = m_contoursNesting[ i ];
         p2t::CDT * cdt = new p2t::CDT( contoursVecPointsVec[ i ] );
 
         for( size_t c = 0; c < ContourCount(); ++c )
         {
-            const FTContour* c2 = contourList[ c ];
-            int c2Nesting = contoursNesting[ c ];
+            const auto & c2 = m_contoursList[ c ];
+            int c2Nesting = m_contoursNesting[ c ];
             // Hole can be only inner contour.
             if( c2->IsOuterContour() )
                 continue;
 
             // Contour c1 (index i) includes contour c2 (index c).
             // We add hole only when c2 is direct hole of c1 (second condition of if statement).
-            if( contoursIncuding[ i ][ c ] &&
+            if( m_contoursIncuding[ i ][ c ] &&
                 c1Nesting == c2Nesting - 1 )
             {
                 cdt->AddHole( contoursVecPointsVec[ c ] );

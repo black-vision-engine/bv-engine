@@ -47,6 +47,7 @@ typedef float    FTGL_FLOAT;
 #include "Mesh.h"
 
 #include <vector>
+#include <memory>
 
 
 
@@ -60,12 +61,8 @@ typedef float    FTGL_FLOAT;
 class Triangulator
 {
 public:
-    /**
-    * Constructor
-    *
-    * @param glyph The freetype glyph to be processed
-    */
-    Triangulator( const FT_GlyphSlot glyph );
+
+    Triangulator( std::vector< std::unique_ptr< FTContour > > && contours );
 
     /**
     *  Destructor
@@ -99,14 +96,7 @@ public:
     *
     * @return the number of contours
     */
-    size_t ContourCount() const { return ftContourCount; }
-
-    /**
-    * Return a contour at index
-    *
-    * @return the number of contours
-    */
-    const FTContour* const Contour( size_t index ) const;
+    size_t ContourCount() const { return m_contoursList.size(); }
 
     /**
     * Get the number of points in a specific contour in this outline
@@ -114,14 +104,10 @@ public:
     * @param c     The contour index
     * @return      the number of points in contour[c]
     */
-    size_t ContourSize( int c ) const { return contourList[ c ]->PointCount(); }
+    size_t ContourSize( int c ) const { return m_contoursList[ c ]->PointCount(); }
 
-    /**
-    * Get the flag for the tesselation rule for this outline
-    *
-    * @return The contour flag
-    */
-    int ContourFlag() const { return contourFlag; }
+	const std::vector< int > &						GetNestingArray		()		{ return m_contoursNesting; }
+	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
 
 private:
     /**
@@ -135,25 +121,11 @@ private:
     /**
     * The list of contours in the glyph
     */
-	std::vector< FTContour* >			contourList;
+	std::vector< std::unique_ptr< FTContour > >		m_contoursList;
 
-    std::vector< int >                  contoursNesting;
-    std::vector< std::vector< bool > >  contoursIncuding;
+    std::vector< int >								m_contoursNesting;
+    std::vector< std::vector< bool > >				m_contoursIncuding;
 
-    /**
-    * The number of contours reported by Freetype
-    */
-    short ftContourCount;
-
-    /**
-    * A flag indicating the tesselation rule for the glyph
-    */
-    int contourFlag;
-
-    /**
-    * A Freetype outline
-    */
-    FT_Outline outline;
 };
 
 
