@@ -330,11 +330,14 @@ void TriangulatePlugin::InitializeVertexAttributesChannel()
 
 //    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 
-
-    VertexAttributesChannelDescriptor vaChannelDesc;
-    vaChannelDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( prevGeomChannel->GetDescriptor()->GetAttrChannelDescriptor( 0 ) ) );
+	VertexAttributesChannelDescriptor vaChannelDesc;
+	if( prevGeomChannel->GetDescriptor()->GetNumVertexChannels() )
+	{
+		vaChannelDesc.AddAttrChannelDesc( std::dynamic_pointer_cast< const AttributeChannelDescriptor >( prevGeomChannel->GetDescriptor()->GetAttrChannelDescriptor( 0 ) ) );
+	}
 
     m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+
 }
 
 // ***********************

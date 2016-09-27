@@ -3,6 +3,7 @@
 #include "SVGAssetDescriptor.h"
 
 #include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv {
 
@@ -52,7 +53,21 @@ SizeType                SVGAssetDescriptor::EstimateMemoryUsage () const
 //
 void                    SVGAssetDescriptor::Serialize       ( ISerializer & ser ) const
 {
-    ser;
+    ser.EnterChild( "asset" );
+
+    ser.SetAttribute( "type", UID() );
+    ser.SetAttribute( "path", m_path );
+
+    ser.ExitChild();
+}
+
+// ***********************
+//
+ISerializableConstPtr	SVGAssetDescriptor::Create          ( const IDeserializer & deser )
+{
+    auto path = deser.GetAttribute( "path" );
+
+    return Create( path );
 }
 
 // ***********************

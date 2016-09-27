@@ -4,6 +4,8 @@
 
 #include "SVGAssetDescriptor.h"
 
+#include "ProjectManager.h"
+
 #include "Serialization/BV/XML/BVXMLDeserializer.h"
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h" // FIXME: this is...
 #include "Assets/AssetDescsWithUIDs.h" // FIXME: ...just shit
@@ -465,7 +467,7 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
 AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  const
 {
     auto svgDesc = QueryTypedDesc< SVGAssetDescriptorConstPtr >( desc );
-    auto path = svgDesc->GetKey(); // FIXME GetKey -> GetPath
+    auto path = ProjectManager::GetInstance()->ToAbsPath( svgDesc->GetKey() ).Str(); // FIXME GetKey -> GetPath
     
     auto mesh = std::make_shared< SVGAsset >( path );
     

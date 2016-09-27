@@ -30,6 +30,7 @@ public:
     virtual SizeType                EstimateMemoryUsage () const;
 
     virtual void                    Serialize       ( ISerializer & ser ) const;
+	ISerializableConstPtr			Create          ( const IDeserializer & deser );
 
     static SVGAssetDescriptorPtr    Create          ( const std::string & path);
 
