@@ -7,6 +7,8 @@
 
 #include "TriangulatePlugin.h"
 
+#include "Triangulator.h"
+
 namespace {
 
 // COTD Entry submitted by John W. Ratcliff [jratcliff@verant.com]
@@ -38,6 +40,7 @@ namespace {
 /*****************************************************************/
 
 #include <vector>  // Include STL vector class.
+
 
 class Vector2d
 {
@@ -378,6 +381,71 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
             connComp->AddAttributeChannel( vertChannel );
             m_vaChannel->AddConnectedComponent( connComp );
         }
+    }
+}
+
+// ***********************
+//
+void TriangulatePlugin::ProcessVertexAttributesChannel()
+{
+    if( !( m_prevPlugin
+           && m_prevPlugin->GetVertexAttributesChannel()
+           && m_prevPlugin->GetVertexAttributesChannel()->GetPrimitiveType() == PrimitiveType::PT_LINES ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
+
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+
+    if( !m_vaChannel )
+    {
+        InitializeVertexAttributesChannel();        
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+    }
+
+    auto prevComponents = prevGeomChannel->GetComponents();
+
+    if( prevComponents.size() )
+    {
+        ContoursList contours;
+        for( int j = 0; j < prevComponents.size(); ++j )
+        {
+            auto currComponent = std::static_pointer_cast< model::ConnectedComponent >( prevComponents[ j ] );
+            auto chan = std::dynamic_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
+
+            auto data = chan->GetVertices();
+            assert( data.size() % 2 == 0 );
+
+
+	        FTContourUPtr contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+            for( int i = 0; i <= data.size(); i += 2 )
+            {
+                if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
+                {
+			        contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
+                }
+                else
+                {
+                    contours.push_back( std::move( contour ) );
+                }
+            }
+        }
+
+        auto connComp = ConnectedComponent::Create();
+        auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
+        auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert",  false );
+
+        Triangulator triangulator( std::move( contours ) );
+        auto mesh = triangulator.MakeMesh();
+
+        vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
+
+        connComp->AddAttributeChannel( vertChannel );
+        m_vaChannel->AddConnectedComponent( connComp );
     }
 }
 

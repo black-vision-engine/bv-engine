@@ -50,6 +50,8 @@ typedef float    FTGL_FLOAT;
 #include <memory>
 
 
+typedef std::unique_ptr< FTContour > FTContourUPtr;
+typedef std::vector< FTContourUPtr > ContoursList;
 
 
 /**
@@ -62,7 +64,8 @@ class Triangulator
 {
 public:
 
-    Triangulator( std::vector< std::unique_ptr< FTContour > > && contours );
+    Triangulator( ContoursList && contours );
+	Triangulator( ContoursList && contours, const std::string debugFileName );
 
     /**
     *  Destructor
@@ -121,10 +124,13 @@ private:
     /**
     * The list of contours in the glyph
     */
-	std::vector< std::unique_ptr< FTContour > >		m_contoursList;
+	ContoursList							m_contoursList;
 
-    std::vector< int >								m_contoursNesting;
-    std::vector< std::vector< bool > >				m_contoursIncuding;
+    std::vector< int >						m_contoursNesting;
+    std::vector< std::vector< bool > >		m_contoursIncuding;
+
+	bool									m_printContoursToFile;
+	std::string								m_fileName;
 
 };
 

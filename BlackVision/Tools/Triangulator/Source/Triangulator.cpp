@@ -34,15 +34,23 @@
 
 // Debug
 #include <fstream>
-#define PRINT_CONTOURS_TO_FILE
 
-// end Debug
+
 
 
 // ================================ //
 //
-Triangulator::Triangulator( std::vector< std::unique_ptr< FTContour > > && contours )
+Triangulator::Triangulator( ContoursList && contours )
 	:	m_contoursList( std::move( contours ) )
+	,	m_printContoursToFile( false )
+{
+	ProcessContours();
+}
+
+Triangulator::Triangulator( ContoursList && contours, const std::string debugFileName )
+	:	m_contoursList( std::move( contours ) )
+	,	m_printContoursToFile( true )
+	,	m_fileName( debugFileName )
 {
 	ProcessContours();
 }
@@ -183,38 +191,38 @@ Mesh Triangulator::MakeMesh()
         }
     }
 
-#ifdef PRINT_CONTOURS_TO_FILE
+	// Print contours to file for debug proses.
+	if( m_printContoursToFile )
+	{
+		std::fstream file( m_fileName, std::ios_base::app );
+		assert( !file.fail() );
 
-    std::fstream file( "Contours.txt", std::ios_base::app );
-    assert( !file.fail() );
+		file << std::endl << std::endl << "Next shape" << std::endl;
 
-    file << std::endl << std::endl << "Next shape" << std::endl;
+		for( size_t c = 0; c < contoursVecPointsVec.size(); c++ )
+		{
+			file << std::endl << "Contour number " << c << std::endl;
+			file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
+			file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
+			file << "Includes contours: ";
+			for( int i = 0; i < ftContourCount; ++i )
+			{
+				if( m_contoursIncuding[ c ][ i ] )
+				{
+					file << i << " ";
+				}
+			}
+			file << std::endl << std::endl;;
 
-    for( size_t c = 0; c < contoursVecPointsVec.size(); c++ )
-    {
-        file << std::endl << "Contour number " << c << std::endl;
-        file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
-        file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
-        file << "Includes contours: ";
-        for( int i = 0; i < ftContourCount; ++i )
-        {
-            if( m_contoursIncuding[ c ][ i ] )
-            {
-                file << i << " ";
-            }
-        }
-        file << std::endl << std::endl;;
+			auto & contour = contoursVecPointsVec[ c ];
+			for( size_t i = 0; i < contoursVecPointsVec[ c ].size(); i++ )
+			{
+				file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
+			}
+		}
 
-        auto & contour = contoursVecPointsVec[ c ];
-        for( size_t i = 0; i < contoursVecPointsVec[ c ].size(); i++ )
-        {
-            file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
-        }
-    }
-
-    file.close();
-
-#endif // PRINT_CONTOURS_TO_FILE
+		file.close();
+	}
 
 
 
@@ -226,6 +234,9 @@ Mesh Triangulator::MakeMesh()
         // We make meshes only for outer contours.
         if( !c1->IsOuterContour() )
             continue;
+
+        //if( !( m_contoursNesting[ i ] % 2 ) )
+        //    continue;
 
         int c1Nesting = m_contoursNesting[ i ];
         p2t::CDT * cdt = new p2t::CDT( contoursVecPointsVec[ i ] );
