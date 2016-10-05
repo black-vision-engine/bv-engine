@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\..\Source\poly2tri\sweep\cdt.cc" />
     <ClCompile Include="..\..\..\Source\poly2tri\sweep\sweep.cc" />
     <ClCompile Include="..\..\..\Source\poly2tri\sweep\sweep_context.cc" />
+    <ClCompile Include="..\..\..\Source\PolylineValidator.cpp" />
     <ClCompile Include="..\..\..\Source\Triangulator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +44,7 @@
     <ClInclude Include="..\..\..\Source\poly2tri\sweep\cdt.h" />
     <ClInclude Include="..\..\..\Source\poly2tri\sweep\sweep.h" />
     <ClInclude Include="..\..\..\Source\poly2tri\sweep\sweep_context.h" />
+    <ClInclude Include="..\..\..\Source\PolylineValidator.h" />
     <ClInclude Include="..\..\..\Source\Triangulator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

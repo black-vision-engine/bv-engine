@@ -516,7 +516,7 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
 
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
     {
-        Triangulator triangulator( MakeContours( m_face->glyph ) );
+        Triangulator triangulator( MakeContours( m_face->glyph ), "Letter.txt" );
         Mesh mesh = triangulator.MakeMesh();
 
 		if( mesh.GetMeshSegments().size() == 1 )

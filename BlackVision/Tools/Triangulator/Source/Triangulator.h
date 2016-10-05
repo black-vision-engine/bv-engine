@@ -45,6 +45,7 @@ typedef float    FTGL_FLOAT;
 #include "FTVector.h"
 
 #include "Mesh.h"
+#include "PolylineValidator.h"
 
 #include <vector>
 #include <memory>
@@ -52,6 +53,7 @@ typedef float    FTGL_FLOAT;
 
 typedef std::unique_ptr< FTContour > FTContourUPtr;
 typedef std::vector< FTContourUPtr > ContoursList;
+
 
 
 /**
@@ -112,7 +114,10 @@ public:
 	const std::vector< int > &						GetNestingArray		()		{ return m_contoursNesting; }
 	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
 
+    void    PrintContoursToFile ();
+
 private:
+
     /**
     * Process the freetype outline data into contours of points
     *
@@ -125,6 +130,7 @@ private:
     * The list of contours in the glyph
     */
 	ContoursList							m_contoursList;
+    PolilinesVec                            m_polylines;
 
     std::vector< int >						m_contoursNesting;
     std::vector< std::vector< bool > >		m_contoursIncuding;

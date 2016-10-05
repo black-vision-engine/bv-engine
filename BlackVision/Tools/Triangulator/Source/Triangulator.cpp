@@ -58,7 +58,16 @@ Triangulator::Triangulator( ContoursList && contours, const std::string debugFil
 // ================================ //
 //
 Triangulator::~Triangulator()
-{}
+{
+    for( auto & polyline : m_polylines )
+    {
+        for( auto point : polyline )
+        {
+            delete point;
+        }
+    }
+}
+
 
 // ================================ //
 //
@@ -173,15 +182,14 @@ Mesh Triangulator::MakeMesh()
 	Mesh mesh( true );
 	auto ftContourCount = m_contoursList.size();
 
-    std::vector< std::vector< p2t::Point * > > contoursVecPointsVec;
-    contoursVecPointsVec.resize( ftContourCount );
+    m_polylines.resize( ftContourCount );
 
 
     for( size_t c = 0; c < ContourCount(); ++c )
     {
         const auto & contour = m_contoursList[ c ];
 
-        std::vector< p2t::Point * >& polyline = contoursVecPointsVec[ c ];
+        Polyline& polyline = m_polylines[ c ];
         polyline.reserve( contour->PointCount() );
 
         for( size_t p = 0; p < contour->PointCount(); ++p )
@@ -191,37 +199,10 @@ Mesh Triangulator::MakeMesh()
         }
     }
 
-	// Print contours to file for debug proses.
+	// Print contours to file for debug purposes.
 	if( m_printContoursToFile )
 	{
-		std::fstream file( m_fileName, std::ios_base::app );
-		assert( !file.fail() );
-
-		file << std::endl << std::endl << "Next shape" << std::endl;
-
-		for( size_t c = 0; c < contoursVecPointsVec.size(); c++ )
-		{
-			file << std::endl << "Contour number " << c << std::endl;
-			file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
-			file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
-			file << "Includes contours: ";
-			for( int i = 0; i < ftContourCount; ++i )
-			{
-				if( m_contoursIncuding[ c ][ i ] )
-				{
-					file << i << " ";
-				}
-			}
-			file << std::endl << std::endl;;
-
-			auto & contour = contoursVecPointsVec[ c ];
-			for( size_t i = 0; i < contoursVecPointsVec[ c ].size(); i++ )
-			{
-				file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
-			}
-		}
-
-		file.close();
+        PrintContoursToFile();
 	}
 
 
@@ -239,7 +220,7 @@ Mesh Triangulator::MakeMesh()
         //    continue;
 
         int c1Nesting = m_contoursNesting[ i ];
-        p2t::CDT * cdt = new p2t::CDT( contoursVecPointsVec[ i ] );
+        p2t::CDT * cdt = new p2t::CDT( m_polylines[ i ] );
 
         for( size_t c = 0; c < ContourCount(); ++c )
         {
@@ -254,7 +235,7 @@ Mesh Triangulator::MakeMesh()
             if( m_contoursIncuding[ i ][ c ] &&
                 c1Nesting == c2Nesting - 1 )
             {
-                cdt->AddHole( contoursVecPointsVec[ c ] );
+                cdt->AddHole( m_polylines[ c ] );
             }
         }
 
@@ -278,5 +259,39 @@ Mesh Triangulator::MakeMesh()
     }
 
 	return mesh;
+}
+
+// ================================ //
+//
+void Triangulator::PrintContoursToFile()
+{
+    std::fstream file( m_fileName, std::ios_base::app );
+    assert( !file.fail() );
+
+    file << std::endl << std::endl << "Next shape" << std::endl;
+
+    for( size_t c = 0; c < m_polylines.size(); c++ )
+    {
+        file << std::endl << "Contour number " << c << std::endl;
+        file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
+        file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
+        file << "Includes contours: ";
+        for( int i = 0; i < ftContourCount; ++i )
+        {
+            if( m_contoursIncuding[ c ][ i ] )
+            {
+                file << i << " ";
+            }
+        }
+        file << std::endl << std::endl;;
+
+        auto & contour = m_polylines[ c ];
+        for( size_t i = 0; i < m_polylines[ c ].size(); i++ )
+        {
+            file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
+        }
+    }
+
+    file.close();
 }
 
