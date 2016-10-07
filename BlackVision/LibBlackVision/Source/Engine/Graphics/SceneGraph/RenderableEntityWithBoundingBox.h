@@ -8,8 +8,8 @@ namespace model { class BoundingVolume; }
 
 class RenderableEntityWithBoundingBox : public RenderableEntity
 {
-    RenderableEntity *          m_renderableBoundingBox;
-    RenderableEntity *          m_renderableCenterOfMass;
+    RenderableEntityUPtr        m_renderableBoundingBox;
+    RenderableEntityUPtr        m_renderableCenterOfMass;
 
 public:
                                 RenderableEntityWithBoundingBox         ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingVolume, RenderableEffectPtr effect );

@@ -52,4 +52,6 @@ protected:
 
 };
 
-}
+DEFINE_UPTR_TYPE( RenderableEntity )
+
+} //bv
