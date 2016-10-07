@@ -542,9 +542,9 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
 			for( int i = 0; i < tessCount; ++i )
 			{
 				const auto & pointList = meshSegments[ i ];
-				for( int i = 0; i < pointList.size(); ++i )
+				for( int j = 0; j < pointList.size(); ++j )
 				{
-					verticies.push_back( pointList[ i ] );
+					verticies.push_back( pointList[ j ] );
 				}
 			}
 
