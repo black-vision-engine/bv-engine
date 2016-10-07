@@ -276,7 +276,7 @@ void Triangulator::PrintContoursToFile()
         file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
         file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
         file << "Includes contours: ";
-        for( int i = 0; i < ftContourCount; ++i )
+        for( int i = 0; i < m_polylines[ c ].size(); ++i )
         {
             if( m_contoursIncuding[ c ][ i ] )
             {

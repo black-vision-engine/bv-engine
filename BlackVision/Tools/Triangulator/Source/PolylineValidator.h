@@ -24,7 +24,7 @@ struct Event
     p2t::Edge *     Edge;
 
     Event( EventType type, p2t::Point * point, p2t::Edge * edge )
-        : Type( Type )
+        : Type( type )
         , Point( point )
         , Edge( edge )
     {}
@@ -41,6 +41,9 @@ private:
     // Temporary helpers    
     std::vector< p2t::Edge* >   m_edgeList;
 
+    // Results
+    std::vector< p2t::Point * > m_intersections;
+
 public:
     explicit        PolylineValidator   ( Polyline polyline );
     explicit        PolylineValidator   ( Polyline&& polyline );
@@ -55,9 +58,18 @@ private:
     bool        CheckRepeatPoints   ();
 
     std::deque< Event >     InitEventQueue              ();
-    void                    ProcessBeginPoint           ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge* > & sweepLine );
-    void                    ProcessEndPoint             ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge* > & sweepLine );
-    void                    ProcessIntersectionPoint    ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge* > & sweepLine, std::vector< p2t::Point* > & intersections );
+    void                    ProcessBeginPoint           ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge * > & sweepLine );
+    void                    ProcessEndPoint             ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge * > & sweepLine );
+    void                    ProcessIntersectionPoint    ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge * > & sweepLine, std::vector< p2t::Point * > & intersections );
+
+    int                     AddToSweepLine              ( p2t::Edge * addEdge, std::vector< p2t::Edge * > & sweepLine );
+    int                     FindInSweepLine             ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine );
+    void                    DeleteFromSweepLine         ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine );
+    void                    AddIntersectionEvent        ( const Event & event, std::deque< Event > & eventQueue );
+
+public:
+
+    static p2t::Point *     Intersect                   ( p2t::Edge * edge1, p2t::Edge * edge2 );
 };
 
 
