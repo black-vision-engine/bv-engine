@@ -130,7 +130,7 @@ private:
     * The list of contours in the glyph
     */
 	ContoursList							m_contoursList;
-    PolilinesVec                            m_polylines;
+    PolylinesVec                            m_polylines;
 
     std::vector< int >						m_contoursNesting;
     std::vector< std::vector< bool > >		m_contoursIncuding;

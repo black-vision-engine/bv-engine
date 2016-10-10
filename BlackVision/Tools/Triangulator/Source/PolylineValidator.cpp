@@ -17,6 +17,20 @@ p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 );
 
 bool            operator<       ( const p2t::Point & point1, const p2t::Point& point2 );
 
+bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint );
+bool            IsIntersectionEnd   ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint );
+
+
+// ***********************
+//
+struct IntersectionData
+{
+    int             PolylineIdx;
+    bool            Processed;          // Segment before PolylineIdx already used.
+    p2t::Point *    IntersectionPoint;
+};
+
+
 
 // ***********************
 //
@@ -32,6 +46,26 @@ PolylineValidator::PolylineValidator   ( Polyline&& polyline )
     :   m_polyline( std::move( polyline ) )
 {
     Init();
+}
+
+// ***********************
+//
+PolylineValidator::~PolylineValidator  ()
+{
+    //for( auto & point : m_polyline )
+    //{
+    //    delete point;
+    //}
+
+    //for( auto & point : m_intersections )
+    //{
+    //    delete point;
+    //}
+
+    //for( auto & edge : m_edgeList )
+    //{
+    //    delete edge;
+    //}
 }
 
 // ***********************
@@ -142,6 +176,46 @@ const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
     }
 
     return m_intersections;
+}
+
+// ***********************
+//
+PolylinesVec            PolylineValidator::DecomposeContour        ()
+{
+    PolylinesVec polylines;
+    if( m_intersections.empty() )
+    {
+        polylines.push_back( m_polyline );
+        return polylines;
+    }
+
+    // Number of intersection is maximal number of separate segments.
+    polylines.reserve( m_intersections.size() );
+    
+    // Points to begin point of segment.
+    std::vector< IntersectionData > intersectionIdx;
+    intersectionIdx.reserve( m_intersections.size() );
+
+    // Divide polyline into ranges between intersection points.
+    for( int i = 0; i < m_polyline.size(); ++i )
+    {
+        for( int j = 0; j < m_intersections.size(); j++ )
+        {
+            if( IsIntersectionStart( m_polyline[ i ], m_intersections[ j ] ) )
+            {
+                IntersectionData data;
+                data.IntersectionPoint = m_intersections[ j ];
+                data.Processed = false;
+                data.PolylineIdx = i;
+
+                intersectionIdx.push_back( data );
+            }
+        }
+    }
+
+
+
+    return polylines;
 }
 
 
@@ -561,3 +635,20 @@ bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
     }
     return false;
 }
+
+// ***********************
+//
+bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint )
+{
+    assert( false );
+    return false;
+}
+
+// ***********************
+//
+bool            IsIntersectionEnd   ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint )
+{
+    assert( false );
+    return false;
+}
+

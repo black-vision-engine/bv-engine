@@ -7,10 +7,12 @@
 
 
 typedef std::vector< p2t::Point * > Polyline;
-typedef std::vector< Polyline > PolilinesVec;
+typedef std::vector< Polyline > PolylinesVec;
 typedef std::vector< p2t::Point * > IntersectionsVec;
 
 
+// ***********************
+//
 enum EventType
 {
     StartPoint,
@@ -18,6 +20,8 @@ enum EventType
     Intersection
 };
 
+// ***********************
+//
 struct Event
 {
     EventType       Type;
@@ -48,9 +52,11 @@ private:
 public:
     explicit        PolylineValidator   ( Polyline polyline );
     explicit        PolylineValidator   ( Polyline&& polyline );
+                    ~PolylineValidator  ();
 
 
     const IntersectionsVec &        FindSelfIntersections   ();
+    PolylinesVec                    DecomposeContour        ();
 
 
 private:
