@@ -281,8 +281,8 @@ p2t::Point *            PolylineValidator::Intersect                   ( p2t::Ed
     glm::vec2 edge12Vec = edge2Begin - edge1Begin;
 
     auto edge12Cross = edge1Vec.x * edge2Vec.y - edge1Vec.y * edge2Vec.x;           // r x s (check in link)
-    auto edge1Point2Cross = edge12Vec.x * edge2Vec.y - edge12Vec.y * edge2Vec.x;    // (p - q) x r
-    auto edge2Point1Cross = edge12Vec.x * edge1Vec.y - edge12Vec.y * edge1Vec.x;    // (p - q) x s
+    auto edge1Point2Cross = edge12Vec.x * edge1Vec.y - edge12Vec.y * edge1Vec.x;    // (p - q) x r
+    auto edge2Point1Cross = edge12Vec.x * edge2Vec.y - edge12Vec.y * edge2Vec.x;    // (p - q) x s
 
     if( edge12Cross == 0 )
         return nullptr;
@@ -290,9 +290,10 @@ p2t::Point *            PolylineValidator::Intersect                   ( p2t::Ed
     float edge1Factor = edge2Point1Cross / edge12Cross;
     float edge2Factor = edge1Point2Cross / edge12Cross;
 
-    // Note: We don't need intersection on begin and end point (> instead of >=)
-    if( edge1Factor > 0.0f && edge1Factor < 1.0f &&
-        edge2Factor > 0.0f && edge2Factor < 1.0f )
+    // Note: We don't need intersection on begin and end point. Add some margin.
+    const float epsilon = 0.00001f;
+    if( edge1Factor > 0.0f + epsilon && edge1Factor < 1.0f - epsilon &&
+        edge2Factor > 0.0f + epsilon && edge2Factor < 1.0f - epsilon )
     {
         glm::vec2 intersectionPoint = edge1Begin + edge1Factor * edge1Vec;
         p2t::Point * intersectPoint = new p2t::Point( intersectionPoint.x, intersectionPoint.y );

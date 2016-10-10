@@ -184,7 +184,7 @@ Mesh Triangulator::MakeMesh()
 	auto ftContourCount = m_contoursList.size();
 
     m_polylines.resize( ftContourCount );
-    m_selfIntersections.resize( ftContourCount );
+    m_selfIntersections.reserve( ftContourCount );
 
     for( size_t c = 0; c < ContourCount(); ++c )
     {
@@ -290,9 +290,11 @@ void Triangulator::PrintContoursToFile()
                 auto point = m_selfIntersections[ c ][ i ];
                 file << "( " << point->x << ", " << point->y << " ) ";
             }
+
+            file << std::endl;
         }
 
-        file << std::endl << "Includes contours: ";
+        file << "Includes contours: ";
         for( int i = 0; i < m_polylines.size(); ++i )
         {
             if( m_contoursIncuding[ c ][ i ] )
