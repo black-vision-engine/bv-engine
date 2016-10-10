@@ -29,6 +29,7 @@
 
 //#include "FTInternals.h"
 #include "Triangulator.h"
+#include "PolylineValidator.h"
 
 #include "poly2tri/poly2tri.h"
 
@@ -183,7 +184,7 @@ Mesh Triangulator::MakeMesh()
 	auto ftContourCount = m_contoursList.size();
 
     m_polylines.resize( ftContourCount );
-
+    m_selfIntersections.resize( ftContourCount );
 
     for( size_t c = 0; c < ContourCount(); ++c )
     {
@@ -197,6 +198,10 @@ Mesh Triangulator::MakeMesh()
             p2t::Point * d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
             polyline.push_back( d );
         }
+
+        PolylineValidator validator( polyline );
+        auto & intersectionPoints = validator.FindSelfIntersections();
+        m_selfIntersections.push_back( intersectionPoints );
     }
 
 	// Print contours to file for debug purposes.
@@ -275,15 +280,27 @@ void Triangulator::PrintContoursToFile()
         file << std::endl << "Contour number " << c << std::endl;
         file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
         file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
-        file << "Includes contours: ";
-        for( int i = 0; i < m_polylines[ c ].size(); ++i )
+
+        if( !m_selfIntersections[ c ].empty() )
+        {
+            file << "Self Intersections in pre computing phase: ";
+            
+            for( int i = 0; i < m_selfIntersections[ c ].size(); ++i )
+            {
+                auto point = m_selfIntersections[ c ][ i ];
+                file << "( " << point->x << ", " << point->y << " ) ";
+            }
+        }
+
+        file << std::endl << "Includes contours: ";
+        for( int i = 0; i < m_polylines.size(); ++i )
         {
             if( m_contoursIncuding[ c ][ i ] )
             {
                 file << i << " ";
             }
         }
-        file << std::endl << std::endl;;
+        file << std::endl << std::endl;
 
         auto & contour = m_polylines[ c ];
         for( size_t i = 0; i < m_polylines[ c ].size(); i++ )

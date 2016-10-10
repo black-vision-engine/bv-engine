@@ -6,7 +6,7 @@
 #include <deque>
 
 
-bool            CompareEvent    ( const Event a, const Event b );
+bool            CompareEvent    ( const Event & a, const Event & b );
 bool            CompareEdge     ( p2t::Edge * leftEdge, p2t::Edge * rightEdge, double sweepY );
 double          FindX           ( p2t::Edge * edge, double sweepY );
 
@@ -14,6 +14,8 @@ p2t::Edge *     GetAboveEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine 
 p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine );
 
 p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 );
+
+bool            operator<       ( const p2t::Point & point1, const p2t::Point& point2 );
 
 
 // ***********************
@@ -37,7 +39,6 @@ PolylineValidator::PolylineValidator   ( Polyline&& polyline )
 void    PolylineValidator::Init        ()
 {
     InitEdges( m_polyline );
-    //Sort();
 }
 
 
@@ -50,9 +51,6 @@ void    PolylineValidator::InitEdges    ( Polyline & polyline )
     {
         int j = i < numPoints - 1 ? i + 1 : 0;
         m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
-
-        // Add Edge to first point. Note that polyline[ j ] edge is st in Edge contructor.
-        //polyline[ i ]->edge_list.push_back( m_edgeList[ m_edgeList.size() - 1 ] );
     }
 }
 
@@ -62,6 +60,47 @@ void    PolylineValidator::Sort         ()
 {
     std::sort( m_polyline.begin(), m_polyline.end(), p2t::cmp );
 }
+
+// ***********************
+//
+std::deque< Event >     PolylineValidator::InitEventQueue  ()
+{
+    std::deque< Event > eventQueue;
+
+    // Fill event queue with all contours end points.
+    for( int i = 0; i < m_polyline.size(); i++ )
+    {
+        // Contours are closed. Last point from m_polyline is connected to first point in polyline.
+        int j = i < m_polyline.size() - 1 ? i + 1 : 0;
+
+        int topIdx;     // Index of top point.
+        int bottomIdx;  // Index of bottom point.
+
+        // Comparing points not pointers !!!
+        if( *m_polyline[ j ] < *m_polyline[ i ] )
+        {
+            // m_polyline[ i ] is top point
+            topIdx = i;
+            bottomIdx = j;
+        }
+        else
+        {
+            // m_polyline[ j ] is top point
+            topIdx = j;
+            bottomIdx = i;
+        }
+
+        // Note: Both points share the same edge from index i. (Check initialization in function PolylineValidator::InitEdges)
+        eventQueue.push_back( Event( EventType::StartPoint, m_polyline[ topIdx ], m_edgeList[ i ] ) );
+        eventQueue.push_back( Event( EventType::EndPoint, m_polyline[ bottomIdx ], m_edgeList[ i ] ) );
+    }
+
+    // Sort event queue - top left points first.
+    std::sort( eventQueue.begin(), eventQueue.end(), CompareEvent );
+
+    return eventQueue;
+}
+
 
 // ***********************
 // Function assumes, that m_polyline list is sorted.
@@ -77,7 +116,7 @@ bool    PolylineValidator::CheckRepeatPoints   ()
 
 // ***********************
 // Implementation based on http://geomalgorithms.com/a09-_intersect-3.html
-void    PolylineValidator::MakeSimplePolygon   ()
+const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
 {
     // Two points with same coordinates can't exist.
     if( CheckRepeatPoints() )
@@ -102,29 +141,9 @@ void    PolylineValidator::MakeSimplePolygon   ()
         eventQueue.pop_front();
     }
 
+    return m_intersections;
 }
 
-// ***********************
-//
-std::deque< Event >     PolylineValidator::InitEventQueue  ()
-{
-    std::deque< Event > eventQueue;
-
-    // Fill event queue with all contours end points.
-    for( int i = 0; i < m_polyline.size() - 1; i++ )
-    {
-        // Note: we take first edge since there're no repeat points
-        eventQueue.push_back( Event( EventType::StartPoint, m_polyline[ i ], m_polyline[ i ]->edge_list[ 0 ] ) );
-        eventQueue.push_back( Event( EventType::EndPoint, m_polyline[ i + 1 ], m_polyline[ i ]->edge_list[ 0 ] ) );
-    }
-    // Add last contour point
-    eventQueue.push_back( Event( EventType::StartPoint, m_polyline[ m_polyline.size() ], m_polyline[ m_polyline.size() ]->edge_list[ 0 ] ) );
-    eventQueue.push_back( Event( EventType::EndPoint, m_polyline[ 0 ], m_polyline[ m_polyline.size() ]->edge_list[ 0 ] ) );
-
-    std::sort( eventQueue.begin(), eventQueue.end(), CompareEvent );
-
-    return eventQueue;
-}
 
 // ***********************
 //
@@ -174,7 +193,7 @@ void                    PolylineValidator::ProcessEndPoint             ( Event &
 {
     p2t::Edge * curEdge = event.Edge;
 
-    auto pos = FindInSweepLine( curEdge, sweepLine );
+    auto pos = BruteFindInSweepLine( curEdge, sweepLine );
     assert( pos >= 0 );
 
     p2t::Edge * aboveEdge = GetAboveEdge( pos, sweepLine );
@@ -269,10 +288,11 @@ p2t::Point *            PolylineValidator::Intersect                   ( p2t::Ed
         return nullptr;
 
     float edge1Factor = edge2Point1Cross / edge12Cross;
-    float edge2Factor = edge2Point1Cross / edge12Cross;
+    float edge2Factor = edge1Point2Cross / edge12Cross;
 
-    if( edge1Factor >= 0.0f && edge1Factor <= 1.0f &&
-        edge2Factor >= 0.0f && edge2Factor <= 1.0f )
+    // Note: We don't need intersection on begin and end point (> instead of >=)
+    if( edge1Factor > 0.0f && edge1Factor < 1.0f &&
+        edge2Factor > 0.0f && edge2Factor < 1.0f )
     {
         glm::vec2 intersectionPoint = edge1Begin + edge1Factor * edge1Vec;
         p2t::Point * intersectPoint = new p2t::Point( intersectionPoint.x, intersectionPoint.y );
@@ -285,14 +305,18 @@ p2t::Point *            PolylineValidator::Intersect                   ( p2t::Ed
 
 // ***********************
 // @return Returns -1 if edge is not present in sweepLine
-int                     FindInSweepLine             ( p2t::Edge * searchedEdge, std::vector< p2t::Edge * > & sweepLine )
+int                     PolylineValidator::FindInSweepLine             ( p2t::Edge * searchedEdge, std::vector< p2t::Edge * > & sweepLine )
 {
     int resultIdx = 0;
     auto sweepY = searchedEdge->p->y;
 
+    if( sweepLine.empty() )
+        return -1;
+
     if( sweepLine.size() == 1 )
     {
-        if( CompareEdge( sweepLine[ 0 ], searchedEdge, sweepY ) && CompareEdge( searchedEdge, sweepLine[ 0 ], sweepY ) )
+        // !Compare( a, b ) && !Compare( b, a ) means that a, b are equal.
+        if( !CompareEdge( sweepLine[ 0 ], searchedEdge, sweepY ) && !CompareEdge( searchedEdge, sweepLine[ 0 ], sweepY ) )
             return 0;
         else
             return -1;
@@ -324,10 +348,24 @@ int                     FindInSweepLine             ( p2t::Edge * searchedEdge, 
     }
 
     auto edge = sweepLine[ left ];
-    if( CompareEdge( edge, searchedEdge, sweepY ) && CompareEdge( searchedEdge, edge, sweepY ) )
+    if( !CompareEdge( edge, searchedEdge, sweepY ) && !CompareEdge( searchedEdge, edge, sweepY ) )
         return (int)left;
     else
         return -1;
+}
+
+// ***********************
+// This method iterates through edges and compares pointers. It doesn't use binary search, because
+// sweepLine vector is ordered with function CompareEdge.
+// Hopefully this function is more cache efficient and brute force won't be performance problem.
+int                     PolylineValidator::BruteFindInSweepLine        ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine )
+{
+    for( int i = 0; i < sweepLine.size(); ++i )
+    {
+        if( edge == sweepLine[ i ] )
+            return i;
+    }
+    return -1;
 }
 
 // ***********************
@@ -336,52 +374,66 @@ int                     PolylineValidator::AddToSweepLine              ( p2t::Ed
 {
     auto sweepY = addEdge->p->y;
 
-    if( sweepLine.size() == 1 )
+    if( sweepLine.size() == 0 )
+    {
+        sweepLine.push_back( addEdge );
+        return 0;
+    }
+    else if( sweepLine.size() == 1 )
     {
         if( CompareEdge( sweepLine[ 0 ], addEdge, sweepY ) )
         {
             sweepLine.insert( sweepLine.begin(), addEdge );
+            return 0;
         }
         else
         {
             sweepLine.push_back( addEdge );
+            return 1;
         }
-    }
-
-    // Binary search 
-    size_t left = 0;
-    auto right = sweepLine.size();
-    auto span = right - left;
-
-    while( span > 1 )
-    {
-        span = span / 2;
-        auto pos = left + span;
-
-        auto edge = sweepLine[ pos ];
-        if( CompareEdge( edge, addEdge, sweepY ) )
-        {
-            right = pos;
-        }
-        else
-        {
-            left = pos;
-        }
-    }
-
-    auto edge = sweepLine[ left ];
-    if( CompareEdge( edge, addEdge, sweepY ) )
-    {
-        sweepLine.insert( sweepLine.begin() + left, addEdge );
-        return (int)left;
     }
     else
     {
-        if( left + 1 < sweepLine.size() )
-            sweepLine.insert( sweepLine.begin() + left + 1, addEdge );
+        // Binary search 
+        size_t left = 0;
+        auto right = sweepLine.size();
+        auto span = right - left;
+
+        while( span > 1 )
+        {
+            span = span / 2;
+            auto pos = left + span;
+
+            auto edge = sweepLine[ pos ];
+            if( CompareEdge( edge, addEdge, sweepY ) )
+            {
+                right = pos;
+            }
+            else
+            {
+                left = pos;
+            }
+        }
+
+        auto edge = sweepLine[ left ];
+        if( CompareEdge( edge, addEdge, sweepY ) )
+        {
+            sweepLine.insert( sweepLine.begin() + left, addEdge );
+            return (int)left;
+        }
         else
-            sweepLine.push_back( addEdge );
-        return int( left + 1 );
+        {
+            if( left + 1 < sweepLine.size() )
+            {
+                sweepLine.insert( sweepLine.begin() + left + 1, addEdge );
+                return int( left + 1 );
+            }
+            else
+            {
+                sweepLine.push_back( addEdge );
+                return (int)sweepLine.size() - 1;
+            }
+        }
     }
 }
 
@@ -389,7 +441,7 @@ int                     PolylineValidator::AddToSweepLine              ( p2t::Ed
 //
 void                    PolylineValidator::DeleteFromSweepLine         ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine )
 {
-    auto pos = FindInSweepLine( edge, sweepLine );
+    auto pos = BruteFindInSweepLine( edge, sweepLine );
     assert( pos >= 0 );
 
     sweepLine.erase( sweepLine.begin() + pos );
@@ -399,7 +451,7 @@ void                    PolylineValidator::DeleteFromSweepLine         ( p2t::Ed
 //
 bool            CompareEvent    ( const Event & a, const Event & b )
 {
-    if( a.Point->y < b.Point->y )
+    if( a.Point->y > b.Point->y )
     {
         return true;
     }
@@ -409,6 +461,12 @@ bool            CompareEvent    ( const Event & a, const Event & b )
         if( a.Point->x < b.Point->x )
         {
             return true;
+        }
+        else if( a.Point->x == b.Point->x )
+        {
+            // Start point goes before end point.
+            if( a.Type == EventType::StartPoint && b.Type != EventType::StartPoint )
+                return true;
         }
     }
     return false;
@@ -450,7 +508,7 @@ double          FindX           ( p2t::Edge * edge, double sweepY )
 p2t::Edge *     GetAboveEdge    ( int pos, std::vector< p2t::Edge * > & sweepLine )
 {
     // SweepLine is sorted so we can take element after and before pos if they exist.
-    if( pos > 0 )
+    if( pos >= 0 && pos < sweepLine.size() - 1 )
         return sweepLine[ pos + 1 ];
     return nullptr;
 }
@@ -460,7 +518,7 @@ p2t::Edge *     GetAboveEdge    ( int pos, std::vector< p2t::Edge * > & sweepLin
 p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge * > & sweepLine )
 {
     // SweepLine is sorted so we can take element after and before pos if they exist.
-    if( pos < sweepLine.size() - 1 )
+    if( pos > 0 && pos < sweepLine.size() )
         return sweepLine[ pos - 1 ];
     return nullptr;
 }
@@ -473,8 +531,32 @@ p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 )
     if( edge1 && edge2 )
     {
         auto point = PolylineValidator::Intersect( edge1, edge2 );
-        point->edge_list.push_back( edge1 );
-        point->edge_list.push_back( edge2 );
+        if( point )
+        {
+            point->edge_list.push_back( edge1 );
+            point->edge_list.push_back( edge2 );
+
+            return point;
+        }
     }
     return nullptr;
+}
+
+// ***********************
+//
+bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
+{
+    if( a.y < b.y )
+    {
+        return true;
+    }
+    else if( a.y == b.y )
+    {
+        // Make sure q is point with greater x value
+        if( a.x < b.x )
+        {
+            return true;
+        }
+    }
+    return false;
 }

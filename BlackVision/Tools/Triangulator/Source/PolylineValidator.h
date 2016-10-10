@@ -8,6 +8,7 @@
 
 typedef std::vector< p2t::Point * > Polyline;
 typedef std::vector< Polyline > PolilinesVec;
+typedef std::vector< p2t::Point * > IntersectionsVec;
 
 
 enum EventType
@@ -48,7 +49,9 @@ public:
     explicit        PolylineValidator   ( Polyline polyline );
     explicit        PolylineValidator   ( Polyline&& polyline );
 
-    void            MakeSimplePolygon   ();
+
+    const IntersectionsVec &        FindSelfIntersections   ();
+
 
 private:
     void        Init        ();
@@ -64,6 +67,7 @@ private:
 
     int                     AddToSweepLine              ( p2t::Edge * addEdge, std::vector< p2t::Edge * > & sweepLine );
     int                     FindInSweepLine             ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine );
+    int                     BruteFindInSweepLine        ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine );
     void                    DeleteFromSweepLine         ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine );
     void                    AddIntersectionEvent        ( const Event & event, std::deque< Event > & eventQueue );
 

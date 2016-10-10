@@ -134,6 +134,7 @@ private:
 
     std::vector< int >						m_contoursNesting;
     std::vector< std::vector< bool > >		m_contoursIncuding;
+    std::vector< IntersectionsVec >         m_selfIntersections;
 
 	bool									m_printContoursToFile;
 	std::string								m_fileName;
