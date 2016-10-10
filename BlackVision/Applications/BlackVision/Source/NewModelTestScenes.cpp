@@ -2066,7 +2066,7 @@ model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( mod
     
     root->AddPlugin( "TRIANGULATE", timeEvaluator );
 
-    auto success = root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator );
+    auto success = root->AddPlugin( "DEFAULT_EXTRUDE_PLUGIN", timeEvaluator ); success;
     assert( success );
     auto extrude = root->GetPlugin( "extrude" );
     assert( extrude );

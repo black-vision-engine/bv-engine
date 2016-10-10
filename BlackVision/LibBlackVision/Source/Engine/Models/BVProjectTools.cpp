@@ -112,6 +112,8 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
 
     assert( radasvb );
 
+    delete vaDesc; //not used anymore
+
     if( type == PrimitiveType::PT_TRIANGLE_STRIP )
         return new TriangleStrip( radasvb, nullptr, nullptr );
     else if( type == PrimitiveType::PT_LINES )
