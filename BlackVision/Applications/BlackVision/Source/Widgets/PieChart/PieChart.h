@@ -3,8 +3,6 @@
 #include "Widgets/NodeLogicBase.h"
 #include "Engine/Models/SceneModel.h"
 
-#include "CoreDEF.h"
-
 
 namespace bv { namespace nodelogic {
 
@@ -21,11 +19,11 @@ public:
 
     enum class PieChartType : int
     {
-		PST_COLOR = 0,
+        PST_COLOR = 0,
         PST_MATERIAL,
         
         PST_TOTAL
-	};
+    };
 
 
     struct PieSliceDesc;
@@ -35,10 +33,10 @@ public:
     struct PieSliceDesc : public ISerializable
     {
 
-	    Float32     percent;
-	    Float32     offset;
+        Float32     percent;
+        Float32     offset;
 
-	                                PieSliceDesc    ( Float32 p, Float32 o );
+                                    PieSliceDesc    ( Float32 p, Float32 o );
 
         virtual void                Serialize       ( ISerializer & ser ) const override;
         static PieSliceDescPtr      Create          ( const IDeserializer & deser );
@@ -68,11 +66,10 @@ private:
 
 private:
 
-	model::BasicNodePtr				m_parentNode;
+    model::BasicNodePtr &           m_parentNode;
     model::ITimeEvaluatorPtr        m_timeEval;
 
-    std::vector< PieSliceDescPtr >                      m_slicesDesc;
-    std::map< model::BasicNodePtr, PieSliceDescPtr >    m_slices;
+    std::vector< PieSliceDescPtr >  m_slicesDesc;
 
     PieChartType                    m_chartType;
     bool                            m_textEnabled;
@@ -81,17 +78,17 @@ private:
 
 public:
 
-	explicit                        PieChart            ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
-	                                ~PieChart           ();
+    explicit                        PieChart            ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
+                                    ~PieChart           ();
 
-	static PieChartPtr              Create              ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
+    static PieChartPtr              Create              ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
 
     virtual void                    Serialize           ( ISerializer & ser ) const override;
-    static PieChartPtr              Create              ( const IDeserializer & deser, model::BasicNodePtr parent );
+    static PieChartPtr              Create              ( const IDeserializer & deser, model::BasicNodePtr & parent );
 
-	virtual void	                Initialize		    ()				override {}
-	virtual void	                Update			    ( TimeType t )	override;
-	virtual void	                Deinitialize	    ()				override {}
+    virtual void                    Initialize          ()              override {}
+    virtual void                    Update              ( TimeType t )  override;
+    virtual void                    Deinitialize        ()              override {}
 
     virtual const std::string &     GetType             () const override;
     static const std::string &      Type                ();
@@ -113,7 +110,6 @@ private:
 
     void                            UpdateChart         ();
     Float32                         UpdateSlice         ( model::BasicNodePtr node, PieSliceDescPtr sliceDesc, Float32 angle );
-    void                            CleanMapping        ();
 
     std::string                     LabelNodeName       ( const std::string & parentNodeName );
     std::string                     SliceNodeName       ( const std::string & parentNodeName, UInt32 idx );

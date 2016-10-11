@@ -1,7 +1,8 @@
 #include "IReplicationModifier.h"
 
-namespace bv { namespace model
-{
+
+namespace bv { namespace model {
+
 
 struct ParamValDelta
 {
@@ -12,10 +13,12 @@ struct ParamValDelta
     TimeType        startTime;
 };
 
+
 class ShiftReplicationModifier;
 
 DEFINE_PTR_TYPE( ShiftReplicationModifier )
 DEFINE_CONST_PTR_TYPE( ShiftReplicationModifier )
+
 
 class ShiftReplicationModifier : public IReplicationModifier
 {

@@ -1,34 +1,32 @@
 #pragma once
 
-
 #include "Engine/Models/Interfaces/INodeLogic.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/BasicNode.h"
-
 #include "Assets/Font/FontAssetDescriptor.h"
 
-namespace bv { namespace model
-{
+
+namespace bv { namespace model {
+
 
 class TextEffects;
 
 DEFINE_PTR_TYPE( TextEffects )
 DEFINE_CONST_PTR_TYPE( TextEffects )
 
+
 class TextEffects : public model::INodeLogic, public std::enable_shared_from_this< TextEffects >
 {
 private:
+
     static const std::string        m_type;
 
-    BasicNodePtr                    m_node;
-
-    BasicNodePtr                    m_shadowNode;
+    BasicNodePtr &                  m_node;
 
     DefaultParamValModelPtr         m_paramValModel;
 
     UInt32                          m_blurSize;
 
-    explicit                        TextEffects     ( const BasicNodePtr & node );
+    explicit                        TextEffects     ( BasicNodePtr & node );
 
 public:
                                     ~TextEffects    ();
@@ -48,9 +46,9 @@ public:
 
     virtual void                    Serialize       ( ISerializer& ser ) const override;
 
-    static TextEffectsPtr           Create          ( const BasicNodePtr & node );
+    static TextEffectsPtr           Create          ( BasicNodePtr & node );
 
-    static TextEffectsPtr           Create          ( const IDeserializer & deser, const BasicNodePtr & node );
+    static TextEffectsPtr           Create          ( const IDeserializer & deser, BasicNodePtr & node );
 
 private:
 
@@ -61,6 +59,7 @@ private:
     FontAssetDescConstPtr           GetShadowFontAssetDesc  () const;
     bool                            ReloadShadowNodeAsset   () const;
     bool                            ShadowAssetIsValid      () const;
+
 };
 
 } // model

@@ -11,7 +11,8 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
-namespace bv{ namespace model {
+
+namespace bv { namespace model {
 
 const std::string   NodeReplicator::m_type = "replicator";
 
@@ -22,7 +23,6 @@ const std::string &  NodeReplicator::Type            ()
     return m_type;
 }
 
-
 // ***********************
 //
 const std::string & NodeReplicator::GetType             () const
@@ -30,10 +30,9 @@ const std::string & NodeReplicator::GetType             () const
     return Type();
 }
 
-
 // *******************************
 //
-NodeReplicator::NodeReplicator( BasicNodePtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicator::NodeReplicator( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
     : m_node( node )
     , m_repModifier( modifier )
     , m_repNum( repNum )
@@ -43,7 +42,7 @@ NodeReplicator::NodeReplicator( BasicNodePtr node, SizeType repNum, const IRepli
 
 // *******************************
 //
-NodeReplicatorPtr           NodeReplicator::Create( BasicNodePtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicatorPtr           NodeReplicator::Create( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
 {
     return NodeReplicatorPtr( new NodeReplicator( node, repNum, modifier ) );
 }
@@ -70,12 +69,11 @@ void					    NodeReplicator::Update( TimeType )
 void					    NodeReplicator::Deinitialize()
 {}
 
-
 // ***********************
 //
-void                NodeReplicator::Serialize       ( ISerializer& ser ) const
+void                NodeReplicator::Serialize       ( ISerializer & ser ) const
 {
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
     assert( context != nullptr );
 
     ser.EnterChild( "logic" );
@@ -92,23 +90,23 @@ void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & deser, BasicNodePtr parentNode )
+NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & deser, BasicNodePtr & parentNode )
 {
     SizeType repetitions = SerializationHelper::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
     
     deser.EnterChild( "replicatorModifier" );
-        std::string modifierType = deser.GetAttribute( "type" );
-        
-        IReplicationModifierConstPtr modifier;
-        if( modifierType == "shiftReplicationModifier" )
-        {
-            modifier = ShiftReplicationModifier::Create( deser );\
-        }
-        else
-        {
-            modifier = nullptr;
-        }
 
+    std::string modifierType = deser.GetAttribute( "type" );
+        
+    IReplicationModifierConstPtr modifier;
+    if( modifierType == "shiftReplicationModifier" )
+    {
+        modifier = ShiftReplicationModifier::Create( deser );\
+    }
+    else
+    {
+        modifier = nullptr;
+    }
 
     deser.ExitChild();  // replicatorModifier
     

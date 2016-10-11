@@ -15,7 +15,6 @@
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
 #include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/SerializationHelper.h"
 #include "Tools/StringHeplers.h"
 
 #include "Engine/Models/BVProjectEditor.h"
@@ -76,7 +75,7 @@ const std::string           PieChart::ACTION::UPDATE_PIECHART     = "UpdatePieCh
 const std::string           PieChart::ACTION::UPDATE_PIESLICE     = "UpdatePieSlice";
 const std::string           PieChart::ACTION::ADD_PIESLICE        = "AddPieSlice";
 const std::string           PieChart::ACTION::REMOVE_PIESLICE     = "RemovePieSlice";
-	
+    
 // *******************************
 
 const std::string           PieChart::PLUGIN::TRANSFORM           = "transform";
@@ -101,12 +100,12 @@ PieChart::PieSliceDescPtr   PieChart::PieSliceDesc::Create          ( const IDes
     auto percent = SerializationHelper::String2T< Float32 >( deser.GetAttribute( "percent" ), 0.f );
     auto offset = SerializationHelper::String2T< Float32 >( deser.GetAttribute( "offset" ), 0.f );
 
-	return std::make_shared< PieSliceDesc >( percent, offset );
+    return std::make_shared< PieSliceDesc >( percent, offset );
 }
 
 // *******************************
 //
-void	                    PieChart::PieSliceDesc::Serialize		( ISerializer & ser ) const
+void                        PieChart::PieSliceDesc::Serialize       ( ISerializer & ser ) const
 {
     ser.SetAttribute( "percent", SerializationHelper::T2String( percent ) );
     ser.SetAttribute( "offset", SerializationHelper::T2String( offset ) );
@@ -114,14 +113,14 @@ void	                    PieChart::PieSliceDesc::Serialize		( ISerializer & ser 
 
 // *******************************
 //
-PieChartPtr	                PieChart::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
+PieChartPtr                 PieChart::Create                ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
 {
-	return std::make_shared< PieChart >( parent, timeEval, chartType, textEnabled );
+    return std::make_shared< PieChart >( parent, timeEval, chartType, textEnabled );
 }
 
 // *******************************
 //
-PieChart::PieChart          ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
+PieChart::PieChart          ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
     : m_parentNode( parent )
     , m_timeEval( timeEval )
     , m_chartType( chartType )
@@ -138,7 +137,7 @@ PieChart::~PieChart     ()
 
 // *******************************
 //
-void		        PieChart::Update			( TimeType )
+void                PieChart::Update            ( TimeType )
 {
 }
 
@@ -170,7 +169,7 @@ void                PieChart::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-PieChartPtr             PieChart::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
+PieChartPtr             PieChart::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr & parent )
 {
     auto timelinePath = deser.GetAttribute( "timelinePath" );
 
@@ -281,7 +280,6 @@ void                        PieChart::AddSlice           ( model::SceneModelPtr 
         }
 
         m_slicesDesc.push_back( sliceDesc );
-        m_slices[ node ] = sliceDesc;
     }
 }
 
@@ -289,19 +287,16 @@ void                        PieChart::AddSlice           ( model::SceneModelPtr 
 //
 bool                        PieChart::RemoveSlice           ( model::SceneModelPtr scene, UInt32 sliceDescIdx, BVProjectEditor * editor )
 {
-    if( sliceDescIdx < m_slices.size() )
+    if( sliceDescIdx < m_slicesDesc.size() )
     {
         auto desc = m_slicesDesc[ sliceDescIdx ];
-        for( auto & slice : m_slices )
+        auto sliceNode = m_parentNode->GetChild( sliceDescIdx );
+        if( sliceNode )
         {
-            if( slice.second == desc )
-            {
-                editor->DeleteChildNode( scene, m_parentNode, slice.first );
-                m_slicesDesc.erase( m_slicesDesc.begin() + sliceDescIdx );
-                m_slices.erase( slice.first );
+            editor->DeleteChildNode( scene, m_parentNode, sliceNode );
+            m_slicesDesc.erase( m_slicesDesc.begin() + sliceDescIdx );
 
-                return true;
-            }
+            return true;
         }
     }
 
@@ -424,19 +419,12 @@ void                        PieChart::SetLabelText              ( model::BasicNo
 //
 void                        PieChart::UpdateChart               ()
 {
-    CleanMapping();
-
     m_totalPercent = 0.f;
     Float32 angle = 0.f;
-    m_slicesDesc.clear();
+    
     for( UInt32 i = 0; i < m_parentNode->GetNumChildren(); ++i )
     {
-        auto node = m_parentNode->GetChild( i );
-
-        auto sliceDesc = m_slices[ node ];
-        m_slicesDesc.push_back( sliceDesc );
-
-        angle = UpdateSlice( node, sliceDesc, angle );
+        angle = UpdateSlice( m_parentNode->GetChild( i ), m_slicesDesc[ i ], angle );
     }
 }
 
@@ -489,34 +477,6 @@ Float32                     PieChart::UpdateSlice               ( model::BasicNo
     }
 
     return angle;
-}
-
-// ***********************
-//
-void                        PieChart::CleanMapping              ()
-{
-    auto it = m_slices.begin();
-    while( it != m_slices.end() ) 
-    {
-        auto exists = false;
-        for( UInt32 i = 0; i < m_parentNode->GetNumChildren(); ++i )
-        {
-            if( m_parentNode->GetChild( i ) == it->first )
-            {
-                exists = true;
-                break;
-            }
-        }
-
-        if( !exists ) 
-        {
-            m_slices.erase( it++ );
-        } 
-        else 
-        {
-            ++it;
-        }
-    }
 }
 
 // ***********************

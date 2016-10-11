@@ -1,16 +1,13 @@
 #pragma once
 
-#include "CoreDEF.h"
-#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Widgets/NodeLogicBase.h"
 #include "Engine/Types/Values/TypedValues.h"
-#include <memory>
 
 
-namespace bv
-{
+namespace bv { 
+    
 
-namespace model
-{
+namespace model {
 
 class BasicNode;
 DEFINE_PTR_TYPE( BasicNode );
@@ -18,10 +15,8 @@ DEFINE_PTR_TYPE( BasicNode );
 } // model
 
 
+namespace nodelogic {
 
-
-namespace nodelogic
-{
 
 class Arrange;
 
@@ -29,10 +24,10 @@ DEFINE_PTR_TYPE( Arrange );
 DEFINE_CONST_PTR_TYPE( Arrange );
 
 
-
 class Arrange : public model::NodeLogicBase, public std::enable_shared_from_this< Arrange >
 {
 public:
+
     enum ArrangmentType
     {
         Circle,
@@ -119,6 +114,7 @@ public:
     };
 
 private:
+
     static const std::string            m_type;
 
     struct ACTION
@@ -165,13 +161,14 @@ private:
 
 private:
 
-    bv::model::BasicNodePtr	                m_parentNode;
+    model::BasicNodePtr &	                m_parentNode;
     std::unique_ptr< ArrangeParamsBase >    m_lastArrangement;
 
     ArrangmentType                          m_lastArrangementType;
 
 public:
-    explicit                            Arrange			( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
+
+    explicit                            Arrange			( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
                                         ~Arrange		();
 
     virtual void	                    Update			( TimeType );
@@ -181,7 +178,7 @@ public:
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
     virtual void                        Deserialize     ( const IDeserializer & ser );
-    static ArrangePtr			        Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
+    static ArrangePtr			        Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 
@@ -189,16 +186,16 @@ private:
 
     void            ArrangeChildren     ( ArrangmentType type, std::unique_ptr< ArrangeParamsBase > & params );
 
-    void            CircleArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const CircleArrangeParams & params );
-    void            LineArrange         ( std::vector< bv::model::BasicNodePtr > & nodes, const LineArrangeParams & params );
-    void            Grid2DArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const Grid2DArrangeParams & params );
-    void            Grid3DArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const Grid3DArrangeParams & params );
-    void            SphereArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const SphereArrangeParams & params );
+    void            CircleArrange       ( std::vector< model::BasicNodePtr > & nodes, const CircleArrangeParams & params );
+    void            LineArrange         ( std::vector< model::BasicNodePtr > & nodes, const LineArrangeParams & params );
+    void            Grid2DArrange       ( std::vector< model::BasicNodePtr > & nodes, const Grid2DArrangeParams & params );
+    void            Grid3DArrange       ( std::vector< model::BasicNodePtr > & nodes, const Grid3DArrangeParams & params );
+    void            SphereArrange       ( std::vector< model::BasicNodePtr > & nodes, const SphereArrangeParams & params );
 
-    std::vector< bv::model::BasicNodePtr >  GetNodesToArrange   ();
-    void                                    SetNodePosition     ( bv::model::BasicNodePtr node, glm::vec3 position, TimeType keyTime );
+    std::vector< model::BasicNodePtr >      GetNodesToArrange   ();
+    void                                    SetNodePosition     ( model::BasicNodePtr node, glm::vec3 position, TimeType keyTime );
+
 };
-
 
 }   // nodelogic
 }	// bv

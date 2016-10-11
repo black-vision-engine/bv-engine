@@ -1,10 +1,9 @@
 #include "ShiftReplicationModifier.h"
 
-#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "../NodeLogicHelper.h"
+#include "Widgets/NodeLogicHelper.h"
 
-namespace bv { namespace model
-{
+
+namespace bv { namespace model {
 
 // *******************************
 //

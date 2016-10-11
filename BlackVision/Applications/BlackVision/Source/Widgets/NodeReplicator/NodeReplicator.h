@@ -23,7 +23,7 @@ public:
 	virtual void					Update			( TimeType t )	override;
 	virtual void					Deinitialize	()				override;
 
-    static NodeReplicatorPtr        Create          ( BasicNodePtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
+    static NodeReplicatorPtr        Create          ( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
 
     virtual const std::string &     GetType         () const override;
     static const std::string &      Type            ();
@@ -32,15 +32,15 @@ public:
     virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
 
     virtual void                    Serialize       ( ISerializer & ser ) const override;
-    static NodeReplicatorPtr        Create          ( const IDeserializer & deser, BasicNodePtr parentNode );
+    static NodeReplicatorPtr        Create          ( const IDeserializer & deser, BasicNodePtr & parentNode );
 
     virtual bool                    HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
 private:
-    explicit                        NodeReplicator  ( BasicNodePtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
+    explicit                        NodeReplicator  ( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
 
 
-    BasicNodePtr                    m_node;
+    BasicNodePtr &                  m_node;
     IReplicationModifierConstPtr    m_repModifier;
     SizeType                        m_repNum;
     bool                            m_initialized;

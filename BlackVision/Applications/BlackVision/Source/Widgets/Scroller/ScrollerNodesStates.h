@@ -2,13 +2,11 @@
 
 #include "CoreDEF.h"
 
-#include <vector>
 
 // forward declarations
 namespace bv { namespace model {
 
 class BasicNode;
-typedef std::shared_ptr< BasicNode > BasicNodePtr;
 
 } // model
 } // bv

@@ -1,14 +1,11 @@
 #pragma once
 
+#include "Widgets/NodeLogicBase.h"
 
-#include "CoreDEF.h"
 #include "Engine/Types/Values/TypedValues.h"
 
-#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
 
-
-namespace bv {
-namespace model {
+namespace bv { namespace model {
 
 class BasicNode;
 typedef std::shared_ptr< BasicNode > BasicNodePtr;
@@ -16,17 +13,20 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 } // model
 } // bv
 
+
 namespace bv { namespace nodelogic {
 
 
-	class WidgetCounter;
+class WidgetCounter;
 
 DEFINE_PTR_TYPE( WidgetCounter )
 DEFINE_CONST_PTR_TYPE( WidgetCounter )
 
+
 class WidgetCounter:  public model::NodeLogicBase, public std::enable_shared_from_this< WidgetCounter >
 {
 private:
+
     static const std::string        m_type;
 
     struct PARAMETERS
@@ -36,13 +36,15 @@ private:
     };
 
 private:
-	bv::model::BasicNode *      m_parentNode;
+
+	model::BasicNode *      m_parentNode;
 
     ValueIntPtr                 m_precision;
     ValueFloatPtr               m_value;
 
 public:
-	explicit        WidgetCounter   ( bv::model::BasicNode * parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
+
+	explicit        WidgetCounter   ( model::BasicNode * parent, model::ITimeEvaluatorPtr timeEvaluator );
 	                ~WidgetCounter  ();
 
 
@@ -53,13 +55,14 @@ public:
     virtual const std::string &     GetType             () const override;
     static const std::string &      Type                ();
 
-	static WidgetCounterPtr         Create              ( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
+	static WidgetCounterPtr         Create              ( model::BasicNode * parent,model:: ITimeEvaluatorPtr timeEvaluator);
 
 
     virtual void                Serialize       ( ISerializer & ser ) const override;
-    static WidgetCounterPtr     Create          ( const IDeserializer & deser, bv::model::BasicNode * parent );
+    static WidgetCounterPtr     Create          ( const IDeserializer & deser, model::BasicNode * parent );
 
     virtual bool                HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor  ) override;
+
 };
 
 }

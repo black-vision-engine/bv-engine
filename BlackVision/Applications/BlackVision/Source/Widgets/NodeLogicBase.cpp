@@ -1,17 +1,12 @@
 #include "NodeLogicBase.h"
 
 #include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
-
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 
 #include "UseLoggerBVAppModule.h"
 
 
-namespace bv { namespace model
-{
+namespace bv { namespace model {
 
 // ***********************
 //
@@ -24,7 +19,6 @@ NodeLogicBase::NodeLogicBase()
 //
 NodeLogicBase::~NodeLogicBase()
 {}
-
 
 // ***********************
 //

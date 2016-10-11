@@ -3,16 +3,10 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Types/Values/BaseValue.h"
 #include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
-#include "Engine/Types/Enums.h"
-
-#include <string>
 
 
-namespace bv
-{
-    
-namespace nodelogic
-{
+namespace bv { namespace nodelogic {
+
 
 struct ParameterBinding
 {
@@ -44,9 +38,8 @@ struct ParameterBinding
         TransformKind = TransformKind::invalid;
         Component = VectorComponent::Invalid;
     }
+
 };
-
-
 
 }   // nodelogic
 }	// bv
