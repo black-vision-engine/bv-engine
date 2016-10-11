@@ -132,6 +132,13 @@ BVProjectEditor *       BVProject::GetProjectEditor	    () const
 
 // *******************************
 //
+AssetTracker *          BVProject::GetAssetTracker      () const
+{
+    return m_assetTracker.get();
+}
+
+// *******************************
+//
 StringVector            BVProject::ListScenesNames      () const
 {
     StringVector ret;

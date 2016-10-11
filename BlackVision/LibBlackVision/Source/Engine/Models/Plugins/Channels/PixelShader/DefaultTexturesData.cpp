@@ -8,12 +8,6 @@
 #include "Engine/Models/AssetTracker.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv { namespace model {
 
 // ******************************
@@ -26,6 +20,7 @@ DefaultTexturesData::DefaultTexturesData ()
 //
 DefaultTexturesData::~DefaultTexturesData()
 {
+	ClearAll();
 }
 
 // ******************************
@@ -107,10 +102,6 @@ void                                            DefaultTexturesData::SetTexture 
 void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptorPtr textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
-
-    auto assetTrackerEvt = std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset );
-    assetTrackerEvt->TextureAsset = textureDesc;
-    GetDefaultEventManager().TriggerEvent( assetTrackerEvt );
 
     TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
 }

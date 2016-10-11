@@ -14,12 +14,6 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 // *************************************
@@ -147,16 +141,18 @@ void                    AssetTracker::RegisterAsset         ( TextureConstPtr as
 //
 void                    AssetTracker::UnregisterAsset       ( TextureConstPtr asset )
 {
-    if( m_registeredAssetsMap.empty() || m_registeredAssetsMap.count( asset ) == 0 ) return;
+    if( m_registeredAssetsMap.empty() || m_registeredAssetsMap.count( asset ) == 0 )
+    {
+        return;
+    }
 
-    if( m_registeredAssetsMap[ asset ] <= 2 ) // asset is registered twice (plugin & finalize plugin)
+    m_registeredAssetsMap[ asset ] -= 1;
+
+    if( m_registeredAssetsMap[ asset ] == 0 )
     {
         m_registeredAssetsMap.erase( asset );
         m_unregisteredAssets.insert( asset );
-        return;
     }
-    
-    m_registeredAssetsMap[ asset ] -= 1;
 }
 
 // *************************************

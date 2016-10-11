@@ -1085,7 +1085,7 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
     if( plugin && assetDesc )
     {
         auto success = plugin->LoadResource( assetDesc );
-        BVProjectTools::ReleaseUnusedResources( m_project->m_renderer, m_project->m_assetTracker.get() );
+        BVProjectTools::ReleaseUnusedResources( m_project->m_renderer, m_project->GetAssetTracker() );
         return success;
     }
 
