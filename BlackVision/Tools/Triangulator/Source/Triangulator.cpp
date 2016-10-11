@@ -202,6 +202,8 @@ Mesh Triangulator::MakeMesh()
         PolylineValidator validator( polyline );
         auto & intersectionPoints = validator.FindSelfIntersections();
         m_selfIntersections.push_back( intersectionPoints );
+
+        //auto decomposedContours = validator.DecomposeContour();
     }
 
 	// Print contours to file for debug purposes.

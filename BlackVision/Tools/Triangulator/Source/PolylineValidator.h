@@ -37,6 +37,18 @@ struct Event
 
 
 
+// ***********************
+//
+struct IntersectionData
+{
+    int             PolylineIdx;        // Point under this index is directly before intersection point.
+    bool            Processed;          // Segment after PolylineIdx already used.
+    p2t::Point *    IntersectionPoint;
+};
+
+
+
+
 
 class PolylineValidator
 {
@@ -77,6 +89,7 @@ private:
     void                    DeleteFromSweepLine         ( p2t::Edge * edge, std::vector< p2t::Edge * > & sweepLine );
     void                    AddIntersectionEvent        ( const Event & event, std::deque< Event > & eventQueue );
 
+    std::vector< IntersectionData > InitDividePoints    ();
 public:
 
     static p2t::Point *     Intersect                   ( p2t::Edge * edge1, p2t::Edge * edge2 );

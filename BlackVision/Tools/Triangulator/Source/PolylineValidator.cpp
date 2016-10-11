@@ -6,6 +6,9 @@
 #include <deque>
 
 
+
+
+
 bool            CompareEvent    ( const Event & a, const Event & b );
 bool            CompareEdge     ( p2t::Edge * leftEdge, p2t::Edge * rightEdge, double sweepY );
 double          FindX           ( p2t::Edge * edge, double sweepY );
@@ -15,20 +18,11 @@ p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine 
 
 p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 );
 
-bool            operator<       ( const p2t::Point & point1, const p2t::Point& point2 );
+bool            operator<       ( const p2t::Point & point1, const p2t::Point & point2 );
 
 bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint );
-bool            IsIntersectionEnd   ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint );
-
-
-// ***********************
-//
-struct IntersectionData
-{
-    int             PolylineIdx;
-    bool            Processed;          // Segment before PolylineIdx already used.
-    p2t::Point *    IntersectionPoint;
-};
+int             FindFreeDividePoint ( std::vector< IntersectionData >& data );
+int             FindNextContourPart ( std::vector< IntersectionData >& data, const p2t::Point * partEnd, int intersectionIdx );
 
 
 
@@ -149,6 +143,32 @@ bool    PolylineValidator::CheckRepeatPoints   ()
 }
 
 // ***********************
+//
+std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
+{
+    std::vector< IntersectionData > dividePoints;
+    dividePoints.reserve( 2 * m_intersections.size() );  // Each intersection gives 2 divide points.
+                                                         // Divide polyline into ranges between intersection points.
+    for( int i = 0; i < m_polyline.size(); ++i )
+    {
+        for( int j = 0; j < m_intersections.size(); j++ )
+        {
+            if( IsIntersectionStart( m_polyline[ i ], m_intersections[ j ] ) )
+            {
+                IntersectionData data;
+                data.IntersectionPoint = m_intersections[ j ];
+                data.Processed = false;
+                data.PolylineIdx = i;
+
+                dividePoints.push_back( data );
+            }
+        }
+    }
+
+    return dividePoints;
+}
+
+// ***********************
 // Implementation based on http://geomalgorithms.com/a09-_intersect-3.html
 const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
 {
@@ -190,30 +210,74 @@ PolylinesVec            PolylineValidator::DecomposeContour        ()
     }
 
     // Number of intersection is maximal number of separate segments.
-    polylines.reserve( m_intersections.size() );
+    polylines.reserve( m_intersections.size() + 1 );
     
-    // Points to begin point of segment.
-    std::vector< IntersectionData > intersectionIdx;
-    intersectionIdx.reserve( m_intersections.size() );
+    // Collect intersection points indicies.
+    std::vector< IntersectionData > dividePoints = InitDividePoints();
 
-    // Divide polyline into ranges between intersection points.
-    for( int i = 0; i < m_polyline.size(); ++i )
+
+
+    // Connect end of m_polyline with begining.
+    polylines.push_back( Polyline() );
+    for( int idx = dividePoints.back().PolylineIdx + 1; idx < m_polyline.size(); idx++ )
     {
-        for( int j = 0; j < m_intersections.size(); j++ )
-        {
-            if( IsIntersectionStart( m_polyline[ i ], m_intersections[ j ] ) )
-            {
-                IntersectionData data;
-                data.IntersectionPoint = m_intersections[ j ];
-                data.Processed = false;
-                data.PolylineIdx = i;
-
-                intersectionIdx.push_back( data );
-            }
-        }
+        polylines[ 0 ].push_back( m_polyline[ idx ] );
     }
 
+    for( int idx = 0; idx <= dividePoints.front().PolylineIdx; idx++ )
+    {
+        polylines[ 0 ].push_back( m_polyline[ idx ] );
+    }
 
+    dividePoints.back().Processed = true;
+
+
+    // Add intersection point
+    auto dividePoint = dividePoints[ 0 ].IntersectionPoint;
+    polylines[ 0 ].push_back( new p2t::Point( dividePoint->x, dividePoint->y ) );
+
+    // Connect ranges into contours.
+    int intersectIdx = FindNextContourPart( dividePoints, m_polyline[ dividePoints.front().PolylineIdx ], 0 );
+    assert( intersectIdx != -1 );
+
+
+    int curPolyline = 0;
+    do
+    {
+        // Make single closed contour.
+        curPolyline = (int)polylines.size() - 1;
+
+        do
+        {
+            int beginIdx = dividePoints[ intersectIdx ].PolylineIdx;
+            int endIdx = dividePoints[ intersectIdx + 1 ].PolylineIdx;
+
+            // Rewrite contour points to polyline.
+            for( int i = beginIdx; i <= endIdx; ++i )
+            {
+                polylines[ curPolyline ].push_back( m_polyline[ i ] );
+            }
+
+            // Add intersection point
+            auto dividePoint = dividePoints[ intersectIdx + 1 ].IntersectionPoint;
+            polylines[ curPolyline ].push_back( new p2t::Point( dividePoint->x, dividePoint->y ) );
+
+            // Set current points range as used.
+            dividePoints[ intersectIdx ].Processed = true;
+
+            // Find contour continuation.
+            intersectIdx = FindNextContourPart( dividePoints, m_polyline[ endIdx ], intersectIdx + 1 );
+        } while( intersectIdx );
+
+        // Add place for new contour.
+        polylines.push_back( Polyline() );
+
+        // Find new segment. Returns -1 if all segments were used.
+        intersectIdx = FindFreeDividePoint( dividePoints );
+    } while( intersectIdx );
+
+    // We added to many polylines (check loop above).
+    polylines.pop_back();
 
     return polylines;
 }
@@ -636,19 +700,80 @@ bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
     return false;
 }
 
+
 // ***********************
 //
 bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint )
 {
-    assert( false );
+    assert( intersectionPoint->edge_list.size() == 2 );
+
+    // Note: Make pointers comparision.
+    if( polylinePoint == intersectionPoint->edge_list[ 0 ]->p )
+        return true;
+
+    if( polylinePoint == intersectionPoint->edge_list[ 0 ]->q )
+        return true;
+
+    if( polylinePoint == intersectionPoint->edge_list[ 1 ]->p )
+        return true;
+
+    if( polylinePoint == intersectionPoint->edge_list[ 1 ]->q )
+        return true;
+
     return false;
 }
+
 
 // ***********************
 //
-bool            IsIntersectionEnd   ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint )
+int             FindFreeDividePoint ( std::vector< IntersectionData > & data )
 {
-    assert( false );
-    return false;
+    for( int i = 0; i < data.size(); ++i )
+    {
+        if( !data[ i ].Processed )
+            return i;
+    }
+
+    return -1;
 }
 
+// ***********************
+// http://geomalgorithms.com/a09-_intersect-3.html - decompose into Simple Pieces
+int             FindNextContourPart ( std::vector< IntersectionData > & data, const p2t::Point * partEnd, int intersectionIdx )
+{
+    auto & intersect = data[ intersectionIdx ];
+    auto point = intersect.IntersectionPoint;
+
+    p2t::Point * nextPoint = nullptr;
+
+    // q is upper point, p is lower point.
+    // If edge goes from top to bottom, we choose top point from second edge.
+    // Check link in comment to this function.
+    if( point->edge_list[ 0 ]->p == partEnd )
+    {
+        nextPoint = point->edge_list[ 1 ]->p;
+    }
+    else if( point->edge_list[ 0 ]->q == partEnd )
+    {
+        nextPoint = point->edge_list[ 1 ]->q;
+    }
+    else if( point->edge_list[ 1 ]->p == partEnd )
+    {
+        nextPoint = point->edge_list[ 0 ]->p;
+    }
+    else if( point->edge_list[ 1 ]->q == partEnd )
+    {
+        nextPoint = point->edge_list[ 0 ]->p;
+    }
+    else
+        assert( false );
+
+    // Iterate all segments of contours to find proper continuation point.
+    for( int i = 0; i < data.size(); ++i )
+    {
+        if( !data[ i ].Processed && data[ i ].IntersectionPoint == nextPoint )
+            return i;
+    }
+
+    return -1;
+}
