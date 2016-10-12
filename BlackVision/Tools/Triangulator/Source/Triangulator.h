@@ -114,7 +114,9 @@ public:
 	const std::vector< int > &						GetNestingArray		()		{ return m_contoursNesting; }
 	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
 
-    void    PrintContoursToFile ();
+    void                                            PrintContoursToFile ();
+
+    Polyline &&                                     HeuristicFindMainContour    ( PolylinesVec && polylines );
 
 private:
 

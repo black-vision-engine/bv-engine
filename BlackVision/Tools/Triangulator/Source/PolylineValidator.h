@@ -60,21 +60,26 @@ private:
 
     // Results
     std::vector< p2t::Point * > m_intersections;
+    PolylinesVec                m_resultPolylines;
 
 public:
-    explicit        PolylineValidator   ( Polyline polyline );
-    explicit        PolylineValidator   ( Polyline&& polyline );
+    explicit        PolylineValidator   ( const Polyline & polyline );      ///< Allocates new points!!
+    explicit        PolylineValidator   ( Polyline && polyline );
                     ~PolylineValidator  ();
 
 
     const IntersectionsVec &        FindSelfIntersections   ();
-    PolylinesVec                    DecomposeContour        ();
+    const PolylinesVec &            DecomposeContour        ();
 
+    // Note: User is responsible for dealocating points.
+    PolylinesVec &&                 StealDecomposedPolylines();
+    IntersectionsVec &&             StealIntersections      ();
 
 private:
     void        Init        ();
     void        InitEdges   ( Polyline & polyline );
     void        Sort        ();
+    void        ClearEdges  ();
 
     bool        CheckRepeatPoints   ();
 

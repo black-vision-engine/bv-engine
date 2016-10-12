@@ -190,7 +190,7 @@ Mesh Triangulator::MakeMesh()
     {
         const auto & contour = m_contoursList[ c ];
 
-        Polyline& polyline = m_polylines[ c ];
+        Polyline & polyline = m_polylines[ c ];
         polyline.reserve( contour->PointCount() );
 
         for( size_t p = 0; p < contour->PointCount(); ++p )
@@ -199,11 +199,12 @@ Mesh Triangulator::MakeMesh()
             polyline.push_back( d );
         }
 
-        PolylineValidator validator( polyline );
-        auto & intersectionPoints = validator.FindSelfIntersections();
-        m_selfIntersections.push_back( intersectionPoints );
+        PolylineValidator validator( polyline/*std::move( polyline )*/ );
+        validator.FindSelfIntersections();
+        validator.DecomposeContour();
 
-        //auto decomposedContours = validator.DecomposeContour();
+        m_selfIntersections.push_back( validator.StealIntersections() );
+        //polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
     }
 
 	// Print contours to file for debug purposes.
@@ -316,3 +317,38 @@ void Triangulator::PrintContoursToFile()
     file.close();
 }
 
+// ***********************
+//
+Polyline &&         Triangulator::HeuristicFindMainContour  ( PolylinesVec && polylines )
+{
+    assert( !polylines.empty() );
+    assert( !polylines[ 0 ].empty() );
+
+    int longestIdx = 0;
+    int longestLength = 0;
+
+    for( int i = 0; i < polylines.size(); ++i )
+    {
+        if( longestLength < polylines[ i ].size() )
+        {
+            longestIdx = i;
+            longestLength = (int)polylines[ i ].size();
+        }
+    }
+
+    // Delete rejected polylines. Dealocate points.
+    for( int i = 0; i < polylines.size(); ++i )
+    {
+        if( i != longestIdx )
+        {
+            for( auto & point : polylines[ i ] )
+            {
+                delete point;
+            }
+            polylines[ i ].clear();
+        }
+    }
+
+
+    return std::move( polylines[ longestIdx ] );
+}

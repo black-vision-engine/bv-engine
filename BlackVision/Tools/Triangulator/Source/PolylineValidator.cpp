@@ -28,15 +28,21 @@ int             FindNextContourPart ( std::vector< IntersectionData >& data, con
 
 // ***********************
 //
-PolylineValidator::PolylineValidator   ( Polyline polyline )
-    :   m_polyline( polyline )
+PolylineValidator::PolylineValidator   ( const Polyline & polyline )
 {
+    m_polyline.reserve( polyline.size() );
+    
+    for( int i = 0; i < polyline.size(); ++i )
+    {
+        m_polyline.push_back( new p2t::Point( *polyline[ i ] ) );
+    }
+
     Init();
 }
 
 // ***********************
 //
-PolylineValidator::PolylineValidator   ( Polyline&& polyline )
+PolylineValidator::PolylineValidator   ( Polyline && polyline )
     :   m_polyline( std::move( polyline ) )
 {
     Init();
@@ -46,20 +52,31 @@ PolylineValidator::PolylineValidator   ( Polyline&& polyline )
 //
 PolylineValidator::~PolylineValidator  ()
 {
-    //for( auto & point : m_polyline )
-    //{
-    //    delete point;
-    //}
+    ClearEdges();
 
-    //for( auto & point : m_intersections )
-    //{
-    //    delete point;
-    //}
 
-    //for( auto & edge : m_edgeList )
-    //{
-    //    delete edge;
-    //}
+    for( auto & point : m_intersections )
+    {
+        delete point;
+    }
+
+    if( !m_polyline.empty() && m_resultPolylines.empty() )
+    {
+        for( auto & point : m_polyline )
+        {
+            delete point;
+        }
+    }
+    else
+    {
+        for( auto & polyline : m_resultPolylines )
+        {
+            for( auto point : polyline )
+            {
+                delete point;
+            }
+        }
+    }
 }
 
 // ***********************
@@ -87,6 +104,49 @@ void    PolylineValidator::InitEdges    ( Polyline & polyline )
 void    PolylineValidator::Sort         ()
 {
     std::sort( m_polyline.begin(), m_polyline.end(), p2t::cmp );
+}
+
+// ***********************
+//
+PolylinesVec &&         PolylineValidator::StealDecomposedPolylines()
+{
+    ClearEdges();
+
+    // Return source polylines, if no decomposition was needed.
+    if( m_resultPolylines.empty() && !m_polyline.empty() )
+    {
+        m_resultPolylines.push_back( std::move( m_polyline ) );
+    }
+    else
+    {
+        m_polyline.clear();
+    }
+
+    return std::move( m_resultPolylines );
+}
+
+// ***********************
+//
+IntersectionsVec &&     PolylineValidator::StealIntersections     ()
+{
+    ClearEdges();
+    return std::move( m_intersections );
+}
+
+// ***********************
+//
+void    PolylineValidator::ClearEdges  ()
+{
+    for( auto & point : m_intersections )
+        point->edge_list.clear();
+
+    for( auto & point : m_polyline )
+        point->edge_list.clear();
+
+    for( auto & edge : m_edgeList )
+        delete edge;
+
+    m_edgeList.clear();
 }
 
 // ***********************
@@ -161,6 +221,10 @@ std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
                 data.PolylineIdx = i;
 
                 dividePoints.push_back( data );
+
+                // If we found intersecting edge, we must ommit second point. We don't need duplciated points.
+                i++;
+                break;
             }
         }
     }
@@ -200,9 +264,9 @@ const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
 
 // ***********************
 //
-PolylinesVec            PolylineValidator::DecomposeContour        ()
+const PolylinesVec &         PolylineValidator::DecomposeContour        ()
 {
-    PolylinesVec polylines;
+    PolylinesVec& polylines = m_resultPolylines;
     if( m_intersections.empty() )
     {
         polylines.push_back( m_polyline );
@@ -238,10 +302,16 @@ PolylinesVec            PolylineValidator::DecomposeContour        ()
 
     // Connect ranges into contours.
     int intersectIdx = FindNextContourPart( dividePoints, m_polyline[ dividePoints.front().PolylineIdx ], 0 );
-    assert( intersectIdx != -1 );
 
 
     int curPolyline = 0;
+    if( intersectIdx < 0 )
+    {
+        intersectIdx = FindFreeDividePoint( dividePoints );
+        curPolyline = 1;
+        polylines.push_back( Polyline() );
+    }
+
     do
     {
         // Make single closed contour.
@@ -249,7 +319,7 @@ PolylinesVec            PolylineValidator::DecomposeContour        ()
 
         do
         {
-            int beginIdx = dividePoints[ intersectIdx ].PolylineIdx;
+            int beginIdx = dividePoints[ intersectIdx ].PolylineIdx + 1;
             int endIdx = dividePoints[ intersectIdx + 1 ].PolylineIdx;
 
             // Rewrite contour points to polyline.
@@ -267,14 +337,18 @@ PolylinesVec            PolylineValidator::DecomposeContour        ()
 
             // Find contour continuation.
             intersectIdx = FindNextContourPart( dividePoints, m_polyline[ endIdx ], intersectIdx + 1 );
-        } while( intersectIdx );
+        } while( intersectIdx != -1 );
+
+        //// We added have duplicate point on contour closing. Delete it.
+        //delete polylines[ curPolyline ].back();
+        //polylines[ curPolyline ].pop_back();
 
         // Add place for new contour.
         polylines.push_back( Polyline() );
 
         // Find new segment. Returns -1 if all segments were used.
         intersectIdx = FindFreeDividePoint( dividePoints );
-    } while( intersectIdx );
+    } while( intersectIdx != -1 );
 
     // We added to many polylines (check loop above).
     polylines.pop_back();
