@@ -766,7 +766,7 @@ bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
     else if( a.y == b.y )
     {
         // Make sure q is point with greater x value
-        if( a.x < b.x )
+        if( a.x > b.x )
         {
             return true;
         }

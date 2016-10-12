@@ -199,12 +199,12 @@ Mesh Triangulator::MakeMesh()
             polyline.push_back( d );
         }
 
-        PolylineValidator validator( polyline/*std::move( polyline )*/ );
+        PolylineValidator validator( std::move( polyline ) );
         validator.FindSelfIntersections();
         validator.DecomposeContour();
 
         m_selfIntersections.push_back( validator.StealIntersections() );
-        //polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
+        polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
     }
 
 	// Print contours to file for debug purposes.
