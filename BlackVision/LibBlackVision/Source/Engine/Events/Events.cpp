@@ -192,7 +192,7 @@ template<> std::string                      T2String    ( const ParamDescriptorE
 
 std::pair< AssetEvent::Command, const char* > AssetCommandMapping[] = 
 {
-    std::make_pair( AssetEvent::Command::ClearUnusedCachedAssets, "ClearUnusedCachedAssets" )
+    std::make_pair( AssetEvent::Command::ClearCache, "ClearCache" )
     , std::make_pair( AssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 

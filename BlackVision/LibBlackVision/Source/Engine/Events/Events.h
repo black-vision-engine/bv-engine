@@ -10,8 +10,8 @@
 #include "Engine/Events/ParamAddress.h"
 
 
-namespace bv
-{
+namespace bv {
+
 
 namespace model
 {
@@ -338,7 +338,7 @@ public:
 
     typedef enum
     {
-        ClearUnusedCachedAssets,
+        ClearCache,
         Fail            ///< Wrong command
     } Command;
 
@@ -1428,7 +1428,8 @@ public:
     const model::IPlugin *          PluginOwner;
     const SceneNode *               SceneNodeOwner;
 
-    ITextureDescriptorConstPtr      TextureAsset;
+    ITextureDescriptorConstPtr      TextureDesc;
+    AssetDescConstPtr               AssetDesc;
 
     virtual void                    Serialize           ( ISerializer & ser ) const;
     static IEventPtr                Create              ( IDeserializer & deser );

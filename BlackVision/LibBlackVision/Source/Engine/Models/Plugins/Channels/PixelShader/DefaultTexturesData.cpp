@@ -93,7 +93,7 @@ void                                            DefaultTexturesData::SetTexture 
     }
 
 	m_textureDescriptors[ idx ] = textureDesc;
-
+    
     TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
 }
 
@@ -102,7 +102,7 @@ void                                            DefaultTexturesData::SetTexture 
 void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptorPtr textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
-
+    
     TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
 }
 
@@ -193,7 +193,7 @@ void                                            DefaultTexturesData::ClearAll			
 void                                            DefaultTexturesData::TriggerEvent	        ( AssetTrackerInternalEvent::Command command, ITextureDescriptorPtr textureDesc )
 {
     auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
-    evt->TextureAsset = textureDesc;
+    evt->TextureDesc = textureDesc;
     GetDefaultEventManager().TriggerEvent( evt );
 }
 

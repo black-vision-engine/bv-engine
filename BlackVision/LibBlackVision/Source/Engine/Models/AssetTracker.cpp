@@ -16,6 +16,7 @@
 
 namespace bv {
 
+
 // *************************************
 //
                         AssetTracker::AssetTracker          ( Renderer * renderer, audio::AudioRenderer * audioRenderer, BVProjectEditor * projectEditor )
@@ -35,39 +36,59 @@ namespace bv {
 
 // *************************************
 //
-void                    AssetTracker::RegisterAsset         ( ITextureDescriptorConstPtr asset )
+void                    AssetTracker::ClearCache            ()
 {
-    //FIXME: register only cached textures
-    auto tex = GTexture2DCache.GetTexture( asset.get() );
-    if( GTexture2DCache.IsRegistered( asset.get() ) )
+    for( auto it = m_registeredUIDs.cbegin(); it != m_registeredUIDs.cend(); )
     {
-        RegisterAsset( tex );
+        if( it->second == 0 )
+        {
+            GTexture2DCache.ClearAsset( it->first );
+            m_registeredUIDs.erase( it++ );
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    for( auto it = m_registeredKeys.cbegin(); it != m_registeredKeys.cend(); )
+    {
+        auto key = it->first;
+
+        //FIXME: unregister assets and check count instead of pointer count
+        auto asset = AssetManager::GetInstance().GetFromCache( key );
+        if( asset && ( asset.use_count() == 2 ) )
+        {
+            AssetManager::GetInstance().RemoveFromCache( key );
+            m_registeredKeys.erase( it++ );
+        }
+        else
+        {
+            ++it;
+        }
     }
 }
 
 // *************************************
 //
-void                    AssetTracker::UnregisterAsset     ( ITextureDescriptorConstPtr asset )
+std::vector< AssetTracker::AssetUID >   AssetTracker::GetUnusedAssetUIDs    () const
 {
-    if( GTexture2DCache.IsRegistered( asset.get() ) )
-    {
-        auto tex = GTexture2DCache.GetTexture( asset.get() );
-        UnregisterAsset( tex );
-    }
-}
+    std::vector< AssetUID > ret;
 
-// *************************************
-//
-std::vector< TextureConstPtr >      AssetTracker::GetUnusedAssets       ()
-{
-    std::vector< TextureConstPtr > ret( m_unregisteredAssets.begin(), m_unregisteredAssets.end() );
-    m_unregisteredAssets.clear();
+    for( auto & uid : m_registeredUIDs )
+    {
+        if( uid.second == 0 )
+        {
+            ret.push_back( uid.first );
+        }
+    }
+
     return ret;
 }
 
 // *************************************
 //
-void                                AssetTracker::ProcessEvent          ( IEventPtr evt )
+void                                    AssetTracker::ProcessEvent          ( IEventPtr evt )
 {
     if( evt->GetEventType() == AssetTrackerInternalEvent::Type() )
     {
@@ -76,13 +97,27 @@ void                                AssetTracker::ProcessEvent          ( IEvent
         {
         case AssetTrackerInternalEvent::Command::RegisterAsset:
             {
-                RegisterAsset( typedEvent->TextureAsset );
+                if( typedEvent->TextureDesc )
+                {
+                    RegisterAsset( typedEvent->TextureDesc );
+                }
+                else if( typedEvent->AssetDesc )
+                {
+                    RegisterAsset( typedEvent->AssetDesc );
+                }
             }
             break;
 
         case AssetTrackerInternalEvent::Command::UnregisterAsset:
             {
-                UnregisterAsset( typedEvent->TextureAsset );
+                if( typedEvent->TextureDesc )
+                {
+                    UnregisterAsset( typedEvent->TextureDesc );
+                }
+                else if( typedEvent->AssetDesc )
+                {
+                    UnregisterAsset( typedEvent->AssetDesc );
+                }
             }
             break;
 
@@ -122,37 +157,30 @@ void                                AssetTracker::ProcessEvent          ( IEvent
 
 // *************************************
 //
-void                    AssetTracker::RegisterAsset         ( TextureConstPtr asset )
+void                    AssetTracker::RegisterAsset                     ( ITextureDescriptorConstPtr & texDesc )
 {
-    if( m_registeredAssetsMap.count( asset ) == 0 )
-    {
-        m_registeredAssetsMap[ asset ] = 0;
-    }
-
-    if( m_unregisteredAssets.count( asset ) )
-    {
-        m_unregisteredAssets.erase( asset );
-    }
-
-    m_registeredAssetsMap[ asset ] += 1;
+    RegisterAsset( m_registeredUIDs, texDesc->GetUID() );
 }
 
 // *************************************
 //
-void                    AssetTracker::UnregisterAsset       ( TextureConstPtr asset )
+void                    AssetTracker::RegisterAsset                     ( AssetDescConstPtr & assetDesc )
 {
-    if( m_registeredAssetsMap.empty() || m_registeredAssetsMap.count( asset ) == 0 )
-    {
-        return;
-    }
+    RegisterAsset( m_registeredKeys, assetDesc->GetKey() );
+}
 
-    m_registeredAssetsMap[ asset ] -= 1;
+// *************************************
+//
+void                    AssetTracker::UnregisterAsset                   ( ITextureDescriptorConstPtr & texDesc )
+{
+    UnregisterAsset( m_registeredUIDs, texDesc->GetUID() );
+}
 
-    if( m_registeredAssetsMap[ asset ] == 0 )
-    {
-        m_registeredAssetsMap.erase( asset );
-        m_unregisteredAssets.insert( asset );
-    }
+// *************************************
+//
+void                    AssetTracker::UnregisterAsset                   ( AssetDescConstPtr & assetDesc )
+{
+    UnregisterAsset( m_registeredKeys, assetDesc->GetKey() );
 }
 
 // *************************************

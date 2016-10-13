@@ -90,6 +90,20 @@ Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescri
     return sequence;
 }
 
+
+// *********************************
+//
+Texture2DPtr    Texture2DCache::GetTexture              ( ITextureDescriptor::uid_t uid ) const
+{
+    auto it = m_tex2DCache.find( uid );
+    if( it != m_tex2DCache.end() )
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
 // *********************************
 //
 bool            Texture2DCache::IsRegistered            ( const ITextureDescriptor * txParams ) const
@@ -117,27 +131,16 @@ void            Texture2DCache::ClearCache              ()
 
 // *********************************
 //
-void            Texture2DCache::ClearUnused				()
+bool            Texture2DCache::ClearAsset              ( ITextureDescriptor::uid_t uid )
 {
-	auto unused = 0;
-	for( auto it = m_tex2DCache.begin(); it != m_tex2DCache.end(); )
-	{
-		auto & tx = it->second;
-		if( tx.use_count() == 1 )
-		{
-			it = m_tex2DCache.erase( it );    
-			m_tex2DSet.erase( tx.get() );
-			unused++;
-		}
-		else
-		{
-			++it;
-		}
-	}
-
-#ifdef PRINT_TEXTURE_CACHE_STATS
-    printf( "Removed %d unused entries from texture cache\n", unused );
-#endif
+    if( m_tex2DCache.count( uid ) > 0 )
+    {
+        m_tex2DSet.erase( m_tex2DCache[ uid ].get() );
+        m_tex2DCache.erase( uid );
+        
+        return true;
+    }
+    return false;
 }
 
 // *********************************

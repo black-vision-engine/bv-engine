@@ -26,7 +26,8 @@ public:
     bool							UnregisterLoader( const std::string & assetDescUID );
 
     void                            AddToCache      ( AssetDescConstPtr & desc, AssetConstPtr asset );
-    AssetConstPtr                   GetFromCache    ( AssetDescConstPtr & desc );
+    bool                            RemoveFromCache ( const std::string & assetKey );
+    AssetConstPtr                   GetFromCache    ( const std::string & assetKey );
 
     ThumbnailConstPtr		        LoadThumbnail	( const AssetDescConstPtr & desc ) const;
 

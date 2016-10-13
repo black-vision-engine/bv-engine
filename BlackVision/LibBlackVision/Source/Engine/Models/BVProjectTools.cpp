@@ -175,13 +175,15 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
 //
 void                BVProjectTools::ReleaseUnusedResources                  ( Renderer * renderer, AssetTracker * assetTracker )
 {
-    auto assets = assetTracker->GetUnusedAssets();
-    for( auto asset : assets )
+    auto assetUIDs = assetTracker->GetUnusedAssetUIDs();
+    for( auto assetUID : assetUIDs )
     {
         //FIXME: for now only texture2d are used
-        auto tex = std::static_pointer_cast< const Texture2D >( asset );
-        assert( tex );
-        renderer->DeletePDR( tex.get() );
+        auto tex = GTexture2DCache.GetTexture( assetUID );
+        if( tex )
+        {
+            renderer->DeletePDR( tex.get() );
+        }
     }
 }
 

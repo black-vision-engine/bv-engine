@@ -14,31 +14,35 @@ class RawDataCache
 {
 public:
 
-	MemoryChunkConstPtr		Get		( const Hash & key ) const;
+    MemoryChunkConstPtr     Get     ( const Hash & key ) const;
 
-	// ******************************
-	// Adds entry to cache. If doesn't exist return false else returns true and adds entry
-	bool					Add		( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
+    // ******************************
+    // Adds entry to cache. If doesn't exist return false else returns true and adds entry
+    bool                    Add     ( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
 
-	// ******************************
-	// Updates entry in cache. If doesn't exist adds it.
-	void					Update	( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
+    // ******************************
+    // Removes entry from cache.
+    bool                    Remove  ( const Hash & key );
 
-	// ******************************
-	// 
-	bool					Exists	( const Hash & key );
+    // ******************************
+    // Updates entry in cache. If doesn't exist adds it.
+    void                    Update  ( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
 
-	// ******************************
-	// Returns instance of the class singleton. 
-	static RawDataCache &	GetInstance();
+    // ******************************
+    // 
+    bool                    Exists  ( const Hash & key );
+
+    // ******************************
+    // Returns instance of the class singleton. 
+    static RawDataCache &   GetInstance();
 
 private:
-	RawDataCache();
-	~RawDataCache();
+    RawDataCache();
+    ~RawDataCache();
 
-	MemoryChunkConstPtr		Find( const Hash & key ) const;
+    MemoryChunkConstPtr     Find( const Hash & key ) const;
 
-	std::map< Hash, MemoryChunkConstPtr > m_data;
+    std::map< Hash, MemoryChunkConstPtr > m_data;
 };
 
 } // bv
