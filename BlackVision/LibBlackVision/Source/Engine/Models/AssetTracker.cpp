@@ -9,6 +9,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
+#include "Assets/Cache/RawDataCache.h"
 
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -54,12 +55,17 @@ void                    AssetTracker::ClearCache            ()
     for( auto it = m_registeredKeys.cbegin(); it != m_registeredKeys.cend(); )
     {
         auto key = it->first;
+        auto keyHash = Hash::FromString( key );
 
         //FIXME: unregister assets and check count instead of pointer count
         auto asset = AssetManager::GetInstance().GetFromCache( key );
-        if( asset && ( asset.use_count() == 2 ) )
+        auto memChunk = RawDataCache::GetInstance().Get( keyHash );
+        if( ( asset && ( asset.use_count() == 2 ) ) ||
+            ( memChunk && ( memChunk.use_count() == 3 ) ) )
         {
             AssetManager::GetInstance().RemoveFromCache( key );
+            RawDataCache::GetInstance().Remove( keyHash );
+
             m_registeredKeys.erase( it++ );
         }
         else
@@ -97,26 +103,26 @@ void                                    AssetTracker::ProcessEvent          ( IE
         {
         case AssetTrackerInternalEvent::Command::RegisterAsset:
             {
-                if( typedEvent->TextureDesc )
+                if( typedEvent->HasUID() )
                 {
-                    RegisterAsset( typedEvent->TextureDesc );
+                    RegisterAsset( typedEvent->AssetUID );
                 }
-                else if( typedEvent->AssetDesc )
+                else if( typedEvent->HasKey() )
                 {
-                    RegisterAsset( typedEvent->AssetDesc );
+                    RegisterAsset( typedEvent->AssetKey );
                 }
             }
             break;
 
         case AssetTrackerInternalEvent::Command::UnregisterAsset:
             {
-                if( typedEvent->TextureDesc )
+                if( typedEvent->HasUID() )
                 {
-                    UnregisterAsset( typedEvent->TextureDesc );
+                    UnregisterAsset( typedEvent->AssetUID );
                 }
-                else if( typedEvent->AssetDesc )
+                else if( typedEvent->HasKey() )
                 {
-                    UnregisterAsset( typedEvent->AssetDesc );
+                    UnregisterAsset( typedEvent->AssetKey );
                 }
             }
             break;
@@ -157,30 +163,30 @@ void                                    AssetTracker::ProcessEvent          ( IE
 
 // *************************************
 //
-void                    AssetTracker::RegisterAsset                     ( ITextureDescriptorConstPtr & texDesc )
+void                    AssetTracker::RegisterAsset                     ( AssetUID uid )
 {
-    RegisterAsset( m_registeredUIDs, texDesc->GetUID() );
+    RegisterAsset( m_registeredUIDs, uid );
 }
 
 // *************************************
 //
-void                    AssetTracker::RegisterAsset                     ( AssetDescConstPtr & assetDesc )
+void                    AssetTracker::RegisterAsset                     ( AssetKey key )
 {
-    RegisterAsset( m_registeredKeys, assetDesc->GetKey() );
+    RegisterAsset( m_registeredKeys, key );
 }
 
 // *************************************
 //
-void                    AssetTracker::UnregisterAsset                   ( ITextureDescriptorConstPtr & texDesc )
+void                    AssetTracker::UnregisterAsset                   ( AssetUID uid )
 {
-    UnregisterAsset( m_registeredUIDs, texDesc->GetUID() );
+    UnregisterAsset( m_registeredUIDs, uid );
 }
 
 // *************************************
 //
-void                    AssetTracker::UnregisterAsset                   ( AssetDescConstPtr & assetDesc )
+void                    AssetTracker::UnregisterAsset                   ( AssetKey key )
 {
-    UnregisterAsset( m_registeredKeys, assetDesc->GetKey() );
+    UnregisterAsset( m_registeredKeys, key );
 }
 
 // *************************************

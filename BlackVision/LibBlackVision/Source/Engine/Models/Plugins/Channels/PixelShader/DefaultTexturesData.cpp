@@ -89,12 +89,12 @@ void                                            DefaultTexturesData::SetTexture 
 
     if( m_textureDescriptors[ idx ] )
     {
-        TriggerEvent( AssetTrackerInternalEvent::Command::UnregisterAsset, m_textureDescriptors[ idx ] );
+        GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::UnregisterAsset, m_textureDescriptors[ idx ]->GetUID() ) );
     }
 
 	m_textureDescriptors[ idx ] = textureDesc;
     
-    TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
+    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc->GetUID() ) );
 }
 
 // ******************************
@@ -103,7 +103,7 @@ void                                            DefaultTexturesData::AddTexture 
 {
     m_textureDescriptors.push_back( textureDesc );
     
-    TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
+    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc->GetUID() ) );
 }
 
 // ******************************
@@ -180,21 +180,12 @@ void                                            DefaultTexturesData::ClearAll			
 {
     for( auto tx : m_textureDescriptors )
     {
-        TriggerEvent( AssetTrackerInternalEvent::Command::UnregisterAsset, tx );
+        GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::UnregisterAsset, tx->GetUID() ) );
     }
 
 	m_textureDescriptors.clear();
 	m_animationDescriptors.clear();
     m_fontDescriptors.clear();
-}
-
-// ******************************
-//
-void                                            DefaultTexturesData::TriggerEvent	        ( AssetTrackerInternalEvent::Command command, ITextureDescriptorPtr textureDesc )
-{
-    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
-    evt->TextureDesc = textureDesc;
-    GetDefaultEventManager().TriggerEvent( evt );
 }
 
 } //model

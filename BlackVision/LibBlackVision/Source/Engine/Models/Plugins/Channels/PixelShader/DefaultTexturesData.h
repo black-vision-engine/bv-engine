@@ -44,10 +44,6 @@ public:
 
 	void													ClearAll			();
 
-private:
-
-    void                                                    TriggerEvent        ( AssetTrackerInternalEvent::Command command, ITextureDescriptorPtr textureDesc );
-
 };
 
 DEFINE_PTR_TYPE(DefaultTexturesData)

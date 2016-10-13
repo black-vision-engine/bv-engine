@@ -177,9 +177,10 @@ SingleTextureAssetConstPtr	TextureUtils::LoadSingleTexture( const SingleTextureA
         
         if( isCacheable )
         {
-            auto res = RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk, cacheOnDisk );
-            assert( res );
-            { res; }
+            if( RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk, cacheOnDisk ) )
+            {
+                GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, key ) );
+            }
         }
 
         auto format		= TextureUtils::ToTextureFormat( bpp, channelNum );
@@ -412,15 +413,24 @@ TextureAssetConstPtr TextureUtils::GetFromRawDataCache             ( const Textu
 void TextureUtils::AddToRawDataCache( const TextureAssetConstPtr & textureRes )
 {
     auto orig = textureRes->GetOriginal();
-    RawDataCache::GetInstance().Add( Hash::FromString( orig->GetKey()), orig->GetData(), orig->GetCacheOnHardDrive() );
-
+    
+    auto key = orig->GetKey();
+    if( RawDataCache::GetInstance().Add( Hash::FromString( key ), orig->GetData(), orig->GetCacheOnHardDrive() ) )
+    {
+        GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, key ) );
+    }
+    
     auto mm = textureRes->GetMipMaps();
 
     if( mm )
     {
         for( SizeType i = 0; i < mm->GetLevelsNum(); ++i )
         {
-            RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData(),  mm->GetLevel( i )->GetCacheOnHardDrive() );
+            key = mm->GetLevel( i )->GetKey();
+            if( RawDataCache::GetInstance().Add( Hash::FromString( key ), mm->GetLevel( i )->GetData(), mm->GetLevel( i )->GetCacheOnHardDrive() ) )
+            {
+                GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, key ) );
+            }
         }
     }
 }

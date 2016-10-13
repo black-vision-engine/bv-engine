@@ -7,8 +7,6 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/Events.h"
 
-#include "Assets/Cache/RawDataCache.h"
-
 #include <memory>
 
 
@@ -54,12 +52,10 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
             auto asset = it->second->LoadAsset( desc );
             if( asset != nullptr )
             {
-                m_assetCache.Add( desc, asset );
-
-                //TriggerEvent
-                auto evt = std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset );
-                evt->AssetDesc = desc;
-                GetDefaultEventManager().TriggerEvent( evt );
+                if( m_assetCache.Add( desc, asset ) )
+                {
+                    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
+                }
 
                 return asset;
             }
@@ -128,9 +124,6 @@ void AssetManager::AddToCache               ( AssetDescConstPtr& desc, AssetCons
 //
 bool AssetManager::RemoveFromCache          ( const std::string & assetKey )
 {
-    auto assetKeyHash = Hash::FromString( assetKey );
-    RawDataCache::GetInstance().Remove( assetKeyHash );
-
     return m_assetCache.Remove( assetKey );
 }
 

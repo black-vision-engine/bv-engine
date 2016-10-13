@@ -1415,21 +1415,25 @@ public:
         Fail            ///< Wrong command
     } Command;
 
+
 private:
 
     static const EventType          m_sEventType;
     static std::string              m_sEventName;
-    
+    static uintptr_t                m_sDefaultUID;
+
 public:
 
-    explicit                        AssetTrackerInternalEvent     ( Command eventCommand );
+    explicit                        AssetTrackerInternalEvent   ( Command eventCommand );
+    explicit                        AssetTrackerInternalEvent   ( Command eventCommand, uintptr_t assetUID );
+    explicit                        AssetTrackerInternalEvent   ( Command eventCommand, std::string assetKey );
 
     Command                         EventCommand;
     const model::IPlugin *          PluginOwner;
     const SceneNode *               SceneNodeOwner;
 
-    ITextureDescriptorConstPtr      TextureDesc;
-    AssetDescConstPtr               AssetDesc;
+    uintptr_t                       AssetUID;
+    std::string                     AssetKey;
 
     virtual void                    Serialize           ( ISerializer & ser ) const;
     static IEventPtr                Create              ( IDeserializer & deser );
@@ -1439,6 +1443,9 @@ public:
     static std::string &            Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
+
+    bool                            HasUID              () const;
+    bool                            HasKey              () const;
 
 };
 

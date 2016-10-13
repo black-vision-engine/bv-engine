@@ -44,11 +44,11 @@ public:
                                             AssetTracker        ( Renderer * renderer, audio::AudioRenderer * audioRenderer, BVProjectEditor * projectEditor );
                                             ~AssetTracker       ();
 
-    void                                    RegisterAsset       ( ITextureDescriptorConstPtr & texDesc );
-    void                                    UnregisterAsset     ( ITextureDescriptorConstPtr & texDesc );
+    void                                    RegisterAsset       ( AssetUID uid );
+    void                                    UnregisterAsset     ( AssetUID uid );
     
-    void                                    RegisterAsset       ( AssetDescConstPtr & assetDesc );
-    void                                    UnregisterAsset     ( AssetDescConstPtr & assetDesc );
+    void                                    RegisterAsset       ( AssetKey key );
+    void                                    UnregisterAsset     ( AssetKey key );
 
     void                                    ClearCache          ();
 

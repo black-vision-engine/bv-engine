@@ -4,13 +4,8 @@
 #include "HardDriveRawDataCache.h"
 
 
+namespace bv {
 
-#include "Memory/MemoryLeaks.h"
-
-
-
-namespace bv
-{
 
 // ******************************
 //
