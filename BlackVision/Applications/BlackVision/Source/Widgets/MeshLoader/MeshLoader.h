@@ -43,6 +43,8 @@ public:
     explicit                        MeshLoader          ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath );
                                     ~MeshLoader         ();
 
+    MeshLoader &                    operator=           ( const MeshLoader & other );
+
     static MeshLoaderPtr            Create              ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath );
 
     virtual void                    Serialize           ( ISerializer & ser ) const override;

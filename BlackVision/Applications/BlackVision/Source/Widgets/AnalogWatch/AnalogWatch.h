@@ -59,8 +59,10 @@ private:
 
 public:
 
-    explicit    AnalogWatch             ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
-                ~AnalogWatch            ();
+    explicit                            AnalogWatch     ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
+                                        ~AnalogWatch    ();
+
+    AnalogWatch &                       operator=       ( const AnalogWatch & other );
 
 	virtual void                        Initialize		()				override {}
     virtual void                        Update			( TimeType t )	override;

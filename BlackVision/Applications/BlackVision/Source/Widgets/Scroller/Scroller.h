@@ -155,6 +155,8 @@ public:
     explicit    Scroller            ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
                 ~Scroller           () {}
 
+    Scroller &  operator=           ( const Scroller & other );
+
     void        AddNext             ( model::BasicNodePtr node );
     bool        AddNext             ( Int32 nodeIdx );
     bool        AddNext             ( const std::string & childNodeName );

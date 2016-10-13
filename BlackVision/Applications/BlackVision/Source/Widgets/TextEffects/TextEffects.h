@@ -27,6 +27,7 @@ private:
     UInt32                          m_blurSize;
 
     explicit                        TextEffects     ( BasicNodePtr & node );
+    TextEffects &                   operator=       ( const TextEffects & other );
 
 public:
                                     ~TextEffects    ();

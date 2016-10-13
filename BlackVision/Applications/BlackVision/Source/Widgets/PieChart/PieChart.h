@@ -76,10 +76,13 @@ private:
 
     Float32                         m_totalPercent;
 
+
 public:
 
     explicit                        PieChart            ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
                                     ~PieChart           ();
+
+    PieChart &                      operator=           ( const PieChart & other );
 
     static PieChartPtr              Create              ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
 

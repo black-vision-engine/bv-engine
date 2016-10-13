@@ -42,8 +42,10 @@ private:
     
 public:
 
-    explicit    SmoothValueSetter   ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
-                ~SmoothValueSetter  ();
+    explicit                            SmoothValueSetter   ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
+                                        ~SmoothValueSetter  ();
+
+    SmoothValueSetter &                 operator=           ( const SmoothValueSetter & other );
 
 	virtual void                        Initialize		()				override {}
 	virtual void                        Update			( TimeType t )	override;
