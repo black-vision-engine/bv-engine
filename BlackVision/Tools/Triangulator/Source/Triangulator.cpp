@@ -141,13 +141,30 @@ void Triangulator::ProcessContours()
                 }
                 else
                 {
-                    FTPoint a = p1 - leftmost;
-                    FTPoint b = p2 - leftmost;
-                    if( b.X() * a.Y() <= b.Y() * a.X() )
+                    FTPoint* top = nullptr;
+                    FTPoint* bottom = nullptr;
+                    
+                    if( p1.Y() > p2.Y() )
                     {
-                        // Check cross product between vectors (on plane, which means result is only z value).
+                        top = &p1;
+                        bottom = &p2;
+                    }
+                    else
+                    {
+                        top = &p2;
+                        bottom = &p1;
+                    }
+
+                    FTPoint a = *bottom - leftmost;
+                    FTPoint b = *top - *bottom;
+                    if( a.X() * b.Y() - a.Y() * b.Y() < 0 )
+                    {
+                        // Sign of deteriminant of matrix created from vectors a and b.
                         parity++;
                     }
+
+                    // Point on segment.
+                    assert( a.X() * b.Y() - a.Y() * b.Y() != 0 );
                 }
             }
 

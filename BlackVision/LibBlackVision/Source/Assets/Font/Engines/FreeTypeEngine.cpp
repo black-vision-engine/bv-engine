@@ -570,13 +570,6 @@ std::vector<std::unique_ptr<FTContour>>		FreeTypeEngine::MakeContours( const FT_
         short startIndex = 0;
         short endIndex = 0;
 
-        auto orient = FT_Outline_Get_Orientation( &outline );
-        // Make sure the glyph has the proper orientation.
-        // Some formats use CCW order and other 
-        bool inverse = false;
-        if( orient == FT_ORIENTATION_POSTSCRIPT )
-            inverse = true;
-
         for( int i = 0; i < ftContourCount; ++i )
         {
             FT_Vector* pointList = &outline.points[ startIndex ];
@@ -586,9 +579,6 @@ std::vector<std::unique_ptr<FTContour>>		FreeTypeEngine::MakeContours( const FT_
             contourLength = ( endIndex - startIndex ) + 1;
 
             std::unique_ptr< FTContour > contour = std::unique_ptr< FTContour >( new FTContour( pointList, tagList, contourLength ) );
-
-            contour->SetParity( inverse );
-
             contourList.push_back( std::move( contour ) );
 
             startIndex = endIndex + 1;
