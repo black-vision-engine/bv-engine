@@ -2,20 +2,15 @@
 
 #include "TextEffects.h"
 
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/BV/BVSerializeContext.h"
-#include "Serialization/BV/BVDeserializeContext.h"
-
-#include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 
 
-namespace bv { namespace model
-{
+namespace bv { namespace model {
 
-namespace 
-{
+namespace {
 
 const std::string SHADOW_TEXT_NODE_EFFECT_NAME = "text_shadow_node_effect";
 
@@ -23,9 +18,10 @@ const std::string SHADOW_TEXT_NODE_EFFECT_NAME = "text_shadow_node_effect";
 
 const std::string   TextEffects::m_type = "text_effects";
 
+
 // ***********************
 //
-TextEffects::TextEffects     ( const BasicNodePtr & node )
+TextEffects::TextEffects     ( BasicNodePtr & node )
     : m_node( node )
     , m_blurSize( 5 )
 {}
@@ -46,7 +42,6 @@ const std::string &      TextEffects::Type              ()
 //
 void					TextEffects::Initialize		    ()
 {
-
 }
 
 // ***********************
@@ -128,7 +123,7 @@ bool                    TextEffects::HandleEvent        ( IDeserializer & eventS
         auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
         auto scene = editor->GetModelScene( context->GetSceneName() );
 
-        m_shadowNode = editor->AddNodeCopy( scene, m_node, scene, m_node );
+        editor->AddNodeCopy( scene, m_node, scene, m_node );
 
         if( ReloadShadowNodeAsset() )
         {
@@ -184,14 +179,14 @@ void                    TextEffects::Serialize          ( ISerializer & ser ) co
 
 // ***********************
 //
-TextEffectsPtr          TextEffects::Create             ( const BasicNodePtr & node )
+TextEffectsPtr          TextEffects::Create             ( BasicNodePtr & node )
 {
     return TextEffectsPtr( new TextEffects( node ) );
 }
 
 // ***********************
 //
-TextEffectsPtr          TextEffects::Create             ( const IDeserializer & deser, const BasicNodePtr & node )
+TextEffectsPtr          TextEffects::Create             ( const IDeserializer & deser, BasicNodePtr & node )
 {
     { deser; node; }
     return nullptr;

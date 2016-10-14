@@ -2,7 +2,6 @@
 
 #include "BVAppLogic.h"
 #include "Engine/Models/BVProjectEditor.h"
-#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
 
@@ -31,9 +30,11 @@ void		AssetHandlers::CacheHandler			( bv::IEventPtr evt )
         bv::AssetEventPtr assetEvent = std::static_pointer_cast< bv::AssetEvent >( evt );
         AssetEvent::Command command = assetEvent->AssetCommand;
         
-        if( command == AssetEvent::Command::ClearUnusedCachedAssets )
+        auto assetTracker = m_appLogic->GetBVProject()->GetAssetTracker();
+
+        if( command == AssetEvent::Command::ClearCache )
         {
-            GTexture2DCache.ClearUnused();
+            assetTracker->ClearCache();
             SendSimpleResponse( command, assetEvent->EventID, assetEvent->SocketID, true );
         }
         else

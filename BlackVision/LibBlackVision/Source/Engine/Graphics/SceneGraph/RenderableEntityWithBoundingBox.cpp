@@ -56,29 +56,29 @@ RenderableEntity *  BuildRenderableCenterOfMass          ( const model::Bounding
 //
 RenderableEntityWithBoundingBox::RenderableEntityWithBoundingBox         ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect )
     : RenderableEntity( type, rad, effect )
+    , m_renderableBoundingBox( nullptr )
+    , m_renderableCenterOfMass( nullptr )
+
 {
     if( boundingBox )
     {
-        m_renderableBoundingBox = BuildRenderableBoundingBox( boundingBox );
-        m_renderableCenterOfMass = BuildRenderableCenterOfMass( boundingBox );
+        m_renderableBoundingBox = std::unique_ptr< RenderableEntity >( BuildRenderableBoundingBox( boundingBox ) );
+        m_renderableCenterOfMass = std::unique_ptr< RenderableEntity >( BuildRenderableCenterOfMass( boundingBox ) );
     }
-    else
-        m_renderableBoundingBox = nullptr;
 }
-
 
 // ***********************
 //
 RenderableEntity *    RenderableEntityWithBoundingBox::GetBoundingBox                          () const
 {
-    return m_renderableBoundingBox;
+    return m_renderableBoundingBox.get();
 }
 
 // ***********************
 //
 RenderableEntity *          RenderableEntityWithBoundingBox::GetCenterOfMass                         () const
 {
-    return m_renderableCenterOfMass;
+    return m_renderableCenterOfMass.get();
 }
 
 // ***********************

@@ -8,12 +8,6 @@
 #include "Engine/Models/AssetTracker.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv { namespace model {
 
 // ******************************
@@ -26,6 +20,7 @@ DefaultTexturesData::DefaultTexturesData ()
 //
 DefaultTexturesData::~DefaultTexturesData()
 {
+	ClearAll();
 }
 
 // ******************************
@@ -94,12 +89,12 @@ void                                            DefaultTexturesData::SetTexture 
 
     if( m_textureDescriptors[ idx ] )
     {
-        TriggerEvent( AssetTrackerInternalEvent::Command::UnregisterAsset, m_textureDescriptors[ idx ] );
+        GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::UnregisterAsset, m_textureDescriptors[ idx ]->GetUID() ) );
     }
 
 	m_textureDescriptors[ idx ] = textureDesc;
-
-    TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
+    
+    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc->GetUID() ) );
 }
 
 // ******************************
@@ -107,12 +102,8 @@ void                                            DefaultTexturesData::SetTexture 
 void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptorPtr textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
-
-    auto assetTrackerEvt = std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset );
-    assetTrackerEvt->TextureAsset = textureDesc;
-    GetDefaultEventManager().TriggerEvent( assetTrackerEvt );
-
-    TriggerEvent( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc );
+    
+    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, textureDesc->GetUID() ) );
 }
 
 // ******************************
@@ -189,21 +180,12 @@ void                                            DefaultTexturesData::ClearAll			
 {
     for( auto tx : m_textureDescriptors )
     {
-        TriggerEvent( AssetTrackerInternalEvent::Command::UnregisterAsset, tx );
+        GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::UnregisterAsset, tx->GetUID() ) );
     }
 
 	m_textureDescriptors.clear();
 	m_animationDescriptors.clear();
     m_fontDescriptors.clear();
-}
-
-// ******************************
-//
-void                                            DefaultTexturesData::TriggerEvent	        ( AssetTrackerInternalEvent::Command command, ITextureDescriptorPtr textureDesc )
-{
-    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
-    evt->TextureAsset = textureDesc;
-    GetDefaultEventManager().TriggerEvent( evt );
 }
 
 } //model

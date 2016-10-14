@@ -11,10 +11,10 @@
 #include "Arrange/Arrange.h"
 
 
-namespace bv
-{
+namespace bv {
 
-model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodePtr logicParent )
+
+model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodePtr & logicParent )
 {
     const std::string& logicType = deser.GetAttribute( "type" );
 
@@ -62,5 +62,4 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     return nullptr;
 }
 
-
-}
+} //bv

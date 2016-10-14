@@ -91,7 +91,7 @@ template< class TimeValueT, class ValueT >
 CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( const CompositeInterpolator& that )
 { 
     keys = that.keys; 
-    interpolators = that.interpolators; 
+    interpolators = that.interpolators;
     m_tolerance = that.m_tolerance; 
     m_type = that.m_type; 
     m_preMethod = that.m_preMethod;
@@ -154,38 +154,37 @@ std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInte
     else
     {
         if( deser.EnterChild( "interpolation" ) )
-		{
-			for( auto key : keys )
-			{
-				interpolator->AddKey( key->t, key->val );
-				if( key != keys.back() )
-				{
-					interpolator->SetAddedKeyCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
-					if( deser.NextChild() == false )
-						if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
-							deser.ExitChild();
-						else // we've got malformed XML
-						{
-							assert( false ); // FIXME: error handling
-							return nullptr;
-						}
-				}
-			}
+        {
+            for( auto key : keys )
+            {
+                interpolator->AddKey( key->t, key->val );
+                if( key != keys.back() )
+                {
+                    interpolator->SetAddedKeyCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
+                    if( deser.NextChild() == false )
+                        if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
+                            deser.ExitChild();
+                        else // we've got malformed XML
+                        {
+                            assert( false ); // FIXME: error handling
+                            return nullptr;
+                        }
+                }
+            }
 
-			deser.EnterChild( "interpolation" );
-			size_t i = 0;
-			do
-			{
-				auto interpolators = interpolator->GetInterpolators();
-				interpolators[ i++ ]->Deserialize( deser );
-			} while( deser.NextChild() );
-			deser.ExitChild(); // exit "interpolation"
-		}
-		else
-		{
-			for( auto key : keys ) // no interpolation types
-				interpolator->AddKey( key->t, key->val );
-		}
+            deser.EnterChild( "interpolation" );
+            size_t i = 0;
+            do
+            {
+                interpolator->interpolators[ i++ ]->Deserialize( deser );
+            } while( deser.NextChild() );
+            deser.ExitChild(); // exit "interpolation"
+        }
+        else
+        {
+            for( auto key : keys ) // no interpolation types
+                interpolator->AddKey( key->t, key->val );
+        }
         deser.ExitChild(); // exit "interpolations"
     }
 
@@ -201,7 +200,7 @@ std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInte
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT > * > & interpolators, size_t i, CurveType cType )
+void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i, CurveType cType )
 {
     typedef Key< TimeValueT, ValueT > Key;
 
@@ -213,7 +212,7 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT > * > & inte
         return;
 
     assert( iType == EvaluatorType::ET_BEZIER );
-    auto be = ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ];
+    auto be = std::static_pointer_cast< BezierEvaluator< TimeValueT, ValueT > >( interpolators[ i ] );
 
     if( cType == CurveType::CT_COSINE_LIKE )
     {
@@ -226,8 +225,8 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT > * > & inte
         auto prevE = ( i == 0 ) ? interpolators[ 0 ] : interpolators[ i-1 ];
         auto nextE = ( i == interpolators.size()-1 ) ? interpolators.back() : interpolators[ i+1 ];
 
-        auto prevBE = ( BezierEvaluator< TimeValueT, ValueT >* ) prevE;
-        auto nextBE = ( BezierEvaluator< TimeValueT, ValueT >* ) nextE;
+        auto prevBE = std::static_pointer_cast< BezierEvaluator< TimeValueT, ValueT > >( prevE );
+        auto nextBE = std::static_pointer_cast< BezierEvaluator< TimeValueT, ValueT > >( nextE );
 
         be->v1 = scale * ( be->key2 - prevBE->key1 );
         be->v2 = -scale * ( nextBE->key2 - be->key1 );
@@ -241,48 +240,48 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT > * > & inte
 // *******************************
 //
 template<>
-void UpdateInterpolator< TimeType, std::string >( std::vector< IEvaluator< TimeType, std::string > * > & , size_t, CurveType )
+void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t, CurveType )
 {}
 
 // *******************************
 //
 template<>
-void UpdateInterpolator< TimeType, std::wstring >( std::vector< IEvaluator< TimeType, std::wstring > * > &, size_t, CurveType )
+void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t, CurveType )
 {}
 
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-IEvaluator<TimeValueT, ValueT > * CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+std::shared_ptr< IEvaluator< TimeValueT, ValueT > > CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
-        return new ConstEvaluator< TimeValueT, ValueT >( k1.val );
+        return std::make_shared< ConstEvaluator< TimeValueT, ValueT > >( k1.val );
     else if( type == CurveType::CT_LINEAR )
-        return new LinearEvaluator< TimeValueT, ValueT >( k1, k2, tolerance );
+        return std::make_shared< LinearEvaluator< TimeValueT, ValueT > >( k1, k2, tolerance );
     else if( type == CurveType::CT_BEZIER )
-        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
+        return std::make_shared< BezierEvaluator< TimeValueT, ValueT > >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
     else if( type == CurveType::CT_COSINE_LIKE )
-        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
+        return std::make_shared< BezierEvaluator< TimeValueT, ValueT > >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
     else if( type == CurveType::CT_CUBIC_IN )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0, tolerance );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 0.f, 0.f, 1.f, 0.f, 0.f, tolerance, false );
     else if( type == CurveType::CT_CUBIC_OUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3, tolerance );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 0.f, 0.f, 1.f, -3.f, 3.f, tolerance, false );
     else if( type == CurveType::CT_ELASTIC_IN )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0, tolerance );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 33.f, -59.f, 32.f, -5.f, 0.f, tolerance, false );
     else if( type == CurveType::CT_ELASTIC_OUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15, tolerance );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 33.f, -106.f, 126.f, -67.f, 15.f, tolerance, false );
     //else if( type == CT_CUBIC_IN_BOUNCE )
     //    return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0, true );
     //else if( type == CT_CUBIC_OUT_BOUNCE )
     //    return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3, true );
     else if( type == CT_ELASTIC_IN_BOUNCE )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0, tolerance, true );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 33.f, -59.f, 32.f, -5.f, 0.f, tolerance, true );
     else if( type == CT_ELASTIC_OUT_BOUNCE )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15, tolerance, true );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 33.f, -106.f, 126.f, -67.f, 15.f, tolerance, true );
     else if( type == CT_QUARTIC_INOUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 6, -15, 10, 0, 0, tolerance );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 6.f, -15.f, 10.f, 0.f, 0.f, tolerance, false );
     else if( type == CT_CUBIC_INTOUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, -2, 3, 0, tolerance );
+        return std::make_shared< PolynomialEvaluator< TimeValueT, ValueT > >( k1, k2, 0.f, 0.f, -2.f, 3.f, 0.f, tolerance, false );
     else
     {
         assert( false );
@@ -293,11 +292,11 @@ IEvaluator<TimeValueT, ValueT > * CreateDummyInterpolator( CurveType type, Key< 
 // *******************************
 //
 template<>
-IEvaluator< TimeType, std::wstring > * CreateDummyInterpolator( CurveType type, Key< TimeType, std::wstring  > k1, Key< TimeType, std::wstring  >, TimeType ) // FIXME maybe
+std::shared_ptr< IEvaluator< TimeType, std::wstring > > CreateDummyInterpolator( CurveType type, Key< TimeType, std::wstring  > k1, Key< TimeType, std::wstring  >, TimeType ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
     {
-        return new ConstEvaluator< TimeType, std::wstring >( k1.val );
+        return std::make_shared< ConstEvaluator< TimeType, std::wstring > >( k1.val );
     }
     else
     {
@@ -309,11 +308,11 @@ IEvaluator< TimeType, std::wstring > * CreateDummyInterpolator( CurveType type, 
 // *******************************
 //
 template<>
-IEvaluator< TimeType, std::string > * CreateDummyInterpolator( CurveType type, Key< TimeType, std::string  > k1, Key< TimeType, std::string  >, TimeType ) // FIXME maybe
+std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpolator( CurveType type, Key< TimeType, std::string  > k1, Key< TimeType, std::string  >, TimeType ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
     {
-        return new ConstEvaluator< TimeType, std::string >( k1.val );
+        return std::make_shared< ConstEvaluator< TimeType, std::string > >( k1.val );
     }
     else
     {
@@ -621,14 +620,6 @@ std::vector< Key< TimeValueT, ValueT > > &                                Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-const std::vector< IEvaluator< TimeValueT, ValueT >* > &                  CompositeInterpolator< TimeValueT, ValueT >::GetInterpolators()
-{
-    return interpolators;
-}
-
-// *******************************
-//
-template< class TimeValueT, class ValueT >
 void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
     if( keys.size() == 0 )
@@ -720,6 +711,7 @@ CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( floa
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {
 }
+
 
 template class CompositeInterpolator<TimeType, TimeType>;
 template class CompositeInterpolator<TimeType, bool>;

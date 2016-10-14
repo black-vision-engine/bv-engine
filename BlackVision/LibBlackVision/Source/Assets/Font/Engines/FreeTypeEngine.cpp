@@ -61,34 +61,34 @@ struct Span
 class Spans
 {
 public:
-	mathematics::Rect		m_boundingRect;
+    mathematics::Rect		m_boundingRect;
 
-	std::vector< Span * > m_spans;
+    std::vector< Span * > m_spans;
 
-	Span * operator [] ( SizeType i )
-	{
-		return m_spans[ i ];
-	}
+    Span * operator [] ( SizeType i )
+    {
+        return m_spans[ i ];
+    }
 
-	const Span * operator [] ( SizeType i ) const
-	{
-		return m_spans[ i ];
-	}
+    const Span * operator [] ( SizeType i ) const
+    {
+        return m_spans[ i ];
+    }
 
-	SizeType	size() const
-	{
-		return m_spans.size();
-	}
+    SizeType	size() const
+    {
+        return m_spans.size();
+    }
 
-	void push_back( Span * s )
-	{
-		m_spans.push_back( s );
-	}
+    void push_back( Span * s )
+    {
+        m_spans.push_back( s );
+    }
 
-	bool empty() const
-	{
-		return m_spans.empty();
-	}
+    bool empty() const
+    {
+        return m_spans.empty();
+    }
 };
 
 
@@ -128,26 +128,26 @@ std::map< std::pair< wchar_t, wchar_t >, float >        BuildKerning    ( FT_Fac
 //
 FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, size_t fontSize )
 {
-	return FreeTypeEnginePtr( new FreeTypeEngine( fontFilePath, fontSize ) );
+    return FreeTypeEnginePtr( new FreeTypeEngine( fontFilePath, fontSize ) );
 }
 
 namespace {
 
 void	RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer, UInt8 channel )
 {
-	auto ymax = (Int32)spans.m_boundingRect.ymax; // FIXME: remove explicit casting
-	auto xmin = (Int32)spans.m_boundingRect.xmin;
+    auto ymax = (Int32)spans.m_boundingRect.ymax; // FIXME: remove explicit casting
+    auto xmin = (Int32)spans.m_boundingRect.xmin;
 
-	for( auto i = spans.size(); i-- > 0;)
-	{
-		auto s = spans[ i ];
-		for ( Int32 w = 0; w < s->width; ++w )
-		{
-			auto c = 4 * (pitch * (ymax - s->y) + s->x -  xmin +  w);
-			buffer[ c + channel ] = (char)s->coverage;
-			buffer[ c + 3 ] = (char)s->coverage;
-		}
-	}
+    for( auto i = spans.size(); i-- > 0;)
+    {
+        auto s = spans[ i ];
+        for ( Int32 w = 0; w < s->width; ++w )
+        {
+            auto c = 4 * (pitch * (ymax - s->y) + s->x -  xmin +  w);
+            buffer[ c + channel ] = (char)s->coverage;
+            buffer[ c + 3 ] = (char)s->coverage;
+        }
+    }
 }
 
 // Each time the renderer calls us back we just push another span entry on
@@ -185,14 +185,14 @@ RenderSpans(FT_Library &library,
 
 
 FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, SizeType fontSize )
-	: m_fontSize( fontSize )
-	, m_face( nullptr )
-	, m_library( nullptr )
-	, m_maxHeight( 0 )
-	, m_maxWidth( 0 )
-	, m_fontFilePath( fontFilePath )
+    : m_fontSize( fontSize )
+    , m_face( nullptr )
+    , m_library( nullptr )
+    , m_maxHeight( 0 )
+    , m_maxWidth( 0 )
+    , m_fontFilePath( fontFilePath )
 {
-	if (FT_Init_FreeType (&m_library))
+    if (FT_Init_FreeType (&m_library))
     {
         std::cerr << "Could not init FreeType library\n" << std::endl;
     }
@@ -202,7 +202,7 @@ FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, SizeType fontS
         std::cerr << "Could not open font\n" << std::endl;
     }
 
-	FT_Set_Pixel_Sizes( m_face, (FT_UInt)m_fontSize, (FT_UInt)m_fontSize );
+    FT_Set_Pixel_Sizes( m_face, (FT_UInt)m_fontSize, (FT_UInt)m_fontSize );
 }
 
 // *********************************
@@ -214,101 +214,101 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 
     if (FT_Load_Glyph(m_face, gindex, FT_LOAD_NO_BITMAP) == 0)
     {
-		// Need an outline for this to work.
-		if (m_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE)
-		{
-			// Render the basic glyph to a span list.
+        // Need an outline for this to work.
+        if (m_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE)
+        {
+            // Render the basic glyph to a span list.
 
-			if( outlineWidth == 0 )
-				RenderSpans(m_library, &m_face->glyph->outline, &spans);
-			else
-			{
-				        // Set up a stroker.
-				FT_Stroker stroker;
-				FT_Stroker_New(m_library, &stroker);
-				FT_Stroker_Set(stroker,
+            if( outlineWidth == 0 )
+                RenderSpans(m_library, &m_face->glyph->outline, &spans);
+            else
+            {
+                        // Set up a stroker.
+                FT_Stroker stroker;
+                FT_Stroker_New(m_library, &stroker);
+                FT_Stroker_Set(stroker,
                        (int)(outlineWidth * 64),
                        FT_STROKER_LINECAP_ROUND,
                        FT_STROKER_LINEJOIN_ROUND,
                        0);
 
-				FT_Glyph glyph;
-				if (FT_Get_Glyph(m_face->glyph, &glyph) == 0)
-				{
-					FT_Glyph_StrokeBorder(&glyph, stroker, 0, 1);
-				}
+                FT_Glyph glyph;
+                if (FT_Get_Glyph(m_face->glyph, &glyph) == 0)
+                {
+                    FT_Glyph_StrokeBorder(&glyph, stroker, 0, 1);
+                }
 
-				if (glyph->format == FT_GLYPH_FORMAT_OUTLINE)
-				{
-				// Render the outline spans to the span list
-					FT_Outline *o =
-						&reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
-					RenderSpans( m_library, o, &spans);
-				}
+                if (glyph->format == FT_GLYPH_FORMAT_OUTLINE)
+                {
+                // Render the outline spans to the span list
+                    FT_Outline *o =
+                        &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
+                    RenderSpans( m_library, o, &spans);
+                }
 
-				// Clean up afterwards.
-				FT_Stroker_Done(stroker);
-				FT_Done_Glyph(glyph);
-			}
+                // Clean up afterwards.
+                FT_Stroker_Done(stroker);
+                FT_Done_Glyph(glyph);
+            }
 
-			// Now we need to put it all together.
-			if (!spans.empty())
-			{
-				// Figure out what the bounding rect is for both the span lists.
-				mathematics::Rect rect(	(float)spans[ 0 ]->x,
-							(float)spans[ 0 ]->y,
-							(float)spans[ 0 ]->x,
-							(float)spans[ 0 ]->y);
-				for ( SizeType i = 0; i < spans.size(); ++i )
-				{
-					auto s = spans[ i ];
-					rect.Include(glm::vec2((float)s->x, (float)s->y));
-					rect.Include(glm::vec2((float)s->x + s->width - 1, (float)s->y));
-				}
+            // Now we need to put it all together.
+            if (!spans.empty())
+            {
+                // Figure out what the bounding rect is for both the span lists.
+                mathematics::Rect rect(	(float)spans[ 0 ]->x,
+                            (float)spans[ 0 ]->y,
+                            (float)spans[ 0 ]->x,
+                            (float)spans[ 0 ]->y);
+                for ( SizeType i = 0; i < spans.size(); ++i )
+                {
+                    auto s = spans[ i ];
+                    rect.Include(glm::vec2((float)s->x, (float)s->y));
+                    rect.Include(glm::vec2((float)s->x + s->width - 1, (float)s->y));
+                }
 
-				spans.m_boundingRect = rect;
+                spans.m_boundingRect = rect;
 
-				// This is unused in this test but you would need this to draw
-				// more than one glyph.
-				Int32 bearingX	= m_face->glyph->metrics.horiBearingX >> 6;
-				Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
+                // This is unused in this test but you would need this to draw
+                // more than one glyph.
+                Int32 bearingX	= m_face->glyph->metrics.horiBearingX >> 6;
+                Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
 
-				// Get some metrics of our image.
-				//int imgWidth = (int)rect.Width(),
-				//	imgHeight = (int)rect.Height(),
-				//	imgSize = imgWidth * imgHeight;
+                // Get some metrics of our image.
+                //int imgWidth = (int)rect.Width(),
+                //	imgHeight = (int)rect.Height(),
+                //	imgSize = imgWidth * imgHeight;
 
-				auto newGlyph = new Glyph;
+                auto newGlyph = new Glyph;
 
-				newGlyph->code = ch;
-				newGlyph->size = m_fontSize;
-				newGlyph->width = (int)rect.Width() + 1;
-				newGlyph->height = (int)rect.Height() + 1;
+                newGlyph->code = ch;
+                newGlyph->size = m_fontSize;
+                newGlyph->width = (int)rect.Width() + 1;
+                newGlyph->height = (int)rect.Height() + 1;
 
-				if( newGlyph->height > m_maxHeight )
-					m_maxHeight = newGlyph->height;
+                if( newGlyph->height > m_maxHeight )
+                    m_maxHeight = newGlyph->height;
 
-				if( newGlyph->width > m_maxWidth )
-					m_maxWidth = newGlyph->width;
+                if( newGlyph->width > m_maxWidth )
+                    m_maxWidth = newGlyph->width;
 
 
-				newGlyph->bearingX = bearingX;
-				newGlyph->bearingY = bearingY;
-				newGlyph->advanceX = m_face->glyph->advance.x >> 6;
-				newGlyph->advanceY = m_face->glyph->advance.y >> 6;
+                newGlyph->bearingX = bearingX;
+                newGlyph->bearingY = bearingY;
+                newGlyph->advanceX = m_face->glyph->advance.x >> 6;
+                newGlyph->advanceY = m_face->glyph->advance.y >> 6;
 
-				//if( outlineWidth != 0 )
-				//{
-				//	newGlyph->advanceX = std::max( newGlyph->advanceX, (Int32)newGlyph->width );
-				//	newGlyph->advanceY = std::max( newGlyph->advanceY, (Int32)newGlyph->height );
-				//}
+                //if( outlineWidth != 0 )
+                //{
+                //	newGlyph->advanceX = std::max( newGlyph->advanceX, (Int32)newGlyph->width );
+                //	newGlyph->advanceY = std::max( newGlyph->advanceY, (Int32)newGlyph->height );
+                //}
 
-				return newGlyph;
-			}
-		}
-	}
+                return newGlyph;
+            }
+        }
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 namespace
@@ -318,9 +318,9 @@ namespace
 //
 size_t GetSizeOfFile( const std::wstring& path )
 {
-	struct _stat fileinfo;
-	_wstat(path.c_str(), &fileinfo);
-	return fileinfo.st_size;
+    struct _stat fileinfo;
+    _wstat(path.c_str(), &fileinfo);
+    return fileinfo.st_size;
 }
 } // anonymous
 // *******************************
@@ -331,31 +331,31 @@ std::wstring LoadUtf8FileToString(const std::wstring & _filename)
 
     auto filename = std::wstring( filenameStr.begin(), filenameStr.end() );
 
-	std::wstring buffer;            // stores file contents
-	FILE* f = nullptr;
+    std::wstring buffer;            // stores file contents
+    FILE* f = nullptr;
     _wfopen_s(&f, filename.c_str(), L"rtS, ccs=UTF-8");
 
-	// Failed to open file
-	if (f == NULL)
-	{
-		// ...handle some error...
-		return buffer;
-	}
+    // Failed to open file
+    if (f == NULL)
+    {
+        // ...handle some error...
+        return buffer;
+    }
 
-	size_t filesize = GetSizeOfFile(filename);
+    size_t filesize = GetSizeOfFile(filename);
 
-	// Read entire file contents in to memory
-	if (filesize > 0)
-	{
-		buffer.resize(filesize);
-		size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
-		buffer.resize(wchars_read);
-		buffer.shrink_to_fit();
-	}
+    // Read entire file contents in to memory
+    if (filesize > 0)
+    {
+        buffer.resize(filesize);
+        size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
+        buffer.resize(wchars_read);
+        buffer.shrink_to_fit();
+    }
 
-	fclose(f);
+    fclose(f);
 
-	return buffer;
+    return buffer;
 }
 
 
@@ -365,144 +365,144 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 {
     auto wcharsSet = LoadUtf8FileToString( wcharsSetFile );
 
-	SizeType							glyphsNum	= wcharsSet.size();
-	Int32								spadding	= (Int32)padding;
+    SizeType							glyphsNum	= wcharsSet.size();
+    Int32								spadding	= (Int32)padding;
 
-	std::map< wchar_t, Glyph * >		glyphs;
-	std::map< wchar_t, Glyph * >		outlineGlyphs;
-	std::map< wchar_t, Spans >			spans;
-	std::map< wchar_t, Spans >			outlineSpans;
+    std::map< wchar_t, Glyph * >		glyphs;
+    std::map< wchar_t, Glyph * >		outlineGlyphs;
+    std::map< wchar_t, Spans >			spans;
+    std::map< wchar_t, Spans >			outlineSpans;
 
     for ( auto ch : wcharsSet )
     {
-		spans[ ch ] = Spans();	
-		glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], 0 );
-	}
+        spans[ ch ] = Spans();	
+        glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], 0 );
+    }
 
-	if( outlineWidth != 0 )
-	{
-		for ( auto ch : wcharsSet )
-		{
-			outlineSpans[ ch ] = Spans();
-			outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
-		}
-	}
+    if( outlineWidth != 0 )
+    {
+        for ( auto ch : wcharsSet )
+        {
+            outlineSpans[ ch ] = Spans();
+            outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
+        }
+    }
 
-	auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
+    auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
 
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;
 
-	auto altlasWidth	= maxWidth	* atlasSize;
-	auto altlasHeight	= maxHeight * atlasSize;
+    auto altlasWidth	= maxWidth	* atlasSize;
+    auto altlasHeight	= maxHeight * atlasSize;
 
-	if( makeSizesPowerOf2 ) 
-	{
-		altlasWidth	= RoundUpToPowerOfTwo( maxWidth	* atlasSize );
-		altlasHeight	= RoundUpToPowerOfTwo( maxHeight * atlasSize );
-	}
+    if( makeSizesPowerOf2 ) 
+    {
+        altlasWidth	= RoundUpToPowerOfTwo( maxWidth	* atlasSize );
+        altlasHeight	= RoundUpToPowerOfTwo( maxHeight * atlasSize );
+    }
 
-	auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
+    auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
-	for ( auto ch : wcharsSet )
-		atlas->SetGlyph( ch, glyphs[ ch ] );
+    for ( auto ch : wcharsSet )
+        atlas->SetGlyph( ch, glyphs[ ch ] );
 
-	if( outlineWidth != 0 )
-		for ( auto ch : wcharsSet )
-			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
+    if( outlineWidth != 0 )
+        for ( auto ch : wcharsSet )
+            atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
 
-	char* atlasData = new char[ altlasWidth * altlasHeight * 4 ];
+    char* atlasData = new char[ altlasWidth * altlasHeight * 4 ];
 
-	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
+    memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
-	char * currAddress = atlasData;
+    char * currAddress = atlasData;
 
-	for( UInt32 y = 0; y < atlasSize; ++y )
-	{
-		currAddress = ( atlasData + y * maxHeight *  altlasWidth * 4 );
-		currAddress += altlasWidth * padding * 4;
+    for( UInt32 y = 0; y < atlasSize; ++y )
+    {
+        currAddress = ( atlasData + y * maxHeight *  altlasWidth * 4 );
+        currAddress += altlasWidth * padding * 4;
 
-		for( UInt32 x = 0; x < atlasSize; ++x )
-		{
-			if( y * atlasSize + x < wcharsSet.size() )
-			{
-				currAddress += padding * 4;
+        for( UInt32 x = 0; x < atlasSize; ++x )
+        {
+            if( y * atlasSize + x < wcharsSet.size() )
+            {
+                currAddress += padding * 4;
 
-				auto ch = wcharsSet[ y * atlasSize + x ];
+                auto ch = wcharsSet[ y * atlasSize + x ];
 
-				auto & sps = spans[ ch ];
-				auto glyph = glyphs[ ch ];
+                auto & sps = spans[ ch ];
+                auto glyph = glyphs[ ch ];
 
-				if( glyph == nullptr )
-				{
+                if( glyph == nullptr )
+                {
                     currAddress += ( m_maxWidth + padding ) * 4;
-					continue;
-				}
+                    continue;
+                }
 
-				char * startRasterizeHere = currAddress;
+                char * startRasterizeHere = currAddress;
 
-				if( outlineWidth != 0 )
-				{
-					auto & osps = outlineSpans[ ch ];
-					auto oglyph = outlineGlyphs[ ch ];
+                if( outlineWidth != 0 )
+                {
+                    auto & osps = outlineSpans[ ch ];
+                    auto oglyph = outlineGlyphs[ ch ];
 
-					startRasterizeHere += ( m_maxHeight - oglyph->height ) * altlasWidth * 4;
-					startRasterizeHere += ( m_maxWidth - oglyph->width ) * 4;
+                    startRasterizeHere += ( m_maxHeight - oglyph->height ) * altlasWidth * 4;
+                    startRasterizeHere += ( m_maxWidth - oglyph->width ) * 4;
 
-					RasterizeSpans( osps, altlasWidth, startRasterizeHere, 1 );
+                    RasterizeSpans( osps, altlasWidth, startRasterizeHere, 1 );
 
-					startRasterizeHere += (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax ) * altlasWidth * 4;
-					startRasterizeHere += (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax ) * 4;
+                    startRasterizeHere += (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax ) * altlasWidth * 4;
+                    startRasterizeHere += (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax ) * 4;
 
-					RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+                    RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
 
-					currAddress += ( m_maxWidth + padding ) * 4;
+                    currAddress += ( m_maxWidth + padding ) * 4;
 
-					oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- oglyph->height );
-					oglyph->textureX = ( m_maxWidth	 + 2 * padding ) * x +  padding + ( m_maxWidth	- oglyph->width );
-					oglyph->padding = padding;
+                    oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- oglyph->height );
+                    oglyph->textureX = ( m_maxWidth	 + 2 * padding ) * x +  padding + ( m_maxWidth	- oglyph->width );
+                    oglyph->padding = padding;
 
 
-					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
-					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
-					glyph->padding = padding;
-				}
-				else
-				{
-					startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
-					startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
+                    glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
+                    glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
+                    glyph->padding = padding;
+                }
+                else
+                {
+                    startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
+                    startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
 
-					RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+                    RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
 
-					currAddress += ( m_maxWidth + padding ) * 4;
+                    currAddress += ( m_maxWidth + padding ) * 4;
 
-					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- glyph->height );
-					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  padding + ( m_maxWidth	- glyph->width );
-					glyph->padding = padding;
-				}
-			}
-		}
-	}
-	
-	auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
+                    glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- glyph->height );
+                    glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  padding + ( m_maxWidth	- glyph->width );
+                    glyph->padding = padding;
+                }
+            }
+        }
+    }
+    
+    auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
 
-	auto singleTex = SingleTextureAsset::Create( atlasMC, "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
-	auto atlasTextureRes = TextureAsset::Create( singleTex, nullptr );
-		
-	atlas->m_textureAsset = atlasTextureRes;
+    auto singleTex = SingleTextureAsset::Create( atlasMC, "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
+    auto atlasTextureRes = TextureAsset::Create( singleTex, nullptr );
+        
+    atlas->m_textureAsset = atlasTextureRes;
 
-	//image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
+    //image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
 
-	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
+    atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
-	return atlas;
+    return atlas;
 }
 
 // *********************************
 //
 TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
-	return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
+    return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
 
 // ***********************
@@ -519,37 +519,37 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
         Triangulator triangulator( MakeContours( m_face->glyph ), "Letter.txt" );
         Mesh mesh = triangulator.MakeMesh();
 
-		if( mesh.GetMeshSegments().size() == 1 )
-		{
-			return std::move( mesh.GetMeshSegments()[ 0 ] );
-		}
-		else
-		{
-			auto & meshSegments = mesh.GetMeshSegments();
+        if( mesh.GetMeshSegments().size() == 1 )
+        {
+            return std::move( mesh.GetMeshSegments()[ 0 ] );
+        }
+        else
+        {
+            auto & meshSegments = mesh.GetMeshSegments();
 
-			std::vector< glm::vec3 > verticies;
-			auto tessCount = meshSegments.size();
+            std::vector< glm::vec3 > verticies;
+            auto tessCount = meshSegments.size();
 
-			// Reserve memory in vector.
-			SizeType numVerticies = 0;
-			for( int i = 0; i < tessCount; ++i )
-			{
-				numVerticies += meshSegments[ i ].size();
-			}
-			verticies.reserve( numVerticies );
+            // Reserve memory in vector.
+            SizeType numVerticies = 0;
+            for( int i = 0; i < tessCount; ++i )
+            {
+                numVerticies += meshSegments[ i ].size();
+            }
+            verticies.reserve( numVerticies );
 
 
-			for( int i = 0; i < tessCount; ++i )
-			{
-				const auto & pointList = meshSegments[ i ];
-				for( int i = 0; i < pointList.size(); ++i )
-				{
-					verticies.push_back( pointList[ i ] );
-				}
-			}
+            for( int i = 0; i < tessCount; ++i )
+            {
+                const auto & pointList = meshSegments[ i ];
+                for( int j = 0; j < pointList.size(); ++j )
+                {
+                    verticies.push_back( pointList[ j ] );
+                }
+            }
 
-			return verticies;
-		}
+            return verticies;
+        }
     }
 
     return std::vector< glm::vec3 >();
@@ -559,45 +559,45 @@ std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, fl
 //
 std::vector<std::unique_ptr<FTContour>>		FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
 {
-	if( glyph )
-	{
-		std::vector< std::unique_ptr< FTContour > > contourList;
+    if( glyph )
+    {
+        std::vector< std::unique_ptr< FTContour > > contourList;
 
-		auto outline = glyph->outline;
-		auto ftContourCount = outline.n_contours;
+        auto outline = glyph->outline;
+        auto ftContourCount = outline.n_contours;
 
-		short contourLength = 0;
-		short startIndex = 0;
-		short endIndex = 0;
+        short contourLength = 0;
+        short startIndex = 0;
+        short endIndex = 0;
 
-		auto orient = FT_Outline_Get_Orientation( &outline );
-		// Make sure the glyph has the proper orientation.
-		// Some formats use CCW order and other 
-		bool inverse = false;
-		if( orient == FT_ORIENTATION_POSTSCRIPT )
-			inverse = true;
+        auto orient = FT_Outline_Get_Orientation( &outline );
+        // Make sure the glyph has the proper orientation.
+        // Some formats use CCW order and other 
+        bool inverse = false;
+        if( orient == FT_ORIENTATION_POSTSCRIPT )
+            inverse = true;
 
-		for( int i = 0; i < ftContourCount; ++i )
-		{
-			FT_Vector* pointList = &outline.points[ startIndex ];
-			char* tagList = &outline.tags[ startIndex ];
+        for( int i = 0; i < ftContourCount; ++i )
+        {
+            FT_Vector* pointList = &outline.points[ startIndex ];
+            char* tagList = &outline.tags[ startIndex ];
 
-			endIndex = outline.contours[ i ];
-			contourLength = ( endIndex - startIndex ) + 1;
+            endIndex = outline.contours[ i ];
+            contourLength = ( endIndex - startIndex ) + 1;
 
-			std::unique_ptr< FTContour > contour = std::unique_ptr< FTContour >( new FTContour( pointList, tagList, contourLength ) );
+            std::unique_ptr< FTContour > contour = std::unique_ptr< FTContour >( new FTContour( pointList, tagList, contourLength ) );
 
-			contour->SetParity( inverse );
+            contour->SetParity( inverse );
 
-			contourList.push_back( std::move( contour ) );
+            contourList.push_back( std::move( contour ) );
 
-			startIndex = endIndex + 1;
-		}
+            startIndex = endIndex + 1;
+        }
 
-		return contourList;
-	}
+        return contourList;
+    }
 
-	return std::vector< std::unique_ptr< FTContour > >();
+    return std::vector< std::unique_ptr< FTContour > >();
 }
 
 

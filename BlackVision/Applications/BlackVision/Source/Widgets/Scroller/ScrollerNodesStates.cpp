@@ -1,6 +1,5 @@
 #include "ScrollerNodesStates.h"
 
-#include <cassert>
 
 namespace bv { namespace nodelogic { 
 

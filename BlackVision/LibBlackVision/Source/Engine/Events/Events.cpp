@@ -192,7 +192,7 @@ template<> std::string                      T2String    ( const ParamDescriptorE
 
 std::pair< AssetEvent::Command, const char* > AssetCommandMapping[] = 
 {
-    std::make_pair( AssetEvent::Command::ClearUnusedCachedAssets, "ClearUnusedCachedAssets" )
+    std::make_pair( AssetEvent::Command::ClearCache, "ClearCache" )
     , std::make_pair( AssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -2510,8 +2510,33 @@ EventType           HightmapEvent::GetEventType() const
 
 // *************************************
 //
+uintptr_t AssetTrackerInternalEvent::m_sDefaultUID = std::numeric_limits< uintptr_t >::max();
+
+
+// *************************************
+//
 AssetTrackerInternalEvent::AssetTrackerInternalEvent        ( Command eventCommand )
     : EventCommand( eventCommand )
+    , AssetUID( m_sDefaultUID )
+    , AssetKey( std::string() )
+{
+}
+
+// *************************************
+//
+AssetTrackerInternalEvent::AssetTrackerInternalEvent        ( Command eventCommand, uintptr_t assetUID )
+    : EventCommand( eventCommand )
+    , AssetUID( assetUID )
+    , AssetKey( std::string() )
+{
+}
+
+// *************************************
+//
+AssetTrackerInternalEvent::AssetTrackerInternalEvent        ( Command eventCommand, std::string assetKey )
+    : EventCommand( eventCommand )
+    , AssetUID( m_sDefaultUID )
+    , AssetKey( assetKey )
 {
 }
 
@@ -2563,6 +2588,19 @@ EventType           AssetTrackerInternalEvent::GetEventType           () const
     return this->m_sEventType; 
 }
 
+// *************************************
+//
+bool                AssetTrackerInternalEvent::HasUID                   () const
+{
+    return ( AssetUID != AssetTrackerInternalEvent::m_sDefaultUID );
+}
+
+// *************************************
+//
+bool                AssetTrackerInternalEvent::HasKey                   () const
+{
+    return ( !AssetKey.empty() );
+}
 
 #pragma warning( pop )
 

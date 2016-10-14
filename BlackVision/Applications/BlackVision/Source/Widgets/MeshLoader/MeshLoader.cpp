@@ -2,10 +2,8 @@
 
 #include "Engine/Events/EventHandlerHelpers.h"
 
-#include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
@@ -29,14 +27,14 @@ const std::string           MeshLoader::ACTION::SET_ASSET_PATH       = "SetAsset
     
 // *******************************
 //
-MeshLoaderPtr	            MeshLoader::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
+MeshLoaderPtr               MeshLoader::Create              ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
 {
     return std::make_shared< MeshLoader >( parent, timeEval, assetPath );
 }
 
 // *******************************
 //
-MeshLoader::MeshLoader      ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
+MeshLoader::MeshLoader      ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
     : m_parentNode( parent )
     , m_timeEval( timeEval )
     , m_textureEnabled( true )
@@ -54,7 +52,7 @@ MeshLoader::~MeshLoader     ()
 
 // *******************************
 //
-void		        MeshLoader::Update			( TimeType )
+void                MeshLoader::Update          ( TimeType )
 {
 }
 

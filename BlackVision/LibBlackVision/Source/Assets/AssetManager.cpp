@@ -4,16 +4,14 @@
 #include "Assets.h"
 #include "Serialization/IDeserializer.h"
 
+#include "Engine/Events/EventManager.h"
+#include "Engine/Events/Events.h"
+
 #include <memory>
 
 
+namespace bv {
 
-#include "Memory/MemoryLeaks.h"
-
-
-
-namespace bv
-{
 
 // ***********************
 //
@@ -54,7 +52,11 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
             auto asset = it->second->LoadAsset( desc );
             if( asset != nullptr )
             {
-                m_assetCache.Add( desc, asset );
+                if( m_assetCache.Add( desc, asset ) )
+                {
+                    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
+                }
+
                 return asset;
             }
         }
@@ -120,9 +122,16 @@ void AssetManager::AddToCache               ( AssetDescConstPtr& desc, AssetCons
 
 // ***********************
 //
-AssetConstPtr AssetManager::GetFromCache    ( AssetDescConstPtr& desc )
+bool AssetManager::RemoveFromCache          ( const std::string & assetKey )
 {
-    return m_assetCache.Get( desc );
+    return m_assetCache.Remove( assetKey );
+}
+
+// ***********************
+//
+AssetConstPtr AssetManager::GetFromCache    ( const std::string & assetKey )
+{
+    return m_assetCache.Get( assetKey );
 }
 
 // ***********************

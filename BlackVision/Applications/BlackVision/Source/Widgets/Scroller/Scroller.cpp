@@ -1,72 +1,62 @@
 #include "Scroller.h"
 
-#include "Engine/Models/BasicNode.h"
-
-#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
-
-#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
-#include "Engine/Events/Interfaces/IEventManager.h"
-
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
-
-#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
-#include "Tools/StringHeplers.h"
-#include "Engine/Events/EventHandlerHelpers.h"
 #include "Widgets/NodeLogicHelper.h"
 
-#include "Mathematics/glm_inc.h"
+#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+
+#include "Serialization/BV/BVDeserializeContext.h"
+
+#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+#include "Engine/Events/EventHandlerHelpers.h"
+
+#include "Tools/StringHeplers.h"
 
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
 
-
-#include <algorithm>
 #include "System/Time.h"
+
 
 namespace bv {
     
 namespace SerializationHelper {
 
 
-std::pair< bv::nodelogic::Scroller::ScrollDirection, const char* > ScrollDirectionMapping[] = 
-    { std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Down, "ScrollDown" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Up, "ScrollUp" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Left, "ScrollLeft" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Right, "ScrollRight" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Total, "" )      // default
+std::pair< nodelogic::Scroller::ScrollDirection, const char* > ScrollDirectionMapping[] = 
+    { std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Down, "ScrollDown" )
+    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Up, "ScrollUp" )
+    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Left, "ScrollLeft" )
+    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Right, "ScrollRight" )
+    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Total, "" )      // default
 };
 
-template<> bv::nodelogic::Scroller::ScrollDirection String2T        ( const std::string & s, const bv::nodelogic::Scroller::ScrollDirection & defaultVal )    { return String2Enum( ScrollDirectionMapping, s, defaultVal ); }
-template<> std::string                              T2String        ( const bv::nodelogic::Scroller::ScrollDirection & t )                                    { return Enum2String( ScrollDirectionMapping, t ); }
+template<> nodelogic::Scroller::ScrollDirection String2T        ( const std::string & s, const nodelogic::Scroller::ScrollDirection & defaultVal )    { return String2Enum( ScrollDirectionMapping, s, defaultVal ); }
+template<> std::string                              T2String        ( const nodelogic::Scroller::ScrollDirection & t )                                    { return Enum2String( ScrollDirectionMapping, t ); }
     
 
-std::pair< bv::nodelogic::Scroller::OffscreenNodeBehavior, const char* > OffscreenNodeBehaviorMapping[] = 
-{   std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_Looping, "Looping" )
-    , std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_DeleteNode, "DeleteNode" )
-    , std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_SetNonActive, "SetNonActive" )
-    , std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_Total, "" )      // default
+std::pair< nodelogic::Scroller::OffscreenNodeBehavior, const char* > OffscreenNodeBehaviorMapping[] = 
+{   std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_Looping, "Looping" )
+    , std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_DeleteNode, "DeleteNode" )
+    , std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_SetNonActive, "SetNonActive" )
+    , std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_Total, "" )      // default
 };
 
-template<> bv::nodelogic::Scroller::OffscreenNodeBehavior   String2T        ( const std::string & s, const bv::nodelogic::Scroller::OffscreenNodeBehavior & defaultVal )    { return String2Enum( OffscreenNodeBehaviorMapping, s, defaultVal ); }
-template<> std::string                                      T2String        ( const bv::nodelogic::Scroller::OffscreenNodeBehavior & t )                                    { return Enum2String( OffscreenNodeBehaviorMapping, t ); }
+template<> nodelogic::Scroller::OffscreenNodeBehavior   String2T        ( const std::string & s, const nodelogic::Scroller::OffscreenNodeBehavior & defaultVal )    { return String2Enum( OffscreenNodeBehaviorMapping, s, defaultVal ); }
+template<> std::string                                      T2String        ( const nodelogic::Scroller::OffscreenNodeBehavior & t )                                    { return Enum2String( OffscreenNodeBehaviorMapping, t ); }
     
 
-std::pair< bv::nodelogic::Scroller::ScrollerItemType, const char* > ScrollerItemTypeMapping[] = 
-{   std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_All, "All" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_Enqueued, "Enqueued" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_OffScreen, "OffScreen" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_OnScreen, "OnScreen" )
-    , std::make_pair( bv::nodelogic::Scroller::ScrollerItemType::SIT_All, "" )      // default
+std::pair< nodelogic::Scroller::ScrollerItemType, const char* > ScrollerItemTypeMapping[] = 
+{   std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_All, "All" )
+    , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_Enqueued, "Enqueued" )
+    , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_OffScreen, "OffScreen" )
+    , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_OnScreen, "OnScreen" )
+    , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_All, "" )      // default
 };
 
-template<> bv::nodelogic::Scroller::ScrollerItemType    String2T        ( const std::string & s, const bv::nodelogic::Scroller::ScrollerItemType & defaultVal )    { return String2Enum( ScrollerItemTypeMapping, s, defaultVal ); }
-template<> std::string                                  T2String        ( const bv::nodelogic::Scroller::ScrollerItemType & t )                                    { return Enum2String( ScrollerItemTypeMapping, t ); }
+template<> nodelogic::Scroller::ScrollerItemType    String2T        ( const std::string & s, const nodelogic::Scroller::ScrollerItemType & defaultVal )    { return String2Enum( ScrollerItemTypeMapping, s, defaultVal ); }
+template<> std::string                                  T2String        ( const nodelogic::Scroller::ScrollerItemType & t )                                    { return Enum2String( ScrollerItemTypeMapping, t ); }
     
 
 // ***********************
@@ -135,16 +125,16 @@ namespace
 {
 // ***********************
 //
-bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, Int32 nodeIdx )
+model::BasicNodePtr         GetNode     ( model::BasicNode * parent, Int32 nodeIdx )
 {
-    return std::static_pointer_cast<bv::model::BasicNode>( parent->GetChild( nodeIdx ) );
+    return std::static_pointer_cast<model::BasicNode>( parent->GetChild( nodeIdx ) );
 }
 
 // ***********************
 //
-bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, const std::string& nodeName )
+model::BasicNodePtr         GetNode     ( model::BasicNode * parent, const std::string& nodeName )
 {
-    return std::static_pointer_cast<bv::model::BasicNode>( parent->GetNode( nodeName ) );
+    return std::static_pointer_cast<model::BasicNode>( parent->GetNode( nodeName ) );
 }
 
 // ***********************
@@ -167,25 +157,25 @@ glm::vec3       ScrollerShiftToVec   ( Scroller::ScrollDirection crawlDirection 
 
 // *******************************
 //
-ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model::ITimeEvaluatorPtr timeEvaluator )
+ScrollerPtr Scroller::Create                ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	return std::make_shared< Scroller >( parent, view, timeEvaluator );
+    return std::make_shared< Scroller >( parent, view, timeEvaluator );
 }
 
 // *******************************
 //
-Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model::ITimeEvaluatorPtr timeEvaluator )
-	: m_parentNode( parent )
+Scroller::Scroller                      ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, model::ITimeEvaluatorPtr timeEvaluator )
+    : m_parentNode( parent )
     , m_editor( nullptr )
-	, m_isFinalized( false )
-	, m_view( view )
-	, m_started( false )
-	, m_currTime( 0 )
+    , m_isFinalized( false )
+    , m_view( view )
+    , m_started( false )
+    , m_currTime( 0 )
     , m_smoothTime( 3000 )
     , m_smoothStart( false )
     , m_smoothPause( false )
-	, m_speed( 0.4f )
-	, m_interspace( 0.0f )
+    , m_speed( 0.4f )
+    , m_interspace( 0.0f )
     , m_paused( false )
     , m_scrollDirection( ScrollDirection::SD_Left )
     , m_enableEvents( false )
@@ -201,14 +191,14 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
 
 // ***********************
 //
-void        Scroller::Initialize		()
+void        Scroller::Initialize        ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &Scroller::NodeRemovedHandler ), NodeRemovedEvent::Type() );
 }
 
 // ***********************
 //
-void        Scroller::Deinitialize	    ()
+void        Scroller::Deinitialize      ()
 {
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &Scroller::NodeRemovedHandler ), NodeRemovedEvent::Type() );
 }
@@ -221,36 +211,36 @@ void        Scroller::Deinitialize	    ()
 
 // *******************************
 //
-void		Scroller::AddNext			( bv::model::BasicNodePtr node )
+void        Scroller::AddNext           ( model::BasicNodePtr node )
 {
     if( !m_started )
-	{
-		m_parentNode->AddChildToModelOnly( node );
-		m_nodesStates.Add( node.get() );
-	}
-	else
-		assert(!"Scroller: Cannot add node while scrolling!");
+    {
+        m_parentNode->AddChildToModelOnly( node );
+        m_nodesStates.Add( node.get() );
+    }
+    else
+        assert(!"Scroller: Cannot add node while scrolling!");
 }
 
 // ***********************
 //
-bool		Scroller::AddNext            ( Int32 nodeIdx )
+bool        Scroller::AddNext            ( Int32 nodeIdx )
 {
     auto newNode = GetNode( m_parentNode.get(), nodeIdx );
-    return AddNode( newNode );
+    return AddNode( newNode.get() );
 }
 
 // ***********************
 //
-bool		Scroller::AddNext				( const std::string& childNodeName )
+bool        Scroller::AddNext               ( const std::string & childNodeName )
 {
     auto newNode = GetNode( m_parentNode.get(), childNodeName );
-    return AddNode( newNode );
+    return AddNode( newNode.get() );
 }
 
 // ***********************
 //
-Scroller::NodeMargin  Scroller::GetMargin           ( bv::model::BasicNode * n )
+Scroller::NodeMargin  Scroller::GetMargin           ( model::BasicNode * n )
 {
     auto iter = m_margins.find( n );
     if( iter != m_margins.end() )
@@ -260,13 +250,15 @@ Scroller::NodeMargin  Scroller::GetMargin           ( bv::model::BasicNode * n )
 
 // ***********************
 //
-bool        Scroller::SetNodeMargin       ( bv::model::BasicNodePtr node, Scroller::NodeMargin & margin )
+bool        Scroller::SetNodeMargin       ( model::BasicNode * node, Scroller::NodeMargin & margin )
 {
     // Node must exist on list.
-    if( !m_nodesStates.Exist( node.get() ) )
+    if( !m_nodesStates.Exist( node ) )
+    {
         return false;
+    }
 
-    m_margins[ node.get() ] = margin;
+    m_margins[ node ] = margin;
     return true;
 }
 
@@ -280,7 +272,7 @@ bool        Scroller::SetNodeMargin       ( IDeserializer & eventSer, ISerialize
     auto node = GetNode( m_parentNode.get(), nodePath );
     if( node )
     {
-        return SetNodeMargin( node, margin );
+        return SetNodeMargin( node.get(), margin );
     }
     else
         return false;
@@ -288,20 +280,20 @@ bool        Scroller::SetNodeMargin       ( IDeserializer & eventSer, ISerialize
 
 // ***********************
 //
-bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
+bool        Scroller::AddNode             ( model::BasicNode * node )
 {
-    bool alreadyExists = m_nodesStates.Exist( node.get() );
+    bool alreadyExists = m_nodesStates.Exist( node );
     
     assert( !alreadyExists );
     if( alreadyExists )
         return false;
 
-	m_nodesStates.Add( node.get() );
+    m_nodesStates.Add( node );
 
     if( m_started )
-	{
-        ShiftNodeToEnd( node.get() );
-	}
+    {
+        ShiftNodeToEnd( node );
+    }
 
     return true;
 }
@@ -412,23 +404,23 @@ Float32     Scroller::Smooth              ( UInt64 time, Float32 shift )
 
 // *******************************
 //
-bool		Scroller::Finalize			()
+bool        Scroller::Finalize          ()
 {
-	if( m_isFinalized )
-		;//assert(!"Scroller: Already finalized!");
-	else
-	{
+    if( m_isFinalized )
+        ;//assert(!"Scroller: Already finalized!");
+    else
+    {
         glm::vec3 shiftDirection = ScrollerShiftToVec( m_scrollDirection );
 
-		auto copy = m_nodesStates.m_nonActives;
-		for( auto n : copy )	
-			SetActiveNode( n );
+        auto copy = m_nodesStates.m_nonActives;
+        for( auto n : copy )    
+            SetActiveNode( n );
 
-		LayoutNodes();
-		m_isFinalized = true;
-	}
+        LayoutNodes();
+        m_isFinalized = true;
+    }
 
-	return m_isFinalized;
+    return m_isFinalized;
 }
 
 // ***********************
@@ -437,8 +429,8 @@ bool        Scroller::Unfinalize          ()
 {
     auto copy = m_nodesStates.m_actives;
 
-    for( auto n : copy )	
-		m_nodesStates.Deacivate( n );
+    for( auto n : copy )    
+        m_nodesStates.Deacivate( n );
     
     m_started = false;
     m_isFinalized = false;
@@ -449,106 +441,106 @@ bool        Scroller::Unfinalize          ()
 
 // *******************************
 //
-void		Scroller::LayoutNodes		()
+void        Scroller::LayoutNodes       ()
 {
-	auto length = m_nodesStates.ActiveSize();
-	if( length > 0 )
-	{
-		Float32 currShift = InitialShift( m_nodesStates.m_actives[ 0 ] );
+    auto length = m_nodesStates.ActiveSize();
+    if( length > 0 )
+    {
+        Float32 currShift = InitialShift( m_nodesStates.m_actives[ 0 ] );
 
-		m_shifts[ m_nodesStates.m_actives[ 0 ] ] = currShift;
+        m_shifts[ m_nodesStates.m_actives[ 0 ] ] = currShift;
 
-		for( SizeType i = 1; i < length; ++i )
-		{
+        for( SizeType i = 1; i < length; ++i )
+        {
             currShift += ShiftStep( m_nodesStates.m_actives[ i - 1 ], m_nodesStates.m_actives[ i ] );
 
-			m_shifts[ m_nodesStates.m_actives[ i ] ] = currShift;
-		}
+            m_shifts[ m_nodesStates.m_actives[ i ] ] = currShift;
+        }
 
-		UpdateTransforms();
-	}
+        UpdateTransforms();
+    }
 }
 
 // *******************************
 //
-void		Scroller::Update				( TimeType )
+void        Scroller::Update                ( TimeType )
 {
     if( m_started )
-	{
+    {
         auto t = Time::Now();
 
         if( !m_paused )
         {
-		    auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
+            auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
             shift = Smooth( t, shift );
 
-		    if( shift > 0.f )
-		    {
-			    for( auto elem : m_shifts )
-				    m_shifts[ elem.first ] += SignedShift( shift );
+            if( shift > 0.f )
+            {
+                for( auto elem : m_shifts )
+                    m_shifts[ elem.first ] += SignedShift( shift );
 
-			    UpdateTransforms();
+                UpdateTransforms();
 
                 if( CheckLowBuffer() )
                     NotifyLowBuffer();
-		    }
+            }
         }
 
         m_currTime = t;
-	}
+    }
 }
 
 // *******************************
 //
-void		Scroller::UpdateTransforms	()
+void        Scroller::UpdateTransforms  ()
 {
     glm::vec3 shiftDirection = ScrollerShiftToVec( m_scrollDirection );
 
-	for( auto elem : m_shifts )
-	{
-		if( IsActive( elem.first ) )
-		{
-			auto trPlugin = elem.first->GetPlugin( "transform" );
-			if( trPlugin )
-			{
-				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0.0f, shiftDirection * elem.second );
-			}
-		}
-	}
+    for( auto elem : m_shifts )
+    {
+        if( IsActive( elem.first ) )
+        {
+            auto trPlugin = elem.first->GetPlugin( "transform" );
+            if( trPlugin )
+            {
+                auto trParam = trPlugin->GetParameter( "simple_transform" );
+                model::SetParameterTranslation( trParam, 0.0f, shiftDirection * elem.second );
+            }
+        }
+    }
 
-	auto copy = m_nodesStates.m_actives;
+    auto copy = m_nodesStates.m_actives;
 
-	for( auto n : copy )
-		UpdateVisibility( n );
+    for( auto n : copy )
+        UpdateVisibility( n );
 }
 
 // *******************************
 //
-void		Scroller::UpdateVisibility	( bv::model::BasicNode * n )
+void        Scroller::UpdateVisibility  ( model::BasicNode * n )
 {
-	auto currVisibility = m_nodesStates.IsVisible( n );
-	auto nAABB = n->GetAABB();
-	bool newVisibility = nAABB.HasNonEmptyIntersection( *m_view );
+    auto currVisibility = m_nodesStates.IsVisible( n );
+    auto nAABB = n->GetAABB();
+    bool newVisibility = nAABB.HasNonEmptyIntersection( *m_view );
 
-	if( currVisibility != newVisibility )
-	{
-		if( newVisibility )
-		{
-			m_nodesStates.Visible( n );
-			OnNotifyVisibilityChanged( n, newVisibility );
-		}
-		else if( IsActive( n ) )
-		{
-			m_nodesStates.NotVisible( n );
-			OnNotifyVisibilityChanged( n, newVisibility );
-		}
-	}
+    if( currVisibility != newVisibility )
+    {
+        if( newVisibility )
+        {
+            m_nodesStates.Visible( n );
+            OnNotifyVisibilityChanged( n, newVisibility );
+        }
+        else if( IsActive( n ) )
+        {
+            m_nodesStates.NotVisible( n );
+            OnNotifyVisibilityChanged( n, newVisibility );
+        }
+    }
 }
 
 // ***********************
 //
-void		Scroller::OnNotifyVisibilityChanged     ( bv::model::BasicNode * n, bool visibility )
+void        Scroller::OnNotifyVisibilityChanged     ( model::BasicNode * n, bool visibility )
 {
     if( m_enableEvents )
     {
@@ -564,7 +556,7 @@ void		Scroller::OnNotifyVisibilityChanged     ( bv::model::BasicNode * n, bool v
 
 // ***********************
 //
-void		Scroller::OnNotifyNodeOffscreen         ( bv::model::BasicNode * n )
+void        Scroller::OnNotifyNodeOffscreen         ( model::BasicNode * n )
 {
     if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_Looping )
     {
@@ -587,33 +579,33 @@ void		Scroller::OnNotifyNodeOffscreen         ( bv::model::BasicNode * n )
 
 // *******************************
 //
-void		Scroller::NotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility )
+void        Scroller::NotifyVisibilityChanged       ( model::BasicNode * n, bool visibility )
 {
     assert( m_scrollerNodePath != "" );
 
     JsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "NodeName", n->GetName() );
-	ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
+    ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
 
-	if( visibility )
+    if( visibility )
         ser.SetAttribute( "cmd", "ItemOnScreen" );
-	else
-		ser.SetAttribute( "cmd", "ItemOffScreen" );
+    else
+        ser.SetAttribute( "cmd", "ItemOffScreen" );
 
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
 
 // *******************************
 //
-void		Scroller::NotifyNoMoreNodes ()
+void        Scroller::NotifyNoMoreNodes ()
 {
     assert( m_scrollerNodePath != "" );
 
     JsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "cmd", "AllItemsOffScreen" );
-	ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
+    ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
 
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
@@ -627,7 +619,7 @@ void        Scroller::NotifyLowBuffer         ()
     JsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "cmd", "LowBuffer" );
-	ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
+    ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
 
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
@@ -635,16 +627,16 @@ void        Scroller::NotifyLowBuffer         ()
 
 // *******************************
 //
-void		Scroller::SetActiveNode		( bv::model::BasicNode * n )
+void        Scroller::SetActiveNode     ( model::BasicNode * n )
 {
-	m_nodesStates.Acivate( n );
+    m_nodesStates.Acivate( n );
 }
 
 // *******************************
 //
-bool		Scroller::IsActive			( bv::model::BasicNode * n )
+bool        Scroller::IsActive          ( model::BasicNode * n )
 {
-	return m_nodesStates.IsActive( n );
+    return m_nodesStates.IsActive( n );
 }
 
 // ***********************
@@ -683,7 +675,7 @@ bool        Scroller::CheckLowBuffer      ()
 
 // ***********************
 // Avtivate node and send to the end of nodes queue.
-void        Scroller::ShiftNodeToEnd      ( bv::model::BasicNode * n )
+void        Scroller::ShiftNodeToEnd      ( model::BasicNode * n )
 {
     m_nodesStates.Acivate( n );
 
@@ -694,7 +686,7 @@ void        Scroller::ShiftNodeToEnd      ( bv::model::BasicNode * n )
     {
         Float32 currShift = m_shifts[ m_nodesStates.m_actives[ lastIdx - 1 ] ];
         currShift += ShiftStep( m_nodesStates.m_actives[ lastIdx - 1 ], m_nodesStates.m_actives[ lastIdx ] );
-		m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = currShift;
+        m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = currShift;
     }
     else
         m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = InitialShift( m_nodesStates.m_actives[ lastIdx ] );
@@ -729,7 +721,7 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
 
             // Node names aren't enough to identify node. Checking children indicies.
             SizeType numChildren = m_parentNode->GetNumChildren();
-            std::vector<bv::model::BasicNode*>     childrenNodes;
+            std::vector<model::BasicNode*>     childrenNodes;
             childrenNodes.reserve( numChildren );
         
             // Copy all node's to vector
@@ -773,7 +765,7 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
+ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, model::BasicNodePtr & parent )
 {
     mathematics::RectPtr rect = SerializationHelper::CreateRect( deser );
 
@@ -812,7 +804,7 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
                 scroller->AddNext( nodeIdx );
                 NodeMargin margin = DeserializeMargin( deser );
                 if( !margin.IsEmpty() )
-                    scroller->SetNodeMargin( GetNode( parent.get(), nodeIdx ), margin );
+                    scroller->SetNodeMargin( GetNode( parent.get(), nodeIdx ).get(), margin );
             }
 
         } while( deser.NextChild() );
@@ -826,7 +818,7 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
 
 // ***********************
 //
-void                        Scroller::SerializeMargin     ( ISerializer & ser, bv::model::BasicNode * node ) const
+void                        Scroller::SerializeMargin     ( ISerializer & ser, model::BasicNode * node ) const
 {
     auto iter = m_margins.find( node );
     if( iter != m_margins.end() )
@@ -878,18 +870,18 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     }
 
 
-	if( scrollAction == "Stop" )
-	{
-		return Stop();
-	}
-	else if( scrollAction == "Start" )
-	{
-		return Start();
-	}
+    if( scrollAction == "Stop" )
+    {
+        return Stop();
+    }
+    else if( scrollAction == "Start" )
+    {
+        return Start();
+    }
     else if( scrollAction == "Reset" )
-	{
-		return Reset();
-	}
+    {
+        return Reset();
+    }
     else if( scrollAction == "Pause" )
     {
         return Pause();
@@ -924,12 +916,12 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
         return RemoveNodes( eventDeser, response, editor );
     }
     else if( scrollAction == "SetSpeed" )
-	{
+    {
         std::string param = eventDeser.GetAttribute( "Speed" );
         float speed = SerializationHelper::String2T( param, 0.0f );
 
-		SetSpeed( speed );
-	}
+        SetSpeed( speed );
+    }
     else if( scrollAction == "GetSpeed" )
     {
         response.SetAttribute( "Speed", SerializationHelper::T2String( m_speed ) );
@@ -997,10 +989,10 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
 
 // *******************************
 //
-bool		Scroller::Start			()
+bool        Scroller::Start         ()
 {
-	if( !m_started )
-	{
+    if( !m_started )
+    {
         SetSpeed( model::QueryTypedParam< model::ParamFloatPtr >( m_paramValModel->GetParameter( "Speed" ) )->Evaluate() );
         SetInterspace( model::QueryTypedParam< model::ParamFloatPtr >( m_paramValModel->GetParameter( "Spacing" ) )->Evaluate() );
         SetSmoothTime( model::QueryTypedParam< model::ParamFloatPtr >( m_paramValModel->GetParameter( "SmoothTime" ) )->Evaluate() );
@@ -1008,11 +1000,11 @@ bool		Scroller::Start			()
 
         Finalize();
 
-		m_started = true;
+        m_started = true;
         m_paused = false;
         m_lowBufferNotified = false;
         m_currTime = Time::Now();
-	}
+    }
     else if( m_paused )
     {
         m_paused = false;
@@ -1025,7 +1017,7 @@ bool		Scroller::Start			()
 
 // *******************************
 //
-bool		Scroller::Stop			()
+bool        Scroller::Stop          ()
 {
     return Reset();
 }
@@ -1068,12 +1060,12 @@ bool       Scroller::Clear               ()
 
 // *******************************
 //
-bool		Scroller::Reset()
+bool        Scroller::Reset()
 {
     // Temporary copy node's to active node's and than set proper layout.
     // Layout is set only for active node's, thats why we have to avtivate them
     auto copy = m_nodesStates.m_nonActives;
-    for( auto n : copy )	
+    for( auto n : copy )    
         m_nodesStates.Acivate( n );
 
     LayoutNodes();
@@ -1136,9 +1128,9 @@ bool        Scroller::GetStatus           ( IDeserializer & /*eventSer*/, ISeria
 
 // *******************************
 //
-void		Scroller::SetInterspace		( Float32 interspace )
+void        Scroller::SetInterspace     ( Float32 interspace )
 {
-	m_interspace = interspace;
+    m_interspace = interspace;
 }
 
 // ***********************
@@ -1191,12 +1183,12 @@ void        Scroller::SetLowBufferMult  ( Float32 lowBufferMult )
 
 // *******************************
 //
-void		Scroller::SetSpeed			( Float32 speed )
+void        Scroller::SetSpeed          ( Float32 speed )
 {
     if( speed < 0.0f )
         speed = 0.0f;
 
-	m_speed = speed;
+    m_speed = speed;
 }
 
 // ***********************
@@ -1300,7 +1292,7 @@ model::BasicNodePtr Scroller::CreatePreset    ( IDeserializer & eventSer, ISeria
         return nullptr;
     }
 
-    auto node = ProjectManager::GetInstance()->LoadPreset( projectName, presetPath, std::static_pointer_cast<bv::model::OffsetTimeEvaluator>( timeline ) );
+    auto node = ProjectManager::GetInstance()->LoadPreset( projectName, presetPath, std::static_pointer_cast<model::OffsetTimeEvaluator>( timeline ) );
     if( node == nullptr )
     {
         response.SetAttribute( "ErrorInfo", "Preset not found" );
@@ -1327,7 +1319,7 @@ bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerialize
     if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
         return false;
 
-    if( AddNode( node ) )
+    if( AddNode( node.get() ) )
     {
         // Prepare response. Send path to new node.
         std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( m_parentNode->GetNumChildren() - 1 );
@@ -1454,7 +1446,7 @@ bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISer
 
 // ***********************
 //
-void            Scroller::ListTypedItems      ( std::vector< bv::model::BasicNode * > & items, ISerializer & response, ScrollerItemType type )
+void            Scroller::ListTypedItems      ( std::vector< model::BasicNode * > & items, ISerializer & response, ScrollerItemType type )
 {
     std::string typeString = SerializationHelper::T2String( type );
 

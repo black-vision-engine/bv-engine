@@ -34,11 +34,13 @@ public:
     Texture2DPtr                    GetTexture          ( const ITextureDescriptor * txParams );
     Texture2DPtr                    GetSequence         ( const IAnimationDescriptor * animParams );
 
+    Texture2DPtr                    GetTexture          ( ITextureDescriptor::uid_t uid ) const;
+
     bool                            IsRegistered        ( const ITextureDescriptor * txParams ) const;
     bool                            IsStored            ( Texture2DConstPtr tex ) const;
 
     void                            ClearCache          ();
-    void                            ClearUnused         ();
+    bool                            ClearAsset          ( ITextureDescriptor::uid_t uid );
 
     static Texture2DPtr				CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels );
     static Texture2DPtr				CreateTexture       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );

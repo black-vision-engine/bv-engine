@@ -82,6 +82,7 @@ public:
     SceneNode *                 GetEngineSceneRoot  () const;
 
     BVProjectEditor *           GetProjectEditor    () const;
+    AssetTracker *              GetAssetTracker     () const;
 
     void					    SetStartTime		( unsigned long millis );
 

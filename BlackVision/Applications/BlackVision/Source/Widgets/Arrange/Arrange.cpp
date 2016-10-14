@@ -1,35 +1,27 @@
 #include "Arrange.h"
 
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
+#include <glm/gtx/euler_angles.hpp>
 
 #include "Engine/Models/BasicNode.h"
 
 #include "Widgets/NodeLogicHelper.h"
-
-#include <glm/gtx/euler_angles.hpp>
-
 
 
 namespace bv {
 
 namespace SerializationHelper {
 
-std::pair< bv::nodelogic::Arrange::ArrangmentType, const char* > ArrangeTypeMapping[] = 
-{   std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Circle, "Circle" )
-    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Grid2D, "Grid2D" )
-    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Grid3D, "Grid3D" )
-    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Line, "Line" )
-    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Sphere, "Sphere" )
-    , std::make_pair( bv::nodelogic::Arrange::ArrangmentType::Total, "" )      // default
+std::pair< nodelogic::Arrange::ArrangmentType, const char* > ArrangeTypeMapping[] = 
+{   std::make_pair( nodelogic::Arrange::ArrangmentType::Circle, "Circle" )
+    , std::make_pair( nodelogic::Arrange::ArrangmentType::Grid2D, "Grid2D" )
+    , std::make_pair( nodelogic::Arrange::ArrangmentType::Grid3D, "Grid3D" )
+    , std::make_pair( nodelogic::Arrange::ArrangmentType::Line, "Line" )
+    , std::make_pair( nodelogic::Arrange::ArrangmentType::Sphere, "Sphere" )
+    , std::make_pair( nodelogic::Arrange::ArrangmentType::Total, "" )      // default
 };
 
-template<> nodelogic::Arrange::ArrangmentType   String2T        ( const std::string & s, const bv::nodelogic::Arrange::ArrangmentType & defaultVal )    { return String2Enum( ArrangeTypeMapping, s, defaultVal ); }
-template<> std::string                          T2String        ( const bv::nodelogic::Arrange::ArrangmentType & t )                                    { return Enum2String( ArrangeTypeMapping, t ); }
+template<> nodelogic::Arrange::ArrangmentType   String2T        ( const std::string & s, const nodelogic::Arrange::ArrangmentType & defaultVal )    { return String2Enum( ArrangeTypeMapping, s, defaultVal ); }
+template<> std::string                          T2String        ( const nodelogic::Arrange::ArrangmentType & t )                                    { return Enum2String( ArrangeTypeMapping, t ); }
 
 }   // SerializationHelper
 
@@ -91,8 +83,8 @@ const std::string &     Arrange::GetType             () const
 
 // ***********************
 //
-Arrange::Arrange             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
-    :   m_parentNode( parent )
+Arrange::Arrange             ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator )
+    : m_parentNode( parent )
 {
     model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::LINE_START_POINT, glm::vec3( -1.0, 0.0, 0.0 ) );
     model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::LINE_END_POINT, glm::vec3( 1.0, 0.0, 0.0 ) );
@@ -158,7 +150,7 @@ void                        Arrange::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-ArrangePtr              Arrange::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode )
+ArrangePtr              Arrange::Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
     auto newLogic = std::make_shared< Arrange >( parentNode, timeline );
@@ -543,7 +535,7 @@ void            Arrange::ArrangeChildren     ( ArrangmentType type, std::unique_
 
 // ***********************
 //
-void            Arrange::CircleArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const CircleArrangeParams & params )
+void            Arrange::CircleArrange       ( std::vector< model::BasicNodePtr > & nodes, const CircleArrangeParams & params )
 {
     auto numElements = nodes.size();
 
@@ -569,7 +561,7 @@ void            Arrange::CircleArrange       ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-void            Arrange::LineArrange         ( std::vector< bv::model::BasicNodePtr > & nodes, const LineArrangeParams & params )
+void            Arrange::LineArrange         ( std::vector< model::BasicNodePtr > & nodes, const LineArrangeParams & params )
 {
     auto numElements = nodes.size();
 
@@ -588,7 +580,7 @@ void            Arrange::LineArrange         ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-void            Arrange::Grid2DArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const Grid2DArrangeParams & params )
+void            Arrange::Grid2DArrange       ( std::vector< model::BasicNodePtr > & nodes, const Grid2DArrangeParams & params )
 {
     auto numElements = nodes.size();
 
@@ -621,7 +613,7 @@ void            Arrange::Grid2DArrange       ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-void            Arrange::Grid3DArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const Grid3DArrangeParams & params )
+void            Arrange::Grid3DArrange       ( std::vector< model::BasicNodePtr > & nodes, const Grid3DArrangeParams & params )
 {
     auto numElements = nodes.size();
 
@@ -658,7 +650,7 @@ void            Arrange::Grid3DArrange       ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-void            Arrange::SphereArrange       ( std::vector< bv::model::BasicNodePtr > & nodes, const SphereArrangeParams & params )
+void            Arrange::SphereArrange       ( std::vector< model::BasicNodePtr > & nodes, const SphereArrangeParams & params )
 {
     auto numElements = nodes.size();
 
@@ -695,10 +687,10 @@ void            Arrange::SphereArrange       ( std::vector< bv::model::BasicNode
 
 // ***********************
 //
-std::vector< bv::model::BasicNodePtr >  Arrange::GetNodesToArrange    ()
+std::vector< model::BasicNodePtr >  Arrange::GetNodesToArrange    ()
 {
     auto numChildren = m_parentNode->GetNumChildren();
-    std::vector< bv::model::BasicNodePtr > children;
+    std::vector< model::BasicNodePtr > children;
     children.reserve( numChildren );
 
     for( unsigned int i = 0; i < numChildren; ++i )
@@ -711,7 +703,7 @@ std::vector< bv::model::BasicNodePtr >  Arrange::GetNodesToArrange    ()
 
 // ***********************
 //
-void                                    Arrange::SetNodePosition     ( bv::model::BasicNodePtr node, glm::vec3 position, TimeType keyTime )
+void                                    Arrange::SetNodePosition     ( model::BasicNodePtr node, glm::vec3 position, TimeType keyTime )
 {
     if( node )
     {

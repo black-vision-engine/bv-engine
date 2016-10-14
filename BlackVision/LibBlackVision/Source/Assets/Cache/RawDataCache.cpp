@@ -4,76 +4,83 @@
 #include "HardDriveRawDataCache.h"
 
 
+namespace bv {
 
-#include "Memory/MemoryLeaks.h"
-
-
-
-namespace bv
-{
 
 // ******************************
 //
-MemoryChunkConstPtr		RawDataCache::Get( const Hash & key ) const
+MemoryChunkConstPtr     RawDataCache::Get( const Hash & key ) const
 {
-	return Find( key );
+    return Find( key );
 }
 
 // ******************************
 //
-bool					RawDataCache::Add( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
+bool                    RawDataCache::Add( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
 {
-	if( Exists( key ) )
-	{
-		return false;
-	}
-	else
-	{
-		Update( key, data, addToHardDriveCache );
-		return true;
-	}
+    if( Exists( key ) )
+    {
+        return false;
+    }
+    else
+    {
+        Update( key, data, addToHardDriveCache );
+        return true;
+    }
 }
 
 // ******************************
 //
-void 					RawDataCache::Update	( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
+bool                    RawDataCache::Remove    ( const Hash & key )
 {
-	m_data[ key ] = data;
+    if ( Exists( key ) )
+    {
+        m_data.erase( key );
+    }
 
-	if( addToHardDriveCache && !HardDriveRawDataCache::GetInstance().Exists( key ) )
-	{
-		HardDriveRawDataCache::GetInstance().Add( key, data, true );
-	}
+    return false;
 }
 
 // ******************************
 //
-RawDataCache &			RawDataCache::GetInstance()
+void                    RawDataCache::Update    ( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
 {
-	static RawDataCache instance = RawDataCache();
-	return instance;
+    m_data[ key ] = data;
+
+    if( addToHardDriveCache && !HardDriveRawDataCache::GetInstance().Exists( key ) )
+    {
+        HardDriveRawDataCache::GetInstance().Add( key, data, true );
+    }
 }
 
 // ******************************
 //
-MemoryChunkConstPtr		RawDataCache::Find( const Hash & key ) const
+RawDataCache &          RawDataCache::GetInstance()
 {
-	auto it = m_data.find( key );
-	if( it != m_data.end() )
-	{
-		return it->second;
-	}
-	else
-	{
-		return HardDriveRawDataCache::GetInstance().Get( key );
-	}
+    static RawDataCache instance = RawDataCache();
+    return instance;
 }
 
 // ******************************
 //
-bool					RawDataCache::Exists( const Hash & key )
+MemoryChunkConstPtr     RawDataCache::Find( const Hash & key ) const
 {
-	return ( m_data.find( key ) != m_data.end() ) || HardDriveRawDataCache::GetInstance().Exists( key );
+    auto it = m_data.find( key );
+    if( it != m_data.end() )
+    {
+        return it->second;
+    }
+    else
+    {
+        return HardDriveRawDataCache::GetInstance().Get( key );
+    }
+}
+
+// ******************************
+//
+bool                    RawDataCache::Exists( const Hash & key )
+{
+    return ( m_data.find( key ) != m_data.end() ) || HardDriveRawDataCache::GetInstance().Exists( key );
 }
 
 // ******************************

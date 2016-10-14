@@ -1,12 +1,6 @@
 #include "AnalogWatch.h"
 
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
-
 #include "Engine/Models/BasicNode.h"
-
 #include "Widgets/NodeLogicHelper.h"
 
 // warning C4996: 'localtime': This function or variable may be unsafe
@@ -45,7 +39,7 @@ const std::string &     AnalogWatch::GetType             () const
 
 // ***********************
 //
-AnalogWatch::AnalogWatch             ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
+AnalogWatch::AnalogWatch             ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
 {
     m_smoothHours = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_HOURS, false )->Value();
@@ -111,7 +105,7 @@ void                        AnalogWatch::Update			( TimeType t )
 //
 void                        AnalogWatch::Serialize       ( ISerializer & ser ) const
 {
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
     assert( context != nullptr );
 
     ser.EnterChild( "logic" );
@@ -127,7 +121,7 @@ void                        AnalogWatch::Serialize       ( ISerializer & ser ) c
 
 // ***********************
 //
-AnalogWatchPtr              AnalogWatch::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode )
+AnalogWatchPtr              AnalogWatch::Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
     auto analogWatch = std::make_shared< AnalogWatch >( parentNode, timeline );
@@ -166,9 +160,9 @@ bool        AnalogWatch::StartWatch      ( IDeserializer & /*eventSer*/, ISerial
 {
     int numChildren = m_parentNode->GetNumChildren();
 
-    m_hourNode = numChildren > 1 ? m_parentNode->GetChild( 0 ) : nullptr;
-    m_minuteNode = numChildren > 2 ? m_parentNode->GetChild( 1 ) : nullptr;
-    m_secondsNode = numChildren > 3 ? m_parentNode->GetChild( 2 ) : nullptr;
+    m_hourNode = numChildren > 1 ? m_parentNode->GetChild( 0 ).get() : nullptr;
+    m_minuteNode = numChildren > 2 ? m_parentNode->GetChild( 1 ).get() : nullptr;
+    m_secondsNode = numChildren > 3 ? m_parentNode->GetChild( 2 ).get() : nullptr;
 
     SetInitialPosition( m_hourNode );
     SetInitialPosition( m_minuteNode );
@@ -202,7 +196,7 @@ bool        AnalogWatch::ClearWatch      ( IDeserializer & /*eventSer*/, ISerial
 
 // ***********************
 //
-void        AnalogWatch::SetInitialPosition      ( bv::model::BasicNodePtr& node )
+void        AnalogWatch::SetInitialPosition      ( model::BasicNode * node )
 {
     if( node )
     {
@@ -226,7 +220,7 @@ void        AnalogWatch::SetInitialPosition      ( bv::model::BasicNodePtr& node
 
 // ***********************
 //
-void        AnalogWatch::UpdateTime              ( bv::model::BasicNodePtr& node, float ratio )
+void        AnalogWatch::UpdateTime             ( model::BasicNode * node, float ratio )
 {
     if( node )
     {
@@ -237,7 +231,7 @@ void        AnalogWatch::UpdateTime              ( bv::model::BasicNodePtr& node
 
 // ***********************
 //
-void        AnalogWatch::ClearPosition           ( bv::model::BasicNodePtr& node )
+void        AnalogWatch::ClearPosition           ( model::BasicNode * node )
 {
     if( node )
     {

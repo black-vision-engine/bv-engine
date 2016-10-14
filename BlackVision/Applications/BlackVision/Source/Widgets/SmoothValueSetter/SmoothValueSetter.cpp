@@ -1,19 +1,12 @@
 #include "SmoothValueSetter.h"
 
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
-
 #include "Widgets/NodeLogicHelper.h"
 
 
+namespace bv { namespace nodelogic {
 
-namespace bv { namespace nodelogic
-{
 
 const std::string       SmoothValueSetter::m_type = "SmoothValueSetter";
-
 
 const std::string       SmoothValueSetter::ACTION::ADD_PARAMETER_BINDING            = "AddParamBinding";
 const std::string       SmoothValueSetter::ACTION::REMOVE_PARAMETER_BINDING         = "RemoveParamBinding";
@@ -36,11 +29,9 @@ const std::string &     SmoothValueSetter::GetType             () const
     return Type();
 }
 
-
-
 // ***********************
 //
-SmoothValueSetter::SmoothValueSetter( bv::model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEvaluator )
+SmoothValueSetter::SmoothValueSetter( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
     ,   m_timeEval( timeEvaluator )
 {}
@@ -115,7 +106,7 @@ void                    SmoothValueSetter::Deserialize     ( const IDeserializer
 
 // ***********************
 //
-SmoothValueSetterPtr    SmoothValueSetter::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode )
+SmoothValueSetterPtr    SmoothValueSetter::Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
     auto smoothValueSetter = std::make_shared< SmoothValueSetter >( parentNode, timeline );
@@ -468,8 +459,6 @@ IValuePtr                       SmoothValueSetter::CreateSrcParameter      ( Mod
 
     return nullptr;
 }
-
-
 
 // ***********************
 //

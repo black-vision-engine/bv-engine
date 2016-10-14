@@ -1,22 +1,13 @@
 #include "Counter.h"
+
 #include "Engine/Models/BasicNode.h"
-
-#include "Engine/Models/Timeline/TimelineHelper.h"
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/BV/BVSerializeContext.h"
-
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Widgets/NodeLogicHelper.h"
-#include "Tools/StringHeplers.h"
-
-#include <string>
-#include <iostream>
 
 
-namespace bv {
-namespace nodelogic {
+namespace bv { namespace nodelogic {
 
 
 const std::string   WidgetCounter::m_type = "counter";
@@ -27,15 +18,14 @@ const std::string   WidgetCounter::PARAMETERS::PRECISION    = "precision";
 	
 // *******************************
 //
-WidgetCounterPtr	WidgetCounter::Create				( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator)
+WidgetCounterPtr	WidgetCounter::Create				( model::BasicNode * parent,model:: ITimeEvaluatorPtr timeEvaluator)
 {
 	return std::make_shared< WidgetCounter >( parent,timeEvaluator );
-	
-
 }
 
-
-WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator)
+// *******************************
+//
+WidgetCounter::WidgetCounter( model::BasicNode * parent,model:: ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
 {
     m_precision = AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::PRECISION, 3 )->Value();
@@ -45,14 +35,14 @@ WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEval
     valueEval->Parameter()->SetGlobalCurveType( CurveType::CT_LINEAR );
 }
 
-
+// *******************************
+//
 WidgetCounter::~WidgetCounter()
 {}
 
-
 // *******************************
 //
-void		WidgetCounter::Update				( TimeType T)
+void		WidgetCounter::Update				( TimeType T )
 {
     NodeLogicBase::Update( T );
 
@@ -94,7 +84,7 @@ void                WidgetCounter::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, bv::model::BasicNode * parent )
+WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, model::BasicNode * parent )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
 
@@ -112,7 +102,6 @@ bool                WidgetCounter::HandleEvent     ( IDeserializer& /*eventSer*/
     return false;
 }
 
-
 // ***********************
 //
 const std::string &  WidgetCounter::Type            ()
@@ -127,5 +116,5 @@ const std::string & WidgetCounter::GetType             () const
     return Type();
 }
 
-}
-}
+} //nodelogic
+} //bv

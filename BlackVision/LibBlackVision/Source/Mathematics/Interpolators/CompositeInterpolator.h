@@ -17,6 +17,7 @@ public:
     virtual EvaluatorType                       GetType()                                   = 0;
 };
 
+
 template< class TimeValueT, class ValueT >
 class CompositeInterpolator : public ISerializable
 {
@@ -25,7 +26,7 @@ private:
     typedef IEvaluator< TimeValueT, ValueT >            IEvaluator;
 
     std::vector< Key >                                  keys;
-    std::vector< IEvaluator* >                          interpolators; // FIXME: ptr-ize
+    std::vector< std::shared_ptr< IEvaluator > >        interpolators; // FIXME: ptr-ize
     TimeValueT                                          m_tolerance;
 
     CurveType                                           m_type;
@@ -39,8 +40,9 @@ public:
     typedef ValueT                      ValT;
 
 public:
-                                                        CompositeInterpolator( const CompositeInterpolator & that );
-    explicit                                            CompositeInterpolator( float tolerance = 0.0001f );
+                                                        CompositeInterpolator   ( const CompositeInterpolator & that );
+    explicit                                            CompositeInterpolator   ( float tolerance = 0.0001f );
+     
 
     static std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >
                                                         Create              ( float tolerance = 0.0001f );
@@ -60,7 +62,6 @@ public:
     int                                                 GetNumKeys          ();
     const std::vector< Key > &                          GetKeys             () const;
     std::vector< Key > &                                GetKeys             ();
-    const std::vector< IEvaluator* > &                  GetInterpolators    ();
 
     void                                                SetGlobalCurveType  ( CurveType type );
     void                                                SetAddedKeyCurveType ( CurveType type );

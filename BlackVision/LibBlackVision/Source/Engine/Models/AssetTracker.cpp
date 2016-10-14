@@ -9,18 +9,14 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
+#include "Assets/Cache/RawDataCache.h"
 
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
+
 
 // *************************************
 //
@@ -41,39 +37,64 @@ namespace bv {
 
 // *************************************
 //
-void                    AssetTracker::RegisterAsset         ( ITextureDescriptorConstPtr asset )
+void                    AssetTracker::ClearCache            ()
 {
-    //FIXME: register only cached textures
-    auto tex = GTexture2DCache.GetTexture( asset.get() );
-    if( GTexture2DCache.IsRegistered( asset.get() ) )
+    for( auto it = m_registeredUIDs.cbegin(); it != m_registeredUIDs.cend(); )
     {
-        RegisterAsset( tex );
+        if( it->second == 0 )
+        {
+            GTexture2DCache.ClearAsset( it->first );
+            m_registeredUIDs.erase( it++ );
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    for( auto it = m_registeredKeys.cbegin(); it != m_registeredKeys.cend(); )
+    {
+        auto key = it->first;
+        auto keyHash = Hash::FromString( key );
+
+        //FIXME: unregister assets and check count instead of pointer count
+        auto asset = AssetManager::GetInstance().GetFromCache( key );
+        auto memChunk = RawDataCache::GetInstance().Get( keyHash );
+        if( ( asset && ( asset.use_count() == 2 ) ) ||
+            ( memChunk && ( memChunk.use_count() == 3 ) ) )
+        {
+            AssetManager::GetInstance().RemoveFromCache( key );
+            RawDataCache::GetInstance().Remove( keyHash );
+
+            m_registeredKeys.erase( it++ );
+        }
+        else
+        {
+            ++it;
+        }
     }
 }
 
 // *************************************
 //
-void                    AssetTracker::UnregisterAsset     ( ITextureDescriptorConstPtr asset )
+std::vector< AssetTracker::AssetUID >   AssetTracker::GetUnusedAssetUIDs    () const
 {
-    if( GTexture2DCache.IsRegistered( asset.get() ) )
-    {
-        auto tex = GTexture2DCache.GetTexture( asset.get() );
-        UnregisterAsset( tex );
-    }
-}
+    std::vector< AssetUID > ret;
 
-// *************************************
-//
-std::vector< TextureConstPtr >      AssetTracker::GetUnusedAssets       ()
-{
-    std::vector< TextureConstPtr > ret( m_unregisteredAssets.begin(), m_unregisteredAssets.end() );
-    m_unregisteredAssets.clear();
+    for( auto & uid : m_registeredUIDs )
+    {
+        if( uid.second == 0 )
+        {
+            ret.push_back( uid.first );
+        }
+    }
+
     return ret;
 }
 
 // *************************************
 //
-void                                AssetTracker::ProcessEvent          ( IEventPtr evt )
+void                                    AssetTracker::ProcessEvent          ( IEventPtr evt )
 {
     if( evt->GetEventType() == AssetTrackerInternalEvent::Type() )
     {
@@ -82,13 +103,27 @@ void                                AssetTracker::ProcessEvent          ( IEvent
         {
         case AssetTrackerInternalEvent::Command::RegisterAsset:
             {
-                RegisterAsset( typedEvent->TextureAsset );
+                if( typedEvent->HasUID() )
+                {
+                    RegisterAsset( typedEvent->AssetUID );
+                }
+                else if( typedEvent->HasKey() )
+                {
+                    RegisterAsset( typedEvent->AssetKey );
+                }
             }
             break;
 
         case AssetTrackerInternalEvent::Command::UnregisterAsset:
             {
-                UnregisterAsset( typedEvent->TextureAsset );
+                if( typedEvent->HasUID() )
+                {
+                    UnregisterAsset( typedEvent->AssetUID );
+                }
+                else if( typedEvent->HasKey() )
+                {
+                    UnregisterAsset( typedEvent->AssetKey );
+                }
             }
             break;
 
@@ -128,35 +163,30 @@ void                                AssetTracker::ProcessEvent          ( IEvent
 
 // *************************************
 //
-void                    AssetTracker::RegisterAsset         ( TextureConstPtr asset )
+void                    AssetTracker::RegisterAsset                     ( AssetUID uid )
 {
-    if( m_registeredAssetsMap.count( asset ) == 0 )
-    {
-        m_registeredAssetsMap[ asset ] = 0;
-    }
-
-    if( m_unregisteredAssets.count( asset ) )
-    {
-        m_unregisteredAssets.erase( asset );
-    }
-
-    m_registeredAssetsMap[ asset ] += 1;
+    RegisterAsset( m_registeredUIDs, uid );
 }
 
 // *************************************
 //
-void                    AssetTracker::UnregisterAsset       ( TextureConstPtr asset )
+void                    AssetTracker::RegisterAsset                     ( AssetKey key )
 {
-    if( m_registeredAssetsMap.empty() || m_registeredAssetsMap.count( asset ) == 0 ) return;
+    RegisterAsset( m_registeredKeys, key );
+}
 
-    if( m_registeredAssetsMap[ asset ] <= 2 ) // asset is registered twice (plugin & finalize plugin)
-    {
-        m_registeredAssetsMap.erase( asset );
-        m_unregisteredAssets.insert( asset );
-        return;
-    }
-    
-    m_registeredAssetsMap[ asset ] -= 1;
+// *************************************
+//
+void                    AssetTracker::UnregisterAsset                   ( AssetUID uid )
+{
+    UnregisterAsset( m_registeredUIDs, uid );
+}
+
+// *************************************
+//
+void                    AssetTracker::UnregisterAsset                   ( AssetKey key )
+{
+    UnregisterAsset( m_registeredKeys, key );
 }
 
 // *************************************

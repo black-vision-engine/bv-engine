@@ -1,13 +1,9 @@
 #pragma once
 
-#include "CoreDEF.h"
-#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Widgets/NodeLogicBase.h"
 #include "ScrollerNodesStates.h"
 #include "Engine/Events/Interfaces/IEvent.h"
 
-#include <string>
-#include <vector>
-#include <map>
 
 // forward references
 namespace bv {
@@ -90,10 +86,11 @@ public:
     };
 
 private:
+
     static const std::string        m_type;
 
 
-	typedef std::map< bv::model::BasicNode *, Float32 >     NodeFloatMap;
+    typedef std::map< bv::model::BasicNode *, Float32 >     NodeFloatMap;
     typedef std::map< bv::model::BasicNode *, NodeMargin >  NodeMarginMap;
 
 private:
@@ -101,12 +98,12 @@ private:
     std::string                             m_scrollerNodePath;
     std::string                             m_sceneName;
 
-	bool									m_isFinalized;
-	bv::model::BasicNodePtr					m_parentNode;
-	ScrollerNodesStates						m_nodesStates;
-	NodeFloatMap							m_shifts;
+    bool                                    m_isFinalized;
+    model::BasicNodePtr &                   m_parentNode;
+    ScrollerNodesStates                     m_nodesStates;
+    NodeFloatMap                            m_shifts;
     NodeMarginMap                           m_margins;
-	UInt64									m_currTime;
+    UInt64                                  m_currTime;
     BVProjectEditor *                       m_editor;
 
     // Smooth
@@ -115,9 +112,9 @@ private:
     UInt64                                  m_smoothTime;
     UInt64                                  m_smoothStartTime;
 
-    mathematics::RectPtr				    m_view;
-	Float32									m_speed;
-	Float32									m_interspace;
+    mathematics::RectPtr                    m_view;
+    Float32                                 m_speed;
+    Float32                                 m_interspace;
     
     ScrollDirection                         m_scrollDirection;
     OffscreenNodeBehavior                   m_offscreenNodeBehavior;
@@ -125,7 +122,7 @@ private:
     bool                                    m_lowBufferNotified;
     Float32                                 m_lowBufferMultiplier;  /// Determines when to notify LowBuffer.
 
-	bool									m_started;
+    bool                                    m_started;
     bool                                    m_paused;
     bool                                    m_enableEvents;
 
@@ -136,40 +133,43 @@ private:
     Float32     SignedShift         ( Float32 shift );
     Float32     Smooth              ( UInt64 time, Float32 shift );
 
-	void		LayoutNodes			();
-	void		UpdateTransforms	();
-	void		UpdateVisibility	( bv::model::BasicNode * );
-	void		SetActiveNode		( bv::model::BasicNode * );
-	bool		IsActive			( bv::model::BasicNode * );
+    void        LayoutNodes         ();
+    void        UpdateTransforms    ();
+    void        UpdateVisibility    ( bv::model::BasicNode * );
+    void        SetActiveNode       ( bv::model::BasicNode * );
+    bool        IsActive            ( bv::model::BasicNode * );
     bool        CheckLowBuffer      ();
     void        ShiftNodeToEnd      ( bv::model::BasicNode * n );
 
-    void		OnNotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility );
-    void		OnNotifyNodeOffscreen           ( bv::model::BasicNode * n );
-	void		NotifyVisibilityChanged         ( bv::model::BasicNode *, bool );
-	void		NotifyNoMoreNodes	            ();
+    void        OnNotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility );
+    void        OnNotifyNodeOffscreen           ( bv::model::BasicNode * n );
+    void        NotifyVisibilityChanged         ( bv::model::BasicNode *, bool );
+    void        NotifyNoMoreNodes               ();
     void        NotifyLowBuffer                 ();
 
 
-    bool        AddNode             ( bv::model::BasicNodePtr node );
+    bool        AddNode             ( model::BasicNode * node );
 
 public:
-	explicit	Scroller            ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
-                ~Scroller			() {}
 
-	void		AddNext				( bv::model::BasicNodePtr node );
-    bool		AddNext				( Int32 nodeIdx );
-    bool		AddNext				( const std::string & childNodeName );
-    NodeMargin  GetMargin           ( bv::model::BasicNode * n );
-    bool        SetNodeMargin       ( bv::model::BasicNodePtr node, NodeMargin & margin );
+    explicit    Scroller            ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
+                ~Scroller           () {}
+
+    Scroller &  operator=           ( const Scroller & other );
+
+    void        AddNext             ( model::BasicNodePtr node );
+    bool        AddNext             ( Int32 nodeIdx );
+    bool        AddNext             ( const std::string & childNodeName );
+    NodeMargin  GetMargin           ( model::BasicNode * n );
+    bool        SetNodeMargin       ( model::BasicNode * node, NodeMargin & margin );
     bool        SetNodeMargin       ( IDeserializer & eventSer, ISerializer & response );
-	bool		Finalize			();
+    bool        Finalize            ();
     bool        Unfinalize          ();
 
 
 
-	void		SetSpeed			        ( Float32 speed );
-	void		SetInterspace		        ( Float32 interspace );
+    void        SetSpeed                    ( Float32 speed );
+    void        SetInterspace               ( Float32 interspace );
     void        SetNodePath                 ( std::string nodePath );
     void        SetLowBufferMult            ( Float32 lowBufferVal );
     void        SetScrollDirection          ( ScrollDirection scrollDirection );
@@ -181,9 +181,9 @@ public:
 
 
 
-	virtual void	            Initialize		()				override;
-	virtual void	            Update			( TimeType t )	override;
-	virtual void	            Deinitialize	()				override;
+    virtual void                Initialize      ()              override;
+    virtual void                Update          ( TimeType t )  override;
+    virtual void                Deinitialize    ()              override;
 
 
     virtual const std::string &                             GetType         () const override;
@@ -192,24 +192,25 @@ public:
     virtual model::IParameterPtr                            GetParameter    ( const std::string & name ) const override;
     virtual const std::vector< model::IParameterPtr > &     GetParameters   () const override;
 
-    virtual void                                            Serialize       ( ISerializer& ser ) const override;
-    static ScrollerPtr                                      Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
-    static ScrollerPtr                                      Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
+    virtual void                                            Serialize       ( ISerializer & ser ) const override;
+    static ScrollerPtr                                      Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
+    static ScrollerPtr                                      Create          ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, model:: ITimeEvaluatorPtr timeEvaluator );
 
-    virtual bool                                            HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
+    virtual bool                                            HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
 public:
+
     // Event handler funtions
-	bool			Start			    ();
-	bool			Stop			    ();
-	bool		    Reset				();
+    bool            Start               ();
+    bool            Stop                ();
+    bool            Reset               ();
     bool            Pause               ();
     bool            Clear               ();
 
     bool            SmoothStart         ();
     bool            SmoothPause         ();
 
-    void            ListTypedItems      ( std::vector< bv::model::BasicNode * > & items, ISerializer & response, ScrollerItemType type );
+    void            ListTypedItems      ( std::vector< model::BasicNode * > & items, ISerializer & response, ScrollerItemType type );
     bool            GetItems            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 
     bool            AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
@@ -220,7 +221,7 @@ public:
 
 private:
 
-    void                    SerializeMargin     ( ISerializer & ser, bv::model::BasicNode * node ) const;
+    void                    SerializeMargin     ( ISerializer & ser, model::BasicNode * node ) const;
     static NodeMargin       DeserializeMargin   ( const IDeserializer & deser );
 
     void                    AddTexts            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
@@ -231,6 +232,7 @@ private:
 
 
     void                    NodeRemovedHandler  ( IEventPtr evt );
+
 };
 
 } 

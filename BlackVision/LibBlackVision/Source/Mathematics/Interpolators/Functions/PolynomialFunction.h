@@ -11,7 +11,7 @@ class PolynomialEvaluator : public IEvaluator< TimeValueT, ValueT >
     Key key1, key2;
     TimeValueT m_tolerance;
 public:
-    PolynomialEvaluator( Key k1, Key k2, Coefficient a, Coefficient b, Coefficient c, Coefficient d, Coefficient e, TimeValueT tolerance, bool bounce = false )
+    PolynomialEvaluator( Key k1, Key k2, Coefficient a, Coefficient b, Coefficient c, Coefficient d, Coefficient e, TimeValueT tolerance, bool bounce )
         : a( a ), b( b ), c( c ), d( d ), e( e ), bounce( bounce )
         , key1( k1 ), key2( k2 ), m_tolerance( tolerance )
     {

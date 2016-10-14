@@ -1,26 +1,12 @@
 #pragma once
 
-#include "CoreDEF.h"
-#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Widgets/NodeLogicBase.h"
 #include "Engine/Models/BasicNode.h"
 
-#include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "ParameterBinding.h"
 
-#include <vector>
 
-namespace bv
-{
-
-namespace model {
-
-class BasicNode;
-DEFINE_PTR_TYPE( BasicNode )
-
-} // model
-
-namespace nodelogic
-{
+namespace bv { namespace nodelogic {
 
 class SmoothValueSetter;
 
@@ -28,11 +14,10 @@ DEFINE_PTR_TYPE( SmoothValueSetter )
 DEFINE_CONST_PTR_TYPE( SmoothValueSetter )
 
 
-
-
 class SmoothValueSetter : public model::NodeLogicBase, public std::enable_shared_from_this< SmoothValueSetter >
 {
 private:
+
     static const std::string            m_type;
 
     struct ACTION 
@@ -50,14 +35,17 @@ private:
 
 private:
 
-    bv::model::BasicNodePtr	            m_parentNode;
+    model::BasicNodePtr &	            m_parentNode;
     model::ITimeEvaluatorPtr            m_timeEval;
 
     std::vector< ParameterBinding >     m_paramBindings;
     
 public:
-    explicit    SmoothValueSetter   ( bv::model::BasicNodePtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
-                ~SmoothValueSetter  ();
+
+    explicit                            SmoothValueSetter   ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
+                                        ~SmoothValueSetter  ();
+
+    SmoothValueSetter &                 operator=           ( const SmoothValueSetter & other );
 
 	virtual void                        Initialize		()				override {}
 	virtual void                        Update			( TimeType t )	override;
@@ -69,7 +57,7 @@ public:
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
     virtual void                        Deserialize     ( const IDeserializer & deser );
-    static SmoothValueSetterPtr         Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
+    static SmoothValueSetterPtr         Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
@@ -95,6 +83,7 @@ private:
 
     template< typename InterpolatorType, typename Type, ModelParamType type >
     bool                        SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, float deltaTime, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );
+
 };
 
 
