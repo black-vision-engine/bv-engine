@@ -432,8 +432,8 @@ void                    PolylineValidator::ProcessIntersectionPoint    ( Event &
 
     assert( event.Point->edge_list.size() >= 2 );
 
-    auto edge1Idx = FindInSweepLine( event.Point->edge_list[ 0 ], sweepLine );
-    auto edge2Idx = FindInSweepLine( event.Point->edge_list[ 1 ], sweepLine );
+    auto edge1Idx = BruteFindInSweepLine( event.Point->edge_list[ 0 ], sweepLine );
+    auto edge2Idx = BruteFindInSweepLine( event.Point->edge_list[ 1 ], sweepLine );
     assert( edge1Idx >= 0 );
     assert( edge2Idx >= 0 );
 
@@ -449,8 +449,8 @@ void                    PolylineValidator::ProcessIntersectionPoint    ( Event &
     }
     else
     {
-        belowEdge = sweepLine[ edge1Idx ];      aboveIdx = edge1Idx;
-        aboveEdge = sweepLine[ edge2Idx ];      belowIdx = edge2Idx;
+        belowEdge = sweepLine[ edge1Idx ];      belowIdx = edge1Idx;
+        aboveEdge = sweepLine[ edge2Idx ];      aboveIdx = edge2Idx;
     }
 
 
@@ -460,8 +460,9 @@ void                    PolylineValidator::ProcessIntersectionPoint    ( Event &
     p2t::Edge * aboveAboveEdge = GetAboveEdge( aboveIdx, sweepLine );
     p2t::Edge * belowBelowEdge = GetBelowEdge( belowIdx, sweepLine );
 
-    auto aboveIntersect = GetIntesection( aboveEdge, aboveAboveEdge );
-    auto belowIntersect = GetIntesection( belowEdge, belowBelowEdge );
+    // Note: we swapped below with above. Now we compare new above edge with above above edge.
+    auto aboveIntersect = GetIntesection( belowEdge, aboveAboveEdge );
+    auto belowIntersect = GetIntesection( aboveEdge, belowBelowEdge );
 
     if( aboveIntersect )
         AddIntersectionEvent( Event( EventType::Intersection, aboveIntersect, nullptr ), eventQueue );
