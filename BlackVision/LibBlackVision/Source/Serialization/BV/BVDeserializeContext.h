@@ -24,6 +24,9 @@ namespace model
 
     class OffsetTimeEvaluator;
     DEFINE_PTR_TYPE(OffsetTimeEvaluator);
+
+    class ITimeEvaluator;
+    DEFINE_PTR_TYPE( ITimeEvaluator );
 }; // model
 
 // ************************

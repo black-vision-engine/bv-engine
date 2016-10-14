@@ -17,7 +17,7 @@
 
 
 #include "Memory/MemoryLeaks.h"
-
+#undef min
 
 
 namespace bv {

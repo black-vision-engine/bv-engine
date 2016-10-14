@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+#undef min
+#undef max
 
 namespace bv { namespace mathematics {
 
