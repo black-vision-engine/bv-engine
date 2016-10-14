@@ -20,10 +20,11 @@ p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 );
 
 bool            operator<       ( const p2t::Point & point1, const p2t::Point & point2 );
 
-bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint );
+bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * nextPoint, const p2t::Point * intersectionPoint );
 int             FindFreeDividePoint ( std::vector< IntersectionData >& data );
 int             FindNextContourPart ( std::vector< IntersectionData >& data, const p2t::Point * partEnd, int intersectionIdx );
 
+bool            IsSharedPointIntersection   ( const Event& intersectEvent );
 
 
 // ***********************
@@ -211,9 +212,10 @@ std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
                                                          // Divide polyline into ranges between intersection points.
     for( int i = 0; i < m_polyline.size(); ++i )
     {
+        int nextPoint = i + 1 < m_polyline.size() ? i + 1 : 0;
         for( int j = 0; j < m_intersections.size(); j++ )
         {
-            if( IsIntersectionStart( m_polyline[ i ], m_intersections[ j ] ) )
+            if( IsIntersectionStart( m_polyline[ i ], m_polyline[ nextPoint ], m_intersections[ j ] ) )
             {
                 IntersectionData data;
                 data.IntersectionPoint = m_intersections[ j ];
@@ -247,7 +249,8 @@ const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
 
     while( !eventQueue.empty() )
     {
-        auto& event = eventQueue[ 0 ];
+        auto event = eventQueue[ 0 ];
+        eventQueue.pop_front();
         
         if( event.Type == EventType::StartPoint )
             ProcessBeginPoint( event, eventQueue, sweepLine );
@@ -255,8 +258,6 @@ const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
             ProcessEndPoint( event, eventQueue, sweepLine );
         else
             ProcessIntersectionPoint( event, eventQueue, sweepLine, intersection );
-
-        eventQueue.pop_front();
     }
 
     return m_intersections;
@@ -425,38 +426,33 @@ void                    PolylineValidator::ProcessEndPoint             ( Event &
 //
 void                    PolylineValidator::ProcessIntersectionPoint    ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge* > & sweepLine, std::vector< p2t::Point* > & intersections )
 {
-    m_intersections.push_back( event.Point );
+    // Segment start and end point are intersection, which we don't count in.
+    //if( !IsSharedPointIntersection( event ) )
+        m_intersections.push_back( event.Point );
 
     assert( event.Point->edge_list.size() >= 2 );
 
-    auto edgeIdx = FindInSweepLine( event.Point->edge_list[ 0 ], sweepLine );
-    assert( edgeIdx >= 1 );
-
-    // Intersection point stores two edges which intersects.
-    // We must determine which one is above edge and which one is below.
-    p2t::Edge * tmpMidlle = sweepLine[ edgeIdx ];
-    p2t::Edge * tmpAbove = GetAboveEdge( edgeIdx, sweepLine );
-    p2t::Edge * tmpBelow = GetBelowEdge( edgeIdx, sweepLine );
+    auto edge1Idx = FindInSweepLine( event.Point->edge_list[ 0 ], sweepLine );
+    auto edge2Idx = FindInSweepLine( event.Point->edge_list[ 1 ], sweepLine );
+    assert( edge1Idx >= 0 );
+    assert( edge2Idx >= 0 );
 
     p2t::Edge * aboveEdge = nullptr;
     p2t::Edge * belowEdge = nullptr;
     int aboveIdx;
     int belowIdx;
 
-    if( tmpBelow && tmpBelow == event.Point->edge_list[ 1 ] )
+    if( edge1Idx > edge2Idx )
     {
-        aboveEdge = tmpMidlle;      aboveIdx = edgeIdx;
-        belowEdge = tmpBelow;       belowIdx = edgeIdx - 1;
-    }
-    else if( tmpAbove && tmpAbove == event.Point->edge_list[ 1 ] )
-    {
-        aboveEdge = tmpAbove;       aboveIdx = edgeIdx + 1;
-        belowEdge = tmpMidlle;      belowIdx = edgeIdx;
+        aboveEdge = sweepLine[ edge1Idx ];      aboveIdx = edge1Idx;
+        belowEdge = sweepLine[ edge2Idx ];      belowIdx = edge2Idx;
     }
     else
     {
-        assert( false );
+        belowEdge = sweepLine[ edge1Idx ];      aboveIdx = edge1Idx;
+        aboveEdge = sweepLine[ edge2Idx ];      belowIdx = edge2Idx;
     }
+
 
     // Swap after reaching intersection point in event queue.
     std::iter_swap( sweepLine.begin() + aboveIdx, sweepLine.begin() + belowIdx );
@@ -503,9 +499,9 @@ p2t::Point *            PolylineValidator::Intersect                   ( p2t::Ed
     float edge2Factor = edge1Point2Cross / edge12Cross;
 
     // Note: We don't need intersection on begin and end point. Add some margin.
-    const float epsilon = 0.00001f;
-    if( edge1Factor > 0.0f + epsilon && edge1Factor < 1.0f - epsilon &&
-        edge2Factor > 0.0f + epsilon && edge2Factor < 1.0f - epsilon )
+    const float epsilon = 0.00005f;
+    if( edge1Factor >= 0.0f + epsilon && edge1Factor <= 1.0f - epsilon &&
+        edge2Factor >= 0.0f + epsilon && edge2Factor <= 1.0f - epsilon )
     {
         glm::vec2 intersectionPoint = edge1Begin + edge1Factor * edge1Vec;
         p2t::Point * intersectPoint = new p2t::Point( intersectionPoint.x, intersectionPoint.y );
@@ -777,21 +773,25 @@ bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
 
 // ***********************
 //
-bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * intersectionPoint )
+bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * nextPoint, const p2t::Point * intersectionPoint )
 {
     assert( intersectionPoint->edge_list.size() == 2 );
 
     // Note: Make pointers comparision.
-    if( polylinePoint == intersectionPoint->edge_list[ 0 ]->p )
+    if( polylinePoint == intersectionPoint->edge_list[ 0 ]->p &&
+        nextPoint == intersectionPoint->edge_list[ 0 ]->q )
         return true;
 
-    if( polylinePoint == intersectionPoint->edge_list[ 0 ]->q )
+    if( polylinePoint == intersectionPoint->edge_list[ 0 ]->q &&
+        nextPoint == intersectionPoint->edge_list[ 0 ]->p )
         return true;
 
-    if( polylinePoint == intersectionPoint->edge_list[ 1 ]->p )
+    if( polylinePoint == intersectionPoint->edge_list[ 1 ]->p &&
+        nextPoint == intersectionPoint->edge_list[ 1 ]->q )
         return true;
 
-    if( polylinePoint == intersectionPoint->edge_list[ 1 ]->q )
+    if( polylinePoint == intersectionPoint->edge_list[ 1 ]->q &&
+        nextPoint == intersectionPoint->edge_list[ 1 ]->p )
         return true;
 
     return false;
@@ -850,4 +850,23 @@ int             FindNextContourPart ( std::vector< IntersectionData > & data, co
     }
 
     return -1;
+}
+
+// ***********************
+//
+bool            IsSharedPointIntersection   ( const Event& intersectEvent )
+{
+    assert( intersectEvent.Type == EventType::Intersection );
+
+    if( intersectEvent.Point->edge_list[ 0 ]->p == intersectEvent.Point->edge_list[ 1 ]->p )
+        return true;
+    if( intersectEvent.Point->edge_list[ 0 ]->q == intersectEvent.Point->edge_list[ 1 ]->q )
+        return true;
+
+    if( intersectEvent.Point->edge_list[ 0 ]->p == intersectEvent.Point->edge_list[ 1 ]->q )
+        return true;
+    if( intersectEvent.Point->edge_list[ 1 ]->p == intersectEvent.Point->edge_list[ 0 ]->q )
+        return true;
+
+    return false;
 }

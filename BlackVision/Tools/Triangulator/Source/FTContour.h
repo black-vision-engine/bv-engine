@@ -93,6 +93,8 @@ class FTContour
          */
         void SetParity( bool inverse );
 
+        bool IsClockwise() { return clockwise;  }
+
         //// FIXME: this should probably go away.
         //void buildFrontOutset(float outset);
         //void buildBackOutset(float outset);

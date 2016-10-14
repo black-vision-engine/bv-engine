@@ -160,6 +160,9 @@ void Triangulator::ProcessContours()
 
         m_contoursNesting[ i ] = contourNesting;
 
+        // Contours orientation doesn't match nesting parity.
+        if( c1->IsClockwise() && contourNesting % 2 != 0 )
+            c1->SetParity( true );
     }
 }
 
@@ -205,6 +208,7 @@ Mesh Triangulator::MakeMesh()
 
         m_selfIntersections.push_back( validator.StealIntersections() );
         polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
+        //m_selfIntersections.push_back( Polyline() );
     }
 
 	// Print contours to file for debug purposes.
