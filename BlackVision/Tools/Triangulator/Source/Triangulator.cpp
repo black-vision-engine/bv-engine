@@ -157,14 +157,18 @@ void Triangulator::ProcessContours()
 
                     FTPoint a = *bottom - leftmost;
                     FTPoint b = *top - *bottom;
-                    if( a.X() * b.Y() - a.Y() * b.Y() < 0 )
+
+                    auto determinant = a.X() * b.Y() - a.Y() * b.Y();
+                    if( determinant < 0 )
                     {
                         // Sign of deteriminant of matrix created from vectors a and b.
                         parity++;
                     }
-
-                    // Point on segment.
-                    assert( a.X() * b.Y() - a.Y() * b.Y() != 0 );
+                    else if( determinant == 0 )
+                    {
+                        // Point on segment.
+                        throw new std::runtime_error( "[Triangulator] Internal contour point lies on outer contour." );
+                    }
                 }
             }
 
@@ -178,8 +182,8 @@ void Triangulator::ProcessContours()
         m_contoursNesting[ i ] = contourNesting;
 
         // Contours orientation doesn't match nesting parity.
-        if( c1->IsClockwise() && contourNesting % 2 != 0 )
-            c1->SetParity( true );
+        if( c1->IsClockwise() != ( contourNesting % 2 == 0 ) )
+            c1->InverseOrientation();
     }
 }
 

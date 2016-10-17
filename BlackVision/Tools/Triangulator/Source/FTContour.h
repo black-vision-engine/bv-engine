@@ -91,7 +91,8 @@ class FTContour
          * @attention Insted of parity, now there's variable inverse. Whole outset was loaded with good
          * orientation, but sometimes we have to inverse points order, because font format uses other filling orientation.
          */
-        void SetParity( bool inverse );
+        void SetParity          ( bool inverse );
+        void InverseOrientation ();
 
         bool IsClockwise() { return clockwise;  }
 

@@ -200,6 +200,15 @@ bool    PolylineValidator::CheckRepeatPoints   ()
         if( m_polyline[ i ] == m_polyline[ i + 1 ] )
             return true;
     }
+
+    const float epsilon = 0.00001f;
+    for( int i = 0; i < m_edgeList.size() - 1; ++i )
+    {
+        if( abs( m_edgeList[ i ]->p->x - m_edgeList[ i ]->q->x ) < epsilon &&
+            abs( m_edgeList[ i ]->p->y - m_edgeList[ i ]->q->y ) < epsilon )
+            return true;
+    }
+
     return false;
 }
 
