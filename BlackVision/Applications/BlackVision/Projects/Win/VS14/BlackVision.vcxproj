@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ASCII'?>
+<?xml version="1.0" encoding="us-ascii"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,7 +22,7 @@
     <ProjectGuid>{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}</ProjectGuid>
     <RootNamespace>BlackVision</RootNamespace>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -49,49 +49,49 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props"/>
-    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -265,133 +265,134 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
       <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp"/>
-    <ClCompile Include="..\..\..\Source\bvApp.cpp"/>
-    <ClCompile Include="..\..\..\Source\BVAppLogic.cpp"/>
-    <ClCompile Include="..\..\..\Source\BVConfig.cpp"/>
-    <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp"/>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp"/>
-    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp"/>
-    <ClCompile Include="..\..\..\Source\FrameStatsService.cpp"/>
-    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp"/>
-    <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp"/>
-    <ClCompile Include="..\..\..\Source\MainInitProcess.cpp"/>
-    <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp"/>
-    <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp"/>
-    <ClCompile Include="..\..\..\Source\MockScenes.cpp"/>
-    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp"/>
-    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp"/>
-    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp"/>
-    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp"/>
-    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp"/>
-    <ClCompile Include="..\..\..\Source\PieChartNode.cpp"/>
-    <ClCompile Include="..\..\..\Source\RenderMode.cpp"/>
-    <ClCompile Include="..\..\..\Source\StatsFormatters.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp"/>
-    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp"/>
-    <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp"/>
+    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\bvApp.cpp" />
+    <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
+    <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
+    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
+    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
+    <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
+    <ClCompile Include="..\..\..\Source\MockScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
+    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
+    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
+    <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
+    <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\bvApp.h"/>
-    <ClInclude Include="..\..\..\Source\BVAppLogic.h"/>
-    <ClInclude Include="..\..\..\Source\BVConfig.h"/>
-    <ClInclude Include="..\..\..\Source\BVForwards.h"/>
-    <ClInclude Include="..\..\..\Source\DefaultPlugins.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h"/>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h"/>
-    <ClInclude Include="..\..\..\Source\RenderMode.h"/>
-    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h"/>
-    <ClInclude Include="..\..\..\Source\FrameStatsService.h"/>
-    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h"/>
-    <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h"/>
-    <ClInclude Include="..\..\..\Source\MainInitProcess.h"/>
-    <ClInclude Include="..\..\..\Source\MainLoopProcess.h"/>
-    <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h"/>
-    <ClInclude Include="..\..\..\Source\MockScenes.h"/>
-    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h"/>
-    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h"/>
-    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h"/>
-    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h"/>
-    <ClInclude Include="..\..\..\Source\PieChartNode.h"/>
-    <ClInclude Include="..\..\..\Source\StatsFormatters.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\AICommands.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestAI.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h"/>
-    <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h"/>
-    <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h"/>
-    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h"/>
-    <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h"/>
+    <ClInclude Include="..\..\..\Source\bvApp.h" />
+    <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
+    <ClInclude Include="..\..\..\Source\BVConfig.h" />
+    <ClInclude Include="..\..\..\Source\BVForwards.h" />
+    <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
+    <ClInclude Include="..\..\..\Source\RenderMode.h" />
+    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
+    <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
+    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
+    <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
+    <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />
+    <ClInclude Include="..\..\..\Source\MockScenes.h" />
+    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
+    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
+    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
+    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
+    <ClInclude Include="..\..\..\Source\PieChartNode.h" />
+    <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Source\bvAppLogInitializer.inl"/>
-    <None Include="..\..\..\Source\BVConfig.inl"/>
-    <None Include="..\..\..\Source\FrameStatsService.inl"/>
+    <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
+    <None Include="..\..\..\Source\BVConfig.inl" />
+    <None Include="..\..\..\Source\FrameStatsService.inl" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemDefinitionGroup Label="CustomXML">
     <ClCompile>

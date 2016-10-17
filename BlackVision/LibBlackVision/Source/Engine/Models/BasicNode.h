@@ -16,9 +16,9 @@ namespace bv { namespace model {
 class PluginsManager;
 
 class BasicNode;
-DEFINE_PTR_TYPE(BasicNode)
-DEFINE_CONST_PTR_TYPE(BasicNode)
-typedef std::weak_ptr< BasicNode >  BasicNodeWeakPtr;
+DEFINE_PTR_TYPE( BasicNode )
+DEFINE_CONST_PTR_TYPE( BasicNode )
+DEFINE_WEAK_PTR_TYPE( BasicNode )
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 

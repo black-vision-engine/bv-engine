@@ -39,7 +39,7 @@ const std::string &     AnalogWatch::GetType             () const
 
 // ***********************
 //
-AnalogWatch::AnalogWatch             ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator )
+AnalogWatch::AnalogWatch             ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
 {
     m_smoothHours = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_HOURS, false )->Value();
@@ -121,7 +121,7 @@ void                        AnalogWatch::Serialize       ( ISerializer & ser ) c
 
 // ***********************
 //
-AnalogWatchPtr              AnalogWatch::Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode )
+AnalogWatchPtr              AnalogWatch::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
     auto analogWatch = std::make_shared< AnalogWatch >( parentNode, timeline );
@@ -158,19 +158,24 @@ bool                        AnalogWatch::HandleEvent     ( IDeserializer & event
 //
 bool        AnalogWatch::StartWatch      ( IDeserializer & /*eventSer*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
 {
-    int numChildren = m_parentNode->GetNumChildren();
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        int numChildren = parentNode->GetNumChildren();
 
-    m_hourNode = numChildren > 1 ? m_parentNode->GetChild( 0 ).get() : nullptr;
-    m_minuteNode = numChildren > 2 ? m_parentNode->GetChild( 1 ).get() : nullptr;
-    m_secondsNode = numChildren > 3 ? m_parentNode->GetChild( 2 ).get() : nullptr;
+        m_hourNode = numChildren > 1 ? parentNode->GetChild( 0 ).get() : nullptr;
+        m_minuteNode = numChildren > 2 ? parentNode->GetChild( 1 ).get() : nullptr;
+        m_secondsNode = numChildren > 3 ? parentNode->GetChild( 2 ).get() : nullptr;
 
-    SetInitialPosition( m_hourNode );
-    SetInitialPosition( m_minuteNode );
-    SetInitialPosition( m_secondsNode );
+        SetInitialPosition( m_hourNode );
+        SetInitialPosition( m_minuteNode );
+        SetInitialPosition( m_secondsNode );
 
-    m_started = true;
+        m_started = true;
 
-    return true;
+        return true;
+    }
+
+    return false;
 }
 
 // ***********************

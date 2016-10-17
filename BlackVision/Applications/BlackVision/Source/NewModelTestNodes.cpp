@@ -580,9 +580,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
     // ROOT
     auto root = bTex.CreateNode( "root", true );
 
-    auto shiftRepMod = model::ShiftReplicationModifier::Create();
+    auto shiftRepMod = nodelogic::ShiftReplicationModifier::Create();
 
-    model::ParamValDelta delta;
+    nodelogic::ParamValDelta delta;
 
     delta.deltaTime = 0.f;
     delta.startTime = 0.f;
@@ -592,7 +592,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
 
     shiftRepMod->AddParamShift( "transform", "translation", delta );
 
-    auto repLogic = model::NodeReplicator::Create( root, 5, shiftRepMod );
+    auto repLogic = nodelogic::NodeReplicator::Create( root, 5, shiftRepMod );
 
     auto image = bTex.CreateNode( "piateczka", true );
 

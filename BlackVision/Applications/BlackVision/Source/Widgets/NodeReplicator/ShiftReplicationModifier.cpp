@@ -3,7 +3,7 @@
 #include "Widgets/NodeLogicHelper.h"
 
 
-namespace bv { namespace model {
+namespace bv { namespace nodelogic {
 
 // *******************************
 //
@@ -57,7 +57,7 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
     {
         do
         {
-            model::ParamValDelta shift;
+            ParamValDelta shift;
             std::string pluginName = deser.GetAttribute( "pluginName" );
             std::string paramName = deser.GetAttribute( "paramName" );
 
@@ -100,11 +100,11 @@ namespace
 {
 
 template< class ParamTypePtr, ParamType paramType >
-void ApplyParamDelta( IParameterPtr param, ParamValDelta delta, int repCounter )
+void ApplyParamDelta( model::IParameterPtr param, ParamValDelta delta, int repCounter )
 {
     typedef std::shared_ptr< ValueImpl< ParamTypePtr::element_type::ValType, paramType > > ValType;
 
-    if( auto p = QueryTypedParam< ParamTypePtr >( param ) )
+    if( auto p = model::QueryTypedParam< ParamTypePtr >( param ) )
     {
         TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
 
@@ -124,7 +124,7 @@ void ApplyParamDelta( IParameterPtr param, ParamValDelta delta, int repCounter )
 
 // *******************************
 //
-void                            ShiftReplicationModifier::Apply( const BasicNodeConstPtr &, const BasicNodePtr & next, BVProjectEditor * /* editor */, int repCounter ) const
+void                            ShiftReplicationModifier::Apply( const model::BasicNodeConstPtr &, const model::BasicNodePtr & next, BVProjectEditor * /* editor */, int repCounter ) const
 {
     for( auto it : m_paramsShifts )
     {
@@ -153,16 +153,16 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
                 switch( it.second.delta->GetType() )
                 {
                 case ParamType::PT_FLOAT1:
-                    ApplyParamDelta< ParamFloatPtr, ParamType::PT_FLOAT1 >( param, it.second, repCounter );                        
+                    ApplyParamDelta< model::ParamFloatPtr, ParamType::PT_FLOAT1 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_FLOAT2:
-                    ApplyParamDelta< ParamVec2Ptr, ParamType::PT_FLOAT2 >( param, it.second, repCounter );
+                    ApplyParamDelta< model::ParamVec2Ptr, ParamType::PT_FLOAT2 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_FLOAT3:
-                    ApplyParamDelta< ParamVec3Ptr, ParamType::PT_FLOAT3 >( param, it.second, repCounter );
+                    ApplyParamDelta< model::ParamVec3Ptr, ParamType::PT_FLOAT3 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_FLOAT4:
-                    ApplyParamDelta< ParamVec4Ptr, ParamType::PT_FLOAT4 >( param, it.second, repCounter );
+                    ApplyParamDelta< model::ParamVec4Ptr, ParamType::PT_FLOAT4 >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_MAT2:
                     assert( false ); // TODO: Implement
@@ -177,7 +177,7 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
                     //ApplyParamDelta< ParamMat4Ptr, ParamType::PT_MAT4 >( param, it.second );
                     break;
                 case ParamType::PT_INT:
-                    ApplyParamDelta< ParamIntPtr, ParamType::PT_INT >( param, it.second, repCounter );
+                    ApplyParamDelta< model::ParamIntPtr, ParamType::PT_INT >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_BOOL:
                     //ApplyParamDelta< ParamBoolPtr, ParamType::PT_BOOL >( param, it.second );
@@ -186,10 +186,10 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
                     //ApplyParamDelta< ParamMat2Ptr, ParamType::PT_MAT2 >( param, it.second );
                     break;
                 case ParamType::PT_STRING:
-                    ApplyParamDelta< ParamStringPtr, ParamType::PT_STRING >( param, it.second, repCounter );
+                    ApplyParamDelta< model::ParamStringPtr, ParamType::PT_STRING >( param, it.second, repCounter );
                     break;
                 case ParamType::PT_WSTRING:
-                    ApplyParamDelta< ParamWStringPtr, ParamType::PT_WSTRING >( param, it.second, repCounter );
+                    ApplyParamDelta< model::ParamWStringPtr, ParamType::PT_WSTRING >( param, it.second, repCounter );
                     break;
                 }
             }
@@ -206,7 +206,7 @@ ShiftReplicationModifierPtr             ShiftReplicationModifier::Create()
 
 // *******************************
 //
-void                                    ShiftReplicationModifier::ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const
+void                                    ShiftReplicationModifier::ApplyTranslationDelta ( const ParamValDelta & delta, const model::BasicNodePtr & node, int repCounter ) const
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
@@ -214,7 +214,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
     {
         TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
 
-        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
+        auto transformParamTyped = model::QueryTypedParam< model::ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
         auto val = transformParamTyped->GetTransform().GetTranslation( startTime );
@@ -232,7 +232,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
 
 // *******************************
 //
-void                                    ShiftReplicationModifier::ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const
+void                                    ShiftReplicationModifier::ApplyScaleDelta       ( const ParamValDelta & delta, const model::BasicNodePtr & node, int repCounter ) const
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
@@ -240,7 +240,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
     {
         TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
 
-        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
+        auto transformParamTyped = model::QueryTypedParam< model::ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
         auto val = transformParamTyped->GetTransform().GetScale( startTime );
@@ -258,7 +258,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
 
 // *******************************
 //
-void                                    ShiftReplicationModifier::ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const
+void                                    ShiftReplicationModifier::ApplyRotationDelta    ( const ParamValDelta & delta, const model::BasicNodePtr & node, int repCounter ) const
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
@@ -266,7 +266,7 @@ void                                    ShiftReplicationModifier::ApplyRotationD
     {
         TimeType startTime = delta.startTime + repCounter * delta.deltaTime;
 
-        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
+        auto transformParamTyped = model::QueryTypedParam< model::ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
         auto valAngles = transformParamTyped->GetTransform().GetRotation( startTime );
@@ -281,5 +281,5 @@ void                                    ShiftReplicationModifier::ApplyRotationD
     }
 }
 
-} // model
+} // nodelogic
 } // bv

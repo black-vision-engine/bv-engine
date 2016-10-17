@@ -5,7 +5,7 @@
 #include "Engine/Models/BasicNode.h"
 
 
-namespace bv { namespace model {
+namespace bv { namespace nodelogic {
 
 class NodeReplicator;
 
@@ -24,30 +24,29 @@ public:
 	virtual void					Update			( TimeType t )	override;
 	virtual void					Deinitialize	()				override;
 
-    static NodeReplicatorPtr        Create          ( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
+    static NodeReplicatorPtr        Create          ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
 
     virtual const std::string &     GetType         () const override;
     static const std::string &      Type            ();
 
-    virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;
-    virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
+    virtual model::IParameterPtr                           GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< model::IParameterPtr > &    GetParameters       () const override;
 
     virtual void                    Serialize       ( ISerializer & ser ) const override;
-    static NodeReplicatorPtr        Create          ( const IDeserializer & deser, BasicNodePtr & parentNode );
+    static NodeReplicatorPtr        Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode );
 
     virtual bool                    HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
 private:
 
-    explicit                        NodeReplicator  ( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
-    NodeReplicator &                operator=       ( const NodeReplicator & other );
+    explicit                        NodeReplicator  ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
 
-    BasicNodePtr &                  m_node;
+    model::BasicNodeWeakPtr         m_node;
     IReplicationModifierConstPtr    m_repModifier;
     SizeType                        m_repNum;
     bool                            m_initialized;
 
 };
 
-} // model
+} // nodelogic
 } // bv

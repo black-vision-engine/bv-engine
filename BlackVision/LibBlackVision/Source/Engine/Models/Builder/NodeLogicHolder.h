@@ -15,8 +15,8 @@ public:
     virtual ~INodeLogicFactory() {};
 
 
-    virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer &   /*deser*/,
-                                                        model::BasicNodePtr &   /*logicParent*/
+    virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer & /*deser*/,
+                                                        model::BasicNodeWeakPtr /*logicParent*/
                                                      )
     { return nullptr; }
 };

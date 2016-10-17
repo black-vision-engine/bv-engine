@@ -129,9 +129,12 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     bool result = true;
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
+    // FIXME: should be set externally
+    bool enableUndo = false;
+
     if( command == NodeStructureEvent::Command::AddNode )
     {
-        result = editor->AddChildNode( sceneName, nodePath, newNodeName, true );
+        result = editor->AddChildNode( sceneName, nodePath, newNodeName, enableUndo );
         
         bool AddTransformPlugin = false;
         if( request && request->GetAttribute( "AddTransformPlugin" ) == "true" )
@@ -151,7 +154,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
-        result = editor->DeleteChildNode( sceneName, nodePath, true );
+        result = editor->DeleteChildNode( sceneName, nodePath, enableUndo );
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
     {
@@ -206,7 +209,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         
-        result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, true );
+        result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, enableUndo );
     }
     else if( command == NodeStructureEvent::Command::CopyNode )
     {
@@ -223,7 +226,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
 
-        auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath, true );
+        auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath, enableUndo );
         if( copyPtr == nullptr )
             result = false;
     }
@@ -254,13 +257,17 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     bool result = true;
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
+
+    // FIXME: should be set externally
+    bool enableUndo = false;
+
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
-        result = editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex, true );
+        result = editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex, enableUndo );
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
     {
-        result = editor->DeletePlugin( sceneName, nodePath, pluginName, true );
+        result = editor->DeletePlugin( sceneName, nodePath, pluginName, enableUndo );
     }
     else if( command == PluginStructureEvent::Command::AttachPlugin )
     {
@@ -287,7 +294,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         auto srcPluginName = request->GetAttribute( "SrcName" );
 
-        auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName, true );
+        auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName, enableUndo );
         if( pluginPtr == nullptr )
             result = false;
     }
@@ -308,7 +315,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         auto srcPluginName = request->GetAttribute( "SrcName" );
 
-        result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName, true );
+        result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName, enableUndo );
     }
     else result = false;
 

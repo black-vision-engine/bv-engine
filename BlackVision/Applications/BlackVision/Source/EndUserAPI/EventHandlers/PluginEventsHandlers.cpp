@@ -56,6 +56,9 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
     model::IParameterPtr param = nullptr;
 
+    // FIXME: should be set externally
+    bool enableUndo = false;
+
     //<------- preserve compatibility code - delete me later & uncomment code below -------
     if( paramSubName.empty() )
     {
@@ -152,7 +155,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         result = SetWrapPostMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::AssignTimeline )
     {
-        result = m_projectEditor->AssignTimeline( sceneName, param, value, true );
+        result = m_projectEditor->AssignTimeline( sceneName, param, value, enableUndo );
     }
     else if( command == ParamKeyEvent::Command::SampleCurve )
     {

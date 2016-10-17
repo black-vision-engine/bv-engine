@@ -157,14 +157,14 @@ glm::vec3       ScrollerShiftToVec   ( Scroller::ScrollDirection crawlDirection 
 
 // *******************************
 //
-ScrollerPtr Scroller::Create                ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, model::ITimeEvaluatorPtr timeEvaluator )
+ScrollerPtr Scroller::Create                ( model::BasicNodeWeakPtr parent, const mathematics::RectPtr & view, model::ITimeEvaluatorPtr timeEvaluator )
 {
     return std::make_shared< Scroller >( parent, view, timeEvaluator );
 }
 
 // *******************************
 //
-Scroller::Scroller                      ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, model::ITimeEvaluatorPtr timeEvaluator )
+Scroller::Scroller                      ( model::BasicNodeWeakPtr parent, const mathematics::RectPtr & view, model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
     , m_editor( nullptr )
     , m_isFinalized( false )
@@ -213,29 +213,40 @@ void        Scroller::Deinitialize      ()
 //
 void        Scroller::AddNext           ( model::BasicNodePtr node )
 {
-    if( !m_started )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        m_parentNode->AddChildToModelOnly( node );
-        m_nodesStates.Add( node.get() );
+        if( !m_started )
+        {
+            parentNode->AddChildToModelOnly( node );
+            m_nodesStates.Add( node.get() );
+        }
+        else
+            assert( !"Scroller: Cannot add node while scrolling!" );
     }
-    else
-        assert(!"Scroller: Cannot add node while scrolling!");
 }
 
 // ***********************
 //
 bool        Scroller::AddNext            ( Int32 nodeIdx )
 {
-    auto newNode = GetNode( m_parentNode.get(), nodeIdx );
-    return AddNode( newNode.get() );
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        auto newNode = GetNode( parentNode.get(), nodeIdx );
+        return AddNode( newNode.get() );
+    }
+    return false;
 }
 
 // ***********************
 //
 bool        Scroller::AddNext               ( const std::string & childNodeName )
 {
-    auto newNode = GetNode( m_parentNode.get(), childNodeName );
-    return AddNode( newNode.get() );
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        auto newNode = GetNode( parentNode.get(), childNodeName );
+        return AddNode( newNode.get() );
+    }
+    return false;
 }
 
 // ***********************
@@ -266,16 +277,19 @@ bool        Scroller::SetNodeMargin       ( model::BasicNode * node, Scroller::N
 //
 bool        Scroller::SetNodeMargin       ( IDeserializer & eventSer, ISerializer & /*response*/ )
 {
-    auto nodePath = eventSer.GetAttribute( "NodePath" );
-    auto margin = DeserializeMargin( eventSer );
-
-    auto node = GetNode( m_parentNode.get(), nodePath );
-    if( node )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        return SetNodeMargin( node.get(), margin );
+        auto nodePath = eventSer.GetAttribute( "NodePath" );
+        auto margin = DeserializeMargin( eventSer );
+
+        auto node = GetNode( parentNode.get(), nodePath );
+        if( node )
+        {
+            return SetNodeMargin( node.get(), margin );
+        }
     }
-    else
-        return false;
+
+    return false;
 }
 
 // ***********************
@@ -558,23 +572,26 @@ void        Scroller::OnNotifyVisibilityChanged     ( model::BasicNode * n, bool
 //
 void        Scroller::OnNotifyNodeOffscreen         ( model::BasicNode * n )
 {
-    if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_Looping )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        ShiftNodeToEnd( n );
+        if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_Looping )
+        {
+            ShiftNodeToEnd( n );
+        }
+        else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_SetNonActive )
+        {
+            // Function m_nodesStates.NotVisible is called in UpdateVisibility and has already
+            // deactivated this node.
+            //m_nodesStates.Deacivate( n );
+        }
+        else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_DeleteNode )
+        {
+            m_nodesStates.Remove( n );
+            m_editor->DeleteChildNode( m_editor->GetModelScene( m_sceneName ), parentNode, n->shared_from_this() );
+        }
+        else
+            assert( false );
     }
-    else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_SetNonActive )
-    {
-        // Function m_nodesStates.NotVisible is called in UpdateVisibility and has already
-        // deactivated this node.
-        //m_nodesStates.Deacivate( n );
-    }
-    else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_DeleteNode )
-    {
-        m_nodesStates.Remove( n );
-        m_editor->DeleteChildNode( m_editor->GetModelScene( m_sceneName ), m_parentNode, n->shared_from_this() );
-    }
-    else
-        assert( false );
 }
 
 // *******************************
@@ -700,10 +717,12 @@ void        Scroller::ShiftNodeToEnd      ( model::BasicNode * n )
 //
 void                Scroller::Serialize       ( ISerializer& ser ) const
 {
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
-    assert( context != nullptr );
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        auto context = static_cast< BVSerializeContext* >( ser.GetSerializeContext() );
+        assert( context != nullptr );
 
-    ser.EnterChild( "logic" );
+        ser.EnterChild( "logic" );
         ser.SetAttribute( "type", m_type );
 
         if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
@@ -720,100 +739,107 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
             NodeLogicBase::Serialize( ser );
 
             // Node names aren't enough to identify node. Checking children indicies.
-            SizeType numChildren = m_parentNode->GetNumChildren();
+            SizeType numChildren = parentNode->GetNumChildren();
             std::vector<model::BasicNode*>     childrenNodes;
             childrenNodes.reserve( numChildren );
-        
+
             // Copy all node's to vector
             for( Int32 i = 0; i < numChildren; ++i )
-                childrenNodes.push_back( m_parentNode->GetChild( i ).get() );
+                childrenNodes.push_back( parentNode->GetChild( i ).get() );
 
 
             ser.EnterArray( "scrollerNodes" );
-                auto allNodes = m_nodesStates.m_actives;
-                allNodes.insert( allNodes.end(), m_nodesStates.m_nonActives.begin(), m_nodesStates.m_nonActives.end() );
+            auto allNodes = m_nodesStates.m_actives;
+            allNodes.insert( allNodes.end(), m_nodesStates.m_nonActives.begin(), m_nodesStates.m_nonActives.end() );
 
-                for( auto& node : allNodes )
+            for( auto& node : allNodes )
+            {
+                ser.EnterChild( "scrollerNode" );
+                ser.SetAttribute( "name", node->GetName() );
+
+                // Find node index
+                Int32  nodeIndex = -1;
+                for( Int32 i = 0; i < numChildren; ++i )
                 {
-                    ser.EnterChild( "scrollerNode" );
-                        ser.SetAttribute( "name", node->GetName() );
-
-                        // Find node index
-                        Int32  nodeIndex = -1;
-                        for( Int32 i = 0; i < numChildren; ++i )
-                        {
-                            if( childrenNodes[ i ] == node )
-                            {
-                                nodeIndex = i;
-                                break;
-                            }
-                        }
-
-                        assert( nodeIndex >= 0 );   // Node held by Scroller exists in tree no more.
-                        ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
-
-                        SerializeMargin( ser, node );
-
-                    ser.ExitChild(); // node
+                    if( childrenNodes[ i ] == node )
+                    {
+                        nodeIndex = i;
+                        break;
+                    }
                 }
+
+                assert( nodeIndex >= 0 );   // Node held by Scroller exists in tree no more.
+                ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
+
+                SerializeMargin( ser, node );
+
+                ser.ExitChild(); // node
+            }
 
             ser.ExitChild(); // nodes
         }
 
-    ser.ExitChild(); // logic
+        ser.ExitChild(); // logic
+    }
 }
 
 // ***********************
 //
-ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, model::BasicNodePtr & parent )
+ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parent )
 {
-    mathematics::RectPtr rect = SerializationHelper::CreateRect( deser );
-
-    float speed = SerializationHelper::String2T( deser.GetAttribute( "Speed" ), 0.0f );
-    float interspace = SerializationHelper::String2T( deser.GetAttribute( "Spacing" ), 0.0f );
-    ScrollDirection scrollDirection = SerializationHelper::String2T( deser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
-    bool enableEvents = SerializationHelper::String2T( deser.GetAttribute( "EnableEvents" ), false );
-    auto offscreenBahavior = SerializationHelper::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
-    float smoothTime = SerializationHelper::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
-
-    auto timeline = SerializationHelper::GetDefaultTimeline( deser );
-
-    auto scroller = Scroller::Create( parent, rect, timeline );
-    scroller->SetSpeed( speed );
-    scroller->SetInterspace( interspace );
-    scroller->SetScrollDirection( scrollDirection );
-    scroller->SetEnableEvents( enableEvents );
-    scroller->SetOffscreenNodeBehavior( offscreenBahavior );
-    scroller->SetSmoothTime( smoothTime );
-
-    scroller->Deserialize( deser ); // Deserialize model parameters.
-
-
-    if( !deser.EnterChild( "scrollerNodes" ) )
-        return scroller;
-    
-    if( deser.EnterChild( "scrollerNode" ) )
+    if( auto parentNode = parent.lock() )
     {
-        do
-        {
-            UInt32 nodeIdx = SerializationHelper::String2T( deser.GetAttribute( "nodeIdx" ), -1 );
-            
-            assert( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() );
-            if( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() )
-            {
-                scroller->AddNext( nodeIdx );
-                NodeMargin margin = DeserializeMargin( deser );
-                if( !margin.IsEmpty() )
-                    scroller->SetNodeMargin( GetNode( parent.get(), nodeIdx ).get(), margin );
-            }
+        mathematics::RectPtr rect = SerializationHelper::CreateRect( deser );
 
-        } while( deser.NextChild() );
-        deser.ExitChild(); // scrollerNode
+        float speed = SerializationHelper::String2T( deser.GetAttribute( "Speed" ), 0.0f );
+        float interspace = SerializationHelper::String2T( deser.GetAttribute( "Spacing" ), 0.0f );
+        ScrollDirection scrollDirection = SerializationHelper::String2T( deser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
+        bool enableEvents = SerializationHelper::String2T( deser.GetAttribute( "EnableEvents" ), false );
+        auto offscreenBahavior = SerializationHelper::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
+        float smoothTime = SerializationHelper::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
+
+        auto timeline = SerializationHelper::GetDefaultTimeline( deser );
+
+        auto scroller = Scroller::Create( parent, rect, timeline );
+        scroller->SetSpeed( speed );
+        scroller->SetInterspace( interspace );
+        scroller->SetScrollDirection( scrollDirection );
+        scroller->SetEnableEvents( enableEvents );
+        scroller->SetOffscreenNodeBehavior( offscreenBahavior );
+        scroller->SetSmoothTime( smoothTime );
+
+        scroller->Deserialize( deser ); // Deserialize model parameters.
+
+
+        if( !deser.EnterChild( "scrollerNodes" ) )
+            return scroller;
+
+        if( deser.EnterChild( "scrollerNode" ) )
+        {
+            do
+            {
+                UInt32 nodeIdx = SerializationHelper::String2T( deser.GetAttribute( "nodeIdx" ), -1 );
+
+                assert( nodeIdx >= 0 && nodeIdx < parentNode->GetNumChildren() );
+                if( nodeIdx >= 0 && nodeIdx < parentNode->GetNumChildren() )
+                {
+                    scroller->AddNext( nodeIdx );
+                    NodeMargin margin = DeserializeMargin( deser );
+                    if( !margin.IsEmpty() )
+                        scroller->SetNodeMargin( GetNode( parentNode.get(), nodeIdx ).get(), margin );
+                }
+
+            }
+            while( deser.NextChild() );
+            deser.ExitChild(); // scrollerNode
+        }
+
+        deser.ExitChild(); // scrollerNodes
+    
+        return scroller;
     }
 
-    deser.ExitChild(); // scrollerNodes
-
-    return scroller;
+    return nullptr;
 }
 
 // ***********************
@@ -1034,28 +1060,33 @@ bool        Scroller::Pause               ()
 //
 bool       Scroller::Clear               ()
 {
-    auto scene = m_editor->GetModelScene( m_sceneName );
-
-    for( auto node : m_nodesStates.m_actives )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        m_editor->DeleteChildNode( scene, m_parentNode->shared_from_this(), node->shared_from_this() );
+        auto scene = m_editor->GetModelScene( m_sceneName );
+
+        for( auto node : m_nodesStates.m_actives )
+        {
+            m_editor->DeleteChildNode( scene, parentNode->shared_from_this(), node->shared_from_this() );
+        }
+
+        for( auto node : m_nodesStates.m_nonActives )
+        {
+            m_editor->DeleteChildNode( scene, parentNode->shared_from_this(), node->shared_from_this() );
+        }
+
+        m_nodesStates.Clear();
+        m_shifts.clear();
+
+        m_paused = false;
+        m_started = false;
+        m_isFinalized = false;
+        m_smoothStart = false;
+        m_smoothPause = false;
+
+        return true;
     }
 
-    for( auto node : m_nodesStates.m_nonActives )
-    {
-        m_editor->DeleteChildNode( scene, m_parentNode->shared_from_this(), node->shared_from_this() );
-    }
-
-    m_nodesStates.Clear();
-    m_shifts.clear();
-
-    m_paused = false;
-    m_started = false;
-    m_isFinalized = false;
-    m_smoothStart = false;
-    m_smoothPause = false;
-
-    return true;
+    return false;
 }
 
 // *******************************
@@ -1245,30 +1276,36 @@ bool            Scroller::AddPresetAndMessages( IDeserializer & eventSer, ISeria
 //
 bool            Scroller::RemoveNodes         ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * editor )
 {
-    bool deleteNodes = SerializationHelper::String2T( eventDeser.GetAttribute( "DeleteFromTree" ), false );
-
-    if( eventDeser.EnterChild( "NodesArray" ) )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        if( eventDeser.EnterChild( "Node" ) )
+        bool deleteNodes = SerializationHelper::String2T( eventDeser.GetAttribute( "DeleteFromTree" ), false );
+
+        if( eventDeser.EnterChild( "NodesArray" ) )
         {
-            do
+            if( eventDeser.EnterChild( "Node" ) )
             {
-                std::string nodePath = eventDeser.GetAttribute( "NodePath" );
-                auto node = editor->GetNode( m_sceneName, nodePath );
+                do
+                {
+                    std::string nodePath = eventDeser.GetAttribute( "NodePath" );
+                    auto node = editor->GetNode( m_sceneName, nodePath );
 
-                m_nodesStates.Remove( std::static_pointer_cast< model::BasicNode >( node ).get() );
-                
-                if( deleteNodes )
-                    editor->DeleteChildNode( editor->GetModelScene( m_sceneName ), m_parentNode, node );
+                    m_nodesStates.Remove( std::static_pointer_cast< model::BasicNode >( node ).get() );
 
-            } while( eventDeser.NextChild() );
+                    if( deleteNodes )
+                        editor->DeleteChildNode( editor->GetModelScene( m_sceneName ), parentNode, node );
 
-            eventDeser.ExitChild();   // Node
+                }
+                while( eventDeser.NextChild() );
+
+                eventDeser.ExitChild();   // Node
+            }
+            eventDeser.ExitChild();   // NodesArray
         }
-        eventDeser.ExitChild();   // NodesArray
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 // ***********************
@@ -1307,25 +1344,29 @@ model::BasicNodePtr Scroller::CreatePreset    ( IDeserializer & eventSer, ISeria
 //
 bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node )
 {
-    auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
-    auto scene = editor->GetModelScene( context->GetSceneName() );
-
-    if( scene == nullptr )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        response.SetAttribute( "ErrorInfo", "Scene not found" );
-        return nullptr;
+        auto context = static_cast< BVDeserializeContext* >( eventSer.GetDeserializeContext() );
+        auto scene = editor->GetModelScene( context->GetSceneName() );
+
+        if( scene == nullptr )
+        {
+            response.SetAttribute( "ErrorInfo", "Scene not found" );
+            return nullptr;
+        }
+
+        if( !editor->AddChildNode( scene, parentNode->shared_from_this(), node ) )
+            return false;
+
+        if( AddNode( node.get() ) )
+        {
+            // Prepare response. Send path to new node.
+            std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( parentNode->GetNumChildren() - 1 );
+            response.SetAttribute( "AddedNodePath", addedNodePath );
+            return true;
+        }
     }
 
-    if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
-        return false;
-
-    if( AddNode( node.get() ) )
-    {
-        // Prepare response. Send path to new node.
-        std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( m_parentNode->GetNumChildren() - 1 );
-        response.SetAttribute( "AddedNodePath", addedNodePath );
-        return true;
-    }
     return false;
 }
 
@@ -1471,23 +1512,25 @@ void            Scroller::ListTypedItems      ( std::vector< model::BasicNode * 
 //
 void            Scroller::NodeRemovedHandler  ( IEventPtr evt )
 {
-    if( evt->GetEventType() != NodeRemovedEvent::Type() )
-        return;
-
-    NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
-    
-    // Scroller uses only closest children.
-    if( removedEvt->ParentNode != m_parentNode )
-        return;
-
-    if( m_nodesStates.Exist( removedEvt->RemovedNode.get() ) )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        m_nodesStates.Remove( removedEvt->RemovedNode.get() );
-        m_shifts.erase( removedEvt->RemovedNode.get() );
-        m_margins.erase( removedEvt->RemovedNode.get() );
+        if( evt->GetEventType() != NodeRemovedEvent::Type() )
+            return;
+
+        NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
+
+        // Scroller uses only closest children.
+        if( removedEvt->ParentNode != parentNode )
+            return;
+
+        if( m_nodesStates.Exist( removedEvt->RemovedNode.get() ) )
+        {
+            m_nodesStates.Remove( removedEvt->RemovedNode.get() );
+            m_shifts.erase( removedEvt->RemovedNode.get() );
+            m_margins.erase( removedEvt->RemovedNode.get() );
+        }
     }
 }
-
 
 } // nodelogic
 } // bv

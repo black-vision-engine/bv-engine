@@ -10,7 +10,7 @@ namespace bv {
 namespace model {
 
     class BasicNode;
-    DEFINE_PTR_TYPE( BasicNode )
+    DEFINE_WEAK_PTR_TYPE( BasicNode )
 
 } // model
 
@@ -45,7 +45,7 @@ private:
 
 private:
 
-    model::BasicNodePtr	&           m_parentNode;
+    model::BasicNodeWeakPtr	        m_parentNode;
 
     model::BasicNode *	            m_hourNode;
     model::BasicNode *	            m_minuteNode;
@@ -59,10 +59,8 @@ private:
 
 public:
 
-    explicit                            AnalogWatch     ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
+    explicit                            AnalogWatch     ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator );
                                         ~AnalogWatch    ();
-
-    AnalogWatch &                       operator=       ( const AnalogWatch & other );
 
 	virtual void                        Initialize		()				override {}
     virtual void                        Update			( TimeType t )	override;
@@ -73,7 +71,7 @@ public:
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
-    static AnalogWatchPtr               Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
+    static AnalogWatchPtr               Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 

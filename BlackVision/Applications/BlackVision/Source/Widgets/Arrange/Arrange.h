@@ -10,7 +10,8 @@ namespace bv {
 namespace model {
 
 class BasicNode;
-DEFINE_PTR_TYPE( BasicNode );
+DEFINE_PTR_TYPE( BasicNode )
+DEFINE_WEAK_PTR_TYPE( BasicNode )
 
 } // model
 
@@ -161,14 +162,14 @@ private:
 
 private:
 
-    model::BasicNodePtr &	                m_parentNode;
+    model::BasicNodeWeakPtr                 m_parentNode;
     std::unique_ptr< ArrangeParamsBase >    m_lastArrangement;
 
     ArrangmentType                          m_lastArrangementType;
 
 public:
 
-    explicit                            Arrange			( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
+    explicit                            Arrange			( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator );
                                         ~Arrange		();
 
     virtual void	                    Update			( TimeType );
@@ -178,7 +179,7 @@ public:
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
     virtual void                        Deserialize     ( const IDeserializer & ser );
-    static ArrangePtr			        Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
+    static ArrangePtr			        Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 

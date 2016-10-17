@@ -113,14 +113,14 @@ void                        PieChart::PieSliceDesc::Serialize       ( ISerialize
 
 // *******************************
 //
-PieChartPtr                 PieChart::Create                ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
+PieChartPtr                 PieChart::Create                ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
 {
     return std::make_shared< PieChart >( parent, timeEval, chartType, textEnabled );
 }
 
 // *******************************
 //
-PieChart::PieChart          ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
+PieChart::PieChart          ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled )
     : m_parentNode( parent )
     , m_timeEval( timeEval )
     , m_chartType( chartType )
@@ -169,7 +169,7 @@ void                PieChart::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-PieChartPtr             PieChart::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr & parent )
+PieChartPtr             PieChart::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parent )
 {
     auto timelinePath = deser.GetAttribute( "timelinePath" );
 
@@ -270,16 +270,19 @@ const std::string &         PieChart::GetType               () const
 //
 void                        PieChart::AddSlice           ( model::SceneModelPtr scene, PieSliceDescPtr sliceDesc, UInt32 idx, BVProjectEditor * editor )
 {
-    auto node = CreateSlice( sliceDesc, ( UInt32 )m_slicesDesc.size() );
-    if( node )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        editor->AddChildNode( scene, m_parentNode, node );
-        if( idx < ( UInt32 )m_slicesDesc.size() )
+        auto node = CreateSlice( sliceDesc, ( UInt32 )m_slicesDesc.size() );
+        if( node )
         {
-            editor->MoveNode( scene, m_parentNode, idx, scene, m_parentNode, node );
-        }
+            editor->AddChildNode( scene, parentNode, node );
+            if( idx < ( UInt32 )m_slicesDesc.size() )
+            {
+                editor->MoveNode( scene, parentNode, idx, scene, parentNode, node );
+            }
 
-        m_slicesDesc.push_back( sliceDesc );
+            m_slicesDesc.push_back( sliceDesc );
+        }
     }
 }
 
@@ -287,16 +290,19 @@ void                        PieChart::AddSlice           ( model::SceneModelPtr 
 //
 bool                        PieChart::RemoveSlice           ( model::SceneModelPtr scene, UInt32 sliceDescIdx, BVProjectEditor * editor )
 {
-    if( sliceDescIdx < m_slicesDesc.size() )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        auto desc = m_slicesDesc[ sliceDescIdx ];
-        auto sliceNode = m_parentNode->GetChild( sliceDescIdx );
-        if( sliceNode )
+        if( sliceDescIdx < m_slicesDesc.size() )
         {
-            editor->DeleteChildNode( scene, m_parentNode, sliceNode );
-            m_slicesDesc.erase( m_slicesDesc.begin() + sliceDescIdx );
+            auto desc = m_slicesDesc[ sliceDescIdx ];
+            auto sliceNode = parentNode->GetChild( sliceDescIdx );
+            if( sliceNode )
+            {
+                editor->DeleteChildNode( scene, parentNode, sliceNode );
+                m_slicesDesc.erase( m_slicesDesc.begin() + sliceDescIdx );
 
-            return true;
+                return true;
+            }
         }
     }
 
@@ -307,28 +313,31 @@ bool                        PieChart::RemoveSlice           ( model::SceneModelP
 //
 model::BasicNodePtr         PieChart::CreateSlice           ( PieSliceDescPtr sliceDesc, UInt32 idx )
 {
-    if( sliceDesc->percent > 0 )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        auto node = model::BasicNode::Create( SliceNodeName( m_parentNode->GetName(), idx ), m_timeEval );
-        
-        node->AddPlugin( model::DefaultTransformPluginDesc::UID(), PLUGIN::TRANSFORM, m_timeEval );
-        node->AddPlugin( model::DefaultCylinder::DefaultCylinderPluginDesc::UID(), PLUGIN::CYLINDER, m_timeEval );
-    
-        AddShaderPlugin( node );
-    
-        if( m_textEnabled )
+        if( sliceDesc->percent > 0 )
         {
-            AddLabelNode( node, sliceDesc->percent );
+            auto node = model::BasicNode::Create( SliceNodeName( parentNode->GetName(), idx ), m_timeEval );
+
+            node->AddPlugin( model::DefaultTransformPluginDesc::UID(), PLUGIN::TRANSFORM, m_timeEval );
+            node->AddPlugin( model::DefaultCylinder::DefaultCylinderPluginDesc::UID(), PLUGIN::CYLINDER, m_timeEval );
+
+            AddShaderPlugin( node );
+
+            if( m_textEnabled )
+            {
+                AddLabelNode( node, sliceDesc->percent );
+            }
+
+            auto cylinderPlugin = node->GetPlugin( PLUGIN::CYLINDER );
+            SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::HEIGHT ), 0.0f, 0.1f );
+            SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::TESSELATION ), 0.0f, 50 );
+            SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::INNERRADIUS ), 0.0f, 0.f );
+            SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OUTERRADIUS ), 0.0f, 1.f );
+            SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OPENANGLEMODE ), 0.0, model::DefaultCylinder::DefaultPlugin::OpenAngleMode::SYMMETRIC );
+
+            return node;
         }
-
-        auto cylinderPlugin = node->GetPlugin( PLUGIN::CYLINDER );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::HEIGHT ), 0.0f, 0.1f );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::TESSELATION ), 0.0f, 50 );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::INNERRADIUS ), 0.0f, 0.f );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OUTERRADIUS ), 0.0f, 1.f );
-        SetParameter( cylinderPlugin->GetParameter( model::DefaultCylinder::PN::OPENANGLEMODE ), 0.0, model::DefaultCylinder::DefaultPlugin::OpenAngleMode::SYMMETRIC );
-
-        return node;
     }
 
     return nullptr;
@@ -419,12 +428,15 @@ void                        PieChart::SetLabelText              ( model::BasicNo
 //
 void                        PieChart::UpdateChart               ()
 {
-    m_totalPercent = 0.f;
-    Float32 angle = 0.f;
-    
-    for( UInt32 i = 0; i < m_parentNode->GetNumChildren(); ++i )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        angle = UpdateSlice( m_parentNode->GetChild( i ), m_slicesDesc[ i ], angle );
+        m_totalPercent = 0.f;
+        Float32 angle = 0.f;
+
+        for( UInt32 i = 0; i < parentNode->GetNumChildren(); ++i )
+        {
+            angle = UpdateSlice( parentNode->GetChild( i ), m_slicesDesc[ i ], angle );
+        }
     }
 }
 

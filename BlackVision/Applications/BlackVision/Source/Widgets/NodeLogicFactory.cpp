@@ -14,9 +14,9 @@
 namespace bv {
 
 
-model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodePtr & logicParent )
+model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodeWeakPtr logicParent )
 {
-    const std::string& logicType = deser.GetAttribute( "type" );
+    const std::string & logicType = deser.GetAttribute( "type" );
 
     if( logicType == nodelogic::Scroller::Type() )
     {
@@ -24,15 +24,15 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     }
     else if( logicType == nodelogic::WidgetCounter::Type() )
     {
-        return nodelogic::WidgetCounter::Create( deser, logicParent.get() );
+        return nodelogic::WidgetCounter::Create( deser, logicParent );
     }
-    else if( logicType == model::NodeReplicator::Type() )
+    else if( logicType == nodelogic::NodeReplicator::Type() )
     {
-        return model::NodeReplicator::Create( deser, logicParent );
+        return nodelogic::NodeReplicator::Create( deser, logicParent );
     }
-    else if( logicType == model::TextEffects::Type() )
+    else if( logicType == nodelogic::TextEffects::Type() )
     {
-        return model::TextEffects::Create( deser, logicParent );
+        return nodelogic::TextEffects::Create( deser, logicParent );
     }
     else if( logicType == nodelogic::SmoothValueSetter::Type() )
     {

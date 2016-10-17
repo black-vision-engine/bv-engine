@@ -31,7 +31,7 @@ const std::string &     SmoothValueSetter::GetType             () const
 
 // ***********************
 //
-SmoothValueSetter::SmoothValueSetter( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator )
+SmoothValueSetter::SmoothValueSetter( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator )
     :   m_parentNode( parent )
     ,   m_timeEval( timeEvaluator )
 {}
@@ -106,7 +106,7 @@ void                    SmoothValueSetter::Deserialize     ( const IDeserializer
 
 // ***********************
 //
-SmoothValueSetterPtr    SmoothValueSetter::Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode )
+SmoothValueSetterPtr    SmoothValueSetter::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
     auto smoothValueSetter = std::make_shared< SmoothValueSetter >( parentNode, timeline );
@@ -365,30 +365,34 @@ const ParameterBinding *        SmoothValueSetter::FindSource      ( const std::
 //
 ParameterBinding                SmoothValueSetter::FillTargetData          ( const std::string & nodePath, const std::string & pluginName, const std::string & paramName, TransformKind transformKind, ParameterBinding::VectorComponent component )
 {
-    auto node = m_parentNode->GetNode( nodePath );
-    if( node == nullptr )
-    {
-        return ParameterBinding();
-    }
-
-    auto plugin = node->GetPlugin( pluginName );
-    if( plugin == nullptr )
-    {
-        return ParameterBinding();
-    }
-
-    auto param = plugin->GetParameter( paramName );
-    if( param == nullptr )
-    {
-        return ParameterBinding();
-    }
-
     ParameterBinding newBinding;
-    newBinding.Node = nodePath;
-    newBinding.Plugin = pluginName;
-    newBinding.Parameter = param;
-    newBinding.Component = component;
-    newBinding.TransformKind = transformKind;
+
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        auto node = parentNode->GetNode( nodePath );
+        if( node == nullptr )
+        {
+            return ParameterBinding();
+        }
+
+        auto plugin = node->GetPlugin( pluginName );
+        if( plugin == nullptr )
+        {
+            return ParameterBinding();
+        }
+
+        auto param = plugin->GetParameter( paramName );
+        if( param == nullptr )
+        {
+            return ParameterBinding();
+        }
+
+        newBinding.Node = nodePath;
+        newBinding.Plugin = pluginName;
+        newBinding.Parameter = param;
+        newBinding.Component = component;
+        newBinding.TransformKind = transformKind;
+    }
 
     return newBinding;
 }

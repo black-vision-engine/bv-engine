@@ -27,14 +27,14 @@ const std::string           MeshLoader::ACTION::SET_ASSET_PATH       = "SetAsset
     
 // *******************************
 //
-MeshLoaderPtr               MeshLoader::Create              ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
+MeshLoaderPtr               MeshLoader::Create              ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
 {
     return std::make_shared< MeshLoader >( parent, timeEval, assetPath );
 }
 
 // *******************************
 //
-MeshLoader::MeshLoader      ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
+MeshLoader::MeshLoader      ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEval, const std::string & assetPath )
     : m_parentNode( parent )
     , m_timeEval( timeEval )
     , m_textureEnabled( true )
@@ -83,7 +83,7 @@ void                MeshLoader::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-MeshLoaderPtr           MeshLoader::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
+MeshLoaderPtr           MeshLoader::Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parent )
 {
     auto assetPath = deser.GetAttribute( "assetPath" );
     auto timelinePath = deser.GetAttribute( "timelinePath" );
@@ -174,11 +174,14 @@ void                        MeshLoader::Load                  ( IDeserializer & 
 //
 void                        MeshLoader::Load                  ( model::SceneModelPtr scene, BVProjectEditor * editor )
 {
-    // add nodes directly to parentNode, because 'RootNode' from mesh asset is always empty
-    auto rootNode = Load( m_asset, m_timeEval );
-    for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        editor->AddChildNode( scene, m_parentNode, rootNode->GetChild( i ) );
+        // add nodes directly to parentNode, because 'RootNode' from mesh asset is always empty
+        auto rootNode = Load( m_asset, m_timeEval );
+        for( UInt32 i = 0; i < rootNode->GetNumChildren(); ++i )
+        {
+            editor->AddChildNode( scene, parentNode, rootNode->GetChild( i ) );
+        }
     }
 }
 

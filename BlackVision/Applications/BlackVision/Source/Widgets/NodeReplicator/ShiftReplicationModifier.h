@@ -1,7 +1,7 @@
 #include "IReplicationModifier.h"
 
 
-namespace bv { namespace model {
+namespace bv { namespace nodelogic {
 
 
 struct ParamValDelta
@@ -24,7 +24,7 @@ class ShiftReplicationModifier : public IReplicationModifier
 {
 public:
 
-    virtual void                            Apply               ( const BasicNodeConstPtr & prev, const BasicNodePtr & next, BVProjectEditor * editor, int repCounter ) const override;
+    virtual void                            Apply               ( const model::BasicNodeConstPtr & prev, const model::BasicNodePtr & next, BVProjectEditor * editor, int repCounter ) const override;
 
     void                                    AddParamShift       ( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift );
 
@@ -35,9 +35,9 @@ public:
 
 private:
 
-    void                                    ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const;
-    void                                    ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const;
-    void                                    ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node, int repCounter ) const;
+    void                                    ApplyTranslationDelta ( const ParamValDelta & delta, const model::BasicNodePtr & node, int repCounter ) const;
+    void                                    ApplyScaleDelta       ( const ParamValDelta & delta, const model::BasicNodePtr & node, int repCounter ) const;
+    void                                    ApplyRotationDelta    ( const ParamValDelta & delta, const model::BasicNodePtr & node, int repCounter ) const;
 
     explicit                ShiftReplicationModifier ();
 
@@ -46,5 +46,5 @@ private:
 
 };
 
-} // model
+} // nodelogic
 } // bv

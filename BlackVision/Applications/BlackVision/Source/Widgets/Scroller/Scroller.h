@@ -18,6 +18,7 @@ namespace model {
 
 class BasicNode;
 DEFINE_PTR_TYPE( BasicNode )
+DEFINE_WEAK_PTR_TYPE( BasicNode )
 
 } // model
 } // bv
@@ -99,7 +100,7 @@ private:
     std::string                             m_sceneName;
 
     bool                                    m_isFinalized;
-    model::BasicNodePtr &                   m_parentNode;
+    model::BasicNodeWeakPtr                 m_parentNode;
     ScrollerNodesStates                     m_nodesStates;
     NodeFloatMap                            m_shifts;
     NodeMarginMap                           m_margins;
@@ -152,7 +153,7 @@ private:
 
 public:
 
-    explicit    Scroller            ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
+    explicit    Scroller            ( model::BasicNodeWeakPtr parent, const mathematics::RectPtr & view, bv::model:: ITimeEvaluatorPtr timeEvaluator );
                 ~Scroller           () {}
 
     Scroller &  operator=           ( const Scroller & other );
@@ -193,8 +194,8 @@ public:
     virtual const std::vector< model::IParameterPtr > &     GetParameters   () const override;
 
     virtual void                                            Serialize       ( ISerializer & ser ) const override;
-    static ScrollerPtr                                      Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
-    static ScrollerPtr                                      Create          ( model::BasicNodePtr & parent, const mathematics::RectPtr & view, model:: ITimeEvaluatorPtr timeEvaluator );
+    static ScrollerPtr                                      Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode );
+    static ScrollerPtr                                      Create          ( model::BasicNodeWeakPtr parent, const mathematics::RectPtr & view, model:: ITimeEvaluatorPtr timeEvaluator );
 
     virtual bool                                            HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 

@@ -83,7 +83,7 @@ const std::string &     Arrange::GetType             () const
 
 // ***********************
 //
-Arrange::Arrange             ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator )
+Arrange::Arrange             ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
 {
     model::AddVec3Param( m_paramValModel, timeEvaluator, PARAMETERS::LINE_START_POINT, glm::vec3( -1.0, 0.0, 0.0 ) );
@@ -150,7 +150,7 @@ void                        Arrange::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-ArrangePtr              Arrange::Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode )
+ArrangePtr              Arrange::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
     auto newLogic = std::make_shared< Arrange >( parentNode, timeline );
@@ -689,13 +689,17 @@ void            Arrange::SphereArrange       ( std::vector< model::BasicNodePtr 
 //
 std::vector< model::BasicNodePtr >  Arrange::GetNodesToArrange    ()
 {
-    auto numChildren = m_parentNode->GetNumChildren();
     std::vector< model::BasicNodePtr > children;
-    children.reserve( numChildren );
 
-    for( unsigned int i = 0; i < numChildren; ++i )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        children.push_back( m_parentNode->GetChild( i ) );
+        auto numChildren = parentNode->GetNumChildren();
+        children.reserve( numChildren );
+
+        for( unsigned int i = 0; i < numChildren; ++i )
+        {
+            children.push_back( parentNode->GetChild( i ) );
+        }
     }
 
     return children;

@@ -35,14 +35,14 @@ private:
 
 private:
 
-    model::BasicNodePtr &	            m_parentNode;
+    model::BasicNodeWeakPtr             m_parentNode;
     model::ITimeEvaluatorPtr            m_timeEval;
 
     std::vector< ParameterBinding >     m_paramBindings;
     
 public:
 
-    explicit                            SmoothValueSetter   ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEvaluator );
+    explicit                            SmoothValueSetter   ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator );
                                         ~SmoothValueSetter  ();
 
     SmoothValueSetter &                 operator=           ( const SmoothValueSetter & other );
@@ -57,7 +57,7 @@ public:
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
     virtual void                        Deserialize     ( const IDeserializer & deser );
-    static SmoothValueSetterPtr         Create          ( const IDeserializer & deser, model::BasicNodePtr & parentNode );
+    static SmoothValueSetterPtr         Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
@@ -85,8 +85,6 @@ private:
     bool                        SetSmoothParam          ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, Type, type > > & param, float deltaTime, ISerializer & response, const std::string & srcParamName, const std::string & paramValue );
 
 };
-
-
 
 }   // nodelogic
 }	// bv

@@ -12,7 +12,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 
 
-namespace bv { namespace model {
+namespace bv { namespace nodelogic {
 
 const std::string   NodeReplicator::m_type = "replicator";
 
@@ -32,7 +32,7 @@ const std::string & NodeReplicator::GetType             () const
 
 // *******************************
 //
-NodeReplicator::NodeReplicator( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicator::NodeReplicator( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
     : m_node( node )
     , m_repModifier( modifier )
     , m_repNum( repNum )
@@ -42,7 +42,7 @@ NodeReplicator::NodeReplicator( BasicNodePtr & node, SizeType repNum, const IRep
 
 // *******************************
 //
-NodeReplicatorPtr           NodeReplicator::Create( BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicatorPtr           NodeReplicator::Create( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
 {
     return NodeReplicatorPtr( new NodeReplicator( node, repNum, modifier ) );
 }
@@ -90,7 +90,7 @@ void                NodeReplicator::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & deser, BasicNodePtr & parentNode )
+NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode )
 {
     SizeType repetitions = SerializationHelper::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
     
@@ -137,63 +137,65 @@ const std::vector< model::IParameterPtr > & NodeReplicator::GetParameters    () 
 //
 bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
-    std::string action = eventSer.GetAttribute( "Action" );
-    
-    if( action == "Replicate" ) 
+    if( auto node = m_node.lock() )
     {
-        auto numChildren = m_node->GetNumChildren();
+        std::string action = eventSer.GetAttribute( "Action" );
 
-        if( numChildren > 0 )
+        if( action == "Replicate" )
         {
-            auto toReplicate = m_node->GetChild( numChildren - 1 );
+            auto numChildren = node->GetNumChildren();
 
-            auto basicName = toReplicate->GetName();
-        
-            auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
-            auto scene = editor->GetModelScene( context->GetSceneName() );
-
-            for( SizeType i = 0; i < m_repNum; ++i )
+            if( numChildren > 0 )
             {
-                auto copiedNode = editor->AddNodeCopy( scene, m_node, scene, toReplicate );
+                auto toReplicate = node->GetChild( numChildren - 1 );
 
-                editor->RenameNode( copiedNode, basicName + "_rep" + std::to_string( i ) );
+                auto basicName = toReplicate->GetName();
 
-                m_repModifier->Apply( toReplicate, copiedNode, editor, (int)i );
+                auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
+                auto scene = editor->GetModelScene( context->GetSceneName() );
 
-                toReplicate = copiedNode;
-            }   
+                for( SizeType i = 0; i < m_repNum; ++i )
+                {
+                    auto copiedNode = editor->AddNodeCopy( scene, node, scene, toReplicate );
 
-            response.SetAttribute( COMMAND_SUCCESS_STRING, "Node replicated." );
+                    editor->RenameNode( copiedNode, basicName + "_rep" + std::to_string( i ) );
+
+                    m_repModifier->Apply( toReplicate, copiedNode, editor, ( int )i );
+
+                    toReplicate = copiedNode;
+                }
+
+                response.SetAttribute( COMMAND_SUCCESS_STRING, "Node replicated." );
+                return true;
+            }
+            else
+            {
+                response.SetAttribute( ERROR_INFO_STRING, "Node has no child. Cannot replicate" );
+            }
+        }
+        if( action == "GetModifier" )
+        {
+            m_repModifier->Serialize( response );
+            return true;
+        }
+        else if( action == "GetNumRepetitions" )
+        {
+            response.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
+            return true;
+        }
+        else if( action == "SetNumRepetitions" )
+        {
+            m_repNum = SerializationHelper::String2T< int >( eventSer.GetAttribute( "numRepetitions" ), 0 );
             return true;
         }
         else
         {
-            response.SetAttribute( ERROR_INFO_STRING, "Node has no child. Cannot replicate" );
+            response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
         }
-    }
-    if( action == "GetModifier" )
-    {
-        m_repModifier->Serialize( response );
-        return true;
-    }
-    else if( action == "GetNumRepetitions" )
-    {
-        response.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
-        return true;
-    }
-    else if( action == "SetNumRepetitions" )
-    {
-        m_repNum = SerializationHelper::String2T< int >( eventSer.GetAttribute( "numRepetitions" ), 0 );
-        return true;
-    }
-    else 
-    {
-        response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
     }
 
     return false;
 }
 
-
-} // model
+} // nodelogic
 } // bv

@@ -66,7 +66,7 @@ private:
 
 private:
 
-    model::BasicNodePtr &           m_parentNode;
+    model::BasicNodeWeakPtr         m_parentNode;
     model::ITimeEvaluatorPtr        m_timeEval;
 
     std::vector< PieSliceDescPtr >  m_slicesDesc;
@@ -79,15 +79,13 @@ private:
 
 public:
 
-    explicit                        PieChart            ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
+    explicit                        PieChart            ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
                                     ~PieChart           ();
 
-    PieChart &                      operator=           ( const PieChart & other );
-
-    static PieChartPtr              Create              ( model::BasicNodePtr & parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
+    static PieChartPtr              Create              ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEval, PieChartType chartType, bool textEnabled );
 
     virtual void                    Serialize           ( ISerializer & ser ) const override;
-    static PieChartPtr              Create              ( const IDeserializer & deser, model::BasicNodePtr & parent );
+    static PieChartPtr              Create              ( const IDeserializer & deser, model::BasicNodeWeakPtr parent );
 
     virtual void                    Initialize          ()              override {}
     virtual void                    Update              ( TimeType t )  override;

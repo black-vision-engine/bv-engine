@@ -8,7 +8,7 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 
 
-namespace bv { namespace model {
+namespace bv { namespace nodelogic {
 
 namespace {
 
@@ -21,7 +21,7 @@ const std::string   TextEffects::m_type = "text_effects";
 
 // ***********************
 //
-TextEffects::TextEffects     ( BasicNodePtr & node )
+TextEffects::TextEffects     ( model::BasicNodeWeakPtr node )
     : m_node( node )
     , m_blurSize( 5 )
 {}
@@ -91,7 +91,7 @@ const std::string &     TextEffects::GetType            () const
 
 // ***********************
 //
-IParameterPtr                           TextEffects::GetParameter        ( const std::string & name ) const
+model::IParameterPtr                            TextEffects::GetParameter        ( const std::string & name ) const
 {
     auto p = m_paramValModel->GetParameter( name );
 
@@ -107,7 +107,7 @@ IParameterPtr                           TextEffects::GetParameter        ( const
 
 // ***********************
 //
-const std::vector< IParameterPtr > &    TextEffects::GetParameters       () const
+const std::vector< model::IParameterPtr > &     TextEffects::GetParameters       () const
 {
     return m_paramValModel->GetParameters();
 }
@@ -116,35 +116,38 @@ const std::vector< IParameterPtr > &    TextEffects::GetParameters       () cons
 //
 bool                    TextEffects::HandleEvent        ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
-    std::string action = eventSer.GetAttribute( "Action" );
-    
-    if( action == "Initialize" ) 
+    if( auto node = m_node.lock() )
     {
-        auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
-        auto scene = editor->GetModelScene( context->GetSceneName() );
+        std::string action = eventSer.GetAttribute( "Action" );
 
-        editor->AddNodeCopy( scene, m_node, scene, m_node );
-
-        if( ReloadShadowNodeAsset() )
+        if( action == "Initialize" )
         {
-            response.SetAttribute( COMMAND_SUCCESS_STRING, "Text Effect initialized" );
-            return true;
+            auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
+            auto scene = editor->GetModelScene( context->GetSceneName() );
+
+            editor->AddNodeCopy( scene, node, scene, node );
+
+            if( ReloadShadowNodeAsset() )
+            {
+                response.SetAttribute( COMMAND_SUCCESS_STRING, "Text Effect initialized" );
+                return true;
+            }
+            else
+            {
+                response.SetAttribute( ERROR_INFO_STRING, "Cannot initialize text effects logic" );
+            }
+        }
+        else if( action == "SetGlowSize" )
+        {
+            std::string valueStr = eventSer.GetAttribute( "NewSizeValue" );
+            auto value = SerializationHelper::String2T< UInt32 >( valueStr );
+
+            m_blurSize = value;
         }
         else
         {
-            response.SetAttribute( ERROR_INFO_STRING, "Cannot initialize text effects logic" );
+            response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Initialize' command." );
         }
-    }
-    else if( action == "SetGlowSize" )
-    {
-        std::string valueStr = eventSer.GetAttribute( "NewSizeValue" );
-        auto value = SerializationHelper::String2T< UInt32 >( valueStr );
-
-        m_blurSize = value;
-    }
-    else 
-    {
-        response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Initialize' command." );
     }
 
     return false;
@@ -179,31 +182,40 @@ void                    TextEffects::Serialize          ( ISerializer & ser ) co
 
 // ***********************
 //
-TextEffectsPtr          TextEffects::Create             ( BasicNodePtr & node )
+TextEffectsPtr          TextEffects::Create             ( model::BasicNodeWeakPtr node )
 {
     return TextEffectsPtr( new TextEffects( node ) );
 }
 
 // ***********************
 //
-TextEffectsPtr          TextEffects::Create             ( const IDeserializer & deser, BasicNodePtr & node )
+TextEffectsPtr          TextEffects::Create             ( const IDeserializer &, model::BasicNodeWeakPtr )
 {
-    { deser; node; }
     return nullptr;
 }
 
 // ***********************
 //
-IPluginPtr              TextEffects::GetTextPlugin      () const
+model::IPluginPtr              TextEffects::GetTextPlugin      () const
 {
-    return m_node->GetPlugin( "text" );
+    if( auto node = m_node.lock() )
+    {
+        return node->GetPlugin( "text" );
+    }
+
+    return nullptr;
 }
 
 // ***********************
 //
-IPluginPtr              TextEffects::GetShadowTextPlugin() const
+model::IPluginPtr              TextEffects::GetShadowTextPlugin() const
 {
-    return m_node->GetChild( SHADOW_TEXT_NODE_EFFECT_NAME )->GetPlugin( "text" );
+    if( auto node = m_node.lock() )
+    {
+        return node->GetChild( SHADOW_TEXT_NODE_EFFECT_NAME )->GetPlugin( "text" );
+    }
+ 
+    return nullptr;
 }
 
 // ***********************
@@ -238,5 +250,5 @@ FontAssetDescConstPtr   TextEffects::GetShadowFontAssetDesc   () const
     }
 }
 
-} // model
+} // nodelogic
 } // bv

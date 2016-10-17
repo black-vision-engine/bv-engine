@@ -5,7 +5,7 @@
 #include "Assets/Font/FontAssetDescriptor.h"
 
 
-namespace bv { namespace model {
+namespace bv { namespace nodelogic {
 
 
 class TextEffects;
@@ -20,14 +20,13 @@ private:
 
     static const std::string        m_type;
 
-    BasicNodePtr &                  m_node;
+    model::BasicNodeWeakPtr         m_node;
 
-    DefaultParamValModelPtr         m_paramValModel;
+    model::DefaultParamValModelPtr  m_paramValModel;
 
     UInt32                          m_blurSize;
 
-    explicit                        TextEffects     ( BasicNodePtr & node );
-    TextEffects &                   operator=       ( const TextEffects & other );
+    explicit                        TextEffects     ( model::BasicNodeWeakPtr node );
 
 public:
                                     ~TextEffects    ();
@@ -39,22 +38,22 @@ public:
 	virtual void					Update			( TimeType t ) override;
 	virtual void					Deinitialize	() override;
 
-    virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;
-    virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
+    virtual model::IParameterPtr                           GetParameter        ( const std::string & name ) const override;
+    virtual const std::vector< model::IParameterPtr > &    GetParameters       () const override;
 
     virtual const std::string &     GetType         () const override;
     virtual bool                    HandleEvent     ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor ) override;
 
     virtual void                    Serialize       ( ISerializer& ser ) const override;
 
-    static TextEffectsPtr           Create          ( BasicNodePtr & node );
+    static TextEffectsPtr           Create          ( model::BasicNodeWeakPtr node );
 
-    static TextEffectsPtr           Create          ( const IDeserializer & deser, BasicNodePtr & node );
+    static TextEffectsPtr           Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr node );
 
 private:
 
-    IPluginPtr                      GetTextPlugin           () const;
-    IPluginPtr                      GetShadowTextPlugin     () const;
+    model::IPluginPtr               GetTextPlugin           () const;
+    model::IPluginPtr               GetShadowTextPlugin     () const;
 
     FontAssetDescConstPtr           GetFontAssetDesc        () const;
     FontAssetDescConstPtr           GetShadowFontAssetDesc  () const;
@@ -63,5 +62,5 @@ private:
 
 };
 
-} // model
+} // nodelogic
 } // bv

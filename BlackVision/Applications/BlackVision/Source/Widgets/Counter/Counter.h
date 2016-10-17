@@ -8,7 +8,7 @@
 namespace bv { namespace model {
 
 class BasicNode;
-typedef std::shared_ptr< BasicNode > BasicNodePtr;
+DEFINE_WEAK_PTR_TYPE( BasicNode )
 
 } // model
 } // bv
@@ -37,14 +37,14 @@ private:
 
 private:
 
-	model::BasicNode *      m_parentNode;
+	model::BasicNodeWeakPtr     m_parentNode;
 
     ValueIntPtr                 m_precision;
     ValueFloatPtr               m_value;
 
 public:
 
-	explicit        WidgetCounter   ( model::BasicNode * parent, model::ITimeEvaluatorPtr timeEvaluator );
+	explicit        WidgetCounter   ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator );
 	                ~WidgetCounter  ();
 
 
@@ -55,11 +55,11 @@ public:
     virtual const std::string &     GetType             () const override;
     static const std::string &      Type                ();
 
-	static WidgetCounterPtr         Create              ( model::BasicNode * parent,model:: ITimeEvaluatorPtr timeEvaluator);
+	static WidgetCounterPtr         Create              ( model::BasicNodeWeakPtr parent, model:: ITimeEvaluatorPtr timeEvaluator);
 
 
     virtual void                Serialize       ( ISerializer & ser ) const override;
-    static WidgetCounterPtr     Create          ( const IDeserializer & deser, model::BasicNode * parent );
+    static WidgetCounterPtr     Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parent );
 
     virtual bool                HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor  ) override;
 

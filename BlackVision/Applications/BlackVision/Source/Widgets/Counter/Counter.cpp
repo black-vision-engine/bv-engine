@@ -18,14 +18,14 @@ const std::string   WidgetCounter::PARAMETERS::PRECISION    = "precision";
 	
 // *******************************
 //
-WidgetCounterPtr	WidgetCounter::Create				( model::BasicNode * parent,model:: ITimeEvaluatorPtr timeEvaluator)
+WidgetCounterPtr	WidgetCounter::Create				( model::BasicNodeWeakPtr parent, model:: ITimeEvaluatorPtr timeEvaluator )
 {
-	return std::make_shared< WidgetCounter >( parent,timeEvaluator );
+	return std::make_shared< WidgetCounter >( parent, timeEvaluator );
 }
 
 // *******************************
 //
-WidgetCounter::WidgetCounter( model::BasicNode * parent,model:: ITimeEvaluatorPtr timeEvaluator )
+WidgetCounter::WidgetCounter( model::BasicNodeWeakPtr parent, model:: ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
 {
     m_precision = AddIntParam( m_paramValModel, timeEvaluator, PARAMETERS::PRECISION, 3 )->Value();
@@ -44,21 +44,24 @@ WidgetCounter::~WidgetCounter()
 //
 void		WidgetCounter::Update				( TimeType T )
 {
-    NodeLogicBase::Update( T );
-
-    auto textPlugin = m_parentNode->GetPlugin( "text" );
-    if( textPlugin )
+    if( auto parentNode = m_parentNode.lock() )
     {
-        float value = m_value->GetValue();
-        int precision = m_precision->GetValue();
-        if( precision < 0 )
-            precision = 0;
+        NodeLogicBase::Update( T );
 
-        std::wstringstream converter;
-        converter.precision( precision );
-        converter << std::fixed << value;
+        auto textPlugin = parentNode->GetPlugin( "text" );
+        if( textPlugin )
+        {
+            float value = m_value->GetValue();
+            int precision = m_precision->GetValue();
+            if( precision < 0 )
+                precision = 0;
 
-        SetParameter( textPlugin->GetParameter( "text" ), 0.0, converter.str() );
+            std::wstringstream converter;
+            converter.precision( precision );
+            converter << std::fixed << value;
+
+            SetParameter( textPlugin->GetParameter( "text" ), 0.0, converter.str() );
+        }
     }
 }
 
@@ -84,7 +87,7 @@ void                WidgetCounter::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, model::BasicNode * parent )
+WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parent )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
 

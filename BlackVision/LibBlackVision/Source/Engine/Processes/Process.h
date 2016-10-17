@@ -8,8 +8,8 @@ namespace bv
 
 class Process;
 
-DEFINE_PTR_TYPE(Process)
-typedef std::weak_ptr<Process>      ProcessWeakPtr;
+DEFINE_PTR_TYPE( Process )
+DEFINE_WEAK_PTR_TYPE( Process )
 
 enum ProcessState : int
 {
