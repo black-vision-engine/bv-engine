@@ -500,64 +500,68 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 // *********************************
 //
-TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
+TextAtlasConstPtr   FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
     return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
 
 // ***********************
 //
-std::vector< glm::vec3 >    FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*size*/ )
+ContoursList        FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*size*/ )
 {
     // Load the glyph we are looking for.
     FT_UInt gindex = FT_Get_Char_Index( m_face, ch );
     //FT_Set_Char_Size( m_face, 0, (int)( size * 64 ), 1000, 1000 );
 
-
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
-    {
-        Triangulator triangulator( MakeContours( m_face->glyph ), "Letter.txt" );
-        Mesh mesh = triangulator.MakeMesh();
+        return MakeContours( m_face->glyph );
+    else
+        return std::vector< std::unique_ptr< FTContour > >();
 
-        if( mesh.GetMeshSegments().size() == 1 )
-        {
-            return std::move( mesh.GetMeshSegments()[ 0 ] );
-        }
-        else
-        {
-            auto & meshSegments = mesh.GetMeshSegments();
+    //if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
+    //{
+    //    Triangulator triangulator( MakeContours( m_face->glyph ), "Letter.txt" );
+    //    Mesh mesh = triangulator.MakeMesh();
 
-            std::vector< glm::vec3 > verticies;
-            auto tessCount = meshSegments.size();
+    //    if( mesh.GetMeshSegments().size() == 1 )
+    //    {
+    //        return std::move( mesh.GetMeshSegments()[ 0 ] );
+    //    }
+    //    else
+    //    {
+    //        auto & meshSegments = mesh.GetMeshSegments();
 
-            // Reserve memory in vector.
-            SizeType numVerticies = 0;
-            for( int i = 0; i < tessCount; ++i )
-            {
-                numVerticies += meshSegments[ i ].size();
-            }
-            verticies.reserve( numVerticies );
+    //        std::vector< glm::vec3 > verticies;
+    //        auto tessCount = meshSegments.size();
+
+    //        // Reserve memory in vector.
+    //        SizeType numVerticies = 0;
+    //        for( int i = 0; i < tessCount; ++i )
+    //        {
+    //            numVerticies += meshSegments[ i ].size();
+    //        }
+    //        verticies.reserve( numVerticies );
 
 
-            for( int i = 0; i < tessCount; ++i )
-            {
-                const auto & pointList = meshSegments[ i ];
-                for( int j = 0; j < pointList.size(); ++j )
-                {
-                    verticies.push_back( pointList[ j ] );
-                }
-            }
+    //        for( int i = 0; i < tessCount; ++i )
+    //        {
+    //            const auto & pointList = meshSegments[ i ];
+    //            for( int j = 0; j < pointList.size(); ++j )
+    //            {
+    //                verticies.push_back( pointList[ j ] );
+    //            }
+    //        }
 
-            return verticies;
-        }
-    }
+    //        return verticies;
+    //    }
+    //}
 
-    return std::vector< glm::vec3 >();
+    //return std::vector< glm::vec3 >();
 }
 
 // ================================ //
 //
-std::vector<std::unique_ptr<FTContour>>		FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
+ContoursList        FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
 {
     if( glyph )
     {

@@ -63,9 +63,9 @@ VertexAttributesChannelPtr   Text3DUtils::CreateEmptyVACForText3D()
     VertexAttributesChannelDescriptor vacDesc;
 
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
+    //vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
 
-    return std::make_shared< VertexAttributesChannel>( PrimitiveType::PT_TRIANGLES, vacDesc );
+    return std::make_shared< VertexAttributesChannel>( PrimitiveType::PT_LINES, vacDesc );
 }
 
 // ***********************
@@ -110,26 +110,58 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
 
 // ***********************
 //
-ConnectedComponentPtr                    Text3DUtils::CreateLetter                ( const wchar_t character, TextConstPtr& textAsset, TextLayout layout )
+std::vector< glm::vec3 >                Text3DUtils::CreateLinesFromContour         ( const ContoursVec& contours )
+{
+    std::vector< glm::vec3 > result;
+
+    SizeType numPoints = 0;
+    for( auto & contour : contours )
+    {
+        numPoints += contour->PointCount();
+    }
+
+    result.reserve( 2 * numPoints );
+
+    for( auto & contour : contours )
+    {
+        for( int i = 0; i < contour->PointCount() - 1; ++i )
+        {
+            result.push_back( glm::vec3( contour->Point( i ).X(), contour->Point( i ).Y(), 0.0f ) );
+            result.push_back( glm::vec3( contour->Point( i + 1 ).X(), contour->Point( i + 1 ).Y(), 0.0f ) );
+        }
+
+        auto lastPointIdx = contour->PointCount() - 1;
+
+        result.push_back( glm::vec3( contour->Point( lastPointIdx ).X(), contour->Point( lastPointIdx ).Y(), 0.0f ) );
+        result.push_back( glm::vec3( contour->Point( 0 ).X(), contour->Point( 0 ).Y(), 0.0f ) );
+    }
+
+    return result;
+}
+
+// ***********************
+//
+ConnectedComponentPtr                    Text3DUtils::CreateLetter                  ( const wchar_t character, TextConstPtr& textAsset, TextLayout layout )
 {
     ConnectedComponentPtr       component = ConnectedComponent::Create();
 
     model::AttributeChannelDescriptorPtr posDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    model::AttributeChannelDescriptorPtr normDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
+    //model::AttributeChannelDescriptorPtr normDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
 
     Float3AttributeChannelPtr   positions = std::make_shared< Float3AttributeChannel >( posDesc, "vertexPosition", false );
-    Float3AttributeChannelPtr   normals = std::make_shared< Float3AttributeChannel >( normDesc, "vertexNormal", false );
+    //Float3AttributeChannelPtr   normals = std::make_shared< Float3AttributeChannel >( normDesc, "vertexNormal", false );
 
     component->AddAttributeChannel( positions );
-    component->AddAttributeChannel( normals );
+    //component->AddAttributeChannel( normals );
 
-    auto positionsVec = textAsset->CreateCharacter3D( character, layout.Size );
-    auto numVerticies = positionsVec.size();
+    auto contoursVec = textAsset->CreateCharacter3D( character, layout.Size );
+    auto positionsVec = CreateLinesFromContour( contoursVec );
+    //auto numVerticies = positionsVec.size();
     positions->ReplaceAttributes( std::move( positionsVec ) );
 
     // Generate normals along z axis.
-    auto & normalsVec = normals->GetVertices();
-    normalsVec.resize( numVerticies, glm::vec3( 0.0f, 0.0f, 1.0f ) );
+    //auto & normalsVec = normals->GetVertices();
+    //normalsVec.resize( numVerticies, glm::vec3( 0.0f, 0.0f, 1.0f ) );
 
     return component;
 }

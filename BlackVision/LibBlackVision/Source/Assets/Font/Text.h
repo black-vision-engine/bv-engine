@@ -37,7 +37,8 @@ private:
 public:
 
     TextAtlasConstPtr                   GetAtlas            () const { return m_atlas; }
-    std::vector< glm::vec3 >            CreateCharacter3D   ( wchar_t ch, float size ) const;
+
+    std::vector< std::unique_ptr< FTContour > >     CreateCharacter3D   ( wchar_t ch, float size ) const;
 
 	static TextConstPtr					Create(const std::wstring& supportedCharsSet
 											, const std::string& fontFile
