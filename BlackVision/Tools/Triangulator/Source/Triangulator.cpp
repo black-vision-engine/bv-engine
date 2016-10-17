@@ -158,16 +158,22 @@ void Triangulator::ProcessContours()
                     FTPoint a = *bottom - leftmost;
                     FTPoint b = *top - *bottom;
 
-                    auto determinant = a.X() * b.Y() - a.Y() * b.Y();
+                    auto determinant = a.X() * b.Y() - a.Y() * b.X();
                     if( determinant < 0 )
                     {
-                        // Sign of deteriminant of matrix created from vectors a and b.
+                        // Sign of determinant of matrix created from vectors a and b.
                         parity++;
                     }
                     else if( determinant == 0 )
                     {
                         // Point on segment.
                         throw new std::runtime_error( "[Triangulator] Internal contour point lies on outer contour." );
+                    }
+                    else
+                    {
+                        // determinant > 0
+                        { parity; }
+                        a = b;
                     }
                 }
             }
