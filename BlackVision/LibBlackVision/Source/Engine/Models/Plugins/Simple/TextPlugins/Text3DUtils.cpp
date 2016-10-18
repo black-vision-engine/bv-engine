@@ -110,7 +110,7 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
 
 // ***********************
 //
-std::vector< glm::vec3 >                Text3DUtils::CreateLinesFromContour         ( const ContoursVec& contours )
+std::vector< glm::vec3 >                Text3DUtils::CreateLinesFromContour         ( const ContoursList& contours )
 {
     std::vector< glm::vec3 > result;
 
