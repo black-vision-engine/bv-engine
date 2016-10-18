@@ -47,7 +47,7 @@ private:
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     model::SceneModelVec	        m_sceneModelVec;
-    SceneVec                        m_sceneVec;
+    SceneUPtrVec                    m_sceneVec;
     
     model::BasicNodePtr             m_rootNode;
     SceneNode *                     m_engineSceneRoot;
@@ -70,7 +70,7 @@ public:
     model::SceneModelPtr         GetModelScene      ( UInt32 idx ) const;
 
     const model::SceneModelVec & GetModelScenes     () const;
-    const SceneVec &             GetScenes          () const;
+    SceneVec                     GetScenes          () const;
 
     StringVector                ListScenesNames     () const;
 
@@ -85,6 +85,9 @@ public:
     AssetTracker *              GetAssetTracker     () const;
 
     void					    SetStartTime		( unsigned long millis );
+
+    void                        AddEngineScene      ( std::unique_ptr< Scene > scene, UInt32 idx );
+    void                        RemoveEngineScene   ( Scene * scene );
 
 private:
 

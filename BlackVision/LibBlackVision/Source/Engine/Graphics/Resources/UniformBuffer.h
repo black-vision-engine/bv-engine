@@ -54,4 +54,6 @@ public:
 
 };
 
+DEFINE_UPTR_TYPE( UniformBuffer )
+
 }
