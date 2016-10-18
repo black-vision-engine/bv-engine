@@ -5,5 +5,6 @@
 #pragma warning(disable : 4201)
 
 #include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
 
 #pragma warning(pop)

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "XML/BVXMLSerializer.h"
 #include "XML/BVXMLDeserializer.h"
 
