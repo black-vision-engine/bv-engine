@@ -524,6 +524,7 @@ void                SVGLoader::ParseGroup       ( IDeserializer & deser, SVGAsse
         do
         {
             ParsePath( deser, mesh );
+            ParseGroup( deser, mesh );
 
         } while( deser.NextChild() );
         deser.ExitChild(); // g
