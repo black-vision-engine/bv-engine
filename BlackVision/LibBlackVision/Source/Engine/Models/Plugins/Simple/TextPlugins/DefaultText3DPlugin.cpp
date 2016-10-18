@@ -187,6 +187,8 @@ void                                DefaultText3DPlugin::RebuildText            
     {
         m_vaChannel->AddConnectedComponent( component );
     }
+
+    HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 }
 
 
@@ -202,7 +204,6 @@ void                                DefaultText3DPlugin::Update                 
         ParameterChanged( "fontSize" ) )
     {
         RebuildText();
-        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
     }
 
     //assumption that text plugin provides vertices, so no need for backward topology propagation

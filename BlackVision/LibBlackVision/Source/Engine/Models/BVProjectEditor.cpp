@@ -874,11 +874,9 @@ model::PluginWithIdx					BVProjectEditor::DeletePlugin          ( model::BasicNo
     {
         auto editor = node->GetModelNodeEditor();
         auto result = editor->DeletePlugin( name );
-        if( result.first )
-        {
-            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
-            return result;
-        }
+
+        RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
+        return result;
     }
     return std::make_pair( nullptr, -1 );
 }
