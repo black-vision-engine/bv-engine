@@ -431,6 +431,10 @@ void TriangulatePlugin::ProcessVertexAttributesChannel()
                 else
                 {
                     contours.push_back( std::move( contour ) );
+
+                    // One contour ended. We make new contour.
+                    if( i < data.size() )
+                        contour = std::unique_ptr< FTContour >( new FTContour( true ) );
                 }
             }
         }
