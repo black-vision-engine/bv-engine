@@ -414,42 +414,44 @@ void TriangulatePlugin::ProcessVertexAttributesChannel()
         ContoursList contours;
         for( int j = 0; j < prevComponents.size(); ++j )
         {
-            auto currComponent = std::static_pointer_cast< model::ConnectedComponent >( prevComponents[ j ] );
-            auto chan = std::dynamic_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
+            auto currComponent = std::static_pointer_cast<model::ConnectedComponent>( prevComponents[ j ] );
+            auto chan = std::dynamic_pointer_cast<Float3AttributeChannel>( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
 
             auto data = chan->GetVertices();
             assert( data.size() % 2 == 0 );
 
-
-	        FTContourUPtr contour = std::unique_ptr< FTContour >( new FTContour( true ) );
-            for( int i = 0; i <= data.size(); i += 2 )
+            if( !data.empty() )
             {
-                if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
+                FTContourUPtr contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+                for( int i = 0; i <= data.size(); i += 2 )
                 {
-			        contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
-                }
-                else
-                {
-                    contours.push_back( std::move( contour ) );
+                    if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
+                    {
+                        contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
+                    }
+                    else
+                    {
+                        contours.push_back( std::move( contour ) );
 
-                    // One contour ended. We make new contour.
-                    if( i < data.size() )
-                        contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+                        // One contour ended. We make new contour.
+                        if( i < data.size() )
+                            contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+                    }
                 }
             }
+
+            auto connComp = ConnectedComponent::Create();
+            auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
+            auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert", false );
+
+            Triangulator triangulator( std::move( contours ) );
+            auto mesh = triangulator.MakeMesh();
+
+            vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
+
+            connComp->AddAttributeChannel( vertChannel );
+            m_vaChannel->AddConnectedComponent( connComp );
         }
-
-        auto connComp = ConnectedComponent::Create();
-        auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
-        auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert",  false );
-
-        Triangulator triangulator( std::move( contours ) );
-        auto mesh = triangulator.MakeMesh();
-
-        vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
-
-        connComp->AddAttributeChannel( vertChannel );
-        m_vaChannel->AddConnectedComponent( connComp );
     }
 }
 
