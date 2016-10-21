@@ -11,7 +11,6 @@
 
 #include "TriangulatePlugin.h"
 
-#include "Triangulator.h"
 
 namespace {
 
@@ -390,7 +389,7 @@ void                            TriangulatePlugin::ProcessConnectedComponent   (
 
 // ***********************
 //
-void TriangulatePlugin::ProcessVertexAttributesChannel()
+void        TriangulatePlugin::ProcessVertexAttributesChannel()
 {
     if( !( m_prevPlugin
            && m_prevPlugin->GetVertexAttributesChannel()
@@ -415,34 +414,9 @@ void TriangulatePlugin::ProcessVertexAttributesChannel()
 
     if( prevComponents.size() )
     {
-        ContoursList contours;
         for( int j = 0; j < prevComponents.size(); ++j )
         {
-            auto currComponent = std::static_pointer_cast<model::ConnectedComponent>( prevComponents[ j ] );
-            auto chan = std::dynamic_pointer_cast<Float3AttributeChannel>( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
-
-            auto data = chan->GetVertices();
-            assert( data.size() % 2 == 0 );
-
-            if( !data.empty() )
-            {
-                FTContourUPtr contour = std::unique_ptr< FTContour >( new FTContour( true ) );
-                for( int i = 0; i <= data.size(); i += 2 )
-                {
-                    if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
-                    {
-                        contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
-                    }
-                    else
-                    {
-                        contours.push_back( std::move( contour ) );
-
-                        // One contour ended. We make new contour.
-                        if( i < data.size() )
-                            contour = std::unique_ptr< FTContour >( new FTContour( true ) );
-                    }
-                }
-            }
+            ContoursList contours = ExtractContours( prevComponents[ j ] );
 
             try
             {
@@ -464,6 +438,41 @@ void TriangulatePlugin::ProcessVertexAttributesChannel()
             }
         }
     }
+}
+
+// ***********************
+//
+ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedComponentPtr& component )
+{
+    auto currComponent = std::static_pointer_cast<ConnectedComponent>( component );
+    auto chan = std::dynamic_pointer_cast<Float3AttributeChannel>( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
+
+    auto data = chan->GetVertices();
+    assert( data.size() % 2 == 0 );
+
+    ContoursList contours;
+
+    if( !data.empty() )
+    {
+        FTContourUPtr contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+        for( int i = 0; i <= data.size(); i += 2 )
+        {
+            if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
+            {
+                contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
+            }
+            else
+            {
+                contours.push_back( std::move( contour ) );
+
+                // One contour ended. We make new contour.
+                if( i < data.size() )
+                    contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+            }
+        }
+    }
+
+    return contours;
 }
 
 } }

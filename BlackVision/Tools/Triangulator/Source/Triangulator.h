@@ -113,6 +113,8 @@ public:
 
 	const std::vector< int > &						GetNestingArray		()		{ return m_contoursNesting; }
 	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
+    const std::vector< IntersectionsVec > &         GetSelfIntersections()      { return m_selfIntersections;  }
+    const PolylinesVec &                            GetPolylines        ()      { return m_polylines;  }
 
     void                                            PrintContoursToFile ();
 
