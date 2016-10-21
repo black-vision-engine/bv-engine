@@ -5,6 +5,10 @@
 #include <string.h>
 #include <assert.h>
 
+//#include "Engine/Events/EventManager.h"
+
+#include "UseLoggerLibBlackVision.h"
+
 #include "TriangulatePlugin.h"
 
 #include "Triangulator.h"
@@ -440,17 +444,24 @@ void TriangulatePlugin::ProcessVertexAttributesChannel()
                 }
             }
 
-            auto connComp = ConnectedComponent::Create();
-            auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
-            auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert", false );
+            try
+            {
+                auto connComp = ConnectedComponent::Create();
+                auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
+                auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert", false );
 
-            Triangulator triangulator( std::move( contours ) );
-            auto mesh = triangulator.MakeMesh();
+                Triangulator triangulator( std::move( contours ) );
+                auto mesh = triangulator.MakeMesh();
 
-            vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
+                vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
 
-            connComp->AddAttributeChannel( vertChannel );
-            m_vaChannel->AddConnectedComponent( connComp );
+                connComp->AddAttributeChannel( vertChannel );
+                m_vaChannel->AddConnectedComponent( connComp );
+            }
+            catch( const std::runtime_error& error )
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << error.what();
+            }
         }
     }
 }
