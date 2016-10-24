@@ -66,11 +66,11 @@ private:
     TextConstPtr                    m_text;
 
     void                                        SetText                     ( const std::wstring & newText );
-
-    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
     void                                        RebuildText                 ();
 
 public:
+
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
