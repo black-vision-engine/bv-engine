@@ -3,6 +3,8 @@
 #include "ProjectManager.h"
 #include "ConfigManager.h"
 
+#include "Assets/Font/FontAssetDescriptor.h"
+
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
@@ -42,6 +44,27 @@ template<>
 inline const char *        GetCategoryName< bv::model::DefaultText3DPluginPtr >    () { return "fonts"; }
 
 
+template< typename PluginType >
+inline bv::AssetDescConstPtr    CreateDesc  ( const char * file ) { return nullptr; }
+
+template<>
+inline bv::AssetDescConstPtr    CreateDesc< bv::model::DefaultMeshPluginPtr >  ( const char * file )
+{
+    auto projectManager = bv::ProjectManager::GetInstance();
+    return projectManager->GetAssetDesc( "", GetCategoryName< bv::model::DefaultMeshPluginPtr >(), file );
+}
+
+template<>
+inline bv::AssetDescConstPtr    CreateDesc< bv::model::DefaultText3DPluginPtr >  ( const char * file )
+{
+    auto projectManager = bv::ProjectManager::GetInstance();
+    auto filePath = projectManager->GetRootDir() / bv::Path( GetCategoryName< bv::model::DefaultText3DPluginPtr >() ) / bv::Path( file );
+
+    return bv::FontAssetDesc::Create( filePath.Str(), 200, 0, 0, false );
+}
+
+
+
 // ***********************
 //
 template< typename PluginType >
@@ -54,9 +77,7 @@ void    TestFile ( const char * file,
                    const std::vector< std::vector< glm::vec2 > > & intersections,
                    const std::vector< std::vector< bool > > & including )
 {
-    auto projectManager = bv::ProjectManager::GetInstance();
-
-    auto assetDesc = projectManager->GetAssetDesc( "", GetCategoryName< PluginType >(), file );
+    auto assetDesc = CreateDesc< PluginType >( file );
     REQUIRE( assetDesc != nullptr );
 
     bool result = meshPlugin->LoadResource( assetDesc );

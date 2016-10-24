@@ -447,7 +447,7 @@ ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedCompo
     auto currComponent = std::static_pointer_cast<ConnectedComponent>( component );
     auto chan = std::dynamic_pointer_cast<Float3AttributeChannel>( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
 
-    auto data = chan->GetVertices();
+    auto & data = chan->GetVertices();
     assert( data.size() % 2 == 0 );
 
     ContoursList contours;

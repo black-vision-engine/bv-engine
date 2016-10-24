@@ -70,6 +70,7 @@ private:
 
 public:
 
+    virtual void                                Update                      ( TimeType t ) override;
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
@@ -78,8 +79,6 @@ public:
 
 private:
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
-
-    virtual void                                Update                      ( TimeType t ) override;
 
 	void										ScaleToMaxTextLength		();
 
