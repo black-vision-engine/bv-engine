@@ -20,12 +20,6 @@
 #include "Engine/Models/Lights/HelperModelLights.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 const std::string	BVProject::MAIN_ROOT_NAME			= "main root";
@@ -99,7 +93,7 @@ void            BVProject::Update( TimeType t )
 
         UpdatersManager::Get().UpdateStep();
 
-        auto & scenes = GetScenes();
+        auto scenes = GetScenes();
         auto identityTrans = Transform( glm::mat4( 1 ), glm::mat4( 1 ) );
 
         for( auto & scene : scenes )
@@ -184,9 +178,14 @@ const model::SceneModelVec &    BVProject::GetModelScenes   () const
 
 // *******************************
 //
-const SceneVec &                BVProject::GetScenes        () const
+SceneVec                        BVProject::GetScenes        () const
 {
-    return m_sceneVec;
+    SceneVec ret;
+    for( auto & scenePtr : m_sceneVec )
+    {
+        ret.push_back( scenePtr.get() );
+    }
+    return ret;
 }
 
 // *******************************
@@ -213,6 +212,31 @@ void                            BVProject::DetachEffect ( SceneNode * engineNode
             
     //    }
     //}
+}
+
+// *******************************
+//
+void                            BVProject::AddEngineScene       ( std::unique_ptr< Scene > scene, UInt32 idx )
+{
+    if( idx < m_sceneVec.size() )
+    {
+        m_sceneVec.insert( m_sceneVec.begin() + idx, std::move( scene ) );
+    }
+    else
+    {
+        m_sceneVec.push_back( std::move( scene ) );
+    }
+}
+
+// *******************************
+//
+void                            BVProject::RemoveEngineScene    ( Scene * scene )
+{
+    m_sceneVec.erase( std::remove_if( m_sceneVec.begin(), m_sceneVec.end(), [ & ] ( SceneUPtr const & scenePtr )
+    { 
+        return scenePtr.get() == scene; 
+    }
+    ), m_sceneVec.end() );
 }
 
 } // bv

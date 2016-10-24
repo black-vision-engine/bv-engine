@@ -14,6 +14,7 @@
 
 namespace bv {
 
+class BVProject;
 class Renderer;
 class SceneNode;
 class RenderableEntity;
@@ -74,7 +75,7 @@ public:
 
     static  std::pair< model::BasicNodePtr, Float32 >   NodeIntersection    ( model::BasicNodePtr modelNode, glm::mat4 & parentInverseTrans, glm::vec3 & rayPoint, glm::vec3 & rayDir );
 
-    static  Scene *             BuildEngineScene                    ( model::SceneModelPtr modelScene, model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
+    static  Scene *             AddEngineScene                      ( BVProject * project,  model::SceneModelPtr modelScene, model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping, UInt32 idx );
 
 private:
 

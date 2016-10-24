@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "Engine/Models/BVProject.h"
 #include "BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
@@ -127,12 +128,14 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
 
 // *******************************
 //
-Scene *             BVProjectTools::BuildEngineScene                    ( model::SceneModelPtr modelScene, model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping )
+Scene *             BVProjectTools::AddEngineScene                          ( BVProject * project, model::SceneModelPtr modelScene, model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping, UInt32 idx )
 {
     auto scene = new Scene();
     
     auto root = BuildEngineSceneNode( modelNode, nodesMapping );
     scene->SetRoot( root );
+
+    project->AddEngineScene( SceneUPtr( scene ), idx );
 
     return scene;
 }

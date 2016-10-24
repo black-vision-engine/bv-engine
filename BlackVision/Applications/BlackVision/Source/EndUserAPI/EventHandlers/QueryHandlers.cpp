@@ -291,7 +291,7 @@ void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser
 //
 void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser )
 {
-    auto & engineScenes = m_appLogic->GetBVProject()->GetScenes();
+    auto engineScenes = m_appLogic->GetBVProject()->GetScenes();
     auto & modelScenes = m_appLogic->GetBVProject()->GetModelScenes();
 
     ser.EnterArray( "Scenes" );

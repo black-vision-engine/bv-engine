@@ -68,4 +68,6 @@ private:
 
 };
 
+DEFINE_UPTR_TYPE( Camera )
+
 } // bv

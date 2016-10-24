@@ -303,16 +303,7 @@ void    BVProjectEditor::AddEngineScene         ( model::SceneModelPtr modelScen
     auto modelRoot = modelScene->GetRootNode();
     if( modelRoot )
     {
-        auto scene = BVProjectTools::BuildEngineScene( modelScene, modelRoot, m_nodesMapping );
-        
-        if( idx < m_project->m_sceneVec.size() )
-        {
-            m_project->m_sceneVec.insert( m_project->m_sceneVec.begin() + idx, scene );
-        }
-        else
-        {
-            m_project->m_sceneVec.push_back( scene );
-        }
+        auto scene = BVProjectTools::AddEngineScene( m_project, modelScene, modelRoot, m_nodesMapping, idx );
 
         m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), scene->GetRoot() );
 
@@ -356,25 +347,18 @@ bool    BVProjectEditor::RemoveModelScene       ( model::SceneModelPtr sceneMode
 bool    BVProjectEditor::RemoveEngineScene      ( model::SceneModelPtr modelScene )
 {
     auto scene = m_scenesMapping[ modelScene.get() ];
-    auto & scenes = m_project->m_sceneVec;
-    auto it = std::find( scenes.begin(), scenes.end(), scene );
 
-    if( it != scenes.end() )
-    { 
-        auto modelRoot = modelScene->GetRootNode();
-        if( modelRoot )
-        {
-            m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( modelRoot ) );
-        }
-
-        m_project->m_sceneVec.erase( it );
-
-        MappingsCleanup( modelScene );
-
-        return true;
+    auto modelRoot = modelScene->GetRootNode();
+    if( modelRoot )
+    {
+        m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( modelRoot ) );
     }
 
-    return false;
+    MappingsCleanup( modelScene );
+
+    m_project->RemoveEngineScene( scene );
+
+    return true;
 }
 
 // *******************************

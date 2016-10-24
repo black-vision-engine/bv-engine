@@ -40,7 +40,7 @@ const std::string &     AnalogWatch::GetType             () const
 // ***********************
 //
 AnalogWatch::AnalogWatch             ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator )
-    :   m_parentNode( parent )
+    : m_parentNode( parent )
     ,   m_hourNode( nullptr )
     ,   m_minuteNode( nullptr )
     ,   m_secondsNode( nullptr )
