@@ -16,8 +16,6 @@ namespace bv {
 
 namespace {
 
-DEFINE_PTR_TYPE( SVGAsset );
-
 enum {
     svgtiny_PATH_MOVE,
     svgtiny_PATH_CLOSE,
@@ -478,16 +476,8 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
     if( !success )
         return nullptr;
 
-    if( deser.EnterChild( "path" ) )
-    {
-        do
-        {
-            auto child = std::make_shared< SVGAsset >( path );
-            svgtiny_parse_path( deser, child );
-            mesh->AddChild( child );
-        }while( deser.NextChild() ); // FIXME when Triangulate is done
-        deser.ExitChild(); // path
-    }
+    ParsePath( deser, mesh );
+    ParseGroup( deser, mesh );
 
     return mesh;
 }
@@ -506,6 +496,39 @@ AssetDescConstPtr	SVGLoader::CreateDescriptor( const IDeserializer & deser ) con
 ThumbnailConstPtr   SVGLoader::LoadThumbnail   ( const AssetDescConstPtr & desc ) const
 {
     return nullptr; desc;
+}
+
+// ***********************
+//
+void                SVGLoader::ParsePath        ( IDeserializer & deser, SVGAssetPtr mesh ) const
+{
+    if( deser.EnterChild( "path" ) )
+    {
+        do
+        {
+            auto child = std::make_shared< SVGAsset >( mesh->GetKey() );
+            svgtiny_parse_path( deser, child );
+            mesh->AddChild( child );
+
+        } while( deser.NextChild() ); // FIXME when Triangulate is done
+        deser.ExitChild(); // path
+    }
+}
+
+// ***********************
+//
+void                SVGLoader::ParseGroup       ( IDeserializer & deser, SVGAssetPtr mesh ) const
+{
+    if( deser.EnterChild( "g" ) )
+    {
+        do
+        {
+            ParsePath( deser, mesh );
+            ParseGroup( deser, mesh );
+
+        } while( deser.NextChild() );
+        deser.ExitChild(); // g
+    }
 }
 
 }

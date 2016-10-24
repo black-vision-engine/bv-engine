@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
-//#include "Engine/Models/Plugins/Plugin.h"
 #include "DefaultGeometryProcessorBase.h"
+#include "Triangulator.h"
+
 
 namespace bv {
 
@@ -36,6 +37,7 @@ protected:
 public:
     explicit							    TriangulatePlugin	        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 
+    ContoursList                            ExtractContours             ( IConnectedComponentPtr& component );
 
 };
 

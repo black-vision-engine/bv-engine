@@ -5,7 +5,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
-#include "glm/gtc/matrix_transform.inl"
+
 
 
 
