@@ -182,6 +182,26 @@ void    TestSVGFile ( const char * file,
         }
     }
 
+    // ***********************
+    // Compare including and nesting data
+    for( int j = 0; j < maxArray; j++ )
+    {
+        auto & including = triangulator.GetIncludingArray();
+        int num = 0;
+
+        for( int i = 0; i < maxArray; ++i )
+        {
+            if( including[ i ][ j ] )
+                num++;
+        }
+
+        INFO( "Inner contour : " << j );
+        INFO( "Nesting and number of including contours differs" );
+        CHECK( num == nesting[ j ] );
+
+        CHECK( triangulator.GetContours()[ j ]->IsClockwise() == ( num % 2 == 0 ) );
+    }
+
 }
 
 
@@ -401,6 +421,166 @@ TEST_CASE( "Testing Triangulator [Loading SVGs]" )
         TestSVGWithArrays( "tea-cup.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
     }
 
+    SECTION( "Loading file: [bicycle.svg]" )
+    {
+        int contourSizeArray[] = { 150, 40, 23, 40 };
+        int nestingArray[] = { 0, 1, 1, 1 };
+        bool includingArray[] =
+        {
+            false,	true,	true,	true,
+            false,	false,	false,	false,
+            false,	false,	false,	false,
+            false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "bicycle.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+// ***********************
+//
+
+    SECTION( "Loading file: [browser.svg]" )
+    {
+        int contourSizeArray[] = { 44, 24, 24, 80, 490, 80, 80, 80, 175 };
+        int nestingArray[] = { 0, 1, 1, 3, 2, 2, 2, 2, 3 };
+        bool includingArray[] =
+        {
+            false,	true,	true,	true,	true,	true,	true,	true,	true,
+            false,	false,	false,	false,	false,	true,	true,	true,	false,
+            false,	false,	false,	true,	true,	false,	false,	false,	true,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	true,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	true,	false,	false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "browser.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+
+    SECTION( "Loading file: [cup.svg]" )
+    {
+        int contourSizeArray[] = { 64, 43, 88, 44, 44, 42, 44, 44, 212, 101, 81, 64, 42 };
+        int nestingArray[] = { 1, 2, 1, 1, 4, 6, 3, 5, 0, 2, 2, 2, 3 };
+        bool includingArray[] =
+        {
+            false,	true,	false,	false,	false,	false,	false,	false,	false,	false,	true,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	true,	false,	false,	true,
+            false,	false,	false,	false,	true,	true,	true,	true,	false,	false,	false,	true,	false,
+            false,	false,	false,	false,	false,	true,	false,	true,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	true,	true,	false,	true,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	true,	false,	false,	false,	false,	false,	false,	false,
+            true,	true,	true,	true,	true,	true,	true,	true,	false,	true,	true,	true,	true,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	true,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	true,	true,	true,	true,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "cup.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+    SECTION( "Loading file: [dollar-symbol.svg]" )
+    {
+        int contourSizeArray[] = { 62, 40, 62, 40, 62, 40, 62, 40, 92, 70, 112, 80, 102, 70, 92, 70, 172 };
+        int nestingArray[] = { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 };
+        bool includingArray[] =
+        {
+            false,	true,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	true,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	true,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	true,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	true,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	true,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	true,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	true,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "dollar-symbol.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+
+    SECTION( "Loading file: [gold.svg]" )
+    {
+        int contourSizeArray[] = { 42, 42, 42, 42, 42, 42, 42 };
+        int nestingArray[] = { 0, 0, 0, 0, 0, 0, 0 };
+        bool includingArray[] =
+        {
+            false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "gold.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+    SECTION( "Loading file: [like.svg]" )
+    {
+        int contourSizeArray[] = { 44, 149, 4, 108 };
+        int nestingArray[] = { 1, 0, 2, 1 };
+        bool includingArray[] =
+        {
+            false,	false,	true,	false,
+            true,	false,	true,	true,
+            false,	false,	false,	false,
+            false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "like.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+    SECTION( "Loading file: [linkedin.svg]" )
+    {
+        int contourSizeArray[] = { 72, 44, 45, 40, 109, 112 };
+        int nestingArray[] = { 0, 0, 2, 2, 2, 1 };
+        bool includingArray[] =
+        {
+            false,	false,	true,	true,	true,	false,
+            false,	false,	true,	true,	true,	true,
+            false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false
+        };
+
+        TestSVGWithArrays( "linkedin.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+    SECTION( "Loading file: [money.svg]" )
+    {
+        int contourSizeArray[] = { 694, 4, 172, 40, 40 };
+        int nestingArray[] = { 0, 1, 2, 0, 1 };
+        bool includingArray[] =
+        {
+            false,	true,	false,	false,	false,
+            false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,
+            false,	false,	true,	false,	true,
+            false,	false,	true,	false,	false
+        };
+
+        TestSVGWithArrays( "money.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    }
+
+
+
 // ***********************
 // Not working
 
@@ -518,6 +698,369 @@ TEST_CASE( "Testing Triangulator [Loading SVGs]" )
 
     //    TestSVGWithArrays( "pineapple.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
     //}
+
+    //SECTION( "Loading file: [nottested/people.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/people.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/chef.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/chef.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/ecology.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/ecology.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/eevee.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/eevee.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+
+    //SECTION( "Loading file: [nottested/pikachu.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/pikachu.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/pokeball.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/pokeball.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/quora.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/quora.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/route.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/route.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/settings2.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/settings2.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/settings3.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/settings3.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/swarm.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/swarm.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/tablet.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/tablet.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/teamwork.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/teamwork.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/telegram.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/telegram.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/trash.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/trash.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/viber.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/viber.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/webcam.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/webcam.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+    //SECTION( "Loading file: [nottested/weedle.svg]" )
+    //{
+    //    int contourSizeArray[] = { 178, 30, 5, 70, 84, 130, 130, 130, 70 };
+    //    int nestingArray[] = { 0, 1, 1, 1, 1, 0, 0, 0, 2 };
+    //    bool includingArray[] =
+    //    {
+    //        false,	true,	true,	true,	true,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	true,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false,
+    //        false,	false,	false,	false,	false,	false,	false,	false,	false
+    //    };
+
+    //    TestSVGWithArrays( "nottested/weedle.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+    //}
+
+
 }
 
 
