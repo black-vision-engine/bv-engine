@@ -32,6 +32,11 @@
 
 #include "FTVector.h"
 
+#include <memory>
+#include <vector>
+
+
+
 
 /**
  * Contour class is a container of points that describe a vector font
@@ -172,6 +177,10 @@ class FTContour
         double minX, minY;
         double maxX, maxY;
 };
+
+
+typedef std::unique_ptr< FTContour > FTContourUPtr;
+typedef std::vector< FTContourUPtr > ContoursList;
 
 #endif // __FTContour__
 

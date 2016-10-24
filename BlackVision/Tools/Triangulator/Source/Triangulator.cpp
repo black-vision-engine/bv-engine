@@ -48,12 +48,21 @@ Triangulator::Triangulator( ContoursList && contours )
 	ProcessContours();
 }
 
-Triangulator::Triangulator( ContoursList && contours, const std::string debugFileName )
+Triangulator::Triangulator( ContoursList && contours, const std::string & debugFileName )
 	:	m_contoursList( std::move( contours ) )
 	,	m_printContoursToFile( true )
 	,	m_fileName( debugFileName )
 {
 	ProcessContours();
+}
+
+Triangulator::Triangulator( ContoursList && contours, const std::string & debugFileName, const std::string & contourName )
+    :   m_contoursList( std::move( contours ) )
+    ,   m_printContoursToFile( true )
+    ,   m_fileName( debugFileName )
+    ,   m_contourName( contourName )
+{
+    ProcessContours();
 }
 
 // ================================ //
@@ -307,14 +316,58 @@ void Triangulator::PrintContoursToFile()
     std::fstream file( m_fileName, std::ios_base::app );
     assert( !file.fail() );
 
-    file << std::endl << std::endl << "Next shape" << std::endl;
+// ***********************
+// Header - beginning of shape
+    file << std::endl << std::endl << "Next shape ";
+    if( !m_contourName.empty() )
+        file << m_contourName.c_str();
+    file << std::endl;
 
+    // ***********************
+    // Contours sizes
+    file << "Contours sizes: " << std::endl;
+    for( int i = 0; i < m_polylines.size(); ++i )
+    {
+        file << m_polylines[ i ].size() << ", ";
+    }
+    file << std::endl;
+
+    // ***********************
+    // Including
+    file << "Including: " << std::endl;
+    for( int i = 0; i < m_contoursIncuding.size(); ++i )
+    {
+        for( int j = 0; j < m_contoursIncuding.size(); ++j )
+        {
+            if( m_contoursIncuding[ i ][ j ] )
+                file << "true,\t";
+            else
+                file << "false,\t";
+        }
+        file << std::endl;
+    }
+    file << std::endl;
+
+    // ***********************
+    // Nesting
+    file << "Nesting: " << std::endl;
+    for( int i = 0; i < m_contoursNesting.size(); ++i )
+    {
+        file << m_contoursNesting[ i ] << ", ";
+    }
+    file << std::endl;
+
+
+// ***********************
+// Polylines
     for( size_t c = 0; c < m_polylines.size(); c++ )
     {
         file << std::endl << "Contour number " << c << std::endl;
         file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
         file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
 
+        // ***********************
+        // Intersections
         if( !m_selfIntersections[ c ].empty() )
         {
             file << "Self Intersections in pre computing phase: ";
@@ -328,6 +381,8 @@ void Triangulator::PrintContoursToFile()
             file << std::endl;
         }
 
+        // ***********************
+        // Including
         file << "Includes contours: ";
         for( int i = 0; i < m_polylines.size(); ++i )
         {
@@ -338,6 +393,8 @@ void Triangulator::PrintContoursToFile()
         }
         file << std::endl << std::endl;
 
+        // ***********************
+        // Points
         auto & contour = m_polylines[ c ];
         for( size_t i = 0; i < m_polylines[ c ].size(); i++ )
         {

@@ -51,9 +51,6 @@ typedef float    FTGL_FLOAT;
 #include <memory>
 
 
-typedef std::unique_ptr< FTContour > FTContourUPtr;
-typedef std::vector< FTContourUPtr > ContoursList;
-
 
 
 /**
@@ -67,7 +64,8 @@ class Triangulator
 public:
 
     Triangulator( ContoursList && contours );
-	Triangulator( ContoursList && contours, const std::string debugFileName );
+	Triangulator( ContoursList && contours, const std::string & debugFileName );
+    Triangulator( ContoursList && contours, const std::string & debugFileName, const std::string & contourName );
 
     /**
     *  Destructor
@@ -142,6 +140,7 @@ private:
 
 	bool									m_printContoursToFile;
 	std::string								m_fileName;
+    std::string                             m_contourName;
 
 };
 

@@ -10,7 +10,6 @@
 #include <vector>
 
 
-typedef std::vector< std::unique_ptr< FTContour > > ContoursList;
 
 namespace bv { 
 
