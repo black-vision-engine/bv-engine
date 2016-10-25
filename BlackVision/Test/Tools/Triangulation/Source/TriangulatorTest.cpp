@@ -44,27 +44,31 @@ TEST_CASE( "Testing Triangulator [Loading SVGs]" )
 
 
 
-    SECTION( "Loading file: [cherries.svg]" )
+    SECTION( "Loading file : [cherries.svg]" )
     {
         int contourSizeArray[] = { 70, 70, 70, 185, 20, 40, 51, 91, 101, 60, 60 };
         int nestingArray[] = { 2, 2, 2, 0, 1, 1, 1, 1, 1, 2, 2 };
+        int intersectsSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        glm::vec2* intersectsArray = nullptr;
+
         bool includingArray[] =
         {
-            false,  false,  false,  false,	false,	false,	false,	false,	false,	false,	false,
-            false,  false,  false,	false,	false,	false,	false,	false,	false,	false,	false,
-            false,  false,  false,	false,	false,	false,	false,	false,	false,	false,	false,
-            true,   true,   true,	false,	true,	true,	true,	true,	true,	true,	true,
-            false,  false,  false,	false,	false,	false,	false,	false,	false,	false,	false,
-            false,  false,  false,	false,	false,	false,	false,	false,	false,	false,	false,
-            false,  false,  false,	false,	false,	false,	false,	false,	false,	false,	false,
-            true,   false,  true,	false,	false,	false,	false,	false,	false,	true,	false,
-            false,  true,   false,  false,	false,	false,	false,	false,	false,	false,	true,
-            false,  false,  false,  false,	false,	false,	false,	false,	false,	false,	false,
-            false,  false,  false,  false,	false,	false,	false,	false,	false,	false,	false
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            true,	true,	true,	false,	true,	true,	true,	true,	true,	true,	true,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            true,	false,	true,	false,	false,	false,	false,	false,	false,	true,	false,
+            false,	true,	false,	false,	false,	false,	false,	false,	false,	false,	true,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false,
+            false,	false,	false,	false,	false,	false,	false,	false,	false,	false,	false
         };
 
-        TestFileWithArrays( "cherries.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray );
+        TestFileWithArrays( "cherries.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );
     }
+
 
 
     SECTION( "Loading file: [group.svg]" )

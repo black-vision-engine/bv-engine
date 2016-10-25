@@ -250,7 +250,7 @@ Mesh Triangulator::MakeMesh()
 	// Print contours to file for debug purposes.
 	if( m_printContoursToFile )
 	{
-        PrintContoursToFile();
+        PrintToFileAsUnitTest();
 	}
 
 
@@ -440,3 +440,108 @@ Polyline &&         Triangulator::HeuristicFindMainContour  ( PolylinesVec && po
 
     return std::move( polylines[ longestIdx ] );
 }
+
+// ***********************
+//
+void                Triangulator::PrintToFileAsUnitTest()
+{
+    std::fstream file( m_fileName, std::ios_base::app );
+    assert( !file.fail() );
+
+    // ***********************
+    // Header - beginning of shape
+    file << std::endl << std::endl << "SECTION( \"Loading file : [" << m_contourName.c_str() << "]\")\n{\n";
+
+    // ***********************
+    // Contours sizes
+    file << "\tint contourSizeArray[] = { ";
+    for( int i = 0; i < m_polylines.size(); ++i )
+    {
+        file << m_polylines[ i ].size();
+        
+        if( i != m_polylines.size() - 1 )
+            file << ", ";
+    }
+    file << " };" << std::endl;
+
+
+    // ***********************
+    // Nesting
+    file << "\tint nestingArray[] = { ";
+    for( int i = 0; i < m_contoursNesting.size(); ++i )
+    {
+        file << m_contoursNesting[ i ];
+
+        if( i != m_contoursNesting.size() - 1 )
+            file << ", ";
+    }
+    file << " };" << std::endl;
+
+
+    // ***********************
+    // Intersection sizes
+    size_t numIntersects = 0;
+
+    file << "\tint intersectsSizes[] = { ";
+    for( int i = 0; i < m_selfIntersections.size(); ++i )
+    {
+        numIntersects += m_selfIntersections[ i ].size();
+        file << m_selfIntersections[ i ].size();
+
+        if( i != m_selfIntersections.size() - 1 )
+            file << ", ";
+    }
+    file << " };" << std::endl;
+
+    // ***********************
+    // Intersections data
+    if( numIntersects )
+    {
+        int intersectsCounter = 0;
+        file << "\tglm::vec2 intersectsArray[] = { ";
+        for( int i = 0; i < m_selfIntersections.size(); ++i )
+        {
+            for( int j = 0; j < m_selfIntersections[ i ].size(); ++j )
+            {
+                auto point = m_selfIntersections[ i ][ j ];
+                file << "glm::vec2( " << point->x << ", " << point->y << " )";
+
+                if( intersectsCounter != numIntersects - 1 )
+                    file << ", ";
+
+                intersectsCounter++;
+            }
+        }
+        file << " };" << std::endl << std::endl;
+    }
+    else
+    {
+        file << "\tglm::vec2* intersectsArray = nullptr;" << std::endl << std::endl;
+    }
+
+    // ***********************
+    // Including
+    file << "\tbool includingArray[] =\n\t{\n";
+    for( int i = 0; i < m_contoursIncuding.size(); ++i )
+    {
+        file << "\t\t";
+        for( int j = 0; j < m_contoursIncuding.size(); ++j )
+        {
+            if( m_contoursIncuding[ i ][ j ] )
+                file << "true";
+            else
+                file << "false";
+
+            if( i != m_contoursIncuding.size() - 1 || j != m_contoursIncuding.size() - 1 )
+                file << ",\t";
+        }
+        file << std::endl;
+    }
+    file << "\t};" << std::endl << std::endl;
+
+    // Call test function and add closing brace.
+    file << "\tTestFileWithArrays( \"" << m_contourName.c_str() << "\", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );" << std::endl;
+    file << "}" << std::endl << std::endl;
+
+}
+

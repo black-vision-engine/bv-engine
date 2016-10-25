@@ -116,6 +116,7 @@ public:
     const ContoursList &                            GetContours         ()      { return m_contoursList;  }
 
     void                                            PrintContoursToFile ();
+    void                                            PrintToFileAsUnitTest();
 
     Polyline &&                                     HeuristicFindMainContour    ( PolylinesVec && polylines );
 

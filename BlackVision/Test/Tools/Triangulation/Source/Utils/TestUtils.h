@@ -92,16 +92,17 @@ void    TestFile ( const char * file,
 
     auto contours = triangulate->ExtractContours( components[ 0 ] );
     auto size = contours.size();
-    CHECK( size == contoursSizes.size() );
+    CHECK( size == contoursSizes.size() );  // It's true only if triangulator makes always one contour if intersections apears.
 
-    // ***********************
-    // Check contours size
-    auto maxArray = std::min( size, static_cast<decltype( size )>( contoursSizes.size() ) );
-    for( int i = 0; i < maxArray; ++i )
-    {
-        INFO( "Contour index: " << i );
-        CHECK( contoursSizes[ i ] == contours[ i ]->PointCount() );
-    }
+    //// ***********************
+    //// Check contours size
+    //auto maxArray = std::min( size, static_cast<decltype( size )>( contoursSizes.size() ) );
+    //for( int i = 0; i < maxArray; ++i )
+    //{
+    //    // 
+    //    INFO( "Contour index: " << i );
+    //    CHECK( contoursSizes[ i ] >= contours[ i ]->PointCount() );
+    //}
 
     // ***********************
     // Triangulate
@@ -110,6 +111,15 @@ void    TestFile ( const char * file,
     Mesh mesh;
     REQUIRE_NOTHROW( mesh = triangulator.MakeMesh() );
 
+
+    // ***********************
+    // Check polylines sizes
+    auto maxArray = std::min( size, static_cast<decltype( size )>( contoursSizes.size() ) );
+    for( int i = 0; i < maxArray; ++i )
+    {
+        INFO( "Contour index: " << i );
+        CHECK( contoursSizes[ i ] >= triangulator.GetPolylines()[ i ].size() );
+    }
 
     // ***********************
     // Check nesting
@@ -126,6 +136,8 @@ void    TestFile ( const char * file,
 
     // ***********************
     // Check intersections
+    const float epsilon = 0.000001f;
+    
     size = intersections.size();
     maxArray = std::min( size, static_cast<decltype( size )>( triangulator.GetSelfIntersections().size() ) );
 
@@ -142,8 +154,8 @@ void    TestFile ( const char * file,
         for( int j = 0; j < maxIntersect; j++ )
         {
             INFO( "Intersection index: " << j );
-            CHECK( intersections[ i ][ j ].x == realIntersects[ j ]->x );
-            CHECK( intersections[ i ][ j ].y == realIntersects[ j ]->y );
+            CHECK( abs( intersections[ i ][ j ].x - realIntersects[ j ]->x ) < epsilon );
+            CHECK( abs( intersections[ i ][ j ].y - realIntersects[ j ]->y ) < epsilon );
         }
 
     }
@@ -233,6 +245,59 @@ void        TestFileWithArrays   ( const char * file,
               );
 }
 
+// @note includingCount is ContoursCount * ContoursCount but I don't know 
+template< int ContoursCount, typename PluginType >
+inline
+void        TestFileWithArrays   ( const char * file,
+                                   PluginType meshPlugin,
+                                   bv::model::TriangulatePluginPtr triangulate,
+                                   int ( &contourSizeArray )[ ContoursCount ],
+                                   int ( &nestingArray )[ ContoursCount ],
+                                   bool* includingArray,
+                                   int ( &intersectNumArray )[ ContoursCount ],
+                                   glm::vec2* intersectsArray
+                                   )
+{
+    int numContours = ContoursCount;
 
+    std::vector< int > sizeArray;                               sizeArray.resize( numContours );
+    std::vector< int > nesting;                                 nesting.resize( numContours );
+    std::vector< std::vector< glm::vec2 > > intersections;      intersections.resize( numContours );
+    std::vector< std::vector< bool > > including;               including.resize( numContours );
+
+    std::copy( contourSizeArray, contourSizeArray + sizeArray.size(), sizeArray.begin() );
+    std::copy( nestingArray, nestingArray + nesting.size(), nesting.begin() );
+
+    for( int i = 0; i < numContours; ++i )
+    {
+        including[ i ].reserve( numContours );
+        for( int j = 0; j < numContours; j++ )
+        {
+            int idx = i * numContours + j;
+            including[ i ].push_back( includingArray[ idx ] );
+        }
+    }
+
+    int intersectsCounter = 0;
+    for( int i = 0; i < ContoursCount; ++i )
+    {
+        intersections[ i ].reserve( intersectNumArray[ i ] );
+        for( int j = 0; j < intersectNumArray[ i ]; ++j )
+        {
+            intersections[ i ].push_back( intersectsArray[ intersectsCounter ] );
+            intersectsCounter++;
+        }
+    }
+
+
+    TestFile( file,
+              meshPlugin,
+              triangulate,
+              sizeArray,
+              nesting,
+              intersections,
+              including
+              );
+}
 
 
