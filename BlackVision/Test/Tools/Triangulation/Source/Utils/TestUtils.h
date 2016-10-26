@@ -92,18 +92,28 @@ void    TestFile ( const char * file,
 
     auto contours = triangulate->ExtractContours( components[ 0 ] );
     auto size = contours.size();
-    CHECK( size == contoursSizes.size() );  // It's true only if triangulator makes always one contour if intersections apears.
 
-    //// ***********************
-    //// Check contours size
-    //auto maxArray = std::min( size, static_cast<decltype( size )>( contoursSizes.size() ) );
-    //for( int i = 0; i < maxArray; ++i )
-    //{
-    //    // 
-    //    INFO( "Contour index: " << i );
-    //    CHECK( contoursSizes[ i ] >= contours[ i ]->PointCount() );
-    //}
+    
+    size_t numIntersections = 0;
+    for( auto & contourIntersect : intersections )
+    {
+        numIntersections += contourIntersect.size();
+    }
 
+    if( numIntersections == 0 )
+    {
+        CHECK( size == contoursSizes.size() );  // It's true only if triangulator makes always one contour if intersections apears.
+
+        // ***********************
+        // Check contours size
+        auto maxArray = std::min( size, static_cast<decltype( size )>( contoursSizes.size() ) );
+        for( int i = 0; i < maxArray; ++i )
+        {
+            // 
+            INFO( "Contour index: " << i );
+            CHECK( contoursSizes[ i ] >= contours[ i ]->PointCount() );
+        }
+    }
     // ***********************
     // Triangulate
     Triangulator triangulator( std::move( contours ), "testContours.txt", file );
