@@ -22,7 +22,7 @@ bool            operator<       ( const p2t::Point & point1, const p2t::Point & 
 
 bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * nextPoint, const p2t::Point * intersectionPoint );
 int             FindFreeDividePoint ( std::vector< IntersectionData >& data );
-int             FindNextContourPart ( std::vector< IntersectionData >& data, const p2t::Point * partEnd, int intersectionIdx );
+int             FindNextContourPart ( std::vector< IntersectionData >& data, Polyline & polyline, const p2t::Point * partEnd, int intersectionIdx );
 
 bool            IsSharedPointIntersection   ( const Event& intersectEvent );
 
@@ -311,7 +311,7 @@ const PolylinesVec &         PolylineValidator::DecomposeContour        ()
     polylines[ 0 ].push_back( new p2t::Point( dividePoint->x, dividePoint->y ) );
 
     // Connect ranges into contours.
-    int intersectIdx = FindNextContourPart( dividePoints, m_polyline[ dividePoints.front().PolylineIdx ], 0 );
+    int intersectIdx = FindNextContourPart( dividePoints, m_polyline, m_polyline[ dividePoints.front().PolylineIdx ], 0 );
 
 
     int curPolyline = 0;
@@ -346,7 +346,7 @@ const PolylinesVec &         PolylineValidator::DecomposeContour        ()
             dividePoints[ intersectIdx ].Processed = true;
 
             // Find contour continuation.
-            intersectIdx = FindNextContourPart( dividePoints, m_polyline[ endIdx ], intersectIdx + 1 );
+            intersectIdx = FindNextContourPart( dividePoints, m_polyline, m_polyline[ endIdx ], intersectIdx + 1 );
         } while( intersectIdx != -1 );
 
         //// We added have duplicate point on contour closing. Delete it.
@@ -823,7 +823,7 @@ int             FindFreeDividePoint ( std::vector< IntersectionData > & data )
 
 // ***********************
 // http://geomalgorithms.com/a09-_intersect-3.html - decompose into Simple Pieces
-int             FindNextContourPart ( std::vector< IntersectionData > & data, const p2t::Point * partEnd, int intersectionIdx )
+int             FindNextContourPart ( std::vector< IntersectionData > & data, Polyline & polyline, const p2t::Point * partEnd, int intersectionIdx )
 {
     auto & intersect = data[ intersectionIdx ];
     auto point = intersect.IntersectionPoint;
@@ -855,7 +855,8 @@ int             FindNextContourPart ( std::vector< IntersectionData > & data, co
     // Iterate all segments of contours to find proper continuation point.
     for( int i = 0; i < data.size(); ++i )
     {
-        if( !data[ i ].Processed && data[ i ].IntersectionPoint == nextPoint )
+        auto polylineIdx = data[ i ].PolylineIdx;
+        if( !data[ i ].Processed && polyline[ polylineIdx ] == nextPoint )
             return i;
     }
 
