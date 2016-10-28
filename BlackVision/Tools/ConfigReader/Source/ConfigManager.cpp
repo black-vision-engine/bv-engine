@@ -94,7 +94,7 @@ wstring ExePath()
 	GetModuleFileName	(NULL, szFilePath, _MAX_PATH);
 	wstring::size_type pos = wstring( szFilePath ).find_last_of( L"\\/" );
 	wstring temp = wstring( szFilePath ).substr(0,pos);
-	printf("Executable directory is : %s\n",string(temp.begin(),temp.end()).c_str());
+	//printf("Executable directory is : %s\n",string(temp.begin(),temp.end()).c_str());
 	return temp;
 }
 

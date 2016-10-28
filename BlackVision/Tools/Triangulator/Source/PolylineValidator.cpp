@@ -14,6 +14,7 @@ const float epsilon = 0.00001f;
 bool            CompareEvent    ( const Event & a, const Event & b );
 bool            CompareEdge     ( p2t::Edge * leftEdge, p2t::Edge * rightEdge, double sweepY );
 double          FindX           ( p2t::Edge * edge, double sweepY );
+double          EdgeDelta       ( p2t::Edge * edge );
 
 p2t::Edge *     GetAboveEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine );
 p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine );
@@ -623,7 +624,7 @@ int                     PolylineValidator::BruteFindInSweepLine        ( p2t::Ed
 //
 int                     PolylineValidator::AddToSweepLine              ( p2t::Edge* addEdge, std::vector< p2t::Edge* > & sweepLine )
 {
-    auto sweepY = addEdge->p->y;
+    auto sweepY = addEdge->q->y;    // Take upper point y value.
 
     if( sweepLine.size() == 0 )
     {
@@ -632,7 +633,7 @@ int                     PolylineValidator::AddToSweepLine              ( p2t::Ed
     }
     else if( sweepLine.size() == 1 )
     {
-        if( CompareEdge( sweepLine[ 0 ], addEdge, sweepY ) )
+        if( CompareEdge( addEdge, sweepLine[ 0 ], sweepY ) )
         {
             sweepLine.insert( sweepLine.begin(), addEdge );
             return 0;
@@ -645,46 +646,59 @@ int                     PolylineValidator::AddToSweepLine              ( p2t::Ed
     }
     else
     {
-        // Binary search 
-        size_t left = 0;
-        auto right = sweepLine.size();
-        auto span = right - left;
-
-        while( span > 1 )
+        for( int i = 0 ; i < sweepLine.size(); ++i )
         {
-            span = span / 2;
-            auto pos = left + span;
-
-            auto edge = sweepLine[ pos ];
-            if( CompareEdge( edge, addEdge, sweepY ) )
+            auto edge = sweepLine[ i ];
+            if( CompareEdge( addEdge, edge, sweepY ) )
             {
-                right = pos;
-            }
-            else
-            {
-                left = pos;
+                sweepLine.insert( sweepLine.begin() + i, addEdge );
+                return i;
             }
         }
 
-        auto edge = sweepLine[ left ];
-        if( CompareEdge( edge, addEdge, sweepY ) )
-        {
-            sweepLine.insert( sweepLine.begin() + left, addEdge );
-            return (int)left;
-        }
-        else
-        {
-            if( left + 1 < sweepLine.size() )
-            {
-                sweepLine.insert( sweepLine.begin() + left + 1, addEdge );
-                return int( left + 1 );
-            }
-            else
-            {
-                sweepLine.push_back( addEdge );
-                return (int)sweepLine.size() - 1;
-            }
-        }
+        sweepLine.push_back( addEdge );
+        return (int)sweepLine.size() - 1;
+
+        //// Binary search 
+        //size_t left = 0;
+        //auto right = sweepLine.size();
+        //auto span = right - left;
+
+        //while( span > 1 )
+        //{
+        //    span = span / 2;
+        //    auto pos = left + span;
+
+        //    auto edge = sweepLine[ pos ];
+        //    if( CompareEdge( addEdge, edge, sweepY ) )
+        //    {
+        //        right = pos;
+        //    }
+        //    else
+        //    {
+        //        left = pos;
+        //    }
+        //}
+
+        //auto edge = sweepLine[ left ];
+        //if( CompareEdge( addEdge, edge, sweepY ) )
+        //{
+        //    sweepLine.insert( sweepLine.begin() + left, addEdge );
+        //    return (int)left;
+        //}
+        //else
+        //{
+        //    if( left + 1 < sweepLine.size() )
+        //    {
+        //        sweepLine.insert( sweepLine.begin() + left + 1, addEdge );
+        //        return int( left + 1 );
+        //    }
+        //    else
+        //    {
+        //        sweepLine.push_back( addEdge );
+        //        return (int)sweepLine.size() - 1;
+        //    }
+        //}
     }
 }
 
@@ -733,6 +747,16 @@ bool            CompareEdge     ( p2t::Edge * leftEdge, p2t::Edge * rightEdge, d
     if( leftX < rightX )
         return true;
 
+    if( leftX == rightX )
+    {
+        // Probably we have two edges with beginning in the same point.
+        // Check which segment makes greater progress in x axis.
+        auto leftDelta = EdgeDelta( leftEdge );
+        auto rightDelta = EdgeDelta( rightEdge );
+        if( leftDelta < rightDelta )
+            return true;
+    }
+
     return false;
 }
 
@@ -752,6 +776,19 @@ double          FindX           ( p2t::Edge * edge, double sweepY )
     auto sweepPointDelta = sweepY - point1->y;
 
     return point1->x + deltaX * ( sweepPointDelta / deltaY );
+}
+
+// ================================ //
+//
+double          EdgeDelta       ( p2t::Edge * edge )
+{
+    p2t::Point* point1 = edge->p;
+    p2t::Point* point2 = edge->q;
+
+    auto deltaX = point1->x - point2->x;
+    auto deltaY = point2->y - point1->y;
+
+    return deltaX / deltaY;
 }
 
 // ***********************

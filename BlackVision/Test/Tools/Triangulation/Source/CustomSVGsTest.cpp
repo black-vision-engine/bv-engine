@@ -22,7 +22,7 @@
 // Test cases
 
 
-TEST_CASE( "Testing Triangulator [Loading Custom SVGs]" )
+TEST_CASE( "Testing Triangulator [Loading SelfIntersecting SVGs]" )
 {
     // Test needs config.xml placed in exe directory.
     REQUIRE( bv::ConfigManager::LoadXMLConfig() );
@@ -40,6 +40,24 @@ TEST_CASE( "Testing Triangulator [Loading Custom SVGs]" )
     REQUIRE( plugin != nullptr );
 
 
+
+    SECTION( "Loading file : [Spiral1.svg]")
+    {
+	    int contourSizeArray[] = { 51 };
+	    int nestingArray[] = { 0 };
+	    int intersectsSizes[] = { 2 };
+	    glm::vec2 intersectsArray[] = { glm::vec2( 2.79864, -3.15698 ), glm::vec2( 2.36741, -4.10785 ) };
+
+	    bool includingArray[] =
+	    {
+		    false
+	    };
+
+	    TestFileWithArrays( "Spiral1.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );
+    }
+
+
+
     SECTION( "Loading file : [Spiral2.svg]")
     {
 	    int contourSizeArray[] = { 62 };
@@ -54,6 +72,8 @@ TEST_CASE( "Testing Triangulator [Loading Custom SVGs]" )
 
 	    TestFileWithArrays( "Spiral2.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );
     }
+
+
 
     SECTION( "Loading file : [OuterSpiral.svg]")
     {
@@ -71,7 +91,7 @@ TEST_CASE( "Testing Triangulator [Loading Custom SVGs]" )
     }
 
 
-    // @Note: Wrong heuristic for choosing contour. Change in future.
+
     SECTION( "Loading file : [MultiIntersection.svg]")
     {
 	    int contourSizeArray[] = { 114 };
@@ -85,6 +105,23 @@ TEST_CASE( "Testing Triangulator [Loading Custom SVGs]" )
 	    };
 
 	    TestFileWithArrays( "MultiIntersection.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );
+    }
+
+
+
+    SECTION( "Loading file : [InnerZigZag.svg]")
+    {
+	    int contourSizeArray[] = { 107 };
+	    int nestingArray[] = { 0 };
+	    int intersectsSizes[] = { 6 };
+	    glm::vec2 intersectsArray[] = { glm::vec2( 4.22776, -0.769686 ), glm::vec2( 2.28266, -1.08817 ), glm::vec2( 4.71113, -1.39482 ), glm::vec2( 5.11492, -1.77449 ), glm::vec2( 4.00326, -1.78721 ), glm::vec2( 5.47355, -2.34524 ) };
+
+	    bool includingArray[] =
+	    {
+		    false
+	    };
+
+	    TestFileWithArrays( "InnerZigZag.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );
     }
 
 
@@ -121,7 +158,6 @@ TEST_CASE( "Testing Triangulator [Loading Custom SVGs]" )
 	    TestFileWithArrays( "ContourHole.svg", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );
     }
 
-    
 }
 
 
