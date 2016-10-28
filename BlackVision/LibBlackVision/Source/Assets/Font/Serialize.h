@@ -10,23 +10,22 @@
 
 namespace boost { namespace serialization {
 
-template< class Archive >
+template<class Archive>
 void serialize( Archive & ar, bv::Glyph & glyph, const unsigned int version )
 {
     { version; } // FIXME: suppress unused warning
-    ar & glyph.textureX;
-    ar & glyph.textureY;
+    ar & glyph.code;
+    ar & glyph.index;
     ar & glyph.width;
     ar & glyph.height;
-    ar & glyph.bearingX;
-    ar & glyph.bearingY;
     ar & glyph.advanceX;
     ar & glyph.advanceY;
-	ar & glyph.padding;
-//    ar & glyphCoords.glyphX;
-//    ar & glyphCoords.glyphY;
-//    ar & glyphCoords.glyphWidth;
-//    ar & glyphCoords.glyphHeight;
+    ar & glyph.bearingX;
+    ar & glyph.bearingY;
+    ar & glyph.textureX;
+    ar & glyph.textureY;
+    ar & glyph.padding;
+    ar & glyph.size;
 }
 
 template< >
@@ -47,12 +46,12 @@ void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive &
 {
     { version; } // FIXME: suppress unused warning
 
-    ar & textAtlas.m_glyphs;
-	ar & textAtlas.m_outlineGlyphs;
+    ar << textAtlas.m_glyphs;
+	ar << textAtlas.m_outlineGlyphs;
     ar << textAtlas.m_glyphWidth;
     ar << textAtlas.m_glyphHeight;
-    ar & textAtlas.m_kerningMap;
-	ar & textAtlas.m_blurSize;
+    ar << textAtlas.m_kerningMap;
+	ar << textAtlas.m_blurSize;
 }
 
 } // serialization

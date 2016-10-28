@@ -1,16 +1,12 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
-#include "Serialization/ISerializer.h"
-#include "Serialization/IDeserializer.h"
 
 #include "CoreDEF.h"
 
-#include <string>
-#include <vector>
 
-namespace bv
-{
+namespace bv {
+
 
 #define SUPPROTED_CHARS_FILE L"fonts/SupportedChars.txt" // FIXME: Sucks as a vacuum
 
@@ -79,7 +75,6 @@ template<> inline const std::string& GetAssetDescUID<FontAsset>()
 {
     return FontAssetDesc::UID();
 }
-
 
 
 } // bv

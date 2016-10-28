@@ -2,37 +2,8 @@
 
 #include "Text.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <cassert>
-
-#pragma warning(push)
-#pragma warning(disable : 4512) //warning C4512: 'boost::archive::detail::helper_collection::predicate' : assignment operator could not be generated
-
-#include "boost/archive/text_oarchive.hpp"
-#include "boost/archive/text_iarchive.hpp"
-#include "boost/serialization/map.hpp"
-#include "boost/filesystem/path.hpp"
-
-#pragma warning(pop)
-
 #include "Serialize.h"
-
-#include "Glyph.h"
-#include "AtlasCache.h"
-#include "IO/FileIO.h"
-#include "LibImage.h"
-#include "Assets/Texture/TextureLoader.h"
-#include "Assets/Font/Engines/FreeTypeEngine.h"
 #include "MipMapBuilder.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv { 
@@ -209,6 +180,7 @@ void                    TextAtlas::Load( std::istream& in )
 {
     boost::archive::text_iarchive ia( in );
     ia >> *this;
+    //ia.delete_created_pointers();
 }
 
 // *********************************
@@ -221,7 +193,7 @@ TextureAssetConstPtr	TextAtlas::GetAsset() const
 
 // *********************************
 //
-TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, SizeType mmLevels, const std::wstring & charSet )
+TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, UInt32 mmLevels, const std::wstring & charSet )
 {
     auto namePrefix = fontFileName + "W" + std::to_string( width ) + "H" + std::to_string( height ) + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "OS" + std::to_string( outlineSize ) + "CS" + std::string( charSet.begin(), charSet.end() );
 

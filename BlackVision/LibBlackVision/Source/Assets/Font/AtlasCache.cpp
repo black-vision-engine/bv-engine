@@ -1,341 +1,405 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
+
+#include "sqlite3.h"
 
 #include "AtlasCache.h"
+#include "Assets/Texture/TextureUtils.h"
+#include "SQLiteDatabase.h"
 
 #include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <cassert>
 
-#include "sqlite3.h"
-
-#include "LibImage.h"
-#include "Assets/Texture/TextureLoader.h"
-#include "Assets/Assets.h"
-#include "Assets/Texture/TextureUtils.h"
-
-#pragma warning(push)
-#pragma warning(disable : 4512)
-#pragma warning(disable : 4267)
-#pragma warning(disable : 4996)
-
-#include "hashlibpp.h"
-
-#pragma warning(pop)
-
-
-
-#include "Memory/MemoryLeaks.h"
-
+#include "Engine/Types/Values/ValuesFactory.h"
 
 
 namespace bv { 
 
 // *********************************
 //
+const std::string FontAtlasCacheEntry::CN::FONT_NAME      = "font_name";
+const std::string FontAtlasCacheEntry::CN::FONT_SIZE      = "font_size";
+const std::string FontAtlasCacheEntry::CN::BLUR_SIZE      = "blur_size";
+const std::string FontAtlasCacheEntry::CN::OUTLINE_WIDTH  = "outline_width";
+const std::string FontAtlasCacheEntry::CN::FONT_FILE_NAME = "font_file_name";
+const std::string FontAtlasCacheEntry::CN::ATLAS_WIDTH    = "atlas_width";
+const std::string FontAtlasCacheEntry::CN::ATLAS_HEIGHT   = "atlas_height";
+const std::string FontAtlasCacheEntry::CN::LEVELS_NUM     = "mm_levels_num";
+const std::string FontAtlasCacheEntry::CN::CHAR_SET       = "char_set";
+const std::string FontAtlasCacheEntry::CN::TEXT_ATLAS     = "text_atlas";
+
+const std::vector< std::string > FontAtlasCacheEntry::m_sPrimaryKeys = GeneratePrimaryKeys();
+const std::vector< IDBEntry::ColumnType > FontAtlasCacheEntry::m_sColumns = GenerateColumnTypes();
+
+// *********************************
+//
 FontAtlasCacheEntry::FontAtlasCacheEntry()
-    : m_textAtlas( nullptr )
-    , m_fontSize( 0 )
-{}
-
-// *********************************
-//
-FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlasConstPtr & textAtlas
-                                         ,  const std::string& fontName
-                                         ,  SizeType fontSize
-                                         ,  SizeType blurSize
-										 ,  SizeType outlineWidth
-                                         ,  const std::string& fontFilePath
-										 ,  UInt32 mmLevelsNum
-                                         ,  const std::wstring & charSetFileName)
-    : m_textAtlas( textAtlas )
-    , m_fontName( fontName )
-    , m_fontSize( fontSize )
-    , m_blurSize( blurSize )
-	, m_outlineWidth( outlineWidth )
-    , m_fontFilePath( fontFilePath )
-	, m_mmLevelsNum( mmLevelsNum )
-    , m_charSetFileName( charSetFileName ) 
-{}
-
-// *********************************
-//
-FontAtlasCache::FontAtlasCache( const std::string& cacheDataFile )
-    : m_dataBase( nullptr )
-    , m_cacheFile( cacheDataFile )
 {
-
+    m_data[ CN::FONT_NAME ] = ValuesFactory::CreateValueString( CN::FONT_NAME );
+    m_data[ CN::FONT_SIZE ] = ValuesFactory::CreateValueInt( CN::FONT_SIZE );
+    m_data[ CN::BLUR_SIZE ] = ValuesFactory::CreateValueInt( CN::BLUR_SIZE );
+    m_data[ CN::OUTLINE_WIDTH ] = ValuesFactory::CreateValueInt( CN::OUTLINE_WIDTH );
+    m_data[ CN::FONT_FILE_NAME ] = ValuesFactory::CreateValueString( CN::FONT_FILE_NAME );
+    m_data[ CN::ATLAS_WIDTH ] = ValuesFactory::CreateValueInt( CN::ATLAS_WIDTH );
+    m_data[ CN::ATLAS_HEIGHT ] = ValuesFactory::CreateValueInt( CN::ATLAS_HEIGHT );
+    m_data[ CN::LEVELS_NUM ] = ValuesFactory::CreateValueInt( CN::LEVELS_NUM );
+    m_data[ CN::CHAR_SET ] = ValuesFactory::CreateValueWString( CN::CHAR_SET );
+    m_data[ CN::TEXT_ATLAS ] = ValuesFactory::CreateValueString( CN::FONT_NAME );
 }
 
 // *********************************
 //
-FontAtlasCache::FontAtlasCache()
-    : m_dataBase( nullptr )
+FontAtlasCacheEntry::FontAtlasCacheEntry( TextAtlasConstPtr & textAtlas, const std::string & fontName, SizeType fontSize,
+                                          SizeType blurSize, SizeType outlineWidth, const std::string & fontFilePath, 
+                                          UInt32 mmLevelsNum, const std::wstring & charSet )
 {
+    m_data[ CN::FONT_NAME ] = ValuesFactory::CreateValueString( CN::FONT_NAME, fontName );
+    m_data[ CN::FONT_SIZE ] = ValuesFactory::CreateValueInt( CN::FONT_SIZE, ( Int32 )fontSize );
+    m_data[ CN::BLUR_SIZE ] = ValuesFactory::CreateValueInt( CN::BLUR_SIZE, ( Int32 )blurSize );
+    m_data[ CN::OUTLINE_WIDTH ] = ValuesFactory::CreateValueInt( CN::OUTLINE_WIDTH, ( Int32 )outlineWidth );
+    m_data[ CN::FONT_FILE_NAME ] = ValuesFactory::CreateValueString( CN::FONT_FILE_NAME, fontFilePath );
+    m_data[ CN::ATLAS_WIDTH ] = ValuesFactory::CreateValueInt( CN::ATLAS_WIDTH, textAtlas->GetWidth() );
+    m_data[ CN::ATLAS_HEIGHT ] = ValuesFactory::CreateValueInt( CN::ATLAS_HEIGHT, textAtlas->GetHeight() );
+    m_data[ CN::LEVELS_NUM ] = ValuesFactory::CreateValueInt( CN::LEVELS_NUM, mmLevelsNum );
+    m_data[ CN::CHAR_SET ] = ValuesFactory::CreateValueWString( CN::CHAR_SET, charSet );
 
+    std::stringstream ss;
+    textAtlas->Save( ss );
+    m_data[ CN::TEXT_ATLAS ] = ValuesFactory::CreateValueString( CN::FONT_NAME, ss.str() );
 }
 
 // *********************************
 //
-FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePath )
+std::vector< std::string > FontAtlasCacheEntry::GeneratePrimaryKeys()
 {
-    if( Path::Exists( filePath ) )
-    {
-        return new FontAtlasCache( filePath );
-    }
-    else
-    {
-        std::cout << "File does not exist: " << filePath << std::endl;
-        std::cout << "Creating new atlas cache file: " << filePath << std::endl;
+    std::vector< std::string > ret;
 
-        auto dir = File::GetDirName( filePath );
+    ret.push_back( CN::FONT_NAME );
+    ret.push_back( CN::FONT_SIZE );
+    ret.push_back( CN::BLUR_SIZE );
+    ret.push_back( CN::OUTLINE_WIDTH );
+    ret.push_back( CN::LEVELS_NUM );
+    ret.push_back( CN::CHAR_SET );
 
-        if( ( !Path::Exists( dir ) ) && ( !dir.empty() ) )
-            Dir::CreateDir( dir );
+    return ret;
+}
 
-        std::ofstream file;
-        file.open( filePath.c_str() );
-        file.close();
 
-        auto fac = new FontAtlasCache( filePath );
+// *********************************
+//
+std::vector< IDBEntry::ColumnType > FontAtlasCacheEntry::GenerateColumnTypes()
+{
+    std::vector< ColumnType > ret;
+    
+    ret.push_back( ColumnType( CN::FONT_NAME, ParamType::PT_STRING ) );
+    ret.push_back( ColumnType( CN::FONT_SIZE, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::BLUR_SIZE, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::OUTLINE_WIDTH, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::FONT_FILE_NAME, ParamType::PT_STRING ) );
+    ret.push_back( ColumnType( CN::ATLAS_WIDTH, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::ATLAS_HEIGHT, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::LEVELS_NUM, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::CHAR_SET, ParamType::PT_WSTRING ) );
+    ret.push_back( ColumnType( CN::TEXT_ATLAS, ParamType::PT_BINARY ) );
 
-        fac->InitFontCachedTable();
-
-        return fac;
-    }
+    return ret;
 }
 
 // *********************************
 //
-sqlite3 *               FontAtlasCache::OpenDataBase    ( const std::string& dbFilePath )
+SizeType                            FontAtlasCacheEntry::ColumnTypesCount   () const
 {
-    sqlite3 * db = nullptr;
-
-    auto res = sqlite3_open( dbFilePath.c_str(), &db );
-
-    if( res )
-    {
-        std::cerr << "Cannot open data base file: " + dbFilePath << std::endl;
-        return nullptr;
-    }
-
-    return db;
+    return m_sColumns.size();
 }
 
 // *********************************
 //
-void                    FontAtlasCache::InitFontCachedTable ()
+FontAtlasCacheEntry::ColumnType     FontAtlasCacheEntry::GetColumnType      ( UInt32 idx ) const
 {
-    m_dataBase = OpenDataBase( m_cacheFile );
+    return m_sColumns[ idx ];
+}
 
-    if ( m_dataBase != nullptr )
+// *********************************
+//
+ParamType                           FontAtlasCacheEntry::GetColumnType      ( const std::string & name ) const
+{
+    for( auto & column : m_sColumns )
     {
-        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, outline_width INTEGER, font_file_name TEXT \
-                            , atlas_width INTEGER, atlas_height INTEGER, mm_levels_num INTEGER, char_set TEXT, text_atlas BLOB, PRIMARY KEY( font_name , font_size, blur_size, mm_levels_num, char_set ) )";
-
-        char* err = nullptr;
-
-        auto res = sqlite3_exec( m_dataBase, sql.c_str(), nullptr, nullptr, &err );
-
-        if( res != SQLITE_OK )
+        if( column.first == name )
         {
-            std::cerr << "SQL Error: " << std::string( err ) << std::endl;
-            sqlite3_free(err);
-            return;
+            return column.second;
         }
-
     }
+
+    assert( false ); //FIXME never should be here
+    return ParamType::PT_TOTAL;
 }
 
-namespace
+// *********************************
+//
+const std::vector< std::string > &          FontAtlasCacheEntry::PrimaryKeys            ()
 {
+    return m_sPrimaryKeys;
+}
 
-int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName )
+// *********************************
+//
+const std::vector< IDBEntry::ColumnType > & FontAtlasCacheEntry::ColumnTypes            ()
 {
-    { columnName; } // FIXME: suppress unused warning
-    { argsNum; } // FIXME: suppress unused warning
+    return m_sColumns;
+}
 
-    auto out = static_cast< FontAtlasCacheEntry * >( data );
+// *********************************
+//
+std::string                                 FontAtlasCacheEntry::GetName                () const
+{
+    if( m_data.count( CN::FONT_NAME ) )
+    {
+        return QueryTypedValue< ValueStringPtr >( m_data.at( CN::FONT_NAME ) )->GetValue();
+    }
+    return "";
+}
 
-    assert( argsNum == 10 );
-
-    out->m_fontName     = args[ 0 ];
-    out->m_fontSize     = std::atoi( args[ 1 ] );
-    out->m_blurSize     = std::atoi( args[ 2 ] );
-	out->m_outlineWidth = std::atoi( args[ 3 ] );
-    out->m_fontFilePath = args[ 4 ];
-	out->m_atlasWidth   = std::atoi( args[ 5 ] );
-    out->m_atlasHeight  = std::atoi( args[ 6 ] );
-	out->m_mmLevelsNum  = std::atoi( args[ 7 ] );
-    out->m_charSetFileName  = ( wchar_t * )( args[ 8 ] );
-	out->m_textAtlas    = TextAtlas::Create(0,0,0,0,0);
-    std::stringstream str(  args[ 9 ] );
-
-	std::const_pointer_cast< TextAtlas >( out->m_textAtlas )->Load( str );    
-
+// *********************************
+//
+SizeType                                    FontAtlasCacheEntry::GetFontSize            () const
+{
+    if( m_data.count( CN::FONT_SIZE ) )
+    {
+        return ( SizeType )QueryTypedValue< ValueIntPtr >( m_data.at( CN::FONT_SIZE ) )->GetValue();
+    }
     return 0;
 }
 
-}
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool withMipMaps, const std::wstring & charSet )
+SizeType                                    FontAtlasCacheEntry::GetBlurSize            () const
 {
-    if( !m_dataBase )
+    if( m_data.count( CN::BLUR_SIZE ) )
     {
-        m_dataBase = OpenDataBase( m_cacheFile );
+        return ( SizeType )QueryTypedValue< ValueIntPtr >( m_data.at( CN::BLUR_SIZE ) )->GetValue();
     }
-
-	auto ret = new FontAtlasCacheEntry();
-
-    std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
-                            " AND font_size = " + std::to_string( fontSize ) +
-                            " AND blur_Size = " + std::to_string( blurSize ) +
-							" AND outline_width = " + std::to_string( outlineWidth ) +
-							" AND mm_levels_num " + ( withMipMaps  ? " > 0 " : " = 0 " ) +
-                            " AND char_set = \'" + std::string( charSet.begin(), charSet.end() )  + "\';";
-
-    char* err = nullptr;
-
-    auto res = sqlite3_exec( m_dataBase, sql.c_str(), GetEntryCallback, ret, &err );
-
-    if( res != SQLITE_OK )
-    {
-        if( err != nullptr )
-        {
-            std::cerr << "SQL Error: " << std::string( err ) << std::endl;
-            sqlite3_free(err);
-        }
-        else
-            std::cerr << "SQL Error: " << res << std::endl;
-    }
-
-	if( ret->m_textAtlas != nullptr )
-	{
-		auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(	ret->m_fontFilePath,
-																				ret->m_atlasWidth,
-																				ret->m_atlasHeight,
-																				ret->m_fontSize,
-																				ret->m_blurSize,
-																				ret->m_outlineWidth,
-																				ret->m_mmLevelsNum,
-                                                                                charSet );
-
-		auto asset = std::static_pointer_cast<const TextureAsset>( AssetManager::GetInstance().LoadAsset( atlasTextureDesc ) );
-
-		if( asset != nullptr )
-		{
-			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureAsset = asset; // FIXME: Remove const_pointer_cast
-		}
-
-		return ret;
-	}
-    else
-    {
-        return nullptr;
-    }
-}
-
-namespace
-{
-
-int AddEntryCallback( void * data, int argsNum, char ** args, char ** columnName )
-{
-    { columnName; args; data; argsNum; } // FIXME: suppress unused warning
     return 0;
 }
 
-} // anonymous
-
 // *********************************
 //
-std::string				FontAtlasCache::GenerateTextAtlasCacheFileName( const TextAtlasConstPtr & textAtlas )
+SizeType                                    FontAtlasCacheEntry::GetOutlineWidth        () const
 {
-	std::stringstream textAtlasStream;
-    textAtlas->Save( textAtlasStream );
-
-    auto textAtlasStr =  textAtlasStream.str();
-
-    auto sha1 = sha1wrapper();
-    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".bmp";
-	return fontAtlasTextureFileName;
+    if( m_data.count( CN::OUTLINE_WIDTH ) )
+    {
+        return ( SizeType )QueryTypedValue< ValueIntPtr >( m_data.at( CN::OUTLINE_WIDTH ) )->GetValue();
+    }
+    return 0;
 }
 
 // *********************************
 //
-void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEntry & data, bool forceInvalidate )
+std::string                                 FontAtlasCacheEntry::GetFontFilePath        () const
 {
-    { forceInvalidate; } // FIXME: suppress unused warning
-    if( !m_dataBase )
+    if( m_data.count( CN::FONT_FILE_NAME ) )
     {
-        m_dataBase = OpenDataBase( m_cacheFile );
+        return QueryTypedValue< ValueStringPtr >( m_data.at( CN::FONT_FILE_NAME ) )->GetValue();
     }
-
-	auto mmLevelsNum = data.m_textAtlas->m_textureAsset->GetMipMaps() ? data.m_textAtlas->m_textureAsset->GetMipMaps()->GetLevelsNum() : 0;
-
-    std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
-        + "\'" + data.m_fontName + "\'" + ", " 
-        + std::to_string( data.m_fontSize ) + ", " 
-        + std::to_string( data.m_blurSize ) + ", " 
-		+ std::to_string( data.m_outlineWidth ) + ", " 
-        + "\'" + data.m_fontFilePath + "\'" + ", " 
-		+ std::to_string( data.m_textAtlas->GetWidth() ) + ", " 
-		+ std::to_string( data.m_textAtlas->GetHeight() ) + ", " 
-		+ std::to_string( mmLevelsNum ) + ", " 
-        + "\'" + std::string( data.m_charSetFileName.begin(), data.m_charSetFileName.end() ) + "\'" + ", "
-        + "?)";
-
-	
-	auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(	data.m_fontFilePath,
-																			data.m_textAtlas->GetWidth(),
-																			data.m_textAtlas->GetHeight(),
-																			data.m_fontSize,
-																			data.m_blurSize,
-																			data.m_outlineWidth,
-																			mmLevelsNum,
-                                                                            data.m_charSetFileName );
-
-    auto descriptor = std::static_pointer_cast<const AssetDesc>( atlasTextureDesc );
-    AssetManager::GetInstance().AddToCache( descriptor, data.m_textAtlas->m_textureAsset ); //Add to AssetCache
-    TextureUtils::AddToRawDataCache( data.m_textAtlas->m_textureAsset );                    //Add to RawDataCache
-
-    sqlite3_stmt * stmt = nullptr;
-    const char * parsed = nullptr;
-
-    auto res = sqlite3_prepare( m_dataBase, sqlAdd.c_str(), (int) sqlAdd.size(), &stmt, &parsed);
-    if( res != SQLITE_OK )
-    {
-        std::cerr << "SQL Error: " << "prepare" << std::endl;
-        return;
-    }
-
-	std::stringstream textAtlasStream;
-    data.m_textAtlas->Save( textAtlasStream );
-
-	auto textAtlasStr = textAtlasStream.str();
-
-    res = sqlite3_bind_blob( stmt, 1, textAtlasStr.c_str(), (int) textAtlasStr.size(), SQLITE_TRANSIENT);
-
-    if( res != SQLITE_OK )
-    {
-        std::cerr << "SQL Error: " << "bind" << std::endl;
-        return;
-    }
-
-    res = sqlite3_step(stmt); 
-
-    if( res != SQLITE_DONE )
-    {
-        std::cerr << "SQL Error: " << "step" << std::endl;
-        return;
-    }
-
-    sqlite3_close( m_dataBase );
-    m_dataBase = nullptr;
+    return std::string();
 }
 
+// *********************************
+//
+UInt32                                      FontAtlasCacheEntry::GetLevelsNum           () const
+{
+    if( m_data.count( CN::LEVELS_NUM ) )
+    {
+        return ( UInt32 )QueryTypedValue< ValueIntPtr >( m_data.at( CN::LEVELS_NUM ) )->GetValue();
+    }
+    return 0;
+}
+
+// *********************************
+//
+UInt32                                      FontAtlasCacheEntry::GetAtlasWidth      () const
+{
+    if( m_data.count( CN::ATLAS_WIDTH ) )
+    {
+        return ( UInt32 )QueryTypedValue< ValueIntPtr >( m_data.at( CN::ATLAS_WIDTH ) )->GetValue();
+    }
+    return 0;
+}
+
+// *********************************
+//
+UInt32                                      FontAtlasCacheEntry::GetAtlasHeight     () const
+{
+    if( m_data.count( CN::ATLAS_HEIGHT ) )
+    {
+        return ( UInt32 )QueryTypedValue< ValueIntPtr >( m_data.at( CN::ATLAS_HEIGHT ) )->GetValue();
+    }
+    return 0;
+}
+
+// *********************************
+//
+std::wstring                                FontAtlasCacheEntry::GetCharSet         () const
+{
+    if( m_data.count( CN::CHAR_SET ) )
+    {
+        return QueryTypedValue< ValueWStringPtr >( m_data.at( CN::CHAR_SET ) )->GetValue();
+    }
+    return L"";
+}
+
+// *********************************
+//
+TextAtlasPtr                                FontAtlasCacheEntry::GetTextAtlas       () const
+{
+    if( m_data.count( CN::TEXT_ATLAS ) )
+    {
+        auto str = QueryTypedValue< ValueStringPtr >( m_data.at( CN::TEXT_ATLAS ) )->GetValue();
+        std::stringstream ss( str );
+        auto textAtlas = TextAtlas::Create( 0, 0, 0, 0, 0 );
+        textAtlas->Load( ss );
+
+        return textAtlas;
+    }
+    return nullptr;
+}
+
+// *********************************
+//
+FontAtlasCacheEntryPtr FontAtlasCacheEntry::Create  ( TextAtlasConstPtr & textAtlas, const std::string & fontName, SizeType fontSize,
+                                                      SizeType blurSize, SizeType outlineWidth, const std::string & fontFilePath,
+                                                      UInt32 mmLevelsNum, const std::wstring & charSetFileName )
+{
+    return std::make_shared< FontAtlasCacheEntry >( textAtlas, fontName, fontSize, blurSize, outlineWidth, fontFilePath, mmLevelsNum, charSetFileName );
+}
+
+// *********************************
+//
+const std::string        FontAtlasCache::m_sCacheDataPath = "cache/fontscache.db";
+const std::string        FontAtlasCache::m_sCachedFontsTableName = "cached_fonts";
+
+
+// *********************************
+//
+FontAtlasCache::FontAtlasCache      ()
+    : m_database( new SQLiteDatabase( m_sCacheDataPath ) )
+{
+    m_database->CreateTable( m_sCachedFontsTableName, FontAtlasCacheEntry::ColumnTypes(), FontAtlasCacheEntry::PrimaryKeys() );
+}
+
+// *********************************
+//
+FontAtlasCache::~FontAtlasCache     ()
+{
+    delete m_database;
+}
+
+// ******************************
+//
+FontAtlasCache &          FontAtlasCache::GetInstance       ()
+{
+    static FontAtlasCache instance = FontAtlasCache();
+    return instance;
+}
+
+// *********************************
+//
+FontAtlasCacheEntryPtr      FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, 
+                                                              SizeType outlineWidth, bool withMipMaps, const std::wstring & charSet )
+{
+    std::string sql = "SELECT * FROM " + m_sCachedFontsTableName + " WHERE " +
+        FontAtlasCacheEntry::CN::FONT_NAME + "=\'" + fontName + "\'" +
+        " AND " + FontAtlasCacheEntry::CN::FONT_SIZE + " = " + std::to_string( fontSize ) +
+        " AND " + FontAtlasCacheEntry::CN::BLUR_SIZE + " = " + std::to_string( blurSize ) +
+        " AND " + FontAtlasCacheEntry::CN::OUTLINE_WIDTH + " = " + std::to_string( outlineWidth ) +
+        " AND " + FontAtlasCacheEntry::CN::LEVELS_NUM + " " + ( withMipMaps  ? " > 0 " : " = 0 " ) +
+        " AND " + FontAtlasCacheEntry::CN::CHAR_SET + " = \'" + std::string( charSet.begin(), charSet.end() ) + "\';";
+
+    auto entries = m_database->Load< FontAtlasCacheEntry >( sql );
+    if( !entries.empty() )
+    {
+        return std::static_pointer_cast< FontAtlasCacheEntry >( entries[ 0 ] );
+    }
+
+    return nullptr;
+}
+
+// *********************************
+//
+void                    FontAtlasCache::AddEntry        ( FontAtlasCacheEntryConstPtr data )
+{
+    m_database->Save( m_sCachedFontsTableName, data );
+
+    //auto mmLevelsNum = 0;
+
+    //if( data->m_textAtlas->m_textureAsset->HasMipMaps() )
+    //{
+    //    mmLevelsNum = data->m_textAtlas->m_textureAsset->GetMipMaps()->GetLevelsNum();
+    //}
+
+    //std::string sqlAdd = std::string( "INSERT OR REPLACE INTO " + m_sCachedFontsTableName + " VALUES(" )
+    //    + "\'" + data->m_fontName + "\'" + ", "
+    //    + std::to_string( data->m_fontSize ) + ", "
+    //    + std::to_string( data->m_blurSize ) + ", "
+    //    + std::to_string( data->m_outlineWidth ) + ", "
+    //    + "\'" + data->m_fontFilePath + "\'" + ", "
+    //    + std::to_string( data->m_textAtlas->GetWidth() ) + ", "
+    //    + std::to_string( data->m_textAtlas->GetHeight() ) + ", "
+    //    + std::to_string( 0 ) + ", " 
+    //    + "\'www\', "
+    //    //+ "\'" + std::string( data->m_charSetFileName.begin(), data->m_charSetFileName.end() ) + "\'" + ", "
+    //    + "?)";
+
+    //wstring p = L"ĂÎȘȚÂăîșțâ";
+    //sqlite3_bind_text16( stmt, 1, ( "%" + p + "%" ).c_str(), -1, SQLITE_TRANSIENT );
+
+    //
+    //auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(  data->m_fontFilePath,
+    //                                                                      data->m_textAtlas->GetWidth(),
+    //                                                                      data->m_textAtlas->GetHeight(),
+    //                                                                      data->m_fontSize,
+    //                                                                      data->m_blurSize,
+    //                                                                      data->m_outlineWidth,
+    //                                                                      mmLevelsNum,
+ //                                                                           data->m_charSetFileName );
+
+ //   auto descriptor = std::static_pointer_cast<const AssetDesc>( atlasTextureDesc );
+ //   
+ //   AssetManager::GetInstance().AddToCache( descriptor, data->m_textAtlas->m_textureAsset ); //Add to AssetCache
+ //   TextureUtils::AddToRawDataCache( data->m_textAtlas->m_textureAsset );                    //Add to RawDataCache
+
+    //m_database->Save();
+
+    //sqlite3_stmt * stmt = nullptr;
+    //const char * parsed = nullptr;
+
+    //auto res = sqlite3_prepare( m_sqliteDB, sqlAdd.c_str(), (int) sqlAdd.size(), &stmt, &parsed);
+    //if( res != SQLITE_OK )
+    //{
+    //    std::cerr << "SQL Error: " << "prepare" << std::endl;
+    //    return;
+    //}
+
+    //std::stringstream textAtlasStream;
+ //   data->m_textAtlas->Save( textAtlasStream );
+
+    //auto textAtlasStr = textAtlasStream.str();
+
+ //   res = sqlite3_bind_blob( stmt, 1, textAtlasStr.c_str(), (int) textAtlasStr.size(), SQLITE_TRANSIENT);
+
+ //   if( res != SQLITE_OK )
+ //   {
+ //       std::cerr << "SQL Error: " << "bind" << std::endl;
+ //       return;
+ //   }
+
+ //   res = sqlite3_step(stmt); 
+
+ //   if( res != SQLITE_DONE )
+ //   {
+ //       std::cerr << "SQL Error: " << "step" << std::endl;
+ //       return;
+ //   }
+}
 
 } // bv

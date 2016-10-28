@@ -1762,6 +1762,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Font\SQLiteDatabase.cpp">
+      <Filter>Assets\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Font\BaseDBEntry.cpp">
+      <Filter>Assets\Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4141,6 +4147,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Font\IDatabase.h">
+      <Filter>Assets\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Font\SQLiteDatabase.h">
+      <Filter>Assets\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Font\BaseDBEntry.h">
+      <Filter>Assets\Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

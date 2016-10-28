@@ -3,12 +3,6 @@
 #include "ValuesFactory.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 // ***********************
@@ -38,7 +32,7 @@ ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name 
 
 // *******************************
 //
-ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name, int initVal )
+ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name, Int32 initVal )
 {
     auto val = CreateValueInt( name );
 
@@ -56,11 +50,29 @@ ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & n
 
 // *******************************
 //
-ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name, float initVal )
+ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name, Float32 initVal )
 {
     auto val = CreateValueFloat( name );
 
     val ->SetValue( initVal );
+
+    return val;
+}
+
+// *******************************
+//
+ValueDoublePtr          ValuesFactory::CreateValueDouble    ( const std::string & name )
+{
+    return std::make_shared< ValueDouble >( name );
+}
+
+// *******************************
+//
+ValueDoublePtr          ValuesFactory::CreateValueDouble    ( const std::string & name, Float64 initVal )
+{
+    auto val = CreateValueDouble( name );
+
+    val->SetValue( initVal );
 
     return val;
 }
@@ -109,9 +121,31 @@ ValueStringPtr       ValuesFactory::CreateValueString    ( const std::string & n
 
 // *******************************
 //
+ValueStringPtr         ValuesFactory::CreateValueString  ( const std::string & name, const std::string & initVal )
+{
+    auto val = CreateValueString( name );
+
+    val->SetValue( initVal );
+
+    return val;
+}
+
+// *******************************
+//
 ValueWStringPtr      ValuesFactory::CreateValueWString   ( const std::string & name )
 {
     return std::make_shared< ValueWString >( name );
+}
+
+// *******************************
+//
+ValueWStringPtr      ValuesFactory::CreateValueWString( const std::string & name, const std::wstring & initVal )
+{
+    auto val = CreateValueWString( name );
+
+    val->SetValue( initVal );
+
+    return val;
 }
 
 } // bv

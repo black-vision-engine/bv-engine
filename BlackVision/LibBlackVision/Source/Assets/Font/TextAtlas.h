@@ -1,12 +1,9 @@
 #pragma once
 
 #include "Assets/Texture/TextureAsset.h"
-#include "Assets/Texture/TextureAssetDescriptor.h"
 
 #include "CoreDEF.h"
 
-#include <string>
-#include <map>
 
 namespace bv {
 
@@ -70,14 +67,15 @@ public:
 												SizeType fontSize, 
 												SizeType blurSize,
 												SizeType outlineSize,
-												SizeType mmLevels,
+                                                UInt32 mmLevels,
                                                 const std::wstring & charSet );
 
     friend class Text;
 
     // serialization
-    void                    Save( std::ostream& out ) const;
-    void                    Load( std::istream& in );
+    void                    Save( std::ostream & out ) const;
+    void                    Load( std::istream & in );
+
 };
 
 } // bv
