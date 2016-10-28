@@ -81,7 +81,7 @@ private:
     void        Sort        ();
     void        ClearEdges  ();
 
-    bool        CheckRepeatPoints   ();
+    void        RepairRepeatPoints   ();
 
     std::deque< Event >     InitEventQueue              ();
     void                    ProcessBeginPoint           ( Event & event, std::deque< Event > & eventQueue, std::vector< p2t::Edge * > & sweepLine );

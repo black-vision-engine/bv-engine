@@ -7,6 +7,8 @@
 
 
 
+const float epsilon = 0.00001f;
+
 
 
 bool            CompareEvent    ( const Event & a, const Event & b );
@@ -19,6 +21,7 @@ p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine 
 p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 );
 
 bool            operator<       ( const p2t::Point & point1, const p2t::Point & point2 );
+bool			Equal			( const p2t::Point & point1, const p2t::Point & point2 );
 
 bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * nextPoint, const p2t::Point * intersectionPoint );
 int             FindFreeDividePoint ( std::vector< IntersectionData >& data );
@@ -92,11 +95,34 @@ void    PolylineValidator::Init        ()
 //
 void    PolylineValidator::InitEdges    ( Polyline & polyline )
 {
-    int numPoints = (int)polyline.size();
-    for( int i = 0; i < numPoints; i++ )
+    for( size_t i = 0; i < polyline.size(); i++ )
     {
-        int j = i < numPoints - 1 ? i + 1 : 0;
-        m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
+        size_t j = i < polyline.size() - 1 ? i + 1 : 0;
+        //m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
+
+        if( !Equal( *polyline[ i ], *polyline[ j ] ) )
+        {
+            m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
+        }
+        else
+        {
+            if( j == 0 )
+            {
+                delete m_polyline[ i ];
+                delete m_edgeList[ i - 1 ];
+                m_polyline.erase( m_polyline.begin() + i );
+                m_edgeList.erase( m_edgeList.begin() + i - 1 );
+
+                m_edgeList.push_back( new p2t::Edge( *polyline[ i - 1 ], *polyline[ 0 ] ) );
+            }
+            else
+            {
+                delete m_polyline[ j ];
+                m_polyline.erase( m_polyline.begin() + j );
+
+                --i;    // Next point ca be equal too.
+            }
+        }
     }
 }
 
@@ -192,24 +218,31 @@ std::deque< Event >     PolylineValidator::InitEventQueue  ()
 
 
 // ***********************
-// Function assumes, that m_polyline list is sorted.
-bool    PolylineValidator::CheckRepeatPoints   ()
+// @deprecated
+void    PolylineValidator::RepairRepeatPoints   ()
 {
-    for( int i = 0; i < m_polyline.size() - 1; ++i )
+    for( int i = 0; i < m_polyline.size(); ++i )
     {
-        if( m_polyline[ i ] == m_polyline[ i + 1 ] )
-            return true;
+        int j = i < m_polyline.size() - 1 ? i + 1 : 0;
+        if( Equal( *m_polyline[ i ], *m_polyline[ j ] ) )
+        {
+            delete m_polyline[ j ];
+            m_polyline.erase( m_polyline.begin() + j );
+
+            --i;    // Next point ca be equal too.
+        }
     }
 
-    const float epsilon = 0.00001f;
-    for( int i = 0; i < m_edgeList.size() - 1; ++i )
+    for( int i = 0; i < m_edgeList.size(); ++i )
     {
-        if( abs( m_edgeList[ i ]->p->x - m_edgeList[ i ]->q->x ) < epsilon &&
-            abs( m_edgeList[ i ]->p->y - m_edgeList[ i ]->q->y ) < epsilon )
-            return true;
-    }
+        if( Equal( *m_edgeList[ i ]->p, *m_edgeList[ i ]->q ) )
+        {
+            delete m_edgeList[ i ];
+            m_edgeList.erase( m_edgeList.begin() + i );
 
-    return false;
+            --i;    // Next point ca be equal too.
+        }
+    }
 }
 
 // ***********************
@@ -248,8 +281,7 @@ std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
 const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
 {
     // Two points with same coordinates can't exist.
-    if( CheckRepeatPoints() )
-        throw std::runtime_error( "[Error] Repeat points" );
+    //RepairRepeatPoints();
 
     std::deque< Event > eventQueue = InitEventQueue();
     std::vector< p2t::Edge* > sweepLine;
@@ -780,6 +812,15 @@ bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
     return false;
 }
 
+// ================================ //
+//
+bool			Equal			( const p2t::Point & point1, const p2t::Point & point2 )
+{
+    if( abs( point1.x - point2.x ) < epsilon && abs( point1.y - point2.y ) < epsilon )
+        return true;
+    return false;
+}
+
 
 // ***********************
 //
@@ -830,37 +871,46 @@ int             FindNextContourPart ( std::vector< IntersectionData > & data, Po
 
     p2t::Point * nextPoint = nullptr;
 
-    // q is upper point, p is lower point.
-    // If edge goes from top to bottom, we choose top point from second edge.
-    // Check link in comment to this function.
-    if( point->edge_list[ 0 ]->p == partEnd )
-    {
-        nextPoint = point->edge_list[ 1 ]->p;
-    }
-    else if( point->edge_list[ 0 ]->q == partEnd )
-    {
-        nextPoint = point->edge_list[ 1 ]->q;
-    }
-    else if( point->edge_list[ 1 ]->p == partEnd )
-    {
-        nextPoint = point->edge_list[ 0 ]->p;
-    }
-    else if( point->edge_list[ 1 ]->q == partEnd )
-    {
-        nextPoint = point->edge_list[ 0 ]->p;
-    }
-    else
-        assert( false );
-
-    // Iterate all segments of contours to find proper continuation point.
     for( int i = 0; i < data.size(); ++i )
     {
         auto polylineIdx = data[ i ].PolylineIdx;
-        if( !data[ i ].Processed && polyline[ polylineIdx ] == nextPoint )
+        if( !data[ i ].Processed && polyline[ polylineIdx ] == point && polylineIdx != i )
             return i;
     }
 
     return -1;
+
+    //// q is upper point, p is lower point.
+    //// If edge goes from top to bottom, we choose top point from second edge.
+    //// Check link in comment to this function.
+    //if( point->edge_list[ 0 ]->p == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 1 ]->p;
+    //}
+    //else if( point->edge_list[ 0 ]->q == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 1 ]->q;
+    //}
+    //else if( point->edge_list[ 1 ]->p == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 0 ]->p;
+    //}
+    //else if( point->edge_list[ 1 ]->q == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 0 ]->p;
+    //}
+    //else
+    //    assert( false );
+
+    //// Iterate all segments of contours to find proper continuation point.
+    //for( int i = 0; i < data.size(); ++i )
+    //{
+    //    auto polylineIdx = data[ i ].PolylineIdx;
+    //    if( !data[ i ].Processed && polyline[ polylineIdx ] == nextPoint )
+    //        return i;
+    //}
+
+    //return -1;
 }
 
 // ***********************
