@@ -146,7 +146,7 @@ void    TestFile ( const char * file,
 
     // ***********************
     // Check intersections
-    const float epsilon = 0.000001f;
+    const float epsilon = 0.00001f;
     
     size = intersections.size();
     maxArray = std::min( size, static_cast<decltype( size )>( triangulator.GetSelfIntersections().size() ) );

@@ -250,8 +250,8 @@ Mesh Triangulator::MakeMesh()
 	// Print contours to file for debug purposes.
 	if( m_printContoursToFile )
 	{
-        //PrintToFileAsUnitTest();
-        PrintContoursToFile();
+        PrintToFileAsUnitTest();
+        //PrintContoursToFile();
 	}
 
 

@@ -143,6 +143,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\CustomSVGsTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\TriangulatePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\TriangulatorTest.cpp" />

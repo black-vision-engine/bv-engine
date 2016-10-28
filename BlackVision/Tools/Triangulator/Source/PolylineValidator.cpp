@@ -869,12 +869,11 @@ int             FindNextContourPart ( std::vector< IntersectionData > & data, Po
     auto & intersect = data[ intersectionIdx ];
     auto point = intersect.IntersectionPoint;
 
-    p2t::Point * nextPoint = nullptr;
-
+    // There are two occurances of one intersection point in data array. One we already met (intersectionIdx).
+    // We must find other.
     for( int i = 0; i < data.size(); ++i )
     {
-        auto polylineIdx = data[ i ].PolylineIdx;
-        if( !data[ i ].Processed && polyline[ polylineIdx ] == point && polylineIdx != i )
+        if( !data[ i ].Processed && data[ i ].IntersectionPoint == point && intersectionIdx != i )
             return i;
     }
 
