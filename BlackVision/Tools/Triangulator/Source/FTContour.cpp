@@ -141,6 +141,22 @@ void FTContour::SetParity( bool inverse )
     }
 }
 
+void FTContour::InverseOrientation()
+{
+    size_t size = PointCount();
+
+    // Contour orientation is wrong! We must reverse all points.
+    // FIXME: could it be worth writing FTVector::reverse() for this?
+    for( size_t i = 0; i < size / 2; i++ )
+    {
+        FTPoint tmp = pointList[ i ];
+        pointList[ i ] = pointList[ size - 1 - i ];
+        pointList[ size - 1 - i ] = tmp;
+    }
+
+    clockwise = !clockwise;
+}
+
 
 bool FTContour::Intersects( const FTContour* other ) const
 {

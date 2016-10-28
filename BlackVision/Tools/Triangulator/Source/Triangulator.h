@@ -45,13 +45,12 @@ typedef float    FTGL_FLOAT;
 #include "FTVector.h"
 
 #include "Mesh.h"
+#include "PolylineValidator.h"
 
 #include <vector>
 #include <memory>
 
 
-typedef std::unique_ptr< FTContour > FTContourUPtr;
-typedef std::vector< FTContourUPtr > ContoursList;
 
 
 /**
@@ -65,7 +64,8 @@ class Triangulator
 public:
 
     Triangulator( ContoursList && contours );
-	Triangulator( ContoursList && contours, const std::string debugFileName );
+	Triangulator( ContoursList && contours, const std::string & debugFileName );
+    Triangulator( ContoursList && contours, const std::string & debugFileName, const std::string & contourName );
 
     /**
     *  Destructor
@@ -111,8 +111,15 @@ public:
 
 	const std::vector< int > &						GetNestingArray		()		{ return m_contoursNesting; }
 	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
+    const std::vector< IntersectionsVec > &         GetSelfIntersections()      { return m_selfIntersections;  }
+    const PolylinesVec &                            GetPolylines        ()      { return m_polylines;  }
+
+    void                                            PrintContoursToFile ();
+
+    Polyline &&                                     HeuristicFindMainContour    ( PolylinesVec && polylines );
 
 private:
+
     /**
     * Process the freetype outline data into contours of points
     *
@@ -125,12 +132,15 @@ private:
     * The list of contours in the glyph
     */
 	ContoursList							m_contoursList;
+    PolylinesVec                            m_polylines;
 
     std::vector< int >						m_contoursNesting;
     std::vector< std::vector< bool > >		m_contoursIncuding;
+    std::vector< IntersectionsVec >         m_selfIntersections;
 
 	bool									m_printContoursToFile;
 	std::string								m_fileName;
+    std::string                             m_contourName;
 
 };
 

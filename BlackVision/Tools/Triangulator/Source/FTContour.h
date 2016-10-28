@@ -32,6 +32,11 @@
 
 #include "FTVector.h"
 
+#include <memory>
+#include <vector>
+
+
+
 
 /**
  * Contour class is a container of points that describe a vector font
@@ -91,7 +96,10 @@ class FTContour
          * @attention Insted of parity, now there's variable inverse. Whole outset was loaded with good
          * orientation, but sometimes we have to inverse points order, because font format uses other filling orientation.
          */
-        void SetParity( bool inverse );
+        void SetParity          ( bool inverse );
+        void InverseOrientation ();
+
+        bool IsClockwise() { return clockwise;  }
 
         //// FIXME: this should probably go away.
         //void buildFrontOutset(float outset);
@@ -169,6 +177,10 @@ class FTContour
         double minX, minY;
         double maxX, maxY;
 };
+
+
+typedef std::unique_ptr< FTContour > FTContourUPtr;
+typedef std::vector< FTContourUPtr > ContoursList;
 
 #endif // __FTContour__
 

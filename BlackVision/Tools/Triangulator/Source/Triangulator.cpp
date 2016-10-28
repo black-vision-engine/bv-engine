@@ -29,6 +29,7 @@
 
 //#include "FTInternals.h"
 #include "Triangulator.h"
+#include "PolylineValidator.h"
 
 #include "poly2tri/poly2tri.h"
 
@@ -47,7 +48,7 @@ Triangulator::Triangulator( ContoursList && contours )
 	ProcessContours();
 }
 
-Triangulator::Triangulator( ContoursList && contours, const std::string debugFileName )
+Triangulator::Triangulator( ContoursList && contours, const std::string & debugFileName )
 	:	m_contoursList( std::move( contours ) )
 	,	m_printContoursToFile( true )
 	,	m_fileName( debugFileName )
@@ -55,10 +56,28 @@ Triangulator::Triangulator( ContoursList && contours, const std::string debugFil
 	ProcessContours();
 }
 
+Triangulator::Triangulator( ContoursList && contours, const std::string & debugFileName, const std::string & contourName )
+    :   m_contoursList( std::move( contours ) )
+    ,   m_printContoursToFile( true )
+    ,   m_fileName( debugFileName )
+    ,   m_contourName( contourName )
+{
+    ProcessContours();
+}
+
 // ================================ //
 //
 Triangulator::~Triangulator()
-{}
+{
+    for( auto & polyline : m_polylines )
+    {
+        for( auto point : polyline )
+        {
+            delete point;
+        }
+    }
+}
+
 
 // ================================ //
 //
@@ -131,12 +150,39 @@ void Triangulator::ProcessContours()
                 }
                 else
                 {
-                    FTPoint a = p1 - leftmost;
-                    FTPoint b = p2 - leftmost;
-                    if( b.X() * a.Y() <= b.Y() * a.X() )
+                    FTPoint* top = nullptr;
+                    FTPoint* bottom = nullptr;
+                    
+                    if( p1.Y() > p2.Y() )
                     {
-                        // Check cross product between vectors (on plane, which means result is only z value).
+                        top = &p1;
+                        bottom = &p2;
+                    }
+                    else
+                    {
+                        top = &p2;
+                        bottom = &p1;
+                    }
+
+                    FTPoint a = *bottom - leftmost;
+                    FTPoint b = *top - *bottom;
+
+                    auto determinant = a.X() * b.Y() - a.Y() * b.X();
+                    if( determinant < 0 )
+                    {
+                        // Sign of determinant of matrix created from vectors a and b.
                         parity++;
+                    }
+                    else if( determinant == 0 )
+                    {
+                        // Point on segment.
+                        throw new std::runtime_error( "[Triangulator] Internal contour point lies on outer contour." );
+                    }
+                    else
+                    {
+                        // determinant > 0
+                        { parity; }
+                        a = b;
                     }
                 }
             }
@@ -150,6 +196,9 @@ void Triangulator::ProcessContours()
 
         m_contoursNesting[ i ] = contourNesting;
 
+        // Contours orientation doesn't match nesting parity.
+        if( c1->IsClockwise() != ( contourNesting % 2 == 0 ) )
+            c1->InverseOrientation();
     }
 }
 
@@ -173,15 +222,14 @@ Mesh Triangulator::MakeMesh()
 	Mesh mesh( true );
 	auto ftContourCount = m_contoursList.size();
 
-    std::vector< std::vector< p2t::Point * > > contoursVecPointsVec;
-    contoursVecPointsVec.resize( ftContourCount );
-
+    m_polylines.resize( ftContourCount );
+    m_selfIntersections.reserve( ftContourCount );
 
     for( size_t c = 0; c < ContourCount(); ++c )
     {
         const auto & contour = m_contoursList[ c ];
 
-        std::vector< p2t::Point * >& polyline = contoursVecPointsVec[ c ];
+        Polyline & polyline = m_polylines[ c ];
         polyline.reserve( contour->PointCount() );
 
         for( size_t p = 0; p < contour->PointCount(); ++p )
@@ -189,39 +237,20 @@ Mesh Triangulator::MakeMesh()
             p2t::Point * d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
             polyline.push_back( d );
         }
+
+        PolylineValidator validator( std::move( polyline ) );
+        validator.FindSelfIntersections();
+        validator.DecomposeContour();
+
+        m_selfIntersections.push_back( validator.StealIntersections() );
+        polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
+        //m_selfIntersections.push_back( Polyline() );
     }
 
-	// Print contours to file for debug proses.
+	// Print contours to file for debug purposes.
 	if( m_printContoursToFile )
 	{
-		std::fstream file( m_fileName, std::ios_base::app );
-		assert( !file.fail() );
-
-		file << std::endl << std::endl << "Next shape" << std::endl;
-
-		for( size_t c = 0; c < contoursVecPointsVec.size(); c++ )
-		{
-			file << std::endl << "Contour number " << c << std::endl;
-			file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
-			file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
-			file << "Includes contours: ";
-			for( int i = 0; i < ftContourCount; ++i )
-			{
-				if( m_contoursIncuding[ c ][ i ] )
-				{
-					file << i << " ";
-				}
-			}
-			file << std::endl << std::endl;;
-
-			auto & contour = contoursVecPointsVec[ c ];
-			for( size_t i = 0; i < contoursVecPointsVec[ c ].size(); i++ )
-			{
-				file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
-			}
-		}
-
-		file.close();
+        PrintContoursToFile();
 	}
 
 
@@ -239,7 +268,7 @@ Mesh Triangulator::MakeMesh()
         //    continue;
 
         int c1Nesting = m_contoursNesting[ i ];
-        p2t::CDT * cdt = new p2t::CDT( contoursVecPointsVec[ i ] );
+        p2t::CDT * cdt = new p2t::CDT( m_polylines[ i ] );
 
         for( size_t c = 0; c < ContourCount(); ++c )
         {
@@ -254,7 +283,7 @@ Mesh Triangulator::MakeMesh()
             if( m_contoursIncuding[ i ][ c ] &&
                 c1Nesting == c2Nesting - 1 )
             {
-                cdt->AddHole( contoursVecPointsVec[ c ] );
+                cdt->AddHole( m_polylines[ c ] );
             }
         }
 
@@ -280,3 +309,134 @@ Mesh Triangulator::MakeMesh()
 	return mesh;
 }
 
+// ================================ //
+//
+void Triangulator::PrintContoursToFile()
+{
+    std::fstream file( m_fileName, std::ios_base::app );
+    assert( !file.fail() );
+
+// ***********************
+// Header - beginning of shape
+    file << std::endl << std::endl << "Next shape ";
+    if( !m_contourName.empty() )
+        file << m_contourName.c_str();
+    file << std::endl;
+
+    // ***********************
+    // Contours sizes
+    file << "Contours sizes: " << std::endl;
+    for( int i = 0; i < m_polylines.size(); ++i )
+    {
+        file << m_polylines[ i ].size() << ", ";
+    }
+    file << std::endl;
+
+    // ***********************
+    // Including
+    file << "Including: " << std::endl;
+    for( int i = 0; i < m_contoursIncuding.size(); ++i )
+    {
+        for( int j = 0; j < m_contoursIncuding.size(); ++j )
+        {
+            if( m_contoursIncuding[ i ][ j ] )
+                file << "true,\t";
+            else
+                file << "false,\t";
+        }
+        file << std::endl;
+    }
+    file << std::endl;
+
+    // ***********************
+    // Nesting
+    file << "Nesting: " << std::endl;
+    for( int i = 0; i < m_contoursNesting.size(); ++i )
+    {
+        file << m_contoursNesting[ i ] << ", ";
+    }
+    file << std::endl;
+
+
+// ***********************
+// Polylines
+    for( size_t c = 0; c < m_polylines.size(); c++ )
+    {
+        file << std::endl << "Contour number " << c << std::endl;
+        file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
+        file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
+
+        // ***********************
+        // Intersections
+        if( !m_selfIntersections[ c ].empty() )
+        {
+            file << "Self Intersections in pre computing phase: ";
+            
+            for( int i = 0; i < m_selfIntersections[ c ].size(); ++i )
+            {
+                auto point = m_selfIntersections[ c ][ i ];
+                file << "( " << point->x << ", " << point->y << " ) ";
+            }
+
+            file << std::endl;
+        }
+
+        // ***********************
+        // Including
+        file << "Includes contours: ";
+        for( int i = 0; i < m_polylines.size(); ++i )
+        {
+            if( m_contoursIncuding[ c ][ i ] )
+            {
+                file << i << " ";
+            }
+        }
+        file << std::endl << std::endl;
+
+        // ***********************
+        // Points
+        auto & contour = m_polylines[ c ];
+        for( size_t i = 0; i < m_polylines[ c ].size(); i++ )
+        {
+            file << contour[ i ]->x << " " << contour[ i ]->y << std::endl;
+        }
+    }
+
+    file.close();
+}
+
+// ***********************
+//
+Polyline &&         Triangulator::HeuristicFindMainContour  ( PolylinesVec && polylines )
+{
+    assert( !polylines.empty() );
+    assert( !polylines[ 0 ].empty() );
+
+    int longestIdx = 0;
+    int longestLength = 0;
+
+    for( int i = 0; i < polylines.size(); ++i )
+    {
+        if( longestLength < polylines[ i ].size() )
+        {
+            longestIdx = i;
+            longestLength = (int)polylines[ i ].size();
+        }
+    }
+
+    // Delete rejected polylines. Dealocate points.
+    for( int i = 0; i < polylines.size(); ++i )
+    {
+        if( i != longestIdx )
+        {
+            for( auto & point : polylines[ i ] )
+            {
+                delete point;
+            }
+            polylines[ i ].clear();
+        }
+    }
+
+
+    return std::move( polylines[ longestIdx ] );
+}

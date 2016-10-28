@@ -119,9 +119,13 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       // not change the given constraint and just keep a variable for the new constraint
       tcx.edge_event.constrained_edge->q = p1;
       triangle = &triangle->NeighborAcross(point);
+
+      if( !triangle )
+          throw new std::runtime_error( "EdgeEvent - nullptr triangle" );
+
       EdgeEvent( tcx, ep, *p1, triangle, *p1 );
     } else {
-      std::runtime_error("EdgeEvent - collinear points not supported");
+      throw new std::runtime_error("EdgeEvent - collinear points not supported");
       assert(0);
     }
     return;
@@ -136,9 +140,13 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       // not change the given constraint and just keep a variable for the new constraint
       tcx.edge_event.constrained_edge->q = p2;
       triangle = &triangle->NeighborAcross(point);
+
+      if( !triangle )
+          throw new std::runtime_error( "EdgeEvent - nullptr triangle" );
+
       EdgeEvent( tcx, ep, *p2, triangle, *p2 );
     } else {
-      std::runtime_error("EdgeEvent - collinear points not supported");
+        throw new std::runtime_error("EdgeEvent - collinear points not supported");
       assert(0);
     }
     return;

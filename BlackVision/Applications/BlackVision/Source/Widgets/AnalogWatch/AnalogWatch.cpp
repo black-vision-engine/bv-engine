@@ -41,9 +41,9 @@ const std::string &     AnalogWatch::GetType             () const
 //
 AnalogWatch::AnalogWatch             ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
-    , m_hourNode( nullptr )
-    , m_minuteNode( nullptr )
-    , m_secondsNode( nullptr )
+    ,   m_hourNode( nullptr )
+    ,   m_minuteNode( nullptr )
+    ,   m_secondsNode( nullptr )
 {
     m_smoothHours = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_HOURS, false )->Value();
     m_smoothMinutes = AddBoolParam( m_paramValModel, timeEvaluator, PARAMETERS::SMOOTH_MINUTES, false )->Value();
