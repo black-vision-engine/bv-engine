@@ -266,9 +266,6 @@ std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
                 data.PolylineIdx = i;
 
                 dividePoints.push_back( data );
-
-                // If we found intersecting edge, we must ommit second point. We don't need duplciated points.
-                i++;
                 break;
             }
         }
