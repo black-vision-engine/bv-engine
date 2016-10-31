@@ -1,10 +1,8 @@
 #pragma once
 
 #include "Assets/Font/FontAsset.h"
-#include "Assets/Font/FontAssetDescriptor.h"
-#include "Assets/Font/Text.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h" // FIXME: Asset shouldn't depend on model
-#include "Mathematics/Rect.h"
+
 
 namespace bv { 
 

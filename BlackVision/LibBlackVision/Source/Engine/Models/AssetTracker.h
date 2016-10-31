@@ -39,6 +39,10 @@ private:
     std::map< AssetUID, UInt32 >            m_registeredUIDs;
     std::map< AssetKey, UInt32 >            m_registeredKeys;
 
+    // assets needs to be erased in the reversed order that was registered (reason: FontAssets stores TextureAsset)
+    std::vector< AssetUID >                 m_uidsRegisterOrder;
+    std::vector< AssetKey >                 m_keysRegisterOrder;
+
 public:
 
                                             AssetTracker        ( Renderer * renderer, audio::AudioRenderer * audioRenderer, BVProjectEditor * projectEditor );
@@ -58,11 +62,11 @@ public:
 
 private:
 
-    template< typename MAP, typename KEY >
-    void                                    RegisterAsset       ( MAP & map, KEY key );
+    template< typename KEYTYPE >
+    void                                    RegisterAsset       ( std::map< KEYTYPE, UInt32 > & keysMap, KEYTYPE key, std::vector< KEYTYPE > & order );
 
-    template< typename MAP, typename KEY >
-    void                                    UnregisterAsset     ( MAP & map, KEY key );
+    template< typename KEYTYPE >
+    void                                    UnregisterAsset     ( std::map< KEYTYPE, UInt32 > & keysMap, KEYTYPE key );
 
     audio::AudioEntity *                    GetAudio            ( const model::IPlugin * plugin );
     audio::AudioEntity *                    GetAudio            ( const SceneNode * sceneNode );
@@ -72,25 +76,26 @@ private:
 
 // *************************************
 //
-template< typename MAP, typename KEY >
-void         AssetTracker::RegisterAsset        ( MAP & map, KEY key )
+template< typename KEYTYPE >
+void         AssetTracker::RegisterAsset        ( std::map< KEYTYPE, UInt32 > & keysMap, KEYTYPE key, std::vector< KEYTYPE > & order )
 {
-    if( map.count( key ) == 0 )
+    if( keysMap.count( key ) == 0 )
     {
-        map[ key ] = 0;
+        keysMap[ key ] = 0;
+        order.push_back( key );
     }
 
-    map[ key ]++;
+    keysMap[ key ]++;
 }
 
 // *************************************
 //
-template< typename MAP, typename KEY >
-void         AssetTracker::UnregisterAsset      ( MAP & map, KEY key )
+template< typename KEYTYPE >
+void         AssetTracker::UnregisterAsset      ( std::map< KEYTYPE, UInt32 > & keysMap, KEYTYPE key )
 {
-    if( map.count( key ) > 0 && map[ key ] > 0 )
+    if( keysMap.count( key ) > 0 && keysMap[ key ] > 0 )
     {
-        map[ key ]--;
+        keysMap[ key ]--;
     }
 }
 

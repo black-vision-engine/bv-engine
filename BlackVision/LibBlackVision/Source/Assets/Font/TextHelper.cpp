@@ -1,23 +1,12 @@
 #include "stdafx.h"
 
 #include "TextHelper.h"
-#include "TextAtlas.h"
 
 #include "Assets/Assets.h"
 #include "Assets/Font/Glyph.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-
 #include "Engine/Models/Plugins/Simple/TextPlugins/TextArranger.h"
-
-#include <assert.h>
-
-
-
-#include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv {

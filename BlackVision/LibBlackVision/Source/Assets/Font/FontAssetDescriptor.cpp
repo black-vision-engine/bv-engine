@@ -1,22 +1,14 @@
 #include "stdafx.h"
 
 #include "FontAssetDescriptor.h"
+
 #include "Serialization/SerializationHelper.h"
 
-#include <cassert>
 
+namespace bv {
 
-
-#include "Memory/MemoryLeaks.h"
-
-
-
-namespace bv
-{
 
 const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
-
-
 
 
 // ***********************
