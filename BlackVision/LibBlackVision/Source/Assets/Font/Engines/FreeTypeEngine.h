@@ -5,8 +5,6 @@
 #include "Assets/Font/Text.h"
 
 #include "CoreDEF.h"
-#include <string>
-#include <vector>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -40,8 +38,8 @@ private:
 								FreeTypeEngine( const std::string & fontFilePath, size_t fontSize );
 
 public:
-	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false )					override;
-	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, UInt32 outline, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false )	override;
+	virtual TextAtlasPtr	    CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false )					override;
+	virtual TextAtlasPtr	    CreateAtlas( UInt32 padding, UInt32 outline, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false )	override;
 
     virtual ContoursList        Create3dVerticies   ( wchar_t ch, float size )                                                                  override;
 

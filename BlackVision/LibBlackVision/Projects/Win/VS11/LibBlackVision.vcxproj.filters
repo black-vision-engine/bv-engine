@@ -1774,6 +1774,9 @@
     <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp">
       <Filter>Database\SQLite</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.cpp">
+      <Filter>Assets\Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4162,6 +4165,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
       <Filter>Database\SQLite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h">
+      <Filter>Assets\Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

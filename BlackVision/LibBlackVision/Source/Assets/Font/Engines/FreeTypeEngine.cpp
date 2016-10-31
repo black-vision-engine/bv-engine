@@ -361,7 +361,7 @@ std::wstring LoadUtf8FileToString(const std::wstring & _filename)
 
 // *********************************
 //
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSetFile, bool makeSizesPowerOf2 )
+TextAtlasPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSetFile, bool makeSizesPowerOf2 )
 {
     auto wcharsSet = LoadUtf8FileToString( wcharsSetFile );
 
@@ -500,7 +500,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 // *********************************
 //
-TextAtlasConstPtr   FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
+TextAtlasPtr   FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
     return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }

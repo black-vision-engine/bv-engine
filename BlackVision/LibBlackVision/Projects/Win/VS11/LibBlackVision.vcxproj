@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp" />
@@ -577,6 +578,7 @@
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayTypedRows.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
+    <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h" />

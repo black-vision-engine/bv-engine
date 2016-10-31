@@ -14,7 +14,7 @@ private:
 
     std::wstring                        m_supportedCharsSetFile;
     std::string                         m_fontFile;
-    TextAtlasConstPtr                   m_atlas;
+    TextAtlasPtr                        m_atlas;
     UInt32                              m_fontSize;
     UInt32                              m_blurSize;
     UInt32                              m_outlineWidth; // if > 0 text is outlined
@@ -26,7 +26,7 @@ private:
     void                                GenerateMipMaps     ();
     void                                BlurAtlas           ();
     void                                AddTexturesKey      ();
-    TextAtlasConstPtr                   LoadFromCache       ();
+    TextAtlasPtr                        LoadFromCache       ();
     void                                AddToCache          ();
 
 public:

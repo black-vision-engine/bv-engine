@@ -17,6 +17,23 @@ TextAtlas::TextAtlas()
 
 // *********************************
 //
+TextAtlas::~TextAtlas()
+{
+    for( auto it = m_glyphs.cbegin(); it != m_glyphs.cend(); )
+    {
+        delete it->second;
+        m_glyphs.erase( it++ );
+    }
+
+    for( auto it = m_outlineGlyphs.cbegin(); it != m_outlineGlyphs.cend(); )
+    {
+        delete it->second;
+        m_outlineGlyphs.erase( it++ );
+    }
+}
+
+// *********************************
+//
 TextAtlas::TextAtlas( UInt32 w, UInt32 h, UInt32 bitsPerPixel, UInt32 gw, UInt32 gh )
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
@@ -180,7 +197,6 @@ void                    TextAtlas::Load( std::istream& in )
 {
     boost::archive::text_iarchive ia( in );
     ia >> *this;
-    //ia.delete_created_pointers();
 }
 
 // *********************************

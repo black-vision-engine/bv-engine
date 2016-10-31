@@ -16,8 +16,8 @@ namespace bv {
 
 // *********************************
 //
-TextConstPtr Text::Create(const std::wstring& supportedCharsSet
-						, const std::string& fontFile
+TextConstPtr Text::Create(const std::wstring & supportedCharsSet
+						, const std::string & fontFile
 						, UInt32 fontSize
 						, UInt32 blurSize
 						, UInt32 outlineSize
@@ -45,7 +45,7 @@ Text::Text( const std::wstring & supportedCharsSetFile, const std::string& fontF
 
 // *********************************
 //
-TextAtlasConstPtr Text::LoadFromCache()
+TextAtlasPtr Text::LoadFromCache()
 {
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
