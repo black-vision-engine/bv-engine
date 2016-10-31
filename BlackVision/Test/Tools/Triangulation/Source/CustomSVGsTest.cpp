@@ -161,3 +161,23 @@ TEST_CASE( "Testing Triangulator [Loading SelfIntersecting SVGs]" )
 }
 
 
+TEST_CASE( "Testing Triangulator exceptions [Loading SVGs]" )
+{
+    // Test needs config.xml placed in exe directory.
+    REQUIRE( bv::ConfigManager::LoadXMLConfig() );
+
+    auto & pluginsManager = bv::model::PluginsManager::DefaultInstanceRef();
+    //auto projectManager = bv::ProjectManager::GetInstance();
+
+    pluginsManager.RegisterDescriptors( pluginUtils::CreatePlugins() );
+    auto timeEvaluator = bv::model::TimelineHelper::CreateTimeEvaluator( "default", bv::TimelineType::TT_DEFAULT );
+
+    bv::model::DefaultMeshPluginPtr plugin = std::static_pointer_cast<bv::model::DefaultMeshPlugin>( pluginsManager.CreatePlugin( "DEFAULT_MESH", "SVG", nullptr, timeEvaluator ) );
+    bv::model::TriangulatePluginPtr triangulate = std::static_pointer_cast<bv::model::TriangulatePlugin>( pluginsManager.CreatePlugin( "TRIANGULATE", "Triangulator", nullptr, timeEvaluator ) );
+
+
+    REQUIRE( plugin != nullptr );
+
+    TestFileThrows( "UnitTest/OneLineMultipleIntersects.svg", plugin, triangulate );
+
+}

@@ -43,7 +43,8 @@ inline const char *        GetCategoryName< bv::model::DefaultMeshPluginPtr >   
 template<>
 inline const char *        GetCategoryName< bv::model::DefaultText3DPluginPtr >    () { return "fonts"; }
 
-
+// ***********************
+// Descriptor creation
 template< typename PluginType >
 inline bv::AssetDescConstPtr    CreateDesc  ( const char * file ) { return nullptr; }
 
@@ -311,3 +312,35 @@ void        TestFileWithArrays   ( const char * file,
 }
 
 
+
+// ***********************
+//
+template< typename PluginType >
+inline
+void    TestFileThrows (
+    const char * file,
+    PluginType meshPlugin,
+    bv::model::TriangulatePluginPtr triangulate )
+{
+    auto assetDesc = CreateDesc< PluginType >( file );
+    REQUIRE( assetDesc != nullptr );
+
+    bool result = meshPlugin->LoadResource( assetDesc );
+    REQUIRE( result == true );
+
+    auto attributesChannel = meshPlugin->GetVertexAttributesChannel();
+    REQUIRE( attributesChannel != nullptr );
+
+    auto components = attributesChannel->GetComponents();
+    CHECK( components.size() == 1 );
+    REQUIRE( components.size() > 0 );
+
+    auto contours = triangulate->ExtractContours( components[ 0 ] );
+
+    // ***********************
+    // Triangulate
+    Triangulator triangulator( std::move( contours ), "testContours.txt", file );
+
+    Mesh mesh;
+    REQUIRE_THROWS_AS( mesh = triangulator.MakeMesh(), std::runtime_error );
+}

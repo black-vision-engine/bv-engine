@@ -432,7 +432,7 @@ void        TriangulatePlugin::ProcessVertexAttributesChannel()
                 connComp->AddAttributeChannel( vertChannel );
                 m_vaChannel->AddConnectedComponent( connComp );
             }
-            catch( const std::runtime_error& error )
+            catch( const std::runtime_error & error )
             {
                 LOG_MESSAGE( SeverityLevel::error ) << error.what();
             }

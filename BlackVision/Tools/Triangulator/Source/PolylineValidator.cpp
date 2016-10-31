@@ -247,6 +247,33 @@ void    PolylineValidator::RepairRepeatPoints   ()
 }
 
 // ***********************
+// Checks if intersections are valid for further decomposition.
+void    PolylineValidator::ValidateIntersections    ( const IntersectionsVec & intersect )
+{
+    // FIXME: Two intersections shouldn't lie on the same edge.
+    for( auto inter1 = intersect.begin(); inter1 != intersect.end(); inter1++ )
+    {
+        for( auto inter2 = inter1 + 1; inter2 != intersect.end(); inter2++ )
+        {
+            if( inter1 == inter2 )
+                continue;
+
+            auto edge11 = ( *inter1 )->edge_list[ 0 ];
+            auto edge12 = ( *inter1 )->edge_list[ 1 ];
+
+            auto edge21 = ( *inter2 )->edge_list[ 0 ];
+            auto edge22 = ( *inter2 )->edge_list[ 1 ];
+
+            if( edge11 == edge21 ||
+                edge11 == edge22 ||
+                edge12 == edge21 ||
+                edge12 == edge22 )
+                throw std::runtime_error( "[PolylineValidator] One edge is intersected multpile times. Fix this in future versions." );
+        }
+    }
+}
+
+// ***********************
 //
 std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
 {
@@ -312,6 +339,8 @@ const PolylinesVec &         PolylineValidator::DecomposeContour        ()
         polylines.push_back( m_polyline );
         return polylines;
     }
+
+    ValidateIntersections( m_intersections );
 
     // Number of intersection is maximal number of separate segments.
     polylines.reserve( m_intersections.size() + 1 );
