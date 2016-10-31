@@ -89,9 +89,9 @@ void				Text::AddToCache()
         mmLevelsNum = ( UInt32 )m_atlas->m_textureAsset->GetMipMaps()->GetLevelsNum();
     }
 
-    auto descriptor = TextAtlas::GenerateTextAtlasAssetDescriptor( fontName, m_atlas->GetWidth(), m_atlas->GetHeight(),
-                                                                    m_fontSize, m_blurSize, m_outlineWidth, mmLevelsNum,
-                                                                    m_supportedCharsSetFile );
+    auto descriptor = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, m_atlas->GetWidth(), m_atlas->GetHeight(),
+                                                                   m_fontSize, m_blurSize, m_outlineWidth, mmLevelsNum,
+                                                                   m_supportedCharsSetFile );
 
     //Add to AssetCache
     auto assetDesc = std::static_pointer_cast< const AssetDesc >( descriptor );
