@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TextAtlas.h"
-#include "IDatabase.h"
+#include "Database/IDatabase.h"
 #include "CoreDEF.h"
 
 struct sqlite3;
@@ -13,7 +13,7 @@ class FontAtlasCacheEntry;
 DEFINE_PTR_TYPE( FontAtlasCacheEntry )
 DEFINE_CONST_PTR_TYPE( FontAtlasCacheEntry )
 
-class FontAtlasCacheEntry : public IDBEntry
+class FontAtlasCacheEntry : public DatabaseEntry
 {
 private:
 

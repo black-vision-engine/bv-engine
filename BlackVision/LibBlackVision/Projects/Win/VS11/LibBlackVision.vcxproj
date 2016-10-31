@@ -180,6 +180,8 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Database\DatabaseEntry.cpp" />
+    <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.cpp" />
@@ -598,6 +600,9 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h" />
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h" />
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h" />
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioEntity.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.h" />

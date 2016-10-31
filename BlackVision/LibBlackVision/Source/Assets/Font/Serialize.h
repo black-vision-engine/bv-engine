@@ -1,6 +1,13 @@
+#pragma once
+
+#pragma warning(push)
+#pragma warning(disable : 4512) //warning C4512: 'boost::archive::detail::helper_collection::predicate' : assignment operator could not be generated
+
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"
 #include "boost/serialization/map.hpp"
+
+#pragma warning(pop)
 
 #include "Text.h"
 #include "TextAtlas.h"

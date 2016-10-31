@@ -6,8 +6,6 @@
 
 #include "sqlite3.h"
 
-#include "AtlasCache.h"
-
 #include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
@@ -103,7 +101,7 @@ void                        SQLiteDatabase::Close()
 // *********************************
 //
 void                        SQLiteDatabase::CreateTable( const std::string & tableName, 
-                                                         const std::vector< IDBEntry::ColumnType > & columnTypes, 
+                                                         const std::vector< DatabaseEntry::ColumnType > & columnTypes, 
                                                          const std::vector< std::string > & primaryKeys )
 {
     Open();
@@ -138,7 +136,7 @@ void                        SQLiteDatabase::CreateTable( const std::string & tab
 
 // *********************************
 //
-void                    SQLiteDatabase::Save( const std::string & tableName, IDBEntryConstPtr entry )
+void                    SQLiteDatabase::Save( const std::string & tableName, DatabaseEntryConstPtr entry )
 {
     Open();
 
@@ -271,7 +269,7 @@ bool      SQLiteDatabase::LoadNext()
 
 // *********************************
 //
-IDBEntryPtr             SQLiteDatabase::LoadEntryImpl( IDBEntryPtr entry )
+DatabaseEntryPtr             SQLiteDatabase::LoadEntryImpl( DatabaseEntryPtr entry )
 {
     for( Int32 i = 0; i < sqlite3_column_count( m_statement ); ++i )
     {
@@ -312,7 +310,7 @@ IDBEntryPtr             SQLiteDatabase::LoadEntryImpl( IDBEntryPtr entry )
 
 // *********************************
 //
-void                    SQLiteDatabase::BindValues      ( sqlite3_stmt * statement, IDBEntryConstPtr entry )
+void                    SQLiteDatabase::BindValues      ( sqlite3_stmt * statement, DatabaseEntryConstPtr entry )
 {
     for( UInt32 i = 0; i < ( UInt32 )entry->ColumnTypesCount(); ++i )
     {

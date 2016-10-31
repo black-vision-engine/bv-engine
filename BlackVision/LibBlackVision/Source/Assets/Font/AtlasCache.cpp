@@ -4,7 +4,7 @@
 
 #include "AtlasCache.h"
 #include "Assets/Texture/TextureUtils.h"
-#include "SQLiteDatabase.h"
+#include "Database/SQLite/SQLiteDatabase.h"
 
 #include "System/Path.h"
 #include "IO/FileIO.h"
@@ -29,7 +29,7 @@ const std::string FontAtlasCacheEntry::CN::CHAR_SET       = "char_set";
 const std::string FontAtlasCacheEntry::CN::TEXT_ATLAS     = "text_atlas";
 
 const std::vector< std::string > FontAtlasCacheEntry::m_sPrimaryKeys = GeneratePrimaryKeys();
-const std::vector< IDBEntry::ColumnType > FontAtlasCacheEntry::m_sColumns = GenerateColumnTypes();
+const std::vector< DatabaseEntry::ColumnType > FontAtlasCacheEntry::m_sColumns = GenerateColumnTypes();
 
 // *********************************
 //
@@ -87,7 +87,7 @@ std::vector< std::string > FontAtlasCacheEntry::GeneratePrimaryKeys()
 
 // *********************************
 //
-std::vector< IDBEntry::ColumnType > FontAtlasCacheEntry::GenerateColumnTypes()
+std::vector< DatabaseEntry::ColumnType > FontAtlasCacheEntry::GenerateColumnTypes()
 {
     std::vector< ColumnType > ret;
     
@@ -144,7 +144,7 @@ const std::vector< std::string > &          FontAtlasCacheEntry::PrimaryKeys    
 
 // *********************************
 //
-const std::vector< IDBEntry::ColumnType > & FontAtlasCacheEntry::ColumnTypes            ()
+const std::vector< DatabaseEntry::ColumnType > & FontAtlasCacheEntry::ColumnTypes            ()
 {
     return m_sColumns;
 }
@@ -329,77 +329,6 @@ FontAtlasCacheEntryPtr      FontAtlasCache::GetEntry        ( const std::string 
 void                    FontAtlasCache::AddEntry        ( FontAtlasCacheEntryConstPtr data )
 {
     m_database->Save( m_sCachedFontsTableName, data );
-
-    //auto mmLevelsNum = 0;
-
-    //if( data->m_textAtlas->m_textureAsset->HasMipMaps() )
-    //{
-    //    mmLevelsNum = data->m_textAtlas->m_textureAsset->GetMipMaps()->GetLevelsNum();
-    //}
-
-    //std::string sqlAdd = std::string( "INSERT OR REPLACE INTO " + m_sCachedFontsTableName + " VALUES(" )
-    //    + "\'" + data->m_fontName + "\'" + ", "
-    //    + std::to_string( data->m_fontSize ) + ", "
-    //    + std::to_string( data->m_blurSize ) + ", "
-    //    + std::to_string( data->m_outlineWidth ) + ", "
-    //    + "\'" + data->m_fontFilePath + "\'" + ", "
-    //    + std::to_string( data->m_textAtlas->GetWidth() ) + ", "
-    //    + std::to_string( data->m_textAtlas->GetHeight() ) + ", "
-    //    + std::to_string( 0 ) + ", " 
-    //    + "\'www\', "
-    //    //+ "\'" + std::string( data->m_charSetFileName.begin(), data->m_charSetFileName.end() ) + "\'" + ", "
-    //    + "?)";
-
-    //wstring p = L"ĂÎȘȚÂăîșțâ";
-    //sqlite3_bind_text16( stmt, 1, ( "%" + p + "%" ).c_str(), -1, SQLITE_TRANSIENT );
-
-    //
-    //auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(  data->m_fontFilePath,
-    //                                                                      data->m_textAtlas->GetWidth(),
-    //                                                                      data->m_textAtlas->GetHeight(),
-    //                                                                      data->m_fontSize,
-    //                                                                      data->m_blurSize,
-    //                                                                      data->m_outlineWidth,
-    //                                                                      mmLevelsNum,
- //                                                                           data->m_charSetFileName );
-
- //   auto descriptor = std::static_pointer_cast<const AssetDesc>( atlasTextureDesc );
- //   
- //   AssetManager::GetInstance().AddToCache( descriptor, data->m_textAtlas->m_textureAsset ); //Add to AssetCache
- //   TextureUtils::AddToRawDataCache( data->m_textAtlas->m_textureAsset );                    //Add to RawDataCache
-
-    //m_database->Save();
-
-    //sqlite3_stmt * stmt = nullptr;
-    //const char * parsed = nullptr;
-
-    //auto res = sqlite3_prepare( m_sqliteDB, sqlAdd.c_str(), (int) sqlAdd.size(), &stmt, &parsed);
-    //if( res != SQLITE_OK )
-    //{
-    //    std::cerr << "SQL Error: " << "prepare" << std::endl;
-    //    return;
-    //}
-
-    //std::stringstream textAtlasStream;
- //   data->m_textAtlas->Save( textAtlasStream );
-
-    //auto textAtlasStr = textAtlasStream.str();
-
- //   res = sqlite3_bind_blob( stmt, 1, textAtlasStr.c_str(), (int) textAtlasStr.size(), SQLITE_TRANSIENT);
-
- //   if( res != SQLITE_OK )
- //   {
- //       std::cerr << "SQL Error: " << "bind" << std::endl;
- //       return;
- //   }
-
- //   res = sqlite3_step(stmt); 
-
- //   if( res != SQLITE_DONE )
- //   {
- //       std::cerr << "SQL Error: " << "step" << std::endl;
- //       return;
- //   }
 }
 
 } // bv

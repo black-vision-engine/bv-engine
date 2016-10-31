@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IDatabase.h"
+#include "Database/IDatabase.h"
 #include "CoreDEF.h"
 
 
@@ -38,10 +38,10 @@ public:
                         ~SQLiteDatabase     ();
 
     virtual void                        CreateTable ( const std::string & tableName, 
-                                                      const std::vector< IDBEntry::ColumnType > & columnTypes, 
+                                                      const std::vector< DatabaseEntry::ColumnType > & columnTypes, 
                                                       const std::vector< std::string > & primaryKeys ) override;
 
-    virtual void                        Save        ( const std::string & tableName, IDBEntryConstPtr entry ) override;
+    virtual void                        Save        ( const std::string & tableName, DatabaseEntryConstPtr entry ) override;
 
 private:
 
@@ -51,9 +51,9 @@ private:
     virtual bool                    PreLoad( const std::string & sqlQuery ) override;
     virtual void                    PostLoad() override;
     virtual bool                    LoadNext() override;
-    virtual IDBEntryPtr             LoadEntryImpl( IDBEntryPtr entry ) override;
+    virtual DatabaseEntryPtr             LoadEntryImpl( DatabaseEntryPtr entry ) override;
 
-    void                            BindValues  ( sqlite3_stmt * statement, IDBEntryConstPtr entry );
+    void                            BindValues  ( sqlite3_stmt * statement, DatabaseEntryConstPtr entry );
 
 
     static const std::map< ParamType, const char * > PopulateTypes();

@@ -164,12 +164,10 @@
     <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Font\BaseDBEntry.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontLoader.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Font\SQLiteDatabase.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextHelper.cpp" />
@@ -204,6 +202,8 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Database\DatabaseEntry.cpp" />
+    <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.cpp" />
@@ -599,9 +599,6 @@
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayTypedRows.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
-    <ClInclude Include="..\..\..\Source\Assets\Font\BaseDBEntry.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Font\IDatabase.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Font\SQLiteDatabase.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h" />
@@ -625,6 +622,9 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h" />
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h" />
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h" />
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioEntity.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrAudioBuffersQueue.h" />

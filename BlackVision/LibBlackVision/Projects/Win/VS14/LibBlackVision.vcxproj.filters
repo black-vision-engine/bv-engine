@@ -349,6 +349,12 @@
     <Filter Include="Engine\Events\InnerEvents">
       <UniqueIdentifier>{9f842784-55d8-48e5-8140-4e4c9ab6634a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{df5a36c4-ad45-4281-bc00-00d96374b638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database\SQLite">
+      <UniqueIdentifier>{d4ed1565-637a-4c2b-9d26-5a6a04086cce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1762,11 +1768,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Font\SQLiteDatabase.cpp">
-      <Filter>Assets\Font</Filter>
+    <ClCompile Include="..\..\..\Source\Database\DatabaseEntry.cpp">
+      <Filter>Database</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Font\BaseDBEntry.cpp">
-      <Filter>Assets\Font</Filter>
+    <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp">
+      <Filter>Database\SQLite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4148,14 +4154,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\IDatabase.h">
-      <Filter>Assets\Font</Filter>
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
+      <Filter>Database</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\SQLiteDatabase.h">
-      <Filter>Assets\Font</Filter>
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
+      <Filter>Database</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\BaseDBEntry.h">
-      <Filter>Assets\Font</Filter>
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
+      <Filter>Database\SQLite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

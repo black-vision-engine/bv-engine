@@ -10,7 +10,7 @@
 namespace bv { 
 
 
-class IDBEntry
+class DatabaseEntry
 {
 public:
 
@@ -33,7 +33,7 @@ public:
 
 };
 
-DEFINE_PTR_TYPE( IDBEntry )
-DEFINE_CONST_PTR_TYPE( IDBEntry )
+DEFINE_PTR_TYPE( DatabaseEntry )
+DEFINE_CONST_PTR_TYPE( DatabaseEntry )
 
 } // bv
