@@ -3,13 +3,8 @@
 #include "FontAsset.h"
 
 
+namespace bv {
 
-#include "Memory/MemoryLeaks.h"
-
-
-
-namespace bv
-{
 
 const std::string FontAsset::uid = "FONT_ASSET";
 

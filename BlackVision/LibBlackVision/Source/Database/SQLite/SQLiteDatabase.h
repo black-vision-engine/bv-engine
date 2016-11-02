@@ -34,35 +34,29 @@ private:
 
 public:
 
-                        SQLiteDatabase      ( const std::string & databasePath );
-                        ~SQLiteDatabase     ();
+                                SQLiteDatabase      ( const std::string & databasePath );
+                                ~SQLiteDatabase     ();
 
-    virtual void                        CreateTable ( const std::string & tableName, 
+    virtual void                CreateTable         ( const std::string & tableName, 
                                                       const std::vector< DatabaseEntry::ColumnType > & columnTypes, 
                                                       const std::vector< std::string > & primaryKeys ) override;
 
-    virtual void                        Save        ( const std::string & tableName, DatabaseEntryConstPtr entry ) override;
+    virtual void                Save                ( const std::string & tableName, DatabaseEntryConstPtr entry ) override;
 
 private:
 
-    void                            Open        ();
-    void                            Close       ();
+    void                        Open                ();
+    void                        Close               ();
 
-    virtual bool                    PreLoad( const std::string & sqlQuery ) override;
-    virtual void                    PostLoad() override;
-    virtual bool                    LoadNext() override;
-    virtual DatabaseEntryPtr             LoadEntryImpl( DatabaseEntryPtr entry ) override;
+    virtual bool                PreLoad             ( const std::string & sqlQuery ) override;
+    virtual void                PostLoad            () override;
+    virtual bool                LoadNext            () override;
+    virtual DatabaseEntryPtr    LoadEntryImpl       ( DatabaseEntryPtr entry ) override;
 
-    void                            BindValues  ( sqlite3_stmt * statement, DatabaseEntryConstPtr entry );
+    void                        BindValues          ( sqlite3_stmt * statement, DatabaseEntryConstPtr entry );
 
-
-    static const std::map< ParamType, const char * > PopulateTypes();
-
-    //template< typename T >
-    //void                BindValues          ( const T & entry, sqlite3_stmt * stmt );
+    static const std::map< ParamType, const char * >    PopulateTypes   ();
 
 };
-
-//extern template void    SQLiteDatabase::BindValues( const FontAtlasCacheEntry & entry, sqlite3_stmt * stmt );
 
 } // bv

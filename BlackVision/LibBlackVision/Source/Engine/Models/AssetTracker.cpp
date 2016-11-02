@@ -65,7 +65,7 @@ void                    AssetTracker::ClearCache            ()
         auto asset = AssetManager::GetInstance().GetFromCache( key );
         auto memChunk = RawDataCache::GetInstance().Get( keyHash );
         if( ( asset && ( asset.use_count() == 2 ) ) ||
-            ( memChunk && ( memChunk.use_count() == 3 ) ) )
+            ( memChunk && ( memChunk.use_count() == 2 ) ) )
         {
             AssetManager::GetInstance().RemoveFromCache( key );
             RawDataCache::GetInstance().Remove( keyHash );

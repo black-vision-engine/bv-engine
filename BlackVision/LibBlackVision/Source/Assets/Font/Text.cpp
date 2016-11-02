@@ -140,23 +140,20 @@ void Text::BuildAtlas        ()
 {
     m_atlas = LoadFromCache();
 
-    if( m_atlas != nullptr )
-	{
-		assert( m_atlas->GetAsset()->GetOriginal() ); // If atlas is in db it should be also in raw data cache.
-		return;
-	}
+    if( !m_atlas || !m_atlas->GetAsset() || !m_atlas->GetAsset()->GetOriginal() )
+    {
+        auto  padding = CalculatePadding( m_fontSize, m_blurSize, m_withMipmaps ); // Update padding in case of bluring the atlas.
 
-	auto  padding = CalculatePadding( m_fontSize, m_blurSize, m_withMipmaps ); // Update padding in case of bluring the atlas.
+        m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSetFile, m_withMipmaps );
 
-	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSetFile, m_withMipmaps );
+        BlurAtlas();
 
-	BlurAtlas();
+        GenerateMipMaps();
 
-	GenerateMipMaps();
+        AddTexturesKey();
 
-	AddTexturesKey();
-
-	AddToCache();
+        AddToCache();
+    }
 
 #ifdef GENERATE_TEST_BMP_FILE
 

@@ -2,8 +2,6 @@
 
 #include "SQLiteDatabase.h"
 
-#include <fstream>
-
 #include "sqlite3.h"
 
 #include "System/Path.h"
@@ -58,9 +56,7 @@ SQLiteDatabase::SQLiteDatabase  ( const std::string & databasePath )
         if( ( !Path::Exists( dir ) ) && ( !dir.empty() ) )
             Dir::CreateDir( dir );
 
-        std::ofstream file;
-        file.open( m_databasePath.c_str() );
-        file.close();
+        File::Touch( m_databasePath );
     }
 }
 
@@ -161,87 +157,6 @@ void                    SQLiteDatabase::Save( const std::string & tableName, Dat
     }
 
     Close();
-
-    //   if( res != SQLITE_DONE )
-    //   {
-    //       std::cerr << "SQL Error: " << "step" << std::endl;
-    //       return;
-    //   }
-
-    //sqlite3_stmt * stmt = nullptr;
-    //sqlite3_prepare_v2( sqliteDB, sqlQuery.c_str(), ( Int32 )sqlQuery.size(), &stmt, NULL );
-
-    //for( Int32 i = 1; i <= sqlite3_bind_parameter_count( stmt ); ++i )
-    //{
-    //    const char * tt1 = sqlite3_bind_parameter_name( stmt, i );
-    //    tt1;
-    //    int w = 0; w;
-    //}
-    //const char * tt2 = sqlite3_bind_parameter_name( stmt, 2 ); tt2;
-
-    //BindValues( entry, stmt );
-
-    /*
-
-	auto mmLevelsNum = entry.m_textAtlas->m_textureAsset->GetMipMaps() ? obj.m_textAtlas->m_textureAsset->GetMipMaps()->GetLevelsNum() : 0;
-
-    std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
-        + "\'" + obj.m_fontName + "\'" + ", "
-        + std::to_string( entry.m_fontSize ) + ", "
-        + std::to_string( entry.m_blurSize ) + ", "
-		+ std::to_string( entry.m_outlineWidth ) + ", "
-        + "\'" + entry.m_fontFilePath + "\'" + ", "
-		+ std::to_string( obj.m_textAtlas->GetWidth() ) + ", "
-		+ std::to_string( obj.m_textAtlas->GetHeight() ) + ", "
-		+ std::to_string( mmLevelsNum ) + ", " 
-        + "\'" + std::string( obj.m_charSetFileName.begin(), obj.m_charSetFileName.end() ) + "\'" + ", "
-        + "?)";*/
-
-	//
-	//auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( obj.m_fontFilePath,
- //                                                                        obj.m_textAtlas->GetWidth(),
- //                                                                        obj.m_textAtlas->GetHeight(),
- //                                                                        obj.m_fontSize,
- //                                                                        obj.m_blurSize,
- //                                                                        obj.m_outlineWidth,
-	//																	mmLevelsNum,
- //                                                                        obj.m_charSetFileName );
-
- //   auto descriptor = std::static_pointer_cast<const AssetDesc>( atlasTextureDesc );
- //   
- //   AssetManager::GetInstance().AddToCache( descriptor, obj.m_textAtlas->m_textureAsset ); //Add to AssetCache
- //   TextureUtils::AddToRawDataCache( obj.m_textAtlas->m_textureAsset );                    //Add to RawDataCache
- //   Close();
-    //sqlite3_stmt * stmt = nullptr;
-    //const char * parsed = nullptr;
-
- //   auto res = sqlite3_prepare( m_sqliteDB, sqlAdd.c_str(), (int) sqlAdd.size(), &stmt, &parsed);
- //   if( res != SQLITE_OK )
- //   {
- //       std::cerr << "SQL Error: " << "prepare" << std::endl;
- //       return;
- //   }
-
-	//std::stringstream textAtlasStream;
- //   obj.m_textAtlas->Save( textAtlasStream );
-
-	//auto textAtlasStr = textAtlasStream.str();
-
- //   res = sqlite3_bind_blob( stmt, 1, textAtlasStr.c_str(), (int) textAtlasStr.size(), SQLITE_TRANSIENT);
-
- //   if( res != SQLITE_OK )
- //   {
- //       std::cerr << "SQL Error: " << "bind" << std::endl;
- //       return;
- //   }
-
- //   res = sqlite3_step(stmt); 
-
- //   if( res != SQLITE_DONE )
- //   {
- //       std::cerr << "SQL Error: " << "step" << std::endl;
- //       return;
- //   }
 }
 
 // *********************************

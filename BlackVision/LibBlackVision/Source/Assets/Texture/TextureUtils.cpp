@@ -54,7 +54,7 @@ image::FilterType ToMMBuilderFilterType( MipMapFilterType ft )
 
 // ******************************
 //
-TextureAssetConstPtr	TextureUtils::GenerateMipMaps ( SingleTextureAssetConstPtr texture, Int32 numLevels, MipMapFilterType ft )
+TextureAssetConstPtr    TextureUtils::GenerateMipMaps ( SingleTextureAssetConstPtr texture, Int32 numLevels, MipMapFilterType ft )
 {
     if( numLevels > 0 )
     {
@@ -63,7 +63,7 @@ TextureAssetConstPtr	TextureUtils::GenerateMipMaps ( SingleTextureAssetConstPtr 
 
         std::vector< SingleTextureAssetConstPtr > mipMapsRes;
         for( SizeType i = 0; i < mipmap.size(); ++i )
-        {		
+        {       
             assert( ToBPP( texture->GetFormat() ) == mipmap[ i ].bpp );  // Mipmaps should have same format.
             mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, "", mipmap[ i ].width, mipmap[ i ].height, texture->GetFormat(), true ) );
         }
@@ -80,7 +80,7 @@ TextureAssetConstPtr	TextureUtils::GenerateMipMaps ( SingleTextureAssetConstPtr 
 
 // ******************************
 //
-TextureFormat			TextureUtils::ToTextureFormat( UInt32 bpp, UInt32 channelNum )
+TextureFormat           TextureUtils::ToTextureFormat( UInt32 bpp, UInt32 channelNum )
 {
     switch( bpp )
     {
@@ -105,7 +105,7 @@ TextureFormat			TextureUtils::ToTextureFormat( UInt32 bpp, UInt32 channelNum )
 
 // ******************************
 //
-TextureFormat			TextureUtils::NearestSupportedTextureFormat	( TextureFormat format )
+TextureFormat           TextureUtils::NearestSupportedTextureFormat ( TextureFormat format )
 {
     switch( format )
     {
@@ -120,7 +120,7 @@ TextureFormat			TextureUtils::NearestSupportedTextureFormat	( TextureFormat form
 
 // ******************************
 //
-UInt32					TextureUtils::ToBPP							( TextureFormat format )
+UInt32                  TextureUtils::ToBPP                         ( TextureFormat format )
 {
     switch( format )
     {
@@ -146,9 +146,9 @@ UInt32					TextureUtils::ToBPP							( TextureFormat format )
 
 // ******************************
 //
-SingleTextureAssetConstPtr	TextureUtils::LoadSingleTexture( const SingleTextureAssetDescConstPtr & singleTextureResDesc, bool cacheOnDisk )
+SingleTextureAssetConstPtr  TextureUtils::LoadSingleTexture( const SingleTextureAssetDescConstPtr & singleTextureResDesc, bool cacheOnDisk )
 {
-    auto key		= singleTextureResDesc->GetKey();
+    auto key        = singleTextureResDesc->GetKey();
 
     auto isCacheable = singleTextureResDesc->IsCacheable();
 
@@ -156,17 +156,17 @@ SingleTextureAssetConstPtr	TextureUtils::LoadSingleTexture( const SingleTextureA
     
     if( mmChunk ) // if found in the cache
     {
-        auto format		= TextureUtils::NearestSupportedTextureFormat( singleTextureResDesc->GetFormat() );
+        auto format     = TextureUtils::NearestSupportedTextureFormat( singleTextureResDesc->GetFormat() );
         return SingleTextureAsset::Create( mmChunk, key, singleTextureResDesc->GetWidth(), singleTextureResDesc->GetHeight(), format );
     }
     else
     {
-        UInt32 w			= 0;
-        UInt32 h			= 0;
-        UInt32 bpp			= 0;
-        UInt32 channelNum	= 0;
+        UInt32 w            = 0;
+        UInt32 h            = 0;
+        UInt32 bpp          = 0;
+        UInt32 channelNum   = 0;
 
-        auto imgPath		= ProjectManager::GetInstance()->ToAbsPath( singleTextureResDesc->GetImagePath() ).Str();
+        auto imgPath        = ProjectManager::GetInstance()->ToAbsPath( singleTextureResDesc->GetImagePath() ).Str();
 
         mmChunk = LoadImage( imgPath, &w, &h, &bpp, &channelNum );
         
@@ -183,7 +183,7 @@ SingleTextureAssetConstPtr	TextureUtils::LoadSingleTexture( const SingleTextureA
             }
         }
 
-        auto format		= TextureUtils::ToTextureFormat( bpp, channelNum );
+        auto format     = TextureUtils::ToTextureFormat( bpp, channelNum );
 
         return SingleTextureAsset::Create( mmChunk, key, singleTextureResDesc->GetWidth(), singleTextureResDesc->GetHeight(), format, cacheOnDisk );
     }
@@ -205,7 +205,7 @@ MemoryChunkConstPtr TextureUtils::LoadImage( const std::string & path, UInt32 * 
 
 // ******************************
 //
-TextureAssetConstPtr TextureUtils::LoadOrginalTextureOnly			( const TextureAssetDescConstPtr & desc )
+TextureAssetConstPtr TextureUtils::LoadOrginalTextureOnly           ( const TextureAssetDescConstPtr & desc )
 {
     assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE );
 
@@ -218,7 +218,7 @@ TextureAssetConstPtr TextureUtils::LoadOrginalTextureOnly			( const TextureAsset
 
 // ******************************
 //
-TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps			( const TextureAssetDescConstPtr & desc )
+TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps            ( const TextureAssetDescConstPtr & desc )
 {
     assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS );
 
@@ -249,7 +249,7 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps			( const TextureAssetD
 
 // ******************************
 //
-TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const TextureAssetDescConstPtr & desc )
+TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps    ( const TextureAssetDescConstPtr & desc )
 {
     assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS );
 
@@ -277,68 +277,42 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
         {
             mipMapsRes.resize( mmDesc->GetLevelsNum() );
 
-            auto cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( 0 ), true );
-
-            if( cachedMMAsset )
+            for( SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
             {
-                mipMapsRes[ 0 ] = cachedMMAsset;
-            }
-            else
-            {
-                auto textureWithMipMap =TextureUtils::GenerateMipMaps( origRes, 1, mmDesc->GetFilter() );
-                //auto data	= origRes->GetData();
-                //auto w		= origW;
-                //auto h		= origH;
-                //auto bpp	= TextureUtils::ToBPP( origRes->GetFormat() );
+                auto cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ), true );
+                if( cachedMMAsset )
+                {
+                    mipMapsRes[ i ] = cachedMMAsset;
+                }
+                else
+                {
+                    TextureAssetConstPtr textureWithMipMap = nullptr;
+                    SingleTextureAssetConstPtr mm = nullptr;
 
-                //tools::Image img = { data, w, h, bpp };
-                //auto mm = tools::GenerateMipmaps(	img,
-                //									1,
-                //									ToMMBuilderFilterType( mmDesc->GetFilter() ) );
-
-                auto key = mmDesc->GetLevelDesc( 0 )->GetKey();
-
-                auto mm = textureWithMipMap->GetMipMaps()->GetLevel( 0 );
-
-                mipMapsRes[ 0 ] = SingleTextureAsset::Create(	mm->GetData(),
-                                                                key,
-                                                                mm->GetWidth(),
-                                                                mm->GetHeight(),
-                                                                mm->GetFormat(),
-                                                                mm->GetCacheOnHardDrive() );
-            }
-
-
-			for(SizeType i = 1; i < mmDesc->GetLevelsNum(); ++i )
-			{
-				cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ), true );
-				if( cachedMMAsset )
-				{
-					mipMapsRes[ i ] = cachedMMAsset;
-				}
-				else
-				{
-					auto textureWithMipMap =TextureUtils::GenerateMipMaps( mipMapsRes[ i - 1 ], 2, mmDesc->GetFilter() );
-					//auto data	= mipMapsRes[ i - 1 ]->GetData();
-					//auto w		= mipMapsRes[ i - 1 ]->GetWidth();
-					//auto h		= mipMapsRes[ i - 1 ]->GetHeight();
-					//auto bpp	= TextureLoader::ToBPP( mipMapsRes[ i - 1 ]->GetFormat() );
+                    if( i == 0 )
+                    {
+                        textureWithMipMap = TextureUtils::GenerateMipMaps( origRes, 1, mmDesc->GetFilter() );
+                        mm = textureWithMipMap->GetMipMaps()->GetLevel( 0 );
+                    }
+                    else
+                    {
+                        textureWithMipMap = TextureUtils::GenerateMipMaps( mipMapsRes[ i - 1 ], 2, mmDesc->GetFilter() );
+                        mm = textureWithMipMap->GetMipMaps()->GetLevel( 1 );
+                    }
+                    //auto data = mipMapsRes[ i - 1 ]->GetData();
+                    //auto w        = mipMapsRes[ i - 1 ]->GetWidth();
+                    //auto h        = mipMapsRes[ i - 1 ]->GetHeight();
+                    //auto bpp  = TextureLoader::ToBPP( mipMapsRes[ i - 1 ]->GetFormat() );
 
                     //tools::Image img = { data, w, h, bpp };
-                    //auto mm = tools::GenerateMipmaps(	img,
-                    //									2,
-                    //									ToMMBuilderFilterType( desc->GetMipMapsDesc()->GetFilter() ) );
+                    //auto mm = tools::GenerateMipmaps( img,
+                    //                                  2,
+                    //                                  ToMMBuilderFilterType( desc->GetMipMapsDesc()->GetFilter() ) );
 
                     auto key = mmDesc->GetLevelDesc( i )->GetKey();
 
-                    auto mm = textureWithMipMap->GetMipMaps()->GetLevel( 1 );
-
-                    mipMapsRes[ i ] = SingleTextureAsset::Create(	mm->GetData(),
-                                                                    key, 
-                                                                    mm->GetWidth(), 
-                                                                    mm->GetHeight(),
-                                                                    mm->GetFormat(), 
-                                                                    mm->GetCacheOnHardDrive() );
+                    mipMapsRes[ i ] = SingleTextureAsset::Create( mm->GetData(), key,  mm->GetWidth(), mm->GetHeight(),
+                                                                  mm->GetFormat(), mm->GetCacheOnHardDrive() );
                 }
             }
         }
@@ -356,7 +330,7 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
 
 // ******************************
 //
-SingleTextureAssetConstPtr	TextureUtils::GetFromRawDataCache	( const SingleTextureAssetDescConstPtr & desc )
+SingleTextureAssetConstPtr  TextureUtils::GetFromRawDataCache   ( const SingleTextureAssetDescConstPtr & desc )
 {
     auto key = desc->GetKey();
     auto mChunk = RawDataCache::GetInstance().Get( Hash::FromString( key ) );

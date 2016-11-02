@@ -6,7 +6,6 @@
 #include "CoreDEF.h"
 
 
-
 namespace bv { 
 
 
