@@ -31,12 +31,16 @@
 #include "Triangulator.h"
 #include "PolylineValidator.h"
 
+#include "Clipper/clipper.hpp"
 #include "poly2tri/poly2tri.h"
 
 // Debug
 #include <fstream>
 
 
+
+Polyline    AllocatePolyline    ( const ClipperLib::Path & path );
+void        FreePolyline        ( Polyline & poly );
 
 
 // ================================ //
@@ -202,6 +206,7 @@ void Triangulator::ProcessContours()
     }
 }
 
+
 // ================================ //
 //
 size_t Triangulator::PointCount()
@@ -222,93 +227,210 @@ Mesh Triangulator::MakeMesh()
 	Mesh mesh( true );
 	auto ftContourCount = m_contoursList.size();
 
-    m_polylines.resize( ftContourCount );
-    m_selfIntersections.reserve( ftContourCount );
+    m_polylines.reserve( ftContourCount );
+    m_selfIntersections.resize( ftContourCount );
+
+    ClipperLib::Paths polylinesPaths;
+    polylinesPaths.resize( ftContourCount );
+
+
+    // Compute bounding box of our contours.
+    double minX = HUGE;
+    double minY = HUGE;
+    double maxX = -HUGE;
+    double maxY = -HUGE;
 
     for( size_t c = 0; c < ContourCount(); ++c )
     {
         const auto & contour = m_contoursList[ c ];
 
-        Polyline & polyline = m_polylines[ c ];
-        polyline.reserve( contour->PointCount() );
+        if( contour->GetMinX() < minX )    minX = contour->GetMinX();
+        if( contour->GetMinY() < minY )    minY = contour->GetMinY();
+        if( contour->GetMaxX() > maxX )    maxX = contour->GetMaxX();
+        if( contour->GetMaxY() > maxY )    maxY = contour->GetMaxY();
+    }
+
+    uint64_t scaleFloat = static_cast< uint64_t >( std::numeric_limits< int >::max() / std::max( maxX - minX, maxY - minY ) );
+
+    minX = minX * scaleFloat;
+    minY = minY * scaleFloat;
+    maxX = maxX * scaleFloat;
+    maxY = maxY * scaleFloat;
+
+
+    for( size_t c = 0; c < ContourCount(); ++c )
+    {
+        const auto & contour = m_contoursList[ c ];
+
+        //Polyline & polyline = m_polylines[ c ];
+        //polyline.reserve( contour->PointCount() );
+        polylinesPaths[ c ].reserve( contour->PointCount() );
 
         for( size_t p = 0; p < contour->PointCount(); ++p )
         {
-            p2t::Point * d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
-            polyline.push_back( d );
+            //p2t::Point * d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
+            //polyline.push_back( d );
+            polylinesPaths[ c ] << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( contour->Point( p ).X() * scaleFloat ), static_cast< ClipperLib::cInt >( contour->Point( p ).Y() * scaleFloat ) );
         }
 
-        PolylineValidator validator( std::move( polyline ) );
-        validator.FindSelfIntersections();
-        validator.DecomposeContour();
+        //PolylineValidator validator( std::move( polyline ) );
+        //validator.FindSelfIntersections();
+        //validator.DecomposeContour();
 
-        m_selfIntersections.push_back( validator.StealIntersections() );
-        polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
-        //m_selfIntersections.push_back( Polyline() );
+        //m_selfIntersections.push_back( validator.StealIntersections() );
+        //polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
+        ////m_selfIntersections.push_back( Polyline() );
     }
+
+
+    // Bounding box of our contours as Path.
+    ClipperLib::Path subPath;
+    subPath << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( minX - 5.0f ), static_cast< ClipperLib::cInt >( minY - 5.0f ) );
+    subPath << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( minX - 5.0f ), static_cast< ClipperLib::cInt >( maxY + 5.0f ) );
+    subPath << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( maxX + 5.0f ), static_cast< ClipperLib::cInt >( maxY + 5.0f ) );
+    subPath << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( maxX + 5.0f ), static_cast< ClipperLib::cInt >( minY - 5.0f ) );
+
+    ClipperLib::Clipper clipper;
+    clipper.AddPaths( polylinesPaths, ClipperLib::PolyType::ptSubject, true );
+    clipper.AddPath( subPath, ClipperLib::PolyType::ptClip, true );
+
+    ClipperLib::PolyTree resultTree;
+    clipper.Execute( ClipperLib::ClipType::ctIntersection, resultTree, ClipperLib::PolyFillType::pftEvenOdd );
+
 
 	// Print contours to file for debug purposes.
 	if( m_printContoursToFile )
 	{
-        PrintToFileAsUnitTest();
-        //PrintContoursToFile();
+        //PrintToFileAsUnitTest();
+        PrintContoursToFile();
 	}
 
-
-
-    // Process only outer contours. Check intersections with rest countours and add as holes
-    // only this ones, that are inside bounding box. 
-    for( size_t i = 0; i < ContourCount(); ++i )
+    for( auto & outerContour : resultTree.Childs )
     {
-        const auto & c1 = m_contoursList[ i ];
-        // We make meshes only for outer contours.
-        if( !c1->IsOuterContour() )
-            continue;
-
-        //if( !( m_contoursNesting[ i ] % 2 ) )
-        //    continue;
-
-        int c1Nesting = m_contoursNesting[ i ];
-        p2t::CDT * cdt = new p2t::CDT( m_polylines[ i ] );
-
-        for( size_t c = 0; c < ContourCount(); ++c )
-        {
-            const auto & c2 = m_contoursList[ c ];
-            int c2Nesting = m_contoursNesting[ c ];
-            // Hole can be only inner contour.
-            if( c2->IsOuterContour() )
-                continue;
-
-            // Contour c1 (index i) includes contour c2 (index c).
-            // We add hole only when c2 is direct hole of c1 (second condition of if statement).
-            if( m_contoursIncuding[ i ][ c ] &&
-                c1Nesting == c2Nesting - 1 )
-            {
-                cdt->AddHole( m_polylines[ c ] );
-            }
-        }
-
-        cdt->Triangulate();
-
-        mesh.Begin();
-
-        for( auto t : cdt->GetTriangles() )
-        {
-            auto p0 = t->GetPoint( 0 );
-            auto p1 = t->GetPoint( 1 );
-            auto p2 = t->GetPoint( 2 );
-            mesh.AddPoint( (float)p0->x, (float)p0->y, 0.0 );
-            mesh.AddPoint( (float)p1->x, (float)p1->y, 0.0 );
-            mesh.AddPoint( (float)p2->x, (float)p2->y, 0.0 );
-        }
-
-        mesh.End();
-
-        delete cdt;
+        TriangulateHierarchy( *outerContour, mesh, scaleFloat );
     }
+
+    //// Process only outer contours. Check intersections with rest countours and add as holes
+    //// only this ones, that are inside bounding box. 
+    //for( size_t i = 0; i < ContourCount(); ++i )
+    //{
+    //    const auto & c1 = m_contoursList[ i ];
+    //    // We make meshes only for outer contours.
+    //    if( !c1->IsOuterContour() )
+    //        continue;
+
+    //    //if( !( m_contoursNesting[ i ] % 2 ) )
+    //    //    continue;
+
+    //    int c1Nesting = m_contoursNesting[ i ];
+    //    p2t::CDT * cdt = new p2t::CDT( m_polylines[ i ] );
+
+    //    for( size_t c = 0; c < ContourCount(); ++c )
+    //    {
+    //        const auto & c2 = m_contoursList[ c ];
+    //        int c2Nesting = m_contoursNesting[ c ];
+    //        // Hole can be only inner contour.
+    //        if( c2->IsOuterContour() )
+    //            continue;
+
+    //        // Contour c1 (index i) includes contour c2 (index c).
+    //        // We add hole only when c2 is direct hole of c1 (second condition of if statement).
+    //        if( m_contoursIncuding[ i ][ c ] &&
+    //            c1Nesting == c2Nesting - 1 )
+    //        {
+    //            cdt->AddHole( m_polylines[ c ] );
+    //        }
+    //    }
+
+    //    cdt->Triangulate();
+
+    //    mesh.Begin();
+
+    //    for( auto t : cdt->GetTriangles() )
+    //    {
+    //        auto p0 = t->GetPoint( 0 );
+    //        auto p1 = t->GetPoint( 1 );
+    //        auto p2 = t->GetPoint( 2 );
+    //        mesh.AddPoint( (float)p0->x, (float)p0->y, 0.0 );
+    //        mesh.AddPoint( (float)p1->x, (float)p1->y, 0.0 );
+    //        mesh.AddPoint( (float)p2->x, (float)p2->y, 0.0 );
+    //    }
+
+    //    mesh.End();
+
+    //    delete cdt;
+    //}
 
 	return mesh;
 }
+
+
+// ***********************
+//
+void    Triangulator::TriangulateHierarchy( const ClipperLib::PolyNode & treeNode, Mesh & mesh, uint64_t rescale )
+{
+    m_polylines.push_back( AllocatePolyline( treeNode.Contour ) );
+    p2t::CDT * cdt = new p2t::CDT( m_polylines[ m_polylines.size() - 1 ] );
+
+    for( int j = 0; j < treeNode.ChildCount(); ++j )
+    {
+        m_polylines.push_back( AllocatePolyline( treeNode.Childs[ j ]->Contour ) );
+        cdt->AddHole( m_polylines[ m_polylines.size() - 1 ] );
+    }
+
+    cdt->Triangulate();
+
+    mesh.Begin();
+
+    for( auto t : cdt->GetTriangles() )
+    {
+        auto p0 = t->GetPoint( 0 );
+        auto p1 = t->GetPoint( 1 );
+        auto p2 = t->GetPoint( 2 );
+        mesh.AddPoint( (float)p0->x / rescale, (float)p0->y / rescale, 0.0 );
+        mesh.AddPoint( (float)p1->x / rescale, (float)p1->y / rescale, 0.0 );
+        mesh.AddPoint( (float)p2->x / rescale, (float)p2->y / rescale, 0.0 );
+    }
+
+    mesh.End();
+
+    delete cdt;
+
+    // Process lower levels of nesting.
+    for( int j = 0; j < treeNode.ChildCount(); ++j )
+    {
+        auto & child = treeNode.Childs[ j ];
+        for( int i = 0; i < child->ChildCount(); ++i )
+        {
+            TriangulateHierarchy( *child->Childs[ i ], mesh, rescale );
+        }
+    }
+}
+
+// ***********************
+//
+Polyline    AllocatePolyline    ( const ClipperLib::Path & path )
+{
+    Polyline poly;
+    poly.reserve( path.size() );
+
+    for( auto & point : path )
+    {
+        poly.push_back( new p2t::Point( (double)point.X, (double)point.Y ) );
+    }
+
+    return poly;
+}
+
+// ***********************
+//
+void        FreePolyline        ( Polyline & poly )
+{
+    for( auto & point : poly )
+        delete point;
+    poly.clear();
+}
+
 
 // ================================ //
 //

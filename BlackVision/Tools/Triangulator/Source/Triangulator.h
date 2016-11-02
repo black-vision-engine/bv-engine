@@ -50,7 +50,11 @@ typedef float    FTGL_FLOAT;
 #include <vector>
 #include <memory>
 
-
+namespace ClipperLib
+{
+    class PolyTree;
+    class PolyNode;
+}
 
 
 /**
@@ -123,14 +127,6 @@ public:
 private:
 
     /**
-    * Process the freetype outline data into contours of points
-    *
-    * @param front front outset distance
-    * @param back back outset distance
-    */
-    void ProcessContours();
-
-    /**
     * The list of contours in the glyph
     */
 	ContoursList							m_contoursList;
@@ -144,6 +140,18 @@ private:
 	std::string								m_fileName;
     std::string                             m_contourName;
 
+
+
+private:
+    /**
+    * Process the freetype outline data into contours of points
+    *
+    * @param front front outset distance
+    * @param back back outset distance
+    */
+    void        ProcessContours();
+
+    void        TriangulateHierarchy    ( const ClipperLib::PolyNode & treeNode, Mesh & mesh, uint64_t rescale );
 };
 
 
