@@ -368,7 +368,7 @@ void    Triangulator::TriangulateHierarchy( ClipperLib::PolyNode & treeNode, Mes
         }
 
         // Clean polygons (self intersection artifacts, colinears, duplicates)
-        double distance = 2.5;//rescale * epsilon;
+        double distance = 1.5;//rescale * epsilon;
         ClipperLib::SimplifyPolygons( paths, GetFillRule( m_fillRule ) );
         ClipperLib::CleanPolygons( paths, distance );
 
@@ -384,8 +384,17 @@ void    Triangulator::TriangulateHierarchy( ClipperLib::PolyNode & treeNode, Mes
             {
                 if( !paths[ j + 1 ].empty() )
                 {
-                    m_polylines.push_back( AllocatePolyline( paths[ j + 1 ] ) );
-                    cdt->AddHole( m_polylines[ m_polylines.size() - 1 ] );
+                    ClipperLib::Paths newPaths;
+
+                    ClipperLib::ClipperOffset offseter;
+                    offseter.AddPath( paths[ j + 1 ], ClipperLib::JoinType::jtSquare, ClipperLib::EndType::etClosedPolygon );
+                    offseter.Execute( newPaths, -distance );
+
+                    for( int i = 0; i < newPaths.size(); ++i )
+                    {
+                        m_polylines.push_back( AllocatePolyline( newPaths[ i ] ) );
+                        cdt->AddHole( m_polylines[ m_polylines.size() - 1 ] );
+                    }
                 }
             }
 
