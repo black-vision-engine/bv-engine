@@ -125,6 +125,7 @@ void    TestFile ( const char * file,
 
     // ***********************
     // Check polylines sizes
+    size = triangulator.GetPolylines().size();
     auto maxArray = std::min( size, static_cast<decltype( size )>( contoursSizes.size() ) );
     for( int i = 0; i < maxArray; ++i )
     {

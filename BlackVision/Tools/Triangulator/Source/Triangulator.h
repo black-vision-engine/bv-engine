@@ -66,6 +66,14 @@ namespace ClipperLib
 class Triangulator
 {
 public:
+    enum FillRule
+    {
+        EvenOdd,
+        NonZero,
+        Positive,
+        Negative
+    };
+public:
 
     Triangulator( ContoursList && contours );
 	Triangulator( ContoursList && contours, const std::string & debugFileName );
@@ -124,11 +132,12 @@ public:
 
     Polyline &&                                     HeuristicFindMainContour    ( PolylinesVec && polylines );
 
+    void                                            SetFillRule         ( FillRule rule );
+
 private:
 
-    /**
-    * The list of contours in the glyph
-    */
+    FillRule                                m_fillRule;
+
 	ContoursList							m_contoursList;
     PolylinesVec                            m_polylines;
 
@@ -151,7 +160,7 @@ private:
     */
     void        ProcessContours();
 
-    void        TriangulateHierarchy    ( const ClipperLib::PolyNode & treeNode, Mesh & mesh, uint64_t rescale );
+    void        TriangulateHierarchy    ( ClipperLib::PolyNode & treeNode, Mesh & mesh, uint64_t rescale );
 };
 
 
