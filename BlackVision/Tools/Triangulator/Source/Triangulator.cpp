@@ -70,7 +70,7 @@ const float epsilon = 0.00001f;
 Triangulator::Triangulator( ContoursList && contours )
 	:	m_contoursList( std::move( contours ) )
 	,	m_printContoursToFile( false )
-    ,   m_fillRule( FillRule::EvenOdd )
+    ,   m_fillRule( FillRule::NonZero )
 {
 	ProcessContours();
 }
@@ -81,7 +81,7 @@ Triangulator::Triangulator( ContoursList && contours, const std::string & debugF
 	:	m_contoursList( std::move( contours ) )
 	,	m_printContoursToFile( true )
 	,	m_fileName( debugFileName )
-    ,   m_fillRule( FillRule::EvenOdd )
+    ,   m_fillRule( FillRule::NonZero )
 {
 	ProcessContours();
 }
@@ -93,7 +93,7 @@ Triangulator::Triangulator( ContoursList && contours, const std::string & debugF
     ,   m_printContoursToFile( true )
     ,   m_fileName( debugFileName )
     ,   m_contourName( contourName )
-    ,   m_fillRule( FillRule::EvenOdd )
+    ,   m_fillRule( FillRule::NonZero )
 {
     ProcessContours();
 }
@@ -130,108 +130,6 @@ void Triangulator::ProcessContours()
     {
         m_contoursIncuding[ i ].resize( ftContourCount, false );
     }
-
-    //// Compute contour nesting.
-    //for( int i = 0; i < ftContourCount; i++ )
-    //{
-    //    auto & c1 = m_contoursList[ i ];
-    //    int contourNesting = 0;
-
-    //    // 1. Find the leftmost point.
-    //    FTPoint leftmost( 65536.0, 0.0 );
-
-    //    for( size_t n = 0; n < c1->PointCount(); n++ )
-    //    {
-    //        FTPoint p = c1->Point( n );
-    //        if( p.X() < leftmost.X() )
-    //        {
-    //            leftmost = p;
-    //        }
-    //    }
-
-    //    // 2. Count how many other contours we cross when going further to
-    //    // the left.
-    //    for( int j = 0; j < ftContourCount; j++ )
-    //    {
-    //        if( j == i )
-    //        {
-    //            continue;
-    //        }
-
-    //        auto & c2 = m_contoursList[ j ];
-    //        int parity = 0;
-
-    //        if( !c1->Intersects( c2.get() ) )
-    //            continue;
-
-    //        for( size_t n = 0; n < c2->PointCount(); n++ )
-    //        {
-    //            FTPoint p1 = c2->Point( n );
-    //            FTPoint p2 = c2->Point( ( n + 1 ) % c2->PointCount() );
-
-    //            /* FIXME: combinations of >= > <= and < do not seem stable */
-    //            if( ( p1.Y() < leftmost.Y() && p2.Y() < leftmost.Y() )
-    //                || ( p1.Y() >= leftmost.Y() && p2.Y() >= leftmost.Y() )
-    //                || ( p1.X() > leftmost.X() && p2.X() > leftmost.X() ) )
-    //            {
-    //                continue;
-    //            }
-    //            else if( p1.X() < leftmost.X() && p2.X() < leftmost.X() )
-    //            {
-    //                parity++;
-    //            }
-    //            else
-    //            {
-    //                FTPoint* top = nullptr;
-    //                FTPoint* bottom = nullptr;
-    //                
-    //                if( p1.Y() > p2.Y() )
-    //                {
-    //                    top = &p1;
-    //                    bottom = &p2;
-    //                }
-    //                else
-    //                {
-    //                    top = &p2;
-    //                    bottom = &p1;
-    //                }
-
-    //                FTPoint a = *bottom - leftmost;
-    //                FTPoint b = *top - *bottom;
-
-    //                auto determinant = a.X() * b.Y() - a.Y() * b.X();
-    //                if( determinant < 0 )
-    //                {
-    //                    // Sign of determinant of matrix created from vectors a and b.
-    //                    parity++;
-    //                }
-    //                else if( determinant == 0 )
-    //                {
-    //                    // Point on segment.
-    //                    throw new std::runtime_error( "[Triangulator] Internal contour point lies on outer contour." );
-    //                }
-    //                else
-    //                {
-    //                    // determinant > 0
-    //                    { parity; }
-    //                    a = b;
-    //                }
-    //            }
-    //        }
-
-    //        // We determine if our contour c1 is inside contour c2. If c1 is inside, that means
-    //        // we must add level of nesting to variable contourNesting for c1.
-    //        contourNesting += parity % 2;
-    //        // Contour i is included by j.
-    //        m_contoursIncuding[ j ][ i ] = parity % 2 != 0;   // != used to avoid warning C4800.
-    //    }
-
-    //    m_contoursNesting[ i ] = contourNesting;
-
-    //    // Contours orientation doesn't match nesting parity.
-    //    if( c1->IsClockwise() != ( contourNesting % 2 == 0 ) )
-    //        c1->InverseOrientation();
-    //}
 }
 
 
@@ -297,8 +195,6 @@ Mesh Triangulator::MakeMesh()
             polylinesPaths[ c ] << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( contour->Point( p ).X() * scaleFloat ), static_cast< ClipperLib::cInt >( contour->Point( p ).Y() * scaleFloat ) );
         }
     }
-
-    SetFillRule( FillRule::NonZero );
 
     // Bounding box of our contours as Path.
     ClipperLib::Path subPath;

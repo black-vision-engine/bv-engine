@@ -522,46 +522,6 @@ ContoursList        FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*si
         return MakeContours( m_face->glyph );
     else
         return std::vector< std::unique_ptr< FTContour > >();
-
-    //if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
-    //{
-    //    Triangulator triangulator( MakeContours( m_face->glyph ), "Letter.txt" );
-    //    Mesh mesh = triangulator.MakeMesh();
-
-    //    if( mesh.GetMeshSegments().size() == 1 )
-    //    {
-    //        return std::move( mesh.GetMeshSegments()[ 0 ] );
-    //    }
-    //    else
-    //    {
-    //        auto & meshSegments = mesh.GetMeshSegments();
-
-    //        std::vector< glm::vec3 > verticies;
-    //        auto tessCount = meshSegments.size();
-
-    //        // Reserve memory in vector.
-    //        SizeType numVerticies = 0;
-    //        for( int i = 0; i < tessCount; ++i )
-    //        {
-    //            numVerticies += meshSegments[ i ].size();
-    //        }
-    //        verticies.reserve( numVerticies );
-
-
-    //        for( int i = 0; i < tessCount; ++i )
-    //        {
-    //            const auto & pointList = meshSegments[ i ];
-    //            for( int j = 0; j < pointList.size(); ++j )
-    //            {
-    //                verticies.push_back( pointList[ j ] );
-    //            }
-    //        }
-
-    //        return verticies;
-    //    }
-    //}
-
-    //return std::vector< glm::vec3 >();
 }
 
 // ================================ //
