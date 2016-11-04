@@ -1,12 +1,9 @@
 #pragma once
 
 #include "Assets/Texture/TextureAsset.h"
-#include "Assets/Texture/TextureAssetDescriptor.h"
 
 #include "CoreDEF.h"
 
-#include <string>
-#include <map>
 
 namespace bv {
 
@@ -14,8 +11,8 @@ class Text;
 struct Glyph;
 
 class TextAtlas;
+DEFINE_PTR_TYPE( TextAtlas )
 DEFINE_CONST_PTR_TYPE(TextAtlas)
-DEFINE_PTR_TYPE(TextAtlas)
 
 class TextAtlas
 {
@@ -36,6 +33,10 @@ public:
     UInt32					m_glyphHeight;
 
 
+                            TextAtlas       ();
+                            ~TextAtlas      ();
+                            TextAtlas       ( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
+
     UInt32					GetBitsPerPixel () const;
 
     UInt32					GetWidth        () const;
@@ -55,9 +56,6 @@ public:
     MemoryChunkPtr			GetWritableData ();
     SizeType				GetSizeInBytes  () const;
 
-    TextAtlas();
-    TextAtlas( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
-
     static TextAtlasPtr		Create          ( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
 
 	TextureAssetConstPtr	GetAsset		() const;
@@ -70,14 +68,15 @@ public:
 												SizeType fontSize, 
 												SizeType blurSize,
 												SizeType outlineSize,
-												SizeType mmLevels,
+                                                UInt32 mmLevels,
                                                 const std::wstring & charSet );
 
     friend class Text;
 
     // serialization
-    void                    Save( std::ostream& out ) const;
-    void                    Load( std::istream& in );
+    void                    Save    ( std::ostream & out ) const;
+    void                    Load    ( std::istream & in );
+
 };
 
 } // bv

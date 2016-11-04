@@ -283,6 +283,8 @@ SizeType    FileImpl::Write       ( const char * in, SizeType size, const std::s
 
 	f->Close();
 
+    delete f;
+
 	return size;
 }
 

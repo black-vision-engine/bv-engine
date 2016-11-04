@@ -39,12 +39,15 @@ namespace bv {
 //
 void                    AssetTracker::ClearCache            ()
 {
-    for( auto it = m_registeredUIDs.cbegin(); it != m_registeredUIDs.cend(); )
+    for( auto it = m_uidsRegisterOrder.cbegin(); it != m_uidsRegisterOrder.cend(); )
     {
-        if( it->second == 0 )
+        auto uid = *it;
+        auto count = m_registeredUIDs[ uid ];
+        if( count == 0 )
         {
-            GTexture2DCache.ClearAsset( it->first );
-            m_registeredUIDs.erase( it++ );
+            GTexture2DCache.ClearAsset( uid );
+            m_registeredUIDs.erase( uid );
+            it = m_uidsRegisterOrder.erase( it );
         }
         else
         {
@@ -52,25 +55,27 @@ void                    AssetTracker::ClearCache            ()
         }
     }
 
-    for( auto it = m_registeredKeys.cbegin(); it != m_registeredKeys.cend(); )
+    // assets needs to be erased in the reversed order that was registered (reason: FontAssets stores TextureAsset)
+    for( auto rit = m_keysRegisterOrder.crbegin(); rit != m_keysRegisterOrder.crend(); )
     {
-        auto key = it->first;
+        auto key = *rit;
         auto keyHash = Hash::FromString( key );
 
         //FIXME: unregister assets and check count instead of pointer count
         auto asset = AssetManager::GetInstance().GetFromCache( key );
         auto memChunk = RawDataCache::GetInstance().Get( keyHash );
         if( ( asset && ( asset.use_count() == 2 ) ) ||
-            ( memChunk && ( memChunk.use_count() == 3 ) ) )
+            ( memChunk && ( memChunk.use_count() == 2 ) ) )
         {
             AssetManager::GetInstance().RemoveFromCache( key );
             RawDataCache::GetInstance().Remove( keyHash );
 
-            m_registeredKeys.erase( it++ );
+            m_registeredKeys.erase( key );
+            rit = std::vector< AssetKey >::reverse_iterator( m_keysRegisterOrder.erase( rit.base() - 1 ) );
         }
         else
         {
-            ++it;
+            ++rit;
         }
     }
 }
@@ -165,14 +170,14 @@ void                                    AssetTracker::ProcessEvent          ( IE
 //
 void                    AssetTracker::RegisterAsset                     ( AssetUID uid )
 {
-    RegisterAsset( m_registeredUIDs, uid );
+    RegisterAsset( m_registeredUIDs, uid, m_uidsRegisterOrder );
 }
 
 // *************************************
 //
 void                    AssetTracker::RegisterAsset                     ( AssetKey key )
 {
-    RegisterAsset( m_registeredKeys, key );
+    RegisterAsset( m_registeredKeys, key, m_keysRegisterOrder );
 }
 
 // *************************************

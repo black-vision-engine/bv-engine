@@ -42,6 +42,8 @@ enum class ParamType : int
     PT_ENUM,
     PT_STRING,
     PT_WSTRING,
+    PT_DOUBLE1,
+    PT_BINARY,
     PT_TOTAL
 };
 
