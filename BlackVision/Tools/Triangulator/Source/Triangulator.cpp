@@ -34,6 +34,7 @@
 #include "Clipper/clipper.hpp"
 #include "poly2tri/poly2tri.h"
 
+
 // Debug
 #include <fstream>
 
@@ -129,7 +130,6 @@ void Triangulator::ProcessContours()
     {
         m_contoursIncuding[ i ].resize( ftContourCount, false );
     }
-
 
     //// Compute contour nesting.
     //for( int i = 0; i < ftContourCount; i++ )
@@ -290,25 +290,12 @@ Mesh Triangulator::MakeMesh()
     for( size_t c = 0; c < ContourCount(); ++c )
     {
         const auto & contour = m_contoursList[ c ];
-
-        //Polyline & polyline = m_polylines[ c ];
-        //polyline.reserve( contour->PointCount() );
         polylinesPaths[ c ].reserve( contour->PointCount() );
 
         for( size_t p = 0; p < contour->PointCount(); ++p )
         {
-            //p2t::Point * d = new p2t::Point( contour->Point( p ).X(), contour->Point( p ).Y() );
-            //polyline.push_back( d );
             polylinesPaths[ c ] << ClipperLib::IntPoint( static_cast< ClipperLib::cInt >( contour->Point( p ).X() * scaleFloat ), static_cast< ClipperLib::cInt >( contour->Point( p ).Y() * scaleFloat ) );
         }
-
-        //PolylineValidator validator( std::move( polyline ) );
-        //validator.FindSelfIntersections();
-        //validator.DecomposeContour();
-
-        //m_selfIntersections.push_back( validator.StealIntersections() );
-        //polyline = HeuristicFindMainContour( validator.StealDecomposedPolylines() );    // Heuristic: Take longest contour ;)
-        ////m_selfIntersections.push_back( Polyline() );
     }
 
     SetFillRule( FillRule::NonZero );
@@ -330,17 +317,18 @@ Mesh Triangulator::MakeMesh()
     clipper.Execute( ClipperLib::ClipType::ctIntersection, resultTree, GetFillRule( m_fillRule ) );
 
 
-	// Print contours to file for debug purposes.
-	if( m_printContoursToFile )
-	{
-        //PrintToFileAsUnitTest();
-        PrintContoursToFile();
-	}
-
     for( auto & outerContour : resultTree.Childs )
     {
         TriangulateHierarchy( *outerContour, mesh, scaleFloat );
     }
+
+
+    //// Print contours to file for debug purposes.
+    //if( m_printContoursToFile )
+    //{
+    //    //PrintToFileAsUnitTest();
+    //    PrintContoursToFile();
+    //}
 
 	return mesh;
 }
@@ -380,7 +368,7 @@ void    Triangulator::TriangulateHierarchy( ClipperLib::PolyNode & treeNode, Mes
             p2t::CDT * cdt = new p2t::CDT( m_polylines[ m_polylines.size() - 1 ] );
 
             // Add holes to triangulator.
-            for( int j = 0; j < childCount; ++j )
+            for( int j = 0; j < paths.size() - 1; ++j )
             {
                 if( !paths[ j + 1 ].empty() )
                 {
@@ -389,6 +377,7 @@ void    Triangulator::TriangulateHierarchy( ClipperLib::PolyNode & treeNode, Mes
                     ClipperLib::ClipperOffset offseter;
                     offseter.AddPath( paths[ j + 1 ], ClipperLib::JoinType::jtSquare, ClipperLib::EndType::etClosedPolygon );
                     offseter.Execute( newPaths, -distance );
+                    //ClipperLib::CleanPolygons( newPaths, distance );
 
                     for( int i = 0; i < newPaths.size(); ++i )
                     {

@@ -467,7 +467,12 @@ ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedCompo
 
                 // One contour ended. We make new contour.
                 if( i < data.size() )
+                {
                     contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+
+                    // Remember about first point.
+                    contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
+                }
             }
         }
     }
