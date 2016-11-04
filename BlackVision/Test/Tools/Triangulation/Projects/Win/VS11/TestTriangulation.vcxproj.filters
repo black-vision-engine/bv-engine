@@ -5,6 +5,10 @@
     <ClCompile Include="..\..\..\Source\Utils\PluginUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TriangulatePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TriangulatorTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\FontTriangulationTest.cpp" />
+    <ClCompile Include="..\..\..\Source\CustomSVGsTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -13,6 +17,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Utils\PluginUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\TestUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

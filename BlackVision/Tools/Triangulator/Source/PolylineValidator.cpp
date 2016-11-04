@@ -7,11 +7,14 @@
 
 
 
+const float epsilon = 0.00001f;
+
 
 
 bool            CompareEvent    ( const Event & a, const Event & b );
 bool            CompareEdge     ( p2t::Edge * leftEdge, p2t::Edge * rightEdge, double sweepY );
 double          FindX           ( p2t::Edge * edge, double sweepY );
+double          EdgeDelta       ( p2t::Edge * edge );
 
 p2t::Edge *     GetAboveEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine );
 p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine );
@@ -19,10 +22,11 @@ p2t::Edge *     GetBelowEdge    ( int pos, std::vector< p2t::Edge* >& sweepLine 
 p2t::Point *    GetIntesection  ( p2t::Edge * edge1, p2t::Edge * edge2 );
 
 bool            operator<       ( const p2t::Point & point1, const p2t::Point & point2 );
+bool			Equal			( const p2t::Point & point1, const p2t::Point & point2 );
 
 bool            IsIntersectionStart ( const p2t::Point * polylinePoint, const p2t::Point * nextPoint, const p2t::Point * intersectionPoint );
 int             FindFreeDividePoint ( std::vector< IntersectionData >& data );
-int             FindNextContourPart ( std::vector< IntersectionData >& data, const p2t::Point * partEnd, int intersectionIdx );
+int             FindNextContourPart ( std::vector< IntersectionData >& data, Polyline & polyline, const p2t::Point * partEnd, int intersectionIdx );
 
 bool            IsSharedPointIntersection   ( const Event& intersectEvent );
 
@@ -92,11 +96,34 @@ void    PolylineValidator::Init        ()
 //
 void    PolylineValidator::InitEdges    ( Polyline & polyline )
 {
-    int numPoints = (int)polyline.size();
-    for( int i = 0; i < numPoints; i++ )
+    for( size_t i = 0; i < polyline.size(); i++ )
     {
-        int j = i < numPoints - 1 ? i + 1 : 0;
-        m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
+        size_t j = i < polyline.size() - 1 ? i + 1 : 0;
+        //m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
+
+        if( !Equal( *polyline[ i ], *polyline[ j ] ) )
+        {
+            m_edgeList.push_back( new p2t::Edge( *polyline[ i ], *polyline[ j ] ) );
+        }
+        else
+        {
+            if( j == 0 )
+            {
+                delete m_polyline[ i ];
+                delete m_edgeList[ i - 1 ];
+                m_polyline.erase( m_polyline.begin() + i );
+                m_edgeList.erase( m_edgeList.begin() + i - 1 );
+
+                m_edgeList.push_back( new p2t::Edge( *polyline[ i - 1 ], *polyline[ 0 ] ) );
+            }
+            else
+            {
+                delete m_polyline[ j ];
+                m_polyline.erase( m_polyline.begin() + j );
+
+                --i;    // Next point ca be equal too.
+            }
+        }
     }
 }
 
@@ -192,24 +219,58 @@ std::deque< Event >     PolylineValidator::InitEventQueue  ()
 
 
 // ***********************
-// Function assumes, that m_polyline list is sorted.
-bool    PolylineValidator::CheckRepeatPoints   ()
+// @deprecated
+void    PolylineValidator::RepairRepeatPoints   ()
 {
-    for( int i = 0; i < m_polyline.size() - 1; ++i )
+    for( int i = 0; i < m_polyline.size(); ++i )
     {
-        if( m_polyline[ i ] == m_polyline[ i + 1 ] )
-            return true;
+        int j = i < m_polyline.size() - 1 ? i + 1 : 0;
+        if( Equal( *m_polyline[ i ], *m_polyline[ j ] ) )
+        {
+            delete m_polyline[ j ];
+            m_polyline.erase( m_polyline.begin() + j );
+
+            --i;    // Next point ca be equal too.
+        }
     }
 
-    const float epsilon = 0.00001f;
-    for( int i = 0; i < m_edgeList.size() - 1; ++i )
+    for( int i = 0; i < m_edgeList.size(); ++i )
     {
-        if( abs( m_edgeList[ i ]->p->x - m_edgeList[ i ]->q->x ) < epsilon &&
-            abs( m_edgeList[ i ]->p->y - m_edgeList[ i ]->q->y ) < epsilon )
-            return true;
-    }
+        if( Equal( *m_edgeList[ i ]->p, *m_edgeList[ i ]->q ) )
+        {
+            delete m_edgeList[ i ];
+            m_edgeList.erase( m_edgeList.begin() + i );
 
-    return false;
+            --i;    // Next point ca be equal too.
+        }
+    }
+}
+
+// ***********************
+// Checks if intersections are valid for further decomposition.
+void    PolylineValidator::ValidateIntersections    ( const IntersectionsVec & intersect )
+{
+    // FIXME: Two intersections shouldn't lie on the same edge.
+    for( auto inter1 = intersect.begin(); inter1 != intersect.end(); inter1++ )
+    {
+        for( auto inter2 = inter1 + 1; inter2 != intersect.end(); inter2++ )
+        {
+            if( inter1 == inter2 )
+                continue;
+
+            auto edge11 = ( *inter1 )->edge_list[ 0 ];
+            auto edge12 = ( *inter1 )->edge_list[ 1 ];
+
+            auto edge21 = ( *inter2 )->edge_list[ 0 ];
+            auto edge22 = ( *inter2 )->edge_list[ 1 ];
+
+            if( edge11 == edge21 ||
+                edge11 == edge22 ||
+                edge12 == edge21 ||
+                edge12 == edge22 )
+                throw std::runtime_error( "[PolylineValidator] One edge is intersected multpile times. Fix this in future versions." );
+        }
+    }
 }
 
 // ***********************
@@ -232,9 +293,6 @@ std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
                 data.PolylineIdx = i;
 
                 dividePoints.push_back( data );
-
-                // If we found intersecting edge, we must ommit second point. We don't need duplciated points.
-                i++;
                 break;
             }
         }
@@ -248,8 +306,7 @@ std::vector< IntersectionData > PolylineValidator::InitDividePoints ()
 const IntersectionsVec &        PolylineValidator::FindSelfIntersections   ()
 {
     // Two points with same coordinates can't exist.
-    if( CheckRepeatPoints() )
-        throw std::runtime_error( "[Error] Repeat points" );
+    //RepairRepeatPoints();
 
     std::deque< Event > eventQueue = InitEventQueue();
     std::vector< p2t::Edge* > sweepLine;
@@ -283,6 +340,8 @@ const PolylinesVec &         PolylineValidator::DecomposeContour        ()
         return polylines;
     }
 
+    ValidateIntersections( m_intersections );
+
     // Number of intersection is maximal number of separate segments.
     polylines.reserve( m_intersections.size() + 1 );
     
@@ -311,7 +370,7 @@ const PolylinesVec &         PolylineValidator::DecomposeContour        ()
     polylines[ 0 ].push_back( new p2t::Point( dividePoint->x, dividePoint->y ) );
 
     // Connect ranges into contours.
-    int intersectIdx = FindNextContourPart( dividePoints, m_polyline[ dividePoints.front().PolylineIdx ], 0 );
+    int intersectIdx = FindNextContourPart( dividePoints, m_polyline, m_polyline[ dividePoints.front().PolylineIdx ], 0 );
 
 
     int curPolyline = 0;
@@ -346,7 +405,7 @@ const PolylinesVec &         PolylineValidator::DecomposeContour        ()
             dividePoints[ intersectIdx ].Processed = true;
 
             // Find contour continuation.
-            intersectIdx = FindNextContourPart( dividePoints, m_polyline[ endIdx ], intersectIdx + 1 );
+            intersectIdx = FindNextContourPart( dividePoints, m_polyline, m_polyline[ endIdx ], intersectIdx + 1 );
         } while( intersectIdx != -1 );
 
         //// We added have duplicate point on contour closing. Delete it.
@@ -591,7 +650,7 @@ int                     PolylineValidator::BruteFindInSweepLine        ( p2t::Ed
 //
 int                     PolylineValidator::AddToSweepLine              ( p2t::Edge* addEdge, std::vector< p2t::Edge* > & sweepLine )
 {
-    auto sweepY = addEdge->p->y;
+    auto sweepY = addEdge->q->y;    // Take upper point y value.
 
     if( sweepLine.size() == 0 )
     {
@@ -600,7 +659,7 @@ int                     PolylineValidator::AddToSweepLine              ( p2t::Ed
     }
     else if( sweepLine.size() == 1 )
     {
-        if( CompareEdge( sweepLine[ 0 ], addEdge, sweepY ) )
+        if( CompareEdge( addEdge, sweepLine[ 0 ], sweepY ) )
         {
             sweepLine.insert( sweepLine.begin(), addEdge );
             return 0;
@@ -613,46 +672,59 @@ int                     PolylineValidator::AddToSweepLine              ( p2t::Ed
     }
     else
     {
-        // Binary search 
-        size_t left = 0;
-        auto right = sweepLine.size();
-        auto span = right - left;
-
-        while( span > 1 )
+        for( int i = 0 ; i < sweepLine.size(); ++i )
         {
-            span = span / 2;
-            auto pos = left + span;
-
-            auto edge = sweepLine[ pos ];
-            if( CompareEdge( edge, addEdge, sweepY ) )
+            auto edge = sweepLine[ i ];
+            if( CompareEdge( addEdge, edge, sweepY ) )
             {
-                right = pos;
-            }
-            else
-            {
-                left = pos;
+                sweepLine.insert( sweepLine.begin() + i, addEdge );
+                return i;
             }
         }
 
-        auto edge = sweepLine[ left ];
-        if( CompareEdge( edge, addEdge, sweepY ) )
-        {
-            sweepLine.insert( sweepLine.begin() + left, addEdge );
-            return (int)left;
-        }
-        else
-        {
-            if( left + 1 < sweepLine.size() )
-            {
-                sweepLine.insert( sweepLine.begin() + left + 1, addEdge );
-                return int( left + 1 );
-            }
-            else
-            {
-                sweepLine.push_back( addEdge );
-                return (int)sweepLine.size() - 1;
-            }
-        }
+        sweepLine.push_back( addEdge );
+        return (int)sweepLine.size() - 1;
+
+        //// Binary search 
+        //size_t left = 0;
+        //auto right = sweepLine.size();
+        //auto span = right - left;
+
+        //while( span > 1 )
+        //{
+        //    span = span / 2;
+        //    auto pos = left + span;
+
+        //    auto edge = sweepLine[ pos ];
+        //    if( CompareEdge( addEdge, edge, sweepY ) )
+        //    {
+        //        right = pos;
+        //    }
+        //    else
+        //    {
+        //        left = pos;
+        //    }
+        //}
+
+        //auto edge = sweepLine[ left ];
+        //if( CompareEdge( addEdge, edge, sweepY ) )
+        //{
+        //    sweepLine.insert( sweepLine.begin() + left, addEdge );
+        //    return (int)left;
+        //}
+        //else
+        //{
+        //    if( left + 1 < sweepLine.size() )
+        //    {
+        //        sweepLine.insert( sweepLine.begin() + left + 1, addEdge );
+        //        return int( left + 1 );
+        //    }
+        //    else
+        //    {
+        //        sweepLine.push_back( addEdge );
+        //        return (int)sweepLine.size() - 1;
+        //    }
+        //}
     }
 }
 
@@ -701,6 +773,16 @@ bool            CompareEdge     ( p2t::Edge * leftEdge, p2t::Edge * rightEdge, d
     if( leftX < rightX )
         return true;
 
+    if( leftX == rightX )
+    {
+        // Probably we have two edges with beginning in the same point.
+        // Check which segment makes greater progress in x axis.
+        auto leftDelta = EdgeDelta( leftEdge );
+        auto rightDelta = EdgeDelta( rightEdge );
+        if( leftDelta < rightDelta )
+            return true;
+    }
+
     return false;
 }
 
@@ -720,6 +802,19 @@ double          FindX           ( p2t::Edge * edge, double sweepY )
     auto sweepPointDelta = sweepY - point1->y;
 
     return point1->x + deltaX * ( sweepPointDelta / deltaY );
+}
+
+// ================================ //
+//
+double          EdgeDelta       ( p2t::Edge * edge )
+{
+    p2t::Point* point1 = edge->p;
+    p2t::Point* point2 = edge->q;
+
+    auto deltaX = point1->x - point2->x;
+    auto deltaY = point2->y - point1->y;
+
+    return deltaX / deltaY;
 }
 
 // ***********************
@@ -780,6 +875,15 @@ bool            operator<       ( const p2t::Point & a, const p2t::Point & b )
     return false;
 }
 
+// ================================ //
+//
+bool			Equal			( const p2t::Point & point1, const p2t::Point & point2 )
+{
+    if( abs( point1.x - point2.x ) < epsilon && abs( point1.y - point2.y ) < epsilon )
+        return true;
+    return false;
+}
+
 
 // ***********************
 //
@@ -823,43 +927,52 @@ int             FindFreeDividePoint ( std::vector< IntersectionData > & data )
 
 // ***********************
 // http://geomalgorithms.com/a09-_intersect-3.html - decompose into Simple Pieces
-int             FindNextContourPart ( std::vector< IntersectionData > & data, const p2t::Point * partEnd, int intersectionIdx )
+int             FindNextContourPart ( std::vector< IntersectionData > & data, Polyline & polyline, const p2t::Point * partEnd, int intersectionIdx )
 {
     auto & intersect = data[ intersectionIdx ];
     auto point = intersect.IntersectionPoint;
 
-    p2t::Point * nextPoint = nullptr;
-
-    // q is upper point, p is lower point.
-    // If edge goes from top to bottom, we choose top point from second edge.
-    // Check link in comment to this function.
-    if( point->edge_list[ 0 ]->p == partEnd )
-    {
-        nextPoint = point->edge_list[ 1 ]->p;
-    }
-    else if( point->edge_list[ 0 ]->q == partEnd )
-    {
-        nextPoint = point->edge_list[ 1 ]->q;
-    }
-    else if( point->edge_list[ 1 ]->p == partEnd )
-    {
-        nextPoint = point->edge_list[ 0 ]->p;
-    }
-    else if( point->edge_list[ 1 ]->q == partEnd )
-    {
-        nextPoint = point->edge_list[ 0 ]->p;
-    }
-    else
-        assert( false );
-
-    // Iterate all segments of contours to find proper continuation point.
+    // There are two occurances of one intersection point in data array. One we already met (intersectionIdx).
+    // We must find other.
     for( int i = 0; i < data.size(); ++i )
     {
-        if( !data[ i ].Processed && data[ i ].IntersectionPoint == nextPoint )
+        if( !data[ i ].Processed && data[ i ].IntersectionPoint == point && intersectionIdx != i )
             return i;
     }
 
     return -1;
+
+    //// q is upper point, p is lower point.
+    //// If edge goes from top to bottom, we choose top point from second edge.
+    //// Check link in comment to this function.
+    //if( point->edge_list[ 0 ]->p == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 1 ]->p;
+    //}
+    //else if( point->edge_list[ 0 ]->q == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 1 ]->q;
+    //}
+    //else if( point->edge_list[ 1 ]->p == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 0 ]->p;
+    //}
+    //else if( point->edge_list[ 1 ]->q == partEnd )
+    //{
+    //    nextPoint = point->edge_list[ 0 ]->p;
+    //}
+    //else
+    //    assert( false );
+
+    //// Iterate all segments of contours to find proper continuation point.
+    //for( int i = 0; i < data.size(); ++i )
+    //{
+    //    auto polylineIdx = data[ i ].PolylineIdx;
+    //    if( !data[ i ].Processed && polyline[ polylineIdx ] == nextPoint )
+    //        return i;
+    //}
+
+    //return -1;
 }
 
 // ***********************

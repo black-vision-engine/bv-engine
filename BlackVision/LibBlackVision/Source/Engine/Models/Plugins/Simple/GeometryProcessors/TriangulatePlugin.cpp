@@ -424,7 +424,7 @@ void        TriangulatePlugin::ProcessVertexAttributesChannel()
                 auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
                 auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert", false );
 
-                Triangulator triangulator( std::move( contours ) );
+                Triangulator triangulator( std::move( contours ), "Triangul.txt" );
                 auto mesh = triangulator.MakeMesh();
 
                 vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
@@ -432,7 +432,7 @@ void        TriangulatePlugin::ProcessVertexAttributesChannel()
                 connComp->AddAttributeChannel( vertChannel );
                 m_vaChannel->AddConnectedComponent( connComp );
             }
-            catch( const std::runtime_error& error )
+            catch( const std::runtime_error & error )
             {
                 LOG_MESSAGE( SeverityLevel::error ) << error.what();
             }
@@ -447,7 +447,7 @@ ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedCompo
     auto currComponent = std::static_pointer_cast<ConnectedComponent>( component );
     auto chan = std::dynamic_pointer_cast<Float3AttributeChannel>( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
 
-    auto data = chan->GetVertices();
+    auto & data = chan->GetVertices();
     assert( data.size() % 2 == 0 );
 
     ContoursList contours;
@@ -467,7 +467,12 @@ ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedCompo
 
                 // One contour ended. We make new contour.
                 if( i < data.size() )
+                {
                     contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+
+                    // Remember about first point.
+                    contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );
+                }
             }
         }
     }

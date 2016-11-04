@@ -121,11 +121,11 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       triangle = &triangle->NeighborAcross(point);
 
       if( !triangle )
-          throw new std::runtime_error( "EdgeEvent - nullptr triangle" );
+          throw std::runtime_error( "EdgeEvent - nullptr triangle" );
 
       EdgeEvent( tcx, ep, *p1, triangle, *p1 );
     } else {
-      throw new std::runtime_error("EdgeEvent - collinear points not supported");
+      throw std::runtime_error("EdgeEvent - collinear points not supported");
       assert(0);
     }
     return;
@@ -142,11 +142,11 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       triangle = &triangle->NeighborAcross(point);
 
       if( !triangle )
-          throw new std::runtime_error( "EdgeEvent - nullptr triangle" );
+          throw std::runtime_error( "EdgeEvent - nullptr triangle" );
 
       EdgeEvent( tcx, ep, *p2, triangle, *p2 );
     } else {
-        throw new std::runtime_error("EdgeEvent - collinear points not supported");
+        throw std::runtime_error("EdgeEvent - collinear points not supported");
       assert(0);
     }
     return;
@@ -713,7 +713,7 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
   if (&ot == NULL) {
     // If we want to integrate the fillEdgeEvent do it here
     // With current implementation we should never get here
-    throw new std::runtime_error( "[BUG:FIXME] FLIP failed due to missing triangle");
+    throw std::runtime_error( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
   }
 
@@ -774,7 +774,7 @@ Point& Sweep::NextFlipPoint(Point& ep, Point& eq, Triangle& ot, Point& op)
     // Left
     return *ot.PointCW(op);
   } else{
-    throw new std::runtime_error("[Unsupported] Opposing point on constrained edge");
+    throw std::runtime_error("[Unsupported] Opposing point on constrained edge");
     assert(false);
   }
 }
@@ -788,7 +788,7 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
   if (&t.NeighborAcross(p) == NULL) {
     // If we want to integrate the fillEdgeEvent do it here
     // With current implementation we should never get here
-    throw new std::runtime_error( "[BUG:FIXME] FLIP failed due to missing triangle");
+    throw std::runtime_error( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
   }
 

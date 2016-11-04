@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Clipper\clipper.cpp" />
     <ClCompile Include="..\..\..\Source\FTContour.cpp" />
     <ClCompile Include="..\..\..\Source\FTPoint.cpp" />
     <ClCompile Include="..\..\..\Source\Mesh.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="..\..\..\Source\Triangulator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Clipper\clipper.hpp" />
     <ClInclude Include="..\..\..\Source\FTContour.h" />
     <ClInclude Include="..\..\..\Source\ftgl.h" />
     <ClInclude Include="..\..\..\Source\FTList.h" />

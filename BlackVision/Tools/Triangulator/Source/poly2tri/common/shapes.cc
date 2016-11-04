@@ -52,7 +52,10 @@ void Triangle::MarkNeighbor(Point* p1, Point* p2, Triangle* t)
   else if ((p1 == points_[0] && p2 == points_[1]) || (p1 == points_[1] && p2 == points_[0]))
     neighbors_[2] = t;
   else
-    assert(0);
+  {
+      throw std::runtime_error( "[Poly2Tri] Something wrong." );
+      assert( 0 );
+  }
 }
 
 // Exhaustive search to update neighbor pointers
@@ -151,6 +154,7 @@ void Triangle::Legalize(Point& opoint, Point& npoint)
     points_[1] = &npoint;
   } else {
     assert(0);
+    throw std::runtime_error( "[Poly2Tri] Something wrong." );
   }
 }
 
@@ -164,6 +168,7 @@ int Triangle::Index(const Point* p)
     return 2;
   }
   assert(0);
+  throw std::runtime_error( "[Poly2Tri] Something wrong." );
   return 0;	// avoid warning C4715
 }
 
@@ -224,6 +229,7 @@ Point* Triangle::PointCW(Point& point)
     return points_[1];
   }
   assert(0);
+  throw std::runtime_error( "[Poly2Tri] Something wrong." );
   return nullptr;
 }
 
@@ -238,6 +244,7 @@ Point* Triangle::PointCCW(Point& point)
     return points_[0];
   }
   assert(0);
+  throw std::runtime_error( "[Poly2Tri] Something wrong." );
   return nullptr;
 }
 

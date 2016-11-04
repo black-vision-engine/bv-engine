@@ -50,7 +50,11 @@ typedef float    FTGL_FLOAT;
 #include <vector>
 #include <memory>
 
-
+namespace ClipperLib
+{
+    class PolyTree;
+    class PolyNode;
+}
 
 
 /**
@@ -61,6 +65,14 @@ typedef float    FTGL_FLOAT;
 */
 class Triangulator
 {
+public:
+    enum FillRule
+    {
+        EvenOdd,
+        NonZero,
+        Positive,
+        Negative
+    };
 public:
 
     Triangulator( ContoursList && contours );
@@ -113,24 +125,19 @@ public:
 	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
     const std::vector< IntersectionsVec > &         GetSelfIntersections()      { return m_selfIntersections;  }
     const PolylinesVec &                            GetPolylines        ()      { return m_polylines;  }
+    const ContoursList &                            GetContours         ()      { return m_contoursList;  }
 
     void                                            PrintContoursToFile ();
+    void                                            PrintToFileAsUnitTest();
 
     Polyline &&                                     HeuristicFindMainContour    ( PolylinesVec && polylines );
 
+    void                                            SetFillRule         ( FillRule rule );
+
 private:
 
-    /**
-    * Process the freetype outline data into contours of points
-    *
-    * @param front front outset distance
-    * @param back back outset distance
-    */
-    void ProcessContours();
+    FillRule                                m_fillRule;
 
-    /**
-    * The list of contours in the glyph
-    */
 	ContoursList							m_contoursList;
     PolylinesVec                            m_polylines;
 
@@ -142,6 +149,18 @@ private:
 	std::string								m_fileName;
     std::string                             m_contourName;
 
+
+
+private:
+    /**
+    * Process the freetype outline data into contours of points
+    *
+    * @param front front outset distance
+    * @param back back outset distance
+    */
+    void        ProcessContours();
+
+    void        TriangulateHierarchy    ( ClipperLib::PolyNode & treeNode, Mesh & mesh, uint64_t rescale );
 };
 
 

@@ -10,6 +10,9 @@
     <Filter Include="poly2tri\sweep">
       <UniqueIdentifier>{4173395b-d59e-4cee-8e93-6165e710525d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Clipper">
+      <UniqueIdentifier>{6c0c27a6-1a5c-41a1-b26a-55dff8767f47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\poly2tri\common\shapes.cc">
@@ -32,6 +35,9 @@
     <ClCompile Include="..\..\..\Source\Triangulator.cpp" />
     <ClCompile Include="..\..\..\Source\Mesh.cpp" />
     <ClCompile Include="..\..\..\Source\PolylineValidator.cpp" />
+    <ClCompile Include="..\..\..\Source\Clipper\clipper.cpp">
+      <Filter>Clipper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\poly2tri\common\shapes.h">
@@ -63,5 +69,8 @@
     <ClInclude Include="..\..\..\Source\FTList.h" />
     <ClInclude Include="..\..\..\Source\Mesh.h" />
     <ClInclude Include="..\..\..\Source\PolylineValidator.h" />
+    <ClInclude Include="..\..\..\Source\Clipper\clipper.hpp">
+      <Filter>Clipper</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
