@@ -12,7 +12,7 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/Glyph.h"
-#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/DefaultAssets.h"
 
 #include "Application/ApplicationContext.h"

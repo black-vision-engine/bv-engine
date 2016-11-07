@@ -11,7 +11,7 @@
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Texture/AnimationLoader.h"
-#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 

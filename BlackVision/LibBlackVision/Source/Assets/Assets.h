@@ -11,9 +11,13 @@
 #include "Assets/Texture/AnimationLoader.h"
 #include "Assets/Texture/AnimationAsset.h"
 
-#include "Assets/Font/FontAssetDescriptor.h"
-#include "Assets/Font/FontLoader.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
+#include "Assets/Font/2D/Font2DLoader.h"
 #include "Assets/Font/FontAsset.h"
+
+#include "Assets/Font/3D/FontAsset3DDesc.h"
+#include "Assets/Font/3D/FontAsset3D.h"
+#include "Assets/Font/3D/Font3DLoader.h"
 
 #include "Assets/VideoStream/AVAssetDescriptor.h"
 #include "Assets/VideoStream/AVAsset.h"

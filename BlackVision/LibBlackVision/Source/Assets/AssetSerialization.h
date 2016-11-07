@@ -6,7 +6,7 @@
 
 #include "Texture/TextureAssetDescriptor.h"
 #include "Texture/AnimationAssetDescriptor.h"
-#include "Font/FontAssetDescriptor.h"
+#include "Font/2D/FontAssetDescriptor.h"
 
 namespace bv {
 

@@ -27,12 +27,6 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
     sob.ExitChild();
 }
 
-//// ***********************
-////
-//void FontAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
-//{
-//    assert( false );
-//}
 
 // ***********************
 //

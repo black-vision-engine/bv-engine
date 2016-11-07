@@ -8,7 +8,7 @@
 
 #include "Assets/DefaultAssets.h"
 #include "Assets/Font/TextHelper.h"
-#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 

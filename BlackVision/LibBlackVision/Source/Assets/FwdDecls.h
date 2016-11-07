@@ -18,11 +18,15 @@ class TextureAsset;
 class TextureAssetDesc;
 class FontAsset;
 class FontAssetDesc;
+class FontAsset3D;
+class FontAsset3DDesc;
 class AVAsset;
 class AVAssetDesc;
 class DataArrayAsset;
 class DataArrayAssetDescriptor;
 
+DEFINE_CONST_PTR_TYPE( FontAssetDesc )
+DEFINE_CONST_PTR_TYPE( FontAsset )
 DEFINE_CONST_PTR_TYPE( FontAssetDesc )
 DEFINE_CONST_PTR_TYPE( FontAsset )
 DEFINE_CONST_PTR_TYPE( TextureAssetDesc )

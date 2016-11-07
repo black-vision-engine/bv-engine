@@ -7,7 +7,7 @@
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Assets/Texture/AnimationAssetDescriptor.h"
-#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/VideoStream/AVAssetDescriptor.h"
 #include "Assets/DataArray/DataArrayAssetDescriptor.h"
 

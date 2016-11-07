@@ -143,17 +143,6 @@ const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
 		return nullptr;
 }
 
-// *********************************
-//
-Float32                  TextAtlas::GetKerning      ( wchar_t c0, wchar_t c1 ) const
-{
-    auto it = m_kerningMap.find( std::make_pair( c0, c1 ) );
-
-    if( it != m_kerningMap.end() )
-        return it->second;
-    else
-        return 0.f;
-}
 
 // *********************************
 //

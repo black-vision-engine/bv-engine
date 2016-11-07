@@ -159,7 +159,8 @@ AssetManager::~AssetManager()
 void AssetManager::RegisterBasicLoaders()
 {
     RegisterLoader( TextureAssetDesc::UID(),	        std::make_shared< TextureLoader >() );
-    RegisterLoader( FontAssetDesc::UID(),		        std::make_shared< FontLoader >() );
+    RegisterLoader( FontAssetDesc::UID(),		        std::make_shared< Font2DLoader >() );
+    RegisterLoader( FontAsset3DDesc::UID(),             std::make_shared< Font3DLoader >() );
     RegisterLoader( AnimationAssetDesc::UID(),	        std::make_shared< AnimationLoader >() );
     RegisterLoader( AVAssetDesc::UID(),	                std::make_shared< AVAssetLoader >() );
     RegisterLoader( MeshAssetDesc::UID(),	            std::make_shared< MeshLoader >() );
