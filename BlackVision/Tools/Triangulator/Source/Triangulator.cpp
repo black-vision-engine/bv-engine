@@ -41,11 +41,11 @@
 
 
 Polyline                    AllocatePolyline    ( const ClipperLib::Path & path );
-void                        FreePolyline        ( Polyline & poly );
-
 ClipperLib::PolyFillType    GetFillRule         ( Triangulator::FillRule rule );
 
 
+// ***********************
+//
 // http://stackoverflow.com/questions/364985/algorithm-for-finding-the-smallest-power-of-two-thats-greater-or-equal-to-a-giv
 inline int64_t  RoundUpPowerOf2 ( int64_t x )
 {
@@ -123,13 +123,6 @@ void Triangulator::ProcessContours()
 	auto ftContourCount = m_contoursList.size();
 
 	m_contoursList.resize( ftContourCount );
-    m_contoursIncuding.resize( ftContourCount );
-    m_contoursNesting.resize( ftContourCount, 0 );
-
-    for( int i = 0; i < ftContourCount; ++i )
-    {
-        m_contoursIncuding[ i ].resize( ftContourCount, false );
-    }
 }
 
 
@@ -154,7 +147,6 @@ Mesh Triangulator::MakeMesh()
 	auto ftContourCount = m_contoursList.size();
 
     m_polylines.reserve( ftContourCount );
-    m_selfIntersections.resize( ftContourCount );
 
     ClipperLib::Paths polylinesPaths;
     polylinesPaths.resize( ftContourCount );
@@ -219,12 +211,11 @@ Mesh Triangulator::MakeMesh()
     }
 
 
-    //// Print contours to file for debug purposes.
-    //if( m_printContoursToFile )
-    //{
-    //    //PrintToFileAsUnitTest();
-    //    PrintContoursToFile();
-    //}
+    // Print contours to file for debug purposes.
+    if( m_printContoursToFile )
+    {
+        PrintContoursToFile();
+    }
 
 	return mesh;
 }
@@ -330,15 +321,6 @@ Polyline    AllocatePolyline    ( const ClipperLib::Path & path )
     return poly;
 }
 
-// ***********************
-//
-void        FreePolyline        ( Polyline & poly )
-{
-    for( auto & point : poly )
-        delete point;
-    poly.clear();
-}
-
 
 // ================================ //
 //
@@ -363,66 +345,12 @@ void Triangulator::PrintContoursToFile()
     }
     file << std::endl;
 
-    // ***********************
-    // Including
-    file << "Including: " << std::endl;
-    for( int i = 0; i < m_contoursIncuding.size(); ++i )
-    {
-        for( int j = 0; j < m_contoursIncuding.size(); ++j )
-        {
-            if( m_contoursIncuding[ i ][ j ] )
-                file << "true,\t";
-            else
-                file << "false,\t";
-        }
-        file << std::endl;
-    }
-    file << std::endl;
-
-    // ***********************
-    // Nesting
-    file << "Nesting: " << std::endl;
-    for( int i = 0; i < m_contoursNesting.size(); ++i )
-    {
-        file << m_contoursNesting[ i ] << ", ";
-    }
-    file << std::endl;
-
 
 // ***********************
 // Polylines
     for( size_t c = 0; c < m_polylines.size(); c++ )
     {
         file << std::endl << "Contour number " << c << std::endl;
-        file << "Nesting: " << m_contoursNesting[ c ] << std::endl;
-        file << "Is clockwise: " << m_contoursList[ c ]->IsOuterContour() << std::endl;
-
-        // ***********************
-        // Intersections
-        if( !m_selfIntersections[ c ].empty() )
-        {
-            file << "Self Intersections in pre computing phase: ";
-            
-            for( int i = 0; i < m_selfIntersections[ c ].size(); ++i )
-            {
-                auto point = m_selfIntersections[ c ][ i ];
-                file << "( " << point->x << ", " << point->y << " ) ";
-            }
-
-            file << std::endl;
-        }
-
-        // ***********************
-        // Including
-        file << "Includes contours: ";
-        for( int i = 0; i < m_polylines.size(); ++i )
-        {
-            if( m_contoursIncuding[ c ][ i ] )
-            {
-                file << i << " ";
-            }
-        }
-        file << std::endl << std::endl;
 
         // ***********************
         // Points
@@ -436,41 +364,6 @@ void Triangulator::PrintContoursToFile()
     file.close();
 }
 
-// ***********************
-//
-Polyline &&         Triangulator::HeuristicFindMainContour  ( PolylinesVec && polylines )
-{
-    assert( !polylines.empty() );
-    assert( !polylines[ 0 ].empty() );
-
-    int longestIdx = 0;
-    int longestLength = 0;
-
-    for( int i = 0; i < polylines.size(); ++i )
-    {
-        if( longestLength < polylines[ i ].size() )
-        {
-            longestIdx = i;
-            longestLength = (int)polylines[ i ].size();
-        }
-    }
-
-    // Delete rejected polylines. Dealocate points.
-    for( int i = 0; i < polylines.size(); ++i )
-    {
-        if( i != longestIdx )
-        {
-            for( auto & point : polylines[ i ] )
-            {
-                delete point;
-            }
-            polylines[ i ].clear();
-        }
-    }
-
-
-    return std::move( polylines[ longestIdx ] );
-}
 
 // ***********************
 //
@@ -493,108 +386,3 @@ ClipperLib::PolyFillType    GetFillRule ( Triangulator::FillRule rule )
         return ClipperLib::PolyFillType::pftPositive;
     return ClipperLib::PolyFillType::pftEvenOdd;
 }
-
-// ***********************
-//
-void                Triangulator::PrintToFileAsUnitTest()
-{
-    std::fstream file( m_fileName, std::ios_base::app );
-    assert( !file.fail() );
-
-    // ***********************
-    // Header - beginning of shape
-    file << std::endl << std::endl << "SECTION( \"Loading file : [" << m_contourName.c_str() << "]\")\n{\n";
-
-    // ***********************
-    // Contours sizes
-    file << "\tint contourSizeArray[] = { ";
-    for( int i = 0; i < m_polylines.size(); ++i )
-    {
-        file << m_polylines[ i ].size();
-        
-        if( i != m_polylines.size() - 1 )
-            file << ", ";
-    }
-    file << " };" << std::endl;
-
-
-    // ***********************
-    // Nesting
-    file << "\tint nestingArray[] = { ";
-    for( int i = 0; i < m_contoursNesting.size(); ++i )
-    {
-        file << m_contoursNesting[ i ];
-
-        if( i != m_contoursNesting.size() - 1 )
-            file << ", ";
-    }
-    file << " };" << std::endl;
-
-
-    // ***********************
-    // Intersection sizes
-    size_t numIntersects = 0;
-
-    file << "\tint intersectsSizes[] = { ";
-    for( int i = 0; i < m_selfIntersections.size(); ++i )
-    {
-        numIntersects += m_selfIntersections[ i ].size();
-        file << m_selfIntersections[ i ].size();
-
-        if( i != m_selfIntersections.size() - 1 )
-            file << ", ";
-    }
-    file << " };" << std::endl;
-
-    // ***********************
-    // Intersections data
-    if( numIntersects )
-    {
-        int intersectsCounter = 0;
-        file << "\tglm::vec2 intersectsArray[] = { ";
-        for( int i = 0; i < m_selfIntersections.size(); ++i )
-        {
-            for( int j = 0; j < m_selfIntersections[ i ].size(); ++j )
-            {
-                auto point = m_selfIntersections[ i ][ j ];
-                file << "glm::vec2( " << point->x << ", " << point->y << " )";
-
-                if( intersectsCounter != numIntersects - 1 )
-                    file << ", ";
-
-                intersectsCounter++;
-            }
-        }
-        file << " };" << std::endl << std::endl;
-    }
-    else
-    {
-        file << "\tglm::vec2* intersectsArray = nullptr;" << std::endl << std::endl;
-    }
-
-    // ***********************
-    // Including
-    file << "\tbool includingArray[] =\n\t{\n";
-    for( int i = 0; i < m_contoursIncuding.size(); ++i )
-    {
-        file << "\t\t";
-        for( int j = 0; j < m_contoursIncuding.size(); ++j )
-        {
-            if( m_contoursIncuding[ i ][ j ] )
-                file << "true";
-            else
-                file << "false";
-
-            if( i != m_contoursIncuding.size() - 1 || j != m_contoursIncuding.size() - 1 )
-                file << ",\t";
-        }
-        file << std::endl;
-    }
-    file << "\t};" << std::endl << std::endl;
-
-    // Call test function and add closing brace.
-    file << "\tTestFileWithArrays( \"" << m_contourName.c_str() << "\", plugin, triangulate, contourSizeArray, nestingArray, includingArray, intersectsSizes, intersectsArray );" << std::endl;
-    file << "}" << std::endl << std::endl;
-
-}
-
