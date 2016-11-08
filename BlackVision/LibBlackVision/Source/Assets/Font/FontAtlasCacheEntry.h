@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Database/DatabaseEntry.h"
-#include "TextAtlas.h"
+#include "2D/TextAtlas.h"
 
 
 namespace bv { 

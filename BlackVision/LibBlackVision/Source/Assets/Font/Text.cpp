@@ -3,7 +3,7 @@
 #include "boost/filesystem/path.hpp"
 
 #include "Text.h"
-#include "TextAtlas.h"
+#include "2D/TextAtlas.h"
 
 #include "AtlasCache.h"
 #include "LibEffect.h"

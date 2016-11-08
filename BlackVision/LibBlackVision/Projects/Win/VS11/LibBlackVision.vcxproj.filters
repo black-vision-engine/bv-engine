@@ -885,9 +885,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp">
       <Filter>Assets\Font</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp">
-      <Filter>Assets\Font</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\TextHelper.cpp">
       <Filter>Assets\Font</Filter>
     </ClCompile>
@@ -1802,6 +1799,9 @@
       <Filter>Assets\Font</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\TextGeometry.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Font\2D\TextAtlas.cpp">
+      <Filter>Assets\Font\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2494,9 +2494,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\Text.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\TextAtlas.h">
-      <Filter>Assets\Font</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\TextHelper.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
@@ -3176,9 +3173,6 @@
       <Filter>Assets\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAsset.h">
-      <Filter>Assets\Font</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\FontAssetDescriptor.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontLoader.h">
@@ -4214,6 +4208,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\TextGeometry.h">
       <Filter>Assets\Font\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Font\2D\TextAtlas.h">
+      <Filter>Assets\Font\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

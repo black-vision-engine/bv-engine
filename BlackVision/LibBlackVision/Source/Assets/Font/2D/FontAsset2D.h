@@ -2,7 +2,7 @@
 
 #include "Assets/Asset.h"
 #include "Assets/Font/FontAsset.h"
-#include "Assets/Font/TextAtlas.h"
+#include "Assets/Font/2D/TextAtlas.h"
 
 #include "Assets/AssetManager.h"			// Only for LoadTypedAsset template specialization
 

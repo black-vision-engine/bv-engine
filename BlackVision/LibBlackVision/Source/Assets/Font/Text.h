@@ -2,7 +2,7 @@
 
 #include "Assets/Font/IFontEngine.h"
 #include "Assets/Font/3D/TextGeometry.h"
-#include "Assets/Font/TextAtlas.h"
+#include "Assets/Font/2D/TextAtlas.h"
 
 
 namespace bv { 

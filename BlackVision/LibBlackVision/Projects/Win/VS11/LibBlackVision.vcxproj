@@ -144,6 +144,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\2D\Font2DLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\2D\FontAsset2D.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\2D\FontAssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Font\2D\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\Font3DLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\FontAsset3D.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\FontAsset3DDesc.cpp" />
@@ -154,7 +155,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextRepresentation.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAsset.cpp" />
@@ -588,6 +588,7 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\Font2DLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\FontAsset2D.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\FontAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Font\2D\TextAtlas.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\Font3DLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\FontAsset3D.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\FontAsset3DDesc.h" />
@@ -783,7 +784,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\IFontEngine.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\Text.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Font\TextAtlas.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\TextHelper.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\AnimationAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.h" />

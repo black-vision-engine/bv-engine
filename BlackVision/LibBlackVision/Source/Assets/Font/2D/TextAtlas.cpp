@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
-#include "Text.h"
+#include "Assets/Font/Text.h"
 
-#include "Serialize.h"
+#include "Assets/Font/Serialize.h"
 #include "MipMapBuilder.h"
 
 

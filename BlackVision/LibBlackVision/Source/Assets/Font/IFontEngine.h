@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TextAtlas.h"
+#include "2D/TextAtlas.h"
 #include "3D/TextGeometry.h"
 #include "FTContour.h"
 
