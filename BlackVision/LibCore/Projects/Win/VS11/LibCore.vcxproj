@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
+    <ClInclude Include="..\..\..\Source\stdafx.h" />
     <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\InitSubsystem.h" />
     <ClInclude Include="..\..\..\Source\System\Path.h" />
@@ -60,6 +61,9 @@
     <ClCompile Include="..\..\..\Source\IO\FileIO.cpp" />
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
+    <ClCompile Include="..\..\..\Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\System\Env.cpp" />
     <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp" />
     <ClCompile Include="..\..\..\Source\System\Path.cpp" />
@@ -152,6 +156,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>LibCore</TargetName>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

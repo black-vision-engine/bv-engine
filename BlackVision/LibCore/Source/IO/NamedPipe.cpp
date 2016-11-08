@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NamedPipe.h"
 
 #include "assert.h"

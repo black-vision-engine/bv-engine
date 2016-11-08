@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FileIO.h"
 #include "DirIO.h"
 #include "System/Path.h"

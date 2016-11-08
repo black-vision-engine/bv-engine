@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "MemoryChunk.h"
 
 //#define PRINT_ALLOCATIONS

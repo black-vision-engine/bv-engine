@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SimpleTimer.h"
 
 #include "System/Time.h"

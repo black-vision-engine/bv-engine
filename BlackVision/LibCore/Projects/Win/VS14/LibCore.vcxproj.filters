@@ -126,6 +126,7 @@
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -194,6 +195,7 @@
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HerarchicalProfiler.h"
 
 #include <cassert>

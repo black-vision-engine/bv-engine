@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Observable.h"
 
 namespace bv

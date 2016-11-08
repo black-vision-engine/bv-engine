@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DirIO.h"
 
 #include "Tools/StringHeplers.h"

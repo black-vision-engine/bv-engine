@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PrintGuard.h"
 
 #include <iostream>

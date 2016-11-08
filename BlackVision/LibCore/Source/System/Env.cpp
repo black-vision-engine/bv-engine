@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Env.h"
 
 #include <cstdlib>

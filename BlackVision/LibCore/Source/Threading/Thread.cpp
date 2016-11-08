@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Thread.h"
 
 #pragma warning(push)
