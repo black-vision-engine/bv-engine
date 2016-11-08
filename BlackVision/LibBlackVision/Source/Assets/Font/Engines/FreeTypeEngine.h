@@ -73,6 +73,8 @@ public:
     virtual TextAtlasPtr        CreateAtlas     ( UInt32 padding, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false ) override;
     virtual TextAtlasPtr        CreateAtlas     ( UInt32 padding, UInt32 outline, const std::wstring & wcharsSet, bool makeSizesPowerOf2 = false ) override;
 
+    virtual void                FillTextGeometry( TextGeometryPtr textGeom, const std::wstring & wcharsSet ) override;
+
     virtual ContoursList        Create3dVerticies   ( wchar_t ch, float size ) override;
 
     static FreeTypeEnginePtr    Create          ( const std::string & fontFilePath, size_t fontSize );

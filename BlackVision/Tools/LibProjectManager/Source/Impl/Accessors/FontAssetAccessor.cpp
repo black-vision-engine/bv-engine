@@ -1,5 +1,5 @@
 #include "FontAssetAccessor.h"
-#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "IO/DirIO.h"
 #include "IO/FileIO.h"
 

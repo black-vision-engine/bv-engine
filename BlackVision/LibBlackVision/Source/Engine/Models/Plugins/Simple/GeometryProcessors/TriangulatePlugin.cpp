@@ -454,7 +454,7 @@ ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedCompo
 
     if( !data.empty() )
     {
-        FTContourUPtr contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+        FTContourPtr contour = std::make_shared< FTContour >( true );
         for( int i = 0; i <= data.size(); i += 2 )
         {
             if( i == 0 || ( i < data.size() && data[ i - 1 ] == data[ i ] ) )
@@ -468,7 +468,7 @@ ContoursList    TriangulatePlugin::ExtractContours             ( IConnectedCompo
                 // One contour ended. We make new contour.
                 if( i < data.size() )
                 {
-                    contour = std::unique_ptr< FTContour >( new FTContour( true ) );
+                    contour = std::make_shared< FTContour >( true );
 
                     // Remember about first point.
                     contour->AddPoint( FTPoint( data[ i ].x, data[ i ].y ) );

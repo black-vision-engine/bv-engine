@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Assets/Font/Text.h"
+#include "Assets/Font/3D/FontAsset3D.h"
 
 #include "Assets/Font/TextHelper.h"
 
@@ -17,11 +18,9 @@ public:
     struct TextLayout
     {
         float                   Size;
-        TextConstPtr            TextAsset;
-        SizeType                BlurSize;
+        FontAsset3DConstPtr     FontAsset;
         float                   Spacing;
         TextAlignmentType       Tat;
-        SizeType                OutlineSize;
         UInt32                  ViewWidth;
         UInt32                  ViewHeight;
         model::TextArranger *   Arranger;
@@ -33,13 +32,13 @@ public:
     /*static Float3AttributeChannelConstPtr           CreateAttrChannel           ( const wchar_t & wch, const std::string & fontPath, SizeType size );*/
     static VertexAttributesChannelPtr               CreateEmptyVACForText3D     ();
 
-    static std::vector< ConnectedComponentPtr >     CreateText                  ( const std::wstring& text, TextConstPtr textAsset, TextLayout layout );
+    static std::vector< ConnectedComponentPtr >     CreateText                  ( const std::wstring & text, FontAsset3DConstPtr textAsset, TextLayout layout );
 
 private:
 
     static std::vector< glm::vec3 >                 CreateLinesFromContour      ( const ContoursList & contours );
-    static ConnectedComponentPtr                    CreateLetter                ( const wchar_t character, TextConstPtr& textAsset, TextLayout layout );
-    static void                                     ArrangeText                 ( const std::wstring& text, std::vector< ConnectedComponentPtr > & components, TextLayout layout );
+    static ConnectedComponentPtr                    CreateLetter                ( const wchar_t character, FontAsset3DConstPtr & textAsset, TextLayout layout );
+    static void                                     ArrangeText                 ( const std::wstring & text, std::vector< ConnectedComponentPtr > & components, TextLayout layout );
 };
 
 

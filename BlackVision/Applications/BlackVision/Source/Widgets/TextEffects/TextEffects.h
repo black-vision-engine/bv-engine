@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Models/BasicNode.h"
-#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
 
 
 namespace bv { namespace nodelogic {

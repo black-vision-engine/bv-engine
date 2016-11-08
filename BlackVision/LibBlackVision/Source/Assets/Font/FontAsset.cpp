@@ -17,15 +17,9 @@ TextConstPtr FontAsset::GetText() const
 
 // *******************************
 // 
-FontAssetConstPtr FontAsset::Create( const TextConstPtr & text )
-{
-	return FontAssetConstPtr( new FontAsset( text ) );
-}
-
-// *******************************
-// 
-FontAsset::FontAsset( const TextConstPtr & text )
-	: m_text( text )
+FontAsset::FontAsset( const TextConstPtr & text, TextRepresentationPtr representation )
+	:   m_text( text )
+    ,   m_representation( representation )
 {}
 
 // *******************************
@@ -40,13 +34,6 @@ const std::string &	FontAsset::GetUID() const
 const std::string &	FontAsset::UID()
 {
 	return FontAsset::uid;
-}
-
-// *******************************
-// 
-VoidConstPtr FontAsset::QueryThis() const
-{
-	return shared_from_this();
 }
 
 } // bv

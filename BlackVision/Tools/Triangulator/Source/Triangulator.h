@@ -121,16 +121,10 @@ public:
     */
     size_t ContourSize( int c ) const { return m_contoursList[ c ]->PointCount(); }
 
-	const std::vector< int > &						GetNestingArray		()		{ return m_contoursNesting; }
-	const std::vector< std::vector< bool > > &		GetIncludingArray	()		{ return m_contoursIncuding; }
-    const std::vector< IntersectionsVec > &         GetSelfIntersections()      { return m_selfIntersections;  }
     const PolylinesVec &                            GetPolylines        ()      { return m_polylines;  }
     const ContoursList &                            GetContours         ()      { return m_contoursList;  }
 
     void                                            PrintContoursToFile ();
-    void                                            PrintToFileAsUnitTest();
-
-    Polyline &&                                     HeuristicFindMainContour    ( PolylinesVec && polylines );
 
     void                                            SetFillRule         ( FillRule rule );
 
@@ -140,10 +134,6 @@ private:
 
 	ContoursList							m_contoursList;
     PolylinesVec                            m_polylines;
-
-    std::vector< int >						m_contoursNesting;
-    std::vector< std::vector< bool > >		m_contoursIncuding;
-    std::vector< IntersectionsVec >         m_selfIntersections;
 
 	bool									m_printContoursToFile;
 	std::string								m_fileName;

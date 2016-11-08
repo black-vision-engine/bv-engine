@@ -503,9 +503,32 @@ TextAtlasPtr    FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth
     return atlas;
 }
 
+// ***********************
+//
+void            FreeTypeEngine::FillTextGeometry( TextGeometryPtr textGeom, const std::wstring & wcharsSetFile )
+{
+    auto wcharsSet = LoadUtf8FileToString( wcharsSetFile );
+
+    std::map< wchar_t, Spans >                          spans;
+    std::map< wchar_t, const Glyph * > &                glyphs = textGeom->m_glyphs;
+
+    for( auto ch : wcharsSet )
+    {
+        if( !glyphs.count( ch ) )
+        {
+            spans[ ch ] = Spans();
+            glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], 0 );
+        }
+    }
+
+    textGeom->m_kerningMap = BuildKerning( m_face, wcharsSet );
+}
+
+
+
 // *********************************
 //
-TextAtlasPtr   FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
+TextAtlasPtr        FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
     return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
@@ -521,47 +544,7 @@ ContoursList        FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*si
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
         return MakeContours( m_face->glyph );
     else
-        return std::vector< std::unique_ptr< FTContour > >();
-
-    //if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
-    //{
-    //    Triangulator triangulator( MakeContours( m_face->glyph ), "Letter.txt" );
-    //    Mesh mesh = triangulator.MakeMesh();
-
-    //    if( mesh.GetMeshSegments().size() == 1 )
-    //    {
-    //        return std::move( mesh.GetMeshSegments()[ 0 ] );
-    //    }
-    //    else
-    //    {
-    //        auto & meshSegments = mesh.GetMeshSegments();
-
-    //        std::vector< glm::vec3 > verticies;
-    //        auto tessCount = meshSegments.size();
-
-    //        // Reserve memory in vector.
-    //        SizeType numVerticies = 0;
-    //        for( int i = 0; i < tessCount; ++i )
-    //        {
-    //            numVerticies += meshSegments[ i ].size();
-    //        }
-    //        verticies.reserve( numVerticies );
-
-
-    //        for( int i = 0; i < tessCount; ++i )
-    //        {
-    //            const auto & pointList = meshSegments[ i ];
-    //            for( int j = 0; j < pointList.size(); ++j )
-    //            {
-    //                verticies.push_back( pointList[ j ] );
-    //            }
-    //        }
-
-    //        return verticies;
-    //    }
-    //}
-
-    //return std::vector< glm::vec3 >();
+        return ContoursList();
 }
 
 // ================================ //
@@ -570,7 +553,7 @@ ContoursList        FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
 {
     if( glyph )
     {
-        std::vector< std::unique_ptr< FTContour > > contourList;
+        ContoursList contourList;
 
         auto outline = glyph->outline;
         auto ftContourCount = outline.n_contours;
@@ -596,7 +579,7 @@ ContoursList        FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
         return contourList;
     }
 
-    return std::vector< std::unique_ptr< FTContour > >();
+    return ContoursList();
 }
 
 

@@ -179,8 +179,8 @@ class FTContour
 };
 
 
-typedef std::unique_ptr< FTContour > FTContourUPtr;
-typedef std::vector< FTContourUPtr > ContoursList;
+typedef std::shared_ptr< FTContour > FTContourPtr;      // This should be unique ptr, but this doesn't work properly with visual 110 toolset.
+typedef std::vector< FTContourPtr > ContoursList;
 
 #endif // __FTContour__
 

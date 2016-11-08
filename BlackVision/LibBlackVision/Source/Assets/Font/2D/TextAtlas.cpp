@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
-#include "Text.h"
+#include "Assets/Font/Text.h"
 
-#include "Serialize.h"
+#include "Assets/Font/Serialize.h"
 #include "MipMapBuilder.h"
 
 
@@ -19,12 +19,6 @@ TextAtlas::TextAtlas()
 //
 TextAtlas::~TextAtlas()
 {
-    for( auto it = m_glyphs.cbegin(); it != m_glyphs.cend(); )
-    {
-        delete it->second;
-        m_glyphs.erase( it++ );
-    }
-
     for( auto it = m_outlineGlyphs.cbegin(); it != m_outlineGlyphs.cend(); )
     {
         delete it->second;
@@ -143,17 +137,6 @@ const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
 		return nullptr;
 }
 
-// *********************************
-//
-Float32                  TextAtlas::GetKerning      ( wchar_t c0, wchar_t c1 ) const
-{
-    auto it = m_kerningMap.find( std::make_pair( c0, c1 ) );
-
-    if( it != m_kerningMap.end() )
-        return it->second;
-    else
-        return 0.f;
-}
 
 // *********************************
 //

@@ -10,19 +10,14 @@ namespace bv {
 
 class FontLoader : public AssetLoader
 {
-private:
+protected:
 
     TextConstPtr            TryLoadFont         (	const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize,
 													bool generateMipMaps, const std::wstring & atlasCharSetFile ) const;
 
 public:
-	AssetConstPtr			LoadAsset			( const bv::AssetDescConstPtr & ) const override;
-	AssetDescConstPtr		CreateDescriptor	( const IDeserializer& deserializeObject ) const override;
-
-    ThumbnailConstPtr       LoadThumbnail       ( const AssetDescConstPtr & desc ) const override;
 
     explicit                FontLoader( ){}
-
     virtual ~FontLoader(){}
 };
 

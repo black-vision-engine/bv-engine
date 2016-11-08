@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/Texture/TextureAsset.h"
+#include "Assets/Font/TextRepresentation.h"
 
 #include "CoreDEF.h"
 
@@ -14,15 +15,16 @@ class TextAtlas;
 DEFINE_PTR_TYPE( TextAtlas )
 DEFINE_CONST_PTR_TYPE(TextAtlas)
 
-class TextAtlas
+
+
+
+class TextAtlas : public TextRepresentation
 {
 public: // Only for non intrusive serialization. Should be private
 
 	TextureAssetConstPtr								m_textureAsset;
 
 	std::map< wchar_t, const Glyph * >                  m_outlineGlyphs;
-    std::map< wchar_t, const Glyph * >                  m_glyphs;
-    std::map< std::pair< wchar_t, wchar_t >, float >	m_kerningMap; 
 	UInt32												m_blurSize;
 
     void                    SetGlyph		( wchar_t wch, const Glyph * glyph, bool outline = false );
@@ -49,8 +51,6 @@ public:
     UInt32					GetGlyphHeight  ( wchar_t c ) const;
 
     const Glyph *			GetGlyph		( wchar_t c, bool outline = false ) const;
-
-    Float32                 GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 
     MemoryChunkConstPtr     GetData         () const;
     MemoryChunkPtr			GetWritableData ();
