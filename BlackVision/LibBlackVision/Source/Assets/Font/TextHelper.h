@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Assets/Font/FontAsset.h"
+#include "Assets/Font/2D/FontAsset2D.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h" // FIXME: Asset shouldn't depend on model
 
 
@@ -28,7 +28,7 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns AssetHandle of this font
-    static FontAssetConstPtr			LoadFont            ( const FontAssetDescConstPtr & fontAssetDesc );
+    static FontAsset2DConstPtr          LoadFont            ( const FontAssetDescConstPtr & fontAssetDesc );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.

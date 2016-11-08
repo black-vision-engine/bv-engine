@@ -17,8 +17,9 @@ TextConstPtr FontAsset::GetText() const
 
 // *******************************
 // 
-FontAsset::FontAsset( const TextConstPtr & text )
-	: m_text( text )
+FontAsset::FontAsset( const TextConstPtr & text, TextRepresentationPtr representation )
+	:   m_text( text )
+    ,   m_representation( representation )
 {}
 
 // *******************************

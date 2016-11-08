@@ -133,8 +133,7 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
 // *************************************
 // 
 DefaultText3DPlugin::~DefaultText3DPlugin         ()
-{
-}
+{}
 
 // *************************************
 // 
@@ -144,13 +143,16 @@ bool                            DefaultText3DPlugin::LoadResource  ( AssetDescCo
 
     if ( fontAssetDesc != nullptr )
     {
-        auto fontResource = LoadTypedAsset<FontAsset>( fontAssetDesc );
+        // Translate font descriptor to descriptor for 3D asset.
+        auto font3DDesc = FontAsset3DDesc::Create( fontAssetDesc );
+
+        auto fontResource = LoadTypedAsset< FontAsset3D >( font3DDesc );
         if( fontResource == nullptr )
         {
             return false;
         }
 
-        m_text = fontResource->GetText();
+        m_fontAsset = fontResource;
 
         SetAsset( 0, LAsset( "Font3D", assetDescr, nullptr ) );
 
@@ -171,16 +173,14 @@ void                                DefaultText3DPlugin::RebuildText            
     Text3DUtils::TextLayout layout;
     layout.Arranger = nullptr;
     layout.Size = m_fontSize->GetValue();
-    layout.BlurSize = 0;
-    layout.OutlineSize = 0;
     layout.Spacing = m_spacingParam->Evaluate();
     layout.Tat = TextAlignmentType::Center;
-    layout.TextAsset = m_text;
+    layout.FontAsset = m_fontAsset;
     layout.UseKerning = false;
     layout.ViewWidth = ApplicationContext::Instance().GetWidth();
     layout.ViewHeight = ApplicationContext::Instance().GetHeight();
 
-    auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_text, layout );
+    auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_fontAsset, layout );
 
     m_vaChannel->ClearAll();
     for( auto & component : connectedComponents )

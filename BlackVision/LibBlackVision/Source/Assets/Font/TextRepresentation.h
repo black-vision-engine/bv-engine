@@ -14,8 +14,10 @@ class Text;
 struct Glyph;
 
 class TextRepresentation;
+class IFontEngine;
 DEFINE_PTR_TYPE( TextRepresentation )
 DEFINE_CONST_PTR_TYPE( TextRepresentation )
+DEFINE_PTR_TYPE( IFontEngine )
 
 
 
@@ -28,7 +30,7 @@ public: // Only for non intrusive serialization. Should be protected
 
 public:
     explicit    TextRepresentation  () {}
-    virtual     ~TextRepresentation () {};
+    virtual     ~TextRepresentation ();
 
 public:
 

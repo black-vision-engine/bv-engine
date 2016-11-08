@@ -19,12 +19,6 @@ TextAtlas::TextAtlas()
 //
 TextAtlas::~TextAtlas()
 {
-    for( auto it = m_glyphs.cbegin(); it != m_glyphs.cend(); )
-    {
-        delete it->second;
-        m_glyphs.erase( it++ );
-    }
-
     for( auto it = m_outlineGlyphs.cbegin(); it != m_outlineGlyphs.cend(); )
     {
         delete it->second;

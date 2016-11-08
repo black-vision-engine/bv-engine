@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Assets/Font/IFontEngine.h"
+#include "Assets/Font/3D/TextGeometry.h"
+#include "Assets/Font/TextAtlas.h"
 
 
 namespace bv { 
@@ -21,19 +23,17 @@ private:
     IFontEnginePtr                      m_fontEngine;
     bool                                m_withMipmaps;
 
-    void                                BuildAtlas          ();
     //void                                BuildAtlasOutlined    ();
-    void                                GenerateMipMaps     ();
-    void                                BlurAtlas           ();
-    void                                AddTexturesKey      ();
-    TextAtlasPtr                        LoadFromCache       ();
-    void                                AddToCache          ();
+    void                                GenerateMipMaps     ( TextAtlasPtr atlas ) const;
+    void                                BlurAtlas           ( TextAtlasPtr atlas ) const;
+    void                                AddTexturesKey      ( TextAtlasPtr atlas ) const;
+    TextAtlasPtr                        LoadFromCache       () const;
+    void                                AddToCache          ( TextAtlasPtr atlas ) const;
 
 public:
 
-    TextAtlasConstPtr                   GetAtlas            () const { return m_atlas; }
-
-    std::vector< std::unique_ptr< FTContour > >     CreateCharacter3D   ( wchar_t ch, float size ) const;
+    TextAtlasPtr                        BuildAtlas          () const;
+    TextGeometryPtr                     BuildGeometry       () const;
 
     static TextConstPtr                 Create(const std::wstring & supportedCharsSet
                                             , const std::string & fontFile

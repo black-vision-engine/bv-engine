@@ -503,9 +503,32 @@ TextAtlasPtr    FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth
     return atlas;
 }
 
+// ***********************
+//
+void            FreeTypeEngine::FillTextGeometry( TextGeometryPtr textGeom, const std::wstring & wcharsSetFile )
+{
+    auto wcharsSet = LoadUtf8FileToString( wcharsSetFile );
+
+    std::map< wchar_t, Spans >                          spans;
+    std::map< wchar_t, const Glyph * > &                glyphs = textGeom->m_glyphs;
+
+    for( auto ch : wcharsSet )
+    {
+        if( !glyphs.count( ch ) )
+        {
+            spans[ ch ] = Spans();
+            glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], 0 );
+        }
+    }
+
+    textGeom->m_kerningMap = BuildKerning( m_face, wcharsSet );
+}
+
+
+
 // *********************************
 //
-TextAtlasPtr   FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
+TextAtlasPtr        FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
     return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
@@ -521,7 +544,7 @@ ContoursList        FreeTypeEngine::Create3dVerticies   ( wchar_t ch, float /*si
     if( FT_Load_Glyph( m_face, gindex, FT_LOAD_NO_BITMAP ) == 0 )
         return MakeContours( m_face->glyph );
     else
-        return std::vector< std::unique_ptr< FTContour > >();
+        return ContoursList();
 }
 
 // ================================ //
@@ -530,7 +553,7 @@ ContoursList        FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
 {
     if( glyph )
     {
-        std::vector< std::unique_ptr< FTContour > > contourList;
+        ContoursList contourList;
 
         auto outline = glyph->outline;
         auto ftContourCount = outline.n_contours;
@@ -556,7 +579,7 @@ ContoursList        FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
         return contourList;
     }
 
-    return std::vector< std::unique_ptr< FTContour > >();
+    return ContoursList();
 }
 
 

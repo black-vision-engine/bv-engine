@@ -2,6 +2,7 @@
 
 #include "Assets/Asset.h"
 #include "Assets/Font/FontAsset.h"
+#include "Assets/Font/3D/TextGeometry.h"
 
 #include "Assets/AssetManager.h"			// Only for LoadTypedAsset template specialization
 
@@ -24,12 +25,12 @@ protected:
 
 public:
 
-    TextConstPtr					GetText			() const;
-
     static FontAsset3DConstPtr		Create			( const TextConstPtr & textAtlas );
 
     virtual const std::string &		GetUID			() const override;
     static const std::string &		UID				();
+
+    TextGeometryConstPtr            GetTextGeometry () const;
 
 private:
 

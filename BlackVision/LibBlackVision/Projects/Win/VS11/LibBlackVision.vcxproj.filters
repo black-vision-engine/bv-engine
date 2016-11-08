@@ -1801,6 +1801,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\TextRepresentation.cpp">
       <Filter>Assets\Font</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Font\3D\TextGeometry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4210,6 +4211,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\TextRepresentation.h">
       <Filter>Assets\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Font\3D\TextGeometry.h">
+      <Filter>Assets\Font\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

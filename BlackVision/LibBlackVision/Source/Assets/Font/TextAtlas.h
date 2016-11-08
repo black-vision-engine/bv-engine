@@ -15,6 +15,9 @@ class TextAtlas;
 DEFINE_PTR_TYPE( TextAtlas )
 DEFINE_CONST_PTR_TYPE(TextAtlas)
 
+
+
+
 class TextAtlas : public TextRepresentation
 {
 public: // Only for non intrusive serialization. Should be private

@@ -1,12 +1,24 @@
 #include "stdafx.h"
 #include "TextRepresentation.h"
 
+#include "Assets/Font/Glyph.h"
 
 
 namespace bv {
 
 
 
+// ***********************
+//
+TextRepresentation::~TextRepresentation()
+{
+    for( auto it = m_glyphs.cbegin(); it != m_glyphs.cend(); )
+    {
+        delete it->second;
+        m_glyphs.erase( it++ );
+    }
+
+}
 
 // *********************************
 //

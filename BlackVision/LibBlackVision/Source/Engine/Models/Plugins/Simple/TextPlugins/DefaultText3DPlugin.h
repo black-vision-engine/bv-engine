@@ -13,7 +13,8 @@
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Events/BaseEvent.h"
-#include "Assets/Font/Text.h"
+#include "Assets/Font/3D/FontAsset3D.h"
+#include "Assets/Font/3D/FontAsset3DDesc.h"
 
 
 
@@ -63,7 +64,7 @@ private:
     ValueFloatPtr                   m_fontSize;
 	ValueMat4Ptr					m_scaleValue;
 
-    TextConstPtr                    m_text;
+    FontAsset3DConstPtr             m_fontAsset;
 
     void                                        SetText                     ( const std::wstring & newText );
     void                                        RebuildText                 ();

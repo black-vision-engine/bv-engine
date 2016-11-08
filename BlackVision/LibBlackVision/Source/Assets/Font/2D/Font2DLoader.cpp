@@ -91,7 +91,7 @@ ThumbnailConstPtr Font2DLoader::LoadThumbnail     ( const AssetDescConstPtr & de
 
     auto text = TryLoadFont( filePath.Str(), 10, 0, 0, false, L"fonts/ThumbnailCharSet.txt" );
 
-    auto atlasTexture = text->GetAtlas()->GetAsset()->GetOriginal();
+    auto atlasTexture = text->BuildAtlas()->GetAsset()->GetOriginal();
 
     auto swaped = image::SwapChannels( atlasTexture->GetData(), 32, 0xff000000, 0xff000000, 0xff000000, 0xff000000 );
     swaped = image::FlipVertical( swaped, atlasTexture->GetWidth(), atlasTexture->GetHeight(), TextureUtils::ToBPP( atlasTexture->GetFormat() ) );

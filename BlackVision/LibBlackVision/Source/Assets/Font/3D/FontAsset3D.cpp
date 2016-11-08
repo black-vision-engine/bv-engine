@@ -19,28 +19,35 @@ FontAsset3DConstPtr     FontAsset3D::Create( const TextConstPtr & text )
 // *******************************
 // 
 FontAsset3D::FontAsset3D( const TextConstPtr & text )
-    :   FontAsset( text )
+    :   FontAsset( text, text->BuildGeometry() )
 {}
 
 // *******************************
 // 
-const std::string &	FontAsset3D::GetUID() const
+const std::string &	    FontAsset3D::GetUID() const
 {
     return FontAsset3D::uid;
 }
 
 // *******************************
 // 
-const std::string &	FontAsset3D::UID()
+const std::string &	    FontAsset3D::UID()
 {
     return FontAsset3D::uid;
 }
 
 // *******************************
 // 
-VoidConstPtr        FontAsset3D::QueryThis() const
+VoidConstPtr            FontAsset3D::QueryThis() const
 {
     return shared_from_this();
+}
+
+// ***********************
+//
+TextGeometryConstPtr    FontAsset3D::GetTextGeometry () const
+{
+    return std::static_pointer_cast< const TextGeometry >( m_representation );
 }
 
 } // bv

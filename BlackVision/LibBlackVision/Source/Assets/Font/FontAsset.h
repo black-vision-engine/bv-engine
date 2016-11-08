@@ -2,6 +2,7 @@
 
 #include "Assets/Asset.h"
 #include "Assets/Font/Text.h"
+#include "Assets/Font/TextRepresentation.h"
 
 #include "Assets/AssetManager.h"			// Only for LoadTypedAsset template specialization
 
@@ -27,11 +28,12 @@ public:
 	virtual const std::string &		GetUID			() const override;
 	static const std::string &		UID				();
 
-    explicit						FontAsset		( const TextConstPtr & textAtlas );
+    explicit						FontAsset		( const TextConstPtr & textAtlas, TextRepresentationPtr representation );
 
-private:
+protected:
 
 	TextConstPtr					m_text;
+    TextRepresentationPtr           m_representation;
 };
 
 

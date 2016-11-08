@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\Font3DLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\FontAsset3D.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\FontAsset3DDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Font\3D\TextGeometry.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp" />
@@ -590,6 +591,7 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\Font3DLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\FontAsset3D.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\3D\FontAsset3DDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Font\3D\TextGeometry.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\TextRepresentation.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />

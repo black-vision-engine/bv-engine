@@ -14,9 +14,9 @@ namespace bv {
 ///////////////////////////////
 //
 // @todo Raplace all references with LoadTypedAsset
-FontAssetConstPtr      TextHelper::LoadFont( const FontAssetDescConstPtr & fontAssetDesc )
+FontAsset2DConstPtr     TextHelper::LoadFont( const FontAssetDescConstPtr & fontAssetDesc )
 {
-    return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );
+    return std::static_pointer_cast< const FontAsset2D >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );
 }
 
 // *********************************
@@ -89,12 +89,11 @@ model::ConnectedComponentPtr         CreateEmptyCC()
 
 TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & asset )
 {
-    auto f = GetFont( asset );
+    auto font2D = std::static_pointer_cast< const FontAsset2D >( asset );
 
-
-    if( f )
+    if( font2D )
     {
-        return f->GetAtlas();
+        return font2D->GetTextAtlas();
     }
     else
     {
