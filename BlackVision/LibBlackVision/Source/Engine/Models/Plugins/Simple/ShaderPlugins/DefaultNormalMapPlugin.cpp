@@ -92,7 +92,7 @@ void DefaultNormalMapPlugin::SetPrevPlugin( IPluginPtr prev )
 // *************************************
 // 
 DefaultNormalMapPlugin::DefaultNormalMapPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );

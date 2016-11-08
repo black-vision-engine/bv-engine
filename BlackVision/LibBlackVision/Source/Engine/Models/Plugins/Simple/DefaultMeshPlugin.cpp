@@ -80,7 +80,7 @@ void DefaultMeshPlugin::SetPrevPlugin( IPluginPtr prev )
 // *************************************
 // 
 DefaultMeshPlugin::DefaultMeshPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
     , m_psc( nullptr )
     , m_meshAsset( nullptr )
 {

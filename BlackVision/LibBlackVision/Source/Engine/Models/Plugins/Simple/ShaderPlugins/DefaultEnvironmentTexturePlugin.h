@@ -27,7 +27,7 @@ public:
 // ***************************** PLUGIN ********************************** 
 
 
-class DefaultEnvironmentTexturePlugin : public BasePlugin< IPlugin >
+class DefaultEnvironmentTexturePlugin : public BasePlugin
 {
 public:
     

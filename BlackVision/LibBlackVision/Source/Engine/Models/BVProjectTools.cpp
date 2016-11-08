@@ -543,7 +543,7 @@ void GetParamsOfTimelinesRecursively                ( const std::string & nodePa
         // Add plugin resource parameters.
         timelineParamInfo.paramOwner = ParamOwner::PO_Resource;
 
-        auto basePlugin = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( plugin );
+        auto basePlugin = std::static_pointer_cast< model::BasePlugin >( plugin );
         auto assets = basePlugin->GetLAssets();
 
         for( auto & asset : assets )

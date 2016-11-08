@@ -26,7 +26,7 @@ namespace bv { namespace model {
     };
 
     // ***************************** PLUGIN ********************************** 
-    class DefaultFadePlugin : public BasePlugin< IPlugin >
+    class DefaultFadePlugin : public BasePlugin
     {
     public:
 

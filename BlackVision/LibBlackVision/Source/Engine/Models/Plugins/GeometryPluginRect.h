@@ -16,7 +16,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryRectPlugin : public BasePlugin< IPlugin >
+class GeometryRectPlugin : public BasePlugin
 {
 private:
 

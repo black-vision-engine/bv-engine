@@ -86,7 +86,7 @@ int DefaultPrismPlugin::GetN()
 // *************************************
 //
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
 {
     m_uvTypeParam = QueryTypedParam< ParamFloatPtr >( m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "uv_type" ) );
     assert( m_uvTypeParam );

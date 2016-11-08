@@ -37,7 +37,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultText3DPlugin : public BasePlugin< IPlugin >
+class DefaultText3DPlugin : public BasePlugin
 {
 public:
     struct PARAMS

@@ -69,7 +69,7 @@ std::string                     DefaultPieChartPluginDesc::UID                  
 // *************************************
 //
 DefaultPieChartPlugin::DefaultPieChartPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
 {
     auto asParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleStart" );
     assert( asParam );

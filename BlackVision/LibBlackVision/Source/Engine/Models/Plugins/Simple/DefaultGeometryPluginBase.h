@@ -23,7 +23,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultGeometryPluginBase : public BasePlugin< IPlugin >
+class DefaultGeometryPluginBase : public BasePlugin
 {
 protected:
 

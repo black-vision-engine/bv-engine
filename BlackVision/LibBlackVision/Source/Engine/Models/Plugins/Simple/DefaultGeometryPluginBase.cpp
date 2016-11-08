@@ -49,7 +49,7 @@ void DefaultGeometryPluginBase::SetPrevPlugin   ( IPluginPtr prev )
 // *************************************
 //
 DefaultGeometryPluginBase::DefaultGeometryPluginBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
     , m_pixelShaderChannel( nullptr )
 {
     m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );

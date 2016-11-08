@@ -25,7 +25,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultAlphaMaskPlugin : public BasePlugin< IPlugin >
+class DefaultAlphaMaskPlugin : public BasePlugin
 {
 private:
 

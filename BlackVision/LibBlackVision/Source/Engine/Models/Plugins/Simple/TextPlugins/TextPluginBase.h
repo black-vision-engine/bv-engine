@@ -11,7 +11,7 @@
 
 namespace bv { namespace model {
 
-class TextPluginBase : public BasePlugin< IPlugin >
+class TextPluginBase : public BasePlugin
 {
 protected:
 

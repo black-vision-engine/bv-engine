@@ -32,7 +32,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultAVDecoderPlugin : public BasePlugin< IPlugin >
+class DefaultAVDecoderPlugin : public BasePlugin
 {
 public:
 

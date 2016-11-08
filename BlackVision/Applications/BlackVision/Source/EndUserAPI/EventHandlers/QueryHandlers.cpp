@@ -869,7 +869,7 @@ void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, ID
 
     PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, true );
 
-    auto plugin = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( iplugin );
+    auto plugin = std::static_pointer_cast< model::BasePlugin >( iplugin );
     plugin->Serialize( ser );
 }
 

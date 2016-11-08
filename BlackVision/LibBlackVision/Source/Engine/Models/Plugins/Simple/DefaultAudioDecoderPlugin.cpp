@@ -104,7 +104,7 @@ void					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
 // *************************************
 // 
 DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
     , m_decoder( nullptr )
     , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )

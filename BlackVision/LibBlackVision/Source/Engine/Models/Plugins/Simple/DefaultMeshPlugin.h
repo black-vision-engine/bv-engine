@@ -30,7 +30,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultMeshPlugin : public BasePlugin< IPlugin >
+class DefaultMeshPlugin : public BasePlugin
 {
 protected:
 

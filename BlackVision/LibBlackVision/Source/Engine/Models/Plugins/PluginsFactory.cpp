@@ -23,7 +23,7 @@ namespace model
 
 // *******************************
 //
-//std::shared_ptr< BasePlugin< IPlugin > >                                            PluginsFactory::CreatePluginByName( std::string name, ITimeEvaluatorPtr te )
+//std::shared_ptr< BasePlugin >                                            PluginsFactory::CreatePluginByName( std::string name, ITimeEvaluatorPtr te )
 //{
 //    if( name == "geometry" // FIXME: deprecated, to remove
 //        || name == "transform" || true )

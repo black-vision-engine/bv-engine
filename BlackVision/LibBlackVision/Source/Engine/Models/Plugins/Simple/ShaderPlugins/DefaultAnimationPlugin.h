@@ -27,7 +27,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultAnimationPlugin : public BasePlugin< IPlugin >
+class DefaultAnimationPlugin : public BasePlugin
 {
 public:
 

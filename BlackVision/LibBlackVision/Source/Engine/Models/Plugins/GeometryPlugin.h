@@ -20,7 +20,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryPlugin : public BasePlugin< IPlugin >
+class GeometryPlugin : public BasePlugin
 {
 private:
 

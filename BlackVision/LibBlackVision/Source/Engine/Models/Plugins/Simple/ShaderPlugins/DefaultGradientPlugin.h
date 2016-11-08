@@ -34,7 +34,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultGradientPlugin : public BasePlugin< IPlugin >
+class DefaultGradientPlugin : public BasePlugin
 {
 public:
     static const std::string        PARAM_BLEND_ENABLE;

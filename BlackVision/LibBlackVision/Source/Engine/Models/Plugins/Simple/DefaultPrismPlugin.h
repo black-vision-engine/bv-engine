@@ -20,7 +20,7 @@ public:
 };
 
 class DefaultPrismPlugin :
-    public BasePlugin< IPlugin >
+    public BasePlugin
 {
     VertexAttributesChannelPtr                  m_vaChannel;
 

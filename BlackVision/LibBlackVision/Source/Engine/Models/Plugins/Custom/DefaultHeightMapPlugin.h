@@ -35,7 +35,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultHeightMapPlugin : public BasePlugin< IPlugin >
+class DefaultHeightMapPlugin : public BasePlugin
 {
 private:
 

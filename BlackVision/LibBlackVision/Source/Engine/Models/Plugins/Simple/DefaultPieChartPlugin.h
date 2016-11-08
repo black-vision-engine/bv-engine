@@ -19,7 +19,7 @@ public:
 };
 
 class DefaultPieChartPlugin :
-    public BasePlugin< IPlugin >
+    public BasePlugin
 {
     VertexAttributesChannelPtr          m_vaChannel;
 

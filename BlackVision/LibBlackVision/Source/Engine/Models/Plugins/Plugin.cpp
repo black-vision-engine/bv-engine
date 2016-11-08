@@ -25,6 +25,421 @@
 
 namespace bv { namespace model {
 
+
+
+// Implementation
+
+// *******************************
+//
+void BasePlugin::Update  ( TimeType t )
+{
+    { t; } // FIXME: suppress unused warning
+
+    m_pluginParamValModel->Update();
+
+    if( GetPixelShaderChannel() )
+    {
+        auto txData = GetPixelShaderChannel()->GetTexturesData();
+        for( auto tx : txData->GetTextures() )
+        {
+            tx->GetSamplerState()->Update();
+        }
+
+        for( auto tx : txData->GetAnimations() )
+        {
+            tx->GetSamplerState()->Update();
+        }
+    }
+
+    //assert( !"Implement in derived class" );
+}
+
+// *******************************
+//
+BasePlugin::BasePlugin   ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model )
+    : m_prevPlugin( prevPlugin )
+    , m_name( name )
+    , m_uid( uid )
+    , m_pluginParamValModel( model )
+    , m_id( IDGenerator::Instance().GetID() )
+{}
+
+// *******************************
+//
+BasePlugin::~BasePlugin()
+{}
+
+// *******************************
+//
+bool						BasePlugin::IsValid				() const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->IsValid();
+    }
+    return true;
+}
+
+// *******************************
+//
+IPluginParamValModelPtr     BasePlugin::GetPluginParamValModel () const
+{
+    return m_pluginParamValModel;
+}
+
+// *******************************
+//
+IParameterPtr               BasePlugin::GetParameter           ( const std::string & name ) const
+{
+    IPluginParamValModelPtr pvm = GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+
+    IParamValModelPtr models[] = { pvm->GetPluginModel()
+        , pvm->GetTransformChannelModel()
+        , pvm->GetVertexAttributesChannelModel()
+        , pvm->GetPixelShaderChannelModel()
+        , pvm->GetVertexShaderChannelModel()
+        , pvm->GetGeometryShaderChannelModel()
+    };
+
+    IParameterPtr retParam = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retParam = model->GetParameter( name ) ) )
+        {
+            return retParam;
+        }
+    }
+
+    return nullptr;
+}
+
+
+// *******************************
+//
+IStatedValuePtr             BasePlugin::GetState               ( const std::string & name ) const
+{
+    IPluginParamValModelPtr pvm = GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+
+    IParamValModelPtr models[] = { pvm->GetPluginModel()
+        , pvm->GetTransformChannelModel()
+        , pvm->GetVertexAttributesChannelModel()
+        , pvm->GetPixelShaderChannelModel()
+        , pvm->GetVertexShaderChannelModel()
+        , pvm->GetGeometryShaderChannelModel()
+    };
+
+    IStatedValuePtr retParam = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retParam = model->GetState( name ) ) )
+        {
+            return retParam;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IParamValModelPtr				BasePlugin::GetResourceStateModel		 ( const std::string & name ) const
+{
+    IShaderChannelConstPtr channels[] = { GetPixelShaderChannel(),
+        GetVertexShaderChannel(),
+        GetGeometryShaderChannel() };
+    for( auto & channel : channels )
+    {
+        if( !channel ) continue;
+
+        auto txData = channel->GetTexturesData();
+        for( auto tx : txData->GetTextures() )
+        {
+            if( tx->GetName() == name )
+            {
+                return tx->GetSamplerState();
+            }
+        }
+
+        for( auto anim : txData->GetAnimations() )
+        {
+            if( anim->GetName() == name )
+            {
+                return anim->GetSamplerState();
+            }
+        }
+
+        for( auto font : txData->GetFonts() )
+        {
+            if( font->GetName() == name )
+            {
+                return font->GetStateModel();
+            }
+        }
+    }
+    return nullptr;
+}
+
+// *******************************
+//
+std::vector< IParameterPtr >        BasePlugin::GetResourceStateModelParameters () const
+{
+    IShaderChannelConstPtr channels[] = { GetPixelShaderChannel(),
+        GetVertexShaderChannel(),
+        GetGeometryShaderChannel() };
+    std::vector< IParameterPtr > ret;
+
+    for( auto & channel : channels )
+    {
+        if( !channel ) continue;
+
+        auto txData = channel->GetTexturesData();
+        for( auto & tx : txData->GetTextures() )
+        {
+            auto params = tx->GetSamplerState()->GetParameters();
+            ret.insert( ret.end(), params.begin(), params.end() );
+        }
+        for( auto & anim : txData->GetAnimations() )
+        {
+            auto params = anim->GetSamplerState()->GetParameters();
+            ret.insert( ret.end(), params.begin(), params.end() );
+        }
+        for( auto & font : txData->GetFonts() )
+        {
+            auto params = font->GetStateModel()->GetParameters();
+            ret.insert( ret.end(), params.begin(), params.end() );
+        }
+    }
+
+    return ret;
+}
+
+
+// *******************************
+//
+struct NullDeleter { template<typename T> void operator()( T* ) {} };
+
+
+ICachedParameterPtr             BasePlugin::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
+{
+    assert( false ); // DEPRECATED
+    IParameterPtr param = GetParameter( name );
+
+    //ParamBoolPtr qParam = std::static_pointer_cast< IParameterPtr, ParamBoolPtr >( param );
+    //ICachedParameterPtr cParam = std::dynamic_pointer_cast< ParamBoolPtr, ICachedParameterPtr >( qParam );
+    //auto ret = cParam;
+
+    IParameter* hParam = param.get();
+    ParamBool* hqParam = static_cast< ParamBool* >( hParam ); // FIXME: although we may assume implementation here, we really shouldn't
+    ICachedParameter* hcParam = dynamic_cast< ICachedParameter* >( hqParam );
+    auto ret = std::shared_ptr< ICachedParameter >( hcParam, NullDeleter() ); // FIXME: removing a need for NullDeleter would be very good idea
+
+    return ret;
+}
+
+// *******************************
+//
+bv::IValueConstPtr         BasePlugin::GetValue           ( const std::string & name ) const
+{
+    IPluginParamValModelPtr pvm = GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+
+    IParamValModelPtr models[] = { pvm->GetPluginModel()
+        , pvm->GetTransformChannelModel()
+        , pvm->GetVertexAttributesChannelModel()
+        , pvm->GetPixelShaderChannelModel()
+        , pvm->GetVertexShaderChannelModel()
+        , pvm->GetGeometryShaderChannelModel()
+    };
+
+    bv::IValueConstPtr retVal = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retVal = model->GetValue( name ) ) )
+        {
+            return retVal;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IVertexAttributesChannelConstPtr            BasePlugin::GetVertexAttributesChannel   () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetVertexAttributesChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+ITransformChannelConstPtr           BasePlugin::GetTransformChannel            () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetTransformChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IPixelShaderChannelPtr         BasePlugin::GetPixelShaderChannel          () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetPixelShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IVertexShaderChannelConstPtr        BasePlugin::GetVertexShaderChannel         () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetVertexShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IGeometryShaderChannelConstPtr      BasePlugin::GetGeometryShaderChannel       () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetGeometryShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IAudioChannelPtr                    BasePlugin::GetAudioChannel       () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetAudioChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+RendererContextConstPtr             BasePlugin::GetRendererContext             () const
+{
+    auto psc = GetPixelShaderChannel();
+
+    if( psc )
+    {
+        return psc->GetRendererContext();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IPluginConstPtr                     BasePlugin::GetPrevPlugin                  () const
+{
+    return m_prevPlugin;
+}
+
+// *******************************
+//
+IPluginPtr							BasePlugin::GetPrevPlugin                  ()
+{
+    return m_prevPlugin;
+}
+
+// *******************************
+//
+void								BasePlugin::SetPrevPlugin                  ( IPluginPtr plugin )
+{
+    m_prevPlugin = plugin;
+}
+
+
+// *******************************
+//
+mathematics::RectConstPtr			BasePlugin::GetAABB						( const glm::mat4 & ) const
+{
+    return nullptr;
+}
+
+// *******************************
+//
+bool                                BasePlugin::LoadResource                   ( AssetDescConstPtr assetDescr )
+{
+    return false;
+}
+
+// *******************************
+//
+IParamValModelPtr                           BasePlugin::PluginModel            () const
+{
+    return m_pluginParamValModel->GetPluginModel();
+}
+
+// *******************************
+//
+IParamValModelPtr                           BasePlugin::TransformChannelModel        () const
+{
+    return m_pluginParamValModel->GetTransformChannelModel();
+}
+
+// *******************************
+//
+IParamValModelPtr                           BasePlugin::VertexAttributesChannelModel () const
+{
+    return m_pluginParamValModel->GetVertexAttributesChannelModel();
+}
+
+// *******************************
+//
+IParamValModelPtr                           BasePlugin::PixelShaderChannelModel      () const
+{
+    return m_pluginParamValModel->GetPixelShaderChannelModel();
+}
+
+// *******************************
+//
+IParamValModelPtr                           BasePlugin::VertexShaderChannelModel     () const
+{
+    return m_pluginParamValModel->GetVertexShaderChannelModel();
+}
+
+// *******************************
+//
+IParamValModelPtr                           BasePlugin::GeometryShaderChannelModel   () const
+{
+    return m_pluginParamValModel->GetGeometryShaderChannelModel();
+}
+
+
+// *******************************
+//
+bool                                        BasePlugin::ParameterChanged            ( const std::string & name )
+{
+    auto state = GetState( name );
+    assert( state );
+    return state->StateChanged();
+}
+
+
 // *******************************
 //
 void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param )
@@ -47,7 +462,7 @@ void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param 
 
 // *******************************
 //
-std::vector< IParameterPtr >        BasePlugin< IPlugin >::GetParameters               () const
+std::vector< IParameterPtr >        BasePlugin::GetParameters               () const
 {
     std::vector< IParameterPtr > ret;
 
@@ -79,7 +494,7 @@ namespace
 {
 // *******************************
 //
-ITimeEvaluatorPtr GetTimeline                                               ( const BasePlugin< IPlugin >* plugin )
+ITimeEvaluatorPtr GetTimeline                                               ( const BasePlugin* plugin )
 {
     auto timelines = plugin->GetTimelines();
     assert( timelines.size() > 0 );
@@ -90,14 +505,14 @@ ITimeEvaluatorPtr GetTimeline                                               ( co
 
 // *******************************
 //
-std::vector< LAsset >    BasePlugin< IPlugin >::GetLAssets                   () const
+std::vector< LAsset >    BasePlugin::GetLAssets                   () const
 {
     return m_assets;
 }
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::SetAsset                    ( int i, LAsset lasset )
+void                                BasePlugin::SetAsset                    ( int i, LAsset lasset )
 {
     if( ( Int32 )m_assets.size() < i )
         assert( false );
@@ -109,7 +524,7 @@ void                                BasePlugin< IPlugin >::SetAsset             
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::Serialize        ( ISerializer& ser ) const
+void                                BasePlugin::Serialize        ( ISerializer& ser ) const
 {
     auto serContext = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
@@ -193,8 +608,7 @@ ser.EnterChild( "plugin" );
 
 // *******************************
 //
-template <>
-ISerializablePtr BasePlugin< IPlugin >::Create                              ( const IDeserializer & deser )
+ISerializablePtr BasePlugin::Create                              ( const IDeserializer & deser )
 {
     std::string pluginType = deser.GetAttribute( "uid" );
     std::string pluginName = deser.GetAttribute( "name" );
@@ -214,7 +628,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
     assert( te );
 
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );           // FIXME Add to deserialization context
-    std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
+    std::shared_ptr< BasePlugin > plugin = std::static_pointer_cast< BasePlugin >( plugin_ );
 
     {
         // params
@@ -292,8 +706,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
 
 // *******************************
 //
-template <>
-IPluginPtr							BasePlugin< IPlugin >::Clone					() const
+IPluginPtr							BasePlugin::Clone					() const
 {
     //AssetDescsWithUIDs assets;
     //GetAssetsWithUIDs( assets, this );
@@ -303,8 +716,7 @@ IPluginPtr							BasePlugin< IPlugin >::Clone					() const
 
 // *******************************
 //
-template <>
-void                                BasePlugin< IPlugin >::SetRendererContext       ( RendererContextPtr context )
+void                                BasePlugin::SetRendererContext       ( RendererContextPtr context )
 {
     auto psc = GetPixelShaderChannel();
     auto pscDefault = std::dynamic_pointer_cast< DefaultPixelShaderChannel >( psc );
@@ -313,8 +725,7 @@ void                                BasePlugin< IPlugin >::SetRendererContext   
 
 // *******************************
 //
-template <>
-std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() const
+std::vector< ITimeEvaluatorPtr >    BasePlugin::GetTimelines				() const
 {
     std::set< ITimeEvaluatorPtr > timelines;
 

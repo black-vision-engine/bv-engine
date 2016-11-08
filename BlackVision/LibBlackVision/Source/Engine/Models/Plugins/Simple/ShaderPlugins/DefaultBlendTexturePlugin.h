@@ -28,7 +28,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultBlendTexturePlugin : public BasePlugin< IPlugin >
+class DefaultBlendTexturePlugin : public BasePlugin
 {
 public:
 

@@ -28,7 +28,7 @@ public:
 
 
 
-class DefaultEnvReflectivityMapPlugin : public BasePlugin< IPlugin >
+class DefaultEnvReflectivityMapPlugin : public BasePlugin
 {
 private:
 

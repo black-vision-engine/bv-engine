@@ -24,7 +24,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultTransformPlugin : public BasePlugin< IPlugin >
+class DefaultTransformPlugin : public BasePlugin
 {
 
 public:

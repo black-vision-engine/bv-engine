@@ -21,7 +21,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultGeometryProcessorBase : public BasePlugin< IPlugin >
+class DefaultGeometryProcessorBase : public BasePlugin
 {
 protected:
 

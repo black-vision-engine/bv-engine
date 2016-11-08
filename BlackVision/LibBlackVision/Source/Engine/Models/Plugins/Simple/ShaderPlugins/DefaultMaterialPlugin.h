@@ -25,7 +25,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultMaterialPlugin : public BasePlugin< IPlugin >
+class DefaultMaterialPlugin : public BasePlugin
 {
 public:
     

@@ -27,7 +27,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultNormalMapPlugin : public BasePlugin< IPlugin >
+class DefaultNormalMapPlugin : public BasePlugin
 {
 public:
 

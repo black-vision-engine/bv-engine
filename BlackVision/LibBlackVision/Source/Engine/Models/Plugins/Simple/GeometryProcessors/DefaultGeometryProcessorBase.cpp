@@ -47,7 +47,7 @@ void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 // *************************************
 //
 DefaultGeometryProcessorBase::DefaultGeometryProcessorBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
 {}
 
 // *************************************

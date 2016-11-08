@@ -36,6 +36,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <hash_map>
+#include <memory>
 
 #endif
 

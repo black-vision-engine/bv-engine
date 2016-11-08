@@ -25,7 +25,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultColorPlugin : public BasePlugin< IPlugin >
+class DefaultColorPlugin : public BasePlugin
 {
 public:
     

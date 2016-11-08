@@ -28,7 +28,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultTexturePlugin : public BasePlugin< IPlugin >
+class DefaultTexturePlugin : public BasePlugin
 {
 public:
 

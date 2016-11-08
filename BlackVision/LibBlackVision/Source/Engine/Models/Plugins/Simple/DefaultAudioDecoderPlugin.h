@@ -32,7 +32,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultAudioDecoderPlugin : public BasePlugin< IPlugin >
+class DefaultAudioDecoderPlugin : public BasePlugin
 {
 public:
 

@@ -27,7 +27,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultParallaxMapPlugin : public BasePlugin< IPlugin >
+class DefaultParallaxMapPlugin : public BasePlugin
 {
 public:
 

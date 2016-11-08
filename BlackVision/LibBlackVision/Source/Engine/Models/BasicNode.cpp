@@ -128,7 +128,7 @@ void                            BasicNode::Serialize               ( ISerializer
             for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
             {
                 auto plugin_ = m_pluginList->GetPlugin( i );
-                auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
+                auto plugin = std::static_pointer_cast< BasePlugin >( plugin_ );
                 assert( plugin );
                 plugin->Serialize( ser );
             }
@@ -177,7 +177,7 @@ BasicNodePtr BasicNode::Create( const IDeserializer& deser )
 
 // plugins
     deserContext->ClearRendererContextes();
-    auto plugins = SerializationHelper::DeserializeArray< BasePlugin< IPlugin > >( deser, "plugins" );
+    auto plugins = SerializationHelper::DeserializeArray< BasePlugin >( deser, "plugins" );
 
     auto itRC = deserContext->RendererContextes().begin();
 

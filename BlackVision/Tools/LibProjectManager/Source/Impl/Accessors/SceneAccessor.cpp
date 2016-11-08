@@ -347,7 +347,7 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr
 
     while( lastPlugin )
     {
-        auto lassets = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetLAssets();
+        auto lassets = std::static_pointer_cast< model::BasePlugin >( lastPlugin )->GetLAssets();
         
         for( auto lasset : lassets )
             allDescs.push_back( lasset.assetDesc );
