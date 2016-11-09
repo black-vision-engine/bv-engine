@@ -1,12 +1,13 @@
 #pragma once
 
+#include <map>
+#include <fstream>
+
 #include "../RemoteController.h"
 #include "../IEventServer.h"
 #include "Threading/CriticalSection.h"
 #include "Engine/Events/Events.h"
 
-#include <map>
-#include <fstream>
 
 namespace bv
 {

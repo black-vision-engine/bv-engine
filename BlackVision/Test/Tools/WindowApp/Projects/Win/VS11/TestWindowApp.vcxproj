@@ -62,8 +62,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -76,8 +78,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -90,8 +94,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -104,8 +110,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>

@@ -61,8 +61,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -74,8 +76,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -87,8 +91,10 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
@@ -100,22 +106,24 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Link>
-      <AdditionalLibraryDirectories>$(ThirdPartyDir)\gtest\Lib\msvc-11\$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
       <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

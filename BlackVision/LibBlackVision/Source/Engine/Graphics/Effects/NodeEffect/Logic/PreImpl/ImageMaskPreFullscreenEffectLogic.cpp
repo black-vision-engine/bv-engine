@@ -1,26 +1,25 @@
 #include "stdafx.h"
-
 #include "ImageMaskPreFullscreenEffectLogic.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
-#include "Engine/Types/Values/ValuesFactory.h"
-
-#include "PreFullscreenEffectLogicUtils.h"
-
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
-
-#include "Mathematics/Util/Transformation.h"
-
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+#include "Engine/Models/Interfaces/ITextureDescriptor.h"
+#include "Engine/Types/Values/ValuesFactory.h"
+
+#include "Mathematics/Util/Transformation.h"
+#include "PreFullscreenEffectLogicUtils.h"
 
 
 #include "Memory/MemoryLeaks.h"
 #undef min
 
-
 namespace bv {
+
 
 // *********************************
 //
@@ -153,7 +152,7 @@ glm::mat4                   ImageMaskPreFullscreenEffectLogic::CalculateMaskTran
 
             maskSize = keepMaskAspektTx * maskSize;
 
-            auto s = std::min( 1.f / maskSize.x, 1.f / maskSize.y );
+            auto s = ( std::min )( 1.f / maskSize.x, 1.f / maskSize.y );
             auto scale = glm::scale( glm::mat4( 1.f ), glm::vec3( s, s, 1.f ) );
 
             auto maskCenter = scale * keepMaskAspektTx * glm::vec4( 0.5f, 0.5f, 0.f, 1.f );

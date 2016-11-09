@@ -7,8 +7,10 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
+#include "Engine/Audio/AudioRenderer.h"
 
 #include "BaseTextureTest.h"
+
 
 namespace bv {
 
@@ -38,6 +40,7 @@ public:
     virtual     void    Resize              ( UInt32 w, UInt32 h )  override;
 
     static IBasicLogicUnqPtr	Create( Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    
 };
 
 } //bv

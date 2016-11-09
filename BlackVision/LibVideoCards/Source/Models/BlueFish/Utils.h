@@ -1,11 +1,53 @@
 #pragma once
 
-#include <string>
+#include <map>
 
-namespace bv
+#include "win_sock.h"
+#include "BlueFish/Inc/BlueVelvet4.h"
+
+#include "VideoCardManagerUtils.h"
+
+#include "CoreDEF.h"
+
+
+namespace bv { namespace videocards { namespace bluefish {
+
+enum class ChannelName : int 
 {
+    A = 0,
+    B,
+    C,
+    D
+};
 
-namespace videocards{
+
+//**************************************
+//
+_EVideoMode                                             ConvertVideoMode        ( UInt32 resolution, UInt32 refresh, bool interlaced );
+std::size_t                                             VideoModeHash           ( UInt32 resolution, UInt32 refresh, bool interlaced );
+
+std::map< std::size_t, _EVideoMode >                    CreateVideoModeMap      ();
+std::map< ReferenceMode, _EBlueGenlockSource >          CreateReferenceModeMap  ();
+
+extern  std::map< std::size_t, _EVideoMode >            VideoModeMap;
+extern  std::map< ReferenceMode, _EBlueGenlockSource >  ReferenceModeMap;
+
+
+//**************************************
+//
+struct ChannelOption 
+{
+    UInt32          InputChannel;
+    UInt32          EpochSDIInput;
+    UInt32          EpochInputMemInterface;
+    UInt32          OutputChannel;
+    UInt32          EpochOutputMemInterface;
+    UInt32          EpochSDIOutput;
+};
+
+
+//**************************************
+//
 struct blue_videomode_info
 {
 	bool			bIs3G;
@@ -23,6 +65,9 @@ struct blue_videomode_info
 
 void BlueMemCpy(void* pDst, void* pSrc, size_t size);
 void BlueMemZero(void* pData, size_t size);
-}
-}
+
+
+} //bluefish
+} //videocards
+} //bv
 
