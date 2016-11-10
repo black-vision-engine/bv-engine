@@ -6,19 +6,9 @@
 
 namespace bv
 {
-namespace SerializationHelper
-{
 
-template<>
-std::string         T2String< bv::ModelParamType>       ( const bv::ModelParamType& t );
+DECLARE_ENUM_SERIALIZATION( bv::ModelParamType );
+DECLARE_ENUM_SERIALIZATION( bv::ParamType );
 
 
-
-template<>
-std::string         T2String< bv::ParamType>            ( const bv::ParamType& t );
-
-template<>
-bv::ParamType         String2T< bv::ParamType>            ( const std::string& s, const bv::ParamType& defaultVal );
-
-} // SerializationHelper
 } // bv

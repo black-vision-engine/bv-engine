@@ -8,6 +8,7 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 
 #include "UseLoggerLibBlackVision.h"
 

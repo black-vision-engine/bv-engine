@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
-
+#include <algorithm>
 
 
 #include "Memory/MemoryLeaks.h"

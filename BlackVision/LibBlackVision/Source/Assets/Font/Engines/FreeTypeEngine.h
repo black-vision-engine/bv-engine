@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/Font/IFontEngine.h"
+#include "Mathematics/Rect.h"
 
 #include FT_FREETYPE_H
 #include FT_STROKER_H

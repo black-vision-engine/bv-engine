@@ -1,16 +1,25 @@
 #pragma once
 
-#include <cassert>
+#include "Engine/Types/Enums.h"
+#include "CoreDEF.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
-#include "Engine/Types/Enums.h"
-
-#include "CoreDEF.h"
-#include <Serialization/ISerializable.h>
-
 #include "Mathematics/Interpolators/InterpolatorBasicTypes.h"
 
-namespace bv { namespace model {
+#include "Serialization/ISerializable.h"
+#include "Serialization/SerializationHelper.h"
+
+
+
+#include <cassert>
+
+namespace bv {
+
+DECLARE_ENUM_SERIALIZATION( ModelParamType );
+DECLARE_ENUM_SERIALIZATION( ParamType );
+
+
+namespace model {
 
 class AbstractModelParameter;
 DEFINE_PTR_TYPE(AbstractModelParameter)

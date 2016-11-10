@@ -4,6 +4,7 @@
 #include <set>
 
 #include "Mathematics/glm_inc.h"
+#include "CoreDEF.h"
 
 namespace bv 
 {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 #include "Mathematics/glm_inc.h"
 
 

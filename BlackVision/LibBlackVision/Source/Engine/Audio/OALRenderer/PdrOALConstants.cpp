@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "CoreDEF.h"
 #include "PdrOALConstants.h"
 
 

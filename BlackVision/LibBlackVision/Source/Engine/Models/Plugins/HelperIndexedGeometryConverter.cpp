@@ -2,7 +2,7 @@
 
 #include "HelperIndexedGeometryConverter.h"
 
-
+#include <algorithm>
 
 #include "Memory/MemoryLeaks.h"
 

@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Engine/Types/Enums.h"
 #include "Engine/Graphics/Resources/UniformBuffer.h"
+
+#include <map>
 
 
 namespace bv

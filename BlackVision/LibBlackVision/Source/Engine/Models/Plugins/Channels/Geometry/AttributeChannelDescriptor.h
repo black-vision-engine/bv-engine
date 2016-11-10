@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 #include <string>
 
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"

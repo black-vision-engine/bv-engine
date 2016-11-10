@@ -4,12 +4,17 @@
 
 namespace bv { namespace SerializationHelper {
 
+
+// ***********************
+//
 template< typename T >
 void SerializeAttribute( ISerializer& ser, const T& t, std::string name )
 {
     ser.SetAttribute( name, T2String( t ) );
 }
 
+// ***********************
+//
 template< typename T >
 std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
 {
@@ -20,6 +25,9 @@ std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
             return "";
 }
 
+
+// ***********************
+//
 template< typename T >
 T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s )
 {
@@ -33,6 +41,9 @@ T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s )
     return t2s[i].first;
 }
 
+
+// ***********************
+//
 template< typename T >
 T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s, const T& defaultVal )
 {

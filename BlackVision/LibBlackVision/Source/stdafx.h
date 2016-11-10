@@ -1,5 +1,7 @@
 #pragma once
 
+//#define DISABLE_PRECOMPILED_HEADER
+
 #ifndef DISABLE_PRECOMPILED_HEADER
 
 #include "CoreDEF.h"
@@ -21,10 +23,13 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 //#include "Serialization/BV/CloneViaSerialization.h"
 
+#include "Serialization/SerializationHelper.h"
+
+
 //#include "Engine/Models/BasicNode.h"
-//#include "Engine/Models/Plugins/Plugin.h"
-//#include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
-//#include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultGeometryProcessorBase.h"
+#include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultGeometryProcessorBase.h"
 
 
 //#include "Memory/MemoryLeaks.h"

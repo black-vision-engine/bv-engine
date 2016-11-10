@@ -3,6 +3,8 @@
 #include "FontAtlasCacheEntry.h"
 #include "Engine/Types/Values/ValuesFactory.h"
 
+#include <sstream>
+
 
 namespace bv { 
 

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "CoreDEF.h"
+
+
 #include <string>
 #include <vector>
 

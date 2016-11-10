@@ -143,8 +143,7 @@ std::pair< LoadAssetEvent::Command, const char* > LoadAssetMapping[] =
     , std::make_pair( LoadAssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> LoadAssetEvent::Command  String2T        ( const std::string& s, const LoadAssetEvent::Command& defaultVal )     { return String2Enum( LoadAssetMapping, s, defaultVal ); }
-template<> std::string              T2String        ( const LoadAssetEvent::Command & t )                                   { return Enum2String( LoadAssetMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( LoadAssetEvent::Command, LoadAssetMapping );
 
 // ========================================================================= //
 // ParamKeyEvent
@@ -166,8 +165,7 @@ std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] =
     , std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> ParamKeyEvent::Command   String2T    ( const std::string& s, const ParamKeyEvent::Command& defaultVal )      { return String2Enum( ParameterCommandMapping, s, defaultVal ); }
-template<> std::string              T2String    ( const ParamKeyEvent::Command & t )                                    { return Enum2String( ParameterCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( ParamKeyEvent::Command, ParameterCommandMapping );
 
 // ========================================================================= //
 // ParamDescriptorEvent
@@ -182,9 +180,8 @@ std::pair< ParamDescriptorEvent::Command, const char* > ParamDescriptorCommandMa
     , std::make_pair( ParamDescriptorEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> ParamDescriptorEvent::Command    String2T    ( const std::string& s, const ParamDescriptorEvent::Command& defaultVal )      { return String2Enum( ParamDescriptorCommandMapping, s, defaultVal ); }
-template<> std::string                      T2String    ( const ParamDescriptorEvent::Command & t )                                    { return Enum2String( ParamDescriptorCommandMapping, t ); }
 
+IMPLEMENT_ENUM_SERIALIZATION( ParamDescriptorEvent::Command, ParamDescriptorCommandMapping );
 
 // ========================================================================= //
 // AssetEvent
@@ -196,9 +193,7 @@ std::pair< AssetEvent::Command, const char* > AssetCommandMapping[] =
     , std::make_pair( AssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> AssetEvent::Command  String2T    ( const std::string& s, const AssetEvent::Command& defaultVal )     { return String2Enum( AssetCommandMapping, s, defaultVal ); }
-template<> std::string          T2String    ( const AssetEvent::Command & t )                                   { return Enum2String( AssetCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( AssetEvent::Command, AssetCommandMapping );
 
 // ========================================================================= //
 // SceneEvent
@@ -220,9 +215,7 @@ std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
     , std::make_pair( SceneEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> SceneEvent::Command  String2T    ( const std::string& s, const SceneEvent::Command& defaultVal )     { return String2Enum( SceneCommandMapping, s, defaultVal ); }
-template<> std::string          T2String    ( const SceneEvent::Command & t )                                   { return Enum2String( SceneCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( SceneEvent::Command, SceneCommandMapping );
 
 // ========================================================================= //
 // LightEvent
@@ -237,9 +230,8 @@ std::pair< LightEvent::Command, const char* > LightCommandMapping[] =
     , std::make_pair( LightEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> LightEvent::Command  String2T    ( const std::string& s, const LightEvent::Command& defaultVal )     { return String2Enum( LightCommandMapping, s, defaultVal ); }
-template<> std::string          T2String    ( const LightEvent::Command & t )                                   { return Enum2String( LightCommandMapping, t ); }
 
+IMPLEMENT_ENUM_SERIALIZATION( LightEvent::Command, LightCommandMapping );
 
 // ========================================================================= //
 // CameraEvent
@@ -254,9 +246,7 @@ std::pair< CameraEvent::Command, const char* > CameraCommandMapping[] =
     , std::make_pair( CameraEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> CameraEvent::Command     String2T    ( const std::string& s, const CameraEvent::Command& defaultVal )     { return String2Enum( CameraCommandMapping, s, defaultVal ); }
-template<> std::string              T2String    ( const CameraEvent::Command & t )                                   { return Enum2String( CameraCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( CameraEvent::Command, CameraCommandMapping );
 
 // ========================================================================= //
 // NodeStructureEvent
@@ -279,14 +269,13 @@ std::pair< NodeStructureEvent::Command, const char* > NodeStructureCommandMappin
     , std::make_pair( NodeStructureEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> NodeStructureEvent::Command  String2T   ( const std::string& s, const NodeStructureEvent::Command& defaultVal )     { return String2Enum( NodeStructureCommandMapping, s, defaultVal ); }
-template<> std::string                  T2String   ( const NodeStructureEvent::Command & t )                                   { return Enum2String( NodeStructureCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( NodeStructureEvent::Command, NodeStructureCommandMapping );
 
 // ========================================================================= //
 // PluginStructureEvent
 // ========================================================================= //
-const std::string ATTACH_INDEX_STRING                = "AttachIndex";
-const std::string PLUGIN_UID_STRING               = "PluginUID";
+const std::string ATTACH_INDEX_STRING           = "AttachIndex";
+const std::string PLUGIN_UID_STRING             = "PluginUID";
 
 std::pair< PluginStructureEvent::Command, const char* > PluginStructureCommandMapping[] = 
 {
@@ -299,9 +288,7 @@ std::pair< PluginStructureEvent::Command, const char* > PluginStructureCommandMa
     , std::make_pair( PluginStructureEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> PluginStructureEvent::Command    String2T   ( const std::string& s, const PluginStructureEvent::Command& defaultVal )   { return String2Enum( PluginStructureCommandMapping, s, defaultVal ); }
-template<> std::string                      T2String   ( const PluginStructureEvent::Command & t )                                 { return Enum2String( PluginStructureCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( PluginStructureEvent::Command, PluginStructureCommandMapping );
 
 // ========================================================================= //
 // ProjectEvent
@@ -344,8 +331,7 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> ProjectEvent::Command    String2T   ( const std::string& s, const ProjectEvent::Command& defaultVal )   { return String2Enum( ProjectEventCommandMapping, s, defaultVal ); }
-template<> std::string              T2String   ( const ProjectEvent::Command & t )                                 { return Enum2String( ProjectEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( ProjectEvent::Command, ProjectEventCommandMapping );
 
 // ========================================================================= //
 // ResponseEvent
@@ -396,8 +382,7 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> InfoEvent::Command   String2T     ( const std::string& s, const InfoEvent::Command& defaultVal )     { return String2Enum( InfoEventCommandMapping, s, defaultVal ); }
-template<> std::string          T2String     ( const InfoEvent::Command & t )                                   { return Enum2String( InfoEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( InfoEvent::Command, InfoEventCommandMapping );
 
 // ========================================================================= //
 // TimeLineEvent
@@ -427,9 +412,7 @@ std::pair< TimeLineEvent::Command, const char* > TimeLineEventCommandMapping[] =
     , std::make_pair( TimeLineEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> TimeLineEvent::Command   String2T    ( const std::string& s, const TimeLineEvent::Command& defaultVal )         { return String2Enum( TimeLineEventCommandMapping, s, defaultVal ); }
-template<> std::string              T2String    ( const TimeLineEvent::Command & t )                                       { return Enum2String( TimeLineEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( TimeLineEvent::Command, TimeLineEventCommandMapping );
 
 // Timeline Type
 
@@ -441,9 +424,8 @@ std::pair< TimelineType, const char* > TimelineTypeMapping[] =
     , std::make_pair( TimelineType::TT_TOTAL, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> TimelineType         String2T    ( const std::string& s, const TimelineType& defaultVal )   { return String2Enum( TimelineTypeMapping, s, defaultVal ); }
-template<> std::string          T2String    ( const TimelineType & t )                                 { return Enum2String( TimelineTypeMapping, t ); }
 
+IMPLEMENT_ENUM_SERIALIZATION( TimelineType, TimelineTypeMapping );
 
 // ========================================================================= //
 // NodeLogicEvent
@@ -459,8 +441,7 @@ std::pair< NodeLogicEvent::Command, const char* > NodeLogicEventCommandMapping[]
     , std::make_pair( NodeLogicEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> NodeLogicEvent::Command  String2T        ( const std::string& s, const NodeLogicEvent::Command& defaultVal )     { return String2Enum( NodeLogicEventCommandMapping, s, defaultVal ); }
-template<> std::string              T2String        ( const NodeLogicEvent::Command & t )                                   { return Enum2String( NodeLogicEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( NodeLogicEvent::Command, NodeLogicEventCommandMapping );
 
 // ========================================================================= //
 // VideoCardEvent
@@ -484,9 +465,7 @@ std::pair< VideoCardEvent::Command, const char* > VideoCardEventCommandMapping[]
     , std::make_pair( VideoCardEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> VideoCardEvent::Command  String2T    ( const std::string& s, const VideoCardEvent::Command& defaultVal )         { return String2Enum( VideoCardEventCommandMapping, s, defaultVal ); }
-template<> std::string              T2String    ( const VideoCardEvent::Command & t )                                       { return Enum2String( VideoCardEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::Command, VideoCardEventCommandMapping );
 
 std::pair< VideoCardEvent::VideoReferenceMode, const char* > VideoCardVideoReferenceModeMapping[] = 
 {
@@ -498,9 +477,7 @@ std::pair< VideoCardEvent::VideoReferenceMode, const char* > VideoCardVideoRefer
     , std::make_pair( VideoCardEvent::VideoReferenceMode::FailMode, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> VideoCardEvent::VideoReferenceMode   String2T   ( const std::string& s, const VideoCardEvent::VideoReferenceMode& defaultVal )  { return String2Enum( VideoCardVideoReferenceModeMapping, s, defaultVal ); }
-template<> std::string                          T2String   ( const VideoCardEvent::VideoReferenceMode & t )                                { return Enum2String( VideoCardVideoReferenceModeMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::VideoReferenceMode, VideoCardVideoReferenceModeMapping );
 
 // ========================================================================= //
 // TimerEvent
@@ -521,9 +498,7 @@ std::pair< TimerEvent::Command, const char* > TimerEventCommandMapping[] =
     , std::make_pair( TimerEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> TimerEvent::Command  String2T    ( const std::string& s, const TimerEvent::Command& defaultVal )     { return String2Enum( TimerEventCommandMapping, s, defaultVal ); }
-template<> std::string          T2String    ( const TimerEvent::Command & t )                                   { return Enum2String( TimerEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( TimerEvent::Command, TimerEventCommandMapping );
 
 // ========================================================================= //
 // VideoDecoderEvent
@@ -536,9 +511,7 @@ std::pair< VideoDecoderEvent::Command, const char* > VideoDecoderEventMapping[] 
     , std::make_pair( VideoDecoderEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> VideoDecoderEvent::Command   String2T    ( const std::string& s, const VideoDecoderEvent::Command& defaultVal )     { return String2Enum( VideoDecoderEventMapping, s, defaultVal ); }
-template<> std::string                  T2String    ( const VideoDecoderEvent::Command & t )                                   { return Enum2String( VideoDecoderEventMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( VideoDecoderEvent::Command, VideoDecoderEventMapping );
 
 // ========================================================================= //
 // EngineStateEvent
@@ -556,8 +529,7 @@ std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMappi
     , std::make_pair( EngineStateEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> EngineStateEvent::Command String2T     ( const std::string& s, const EngineStateEvent::Command& defaultVal )     { return String2Enum( EngineStateEventCommandMapping, s, defaultVal ); }
-template<> std::string T2String                   ( const EngineStateEvent::Command & t )                                   { return Enum2String( EngineStateEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( EngineStateEvent::Command, EngineStateEventCommandMapping );
 
 // ========================================================================= //
 // GlobalEffectEvent
@@ -571,9 +543,7 @@ std::pair< GlobalEffectEvent::Command, const char* > GlobalEffectEventCommandMap
     , std::make_pair( GlobalEffectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> GlobalEffectEvent::Command   String2T    ( const std::string& s, const GlobalEffectEvent::Command& defaultVal )  { return String2Enum( GlobalEffectEventCommandMapping, s, defaultVal ); }
-template<> std::string                  T2String    ( const GlobalEffectEvent::Command & t )                                { return Enum2String( GlobalEffectEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( GlobalEffectEvent::Command, GlobalEffectEventCommandMapping );
 
 // ========================================================================= //
 // TimelineKeyframeEvent
@@ -592,8 +562,8 @@ std::pair< TimelineKeyframeEvent::Command, const char* > TimelineKeyframeEventCo
     , std::make_pair( TimelineKeyframeEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> TimelineKeyframeEvent::Command   String2T   ( const std::string& s, const TimelineKeyframeEvent::Command& defaultVal )      { return String2Enum( TimelineKeyframeEventCommandMapping, s, defaultVal ); }
-template<> std::string                      T2String   ( const TimelineKeyframeEvent::Command & t )                                    { return Enum2String( TimelineKeyframeEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( TimelineKeyframeEvent::Command, TimelineKeyframeEventCommandMapping );
+
 
 std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMapping[] = 
 {
@@ -606,8 +576,7 @@ std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMappin
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> TimelineKeyframeEvent::KeyframeType  String2T   ( const std::string& s, const TimelineKeyframeEvent::KeyframeType& defaultVal )      { return String2Enum( KeyframeTypeMapping, s, defaultVal ); }
-template<> std::string                          T2String   ( const TimelineKeyframeEvent::KeyframeType & t )                                    { return Enum2String( KeyframeTypeMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( TimelineKeyframeEvent::KeyframeType, KeyframeTypeMapping );
 
 // ========================================================================= //
 // MouseEvent
@@ -626,8 +595,7 @@ std::pair< MouseEvent::Command, const char* > MouseEventCommandMapping[] =
     , std::make_pair( MouseEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> MouseEvent::Command      String2T   ( const std::string & s, const MouseEvent::Command & defaultVal )    { return String2Enum( MouseEventCommandMapping, s, defaultVal ); }
-template<> std::string              T2String   ( const MouseEvent::Command & t )                                    { return Enum2String( MouseEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( MouseEvent::Command, MouseEventCommandMapping );
 
 // ========================================================================= //
 // SceneVariableEvent
@@ -644,9 +612,7 @@ std::pair< SceneVariableEvent::Command, const char* > SceneVariableEventCommandM
     , std::make_pair( SceneVariableEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> SceneVariableEvent::Command      SerializationHelper::String2T  ( const std::string& s, const SceneVariableEvent::Command& defaultVal )  { return String2Enum( SceneVariableEventCommandMapping, s, defaultVal ); };
-template<> std::string                      SerializationHelper::T2String  ( const SceneVariableEvent::Command & t )                                { return Enum2String( SceneVariableEventCommandMapping, t ); };
-
+IMPLEMENT_ENUM_SERIALIZATION( SceneVariableEvent::Command, SceneVariableEventCommandMapping );
 
 // ========================================================================= //
 // ConfigEvent
@@ -662,9 +628,7 @@ std::pair< ConfigEvent::Command, const char* > ConfigEventCommandMapping[] =
     , std::make_pair( ConfigEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> ConfigEvent::Command String2T        ( const std::string& s, const ConfigEvent::Command& defaultVal )     { return String2Enum( ConfigEventCommandMapping, s, defaultVal ); }
-template<> std::string T2String                 ( const ConfigEvent::Command & t )                                   { return Enum2String( ConfigEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( ConfigEvent::Command, ConfigEventCommandMapping );
 
 // ========================================================================= //
 // GridLineEvent
@@ -686,9 +650,7 @@ std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMappin
     , std::make_pair( GridLineEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> GridLineEvent::Command String2T       ( const std::string& s, const GridLineEvent::Command& defaultVal )     { return String2Enum( GridLineEventEventCommandMapping, s, defaultVal ); }
-template<> std::string T2String                 ( const GridLineEvent::Command & t )                                   { return Enum2String( GridLineEventEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( GridLineEvent::Command, GridLineEventEventCommandMapping );
 
 // ========================================================================= //
 // UndoRedoEvent
@@ -705,9 +667,7 @@ std::pair< UndoRedoEvent::Command, const char* > UndoRedoEventCommandMapping[] =
     , std::make_pair( UndoRedoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> UndoRedoEvent::Command String2T       ( const std::string& s, const UndoRedoEvent::Command& defaultVal )     { return String2Enum( UndoRedoEventCommandMapping, s, defaultVal ); }
-template<> std::string T2String                  ( const UndoRedoEvent::Command & t )                                   { return Enum2String( UndoRedoEventCommandMapping, t ); }
-
+IMPLEMENT_ENUM_SERIALIZATION( UndoRedoEvent::Command, UndoRedoEventCommandMapping );
 
 // ========================================================================= //
 // HightmapEvent
@@ -738,9 +698,7 @@ std::pair< HightmapEvent::Command, const char* > HightmapEventCommandMapping[] =
     , std::make_pair( HightmapEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
-
-template<> HightmapEvent::Command   String2T    ( const std::string& s, const HightmapEvent::Command& defaultVal )      { return String2Enum( HightmapEventCommandMapping, s, defaultVal ); }
-template<> std::string              T2String    ( const HightmapEvent::Command & t )                                    { return Enum2String( HightmapEventCommandMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( HightmapEvent::Command, HightmapEventCommandMapping );
 
 }
 

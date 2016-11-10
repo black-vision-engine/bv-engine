@@ -40,20 +40,7 @@ std::pair< bv::ModelParamType, const char* > mpt2s[] = {
     std::make_pair( bv::ModelParamType::MPT_TOTAL, "" )
 };
 
-template<>
-std::string T2String< bv::ModelParamType>( const bv::ModelParamType& t )
-{
-    return SerializationHelper::Enum2String< bv::ModelParamType >( mpt2s, t );
-}
-
-template<>
-bv::ModelParamType  String2T< bv::ModelParamType >            ( const std::string & s, const bv::ModelParamType & defaultVal )
-{
-    auto result = SerializationHelper::String2Enum< bv::ModelParamType >( mpt2s, s );
-    if( result == ModelParamType::MPT_TOTAL )
-        return defaultVal;
-    return result;
-}
+IMPLEMENT_ENUM_SERIALIZATION( bv::ModelParamType, mpt2s );
 
 
 std::pair< bv::ParamType, const char* > ParamTypeStringsArray[] = {
@@ -72,20 +59,7 @@ std::pair< bv::ParamType, const char* > ParamTypeStringsArray[] = {
     std::make_pair( bv::ParamType::PT_TOTAL, "" ),
 };
 
-template<>
-std::string T2String< bv::ParamType>( const bv::ParamType& t )
-{
-    return SerializationHelper::Enum2String< bv::ParamType >( ParamTypeStringsArray, t );
-}
-
-template<>
-bv::ParamType         String2T< bv::ParamType>            ( const std::string& s, const bv::ParamType& defaultVal )
-{
-    auto result = SerializationHelper::String2Enum< bv::ParamType >( ParamTypeStringsArray, s );
-    if( result == ParamType::PT_TOTAL )
-        return defaultVal;
-    return result;
-}
+IMPLEMENT_ENUM_SERIALIZATION( bv::ParamType, ParamTypeStringsArray );
 
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Serialization/SerializationHelper.inl"
+#include "Serialization/SerializationHelper.h"
 #include "Engine/Events/CommonEventsStrings.h"
 
 #include <string>
@@ -41,8 +41,7 @@ public:
     friend bool                 operator<       ( const ParameterAddress& address1, const ParameterAddress& address2 );
 };
 
-template<> ParameterAddress::TargetType     SerializationHelper::String2T      ( const std::string& s, const ParameterAddress::TargetType& defaultVal );
-template<> std::string                      SerializationHelper::T2String      ( const ParameterAddress::TargetType & t );
+DECLARE_ENUM_SERIALIZATION( ParameterAddress::TargetType );
 
 }	// bv
 

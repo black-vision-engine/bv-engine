@@ -2,10 +2,6 @@
 #include "ParamAddress.h"
 
 
-
-
-
-
 #include "Memory/MemoryLeaks.h"
 
 
@@ -26,8 +22,7 @@ std::pair< ParameterAddress::TargetType, const char* > TargetTypeMapping[] =
     , std::make_pair( ParameterAddress::TargetType::FailTarget, SerializationHelper::EMPTY_STRING )      // default
 };
 
-template<> ParameterAddress::TargetType String2T            ( const std::string& s, const ParameterAddress::TargetType& defaultVal )       { return String2Enum( TargetTypeMapping, s, defaultVal ); }
-template<> std::string                  T2String            ( const ParameterAddress::TargetType & t )                                     { return Enum2String( TargetTypeMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( ParameterAddress::TargetType, TargetTypeMapping );
 
 }   // SerializationHelper
 

@@ -2,6 +2,8 @@
 
 #include "FFmpegDef.h"
 
+#include "DataTypes/QueueConcurrent.h"
+
 #include "Assets/VideoStream/AVAsset.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
 

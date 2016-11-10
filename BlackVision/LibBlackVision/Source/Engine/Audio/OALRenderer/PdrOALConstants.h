@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Types/Enums.h"
 #include "BVAL.h"
 
 

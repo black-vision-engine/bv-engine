@@ -3,7 +3,7 @@
 #include "Engine/Models/Plugins/IndexedGeometry.h"
 
 
-
+#include <algorithm>
 
 #include "Memory/MemoryLeaks.h"
 

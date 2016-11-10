@@ -29,13 +29,6 @@ std::shared_ptr< T >                                        DeserializeObject( c
     }
 }
 
-//// *************************************
-////
-//template< typename T >
-//std::shared_ptr< T >                                        DeserializeObjectPtr( const IDeserializer& deser, std::string name )
-//{
-//    return std::shared_ptr< T >( DeserializeObject< T >( deser, name ) );
-//}
 
 // *************************************
 //
@@ -83,7 +76,7 @@ std::vector< std::shared_ptr< T > >                         DeserializePropertie
             auto obj = ISerializablePtr( T::Create( deser ) );
 
             ret.push_back( std::static_pointer_cast< T >( obj ) );
-        }while( deser.NextChild( ) );
+        } while( deser.NextChild( ) );
         deser.ExitChild();
     }
 
@@ -100,32 +93,41 @@ std::shared_ptr< T > Create( const IDeserializer& deser )
     return std::static_pointer_cast< T >( obj );
 }
 
-//template< typename T >
-//T* DeserializeObjectImpl( ISerializer& dob );
-//
-//template< typename T >
-//class SerializedObject : public ISerializable
-//{
-//    T o;
-//
-//public:
-//    SerializedObject( const T& o_ ) : o( o_ ) { }
-//
-//    virtual void                Serialize       ( ISerializer& sob ) const { SerializeObjectImpl< T >( o, sob ); }
-//
-//    static ISerializablePtr     Create          ( ISerializer& dob ) { return ISerializablePtr( DeserializeObjectImpl< T >( dob ); }
-//};
-
-// glm stuff
 
 template< typename T >
-std::string T2String( const T & t );
+std::string         T2String    ( const T & t );
 
 template< typename T >
-Expected<T> String2T( const std::string & s );
+Expected<T>         String2T    ( const std::string & s );
 
 template< typename T >
-T String2T( const std::string & s, const T & defaultVal );
+T                   String2T    ( const std::string & s, const T & defaultVal );
+
+
+
+// ***********************
+// Declarations of specializations.
+template<> bool             String2T    ( const std::string & s, const bool & defaultVal );
+template<> std::string      T2String    ( const bool & t );
+
+template<> std::string      T2String    ( const std::wstring & wstr );
 
 } // SerializationHelper
 } // bv
+
+
+// ***********************
+// Use these macros for enum serialization. DECLARE_ENUM_SERIALIZATION should be in .h file and IMPLEMENT_ENUM_SERIALIZATION in .cpp file.
+// Examples: check file Events.h ParamKeyEvent.
+
+#define DECLARE_ENUM_SERIALIZATION( enumType )  \
+template<> enumType         SerializationHelper::String2T      ( const std::string & s, const enumType & defaultVal );  \
+template<> std::string      SerializationHelper::T2String      ( const enumType & t );
+
+
+#define IMPLEMENT_ENUM_SERIALIZATION( enumType, enumMapping )  \
+template<> enumType         String2T        ( const std::string & s, const enumType & defaultVal ) { return String2Enum( enumMapping, s, defaultVal ); }   \
+template<> std::string      T2String        ( const enumType & t ) { return Enum2String( enumMapping, t ); }
+
+
+#include "SerializationHelper.inl"

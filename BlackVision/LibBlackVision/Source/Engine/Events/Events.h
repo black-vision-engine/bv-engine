@@ -231,9 +231,7 @@ public:
 };
 
 
-template<> LoadAssetEvent::Command  SerializationHelper::String2T      ( const std::string& s, const LoadAssetEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String      ( const LoadAssetEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( LoadAssetEvent::Command )
 DEFINE_PTR_TYPE( LoadAssetEvent )
 
 
@@ -281,9 +279,7 @@ public:
     static std::string&             Name                ();
 };
 
-template<> ParamKeyEvent::Command       SerializationHelper::String2T      ( const std::string& s, const ParamKeyEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String      ( const ParamKeyEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( ParamKeyEvent::Command )
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
@@ -538,9 +534,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> NodeStructureEvent::Command      SerializationHelper::String2T      ( const std::string& s, const NodeStructureEvent::Command& defaultVal );
-template<> std::string                      SerializationHelper::T2String      ( const NodeStructureEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( NodeStructureEvent::Command )
 DEFINE_PTR_TYPE( NodeStructureEvent )
 
 
@@ -585,9 +580,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> PluginStructureEvent::Command    SerializationHelper::String2T( const std::string& s, const PluginStructureEvent::Command& defaultVal );
-template<> std::string                      SerializationHelper::T2String( const PluginStructureEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( PluginStructureEvent::Command )
 DEFINE_PTR_TYPE( PluginStructureEvent )
 
 
@@ -652,9 +646,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> ProjectEvent::Command    SerializationHelper::String2T  ( const std::string& s, const ProjectEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String  ( const ProjectEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( ProjectEvent::Command )
 DEFINE_PTR_TYPE( ProjectEvent )
 
 
@@ -746,9 +739,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> InfoEvent::Command       SerializationHelper::String2T       ( const std::string& s, const InfoEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String       ( const InfoEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( InfoEvent::Command )
 DEFINE_PTR_TYPE( InfoEvent )
 
 
@@ -805,9 +797,8 @@ public:
 
 };
 
-template<> TimeLineEvent::Command   SerializationHelper::String2T  ( const std::string& s, const TimeLineEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String  ( const TimeLineEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( TimeLineEvent::Command )
 DEFINE_PTR_TYPE( TimeLineEvent )
 
 
@@ -850,9 +841,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TimerEvent::Command      SerializationHelper::String2T    ( const std::string& s, const TimerEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String    ( const TimerEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( TimerEvent::Command )
 DEFINE_PTR_TYPE( TimerEvent )
 
 
@@ -891,9 +881,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> VideoDecoderEvent::Command       SerializationHelper::String2T    ( const std::string & s, const VideoDecoderEvent::Command & defaultVal );
-template<> std::string                      SerializationHelper::T2String    ( const VideoDecoderEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( VideoDecoderEvent::Command )
 DEFINE_PTR_TYPE( VideoDecoderEvent )
 
 
@@ -931,9 +920,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> NodeLogicEvent::Command      SerializationHelper::String2T      ( const std::string& s, const NodeLogicEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String      ( const NodeLogicEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( NodeLogicEvent::Command )
 DEFINE_PTR_TYPE( NodeLogicEvent )
 
 
@@ -1029,9 +1017,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> EngineStateEvent::Command    SerializationHelper::String2T  ( const std::string& s, const EngineStateEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const EngineStateEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( EngineStateEvent::Command )
 DEFINE_PTR_TYPE( EngineStateEvent )
 
 
@@ -1071,9 +1058,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> GlobalEffectEvent::Command   SerializationHelper::String2T  ( const std::string& s, const GlobalEffectEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const GlobalEffectEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( GlobalEffectEvent::Command )
 DEFINE_PTR_TYPE( GlobalEffectEvent )
 
 
@@ -1126,12 +1112,9 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TimelineKeyframeEvent::Command   SerializationHelper::String2T  ( const std::string& s, const TimelineKeyframeEvent::Command& defaultVal );
-template<> std::string                      SerializationHelper::T2String  ( const TimelineKeyframeEvent::Command & t );
 
-template<> TimelineKeyframeEvent::KeyframeType   SerializationHelper::String2T   ( const std::string& s, const TimelineKeyframeEvent::KeyframeType& defaultVal );
-template<> std::string                           SerializationHelper::T2String   ( const TimelineKeyframeEvent::KeyframeType & t );
-
+DECLARE_ENUM_SERIALIZATION( TimelineKeyframeEvent::Command )
+DECLARE_ENUM_SERIALIZATION( TimelineKeyframeEvent::KeyframeType )
 DEFINE_PTR_TYPE( TimelineKeyframeEvent )
 
 
@@ -1171,9 +1154,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> MouseEvent::Command          SerializationHelper::String2T  ( const std::string& s, const MouseEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const MouseEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( MouseEvent::Command )
 DEFINE_PTR_TYPE( MouseEvent )
 
 
@@ -1214,9 +1196,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> SceneVariableEvent::Command      SerializationHelper::String2T  ( const std::string& s, const SceneVariableEvent::Command& defaultVal );
-template<> std::string                      SerializationHelper::T2String  ( const SceneVariableEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( SceneVariableEvent::Command )
 DEFINE_PTR_TYPE( SceneVariableEvent )
 
 
@@ -1255,9 +1236,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> ConfigEvent::Command         SerializationHelper::String2T  ( const std::string& s, const ConfigEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const ConfigEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( ConfigEvent::Command )
 DEFINE_PTR_TYPE( ConfigEvent )
 
 
@@ -1304,9 +1284,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> GridLineEvent::Command       SerializationHelper::String2T  ( const std::string& s, const GridLineEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const GridLineEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( GridLineEvent::Command )
 DEFINE_PTR_TYPE( GridLineEvent )
 
 
@@ -1348,9 +1327,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> UndoRedoEvent::Command       SerializationHelper::String2T  ( const std::string& s, const UndoRedoEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const UndoRedoEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( UndoRedoEvent::Command )
 DEFINE_PTR_TYPE( UndoRedoEvent )
 
 
@@ -1395,9 +1373,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> HightmapEvent::Command       SerializationHelper::String2T      ( const std::string& s, const HightmapEvent::Command& defaultVal );
-template<> std::string                  SerializationHelper::T2String      ( const HightmapEvent::Command & t );
 
+DECLARE_ENUM_SERIALIZATION( HightmapEvent::Command )
 DEFINE_PTR_TYPE( HightmapEvent )
 
 
