@@ -74,14 +74,7 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
 {
     renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
     
-    // FIXME: add video manager code somewhere near this piece of logic
-
     videocards::VideoCardManager::Instance().ProcessFrame( m_videoFrame->GetData() );
-
-//  if( m_renderToSharedMemory )
-//  {
-//	    m_SharedMemoryVideoBuffer->DistributeFrame(frame);
-//  }
 }
 
 // *********************************

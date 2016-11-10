@@ -33,13 +33,14 @@ namespace bv {
 
 // *********************************
 //DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput()
-RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool renderToSharedMemory )
+RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool enableSharedMemory )
     : m_rtStackAllocator( width, height, TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
     , m_videoOutputRenderLogic( nullptr )
     , m_ctx( nullptr )
     , m_clearColor( clearColor )
-    , m_renderToSharedMemory( renderToSharedMemory )
+    , m_enableSharedMemory( enableSharedMemory )
+    , m_sharedMemoryVideoBuffer( nullptr )
 {
     auto videoCardEnabled   = useReadback;
     auto previewAsVideoCard = useVideoCardOutput;
@@ -49,7 +50,6 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
     m_blitEffect                = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SIMPLE_BLIT );
     m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
     m_videoOutputRenderLogic    = new VideoOutputRenderLogic( height ); // FIXME: interlace odd/even setup
-    //m_SharedMemoryVideoBuffer	= new SharedMemoryVideoBuffer();
 
     m_displayVideoCardPreview   = previewAsVideoCard;
     m_useVideoCardOutput        = videoCardEnabled;
@@ -58,6 +58,11 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
 
     auto effect = new BoundingBoxEffect(); // FIXME: memory leak
     m_boundingBoxEffect         = effect->GetPass( 0 );
+
+    if( m_enableSharedMemory )
+    {
+        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height );
+    }
 }
 
 // *********************************
@@ -65,9 +70,15 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
 RenderLogic::~RenderLogic    ()
 {
     delete m_offscreenDisplay;
+    delete m_videoOutputRenderLogic;
     delete m_blitEffect;
     delete m_screenShotLogic;
     delete m_ctx;
+    
+    if( m_sharedMemoryVideoBuffer )
+    {
+        delete m_sharedMemoryVideoBuffer;
+    }
 }
 
 // *********************************
@@ -349,6 +360,11 @@ void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext
     auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 
     m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );
+
+    if( m_enableSharedMemory )
+    {
+        m_sharedMemoryVideoBuffer->DistributeFrame( m_videoOutputRenderLogic->GetLastVideoFrame() );
+    }
 }
 
 // *********************************

@@ -3,48 +3,37 @@
 #include "SharedMemoryVideoBuffer.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
-namespace bv
-{
+namespace bv {
 
 // *********************************
 //
-SharedMemoryVideoBuffer::SharedMemoryVideoBuffer()
+SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 height, UInt32 scaleFactor )
+    : m_isAllocated( false )
+    , m_pBuf( nullptr )
 {
-    m_is_allocated = false;
-    TCHAR szName[]=TEXT("BV");
+    TCHAR szName[] = TEXT( "BV" );
 
-    int new_width = 1920/4;
-    int new_height = 1080/4;
-    int new_size =new_width*new_height*3; 
+    m_scaleFactor = scaleFactor;
+    m_width = width;// / m_scaleFactor;
+    m_height = height;// / m_scaleFactor;
+    m_buffSize = m_width * m_height * 3;
 
-        
+    m_hMapFile = CreateFileMapping( INVALID_HANDLE_VALUE,    // use paging file
+                                    NULL,                    // default security
+                                    PAGE_READWRITE,          // read/write access
+                                    0,                       // maximum object size (high-order DWORD)
+                                    m_buffSize,              // maximum object size (low-order DWORD)
+                                    szName );                // name of mapping object
 
-    m_hMapFile = CreateFileMapping(
-                    INVALID_HANDLE_VALUE,    // use paging file
-                    NULL,                    // default security
-                    PAGE_READWRITE,          // read/write access
-                    0,                       // maximum object size (high-order DWORD)
-                    new_size,                // maximum object size (low-order DWORD)
-                    szName);                 // name of mapping object
-
-    if (m_hMapFile == NULL)
+    if( m_hMapFile )
     {
-        printf("Could not create file mapping object (%d).\n",GetLastError());
-    }else{
+        m_pBuf = ( LPTSTR ) MapViewOfFile( m_hMapFile,   // handle to map object
+                                           FILE_MAP_ALL_ACCESS, // read/write permission
+                                           0,
+                                           0,
+                                           m_buffSize );
 
-        m_pBuf = (LPTSTR) MapViewOfFile(m_hMapFile,   // handle to map object
-                            FILE_MAP_ALL_ACCESS, // read/write permission
-                            0,
-                            0,
-                            new_size);
-
-        if (m_pBuf == NULL)
+        if ( m_pBuf == NULL )
         {
             printf( "Could not map view of file (%d).\n", GetLastError() );
 
@@ -52,51 +41,60 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer()
         }
         else
         {
-            m_data = new unsigned char[ new_size ];
-            CopyMemory( ( PVOID )m_pBuf, m_data, new_size * sizeof( unsigned char ) );
-            m_is_allocated = true;	
+            m_data = new unsigned char[ m_buffSize ];
+            CopyMemory( ( PVOID )m_pBuf, m_data, m_buffSize * sizeof( unsigned char ) );
+            m_isAllocated = true;
         }
+    }
+    else
+    {
+        printf( "Could not create file mapping object (%d).\n", GetLastError() );
     }
 }
 
 // *********************************
 //
-void		SharedMemoryVideoBuffer::DistributeFrame							(Texture2DConstPtr frame)
+void        SharedMemoryVideoBuffer::DistributeFrame                            ( Texture2DConstPtr frame )
 {
+    auto data = ( unsigned char * )frame->GetData()->Get();  
 
-    // scale down by a factor of 4
-
-    unsigned char* data = (unsigned char*)frame->GetData()->Get();	
-    int new_width = 1920/4;
-    int new_height = 1080/4;
-    int new_size =new_width*new_height*3; 
-
-    for(int j=0;j<new_height;j++)
+    for( UInt32 j = 0; j < m_height; ++j )
     {
-        int y_scaled_offset = j*new_width*3;
-        int y_offset = j*4*1920*4;
+        int y_scaled_offset = j * m_width;
+        //int y_offset = j * m_width * m_scaleFactor;
             
-        for(int i=0;i<new_width;i++)
+        for( UInt32 i = 0; i < m_width ; ++i )
         {
-                int x_offset = i*4*4;
-                int x_scaled_offset = i*3;
+            //int x_scaled_offset = i * 3;
+            int x_offset = i * 3;
 
-                m_data[y_scaled_offset + x_scaled_offset + 0] = data[y_offset+x_offset +0];
-                m_data[y_scaled_offset + x_scaled_offset + 1] = data[y_offset+x_offset +1];
-                m_data[y_scaled_offset + x_scaled_offset + 2] = data[y_offset+x_offset +2];
+            auto w = (int)data[ y_scaled_offset + x_offset + 2 ];
+            w;
+            if( w > 0 )
+            {
+                auto a = 0; a;
+            }
+            if( w > 1 )
+            {
+                auto b = 0; b;
+            }
+            m_data[ y_scaled_offset + x_offset + 0 ] = data[ y_scaled_offset + x_offset + 0 ];
+            m_data[ y_scaled_offset + x_offset + 1 ] = data[ y_scaled_offset + x_offset + 1 ];
+            m_data[ y_scaled_offset + x_offset + 2 ] = data[ y_scaled_offset + x_offset + 2 ];
         }
     }
-    CopyMemory((PVOID)m_pBuf, m_data, new_size* sizeof(unsigned char));
+    CopyMemory( ( PVOID )m_pBuf, m_data, m_buffSize * sizeof( unsigned char ) );
 }
 
 // *********************************
 //
 SharedMemoryVideoBuffer::~SharedMemoryVideoBuffer()
 {
-    if(m_is_allocated)
+    if( m_isAllocated )
     {
-        UnmapViewOfFile(m_pBuf);
-        CloseHandle(m_hMapFile);
+        UnmapViewOfFile( m_pBuf );
+        CloseHandle( m_hMapFile );
     }
 }
-}
+
+} //bv

@@ -1,13 +1,11 @@
 #pragma once
 
-//pablito:
 #include "VideoCardManager.h"
-#include <vector>
 
+#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 #include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
-//#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
 #include "Mathematics/glm_inc.h"
@@ -52,16 +50,17 @@ private:
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
-    //SharedMemoryVideoBuffer*        m_SharedMemoryVideoBuffer;
 
     glm::vec4                       m_clearColor;
-    bool                            m_renderToSharedMemory;
 
     RenderablePass *                m_boundingBoxEffect;
 
+    SharedMemoryVideoBuffer *       m_sharedMemoryVideoBuffer;
+    bool                            m_enableSharedMemory;
+
 public:
 
-            RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool renderToSharedMemory );
+            RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool enableSharedMemory );
             ~RenderLogic    ();
 
     void    RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
