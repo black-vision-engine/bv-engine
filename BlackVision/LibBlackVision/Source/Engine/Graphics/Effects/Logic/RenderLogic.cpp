@@ -61,7 +61,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
 
     if( m_enableSharedMemory )
     {
-        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height );
+        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_R8G8B8 );
     }
 }
 
@@ -130,7 +130,6 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
         auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
         m_screenShotLogic->FrameRendered( rt, ctx );
     }
-
 
     if( m_displayVideoCardPreview )
     {
@@ -357,7 +356,7 @@ void                    RenderLogic::UpdateOffscreenState   ()
 //
 void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext * ctx )
 {
-    auto rt = m_offscreenDisplay->GetVideoRenderTarget();
+    auto rt = m_offscreenDisplay->GetPreviousFrameRenderTarget();
 
     m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );
 

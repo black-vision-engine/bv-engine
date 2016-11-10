@@ -14,11 +14,6 @@
 //#include "Tools/HRTimer.h"
 
 
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 //FIXME: remove
@@ -117,7 +112,7 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 
 // ****************************
 // FIXME: dodac streaming flag do bufora (dla multi PBO)
-void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex )
+void            PdrRenderTarget::ReadColorTexture( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex )
 {
     assert( i < m_numTargets );
 
@@ -135,41 +130,43 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         txBufMap[ outputTex.get() ] = buffer;
     }
 
-    assert( txBufMap.find( outputTex.get() ) != txBufMap.end() );
-
-    buffer = txBufMap[ outputTex.get() ];
-
-    if( outputTex->GetFormat() != format || outputTex->GetWidth() != m_width || outputTex->GetHeight() != m_height )
+    if( txBufMap.find( outputTex.get() ) != txBufMap.end() )
     {
-        printf( "Reading %d texture from render target with incompatibile texture (%d, %d, %d) -> expected (%d, %d, %d) - ASSERT\n"
-                , i
-                , outputTex->GetFormat()
-                , outputTex->GetWidth()
-                , outputTex->GetHeight()
-                , format
-                , m_width
-                , m_height );
+        buffer = txBufMap[ outputTex.get() ];
 
-        assert( false ); //FIXME: disallowed in current implementation
+        if( outputTex->GetFormat() != format || outputTex->GetWidth() != m_width || outputTex->GetHeight() != m_height )
+        {
+            printf( "Reading %d texture from render target with incompatibile texture (%d, %d, %d) -> expected (%d, %d, %d) - ASSERT\n"
+                    , i
+                    , outputTex->GetFormat()
+                    , outputTex->GetWidth()
+                    , outputTex->GetHeight()
+                    , format
+                    , m_width
+                    , m_height );
+
+            assert( false ); //FIXME: disallowed in current implementation
 #if 0        
-        assert( buffer->Size() != Texture2D::RawFrameSize( format, m_width, m_height ) ); //FIXME: not safe - chances are that multiple formats may have exactly the same size (in which case mem buffer should be simply reused)
-        buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
+            assert( buffer->Size() != Texture2D::RawFrameSize( format, m_width, m_height ) ); //FIXME: not safe - chances are that multiple formats may have exactly the same size (in which case mem buffer should be simply reused)
+            buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
-        auto tx = Texture2DCache::CreateTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, buffer );
-        outputTex = tx;
+            auto tx = Texture2DCache::CreateTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, buffer );
+            outputTex = tx;
 #endif
+        }
+
+
+        //double readStart = GTimer.CurElapsed();
+        Enable( renderer );
+
+        pboMem->LockDownload();
+        PBODownloadData( i );
+        pboMem->UnlockDownload( buffer->GetWritable(), outputTex->RawFrameSize() );
+
+        Disable( renderer );
+        //double readTime = GTimer.CurElapsed() - readStart;
+        //printf( "Frame readback took %.4f ms\n", readTime * 1000.f );
     }
-
-    //double readStart = GTimer.CurElapsed();
-    Enable( renderer );
-
-	pboMem->LockDownload();
-	PBODownloadData( i );
-    pboMem->UnlockDownload( buffer->GetWritable(), outputTex->RawFrameSize() );
-
-    Disable( renderer );
-    //double readTime = GTimer.CurElapsed() - readStart;
-    //printf( "Frame readback took %.4f ms\n", readTime * 1000.f );
 }
 
 // ****************************

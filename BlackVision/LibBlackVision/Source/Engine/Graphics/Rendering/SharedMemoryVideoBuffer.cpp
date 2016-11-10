@@ -5,25 +5,30 @@
 
 namespace bv {
 
+
 // *********************************
 //
-SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 height, UInt32 scaleFactor )
+const std::wstring    SharedMemoryVideoBuffer::MAPPING_OBJECT_NAME = L"BV";
+
+// *********************************
+//
+SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor )
     : m_isAllocated( false )
     , m_pBuf( nullptr )
+    , m_scaleFactor( scaleFactor )
+    , m_format( format )
 {
-    TCHAR szName[] = TEXT( "BV" );
+    // FIXME: rescale
+    m_width = width / scaleFactor;
+    m_height = height / scaleFactor;
+    m_buffSize = m_width * m_height * ( UInt32 )Texture::GetPixelSize( m_format );
 
-    m_scaleFactor = scaleFactor;
-    m_width = width;// / m_scaleFactor;
-    m_height = height;// / m_scaleFactor;
-    m_buffSize = m_width * m_height * 3;
-
-    m_hMapFile = CreateFileMapping( INVALID_HANDLE_VALUE,    // use paging file
-                                    NULL,                    // default security
-                                    PAGE_READWRITE,          // read/write access
-                                    0,                       // maximum object size (high-order DWORD)
-                                    m_buffSize,              // maximum object size (low-order DWORD)
-                                    szName );                // name of mapping object
+    m_hMapFile = CreateFileMapping( INVALID_HANDLE_VALUE,           // use paging file
+                                    NULL,                           // default security
+                                    PAGE_READWRITE,                 // read/write access
+                                    0,                              // maximum object size (high-order DWORD)
+                                    m_buffSize,                     // maximum object size (low-order DWORD)
+                                    MAPPING_OBJECT_NAME.c_str() );  // name of mapping object
 
     if( m_hMapFile )
     {
@@ -41,8 +46,7 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 h
         }
         else
         {
-            m_data = new unsigned char[ m_buffSize ];
-            CopyMemory( ( PVOID )m_pBuf, m_data, m_buffSize * sizeof( unsigned char ) );
+            m_data = new char[ m_buffSize ];
             m_isAllocated = true;
         }
     }
@@ -56,34 +60,29 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 h
 //
 void        SharedMemoryVideoBuffer::DistributeFrame                            ( Texture2DConstPtr frame )
 {
-    auto data = ( unsigned char * )frame->GetData()->Get();  
+    auto data = frame->GetData()->Get();
 
+    auto inPixelSize = ( UInt32 )frame->GetPixelSize();
+    auto outPixelSize = ( UInt32 )Texture::GetPixelSize( m_format );
+
+    assert( inPixelSize >= outPixelSize );
+
+    //FIXME: interpolate
     for( UInt32 j = 0; j < m_height; ++j )
     {
-        int y_scaled_offset = j * m_width;
-        //int y_offset = j * m_width * m_scaleFactor;
-            
-        for( UInt32 i = 0; i < m_width ; ++i )
-        {
-            //int x_scaled_offset = i * 3;
-            int x_offset = i * 3;
+        int y_scaled_offset = j * m_width * outPixelSize;
+        int y_offset = j * m_width * ( UInt32 )pow( m_scaleFactor, 2 ) * inPixelSize;
 
-            auto w = (int)data[ y_scaled_offset + x_offset + 2 ];
-            w;
-            if( w > 0 )
-            {
-                auto a = 0; a;
-            }
-            if( w > 1 )
-            {
-                auto b = 0; b;
-            }
-            m_data[ y_scaled_offset + x_offset + 0 ] = data[ y_scaled_offset + x_offset + 0 ];
-            m_data[ y_scaled_offset + x_offset + 1 ] = data[ y_scaled_offset + x_offset + 1 ];
-            m_data[ y_scaled_offset + x_offset + 2 ] = data[ y_scaled_offset + x_offset + 2 ];
+        for( UInt32 i = 0; i < m_width; ++i )
+        {
+            int x_scaled_offset = i * outPixelSize;
+            int x_offset = i * inPixelSize * m_scaleFactor;
+
+            memcpy( &m_data[ y_scaled_offset + x_scaled_offset ], &data[ y_offset + x_offset ], outPixelSize );
         }
     }
-    CopyMemory( ( PVOID )m_pBuf, m_data, m_buffSize * sizeof( unsigned char ) );
+
+    CopyMemory( ( PVOID )m_pBuf, m_data, m_buffSize * sizeof( char ) );
 }
 
 // *********************************
