@@ -1,6 +1,7 @@
 #pragma once
 
-#include <windows.h>
+//#include <windows.h>
+#include "DeclareWinTypes.h"
 #include <conio.h>
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"

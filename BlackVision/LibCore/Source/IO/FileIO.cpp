@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "stdafxCore.h"
 
 #include "FileIO.h"
 #include "DirIO.h"

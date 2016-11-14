@@ -27,9 +27,12 @@ class TriangulatePlugin : public DefaultGeometryProcessorBase
 {
 
 protected:
-    virtual void                            ProcessConnectedComponent   (   model::ConnectedComponentPtr & currComponent,
-                                                                                    std::vector< IConnectedComponentPtr > & allComponents,
-                                                                                    PrimitiveType topology );
+    virtual void                            ProcessConnectedComponent   ( model::ConnectedComponentPtr & /*currComponent*/,
+                                                                          std::vector< IConnectedComponentPtr > & /*allComponents*/,
+                                                                          PrimitiveType /*topology*/ )
+    {}
+
+
     virtual void                            ProcessVertexAttributesChannel  ();
 
     virtual void                            InitializeVertexAttributesChannel ();

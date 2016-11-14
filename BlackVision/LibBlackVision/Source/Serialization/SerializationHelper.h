@@ -107,7 +107,7 @@ T                   String2T    ( const std::string & s, const T & defaultVal );
 
 // ***********************
 // Declarations of specializations.
-template<> bool             String2T    ( const std::string & s, const bool & defaultVal );
+//template<> bool             String2T    ( const std::string & s, const bool & defaultVal );
 template<> std::string      T2String    ( const bool & t );
 
 template<> std::string      T2String    ( const std::wstring & wstr );

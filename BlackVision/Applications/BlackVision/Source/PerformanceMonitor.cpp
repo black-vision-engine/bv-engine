@@ -3,6 +3,11 @@
 #pragma comment(lib,"pdh.lib")
 #include <cstdio>
 
+
+#include "psapi.h"
+#include "pdh.h"
+#include <pdhmsg.h>
+
 namespace bv{
 
 PerformanceStats PerformanceMonitor::Stats;

@@ -2,7 +2,7 @@
 
 #include "SharedMemoryVideoBuffer.h"
 
-
+#include <Windows.h>
 
 
 #include "Memory/MemoryLeaks.h"

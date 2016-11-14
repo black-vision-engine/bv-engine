@@ -9,7 +9,6 @@
 #include <iostream>
 #include <fstream>
 #include <process.h>
-#include "win_sock.h"
 #include <memory>
 #include <boost\circular_buffer.hpp>
 namespace bv

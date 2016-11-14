@@ -126,7 +126,7 @@
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h">
       <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\stdafx.h" />
+    <ClInclude Include="..\..\..\Source\stdafxCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">

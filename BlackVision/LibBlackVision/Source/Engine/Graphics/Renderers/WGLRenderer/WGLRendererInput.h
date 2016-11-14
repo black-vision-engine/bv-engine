@@ -1,6 +1,8 @@
 #pragma once
 
-#include "win_sock.h" // FIXME for God's sake
+//#include "win_sock.h" // FIXME for God's sake
+// It's better hack then including win_sock.h
+#include "DeclareWinTypes.h"
 
 namespace bv
 {

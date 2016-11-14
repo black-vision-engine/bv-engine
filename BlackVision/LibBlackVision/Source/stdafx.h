@@ -12,8 +12,7 @@
 #include "Mathematics/Box.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 
-
-#include "Assets/AssetManager.h"
+#include "Engine/Models/BoundingVolume.h"
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
@@ -26,7 +25,11 @@
 #include "Serialization/SerializationHelper.h"
 
 
-//#include "Engine/Models/BasicNode.h"
+#include "Engine/Events/Events.h"
+#include "Engine/Events/EventManager.h"
+
+
+#include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultGeometryProcessorBase.h"
@@ -36,6 +39,43 @@
 //#include <vld.h>
 
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
+
+#include "Assets/Asset.h"
+#include "Assets/AssetDescriptor.h"
+#include "Assets/AssetLoader.h"
+#include "Assets/AssetManager.h"
+#include "Assets/Font/2D/FontAssetDescriptor.h"
+#include "Assets/Font/3D/FontAsset3DDesc.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
+#include "Assets/Mesh/MeshAssetDescriptor.h"
+#include "Assets/SVG/SVGAssetDescriptor.h"
+
+
+#include "Engine/Types/Values/ValuesFactory.h"
+
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimeEvaluatorBase.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
+
+
+#include "Engine/Graphics/State/RendererStateInstance.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
+
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PostFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
+#include "Engine/Graphics/Shaders/RenderablePass.h"
+
+#include "Engine/Graphics/SceneGraph/Camera.h"
+#include "Engine/Graphics/SceneGraph/Scene.h"
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+
+
+
 
 
 #include <map>

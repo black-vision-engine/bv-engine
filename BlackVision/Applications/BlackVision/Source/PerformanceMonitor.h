@@ -1,13 +1,11 @@
-#include "win_sock.h"
+#pragma once
 
-#include "psapi.h"
-#include "pdh.h"
-#include <pdhmsg.h>
+#include "DeclareWinTypes.h"
 #include "FrameStatsService.h"
 
 #include <string>
 
-#pragma once
+
 
 namespace bv{
 using std::string;

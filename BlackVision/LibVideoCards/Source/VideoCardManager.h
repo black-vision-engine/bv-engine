@@ -1,6 +1,8 @@
 #pragma once
 
-#include "win_sock.h"
+//#include "win_sock.h"
+#include "DeclareWinTypes.h"
+
 #include <vector>
 #include "VideoCardBase.h"
 #include "VideoMidgard.h"
