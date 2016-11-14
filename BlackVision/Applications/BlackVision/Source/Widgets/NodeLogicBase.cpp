@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "NodeLogicBase.h"
 
 #include "Serialization/SerializationHelper.h"

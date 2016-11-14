@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "NodeLogicFactory.h"
 
 #include "Counter/Counter.h"

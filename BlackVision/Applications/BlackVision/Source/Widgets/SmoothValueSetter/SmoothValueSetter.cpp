@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "SmoothValueSetter.h"
 
 #include "Widgets/NodeLogicHelper.h"

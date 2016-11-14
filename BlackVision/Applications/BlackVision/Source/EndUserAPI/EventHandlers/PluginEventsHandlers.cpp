@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "PluginEventsHandlers.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"

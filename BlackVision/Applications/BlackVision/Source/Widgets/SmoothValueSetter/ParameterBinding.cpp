@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "ParameterBinding.h"
 
 #include "Serialization/SerializationHelper.h"

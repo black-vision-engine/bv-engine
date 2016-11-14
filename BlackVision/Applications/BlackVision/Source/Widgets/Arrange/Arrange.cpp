@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "Arrange.h"
 
 #include <glm/gtx/euler_angles.hpp>

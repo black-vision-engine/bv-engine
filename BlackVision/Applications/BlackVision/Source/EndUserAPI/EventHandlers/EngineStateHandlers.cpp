@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "EngineStateHandlers.h"
 
 #include "BVAppLogic.h"

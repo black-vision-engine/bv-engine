@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #pragma warning(disable :4996)
 #include "bvApp.h"
 
@@ -7,11 +9,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Processes/ProcessManager.h"
-#include "Assets/AssetManager.h"
-#include "Assets/Texture/TextureLoader.h"
-#include "Assets/Font/FontLoader.h"
-#include "Assets/Texture/AnimationLoader.h"
-#include "Assets/Font/2D/FontAssetDescriptor.h"
+
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 

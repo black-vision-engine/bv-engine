@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "NodeReplicator.h"
 
 #include "Engine/Models/ModelNodeEditor.h"

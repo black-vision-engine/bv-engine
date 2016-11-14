@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "AICommands.h"
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"

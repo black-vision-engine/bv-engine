@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "NewModelTestNodes.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPluginListFinalized.h"

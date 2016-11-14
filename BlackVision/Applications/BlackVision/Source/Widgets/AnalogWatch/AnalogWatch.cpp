@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "AnalogWatch.h"
 
 #include "Engine/Models/BasicNode.h"

@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "TestEditorsKeyboardHandler.h"
 
 #include "Engine/Models/BVProjectEditor.h"

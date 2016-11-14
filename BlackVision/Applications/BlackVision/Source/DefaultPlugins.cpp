@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "DefaultPlugins.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"

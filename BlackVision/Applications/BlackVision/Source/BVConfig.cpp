@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "BVConfig.h"
 
 #define USE_READBACK_API

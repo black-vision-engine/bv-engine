@@ -197,6 +197,7 @@
     <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp">
       <Filter>Widgets\Arrange</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -348,6 +349,7 @@
     <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h">
       <Filter>Widgets\Arrange</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\stdafxBVApp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

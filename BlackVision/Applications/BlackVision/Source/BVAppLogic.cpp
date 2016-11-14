@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "BVAppLogic.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"

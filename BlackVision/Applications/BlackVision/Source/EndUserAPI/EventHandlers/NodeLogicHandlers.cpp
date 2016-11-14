@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "NodeLogicHandlers.h"
 
 #include "Engine/Models/BVProjectEditor.h"

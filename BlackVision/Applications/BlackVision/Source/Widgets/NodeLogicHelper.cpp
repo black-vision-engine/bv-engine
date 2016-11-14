@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "NodeLogicHelper.h"
 #include "Engine/Types/Values/ValuesFactory.h"
 #include "Engine/Models/Plugins/Parameters/ParameterSerialization.h"

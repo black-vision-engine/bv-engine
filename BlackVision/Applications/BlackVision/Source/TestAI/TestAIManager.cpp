@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "TestAIManager.h"
 
 #include <cassert>

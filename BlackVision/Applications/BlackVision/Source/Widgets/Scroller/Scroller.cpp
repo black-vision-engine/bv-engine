@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "Scroller.h"
 
 #include "Widgets/NodeLogicHelper.h"

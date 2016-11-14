@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "FrameStatsService.h"
 
 #include  <cassert>

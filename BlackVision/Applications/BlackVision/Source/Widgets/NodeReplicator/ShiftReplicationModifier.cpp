@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "ShiftReplicationModifier.h"
 
 #include "Widgets/NodeLogicHelper.h"

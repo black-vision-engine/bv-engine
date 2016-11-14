@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "TestVideoStreamDecoderKeyboardHandler.h"
 
 #include "Engine/Models/BVProjectEditor.h"

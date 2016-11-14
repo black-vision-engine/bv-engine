@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "QueryHandlers.h"
 
 #include "BVAppLogic.h"

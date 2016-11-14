@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "PerformanceMonitor.h"
 #include "BVConfig.h"
 #pragma comment(lib,"pdh.lib")

@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "RenderMode.h"
 
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"

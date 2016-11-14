@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "SceneEventsHandlers.h"
 
 #include "Engine/Models/BVProjectEditor.h"

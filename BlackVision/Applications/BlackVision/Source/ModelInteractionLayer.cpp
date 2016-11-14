@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "ModelInteractionLayer.h"
 
 #include "Tools/StringHeplers.h"

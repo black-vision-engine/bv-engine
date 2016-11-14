@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "StatsFormatters.h"
 
 #include <sstream>

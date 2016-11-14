@@ -1,8 +1,6 @@
 #include "bvApp.h"
-#include "Tools\Logger\Logger.h"
+#include "UseLoggerBVAppModule.h"
 
-
-#define LOG_MODULE bv::ModuleEnum::ME_BlackVisionApp
 
 
 // *********************************

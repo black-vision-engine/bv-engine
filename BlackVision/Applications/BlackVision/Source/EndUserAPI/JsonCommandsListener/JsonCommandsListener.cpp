@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "JsonCommandsListener.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"

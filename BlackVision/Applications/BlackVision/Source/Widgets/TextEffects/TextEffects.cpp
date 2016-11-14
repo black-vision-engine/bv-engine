@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "stdafxBVApp.h"
 
 #include "TextEffects.h"
 

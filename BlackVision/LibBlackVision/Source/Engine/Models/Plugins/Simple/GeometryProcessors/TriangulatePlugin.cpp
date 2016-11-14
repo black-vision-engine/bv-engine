@@ -3,6 +3,7 @@
 #include "UseLoggerLibBlackVision.h"
 
 #include "TriangulatePlugin.h"
+#include "Triangulator.h"
 
 
 

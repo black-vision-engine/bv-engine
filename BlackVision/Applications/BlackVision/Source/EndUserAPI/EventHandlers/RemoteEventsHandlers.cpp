@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "RemoteEventsHandlers.h"
 
 #include "PluginEventsHandlers.h"

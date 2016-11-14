@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "AssetHandlers.h"
 
 #include "BVAppLogic.h"

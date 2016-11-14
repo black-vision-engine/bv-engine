@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "ExampleTestScenes.h"
 
 #include <vector>

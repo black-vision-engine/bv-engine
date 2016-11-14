@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "MeshLoader.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"

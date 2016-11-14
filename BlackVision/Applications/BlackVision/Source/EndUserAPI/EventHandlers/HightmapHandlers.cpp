@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "HightmapHandlers.h"
 
 #include "BVAppLogic.h"

@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "ExampleVideoInput.h"
 //#include "Engine\Models\Resources\TextureLoader.h"
 

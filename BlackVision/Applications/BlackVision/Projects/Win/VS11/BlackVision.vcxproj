@@ -100,6 +100,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <PrecompiledHeaderFile>stdafxBVApp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions> /Zm200 </AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -130,7 +133,9 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS</AdditionalOptions>
+      <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS /Zm200 </AdditionalOptions>
+      <PrecompiledHeaderFile>stdafxBVApp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,6 +170,9 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PrecompiledHeaderFile>stdafxBVApp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions> /Zm200 </AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -214,7 +222,9 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalOptions>-SCL_SECURE_NO_WARNINGS</AdditionalOptions>
+      <AdditionalOptions>-SCL_SECURE_NO_WARNINGS /Zm200 </AdditionalOptions>
+      <PrecompiledHeaderFile>stdafxBVApp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -309,6 +319,12 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
+    <ClCompile Include="..\..\..\Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
@@ -369,6 +385,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
+    <ClInclude Include="..\..\..\Source\stdafxBVApp.h" />
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />

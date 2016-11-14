@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "TestVideoInput.h"
 
 namespace bv {

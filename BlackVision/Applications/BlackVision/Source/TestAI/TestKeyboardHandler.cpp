@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "TestKeyboardHandler.h"
 
 #include "BVAppLogic.h"

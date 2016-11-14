@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "PieChart.h"
 
 #include <random>

@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "GlobalEffectHandler.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"

@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "RectNodeBuilder.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"

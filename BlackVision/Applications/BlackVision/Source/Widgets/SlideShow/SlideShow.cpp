@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SlideShow.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"

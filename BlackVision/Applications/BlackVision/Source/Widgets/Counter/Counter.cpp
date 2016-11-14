@@ -1,3 +1,5 @@
+#include "stdafxBVApp.h"
+
 #include "Counter.h"
 
 #include "Engine/Models/BasicNode.h"
