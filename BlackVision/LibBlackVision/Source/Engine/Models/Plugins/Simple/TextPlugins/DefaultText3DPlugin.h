@@ -15,11 +15,15 @@
 #include "Engine/Events/BaseEvent.h"
 #include "Assets/Font/3D/FontAsset3D.h"
 #include "Assets/Font/3D/FontAsset3DDesc.h"
+#include "Assets/Font/TextHelper.h"
 
 
 
 namespace bv { namespace model {
 
+
+typedef ParamEnum< TextAlignmentType > ParamEnumTAT;
+DEFINE_PTR_TYPE( ParamEnumTAT );
 
 // ***************************** DESCRIPTOR **********************************
 class DefaultText3DPluginDesc : public BasePluginDescriptor
@@ -47,6 +51,7 @@ public:
         static const std::string        SPACING;
         static const std::string        MAX_TEXT_LENGTH;
         static const std::string        ALIGNEMENT;
+        static const std::string        USE_KERNING;
     };
 
 private:
@@ -58,11 +63,13 @@ private:
 
     ParamWStringPtr                 m_textParam;
 
-    ParamFloatPtr                   m_spacingParam;
-    ParamFloatPtr                   m_alignmentParam;
-    ParamFloatPtr                   m_maxTextLengthParam;
+    ValueBoolPtr                    m_useKerningValue;
+    ValueFloatPtr                   m_spacingValue;
+    ValueFloatPtr                   m_maxTextLengthValue;
     ValueFloatPtr                   m_fontSize;
 	ValueMat4Ptr					m_scaleValue;
+
+    ParamEnumTATPtr                 m_alignmentParam;
 
     FontAsset3DConstPtr             m_fontAsset;
 

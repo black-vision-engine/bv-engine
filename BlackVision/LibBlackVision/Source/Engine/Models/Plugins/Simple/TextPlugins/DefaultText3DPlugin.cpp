@@ -32,6 +32,36 @@
 namespace bv { namespace model {
 
 
+typedef ParamEnum< TextAlignmentType > ParamEnumTAT;
+
+// ***********************
+//
+VoidPtr    ParamEnumTAT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+// ***********************
+//
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< ParamEnumTAT >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< ParamEnumTAT >( name, timeline );
+}
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+
+
+const std::string        DefaultText3DPlugin::PARAMS::TEXT              = "text";
+const std::string        DefaultText3DPlugin::PARAMS::FONT_SIZE         = "fontSize";
+const std::string        DefaultText3DPlugin::PARAMS::SPACING           = "spacing";
+const std::string        DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH   = "maxTextLenght";
+const std::string        DefaultText3DPlugin::PARAMS::ALIGNEMENT        = "alignment";
+const std::string        DefaultText3DPlugin::PARAMS::USE_KERNING       = "useKerning";
+
+
+
+
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
@@ -55,11 +85,13 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     ModelHelper h( timeEvaluator );
     h.CreateVacModel();
 
-    h.AddSimpleParam( "text", std::wstring( L"" ), true, true );
-    h.AddSimpleParam( "spacing", 0.0f, true, true );
-    h.AddSimpleParam( "alignment", 0.0f, true, true );
-    h.AddSimpleParam( "maxTextLenght", 0.0f, true, true );
-    h.AddSimpleParam( "fontSize", 8.0f, true, true );
+    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::TEXT, std::wstring( L"" ), true, true );
+    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::SPACING, 0.0f, true, true );
+    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH, 0.0f, true, true );
+    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::FONT_SIZE, 8.0f, true, true );
+    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true, true, true );
+    h.AddParam< IntInterpolator, TextAlignmentType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumTAT >
+        ( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
 
     h.CreatePSModel();
     h.CreateVSModel();
@@ -121,11 +153,14 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
     
 	SetPrevPlugin( prev );
 
-    m_fontSize              = QueryTypedValue< ValueFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetValue( "fontSize" ) );
-    m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "spacing" ) );
-    m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "alignment" ) );
-    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "maxTextLenght" ) );
-    m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetVertexAttributesChannelModel()->GetParameter( "text" ) );
+    auto modelVAC = GetPluginParamValModel()->GetVertexAttributesChannelModel();
+
+    m_fontSize              = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::FONT_SIZE ) );
+    m_spacingValue          = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::SPACING ) );
+    m_maxTextLengthValue    = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::MAX_TEXT_LENGTH ) );
+    m_textParam             = QueryTypedParam< ParamWStringPtr >( modelVAC->GetParameter( PARAMS::TEXT ) );
+    m_useKerningValue       = QueryTypedValue< ValueBoolPtr >( modelVAC->GetValue( PARAMS::USE_KERNING ) );
+    m_alignmentParam        = QueryTypedParam< ParamEnumTATPtr >( modelVAC->GetParameter( PARAMS::ALIGNEMENT ) );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
@@ -173,10 +208,10 @@ void                                DefaultText3DPlugin::RebuildText            
     Text3DUtils::TextLayout layout;
     layout.Arranger = nullptr;
     layout.Size = m_fontSize->GetValue();
-    layout.Spacing = m_spacingParam->Evaluate();
-    layout.Tat = TextAlignmentType::Center;
+    layout.Spacing = m_spacingValue->GetValue();
+    layout.Tat = m_alignmentParam->Evaluate();
     layout.FontAsset = m_fontAsset;
-    layout.UseKerning = false;
+    layout.UseKerning = m_useKerningValue->GetValue();
     layout.ViewWidth = ApplicationContext::Instance().GetWidth();
     layout.ViewHeight = ApplicationContext::Instance().GetHeight();
 
@@ -198,10 +233,11 @@ void                                DefaultText3DPlugin::Update                 
 {
     BasePlugin::Update( t );
 
-    if( ParameterChanged( "text" ) || 
-        ParameterChanged( "alignment" ) ||
-        ParameterChanged( "spacing" ) ||
-        ParameterChanged( "fontSize" ) )
+    if( ParameterChanged( PARAMS::TEXT ) || 
+        ParameterChanged( PARAMS::ALIGNEMENT ) ||
+        ParameterChanged( PARAMS::SPACING ) ||
+        ParameterChanged( PARAMS::FONT_SIZE ) ||
+        ParameterChanged( PARAMS::USE_KERNING ) )
     {
         RebuildText();
     }

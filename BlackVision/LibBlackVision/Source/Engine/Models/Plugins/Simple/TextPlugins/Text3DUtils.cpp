@@ -24,36 +24,6 @@
 namespace bv { namespace model
 {
 
-// *********************************
-//
-namespace
-{
-
-
-
-} // anonymous
-
-//// *********************************
-////
-//Float3AttributeChannelConstPtr      Text3DUtils::CreateAttrChannel( const wchar_t & wch, const std::string & fontPath, SizeType size )
-//{
-//    {
-//        wch;
-//        fontPath;
-//        size;
-//    }
-//    
-//    FTGLPolygonFont font( fontPath.c_str() );
-//
-//    if( font.Error() )
-//        return nullptr;
-//
-//    font.FaceSize( size );
-//    
-//    //FTPolygonGlyph glyph;
-//
-//    return nullptr;
-//}
 
 // *********************************
 //
@@ -62,7 +32,6 @@ VertexAttributesChannelPtr   Text3DUtils::CreateEmptyVACForText3D()
     VertexAttributesChannelDescriptor vacDesc;
 
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    //vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
 
     return std::make_shared< VertexAttributesChannel>( PrimitiveType::PT_LINES, vacDesc );
 }
@@ -80,24 +49,8 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
             text[ l ] == L'\r' )
             continue;
 
-        ConnectedComponentPtr component = nullptr;
-
-        //// Find previous use of this letter.
-        //for( int i = 0; i < l; ++i )
-        //{
-        //    if( text[ i ] == text[ l ] )
-        //    {
-        //        component = letters[ i ];
-        //        break;
-        //    }
-        //}
-
-        // Component not found in previously used letters. We must crate it.
-        if( component == nullptr )
-        {
-            component = CreateLetter( text[ l ], textAsset, layout );
-            assert( component );
-        }
+        ConnectedComponentPtr component = CreateLetter( text[ l ], textAsset, layout );
+        assert( component );
 
         letters.push_back( component );
     }
@@ -145,22 +98,13 @@ ConnectedComponentPtr                    Text3DUtils::CreateLetter              
     ConnectedComponentPtr       component = ConnectedComponent::Create();
 
     model::AttributeChannelDescriptorPtr posDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    //model::AttributeChannelDescriptorPtr normDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR );
-
     Float3AttributeChannelPtr   positions = std::make_shared< Float3AttributeChannel >( posDesc, "vertexPosition", false );
-    //Float3AttributeChannelPtr   normals = std::make_shared< Float3AttributeChannel >( normDesc, "vertexNormal", false );
 
     component->AddAttributeChannel( positions );
-    //component->AddAttributeChannel( normals );
 
     auto contoursVec = textAsset->GetTextGeometry()->CreateCharacter( character, layout.Size );
     auto positionsVec = CreateLinesFromContour( contoursVec );
-    //auto numVerticies = positionsVec.size();
     positions->ReplaceAttributes( std::move( positionsVec ) );
-
-    // Generate normals along z axis.
-    //auto & normalsVec = normals->GetVertices();
-    //normalsVec.resize( numVerticies, glm::vec3( 0.0f, 0.0f, 1.0f ) );
 
     return component;
 }
@@ -173,6 +117,7 @@ void                                     Text3DUtils::ArrangeText               
     auto spacing = layout.Spacing;
     auto viewWidth = layout.ViewWidth;
     auto viewHeight = layout.ViewHeight;
+    auto alignement = layout.Tat;
     bool useKerning = layout.UseKerning;
 
     assert( textObj );
@@ -189,74 +134,89 @@ void                                     Text3DUtils::ArrangeText               
     float scaleRatio = aspectRatio / fontRatio;
 
 
-    float ccPaddingX = 1.f / aspectRatio;
-    float ccPaddingY = 1.f / aspectRatio;
+    //float ccPaddingX = 1.f / aspectRatio;
+    //float ccPaddingY = 1.f / aspectRatio;
 
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
     auto spaceGlyphWidth    = (float)textRepresentation->GetGlyph( L'0' )->width / scaleRatio + spacing;
     auto newLineShift       = -(float) 1.5f * textRepresentation->GetGlyph( L'0' )->height / scaleRatio;
 
     unsigned int componentIdx = 0;
-    for( unsigned int i = 0; i < text.size(); ++i )
+    unsigned int lineBeginComponentIdx = 0;
+    unsigned int i = 0;
+
+    while( i < text.size() )
     {
-        auto wch = text[ i ];
+        lineBeginComponentIdx = componentIdx;
 
-        if( wch == L' ' )
+        for( ; i < text.size(); ++i )
         {
-            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
-            continue;
-        }
+            auto wch = text[ i ];
 
-        if( wch == L'\n' || wch == L'\r' )
-        {
-            translate = glm::vec3( 0.f );
-            newLineTranslation += glm::vec3( 0.f, newLineShift , 0.f );
-            continue;
-        }
-
-
-        if( auto glyph = textRepresentation->GetGlyph( wch ) )
-        {
-            auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
-
-            if( useKerning && i > 0 )
+            if( wch == L' ' )
             {
-                auto kerShift = textRepresentation->GetKerning( text[ i - 1 ], text[ i ] );
-                kerningShift.x = kerShift / scaleRatio;
-                translate += kerningShift;
+                translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
+                continue;
             }
 
-            glm::vec3 letterTranslate = translate + newLineTranslation - glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
-
-            auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
-            auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
-            assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
-
-            // Note: FreeType unit is 1/64th of a pixel.
-            glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
-
-            for( auto & pos : posChannel->GetVertices() )
+            if( wch == L'\n' || wch == L'\r' )
             {
-                pos = scaleFactor * pos + letterTranslate;
+                newLineTranslation += glm::vec3( 0.f, newLineShift, 0.f );
+                break;
             }
 
-            if( wch==L'.' && layout.Tat == TextAlignmentType::Dot )
-            {
-                translateDot = translate;
-            }
 
+            if( auto glyph = textRepresentation->GetGlyph( wch ) )
             {
-                translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
-            }
+                auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
 
-            componentIdx++;
+                if( useKerning && i > 0 )
+                {
+                    auto kerShift = textRepresentation->GetKerning( text[ i - 1 ], text[ i ] );
+                    kerningShift.x = kerShift / scaleRatio;
+                    translate += kerningShift;
+                }
+
+                glm::vec3 letterTranslate = translate + newLineTranslation;// -glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
+
+                auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
+                auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
+                assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
+
+                // Note: FreeType unit is 1/64th of a pixel.
+                glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
+
+                for( auto & pos : posChannel->GetVertices() )
+                {
+                    pos = scaleFactor * pos + letterTranslate;
+                }
+
+                if( wch == L'.' && layout.Tat == TextAlignmentType::Dot )
+                {
+                    translateDot = translate;
+                }
+
+                {
+                    translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
+                }
+
+                componentIdx++;
+            }
+            else
+            {
+                translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
+                //assert( !( "Cannot find glyph for char " + wch) );
+            }
         }
-        else
-        {
-            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
-            //assert( !( "Cannot find glyph for char " + wch) );
-        }
 
+        // Apply alignement to current line and go to next.
+        std::vector< model::ConnectedComponentPtr > lineComponents( components.begin() + lineBeginComponentIdx, components.begin() + componentIdx );
+
+        TextHelper::ApplyAlignementP( alignement, translate, translateDot, lineComponents );
+
+        // End of line (or text) reached.
+        translate = glm::vec3( 0.f );
+        ++i;
     }
 
 

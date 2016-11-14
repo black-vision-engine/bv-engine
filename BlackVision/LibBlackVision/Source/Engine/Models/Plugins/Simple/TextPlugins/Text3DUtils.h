@@ -29,9 +29,7 @@ public:
 
 public:
 
-    /*static Float3AttributeChannelConstPtr           CreateAttrChannel           ( const wchar_t & wch, const std::string & fontPath, SizeType size );*/
     static VertexAttributesChannelPtr               CreateEmptyVACForText3D     ();
-
     static std::vector< ConnectedComponentPtr >     CreateText                  ( const std::wstring & text, FontAsset3DConstPtr textAsset, TextLayout layout );
 
 private:

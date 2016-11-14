@@ -255,45 +255,10 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
         }
     }
 
-    auto alignmentTranslation = 0.f;
-    switch (tat)
-    {
-        case TextAlignmentType::Center:
-            alignmentTranslation = -translate.x / 2.f;
-            break;
-        case TextAlignmentType::Right:
-            alignmentTranslation = -translate.x;
-            break;
-        case TextAlignmentType::Dot: 
-            alignmentTranslation = -translateDot.x;
-            break;
+    auto components = vertexAttributeChannel->GetComponents();
+    ApplyAlignementPC( tat, translate, translateDot, components );
 
-    }
-    
-
-    if( tat != TextAlignmentType::Left )
-    {
-        for( auto cc : vertexAttributeChannel->GetComponents() )
-        {
-            auto & verts = std::static_pointer_cast< model::Float3AttributeChannel >( cc->GetAttributeChannels()[ 0 ] )->GetVertices();
-
-            for ( auto & v : verts )
-            {
-                v.x += alignmentTranslation;
-            }
-
-            auto & centers = std::static_pointer_cast< model::Float2AttributeChannel >( cc->GetAttributeChannels()[ 2 ] )->GetVertices();
-
-            for ( auto & c : centers )
-            {
-                c.x += alignmentTranslation;
-            }
-        }
-
-    }
-
-
-    if( vertexAttributeChannel->GetComponents().empty() ) // FIXME: We add one empty CC because of bug #72174842
+    if( components.empty() ) // FIXME: We add one empty CC because of bug #72174842
     {
         vertexAttributeChannel->AddConnectedComponent( CreateEmptyCC() );
     }
@@ -304,6 +269,77 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     }
 
     return translate.x; // FIXME: This does not work for multiline text
+}
+
+
+
+// ***********************
+//
+float               TextHelper::ComputeAlignement( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot )
+{
+    auto alignmentTranslation = 0.f;
+    switch( tat )
+    {
+        case TextAlignmentType::Center:
+            alignmentTranslation = -translate.x / 2.f;
+            break;
+        case TextAlignmentType::Right:
+            alignmentTranslation = -translate.x;
+            break;
+        case TextAlignmentType::Dot:
+            alignmentTranslation = -translateDot.x;
+            break;
+    }
+
+    return alignmentTranslation;
+}
+
+// ***********************
+//
+void                TextHelper::ApplyAlignementPC   ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< model::IConnectedComponentPtr > & components )
+{
+    auto alignmentTranslation = ComputeAlignement( tat, translate, translateDot );
+
+    if( tat != TextAlignmentType::Left )
+    {
+        for( auto cc : components )
+        {
+            auto & verts = std::static_pointer_cast< model::Float3AttributeChannel >( cc->GetAttributeChannels()[ 0 ] )->GetVertices();
+
+            for( auto & v : verts )
+            {
+                v.x += alignmentTranslation;
+            }
+
+            auto & centers = std::static_pointer_cast< model::Float2AttributeChannel >( cc->GetAttributeChannels()[ 2 ] )->GetVertices();
+
+            for( auto & c : centers )
+            {
+                c.x += alignmentTranslation;
+            }
+        }
+
+    }
+}
+
+// ***********************
+//
+void                TextHelper::ApplyAlignementP    ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< model::ConnectedComponentPtr > & components )
+{
+    auto alignmentTranslation = ComputeAlignement( tat, translate, translateDot );
+
+    if( tat != TextAlignmentType::Left )
+    {
+        for( auto cc : components )
+        {
+            auto & verts = std::static_pointer_cast< model::Float3AttributeChannel >( cc->GetAttributeChannels()[ 0 ] )->GetVertices();
+
+            for( auto & v : verts )
+            {
+                v.x += alignmentTranslation;
+            }
+        }
+    }
 }
 
 } // bv
