@@ -36,7 +36,8 @@ namespace bv { namespace model {
 extern TextArranger CircleArranger;
 
 
-const std::string   DefaultTextPlugin::PARAM::TEXT          = "text";
+const std::string   DefaultTextPlugin::PARAM::TEXT              = "text";
+const std::string   DefaultTextPlugin::PARAM::ALIGN_CHARACTER   = "alignCharacter";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -59,15 +60,24 @@ IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const 
 //
 DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
+    // Rewrite to ModelHelper.
+    ModelHelper h( timeEvaluator );
+    h.CreatePluginModel();
+
+    h.AddSimpleStatedParam( "spacing", 0.0f );
+    h.AddSimpleStatedParam( "alignment", 0.0f );
+    h.AddSimpleStatedParam( "maxTextLength", 0.0f );
+    h.AddSimpleStatedParam( DefaultTextPlugin::PARAM::ALIGN_CHARACTER, (int)L'.' );
+    h.AddSimpleStatedParam( DefaultTextPlugin::PARAM::TEXT, std::wstring( L"" ) );
+
+
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
+    DefaultPluginParamValModelPtr model  = h.GetModel();
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
 
 
     //Create all parameters and evaluators
-    SimpleWStringEvaluatorPtr   textEvaluator           = ParamValEvaluatorFactory::CreateSimpleWStringEvaluator( DefaultTextPlugin::PARAM::TEXT, timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     //SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
@@ -84,10 +94,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     SimpleFloatEvaluatorPtr     timeValEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
     SimpleFloatEvaluatorPtr     transformEffectVal1Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal1", timeEvaluator );
     SimpleFloatEvaluatorPtr     transformEffectVal2Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal2", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
-    SimpleFloatEvaluatorPtr     maxTextLenghtEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "maxTextLenght", timeEvaluator );
 
     SimpleVec2EvaluatorPtr      explosionCenterEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "explosionCenter", timeEvaluator );
 
@@ -118,27 +124,15 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     psModel->RegisterAll( colTextEffectIdEvaluator );
     psModel->RegisterAll( transformTextEffectIdEvaluator );
 
-    plModel->RegisterAll( textEvaluator );
-    //plModel->RegisterAll( blurSizeEvaluator );
-	//plModel->RegisterAll( outlineSizeEvaluator );
-    plModel->RegisterAll( spacingEvaluator );
-    plModel->RegisterAll( alignmentEvaluator );
-    //plModel->RegisterAll( fontSizeEvaluator );
-    plModel->RegisterAll( maxTextLenghtEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
-    model->SetPluginModel( plModel );
 
     //Set default values of all parameters
-    textEvaluator->Parameter()->SetVal( L"", TimeType( 0.f ) );
-    textEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     //blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 	//outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
 
     rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
@@ -154,7 +148,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     //fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
-    maxTextLenghtEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
 
     transformEffectVal1Evaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
 
@@ -211,8 +204,9 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
-    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLenght" ) );
+    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLength" ) );
     m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::TEXT ) );
+    m_alignCharacter        = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
 
     m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
     m_scaleValue->SetValue( glm::mat4( 1.0 ) );
@@ -263,9 +257,10 @@ void                                DefaultTextPlugin::Update                   
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
     BasePlugin::Update( t );
 
-    if( m_currentText       != m_textParam->Evaluate() || 
-        m_currentAligment   != m_alignmentParam->Evaluate() ||
-        m_currentSpacing    != m_spacingParam->Evaluate() )
+    if( ParameterChanged( PARAM::TEXT ) ||
+        ParameterChanged( "alignment" ) ||
+        ParameterChanged( "spacing" ) ||
+        ParameterChanged( PARAM::ALIGN_CHARACTER ) )
     {
         SetText( m_textParam->Evaluate() );
     }
@@ -336,7 +331,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_currentSpacing, alignType, m_outlineSize, viewWidth, viewHeight, m_arranger, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_currentSpacing, alignType, (wchar_t)m_alignCharacter->GetValue(), m_outlineSize, viewWidth, viewHeight, m_arranger, false );
 
     ScaleToMaxTextLength();
 

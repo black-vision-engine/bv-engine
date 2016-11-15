@@ -52,6 +52,7 @@ public:
         static const std::string        MAX_TEXT_LENGTH;
         static const std::string        ALIGNEMENT;
         static const std::string        USE_KERNING;
+        static const std::string        ALIGN_CHARACTER;
     };
 
 private:
@@ -59,7 +60,6 @@ private:
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-	DefaultTransformChannelPtr		m_transformChannel;
 
     ParamWStringPtr                 m_textParam;
 
@@ -67,9 +67,9 @@ private:
     ValueFloatPtr                   m_spacingValue;
     ValueFloatPtr                   m_maxTextLengthValue;
     ValueFloatPtr                   m_fontSize;
-	ValueMat4Ptr					m_scaleValue;
 
     ParamEnumTATPtr                 m_alignmentParam;
+    ValueIntPtr                     m_alignCharacter;
 
     FontAsset3DConstPtr             m_fontAsset;
 

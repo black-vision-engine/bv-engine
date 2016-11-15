@@ -58,7 +58,7 @@ const std::string        DefaultText3DPlugin::PARAMS::SPACING           = "spaci
 const std::string        DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH   = "maxTextLenght";
 const std::string        DefaultText3DPlugin::PARAMS::ALIGNEMENT        = "alignment";
 const std::string        DefaultText3DPlugin::PARAMS::USE_KERNING       = "useKerning";
-
+const std::string        DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER   = "alignCharacter";
 
 
 
@@ -90,6 +90,7 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     h.AddSimpleParam( DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH, 0.0f, true, true );
     h.AddSimpleParam( DefaultText3DPlugin::PARAMS::FONT_SIZE, 8.0f, true, true );
     h.AddSimpleParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true, true, true );
+    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.', true, true );
     h.AddParam< IntInterpolator, TextAlignmentType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumTAT >
         ( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
 
@@ -127,10 +128,6 @@ void DefaultText3DPlugin::SetPrevPlugin( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
-	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
-	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, m_scaleValue, false ) ); //<3
-
 	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 	auto ctx = m_psc->GetRendererContext();
 	ctx->cullCtx->enabled = false;
@@ -161,6 +158,7 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
     m_textParam             = QueryTypedParam< ParamWStringPtr >( modelVAC->GetParameter( PARAMS::TEXT ) );
     m_useKerningValue       = QueryTypedValue< ValueBoolPtr >( modelVAC->GetValue( PARAMS::USE_KERNING ) );
     m_alignmentParam        = QueryTypedParam< ParamEnumTATPtr >( modelVAC->GetParameter( PARAMS::ALIGNEMENT ) );
+    m_alignCharacter        = QueryTypedValue< ValueIntPtr >( modelVAC->GetValue( PARAMS::ALIGN_CHARACTER ) );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
@@ -210,6 +208,7 @@ void                                DefaultText3DPlugin::RebuildText            
     layout.Size = m_fontSize->GetValue();
     layout.Spacing = m_spacingValue->GetValue();
     layout.Tat = m_alignmentParam->Evaluate();
+    layout.AlignChar = static_cast< wchar_t >( m_alignCharacter->GetValue() );
     layout.FontAsset = m_fontAsset;
     layout.UseKerning = m_useKerningValue->GetValue();
     layout.ViewWidth = ApplicationContext::Instance().GetWidth();
@@ -237,7 +236,8 @@ void                                DefaultText3DPlugin::Update                 
         ParameterChanged( PARAMS::ALIGNEMENT ) ||
         ParameterChanged( PARAMS::SPACING ) ||
         ParameterChanged( PARAMS::FONT_SIZE ) ||
-        ParameterChanged( PARAMS::USE_KERNING ) )
+        ParameterChanged( PARAMS::USE_KERNING ) ||
+        ParameterChanged( PARAMS::ALIGN_CHARACTER ) )
     {
         RebuildText();
     }

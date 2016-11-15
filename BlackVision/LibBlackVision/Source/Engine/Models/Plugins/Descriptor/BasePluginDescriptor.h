@@ -119,6 +119,7 @@ protected:
         template< typename ValueType >
         inline void                             AddSimpleParam      ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string, const ValueType&, bool = false, bool = false ) const
         {
+            static_assert( false, "You shouldn't be here. Check parameter default value type." );
             assert( false );
         }
 

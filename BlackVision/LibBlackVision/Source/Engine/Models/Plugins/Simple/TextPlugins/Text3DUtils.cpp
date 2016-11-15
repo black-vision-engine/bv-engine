@@ -118,6 +118,7 @@ void                                     Text3DUtils::ArrangeText               
     auto viewWidth = layout.ViewWidth;
     auto viewHeight = layout.ViewHeight;
     auto alignement = layout.Tat;
+    auto alignChar = layout.AlignChar;
     bool useKerning = layout.UseKerning;
 
     assert( textObj );
@@ -191,15 +192,13 @@ void                                     Text3DUtils::ArrangeText               
                     pos = scaleFactor * pos + letterTranslate;
                 }
 
-                if( wch == L'.' && layout.Tat == TextAlignmentType::Dot )
+                if( wch == alignChar && layout.Tat == TextAlignmentType::Character )
                 {
                     translateDot = translate;
                 }
 
-                {
-                    translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
-                }
 
+                translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
                 componentIdx++;
             }
             else
@@ -216,6 +215,7 @@ void                                     Text3DUtils::ArrangeText               
 
         // End of line (or text) reached.
         translate = glm::vec3( 0.f );
+        translateDot = glm::vec3( 0.f );
         ++i;
     }
 

@@ -40,6 +40,7 @@ public:
     struct PARAM
     {
         static const std::string    TEXT;
+        static const std::string    ALIGN_CHARACTER;
     };
 
 private:
@@ -51,6 +52,7 @@ private:
 
     Float32                         m_textLength;
 
+    ValueIntPtr                     m_alignCharacter;
     ParamFloatPtr                   m_maxTextLengthParam;
     ParamFloatPtr                   m_timeParam;
     ValueMat4Ptr                    m_scaleValue;

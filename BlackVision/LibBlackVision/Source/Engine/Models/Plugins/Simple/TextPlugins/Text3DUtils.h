@@ -18,13 +18,14 @@ public:
     struct TextLayout
     {
         float                   Size;
-        FontAsset3DConstPtr     FontAsset;
         float                   Spacing;
-        TextAlignmentType       Tat;
+        FontAsset3DConstPtr     FontAsset;
         UInt32                  ViewWidth;
         UInt32                  ViewHeight;
         model::TextArranger *   Arranger;
         bool                    UseKerning;
+        TextAlignmentType       Tat;
+        wchar_t                 AlignChar;
     };
 
 public:
