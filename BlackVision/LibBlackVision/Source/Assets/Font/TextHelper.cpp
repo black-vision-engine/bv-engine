@@ -267,6 +267,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
         TextHelper::ApplyAlignementPC( tat, translate, translateDot, lineComponents );
 
         // End of line (or text) reached.
+        translateDot = glm::vec3( 0.f );
         translate = glm::vec3( 0.f );
         ++i;
     }
