@@ -41,6 +41,6 @@ void main()
     vec4 mask = texture( Mask, uvCoord );
     //if( col.a * alpha < 0.9 ) 
     //    discard; 
-    // FragColor = getBlendValue( mask ) * col.rgba * alpha;
-    FragColor = mask.a * col.rgba * alpha;
+    //float maskFactor = getBlendValue( mask );
+    FragColor = mask.r * col.rgba * alpha;
 }

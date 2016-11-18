@@ -381,7 +381,7 @@ namespace ProfilerEditor
         {
             try
             {
-                Int32 port = 11101;
+                Int32 port = 11010;
                 string addressIP = "127.0.0.1";
                 m_tcpClient = new TcpClient(addressIP, port);
 
