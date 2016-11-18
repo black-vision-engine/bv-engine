@@ -162,7 +162,7 @@ namespace Generator
 				IndexedGeometry cube;
 
 				std::vector<glm::vec3>& verticies = cube.GetVerticies();
-				std::vector<INDEX_TYPE>& indicies = cube.GetIndicies();
+				std::vector<IndexType>& indicies = cube.GetIndicies();
 
 				verticies.reserve( 8 );
 				indicies.reserve( 36 );
@@ -194,7 +194,7 @@ namespace Generator
 				verticies.push_back( glm::vec3( -x / 2, -y / 2, z) );
 				verticies.push_back( glm::vec3( x / 2, -y / 2, z) );
 
-				//INDEX_TYPE indicesData[] = { 
+				//IndexType indicesData[] = { 
 				//	0, 1, 2, 2, 3, 0, 
 				//	3, 2, 6, 6, 7, 3, 
 				//	7, 6, 5, 5, 4, 7, 
@@ -204,7 +204,7 @@ namespace Generator
 				//};
 
 				// normal cube
-				INDEX_TYPE indicesData[] =
+				IndexType indicesData[] =
 				{
 					0, 1, 2,    // side 1
 					2, 1, 3,
@@ -224,7 +224,7 @@ namespace Generator
 #define in( x ) (x + 8)
 
 				//Cube with hole
-				//INDEX_TYPE indicesData[] =
+				//IndexType indicesData[] =
 				//{
 				//	4, 0, 6,    // side 2
 				//	6, 0, 2,
@@ -268,7 +268,7 @@ namespace Generator
 				for( auto i : indicesData )
 					indicies.push_back( i );
 
-				std::vector<INDEX_TYPE> sharpEdges;
+				std::vector<IndexType> sharpEdges;
 
 				//sharpEdges.push_back( 0 );
 				//sharpEdges.push_back( 1 );
@@ -368,7 +368,7 @@ namespace Generator
 			for( int i = 0; i < 36; ++i )
 				indicies.push_back( indicesData[i] );
 
-			std::vector<INDEX_TYPE> sharpEdges;
+			std::vector<IndexType> sharpEdges;
 			const unsigned tesselation = 1;
 
 			IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );

@@ -82,7 +82,7 @@ private:
 private:
 
     void            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
-    void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners );
+    void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, std::vector< IndexType > & corners );
     void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals );
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
@@ -90,19 +90,19 @@ private:
     void            ApplyFunction           (   ExtrudeCurve curve,
                                                 IndexedGeometry & mesh,
                                                 IndexedGeometry & normalsVec,
-                                                std::vector< INDEX_TYPE > & edges,
-                                                std::vector< INDEX_TYPE > & corners
+                                                std::vector< IndexType > & edges,
+                                                std::vector< IndexType > & corners
                                             );
    
 
-    int             FindEdge                ( const std::vector< INDEX_TYPE > & indicies, INDEX_TYPE idx1, INDEX_TYPE idx2 );
-    void            AddOrRemoveEdge         ( std::vector< INDEX_TYPE > & edges, INDEX_TYPE idx1, INDEX_TYPE idx2 );
+    int             FindEdge                ( const std::vector< IndexType > & indicies, IndexType idx1, IndexType idx2 );
+    void            AddOrRemoveEdge         ( std::vector< IndexType > & edges, IndexType idx1, IndexType idx2 );
 
-    void            ConnectVerticies        ( std::vector< INDEX_TYPE > & indicies, std::vector< INDEX_TYPE > & edges, int offset1, int offset2 );
+    void            ConnectVerticies        ( std::vector< IndexType > & indicies, std::vector< IndexType > & edges, int offset1, int offset2 );
 
 
-    std::vector< INDEX_TYPE >       ExtractEdges            ( IndexedGeometry & mesh );
-    std::vector< INDEX_TYPE >       ExtractCorners          ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges, float angleThreshold );
+    std::vector< IndexType >       ExtractEdges            ( IndexedGeometry & mesh );
+    std::vector< IndexType >       ExtractCorners          ( IndexedGeometry & mesh, const std::vector< IndexType > & edges, float angleThreshold );
 };
 
 

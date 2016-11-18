@@ -8,12 +8,12 @@
 namespace bv { namespace model {
 
 
-typedef UInt32 INDEX_TYPE;
+typedef UInt32 IndexType;
 
 class IndexedGeometry
 {
 private:
-	std::vector<INDEX_TYPE>			indicies;
+	std::vector<IndexType>			indicies;
 	std::vector<glm::vec3>			verticies;
 public:
 	IndexedGeometry()   {}
@@ -43,7 +43,7 @@ public:
 		return *this;
 	}
 
-	std::vector< INDEX_TYPE > &       GetIndicies     () { return indicies; }
+	std::vector< IndexType > &       GetIndicies     () { return indicies; }
 	std::vector< glm::vec3 > &        GetVerticies    () { return verticies; }
 };
 

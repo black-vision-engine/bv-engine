@@ -17,6 +17,8 @@
 namespace bv { namespace model {
 
 
+
+
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR           = "extrude vector";
 const std::string        DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE   = "smooth threshold angle";
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE            = "extrude curve";
@@ -272,20 +274,20 @@ void    DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, g
 
     for( int i = 0; i < numIndicies; i += 3 )
     {
-        indices.push_back( indices[ i ] + (INDEX_TYPE)numVerticies );
-        indices.push_back( indices[ i + 2 ] + (INDEX_TYPE)numVerticies );
-        indices.push_back( indices[ i + 1 ] + (INDEX_TYPE)numVerticies );
+        indices.push_back( indices[ i ] + (IndexType)numVerticies );
+        indices.push_back( indices[ i + 2 ] + (IndexType)numVerticies );
+        indices.push_back( indices[ i + 1 ] + (IndexType)numVerticies );
     }
 }
 
 // ***********************
 // Function assumes that someone used function AddSymetricalPlane.
-void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & corners )
+void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, std::vector< IndexType > & corners )
 {
     // We will create new corners vector containing indicies to new verticies which will
-    // be created in this function. Because each corner will have to separate verticies
+    // be created in this function. Because each corner will have two separate verticies
     // new vector consist of pairs of indicies.
-    std::vector< INDEX_TYPE > cornerPairs;
+    std::vector< IndexType > cornerPairs;
     cornerPairs.resize( 2 * corners.size() );
 
     auto & indices = mesh.GetIndicies();
@@ -371,7 +373,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
 
 // ***********************
 //
-void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< INDEX_TYPE > & edges, std::vector< INDEX_TYPE > & cornerPairs )
+void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< IndexType > & edges, std::vector< IndexType > & cornerPairs )
 {
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
@@ -432,7 +434,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
 
 // ***********************
 //
-void    DefaultExtrudePlugin::ConnectVerticies        ( std::vector< INDEX_TYPE > & indicies, std::vector< INDEX_TYPE > & edges, int offset1, int offset2 )
+void    DefaultExtrudePlugin::ConnectVerticies        ( std::vector< IndexType > & indicies, std::vector< IndexType > & edges, int offset1, int offset2 )
 {
     for( int i = 0; i < (int)edges.size(); i += 2 )
     {
@@ -522,9 +524,9 @@ void    DefaultExtrudePlugin::ClampNormVecToDefaults   ( IndexedGeometry & norma
 // Edge is a pair of verticies that builds only one triangle in whole mesh.
 // Note: Edges have their direction. Order of verticies counts. It's used later
 // to determine normal direction as cross product between edge vector and extrude vector.
-std::vector< INDEX_TYPE >           DefaultExtrudePlugin::ExtractEdges ( IndexedGeometry& mesh )
+std::vector< IndexType >           DefaultExtrudePlugin::ExtractEdges ( IndexedGeometry& mesh )
 {
-    std::vector< INDEX_TYPE >   edges;
+    std::vector< IndexType >   edges;
 
     auto & indicies = mesh.GetIndicies();
     auto numIndicies = (int)indicies.size();
@@ -538,16 +540,26 @@ std::vector< INDEX_TYPE >           DefaultExtrudePlugin::ExtractEdges ( Indexed
         AddOrRemoveEdge( edges, indicies[ i + 2 ], indicies[ i ] );
     }
 
+    // Remove duplicate edges.
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
+        if( edges[ i ] == edges[ i + 1 ] )
+        {
+            edges.erase( edges.begin() + i, edges.begin() + ( i + 2 ) );
+            i -= 2;
+        }
+    }
+
     return edges;
 }
 
 // ***********************
 // Returns max( SizeType ) if Edge coundn't be found.
-int                            DefaultExtrudePlugin::FindEdge  ( const std::vector< INDEX_TYPE > & indicies, INDEX_TYPE idx1, INDEX_TYPE idx2 )
+int                            DefaultExtrudePlugin::FindEdge  ( const std::vector< IndexType > & indicies, IndexType idx1, IndexType idx2 )
 {
     for( int i = (int)indicies.size() - 1; i >= 0; i -= 2 )
     {
-        if( ( indicies[ i ] == idx2 && indicies[ i - 1 ] == idx1 ) ||
+        if( /*( indicies[ i ] == idx2 && indicies[ i - 1 ] == idx1 ) ||*/
             ( indicies[ i ] == idx1 && indicies[ i - 1 ] == idx2 ) )
             return i - 1;
     }
@@ -556,7 +568,7 @@ int                            DefaultExtrudePlugin::FindEdge  ( const std::vect
 
 // ***********************
 //
-void                            DefaultExtrudePlugin::AddOrRemoveEdge   ( std::vector< INDEX_TYPE > & edges, INDEX_TYPE idx1, INDEX_TYPE idx2 )
+void                            DefaultExtrudePlugin::AddOrRemoveEdge   ( std::vector< IndexType > & edges, IndexType idx1, IndexType idx2 )
 {
     int searchResult = FindEdge( edges, idx1, idx2 );
     if( searchResult == std::numeric_limits< int >::max() )
@@ -573,21 +585,21 @@ void                            DefaultExtrudePlugin::AddOrRemoveEdge   ( std::v
 
 // ***********************
 //
-std::vector< INDEX_TYPE >       DefaultExtrudePlugin::ExtractCorners          ( IndexedGeometry & mesh, const std::vector< INDEX_TYPE > & edges, float angleThreshold )
+std::vector< IndexType >       DefaultExtrudePlugin::ExtractCorners          ( IndexedGeometry & mesh, const std::vector< IndexType > & edges, float angleThreshold )
 {
     //float threshold = glm::radians( angleThreshold );
 
     auto & vertices = mesh.GetVerticies();
-    std::vector< INDEX_TYPE > corners;
+    std::vector< IndexType > corners;
 
     // This is very inefficeint way to do this. Map requires many memory allocations;
-    std::map< INDEX_TYPE, std::pair< glm::vec3, glm::vec3 > > edgeVectors;
+    std::map< IndexType, std::pair< glm::vec3, glm::vec3 > > edgeVectors;
 
     // Compute edge vectors.
     for( int i = 0; i < (int)edges.size(); i += 2 )
     {
-        INDEX_TYPE idx1 = edges[ i ];
-        INDEX_TYPE idx2 = edges[ i + 1 ];
+        IndexType idx1 = edges[ i ];
+        IndexType idx2 = edges[ i + 1 ];
 
         glm::vec3 vert1 = vertices[ idx1 ];
         glm::vec3 vert2 = vertices[ idx2 ];

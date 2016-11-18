@@ -48,7 +48,7 @@ void IndexedGeometryConverter::MakeStrip( IndexedGeometry& mesh, Float3Attribute
 {
     usedRangeIndex = 0;
 
-    std::vector<INDEX_TYPE>& indicies = mesh.GetIndicies();
+    std::vector<IndexType>& indicies = mesh.GetIndicies();
     std::vector<glm::vec3>& verticies = mesh.GetVerticies();
     if( indicies.size() < 3 )
         return;
@@ -127,7 +127,7 @@ If next index is found, whole triangle is set as used in usedIndicies table.
 @param[in] index1 Second index of index of vertex.
 return Returns false if couldn't find traingle having such indicies.
 */
-bool IndexedGeometryConverter::findNeighbour( unsigned int index1, unsigned int index2, unsigned int& foundIndex, std::vector<INDEX_TYPE>& indicies )
+bool IndexedGeometryConverter::findNeighbour( unsigned int index1, unsigned int index2, unsigned int& foundIndex, std::vector<IndexType>& indicies )
 {
     unsigned int i = usedRangeIndex;
     for( ; i < indicies.size(); ++i )
@@ -149,7 +149,7 @@ bool IndexedGeometryConverter::findNeighbour( unsigned int index1, unsigned int 
 }
 
 /**Finds neighbour as the second findNeighbour function, but looks for only one common vertex.*/
-bool IndexedGeometryConverter::findNeighbourPair( unsigned int index1, unsigned int& foundIndex1, unsigned int& foundIndex2, std::vector<INDEX_TYPE>& indicies )
+bool IndexedGeometryConverter::findNeighbourPair( unsigned int index1, unsigned int& foundIndex1, unsigned int& foundIndex2, std::vector<IndexType>& indicies )
 {
     unsigned int i = usedRangeIndex;
     for( ; i < indicies.size(); ++i )
@@ -167,7 +167,7 @@ bool IndexedGeometryConverter::findNeighbourPair( unsigned int index1, unsigned 
     return false;
 }
 
-void IndexedGeometryConverter::findFirstUnusedTriangle( unsigned int& index1 , std::vector<INDEX_TYPE>& indicies )
+void IndexedGeometryConverter::findFirstUnusedTriangle( unsigned int& index1 , std::vector<IndexType>& indicies )
 {
     unsigned int i = usedRangeIndex;
     for( ; i < indicies.size(); i += 3 )
@@ -207,7 +207,7 @@ void    IndexedGeometryConverter::MakeTriangles           ( IndexedGeometry & me
 
 // ***********************
 //
-void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< INDEX_TYPE > & indicies, Float3AttributeChannelPtr verts )
+void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< glm::vec3 > & verticies, const std::vector< IndexType > & indicies, Float3AttributeChannelPtr verts )
 {
     for( auto index : indicies )
     {
@@ -261,19 +261,19 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Floa
             if( i & 0x1 )   // Check parity.
             {
                 // Triangles ordering in triangle strips changes evenry triangle.
-                indices.push_back( (INDEX_TYPE)prePrevIdx );
-                indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
-                indices.push_back( (INDEX_TYPE)prevIdx );
+                indices.push_back( (IndexType)prePrevIdx );
+                indices.push_back( (IndexType)( vertices.size() - 1 ) );
+                indices.push_back( (IndexType)prevIdx );
             }
             else
             {
-                indices.push_back( (INDEX_TYPE)prePrevIdx );
-                indices.push_back( (INDEX_TYPE)prevIdx );
-                indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
+                indices.push_back( (IndexType)prePrevIdx );
+                indices.push_back( (IndexType)prevIdx );
+                indices.push_back( (IndexType)( vertices.size() - 1 ) );
             }
 
             prePrevIdx = prevIdx;
-            prevIdx = (INDEX_TYPE)vertices.size() - 1;  // It's the newest vertex index.
+            prevIdx = (IndexType)vertices.size() - 1;  // It's the newest vertex index.
         }
         else
         {
@@ -283,15 +283,15 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromStrips     ( Floa
             if( i & 0x1 )   // Check parity.
             {
                 // Triangles ordering in triangle strips changes evenry triangle.
-                indices.push_back( (INDEX_TYPE)prePrevIdx );
-                indices.push_back( (INDEX_TYPE)idx );
-                indices.push_back( (INDEX_TYPE)prevIdx );
+                indices.push_back( (IndexType)prePrevIdx );
+                indices.push_back( (IndexType)idx );
+                indices.push_back( (IndexType)prevIdx );
             }
             else
             {
-                indices.push_back( (INDEX_TYPE)prePrevIdx );
-                indices.push_back( (INDEX_TYPE)prevIdx );
-                indices.push_back( (INDEX_TYPE)idx );
+                indices.push_back( (IndexType)prePrevIdx );
+                indices.push_back( (IndexType)prevIdx );
+                indices.push_back( (IndexType)idx );
             }
 
             prePrevIdx = prevIdx;
@@ -341,12 +341,12 @@ IndexedGeometry     IndexedGeometryConverter::MakeIndexGeomFromTriangles  ( Floa
             if( m_rememberConversion )
                 m_conversionIndicies.push_back( i );
 
-            indices.push_back( (INDEX_TYPE)( vertices.size() - 1 ) );
+            indices.push_back( (IndexType)( vertices.size() - 1 ) );
         }
         else
         {
             auto idx = ( UInt32 )( std::distance( vertices.begin(), it ) );
-            indices.push_back( (INDEX_TYPE)idx );
+            indices.push_back( (IndexType)idx );
         }
     }
 
