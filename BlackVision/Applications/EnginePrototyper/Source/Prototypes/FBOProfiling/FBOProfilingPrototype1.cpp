@@ -280,7 +280,7 @@ void	FBOProfilingPrototype1::AddColorAttachments()
 
 // **************************
 //
-IBasicLogicUnqPtr    FBOProfilingPrototype1::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    FBOProfilingPrototype1::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
 	return IBasicLogicUnqPtr( new FBOProfilingPrototype1( renderer ) );
 }

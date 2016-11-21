@@ -56,6 +56,10 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
     , m_timelineManager( std::make_shared < model::TimelineManager >() )
     , m_globalTimeline( model::OffsetTimeEvaluator::Create( GLOBAL_TIMELINE_NAME, TimeType( 0.0 ) ) )
 {
+    //initialize static managers in correct order
+    GetDefaultEventManager();
+    UpdatersManager::Get();
+
     m_timelineManager->RegisterRootTimeline( m_globalTimeline );
     model::TimelineManager::SetInstance( m_timelineManager.get() );
 

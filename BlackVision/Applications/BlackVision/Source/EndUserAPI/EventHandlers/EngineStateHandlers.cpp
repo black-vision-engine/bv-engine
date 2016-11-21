@@ -13,7 +13,7 @@
 #include "Engine/Models/Updaters/UpdatersHelpers.h"
 
 #include "BVConfig.h"
-#include "ConfigManager.h"
+
 
 namespace bv
 {
@@ -24,7 +24,7 @@ EngineStateHandlers::EngineStateHandlers( BVAppLogic* logic )
     :   m_appLogic( logic )
     //,   m_lockWarning( 360 )
 {
-    m_enableLockQueue = ConfigManager::GetBool( "Application/EnableLockingQueue" );
+    m_enableLockQueue = DefaultConfig.EnableLockingQueue();
 }
 
 // ***********************
@@ -218,18 +218,19 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
 
     if( command == ConfigEvent::Command::ReadValue )
     {
-        auto result = ConfigManager::GetString( key );
+        auto result = DefaultConfig.PropertyValue( key );
         ser.SetAttribute( "Value", result );
 		ser.SetAttribute( "Key", key );
     }
     else if( command == ConfigEvent::Command::SetValue )
     {
-        ConfigManager::SetString( key, value );
+        BVConfig::Instance().SetPropertyValue( key, value );
     }
     else if( command == ConfigEvent::Command::SaveConfig )
     {
-        bool result = ConfigManager::SaveXMLConfig();
-        SendSimpleResponse( command, configEvent->EventID, configEvent->SocketID, result );
+        //FIXME
+        //bool result = ConfigManager::SaveXMLConfig();
+        //SendSimpleResponse( command, configEvent->EventID, configEvent->SocketID, result );
         return;
     }
     else

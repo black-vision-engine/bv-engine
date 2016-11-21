@@ -40,7 +40,7 @@
 
 
 
-Polyline                    AllocatePolyline    ( const ClipperLib::Path & path );
+triangulator::Polyline      AllocatePolyline    ( const ClipperLib::Path & path );
 ClipperLib::PolyFillType    GetFillRule         ( Triangulator::FillRule rule );
 
 
@@ -308,9 +308,9 @@ void    Triangulator::TriangulateHierarchy( ClipperLib::PolyNode & treeNode, Mes
 
 // ***********************
 //
-Polyline    AllocatePolyline    ( const ClipperLib::Path & path )
+triangulator::Polyline    AllocatePolyline    ( const ClipperLib::Path & path )
 {
-    Polyline poly;
+    triangulator::Polyline poly;
     poly.reserve( path.size() );
 
     for( auto & point : path )

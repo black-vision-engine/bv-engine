@@ -17,12 +17,7 @@ RenderMode::RenderMode()
         m_currentTime( 0 ),
         m_renderMode( RenderingMode::RenderRealTime )
 {
-	m_fps = ConfigManager::GetInt( "Renderer/TimerFPS" );
-
-	if( m_fps == 0 )
-	{
-		m_fps = 50;
-	}
+    m_fps = DefaultConfig.TimerFPS();
 }
 
 // ***********************
@@ -94,8 +89,8 @@ TimeType RenderMode::StartFrame( unsigned long millis )
         {// Rendering to file ended. Restore previous state.
             m_renderMode = RenderingMode::RenderRealTime;
 
-            m_renderer->SetVSync( !BVConfig::Instance().GetRendererInput().m_DisableVerticalSync, BVConfig::Instance().GetRendererInput().m_VerticalBufferFrameCount );
-            m_renderer->SetFlushFinish( BVConfig::Instance().GetRendererInput().m_EnableGLFlush, BVConfig::Instance().GetRendererInput().m_EnableGLFinish );
+            m_renderer->SetVSync( !DefaultConfig.GetRendererInput().m_DisableVerticalSync, DefaultConfig.GetRendererInput().m_VerticalBufferFrameCount );
+            m_renderer->SetFlushFinish( DefaultConfig.GetRendererInput().m_EnableGLFlush, DefaultConfig.GetRendererInput().m_EnableGLFinish );
 
             // @todo Make something with timestamp to keep continuity.
             m_currentTime = m_realTime;

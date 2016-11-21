@@ -1,409 +1,309 @@
-
 #include "Channel.h"
-namespace bv
-{
 
-namespace videocards{
+#include <process.h>
+
+
+namespace bv { namespace videocards { namespace bluefish {
+
+
 //**************************************
 //
-Channel::Channel( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture,bool playthrough, std::string inputType, long referenceMode, int refH, int refV )
+Channel::Channel( ChannelName name, InputDataUPtr & input, OutputDataUPtr & output )
+    : m_channelName( name )
+    , m_captureData( nullptr )
+    , m_captureChannel( nullptr )
+    , m_captureFifoBuffer( nullptr )
+    , m_playbackData( nullptr )
+    , m_playbackChannel( nullptr )
+    , m_playbackFifoBuffer( nullptr )
 {
-	m_Name = name;
-	m_Type = type;
-	m_Renderer = renderer;
-	m_Resolution = resolution;
-	m_Refresh = refresh;
-	m_Interlaced = interlaced;
-	m_Flipped = flipped;
-	m_Playback = playback;
-	m_Capture = capture;
-	m_playthrough = playthrough;
-	m_InputType = inputType;
-	m_referenceMode = referenceMode;
-	m_refH = refH;
-	m_refV = refV;
-	m_VideoMode = ParseVideoMode(m_Resolution, m_Refresh, m_Interlaced);
-	if(capture) this->m_CaptureChannel = new CFifoCapture();
-	if(playback) this->m_PlaybackChannel = new CFifoPlayback();
+    if( input ) 
+    {
+        m_captureData = std::move( input );
+        m_captureFifoBuffer = new CFifoBuffer();
+        m_captureChannel = new CFifoCapture();
+    }
+
+    if( output )
+    {
+        m_playbackData = std::move( output );
+        m_playbackFifoBuffer = new CFifoBuffer();
+        m_playbackChannel = new CFifoPlayback();
+    }
 }
 
 //**************************************
 //
 Channel::~Channel()
 {
-	cout << "Deleting Channels.... " << endl;
-    if(m_playthrough)
-	{
-	    m_PlaythroughThreadArgs.bDoRun = FALSE;
-        WaitForSingleObject(m_PlaythroughThreadHandle, INFINITE);
-	    CloseHandle(m_PlaythroughThreadHandle);
-    }
-
-    if(m_Playback)
-	{
-		m_PlaybackChannel->StopPlaybackThread();
-        m_PlaybackChannel->m_pFifoBuffer->m_threadsafebuffer.clear();
-		delete m_PlaybackChannel;
-		m_PlaybackChannel = NULL;
-	}
-
-    if(m_Capture)
+    if( m_captureChannel )
     {
-        m_CaptureChannel->m_pFifoBuffer->m_threadsafebuffer.clear();
+        if( m_captureData->playthrough )
+        {
+            m_PlaythroughThreadArgs.bDoRun = FALSE;
+            WaitForSingleObject( m_PlaythroughThreadHandle, INFINITE );
+            CloseHandle( m_PlaythroughThreadHandle );
+        }
 
-	    m_CaptureChannel->StopCaptureThread();
-	    delete m_CaptureChannel;
-	    m_CaptureChannel = NULL;
+        m_captureChannel->StopThread();
+        delete m_captureChannel;
+        m_captureChannel = nullptr;
     }
 
+    if( m_playbackChannel )
+    {
+        m_playbackChannel->StopThread();
+        delete m_playbackChannel;
+        m_playbackChannel = nullptr;
+    }
 }
 
 //**************************************
 //
-std::string Channel::GetName()
+ChannelName Channel::GetName() const
 {
-	return m_Name;
+    return m_channelName;
 }
 
 //**************************************
 //
-std::string Channel::GetType()
+IOType      Channel::GetOutputType() const
 {
-	return m_Type;
-}
-//**************************************
-//
-std::string Channel::GetInputType()
-{
-	return m_InputType;
-}
-//**************************************
-//
-CFifoBuffer* Channel::GetCaptureBuffer()
-{
-	return &m_CaptureFifoBuffer;
+    if( m_playbackData )
+    {
+        return m_playbackData->type;
+    }
+
+    return IOType::INVALID;
 }
 
 //**************************************
 //
-CFifoBuffer* Channel::GetPlaybackBuffer()
+IOType      Channel::GetInputType() const
 {
-	return &m_PlaybackFifoBuffer;
+    if( m_captureData )
+    {
+        return m_captureData->type;
+    }
+
+    return IOType::INVALID;
 }
 
 //**************************************
 //
-void Channel::InitThreads()
+CFifoCapture *  Channel::GetCaptureChannel      () const
 {
-	if(m_Capture)this->m_CaptureChannel->InitThread();
-	if(m_Playback) this->m_PlaybackChannel->InitThread();
+    return m_captureChannel;
 }
+
+//**************************************
+//
+CFifoPlayback * Channel::GetPlaybackChannel     () const
+{
+    return m_playbackChannel;
+}
+
+//**************************************
+//
+CFifoBuffer *   Channel::GetCaptureBuffer       ()
+{
+    return m_captureFifoBuffer;
+}
+
+//**************************************
+//
+CFifoBuffer *   Channel::GetPlaybackBuffer      ()
+{
+    return m_playbackFifoBuffer;
+}
+
+//**************************************
+//
+UInt32          Channel::GetVideoMode           () const
+{
+    if( m_playbackData )
+    {
+        return ( UInt32 )m_playbackData->videoMode;
+    }
+
+    return m_captureChannel->m_nVideoMode;
+}
+
+//**************************************
+//
+UInt32          Channel::GetReferenceMode       () const
+{
+    if( m_playbackData )
+    {
+        return ( UInt32 )m_playbackData->referenceMode;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32          Channel::GetReferenceH          () const
+{
+    if( m_playbackData )
+    {
+        return ( UInt32 )m_playbackData->referenceH;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32          Channel::GetReferenceV          () const
+{
+    if( m_playbackData )
+    {
+        return ( UInt32 )m_playbackData->referenceV;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+bool            Channel::GetFlipped             () const
+{
+    if( m_playbackData )
+    {
+        return m_playbackData->flipped;
+    }
+
+    return false;
+}
+
+////**************************************
+////
+//bool          Channel::HasPlaythroughChannel    () const
+//{
+//    if( m_captureChannel )
+//    {
+//        m_captureChannel->
+//    }
+//    return false;
+//}
 
 //**************************************
 //
 void Channel::StartThreads()
 {
-	if(m_Capture)this->m_CaptureChannel->StartCaptureThread();
-	if(m_Playback)this->m_PlaybackChannel->StartPlaybackThread();
+    if( m_captureData && m_captureData->playthrough )
+    {
+        m_PlaythroughThreadArgs = MainThreadArgs();
+        m_PlaythroughThreadArgs.bDoRun = TRUE;
+        m_PlaythroughThreadArgs.pInputFifo = m_captureFifoBuffer;
+        m_PlaythroughThreadArgs.pOutputFifo = m_playbackFifoBuffer;
+        m_PlaythroughThreadID = 0;
+        m_PlaythroughThreadHandle = ( HANDLE )_beginthreadex( NULL, 0, &PlaythroughThread, &m_PlaythroughThreadArgs, CREATE_SUSPENDED, &m_PlaythroughThreadID );
+        if( !m_PlaythroughThreadHandle )
+        {
+            //std::cout << "Error starting Main Thread StartDuplexThread" << std::endl;
+            /*delete m_captureChannel;
+            delete m_playbackChannel;*/
+            return;
+        }
+        SetThreadPriority( m_PlaythroughThreadHandle, THREAD_PRIORITY_TIME_CRITICAL );
+    }
+
+    if( m_captureChannel )
+    {
+        m_captureChannel->StartThread();
+    }
+
+    if( m_playbackChannel )
+    {
+        m_playbackChannel->StartThread();
+    }
+
+    if( m_captureData && m_captureData->playthrough )
+    {
+        ResumeThread( m_PlaythroughThreadHandle );
+    }
 }
+
 //**************************************
 //
 void Channel::StopThreads()
 {
-	if(m_Playback)this->m_PlaybackChannel->StopPlaybackThread();
-	if(m_Capture)this->m_CaptureChannel->StopCaptureThread();
+    if( m_playbackChannel )
+    {
+        m_playbackChannel->StopThread();
+    }
+
+    if( m_captureChannel )
+    {
+        m_captureChannel->StopThread();
+    }
+
+    //FIXME: playthrough
 }
+
 //**************************************
 //
 void Channel::SuspendThreads()
 {
-	if(m_Playback)this->m_PlaybackChannel->SuspendPlaybackThread();
-	if(m_Capture)this->m_CaptureChannel->SuspendCaptureThread();
+    if( m_playbackChannel )
+    {
+        m_playbackChannel->SuspendThread();
+    }
+
+    if( m_captureChannel )
+    {
+        m_captureChannel->SuspendThread();
+    }
+    //FIXME: playthrough
 }
+
 //**************************************
 //
 void Channel::ResumeThreads()
 {
-	if(m_Capture)this->m_CaptureChannel->ResumeCaptureThread();
-	if(m_Playback)this->m_PlaybackChannel->ResumePlaybackThread();
-}
-//**************************************
-//
-CFifoCapture* Channel::GetCaptureChannel()
-{
-	return m_CaptureChannel;
-}
-//**************************************
-//
-CFifoPlayback* Channel::GetPlaybackChannel()
-{
-	return m_PlaybackChannel;
-}
-
-//**************************************
-//
-void Channel::GenerateBlack()
-{    
-    if(GetPlaybackChannel()->m_pSDK)
+    if( m_captureChannel )
     {
-        VARIANT varVal;       
-        varVal.ulVal = ENUM_BLACKGENERATOR_ON;
-        GetPlaybackChannel()->m_pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
+        m_captureChannel->StartThread();
     }
-    
-    else
-        cout << "BlueFish Playback SDK not INITIALISED" << endl;
 
-   /* if(m_PlaybackChannel!=nullptr)
+    if( m_playbackChannel )
     {
-        GetPlaybackBuffer()->PushKillerFrame();		  
-    }*/
+        m_playbackChannel->StartThread();
+    }
+    //FIXME: playthrough
+}
+
+//**************************************
+//
+void Channel::SetVideoOutput        ( bool enable )
+{    
+    if( GetPlaybackChannel() && GetPlaybackChannel()->m_pSDK )
+    {
+        VARIANT value;       
+		value.vt = VT_UI4;
+
+        value.ulVal = enable;
+        GetPlaybackChannel()->m_pSDK->SetCardProperty( VIDEO_BLACKGENERATOR, value );
+    }
 }
 
 //**************************************
 //
 unsigned int __stdcall Channel::PlaythroughThread(void * pArg)
 {
-	MainThreadArgs* pParams = (MainThreadArgs*)pArg;
-	cout << "Thread " << pParams->strChannel.c_str() << " running." << endl;
+    MainThreadArgs * pParams = ( MainThreadArgs * )pArg;
 
-	while(pParams->bDoRun)
-	{	
-        pParams->pOutputFifo->m_threadsafebuffer.push(pParams->pInputFifo->m_threadsafebuffer.pop());
-	}
+    while( pParams->bDoRun )
+    {   
+        pParams->pOutputFifo->PutLiveBuffer( pParams->pInputFifo->GetLiveBuffer() );
+    }
 
-	cout << "PlaythroughThread " << pParams->strChannel.c_str() << " exiting." << endl;
-	_endthreadex(0);
-	return 0;
+    _endthreadex(0);
+    return 0;
 }
 
-//**************************************
-//
-void Channel::StartDuplexThread()
-{
-    
-	if(m_playthrough)
-	{
-		m_PlaythroughThreadArgs = MainThreadArgs();
-		m_PlaythroughThreadArgs.bDoRun = TRUE;
-        m_PlaythroughThreadArgs.pInputFifo = GetCaptureBuffer();//>m_CaptureFifoBuffer;
-        m_PlaythroughThreadArgs.pOutputFifo = GetPlaybackBuffer();//&this->m_PlaybackFifoBuffer;
-		m_PlaythroughThreadArgs.strChannel = this->m_Name;
-		m_PlaythroughThreadID = 0;
-		m_PlaythroughThreadHandle = (HANDLE)_beginthreadex(NULL, 0, &PlaythroughThread, &m_PlaythroughThreadArgs, CREATE_SUSPENDED, &m_PlaythroughThreadID);
-		if(!m_PlaythroughThreadHandle)
-		{
-			cout << "Error starting Main Thread StartDuplexThread" << endl;
-			delete this->m_CaptureChannel;
-			delete this->m_PlaybackChannel;
-		}
-		SetThreadPriority(m_PlaythroughThreadHandle, THREAD_PRIORITY_TIME_CRITICAL);
-	}
-
-    if(m_Capture) this->m_CaptureChannel->StartCaptureThread();	//this actually just resumes the threads; it would take too long to start them from scracth
-    if(m_Playback) this->m_PlaybackChannel->StartPlaybackThread();	//that's why we created them before as suspended
-
-	if(m_playthrough) ResumeThread(m_PlaythroughThreadHandle);
-}
-
-//**************************************
-//
-ULONG Channel::ParseVideoMode(unsigned short resolution, unsigned short refresh, bool interlaced)
-{
-	ULONG VideoMode=VID_FMT_INVALID;
-	if(interlaced)
-	{
-		switch(resolution)
-		{
-		 case 1080:
-			 {
-				switch(refresh)
-				{
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_1080I_5000;
-						 break;
-					 }
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_1080I_5994;
-						 break;
-					 }
-				 case 6000:
-					 {
-						 VideoMode = VID_FMT_1080I_6000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Interlaced 1080 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 case 576:
-			 {
-				switch(refresh)
-				{
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_576I_5000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Interlaced 576 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 case 486:
-			 {
-				switch(refresh)
-				{
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_486I_5994;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Interlaced 486 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 default:
-			 {
-				 cout << "Unknown Resolution for Interlaced Setting" << endl;
-				 break;
-			 }
-		}
-	}
-	else
-	{
-		switch(resolution)
-		{
-		 case 1080:
-			 {
-				switch(refresh)
-				{
-				 case 2397:
-					 {
-						 VideoMode = VID_FMT_1080P_2397;
-						 break;
-					 }
-				 case 2400:
-					 {
-						 VideoMode = VID_FMT_1080P_2400;
-						 break;
-					 }
-				 case 2500:
-					 {
-						 VideoMode = VID_FMT_1080P_2500;
-						 break;
-					 }
-				 case 2997:
-					 {
-						 VideoMode = VID_FMT_1080P_2997;
-						 break;
-					 }
-				 case 3000:
-					 {
-						 VideoMode = VID_FMT_1080P_3000;
-						 break;
-					 }
-				 case 4800:
-					 {
-						 VideoMode = VID_FMT_1080P_4800;
-						 break;
-					 }
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_1080P_5000;
-						 break;
-					 }
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_1080P_5994;
-						 break;
-					 }
-				 case 6000:
-					 {
-						 VideoMode = VID_FMT_1080P_6000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Progressive 1080 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 case 720:
-			 {
-				switch(refresh)
-				{
-				 case 2398:
-					 {
-						 VideoMode = VID_FMT_720P_2398;
-						 break;
-					 }
-				 case 2400:
-					 {
-						 VideoMode = VID_FMT_720P_2400;
-						 break;
-					 }
-				 case 2500:
-					 {
-						 VideoMode = VID_FMT_720P_2500;
-						 break;
-					 }
-				 case 2997:
-					 {
-						 VideoMode = VID_FMT_720P_2997;
-						 break;
-					 }
-				 case 3000:
-					 {
-						 VideoMode = VID_FMT_720P_3000;
-						 break;
-					 }
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_720P_5000;
-						 break;
-					 }
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_720P_5994;
-						 break;
-					 }
-				 case 6000:
-					 {
-						 VideoMode = VID_FMT_720P_6000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Progressive 720 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 default:
-			 {
-				cout << "Unknown resolution" << endl;
-				break;
-			 }
-		}
-	}
-
-	if(VideoMode==VID_FMT_INVALID)  
-        cout << "UNKNOWN RESOLUTION/REFRESH RATE CONFIGURATION" << endl;
-
-	return VideoMode;
-}
-
-}
-}
+} //bluefish
+} //videocards
+} //bv

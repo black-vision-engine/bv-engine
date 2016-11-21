@@ -3,9 +3,9 @@
 #include "glm/glm.hpp"
 
 #include <algorithm>
-#include <deque>
 
 
+namespace triangulator {
 
 const float epsilon = 0.00001f;
 
@@ -993,3 +993,5 @@ bool            IsSharedPointIntersection   ( const Event& intersectEvent )
 
     return false;
 }
+
+} //triangulator

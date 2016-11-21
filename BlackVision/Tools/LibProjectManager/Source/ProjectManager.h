@@ -10,6 +10,7 @@
 
 #include "System/Path.h"
 
+
 namespace bv
 {
 
@@ -136,19 +137,25 @@ public:
 
     Path                    ToAbsPath           ( const Path & path ) const;
 
-    static ProjectManager *	GetInstance			(  );
+    static ProjectManager *	GetInstance			();
+
+    static void             SetPMFolder         ( const std::string & pmFolder );
 
     ~ProjectManager	();
 
 private:
+
     ProjectManagerImpl * m_impl;
 
     ProjectManager	( const Path & rootPath );
 
     static std::shared_ptr< ProjectManager > _instance;
 
+    static std::string      m_pmFolder;
+
     static void             SetPMInstanceOnlyForTests( ProjectManager * inst );
     friend void             bv::ChangeProjectManagerInstanceTo( const std::string & );
+
 };
 
 } // bv

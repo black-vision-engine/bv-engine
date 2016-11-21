@@ -4,6 +4,7 @@
 
 #include "Common/VBORect.h"
 #include "Common/GLSLProgram.h"
+#include "Engine/Audio/AudioRenderer.h"
 
 
 namespace bv {
@@ -27,7 +28,7 @@ public:
     virtual     void    Key                 ( unsigned char c ) override;
     virtual     void    Resize              ( UInt32 w, UInt32 h ) override;
 
-	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer, audio::AudioRenderer * );
 
 private:
 

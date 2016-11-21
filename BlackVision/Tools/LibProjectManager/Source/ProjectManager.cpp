@@ -1,9 +1,11 @@
 #include "ProjectManager.h"
 #include "Impl/ProjectManagerImpl.h"
-#include "ConfigManager.h"
 
-namespace bv
-{
+
+namespace bv {
+
+std::string                       ProjectManager::m_pmFolder = "DefaultPMDir";
+
 std::shared_ptr< ProjectManager > ProjectManager::_instance = nullptr;
 
 // ********************************
@@ -30,25 +32,24 @@ namespace
 //
 ProjectManager *	        ProjectManager::GetInstance		()
 {
-    auto pmRootFolder = ConfigManager::GetString( "PMFolder" );
-
-    if( pmRootFolder.empty() )
-    {
-        pmRootFolder = "DefaultPMDir";
-    }
-
     if( !_instance )
     {
-        _instance = std::shared_ptr< ProjectManager >( new ProjectManager( pmRootFolder ) );
+        _instance = std::shared_ptr< ProjectManager >( new ProjectManager( m_pmFolder ) );
     }
 
     return _instance.get();
 }
 
+// ********************************
+//
+void	        ProjectManager::SetPMFolder		( const std::string & pmFolder )
+{
+    m_pmFolder = pmFolder;
+}
 
 // ********************************
 // DO NOT USE, IF NOT TESTING MORE THAN ONE PM
-void                        ProjectManager::SetPMInstanceOnlyForTests( ProjectManager * inst )
+void            ProjectManager::SetPMInstanceOnlyForTests( ProjectManager * inst )
 {
     ProjectManager::_instance = std::shared_ptr< ProjectManager >( inst );
 }

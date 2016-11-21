@@ -1,16 +1,13 @@
 #include "stdafx.h"
 
 #include "TextArranger.h"
+
+#include <glm/gtx/rotate_vector.hpp>
+
 #include "Assets/Font/TextHelper.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv { namespace model
