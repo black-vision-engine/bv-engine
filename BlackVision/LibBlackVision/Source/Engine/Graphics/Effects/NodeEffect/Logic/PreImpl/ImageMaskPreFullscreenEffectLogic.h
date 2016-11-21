@@ -10,6 +10,7 @@ namespace bv {
 class ImageMaskPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
 private:
+
     ITextureDescriptorConstPtr      m_txDesc;
 
     ValueIntPtr                     m_fitVal;
@@ -37,6 +38,7 @@ public:
     virtual void                        AddTexture                          ( const ITextureDescriptorConstPtr & ) override;
 
 private:
+
     glm::mat4                           CalculateMaskTransformation         ( SizeType maskW, SizeType maskH, SizeType screenW, SizeType screenH , bool aspectMask, bool fitObject, SceneNode * node, RenderLogicContext * ctx ) const;
 
 };

@@ -5,6 +5,7 @@
 #include "Common/GLSLProgram.h"
 #include "Common/VBORect.h"
 #include "Memory/MemoryChunk.h"
+#include "Engine/Audio/AudioRenderer.h"
 
 
 namespace bv {
@@ -32,7 +33,7 @@ public:
 
 	MemoryChunkConstPtr ReadColor			() override;
 
-	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer, audio::AudioRenderer * );
 
 private:
 

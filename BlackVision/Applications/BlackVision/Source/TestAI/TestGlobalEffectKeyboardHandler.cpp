@@ -127,7 +127,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
         {
             auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( effect->GetParameter( "alpha" ) );
 
-            alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
+            alpha->SetVal( std::min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
             printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
         }
@@ -140,7 +140,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
         {
             auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( effect->GetParameter( "alpha" ) );
 
-            alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
+            alpha->SetVal( std::min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
             printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
         }
@@ -175,7 +175,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
         {
             auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( effect->GetParameter( "alpha" ) );
 
-            alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+            alpha->SetVal( std::max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
             printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
         }
@@ -188,7 +188,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
         {
             auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( effect->GetParameter( "alpha" ) );
 
-            alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+            alpha->SetVal( std::max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
             printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
         }

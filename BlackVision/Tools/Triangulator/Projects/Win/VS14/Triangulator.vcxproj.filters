@@ -37,6 +37,7 @@
     <ClCompile Include="..\..\..\Source\Clipper\clipper.cpp">
       <Filter>Clipper</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\PolylineValidator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\poly2tri\common\shapes.h">
@@ -70,5 +71,6 @@
     <ClInclude Include="..\..\..\Source\Clipper\clipper.hpp">
       <Filter>Clipper</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\PolylineValidator.h" />
   </ItemGroup>
 </Project>

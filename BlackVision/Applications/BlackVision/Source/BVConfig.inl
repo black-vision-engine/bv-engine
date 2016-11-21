@@ -4,35 +4,35 @@ namespace bv
 
 // *********************************
 //
-int            BVConfig::DefaultwindowWidth                     () const
+Int32           BVConfig::DefaultwindowWidth                     () const
 {
     return m_defaultWindowWidth;
 }
 
 // *********************************
 //
-int            BVConfig::DefaultWindowHeight                    () const
+Int32           BVConfig::DefaultWindowHeight                    () const
 {
     return m_defaultWindowHeight;
 }
 
 // *********************************
 //
-inline int     BVConfig::DefaultWidth                           () const
+inline Int32    BVConfig::DefaultWidth                           () const
 {
     return m_defaultWidth;
 }
 
 // *********************************
 //
-inline int     BVConfig::DefaultHeight                          () const
+inline Int32    BVConfig::DefaultHeight                          () const
 {
     return m_defaultHeight;
 }
 
 // *********************************
 //
-inline bool    BVConfig::FullScreenMode                         () const
+inline bool     BVConfig::FullScreenMode                         () const
 {
     return m_fullscreeMode;
 }
@@ -48,12 +48,12 @@ inline WindowMode    BVConfig::GetWindowMode                   () const
 //
 inline RendererInput    BVConfig::GetRendererInput                   () const
 {
-    return m_RendererInput;
+    return m_rendererInput;
 }
 
 // *********************************
 //
-inline bool    BVConfig::ReadbackFlag                           () const
+inline bool     BVConfig::ReadbackFlag                           () const
 {
     return m_readbackOn;
 }
@@ -81,42 +81,49 @@ inline bool     BVConfig::RenderToSharedMemory                   () const
 
 // *********************************
 //
-inline unsigned int BVConfig::EventLoopUpdateMillis             () const
+inline UInt32       BVConfig::EventLoopUpdateMillis             () const
 {
     return m_eventLoopUpdateMillis;
 }
 
 // *********************************
 //
-inline unsigned int BVConfig::FPS                               () const
+inline UInt32       BVConfig::FPS                               () const
 {
     return m_fps;   
 }
 
 // *********************************
 //
-inline unsigned int BVConfig::FrameTimeMillis                   () const
+inline UInt32       BVConfig::FrameTimeMillis                   () const
 {
     return m_frameTimeMillis;
 }
 
 // *********************************
 //
-inline float        BVConfig::FOV                               () const
+inline UInt32       BVConfig::TimerFPS                          () const
+{
+    return m_timerFPS;
+}
+
+// *********************************
+//
+inline Float32      BVConfig::FOV                               () const
 {
     return m_defaultFOV;
 }
 
 // *********************************
 //
-inline float        BVConfig::NearClippingPlane                 () const
+inline Float32      BVConfig::NearClippingPlane                 () const
 {
     return m_defaultNearClippingPlane;
 }
 
 // *********************************
 //
-inline float        BVConfig::FarClippingPlane                  () const
+inline Float32      BVConfig::FarClippingPlane                  () const
 {
     return m_defaultFarClippingPlane;
 }
@@ -151,49 +158,49 @@ inline const glm::vec4 &    BVConfig::ClearColor                () const
 
 // *********************************
 //
-inline float                BVConfig::ClearDepth                () const
+inline Float32              BVConfig::ClearDepth                () const
 {
     return m_defaultClearDepth;
 }
 
 // *********************************
 //
-inline unsigned int         BVConfig::StatsMAWindowSize         () const
+inline UInt32               BVConfig::StatsMAWindowSize         () const
 {
     return m_defaultStatsMovingAverageWindowSize;
 }
 
 // *********************************
 //
-inline unsigned int         BVConfig::MAVWarmupRounds           () const
+inline UInt32               BVConfig::MAVWarmupRounds           () const
 {
     return m_defaultWarmupRoundsStatsMAV;
 }
 
 // *********************************
 //
-inline unsigned int         BVConfig::StatsRefreshMillisDelta   () const
+inline UInt32               BVConfig::StatsRefreshMillisDelta   () const
 {
     return m_defaultStatsRefreshMillisDelta;
 }
 
 // *********************************
 //
-inline unsigned int         BVConfig::StatsRecalcFramesDelta    () const
+inline UInt32               BVConfig::StatsRecalcFramesDelta    () const
 {
     return m_defaultStatsRecalcFramesDelta;
 }
 
 // *********************************
 //
-inline unsigned int         BVConfig::NumRedbackBuffersPerRT    () const
+inline UInt32               BVConfig::NumRedbackBuffersPerRT    () const
 {
     return m_numRedbackBuffersPerRenderTarget;
 }
 
 // *********************************
 //
-inline unsigned int         BVConfig::ProfilerDispWaitMillis    () const
+inline UInt32               BVConfig::ProfilerDispWaitMillis    () const
 {
     return m_defaultProfilerDisplayWaitMillis;
 }
@@ -207,9 +214,65 @@ inline const char *         BVConfig::FrameStatsSection         () const
 
 // *********************************
 //
+inline const std::string &  BVConfig::SceneFromEnvName          () const
+{
+    return m_sceneFromEnvName;
+}
+
+// *********************************
+//
 inline std::string          BVConfig::DefaultSceneEnvVarName    () const
 {
     return m_defaultSceneEnvVarName;
+}
+
+// *********************************
+//
+inline const std::string &  BVConfig::PMFolder                  () const
+{
+    return m_pmFolder;
+}
+
+// *********************************
+//
+inline Int32                BVConfig::SockerServerPort          () const
+{
+    return m_sockerServerPort;
+}
+
+// *********************************
+//
+inline bool                 BVConfig::UseDebugLayer             () const
+{
+    return m_useDebugLayer;
+}
+
+// *********************************
+//
+inline const std::string &  BVConfig::DebugFilePath             () const
+{
+    return m_debugFilePath;
+}
+
+// *********************************
+//
+inline bool                 BVConfig::LoadSceneFromEnv          () const
+{
+    return m_loadSceneFromEnv;
+}
+
+// *********************************
+//
+inline bool                 BVConfig::UseVideoInputFeeding      () const
+{
+    return m_useVideoInputFeeding;
+}
+
+// *********************************
+//
+inline bool                 BVConfig::EnableLockingQueue        () const
+{
+    return m_enableQueueLocking;
 }
 
 } //bv

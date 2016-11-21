@@ -198,6 +198,8 @@ bool    BlackVisionApp::InitializeLicenses   ()
     return license;
 }
 
+
+
 // *********************************
 //
 void    BlackVisionApp::InitializeAppLogic  ()
@@ -223,7 +225,6 @@ void    BlackVisionApp::InitializeAppLogic  ()
 
     m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
 
-    m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();
     m_app->LoadScene();
 }

@@ -121,7 +121,7 @@ public:
     */
     size_t ContourSize( int c ) const { return m_contoursList[ c ]->PointCount(); }
 
-    const PolylinesVec &                            GetPolylines        ()      { return m_polylines;  }
+    const triangulator::PolylinesVec &              GetPolylines        ()      { return m_polylines;  }
     const ContoursList &                            GetContours         ()      { return m_contoursList;  }
 
     void                                            PrintContoursToFile ();
@@ -133,7 +133,7 @@ private:
     FillRule                                m_fillRule;
 
 	ContoursList							m_contoursList;
-    PolylinesVec                            m_polylines;
+    triangulator::PolylinesVec              m_polylines;
 
 	bool									m_printContoursToFile;
 	std::string								m_fileName;

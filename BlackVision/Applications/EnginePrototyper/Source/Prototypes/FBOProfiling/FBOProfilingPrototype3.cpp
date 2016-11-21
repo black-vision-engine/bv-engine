@@ -298,7 +298,7 @@ void	FBOProfilingPrototype3::AddRenderBufferStorage( SizeType i )
 
 // **************************
 //
-IBasicLogicUnqPtr    FBOProfilingPrototype3::Create  ( Renderer * renderer )
+IBasicLogicUnqPtr    FBOProfilingPrototype3::Create  ( Renderer * renderer, audio::AudioRenderer * )
 {
 	return IBasicLogicUnqPtr( new FBOProfilingPrototype3( renderer ) );
 }

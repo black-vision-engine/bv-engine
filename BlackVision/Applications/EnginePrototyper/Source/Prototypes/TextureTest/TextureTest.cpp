@@ -1,5 +1,8 @@
 #include "TextureTest.h"
 
+#include "Engine/Audio/AudioRenderer.h"
+
+
 namespace bv {
 
 // *****************************
