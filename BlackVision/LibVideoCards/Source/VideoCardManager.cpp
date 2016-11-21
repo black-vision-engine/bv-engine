@@ -1,6 +1,6 @@
 #include "VideoCardManager.h"
 
-//#include "Models/BlackMagic/BlackMagicVideoCard.h"
+#include "Models/BlackMagic/BlackMagicVideoCard.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
 
 #include "UseLoggerVideoModule.h"
@@ -16,7 +16,7 @@ std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
     std::vector< IVideoCardDesc * > descriptors;
     
     descriptors.push_back( new bluefish::VideoCardDesc() );
-    //descriptors.push_back( new blackmagic::VideoCardDesc() );
+    descriptors.push_back( new blackmagic::VideoCardDesc() );
 
     return descriptors;
 }

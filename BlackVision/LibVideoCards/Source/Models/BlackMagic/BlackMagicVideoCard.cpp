@@ -1,7 +1,129 @@
-//#include "BlackMagicVideoCard.h"
-//#include <iostream>
+#include "BlackMagicVideoCard.h"
+
+#include "DeckLinkAPI_h.h"
+
+#include "VideoCardManagerUtils.h"
+#include "Serialization/SerializationHelper.h"
+
+
+namespace bv { namespace videocards { namespace blackmagic {
+
+
+//**************************************
 //
-////using namespace stasd;
+VideoCardDesc::VideoCardDesc()
+    : m_uid( "BlackMagic" )
+{
+}
+
+//**************************************
+//
+IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & deser ) const
+{
+    if( VideoCard::AvailableVideoCards > 0 )
+    {
+        auto deviceID = 0;
+        if( deser.EnterChild( "deviceID" ) )
+        {
+            deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
+
+            deser.ExitChild(); //deviceID
+        }
+
+        auto card = std::make_shared< VideoCard >( deviceID );
+
+        //check input / output count
+
+        if( deser.EnterChild( "channels" ) )
+        {
+            if( deser.EnterChild( "channel" ) )
+            {
+                do
+                {
+                    ChannelInputDataUPtr input = nullptr;
+                    ChannelOutputDataUPtr output = nullptr;
+
+                    if( deser.EnterChild( "input" ) )
+                    {
+                        input = std::unique_ptr< Channel::InputData >( new Channel::InputData() );
+                        input->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
+
+                        deser.ExitChild(); //input
+                    }
+
+                    if( deser.EnterChild( "output" ) )
+                    {
+                        output = std::unique_ptr< Channel::OutputData >( new Channel::OutputData() );
+                        output->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
+                        output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
+                        output->interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
+                        output->flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
+                        output->referenceMode = ReferenceModeMap[ SerializationHelper::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
+                        output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ), -1 );
+                        output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ), -1 );
+                        output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
+
+                        deser.ExitChild(); //output
+                    }
+
+                    card->AddChannel( new Channel( name, input, output ) );
+
+                }
+                while( deser.NextChild() );
+
+                deser.ExitChild(); //channel
+            }
+
+            deser.ExitChild(); //channels
+        }
+
+        VideoCard::AvailableVideoCards--;
+
+        return card;
+    }
+
+    return nullptr;
+}
+
+//**************************************
+//
+const std::string &     VideoCardDesc::GetVideoCardUID() const
+{
+    return m_uid;
+}
+
+//**************************************
+//
+UInt32                          VideoCard::AvailableVideoCards = EnumerateDevices();
+
+//**************************************
+//
+UInt32                          VideoCard::EnumerateDevices()
+{
+    Int32 deviceCount = 0;
+
+    IDeckLink * deckLink = nullptr;
+    IDeckLinkIterator * iterator = nullptr;
+    CoInitialize( nullptr );
+
+    CoCreateInstance( CLSID_CDeckLinkIterator, nullptr, CLSCTX_ALL, IID_IDeckLinkIterator, ( void ** )&iterator );
+    while( iterator->Next( &deckLink ) == S_OK )
+    {
+        deviceCount++;
+    }
+
+    iterator->Release();
+
+    return ( UInt32 )deviceCount;
+}
+
+} //blackmagic
+} //videocards
+} //bv
+
+
 //namespace bv
 //{
 //
