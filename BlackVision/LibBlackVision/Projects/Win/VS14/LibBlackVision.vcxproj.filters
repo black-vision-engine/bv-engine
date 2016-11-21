@@ -3177,9 +3177,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAsset.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\FontAssetDescriptor.h">
-      <Filter>Assets\Font</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontLoader.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
@@ -3193,9 +3190,6 @@
       <Filter>Assets\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\Text.h">
-      <Filter>Assets\Font</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\TextAtlas.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\TextHelper.h">
