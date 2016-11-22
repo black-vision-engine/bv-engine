@@ -198,6 +198,8 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     auto edges = ExtractEdges( mesh );
     auto corners = ExtractCorners( mesh, edges, cornerThreshold );
 
+    //DebugPrintToFile( "ExtrudeDebug.txt", mesh.GetVerticies(), edges, corners );
+
     AddSymetricalPlane( mesh, translate );
     AddSidePlanes( mesh, edges, corners );
 
@@ -668,6 +670,48 @@ void                                DefaultExtrudePlugin::ProcessVertexAttribute
         ProcessConnectedComponent( prevConnComp, prevComponents, prevGeomChannel->GetPrimitiveType() );
     }
 }
+
+// ***********************
+//
+void        DefaultExtrudePlugin::DebugPrintToFile  ( const std::string & fileName, const std::vector< glm::vec3 > & verticies, const std::vector< IndexType > & edges, const std::vector< IndexType > & corners )
+{
+    std::fstream file( fileName, std::ios_base::app );
+    assert( !file.fail() );
+
+    file << "Next contour: " << std::endl;
+
+    // Print edges.
+    file << "Edges: " << std::endl;
+    for( int i = 0; i < edges.size(); i += 2 )
+    {
+        file << "( " << edges[ i ] << ", " << edges[ i + 1 ] << " ) - ";
+        DebugPrint( file, verticies[ edges[ i ] ] );
+        DebugPrint( file, verticies[ edges[ i + 1 ] ] );
+        file << std::endl;
+    }
+    file << std::endl;
+
+    // Print corners.
+    file << "Corners: " << std::endl;
+    for( int i = 0; i < corners.size(); ++i )
+    {
+        file << corners[ i ] << " - ";
+        DebugPrint( file, verticies[ corners[ i ] ] );
+        file << std::endl;
+    }
+    file << std::endl;
+
+    file.close();
+}
+
+// ***********************
+//
+void        DefaultExtrudePlugin::DebugPrint    ( std::fstream & file, glm::vec3 vertex )
+{
+    file << "( " << vertex.x << ", " << vertex.y << ", " << vertex.z << " )";
+}
+
+
 
 } // model
 } // bv
