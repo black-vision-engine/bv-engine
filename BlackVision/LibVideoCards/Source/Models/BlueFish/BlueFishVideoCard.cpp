@@ -102,9 +102,9 @@ VideoCard::ChannelOptionMap     VideoCard::ChannelOptions = CreateChannelOptionM
 //**************************************
 //
 VideoCard::VideoCard        ( UInt32 deviceID )
+    : m_deviceID( deviceID )
 {
     m_SDK = CBlueVelvet4Ptr( BlueVelvetFactory4() );
-    m_deviceID = deviceID;
 
     InitVideoCard();
 

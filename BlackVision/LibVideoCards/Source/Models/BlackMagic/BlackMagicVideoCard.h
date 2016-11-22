@@ -12,7 +12,7 @@ class VideoCardDesc : public IVideoCardDesc
 {
 private:
 
-    std::string     m_uid;
+    std::string             m_uid;
 
 public:
 
@@ -29,13 +29,32 @@ public:
 //
 class VideoCard : public IVideoCard
 {
+private:
+
+    UInt32                                  m_deviceID;
+    IDeckLinkOutput *                       m_output;
+    IDeckLinkConfiguration *                m_configuration;
+    IDeckLinkMutableVideoFrame *            m_frame;
+
+    ChannelInputData                        m_inputChannel;
+    ChannelOutputData                       m_outputChannel;
+
 public:
 
     static UInt32           AvailableVideoCards;
 
 public:
+    
+                            VideoCard           ( UInt32 deviceID );
+    virtual                 ~VideoCard          () override;
 
-    static UInt32           EnumerateDevices();
+    static UInt32           EnumerateDevices    ();
+
+    void                    SetChannel          ( ChannelInputData input );
+    void                    SetChannel          ( ChannelOutputData output );
+
+    virtual void            Start               () override;
+    virtual void            ProcessFrame        ( MemoryChunkConstPtr data ) override;
 
 };
 

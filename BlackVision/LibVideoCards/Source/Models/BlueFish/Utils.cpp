@@ -36,7 +36,6 @@ std::map< std::size_t, _EVideoMode >    CreateVideoModeMap  ()
     videoModeMap[ VideoModeHash( 486, 5994, true ) ] = VID_FMT_486I_5994;
 
     videoModeMap[ VideoModeHash( 1080, 2397, false ) ] = VID_FMT_1080P_2397;
-    videoModeMap[ VideoModeHash( 1080, 2397, false ) ] = VID_FMT_1080P_2397;
     videoModeMap[ VideoModeHash( 1080, 2400, false ) ] = VID_FMT_1080P_2400;
     videoModeMap[ VideoModeHash( 1080, 2500, false ) ] = VID_FMT_1080P_2500;
     videoModeMap[ VideoModeHash( 1080, 2997, false ) ] = VID_FMT_1080P_2997;
