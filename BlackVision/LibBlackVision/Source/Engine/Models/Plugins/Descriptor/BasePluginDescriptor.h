@@ -89,6 +89,7 @@ protected:
             {
                 auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< InterpolatorType, ValueType, MPT, PT >( param );
                 model->RegisterAll( evaluator );
+                evaluator->Evaluate();      // Set Value to defaultValue.
             }
             else
             {

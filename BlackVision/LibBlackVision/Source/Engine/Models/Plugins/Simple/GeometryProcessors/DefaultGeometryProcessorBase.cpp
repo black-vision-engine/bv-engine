@@ -42,6 +42,9 @@ void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
     ProcessVertexAttributesChannel();
+
+    HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+    HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
 }
 
 // *************************************
@@ -68,8 +71,7 @@ void                                DefaultGeometryProcessorBase::Update        
     {
         ProcessVertexAttributesChannel();
     }
-
-    if( m_pluginParamValModel->GetVertexAttributesChannelModel() )
+    else if( m_pluginParamValModel->GetVertexAttributesChannelModel() )
     {
         auto & states = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetStates();
         for( auto iter = states.begin(); iter != states.end(); ++iter )
