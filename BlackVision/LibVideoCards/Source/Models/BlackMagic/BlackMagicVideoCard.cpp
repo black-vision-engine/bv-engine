@@ -1,7 +1,237 @@
-//#include "BlackMagicVideoCard.h"
-//#include <iostream>
+#include "BlackMagicVideoCard.h"
+
+
+#include "Utils.h"
+#include "Serialization/SerializationHelper.h"
+
+
+namespace bv { namespace videocards { namespace blackmagic {
+
+
+//**************************************
 //
-////using namespace stasd;
+VideoCardDesc::VideoCardDesc()
+    : m_uid( "BlackMagic" )
+{
+}
+
+//**************************************
+//
+IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & deser ) const
+{
+    if( VideoCard::AvailableVideoCards > 0 )
+    {
+        auto deviceID = 0;
+        if( deser.EnterChild( "deviceID" ) )
+        {
+            deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
+
+            deser.ExitChild(); //deviceID
+        }
+
+        auto card = std::make_shared< VideoCard >( deviceID );
+
+        //check input / output count
+
+        if( deser.EnterChild( "channels" ) )
+        {
+            if( deser.EnterChild( "channel" ) )
+            {
+                do
+                {
+                    ChannelInputDataUPtr input = nullptr;
+                    ChannelOutputDataUPtr output = nullptr;
+
+                    if( deser.EnterChild( "input" ) )
+                    {
+                        ChannelInputData input;
+                        input.type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        input.playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
+
+                        deser.ExitChild(); //input
+
+                        card->SetChannel( input );
+                    }
+
+                    if( deser.EnterChild( "output" ) )
+                    {
+                        ChannelOutputData output;
+                        output.type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        output.resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
+                        output.refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
+                        output.interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
+                        output.flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
+                        output.videoMode = ConvertVideoMode( output.resolution, output.refresh, output.interlaced );
+
+                        deser.ExitChild(); //output
+
+                        card->SetChannel( output );
+                    }
+                }
+                while( deser.NextChild() );
+
+                deser.ExitChild(); //channel
+            }
+
+            deser.ExitChild(); //channels
+        }
+
+        VideoCard::AvailableVideoCards--;
+
+        return card;
+    }
+
+    return nullptr;
+}
+
+//**************************************
+//
+const std::string &     VideoCardDesc::GetVideoCardUID  () const
+{
+    return m_uid;
+}
+
+
+//**************************************
+//
+VideoCard::VideoCard        ( UInt32 deviceID )
+    : m_deviceID( deviceID )
+{
+    IDeckLinkIterator * iterator;
+    HRESULT result;
+
+    result = CoCreateInstance( CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, ( void** )&iterator );
+    if( result == S_OK )
+    {
+        IDeckLink * device = nullptr;
+        auto idx = m_deviceID;
+
+        while( ( result = iterator->Next( &device ) ) == S_OK )
+        {
+            if( idx == 0 )
+                break;
+            --idx;
+
+            device->Release();
+        }
+
+        if( result == S_OK && device != nullptr )
+        {
+            result = device->QueryInterface( IID_IDeckLinkOutput, ( void** )&m_output );
+
+            if( result == S_OK )
+            {
+                result = device->QueryInterface( IID_IDeckLinkConfiguration, ( void** )&m_configuration );
+            }
+        }
+    }
+
+    //if output
+    //EnableVideoAndStartDisplay
+    IDeckLinkDisplayModeIterator * displayModeIterator = nullptr;
+    IDeckLinkDisplayMode * displayMode = nullptr;
+
+    if( m_output->GetDisplayModeIterator( &displayModeIterator ) == S_OK )
+    {
+        while( displayModeIterator->Next( &displayMode ) == S_OK )
+        {
+            if( displayMode->GetDisplayMode() == m_outputChannel.videoMode )
+            {
+                break;
+            }
+
+            displayMode->Release();
+            displayMode = nullptr;
+
+        }
+
+        displayModeIterator->Release();
+
+        if( displayMode )
+        {
+            result = m_output->EnableVideoOutput( displayMode->GetDisplayMode(), 
+                                                  BMDVideoOutputFlags::bmdVideoOutputFlagDefault );
+            if( result == S_OK )
+            {
+                auto width = displayMode->GetWidth();
+                auto height = displayMode->GetHeight();
+                m_output->CreateVideoFrame( width, height, width * 4, BMDPixelFormat::bmdFormat8BitBGRA, 
+                                            bmdFrameFlagFlipVertical, &m_frame );
+            }
+        }
+    }
+}
+
+//**************************************
+//
+void                    VideoCard::SetChannel           ( ChannelInputData input )
+{
+    m_inputChannel = input;
+}
+
+//**************************************
+//
+void                    VideoCard::SetChannel           ( ChannelOutputData output )
+{
+    m_outputChannel = output;
+}
+
+//**************************************
+//
+void                    VideoCard::Start                ()
+{
+    for( auto channel : m_channels )
+    {
+        channel->StartThreads();
+    }
+}
+
+//**************************************
+//
+void                    VideoCard::ProcessFrame         ( MemoryChunkConstPtr data )
+{
+    for( auto channel : m_channels )
+    {
+        auto playbackChannel = channel->GetPlaybackChannel();
+        auto captureChannel = channel->GetCaptureChannel();
+        if( playbackChannel &&
+            ( !captureChannel /*|| ( captureChannel && m_playthrough==false )*/ ) )
+        {
+            playbackChannel->m_pFifoBuffer->PutLiveBuffer( new CFrame( reinterpret_cast< const unsigned char * >( data->Get() ), 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
+        }
+    }
+}
+
+//**************************************
+//
+UInt32                          VideoCard::AvailableVideoCards = EnumerateDevices();
+
+//**************************************
+//
+UInt32                  VideoCard::EnumerateDevices     ()
+{
+    Int32 deviceCount = 0;
+
+    IDeckLink * deckLink = nullptr;
+    IDeckLinkIterator * iterator = nullptr;
+    CoInitialize( nullptr );
+
+    CoCreateInstance( CLSID_CDeckLinkIterator, nullptr, CLSCTX_ALL, IID_IDeckLinkIterator, ( void ** )&iterator );
+    while( iterator->Next( &deckLink ) == S_OK )
+    {
+        deviceCount++;
+    }
+
+    iterator->Release();
+
+    return ( UInt32 )deviceCount;
+}
+
+} //blackmagic
+} //videocards
+} //bv
+
+
 //namespace bv
 //{
 //
@@ -464,23 +694,6 @@
 //
 //        if (result == S_OK)
 //	    {
-//		    LONGLONG		deckLinkVersion;
-//		    int				dlVerMajor, dlVerMinor, dlVerPoint;
-//		    deckLinkAPIInformation->GetInt(BMDDeckLinkAPIVersion, &deckLinkVersion);	
-//		    dlVerMajor = (deckLinkVersion & 0xFF000000) >> 24;
-//		    dlVerMinor = (deckLinkVersion & 0x00FF0000) >> 16;
-//		    dlVerPoint = (deckLinkVersion & 0x0000FF00) >> 8;
-//		
-//
-//            printf("VideoCard INFO DeckLink API detected! API version: ");
-//			printf((to_string(dlVerMajor)).c_str());
-//			printf(".");
-//			printf((to_string(dlVerMinor)).c_str());
-//			printf(".");
-//			printf((to_string(dlVerPoint)).c_str());
-//			printf("\n");
-//
-//		
 //		    deckLinkAPIInformation->Release();
 //        }else{ 
 //            printf("VideoCard INFO No Decklink API present... \n");

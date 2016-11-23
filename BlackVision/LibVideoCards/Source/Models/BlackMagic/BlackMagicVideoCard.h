@@ -1,3 +1,68 @@
+#pragma once
+
+#include "Interfaces/IVideoCard.h"
+#include "Interfaces/IVideoCardDescriptor.h"
+
+
+namespace bv { namespace videocards { namespace blackmagic {
+
+// ***************************** DESCRIPTOR **********************************
+//
+class VideoCardDesc : public IVideoCardDesc
+{
+private:
+
+    std::string             m_uid;
+
+public:
+
+                                            VideoCardDesc       ();
+
+    virtual IVideoCardPtr                   CreateVideoCard     ( const IDeserializer & deser ) const override;
+
+    virtual const std::string &             GetVideoCardUID     () const override;
+
+};
+
+
+// ***************************************************************
+//
+class VideoCard : public IVideoCard
+{
+private:
+
+    UInt32                                  m_deviceID;
+    IDeckLinkOutput *                       m_output;
+    IDeckLinkConfiguration *                m_configuration;
+    IDeckLinkMutableVideoFrame *            m_frame;
+
+    ChannelInputData                        m_inputChannel;
+    ChannelOutputData                       m_outputChannel;
+
+public:
+
+    static UInt32           AvailableVideoCards;
+
+public:
+    
+                            VideoCard           ( UInt32 deviceID );
+    virtual                 ~VideoCard          () override;
+
+    static UInt32           EnumerateDevices    ();
+
+    void                    SetChannel          ( ChannelInputData input );
+    void                    SetChannel          ( ChannelOutputData output );
+
+    virtual void            Start               () override;
+    virtual void            ProcessFrame        ( MemoryChunkConstPtr data ) override;
+
+};
+
+
+} //bluefish
+} //videocards
+} //bv
+
 //#pragma once
 //#include "../../VideoCardBase.h"
 //

@@ -8,7 +8,7 @@ namespace bv { namespace videocards { namespace bluefish {
 
 //**************************************
 //
-Channel::Channel( ChannelName name, InputDataUPtr & input, OutputDataUPtr & output )
+Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputDataUPtr & output )
     : m_channelName( name )
     , m_captureData( nullptr )
     , m_captureChannel( nullptr )

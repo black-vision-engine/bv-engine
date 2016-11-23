@@ -38,35 +38,10 @@ private:
     
 public:
 
-    struct InputData
-    {
-        IOType                  type;
-        bool                    playthrough;
-    };
+    ChannelInputDataUPtr    m_captureData;
+    ChannelOutputDataUPtr   m_playbackData;
 
-    DEFINE_UPTR_TYPE( InputData )
-
-    struct OutputData
-    {
-        IOType                  type;
-        UInt32                  resolution;
-	    UInt32                  refresh;
-        bool                    interlaced;
-        bool                    flipped;
-        _EVideoMode             videoMode;
-        _EBlueGenlockSource     referenceMode;
-        Int32                   referenceH;
-        Int32                   referenceV;
-    };
-
-    DEFINE_UPTR_TYPE( OutputData )
-
-public:
-
-    InputDataUPtr   m_captureData;
-    OutputDataUPtr  m_playbackData;
-
-    HANDLE          m_PlaythroughThreadHandle;
+    HANDLE                  m_PlaythroughThreadHandle;
 
     //std::shared_ptr<CFrame>         pFrameOut;
     //long            m_referenceMode;
@@ -75,7 +50,7 @@ public:
 
 public:
 
-                    Channel             ( ChannelName name, InputDataUPtr & input, OutputDataUPtr & output );
+                    Channel             ( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputDataUPtr & output );
                     ~Channel            ();
 
     ChannelName     GetName             () const;
