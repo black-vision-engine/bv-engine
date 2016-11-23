@@ -16,6 +16,7 @@ public:
 
 	virtual void                SetVideoOutput          ( bool enable ) = 0;
 
+    //TODO: handle frames from GPU
     virtual void                ProcessFrame            ( MemoryChunkConstPtr data ) = 0;
 
 	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;

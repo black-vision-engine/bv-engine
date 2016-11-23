@@ -1,8 +1,9 @@
 #include "BlackMagicVideoCard.h"
 
-
-#include "Utils.h"
 #include "Serialization/SerializationHelper.h"
+
+
+#define SUCCESS( hr ) ( ( ( HRESULT )( hr ) ) == S_OK )
 
 
 namespace bv { namespace videocards { namespace blackmagic {
@@ -31,28 +32,12 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
 
         auto card = std::make_shared< VideoCard >( deviceID );
 
-        //check input / output count
-
         if( deser.EnterChild( "channels" ) )
         {
             if( deser.EnterChild( "channel" ) )
             {
                 do
                 {
-                    ChannelInputDataUPtr input = nullptr;
-                    ChannelOutputDataUPtr output = nullptr;
-
-                    if( deser.EnterChild( "input" ) )
-                    {
-                        ChannelInputData input;
-                        input.type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
-                        input.playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
-
-                        deser.ExitChild(); //input
-
-                        card->SetChannel( input );
-                    }
-
                     if( deser.EnterChild( "output" ) )
                     {
                         ChannelOutputData output;
@@ -65,7 +50,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
 
                         deser.ExitChild(); //output
 
-                        card->SetChannel( output );
+                        card->AddOutput( output );
                     }
                 }
                 while( deser.NextChild() );
@@ -94,111 +79,179 @@ const std::string &     VideoCardDesc::GetVideoCardUID  () const
 
 //**************************************
 //
-VideoCard::VideoCard        ( UInt32 deviceID )
+VideoCard::VideoCard( UInt32 deviceID )
     : m_deviceID( deviceID )
+    , m_device( nullptr )
+    , m_output( nullptr )
+    , m_configuration( nullptr )
 {
-    IDeckLinkIterator * iterator;
-    HRESULT result;
+    InitVideoCard();
+}
 
-    result = CoCreateInstance( CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, ( void** )&iterator );
-    if( result == S_OK )
+//**************************************
+//
+VideoCard::~VideoCard       ()
+{
+    while( !m_frames.empty() )
     {
-        IDeckLink * device = nullptr;
-        auto idx = m_deviceID;
+        m_frames[ 0 ]->Release();
+    }
+    m_frames.clear();
 
-        while( ( result = iterator->Next( &device ) ) == S_OK )
-        {
-            if( idx == 0 )
-                break;
-            --idx;
+    if( m_output )
+        m_output->Release();
 
-            device->Release();
-        }
+    if( m_configuration )
+        m_configuration->Release();
 
-        if( result == S_OK && device != nullptr )
-        {
-            result = device->QueryInterface( IID_IDeckLinkOutput, ( void** )&m_output );
+    if( m_device )
+        m_device->Release();
+}
 
-            if( result == S_OK )
-            {
-                result = device->QueryInterface( IID_IDeckLinkConfiguration, ( void** )&m_configuration );
-            }
-        }
+//**************************************
+//
+bool                    VideoCard::InitVideoCard        ()
+{
+    if( InitDevice() )
+    {
+        return InitOutput();
     }
 
-    //if output
-    //EnableVideoAndStartDisplay
+    return false;
+}
+
+//**************************************
+//
+bool                    VideoCard::InitDevice           ()
+{
+    IDeckLinkIterator * iterator;
+
+    if( SUCCESS( CoCreateInstance( CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, ( void** )&iterator ) ) )
+    {
+        auto idx = m_deviceID;
+        while( SUCCESS( iterator->Next( &m_device ) ) )
+        {
+            if( idx == 0 )
+            {
+                break;
+            }
+            --idx;
+
+            m_device->Release();
+        }
+
+        if( m_device )
+        {
+            if( SUCCESS( m_device->QueryInterface( IID_IDeckLinkOutput, ( void** )&m_output ) ) &&
+                SUCCESS( m_device->QueryInterface( IID_IDeckLinkConfiguration, ( void** )&m_configuration ) ) )
+            {
+                return true;
+            }
+        }
+
+        iterator->Release();
+    }
+
+    return false;
+}
+
+//**************************************
+//
+bool                    VideoCard::InitOutput()
+{
     IDeckLinkDisplayModeIterator * displayModeIterator = nullptr;
     IDeckLinkDisplayMode * displayMode = nullptr;
 
-    if( m_output->GetDisplayModeIterator( &displayModeIterator ) == S_OK )
+    for( auto & output : m_outputs )
     {
-        while( displayModeIterator->Next( &displayMode ) == S_OK )
+        if( SUCCESS( m_output->GetDisplayModeIterator( &displayModeIterator ) ) )
         {
-            if( displayMode->GetDisplayMode() == m_outputChannel.videoMode )
+            while( SUCCESS( displayModeIterator->Next( &displayMode ) ) )
             {
-                break;
+                if( displayMode->GetDisplayMode() == output.videoMode )
+                {
+                    break;
+                }
+
+                displayMode->Release();
             }
 
-            displayMode->Release();
-            displayMode = nullptr;
+            displayModeIterator->Release();
 
-        }
-
-        displayModeIterator->Release();
-
-        if( displayMode )
-        {
-            result = m_output->EnableVideoOutput( displayMode->GetDisplayMode(), 
-                                                  BMDVideoOutputFlags::bmdVideoOutputFlagDefault );
-            if( result == S_OK )
+            if( displayMode )
             {
                 auto width = displayMode->GetWidth();
                 auto height = displayMode->GetHeight();
-                m_output->CreateVideoFrame( width, height, width * 4, BMDPixelFormat::bmdFormat8BitBGRA, 
-                                            bmdFrameFlagFlipVertical, &m_frame );
+
+                IDeckLinkMutableVideoFrame * frame = nullptr;
+
+                if( SUCCESS( m_output->EnableVideoOutput( displayMode->GetDisplayMode(),
+                                                            BMDVideoOutputFlags::bmdVideoOutputFlagDefault ) ) &&
+                    SUCCESS( m_output->CreateVideoFrame( width, height, width * 4, BMDPixelFormat::bmdFormat8BitBGRA,
+                                                            bmdFrameFlagFlipVertical, &frame ) ) )
+                {
+                    m_frames.push_back( frame );
+                    return true;
+                }
+
+                displayMode->Release();
             }
+
+            displayModeIterator->Release();
         }
     }
+    
+    return false;
 }
 
 //**************************************
 //
-void                    VideoCard::SetChannel           ( ChannelInputData input )
+void                    VideoCard::SetVideoOutput       ( bool enable )
 {
-    m_inputChannel = input;
+    { enable; }
+    //for( auto frame : m_frames )
+    //{
+    //    void * rawFrame;
+    //    frame->GetBytes( &rawFrame );
+
+    //    memset( rawFrame, 0, frame->GetRowBytes() * frame->GetHeight() );
+    //}
 }
 
 //**************************************
 //
-void                    VideoCard::SetChannel           ( ChannelOutputData output )
+void                    VideoCard::AddOutput            ( ChannelOutputData output )
 {
-    m_outputChannel = output;
+    m_outputs.push_back( output );
 }
 
 //**************************************
 //
 void                    VideoCard::Start                ()
 {
-    for( auto channel : m_channels )
-    {
-        channel->StartThreads();
-    }
 }
 
 //**************************************
 //
 void                    VideoCard::ProcessFrame         ( MemoryChunkConstPtr data )
 {
-    for( auto channel : m_channels )
+    for( UInt32 i = 0; i < ( UInt32 )m_outputs.size(); ++i )
     {
-        auto playbackChannel = channel->GetPlaybackChannel();
-        auto captureChannel = channel->GetCaptureChannel();
-        if( playbackChannel &&
-            ( !captureChannel /*|| ( captureChannel && m_playthrough==false )*/ ) )
+        auto frame = m_frames[ i ];
+
+        void * rawFrame;
+        frame->GetBytes( &rawFrame );
+
+        if( m_outputs[ i ].type == IOType::KEY )
         {
-            playbackChannel->m_pFifoBuffer->PutLiveBuffer( new CFrame( reinterpret_cast< const unsigned char * >( data->Get() ), 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
+            //FIXME: CopyAlphaBits
         }
+        else
+        {
+            memcpy( rawFrame, data->Get(), frame->GetRowBytes() * frame->GetHeight() );
+        }
+
+        m_output->DisplayVideoFrameSync( frame );
     }
 }
 
@@ -214,15 +267,19 @@ UInt32                  VideoCard::EnumerateDevices     ()
 
     IDeckLink * deckLink = nullptr;
     IDeckLinkIterator * iterator = nullptr;
-    CoInitialize( nullptr );
-
-    CoCreateInstance( CLSID_CDeckLinkIterator, nullptr, CLSCTX_ALL, IID_IDeckLinkIterator, ( void ** )&iterator );
-    while( iterator->Next( &deckLink ) == S_OK )
+    if( SUCCESS( CoInitialize( nullptr ) ) )
     {
-        deviceCount++;
-    }
+        if( SUCCESS( CoCreateInstance( CLSID_CDeckLinkIterator, nullptr, CLSCTX_ALL, IID_IDeckLinkIterator, ( void ** )&iterator ) ) )
+        {
+            while( SUCCESS( iterator->Next( &deckLink ) ) )
+            {
+                deviceCount++;
+            }
 
-    iterator->Release();
+            iterator->Release();
+            deckLink->Release();
+        }
+    }
 
     return ( UInt32 )deviceCount;
 }
@@ -231,26 +288,6 @@ UInt32                  VideoCard::EnumerateDevices     ()
 } //videocards
 } //bv
 
-
-//namespace bv
-//{
-//
-//namespace videocards{
-//
-//BlackMagicVideoCard::BlackMagicVideoCard(void)
-//{
-//
-//	Brand = "BlackMagic";
-//    Name = Brand;
-//    SuperMagic = false;     
-//}
-//BlackMagicVideoCard::BlackMagicVideoCard(unsigned int id)
-//{
-//    device_id = id;
-//	Brand = "BlackMagic";
-//    Name = Brand + "_" + std::to_string(id);
-//    SuperMagic = false;     
-//}
 ////**************************************
 ////
 //void CopyAlphaBits(void* from, void *to,int size)
@@ -283,192 +320,6 @@ UInt32                  VideoCard::EnumerateDevices     ()
 //		_mm_store_si128( out_128, _mm_shuffle_epi8( _mm_load_si128( in_128 ), mask ) );	
 //	}
 //
-//}
-//
-////**************************************
-////Nasfeter todo
-//void BlackMagicVideoCard::SetReferenceModeValue(string refMode)
-//{
-//}
-//
-////**************************************
-////Nasfeter Todo
-//void BlackMagicVideoCard::DeliverFrameFromGPU(unsigned int bufferPointer)
-//{
-//	{bufferPointer;}
-//}
-//
-//void    BlackMagicVideoCard::DeliverFrameFromRAM (std::shared_ptr<CFrame> Frame )
-//{
-//     VideoOutput* output = outputsManager->GetDefaultVideoOutput();
-//    
-//    for(unsigned int i=0;i<output->Channels.size();i++)
-//    {
-//        int hdVideo =  output->Channels[i].OutputId-1;
-//        EnterCriticalSection(&Mutex[hdVideo]);
-//        if(hdVideo<0 || hdVideo >= ChannelsCount)
-//        {
-//            printf("VideoCard ERROR DeliverFrameFromRAM(), wrong Output id! \n");
-//            LeaveCriticalSection(&Mutex[hdVideo]);
-//            return;
-//        }
-//
-//        if(output->Channels[i].OutputType == VideoOutputType::KEY)
-//        {
-//            CopyAlphaBits((void*) Frame->m_pBuffer,pFrame[hdVideo],VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//            //memcpy(pFrame[hdVideo],(void*)buffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//        }
-//        else if(output->Channels[i].OutputType == VideoOutputType::FILL) {
-//            // kopiujemy bez sensu ramkê do jakiegoœ bufora
-//            memcpy(pFrame[hdVideo],(void*)Frame->m_pBuffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//        }else if(output->Channels[i].OutputType == VideoOutputType::FILL_AUTO_KEY) 
-//        {
-//            memcpy(pFrame[hdVideo],(void*)Frame->m_pBuffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//        }
-//        VideoFrames[hdVideo]->GetBytes((void**)&pFrame[hdVideo]);
-//        //result = HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
-//        LeaveCriticalSection(&Mutex[hdVideo]);
-//        //bool result=false;
-//        /*if(result!=S_OK)
-//        {
-//            //printf("VideoCard","ERROR", "ScheduleVideoFrame error");
-//        }else{
-//            //printf("VideoCard","INFO", "Frame out there!");
-//        }*/
-//    }
-//    for(unsigned int i=0;i<output->Channels.size();i++)
-//    {
-//        int hdVideo =  output->Channels[i].OutputId-1;
-//        HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
-//    }
-//
-//    LeaveCriticalSection(&pMutex);
-//}
-//
-
-////**************************************
-////
-//void BlackMagicVideoCard::DeliverFrameFromRAM(unsigned char * buffer)
-//{
-//    
-//
-//    VideoOutput* output = outputsManager->GetDefaultVideoOutput();
-//    
-//    for(unsigned int i=0;i<output->Channels.size();i++)
-//    {
-//        int hdVideo =  output->Channels[i].OutputId-1;
-//        EnterCriticalSection(&Mutex[hdVideo]);
-//        if(hdVideo<0 || hdVideo >= ChannelsCount)
-//        {
-//            printf("VideoCard ERROR DeliverFrameFromRAM(), wrong Output id! \n");
-//            LeaveCriticalSection(&Mutex[hdVideo]);
-//            return;
-//        }
-//        //HRESULT result;
-//
-//        if(output->Channels[i].OutputType == VideoOutputType::KEY)
-//        {
-//            CopyAlphaBits((void*) buffer,pFrame[hdVideo],VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//            //memcpy(pFrame[hdVideo],(void*)buffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//        }
-//        else if(output->Channels[i].OutputType == VideoOutputType::FILL) {
-//            // kopiujemy bez sensu ramkê do jakiegoœ bufora
-//            memcpy(pFrame[hdVideo],(void*)buffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//        }else if(output->Channels[i].OutputType == VideoOutputType::FILL_AUTO_KEY) 
-//        {
-//            memcpy(pFrame[hdVideo],(void*)buffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
-//        }
-//        VideoFrames[hdVideo]->GetBytes((void**)&pFrame[hdVideo]);
-//        //result = HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
-//        LeaveCriticalSection(&Mutex[hdVideo]);
-//        //bool result=false;
-//        /*if(result!=S_OK)
-//        {
-//            //printf("VideoCard","ERROR", "ScheduleVideoFrame error");
-//        }else{
-//            //printf("VideoCard","INFO", "Frame out there!");
-//        }*/
-//    }
-//    for(unsigned int i=0;i<output->Channels.size();i++)
-//    {
-//        int hdVideo =  output->Channels[i].OutputId-1;
-//        HRESULT result = HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
-//		 
-//		{result;} 
-//	}
-//
-//    LeaveCriticalSection(&pMutex);
-//}
-//
-//
-////**************************************
-////
-//BlackMagicVideoCard::~BlackMagicVideoCard(void)
-//{
-//
-//}
-//
-////**************************************
-////
-//bool BlackMagicVideoCard::DetectVideoCard(void)
-//{
-//	return true || false;
-//}
-//
-//
-////**************************************
-////
-//void BlackMagicVideoCard::BailOut()
-//{
-//	
-//}
-//
-////**************************************
-////
-//void BlackMagicVideoCard::RouteChannel()
-//{
-//
-//}
-//    
-////**************************************
-////
-//bool BlackMagicVideoCard::InitVideoCard( const std::vector<int> & hackBuffersUids )
-//{
-//	{ hackBuffersUids;}
-//    cout << "Initializing BlackMagic VideoCard..." << endl;
-//    //if(this->transferMode==GPU)
-//    //{
-//    //    int result = InitSDKGPUDirect();
-//    //    return result>0;
-//    //}
-//    //else 
-//    {
-//        int result = InitSDK();
-//        return result>0;
-//    }
-//}
-//
-////**************************************
-////ToDo GPUDirect
-//bool BlackMagicVideoCard::InitSDKGPUDirect(void)
-//{
-//	//cout << "Initializing BlackMagic VideoCard..." << endl;
-//	//int result = InitDirectGPUSDK();
-//
-//	return true;
-//}
-////**************************************
-////
-////**************************************
-////ToDo GPUDirect
-//
-//bool BlackMagicVideoCard::DirectGPUPreRender()
-//{
-//    return true;
-//}
-//bool BlackMagicVideoCard::DirectGPUPostRender()
-//{
-//    return true;
 //}
 //
 ////**************************************

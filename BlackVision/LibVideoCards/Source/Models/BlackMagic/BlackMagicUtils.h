@@ -3,23 +3,14 @@
 #include <map>
 
 #include "VideoCardManagerUtils.h"
+
+#define _WINSOCKAPI_
 #include "DeckLinkAPI_h.h"
 
 #include "CoreDEF.h"
 
 
 namespace bv { namespace videocards { namespace blackmagic {
-
-
-//**************************************
-//
-struct ChannelInputData
-{
-    IOType                  type;
-    bool                    playthrough;
-};
-
-DEFINE_UPTR_TYPE( ChannelInputData )
 
 
 //**************************************

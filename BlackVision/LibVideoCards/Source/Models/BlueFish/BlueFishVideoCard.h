@@ -71,7 +71,7 @@ public:
 
 	bool                    InitVideoCard               ();
 
-    void                    SetVideoOutput              ( bool enable );
+    virtual void            SetVideoOutput              ( bool enable ) override;
 
 	void				    AddChannel					( Channel * channel );
 	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );

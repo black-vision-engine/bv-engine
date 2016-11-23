@@ -2,6 +2,7 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
+#include "BlackMagicUtils.h"
 
 
 namespace bv { namespace videocards { namespace blackmagic {
@@ -31,13 +32,13 @@ class VideoCard : public IVideoCard
 {
 private:
 
-    UInt32                                  m_deviceID;
-    IDeckLinkOutput *                       m_output;
-    IDeckLinkConfiguration *                m_configuration;
-    IDeckLinkMutableVideoFrame *            m_frame;
+    UInt32                                      m_deviceID;
+    IDeckLink *                                 m_device;
+    IDeckLinkOutput *                           m_output;
+    IDeckLinkConfiguration *                    m_configuration;
 
-    ChannelInputData                        m_inputChannel;
-    ChannelOutputData                       m_outputChannel;
+    std::vector< IDeckLinkMutableVideoFrame * > m_frames;
+    std::vector< ChannelOutputData >            m_outputs;
 
 public:
 
@@ -48,13 +49,18 @@ public:
                             VideoCard           ( UInt32 deviceID );
     virtual                 ~VideoCard          () override;
 
-    static UInt32           EnumerateDevices    ();
+    bool                    InitVideoCard       ();
+    bool                    InitDevice          ();
+    bool                    InitOutput          ();
 
-    void                    SetChannel          ( ChannelInputData input );
-    void                    SetChannel          ( ChannelOutputData output );
+    virtual void            SetVideoOutput      ( bool enable ) override;
+
+    void                    AddOutput           ( ChannelOutputData output );
 
     virtual void            Start               () override;
     virtual void            ProcessFrame        ( MemoryChunkConstPtr data ) override;
+
+    static UInt32           EnumerateDevices    ();
 
 };
 

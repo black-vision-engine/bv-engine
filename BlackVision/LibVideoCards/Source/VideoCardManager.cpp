@@ -3,7 +3,7 @@
 #include "Models/BlackMagic/BlackMagicVideoCard.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
 
-#include "UseLoggerVideoModule.h"
+//#include "UseLoggerVideoModule.h"
 
 
 namespace bv { namespace videocards {

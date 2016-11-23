@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "BlackMagicUtils.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
