@@ -284,7 +284,7 @@ void Channel::SetVideoOutput        ( bool enable )
         VARIANT value;       
 		value.vt = VT_UI4;
 
-        value.ulVal = enable;
+        value.ulVal = !enable;
         GetPlaybackChannel()->m_pSDK->SetCardProperty( VIDEO_BLACKGENERATOR, value );
     }
 }

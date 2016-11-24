@@ -153,6 +153,7 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
         auto asset = LoadTypedAsset< AVAsset >( assetDescr );
         if( asset )
         {
+            m_decoder = nullptr;
             m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
             if( m_decoder->HasAudio() )

@@ -69,7 +69,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                     }
 
                     card->AddChannel( new Channel( name, input, output ) );
-
+                    
                 } while( deser.NextChild() );
 
                 deser.ExitChild(); //channel
@@ -79,6 +79,8 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
         }
 
         VideoCard::AvailableVideoCards--;
+
+        card->InitVideoCard();
 
         return card;
     }
@@ -106,7 +108,6 @@ VideoCard::VideoCard        ( UInt32 deviceID )
 {
     m_SDK = CBlueVelvet4Ptr( BlueVelvetFactory4() );
 
-    InitVideoCard();
 
     //m_referenceMode = BlueFreeRunning;
     //m_refH = 0;
