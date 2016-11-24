@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "BlueFishUtils.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
@@ -35,7 +35,6 @@ std::map< std::size_t, _EVideoMode >    CreateVideoModeMap  ()
     videoModeMap[ VideoModeHash( 576, 5000, true ) ] = VID_FMT_576I_5000;
     videoModeMap[ VideoModeHash( 486, 5994, true ) ] = VID_FMT_486I_5994;
 
-    videoModeMap[ VideoModeHash( 1080, 2397, false ) ] = VID_FMT_1080P_2397;
     videoModeMap[ VideoModeHash( 1080, 2397, false ) ] = VID_FMT_1080P_2397;
     videoModeMap[ VideoModeHash( 1080, 2400, false ) ] = VID_FMT_1080P_2400;
     videoModeMap[ VideoModeHash( 1080, 2500, false ) ] = VID_FMT_1080P_2500;

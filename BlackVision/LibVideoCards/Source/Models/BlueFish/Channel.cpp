@@ -8,7 +8,7 @@ namespace bv { namespace videocards { namespace bluefish {
 
 //**************************************
 //
-Channel::Channel( ChannelName name, InputDataUPtr & input, OutputDataUPtr & output )
+Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputDataUPtr & output )
     : m_channelName( name )
     , m_captureData( nullptr )
     , m_captureChannel( nullptr )
@@ -284,7 +284,7 @@ void Channel::SetVideoOutput        ( bool enable )
         VARIANT value;       
 		value.vt = VT_UI4;
 
-        value.ulVal = enable;
+        value.ulVal = !enable;
         GetPlaybackChannel()->m_pSDK->SetCardProperty( VIDEO_BLACKGENERATOR, value );
     }
 }

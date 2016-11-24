@@ -37,15 +37,15 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
             {
                 do
                 {
-                    Channel::InputDataUPtr input = nullptr;
-                    Channel::OutputDataUPtr output = nullptr;
+                    ChannelInputDataUPtr input = nullptr;
+                    ChannelOutputDataUPtr output = nullptr;
 
                     auto name = SerializationHelper::String2T< ChannelName >( deser.GetAttribute( "name" ) );
                     //auto renderer = deser.GetAttribute( "renderer" );
 
                     if( deser.EnterChild( "input" ) )
                     {
-                        input = std::unique_ptr< Channel::InputData >( new Channel::InputData() );
+                        input = std::unique_ptr< ChannelInputData >( new ChannelInputData() );
                         input->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
                         input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
                     
@@ -54,7 +54,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
 
                     if( deser.EnterChild( "output" ) )
                     {
-                        output = std::unique_ptr< Channel::OutputData >( new Channel::OutputData() );
+                        output = std::unique_ptr< ChannelOutputData >( new ChannelOutputData() );
                         output->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
                         output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
                         output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
@@ -69,7 +69,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                     }
 
                     card->AddChannel( new Channel( name, input, output ) );
-
+                    
                 } while( deser.NextChild() );
 
                 deser.ExitChild(); //channel
@@ -79,6 +79,8 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
         }
 
         VideoCard::AvailableVideoCards--;
+
+        card->InitVideoCard();
 
         return card;
     }
@@ -102,11 +104,10 @@ VideoCard::ChannelOptionMap     VideoCard::ChannelOptions = CreateChannelOptionM
 //**************************************
 //
 VideoCard::VideoCard        ( UInt32 deviceID )
+    : m_deviceID( deviceID )
 {
     m_SDK = CBlueVelvet4Ptr( BlueVelvetFactory4() );
-    m_deviceID = deviceID;
 
-    InitVideoCard();
 
     //m_referenceMode = BlueFreeRunning;
     //m_refH = 0;

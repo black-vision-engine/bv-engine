@@ -7,7 +7,7 @@
 
 #include "CFrame.h"
 #include "BlueLock.h"
-#include "Utils.h"
+#include "BlueFishUtils.h"
 
 
 namespace bv { namespace videocards { namespace bluefish {
