@@ -77,9 +77,11 @@ namespace ProfilerEditor.ProfilerModel
 			if( MinDuration > sampleDuration )
 				MinDuration = sampleDuration;
 
-			
-			bool[] updated = new bool[ m_childSamples.Count ];
-			updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
+
+            // Note: size of array should be m_childSamples.Count, but we sometimes we must add new samples to child array.
+            // Allocate bool array to spare.
+            bool[] updated = new bool[ samples.Length ];
+			updated = Enumerable.Repeat( false, samples.Length ).ToArray();
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
 			{
@@ -113,8 +115,10 @@ namespace ProfilerEditor.ProfilerModel
 				MinDuration = sampleModel.m_sampleData.minDuration;
 
 
-			bool[] updated = new bool[ m_childSamples.Count ];
-			updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
+            // Note: size of array should be m_childSamples.Count, but we sometimes we must add new samples to child array.
+            // Allocate bool array to spare.
+            bool[] updated = new bool[ sampleModel.m_childSamples.Count ];
+			updated = Enumerable.Repeat( false, sampleModel.m_childSamples.Count ).ToArray();
 			
 			foreach( var childSample in sampleModel.m_childSamples )
 			{
