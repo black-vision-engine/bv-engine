@@ -24,6 +24,10 @@ class Channel
 {
 private:
 
+    typedef std::map< ChannelName, ChannelOption > ChannelOptionMap;
+
+private:
+
     MainThreadArgs  m_PlaythroughThreadArgs;
 
     CFifoBuffer *   m_captureFifoBuffer;
@@ -43,10 +47,7 @@ public:
 
     HANDLE                  m_PlaythroughThreadHandle;
 
-    //std::shared_ptr<CFrame>         pFrameOut;
-    //long            m_referenceMode;
-    //int             m_refH;
-    //int             m_refV;
+	static ChannelOptionMap ChannelOptions;
 
 public:
 
@@ -58,17 +59,28 @@ public:
     IOType          GetOutputType       () const;
     IOType          GetInputType        () const;
 
+    UInt32          GetOutputChannel            () const;
+    UInt32          GetEpochSDIOutput           () const;
+    UInt32          GetEpochOutputMemInterface  () const;
+    UInt32          GetInputChannel             () const;
+    UInt32          GetEpochSDIInput            () const;
+    UInt32          GetEpochInputMemInterface   () const;
+
     CFifoCapture *  GetCaptureChannel   () const;
     CFifoPlayback * GetPlaybackChannel  () const;
 
     CFifoBuffer *   GetCaptureBuffer    ();
     CFifoBuffer *   GetPlaybackBuffer   ();
     
+    bool            PlaythroughEnabled  () const;
+
     UInt32          GetVideoMode        () const;
     UInt32          GetReferenceMode    () const;
     UInt32          GetReferenceH       () const;
     UInt32          GetReferenceV       () const;
     bool            GetFlipped          () const;
+    UInt32          GetUpdateFormat     () const;
+    UInt32          GetMemoryFormat     () const;
 
     //bool            HasPlaythroughChannel () const;
 
@@ -80,6 +92,8 @@ public:
     void            SetVideoOutput      ( bool enable );
 
     unsigned int static __stdcall PlaythroughThread ( void * pArg );
+
+    static ChannelOptionMap CreateChannelOptionMap      ();
 
 };
 

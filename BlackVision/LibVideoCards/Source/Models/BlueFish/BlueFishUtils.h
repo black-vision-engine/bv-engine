@@ -39,6 +39,7 @@ DEFINE_UPTR_TYPE( ChannelInputData )
 //
 struct ChannelOutputData
 {
+    UInt32                  cardNumber;
     IOType                  type;
     UInt32                  resolution;
     UInt32                  refresh;
@@ -48,6 +49,8 @@ struct ChannelOutputData
     _EBlueGenlockSource     referenceMode;
     Int32                   referenceH;
     Int32                   referenceV;
+    EUpdateMethod           updateFormat;
+    EMemoryFormat           memoryFormat;
 };
 
 DEFINE_UPTR_TYPE( ChannelOutputData )

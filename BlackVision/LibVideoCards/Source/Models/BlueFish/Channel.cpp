@@ -5,6 +5,9 @@
 
 namespace bv { namespace videocards { namespace bluefish {
 
+//**************************************
+//
+Channel::ChannelOptionMap     Channel::ChannelOptions = CreateChannelOptionMap();
 
 //**************************************
 //
@@ -26,6 +29,7 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
 
     if( output )
     {
+
         m_playbackData = std::move( output );
         m_playbackFifoBuffer = new CFifoBuffer();
         m_playbackChannel = new CFifoPlayback();
@@ -67,7 +71,7 @@ ChannelName Channel::GetName() const
 
 //**************************************
 //
-IOType      Channel::GetOutputType() const
+IOType      Channel::GetOutputType      () const
 {
     if( m_playbackData )
     {
@@ -79,7 +83,7 @@ IOType      Channel::GetOutputType() const
 
 //**************************************
 //
-IOType      Channel::GetInputType() const
+IOType      Channel::GetInputType       () const
 {
     if( m_captureData )
     {
@@ -87,6 +91,78 @@ IOType      Channel::GetInputType() const
     }
 
     return IOType::INVALID;
+}
+
+//**************************************
+//
+UInt32      Channel::GetOutputChannel           () const
+{
+    if( m_playbackData )
+    {
+        return ChannelOptions.at( m_channelName ).OutputChannel;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32      Channel::GetEpochSDIOutput          () const
+{
+    if( m_playbackData )
+    {
+        return ChannelOptions.at( m_channelName ).EpochSDIOutput;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32      Channel::GetEpochOutputMemInterface () const
+{
+    if( m_playbackData )
+    {
+        return ChannelOptions.at( m_channelName ).EpochOutputMemInterface;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32      Channel::GetInputChannel            () const
+{
+    if( m_captureData )
+    {
+        return ChannelOptions.at( m_channelName ).InputChannel;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32      Channel::GetEpochSDIInput           () const
+{
+    if( m_captureData )
+    {
+        return ChannelOptions.at( m_channelName ).EpochSDIInput;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32      Channel::GetEpochInputMemInterface  () const
+{
+    if( m_captureData )
+    {
+        return ChannelOptions.at( m_channelName ).EpochInputMemInterface;
+    }
+
+    return 0;
 }
 
 //**************************************
@@ -115,6 +191,18 @@ CFifoBuffer *   Channel::GetCaptureBuffer       ()
 CFifoBuffer *   Channel::GetPlaybackBuffer      ()
 {
     return m_playbackFifoBuffer;
+}
+
+//**************************************
+//
+bool            Channel::PlaythroughEnabled     () const
+{
+    if( m_captureChannel )
+    {
+        return ( UInt32 )m_captureData->playthrough;
+    }
+
+    return false;
 }
 
 //**************************************
@@ -177,6 +265,29 @@ bool            Channel::GetFlipped             () const
     return false;
 }
 
+//**************************************
+//
+UInt32          Channel::GetUpdateFormat        () const
+{
+    if( m_playbackData )
+    {
+        return m_playbackData->updateFormat;
+    }
+
+    return 0;
+}
+
+//**************************************
+//
+UInt32          Channel::GetMemoryFormat        () const
+{
+    if( m_playbackData )
+    {
+        return m_playbackData->memoryFormat;
+    }
+
+    return false;
+}
 ////**************************************
 ////
 //bool          Channel::HasPlaythroughChannel    () const
@@ -283,8 +394,7 @@ void Channel::SetVideoOutput        ( bool enable )
     {
         VARIANT value;       
 		value.vt = VT_UI4;
-
-        value.ulVal = !enable;
+        value.ulVal = enable ? ENUM_BLACKGENERATOR_OFF : ENUM_BLACKGENERATOR_ON;
         GetPlaybackChannel()->m_pSDK->SetCardProperty( VIDEO_BLACKGENERATOR, value );
     }
 }
@@ -302,6 +412,53 @@ unsigned int __stdcall Channel::PlaythroughThread(void * pArg)
 
     _endthreadex(0);
     return 0;
+}
+
+
+//**************************************
+//
+Channel::ChannelOptionMap     Channel::CreateChannelOptionMap   ()
+{
+    ChannelOptionMap channelOptionMap;
+
+    ChannelOption A;
+    A.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_A;
+    A.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_A;
+    A.EpochSDIInput = EPOCH_SRC_SDI_INPUT_A;
+    A.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_A;
+    A.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHA;
+    A.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA;
+
+    ChannelOption B;
+    B.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_B;
+    B.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_B;
+    B.EpochSDIInput = EPOCH_SRC_SDI_INPUT_B;
+    B.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_B;
+    B.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHB;
+    B.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHB;
+
+    ChannelOption C;
+    C.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_C;
+    C.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_C;
+    C.EpochSDIInput = EPOCH_SRC_SDI_INPUT_C;
+    C.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_C;
+    C.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHC;
+    C.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHC;
+
+    ChannelOption D;
+    D.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_D;
+    D.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_D;
+    D.EpochSDIInput = EPOCH_SRC_SDI_INPUT_D;
+    D.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_D;
+    D.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHD;
+    D.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHD;
+
+    channelOptionMap[ ChannelName::A ] = A;
+    channelOptionMap[ ChannelName::B ] = B;
+    channelOptionMap[ ChannelName::C ] = C;
+    channelOptionMap[ ChannelName::D ] = D;
+
+    return channelOptionMap;
 }
 
 } //bluefish
