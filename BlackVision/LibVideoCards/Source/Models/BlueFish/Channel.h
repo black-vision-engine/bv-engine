@@ -82,8 +82,6 @@ public:
     UInt32          GetUpdateFormat     () const;
     UInt32          GetMemoryFormat     () const;
 
-    //bool            HasPlaythroughChannel () const;
-
     void            StartThreads        ();
     void            StopThreads         ();
     void            SuspendThreads      ();

@@ -1,51 +1,32 @@
 #pragma once
 
-#include <queue>
-
 #include "win_sock.h"
+#include <queue>
 #include "BlueFish/inc/BlueVelvet4.h"
-
-#include "CFrame.h"
-#include "BlueLock.h"
 #include "BlueFishUtils.h"
+#include "../../ThreadSafeQueue.h"
+#include "CFrame.h"
 
 
 namespace bv { namespace videocards { namespace bluefish {
+
 
 class CFifoBuffer
 {
 public:
 
-	CFifoBuffer();
-	~CFifoBuffer();
+            CFifoBuffer     ();
+            ~CFifoBuffer    ();
 
-	void	Init(BLUE_UINT32 Count, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
-	void	PutFreeBuffer(CFrame* pFrame);
-	void	PutLiveBuffer(CFrame* pFrame);
-	CFrame* GetFreeBuffer();
-	CFrame* GetLiveBuffer();
-    bool    IsLiveBufferEmpty();
+    void    Init            ( UInt32 count, UInt32 size, UInt32 bytesPerLine );
+
+    void    PushEmptyFrame  ();
+
+    ThreadSafeQueue< std::shared_ptr< CFrame >, 1 > m_threadsafebuffer;
 
 private:
 
-	std::queue<CFrame*>	m_qFreeBuffers;
-	std::queue<CFrame*>	m_qLiveBuffers;
-	std::queue<CFrame*>	m_qBuffers;
-	HANDLE			m_hFreeMutexEmpty;
-	HANDLE			m_hFreeMutexLive;
-	HANDLE			m_hLiveMutexEmpty;
-	HANDLE			m_hLiveMutexLive;
-	BlueLock		m_FreeLock;
-	BlueLock		m_LiveLock;
-
-//	void	PushKillerFrame();
-//	ThreadSafeQueue<std::shared_ptr<CFrame>,1> m_threadsafebuffer;
-//	ULONG m_GoldenSize;
-//	ULONG m_BytesPerLine;
-//
-//private:
-//
-//    std::shared_ptr<CFrame> m_killerFrame;
+    std::shared_ptr< CFrame > m_emptyFrame;
 
 };
 

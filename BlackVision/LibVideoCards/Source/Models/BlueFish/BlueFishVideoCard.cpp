@@ -263,7 +263,7 @@ void                            VideoCard::ProcessFrame             ( MemoryChun
         auto playbackChannel = channel->GetPlaybackChannel();
         if( playbackChannel && !channel->PlaythroughEnabled() )
 		{
-            playbackChannel->m_pFifoBuffer->PutLiveBuffer( new CFrame( reinterpret_cast< const unsigned char * >( data->Get() ), 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
+            playbackChannel->m_pFifoBuffer->m_threadsafebuffer.push( std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( data->Get() ), 1, playbackChannel->GoldenSize, playbackChannel->BytesPerLine ) );
 		}
 	}   
 }

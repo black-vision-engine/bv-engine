@@ -206,7 +206,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 	CFifoCapture* pThis = (CFifoCapture*)pArg;
 	ULONG CurrentFieldCount = 0;
 	ULONG LastFieldCount = 0;
-	CFrame* pFrame = NULL;
+	std::shared_ptr< CFrame > pFrame = nullptr;
 	struct blue_videoframe_info_ex video_capture_frame;
 	int	NotUsedCompostLater = 0;
 	unsigned int capture_fifo_size = 0;
@@ -216,8 +216,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 	pThis->m_pSDK->wait_input_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
 	while(!pThis->m_nThreadStopping)
 	{
-		if(!pFrame)
-			pFrame = pThis->m_pFifoBuffer->GetFreeBuffer();
+		pFrame = std::make_shared<CFrame>(1,pThis->GoldenSize,pThis->BytesPerLine);
 
 		if(!pFrame)
 			continue;
@@ -237,8 +236,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
 			pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
 			pFrame->m_nCardBufferID = video_capture_frame.BufferId;
-			pThis->m_pFifoBuffer->PutLiveBuffer(pFrame);
-			pFrame = NULL;
+			pThis->m_pFifoBuffer->m_threadsafebuffer.push(pFrame);
 			bFirstFrame = FALSE;
 		}
 		else
