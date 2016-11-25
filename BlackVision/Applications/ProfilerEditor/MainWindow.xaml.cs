@@ -206,7 +206,9 @@ namespace ProfilerEditor
 			m_pipeName = dialog.NamedPipeTextBox.Text;
 
             TesterControl.UpdateBVExecPath( m_BlackVisionPathName );
-		}
+            m_BlackVisionProcess.BlackVisionPathName = m_BlackVisionPathName;
+
+        }
 
 		private void ClearMaxTimeButton_Click( object sender, RoutedEventArgs e )
 		{

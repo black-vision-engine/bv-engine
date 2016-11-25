@@ -19,6 +19,5 @@ void main()
 
 	float factor = dot(v1,v2) / dot(v2, v2);
 
-	// vec4( uvCoord, 0.0, 1.0 );
-	FragColor = vec4( uvCoord, 0.0, 1.0 ); //alpha * ( color1 * factor + color2 * (1 - factor) );
+	FragColor = alpha * ( color1 * factor + color2 * (1 - factor) );
 }

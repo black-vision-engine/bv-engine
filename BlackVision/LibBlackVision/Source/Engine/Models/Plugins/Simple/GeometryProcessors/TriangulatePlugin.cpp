@@ -98,7 +98,7 @@ void        TriangulatePlugin::ProcessVertexAttributesChannel()
                 auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
                 auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert", false );
 
-                Triangulator triangulator( std::move( contours ), "Triangul.txt" );
+                Triangulator triangulator( std::move( contours ) );
                 auto mesh = triangulator.MakeMesh();
 
                 vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );

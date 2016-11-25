@@ -117,8 +117,8 @@ namespace ProfilerEditor.ProfilerModel
 
             // Note: size of array should be m_childSamples.Count, but we sometimes we must add new samples to child array.
             // Allocate bool array to spare.
-            bool[] updated = new bool[ sampleModel.m_childSamples.Count ];
-			updated = Enumerable.Repeat( false, sampleModel.m_childSamples.Count ).ToArray();
+            //bool[] updated = new bool[ sampleModel.m_childSamples.Count + m_childSamples.Count ];
+            bool[] updated = Enumerable.Repeat( false, sampleModel.m_childSamples.Count + m_childSamples.Count ).ToArray();
 			
 			foreach( var childSample in sampleModel.m_childSamples )
 			{
