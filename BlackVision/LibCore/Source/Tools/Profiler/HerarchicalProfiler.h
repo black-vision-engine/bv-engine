@@ -6,7 +6,7 @@
 #include "CoreDEF.h"
 #include <climits>
 
-#define MAX_PROFILER_SAMPLES		120
+#define MAX_PROFILER_SAMPLES		400
 #define MAX_PROFILER_FRAMES			10
 #define MAX_PROFILER_THREADS		1
 
@@ -240,16 +240,16 @@ inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
 
 } //bv
 
-#define HPROFILER_NEW_FRAME( thread )               AutoFrameProfile COMBINE(frame_sample_,__LINE__) ( thread )
+#define HPROFILER_NEW_FRAME( thread )               ::bv::AutoFrameProfile COMBINE(frame_sample_,__LINE__) ( thread )
 
-#define HPROFILER_FUNCTION( name, thread )          AutoProfile COMBINE(function_sample_,__LINE__) ( name, AutoProfileType::APT_FUNCTION, thread )
-#define HPROFILER_SECTION( name, thread )           AutoProfile COMBINE(section_sample_,__LINE__) ( name, AutoProfileType::APT_SECTION, thread )
+#define HPROFILER_FUNCTION( name, thread )          ::bv::AutoProfile COMBINE(function_sample_,__LINE__) ( name, ::bv::AutoProfileType::APT_FUNCTION, thread )
+#define HPROFILER_SECTION( name, thread )           ::bv::AutoProfile COMBINE(section_sample_,__LINE__) ( name, ::bv::AutoProfileType::APT_SECTION, thread )
 
-#define HPROFILER_SET_FORCED_DISPLAY()              AutoFrameProfile::SetDisplayStats()
-#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   AutoFrameProfile::RegisterDisplayCallback( cb )
+#define HPROFILER_SET_FORCED_DISPLAY()              ::bv::AutoFrameProfile::SetDisplayStats()
+#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   ::bv::AutoFrameProfile::RegisterDisplayCallback( cb )
 
-#define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )	AutoFrameProfile::SetFramesToShow( n )
-#define HPROFILER_SET_DISPLAY_MODE( mode )			AutoFrameProfile::SetDisplayMode( mode )
-#define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) AutoProfile::SetStatsDisplayWaitMs( millis )
+#define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )	::bv::AutoFrameProfile::SetFramesToShow( n )
+#define HPROFILER_SET_DISPLAY_MODE( mode )			::bv::AutoFrameProfile::SetDisplayMode( mode )
+#define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) ::bv::AutoProfile::SetStatsDisplayWaitMs( millis )
 
 #include "HerarchicalProfiler.inl"
