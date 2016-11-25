@@ -868,6 +868,9 @@ void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, ID
         ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, "Plugin not found" );
         return;
     }
+	
+	ser.SetAttribute("SceneName", sceneName);
+	ser.SetAttribute("NodePath", nodePath);
 
     PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, true );
 
