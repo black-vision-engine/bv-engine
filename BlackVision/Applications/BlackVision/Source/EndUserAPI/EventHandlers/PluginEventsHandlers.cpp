@@ -294,7 +294,6 @@ ParameterPtr PluginEventsHandlers::GetGlobalEffectParameter(    const std::strin
         return nullptr;
     }
 
-    effect->GetParameter( paramName );
     auto param = effect->GetParameter( paramName );
     if( param == nullptr )
     {
