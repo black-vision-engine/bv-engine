@@ -21,8 +21,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h" />
@@ -30,14 +32,15 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoCapture.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h" />
-    <ClInclude Include="..\..\..\Source\Models\BlueFish\Utils.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp" />
@@ -45,7 +48,6 @@
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoCapture.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp" />
-    <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManagerUtils.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
   </ItemGroup>
