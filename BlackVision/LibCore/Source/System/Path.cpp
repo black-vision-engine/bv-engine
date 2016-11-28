@@ -327,10 +327,14 @@ bool            Path::IsValisPathName   ( const std::string & path )
 
     bool isWindowsName = boost::filesystem::windows_name( fileName );
     bool isPortableDir = true;
-    for( auto & dirName : dirVec )
+
+    if( dirVec.size() > 0 && !dirVec[ 0 ].empty() )
     {
-        if( !boost::filesystem::portable_directory_name( dirName ) )
-            isPortableDir = false;
+        for( auto & dirName : dirVec )
+        {
+            if( !boost::filesystem::portable_directory_name( dirName ) )
+                isPortableDir = false;
+        }
     }
     
     return isWindowsName && isPortableDir;

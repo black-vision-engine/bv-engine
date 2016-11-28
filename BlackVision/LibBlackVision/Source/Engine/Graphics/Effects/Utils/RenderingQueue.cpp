@@ -98,7 +98,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
 
     float z = ComputeNodeZ( node, ctx );
     
-    if( IsTransparent( node ) )
+    if( IsTransparent( node ) || HasEffect( node ) )
     {
         // Farthest elements are at the beginning of vector.
         auto iterator = m_transparentNodes.begin();
