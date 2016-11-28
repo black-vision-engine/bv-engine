@@ -33,8 +33,8 @@ AssetConstPtr       Font2DLoader::LoadAsset( const bv::AssetDescConstPtr & desc 
     auto filePath = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetFontFileName() ).Str();
     auto atlasCharSetFile = typedDesc->GetAtlasCharSetFile();
     auto fontSize = typedDesc->GetFontSize();
-    auto blurSize = 0;
-    auto outlineSize = 0;
+    auto blurSize = typedDesc->GetBlurSize();
+    auto outlineSize = typedDesc->GetOutlineSize();
     auto generateMipMaps = false;
 
     auto text = TryLoadFont( filePath, fontSize, blurSize, outlineSize, generateMipMaps, atlasCharSetFile );

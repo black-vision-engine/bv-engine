@@ -46,6 +46,7 @@ typedef unsigned short		UInt16;
 typedef unsigned long long	UInt64;
 typedef unsigned int		UInt32;
 typedef size_t				SizeType;
+typedef std::ptrdiff_t      PtrOffset;
 
 typedef Float32				TimeType;
 
