@@ -4,12 +4,6 @@
 #include "FFmpegUtils.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 
@@ -487,15 +481,12 @@ bool				FFmpegAVDecoder::NextStreamDataReady	        ( AVMediaType type, UInt64 
             AVMediaData data;
             if( streamData->outQueue.IsEmpty() )
             {
-                auto currentPTS = streamData->decoder->GetCurrentPTS();
-
                 // find the closest frame to given time
                 while( !streamData->decoder->IsDataQueueEmpty()
-                    && ( streamData->prevPTS <= currentPTS )
-                    && ( currentPTS <= time + streamData->decoder->GetOffset() ) )
+                    && ( streamData->prevPTS <= streamData->decoder->GetCurrentPTS() )
+                    && ( streamData->decoder->GetCurrentPTS() <= time + streamData->decoder->GetOffset() ) )
                 {
                     success = streamData->decoder->PopData( data );
-                    currentPTS = streamData->decoder->GetCurrentPTS();
                 }
 
                 if( success )

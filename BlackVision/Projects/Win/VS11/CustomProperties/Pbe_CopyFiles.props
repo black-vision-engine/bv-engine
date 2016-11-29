@@ -15,7 +15,8 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
 xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\dvp.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueVelvet.dll $(OutDir) /c /y
 xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueHancUtils.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueGpuDirect.dll $(OutDir) /c /y</Command>
+xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueGpuDirect.dll $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\Rockey\$(PlatformName)\Rockey2.dll $(OutDir) /c /y</Command>
       <Message>Copying required dll files.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
