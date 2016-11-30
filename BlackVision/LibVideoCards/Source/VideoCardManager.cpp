@@ -21,12 +21,45 @@ std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
     return descriptors;
 }
 
+//**************************************
+//
+VideoCardProcessingThread::VideoCardProcessingThread    ()
+    : m_running( true )
+{
+}
+
+//**************************************
+//
+VideoCardProcessingThread::~VideoCardProcessingThread   ()
+{
+}
+
+//**************************************
+//
+void            VideoCardProcessingThread::Run          ()
+{
+    while( m_running )
+    {
+        if( !VideoCardManager::Instance().ProcessFrame() )
+        {
+            break;
+        }
+    }
+}
+
+
+
+//**************************************
+//
+MemoryChunkConstPtr          VideoCardManager::KILLER_FRAME = nullptr;
 
 //**************************************
 //
 VideoCardManager::VideoCardManager      ()
     : m_keyActive( true )
+    , m_interlaceEnabled( false )
     , m_dislpayMode( DisplayMode::HD )
+    , m_processThread( std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread() ) )
 {
 }
 
@@ -34,12 +67,17 @@ VideoCardManager::VideoCardManager      ()
 //
 VideoCardManager::~VideoCardManager     ()
 {
-    for( auto & videoCard : m_videoCards )
-    {
-        videoCard->SetVideoOutput( false );
-    }
+    // kill processing thread with killer frame
+    QueueFrame( KILLER_FRAME );
 
-    m_videoCards.clear();
+    {
+        std::unique_lock< std::mutex > lock( m_mutex );
+        for( auto & videoCard : m_videoCards )
+        {
+            videoCard->SetVideoOutput( false );
+        }
+        m_videoCards.clear();
+    }
 
     for( auto desc : m_descVec )
     {
@@ -51,6 +89,8 @@ VideoCardManager::~VideoCardManager     ()
 //
 void                        VideoCardManager::ReadConfig            ( const IDeserializer & deser )
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+
     if( deser.EnterChild( "videocards" ) )
     {
         if( deser.EnterChild( "videocard" ) )
@@ -100,6 +140,8 @@ bool                        VideoCardManager::IsRegistered          ( const std:
 //
 void VideoCardManager::SetVideoOutput   ( bool enable )
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+
     for( auto & videoCard : m_videoCards )
     {
         videoCard->SetVideoOutput( enable );
@@ -117,6 +159,9 @@ void                        VideoCardManager::SetKey                ( bool activ
 //
 void                        VideoCardManager::Start                 ()
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+    
+    m_processThread->Start();
     for( auto & videoCard : m_videoCards )
     {
 		videoCard->Start();
@@ -125,18 +170,50 @@ void                        VideoCardManager::Start                 ()
 
 // *********************************
 //
-void                        VideoCardManager::ProcessFrame          ( MemoryChunkConstPtr data )
+void                        VideoCardManager::QueueFrame            ( MemoryChunkConstPtr data )
 {
-    for( auto & videoCard : m_videoCards )
-	{
-		videoCard->ProcessFrame( data );
-	}    
+    m_frameBuffer.Push( data );
+}
+
+// *********************************
+//
+bool                        VideoCardManager::ProcessFrame          ()
+{
+    auto data = m_frameBuffer.Pop();
+
+    if( data )
+    {
+        if( m_interlaceEnabled )
+        {
+            data = InterlacedFrame( data );
+        }
+
+        std::unique_lock< std::mutex > lock( m_mutex );
+        for( auto & videoCard : m_videoCards )
+        {
+            videoCard->ProcessFrame( data );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// *********************************
+//
+MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChunkConstPtr data )
+{
+    //FIXME: add CPU interlacing on data copy
+    return data;
 }
 
 //**************************************
 //
 IVideoCardPtr   VideoCardManager::GetVideoCard        ( UInt32 idx )
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+
     if( idx < m_videoCards.size() )
     {
         return m_videoCards[ idx ];
@@ -507,20 +584,20 @@ VideoCardManager &      VideoCardManager::Instance             ()
 //{
 //    return m_videoCards.size();
 //}
-
-//**************************************
 //
-unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/ )
-{
-    //return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
-    return nullptr;
-}
-  
-bool VideoCardManager::CheckIfNewFrameArrived                  (unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/)
-{
-    //return GetVideoCard(VideCardID)->CheckIfNewFrameArrived(ChannelName);
-    return false;
-}
+////**************************************
+////
+//unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/ )
+//{
+//    //return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
+//    return nullptr;
+//}
+//  
+//bool VideoCardManager::CheckIfNewFrameArrived                  (unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/)
+//{
+//    //return GetVideoCard(VideCardID)->CheckIfNewFrameArrived(ChannelName);
+//    return false;
+//}
 //void   VideoCardManager::UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
 //{
 //    return GetVideoCard(VideCardID)->UnblockCaptureQueue(ChannelName);

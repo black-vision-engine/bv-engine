@@ -259,9 +259,9 @@ void CFifoPlayback::StopThread()
 }
 
 
-unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
+unsigned int __stdcall CFifoPlayback::PlaybackThread( void * pArg )
 {
-    CFifoPlayback* pThis = (CFifoPlayback*)pArg;
+    CFifoPlayback* pThis = ( CFifoPlayback* )pArg;
     ULONG BufferId = 0;
     ULONG CurrentFieldCount = 0;
     ULONG LastFieldCount = 0;
@@ -273,92 +273,73 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
     unsigned int nFramesTobuffer = 1;
     unsigned int nFramesPlayed = 0;
     //BOOL bPlaybackStarted = FALSE;
-    std::shared_ptr< CFrame > pFrame = nullptr;
+    std::shared_ptr<CFrame> pFrame = NULL;
 
     //make sure FIFO is not running
-    pThis->m_pSDK->video_playback_stop(0, 0);
+    pThis->m_pSDK->video_playback_stop( 0, 0 );
 
     LastFieldCount = CurrentFieldCount;
 
-    while(!pThis->m_nThreadStopping)
+    while( !pThis->m_nThreadStopping )
     {
-        pFrame = pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
-
-        if(!pFrame)
+        pFrame = pThis->m_pFifoBuffer->PopFrame();
+        if( !pFrame )
         {
             //cout << "Couldn't get buffer from Live queue (playback)" << endl;
-            pThis->m_pSDK->wait_output_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
             continue;
         }
-
-
-        if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
+        if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, Underrun ) ) )
         {
-            pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-                                                    pFrame->m_nSize,
-                                                    NULL, 
-                                                    BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
+            pThis->m_pSDK->system_buffer_write_async( pFrame->m_pBuffer,
+                                                      pFrame->m_nSize,
+                                                      NULL,
+                                                      BlueImage_DMABuffer( BufferId, BLUE_DATA_IMAGE ), 0 );
 
-            pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
+            pThis->m_pSDK->video_playback_present( UniqueId, BlueBuffer_Image( BufferId ), 1, 0, 0 );
             nFramesPlayed++;
 
+            //if( bPlaybackStarted && Underrun != LastUnderrun )
+                //cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
             LastUnderrun = Underrun;
-            if(nFramesTobuffer > 0)
-            { 
+            if( nFramesTobuffer > 0 )
+            {
                 nFramesTobuffer--;
-                if(nFramesTobuffer == 0)
+                if( nFramesTobuffer == 0 )
                 {
-                    pThis->m_pSDK->video_playback_start(0, 0);
+                    pThis->m_pSDK->video_playback_start( 0, 0 );
                 }
             }
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
         }
         else
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
-    }
-
-            //if(bPlaybackStarted && Underrun != LastUnderrun)
-            //  cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
-            /*LastUnderrun = Underrun;
-            if(nFramesTobuffer > 0)
-            { 
-                nFramesTobuffer--;
-                if(nFramesTobuffer == 0)
-                {
-                    pThis->m_pSDK->video_playback_start(0, 0);
-                }
-            }
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
-        }
-        else
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
     }
 
     bool blackout = false;
-    pFrame = std::make_shared<CFrame>(0,pThis->GoldenSize,pThis->BytesPerLine);
-    while(!blackout)
+    pFrame = std::make_shared<CFrame>( 0, pThis->GoldenSize, pThis->BytesPerLine );
+    while( !blackout )
     {
-        if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
+        if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, Underrun ) ) )
         {
-            pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-                                                                    pFrame->m_nSize,
-                                                                    NULL, 
-                                                                    BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
-        
-            cout << "Playback Black..." << endl;
-            pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
+            pThis->m_pSDK->system_buffer_write_async( pFrame->m_pBuffer,
+                                                      pFrame->m_nSize,
+                                                      NULL,
+                                                      BlueImage_DMABuffer( BufferId, BLUE_DATA_IMAGE ), 0 );
+
+            //cout << "Playback Black..." << endl;
+            pThis->m_pSDK->video_playback_present( UniqueId, BlueBuffer_Image( BufferId ), 1, 0, 0 );
             blackout = true;
         }
         else
         {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
         }
     }
-    cout << "Playback Thread Stopped..." << endl;*/
-    
-    pThis->m_pSDK->video_playback_stop(100, 1);
+    //cout << "Playback Thread Stopped..." << endl;
 
-    _endthreadex(0);
+    pThis->m_pSDK->video_playback_stop( 100, 1 );
+    _endthreadex( 0 );
     return 0;
 }
 

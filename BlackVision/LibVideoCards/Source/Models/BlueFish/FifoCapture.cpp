@@ -236,7 +236,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
 			pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
 			pFrame->m_nCardBufferID = video_capture_frame.BufferId;
-			pThis->m_pFifoBuffer->m_threadsafebuffer.push(pFrame);
+			pThis->m_pFifoBuffer->PushFrame(pFrame);
 			bFirstFrame = FALSE;
 		}
 		else

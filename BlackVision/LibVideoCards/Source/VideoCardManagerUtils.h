@@ -1,6 +1,7 @@
 #pragma once
 
 
+#define FRAME_BUFFER_SIZE 1
 
 namespace bv { namespace videocards {
 
