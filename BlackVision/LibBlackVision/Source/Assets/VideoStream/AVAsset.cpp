@@ -31,6 +31,8 @@ AVAsset::AVAsset( const std::string & streamPath, TextureFormat textureFormat, U
     , m_height( height )
     , m_frameRate( frameRate )
     , m_videoFormat( videoFormat )
+    , m_videoEnabled( true )
+    , m_audioEnabled( true )
 {
 }
 
