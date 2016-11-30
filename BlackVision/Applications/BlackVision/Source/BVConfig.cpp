@@ -45,6 +45,7 @@ BVConfig::BVConfig                      ()
     m_sockerServerPort = SerializationHelper::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
 
     m_useDebugLayer = SerializationHelper::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );
+    m_debugFilePath = m_properties[ "Debug/CommandsDebugLayer/FilePath" ];
     
     if( m_properties[ "Resolution" ] == "SD" )
     {
