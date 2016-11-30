@@ -52,6 +52,9 @@ private:
     void     TreeStructureInfo       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     CheckTimelineTime       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     PluginInfo              ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     EffectInfo              ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     LogicInfo               ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     ParamInfo               ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     
     void     ListTimelineKeyframes   ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     ListTimelinesParams     ( JsonSerializeObject & ser, IDeserializer * request, int eventID );

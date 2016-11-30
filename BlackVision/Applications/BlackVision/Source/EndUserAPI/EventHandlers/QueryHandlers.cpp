@@ -100,6 +100,12 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             GetNodeInfo( responseJSON, request, eventID );
         else if ( command == InfoEvent::Command::PluginInfo )
             PluginInfo( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::EffectInfo )
+            EffectInfo( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::ParamInfo )
+            ParamInfo( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::LogicInfo )
+            LogicInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::MinimalSceneInfo )
             GetMinimalSceneInfo( responseJSON, request, eventID );
         else if ( command == InfoEvent::Command::LightsInfo )
@@ -876,6 +882,83 @@ void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, ID
 
     auto plugin = std::static_pointer_cast< model::BasePlugin >( iplugin );
     plugin->Serialize( ser );
+}
+
+// ***********************
+//
+void        QueryHandlers::EffectInfo               ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::EffectInfo, eventID, "Not valid request." );
+        return;
+    }
+
+    std::string nodePath = request->GetAttribute( "NodePath" );
+    std::string sceneName = request->GetAttribute( "SceneName" );
+
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
+    if( node == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::EffectInfo, eventID, "Node not found" );
+        return;
+    }
+
+    auto effect = node->GetNodeEffect();
+    if( effect == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::EffectInfo, eventID, "Effect not found" );
+        return;
+    }
+
+    ser.SetAttribute( "SceneName", sceneName );
+    ser.SetAttribute( "NodePath", nodePath );
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::EffectInfo, eventID, true );
+    effect->Serialize( ser );
+}
+
+// ***********************
+//
+void        QueryHandlers::LogicInfo                ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::LogicInfo, eventID, "Not valid request." );
+        return;
+    }
+
+    std::string nodePath = request->GetAttribute( "NodePath" );
+    std::string sceneName = request->GetAttribute( "SceneName" );
+
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
+    if( node == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::LogicInfo, eventID, "Node not found" );
+        return;
+    }
+
+    auto logic = node->GetLogic();
+    if( logic == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::LogicInfo, eventID, "Logic not found" );
+        return;
+    }
+
+    ser.SetAttribute( "SceneName", sceneName );
+    ser.SetAttribute( "NodePath", nodePath );
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::LogicInfo, eventID, true );
+    logic->Serialize( ser );
+}
+
+// ***********************
+//
+void        QueryHandlers::ParamInfo                ( JsonSerializeObject & /*ser*/, IDeserializer * /*request*/, int /*eventID */)
+{
+    assert( false );
 }
 
 // ***********************

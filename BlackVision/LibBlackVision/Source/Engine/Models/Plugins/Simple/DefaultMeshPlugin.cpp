@@ -221,6 +221,7 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
             m_vaChannel->AddConnectedComponent( cc );
 
             HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+            HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
 
             return true;
         }
