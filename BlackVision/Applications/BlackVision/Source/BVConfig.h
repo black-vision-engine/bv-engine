@@ -85,6 +85,8 @@ private:
 
     bool            m_enableQueueLocking;
 
+    std::string     m_loadSceneFromProjectManager;
+
 private:
 
     BVConfig    ();
@@ -106,7 +108,7 @@ public:
     inline Int32                DefaultHeight           () const;
 
     inline WindowMode           GetWindowMode	        () const;
-	inline RendererInput        GetRendererInput	        () const;
+	inline RendererInput        GetRendererInput	    () const;
 	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
     inline bool                 DisplayVideoCardOutput  () const;
@@ -140,8 +142,9 @@ public:
 
     inline const char *         FrameStatsSection       () const;
 
-    inline const std::string &  SceneFromEnvName        () const;
-    inline std::string          DefaultSceneEnvVarName  () const;
+    inline const std::string &  SceneFromEnvName            () const;
+    inline const std::string &  LoadSceneFromProjectManager () const;
+    inline std::string          DefaultSceneEnvVarName      () const;
 
     inline const std::string &  PMFolder                () const;
 

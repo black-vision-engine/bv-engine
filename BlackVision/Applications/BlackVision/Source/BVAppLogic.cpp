@@ -219,7 +219,23 @@ void BVAppLogic::LoadScene          ( void )
     //    //}
     //}
 
-    if( DefaultConfig.LoadSceneFromEnv() )
+    auto pmSceneName = DefaultConfig.LoadSceneFromProjectManager();
+
+    if(!pmSceneName.empty())
+    {
+        auto pm = ProjectManager::GetInstance();
+        auto sceneModel = pm->LoadScene("", pmSceneName);
+
+        if(sceneModel)
+        {
+            projectEditor->AddScene( sceneModel );
+        }
+        else 
+        {
+            // TODO: Add an error log message here.
+        }
+    }
+    else if( DefaultConfig.LoadSceneFromEnv() )
     {
         model::SceneModelPtr sceneModel = nullptr;
 

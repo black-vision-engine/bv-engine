@@ -221,6 +221,13 @@ inline const std::string &  BVConfig::SceneFromEnvName          () const
 
 // *********************************
 //
+inline const std::string &  BVConfig::LoadSceneFromProjectManager() const
+{
+    return m_loadSceneFromProjectManager;
+}
+
+// *********************************
+//
 inline std::string          BVConfig::DefaultSceneEnvVarName    () const
 {
     return m_defaultSceneEnvVarName;

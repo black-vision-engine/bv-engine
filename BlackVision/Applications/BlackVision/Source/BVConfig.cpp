@@ -138,6 +138,7 @@ BVConfig::BVConfig                      ()
     m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
     m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
     m_loadSceneFromEnv = SerializationHelper::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
+    m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
     m_useVideoInputFeeding = SerializationHelper::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
 
     m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
