@@ -17,13 +17,13 @@ namespace bv {
 // *********************************
 //
 TextConstPtr Text::Create(const std::wstring & supportedCharsSet
-						, const std::string & fontFile
-						, UInt32 fontSize
-						, UInt32 blurSize
-						, UInt32 outlineSize
-						, bool withMipmaps )
+                        , const std::string & fontFile
+                        , UInt32 fontSize
+                        , UInt32 blurSize
+                        , UInt32 outlineSize
+                        , bool withMipmaps )
 {
-	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize, withMipmaps );
+    return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize, withMipmaps );
 }
 
 
@@ -34,10 +34,10 @@ Text::Text( const std::wstring & supportedCharsSetFile, const std::string& fontF
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
-	, m_outlineWidth( outlineSize )
-	, m_withMipmaps( withMipmaps )
+    , m_outlineWidth( outlineSize )
+    , m_withMipmaps( withMipmaps )
 {
-	m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
+    m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
 }
 
 //#define GENERATE_TEST_BMP_FILE
@@ -49,11 +49,11 @@ TextAtlasPtr Text::LoadFromCache() const
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = FontAtlasCache::GetInstance().GetEntry( fontName, m_fontSize, m_blurSize, m_outlineWidth, 
+    auto entry = FontAtlasCache::GetInstance().GetEntry( fontName, m_fontSize, m_blurSize, m_outlineWidth, 
                                                          m_withMipmaps, m_supportedCharsSetFile );
 
     if( entry )
-	{
+    {
         auto textAtlas = entry->GetTextAtlas();
         if( textAtlas )
         {
@@ -70,14 +70,14 @@ TextAtlasPtr Text::LoadFromCache() const
         }
 
         return textAtlas;
-	}
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 // *********************************
 //
-void				Text::AddToCache( TextAtlasPtr atlas ) const
+void                Text::AddToCache( TextAtlasPtr atlas ) const
 {
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
@@ -113,22 +113,22 @@ namespace
 //
 UInt32 GetMMLevelsNum( UInt32 fontSize )
 {
-	return ( UInt32 )std::floor( std::log( fontSize ) / std::log( 2 ) );
+    return ( UInt32 )std::floor( std::log( fontSize ) / std::log( 2 ) );
 }
 
 // *********************************
 //
 UInt32 CalculatePadding( UInt32 fontSize, UInt32 blurSize, bool withMipMaps )
 {
-	UInt32 padding = blurSize + 1;
+    UInt32 padding = blurSize + 1;
 
-	if( withMipMaps )
-	{
-		auto mmLevelsNum = GetMMLevelsNum( fontSize );
-		padding += 2 * mmLevelsNum;
-	}
+    if( withMipMaps )
+    {
+        auto mmLevelsNum = GetMMLevelsNum( fontSize );
+        padding += 2 * mmLevelsNum;
+    }
 
-	return padding;
+    return padding;
 }
 
 } // anonymous
@@ -178,90 +178,78 @@ TextGeometryPtr             Text::BuildGeometry       () const
 //
 void Text::GenerateMipMaps( TextAtlasPtr atlas ) const
 {
-	if( m_withMipmaps )
-	{
-		UInt32 numLevels = GetMMLevelsNum( m_fontSize );
+    if( m_withMipmaps )
+    {
+        UInt32 numLevels = GetMMLevelsNum( m_fontSize );
 
-		auto texWithMipMaps = TextureUtils::GenerateMipMaps( atlas->m_textureAsset->GetOriginal(), numLevels, MipMapFilterType::BILINEAR );
+        auto texWithMipMaps = TextureUtils::GenerateMipMaps( atlas->m_textureAsset->GetOriginal(), numLevels, MipMapFilterType::BILINEAR );
 
-		std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = texWithMipMaps;
-	}
+        std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = texWithMipMaps;
+    }
 }
 
 // *********************************
 //
 void Text::AddTexturesKey( TextAtlasPtr atlas ) const
 {
-	auto oldTA = atlas->m_textureAsset;
-	auto atlasW = atlas->GetWidth();
-	auto atlasH = atlas->GetHeight();
+    auto oldTA = atlas->m_textureAsset;
+    auto atlasW = atlas->GetWidth();
+    auto atlasH = atlas->GetHeight();
 
-	UInt32 levelsNum = m_withMipmaps ? GetMMLevelsNum( m_fontSize ) : 0;
+    UInt32 levelsNum = m_withMipmaps ? GetMMLevelsNum( m_fontSize ) : 0;
 
     auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, levelsNum, m_supportedCharsSetFile );
 
-	auto origKey = atlasAssetDesc->GetOrigTextureDesc()->GetKey();
+    auto origKey = atlasAssetDesc->GetOrigTextureDesc()->GetKey();
 
-	auto newOrigTexture = SingleTextureAsset::Create( oldTA->GetOriginal()->GetData(), origKey, atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
+    auto newOrigTexture = SingleTextureAsset::Create( oldTA->GetOriginal()->GetData(), origKey, atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
 
-	auto mmAssetDesc = atlasAssetDesc->GetMipMapsDesc();
+    auto mmAssetDesc = atlasAssetDesc->GetMipMapsDesc();
 
-	if( mmAssetDesc )
-	{
-		std::vector< SingleTextureAssetConstPtr > mmsSTAs;
+    if( mmAssetDesc )
+    {
+        std::vector< SingleTextureAssetConstPtr > mmsSTAs;
 
-		for( SizeType i = 0; i < mmAssetDesc->GetLevelsNum(); ++i )
-		{
-			auto key			= mmAssetDesc->GetLevelDesc( i )->GetKey();
+        for( SizeType i = 0; i < mmAssetDesc->GetLevelsNum(); ++i )
+        {
+            auto key            = mmAssetDesc->GetLevelDesc( i )->GetKey();
 
-			auto mm = oldTA->GetMipMaps()->GetLevel( i );
-			auto w = mm->GetWidth();
-			auto h = mm->GetHeight();
-			auto f = mm->GetFormat();
+            auto mm = oldTA->GetMipMaps()->GetLevel( i );
+            auto w = mm->GetWidth();
+            auto h = mm->GetHeight();
+            auto f = mm->GetFormat();
 
-			mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), key, w, h, f, true ) );
-		}
+            mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), key, w, h, f, true ) );
+        }
 
-		std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, MipMapAsset::Create( mmsSTAs ) );
-	}
-	else
-	{
-		std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, nullptr );
-	}
+        std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, MipMapAsset::Create( mmsSTAs ) );
+    }
+    else
+    {
+        std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, nullptr );
+    }
 }
 
 // *********************************
 //
 void Text::BlurAtlas( TextAtlasPtr atlas ) const
 {
-	if( m_blurSize > 0 )
-	{
-		auto atlasW = atlas->GetWidth();
-		auto atlasH = atlas->GetHeight();
-		auto oldData = std::const_pointer_cast< MemoryChunk >( atlas->m_textureAsset->GetOriginal()->GetData() );
+    if( m_blurSize > 0 )
+    {
+        auto atlasW = atlas->GetWidth();
+        auto atlasH = atlas->GetHeight();
+        auto oldData = std::const_pointer_cast< MemoryChunk >( atlas->m_textureAsset->GetOriginal()->GetData() );
 
-		//image::SaveBMPImage( "test.bmp", oldData, (unsigned int) atlas->GetWidth(), (unsigned int) atlas->GetHeight(), (unsigned int) atlas->GetBitsPerPixel() );
+        image::SaveBMPImage( "test_in.bmp", oldData, atlasW, atlasH, atlas->GetBitsPerPixel() );
 
+        auto bluredData = image::BlurImage( oldData, atlasW, atlasH, atlas->GetBitsPerPixel(), m_blurSize );
 
-		//UInt32 w;
-		//UInt32 h;
-		//UInt32 bbp;
-		//auto img = image::LoadImage( "100x100.png", &w, &h, &bbp );
-		//auto bluredData = image::BlurImage( img, w, h, bbp, 5 );
+        image::SaveBMPImage( "test_out.bmp", bluredData, atlasW, atlasH, atlas->GetBitsPerPixel() );
 
-		//image::SaveBMPImage( "testhost.bmp", bluredData, w, h, bbp );
-
-		//bluredData = bv::effect::GLBlurImage( img, w, h, bbp, 5 );
-
-		//image::SaveBMPImage( "testbgpu.bmp", bluredData, w, h, bbp );
-
-		auto bluredData = bv::effect::GLBlurImage( oldData, atlas->GetWidth(), atlas->GetHeight(), atlas->GetBitsPerPixel(), m_blurSize );
-
-		//image::SaveBMPImage( "testbgpu.bmp", bluredData, atlas->GetWidth(), atlas->GetHeight(), atlas->GetBitsPerPixel() );
-
-		auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
-		std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );
-	}
+        auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
+        
+        std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );
+    }
 }
 
 } // bv

@@ -13,98 +13,98 @@ namespace bv { namespace image
 
 struct Float4
 {
-	Float32 x;
-	Float32 y;
-	Float32 z;
-	Float32 w;
+    Float32 x;
+    Float32 y;
+    Float32 z;
+    Float32 w;
 
-	Float4( Float32 x_, Float32 y_, Float32 z_, Float32 w_ )
-		: x( x_ ), y( y_ ), z( z_ ), w( w_ ) {}
+    Float4( Float32 x_, Float32 y_, Float32 z_, Float32 w_ )
+        : x( x_ ), y( y_ ), z( z_ ), w( w_ ) {}
 
-	Float4 operator + ( const Float4 & rhs )
-	{
-		return Float4( x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w );
-	}
+    Float4 operator + ( const Float4 & rhs )
+    {
+        return Float4( x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w );
+    }
 
-	Float4 operator * ( Float32 f )
-	{
-		return Float4( x * f, y * f, z * f, w * f );
-	}
+    Float4 operator * ( Float32 f )
+    {
+        return Float4( x * f, y * f, z * f, w * f );
+    }
 };
 
 // *********************************
 //
 ImageProperties GetImageProps( const std::string & imageFilePath )
 {
-	if( !Path::Exists( imageFilePath ) )
-	{
-		ImageProperties iprops;
-		iprops.error = std::string("File doesn't exist");
-		return iprops;
-	}
+    if( !Path::Exists( imageFilePath ) )
+    {
+        ImageProperties iprops;
+        iprops.error = std::string("File doesn't exist");
+        return iprops;
+    }
 
-	auto size = File::Size( imageFilePath );
+    auto size = File::Size( imageFilePath );
 
-	FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( imageFilePath.c_str(), (int) size );
+    FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( imageFilePath.c_str(), (int) size );
 
-	if( fiff == FIF_UNKNOWN )
-	{
-		ImageProperties iprops;
-		iprops.error = std::string("Unknown file format");
-		return iprops;
-	}
+    if( fiff == FIF_UNKNOWN )
+    {
+        ImageProperties iprops;
+        iprops.error = std::string("Unknown file format");
+        return iprops;
+    }
 
-	FIBITMAP * bitmap = FreeImage_Load( fiff, imageFilePath.c_str(), BMP_DEFAULT );
+    FIBITMAP * bitmap = FreeImage_Load( fiff, imageFilePath.c_str(), BMP_DEFAULT );
 
-	if( bitmap == nullptr )
-	{
-		ImageProperties iprops;
-		iprops.error = std::string("Cannot load file: ") + imageFilePath;
-		return iprops;
-	}
+    if( bitmap == nullptr )
+    {
+        ImageProperties iprops;
+        iprops.error = std::string("Cannot load file: ") + imageFilePath;
+        return iprops;
+    }
 
-	auto bbp		= FreeImage_GetBPP( bitmap );
-	auto imageType	= FreeImage_GetImageType( bitmap );
+    auto bbp        = FreeImage_GetBPP( bitmap );
+    auto imageType    = FreeImage_GetImageType( bitmap );
 
-	ImageFormat format = bv::image::ImageFormat::IF_TOTAL;
+    ImageFormat format = bv::image::ImageFormat::IF_TOTAL;
 
-	if( imageType == FIT_BITMAP )
-	{
-		if( bbp == 32 )
-			format = bv::image::ImageFormat::IF_A8R8G8B8;
-		else if ( bbp == 24 )
-			format = bv::image::ImageFormat::IF_R8G8B8;
-		else if( bbp == 8 )
-			format = bv::image::ImageFormat::IF_A8;
-	}
-	else if ( imageType == FIT_FLOAT )
-		format = bv::image::ImageFormat::IF_A32F;
-	else if ( imageType == FIT_RGBF )
-		format = bv::image::ImageFormat::IF_R32FG32FB32F;
-	else if ( imageType == FIT_RGBAF )
-		format = bv::image::ImageFormat::IF_A32FR32FG32FB32F;
-	else if ( imageType == FIT_INT16 )
-		format = bv::image::ImageFormat::IF_A16;
-	else if ( imageType == FIT_RGB16 )
-		format = bv::image::ImageFormat::IF_R16G16B16;
-	else if ( imageType == FIT_RGBA16 )
-		format = bv::image::ImageFormat::IF_A16R16G16B16;
-	else
-	{
-		ImageProperties iprops;
-		iprops.error = std::string("Image format not supported");
-		return iprops;
-	}
+    if( imageType == FIT_BITMAP )
+    {
+        if( bbp == 32 )
+            format = bv::image::ImageFormat::IF_A8R8G8B8;
+        else if ( bbp == 24 )
+            format = bv::image::ImageFormat::IF_R8G8B8;
+        else if( bbp == 8 )
+            format = bv::image::ImageFormat::IF_A8;
+    }
+    else if ( imageType == FIT_FLOAT )
+        format = bv::image::ImageFormat::IF_A32F;
+    else if ( imageType == FIT_RGBF )
+        format = bv::image::ImageFormat::IF_R32FG32FB32F;
+    else if ( imageType == FIT_RGBAF )
+        format = bv::image::ImageFormat::IF_A32FR32FG32FB32F;
+    else if ( imageType == FIT_INT16 )
+        format = bv::image::ImageFormat::IF_A16;
+    else if ( imageType == FIT_RGB16 )
+        format = bv::image::ImageFormat::IF_R16G16B16;
+    else if ( imageType == FIT_RGBA16 )
+        format = bv::image::ImageFormat::IF_A16R16G16B16;
+    else
+    {
+        ImageProperties iprops;
+        iprops.error = std::string("Image format not supported");
+        return iprops;
+    }
 
-	ImageProperties iprops;
+    ImageProperties iprops;
 
-	iprops.format = format;
-	iprops.width = ( bv::SizeType )FreeImage_GetWidth( bitmap );
-	iprops.height = ( bv::SizeType )FreeImage_GetHeight( bitmap );
+    iprops.format = format;
+    iprops.width = ( bv::SizeType )FreeImage_GetWidth( bitmap );
+    iprops.height = ( bv::SizeType )FreeImage_GetHeight( bitmap );
 
-	FreeImage_Unload( bitmap );
+    FreeImage_Unload( bitmap );
 
-	return iprops;
+    return iprops;
 }
 
 namespace {
@@ -113,67 +113,67 @@ namespace {
 //
 FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap, UInt32 * bpp, UInt32 * channelNum )
 {
-	auto bitsPerPixel = FreeImage_GetBPP( bitmap );
+    auto bitsPerPixel = FreeImage_GetBPP( bitmap );
 
-	auto imgType = FreeImage_GetImageType( bitmap );
+    auto imgType = FreeImage_GetImageType( bitmap );
 
-	if( imgType == FIT_BITMAP )
-	{
-		switch( bitsPerPixel )
-		{
-		case 32:
-		case 24:
-		case 16:
-			*bpp = 32;
-			*channelNum = 4;
-			return FreeImage_ConvertTo32Bits( bitmap );
-		case 8:
-		case 4:
-		case 1:
-			*bpp = 8;
-			*channelNum = 1;
-			return FreeImage_ConvertTo8Bits( bitmap );
-		}
-	}
-	else if( imgType < FIT_DOUBLE )
-	{
-		*bpp = 32;
-		*channelNum = 1;
-		return FreeImage_ConvertToFloat( bitmap );
-	}
-	else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
-	{
-		*bpp = 128;
-		*channelNum = 4;
-		return FreeImage_ConvertToRGBAF( bitmap );
-	}
+    if( imgType == FIT_BITMAP )
+    {
+        switch( bitsPerPixel )
+        {
+        case 32:
+        case 24:
+        case 16:
+            *bpp = 32;
+            *channelNum = 4;
+            return FreeImage_ConvertTo32Bits( bitmap );
+        case 8:
+        case 4:
+        case 1:
+            *bpp = 8;
+            *channelNum = 1;
+            return FreeImage_ConvertTo8Bits( bitmap );
+        }
+    }
+    else if( imgType < FIT_DOUBLE )
+    {
+        *bpp = 32;
+        *channelNum = 1;
+        return FreeImage_ConvertToFloat( bitmap );
+    }
+    else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
+    {
+        *bpp = 128;
+        *channelNum = 4;
+        return FreeImage_ConvertToRGBAF( bitmap );
+    }
 
-	assert( !"Not supported texture format" );
-	return nullptr;
+    assert( !"Not supported texture format" );
+    return nullptr;
 }
 
 // ******************************
 //
 FREE_IMAGE_FILTER ToFIFilter( FilterType ft )
 {
-	switch ( ft )
-	{
-	case FilterType::FT_BOX:
-		return FREE_IMAGE_FILTER::FILTER_BOX;
-	case FilterType::FT_BILINEAR:
-		return FREE_IMAGE_FILTER::FILTER_BILINEAR;
-	case FilterType::FT_B_SPLINE:
-		return FREE_IMAGE_FILTER::FILTER_BSPLINE;
-	case FilterType::FT_BICUBIC:
-		return FREE_IMAGE_FILTER::FILTER_BICUBIC;
-	case FilterType::FT_CATMULL_ROM:
-		return FREE_IMAGE_FILTER::FILTER_CATMULLROM;
-	case FilterType::FT_LANCZOS:
-		return FREE_IMAGE_FILTER::FILTER_LANCZOS3;
-	default:
-		assert( false && "Unreachable" );
-		return FREE_IMAGE_FILTER::FILTER_BOX;
-	}
+    switch ( ft )
+    {
+    case FilterType::FT_BOX:
+        return FREE_IMAGE_FILTER::FILTER_BOX;
+    case FilterType::FT_BILINEAR:
+        return FREE_IMAGE_FILTER::FILTER_BILINEAR;
+    case FilterType::FT_B_SPLINE:
+        return FREE_IMAGE_FILTER::FILTER_BSPLINE;
+    case FilterType::FT_BICUBIC:
+        return FREE_IMAGE_FILTER::FILTER_BICUBIC;
+    case FilterType::FT_CATMULL_ROM:
+        return FREE_IMAGE_FILTER::FILTER_CATMULLROM;
+    case FilterType::FT_LANCZOS:
+        return FREE_IMAGE_FILTER::FILTER_LANCZOS3;
+    default:
+        assert( false && "Unreachable" );
+        return FREE_IMAGE_FILTER::FILTER_BOX;
+    }
 }
 
 // *********************************
@@ -190,12 +190,12 @@ inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 w
 //
 inline Float4 GetPixelColorFloat4( Int32 x, Int32 y, const char * data, UInt32 width, UInt32 height )
 {
-	x = std::max( 0, std::min( x, ( Int32 )width - 1 ) );
-	y = std::max( 0, std::min( y, ( Int32 )height - 1 ) );
+    x = std::max( 0, std::min( x, ( Int32 )width - 1 ) );
+    y = std::max( 0, std::min( y, ( Int32 )height - 1 ) );
 
-	const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
+    const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
 
-	return Float4( p[ 0 ] / 255.f, p[ 1 ] / 255.f, p[ 2 ] / 255.f, p[ 3 ] / 255.f );
+    return Float4( p[ 0 ] / 255.f, p[ 1 ] / 255.f, p[ 2 ] / 255.f, p[ 3 ] / 255.f );
 }
 
 // *********************************
@@ -213,12 +213,12 @@ inline void SetPixelColorFloat4( Int32 x, Int32 y, char * data, UInt32 width, UI
 {
     { height; } // FIXME: suppress unused warning
 
-	char * p = &data[ 4 * ( x + y * width ) ];
+    char * p = &data[ 4 * ( x + y * width ) ];
 
-	p[ 0 ] = char( color.x * 255.f );
-	p[ 1 ] = char( color.y * 255.f );
-	p[ 2 ] = char( color.z * 255.f );
-	p[ 3 ] = char( color.w * 255.f );
+    p[ 0 ] = char( color.x * 255.f );
+    p[ 1 ] = char( color.y * 255.f );
+    p[ 2 ] = char( color.z * 255.f );
+    p[ 3 ] = char( color.w * 255.f );
 }
 
 } // anonymous
@@ -226,16 +226,16 @@ inline void SetPixelColorFloat4( Int32 x, Int32 y, char * data, UInt32 width, UI
 
 // *********************************
 //
-char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
+char *                    LoadImageImpl    ( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
 {
-	FIBITMAP * bitmap = nullptr;
+    FIBITMAP * bitmap = nullptr;
 
-	if( !Path::Exists( filePath ) )
-		return nullptr;
+    if( !Path::Exists( filePath ) )
+        return nullptr;
 
-	auto size = File::Size( filePath );
+    auto size = File::Size( filePath );
 
-	FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( filePath.c_str(), (int) size );
+    FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( filePath.c_str(), (int) size );
 
     if( loadFromMemory )
     {
@@ -243,9 +243,9 @@ char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width
 
         SizeType bytes = File::Read( bufToRead, filePath );
 
-		FIMEMORY * memory = FreeImage_OpenMemory( ( BYTE * ) bufToRead, ( DWORD ) bytes );
+        FIMEMORY * memory = FreeImage_OpenMemory( ( BYTE * ) bufToRead, ( DWORD ) bytes );
 
-		bitmap = FreeImage_LoadFromMemory( fiff, memory, BMP_DEFAULT );
+        bitmap = FreeImage_LoadFromMemory( fiff, memory, BMP_DEFAULT );
 
         if( bitmap == nullptr )
         {
@@ -256,14 +256,14 @@ char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width
     }
     else
     {
-		bitmap = FreeImage_Load( fiff, filePath.c_str(), BMP_DEFAULT );
+        bitmap = FreeImage_Load( fiff, filePath.c_str(), BMP_DEFAULT );
         if( bitmap == nullptr )
         {
             return nullptr;
         }
     }
 
-	auto bitmapcvt = ConvertToNearestSupported( bitmap, bpp, channelNum );
+    auto bitmapcvt = ConvertToNearestSupported( bitmap, bpp, channelNum );
 
     if( bitmapcvt != bitmap )
     {
@@ -271,12 +271,12 @@ char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width
     }
 
     if( bitmapcvt == nullptr )
-	{
-		return nullptr;
-	}
+    {
+        return nullptr;
+    }
 
-	*width  = FreeImage_GetWidth( bitmapcvt );
-	*heigth = FreeImage_GetHeight( bitmapcvt );
+    *width  = FreeImage_GetWidth( bitmapcvt );
+    *heigth = FreeImage_GetHeight( bitmapcvt );
 
     auto numBytes = ( *width ) * ( *heigth ) * ( *bpp ) / 8;
 
@@ -294,9 +294,9 @@ char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width
 char *                  LoadRAWImageImpl( const std::string & filePath, SizeType * size )
 {
     assert( size != nullptr );
-	*size = File::Size( filePath );
+    *size = File::Size( filePath );
 
-	auto buffer = new char[ *size ];
+    auto buffer = new char[ *size ];
 
     File::Read( buffer, filePath );
 
@@ -305,64 +305,64 @@ char *                  LoadRAWImageImpl( const std::string & filePath, SizeType
 
 // *********************************
 //
-bool					SaveBMPImageImpl( const std::string & filePath, const char * data, UInt32 width, UInt32 height, UInt32 bpp )
+bool                    SaveBMPImageImpl( const std::string & filePath, const char * data, UInt32 width, UInt32 height, UInt32 bpp )
 {
-	FIBITMAP * bitmap = FreeImage_Allocate( width, height, bpp );
+    FIBITMAP * bitmap = FreeImage_Allocate( width, height, bpp );
 
-	auto bits = FreeImage_GetBits( bitmap );
+    auto bits = FreeImage_GetBits( bitmap );
 
     memcpy( bits, data, width * height * bpp / 8 );
 
-	auto res = FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT ) ? true : false;
+    auto res = FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT ) ? true : false;
 
-	FreeImage_Unload( bitmap );
+    FreeImage_Unload( bitmap );
 
-	return res;
+    return res;
 }
 
 // *********************************
 //
-void					SaveRAWImageImpl( const std::string & filePath, const char * data, SizeType size )
+void                    SaveRAWImageImpl( const std::string & filePath, const char * data, SizeType size )
 {
-	auto f = File::Open( filePath, File::FOMReadWrite );
-	f.Write( data, size );
-	f.Close();
+    auto f = File::Open( filePath, File::FOMReadWrite );
+    f.Write( data, size );
+    f.Close();
 }
 
 // *********************************
 //
-char *		            ResizeImpl		( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
+char *                    ResizeImpl        ( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
-	FIBITMAP * inBitmap = nullptr;
-	if( bpp <= 32 )
-	{
-		inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
-	else
-	{
-		inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
+    FIBITMAP * inBitmap = nullptr;
+    if( bpp <= 32 )
+    {
+        inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
+    else
+    {
+        inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
 
-	memcpy( FreeImage_GetBits( inBitmap ), in, width * height * bpp / 8 );
+    memcpy( FreeImage_GetBits( inBitmap ), in, width * height * bpp / 8 );
 
-	auto b = FreeImage_GetBPP( inBitmap );
-	
-	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
+    auto b = FreeImage_GetBPP( inBitmap );
+    
+    auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
 
-	auto ob = FreeImage_GetBPP( inBitmap );
+    auto ob = FreeImage_GetBPP( inBitmap );
 
     // FIXME: what are b and ob required for?
     {b; ob; }
-	//FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
-	//outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
+    //FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
+    //outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
 
-	auto numBytes = newWidth * newHeight * bpp / 8;
+    auto numBytes = newWidth * newHeight * bpp / 8;
 
     char * pixels = new char[ numBytes ];
     memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
 
-	FreeImage_Unload( inBitmap );
-	FreeImage_Unload( outBitmap );
+    FreeImage_Unload( inBitmap );
+    FreeImage_Unload( outBitmap );
 
     return pixels;
 }
@@ -427,7 +427,7 @@ char *                  MakeThumbnailImpl   ( const char * in, UInt32 width, UIn
 
 // *********************************
 //
-char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize )
+char *                    BlurImageImpl    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize )
 {
     auto numBytes = width * height * bpp / 8;
 
@@ -440,11 +440,11 @@ char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 heig
     {
         for ( unsigned int x = 0; x < width; ++x )
         {
-			Float4 currVal( 0.f, 0.f, 0.f, 0.f );
+            Float4 currVal( 0.f, 0.f, 0.f, 0.f );
             for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
-			{
-				currVal = currVal + GetPixelColorFloat4( x + i, y, data, width, height );
-			}
+            {
+                currVal = currVal + GetPixelColorFloat4( x + i, y, data, width, height );
+            }
 
             currVal = currVal * ( 1.f / kernelSize );
             
@@ -458,13 +458,13 @@ char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 heig
         {
             Float4 currVal( 0.f, 0.f, 0.f, 0.f );
             for( int i = -(int)blurSize; i <= (int)blurSize; ++i )
-			{
-				currVal = currVal + GetPixelColorFloat4( x, y + i , tmp, height, width );
-			}
+            {
+                currVal = currVal + GetPixelColorFloat4( x, y + i , tmp, width, height );
+            }
 
             currVal = currVal * ( 1.f / kernelSize );
             
-			SetPixelColorFloat4( x, y, out, width, height, currVal );
+            SetPixelColorFloat4( x, y, out, width, height, currVal );
         }
     }
 
@@ -477,15 +477,15 @@ char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 heig
 //
 char *              FlipHorizontalImpl  ( const char * data, UInt32 width, UInt32 height, UInt32 bpp )
 {
-	FIBITMAP * copyInBitmap = nullptr;
-	if( bpp <= 32 )
-	{
-		copyInBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
-	else
-	{
-		copyInBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
+    FIBITMAP * copyInBitmap = nullptr;
+    if( bpp <= 32 )
+    {
+        copyInBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
+    else
+    {
+        copyInBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
 
     auto numBytes = width * height * bpp / 8;
     memcpy( FreeImage_GetBits( copyInBitmap ), data, numBytes );
@@ -503,15 +503,15 @@ char *              FlipHorizontalImpl  ( const char * data, UInt32 width, UInt3
 //
 char *                  FlipVerticalImpl    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp )
 {
-	FIBITMAP * copyInBitmap = nullptr;
-	if( bpp <= 32 )
-	{
-		copyInBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
-	else
-	{
-		copyInBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
+    FIBITMAP * copyInBitmap = nullptr;
+    if( bpp <= 32 )
+    {
+        copyInBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
+    else
+    {
+        copyInBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
 
     auto numBytes = width * height * bpp / 8;
     memcpy( FreeImage_GetBits( copyInBitmap ), data, numBytes );
@@ -528,7 +528,7 @@ char *                  FlipVerticalImpl    ( const char * data, UInt32 width, U
 // *********************************
 //
 MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
-{	
+{    
     auto pixels = LoadImageImpl( filePath, width, height, bpp, channelNum, loadFromMemory );
     auto numBytes = ( *width ) * ( *height ) * ( *bpp ) / 8;
 
@@ -571,7 +571,7 @@ MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 he
 
 // ******************************
 //
-MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
+MemoryChunkConstPtr        Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
     auto numBytes = newWidth * newHeight * bpp / 8;
     auto pixels = ResizeImpl( in->Get(), width, height, bpp, newWidth, newHeight, ft );
@@ -591,7 +591,7 @@ MemoryChunkConstPtr     MakeThumbnai    ( const MemoryChunkConstPtr & in, UInt32
 
 // ***********************
 //
-MemoryChunkConstPtr		FlipHorizontal  ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+MemoryChunkConstPtr        FlipHorizontal  ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
 {
     auto pixels = FlipHorizontalImpl( data->Get(), width, height, bpp );
 
@@ -600,7 +600,7 @@ MemoryChunkConstPtr		FlipHorizontal  ( MemoryChunkConstPtr data, UInt32 width, U
 
 // ***********************
 //
-MemoryChunkConstPtr		FlipVertical    ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+MemoryChunkConstPtr        FlipVertical    ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
 {
     auto pixels = FlipVerticalImpl( data->Get(), width, height, bpp );
 
@@ -612,14 +612,14 @@ MemoryChunkConstPtr		FlipVertical    ( MemoryChunkConstPtr data, UInt32 width, U
 MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp )
 {
     FIBITMAP * inBitmap = nullptr;
-	if( bpp <= 32 )
-	{
-		inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
-	else
-	{
-		inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	}
+    if( bpp <= 32 )
+    {
+        inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
+    else
+    {
+        inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+    }
 
     memcpy( FreeImage_GetBits( inBitmap ), in->Get(), width * height * bpp / 8 );
 
@@ -642,7 +642,7 @@ MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32
 
         memcpy( pixels, pixelsR, size );
 
-	    FreeImage_Unload( inBitmap );
+        FreeImage_Unload( inBitmap );
         FreeImage_CloseMemory( destStream );
 
         ret = MemoryChunk::Create( ( char * )pixels, size );
