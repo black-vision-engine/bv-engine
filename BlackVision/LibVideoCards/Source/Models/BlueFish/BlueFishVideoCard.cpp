@@ -64,7 +64,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                         output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
                         
                         //FIXME?
-                        output->updateFormat = UPD_FMT_FRAME;
+                        output->updateFormat = UPD_FMT_FIELD;
                         output->memoryFormat = MEM_FMT_BGRA;
 
                         deser.ExitChild(); //output
