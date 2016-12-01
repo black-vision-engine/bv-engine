@@ -51,7 +51,6 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     std::string & paramSubName = setParamEvent->ParamAddress.ParamSubName;
     std::string & sceneName    = setParamEvent->ParamAddress.SceneName;
     std::string & value        = setParamEvent->Value;
-    UInt32        index        = setParamEvent->ParamAddress.Index;
     
     
     TimeType keyTime           = setParamEvent->Time;
@@ -66,34 +65,23 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     {
         if( pluginName == "transform" )     // Hack for transformations. Maybe it's eternal hack.
         {
-            param = GetPluginParameter( sceneName, nodeName, pluginName, "simple_transform" );
+            param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, "simple_transform" );
             paramSubName = paramName;
         }
         else if( pluginName == "texture" && ( paramName == "translation" || paramName == "scale" || paramName == "rotation" ) )     // Hack for transformations. Maybe it's eternal hack.
         {
-            param = GetPluginParameter( sceneName, nodeName, pluginName, "txMat" );
+            param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, "txMat" );
             paramSubName = paramName;
         }
         else if( targetType == ParameterAddress::TargetType::ResourceParam )
-            param = GetResourceParameter( sceneName, nodeName, pluginName, "Tex0", paramName );
+            param = GetResourceParameter( m_projectEditor, sceneName, nodeName, pluginName, "Tex0", paramName );
     }
 
     if( !param )
     {
-        if( targetType == ParameterAddress::TargetType::PluginParam )
-            param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
-        else if( targetType == ParameterAddress::TargetType::GlobalEffectParam )
-            param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
-        else if( targetType == ParameterAddress::TargetType::ResourceParam )
-            param = GetResourceParameter( sceneName, nodeName, pluginName, paramSubName, paramName );
-        else if( targetType == ParameterAddress::TargetType::LightParam )
-            param = GetLightParameter( sceneName, index, paramName );
-        else if( targetType == ParameterAddress::TargetType::NodeLogicParam )
-            param = GetNodeLogicParameter( sceneName, nodeName, paramName );
-        else if( targetType == ParameterAddress::TargetType::CameraParam )
-            param = GetCameraParameter( sceneName, index, paramName );
-        else
-            param = GetPluginParameter( sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
+        param = GetParameter( m_projectEditor, setParamEvent->ParamAddress );
+        if( !param )
+            param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
     }
     // ------- preserve compatibility code ------->
 
@@ -224,173 +212,6 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     }
 
     SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
-}
-
-// ***********************
-//
-ParameterPtr    PluginEventsHandlers::GetParameter      ( const ParameterAddress & paramAddress )
-{
-    if( paramAddress.ParamTargetType == ParameterAddress::TargetType::PluginParam )
-        return GetPluginParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamName );
-    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::GlobalEffectParam )
-        return GetGlobalEffectParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
-    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::ResourceParam )
-        return GetResourceParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamSubName, paramAddress.ParamName );
-    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::LightParam )
-        return GetLightParameter( paramAddress.SceneName, paramAddress.LightParam, paramAddress.ParamName );
-    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::NodeLogicParam )
-        return GetNodeLogicParameter( paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
-    else if( paramAddress.ParamTargetType == ParameterAddress::TargetType::CameraParam )
-        return GetCameraParameter( paramAddress.SceneName, paramAddress.Index, paramAddress.ParamName );
-
-    return nullptr;
-}
-
-// ***********************
-//
-ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string & sceneName,
-                                                            const std::string & nodePath,
-                                                            const std::string & pluginName,
-                                                            const std::string & paramName )
-{
-    auto node = m_projectEditor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
-    {
-        return nullptr;
-    }
-
-    auto plugin = node->GetPlugin( pluginName );
-    if( plugin == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
-        return nullptr;
-    }
-
-    auto param = plugin->GetParameter( paramName );
-    if( param == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
-        return nullptr;
-    }
-    return param;
-}
-
-// ***********************
-//
-ParameterPtr PluginEventsHandlers::GetGlobalEffectParameter(    const std::string & sceneName,
-                                                                const std::string & nodePath,
-                                                                const std::string & paramName )
-{
-    auto node = m_projectEditor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
-    {
-        return nullptr;
-    }
-
-    auto effect = node->GetNodeEffect();
-    if( effect == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], effect not found";
-        return nullptr;
-    }
-
-    auto param = effect->GetParameter( paramName );
-    if( param == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], param [" + paramName + "] not found";
-        return nullptr;
-    }
-    return param;
-}
-
-
-// ***********************
-//
-ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::string & sceneName,
-                                                                const std::string & nodePath,
-                                                                const std::string & pluginName,
-                                                                const std::string & textureName,
-                                                                const std::string & paramName )
-{
-    auto node = m_projectEditor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
-    {
-        return nullptr;
-    }
-
-    auto plugin = node->GetPlugin( pluginName );
-    if( plugin == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
-        return nullptr;
-    }
-
-    auto resourceModel = plugin->GetResourceStateModel( textureName );
-    if( resourceModel == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
-        return nullptr;
-    }
-    
-    return resourceModel->GetParameter( paramName );
-}
-
-// ***********************
-//
-ParameterPtr PluginEventsHandlers::GetLightParameter        ( const std::string & sceneName,
-                                                              UInt32 lightIndex,
-                                                              const std::string & paramName )
-{
-    auto scene = m_projectEditor->GetModelScene( sceneName );
-    if( scene )
-    {
-        auto light = scene->GetLight( lightIndex );
-        if( light )
-        {
-            return light->GetParameter( paramName );
-        }
-    }
-
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: not found";
-    return nullptr;
-}
-
-// ***********************
-//
-ParameterPtr    PluginEventsHandlers::GetNodeLogicParameter   ( const std::string & sceneName, const std::string & nodePath, const std::string & paramName )
-{
-    auto node = m_projectEditor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
-    {
-        return nullptr;
-    }
-
-    auto logic = node->GetLogic();
-    if( logic )
-    {
-        logic->GetParameter( paramName );
-    }
-
-    LOG_MESSAGE( SeverityLevel::warning ) << "Node logic parameter not found";
-    return nullptr;
-}
-
-// ***********************
-//
-ParameterPtr    PluginEventsHandlers::GetCameraParameter      ( const std::string & sceneName, UInt32 cameraIndex, const std::string & paramName )
-{
-    auto scene = m_projectEditor->GetModelScene( sceneName );
-    if( scene )
-    {
-        auto camera = scene->GetCamerasLogic().GetCamera( cameraIndex );
-        if( camera )
-        {
-            return camera->GetParameter( paramName );
-        }
-    }
-
-    LOG_MESSAGE( SeverityLevel::warning ) << "Camera parameter not found";
-    return nullptr;
 }
 
 // ***********************
@@ -618,7 +439,7 @@ void        PluginEventsHandlers::ParamDescHandler    ( bv::IEventPtr eventPtr )
     if( command == ParamDescriptorEvent::AddParamDescriptor )
     {
         model::IParameterPtr param = nullptr;
-        param = GetParameter( paramDescEvent->ParamAddress );
+        param = GetParameter( m_projectEditor, paramDescEvent->ParamAddress );
 
         if( param )
         {

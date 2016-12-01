@@ -360,9 +360,7 @@ public:
     static std::string&             Name                ();
 };
 
-template<> AssetEvent::Command      SerializationHelper::String2T   ( const std::string& s, const AssetEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String   ( const AssetEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( AssetEvent::Command )
 DEFINE_PTR_TYPE( AssetEvent )
 
 // ************************************* SceneEvent Event *************************************
@@ -405,9 +403,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> SceneEvent::Command      SerializationHelper::String2T   ( const std::string& s, const SceneEvent::Command& defaultVal );
-template<> std::string              SerializationHelper::T2String   ( const SceneEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( SceneEvent::Command )
 DEFINE_PTR_TYPE( SceneEvent )
 
 
@@ -444,9 +440,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> LightEvent::Command      SerializationHelper::String2T   ( const std::string & s, const LightEvent::Command & defaultVal );
-template<> std::string              SerializationHelper::T2String   ( const LightEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( LightEvent::Command )
 DEFINE_PTR_TYPE( LightEvent )
 
 
@@ -483,9 +477,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> CameraEvent::Command     SerializationHelper::String2T   ( const std::string & s, const CameraEvent::Command & defaultVal );
-template<> std::string              SerializationHelper::T2String   ( const CameraEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( CameraEvent::Command )
 DEFINE_PTR_TYPE( CameraEvent )
 
 

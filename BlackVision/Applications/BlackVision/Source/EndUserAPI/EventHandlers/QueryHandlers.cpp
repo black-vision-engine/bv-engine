@@ -956,9 +956,27 @@ void        QueryHandlers::LogicInfo                ( JsonSerializeObject & ser,
 
 // ***********************
 //
-void        QueryHandlers::ParamInfo                ( JsonSerializeObject & /*ser*/, IDeserializer * /*request*/, int /*eventID */)
+void        QueryHandlers::ParamInfo                ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
-    assert( false );
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ParamInfo, eventID, "Not valid request." );
+        return;
+    }
+
+    ParameterAddress paramAddress = ParameterAddress::Create( *request );
+
+    auto param = GetParameter( m_editor, paramAddress );
+    if( param == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ParamInfo, eventID, "Parameter not found" );
+        return;
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::ParamInfo, eventID, true );
+    param->Serialize( ser );
+    paramAddress.Serialize( ser );
 }
 
 // ***********************
