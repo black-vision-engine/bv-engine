@@ -34,8 +34,8 @@ BVConfig::BVConfig                      ()
         m_deserializer.ExitChild();  // config
     }
 
-    m_defaultWidth = 1920;
-    m_defaultHeight = 1080;
+    m_defaultWidth = m_defaultWindowWidth = 1920;
+    m_defaultHeight = m_defaultWindowHeight = 1080;
 
     m_pmFolder = m_properties[ "PMFolder" ];
     m_fullscreeMode = SerializationHelper::String2T< bool >( m_properties[ "FullScreen" ], true );
