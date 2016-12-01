@@ -38,6 +38,7 @@ void    CFrame::Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 Bytes
     {
 		VirtualLock(m_pBuffer, Size);
     }
+
 }
 
 } //bluefish

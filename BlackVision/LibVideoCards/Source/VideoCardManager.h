@@ -77,6 +77,8 @@ class VideoCardManager
 {
 private:
 
+	int	m_currentFrameNumber;
+	MemoryChunkPtr m_currentFrameData;
     static MemoryChunkConstPtr                  KILLER_FRAME;
 
     std::hash_map< std::string, const IVideoCardDesc * >                m_descMap;

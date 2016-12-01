@@ -39,7 +39,7 @@
 
 //----------------------------------------------------------------------------
 // Some simple macros and definitions
-#define	BLUEVELVET_MAX_DEVICES	(5)			// Maximum number of Blue Cards recognised by driver
+#define	BLUEVELVET_MAX_DEVICES	(15)			// Maximum number of Bluefish cards recognised by driver
 
 typedef int BErr;
 
