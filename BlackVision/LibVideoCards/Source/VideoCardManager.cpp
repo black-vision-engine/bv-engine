@@ -1,5 +1,6 @@
 #include "VideoCardManager.h"
-
+#include <memory>
+#include <iostream>
 #include "Models/BlackMagic/BlackMagicVideoCard.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
 
@@ -57,10 +58,16 @@ MemoryChunkConstPtr          VideoCardManager::KILLER_FRAME = nullptr;
 //
 VideoCardManager::VideoCardManager      ()
     : m_keyActive( true )
-    , m_interlaceEnabled( false )
+    , m_interlaceEnabled( true )
     , m_dislpayMode( DisplayMode::HD )
+	, m_currentFrameNumber(0)
     , m_processThread( std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread() ) )
+	
 {
+	int size = 1920 * 1080 * 4 / 2;
+	char *mem = new char[size];
+	m_currentFrameData = MemoryChunkPtr(new MemoryChunk((char*)mem, size));
+		 
 }
 
 //**************************************
@@ -200,12 +207,90 @@ bool                        VideoCardManager::ProcessFrame          ()
     return false;
 }
 
+
+int PoliczSume(const char* data, int size)
+{
+	int max = 1024;
+	int suma = 0;
+	for (int i = 0;i < size;i++)
+	{
+		suma += (int)data[i];
+	}
+	suma = suma % max;
+	return suma;
+
+}
+
 // *********************************
 //
 MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChunkConstPtr data )
 {
     //FIXME: add CPU interlacing on data copy
-    return data;
+	//data.`
+
+//	int size = 1920 * 1080 * 4 / 2;
+	short  int offset = m_currentFrameNumber % 2;
+	
+	m_currentFrameNumber++;
+	const char *mem2 = data->Get();
+	int size = 1920 * 1080 * 2 + 2048;
+	char *mem = new char[size];//m_currentFrameData->GetWritable();
+	char *mem3 = new char[4 * 1920];
+	memset(mem3, 127, 1920 * 4);
+
+
+	int suma = PoliczSume(mem2, 1920 * 1080 * 4);
+
+	std::cout << "!!!!!!SUMA !!!!! : " << suma << std::endl;
+
+
+
+
+	//std::cout << "  interalaced frame: offset: " << offset << std::endl;
+	for (int i = offset,j=0;i < 1080;i += 2,j++)
+	{
+		/*if(offset==1)
+			memcpy(&mem[j*(1920 * 4)], mem3, 1920 * 4);
+		else*/
+			memcpy(&mem[j*(1920 * 4)], &mem2[i*(1920 * 4)], 1920 * 4);
+	}
+	for (int i = 0;i < 2048;i++)
+	{
+		mem[1920 * 1080 * 2 + i] = (char)64;
+
+		//mem[0 + i] = (char)64;
+	}
+
+	mem[0] = (char)offset;
+	//std::cout << "__interalaced frame: offset: " << (short int)mem[0] << std::endl;
+
+	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem, size));
+	
+	const char* woof= ptr->Get();
+	{woof;}
+
+	//bool enable_interlace = false;
+	//      if(enable_interlace)
+	//      {
+	//           unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
+	//
+	//          memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
+	//          unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+	//
+	//          for( unsigned int i = 0;  i < 1080; i += 2 )
+	//          {
+	//              unsigned int cur_i = i + 1;
+	//              unsigned int prev_i = i + 1;
+	//
+	//              unsigned int cur_scanline = width_bytes * cur_i;
+	//              unsigned int prev_scanline = width_bytes * prev_i;
+	//
+	//              memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
+	//
+	//          }
+	//      }
+
+    return ptr;
 }
 
 //**************************************

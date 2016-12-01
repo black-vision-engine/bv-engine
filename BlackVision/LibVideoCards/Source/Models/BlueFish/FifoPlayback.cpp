@@ -1,5 +1,5 @@
 #include "FifoPlayback.h"
-
+#include <iostream>
 #include <process.h>
 
 
@@ -275,45 +275,93 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread( void * pArg )
     //BOOL bPlaybackStarted = FALSE;
     std::shared_ptr<CFrame> pFrame = NULL;
 
+	OVERLAPPED OverlapChA;
+	OverlapChA.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	DWORD BytesReturnedChA = 0;
+
     //make sure FIFO is not running
     pThis->m_pSDK->video_playback_stop( 0, 0 );
 
+	VARIANT varVal;
+	varVal.vt = VT_UI4;
+	varVal.ulVal = ENUM_BLACKGENERATOR_OFF;
+	pThis->m_pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
+
     LastFieldCount = CurrentFieldCount;
+	ULONG LastUnderrunChA = 0;
+	ULONG UnderrunChA = 0;
+	pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+	if (!(CurrentFieldCount & 0x1))
+		pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);	//we need to schedule the playback of field 0 at field 1 interrupt
+
+	int FieldNumber = 0;
 
     while( !pThis->m_nThreadStopping )
     {
-        pFrame = pThis->m_pFifoBuffer->PopFrame();
-        if( !pFrame )
+		
+        if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, UnderrunChA ) ) )
         {
-            //cout << "Couldn't get buffer from Live queue (playback)" << endl;
-            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
-            continue;
-        }
-        if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, Underrun ) ) )
-        {
+			
+			pFrame = pThis->m_pFifoBuffer->PopFrame();
+			int fieldWoot = (int)(pFrame->m_pBuffer[0]);
+			if (!pFrame)
+			{
+				//std::cout << "Couldn't get buffer from Live queue (playback)" << std::endl;
+				pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+				continue;
+			}
+			
+
+			//pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+			_EDMADataType dt = BLUE_DATA_FIELD1;
+			if (fieldWoot == 1)
+				dt = BLUE_DATA_FIELD2;
+
+			//std::cout << ".... offset inside blue: "<<fieldWoot<<std::endl;
             pThis->m_pSDK->system_buffer_write_async( pFrame->m_pBuffer,
                                                       pFrame->m_nSize,
                                                       NULL,
-                                                      BlueImage_DMABuffer( BufferId, BLUE_DATA_IMAGE ), 0 );
+                                                      BlueImage_DMABuffer( BufferId, dt), 0 );
 
-            pThis->m_pSDK->video_playback_present( UniqueId, BlueBuffer_Image( BufferId ), 1, 0, 0 );
-            nFramesPlayed++;
+			GetOverlappedResult(pThis->m_pSDK->m_hDevice, &OverlapChA, &BytesReturnedChA, TRUE);
+			ResetEvent(OverlapChA.hEvent);
+			//std::cout << ".... field number in blue: " << FieldNumber << std::endl;
+            pThis->m_pSDK->video_playback_present( UniqueId, BlueBuffer_Image( BufferId ), 1, 0, fieldWoot);
+			
+			if (FieldNumber == 0)
+				FieldNumber = 1;
+			else
+				FieldNumber = 0;
+            
+			//track UnderrunChA and UnderrunChB to see if frames were dropped
+			if (UnderrunChA != LastUnderrunChA)
+			{
+				std::cout << "Dropped a frame: ChA underruns: " << UnderrunChA << std::endl;
+				LastUnderrunChA = UnderrunChA;
+			}
+
+			nFramesPlayed++;
 
             //if( bPlaybackStarted && Underrun != LastUnderrun )
                 //cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
             LastUnderrun = Underrun;
-            if( nFramesTobuffer > 0 )
-            {
-                nFramesTobuffer--;
-                if( nFramesTobuffer == 0 )
-                {
-                    pThis->m_pSDK->video_playback_start( 0, 0 );
-                }
-            }
-            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
+            
+            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FIELD, CurrentFieldCount );
         }
-        else
-            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
+		else {
+			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+			std::cout << CurrentFieldCount << " waiting..." << std::endl;
+		}
+
+		if (nFramesTobuffer > 0)
+		{
+			nFramesTobuffer--;
+			if (nFramesTobuffer == 0)
+			{
+				pThis->m_pSDK->video_playback_start(0, 0);
+
+			}
+		}
     }
 
     bool blackout = false;
@@ -333,7 +381,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread( void * pArg )
         }
         else
         {
-            pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FRAME, CurrentFieldCount );
+            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount );
         }
     }
     //cout << "Playback Thread Stopped..." << endl;
