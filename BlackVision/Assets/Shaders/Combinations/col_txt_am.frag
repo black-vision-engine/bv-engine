@@ -142,7 +142,11 @@ void main()
     }
     
 	vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
-	FragColor = alphaMask.a * a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
+	vec4 result = alphaMask.a * a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
+	
+	if( result.a == 0.0 )
+		discard;
+	FragColor = result;
 }
 
 

@@ -756,9 +756,9 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     // --- mesh ---
     StringVector meshExts;
-    videoExts.push_back( ".*\\.obj" );
-    videoExts.push_back( ".*\\.fbx" );
-    videoExts.push_back( ".*\\.dae" );
+    meshExts.push_back( ".*\\.[oO][bB][jJ]" );
+    meshExts.push_back( ".*\\.[fF][bB][xX]" );
+    meshExts.push_back( ".*\\.[dD][aA][eE]" );
 
     auto maa = MeshAssetAccessor::Create( GetRootDir() / "meshes", meshExts );
     RegisterCategory( AssetCategory::Create( "meshes", maa ) );
