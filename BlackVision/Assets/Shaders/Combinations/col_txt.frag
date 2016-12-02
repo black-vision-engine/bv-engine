@@ -139,7 +139,11 @@ void main()
         break;
     }
     
-	FragColor = a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
+	vec4 result = a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
+	
+	if( result.a == 0.0 )
+		discard;
+	FragColor = result;
 }
 
 
