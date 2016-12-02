@@ -129,7 +129,7 @@ public:
     //FIXME: probably not needed
     /**@brief Copies and interlaces full frame.
     @return Returns interlaced copy of frame. */
-    MemoryChunkConstPtr                 InterlacedFrame         ( MemoryChunkConstPtr data );
+    MemoryChunkConstPtr                 InterlacedFrame         ( MemoryChunkConstPtr data, int odd );
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 

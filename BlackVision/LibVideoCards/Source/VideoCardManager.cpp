@@ -190,15 +190,18 @@ bool                        VideoCardManager::ProcessFrame          ()
 
     if( data )
     {
+		short  int odd = m_currentFrameNumber % 2;
+		m_currentFrameNumber++;
         if( m_interlaceEnabled )
         {
-            data = InterlacedFrame( data );
+
+            data = InterlacedFrame( data, odd  );
         }
 
         std::unique_lock< std::mutex > lock( m_mutex );
         for( auto & videoCard : m_videoCards )
         {
-            videoCard->ProcessFrame( data );
+            videoCard->ProcessFrame( data,odd );
         }
 
         return true;
@@ -223,72 +226,28 @@ int PoliczSume(const char* data, int size)
 
 // *********************************
 //
-MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChunkConstPtr data )
+MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChunkConstPtr data, int odd )
 {
-    //FIXME: add CPU interlacing on data copy
-	//data.`
-
-//	int size = 1920 * 1080 * 4 / 2;
-	short  int offset = m_currentFrameNumber % 2;
+	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
 	
-	m_currentFrameNumber++;
-	const char *mem2 = data->Get();
-	int size = 1920 * 1080 * 2 + 2048;
-	char *mem = new char[size];//m_currentFrameData->GetWritable();
-	char *mem3 = new char[4 * 1920];
-	memset(mem3, 127, 1920 * 4);
+	const char *mem_src = data->Get();
+
+	int pixel_depth = 4;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
+	int width = 1920;
+	int height = 1080;
+	int bytes_per_line = width * pixel_depth;
+	int size = width * height * 2 + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
+
+	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
 
 
-	int suma = PoliczSume(mem2, 1920 * 1080 * 4);
-
-	std::cout << "!!!!!!SUMA !!!!! : " << suma << std::endl;
-
-
-
-
-	//std::cout << "  interalaced frame: offset: " << offset << std::endl;
-	for (int i = offset,j=0;i < 1080;i += 2,j++)
+	for (int i = odd, j = 0;i < height;i += 2, j++)
 	{
-		/*if(offset==1)
-			memcpy(&mem[j*(1920 * 4)], mem3, 1920 * 4);
-		else*/
-			memcpy(&mem[j*(1920 * 4)], &mem2[i*(1920 * 4)], 1920 * 4);
+		memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
 	}
-	for (int i = 0;i < 2048;i++)
-	{
-		mem[1920 * 1080 * 2 + i] = (char)64;
-
-		//mem[0 + i] = (char)64;
-	}
-
-	mem[0] = (char)offset;
-	//std::cout << "__interalaced frame: offset: " << (short int)mem[0] << std::endl;
-
-	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem, size));
 	
-	const char* woof= ptr->Get();
-	{woof;}
-
-	//bool enable_interlace = false;
-	//      if(enable_interlace)
-	//      {
-	//           unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
-	//
-	//          memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
-	//          unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
-	//
-	//          for( unsigned int i = 0;  i < 1080; i += 2 )
-	//          {
-	//              unsigned int cur_i = i + 1;
-	//              unsigned int prev_i = i + 1;
-	//
-	//              unsigned int cur_scanline = width_bytes * cur_i;
-	//              unsigned int prev_scanline = width_bytes * prev_i;
-	//
-	//              memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
-	//
-	//          }
-	//      }
+	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
+	
 
     return ptr;
 }

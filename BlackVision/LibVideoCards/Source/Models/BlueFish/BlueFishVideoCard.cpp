@@ -229,7 +229,7 @@ void                            VideoCard::Start                    ()
 
 //**************************************
 //
-void                            VideoCard::ProcessFrame             ( MemoryChunkConstPtr data )
+void                            VideoCard::ProcessFrame             ( MemoryChunkConstPtr data, int odd )
 {
     for( auto channel : m_channels )
 	{
@@ -240,7 +240,8 @@ void                            VideoCard::ProcessFrame             ( MemoryChun
                 std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( data->Get() ), 
                                             m_deviceID,
                                             playbackChannel->GoldenSize, 
-                                            playbackChannel->BytesPerLine ) );
+                                            playbackChannel->BytesPerLine,
+											odd) );
 		}
 	}   
 }
