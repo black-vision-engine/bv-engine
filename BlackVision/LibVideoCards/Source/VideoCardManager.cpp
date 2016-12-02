@@ -197,7 +197,7 @@ bool                        VideoCardManager::ProcessFrame          ()
 
             data = InterlacedFrame( data, odd  );
         }
-
+		odd = m_currentFrameNumber % 2;
         std::unique_lock< std::mutex > lock( m_mutex );
         for( auto & videoCard : m_videoCards )
         {
