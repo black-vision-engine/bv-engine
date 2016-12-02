@@ -23,12 +23,12 @@ DefaultPluginParamValModelPtr   DefaultTrianglePluginDesc::CreateDefaultModel  (
 {
 	ModelHelper h( timeEvaluator );
 
-	h.CreateVacModel();
+	h.SetOrCreateVacModel();
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTA, glm::vec3( 0, 1, 0 ), true, true );
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTB, glm::vec3( -1, 0, 0 ), true, true );
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTC, glm::vec3( 1, 0, 0 ), true, true );
 
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
 	return h.GetModel();
 }

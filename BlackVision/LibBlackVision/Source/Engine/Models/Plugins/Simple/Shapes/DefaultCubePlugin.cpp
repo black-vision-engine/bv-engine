@@ -57,7 +57,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 {
     ModelHelper h( timeEvaluator );
 
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
     h.AddSimpleParam( PN::BEVEL, 0.1f, true, true );
     h.AddSimpleParam( PN::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
     h.AddSimpleParam( PN::TESSELATION, 4, true, true );
@@ -70,7 +70,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
   	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, Plugin::MappingType::OLDSTYLE, true, true );
     
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

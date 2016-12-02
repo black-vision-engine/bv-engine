@@ -83,7 +83,7 @@ IPluginPtr              DefaultText3DPluginDesc::CreatePlugin             ( cons
 DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper h( timeEvaluator );
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
 
     h.AddSimpleParam( DefaultText3DPlugin::PARAMS::TEXT, std::wstring( L"" ), true, true );
     h.AddSimpleParam( DefaultText3DPlugin::PARAMS::SPACING, 0.0f, true, true );
@@ -94,8 +94,8 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     h.AddParam< IntInterpolator, TextAlignmentType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumTAT >
         ( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
 
-    h.CreatePSModel();
-    h.CreateVSModel();
+    h.SetOrCreatePSModel();
+    h.SetOrCreateVSModel();
 
     return h.GetModel();
 }

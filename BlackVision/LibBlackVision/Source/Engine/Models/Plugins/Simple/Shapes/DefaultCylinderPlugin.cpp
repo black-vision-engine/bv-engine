@@ -74,7 +74,7 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
 {
     ModelHelper h( timeEvaluator );
 
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
 	h.AddSimpleParam( PN::TESSELATION, 20, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
@@ -91,7 +91,7 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
 	h.AddParam< IntInterpolator, DefaultPlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, DefaultPlugin::MappingType::GOODMAPPING, true, true );
 
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

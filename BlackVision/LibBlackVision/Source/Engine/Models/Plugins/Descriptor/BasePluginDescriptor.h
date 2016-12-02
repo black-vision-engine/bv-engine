@@ -53,14 +53,16 @@ protected:
         ITimeEvaluatorPtr                       m_lastTimeEvaluator;
 
     public:
-        ModelHelper(  ITimeEvaluatorPtr te ) : m_lastTimeEvaluator( te ) { m_model = std::make_shared< DefaultPluginParamValModel >( te ); }
-        DefaultPluginParamValModelPtr           GetModel() { return m_model; }
+        ModelHelper ( ITimeEvaluatorPtr te, DefaultPluginParamValModelPtr model );
+        ModelHelper ( ITimeEvaluatorPtr te );
 
-        void                                    CreateVacModel      ();
-        void                                    CreateVSModel       ();
-        void                                    CreatePSModel       ();
-        void                                    CreateGSModel       ();
-        void                                    CreatePluginModel   ();
+        DefaultPluginParamValModelPtr           GetModel                ()  { return m_model; }
+
+        void                                    SetOrCreateVacModel     ();
+        void                                    SetOrCreateVSModel      ();
+        void                                    SetOrCreatePSModel      ();
+        void                                    SetOrCreateGSModel      ();
+        void                                    SetOrCreatePluginModel  ();
 
 
         inline void                             AddTransformParam   ( std::string name, bool addValue = true ) const

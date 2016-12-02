@@ -69,9 +69,9 @@ DefaultPluginParamValModelPtr   DefaultBlendTexturePluginDesc::CreateDefaultMode
     //Create all parameters and evaluators
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txBlendMat", timeEvaluator );
     
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::ALPHA, 1.f, true );
     helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, (int)DefaultBlendTexturePlugin::BlendingMode::BM_Normal, true );
 

@@ -47,9 +47,9 @@ DefaultPluginParamValModelPtr   DefaultParallaxMapPluginDesc::CreateDefaultModel
     //Create all models
     auto model  = helper.GetModel();
 
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
     
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM::HEIGHT_SCALE, 0.1f, true );
     helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM::MIN_SAMPLES_NUM, 10, true );
     helper.AddSimpleParam( DefaultParallaxMapPlugin::PARAM::MAX_SAMPLES_NUM, 20, true );

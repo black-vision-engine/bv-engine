@@ -41,7 +41,7 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
 {
     ModelHelper h( timeEvaluator );
 
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
     h.AddSimpleParam( DefaultCirclePlugin::PN_OUTER_RADIUS, 1.f, true, true );
     h.AddSimpleParam( DefaultCirclePlugin::PN_INNER_RADIUS, 0.f, true, true );
     h.AddSimpleParam( DefaultCirclePlugin::PN_OPEN_ANGLE, 360.f, true, true );
@@ -49,7 +49,7 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
     h.AddParam< IntInterpolator, DefaultCirclePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, DefaultCirclePlugin::OpenAngleMode::CW, true, true );
     
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

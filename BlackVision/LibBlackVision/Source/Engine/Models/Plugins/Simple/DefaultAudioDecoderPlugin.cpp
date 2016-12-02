@@ -70,7 +70,7 @@ DefaultPluginParamValModelPtr   DefaultAudioDecoderPluginDesc::CreateDefaultMode
     ModelHelper helper( timeEvaluator );
     auto model  = helper.GetModel();
 
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultAudioDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultAudioDecoderPlugin::PARAM::DECODER_STATE, DefaultAudioDecoderPlugin::DecoderMode::STOP, true, true );

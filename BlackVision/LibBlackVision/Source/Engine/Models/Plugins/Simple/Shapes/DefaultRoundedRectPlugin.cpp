@@ -19,12 +19,12 @@ DefaultPluginParamValModelPtr   DefaultRoundedRectPluginDesc::CreateDefaultModel
 {
     ModelHelper h( timeEvaluator );
 
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_SIZE, glm::vec2( 1, 1 ), true, true );
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_BEVELS, glm::vec4( 0.1, 0.1, 0.1, 0.1 ), true, true );
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_TESSELATION, 10, true, true );
 
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

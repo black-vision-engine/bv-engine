@@ -44,9 +44,9 @@ DefaultPluginParamValModelPtr   DefaultEnvironmentTexturePluginDesc::CreateDefau
     //Create all models
     auto model  = helper.GetModel();
 
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultEnvironmentTexturePlugin::PARAM::Reflectivity, 0.5f, true );
 
     return helper.GetModel();

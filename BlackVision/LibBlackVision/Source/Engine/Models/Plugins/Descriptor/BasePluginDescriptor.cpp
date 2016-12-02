@@ -56,45 +56,83 @@ IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluator
 
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreateVacModel      ()
+BasePluginDescriptor::ModelHelper::ModelHelper(  ITimeEvaluatorPtr te, DefaultPluginParamValModelPtr model )
+    : m_lastTimeEvaluator( te )
+    , m_model( model )
+{}
+
+// *********************************
+//
+BasePluginDescriptor::ModelHelper::ModelHelper(  ITimeEvaluatorPtr te )
+    : m_lastTimeEvaluator( te )
+    , m_model( std::make_shared< DefaultPluginParamValModel >( te ) )
+{}
+
+// *********************************
+//
+void BasePluginDescriptor::ModelHelper::SetOrCreateVacModel      ()
 {
-    auto vacModel = std::make_shared< DefaultParamValModel >();
-    m_model->SetVertexAttributesChannelModel( vacModel );
+    DefaultParamValModelPtr vacModel = std::static_pointer_cast< DefaultParamValModel >( m_model->GetVertexAttributesChannelModel() );
+
+    if( !vacModel )
+    {
+        vacModel = std::make_shared< DefaultParamValModel >();
+        m_model->SetVertexAttributesChannelModel( vacModel );
+    }
+
     m_lastParamValModel = vacModel;
 }
 
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreateVSModel       ()
+void BasePluginDescriptor::ModelHelper::SetOrCreateVSModel       ()
 {
-    auto psModel = std::make_shared< DefaultParamValModel >();
-    m_model->SetVertexShaderChannelModel( psModel );
-    m_lastParamValModel = psModel;
+    DefaultParamValModelPtr vsModel = std::static_pointer_cast< DefaultParamValModel >( m_model->GetVertexShaderChannelModel() );
+
+    if( !vsModel )
+    {
+        vsModel = std::make_shared< DefaultParamValModel >();
+        m_model->SetVertexShaderChannelModel( vsModel );
+    }
+
+    m_lastParamValModel = vsModel;
 }
 
 // ***********************
 //
-void BasePluginDescriptor::ModelHelper::CreateGSModel       ()
+void BasePluginDescriptor::ModelHelper::SetOrCreateGSModel       ()
 {
     assert( false );
 }
 
 // *********************************
 //
-void BasePluginDescriptor::ModelHelper::CreatePSModel       ()
+void BasePluginDescriptor::ModelHelper::SetOrCreatePSModel       ()
 {
-    auto psModel = std::make_shared< DefaultParamValModel >();
-    m_model->SetPixelShaderChannelModel( psModel );
+    DefaultParamValModelPtr psModel = std::static_pointer_cast< DefaultParamValModel >( m_model->GetPixelShaderChannelModel() );
+
+    if( !psModel )
+    {
+        psModel = std::make_shared< DefaultParamValModel >();
+        m_model->SetPixelShaderChannelModel( psModel );
+    }
+
     m_lastParamValModel = psModel;
 }
 
 // ***********************
 //
-void BasePluginDescriptor::ModelHelper::CreatePluginModel   ()
+void BasePluginDescriptor::ModelHelper::SetOrCreatePluginModel   ()
 {
-    auto psModel = std::make_shared< DefaultParamValModel >();
-    m_model->SetPluginModel( psModel );
-    m_lastParamValModel = psModel;
+    DefaultParamValModelPtr plModel = std::static_pointer_cast< DefaultParamValModel >( m_model->GetPluginModel() );
+
+    if( !plModel )
+    {
+        plModel = std::make_shared< DefaultParamValModel >();
+        m_model->SetPluginModel( plModel );
+    }
+
+    m_lastParamValModel = plModel;
 }
 
 

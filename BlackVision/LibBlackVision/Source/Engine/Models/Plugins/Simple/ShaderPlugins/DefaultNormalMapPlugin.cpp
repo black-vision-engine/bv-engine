@@ -47,8 +47,8 @@ DefaultPluginParamValModelPtr   DefaultNormalMapPluginDesc::CreateDefaultModel( 
 
     SimpleTransformEvaluatorPtr trTxEvaluator = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( DefaultNormalMapPlugin::PARAM::NORMAL_MAP_MAT, timeEvaluator );
     
-    helper.CreatePluginModel();
-    helper.CreatePSModel();
+    helper.SetOrCreatePluginModel();
+    helper.SetOrCreatePSModel();
     
     vsModel->RegisterAll( trTxEvaluator );
     model->SetVertexShaderChannelModel( vsModel );

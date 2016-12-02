@@ -57,13 +57,13 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
     
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_BLEND_ENABLE, true, true, true );
 
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_AUTO_PLAY, false, true, true );
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FPS, 24.f, true, true );
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_ALPHA, 1.f, true );
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FRAME_NUM, 0.f, true );    // FIXME: integer parmeters should be used here
 

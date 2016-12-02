@@ -52,7 +52,7 @@ DefaultPluginParamValModelPtr       PluginDesc::CreateDefaultModel  ( ITimeEvalu
 {
     ModelHelper h( timeEvaluator );
     
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
 
     h.AddSimpleStatedParam( PN::WIDTH, 1.f );
     h.AddSimpleStatedParam( PN::HEIGHT, 1.f );
@@ -62,7 +62,7 @@ DefaultPluginParamValModelPtr       PluginDesc::CreateDefaultModel  ( ITimeEvalu
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultRect::PN::WEIGHTCENTERY, Plugin::WeightCenter::CENTER, true, true );
 
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

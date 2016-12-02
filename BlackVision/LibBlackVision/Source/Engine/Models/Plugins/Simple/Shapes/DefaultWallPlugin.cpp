@@ -29,7 +29,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 {
     ModelHelper h( timeEvaluator );
 
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
 	h.AddSimpleParam( PN::TESSELATION, 20, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
     h.AddSimpleParam( PN::WIDTH, 1.f, true, true );
@@ -37,7 +37,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::ANGLE, 80.f, true, true );
     h.AddSimpleParam( PN::FRONT, true, true, true );
 
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

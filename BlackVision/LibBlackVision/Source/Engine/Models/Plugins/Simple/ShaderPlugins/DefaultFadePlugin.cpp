@@ -67,9 +67,9 @@ DefaultPluginParamValModelPtr   DefaultFadePluginDesc::CreateDefaultModel( ITime
     //Create all parameters and evaluators
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "fadeMat", timeEvaluator );
 
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultFadePlugin::PARAMS::POINT1_ALPHA, 1.f, true );
     helper.AddSimpleParam( DefaultFadePlugin::PARAMS::POINT2_ALPHA, 1.f, true );
     helper.AddSimpleParam( DefaultFadePlugin::PARAMS::POINT3_ALPHA, 1.f, true );

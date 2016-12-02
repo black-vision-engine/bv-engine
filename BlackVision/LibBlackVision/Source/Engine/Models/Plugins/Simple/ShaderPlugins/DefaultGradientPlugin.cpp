@@ -61,10 +61,10 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     //Create all parameters and evaluators
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultGradientPlugin::PARAM_BLEND_ENABLE, true, true, true );
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultGradientPlugin::PARAM_ALPHA, 1.f, true );
 
     helper.AddSimpleParam( DefaultGradientPlugin::PARAM_POINT1, glm::vec2( 0.0f, 1.0f ), true );

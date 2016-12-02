@@ -62,7 +62,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 {
     // Rewrite to ModelHelper.
     ModelHelper h( timeEvaluator );
-    h.CreatePluginModel();
+    h.SetOrCreatePluginModel();
 
     h.AddSimpleStatedParam( "spacing", 0.0f );
     h.AddSimpleStatedParam( "alignment", 0.0f );

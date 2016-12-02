@@ -43,9 +43,9 @@ IPluginPtr              DefaultLineChartPluginDesc::CreatePlugin              ( 
 DefaultPluginParamValModelPtr   DefaultLineChartPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper h( timeEvaluator );
-    h.CreateVacModel();
+    h.SetOrCreateVacModel();
 
-    h.CreatePSModel();
+    h.SetOrCreatePSModel();
 
     return h.GetModel();
 }

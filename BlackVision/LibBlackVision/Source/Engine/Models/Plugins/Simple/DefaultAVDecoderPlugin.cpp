@@ -80,7 +80,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
     ModelHelper helper( timeEvaluator );
     auto model  = helper.GetModel();
 
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultAVDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::PAUSE, true, true );
@@ -88,12 +88,12 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::MUTE, false, true, true );
 
-    helper.CreateVSModel();
+    helper.SetOrCreateVSModel();
     helper.AddTransformParam( DefaultAVDecoderPlugin::PARAM::TX_MAT, true );
     auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultAVDecoderPlugin::PARAM::TX_MAT );
     SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::ALPHA, 1.f, true );
 
     return model;

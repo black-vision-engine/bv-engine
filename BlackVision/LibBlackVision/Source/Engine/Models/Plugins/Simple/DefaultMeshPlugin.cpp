@@ -45,7 +45,7 @@ IPluginPtr              DefaultMeshPluginDesc::CreatePlugin              ( const
 DefaultPluginParamValModelPtr   DefaultMeshPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper helper( timeEvaluator );
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     return helper.GetModel();
 }
 

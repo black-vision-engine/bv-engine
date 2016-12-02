@@ -41,8 +41,8 @@ DefaultPluginParamValModelPtr   DefaultEnvReflectivityMapPluginDesc::CreateDefau
     //Create all models
     auto model  = helper.GetModel();
 
-    helper.CreatePluginModel();
-    helper.CreatePSModel();
+    helper.SetOrCreatePluginModel();
+    helper.SetOrCreatePSModel();
     
     DefaultParamValModelPtr vsModel             = std::make_shared< DefaultParamValModel >();
     SimpleTransformEvaluatorPtr trTxEvaluator   = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "reflMat", timeEvaluator );

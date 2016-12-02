@@ -51,10 +51,10 @@ DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( IT
     //Create all models
     auto model  = helper.GetModel();
 
-    helper.CreatePluginModel();
+    helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultColorPlugin::PARAM_BLEND_ENABLE, true, true, true );
 
-    helper.CreatePSModel();
+    helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultColorPlugin::PARAM_COLOR, glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ), true );
 
     return helper.GetModel();
