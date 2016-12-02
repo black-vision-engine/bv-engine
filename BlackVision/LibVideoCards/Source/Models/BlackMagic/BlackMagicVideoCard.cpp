@@ -233,8 +233,9 @@ void                    VideoCard::Start                ()
 
 //**************************************
 //
-void                    VideoCard::ProcessFrame         ( MemoryChunkConstPtr data )
+void                    VideoCard::ProcessFrame         ( MemoryChunkConstPtr data, int odd )
 {
+	{odd;}
     for( UInt32 i = 0; i < ( UInt32 )m_outputs.size(); ++i )
     {
         auto frame = m_frames[ i ];

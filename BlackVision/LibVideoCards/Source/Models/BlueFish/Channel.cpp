@@ -407,7 +407,7 @@ unsigned int __stdcall Channel::PlaythroughThread(void * pArg)
 
     while( pParams->bDoRun )
     {   
-        pParams->pOutputFifo->m_threadsafebuffer.push( pParams->pInputFifo->m_threadsafebuffer.pop() );
+        pParams->pOutputFifo->PushFrame( pParams->pInputFifo->PopFrame() );
     }
 
     _endthreadex(0);

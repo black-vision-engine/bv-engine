@@ -154,7 +154,7 @@ FullscreenEffect *  CreateVideoOutputFSE        ( const std::vector< IValuePtr >
     // ( ( aIdx & 0x3 ) << 6 ) | ( ( bIdx & 0x3 ) << 4 ) | ( ( gIdx & 0x3 ) << 2 ) | ( ( rIdx & 0x3 ) << 0 );
     int channelMask         = ( 3 << 6 ) | ( 2 << 4 ) | ( 1 << 2 ) | ( 0 << 0 );
 
-    auto useInterlaceVal    = ValuesFactory::CreateValueInt     ( "useInterlace", 1 );
+    auto useInterlaceVal    = ValuesFactory::CreateValueInt     ( "useInterlace", 0 );
     auto startEvenVal       = ValuesFactory::CreateValueInt     ( "startEven", 0 );
     auto heightVal          = ValuesFactory::CreateValueFloat   ( "height", 1080 );
     auto channelMaskVal     = ValuesFactory::CreateValueInt     ( "channelMask", channelMask ); 

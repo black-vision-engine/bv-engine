@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\CircularBufferConcurrent.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\Hash.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\Queue.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h" />

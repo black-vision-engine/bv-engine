@@ -11,12 +11,13 @@ class CFrame
 public:
 
 	CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
-    CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
+    CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd);
 	~CFrame();
 
 public:
 
 	BLUE_UINT32	m_nFrameID;
+	int m_FieldOdd;
 	BLUE_UINT32	m_nCardBufferID;
 	BLUE_UINT32	m_nSize;
 	BLUE_UINT32	m_nBytesPerLine;
@@ -25,7 +26,7 @@ public:
 
 private:
 
-    void        Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
+    void        Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd);
 
 };
 
