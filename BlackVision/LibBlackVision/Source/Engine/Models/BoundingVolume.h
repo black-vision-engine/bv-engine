@@ -10,6 +10,7 @@ namespace model {
 
 class VertexAttributesChannel;
 class IVertexAttributesChannel;
+DEFINE_CONST_PTR_TYPE( IVertexAttributesChannel );
 
 class IConnectedComponent;
 DEFINE_PTR_TYPE( IConnectedComponent );
@@ -29,7 +30,6 @@ class BoundingVolume {
     mathematics::Box                    m_childrenBox;
     //BoundingVolume *                    m_parent;
 
-    const VertexAttributesChannel *     m_vac;
     UInt64                              m_lastTopologyID;
     UInt64                              m_lastAttribuetesID;
 
@@ -46,7 +46,7 @@ public:
     IConnectedComponentPtr              BuildBoxRepresentation  () const;
     IConnectedComponentPtr              BuildCenterRepresentation () const;
 
-    void                                UpdateOwnBox            ();
+    void                                UpdateOwnBox            ( const IVertexAttributesChannelConstPtr & vac );
     void                                IncludeChildrenBox      ( const mathematics::Box & box );
 };
 

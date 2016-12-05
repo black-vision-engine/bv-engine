@@ -37,6 +37,7 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultMaterialPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultWallPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultMeshPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSVGPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultNormalMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultParallaxMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultEnvironmentTexturePlugin.h"
@@ -88,6 +89,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultMaterialPluginDesc() );
     descriptors.push_back( new DefaultWallPlugin::PluginDesc() );
     descriptors.push_back( new DefaultMeshPluginDesc() );
+    descriptors.push_back( new DefaultSVGPluginDesc() );
     descriptors.push_back( new DefaultNormalMapPluginDesc() );
     descriptors.push_back( new DefaultParallaxMapPluginDesc() );
     descriptors.push_back( new DefaultEnvironmentTexturePluginDesc() );

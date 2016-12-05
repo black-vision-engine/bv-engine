@@ -131,37 +131,38 @@ model::ConnectedComponentPtr BuildCenterComponent( const glm::vec3 & center )
 
 
 BoundingVolume::BoundingVolume          ( const VertexAttributesChannel * vac, ParamTransform * param )
-    : m_vac( vac )
-    , m_lastAttribuetesID( 0 )
+    : m_lastAttribuetesID( 0 )
     , m_lastTopologyID( 0 )
     , m_param( param )
 {
     if( vac )
-        m_box = CalculateBoundingBox( m_vac );
+        m_box = CalculateBoundingBox( vac );
     //m_transform *= glm::translate( glm::mat4( 1.0f ), glm::vec3( box.xmin, box.ymin, box.zmin ) );
     //m_transform *= glm::scale( glm::mat4( 1.0f ), glm::vec3( box.xmax - box.xmin, box.ymax - box.ymin, box.zmax - box.zmin ) );
 }
 
-void                    BoundingVolume::UpdateOwnBox                  ()
+void                    BoundingVolume::UpdateOwnBox                  ( const IVertexAttributesChannelConstPtr & vac )
 {
-    if( m_vac == nullptr )
+    if( vac == nullptr )
         return;
+
+    auto typedVac = std::static_pointer_cast< const VertexAttributesChannel>( vac );
 
     if( m_param )
         m_center = m_param->GetTransform().GetCenter( m_param->GetTimeEvaluator()->GetLocalTime() );
     else
         m_center = glm::vec3( 0, 0, 0 );
 
-    if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
+    if( m_lastAttribuetesID < typedVac->GetAttributesUpdateID() )
     {
-        m_box = CalculateBoundingBox( m_vac );
-        m_lastAttribuetesID = m_vac->GetAttributesUpdateID();
+        m_box = CalculateBoundingBox( typedVac.get() );
+        m_lastAttribuetesID = typedVac->GetAttributesUpdateID();
     }
-    else if( m_lastTopologyID < m_vac->GetTopologyUpdateID() )
+    else if( m_lastTopologyID < typedVac->GetTopologyUpdateID() )
     {
-        m_box = CalculateBoundingBox( m_vac );
-        m_lastTopologyID = m_vac->GetTopologyUpdateID();
-        assert( m_lastAttribuetesID == m_vac->GetAttributesUpdateID() );
+        m_box = CalculateBoundingBox( typedVac.get() );
+        m_lastTopologyID = typedVac->GetTopologyUpdateID();
+        assert( m_lastAttribuetesID == typedVac->GetAttributesUpdateID() );
     }
 
     m_childrenBox = m_box;
@@ -203,14 +204,7 @@ void                        BoundingVolume::UpdateVAC               ( const IVer
 {
     if( vac_ == nullptr )
     {
-        m_vac = nullptr;
         m_box = mathematics::Box();
-    }
-    else
-    {
-        auto vac = Cast< const VertexAttributesChannel * >( vac_);
-
-        m_vac = vac;
     }
 }
 

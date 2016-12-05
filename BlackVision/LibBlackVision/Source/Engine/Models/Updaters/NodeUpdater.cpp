@@ -161,6 +161,8 @@ void    NodeUpdater::DoUpdate               ()
 
         if( m_hasEffect )
         {
+            UpdateVACPtr();
+
             if( !m_timeInvariantVertexData )
             {
                 UpdateGeometry();
@@ -371,6 +373,21 @@ void	NodeUpdater::UpdateValue			( IValueConstPtr source, IValuePtr dest )
     }
 }
 
+// ***********************
+//
+void NodeUpdater::UpdateVACPtr()
+{
+    auto finalizer = m_modelNode->GetFinalizePlugin();
+    auto vertexAttributtesChannel = finalizer->GetVertexAttributesChannel();
+    m_vertexAttributesChannel = vertexAttributtesChannel;
+
+    assert( m_vertexAttributesChannel != nullptr );
+
+    m_timeInvariantVertexData = m_vertexAttributesChannel->IsTimeInvariant();
+}
+
+// ***********************
+//
 void NodeUpdater::UpdateBoundingBox(/* const model::BoundingVolume * bv */)
 {
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );

@@ -1792,6 +1792,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\TextGeometry.cpp">
       <Filter>Assets\Font\3D</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3078,9 +3081,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h">
       <Filter>Engine\Types</Filter>
     </ClInclude>
@@ -3175,9 +3175,6 @@
       <Filter>Assets\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\Text.h">
-      <Filter>Assets\Font</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Font\TextAtlas.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\TextHelper.h">
@@ -4906,6 +4903,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\TextAtlas.h">
       <Filter>Assets\Font\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

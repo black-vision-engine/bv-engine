@@ -632,75 +632,82 @@ ISerializablePtr BasePlugin::Create                              ( const IDeseri
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );           // FIXME Add to deserialization context
     std::shared_ptr< BasePlugin > plugin = std::static_pointer_cast< BasePlugin >( plugin_ );
 
+    if( plugin )
     {
-        // params
-        auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-        for( auto param : params )
+
         {
-            if( plugin->GetParameter( param->GetName() ) == nullptr )
-            {
-                LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " does not have parameter " << param->GetName() << ", which is serialized.";
-            }
-
-            SetParameter( plugin->GetPluginParamValModel(), param );
-        }
-    }
-
-    // assets
-    if( deser.EnterChild( "assets" ) )
-    {
-        do
-        {
-            deser.EnterChild( "asset" );
-
-            auto asset = AssetManager::GetInstance().CreateDesc( deser );
-
-            if( asset == nullptr )
-            {
-                auto uid = deser.GetAttribute( "uid" );
-
-                assert( deserContext->GetAssets() != nullptr );
-
-                asset = deserContext->GetAssets()->UID2Asset( uid );
-            }
-
-            if( asset )
-                plugin->LoadResource( asset );
-        
+            // params
             auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-            auto rsm = std::dynamic_pointer_cast< ResourceStateModel >( plugin->GetResourceStateModel( deser.GetAttribute( "name" ) ) );
-            
             for( auto param : params )
             {
-                rsm->SetParameter( param );
+                if( plugin->GetParameter( param->GetName() ) == nullptr )
+                {
+                    LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " does not have parameter " << param->GetName() << ", which is serialized.";
+                }
+
+                SetParameter( plugin->GetPluginParamValModel(), param );
             }
-
-            deser.ExitChild(); // asset
         }
-        while( deser.NextChild() );
-        
-        deser.ExitChild(); // assets
-    }
 
-    // renderer_context
-    bool rcAdded = false;
-    if( plugin->GetPixelShaderChannel() )
-    {
-        if( deser.EnterChild( "renderer_context" ) )
+        // assets
+        if( deser.EnterChild( "assets" ) )
         {
-            auto context = RendererContext::Create( deser );
-            deser.ExitChild();
+            do
+            {
+                deser.EnterChild( "asset" );
 
-            deserContext->Push( context );
-            rcAdded = true;
-            
-            plugin->SetRendererContext( context );
+                auto asset = AssetManager::GetInstance().CreateDesc( deser );
+
+                if( asset == nullptr )
+                {
+                    auto uid = deser.GetAttribute( "uid" );
+
+                    assert( deserContext->GetAssets() != nullptr );
+
+                    asset = deserContext->GetAssets()->UID2Asset( uid );
+                }
+
+                if( asset )
+                    plugin->LoadResource( asset );
+
+                auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
+                auto rsm = std::dynamic_pointer_cast<ResourceStateModel>( plugin->GetResourceStateModel( deser.GetAttribute( "name" ) ) );
+
+                for( auto param : params )
+                {
+                    rsm->SetParameter( param );
+                }
+
+                deser.ExitChild(); // asset
+            } while( deser.NextChild() );
+
+            deser.ExitChild(); // assets
+        }
+
+        // renderer_context
+        bool rcAdded = false;
+        if( plugin->GetPixelShaderChannel() )
+        {
+            if( deser.EnterChild( "renderer_context" ) )
+            {
+                auto context = RendererContext::Create( deser );
+                deser.ExitChild();
+
+                deserContext->Push( context );
+                rcAdded = true;
+
+                plugin->SetRendererContext( context );
+            }
+        }
+
+        if( !rcAdded )
+        {
+            deserContext->Push( nullptr );
         }
     }
-
-    if( !rcAdded )
+    else
     {
-        deserContext->Push( nullptr );
+        LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " couldn't be created";
     }
 
     return plugin;

@@ -54,7 +54,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-private:
+protected:
 
     bool										InitVertexAttributesChannel ( bool recursive );
 

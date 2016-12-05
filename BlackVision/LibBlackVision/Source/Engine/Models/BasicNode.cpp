@@ -668,7 +668,7 @@ void BasicNode::Update( TimeType t )
 
         if( m_boundingVolume )
         {
-            m_boundingVolume->UpdateOwnBox();
+            m_boundingVolume->UpdateOwnBox( m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel() );
         }
 
         if( m_nodeLogic )

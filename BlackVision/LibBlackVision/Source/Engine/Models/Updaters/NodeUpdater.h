@@ -161,6 +161,7 @@ private:
     template< typename ValType >
     void			UpdateTypedValue    ( IValueConstPtr source, IValuePtr dest );
 
+    void            UpdateVACPtr        ();
 };
 
 } //bv
