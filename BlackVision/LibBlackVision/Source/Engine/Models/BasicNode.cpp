@@ -88,6 +88,9 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const Plugins
 //
 BasicNode::~BasicNode()
 {
+    if( m_nodeLogic )
+        m_nodeLogic->Deinitialize();
+
     delete m_modelNodeEditor;
 }
 
