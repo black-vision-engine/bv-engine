@@ -5,7 +5,7 @@
 #include "TriangulatePlugin.h"
 #include "Triangulator.h"
 
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 

@@ -10,6 +10,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 

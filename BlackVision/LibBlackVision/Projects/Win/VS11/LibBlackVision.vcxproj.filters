@@ -1471,9 +1471,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp">
       <Filter>Engine\Models\Cameras</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp">
       <Filter>Engine\Models\Cameras</Filter>
     </ClCompile>
@@ -1792,8 +1789,14 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\TextGeometry.cpp">
       <Filter>Assets\Font\3D</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.cpp">
+      <Filter>Engine\Models\Plugins\Descriptor</Filter>
+	</ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper1.cpp">
+      <Filter>Engine\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

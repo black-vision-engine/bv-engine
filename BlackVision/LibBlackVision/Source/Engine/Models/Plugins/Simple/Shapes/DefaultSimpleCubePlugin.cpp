@@ -5,7 +5,7 @@
 #include "Engine/Models/Plugins/HelperIndexedGeometryConverter.h"
 #include "Engine/Models/Plugins/HelperSmoothMesh.h"
 
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Memory/MemoryLeaks.h"
 

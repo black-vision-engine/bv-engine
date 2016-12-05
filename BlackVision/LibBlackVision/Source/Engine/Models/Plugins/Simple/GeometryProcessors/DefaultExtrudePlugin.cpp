@@ -3,6 +3,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/HelperIndexedGeometryConverter.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include <glm/gtx/vector_angle.hpp>
 #include <map>

@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/Font/FontLoader.h"

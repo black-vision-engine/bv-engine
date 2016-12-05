@@ -3,10 +3,9 @@
 #include "DefaultSpherePlugin.h"
 #include "Mathematics/Defines.h"
 
-
-
 #include "Memory/MemoryLeaks.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 namespace bv { namespace model {

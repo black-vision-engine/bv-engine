@@ -13,6 +13,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Assets/DefaultAssets.h"
 

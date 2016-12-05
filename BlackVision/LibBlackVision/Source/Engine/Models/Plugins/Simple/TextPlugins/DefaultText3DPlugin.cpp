@@ -11,6 +11,8 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Events/Events.h"

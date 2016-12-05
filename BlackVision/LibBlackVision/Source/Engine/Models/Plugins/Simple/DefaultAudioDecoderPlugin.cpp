@@ -7,6 +7,8 @@
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultVideoStreamDescriptor.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 #include "Assets/DefaultAssets.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
