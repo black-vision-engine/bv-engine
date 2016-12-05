@@ -14,7 +14,7 @@
 #include "Assets/SVG/SVGAsset.h"
 #include "Assets/Asset.h"
 
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Memory/MemoryLeaks.h"
 
