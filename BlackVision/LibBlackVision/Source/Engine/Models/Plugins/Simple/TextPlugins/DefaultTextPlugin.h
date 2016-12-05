@@ -18,7 +18,7 @@ namespace bv { namespace model {
 class TextAtlas;
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultTextPluginDesc : public BasePluginDescriptor
+class DefaultTextPluginDesc : public TextPluginBaseDesc
 {
 public:
 
@@ -39,8 +39,21 @@ public:
 
     struct PARAM
     {
-        static const std::string    TEXT;
-        static const std::string    ALIGN_CHARACTER;
+        static const std::string TEXT;
+        static const std::string MAX_TEXT_LENGTH;
+        static const std::string TX_MAT;
+        static const std::string RCC_BEGIN_COLOR;
+        static const std::string RCC_END_COLOR;
+        static const std::string COL_TEXT_EFFECT;
+        static const std::string TX_TEXT_EFFECT;
+        static const std::string TIME;
+        static const std::string TX_EFFECT_VAL1;
+        static const std::string TX_EFFECT_VAL2;
+        static const std::string EXPLOSION_CENTER;
+        static const std::string ANIM_SCALE_OFFSET;
+        static const std::string ANIM_SCALE;
+        static const std::string ANIM_ALPHA_OFFSET;
+        static const std::string ANIM_ALPHA;
     };
 
 private:
@@ -52,7 +65,6 @@ private:
 
     Float32                         m_textLength;
 
-    ValueIntPtr                     m_alignCharacter;
     ParamFloatPtr                   m_maxTextLengthParam;
     ParamFloatPtr                   m_timeParam;
     ValueMat4Ptr                    m_scaleValue;

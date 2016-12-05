@@ -36,19 +36,29 @@ namespace bv { namespace model {
 
 extern TextArranger CircleArranger;
 
-
 const std::string   DefaultTextPlugin::PARAM::TEXT              = "text";
-const std::string   DefaultTextPlugin::PARAM::ALIGN_CHARACTER   = "alignCharacter";
-
+const std::string   DefaultTextPlugin::PARAM::MAX_TEXT_LENGTH   = "maxTextLength";
+const std::string   DefaultTextPlugin::PARAM::TX_MAT            = "txMat";
+const std::string   DefaultTextPlugin::PARAM::RCC_BEGIN_COLOR   = "rcc_beginColor";
+const std::string   DefaultTextPlugin::PARAM::RCC_END_COLOR     = "rcc_endColor";
+const std::string   DefaultTextPlugin::PARAM::COL_TEXT_EFFECT   = "colTextEffectId";
+const std::string   DefaultTextPlugin::PARAM::TX_TEXT_EFFECT    = "transformTextEffectId";
+const std::string   DefaultTextPlugin::PARAM::TIME              = "time";
+const std::string   DefaultTextPlugin::PARAM::TX_EFFECT_VAL1    = "transformEffectVal1";
+const std::string   DefaultTextPlugin::PARAM::TX_EFFECT_VAL2    = "transformEffectVal2";
+const std::string   DefaultTextPlugin::PARAM::EXPLOSION_CENTER  = "explosionCenter";
+const std::string   DefaultTextPlugin::PARAM::ANIM_SCALE_OFFSET = "animScaleOffset";
+const std::string   DefaultTextPlugin::PARAM::ANIM_SCALE        = "animScale";
+const std::string   DefaultTextPlugin::PARAM::ANIM_ALPHA_OFFSET = "animAlphaOffset";
+const std::string   DefaultTextPlugin::PARAM::ANIM_ALPHA        = "animAlpha";
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
 //
 DefaultTextPluginDesc::DefaultTextPluginDesc                            ()
-    : BasePluginDescriptor( UID(), "text", "txt" )
-{
-}
+    : TextPluginBaseDesc( UID(), "text", "txt" )
+{}
 
 // *******************************
 //
@@ -61,114 +71,33 @@ IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const 
 //
 DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
+    auto model = TextPluginBaseDesc::CreateDefaultModel( timeEvaluator );
     // Rewrite to ModelHelper.
-    ModelHelper h( timeEvaluator );
+    ModelHelper h( timeEvaluator, model );
     h.SetOrCreatePluginModel();
 
-    h.AddSimpleStatedParam( "spacing", 0.0f );
-    h.AddSimpleStatedParam( "alignment", 0.0f );
-    h.AddSimpleStatedParam( "maxTextLength", 0.0f );
-    h.AddSimpleStatedParam( DefaultTextPlugin::PARAM::ALIGN_CHARACTER, (int)L'.' );
     h.AddSimpleStatedParam( DefaultTextPlugin::PARAM::TEXT, std::wstring( L"" ) );
+    h.AddSimpleStatedParam( DefaultTextPlugin::PARAM::MAX_TEXT_LENGTH, 0.0f );
 
+    h.SetOrCreateVSModel();
 
-    //Create all models
-    DefaultPluginParamValModelPtr model  = h.GetModel();
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
+    h.AddTransformParam( DefaultTextPlugin::PARAM::TX_MAT );
 
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_EFFECT_VAL1, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_EFFECT_VAL2, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_SCALE_OFFSET, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_SCALE, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_ALPHA_OFFSET, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_ALPHA, 0.f );
 
-    //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    //SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+    h.SetOrCreatePSModel();
 
-    //SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
-	//SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
-	SimpleVec4EvaluatorPtr      outlineColorEvaluator   = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "outlineColor", timeEvaluator );
-
-    SimpleVec4EvaluatorPtr      rccBeginColorEvaluator  = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_beginColor", timeEvaluator );
-    SimpleVec4EvaluatorPtr      rccEndColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_endColor", timeEvaluator );
-    SimpleIntEvaluatorPtr       colTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "colTextEffectId", timeEvaluator );
-    SimpleIntEvaluatorPtr       transformTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "transformTextEffectId", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     timeValEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
-    SimpleFloatEvaluatorPtr     transformEffectVal1Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal1", timeEvaluator );
-    SimpleFloatEvaluatorPtr     transformEffectVal2Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal2", timeEvaluator );
-
-    SimpleVec2EvaluatorPtr      explosionCenterEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "explosionCenter", timeEvaluator );
-
-
-    SimpleFloatEvaluatorPtr      animScaleOffsetEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animScaleOffset", timeEvaluator );
-    SimpleFloatEvaluatorPtr      animScaleEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animScale", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr      animAlphaOffsetEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animAlphaOffset", timeEvaluator );
-    SimpleFloatEvaluatorPtr      animAlphaEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animAlpha", timeEvaluator );
-
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
-
-    vsModel->RegisterAll( transformEffectVal1Evaluator );
-    vsModel->RegisterAll( transformEffectVal2Evaluator );
-    vsModel->RegisterAll( animScaleOffsetEvaluator );
-    vsModel->RegisterAll( animScaleEvaluator );
-
-    psModel->RegisterAll( outlineColorEvaluator );
-    psModel->RegisterAll( alphaEvaluator );
-    vsModel->RegisterAll( animAlphaOffsetEvaluator );
-    vsModel->RegisterAll( animAlphaEvaluator );
-
-    psModel->RegisterAll( rccBeginColorEvaluator );
-    psModel->RegisterAll( rccEndColorEvaluator );
-    psModel->RegisterAll( timeValEvaluator );
-    psModel->RegisterAll( explosionCenterEvaluator );
-    psModel->RegisterAll( colTextEffectIdEvaluator );
-    psModel->RegisterAll( transformTextEffectIdEvaluator );
-
-
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
-
-    //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    //blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-	//outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-
-    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
-    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 1.f ), TimeType( 0.f ) );
-
-    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 1.f, 0.f, 1.f ), TimeType( 10.f ) );
-    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 10.f ) );
-
-    colTextEffectIdEvaluator->Parameter()->SetVal( 0, TimeType( 0.f ) );
-    transformTextEffectIdEvaluator->Parameter()->SetVal( 0, TimeType( 0.f ) );
-
-    explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
-
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    //fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
-
-    transformEffectVal1Evaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
-
-    transformEffectVal1Evaluator->Parameter()->SetVal( 0.1f, TimeType( 10.f ) );
-
-    transformEffectVal2Evaluator->Parameter()->SetVal( 2.f, TimeType( 0.f ) );
-
-    transformEffectVal2Evaluator->Parameter()->SetVal( 5.f, TimeType( 10.f ) );
-
-    animScaleOffsetEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
-    animScaleOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 15.f ) );
-
-    animScaleOffsetEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
-
-    animScaleEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
-
-    animAlphaOffsetEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
-    animAlphaOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 5.f ) );
-    animAlphaOffsetEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
-    animAlphaEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::RCC_BEGIN_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::RCC_END_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::COL_TEXT_EFFECT, 0 );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_TEXT_EFFECT, 0 );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TIME, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::EXPLOSION_CENTER, glm::vec2( 0.0, -0.2 ) );
 
     return model;
 }
@@ -203,16 +132,14 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     //m_arranger = &CircleArranger;
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
-    m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
-    m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
-    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLength" ) );
     m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::TEXT ) );
-    m_alignCharacter        = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
+
+    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::MAX_TEXT_LENGTH ) );
 
     m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
     m_scaleValue->SetValue( glm::mat4( 1.0 ) );
     
-    m_timeParam             = QueryTypedParam< ParamFloatPtr >( GetParameter( "time" ) );
+    m_timeParam             = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::TIME ) );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
@@ -256,12 +183,12 @@ mathematics::RectConstPtr       DefaultTextPlugin::GetAABB      ( const glm::mat
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
-    BasePlugin::Update( t );
+    TextPluginBase::Update( t );
 
     if( ParameterChanged( PARAM::TEXT ) ||
-        ParameterChanged( "alignment" ) ||
-        ParameterChanged( "spacing" ) ||
-        ParameterChanged( PARAM::ALIGN_CHARACTER ) )
+        ParameterChanged( TextPluginBase::PARAM::ALIGNEMENT ) ||
+        ParameterChanged( TextPluginBase::PARAM::SPACING ) ||
+        ParameterChanged( TextPluginBase::PARAM::ALIGN_CHARACTER ) )
     {
         SetText( m_textParam->Evaluate() );
     }

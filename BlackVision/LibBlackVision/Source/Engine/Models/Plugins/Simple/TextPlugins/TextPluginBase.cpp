@@ -6,6 +6,8 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 #include "Assets/DefaultAssets.h"
 #include "Assets/Font/TextHelper.h"
 #include "Assets/Font/2D/FontAssetDescriptor.h"
@@ -20,6 +22,48 @@
 
 namespace bv { namespace model {
 
+// ************************************************************************* DESCRIPTOR *************************************************************************
+
+const std::string TextPluginBase::PARAM::ALPHA           = "alpha";
+const std::string TextPluginBase::PARAM::FONT_SIZE       = "fontSize";
+const std::string TextPluginBase::PARAM::BLUR_SIZE       = "blurSize";
+const std::string TextPluginBase::PARAM::GLOW_COLOR      = "glowColor";
+const std::string TextPluginBase::PARAM::OUTLINE_SIZE    = "outlineSize";
+const std::string TextPluginBase::PARAM::OUTLINE_COLOR   = "outlineColor";
+const std::string TextPluginBase::PARAM::SPACING         = "spacing";
+const std::string TextPluginBase::PARAM::ALIGNEMENT      = "alingment";
+const std::string TextPluginBase::PARAM::ALIGN_CHARACTER = "alignCharacter";
+
+// *******************************
+//
+TextPluginBaseDesc::TextPluginBaseDesc                            (const std::string & uid, const std::string & defaultName, const std::string & abbrv)
+    : BasePluginDescriptor( uid, defaultName, abbrv )
+{}
+
+// *******************************
+//
+DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+{
+    ModelHelper h( timeEvaluator );
+
+    h.SetOrCreatePSModel();
+
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::BLUR_SIZE, 0.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_SIZE, 0.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0.0f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
+
+    return h.GetModel();
+}
+
+
 // *********************************
 //
 TextPluginBase::TextPluginBase              ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
@@ -32,8 +76,9 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     , m_outlineSize( 0 )
     , m_atlas( nullptr )
 {
-    m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
-    m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
+    m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
+    m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
+    m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -153,6 +198,12 @@ bool                                TextPluginBase::LoadAtlas                   
     return true;
 }
 
+// *************************************
+// 
+void                                TextPluginBase::Update                      ( TimeType t )
+{
+    BasePlugin::Update( t );
+}
 
 // *************************************
 // 

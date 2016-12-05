@@ -9,6 +9,8 @@
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/Glyph.h"
@@ -31,10 +33,12 @@ namespace bv { namespace model {
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
+const std::string        DefaultTimerPlugin::PARAM::PRECISION           = "precision";
+
 // *******************************
 //
 DefaultTimerPluginDesc::DefaultTimerPluginDesc                            ()
-    : BasePluginDescriptor( UID(), "timer", "txt" ) // FIXME: it does not really look right :/
+    : TextPluginBaseDesc( UID(), "timer", "txt" ) // FIXME: it does not really look right :/
 {
 }
 
@@ -49,47 +53,13 @@ IPluginPtr              DefaultTimerPluginDesc::CreatePlugin             ( const
 //
 DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
+    auto model = TextPluginBaseDesc::CreateDefaultModel( timeEvaluator );
 
+    ModelHelper h( timeEvaluator, model );
 
-    //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+    h.SetOrCreatePluginModel();
 
-    SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
-	SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     precisionEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "precision", timeEvaluator );
-
-    //Register all parameters and evaloators in models
-    psModel->RegisterAll( alphaEvaluator );
-	plModel->RegisterAll( blurSizeEvaluator );
-    plModel->RegisterAll( outlineSizeEvaluator );
-    plModel->RegisterAll( spacingEvaluator );
-    plModel->RegisterAll( fontSizeEvaluator );
-    plModel->RegisterAll( alignmentEvaluator );
-    plModel->RegisterAll( precisionEvaluator );
-
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
-    model->SetPluginModel( plModel );
-
-    //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
-    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    precisionEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION, 1.f );
 
     return model;
 }
@@ -285,12 +255,12 @@ void                                DefaultTimerPlugin::Update                  
 
     SetTime( m_currentLocalTime / 1000.f );
 
-	BasePlugin::Update( t );
+    TextPluginBase::Update( t );
 
-	//assumption that text plugin provides vertices, so no need for backward topology propagation
-	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
-	
+    //assumption that text plugin provides vertices, so no need for backward topology propagation
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
 }

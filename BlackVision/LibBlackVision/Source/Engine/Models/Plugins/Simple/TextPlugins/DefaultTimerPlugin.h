@@ -22,7 +22,7 @@ struct Glyph;
 namespace model {
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultTimerPluginDesc : public BasePluginDescriptor
+class DefaultTimerPluginDesc : public TextPluginBaseDesc
 {
 public:
 
@@ -87,6 +87,12 @@ bool            ResetTimerPlugin( IPluginPtr timerPlugin );
 // ***************************** PLUGIN ********************************** 
 class DefaultTimerPlugin : public TextPluginBase
 {
+public:
+    struct PARAM 
+    {
+        static const std::string        PRECISION;
+    };
+
 private:
     ParamFloatPtr                   m_precisionParam;
 
