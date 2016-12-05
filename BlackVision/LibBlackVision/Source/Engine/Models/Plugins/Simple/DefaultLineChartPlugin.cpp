@@ -6,6 +6,7 @@
 
 #include "Assets/DefaultAssets.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 

@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 

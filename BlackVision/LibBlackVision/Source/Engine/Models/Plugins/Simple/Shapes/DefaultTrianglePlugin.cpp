@@ -2,7 +2,7 @@
 
 #include "DefaultTrianglePlugin.h"
 
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Memory/MemoryLeaks.h"
 

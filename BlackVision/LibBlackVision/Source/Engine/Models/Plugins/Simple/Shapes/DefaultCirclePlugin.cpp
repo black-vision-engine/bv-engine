@@ -2,10 +2,9 @@
 
 #include "DefaultCirclePlugin.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 #include "Mathematics/Defines.h"
-
-
-
 
 #include "Memory/MemoryLeaks.h"
 

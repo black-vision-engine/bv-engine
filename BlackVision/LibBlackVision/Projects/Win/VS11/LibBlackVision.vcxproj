@@ -371,7 +371,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\HelperModelLights.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelSpotLight.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper1.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp" />
@@ -428,6 +428,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\EngineConstantsMapper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPlugin.cpp" />

@@ -1,10 +1,7 @@
 #include "stdafx.h"
 #include "DefaultWallPlugin.h"
 
-
-
-
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Memory/MemoryLeaks.h"
 

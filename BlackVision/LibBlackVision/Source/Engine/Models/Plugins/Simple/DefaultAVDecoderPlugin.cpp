@@ -12,6 +12,7 @@
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Assets/DefaultAssets.h"
 

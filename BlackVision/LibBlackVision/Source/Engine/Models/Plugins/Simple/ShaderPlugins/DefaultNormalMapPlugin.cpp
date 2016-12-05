@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 
 #include "Assets/DefaultAssets.h"
 

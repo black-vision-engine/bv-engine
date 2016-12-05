@@ -6,6 +6,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 #include "Application/ApplicationContext.h"
 
 #include "Assets/DefaultAssets.h"

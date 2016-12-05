@@ -3,11 +3,9 @@
 #include "DefaultCylinderPlugin.h"
 #include "glm/gtx/vector_angle.hpp"
 
-
-
-
 #include "Memory/MemoryLeaks.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 namespace bv { namespace model {
