@@ -33,5 +33,9 @@ void main()
     
     vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
     
-	FragColor = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
+	vec4 result = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
+	
+	if( result.a == 0.0 )
+		discard;
+	FragColor = result;
 }

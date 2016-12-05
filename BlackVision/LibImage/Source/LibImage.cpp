@@ -93,6 +93,10 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
     {
         ImageProperties iprops;
         iprops.error = std::string("Image format not supported");
+        iprops.format = image::ImageFormat::IF_TOTAL;
+        iprops.width = 0;
+        iprops.height = 0;
+
         return iprops;
     }
 

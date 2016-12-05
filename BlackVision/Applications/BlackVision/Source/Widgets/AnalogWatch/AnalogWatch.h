@@ -62,9 +62,9 @@ public:
     explicit                            AnalogWatch     ( model::BasicNodeWeakPtr parent, model::ITimeEvaluatorPtr timeEvaluator );
                                         ~AnalogWatch    ();
 
-	virtual void                        Initialize		()				override {}
+	virtual void                        Initialize		()				override;
     virtual void                        Update			( TimeType t )	override;
-	virtual void                        Deinitialize	()				override {}
+    virtual void                        Deinitialize	()				override;
 
 
     virtual const std::string &         GetType         () const override;
@@ -86,6 +86,7 @@ private:
     void            ClearPosition           ( model::BasicNode * node );
     void            UpdateTime              ( model::BasicNode * node, float ratio );
 
+    void            NodeRemovedHandler      ( IEventPtr evt );
 };
 
 }   // nodelogic

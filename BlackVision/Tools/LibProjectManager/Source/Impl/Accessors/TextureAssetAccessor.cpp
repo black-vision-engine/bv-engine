@@ -47,6 +47,12 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
     if( Path::Exists( p ) )
     {
         auto props = image::GetImageProps( p.Str() );
+
+        if( !props.error.empty() )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Error loading: [ " << p.Str() << " ]. " << props.error;
+            return nullptr;
+        }
     
         auto origTextureDesc = SingleTextureAssetDesc::Create( ( Path( "textures" ) / path ).Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
 

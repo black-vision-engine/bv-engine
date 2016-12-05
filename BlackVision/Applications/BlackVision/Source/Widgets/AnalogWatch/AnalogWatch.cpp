@@ -5,6 +5,9 @@
 #include "Engine/Models/BasicNode.h"
 #include "Widgets/NodeLogicHelper.h"
 
+#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+
+
 // warning C4996: 'localtime': This function or variable may be unsafe
 #pragma warning(disable : 4996)
 #include <chrono>
@@ -56,6 +59,20 @@ AnalogWatch::AnalogWatch             ( model::BasicNodeWeakPtr parent, model::IT
 //
 AnalogWatch::~AnalogWatch()
 {}
+
+// ***********************
+//
+void        AnalogWatch::Initialize        ()
+{
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &AnalogWatch::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+}
+
+// ***********************
+//
+void        AnalogWatch::Deinitialize      ()
+{
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &AnalogWatch::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+}
 
 // ***********************
 //
@@ -247,6 +264,37 @@ void        AnalogWatch::ClearPosition           ( model::BasicNode * node )
     {
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
         transformParam->SetRotation( glm::vec3( 0.0f, 0.0f, 0.0f ), TimeType( 0.0f ) );
+    }
+}
+
+
+// ***********************
+//
+void        AnalogWatch::NodeRemovedHandler  ( IEventPtr evt )
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        if( evt->GetEventType() != NodeRemovedEvent::Type() )
+            return;
+
+        NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
+
+        // AnalogWatch uses only closest children.
+        if( removedEvt->ParentNode != parentNode )
+            return;
+
+        if( removedEvt->RemovedNode.get() == m_hourNode )
+        {
+            m_hourNode = nullptr;
+        }
+        else if( removedEvt->RemovedNode.get() == m_minuteNode )
+        {
+            m_minuteNode = nullptr;
+        }
+        else if( removedEvt->RemovedNode.get() == m_secondsNode )
+        {
+            m_secondsNode = nullptr;
+        }
     }
 }
 
