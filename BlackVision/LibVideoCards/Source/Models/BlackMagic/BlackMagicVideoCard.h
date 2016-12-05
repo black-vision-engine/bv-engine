@@ -58,7 +58,7 @@ public:
     void                    AddOutput           ( ChannelOutputData output );
 
     virtual void            Start               () override;
-    virtual void            ProcessFrame        ( MemoryChunkConstPtr data ) override;
+    virtual void            ProcessFrame        ( MemoryChunkConstPtr data, int odd ) override;
 
     static UInt32           EnumerateDevices    ();
 

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "DefaultTransformPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
@@ -95,7 +94,7 @@ ITransformChannelConstPtr           DefaultTransformPlugin::GetTransformChannel 
 void                                DefaultTransformPlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
-
+	
     m_transformChannel->PostUpdate();
 }
 

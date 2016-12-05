@@ -74,7 +74,7 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
 {
     renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
     
-    videocards::VideoCardManager::Instance().ProcessFrame( m_videoFrame->GetData() );
+    videocards::VideoCardManager::Instance().QueueFrame( m_videoFrame->GetData() );
 }
 
 // *********************************

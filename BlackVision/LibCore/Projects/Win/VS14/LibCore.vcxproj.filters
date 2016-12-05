@@ -163,6 +163,9 @@
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\CircularBufferConcurrent.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">

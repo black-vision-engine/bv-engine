@@ -1,5 +1,6 @@
 #include "VideoCardManager.h"
-
+#include <memory>
+#include <iostream>
 #include "Models/BlackMagic/BlackMagicVideoCard.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
 
@@ -21,25 +22,69 @@ std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
     return descriptors;
 }
 
+//**************************************
+//
+VideoCardProcessingThread::VideoCardProcessingThread    ()
+    : m_running( true )
+{
+}
+
+//**************************************
+//
+VideoCardProcessingThread::~VideoCardProcessingThread   ()
+{
+}
+
+//**************************************
+//
+void            VideoCardProcessingThread::Run          ()
+{
+    while( m_running )
+    {
+        if( !VideoCardManager::Instance().ProcessFrame() )
+        {
+            break;
+        }
+    }
+}
+
+
+
+//**************************************
+//
+MemoryChunkConstPtr          VideoCardManager::KILLER_FRAME = nullptr;
 
 //**************************************
 //
 VideoCardManager::VideoCardManager      ()
     : m_keyActive( true )
+    , m_interlaceEnabled( true )
     , m_dislpayMode( DisplayMode::HD )
+	, m_currentFrameNumber(0)
+    , m_processThread( std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread() ) )
+	
 {
+	int size = 1920 * 1080 * 4 / 2;
+	char *mem = new char[size];
+	m_currentFrameData = MemoryChunkPtr(new MemoryChunk((char*)mem, size));
+		 
 }
 
 //**************************************
 //
 VideoCardManager::~VideoCardManager     ()
 {
-    for( auto & videoCard : m_videoCards )
-    {
-        videoCard->SetVideoOutput( false );
-    }
+    // kill processing thread with killer frame
+    QueueFrame( KILLER_FRAME );
 
-    m_videoCards.clear();
+    {
+        std::unique_lock< std::mutex > lock( m_mutex );
+        for( auto & videoCard : m_videoCards )
+        {
+            videoCard->SetVideoOutput( false );
+        }
+        m_videoCards.clear();
+    }
 
     for( auto desc : m_descVec )
     {
@@ -51,6 +96,8 @@ VideoCardManager::~VideoCardManager     ()
 //
 void                        VideoCardManager::ReadConfig            ( const IDeserializer & deser )
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+
     if( deser.EnterChild( "videocards" ) )
     {
         if( deser.EnterChild( "videocard" ) )
@@ -100,6 +147,8 @@ bool                        VideoCardManager::IsRegistered          ( const std:
 //
 void VideoCardManager::SetVideoOutput   ( bool enable )
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+
     for( auto & videoCard : m_videoCards )
     {
         videoCard->SetVideoOutput( enable );
@@ -117,6 +166,9 @@ void                        VideoCardManager::SetKey                ( bool activ
 //
 void                        VideoCardManager::Start                 ()
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+    
+    m_processThread->Start();
     for( auto & videoCard : m_videoCards )
     {
 		videoCard->Start();
@@ -125,18 +177,87 @@ void                        VideoCardManager::Start                 ()
 
 // *********************************
 //
-void                        VideoCardManager::ProcessFrame          ( MemoryChunkConstPtr data )
+void                        VideoCardManager::QueueFrame            ( MemoryChunkConstPtr data )
 {
-    for( auto & videoCard : m_videoCards )
+    m_frameBuffer.Push( data );
+}
+
+// *********************************
+//
+bool                        VideoCardManager::ProcessFrame          ()
+{
+    auto data = m_frameBuffer.Pop();
+
+    if( data )
+    {
+		short  int odd = m_currentFrameNumber % 2;
+		m_currentFrameNumber++;
+        if( m_interlaceEnabled )
+        {
+
+            data = InterlacedFrame( data, odd  );
+        }
+		odd = m_currentFrameNumber % 2;
+        std::unique_lock< std::mutex > lock( m_mutex );
+        for( auto & videoCard : m_videoCards )
+        {
+            videoCard->ProcessFrame( data,odd );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
+int PoliczSume(const char* data, int size)
+{
+	int max = 1024;
+	int suma = 0;
+	for (int i = 0;i < size;i++)
 	{
-		videoCard->ProcessFrame( data );
-	}    
+		suma += (int)data[i];
+	}
+	suma = suma % max;
+	return suma;
+
+}
+
+// *********************************
+//
+MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChunkConstPtr data, int odd )
+{
+	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
+	
+	const char *mem_src = data->Get();
+
+	int pixel_depth = 4;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
+	int width = 1920;
+	int height = 1080;
+	int bytes_per_line = width * pixel_depth;
+	int size = width * height * 2 + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
+
+	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
+
+
+	for (int i = odd, j = 0;i < height;i += 2, j++)
+	{
+		memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
+	}
+	
+	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
+	
+
+    return ptr;
 }
 
 //**************************************
 //
 IVideoCardPtr   VideoCardManager::GetVideoCard        ( UInt32 idx )
 {
+    std::unique_lock< std::mutex > lock( m_mutex );
+
     if( idx < m_videoCards.size() )
     {
         return m_videoCards[ idx ];
@@ -507,20 +628,20 @@ VideoCardManager &      VideoCardManager::Instance             ()
 //{
 //    return m_videoCards.size();
 //}
-
-//**************************************
 //
-unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/ )
-{
-    //return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
-    return nullptr;
-}
-  
-bool VideoCardManager::CheckIfNewFrameArrived                  (unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/)
-{
-    //return GetVideoCard(VideCardID)->CheckIfNewFrameArrived(ChannelName);
-    return false;
-}
+////**************************************
+////
+//unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/ )
+//{
+//    //return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
+//    return nullptr;
+//}
+//  
+//bool VideoCardManager::CheckIfNewFrameArrived                  (unsigned int /*VideCardID*/, std::string /*ChannelName*//*A,B,C,D,E,F*/)
+//{
+//    //return GetVideoCard(VideCardID)->CheckIfNewFrameArrived(ChannelName);
+//    return false;
+//}
 //void   VideoCardManager::UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
 //{
 //    return GetVideoCard(VideCardID)->UnblockCaptureQueue(ChannelName);

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "win_sock.h"
-#include <queue>
 #include "BlueFish/inc/BlueVelvet4.h"
 #include "BlueFishUtils.h"
-#include "../../ThreadSafeQueue.h"
 #include "CFrame.h"
+
+#include "VideoCardManagerUtils.h"
+#include "DataTypes/CircularBufferConcurrent.h"
 
 
 namespace bv { namespace videocards { namespace bluefish {
@@ -18,13 +19,16 @@ public:
             CFifoBuffer     ();
             ~CFifoBuffer    ();
 
-    void    Init            ( UInt32 count, UInt32 size, UInt32 bytesPerLine );
+    void                        Init            ( UInt32 count, UInt32 size, UInt32 bytesPerLine );
 
-    void    PushEmptyFrame  ();
+    void                        PushFrame       ( std::shared_ptr< CFrame > frame );
+    std::shared_ptr< CFrame >   PopFrame        ();
 
-    ThreadSafeQueue< std::shared_ptr< CFrame >, 1 > m_threadsafebuffer;
+    void                        PushEmptyFrame  ();
 
 private:
+
+    CircularBufferConcurrent< std::shared_ptr< CFrame >, FRAME_BUFFER_SIZE > m_frameBuffer;
 
     std::shared_ptr< CFrame > m_emptyFrame;
 
