@@ -29,5 +29,9 @@ void main()
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
     
-	FragColor = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) );
+	vec4 result = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) );
+	
+	if( result.a == 0.0 )
+		discard;
+	FragColor = result;
 }
