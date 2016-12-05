@@ -13,19 +13,16 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
+#include "Engine/Events/Events.h"
+#include "Engine/Events/Interfaces/IEventManager.h"
+
 #include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 
 #include "Application/ApplicationContext.h"
 
-#include "Engine/Events/Events.h"
-#include "Engine/Events/Interfaces/IEventManager.h"
-
 #include "Assets/DefaultAssets.h"
-
-
-
 
 #include "Memory/MemoryLeaks.h"
 
@@ -72,7 +69,7 @@ IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const 
 DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     auto model = TextPluginBaseDesc::CreateDefaultModel( timeEvaluator );
-    // Rewrite to ModelHelper.
+
     ModelHelper h( timeEvaluator, model );
     h.SetOrCreatePluginModel();
 
@@ -129,7 +126,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_textLength( 0.f )
     , m_arranger( nullptr )
 {
-    //m_arranger = &CircleArranger;
+    //m_arranger = &CircleArranger; // INFO: Needed for testing arrangers only.
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
     m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::TEXT ) );
@@ -193,8 +190,6 @@ void                                DefaultTextPlugin::Update                   
         SetText( m_textParam->Evaluate() );
     }
 
-    m_scaleMat = glm::mat4( 1.0 );
-
     ScaleToMaxTextLength();
 
     m_scaleValue->SetValue( m_scaleMat );
@@ -234,8 +229,10 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
 
 // *************************************
 //
-void DefaultTextPlugin::ScaleToMaxTextLength		()
+void DefaultTextPlugin::ScaleToMaxTextLength        ()
 {
+    m_scaleMat = glm::mat4( 1.0 ); // reset current scale.
+
     auto maxTextLenght = m_maxTextLengthParam->Evaluate();
 
     if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
@@ -249,17 +246,27 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 //
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
 {
-    m_currentText = newText;
-    m_currentAligment = m_alignmentParam->Evaluate();
-    m_currentSpacing = m_spacingParam->Evaluate();
-
     m_vaChannel->ClearAll();
 
-    auto alignType		=  TextAlignmentType( (int)m_currentAligment );
+    auto alignType  = TextAlignmentType( m_alignmentParam->Evaluate() );
+    auto alignCh    = (wchar_t)m_alignCharacter->GetValue();
+    auto spacing    = m_spacingParam->Evaluate();
 
     auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_currentSpacing, alignType, (wchar_t)m_alignCharacter->GetValue(), m_outlineSize, viewWidth, viewHeight, m_arranger, true );
+
+    m_textLength    = TextHelper::BuildVACForText(  m_vaChannel.get(),
+                                                    m_atlas,
+                                                    newText,
+                                                    m_blurSize,
+                                                    spacing,
+                                                    alignType,
+                                                    alignCh,
+                                                    m_outlineSize,
+                                                    viewWidth,
+                                                    viewHeight,
+                                                    m_arranger,
+                                                    true );
 
     ScaleToMaxTextLength();
 

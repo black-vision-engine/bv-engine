@@ -94,7 +94,7 @@ public:
     };
 
 private:
-    ParamFloatPtr                   m_precisionParam;
+    ParamIntPtr                     m_precisionParam;
 
     bool                            m_started;
     unsigned long                   m_globalStartTime;

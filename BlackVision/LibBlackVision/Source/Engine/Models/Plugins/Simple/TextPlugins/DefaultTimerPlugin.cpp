@@ -19,14 +19,9 @@
 
 #include "Application/ApplicationContext.h"
 
-#include <algorithm>
-
-#include "win_sock.h"
-
-
-
 #include "Memory/MemoryLeaks.h"
 
+#include <algorithm>
 
 
 namespace bv { namespace model {
@@ -59,7 +54,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
 
     h.SetOrCreatePluginModel();
 
-    h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION, 1.f );
+    h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION, 1 );
 
     return model;
 }
@@ -195,7 +190,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 {
     SetPrevPlugin( prev );
 
-    m_precisionParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
+    m_precisionParam = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
@@ -204,19 +199,6 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 //
 DefaultTimerPlugin::~DefaultTimerPlugin  ( )
 {}
-
-namespace {
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-} //anonymous
 
 // *************************************
 // 
@@ -344,10 +326,11 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     m_vaChannel->ClearAll();
 
-    auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+    auto alignType =  TextAlignmentType( m_alignmentParam->Evaluate() );
 
-	auto viewWidth  = ApplicationContext::Instance().GetWidth();
+    auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
+
     TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, timerInit, m_blurSize, m_spacingParam->Evaluate(), alignType, L'.', false, viewWidth, viewHeight );
 }
 
@@ -447,7 +430,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     shift = m_timePaternInfo.fosPHStart;
     int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
 
-    int prec =  EvaluateAsInt< int >( m_precisionParam );
+    int prec =  m_precisionParam->Evaluate();
 
     prec = prec < 0 ? 0 : prec;
 
@@ -596,7 +579,7 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         ret.push_back( m_defaultSeparator );
         ret.append( L"SS" );
 
-        int prec =  EvaluateAsInt< int >( m_precisionParam );
+        int prec =  m_precisionParam->Evaluate();
         if( prec > 0 )
         {
             ret.push_back( m_secSeparator );
@@ -621,7 +604,7 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
             ret.push_back( m_defaultSeparator );
             ret.append( L"SS" );
 
-            auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            auto prec =  m_precisionParam->Evaluate();
             if( prec > 0 )
             {
                 ret.push_back( m_secSeparator );
@@ -643,7 +626,7 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
                 ret.push_back( L'S' );
             }
 
-            auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            auto prec =  m_precisionParam->Evaluate();
             if( prec > 0 )
             {
                 ret.push_back( m_secSeparator );

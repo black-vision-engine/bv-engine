@@ -57,7 +57,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::BLUR_SIZE, 0.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_SIZE, 0.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0.0f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
 
     return h.GetModel();
@@ -77,7 +77,7 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     , m_atlas( nullptr )
 {
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
-    m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
+    m_alignmentParam    = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );

@@ -52,7 +52,7 @@ protected:
     TextAtlasConstPtr               m_atlas;
 
     ParamFloatPtr                   m_spacingParam;
-    ParamFloatPtr                   m_alignmentParam;
+    ParamIntPtr                     m_alignmentParam;
     ValueIntPtr                     m_alignCharacter;
 
     bool                                        LoadResource                ( AssetDescConstPtr assetDescr, const std::string & name );
