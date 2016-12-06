@@ -138,9 +138,11 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
 	frame->m_FrameInformation.m_depth = 4;
 	frame->m_FrameInformation.m_width = 1920;
 	frame->m_FrameInformation.m_height = 1080;
+
 	frame->m_FrameInformation.m_AudioPresent = true;
 	frame->m_FrameInformation.m_IsFieldMode = true;
 	frame->m_FrameInformation.m_TimeCodePresent = true;
+	frame->m_FrameInformation.m_AutoGenerateTimecode = true; // jesli ==true timecode sam sie bedzie generowa³ w fifoplayback na podstawie liczby wyswietlonych ramek
 	frame->m_FrameInformation.m_VideoAspect = 1.777778f;
 	frame->m_FrameInformation.m_AudioSamplesPerFrame = 1920; // poprawne dla HD 50i, SD 50i   dla dowolnego formatu mozna pobraæ z funkcji Bluefisha GetNumberOfAudioSamplesPerFrame
 	frame->m_FrameInformation.m_AudioChannelsCount = AudioChannels;

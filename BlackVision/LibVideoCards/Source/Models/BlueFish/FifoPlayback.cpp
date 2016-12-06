@@ -472,11 +472,13 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				ext_ltc = pFrame->m_TimeCode.GetTimeCode(true);
 				sd_vitc = pFrame->m_TimeCode.GetTimeCode(true);
 
-				/*pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, false, rp188_vitc, false);
-				pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, rp188_ltc, false);
-				pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, ext_ltc, false);
-				pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, sd_vitc, false);*/
-				
+				if (pFrame->m_FrameInformation.m_AutoGenerateTimecode)
+				{
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, false, rp188_vitc, false);
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, rp188_ltc, false);
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, ext_ltc, false);
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, sd_vitc, false);
+				}
 				hanc_stream_info.time_code = rp188_vitc.timecode_u64;			//RP188 VITC time code
 				hanc_stream_info.rp188_ltc_time_code = rp188_ltc.timecode_u64;	//RP188 LTC time code
 				hanc_stream_info.ltc_time_code = ext_ltc.timecode_u64;			//external LTC time code
@@ -534,16 +536,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 			if (odd == 1)
 				dt = BLUE_DATA_FIELD2;
 
-			/*
-			
-            pThis->m_pSDK->system_buffer_write_async( pFrame->m_pBuffer,
-                                                      pFrame->m_nSize,
-                                                      NULL,
-                                                      BlueImage_DMABuffer( BufferId, dt), 0 );*/
-
 		
-			
-            //pThis->m_pSDK->video_playback_present( UniqueId, BlueBuffer_Image( BufferId ), 1, 0, odd);
 			
 			
 			//track UnderrunChA and UnderrunChB to see if frames were dropped
@@ -576,6 +569,12 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 			}
 		}
     }
+
+	//turn on black generator (unless we want to keep displaying the last rendered frame)
+	varVal.ulVal = ENUM_BLACKGENERATOR_ON;
+	pThis->m_pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
+	varVal.ulVal = 0;
+	pThis->m_pSDK->SetCardProperty(FORCE_SD_VBI_OUTPUT_BUFFER_TO_V210, varVal);	//when changing this property the video output mode and video output engine need to be set again manually!
 
     bool blackout = false;
     pFrame = std::make_shared<CFrame>( 0, pThis->GoldenSize, pThis->BytesPerLine );

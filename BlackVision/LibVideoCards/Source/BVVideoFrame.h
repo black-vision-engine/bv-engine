@@ -19,6 +19,7 @@ namespace bv {
 			int m_AudioChannelsCount;
 			bool m_VideoPresent;
 			bool m_TimeCodePresent;
+			bool m_AutoGenerateTimecode;
 			bool m_IsFieldMode;
 			int m_odd;
 			float m_VideoAspect;
