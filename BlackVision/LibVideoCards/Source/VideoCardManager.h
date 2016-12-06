@@ -132,7 +132,8 @@ public:
     //FIXME: probably not needed
     /**@brief Copies and interlaces full frame.
     @return Returns interlaced copy of frame. */
-	BVVideoFramePtr                 InterlacedFrame         (BVVideoFramePtr data, int odd );
+	BVVideoFramePtr                 InterlacedFrame(BVVideoFramePtr data);
+	BVVideoFramePtr                 RetrieveFieldFromFrame(BVVideoFramePtr data, int odd);
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 

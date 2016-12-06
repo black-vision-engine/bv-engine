@@ -192,10 +192,12 @@ bool                        VideoCardManager::ProcessFrame          ()
     {
 		short  int odd = m_currentFrameNumber % 2;
 		m_currentFrameNumber++;
-        if( m_interlaceEnabled )
-        {
-
-            data = InterlacedFrame( data, odd  );
+		if (data->m_FrameInformation.m_IsFieldMode)
+		{
+			data = RetrieveFieldFromFrame(data, odd);
+		}
+		else{
+            data = InterlacedFrame( data );
         }
 		odd = m_currentFrameNumber % 2;
         std::unique_lock< std::mutex > lock( m_mutex );
@@ -213,17 +215,18 @@ bool                        VideoCardManager::ProcessFrame          ()
 
 // *********************************
 //
-BVVideoFramePtr         VideoCardManager::InterlacedFrame       (BVVideoFramePtr frame, int odd )
+BVVideoFramePtr         VideoCardManager::RetrieveFieldFromFrame(BVVideoFramePtr frame, int odd)
 {
 	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
-	
+
 	const char *mem_src = frame->m_VideoData->Get();
 
-	int pixel_depth = 4;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
-	int width = 1920;
-	int height = 1080;
+	int pixel_depth = frame->m_FrameInformation.m_depth;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
+	int width = frame->m_FrameInformation.m_width;
+	int height = frame->m_FrameInformation.m_height;
 	int bytes_per_line = width * pixel_depth;
-	int size = width * height * 2 + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
+
+	int size = width * height/2 * pixel_depth + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
 
 	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
 
@@ -232,12 +235,22 @@ BVVideoFramePtr         VideoCardManager::InterlacedFrame       (BVVideoFramePtr
 	{
 		memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
 	}
-	
+
 	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
-	
+
 	frame->m_VideoData = ptr;
 
-    return frame;
+	return frame;
+}
+
+// *********************************
+//
+BVVideoFramePtr         VideoCardManager::InterlacedFrame(BVVideoFramePtr frame)
+{
+	
+	// yet to be implemented
+
+	return frame;
 }
 
 //**************************************

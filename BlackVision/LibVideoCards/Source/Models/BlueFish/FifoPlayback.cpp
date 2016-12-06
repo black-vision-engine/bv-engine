@@ -497,13 +497,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 					1920,
 					nSampleType,
 					nEmbAudioFlag);
-				/*encode_hanc_frame_ex(nCardType,
-					&hanc_stream_info,
-					0,
-					0,
-					0,
-					0,
-					0);*/
+			
 
 				if (pThis->m_EnableVbiVanc)
 					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));
@@ -512,14 +506,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 
 				pThis->m_pSDK->render_buffer_update(BlueBuffer_Image_HANC(BufferId));
 					
-				/*encode_hanc_frame_ex(nCardType,
-					&hanc_stream_info,
-					pPCMData,
-					WaveFile.m_pwfx->nChannels,
-					GetAudioSamplesPerFrame(nVideoMode, nAudioSequenceCount),
-					nSampleType,
-					nEmbAudioFlag);
-				*/
+				
 			}
 
 			if (pThis->m_EnableVbiVanc)

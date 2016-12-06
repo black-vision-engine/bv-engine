@@ -15,10 +15,12 @@ namespace bv {
 			int m_height;
 			int m_depth;
 			bool m_AudioPresent;
+			int m_AudioSamplesPerFrame;
+			int m_AudioChannelsCount;
 			bool m_VideoPresent;
 			bool m_TimeCodePresent;
 			bool m_IsFieldMode;
-			int odd;
+			int m_odd;
 			float m_VideoAspect;
 		};
 

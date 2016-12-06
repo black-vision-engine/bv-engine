@@ -128,34 +128,30 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
 	videocards::BVVideoFramePtr frame = videocards::BVVideoFramePtr(new videocards::BVVideoFrame());
 	frame->m_VideoData = m_videoFrame->GetData();
 	
+	int AudioChannels = 2;  // liczba kana³ów audio
 
-	int AudioSize = 2 * 2002*4; // 2 channels (eg. stereo)
-	unsigned char *mem_dst = new unsigned char[AudioSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
-	memset(mem_dst, 0, AudioSize);
-	Fill48((USHORT*)mem_dst, 1920, 2);
-
-	frame->m_AudioData = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, AudioSize));
-	frame->m_TimeCode.h = 11;
+	frame->m_TimeCode.h = 10;
 	frame->m_TimeCode.m = 22;
 	frame->m_TimeCode.s = 33;
 	frame->m_TimeCode.frame = 12;
 
-	//frame->m_FrameInformation.
+	frame->m_FrameInformation.m_depth = 4;
+	frame->m_FrameInformation.m_width = 1920;
+	frame->m_FrameInformation.m_height = 1080;
+	frame->m_FrameInformation.m_AudioPresent = true;
+	frame->m_FrameInformation.m_IsFieldMode = true;
+	frame->m_FrameInformation.m_TimeCodePresent = true;
+	frame->m_FrameInformation.m_VideoAspect = 1.777778f;
+	frame->m_FrameInformation.m_AudioSamplesPerFrame = 1920; // poprawne dla HD 50i, SD 50i   dla dowolnego formatu mozna pobraæ z funkcji Bluefisha GetNumberOfAudioSamplesPerFrame
+	frame->m_FrameInformation.m_AudioChannelsCount = AudioChannels;
 
+	int AudioBufferSize = AudioChannels * 2002*4; // 2 channels (eg. stereo) 2002 jest maksymaln¹ wartoœci¹  // max 4 bajty g³êbi
+	unsigned char *mem_dst = new unsigned char[AudioBufferSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ... tylko sk¹dœ pobraæ
+	memset(mem_dst, 0, AudioBufferSize);
+	Fill48((USHORT*)mem_dst, frame->m_FrameInformation.m_AudioSamplesPerFrame, AudioChannels);  // zape³nia bufor sygna³em testowym 1kHz
+
+	frame->m_AudioData = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, AudioBufferSize));
 	
-
-
-	/*
-	for (int i = odd, j = 0;i < height;i += 2, j++)
-	{
-	memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
-	}
-
-	*/
-	
-
-
-
     videocards::VideoCardManager::Instance().QueueFrame( frame );
 }
 
