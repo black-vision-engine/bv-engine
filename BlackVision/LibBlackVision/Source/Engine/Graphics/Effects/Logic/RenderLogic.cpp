@@ -356,7 +356,7 @@ void                    RenderLogic::UpdateOffscreenState   ()
 //
 void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext * ctx )
 {
-    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+    auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 
     m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );
 

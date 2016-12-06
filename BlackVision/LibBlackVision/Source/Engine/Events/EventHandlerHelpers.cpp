@@ -60,7 +60,7 @@ ParameterPtr    GetParameter            ( BVProjectEditor * editor, const Parame
         case ParameterAddress::TargetType::ResourceParam:
             return GetResourceParameter( editor, paramAddress.SceneName, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamSubName, paramAddress.ParamName );
         case ParameterAddress::TargetType::LightParam:
-            return GetLightParameter( editor, paramAddress.SceneName, paramAddress.LightParam, paramAddress.ParamName );
+            return GetLightParameter( editor, paramAddress.SceneName, paramAddress.Index, paramAddress.ParamName );
         case ParameterAddress::TargetType::NodeLogicParam:
             return GetNodeLogicParameter( editor, paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
         case ParameterAddress::TargetType::CameraParam:

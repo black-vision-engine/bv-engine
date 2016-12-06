@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
+    <ClInclude Include="..\..\..\Source\BVVideoFrame.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
@@ -37,6 +39,8 @@
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
+    <ClCompile Include="..\..\..\Source\BVVideoFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c" />

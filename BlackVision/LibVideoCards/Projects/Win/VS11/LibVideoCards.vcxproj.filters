@@ -57,6 +57,8 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
+    <ClInclude Include="..\..\..\Source\BVVideoFrame.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp">
@@ -94,5 +96,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp">
       <Filter>Models\BlackMagic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
+    <ClCompile Include="..\..\..\Source\BVVideoFrame.cpp" />
   </ItemGroup>
 </Project>

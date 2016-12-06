@@ -1,12 +1,19 @@
 #pragma once
 
 #include <hash_map>
+#include <atomic>
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
-#include "Serialization/IDeserializer.h"
+#include "VideoCardManagerUtils.h"
 
 #include "Memory/MemoryChunk.h"
+#include "DataTypes/CircularBufferConcurrent.h"
+#include "Threading/Thread.h"
+#include "BVVideoFrame.h"
+
+#include "Serialization/IDeserializer.h"
+
 
 
 namespace bv { namespace videocards {
@@ -15,7 +22,9 @@ namespace bv { namespace videocards {
 enum class DisplayMode : int
 {
     SD,
+	SD_4_3,
     HD
+
 };
 
 
@@ -42,18 +51,59 @@ struct OutputConfig
 };
 
 
+class VideoCardManager;
+
+
+// ******************************
+class VideoCardProcessingThread : public Thread
+{
+private:
+
+    std::atomic< bool >     m_running;
+
+public:
+
+                        VideoCardProcessingThread   ();
+    virtual				~VideoCardProcessingThread  ();
+    
+protected:
+
+    virtual void		Run                         () override;
+
+};
+
+DEFINE_UPTR_TYPE( VideoCardProcessingThread )
+
+
+// ******************************
 class VideoCardManager
 {
 private:
 
-    std::hash_map< std::string, const IVideoCardDesc * >    m_descMap;
-    std::vector< const IVideoCardDesc * >                   m_descVec;
+	int	m_currentFrameNumber;
+	MemoryChunkPtr m_currentFrameData;
+    static BVVideoFramePtr                  KILLER_FRAME;
 
-    std::vector< IVideoCardPtr >        m_videoCards;
+    std::hash_map< std::string, const IVideoCardDesc * >                m_descMap;
+    std::vector< const IVideoCardDesc * >                               m_descVec;
+
+    std::vector< IVideoCardPtr >                                        m_videoCards;
+
+    /**@brief Circular blocking frame queue */
+    CircularBufferConcurrent< BVVideoFramePtr, FRAME_BUFFER_SIZE >  m_frameBuffer;
 
     bool                                m_keyActive;
 
+    //FIXME: probably not needed
+    bool                                m_interlaceEnabled;
+
     DisplayMode                         m_dislpayMode;
+
+    mutable std::mutex			        m_mutex;
+
+    //FIXME: probably not needed
+    /**@brief Frame processing thread (copies frames, interlacing, etc.) */
+    VideoCardProcessingThreadUPtr       m_processThread;
 
 private:
 
@@ -67,63 +117,28 @@ public:
 
     bool                                IsRegistered            ( const std::string & uid ) const;
 
+    /**@brief Enables/disabled videooutput. */
     void                                SetVideoOutput          ( bool enable );
     void                                SetKey                  ( bool active );
 
-
     void                                Start                   ();
 
-    void                                ProcessFrame            ( MemoryChunkConstPtr data );
+    void                                QueueFrame              (BVVideoFramePtr data );
+    
+    /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
+    @return Returns true if processed correct frame, false for KILLER_FRAME. */
+    bool                                ProcessFrame            ();
+    
+    //FIXME: probably not needed
+    /**@brief Copies and interlaces full frame.
+    @return Returns interlaced copy of frame. */
+	BVVideoFramePtr                 InterlacedFrame(BVVideoFramePtr data);
+	BVVideoFramePtr                 RetrieveFieldFromFrame(BVVideoFramePtr data, int odd);
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
 
     static VideoCardManager &           Instance                ();
-
-private:
-
-    //vector< VideoCardBase * >   m_VideoCards;
-    //VideoMidgard *                m_Midgard;
-    //HANDLE                        m_midgardThreadHandle;
-    //unsigned int              m_midgardThreadID;
-    //bool                      m_midgardThreadStopping;
-
-    
-public:
-    
-    //bool                    m_SuperMagic;
-    //VideoConfig             m_VideoCardConfig;
-    //VideoCard_RAM_GPU       m_CurrentTransferMode;
-    
-
-
-
-    //void                    StopVideoCards            ();
-    //void                    SuspendVideoCards     ();
-    //void                    ResumeVideoCards      ();
-    //size_t                  GetVideoCardsSize       ();
-    
-
-    unsigned char *         GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
-    bool                    CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
-    //void                    UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
-    bool                    UpdateReferenceMode     (unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
-    bool                    UpdateReferenceOffset   (unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
-
-private:
-
-    //void                    DetectVideoCards        ();
-    //void                    DisableVideoCard        (int i);
-    //void                    DisableVideoCards       ();
-    //void                    EnableVideoCard         (int i);
-    //void                    EnableVideoCards        ();
-    //void                    SetupVideoChannels      ();
-    //bool                    InitVideoCard           ( int i, const std::vector<int> & hackBuffersUids );
-    //bool                    InitVideoCards          ( const std::vector<int> & hackBuffersUids );
-    //void                    RegisterVideoCards      ();
-/*    void                    RegisterBlueFishCards   ();
-    void                    RegisterBlackMagicCards ();   */ 
-    //unsigned int static __stdcall copy_buffer_thread      (void *args);
 
 };
 

@@ -9,7 +9,6 @@
 
 #define USE_READBACK_API
 //#define FULLSCREEN_MODE
-//#define DISPLAY_VIDEO_CARD_OUTPUT
 #define PERSPECTIVE_CAMERA
 
 
@@ -99,11 +98,7 @@ BVConfig::BVConfig                      ()
     m_frameTimeMillis = 1000 / m_fps;
     m_timerFPS = SerializationHelper::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
 
-#ifdef DISPLAY_VIDEO_CARD_OUTPUT
-    m_displayVideoCardOutput = true;
-#else
-    m_displayVideoCardOutput = false;
-#endif
+    m_displayVideoCardOutput = SerializationHelper::String2T< bool >( m_properties[ "Renderer/DisplayVideoCardOutput" ], false );
 
     m_eventLoopUpdateMillis = 20;
 
