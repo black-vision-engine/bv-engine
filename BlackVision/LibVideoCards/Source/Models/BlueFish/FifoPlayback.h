@@ -15,7 +15,7 @@ public:
     CFifoPlayback();
     ~CFifoPlayback();
 
-    BLUE_INT32                      Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped);
+    BLUE_INT32                      Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped, bool EnableAudioEmbedding, bool EnableVbiVanc, BLUE_UINT32 sdiOutput);
     void                            RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType);
     unsigned int static __stdcall   PlaybackThread(void * pArg);
     unsigned int static __stdcall   PlaybackThreadNotSynchronised(void * pArg);
@@ -31,8 +31,13 @@ public:
 
     CBlueVelvet4*   m_pSDK;
     BLUE_INT32      m_iDevices;
+	BLUE_INT32		m_iCardType;
     BLUE_INT32      m_nIsAttached;
-    BLUE_INT32      m_iCardType;
+	bool			m_EnableEmbAudio;
+	bool			m_EnableVbiVanc;
+	bool			m_EnableTimecode;
+	BLUE_UINT32		m_SdiOutputConnector;
+	BLUE_UINT32		m_nVideoChannel;
     BLUE_UINT32     m_nVideoMode;
     BLUE_UINT32     m_nUpdateFormat;
     BLUE_UINT32     m_nMemoryFormat;

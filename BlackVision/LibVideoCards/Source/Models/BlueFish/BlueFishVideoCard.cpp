@@ -154,7 +154,7 @@ void            VideoCard::InitVideoCard            ()
         if( playbackChannel )
 		{
             playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(), 
-                channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped() );
+                channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
 
 			if( channel->GetOutputType() == IOType::FILL || channel->GetOutputType() == IOType::KEY )
 			{

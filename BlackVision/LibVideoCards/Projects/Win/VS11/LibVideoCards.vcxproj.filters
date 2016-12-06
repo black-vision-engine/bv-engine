@@ -57,9 +57,6 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
-    <ClInclude Include="TimeCodeStructures.h">
-      <Filter>Models\BlueFish</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
     <ClInclude Include="..\..\..\Source\BVVideoFrame.h" />
   </ItemGroup>

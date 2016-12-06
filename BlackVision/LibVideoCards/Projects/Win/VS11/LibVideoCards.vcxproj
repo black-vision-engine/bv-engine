@@ -37,7 +37,6 @@
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
-    <ClInclude Include="TimeCodeStructures.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
