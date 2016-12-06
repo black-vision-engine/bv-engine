@@ -229,19 +229,24 @@ void                            VideoCard::Start                    ()
 
 //**************************************
 //
-void                            VideoCard::ProcessFrame             ( MemoryChunkConstPtr data, int odd )
+void                            VideoCard::ProcessFrame             (BVVideoFramePtr frame, int odd )
 {
     for( auto channel : m_channels )
 	{
         auto playbackChannel = channel->GetPlaybackChannel();
         if( playbackChannel && !channel->PlaythroughEnabled() )
 		{
-            playbackChannel->m_pFifoBuffer->PushFrame( 
-                std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( data->Get() ), 
-                                            m_deviceID,
-                                            playbackChannel->GoldenSize, 
-                                            playbackChannel->BytesPerLine,
-											odd) );
+			playbackChannel->m_pFifoBuffer->PushFrame(
+				std::make_shared< CFrame >(reinterpret_cast<const unsigned char *>(frame->m_VideoData->Get()),
+					m_deviceID,
+					playbackChannel->GoldenSize,
+					playbackChannel->BytesPerLine,
+					odd,
+					(unsigned int)frame->m_AudioData->Size(),
+					reinterpret_cast<const unsigned int *>(frame->m_VideoData->Get()),
+					frame->m_TimeCode,
+					frame->m_FrameInformation
+					) );
 		}
 	}   
 }

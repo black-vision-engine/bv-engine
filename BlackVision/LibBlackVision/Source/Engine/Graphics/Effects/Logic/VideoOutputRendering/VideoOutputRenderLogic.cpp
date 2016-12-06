@@ -12,6 +12,7 @@
 
 
 
+
 #include "Memory/MemoryLeaks.h"
 
 
@@ -72,9 +73,38 @@ void                            VideoOutputRenderLogic::Render          ( Render
 //
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
-    renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
-    
-    videocards::VideoCardManager::Instance().QueueFrame( m_videoFrame->GetData() );
+	renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
+ 
+	videocards::BVVideoFramePtr frame = videocards::BVVideoFramePtr(new videocards::BVVideoFrame());
+	frame->m_VideoData = m_videoFrame->GetData();
+	
+
+	int AudioSize = 2 * 2002; // 2 channels (eg. stereo)
+	unsigned int *mem_dst = new unsigned int[AudioSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
+
+	frame->m_AudioData = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, AudioSize));
+	frame->m_TimeCode.h = 11;
+	frame->m_TimeCode.m = 22;
+	frame->m_TimeCode.s = 33;
+	frame->m_TimeCode.frame = 12;
+
+	//frame->m_FrameInformation.
+
+	
+
+
+	/*
+	for (int i = odd, j = 0;i < height;i += 2, j++)
+	{
+	memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
+	}
+
+	*/
+	
+
+
+
+    videocards::VideoCardManager::Instance().QueueFrame( frame );
 }
 
 // *********************************

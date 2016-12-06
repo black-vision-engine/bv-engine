@@ -10,6 +10,7 @@
 #include "Memory/MemoryChunk.h"
 #include "DataTypes/CircularBufferConcurrent.h"
 #include "Threading/Thread.h"
+#include "BVVideoFrame.h"
 
 #include "Serialization/IDeserializer.h"
 
@@ -21,7 +22,9 @@ namespace bv { namespace videocards {
 enum class DisplayMode : int
 {
     SD,
+	SD_4_3,
     HD
+
 };
 
 
@@ -79,7 +82,7 @@ private:
 
 	int	m_currentFrameNumber;
 	MemoryChunkPtr m_currentFrameData;
-    static MemoryChunkConstPtr                  KILLER_FRAME;
+    static BVVideoFramePtr                  KILLER_FRAME;
 
     std::hash_map< std::string, const IVideoCardDesc * >                m_descMap;
     std::vector< const IVideoCardDesc * >                               m_descVec;
@@ -87,7 +90,7 @@ private:
     std::vector< IVideoCardPtr >                                        m_videoCards;
 
     /**@brief Circular blocking frame queue */
-    CircularBufferConcurrent< MemoryChunkConstPtr, FRAME_BUFFER_SIZE >  m_frameBuffer;
+    CircularBufferConcurrent< BVVideoFramePtr, FRAME_BUFFER_SIZE >  m_frameBuffer;
 
     bool                                m_keyActive;
 
@@ -120,7 +123,7 @@ public:
 
     void                                Start                   ();
 
-    void                                QueueFrame              ( MemoryChunkConstPtr data );
+    void                                QueueFrame              (BVVideoFramePtr data );
     
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */
@@ -129,7 +132,7 @@ public:
     //FIXME: probably not needed
     /**@brief Copies and interlaces full frame.
     @return Returns interlaced copy of frame. */
-    MemoryChunkConstPtr                 InterlacedFrame         ( MemoryChunkConstPtr data, int odd );
+	BVVideoFramePtr                 InterlacedFrame         (BVVideoFramePtr data, int odd );
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 

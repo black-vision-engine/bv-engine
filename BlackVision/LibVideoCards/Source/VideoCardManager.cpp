@@ -52,7 +52,7 @@ void            VideoCardProcessingThread::Run          ()
 
 //**************************************
 //
-MemoryChunkConstPtr          VideoCardManager::KILLER_FRAME = nullptr;
+BVVideoFramePtr          VideoCardManager::KILLER_FRAME = nullptr;
 
 //**************************************
 //
@@ -177,7 +177,7 @@ void                        VideoCardManager::Start                 ()
 
 // *********************************
 //
-void                        VideoCardManager::QueueFrame            ( MemoryChunkConstPtr data )
+void                        VideoCardManager::QueueFrame            (BVVideoFramePtr data )
 {
     m_frameBuffer.Push( data );
 }
@@ -226,11 +226,13 @@ int PoliczSume(const char* data, int size)
 
 // *********************************
 //
-MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChunkConstPtr data, int odd )
+BVVideoFramePtr         VideoCardManager::InterlacedFrame       (BVVideoFramePtr frame, int odd )
 {
 	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
 	
-	const char *mem_src = data->Get();
+	
+	
+	const char *mem_src = frame->m_VideoData->Get();
 
 	int pixel_depth = 4;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
 	int width = 1920;
@@ -248,8 +250,9 @@ MemoryChunkConstPtr         VideoCardManager::InterlacedFrame       ( MemoryChun
 	
 	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
 	
+	frame->m_VideoData = ptr;
 
-    return ptr;
+    return frame;
 }
 
 //**************************************

@@ -2,7 +2,7 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
-
+#include "BVVideoFrame.h"
 #include "Channel.h"
 
 
@@ -69,7 +69,7 @@ public:
 
     virtual void            Start                       () override;
 
-    virtual void            ProcessFrame                ( MemoryChunkConstPtr data, int odd ) override;
+    virtual void            ProcessFrame                ( BVVideoFramePtr data, int odd ) override;
 
     static UInt32           EnumerateDevices            ();
 
