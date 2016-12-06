@@ -71,6 +71,56 @@ void                            VideoOutputRenderLogic::Render          ( Render
 
 // *********************************
 //
+
+unsigned short sine_wave_const_48[] = { 0x0000, 0x01A8, 0x0349, 0x04DB, 0x0658, 0x07BA,
+0x08FA, 0x0A12, 0x0AFE, 0x0BBA, 0x0C43, 0x0C96,
+0x0CB1, 0x0C96, 0x0C43, 0x0BBA, 0x0AFE, 0x0A12,
+0x08FA, 0x07BA, 0x0658, 0x04DB, 0x0349, 0x01A8,
+0x0000, 0xFE58, 0xFCB7, 0xFB25, 0xF9A8, 0xF846,
+0xF706, 0xF5EE, 0xF502, 0xF446, 0xF3BD, 0xF36A,
+0xF34F, 0xF36A, 0xF3BD, 0xF446, 0xF502, 0xF5EE,
+0xF706, 0xF846, 0xF9A8, 0xFB25, 0xFCB7, 0xFE58 };
+
+
+void Fill48(USHORT* pAudio16, UINT32 Samples, UINT32 Channels)
+{
+	USHORT data = 0;
+	USHORT end = (USHORT)(Samples / 48);
+	USHORT Bytes = 0;
+
+
+	for (USHORT i = 0; i<end; i++)
+	{
+		for (USHORT k = 0; k<48; k++)
+		{
+			data = sine_wave_const_48[k];
+			// 16 channels
+			/*if (Channels > 0) { pAudio16[i * 48 * 2 + k + 0] = data; }
+			if (Channels > 1) { pAudio16[i * 48 * 2 + k + 1] = data; }*/
+			if (Channels > 0) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 1) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 2) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 3) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 4) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 5) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 6) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 7) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 8) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 9) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 10) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 11) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 12) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 13) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 14) { *pAudio16 = data; pAudio16++; }
+			if (Channels > 15) { *pAudio16 = data; pAudio16++; }
+			Bytes++;
+		}
+	}
+	int a = 0;
+	{a;}
+}
+
+
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
 	renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
@@ -81,6 +131,8 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
 
 	int AudioSize = 2 * 2002; // 2 channels (eg. stereo)
 	unsigned int *mem_dst = new unsigned int[AudioSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
+	memset(mem_dst, 0, 2 * 2002*4);
+	Fill48((USHORT*)mem_dst, 1920, 2);
 
 	frame->m_AudioData = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, AudioSize));
 	frame->m_TimeCode.h = 11;

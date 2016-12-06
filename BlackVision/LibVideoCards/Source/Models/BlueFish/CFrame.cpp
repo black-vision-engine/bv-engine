@@ -27,6 +27,7 @@ CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_
 	{
 		
 		m_AudioData = new unsigned int[16 * 2002];
+		memset(m_AudioData, 0, 2002 * 16 *4);
 		memcpy(m_AudioData, AudioData, AudioSize);
 		
 		if (m_AudioData)

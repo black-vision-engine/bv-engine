@@ -298,7 +298,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	
 	
 	BLUE_UINT32	nBytesPerAudioChannel = 2;
-	BLUE_UINT32 nSampleType = (AUDIO_CHANNEL_16BIT | AUDIO_CHANNEL_LITTLEENDIAN);
+	BLUE_UINT32 nSampleType = AUDIO_CHANNEL_16BIT;//(AUDIO_CHANNEL_16BIT | AUDIO_CHANNEL_LITTLEENDIAN);
 
 	BLUE_UINT32 embAudioProp = 0;
 	BLUE_UINT32 aesAudioRouting = 0;
@@ -440,6 +440,9 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 		pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);	//we need to schedule the playback of field 0 at field 1 interrupt
 
 
+	BLUE_UINT32 nEmbAudioFlag = 0;
+	nEmbAudioFlag = (blue_emb_audio_enable | blue_emb_audio_group1_enable); // liczba kana³ów... do ogarniêcia...
+
     while( !pThis->m_nThreadStopping )
     {
 		
@@ -488,12 +491,12 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				}
 
 				encode_hanc_frame_ex(nCardType,
-					&hanc_stream_info,
-					NULL,
-					0,
-					0,
-					0,
-					0);
+					&hanc_stream_info,					
+					pFrame->m_AudioData,
+					2,
+					1920,
+					nSampleType,
+					nEmbAudioFlag);
 
 				if (pThis->m_EnableVbiVanc)
 					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));

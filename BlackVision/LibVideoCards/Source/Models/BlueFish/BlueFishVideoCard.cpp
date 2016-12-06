@@ -243,7 +243,7 @@ void                            VideoCard::ProcessFrame             (BVVideoFram
 					playbackChannel->BytesPerLine,
 					odd,
 					(unsigned int)frame->m_AudioData->Size(),
-					reinterpret_cast<const unsigned int *>(frame->m_VideoData->Get()),
+					reinterpret_cast<const unsigned int *>(frame->m_AudioData->Get()),
 					frame->m_TimeCode,
 					frame->m_FrameInformation
 					) );
