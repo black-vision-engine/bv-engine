@@ -36,6 +36,9 @@ public:
         static const std::string        SPACING;
         static const std::string        ALIGNEMENT;
         static const std::string        ALIGN_CHARACTER;
+        static const std::string        FIRST_TEXT_CC;
+        static const std::string        FIRST_TEXT_OUT_CC;
+        static const std::string        FIRST_TEXT_SH_CC;
     };
 
 protected:
@@ -54,6 +57,9 @@ protected:
     ParamFloatPtr                   m_spacingParam;
     ParamIntPtr                     m_alignmentParam;
     ValueIntPtr                     m_alignCharacter;
+    ValueIntPtr                     m_firstTextCC;
+    ValueIntPtr                     m_firstTextOutCC;
+    ValueIntPtr                     m_firstTextShCC;
 
     bool                                        LoadResource                ( AssetDescConstPtr assetDescr, const std::string & name );
     bool                                        LoadAtlas                   ( const FontAssetDescConstPtr & fontAssetDesc, const std::string & name );
@@ -67,6 +73,8 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
+
+    virtual Float32                             BuildVACForText             ( const std::wstring & text, bool useKerning );
 
     explicit                                    TextPluginBase              (   const std::string & name,
                                                                                 const std::string & uid,

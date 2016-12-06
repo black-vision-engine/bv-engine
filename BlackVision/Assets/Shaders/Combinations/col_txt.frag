@@ -13,6 +13,10 @@ uniform float       alpha;
 uniform int         cc_num;
 uniform int         cc_num_total;
 
+uniform int         firstTextCC;
+uniform int         firstTextOutCC;
+uniform int         firstTextShCC;
+
 uniform float       time;
 
 uniform int         colTextEffectId;
@@ -139,7 +143,9 @@ void main()
         break;
     }
     
-	vec4 result = a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
+	vec4 result = a * ( cc_num >= firstTextCC ? c * col1 : oc * col2 * ( 1.0 - col1 ) );
+	
+	//vec4 result = a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
 	
 	if( result.a == 0.0 )
 		discard;

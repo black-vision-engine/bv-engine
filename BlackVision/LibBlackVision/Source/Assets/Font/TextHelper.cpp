@@ -131,8 +131,8 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     float texPadding = 1.f;
 
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
-    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / aspectRatio  + spacing;
-    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
+    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', false )->width / aspectRatio  + spacing;
+    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', false )->height / aspectRatio;
 
     unsigned int componentIdx = 0;
     unsigned int lineBeginComponentIdx = 0;
@@ -166,7 +166,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
             if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
             {
-                glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / aspectRatio, (float)( glyph->bearingY - (int)glyph->height ) / aspectRatio, 0.f );
+                glm::vec3 bearing = glm::vec3( ( (float)glyph->bearingX - float( outlineSize ) ) / aspectRatio, ( float( glyph->bearingY ) + float( outlineSize ) ) / aspectRatio, 0.f );
 
                 glm::vec3 quadBottomLeft;
                 glm::vec3 quadBottomRight;
@@ -185,10 +185,10 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
                 // XYZ
 
                 {
-                    quadBottomLeft = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
-                    quadBottomRight = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) + glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
-                    quadTopLeft = glm::vec3( 0.f, (float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
-                    quadTopRight = glm::vec3( (float)glyph->width / aspectRatio, (float)glyph->height / aspectRatio, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
+                    quadTopLeft = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
+                    quadTopRight = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) + glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
+                    quadBottomLeft = glm::vec3( 0.f, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
+                    quadBottomRight = glm::vec3( (float)glyph->width / aspectRatio, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
                 }
 
                 posAttribChannel->AddAttribute( quadBottomLeft + translate + bearing + newLineTranslation );

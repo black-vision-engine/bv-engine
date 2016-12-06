@@ -20,8 +20,6 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 
-#include "Application/ApplicationContext.h"
-
 #include "Assets/DefaultAssets.h"
 
 #include "Memory/MemoryLeaks.h"
@@ -248,25 +246,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 {
     m_vaChannel->ClearAll();
 
-    auto alignType  = TextAlignmentType( m_alignmentParam->Evaluate() );
-    auto alignCh    = (wchar_t)m_alignCharacter->GetValue();
-    auto spacing    = m_spacingParam->Evaluate();
-
-    auto viewWidth  = ApplicationContext::Instance().GetWidth();
-    auto viewHeight = ApplicationContext::Instance().GetHeight();
-
-    m_textLength    = TextHelper::BuildVACForText(  m_vaChannel.get(),
-                                                    m_atlas,
-                                                    newText,
-                                                    m_blurSize,
-                                                    spacing,
-                                                    alignType,
-                                                    alignCh,
-                                                    m_outlineSize,
-                                                    viewWidth,
-                                                    viewHeight,
-                                                    m_arranger,
-                                                    true );
+    m_textLength = TextPluginBase::BuildVACForText( newText, true );
 
     ScaleToMaxTextLength();
 
