@@ -1471,9 +1471,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp">
       <Filter>Engine\Models\Cameras</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp">
       <Filter>Engine\Models\Cameras</Filter>
     </ClCompile>
@@ -1663,9 +1660,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
@@ -1791,6 +1785,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\TextRepresentation.cpp">
       <Filter>Assets\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamsDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.cpp">
+      <Filter>Engine\Models\Plugins\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper1.cpp">
+      <Filter>Engine\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4016,9 +4022,6 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h">
       <Filter>Assets\VideoStream</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoderThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
@@ -4168,6 +4171,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\TextRepresentation.h">
       <Filter>Assets\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamsDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

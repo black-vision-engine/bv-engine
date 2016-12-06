@@ -25,7 +25,7 @@ private:
 
 public:
 
-                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
+                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 2 );
                             ~FFmpegVideoStreamDecoder   ();
 
     SizeType                GetFrameSize                () const;   
@@ -34,9 +34,6 @@ public:
     UInt32                  GetHeight                   () const;   
     Float64                 GetFrameRate                () const;   
 
-    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) override;
-
-    virtual bool            DecodePacket                ( AVPacket * packet ) override;
     virtual AVMediaData     ConvertFrame                () override;
 
 };

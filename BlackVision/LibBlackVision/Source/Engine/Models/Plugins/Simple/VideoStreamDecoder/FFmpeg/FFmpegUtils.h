@@ -15,6 +15,8 @@ public:
 	static AVPixelFormat		ToFFmpegPixelFormat		( TextureFormat format );
 	static AVPixelFormat		ToFFmpegPixelFormat		( VideoPixelFormat format );
 
+    static Int64                ConvertToMiliseconds    ( Float64 seconds );
+
 };
 
 } //bv

@@ -5,17 +5,11 @@
 #include <cassert>
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 
 const UInt32         FFmpegDemuxer::SAFE_SEEK_FRAMES = 10;
-const UInt32         FFmpegDemuxer::MAX_QUEUE_SIZE = 5;
+const UInt32         FFmpegDemuxer::MAX_QUEUE_SIZE = 10;
 
 
 // *******************************
@@ -212,7 +206,7 @@ Int32				FFmpegDemuxer::FindStreamIndex		( AVMediaType type, UInt32 idx ) const
 	Int32 last = -1;
 	for ( unsigned int i = 0; i < m_formatCtx->nb_streams; ++i )
 	{
-		if ( m_formatCtx->streams[i]->codec->codec_type == type )
+        if ( m_formatCtx->streams[i]->codecpar->codec_type == type )
 		{
 			last = ( Int32 )i;
 			if( counter == idx )

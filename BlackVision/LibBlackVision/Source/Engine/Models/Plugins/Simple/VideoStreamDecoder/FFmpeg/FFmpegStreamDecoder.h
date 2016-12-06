@@ -24,11 +24,14 @@ protected:
 
     AVFrame *                           m_frame;
 
-	QueueConcurrent< AVMediaData >      m_bufferQueue;
 
     UInt32                              m_maxQueueSize;
 
     UInt64                              m_duration;
+    UInt64                              m_prevPTS;
+
+    QueueConcurrent< AVMediaData >      m_bufferQueue;
+    QueueConcurrent< AVMediaData >	    m_outQueue;
 
     /** Starting frame timestamp (in stream time base), updated on seeking. */
     UInt64                              m_offset;
@@ -41,14 +44,18 @@ public:
     UInt64                  GetDuration                 () const;   
 
     virtual UInt64          GetCurrentPTS               ();
+
+    void                    UploadData                  ();
     virtual bool            PopData                     ( AVMediaData & data );
-	bool					IsDataQueueEmpty		    () const;
+    bool					IsDataQueueEmpty            () const;
 
-	virtual void			Reset						();
+    bool					IsOutQueueEmpty		        () const;
 
-    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) = 0;
+    virtual void			Reset                       ();
 
-    virtual bool            DecodePacket                ( AVPacket * packet ) = 0;
+    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer );
+
+    virtual bool            DecodePacket                ( AVPacket * packet );
     virtual AVMediaData     ConvertFrame                () = 0;
 
     void                    SetOffset                   ( UInt64 offset );
@@ -58,6 +65,8 @@ public:
 
     /** Converts time from seconds to the stream specific time base timestamp */
     Int64                   ConvertTime                 ( Float64 time );
+
+    bool                    NextDataReady               ( UInt64 time );
 
 };
 

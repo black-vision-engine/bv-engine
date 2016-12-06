@@ -3,11 +3,6 @@
 #include "FFmpegUtils.h"
 
 
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 
@@ -82,6 +77,13 @@ AVPixelFormat				FFmpegUtils::ToFFmpegPixelFormat		( TextureFormat format )
 	default:
 		return AVPixelFormat::AV_PIX_FMT_NONE;
 	}
+}
+
+// *********************************
+//
+Int64				        FFmpegUtils::ConvertToMiliseconds       ( Float64 seconds )
+{
+    return ( Int64 )( 1000 * seconds );
 }
 
 } //bv

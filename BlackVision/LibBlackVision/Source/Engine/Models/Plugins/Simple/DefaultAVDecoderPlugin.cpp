@@ -84,7 +84,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultAVDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
-        ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::PAUSE, true, true );
+        ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::MUTE, false, true, true );
@@ -151,8 +151,6 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 
     SetPrevPlugin( prev );
 
-    LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
-
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
     
@@ -165,6 +163,8 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_muteParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::MUTE ) );
     
     m_decoderMode =  m_decoderModeParam->Evaluate();
+
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
 }
 
 // *************************************
@@ -219,6 +219,7 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 
                     HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
+                    UploadVideoFrame();
                     UpdateDecoderState( m_decoderMode );
 
                     return true;
@@ -372,11 +373,17 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
         if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
         {
             m_decoder->Seek( offset[ 0 ] );
+            m_prevOffsetCounter = offset[ 1 ];
+
+            //clear audio buffer
+            AVMediaData mediaData;
+            m_decoder->GetAudioMediaData( mediaData );
+
+            //set video frame
             if( m_decoderMode != DecoderMode::PLAY )
             {
                 std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
             }
-            m_prevOffsetCounter = offset[ 1 ];
         }
 
         if( ParameterChanged( PARAM::MUTE ) )
@@ -408,6 +415,7 @@ void                                DefaultAVDecoderPlugin::Play                
 void                                DefaultAVDecoderPlugin::Stop                ()
 {
     m_decoder->Stop();
+    m_decoder->Seek( 0.f );
     TriggerEvent( AssetTrackerInternalEvent::Command::StopAudio );
 }
 

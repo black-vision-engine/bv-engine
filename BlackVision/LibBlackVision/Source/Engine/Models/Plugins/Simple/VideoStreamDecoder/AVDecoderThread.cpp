@@ -49,15 +49,13 @@ void				AVDecoderThread::Kill	    ()
 //
 void				AVDecoderThread::Play	    ()
 {
-	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-        if( !m_paused )
-        {
-            m_timer.Start();
-        }
-		m_stopped = false;
-        m_paused = false;
-	}
+	std::unique_lock< std::mutex > lock( m_mutex );
+    if( !m_paused )
+    {
+        m_timer.Start();
+    }
+	m_stopped = false;
+    m_paused = false;
 	m_cond.notify_one();
 }
 
@@ -65,30 +63,26 @@ void				AVDecoderThread::Play	    ()
 //
 void				AVDecoderThread::Stop		()
 {
-	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-        m_paused = false;
-		m_stopped = true;
-	}
+	std::unique_lock< std::mutex > lock( m_mutex );
+    m_paused = false;
+	m_stopped = true;
 	m_cond.notify_one();
 }
 
 // *******************************
 //
-void				AVDecoderThread::Pause		()
+bool				AVDecoderThread::Pause		()
 {
-	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-		m_paused = !m_paused;
-	}
+	std::unique_lock< std::mutex > lock( m_mutex );
+	m_paused = !m_paused;
 	m_cond.notify_one();
+    return m_paused;
 }
 
 // *******************************
 //
 bool				AVDecoderThread::Paused		() const
 {
-	std::unique_lock< std::mutex > lock( m_mutex );
 	return m_paused;
 }
 
@@ -96,7 +90,6 @@ bool				AVDecoderThread::Paused		() const
 //
 bool				AVDecoderThread::Stopped		    () const
 {
-	std::unique_lock< std::mutex > lock( m_mutex );
 	return m_stopped;
 }
 
@@ -125,8 +118,7 @@ void				AVDecoderThread::Run			    ()
 
         auto time = m_timer.ElapsedMillis();
         
-        m_decoder->NextVideoDataReady( time );
-        m_decoder->NextAudioDataReady( time );
+        m_decoder->NextDataReady( time );
 
         if( time > duration ) 
         {

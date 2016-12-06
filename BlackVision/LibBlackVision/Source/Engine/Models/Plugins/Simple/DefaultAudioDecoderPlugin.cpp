@@ -117,8 +117,6 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
 
     SetPrevPlugin( prev );
 
-    LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
-
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
     
@@ -129,6 +127,8 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
     m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
 
     m_decoderMode =  m_decoderModeParam->Evaluate();
+
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
 }
 
 // *************************************
@@ -155,7 +155,6 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
         auto asset = LoadTypedAsset< AVAsset >( assetDescr );
         if( asset )
         {
-            m_decoder = nullptr;
             m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
             if( m_decoder->HasAudio() )
@@ -248,6 +247,7 @@ void                                DefaultAudioDecoderPlugin::Play             
 void                                DefaultAudioDecoderPlugin::Stop                     ()
 {
     m_decoder->Stop();
+    m_decoder->Seek( 0.f );
     TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
 }
 
