@@ -442,6 +442,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 
 	BLUE_UINT32 nEmbAudioFlag = 0;
 	nEmbAudioFlag = (blue_emb_audio_enable | blue_emb_audio_group1_enable); // liczba kana³ów... do ogarniêcia...
+	
 
     while( !pThis->m_nThreadStopping )
     {
@@ -495,8 +496,8 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				encode_hanc_frame_ex(nCardType,
 					&hanc_stream_info,
 					pFrame->m_AudioData,
-					2,
-					1920,
+					pFrame->m_FrameInformation.m_AudioChannelsCount,
+					pFrame->m_FrameInformation.m_AudioSamplesPerFrame,
 					nSampleType,
 					nEmbAudioFlag);
 			
