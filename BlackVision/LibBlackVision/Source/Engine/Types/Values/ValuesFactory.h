@@ -27,6 +27,13 @@ public:
     static ValueWStringPtr      CreateValueWString  ( const std::string & name );
     static ValueWStringPtr      CreateValueWString  ( const std::string & name, const std::wstring & initVal );
 
+    template< typename ValueType >
+    static std::shared_ptr< typename ValueT< ValueType >::Type > CreateValue( const std::string & name, ValueType initVal = ValueType() )
+    {
+        auto val = std::make_shared< typename ValueT< ValueType >::Type >( name );
+        val->SetValue( initVal );
+        return val;
+    }
 };
 
 } // bv

@@ -180,11 +180,18 @@ namespace bv { namespace model {
         }
 
         template< typename ValueType >
-        inline void                             AddPsSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        inline void                             AddPsSimpleStatedParam      ( std::string name, const ValueType & defaultValue ) const
         {
             auto model = GetPsModel();
             AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, true, true );
         }
+
+        template< typename ValueType >
+        inline void                             AddValue                    ( std::string name, const ValueType & defaultValue ) const
+        {
+            m_lastParamValModel->AddValue( std::static_pointer_cast< IValue >( ValuesFactory::CreateValue( name, defaultValue ) ) );
+        }
+
 
 private:
         DefaultParamValModelPtr GetVacModel() const

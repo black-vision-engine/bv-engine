@@ -9,18 +9,76 @@
 
 namespace bv {
 
-typedef ValueImpl< bool, ParamType::PT_BOOL >           ValueBool;
-typedef ValueImpl< int, ParamType::PT_INT >             ValueInt;
-typedef ValueImpl< float, ParamType::PT_FLOAT1 >        ValueFloat;
-typedef ValueImpl< Float64, ParamType::PT_DOUBLE1 >     ValueDouble;
-typedef ValueImpl< glm::vec2, ParamType::PT_FLOAT2 >    ValueVec2;
-typedef ValueImpl< glm::vec3, ParamType::PT_FLOAT3 >    ValueVec3;
-typedef ValueImpl< glm::vec4, ParamType::PT_FLOAT4 >    ValueVec4;
-typedef ValueImpl< glm::mat2, ParamType::PT_MAT2 >      ValueMat2;
-typedef ValueImpl< glm::mat3, ParamType::PT_MAT3 >      ValueMat3;
-typedef ValueImpl< glm::mat4, ParamType::PT_MAT4 >      ValueMat4;
-typedef ValueImpl< std::string, ParamType::PT_STRING >  ValueString;
-typedef ValueImpl< std::wstring, ParamType::PT_WSTRING > ValueWString;
+template< typename ValueType >
+struct Value2ParamTypeTrait
+{ };
+
+template<>
+struct Value2ParamTypeTrait< bool >
+{ const static ParamType ParamT = ParamType::PT_BOOL; };
+
+template<>
+struct Value2ParamTypeTrait< Int32 >
+{ const static ParamType ParamT = ParamType::PT_INT; };
+
+template<>
+struct Value2ParamTypeTrait< Float32 >
+{ const static ParamType ParamT = ParamType::PT_FLOAT1; };
+
+template<>
+struct Value2ParamTypeTrait< Float64 >
+{ const static ParamType ParamT = ParamType::PT_DOUBLE1; };
+
+template<>
+struct Value2ParamTypeTrait< glm::vec2 >
+{ const static ParamType ParamT = ParamType::PT_FLOAT2; };
+
+template<>
+struct Value2ParamTypeTrait< glm::vec3 >
+{ const static ParamType ParamT = ParamType::PT_FLOAT3; };
+
+template<>
+struct Value2ParamTypeTrait< glm::vec4 >
+{ const static ParamType ParamT = ParamType::PT_FLOAT4; };
+
+template<>
+struct Value2ParamTypeTrait< glm::mat2 >
+{ const static ParamType ParamT = ParamType::PT_MAT2; };
+
+template<>
+struct Value2ParamTypeTrait< glm::mat3 >
+{ const static ParamType ParamT = ParamType::PT_MAT3; };
+
+template<>
+struct Value2ParamTypeTrait< glm::mat4 >
+{ const static ParamType ParamT = ParamType::PT_MAT4; };
+
+template<>
+struct Value2ParamTypeTrait< std::string >
+{ const static ParamType ParamT = ParamType::PT_STRING; };
+
+template<>
+struct Value2ParamTypeTrait< std::wstring >
+{ const static ParamType ParamT = ParamType::PT_WSTRING; };
+
+template< typename ValueType >
+struct ValueT
+{
+    typedef ValueImpl< ValueType, Value2ParamTypeTrait< ValueType >::ParamT > Type;
+};
+
+typedef ValueT< bool >::Type            ValueBool;
+typedef ValueT< Int32 >::Type           ValueInt;
+typedef ValueT< Float32 >::Type         ValueFloat;
+typedef ValueT< Float64 >::Type         ValueDouble;
+typedef ValueT< glm::vec2 >::Type       ValueVec2;
+typedef ValueT< glm::vec3 >::Type       ValueVec3;
+typedef ValueT< glm::vec4 >::Type       ValueVec4;
+typedef ValueT< glm::mat2 >::Type       ValueMat2;
+typedef ValueT< glm::mat3 >::Type       ValueMat3;
+typedef ValueT< glm::mat4 >::Type       ValueMat4;
+typedef ValueT< std::string >::Type     ValueString;
+typedef ValueT< std::wstring >::Type    ValueWString;
 
 DEFINE_PTR_TYPE( ValueBool )
 DEFINE_PTR_TYPE( ValueInt )
