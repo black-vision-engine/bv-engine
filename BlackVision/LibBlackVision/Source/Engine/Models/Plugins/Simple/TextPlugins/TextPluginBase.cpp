@@ -54,6 +54,10 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_CC, 0 );
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_OUT_CC, 0 );
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_SH_CC, 0 );
+
     h.SetOrCreatePluginModel();
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
@@ -62,10 +66,6 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
-
-    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_CC, 0 );
-    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_OUT_CC, 0 );
-    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_SH_CC, 0 );
 
     return h.GetModel();
 }
@@ -87,9 +87,9 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     m_alignmentParam    = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
 
-    m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
-    m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
-    m_firstTextShCC     = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::FIRST_TEXT_SH_CC ) );
+    m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
+    m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
+    m_firstTextShCC     = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_SH_CC ) );
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -260,18 +260,24 @@ Float32                             TextPluginBase::BuildVACForText             
     auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
 
-    TextHelper::BuildVACForText(  m_vaChannel.get(),
-                                                    m_atlas,
-                                                    text,
-                                                    m_blurSize,
-                                                    spacing,
-                                                    alignType,
-                                                    alignCh,
-                                                    m_outlineSize,
-                                                    viewWidth,
-                                                    viewHeight,
-                                                    nullptr,
-                                                    useKerning );
+    if( m_outlineSize > 0 ) 
+    {
+        m_firstTextOutCC->SetValue( 0 );
+        TextHelper::BuildVACForText(    m_vaChannel.get(),
+                                        m_atlas,
+                                        text,
+                                        m_blurSize,
+                                        spacing,
+                                        alignType,
+                                        alignCh,
+                                        m_outlineSize,
+                                        viewWidth,
+                                        viewHeight,
+                                        nullptr,
+                                        useKerning );
+
+        m_firstTextCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
+    }
 
     auto textLength = TextHelper::BuildVACForText(  m_vaChannel.get(),
                                                     m_atlas,
