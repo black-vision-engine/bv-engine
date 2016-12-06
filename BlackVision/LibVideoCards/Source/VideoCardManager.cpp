@@ -211,26 +211,11 @@ bool                        VideoCardManager::ProcessFrame          ()
 }
 
 
-int PoliczSume(const char* data, int size)
-{
-	int max = 1024;
-	int suma = 0;
-	for (int i = 0;i < size;i++)
-	{
-		suma += (int)data[i];
-	}
-	suma = suma % max;
-	return suma;
-
-}
-
 // *********************************
 //
 BVVideoFramePtr         VideoCardManager::InterlacedFrame       (BVVideoFramePtr frame, int odd )
 {
 	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
-	
-	
 	
 	const char *mem_src = frame->m_VideoData->Get();
 

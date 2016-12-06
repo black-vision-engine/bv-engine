@@ -129,9 +129,9 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
 	frame->m_VideoData = m_videoFrame->GetData();
 	
 
-	int AudioSize = 2 * 2002; // 2 channels (eg. stereo)
-	unsigned int *mem_dst = new unsigned int[AudioSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
-	memset(mem_dst, 0, 2 * 2002*4);
+	int AudioSize = 2 * 2002*4; // 2 channels (eg. stereo)
+	unsigned char *mem_dst = new unsigned char[AudioSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
+	memset(mem_dst, 0, AudioSize);
 	Fill48((USHORT*)mem_dst, 1920, 2);
 
 	frame->m_AudioData = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, AudioSize));

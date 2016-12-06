@@ -476,7 +476,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, rp188_ltc, false);
 				pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, ext_ltc, false);
 				pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, sd_vitc, false);*/
-
+				
 				hanc_stream_info.time_code = rp188_vitc.timecode_u64;			//RP188 VITC time code
 				hanc_stream_info.rp188_ltc_time_code = rp188_ltc.timecode_u64;	//RP188 LTC time code
 				hanc_stream_info.ltc_time_code = ext_ltc.timecode_u64;			//external LTC time code
@@ -491,12 +491,19 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				}
 
 				encode_hanc_frame_ex(nCardType,
-					&hanc_stream_info,					
+					&hanc_stream_info,
 					pFrame->m_AudioData,
 					2,
 					1920,
 					nSampleType,
 					nEmbAudioFlag);
+				/*encode_hanc_frame_ex(nCardType,
+					&hanc_stream_info,
+					0,
+					0,
+					0,
+					0,
+					0);*/
 
 				if (pThis->m_EnableVbiVanc)
 					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));

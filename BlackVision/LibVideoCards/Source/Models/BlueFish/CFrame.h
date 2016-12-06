@@ -19,7 +19,7 @@ public:
 
 	BLUE_UINT32	m_nFrameID;
 	int m_FieldOdd;
-	BLUE_UINT32* m_AudioData;
+	unsigned char* m_AudioData;
 	unsigned int m_AudioSize;
 
 	BVFrameDescriptor m_FrameInformation;
