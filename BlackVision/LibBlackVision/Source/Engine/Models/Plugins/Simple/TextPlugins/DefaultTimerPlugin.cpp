@@ -326,12 +326,7 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     m_vaChannel->ClearAll();
 
-    auto alignType =  TextAlignmentType( m_alignmentParam->Evaluate() );
-
-    auto viewWidth  = ApplicationContext::Instance().GetWidth();
-    auto viewHeight = ApplicationContext::Instance().GetHeight();
-
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, timerInit, m_blurSize, m_spacingParam->Evaluate(), alignType, L'.', false, viewWidth, viewHeight );
+    TextPluginBase::BuildVACForText( timerInit, false );
 }
 
 ////////////////////////////

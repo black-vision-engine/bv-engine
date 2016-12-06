@@ -14,7 +14,7 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 
-
+#include "Application/ApplicationContext.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -33,6 +33,9 @@ const std::string TextPluginBase::PARAM::OUTLINE_COLOR   = "outlineColor";
 const std::string TextPluginBase::PARAM::SPACING         = "spacing";
 const std::string TextPluginBase::PARAM::ALIGNEMENT      = "alingment";
 const std::string TextPluginBase::PARAM::ALIGN_CHARACTER = "alignCharacter";
+const std::string TextPluginBase::PARAM::FIRST_TEXT_CC   = "firstTextCC";
+const std::string TextPluginBase::PARAM::FIRST_TEXT_OUT_CC  = "firstTextOutCC";
+const std::string TextPluginBase::PARAM::FIRST_TEXT_SH_CC   = "firstTextShCC";
 
 // *******************************
 //
@@ -60,7 +63,9 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
 
-//    h.AddValue( "dasdasd", 1.f );
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_CC, 0 );
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_OUT_CC, 0 );
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_SH_CC, 0 );
 
     return h.GetModel();
 }
@@ -81,6 +86,10 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
     m_alignmentParam    = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
+
+    m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
+    m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
+    m_firstTextShCC     = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::FIRST_TEXT_SH_CC ) );
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -238,6 +247,47 @@ DefaultTextureDescriptorPtr         TextPluginBase::LoadTexture                 
     {
         return nullptr;
     }
+}
+
+// *************************************
+// 
+Float32                             TextPluginBase::BuildVACForText             ( const std::wstring & text, bool useKerning )
+{
+    auto alignType  = TextAlignmentType( m_alignmentParam->Evaluate() );
+    auto alignCh    = (wchar_t)m_alignCharacter->GetValue();
+    auto spacing    = m_spacingParam->Evaluate();
+
+    auto viewWidth  = ApplicationContext::Instance().GetWidth();
+    auto viewHeight = ApplicationContext::Instance().GetHeight();
+
+    TextHelper::BuildVACForText(  m_vaChannel.get(),
+                                                    m_atlas,
+                                                    text,
+                                                    m_blurSize,
+                                                    spacing,
+                                                    alignType,
+                                                    alignCh,
+                                                    m_outlineSize,
+                                                    viewWidth,
+                                                    viewHeight,
+                                                    nullptr,
+                                                    useKerning );
+
+    auto textLength = TextHelper::BuildVACForText(  m_vaChannel.get(),
+                                                    m_atlas,
+                                                    text,
+                                                    m_blurSize,
+                                                    spacing,
+                                                    alignType,
+                                                    alignCh,
+                                                    0,
+                                                    viewWidth,
+                                                    viewHeight,
+                                                    nullptr,
+                                                    useKerning );
+
+
+    return textLength;
 }
 
 } // model
