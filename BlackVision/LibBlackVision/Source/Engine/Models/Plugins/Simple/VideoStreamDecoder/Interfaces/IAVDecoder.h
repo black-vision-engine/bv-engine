@@ -45,8 +45,7 @@ public:
 
 //protected:
 
-	virtual bool					NextVideoDataReady		( UInt64 t ) = 0;
-	virtual bool				    NextAudioDataReady		( UInt64 t ) = 0;
+    virtual void					NextDataReady           ( UInt64 t ) = 0;
     
 	friend class AVDecoderThread;
 

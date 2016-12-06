@@ -13,7 +13,7 @@
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAudioStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegStreamsDecoderThread.h"
 
 #include "DataTypes/QueueConcurrent.h"
 
@@ -25,21 +25,12 @@ class FFmpegAVDecoder : public IAVDecoder
 {
 private:
 
-    struct StreamData {
-    
-        FFmpegStreamDecoderUPtr         decoder;
-        FFmpegStreamDecoderThreadUPtr   decoderThread;
-        QueueConcurrent< AVMediaData >	outQueue;
-        UInt64                          prevPTS;
-
-    };
-
-private:
-
-    std::map< AVMediaType, StreamData * >   m_streams;
+    std::map< AVMediaType, FFmpegStreamDecoderUPtr >   m_streams;
 
 	FFmpegDemuxerUPtr				        m_demuxer;
     FFmpegDemuxerThreadUPtr                 m_demuxerThread;
+    
+    FFmpegStreamsDecoderThreadUPtr          m_streamsDecoderThread;
 
 	AVDecoderThreadUPtr			            m_decoderThread;
 
@@ -54,7 +45,7 @@ public:
 
 	virtual void				Play					() override;
 	virtual void				Pause					() override;
-	virtual void				Stop					() override;
+    virtual void				Stop                    () override;
 
 	virtual bool		        GetVideoMediaData		( AVMediaData & data ) override;
 	virtual bool		        GetAudioMediaData		( AVMediaData & data ) override;
@@ -89,22 +80,18 @@ public:
 
 protected:
 	
-	virtual bool				NextVideoDataReady		( UInt64 t ) override;
-	virtual bool		        NextAudioDataReady		( UInt64 t ) override;
+    void			            NextDataReady           ( AVMediaType type, UInt64 t );
+    virtual void			    NextDataReady           ( UInt64 t ) override;
 
 private:
 
+    void                        RestartDecoding         ();
     void                        StopDecoding            ();
 
-    void                        ClearStream             ( StreamData * streamData );
-
     /** Manually seek from current keyframe to frame with at given timestamp.
-	@param[decoder]
-    @param[timestamp] in stream time base
+    @param[time] in miliseconds
     */
-	void				        Seek					( FFmpegStreamDecoder * decoder, Int64 timestamp );
-
-	bool				        NextStreamDataReady		( AVMediaType type, UInt64 t );
+    Int64				        Seek					( FFmpegStreamDecoder * decoder, Int64 time );
 
 };
 

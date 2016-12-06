@@ -37,7 +37,7 @@ public:
 
 	void						Play				();
 	void						Stop				();
-	void						Pause				();
+	bool						Pause				();
 
 	bool						Paused				() const;
 	bool						Stopped				() const;

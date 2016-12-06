@@ -6,12 +6,6 @@
 #include "FFmpegUtils.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_U8 };
@@ -64,51 +58,6 @@ AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 
 // *******************************
 //
-bool			        FFmpegAudioStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxer )
-{
-    if( m_bufferQueue.Size() < m_maxQueueSize )
-    {
-        auto ffmpegPacket = demuxer->GetPacket( m_streamIdx );
-        if( ffmpegPacket )
-        {
-            auto success = DecodePacket( ffmpegPacket->GetAVPacket() );
-            if( success )
-            {
-                auto data = ConvertFrame();
-                m_bufferQueue.Push( data );
-
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-// *******************************
-//
-bool				FFmpegAudioStreamDecoder::DecodePacket		( AVPacket * packet )
-{
-	assert( packet != nullptr );
-
-	int frameReady = 0;
-    
-    while ( packet->size > 0)
-    {
-        auto len = avcodec_decode_audio4( m_codecCtx, m_frame, &frameReady, packet );
-        if( len < 0 )
-        {
-            //FIXME: error
-        }
-
-        packet->size -= len;
-        packet->data += len;
-    }
-
-    return ( frameReady != 0 );
-}
-
-// *******************************
-//
 AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 {
     auto frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, m_frame->nb_samples, m_format, 0 );
@@ -125,7 +74,7 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
     
     AVMediaData mediaData;
 
-    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pkt_pts );
+    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pts );
     mediaData.frameData = MemoryChunk::Create( ( char * )outBuffer, SizeType( frameSize ) );
     mediaData.nbSamples = m_frame->nb_samples;
 

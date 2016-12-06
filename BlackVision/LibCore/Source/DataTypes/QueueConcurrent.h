@@ -18,6 +18,8 @@ class QueueConcurrent
 private:
 
     mutable std::condition_variable     m_conditionVariable;
+    mutable std::mutex					m_mutex;
+
     mutable CriticalSection             m_criticalSection;
 
     std::queue< T >     m_queue;
@@ -132,7 +134,7 @@ template< typename T >
 bool        QueueConcurrent< T >::TryPop      ( T & val )
 {
     ScopedCriticalSection lock( m_criticalSection );
-
+    
     if( m_queue.empty() )
     {
         return false;
@@ -149,7 +151,8 @@ bool        QueueConcurrent< T >::TryPop      ( T & val )
 template< typename T >
 void        QueueConcurrent< T >::WaitAndPop    ( T & val )
 {
-    m_conditionVariable.wait();
+    std::unique_lock< std::mutex > lock( m_mutex );
+    m_conditionVariable.wait( lock, [ = ] { return !m_queue.empty(); } );
 
     val = m_queue.front();
     m_queue.pop();

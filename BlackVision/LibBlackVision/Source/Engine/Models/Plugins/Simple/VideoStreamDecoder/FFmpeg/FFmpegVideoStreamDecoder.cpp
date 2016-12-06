@@ -7,12 +7,6 @@
 #include "FFmpegUtils.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 
@@ -77,18 +71,6 @@ FFmpegVideoStreamDecoder::~FFmpegVideoStreamDecoder             ()
 
 // *******************************
 //
-bool                FFmpegVideoStreamDecoder::DecodePacket          ( AVPacket * packet )
-{
-    assert( packet != nullptr );
-
-    int frameReady = 0;
-    avcodec_decode_video2( m_codecCtx, m_frame, &frameReady, packet );
-
-    return ( frameReady != 0 );
-}
-
-// *******************************
-//
 AVMediaData         FFmpegVideoStreamDecoder::ConvertFrame          ()
 {
     sws_scale( m_swsCtx, m_frame->data, m_frame->linesize, 0, m_frame->height, m_outFrame->data, m_outFrame->linesize );
@@ -97,7 +79,7 @@ AVMediaData         FFmpegVideoStreamDecoder::ConvertFrame          ()
     memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
 
     AVMediaData mediaData;
-    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pkt_pts );
+    mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pts );
     mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
     
     return mediaData;
@@ -129,27 +111,6 @@ UInt32              FFmpegVideoStreamDecoder::GetHeight         () const
 Float64             FFmpegVideoStreamDecoder::GetFrameRate      () const
 {
     return m_frameRate;
-}
-
-// *******************************
-//
-bool			    FFmpegVideoStreamDecoder::ProcessPacket		( FFmpegDemuxer * demuxer )
-{
-    if( m_bufferQueue.Size() < m_maxQueueSize )
-    {
-        auto packet = demuxer->GetPacket( m_streamIdx );
-        if( packet )
-        {
-            if( DecodePacket( packet->GetAVPacket() ) )
-            {
-                auto data = ConvertFrame();
-                m_bufferQueue.Push( data );
-
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 } //bv

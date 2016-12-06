@@ -25,15 +25,12 @@ private:
 
 public:
 
-							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 5 );
+							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 10 );
 							~FFmpegAudioStreamDecoder	();
 
     Int32                   GetSampleRate               () const;
     AudioFormat             GetFormat                   () const;
 
-    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer ) override;
-	
-	virtual bool			DecodePacket				( AVPacket * packet ) override;
 	virtual AVMediaData		ConvertFrame				() override;
 
 private:

@@ -17,13 +17,13 @@ namespace bv {
 class FFmpegAVDecoder;
 
 
-class FFmpegStreamDecoderThread : public Thread
+class FFmpegStreamsDecoderThread : public Thread
 {
 
 private:
 
-    FFmpegAVDecoder *           m_decoder;
-    FFmpegStreamDecoder *       m_streamDecoder;
+    FFmpegStreamDecoder *       m_videoStreamDecoder;
+    FFmpegStreamDecoder *       m_audioStreamDecoder;
     FFmpegDemuxer *				m_demuxer;
 
 	mutable std::mutex			m_mutex;
@@ -34,8 +34,8 @@ private:
 
 public:
 
-							    FFmpegStreamDecoderThread	    ( FFmpegAVDecoder * decoder, FFmpegStreamDecoder * streamDecoder, FFmpegDemuxer * demuxer );
-	virtual					    ~FFmpegStreamDecoderThread	    ();
+                                FFmpegStreamsDecoderThread      ( FFmpegStreamDecoder * videoStreamDecoder, FFmpegStreamDecoder * audioStreamDecoder, FFmpegDemuxer * demuxer );
+	virtual					    ~FFmpegStreamsDecoderThread     ();
 	void						Kill				            ();
 
     void					    Restart				            ();
@@ -49,6 +49,6 @@ protected:
 
 };
 
-DEFINE_UPTR_TYPE( FFmpegStreamDecoderThread )
+DEFINE_UPTR_TYPE( FFmpegStreamsDecoderThread )
 
 } //bv
