@@ -8,6 +8,13 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
 
+uniform mat4 shadowTx;
+uniform mat4 outlineTx;
+
+uniform int         firstTextCC;
+uniform int         firstTextOutCC;
+uniform int         firstTextShCC;
+
 uniform int     cc_num;
 uniform int     cc_num_total;
 
@@ -143,8 +150,17 @@ void main()
     default:
         break;
     }
-    
+	
     transform = MVP * transform;
+	
+	if( cc_num >= firstTextShCC && cc_num < firstTextOutCC ) 
+	{
+		transform = transform * shadowTx;
+	}
+	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
+	{
+		transform = transform * outlineTx;
+	}
     
     gl_Position = transform * vec4( vertexPosition, 1.0 );
     uvCoord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;

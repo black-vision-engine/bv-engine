@@ -185,10 +185,10 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
                 // XYZ
 
                 {
-                    quadTopLeft = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
-                    quadTopRight = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) + glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
-                    quadBottomLeft = glm::vec3( 0.f, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
-                    quadBottomRight = glm::vec3( (float)glyph->width / aspectRatio, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
+                    quadTopLeft = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
+                    quadTopRight = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
+                    quadBottomLeft = glm::vec3( 0.f, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
+                    quadBottomRight = glm::vec3( (float)glyph->width / aspectRatio, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
                 }
 
                 posAttribChannel->AddAttribute( quadBottomLeft + translate + bearing + newLineTranslation );

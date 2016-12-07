@@ -29,10 +29,13 @@ public:
     {
         static const std::string        ALPHA;
         static const std::string        FONT_SIZE;
-        static const std::string        BLUR_SIZE;
-        static const std::string        GLOW_COLOR;
-        static const std::string        OUTLINE_SIZE;
+
+        static const std::string        SHADOW_COLOR;
+        static const std::string        SHADOW_TX;
+
         static const std::string        OUTLINE_COLOR;
+        static const std::string        OUTLINE_TX;
+
         static const std::string        SPACING;
         static const std::string        ALIGNEMENT;
         static const std::string        ALIGN_CHARACTER;
@@ -56,6 +59,10 @@ protected:
 
     ParamFloatPtr                   m_spacingParam;
     ParamIntPtr                     m_alignmentParam;
+
+    ParamTransformPtr               m_outlineTxParam;
+    ParamTransformPtr               m_glowTxParam;
+
     ValueIntPtr                     m_alignCharacter;
     ValueIntPtr                     m_firstTextCC;
     ValueIntPtr                     m_firstTextOutCC;

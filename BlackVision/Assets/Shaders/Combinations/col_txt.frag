@@ -9,7 +9,7 @@ uniform sampler2D   AtlasTex0;
 
 uniform vec4        color;
 uniform vec4        outlineColor;
-uniform vec4        glowColor;
+uniform vec4        shadowColor;
 uniform float       alpha;
 uniform int         cc_num;
 uniform int         cc_num_total;
@@ -121,11 +121,11 @@ void main()
 {
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
-	float col3 = texture( AtlasTex0, uvCoord ).a;
+	float col3 = texture( AtlasTex0, uvCoord ).r;
     
     vec4 c = color;
     vec4 oc = outlineColor;
-	vec4 sc = glowColor;
+	vec4 sc = shadowColor;
     float a = alpha;
 
     switch( colTextEffectId )
