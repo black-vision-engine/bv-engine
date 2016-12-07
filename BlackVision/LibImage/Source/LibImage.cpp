@@ -448,20 +448,18 @@ char *                    BlurImageImpl    ( const char * data, UInt32 width, UI
     for ( unsigned int y = 0; y < height; ++y )
     {
         Float4 currVal( 0.f, 0.f, 0.f, 0.f );
-        for ( unsigned int x = 0; x < width; ++x )
+
+        for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
         {
-            if ( x == 0 )
-            {
-                for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
-                {
-                    currVal = currVal + GetPixelColorFloat4( x + i, y, data, width, height );
-                    currVal = currVal * ( 1.f / kernelSize );
-                }
-            } 
-            else 
-            {
-                currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, data, width, height ) - GetPixelColorFloat4( x - (Int32)blurSize, y, data, width, height ) ) * ( 1.f / kernelSize );
-            }
+            currVal = currVal + GetPixelColorFloat4( i, y, data, width, height );
+            currVal = currVal * ( 1.f / kernelSize );
+
+            SetPixelColorFloat4( y, 0, out, width, height, currVal );
+        }
+
+        for ( unsigned int x = 1; x < width; ++x )
+        {
+            currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, data, width, height ) - GetPixelColorFloat4( x - (Int32)blurSize, y, data, width, height ) ) * ( 1.f / kernelSize );
             
             SetPixelColorFloat4( y, x, tmp, height, width, currVal );
         }
@@ -470,21 +468,18 @@ char *                    BlurImageImpl    ( const char * data, UInt32 width, UI
     for ( unsigned int y = 0; y < width; ++y )
     {
         Float4 currVal( 0.f, 0.f, 0.f, 0.f );
-        for ( unsigned int x = 0; x < height; ++x )
+
+        for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
         {
-            
-            if ( x == 0 )
-            {
-                for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
-                {
-                    currVal = currVal + GetPixelColorFloat4( x + i, y, tmp, height, width );
-                    currVal = currVal * ( 1.f / kernelSize );
-                }
-            } 
-            else 
-            {
-                currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, tmp, height, width ) - GetPixelColorFloat4( x - (Int32)blurSize, y, tmp, height, width ) ) * ( 1.f / kernelSize );
-            }
+            currVal = currVal + GetPixelColorFloat4( i, y, tmp, height, width );
+            currVal = currVal * ( 1.f / kernelSize );
+
+            SetPixelColorFloat4( y, 0, out, width, height, currVal );
+        }
+
+        for ( unsigned int x = 1; x < height; ++x )
+        {            
+            currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, tmp, height, width ) - GetPixelColorFloat4( x - (Int32)blurSize, y, tmp, height, width ) ) * ( 1.f / kernelSize );
             
             SetPixelColorFloat4( y, x, out, width, height, currVal );
         }
