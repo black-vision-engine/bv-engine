@@ -53,6 +53,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_CC, 0 );
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_OUT_CC, 0 );
@@ -260,9 +261,31 @@ Float32                             TextPluginBase::BuildVACForText             
     auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
 
+    m_firstTextOutCC->SetValue( 0 );
+    m_firstTextCC->SetValue( 0 );
+    m_firstTextShCC->SetValue( 0 );
+
+    if( m_blurSize > 0 ) 
+    {
+        TextHelper::BuildVACForText(    m_vaChannel.get(),
+                                        m_atlas,
+                                        text,
+                                        m_blurSize,
+                                        spacing,
+                                        alignType,
+                                        alignCh,
+                                        m_outlineSize,
+                                        viewWidth,
+                                        viewHeight,
+                                        nullptr,
+                                        useKerning );
+
+        m_firstTextOutCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
+    }
+
+
     if( m_outlineSize > 0 ) 
     {
-        m_firstTextOutCC->SetValue( 0 );
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
                                         text,

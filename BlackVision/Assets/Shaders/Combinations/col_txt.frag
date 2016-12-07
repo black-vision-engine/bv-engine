@@ -9,6 +9,7 @@ uniform sampler2D   AtlasTex0;
 
 uniform vec4        color;
 uniform vec4        outlineColor;
+uniform vec4        glowColor;
 uniform float       alpha;
 uniform int         cc_num;
 uniform int         cc_num_total;
@@ -120,9 +121,11 @@ void main()
 {
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
+	float col3 = texture( AtlasTex0, uvCoord ).a;
     
     vec4 c = color;
     vec4 oc = outlineColor;
+	vec4 sc = glowColor;
     float a = alpha;
 
     switch( colTextEffectId )
@@ -130,7 +133,7 @@ void main()
     case 1:
         c = pseudoRandonColorAffine( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
          break;
-   case 2:
+    case 2:
         c = pseudoRandonColorCube( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
         break;
     case 3:
@@ -142,11 +145,25 @@ void main()
     default:
         break;
     }
+
+	// if( a == 0.0 )
+		// discard;
     
-	vec4 result = a * ( cc_num >= firstTextCC ? c * col1 : oc * col2 * ( 1.0 - col1 ) );
+	vec4 result;
 	
-	//vec4 result = a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
-	
+	if( cc_num >= firstTextShCC && cc_num < firstTextOutCC ) 
+	{
+		result = a * col3 * sc;
+	}
+	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
+	{
+		result = a * col2 * oc;
+	}
+	else 
+	{
+		result = a * col1 * c;
+	}
+		
 	if( result.a == 0.0 )
 		discard;
 	FragColor = result;

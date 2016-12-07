@@ -52,6 +52,8 @@ void					SaveRAWImageImpl( const std::string & filePath, const char * data, Size
 MemoryChunkConstPtr     SwapChannels    ( const MemoryChunkConstPtr & in, UInt32 bpp, UInt32 b, UInt32 g, UInt32 r, UInt32 a);
 MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp );
 
+MemoryChunkConstPtr     AddImages       ( const MemoryChunkConstPtr & in1, const MemoryChunkConstPtr & in2 );
+
 char *		            ResizeImpl		    ( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft );
 char *                  MakeThumbnailImpl   ( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 maxSize );
 char *		            BlurImageImpl	    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize );

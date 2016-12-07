@@ -669,11 +669,40 @@ MemoryChunkConstPtr     SwapChannels    ( const MemoryChunkConstPtr & in, UInt32
     for( auto p = in->Get(); p < in->Get() + in->Size(); p += 4, o += 4 )
     {
         *( ( UInt32 * )( o ) ) = ( ( UInt32 )p[ 0 ] & b )
+                                + ( ( ( UInt32 )p[ 0 ] << 8 ) & b ) 
+                                + ( ( ( UInt32 )p[ 0 ] << 16 ) & b )
+                                + ( ( ( UInt32 )p[ 0 ] << 24 ) & b )
+                                + ( ( UInt32 )p[ 1 ] & g )
                                 + ( ( ( UInt32 )p[ 1 ] << 8 ) & g ) 
+                                + ( ( ( UInt32 )p[ 1 ] << 16 ) & g )
+                                + ( ( ( UInt32 )p[ 1 ] << 24 ) & g )
+                                + ( ( UInt32 )p[ 2 ] & r )
+                                + ( ( ( UInt32 )p[ 2 ] << 8 ) & r ) 
                                 + ( ( ( UInt32 )p[ 2 ] << 16 ) & r )
-                                + ( ( ( UInt32 )p[ 3 ] << 24 ) & a );
+                                + ( ( ( UInt32 )p[ 2 ] << 24 ) & r )
+                                + ( ( UInt32 )p[ 3 ] & a )
+                                + ( ( ( UInt32 )p[ 3 ] << 8 ) & a ) 
+                                + ( ( ( UInt32 )p[ 3 ] << 16 ) & a )
+                                + ( ( ( UInt32 )p[ 3 ] << 24 ) & a )
+                                ;
         auto r1 = *( ( UInt32 * )( o ) );
         { r1; }
+    }
+
+    return out;
+}
+
+MemoryChunkConstPtr     AddImages       ( const MemoryChunkConstPtr & in1, const MemoryChunkConstPtr & in2 )
+{
+    assert( in1->Size() == in2->Size() );
+
+    auto out = MemoryChunk::Create( new char[ in1->Size() ], in1->Size() );
+
+    auto o = out->GetWritable();
+
+    for( auto p1 = in1->Get(), p2 = in2->Get(); p1 < in1->Get() + in1->Size(); p1 += 4, p2 += 4, o += 4 ) 
+    {
+        *( (UInt32 * )( o ) ) = *((UInt32 * )(&p1[ 0 ])) + *((UInt32 * )(&p2[ 0 ]));
     }
 
     return out;
