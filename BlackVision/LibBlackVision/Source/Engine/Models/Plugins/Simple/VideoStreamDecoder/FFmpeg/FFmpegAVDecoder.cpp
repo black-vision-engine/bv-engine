@@ -149,7 +149,6 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
     if( HasVideo() )
     {
         Seek( frameTime );
-        FlushBuffers();
         
         Play();
 
