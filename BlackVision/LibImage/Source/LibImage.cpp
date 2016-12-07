@@ -26,6 +26,11 @@ struct Float4
         return Float4( x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w );
     }
 
+    Float4 operator - ( const Float4 & rhs )
+    {
+        return Float4( x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w );
+    }
+
     Float4 operator * ( Float32 f )
     {
         return Float4( x * f, y * f, z * f, w * f );
@@ -194,8 +199,8 @@ inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 w
 //
 inline Float4 GetPixelColorFloat4( Int32 x, Int32 y, const char * data, UInt32 width, UInt32 height )
 {
-    x = std::max( 0, std::min( x, ( Int32 )width - 1 ) );
-    y = std::max( 0, std::min( y, ( Int32 )height - 1 ) );
+    x = x >= 0 && x < ( Int32 )width ? x : 0;
+    y = y >= 0 && y < ( Int32 )height ? y : 0;
 
     const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
 
@@ -438,37 +443,45 @@ char *                    BlurImageImpl    ( const char * data, UInt32 width, UI
     char * tmp = new char[ numBytes ];
     char * out = new char[ numBytes ];
 
-    float kernelSize = float( blurSize * 2 + 1 );
+    float kernelSizeDiv = 1.f / float( blurSize * 2 + 1 );
 
     for ( unsigned int y = 0; y < height; ++y )
     {
-        for ( unsigned int x = 0; x < width; ++x )
-        {
-            Float4 currVal( 0.f, 0.f, 0.f, 0.f );
-            for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
-            {
-                currVal = currVal + GetPixelColorFloat4( x + i, y, data, width, height );
-            }
+        Float4 currVal( 0.f, 0.f, 0.f, 0.f );
 
-            currVal = currVal * ( 1.f / kernelSize );
+        for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
+        {
+            currVal = currVal + GetPixelColorFloat4( i, y, data, width, height );
+            currVal = currVal * kernelSizeDiv;
+
+            SetPixelColorFloat4( y, 0, out, width, height, currVal );
+        }
+
+        for ( unsigned int x = 1; x < width; ++x )
+        {
+            currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, data, width, height ) - GetPixelColorFloat4( x - (Int32)blurSize, y, data, width, height ) ) * kernelSizeDiv;
             
-            SetPixelColorFloat4( x, y, tmp, width, height, currVal );
+            SetPixelColorFloat4( y, x, tmp, height, width, currVal );
         }
     }
 
-    for ( unsigned int x = 0; x < width; ++x )
+    for ( unsigned int y = 0; y < width; ++y )
     {
-        for ( unsigned int y = 0; y < height; ++y )
-        {
-            Float4 currVal( 0.f, 0.f, 0.f, 0.f );
-            for( int i = -(int)blurSize; i <= (int)blurSize; ++i )
-            {
-                currVal = currVal + GetPixelColorFloat4( x, y + i , tmp, width, height );
-            }
+        Float4 currVal( 0.f, 0.f, 0.f, 0.f );
 
-            currVal = currVal * ( 1.f / kernelSize );
+        for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
+        {
+            currVal = currVal + GetPixelColorFloat4( i, y, tmp, height, width );
+            currVal = currVal * kernelSizeDiv;
+
+            SetPixelColorFloat4( y, 0, out, width, height, currVal );
+        }
+
+        for ( unsigned int x = 1; x < height; ++x )
+        {            
+            currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, tmp, height, width ) - GetPixelColorFloat4( x - (Int32)blurSize, y, tmp, height, width ) ) * kernelSizeDiv;
             
-            SetPixelColorFloat4( x, y, out, width, height, currVal );
+            SetPixelColorFloat4( y, x, out, width, height, currVal );
         }
     }
 
@@ -669,11 +682,40 @@ MemoryChunkConstPtr     SwapChannels    ( const MemoryChunkConstPtr & in, UInt32
     for( auto p = in->Get(); p < in->Get() + in->Size(); p += 4, o += 4 )
     {
         *( ( UInt32 * )( o ) ) = ( ( UInt32 )p[ 0 ] & b )
+                                + ( ( ( UInt32 )p[ 0 ] << 8 ) & b ) 
+                                + ( ( ( UInt32 )p[ 0 ] << 16 ) & b )
+                                + ( ( ( UInt32 )p[ 0 ] << 24 ) & b )
+                                + ( ( UInt32 )p[ 1 ] & g )
                                 + ( ( ( UInt32 )p[ 1 ] << 8 ) & g ) 
+                                + ( ( ( UInt32 )p[ 1 ] << 16 ) & g )
+                                + ( ( ( UInt32 )p[ 1 ] << 24 ) & g )
+                                + ( ( UInt32 )p[ 2 ] & r )
+                                + ( ( ( UInt32 )p[ 2 ] << 8 ) & r ) 
                                 + ( ( ( UInt32 )p[ 2 ] << 16 ) & r )
-                                + ( ( ( UInt32 )p[ 3 ] << 24 ) & a );
+                                + ( ( ( UInt32 )p[ 2 ] << 24 ) & r )
+                                + ( ( UInt32 )p[ 3 ] & a )
+                                + ( ( ( UInt32 )p[ 3 ] << 8 ) & a ) 
+                                + ( ( ( UInt32 )p[ 3 ] << 16 ) & a )
+                                + ( ( ( UInt32 )p[ 3 ] << 24 ) & a )
+                                ;
         auto r1 = *( ( UInt32 * )( o ) );
         { r1; }
+    }
+
+    return out;
+}
+
+MemoryChunkConstPtr     AddImages       ( const MemoryChunkConstPtr & in1, const MemoryChunkConstPtr & in2 )
+{
+    assert( in1->Size() == in2->Size() );
+
+    auto out = MemoryChunk::Create( new char[ in1->Size() ], in1->Size() );
+
+    auto o = out->GetWritable();
+
+    for( auto p1 = in1->Get(), p2 = in2->Get(); p1 < in1->Get() + in1->Size(); p1 += 4, p2 += 4, o += 4 ) 
+    {
+        *( (UInt32 * )( o ) ) = *((UInt32 * )(&p1[ 0 ])) + *((UInt32 * )(&p2[ 0 ]));
     }
 
     return out;

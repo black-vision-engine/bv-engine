@@ -29,13 +29,19 @@ public:
     {
         static const std::string        ALPHA;
         static const std::string        FONT_SIZE;
-        static const std::string        BLUR_SIZE;
-        static const std::string        GLOW_COLOR;
-        static const std::string        OUTLINE_SIZE;
+
+        static const std::string        SHADOW_COLOR;
+        static const std::string        SHADOW_TX;
+
         static const std::string        OUTLINE_COLOR;
+        static const std::string        OUTLINE_TX;
+
         static const std::string        SPACING;
         static const std::string        ALIGNEMENT;
         static const std::string        ALIGN_CHARACTER;
+        static const std::string        FIRST_TEXT_CC;
+        static const std::string        FIRST_TEXT_OUT_CC;
+        static const std::string        FIRST_TEXT_SH_CC;
     };
 
 protected:
@@ -53,7 +59,14 @@ protected:
 
     ParamFloatPtr                   m_spacingParam;
     ParamIntPtr                     m_alignmentParam;
+
+    ParamTransformPtr               m_outlineTxParam;
+    ParamTransformPtr               m_glowTxParam;
+
     ValueIntPtr                     m_alignCharacter;
+    ValueIntPtr                     m_firstTextCC;
+    ValueIntPtr                     m_firstTextOutCC;
+    ValueIntPtr                     m_firstTextShCC;
 
     bool                                        LoadResource                ( AssetDescConstPtr assetDescr, const std::string & name );
     bool                                        LoadAtlas                   ( const FontAssetDescConstPtr & fontAssetDesc, const std::string & name );
@@ -67,6 +80,8 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
+
+    virtual Float32                             BuildVACForText             ( const std::wstring & text, bool useKerning );
 
     explicit                                    TextPluginBase              (   const std::string & name,
                                                                                 const std::string & uid,

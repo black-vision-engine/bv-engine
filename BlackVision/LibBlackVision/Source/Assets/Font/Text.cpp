@@ -240,13 +240,26 @@ void Text::BlurAtlas( TextAtlasPtr atlas ) const
         auto atlasH = atlas->GetHeight();
         auto oldData = std::const_pointer_cast< MemoryChunk >( atlas->m_textureAsset->GetOriginal()->GetData() );
 
-        image::SaveBMPImage( "test_in.bmp", oldData, atlasW, atlasH, atlas->GetBitsPerPixel() );
+        image::SaveBMPImage( "test_in.png", oldData, atlasW, atlasH, atlas->GetBitsPerPixel() );
+
+        //image::SaveBMPImage( "test_in.bmp", oldData, atlasW, atlasH, atlas->GetBitsPerPixel() );
 
         auto bluredData = image::BlurImage( oldData, atlasW, atlasH, atlas->GetBitsPerPixel(), m_blurSize );
 
-        image::SaveBMPImage( "test_out.bmp", bluredData, atlasW, atlasH, atlas->GetBitsPerPixel() );
+        image::SaveBMPImage( "test_blured.png", bluredData, atlasW, atlasH, atlas->GetBitsPerPixel() );
 
-        auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
+        //image::SaveBMPImage( "test_out.bmp", bluredData, atlasW, atlasH, atlas->GetBitsPerPixel() );
+
+        auto swapped = image::SwapChannels( bluredData, atlas->GetBitsPerPixel(), 0x00ff0000, 0xff000000, 0x00000000, 0x00000000 );
+
+        image::SaveBMPImage( "test_swapped.png", swapped, atlasW, atlasH, atlas->GetBitsPerPixel() );
+
+        auto added = image::AddImages( oldData, swapped );
+
+        ///image::SaveRAWImage( "test_out_sw.raw", swapped );
+
+        image::SaveBMPImage( "test_out.png", added, atlasW, atlasH, atlas->GetBitsPerPixel() );
+        auto newSingleTextureRes = SingleTextureAsset::Create( added, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
         
         std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );
     }

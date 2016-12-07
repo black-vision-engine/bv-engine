@@ -137,7 +137,7 @@ void    RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer, UInt
         {
             auto c = 4 * (pitch * (ymax - s->y) + s->x -  xmin +  w);
             buffer[ c + channel ] = (char)s->coverage;
-            buffer[ c + 3 ] = (char)s->coverage;
+            //buffer[ c + 3 ] = (char)s->coverage;
         }
     }
 }
