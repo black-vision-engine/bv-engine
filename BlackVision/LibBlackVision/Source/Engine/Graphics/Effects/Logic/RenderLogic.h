@@ -68,12 +68,9 @@ public:
 private:
 
     void    RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
-    void    FrameRendered   ( Renderer * renderer );
+    void    FrameRendered   ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
-    void    RenderRootNode  ( Renderer * renderer, const SceneVec & scenes, RenderTarget * rt );
-
-    // ------ audio ------
-    void    RenderRootNode  ( audio::AudioRenderer * audioRenderer, const SceneVec & scenes );
+    void    RenderRootNode  ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes, RenderTarget * rt );
 
 public:
 
@@ -92,7 +89,7 @@ private:
 
     void    RenderGridLines     ( Scene * scene, RenderLogicContext * ctx );
        
-    RenderLogicContext *            GetContext              ( Renderer * renderer );
+    RenderLogicContext *            GetContext              ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
     void                            BlitToPreview           ( RenderTarget * rt, RenderLogicContext * ctx );
 

@@ -73,7 +73,7 @@ bool                        AudioEntity::IsEmpty        () const
 
 // ***********************
 //
-void                        AudioEntity::PushData       ( const std::vector< MemoryChunkConstPtr > & data )
+void                        AudioEntity::PushData       ( MemoryChunkConstPtr data )
 {
     auto buffer = audio::AudioBuffer::Create( data, m_frequency, m_format );
     m_audioData.Push( buffer );

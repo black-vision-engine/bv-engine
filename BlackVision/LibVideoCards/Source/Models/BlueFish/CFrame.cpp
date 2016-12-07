@@ -5,36 +5,38 @@ namespace bv { namespace videocards { namespace bluefish {
 
 
 CFrame::CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
+    : m_pAudioBuffer( nullptr )
+    , m_nAudioSize( 0 )
 {
     Init( ID, Size, BytesPerLine,0 );
 }
 
 CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
+    : m_pAudioBuffer( nullptr )
+    , m_nAudioSize( 0 )
 {
     Init( ID, Size, BytesPerLine,Odd );
     memcpy(m_pBuffer, buffer, Size);
 }
 
-CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd, unsigned int AudioSize, const unsigned int* AudioData, BVTimeCode TimeCode, BVFrameDescriptor FrameDescriptor)
+CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc )
+    : m_desc( desc )
+    , m_nAudioSize( audioSize )
 {
 	Init(ID, Size, BytesPerLine, Odd);
 	memcpy(m_pBuffer, buffer, Size);
 
-	m_AudioSize = AudioSize;
-	m_FrameInformation = FrameDescriptor;
 	m_TimeCode = TimeCode;
-	if (AudioSize != 0)
-	{
-		
-		m_AudioData = new unsigned char[2002 * 16 * 4];
-		memset(m_AudioData, 0, 2002 * 16 *4);
-		memcpy(m_AudioData, AudioData, AudioSize);
-		
-		if (m_AudioData)
-		{
-			//VirtualLock(m_AudioData, AudioSize);
-		}
-	}	
+
+    if( audioSize )
+    {
+        m_pAudioBuffer = (BLUE_UINT8*)VirtualAlloc(NULL, audioSize, MEM_COMMIT, PAGE_READWRITE);
+	    if(m_pAudioBuffer)
+        {
+		    VirtualLock(m_pAudioBuffer, audioSize);
+        }
+	    memcpy(m_pAudioBuffer, audioBuffer, audioSize);
+    }
 }
 
 CFrame::~CFrame()
@@ -45,17 +47,16 @@ CFrame::~CFrame()
 		VirtualFree(m_pBuffer, 0, MEM_RELEASE);
 	}
 
-	if (m_AudioData)
+	if (m_pAudioBuffer)
 	{
-		delete m_AudioData;
-		//VirtualUnlock(m_AudioData, 16*2002);
-		//VirtualFree(m_AudioData, 0, MEM_RELEASE);
+		VirtualUnlock(m_pAudioBuffer, m_nAudioSize);
+		VirtualFree(m_pAudioBuffer, 0, MEM_RELEASE);
 	}
 }
 
 void    CFrame::Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
 {
-	m_AudioData = NULL;
+	m_pAudioBuffer = NULL;
     m_nFrameID = ID;
     m_nCardBufferID = 0;
 	m_nSize = Size;

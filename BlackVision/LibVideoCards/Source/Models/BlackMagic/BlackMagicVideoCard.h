@@ -3,7 +3,7 @@
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "BlackMagicUtils.h"
-#include "BVVideoFrame.h"
+#include "AVFrame.h"
 
 
 namespace bv { namespace videocards { namespace blackmagic {
@@ -59,7 +59,7 @@ public:
     void                    AddOutput           ( ChannelOutputData output );
 
     virtual void            Start               () override;
-    virtual void            ProcessFrame        ( BVVideoFramePtr data, int odd ) override;
+    virtual void            ProcessFrame        ( AVFramePtr data, int odd ) override;
 
     static UInt32           EnumerateDevices    ();
 

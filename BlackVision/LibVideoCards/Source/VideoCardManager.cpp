@@ -52,7 +52,7 @@ void            VideoCardProcessingThread::Run          ()
 
 //**************************************
 //
-BVVideoFramePtr          VideoCardManager::KILLER_FRAME = nullptr;
+AVFramePtr          VideoCardManager::KILLER_FRAME = nullptr;
 
 //**************************************
 //
@@ -60,14 +60,10 @@ VideoCardManager::VideoCardManager      ()
     : m_keyActive( true )
     , m_interlaceEnabled( true )
     , m_dislpayMode( DisplayMode::HD )
-	, m_currentFrameNumber(0)
+	, m_currentFrameNumber( 0 )
     , m_processThread( std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread() ) )
 	
 {
-	int size = 1920 * 1080 * 4 / 2;
-	char *mem = new char[size];
-	m_currentFrameData = MemoryChunkPtr(new MemoryChunk((char*)mem, size));
-		 
 }
 
 //**************************************
@@ -177,7 +173,7 @@ void                        VideoCardManager::Start                 ()
 
 // *********************************
 //
-void                        VideoCardManager::QueueFrame            (BVVideoFramePtr data )
+void                        VideoCardManager::QueueFrame            (AVFramePtr data )
 {
     m_frameBuffer.Push( data );
 }
@@ -192,18 +188,19 @@ bool                        VideoCardManager::ProcessFrame          ()
     {
 		short  int odd = m_currentFrameNumber % 2;
 		m_currentFrameNumber++;
-		if (data->m_FrameInformation.m_IsFieldMode)
+		if( data->m_desc.fieldModeEnabled )
 		{
-			data = RetrieveFieldFromFrame(data, odd);
+			data = RetrieveFieldFromFrame( data, odd );
 		}
 		else{
             data = InterlacedFrame( data );
         }
 		odd = m_currentFrameNumber % 2;
+
         std::unique_lock< std::mutex > lock( m_mutex );
         for( auto & videoCard : m_videoCards )
         {
-            videoCard->ProcessFrame( data,odd );
+            videoCard->ProcessFrame( data, odd );
         }
 
         return true;
@@ -215,15 +212,15 @@ bool                        VideoCardManager::ProcessFrame          ()
 
 // *********************************
 //
-BVVideoFramePtr         VideoCardManager::RetrieveFieldFromFrame(BVVideoFramePtr frame, int odd)
+AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, int odd)
 {
 	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
 
-	const char *mem_src = frame->m_VideoData->Get();
+	const char *mem_src = frame->m_videoData->Get();
 
-	int pixel_depth = frame->m_FrameInformation.m_depth;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
-	int width = frame->m_FrameInformation.m_width;
-	int height = frame->m_FrameInformation.m_height;
+	int pixel_depth = frame->m_desc.depth;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
+	int width = frame->m_desc.width;
+	int height = frame->m_desc.height;
 	int bytes_per_line = width * pixel_depth;
 
 	int size = width * height/2 * pixel_depth + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
@@ -238,14 +235,14 @@ BVVideoFramePtr         VideoCardManager::RetrieveFieldFromFrame(BVVideoFramePtr
 
 	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
 
-	frame->m_VideoData = ptr;
+	frame->m_videoData = ptr;
 
 	return frame;
 }
 
 // *********************************
 //
-BVVideoFramePtr         VideoCardManager::InterlacedFrame(BVVideoFramePtr frame)
+AVFramePtr         VideoCardManager::InterlacedFrame(AVFramePtr frame)
 {
 	
 	// yet to be implemented

@@ -233,7 +233,7 @@ void                    VideoCard::Start                ()
 
 //**************************************
 //
-void                    VideoCard::ProcessFrame         (BVVideoFramePtr src_frame, int odd )
+void                    VideoCard::ProcessFrame         (AVFramePtr src_frame, int odd )
 {
 	{odd;}
     for( UInt32 i = 0; i < ( UInt32 )m_outputs.size(); ++i )
@@ -249,7 +249,7 @@ void                    VideoCard::ProcessFrame         (BVVideoFramePtr src_fra
         }
         else
         {
-            memcpy( rawFrame, src_frame->m_VideoData->Get(), frame->GetRowBytes() * frame->GetHeight() );
+            memcpy( rawFrame, src_frame->m_videoData->Get(), frame->GetRowBytes() * frame->GetHeight() );
         }
 
         m_output->DisplayVideoFrameSync( frame );

@@ -36,7 +36,7 @@ public:
     void                        Clear           ();
     bool                        IsEmpty         () const;
 
-    void                        PushData        ( const std::vector< MemoryChunkConstPtr > & data );
+    void                        PushData        ( MemoryChunkConstPtr data );
     AudioBufferVec              PopData         ();
 
     UInt32                      GetUpdateID     () const;

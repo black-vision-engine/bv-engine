@@ -473,7 +473,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				ext_ltc = pFrame->m_TimeCode.GetTimeCode(true);
 				sd_vitc = pFrame->m_TimeCode.GetTimeCode(true);
 
-				if (pFrame->m_FrameInformation.m_AutoGenerateTimecode)
+				if (pFrame->m_desc.autoGenerateTimecode)
 				{
 					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, false, rp188_vitc, false);
 					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, rp188_ltc, false);
@@ -485,7 +485,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				hanc_stream_info.ltc_time_code = ext_ltc.timecode_u64;			//external LTC time code
 				hanc_stream_info.sd_vitc_time_code = sd_vitc.timecode_u64;		//this field is only valid for SD video signal 
 
-				if (!pFrame->m_FrameInformation.m_TimeCodePresent)
+				if (!pFrame->m_desc.timeCodePresent)
 				{
 					hanc_stream_info.time_code = 0LL;			//RP188 VITC time code
 					hanc_stream_info.rp188_ltc_time_code = 0LL;	//RP188 LTC time code
@@ -493,14 +493,16 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 					hanc_stream_info.sd_vitc_time_code = 0LL;		//this field is only valid for SD video signal 
 				}
 
-				encode_hanc_frame_ex(nCardType,
-					&hanc_stream_info,
-					pFrame->m_AudioData,
-					pFrame->m_FrameInformation.m_AudioChannelsCount,
-					pFrame->m_FrameInformation.m_AudioSamplesPerFrame,
-					nSampleType,
-					nEmbAudioFlag);
-			
+                if( pFrame->m_pAudioBuffer )
+                {
+				    encode_hanc_frame_ex(nCardType,
+					    &hanc_stream_info,
+					    pFrame->m_pAudioBuffer,
+					    pFrame->m_desc.channels,
+					    1920,//FIXME samples
+					    nSampleType,
+					    nEmbAudioFlag);
+                }
 
 				if (pThis->m_EnableVbiVanc)
 					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));
@@ -508,8 +510,6 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));
 
 				pThis->m_pSDK->render_buffer_update(BlueBuffer_Image_HANC(BufferId));
-					
-				
 			}
 
 			if (pThis->m_EnableVbiVanc)

@@ -10,7 +10,7 @@
 #include "Memory/MemoryChunk.h"
 #include "DataTypes/CircularBufferConcurrent.h"
 #include "Threading/Thread.h"
-#include "BVVideoFrame.h"
+#include "AVFrame.h"
 
 #include "Serialization/IDeserializer.h"
 
@@ -80,9 +80,7 @@ class VideoCardManager
 {
 private:
 
-	int	m_currentFrameNumber;
-	MemoryChunkPtr m_currentFrameData;
-    static BVVideoFramePtr                  KILLER_FRAME;
+    static AVFramePtr                  KILLER_FRAME;
 
     std::hash_map< std::string, const IVideoCardDesc * >                m_descMap;
     std::vector< const IVideoCardDesc * >                               m_descVec;
@@ -90,7 +88,7 @@ private:
     std::vector< IVideoCardPtr >                                        m_videoCards;
 
     /**@brief Circular blocking frame queue */
-    CircularBufferConcurrent< BVVideoFramePtr, FRAME_BUFFER_SIZE >  m_frameBuffer;
+    CircularBufferConcurrent< AVFramePtr, FRAME_BUFFER_SIZE >  m_frameBuffer;
 
     bool                                m_keyActive;
 
@@ -100,6 +98,7 @@ private:
     DisplayMode                         m_dislpayMode;
 
     mutable std::mutex			        m_mutex;
+	Int32                               m_currentFrameNumber;
 
     //FIXME: probably not needed
     /**@brief Frame processing thread (copies frames, interlacing, etc.) */
@@ -123,7 +122,7 @@ public:
 
     void                                Start                   ();
 
-    void                                QueueFrame              (BVVideoFramePtr data );
+    void                                QueueFrame              (AVFramePtr data );
     
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */
@@ -132,8 +131,8 @@ public:
     //FIXME: probably not needed
     /**@brief Copies and interlaces full frame.
     @return Returns interlaced copy of frame. */
-	BVVideoFramePtr                 InterlacedFrame(BVVideoFramePtr data);
-	BVVideoFramePtr                 RetrieveFieldFromFrame(BVVideoFramePtr data, int odd);
+	AVFramePtr                 InterlacedFrame(AVFramePtr data);
+	AVFramePtr                 RetrieveFieldFromFrame(AVFramePtr data, int odd);
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 

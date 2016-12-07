@@ -14,12 +14,6 @@
 #include "UseLoggerLibBlackVision.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv { namespace audio {
 
 
@@ -163,6 +157,30 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
         DeleteSinglePDR( m_bufferMap, source );
         m_audioEntityUpdateIDMap.erase( audio );
     }
+}
+
+// *********************************
+//
+AudioBufferConstPtr     AudioRenderer::GetBufferedData              ()
+{
+    AudioBufferPtr mixedAudioBuffer = nullptr;
+    for( auto & obj : m_bufferMap )
+    {
+        AudioBufferConstPtr bufferedData = nullptr;
+        if( obj.second->GetBufferedData( bufferedData ) )
+        {
+            if( !mixedAudioBuffer )
+            {
+                mixedAudioBuffer = audio::AudioBuffer::Create( bufferedData->GetData(), bufferedData->GetFrequency(), bufferedData->GetFormat() );
+            }
+            else
+            {
+                //mix audio
+            }
+        }
+    }
+
+    return mixedAudioBuffer;
 }
 
 // *********************************

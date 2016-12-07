@@ -229,24 +229,36 @@ void                            VideoCard::Start                    ()
 
 //**************************************
 //
-void                            VideoCard::ProcessFrame             (BVVideoFramePtr frame, int odd )
+void                            VideoCard::ProcessFrame             (AVFramePtr frame, int odd )
 {
     for( auto channel : m_channels )
 	{
         auto playbackChannel = channel->GetPlaybackChannel();
         if( playbackChannel && !channel->PlaythroughEnabled() )
 		{
-			playbackChannel->m_pFifoBuffer->PushFrame(
-				std::make_shared< CFrame >(reinterpret_cast<const unsigned char *>(frame->m_VideoData->Get()),
-					m_deviceID,
-					playbackChannel->GoldenSize,
-					playbackChannel->BytesPerLine,
-					odd,
-					(unsigned int)frame->m_AudioData->Size(),
-					reinterpret_cast<const unsigned int *>(frame->m_AudioData->Get()),
-					frame->m_TimeCode,
-					frame->m_FrameInformation
-					) );
+            if( !frame->m_audioData )
+            {
+			    playbackChannel->m_pFifoBuffer->PushFrame(
+				    std::make_shared< CFrame >(reinterpret_cast<const unsigned char *>(frame->m_videoData->Get()),
+					    m_deviceID,
+					    playbackChannel->GoldenSize,
+					    playbackChannel->BytesPerLine,
+					    odd ) );
+            }
+            else
+            {
+                playbackChannel->m_pFifoBuffer->PushFrame(
+				    std::make_shared< CFrame >(reinterpret_cast<const unsigned char *>(frame->m_videoData->Get()),
+					    m_deviceID,
+					    playbackChannel->GoldenSize,
+					    playbackChannel->BytesPerLine,
+					    odd,
+					    (unsigned int)frame->m_audioData->Size(),
+					    reinterpret_cast<const unsigned char *>(frame->m_audioData->Get()),
+					    frame->m_TimeCode,
+					    frame->m_desc
+					    ) );
+            }
 		}
 	}   
 }
