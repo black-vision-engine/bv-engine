@@ -61,6 +61,7 @@ void				FFmpegDemuxerThread::Stop		()
 //
 bool				FFmpegDemuxerThread::Stopped		() const
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
 	return m_stopped;
 }
 
@@ -70,12 +71,10 @@ void				FFmpegDemuxerThread::Run			()
 {
     while( m_running )
     {
+        std::unique_lock< std::mutex > lock( m_mutex );
+        while( m_stopped )
         {
-            std::unique_lock< std::mutex > lock( m_mutex );
-            while( m_stopped )
-            {
-                m_cond.wait( lock );
-            }
+            m_cond.wait( lock );
         }
         
         m_demuxer->ProcessPacket();
