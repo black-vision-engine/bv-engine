@@ -157,7 +157,7 @@ void main()
 	}
 	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
 	{
-		result = a * col2 * oc;
+		result = a * ( col2 * oc * ( 1 - col1 ) );
 	}
 	else 
 	{
