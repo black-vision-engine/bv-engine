@@ -18,7 +18,7 @@ CFifoBuffer::~CFifoBuffer()
 
 //**************************************
 //
-void CFifoBuffer::Init( UInt32 count, UInt32 size, UInt32 bytesPerLine )
+void                        CFifoBuffer::Init           ( UInt32 count, UInt32 size, UInt32 bytesPerLine )
 {
     { count; }
     m_emptyFrame = std::make_shared< CFrame >( 0, size, bytesPerLine );
@@ -26,9 +26,23 @@ void CFifoBuffer::Init( UInt32 count, UInt32 size, UInt32 bytesPerLine )
 
 //**************************************
 //
-void CFifoBuffer::PushEmptyFrame()
+void                        CFifoBuffer::PushFrame      ( std::shared_ptr< CFrame > frame )
 {
-    m_threadsafebuffer.push( m_emptyFrame );
+    m_frameBuffer.Push( frame );
+}
+
+//**************************************
+//
+std::shared_ptr< CFrame >   CFifoBuffer::PopFrame       ()
+{
+    return m_frameBuffer.Pop();
+}
+
+//**************************************
+//
+void                        CFifoBuffer::PushEmptyFrame ()
+{
+    m_frameBuffer.Push( m_emptyFrame );
 }
 
 } //bluefish

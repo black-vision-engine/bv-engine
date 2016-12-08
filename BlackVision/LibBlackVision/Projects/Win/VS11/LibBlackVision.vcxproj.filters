@@ -1791,12 +1791,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.cpp">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper1.cpp">
       <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.cpp">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3774,9 +3777,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h">
       <Filter>Engine\Types</Filter>
     </ClInclude>
@@ -4909,6 +4909,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.h">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

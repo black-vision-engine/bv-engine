@@ -21,6 +21,7 @@ private:
     ALuint *                        m_bufferHandles;
     Queue< ALuint >                 m_unqueuedBufferHandles;
     Queue< AudioBufferConstPtr >    m_buffers;
+    Queue< AudioBufferConstPtr >    m_bufferedData;
 
     ALuint                          m_sourceHandle;
 
@@ -29,20 +30,24 @@ private:
 
 public:
 
-            PdrAudioBuffersQueue    ( ALuint sourceHandle, Int32 frequency, AudioFormat format );
-            ~PdrAudioBuffersQueue   ();
+                        PdrAudioBuffersQueue    ( ALuint sourceHandle, Int32 frequency, AudioFormat format );
+                        ~PdrAudioBuffersQueue   ();
 
-    void    Reinitialize            ( Int32 frequency, AudioFormat format );
+    void                Reinitialize            ( Int32 frequency, AudioFormat format );
     
-    void    PushData                ( const std::vector< AudioBufferConstPtr > & buffers );
+    void                PushData                ( const std::vector< AudioBufferConstPtr > & buffers );
     
-    bool    BufferData              ();
+    bool                BufferData              ();
 
-    void    ClearBuffers            ();
+    bool                GetBufferedData         ( AudioBufferConstPtr & buffer );
+
+    void                ClearBuffers            ();
+
+    Int32               GetFrequency            () const;
 
 private:
 
-    void    InitBuffers             ( Int32 frequency, AudioFormat format );
+    void                InitBuffers             ( Int32 frequency, AudioFormat format );
 
 };
 

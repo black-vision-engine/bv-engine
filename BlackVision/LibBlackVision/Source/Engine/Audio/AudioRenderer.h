@@ -46,7 +46,9 @@ public:
     void                Stop                ( AudioEntity * audio );
 
 
-    void                DeletePDR                   ( const AudioEntity * audio );
+    void                DeletePDR           ( const AudioEntity * audio );
+
+    AudioBufferConstPtr GetBufferedData     ();
 
 private:
 

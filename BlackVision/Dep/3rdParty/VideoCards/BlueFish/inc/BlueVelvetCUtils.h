@@ -57,6 +57,9 @@ extern "C" {
 	BLUEVELVETC_API int				bfcUtilsGetFrameInfoForVideoMode(const BLUE_UINT32 nVideoMode, BLUE_UINT32&  nWidth, BLUE_UINT32& nHeight, BLUE_UINT32& nRate, BLUE_UINT32& bIs1001, BLUE_UINT32& bIsProgressive);
 	
 	
+// Get the number of Audio Packets for a given frame of video in a specific mode.
+	BLUEVELVETC_API	int				bfcUtilsGetAudioSamplesPerFrame(const BLUE_UINT32 nVideoMode, const BLUE_UINT32 nFrameNo);
+
 
 // HANC / VANC utils
 
@@ -70,8 +73,9 @@ extern "C" {
  */
 	enum BlueVancPktTypeEnum
 	{
-		BlueVancPktYComp=0,		/**< ANC pkt should be inserted/extracted from the  Y component buffer*/
-		BlueVancPktCbcrComp=1	/**< ANC pkt should be inserted/extracted from the  CbCr component buffer*/
+		BlueVancPktYComp=0,		/**< ANC pkt should be inserted/extracted from the Y component buffer*/
+		BlueVancPktCbcrComp=1,	/**< ANC pkt should be inserted/extracted from the CbCr component buffer*/
+		BlueVancPktAllComp=2	/**< ANC pkt should be inserted/extracted from all components (SD video modes)*/
 	};
 
 /*!

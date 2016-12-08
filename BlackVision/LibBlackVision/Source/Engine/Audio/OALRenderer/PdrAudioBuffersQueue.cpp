@@ -73,8 +73,10 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         auto buffer = m_buffers.Front();
         bufferId = m_unqueuedBufferHandles.Front();
 
-        BVAL::bvalBufferData( bufferId, m_format, ( const ALvoid * )buffer->Data(), ( Int32 )buffer->GetSize(), m_frequency );
+        BVAL::bvalBufferData( bufferId, m_format, ( const ALvoid * )buffer->GetRawData(), ( Int32 )buffer->GetSize(), m_frequency );
         BVAL::bvalSourceQueueBuffers( m_sourceHandle, 1, &bufferId );
+        
+        m_bufferedData.Push( m_buffers.Front() );
         m_buffers.Pop();
         m_unqueuedBufferHandles.Pop();
 
@@ -102,6 +104,21 @@ void    PdrAudioBuffersQueue::InitBuffers   ( Int32 frequency, AudioFormat forma
 
 // *******************************
 //
+bool    PdrAudioBuffersQueue::GetBufferedData  ( AudioBufferConstPtr & buffer )
+{
+    if( !m_bufferedData.IsEmpty() )
+    {
+        buffer = m_bufferedData.Front();
+        m_bufferedData.Pop();
+        
+        return true;
+    }
+
+    return false;
+}
+
+// *******************************
+//
 void    PdrAudioBuffersQueue::ClearBuffers  ()
 {
     BVAL::bvalSourcei( m_sourceHandle, AL_BUFFER, 0 );
@@ -110,6 +127,14 @@ void    PdrAudioBuffersQueue::ClearBuffers  ()
 
     m_unqueuedBufferHandles.Clear();
     m_buffers.Clear();
+    m_bufferedData.Clear();
+}
+
+// *******************************
+//
+Int32    PdrAudioBuffersQueue::GetFrequency         () const
+{
+    return m_frequency;
 }
 
 } // audio

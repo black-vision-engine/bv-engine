@@ -20,9 +20,10 @@ typedef bool BOOL;
 
 
 
-
+#ifdef __cplusplus
 extern "C"
 {
+#endif
 /**
 @defgroup hanc_manipilation_function Embedded audio
 @{
@@ -35,17 +36,16 @@ extern "C"
 
 struct hanc_stream_info_struct
 {
-	BLUE_INT32 AudioDBNArray[4];			/**< Contains the DBN values that should be used for each of the embedded audio groups*/
+	BLUE_INT32 AudioDBNArray[4];			/**< Contains the DBN values that should be used for each of the embedded audio groups; for default set to -1 */
 	BLUE_INT32 AudioChannelStatusBlock[4];	/**< channel status block information for each of the embedded audio group*/
 	BLUE_UINT32 flag_valid_time_code;		/**< deprecated/unused flag; set to 0*/
-	BLUE_UINT64	time_code;					/**< RP188 time code that was extracted from the HANC buffer or RP188 timecode which should be inserted 
-												 into the HANC buffer*/
+	BLUE_UINT64	time_code;					/**< -->RP188 VITC timecode */
 	BLUE_UINT32* hanc_data_ptr;				/**< Hanc Buffer which should be used as the source or destination for either extraction or insertion */
 	BLUE_UINT32 video_mode;					/**< video mode which this hanc buffer which be used with. We need this information for do the required audio distribution 
 												 especially NTSC */
-	BLUE_UINT64 ltc_time_code;
-	BLUE_UINT64 sd_vitc_time_code;
-	BLUE_UINT64 rp188_ltc_time_code;
+	BLUE_UINT64 ltc_time_code;				/**< -->External LTC timecode */
+	BLUE_UINT64 sd_vitc_time_code;			/**< -->SD VITC timecode */
+	BLUE_UINT64 rp188_ltc_time_code;		/**< -->RP188 LTC timecode */
 	BLUE_UINT32 pad[126];
 };
 
@@ -98,6 +98,7 @@ struct hanc_decode_struct
 
 #pragma pack(pop, hanc_struct)
 
+__declspec(deprecated("Deprecated. Do not use; use encode_hanc_frame_ex() instead."))
 HANCUTILS_API BLUE_UINT32 encode_hanc_frame(struct hanc_stream_info_struct* hanc_stream_ptr,
 											void* audio_pcm_ptr,
 											BLUE_UINT32 no_audio_ch,
@@ -123,6 +124,7 @@ HANCUTILS_API BLUE_UINT32 encode_hanc_frame_with_ucz(	BLUE_UINT32 card_type,
 														BLUE_UINT32 emb_audio_flag,
 														BLUE_UINT8* pUCZBuffer);
 
+__declspec(deprecated("Deprecated. Do not use."))
 HANCUTILS_API BLUE_UINT32 create_embed_audiosample(	void* raw_data_ptr,
 													BLUE_UINT32* emb_data_ptr,
 													BLUE_UINT32 channels_per_audio_sample,
@@ -132,11 +134,15 @@ HANCUTILS_API BLUE_UINT32 create_embed_audiosample(	void* raw_data_ptr,
 													BLUE_UINT8* Audio_Groups_DBN_Array,
 													BLUE_UINT8* Audio_Groups_statusblock_Array);
 
+__declspec(deprecated("Deprecated. Do not use."))
 HANCUTILS_API BLUE_UINT32* get_embed_audio_distribution_array(BLUE_UINT32 video_mode, BLUE_UINT32 sequence_no);
 //HANCUTILS_API BLUE_UINT32 * GetAudioFrameSequence(BLUE_UINT32 video_output_standard);
 
+__declspec(deprecated("Deprecated. Do not use."))
 HANCUTILS_API bool hanc_stream_analyzer(BLUE_UINT32 *src_hanc_buffer,struct hanc_stream_info_struct * hanc_stream_ptr);
+__declspec(deprecated("Deprecated. Do not use."))
 HANCUTILS_API bool orac_hanc_stream_analyzer(BLUE_UINT32 card_type,BLUE_UINT32 *src_hanc_buffer,struct hanc_decode_struct * decode_ptr,char * analyzer_output_file);
+
 HANCUTILS_API bool hanc_decoder_ex(	BLUE_UINT32 card_type,
 									BLUE_UINT32* src_hanc_buffer,
 									struct hanc_decode_struct* hanc_decode_struct_ptr);
@@ -161,8 +167,9 @@ HANCUTILS_API bool hanc_decoder_ex(	BLUE_UINT32 card_type,
 */
 enum blue_vanc_pkt_type_enum
 {
-	blue_vanc_pkt_y_comp=0, /**< ANC pkt should be inserted/extracted from the  Y component buffer*/
-	blue_vanc_pkt_cbcr_comp=1 /**< ANC pkt should be inserted/extracted from the  CbCr component buffer*/
+	blue_vanc_pkt_y_comp=0,		/**< ANC pkt should be inserted/extracted from the Y component buffer*/
+	blue_vanc_pkt_cbcr_comp=1,	/**< ANC pkt should be inserted/extracted from the CbCr component buffer*/
+	blue_vanc_pkt_all_comp=2	/**< ANC pkt should be inserted/extracted from all components (SD video modes)*/
 };
 
 /*!
@@ -249,4 +256,6 @@ HANCUTILS_API BLUE_UINT32 decode_eia_708b_pkt(BLUE_UINT32 CardType,BLUE_UINT16 *
 
 
 /** @} */
+#ifdef __cplusplus
 }
+#endif
