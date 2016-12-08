@@ -152,7 +152,8 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 //
 IPixelShaderChannelPtr              DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
-    UpdatePixelShaderChannel();
+    // TODO: Check if everything updates properly without this line.
+    //UpdatePixelShaderChannel();
 
     return m_finalizePSC;
 }
@@ -307,7 +308,8 @@ void                                DefaultFinalizePlugin::SetPrevPlugin        
 
     m_prevPlugin = plugin;
 
-    GetPixelShaderChannel(); //recreate pixel shader channel
+    UpdatePixelShaderChannel(); //recreate pixel shader channel
+    //GetPixelShaderChannel();  // GetPixelShaderChannel doesn't call UpdatePixelShaderChannel anymore.
 }
 
 // *******************************

@@ -194,6 +194,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     else
     {
         assert( !"This primitive topology is not supported yet" );
+        return;
     }
 
     auto edges = ExtractEdges( mesh );
