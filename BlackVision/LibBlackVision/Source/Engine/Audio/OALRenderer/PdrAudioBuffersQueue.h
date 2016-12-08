@@ -5,6 +5,7 @@
 #include "Engine/Audio/Resources/AudioBuffer.h"
 #include "Engine/Audio/OALRenderer/PdrSource.h"
 #include "DataTypes/Queue.h"
+#include "DataTypes/Deque.h"
 
 
 namespace bv { namespace audio {
@@ -21,7 +22,9 @@ private:
     ALuint *                        m_bufferHandles;
     Queue< ALuint >                 m_unqueuedBufferHandles;
     Queue< AudioBufferConstPtr >    m_buffers;
-    Queue< AudioBufferConstPtr >    m_bufferedData;
+
+    Deque< MemoryChunkConstPtr >    m_bufferedData;
+    SizeType                        m_bufferedDataSize;
 
     ALuint                          m_sourceHandle;
 
@@ -39,7 +42,7 @@ public:
     
     bool                BufferData              ();
 
-    bool                GetBufferedData         ( AudioBufferConstPtr & buffer );
+    bool                GetBufferedData         ( MemoryChunkPtr data );
 
     void                ClearBuffers            ();
 

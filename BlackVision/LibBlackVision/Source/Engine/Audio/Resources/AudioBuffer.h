@@ -27,8 +27,6 @@ public:
     SizeType		GetSize	            () const;
     Int32		    GetFrequency	    () const;
     AudioFormat		GetFormat	        () const;
-    Int32		    GetChannels	        () const;
-    Int32		    GetChannelBitDepth  () const;
 
     MemoryChunkConstPtr GetData			() const;
     const char *	    GetRawData		() const;

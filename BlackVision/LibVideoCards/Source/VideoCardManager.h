@@ -122,7 +122,7 @@ public:
 
     void                                Start                   ();
 
-    void                                QueueFrame              (AVFramePtr data );
+    void                                QueueFrame              ( AVFramePtr data );
     
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */

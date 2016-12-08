@@ -31,6 +31,10 @@ private:
 
     AudioEntityUpdateIDMap  m_audioEntityUpdateIDMap;
 
+    UInt32                  m_channels;
+    UInt32                  m_frequency;
+    UInt32                  m_channelDepth;
+
 public:
 
                         AudioRenderer       ();
@@ -48,7 +52,11 @@ public:
 
     void                DeletePDR           ( const AudioEntity * audio );
 
-    AudioBufferConstPtr GetBufferedData     ();
+    AudioBufferConstPtr GetBufferedData     ( MemoryChunkPtr data );
+
+    UInt32              GetChannels         () const;
+    UInt32              GetFrequency        () const;
+    UInt32              GetChannelDepth     () const;
 
 private:
 

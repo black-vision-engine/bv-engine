@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/Resources/AudioBuffer.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
@@ -24,7 +25,10 @@ VideoOutputRenderLogic::VideoOutputRenderLogic          ( unsigned int height, b
     , m_videoFrame( nullptr )
     , m_vidTargets( 2 )
 {
+    m_fps = 25; //FIXME: should be taken from videocard?
+
     m_videoOutputEffect = CreateFullscreenEffectInstance( FullscreenEffectType::FET_VIDEO_OUTPUT );
+    m_audioData = MemoryChunk::Create( DEFAULT_AUDIO_BUFFER_SIZE );
 }
 
 // *********************************
@@ -65,58 +69,6 @@ void                            VideoOutputRenderLogic::Render          ( Render
     render->Disable   ( videoRenderTarget );
 }
 
-//// *********************************
-////
-//
-//unsigned short sine_wave_const_48[] = { 0x0000, 0x01A8, 0x0349, 0x04DB, 0x0658, 0x07BA,
-//0x08FA, 0x0A12, 0x0AFE, 0x0BBA, 0x0C43, 0x0C96,
-//0x0CB1, 0x0C96, 0x0C43, 0x0BBA, 0x0AFE, 0x0A12,
-//0x08FA, 0x07BA, 0x0658, 0x04DB, 0x0349, 0x01A8,
-//0x0000, 0xFE58, 0xFCB7, 0xFB25, 0xF9A8, 0xF846,
-//0xF706, 0xF5EE, 0xF502, 0xF446, 0xF3BD, 0xF36A,
-//0xF34F, 0xF36A, 0xF3BD, 0xF446, 0xF502, 0xF5EE,
-//0xF706, 0xF846, 0xF9A8, 0xFB25, 0xFCB7, 0xFE58 };
-//
-//
-//void Fill48(USHORT* pAudio16, UINT32 Samples, UINT32 Channels)
-//{
-//	USHORT data = 0;
-//	USHORT end = (USHORT)(Samples / 48);
-//	USHORT Bytes = 0;
-//
-//
-//	for (USHORT i = 0; i<end; i++)
-//	{
-//		for (USHORT k = 0; k<48; k++)
-//		{
-//			data = sine_wave_const_48[k];
-//			// 16 channels
-//			/*if (Channels > 0) { pAudio16[i * 48 * 2 + k + 0] = data; }
-//			if (Channels > 1) { pAudio16[i * 48 * 2 + k + 1] = data; }*/
-//			if (Channels > 0) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 1) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 2) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 3) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 4) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 5) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 6) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 7) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 8) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 9) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 10) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 11) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 12) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 13) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 14) { *pAudio16 = data; pAudio16++; }
-//			if (Channels > 15) { *pAudio16 = data; pAudio16++; }
-//			Bytes++;
-//		}
-//	}
-//	int a = 0;
-//	{a;}
-//}
-
-
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
 	renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
@@ -126,31 +78,28 @@ void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRe
     desc.height = m_videoFrame->GetHeight();
     desc.depth = TextureUtils::Channels( m_videoFrame->GetFormat() );
 
-    auto audioBuffer = audioRenderer( ctx )->GetBufferedData();
-    MemoryChunkConstPtr audioData = nullptr;
-    if( audioBuffer )
+    desc.channels = audioRenderer( ctx )->GetChannels();
+    desc.sampleRate = audioRenderer( ctx )->GetFrequency() / m_fps;
+    
+    auto audioSize = desc.sampleRate * desc.channels * audioRenderer( ctx )->GetChannelDepth();
+    if( m_audioData->Size() != audioSize )
     {
-        desc.frequency = audioBuffer->GetFrequency();
-        desc.channels = audioBuffer->GetChannels();
-        audioData = audioBuffer->GetData();
+        m_audioData = MemoryChunk::Create( audioSize );
     }
-
+    
+    audioRenderer( ctx )->GetBufferedData( m_audioData );
 
     desc.fieldModeEnabled = true;
     desc.timeCodePresent = true;
     desc.autoGenerateTimecode = true;
 
-	auto frame = std::make_shared< videocards::AVFrame >( m_videoFrame->GetData(), audioData, desc );
+	auto frame = std::make_shared< videocards::AVFrame >( m_videoFrame->GetData(), m_audioData, desc );
 
 	frame->m_TimeCode.h = 10;
 	frame->m_TimeCode.m = 22;
 	frame->m_TimeCode.s = 33;
 	frame->m_TimeCode.frame = 12;
 
-	//int AudioBufferSize = AudioChannels * 2002*4; // 2 channels (eg. stereo) 2002 jest maksymaln¹ wartoœci¹  // max 4 bajty g³êbi
-	//unsigned char *mem_dst = new unsigned char[AudioBufferSize];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ... tylko sk¹dœ pobraæ
-	//memset(mem_dst, 0, AudioBufferSize);
-	//Fill48((USHORT*)mem_dst, frame->m_FrameInformation.m_AudioSamplesPerFrame, AudioChannels);  // zape³nia bufor sygna³em testowym 1kHz
 
     videocards::VideoCardManager::Instance().QueueFrame( frame );
 }

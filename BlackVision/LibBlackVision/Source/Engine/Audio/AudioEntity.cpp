@@ -1,12 +1,7 @@
 #include "stdafx.h"
 
 #include "AudioEntity.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
+#include "Resources/AudioUtils.h"
 
 
 namespace bv { namespace audio {
@@ -75,8 +70,10 @@ bool                        AudioEntity::IsEmpty        () const
 //
 void                        AudioEntity::PushData       ( MemoryChunkConstPtr data )
 {
-    auto buffer = audio::AudioBuffer::Create( data, m_frequency, m_format );
-    m_audioData.Push( buffer );
+    if( data->Size() > 0 )
+    {
+        m_audioData.Push( audio::AudioBuffer::Create( data, m_frequency, m_format ) );
+    }
 }
 
 // ***********************
@@ -97,9 +94,24 @@ AudioEntity::AudioBufferVec AudioEntity::PopData        ()
 
 // *******************************
 //
-UInt32                      AudioEntity::GetUpdateID    () const
+UInt32                      AudioEntity::GetUpdateID        () const
 {
     return m_updateID;
+}
+
+
+// *********************************
+//
+Int32                       AudioEntity::GetChannels        () const
+{
+	return AudioUtils::ChannelsCount( m_format );
+}
+
+// *********************************
+//
+Int32                       AudioEntity::GetChannelDepth () const
+{
+	return AudioUtils::ChannelDepth( m_format );
 }
 
 } //audio

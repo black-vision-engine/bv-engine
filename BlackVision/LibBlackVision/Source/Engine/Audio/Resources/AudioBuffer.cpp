@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "AudioBuffer.h"
-#include "AudioUtils.h"
 
 
 namespace bv { namespace audio {
@@ -41,20 +40,6 @@ Int32               AudioBuffer::GetFrequency	    () const
 AudioFormat         AudioBuffer::GetFormat           () const
 {
 	return m_format;
-}
-
-// *********************************
-//
-Int32               AudioBuffer::GetChannels         () const
-{
-	return AudioUtils::ChannelsCount( m_format );
-}
-
-// *********************************
-//
-Int32               AudioBuffer::GetChannelBitDepth  () const
-{
-	return AudioUtils::ChannelBitDepth( m_format );
 }
 
 // *********************************

@@ -32,6 +32,8 @@ public:
 
     Int32                       GetFrequency    () const;
     AudioFormat                 GetFormat       () const;
+    Int32		                GetChannels	    () const;
+    Int32		                GetChannelDepth () const;
 
     void                        Clear           ();
     bool                        IsEmpty         () const;

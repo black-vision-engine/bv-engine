@@ -20,6 +20,9 @@ namespace bv { namespace audio {
 // *********************************
 //
 	    AudioRenderer::AudioRenderer	()
+    : m_channels( 0 )
+    , m_frequency( 0 )
+    , m_channelDepth( 0 )
 {
     Initialize();
 }
@@ -136,6 +139,10 @@ PdrAudioBuffersQueue *  AudioRenderer::GetPdrAudioBuffersQueue      ( PdrSource 
         {
             queue = new PdrAudioBuffersQueue( source->GetHandle(), audio->GetFrequency(), audio->GetFormat() );
             m_bufferMap[ source ] = queue;
+
+            m_channels = audio->GetChannels();
+            m_frequency = audio->GetFrequency();
+            m_channelDepth = audio->GetChannelDepth();
         }
     }
     else
@@ -161,26 +168,42 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
 
 // *********************************
 //
-AudioBufferConstPtr     AudioRenderer::GetBufferedData              ()
+AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data )
 {
-    AudioBufferPtr mixedAudioBuffer = nullptr;
+    AudioBufferPtr mixedAudioBuffer = audio::AudioBuffer::Create( data, 48000, AudioFormat::STEREO16 ); //FIXME
+
     for( auto & obj : m_bufferMap )
     {
-        AudioBufferConstPtr bufferedData = nullptr;
-        if( obj.second->GetBufferedData( bufferedData ) )
+        if( obj.second->GetBufferedData( data ) )
         {
-            if( !mixedAudioBuffer )
-            {
-                mixedAudioBuffer = audio::AudioBuffer::Create( bufferedData->GetData(), bufferedData->GetFrequency(), bufferedData->GetFormat() );
-            }
-            else
-            {
-                //mix audio
-            }
+            //FIXME mix audio - for now only take one audio channel
+            return mixedAudioBuffer;
         }
     }
 
     return mixedAudioBuffer;
+}
+
+// *********************************
+//
+UInt32                  AudioRenderer::GetChannels                  () const
+{
+    return m_channels;
+}
+
+// *********************************
+//
+UInt32                  AudioRenderer::GetFrequency                 () const
+{
+    return m_frequency;
+}
+
+
+// *********************************
+//
+UInt32                  AudioRenderer::GetChannelDepth                 () const
+{
+    return m_channelDepth;
 }
 
 // *********************************

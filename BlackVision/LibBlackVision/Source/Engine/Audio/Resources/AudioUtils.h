@@ -11,7 +11,7 @@ class AudioUtils
 public:
 
     static Int32        ChannelsCount   ( AudioFormat format );
-    static Int32        ChannelBitDepth ( AudioFormat format );
+    static Int32        ChannelDepth    ( AudioFormat format );
 
 };
 

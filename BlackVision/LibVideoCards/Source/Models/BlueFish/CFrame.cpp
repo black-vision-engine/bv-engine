@@ -23,54 +23,50 @@ CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_
     : m_desc( desc )
     , m_nAudioSize( audioSize )
 {
-	Init(ID, Size, BytesPerLine, Odd);
+    Init(ID, Size, BytesPerLine, Odd);
+    memcpy(m_pBuffer, buffer, Size);
 
-	audioSize = 2002 * 4 * 2;  // hack so bluehanc lib would not crash, size should be set accordingly to sdi audio spec
-	memcpy(m_pBuffer, buffer, Size);
+    m_TimeCode = TimeCode;
 
-	m_TimeCode = TimeCode;
+    m_pAudioBuffer = (BLUE_UINT8*)VirtualAlloc(NULL, audioSize, MEM_COMMIT, PAGE_READWRITE);
 
-    if( audioSize )
+    if(m_pAudioBuffer)
     {
-        m_pAudioBuffer = (BLUE_UINT8*)VirtualAlloc(NULL, audioSize, MEM_COMMIT, PAGE_READWRITE);
-	    if(m_pAudioBuffer)
-        {
-		    VirtualLock(m_pAudioBuffer, audioSize);
-        }
-	    memcpy(m_pAudioBuffer, audioBuffer, audioSize);
+        VirtualLock(m_pAudioBuffer, audioSize);
+        memcpy(m_pAudioBuffer, audioBuffer, audioSize);
     }
 }
 
 CFrame::~CFrame()
 {
-	if (m_pBuffer)
-	{
-		VirtualUnlock(m_pBuffer, m_nSize);
-		VirtualFree(m_pBuffer, 0, MEM_RELEASE);
-	}
+    if (m_pBuffer)
+    {
+        VirtualUnlock(m_pBuffer, m_nSize);
+        VirtualFree(m_pBuffer, 0, MEM_RELEASE);
+    }
 
-	if (m_pAudioBuffer)
-	{
-		VirtualUnlock(m_pAudioBuffer, m_nAudioSize);
-		VirtualFree(m_pAudioBuffer, 0, MEM_RELEASE);
-	}
+    if (m_pAudioBuffer)
+    {
+        VirtualUnlock(m_pAudioBuffer, m_nAudioSize);
+        VirtualFree(m_pAudioBuffer, 0, MEM_RELEASE);
+    }
 }
 
 void    CFrame::Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
 {
-	m_pAudioBuffer = NULL;
+    m_pAudioBuffer = NULL;
     m_nFrameID = ID;
     m_nCardBufferID = 0;
-	m_nSize = Size;
-	m_nBytesPerLine = BytesPerLine;
-	m_pBuffer = NULL;
-	m_lFieldCount = 0;
-	m_FieldOdd = Odd;
+    m_nSize = Size;
+    m_nBytesPerLine = BytesPerLine;
+    m_pBuffer = NULL;
+    m_lFieldCount = 0;
+    m_FieldOdd = Odd;
 
-	m_pBuffer = (BLUE_UINT8*)VirtualAlloc(NULL, Size, MEM_COMMIT, PAGE_READWRITE);
-	if(m_pBuffer)
+    m_pBuffer = (BLUE_UINT8*)VirtualAlloc(NULL, Size, MEM_COMMIT, PAGE_READWRITE);
+    if(m_pBuffer)
     {
-		VirtualLock(m_pBuffer, Size);
+        VirtualLock(m_pBuffer, Size);
     }
 
 }

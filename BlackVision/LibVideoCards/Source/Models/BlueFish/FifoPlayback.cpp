@@ -309,7 +309,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 
 	if (pThis->m_EnableEmbAudio)
 	{
-		embAudioProp |= (blue_emb_audio_enable | blue_emb_audio_group1_enable | blue_emb_audio_group2_enable | blue_emb_audio_group3_enable | blue_emb_audio_group4_enable);
+		embAudioProp |= (blue_emb_audio_enable | blue_emb_audio_group1_enable );
 	}
 
 	if (pThis->m_nVideoChannel == BLUE_VIDEO_OUTPUT_CHANNEL_D)
@@ -493,16 +493,13 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 					hanc_stream_info.sd_vitc_time_code = 0LL;		//this field is only valid for SD video signal 
 				}
 
-                if( pFrame->m_pAudioBuffer )
-                {
-				    encode_hanc_frame_ex(nCardType,
-					    &hanc_stream_info,
-					    pFrame->m_pAudioBuffer,
-					    pFrame->m_desc.channels,
-					    1920,//FIXME samples
-					    nSampleType,
-					    nEmbAudioFlag);
-                }
+				encode_hanc_frame_ex(nCardType,
+					&hanc_stream_info,
+					pFrame->m_pAudioBuffer,
+					pFrame->m_desc.channels,
+					pFrame->m_desc.sampleRate,
+					nSampleType, //FIXME: get bit depth from frame
+					nEmbAudioFlag);
 
 				if (pThis->m_EnableVbiVanc)
 					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));

@@ -17,12 +17,12 @@ namespace
         2       // STEREO16,
     };
 
-    Int32 AudioChannelBitDepth[] =
+    Int32 AudioChannelDepth[] =
     {
-        8,      // MONO8,
-        8,      // STEREO8,
-        16,     // MONO16,
-        16      // STEREO16,
+        1,      // MONO8,
+        1,      // STEREO8,
+        2,      // MONO16,
+        2       // STEREO16,
     };
 
 } //anonymous
@@ -36,9 +36,9 @@ Int32       AudioUtils::ChannelsCount   ( AudioFormat format )
 
 // ****************************
 //
-Int32       AudioUtils::ChannelBitDepth ( AudioFormat format )
+Int32       AudioUtils::ChannelDepth ( AudioFormat format )
 {
-    return AudioChannelBitDepth[ ( Int32 )format ]; 
+    return AudioChannelDepth[ ( Int32 )format ]; 
 }
 
 } //audio

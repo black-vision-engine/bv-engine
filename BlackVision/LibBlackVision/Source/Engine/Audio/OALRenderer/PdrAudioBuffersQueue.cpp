@@ -13,12 +13,13 @@
 namespace bv { namespace audio {
 
 
-const UInt32 PdrAudioBuffersQueue::QUEUE_SIZE    = 3;
+const UInt32 PdrAudioBuffersQueue::QUEUE_SIZE    = 5;
 
 // *******************************
 //
 PdrAudioBuffersQueue::PdrAudioBuffersQueue          ( ALuint sourceHandle, Int32 frequency, AudioFormat format )
     : m_sourceHandle( sourceHandle )
+    , m_bufferedDataSize( 0 )
 {
     InitBuffers( frequency, format );
 }
@@ -76,7 +77,9 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         BVAL::bvalBufferData( bufferId, m_format, ( const ALvoid * )buffer->GetRawData(), ( Int32 )buffer->GetSize(), m_frequency );
         BVAL::bvalSourceQueueBuffers( m_sourceHandle, 1, &bufferId );
         
-        m_bufferedData.Push( m_buffers.Front() );
+        m_bufferedData.PushBack( buffer->GetData() );
+        m_bufferedDataSize += buffer->GetSize();
+
         m_buffers.Pop();
         m_unqueuedBufferHandles.Pop();
 
@@ -104,13 +107,37 @@ void    PdrAudioBuffersQueue::InitBuffers   ( Int32 frequency, AudioFormat forma
 
 // *******************************
 //
-bool    PdrAudioBuffersQueue::GetBufferedData  ( AudioBufferConstPtr & buffer )
+bool    PdrAudioBuffersQueue::GetBufferedData  ( MemoryChunkPtr data )
 {
-    if( !m_bufferedData.IsEmpty() )
+    auto dataSize = data->Size();
+    auto dataOffset = ( SizeType )0;
+    auto rawData = data->GetWritable();
+
+    if( m_bufferedDataSize >= dataSize )
     {
-        buffer = m_bufferedData.Front();
-        m_bufferedData.Pop();
-        
+        while( dataSize && m_bufferedDataSize >= dataSize )
+        {
+            auto chunkData = m_bufferedData.Front();
+            auto chunkDataSize = chunkData->Size();
+
+            auto rewriteSize = ( SizeType )std::min( chunkDataSize, dataSize );
+            
+            memcpy( rawData + dataOffset, chunkData->Get(), rewriteSize );
+
+            dataOffset += rewriteSize;
+            dataSize -= rewriteSize;
+            m_bufferedDataSize -= rewriteSize;
+            m_bufferedData.PopFront();
+
+            if( chunkDataSize > rewriteSize )
+            {
+                auto offsetChunkData = MemoryChunk::Create( chunkDataSize - rewriteSize );
+                memcpy( offsetChunkData->GetWritable(), chunkData->Get() + rewriteSize, chunkDataSize - rewriteSize );
+                m_bufferedData.PushFront( offsetChunkData );
+            }
+
+        }
+
         return true;
     }
 
