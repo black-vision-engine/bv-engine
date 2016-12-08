@@ -24,6 +24,8 @@ CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_
     , m_nAudioSize( audioSize )
 {
 	Init(ID, Size, BytesPerLine, Odd);
+
+	audioSize = 2002 * 4 * 2;  // hack so bluehanc lib would not crash, size should be set accordingly to sdi audio spec
 	memcpy(m_pBuffer, buffer, Size);
 
 	m_TimeCode = TimeCode;
