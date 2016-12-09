@@ -82,8 +82,7 @@ void Camera::SetOrthogonal           ( unsigned int w, unsigned int h, float nea
     m_nearClippingPlane = near;
     m_farClippingPlane = far;
 
-    auto m = glm::ortho( -(float)m_viewportWidth / 2.0f, (float)m_viewportWidth / 2.0f, -(float)m_viewportHeight / 2.0f, (float)m_viewportHeight / 2.0f, near, far );
-    SetProjectionMatrix( m );
+    SetViewportSize( w, h );
 }
 
 // *********************************
