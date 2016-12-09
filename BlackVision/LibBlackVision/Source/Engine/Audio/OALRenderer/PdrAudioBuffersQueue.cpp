@@ -109,15 +109,15 @@ SizeType PdrAudioBuffersQueue::GetBufferedDataSize  () const
 
 // *******************************
 //
-bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data )
+bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data, bool force )
 {
     auto dataSize = data->Size();
     auto dataOffset = ( SizeType )0;
     auto rawData = data->GetWritable();
 
-    if( m_bufferedDataSize >= dataSize )
+    if( m_bufferedDataSize >= dataSize || ( m_bufferedDataSize > 0 && force ) )
     {
-        while( dataSize && m_bufferedDataSize >= dataSize )
+        while( dataSize && m_bufferedDataSize && ( m_bufferedDataSize >= dataSize || force ) )
         {
             auto chunkData = m_bufferedData.Front();
             auto chunkRawData = chunkData->Get();
@@ -132,6 +132,11 @@ bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data )
             dataSize -= rewriteSize;
             m_bufferedDataSize -= rewriteSize;
             m_bufferedData.PopFront();
+
+            if( force )
+            {
+                return true;
+            }
 
             if( chunkDataSize > rewriteSize )
             {
@@ -172,6 +177,13 @@ void    PdrAudioBuffersQueue::ClearBuffers  ()
 Int32    PdrAudioBuffersQueue::GetFrequency         () const
 {
     return m_frequency;
+}
+
+// *******************************
+//
+bool    PdrAudioBuffersQueue::BufferingDone         () const
+{
+    return ( m_unqueuedBufferHandles.Size() == QUEUE_SIZE );
 }
 
 } // audio

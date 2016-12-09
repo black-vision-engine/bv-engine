@@ -42,11 +42,12 @@ public:
 
     void	            Terminate			();
 
-    void                Play                ( AudioEntity * audio );
+    void                Proccess            ( AudioEntity * audio );
 
+    void                Play                ( AudioEntity * audio );
     void                Pause               ( AudioEntity * audio );
     void                Stop                ( AudioEntity * audio );
-
+    void                EndOfFile           ( AudioEntity * audio );
 
     void                DeletePDR           ( const AudioEntity * audio );
 
@@ -60,6 +61,9 @@ private:
 
     PdrSource *             GetPdrSource                ( const AudioEntity * audio, bool autoCreate = true );
     PdrAudioBuffersQueue *  GetPdrAudioBuffersQueue     ( PdrSource * source, const AudioEntity * audio,  bool autoCreate = true );
+
+    bool                    IsAnySourcePlaying          () const;
+    bool                    IsAnyBufferReady            ( SizeType requestedBufferSize ) const;
 
 private:
 

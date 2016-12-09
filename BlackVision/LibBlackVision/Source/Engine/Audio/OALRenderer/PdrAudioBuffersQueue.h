@@ -43,11 +43,13 @@ public:
     bool                BufferData              ();
 
     SizeType            GetBufferedDataSize     () const;
-    bool                MixBufferedData         ( MemoryChunkPtr data );
+    bool                MixBufferedData         ( MemoryChunkPtr data, bool force = false );
 
     void                ClearBuffers            ();
 
     Int32               GetFrequency            () const;
+
+    bool                BufferingDone           () const;
 
 private:
 

@@ -70,9 +70,13 @@ bool                        AudioEntity::IsEmpty        () const
 //
 void                        AudioEntity::PushData       ( MemoryChunkConstPtr data )
 {
-    if( data->Size() > 0 )
+    if( !data )
     {
-        m_audioData.Push( audio::AudioBuffer::Create( data, m_frequency, m_format ) );
+        m_audioData.Push( audio::AudioBuffer::Create( data, m_frequency, m_format, true ) );
+    }
+    else if( data->Size() > 0 )
+    {
+        m_audioData.Push( audio::AudioBuffer::Create( data, m_frequency, m_format, false ) );
     }
 }
 
@@ -85,8 +89,15 @@ AudioEntity::AudioBufferVec AudioEntity::PopData        ()
     while( !m_audioData.IsEmpty() )
     {
         auto data = m_audioData.Front();
-        buffers.push_back( data );
-        m_audioData.Pop();
+        if( !data->IsEOF() )
+        {
+            buffers.push_back( data );
+            m_audioData.Pop();
+        }
+        else
+        {
+            break;
+        }
     }
 
     return buffers;
@@ -94,9 +105,41 @@ AudioEntity::AudioBufferVec AudioEntity::PopData        ()
 
 // *******************************
 //
+bool                        AudioEntity::IsEOF              () const
+{
+    if( !m_audioData.IsEmpty() )
+    {
+        return m_audioData.Front()->IsEOF();
+    }
+    return false;
+}
+
+// *******************************
+//
 UInt32                      AudioEntity::GetUpdateID        () const
 {
     return m_updateID;
+}
+
+// *******************************
+//
+bool                        AudioEntity::IsPlaying          () const
+{
+    return m_playing;
+}
+
+// *******************************
+//
+void                        AudioEntity::Play               ()
+{
+    m_playing = true;
+}
+
+// *******************************
+//
+void                        AudioEntity::Stop               ()
+{
+    m_playing = false;
 }
 
 } //audio

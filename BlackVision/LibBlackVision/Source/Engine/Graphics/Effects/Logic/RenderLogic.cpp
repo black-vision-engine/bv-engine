@@ -260,7 +260,7 @@ void    RenderLogic::Play           ( audio::AudioRenderer * renderer, SceneNode
         auto audio = node->GetAudio();
         if( audio )
         {
-            renderer->Play( audio );
+            renderer->Proccess( audio );
         }
 
         for( unsigned int i = 0; i < ( UInt32 )node->NumChildNodes(); ++i )

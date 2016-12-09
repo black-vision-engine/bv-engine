@@ -51,7 +51,7 @@ void	AudioRenderer::Terminate        ()
 
 // *********************************
 //
-void    AudioRenderer::Play             ( AudioEntity * audio )
+void    AudioRenderer::Proccess         ( AudioEntity * audio )
 {
     //FIXME: no mechanism to free pdrsource & pdraudiobuffersqueue
 
@@ -66,12 +66,17 @@ void    AudioRenderer::Play             ( AudioEntity * audio )
             m_audioEntityUpdateIDMap[ audio ] = audio->GetUpdateID();
         }
 
+        if( audio->IsEOF() && ( queue->GetBufferedDataSize() == 0 ) && queue->BufferingDone() )
+        {
+            audio->Stop();
+        }
+
         if( !audio->IsEmpty() )
         {
             queue->PushData( audio->PopData() );
         }
 
-        if( queue->BufferData() )
+        if( audio->IsPlaying() && queue->BufferData() )
         {
             source->Play();
         }
@@ -80,8 +85,17 @@ void    AudioRenderer::Play             ( AudioEntity * audio )
 
 // *********************************
 //
+void    AudioRenderer::Play             ( AudioEntity * audio )
+{
+    audio->Play();
+}
+
+// *********************************
+//
 void    AudioRenderer::Pause            ( AudioEntity * audio )
 {
+    audio->Stop();
+
     auto source = GetPdrSource( audio, false ); 
     if( source )
     {
@@ -93,6 +107,7 @@ void    AudioRenderer::Pause            ( AudioEntity * audio )
 //
 void    AudioRenderer::Stop             ( AudioEntity * audio )
 {
+    audio->Stop();
     audio->Clear();
 
     auto source = GetPdrSource( audio, false );
@@ -105,6 +120,13 @@ void    AudioRenderer::Stop             ( AudioEntity * audio )
             queue->Reinitialize( audio->GetFrequency(), audio->GetFormat() );
         }
     }
+}
+
+// *********************************
+//
+void    AudioRenderer::EndOfFile        ( AudioEntity * audio )
+{
+    audio->PushData( nullptr );
 }
 
 // *********************************
@@ -174,21 +196,27 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
 //
 AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data )
 {
-    for( auto & obj : m_bufferMap )
+    // check whether active audio buffer exists
+    if( IsAnySourcePlaying() )
     {
-        if( data->Size() <= obj.second->GetBufferedDataSize() )
+        // check whether any data needs uploading
+        if( IsAnyBufferReady( data->Size() ) )
         {
             data->Clear();
-            break;
+        }
+
+        for( auto & obj : m_sources )
+        {        
+            auto queue = m_bufferMap.at( obj.second );
+            queue->MixBufferedData( data, obj.first->IsEOF() );
         }
     }
-
-    for( auto & obj : m_bufferMap )
+    else
     {
-        obj.second->MixBufferedData( data );
+        data->Clear();
     }
 
-    return audio::AudioBuffer::Create( data, m_frequency, m_format );
+    return audio::AudioBuffer::Create( data, m_frequency, m_format, false );
 }
 
 // *********************************
@@ -228,6 +256,45 @@ void                    AudioRenderer::DeleteSinglePDR              ( MapType & 
 
         resMap.erase( it );
     }
+}
+
+// *********************************
+//
+bool                    AudioRenderer::IsAnySourcePlaying           () const
+{
+    for( auto & obj : m_sources )
+    {
+        if( obj.first->IsPlaying() )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// *********************************
+//
+bool                    AudioRenderer::IsAnyBufferReady             ( SizeType requestedBufferSize ) const
+{
+    for( auto & obj : m_sources )
+    {        
+        auto queue = m_bufferMap.at( obj.second );
+        if( !obj.first->IsEOF() )
+        {
+            if( requestedBufferSize <= queue->GetBufferedDataSize() )
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if( queue->GetBufferedDataSize() > 0 )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } // audio

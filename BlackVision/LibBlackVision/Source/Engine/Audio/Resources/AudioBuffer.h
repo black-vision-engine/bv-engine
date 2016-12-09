@@ -19,19 +19,23 @@ private:
     Int32               m_frequency;
     AudioFormat         m_format;
 
+    bool                m_eof;
+
 public:
 
-                    AudioBuffer	        ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format );
+                    AudioBuffer	        ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof = false );
     virtual         ~AudioBuffer	    ();
 
     SizeType		GetSize	            () const;
     Int32		    GetFrequency	    () const;
     AudioFormat		GetFormat	        () const;
 
+    bool		    IsEOF	            () const;
+
     MemoryChunkConstPtr GetData			() const;
     const char *	    GetRawData		() const;
 
-    static AudioBufferPtr   Create	    ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format );
+    static AudioBufferPtr   Create	    ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof );
 
 };
 

@@ -8,10 +8,11 @@ namespace bv { namespace audio {
 
 // *********************************
 //
-AudioBuffer::AudioBuffer	( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format )
+AudioBuffer::AudioBuffer	( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof )
 	: m_data( data )
 	, m_frequency( frequency )
     , m_format( format )
+    , m_eof( eof )
 {
 }
 
@@ -37,9 +38,16 @@ Int32               AudioBuffer::GetFrequency	    () const
 
 // *********************************
 //
-AudioFormat         AudioBuffer::GetFormat           () const
+AudioFormat         AudioBuffer::GetFormat          () const
 {
 	return m_format;
+}
+
+// *********************************
+//
+bool                AudioBuffer::IsEOF              () const
+{
+	return m_eof;
 }
 
 // *********************************
@@ -58,9 +66,9 @@ const char *        AudioBuffer::GetRawData			() const
 
 // *********************************
 //
-AudioBufferPtr      AudioBuffer::Create             ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format )
+AudioBufferPtr      AudioBuffer::Create             ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof )
 {
-    return std::make_shared< AudioBuffer >( data, frequency, format ); 
+    return std::make_shared< AudioBuffer >( data, frequency, format, eof ); 
 }
 
 } // audio
