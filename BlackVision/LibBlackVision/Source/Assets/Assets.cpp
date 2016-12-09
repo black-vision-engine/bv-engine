@@ -34,17 +34,19 @@ TextureAssetConstPtr	LoadTextureAsset( const std::string & imageFilePath, const 
 
 // ***********************
 //
-FontAssetConstPtr	LoadFontAsset	(	const std::string & fontFileName,
-										UInt32 fontSize,
-										UInt32 blurSize,
-										UInt32 outlineSize,
-										bool generateMipmaps )
+FontAssetConstPtr   LoadFontAsset   (   const std::string & fontFileName,
+                                        UInt32 fontSize,
+                                        UInt32 blurSize,
+                                        UInt32 glowBlurSize,
+                                        UInt32 outlineSize,
+                                        bool generateMipmaps )
 {
-	return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( FontAssetDesc::Create( fontFileName,
-										fontSize,
-										blurSize,
-										outlineSize,
-										generateMipmaps ) ) );
+    return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( FontAssetDesc::Create( fontFileName,
+                                        fontSize,
+                                        blurSize,
+                                        glowBlurSize,
+                                        outlineSize,
+                                        generateMipmaps ) ) );
 }
 
 } // bv

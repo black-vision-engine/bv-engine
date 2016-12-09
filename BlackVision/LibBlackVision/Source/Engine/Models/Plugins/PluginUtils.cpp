@@ -85,9 +85,9 @@ bool    LoadAVStream ( IPluginPtr plugin, const std::string & streamPath, Textur
 
 // *******************************
 //
-bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
+bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 glowBlurSize, UInt32 outlineSize, bool generateMipmaps )
 {
-    auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps, SUPPROTED_CHARS_FILE );
+    auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, glowBlurSize, outlineSize, generateMipmaps, SUPPROTED_CHARS_FILE );
 
     return plugin->LoadResource( desc );
 }

@@ -321,7 +321,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( model::ITimeEvaluatorPtr t
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, 0, true );
     SetParameter( node->GetPlugin( "text" )->GetParameter("text"), 0.0, std::wstring( L"tekst\n1234" ) );
 	
 	if( !alphaMask.empty() )
@@ -357,7 +357,7 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( model::ITimeEvaluatorPtr t
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, 0, true );
     SetParameter( node->GetPlugin( "text" )->GetParameter("text"), 0.0, std::wstring( L"tekst\n1234" ) );
 	
 	if( !alphaMask.empty() )
@@ -392,7 +392,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::ITimeEvaluatorPtr 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-    LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, true );
+    LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, 0, true );
     
 	if( !alphaMask.empty() )
 	{
@@ -430,7 +430,7 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::ITimeEvaluatorPtr 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, 0, true );
     
 	if( !alphaMask.empty() )
 	{

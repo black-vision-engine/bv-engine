@@ -13,6 +13,7 @@ namespace bv {
 const std::string FontAtlasCacheEntry::CN::FONT_NAME      = "font_name";
 const std::string FontAtlasCacheEntry::CN::FONT_SIZE      = "font_size";
 const std::string FontAtlasCacheEntry::CN::BLUR_SIZE      = "blur_size";
+const std::string FontAtlasCacheEntry::CN::GLOW_BLUR_SIZE = "glow_blur_size";
 const std::string FontAtlasCacheEntry::CN::OUTLINE_WIDTH  = "outline_width";
 const std::string FontAtlasCacheEntry::CN::FONT_FILE_NAME = "font_file_name";
 const std::string FontAtlasCacheEntry::CN::ATLAS_WIDTH    = "atlas_width";
@@ -44,13 +45,14 @@ FontAtlasCacheEntry::FontAtlasCacheEntry()
 // *********************************
 //
 FontAtlasCacheEntry::FontAtlasCacheEntry( TextAtlasPtr & textAtlas, const std::string & fontName, SizeType fontSize,
-                                          SizeType blurSize, SizeType outlineWidth, const std::string & fontFilePath, 
+                                          SizeType blurSize, SizeType glowBlurSize, SizeType outlineWidth, const std::string & fontFilePath, 
                                           UInt32 mmLevelsNum, const std::wstring & charSet )
     : m_textAtlas( textAtlas )
 {
     m_data[ CN::FONT_NAME ] = ValuesFactory::CreateValueString( CN::FONT_NAME, fontName );
     m_data[ CN::FONT_SIZE ] = ValuesFactory::CreateValueInt( CN::FONT_SIZE, ( Int32 )fontSize );
     m_data[ CN::BLUR_SIZE ] = ValuesFactory::CreateValueInt( CN::BLUR_SIZE, ( Int32 )blurSize );
+    m_data[ CN::GLOW_BLUR_SIZE ] = ValuesFactory::CreateValueInt( CN::BLUR_SIZE, ( Int32 )glowBlurSize );
     m_data[ CN::OUTLINE_WIDTH ] = ValuesFactory::CreateValueInt( CN::OUTLINE_WIDTH, ( Int32 )outlineWidth );
     m_data[ CN::FONT_FILE_NAME ] = ValuesFactory::CreateValueString( CN::FONT_FILE_NAME, fontFilePath );
     m_data[ CN::ATLAS_WIDTH ] = ValuesFactory::CreateValueInt( CN::ATLAS_WIDTH, textAtlas->GetWidth() );
@@ -72,6 +74,7 @@ std::vector< std::string > FontAtlasCacheEntry::GeneratePrimaryKeys()
     ret.push_back( CN::FONT_NAME );
     ret.push_back( CN::FONT_SIZE );
     ret.push_back( CN::BLUR_SIZE );
+    ret.push_back( CN::GLOW_BLUR_SIZE );
     ret.push_back( CN::OUTLINE_WIDTH );
     ret.push_back( CN::LEVELS_NUM );
     ret.push_back( CN::CHAR_SET );
@@ -89,6 +92,7 @@ std::vector< DatabaseEntry::ColumnType > FontAtlasCacheEntry::GenerateColumnType
     ret.push_back( ColumnType( CN::FONT_NAME, ParamType::PT_STRING ) );
     ret.push_back( ColumnType( CN::FONT_SIZE, ParamType::PT_INT ) );
     ret.push_back( ColumnType( CN::BLUR_SIZE, ParamType::PT_INT ) );
+    ret.push_back( ColumnType( CN::GLOW_BLUR_SIZE, ParamType::PT_INT ) );
     ret.push_back( ColumnType( CN::OUTLINE_WIDTH, ParamType::PT_INT ) );
     ret.push_back( ColumnType( CN::FONT_FILE_NAME, ParamType::PT_STRING ) );
     ret.push_back( ColumnType( CN::ATLAS_WIDTH, ParamType::PT_INT ) );
@@ -173,6 +177,17 @@ SizeType                                    FontAtlasCacheEntry::GetBlurSize    
     if( m_data.count( CN::BLUR_SIZE ) )
     {
         return ( SizeType )QueryTypedValue< ValueIntPtr >( m_data.at( CN::BLUR_SIZE ) )->GetValue();
+    }
+    return 0;
+}
+
+// *********************************
+//
+SizeType                                    FontAtlasCacheEntry::GetGlowBlurSize            () const
+{
+    if( m_data.count( CN::GLOW_BLUR_SIZE ) )
+    {
+        return ( SizeType )QueryTypedValue< ValueIntPtr >( m_data.at( CN::GLOW_BLUR_SIZE ) )->GetValue();
     }
     return 0;
 }
@@ -267,10 +282,10 @@ TextAtlasPtr                                FontAtlasCacheEntry::GetTextAtlas   
 // *********************************
 //
 FontAtlasCacheEntryPtr FontAtlasCacheEntry::Create  ( TextAtlasPtr & textAtlas, const std::string & fontName, SizeType fontSize,
-                                                      SizeType blurSize, SizeType outlineWidth, const std::string & fontFilePath,
+                                                      SizeType blurSize, SizeType glowBlurSize, SizeType outlineWidth, const std::string & fontFilePath,
                                                       UInt32 mmLevelsNum, const std::wstring & charSetFileName )
 {
-    return std::make_shared< FontAtlasCacheEntry >( textAtlas, fontName, fontSize, blurSize, outlineWidth, fontFilePath, mmLevelsNum, charSetFileName );
+    return std::make_shared< FontAtlasCacheEntry >( textAtlas, fontName, fontSize, blurSize, glowBlurSize, outlineWidth, fontFilePath, mmLevelsNum, charSetFileName );
 }
 
 } // bv

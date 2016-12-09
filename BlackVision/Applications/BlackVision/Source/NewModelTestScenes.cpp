@@ -2133,7 +2133,7 @@ model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( mod
 
     SetParameter( node->GetPlugin( "extrude" )->GetParameter( "extrude vector" ), 0.0, glm::vec3( 0.0, 0.0, -0.3f ) );
 
-    success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/proj00/arial.ttf", 30, 0, 0, true );
+    success = model::LoadFont( node->GetPlugin( "text3d" ), "fonts/proj00/arial.ttf", 30, 0, 0, 0, true );
     assert( success );
 
     return node;    

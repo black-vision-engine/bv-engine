@@ -1413,7 +1413,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Left ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.0f );
-    success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/arial.TTF", 423, 0, 0, false );
+    success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/arial.TTF", 423, 0, 0, 0, false );
     assert( success );
 
     SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"1238" ) );
@@ -1897,7 +1897,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
-    success = model::LoadFont( node->GetPlugin( "text" ), "fonts/Astera.TTF", 50, blurSize, 0, true );
+    success = model::LoadFont( node->GetPlugin( "text" ), "fonts/Astera.TTF", 50, blurSize, 0, 0, true );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 
@@ -2050,7 +2050,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-    success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
+    success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
@@ -2123,7 +2123,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvalu
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-    success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
+    success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
@@ -2706,7 +2706,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 
-    success = model::LoadFont( node->GetPlugin( "text" ), fontName, 30, 0, 0, true );
+    success = model::LoadFont( node->GetPlugin( "text" ), fontName, 30, 0, 0, 0, true );
     assert( success );
 
     SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, text );

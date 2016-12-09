@@ -28,10 +28,11 @@ AssetConstPtr       Font3DLoader::LoadAsset( const bv::AssetDescConstPtr & desc 
     auto atlasCharSetFile = typedDesc->GetAtlasCharSetFile();
     auto fontSize = typedDesc->GetFontSize();
     auto blurSize = 0;
+    auto glowBlurSize = 0;
     auto outlineSize = 0;
     auto generateMipMaps = false;
 
-    auto text = TryLoadFont( filePath, fontSize, blurSize, outlineSize, generateMipMaps, atlasCharSetFile );
+    auto text = TryLoadFont( filePath, fontSize, blurSize, glowBlurSize, outlineSize, generateMipMaps, atlasCharSetFile );
 
     if( text )
     {

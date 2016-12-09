@@ -31,19 +31,20 @@ TextAtlas::~TextAtlas()
 TextAtlas::TextAtlas( UInt32 w, UInt32 h, UInt32 bitsPerPixel, UInt32 gw, UInt32 gh )
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
-	, m_textureAsset( nullptr )
-	, m_blurSize( 0 )
+    , m_textureAsset( nullptr )
+    , m_blurSize( 0 )
+    , m_glowBlurSize( 0 )
 {
     auto size   = w * h * bitsPerPixel / 8;
     auto data  = std::make_shared< MemoryChunk >( new char[ size ], size );
 
     TextureFormat tf = TextureFormat::F_TOTAL;
-	if( bitsPerPixel == 8 )
-		tf = TextureFormat::F_A8;
-	else if ( bitsPerPixel == 32 )
-		tf = TextureFormat::F_A8R8G8B8;
-	else
-		assert( bitsPerPixel == 0 ); // For deserializing of TextAtlas 
+    if( bitsPerPixel == 8 )
+        tf = TextureFormat::F_A8;
+    else if ( bitsPerPixel == 32 )
+        tf = TextureFormat::F_A8R8G8B8;
+    else
+        assert( bitsPerPixel == 0 ); // For deserializing of TextAtlas 
 }
 
 // *********************************
@@ -57,61 +58,61 @@ TextAtlasPtr TextAtlas::Create( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 
 //
 MemoryChunkConstPtr      TextAtlas::GetData         () const
 {
-	// FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
-	return m_textureAsset->GetOriginal()->GetData();
+    // FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
+    return m_textureAsset->GetOriginal()->GetData();
 }
 
 // *********************************
 //
-MemoryChunkPtr			TextAtlas::GetWritableData ()
+MemoryChunkPtr          TextAtlas::GetWritableData ()
 {
-	// FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
-	return std::const_pointer_cast< MemoryChunk >( m_textureAsset->GetOriginal()->GetData() );
+    // FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
+    return std::const_pointer_cast< MemoryChunk >( m_textureAsset->GetOriginal()->GetData() );
 }
 
 // *********************************
 //
-SizeType				TextAtlas::GetSizeInBytes  () const
+SizeType                TextAtlas::GetSizeInBytes  () const
 {
-	// FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
-	return m_textureAsset->GetOriginal()->GetData()->Size();
+    // FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
+    return m_textureAsset->GetOriginal()->GetData()->Size();
 }
 
 // *********************************
 //
-void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph, bool outline )
+void                    TextAtlas::SetGlyph         ( wchar_t wch, const Glyph * glyph, bool outline )
 {
-	if( outline )
-		m_outlineGlyphs.insert(std::make_pair( wch, glyph ) );
-	else
-		m_glyphs.insert(std::make_pair( wch, glyph ) );
+    if( outline )
+        m_outlineGlyphs.insert(std::make_pair( wch, glyph ) );
+    else
+        m_glyphs.insert(std::make_pair( wch, glyph ) );
 }
 
 // *********************************
 //
-UInt32					TextAtlas::GetBitsPerPixel () const
+UInt32                  TextAtlas::GetBitsPerPixel () const
 {
-	assert( m_textureAsset->GetOriginal()->GetFormat() == TextureFormat::F_A8R8G8B8 );
-	return 32;
+    assert( m_textureAsset->GetOriginal()->GetFormat() == TextureFormat::F_A8R8G8B8 );
+    return 32;
 }
 
 // *********************************
 //
-UInt32					TextAtlas::GetWidth        () const
+UInt32                  TextAtlas::GetWidth        () const
 {
     return m_textureAsset->GetOriginal()->GetWidth();
 }
 
 // *********************************
 //
-UInt32					TextAtlas::GetHeight       () const
+UInt32                  TextAtlas::GetHeight       () const
 {
     return m_textureAsset->GetOriginal()->GetHeight();
 }
 
 // *********************************
 //
-const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
+const Glyph *           TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
 {
 	if(! outline )
 	{
@@ -192,22 +193,22 @@ TextureAssetConstPtr	TextAtlas::GetAsset() const
 
 // *********************************
 //
-TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, UInt32 mmLevels, const std::wstring & charSet )
+TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType glowBlurSize, SizeType outlineSize, UInt32 mmLevels, const std::wstring & charSet )
 {
-    auto namePrefix = fontFileName + "W" + std::to_string( width ) + "H" + std::to_string( height ) + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "OS" + std::to_string( outlineSize ) + "CS" + std::string( charSet.begin(), charSet.end() );
+    auto namePrefix = fontFileName + "W" + std::to_string( width ) + "H" + std::to_string( height ) + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "GBS" + std::to_string( glowBlurSize ) + "OS" + std::to_string( outlineSize ) + "CS" + std::string( charSet.begin(), charSet.end() );
 
-	auto zeroLevelDesc = GeneratedSingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
+    auto zeroLevelDesc = GeneratedSingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
 
-	MipMapAssetDescConstPtr mmDesc = nullptr;
+    MipMapAssetDescConstPtr mmDesc = nullptr;
 
-	if ( mmLevels > 0 )
-	{
-		auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( width, height ) );
+    if ( mmLevels > 0 )
+    {
+        auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( width, height ) );
 
-		mmDesc = MipMapAssetDesc::Create( MipMapFilterType::BILINEAR, zeroLevelDesc, ( Int32 )mmLevels );
-	}
+        mmDesc = MipMapAssetDesc::Create( MipMapFilterType::BILINEAR, zeroLevelDesc, ( Int32 )mmLevels );
+    }
 
-	return TextureAssetDesc::Create( zeroLevelDesc, mmDesc );
+    return TextureAssetDesc::Create( zeroLevelDesc, mmDesc );
 }
 
 } // bv

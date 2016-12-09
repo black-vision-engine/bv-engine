@@ -91,6 +91,7 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     , m_vaChannel( nullptr )
     , m_fontSize( 0 )
     , m_blurSize( 0 )
+    , m_glowBlurSize( 0 )
     , m_outlineSize( 0 )
     , m_atlas( nullptr )
 {
@@ -129,6 +130,7 @@ bool                                TextPluginBase::LoadResource                
 
         m_fontSize = txAssetDescr->GetFontSize();
         m_blurSize = txAssetDescr->GetBlurSize();
+        m_glowBlurSize = txAssetDescr->GetBlurSize();
         m_outlineSize = txAssetDescr->GetOutlineSize();
 
         auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
