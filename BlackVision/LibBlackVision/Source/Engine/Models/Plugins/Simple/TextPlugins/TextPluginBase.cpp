@@ -130,7 +130,7 @@ bool                                TextPluginBase::LoadResource                
 
         m_fontSize = txAssetDescr->GetFontSize();
         m_blurSize = txAssetDescr->GetBlurSize();
-        m_glowBlurSize = txAssetDescr->GetBlurSize();
+        m_glowBlurSize = txAssetDescr->GetGlowBlurSize();
         m_outlineSize = txAssetDescr->GetOutlineSize();
 
         auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
@@ -301,7 +301,7 @@ Float32                             TextPluginBase::BuildVACForText             
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
                                         text,
-                                        m_blurSize,
+                                        m_glowBlurSize,
                                         spacing,
                                         alignType,
                                         alignCh,
@@ -317,7 +317,7 @@ Float32                             TextPluginBase::BuildVACForText             
     auto textLength = TextHelper::BuildVACForText(  m_vaChannel.get(),
                                                     m_atlas,
                                                     text,
-                                                    m_blurSize,
+                                                    m_glowBlurSize,
                                                     spacing,
                                                     alignType,
                                                     alignCh,
