@@ -14,6 +14,8 @@ uniform float       alpha;
 uniform int         cc_num;
 uniform int         cc_num_total;
 
+uniform float       glowStrength;
+
 uniform int         firstTextCC;
 uniform int         firstTextOutCC;
 uniform int         firstTextShCC;
@@ -122,6 +124,7 @@ void main()
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
 	float col3 = texture( AtlasTex0, uvCoord ).r;
+	float bluredOutlineCol = texture( AtlasTex0, uvCoord ).a;
     
     vec4 c = color;
     vec4 oc = outlineColor;
@@ -158,10 +161,12 @@ void main()
 	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
 	{
 		result = a * ( col2 * oc * ( 1 - col1 ) );
+		result = min( result +  glowStrength * outlineColor * bluredOutlineCol, 1.0 );
 	}
 	else 
 	{
 		result = a * col1 * c;
+        result = min( result +  glowStrength * color * col3, 1.0 );
 	}
 		
 	if( result.a == 0.0 )
