@@ -15,6 +15,9 @@ private:
 	UInt32					m_width; //framebuffer
 	UInt32					m_height; //framebuffer
 
+    UInt32                  m_clientWidth;
+    UInt32                  m_clientHeight;
+
 	UInt64					m_timestamp;
 
 public:
@@ -23,6 +26,9 @@ public:
 	UInt32					GetWidth				() const;
 	UInt32					GetHeight				() const;
 	UInt64					GetTimestamp			() const;
+
+    UInt32                  GetClientHeight         () const;
+    UInt32                  GetClientWidth          () const;
 
 	//FIXME: shouldn't be public
 	void					SetResolution			( UInt32 width, UInt32 height );

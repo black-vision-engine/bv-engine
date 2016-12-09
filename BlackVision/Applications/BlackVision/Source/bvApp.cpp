@@ -152,7 +152,7 @@ void BlackVisionApp::OnTerminate        ()
 void	BlackVisionApp::OnResize        ( int w, int h )
 {
     WindowedApplication::OnResize( w, h );
-    //ApplicationContext::Instance().SetResolution( w, h );
+    ApplicationContext::Instance().SetResolution( w, h );
 }
 
 // *********************************

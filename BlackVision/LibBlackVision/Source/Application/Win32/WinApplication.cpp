@@ -29,6 +29,20 @@ namespace {
 
 }
 
+// ***********************
+//
+RECT        GetClientRect   ( HWND handle, int w, int h )
+{
+    RECT rect;
+    rect.left = 0;
+    rect.top = 0;
+    rect.right = w;
+    rect.bottom = h;
+
+    GetClientRect( handle, &rect );
+    return rect;
+}
+
 namespace LocalWindowHandler
 {
 
@@ -70,7 +84,10 @@ LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wPara
         {
             int w = (int)(LOWORD(lParam));
             int h = (int)(HIWORD(lParam));
-            app->OnResize( w, h );
+
+            RECT rect = GetClientRect( handle, w, h );
+
+            app->OnResize( rect.right, rect.bottom );
             return 0;
         }
         case WM_CHAR:
@@ -213,7 +230,7 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
         dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     }
 
-    RECT rect = { 0, 0, app->Width()-1, app->Height() - 1 };
+    RECT rect = { 0, 0, app->Width(), app->Height() };
     AdjustWindowRectEx( &rect, dwStyle, FALSE, dwExStyle );
 
     // Create the application window.
@@ -229,8 +246,8 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
                                     dwStyle , 
                                     app->XPos(),
                                     app->YPos(),
-                                    rect.right - rect.left + 1,
-                                    rect.bottom - rect.top + 1, 
+                                    rect.right - rect.left,
+                                    rect.bottom - rect.top, 
                                     0, 
                                     0, 
                                     GHInstance,
