@@ -641,7 +641,7 @@ void					TestScene::InitColoredTextTest			()
         auto editor = m_project->GetProjectEditor();
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         
-        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, 0, true );
         editor->LoadAsset( root->GetPlugin( "text" ), desc );
     });
     m_testSteps.push_back( [&]{ RestoreRoot( 1, "text" ); } );
@@ -660,7 +660,7 @@ void					TestScene::InitColoredTextTest			()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = root->GetChild( TXT_NODE );
 
-        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, 0, true );
         editor->LoadAsset( root->GetPlugin( "text" ), desc );
     });
 
@@ -884,7 +884,7 @@ void					TestScene::InitColoredTimerTest			()
         auto editor = m_project->GetProjectEditor();
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         
-        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, 0, true );
         editor->LoadAsset( root->GetPlugin( "timer" ), desc );
     });
     Wait( 2 );
@@ -907,7 +907,7 @@ void					TestScene::InitColoredTimerTest			()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = root->GetChild( TMR_NODE );
 
-        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, 0, true );
         editor->LoadAsset( root->GetPlugin( "timer" ), desc );
     });
     Wait( 1 );
@@ -1038,7 +1038,7 @@ void					TestScene::InitGradientTimerTest			()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = root->GetChild( TMR_NODE );
 
-        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, 0, true );
         editor->LoadAsset( root->GetPlugin( "timer" ), desc );
     });
     Wait( 1 );

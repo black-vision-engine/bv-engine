@@ -34,10 +34,11 @@ AssetConstPtr       Font2DLoader::LoadAsset( const bv::AssetDescConstPtr & desc 
     auto atlasCharSetFile = typedDesc->GetAtlasCharSetFile();
     auto fontSize = typedDesc->GetFontSize();
     auto blurSize = typedDesc->GetBlurSize();
+    auto glowBlurSize = typedDesc->GetGlowBlurSize();
     auto outlineSize = typedDesc->GetOutlineSize();
     auto generateMipMaps = false;
 
-    auto text = TryLoadFont( filePath, fontSize, blurSize, outlineSize, generateMipMaps, atlasCharSetFile );
+    auto text = TryLoadFont( filePath, fontSize, blurSize, glowBlurSize, outlineSize, generateMipMaps, atlasCharSetFile );
 
     if( text )
     {
@@ -89,7 +90,7 @@ ThumbnailConstPtr Font2DLoader::LoadThumbnail     ( const AssetDescConstPtr & de
         }
     }
 
-    auto text = TryLoadFont( filePath.Str(), 10, 0, 0, false, L"fonts/ThumbnailCharSet.txt" );
+    auto text = TryLoadFont( filePath.Str(), 10, 0, 0, 0, false, L"fonts/ThumbnailCharSet.txt" );
 
     auto atlasTexture = text->BuildAtlas()->GetAsset()->GetOriginal();
 

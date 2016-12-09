@@ -32,9 +32,9 @@ namespace
 
 // *******************************
 //
-TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile )
+TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 glowBlurSize, UInt32 outlineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile )
 {
-	return Text::Create( atlasCharSetFile, file, size, blurSize, outlineSize, generateMipMaps ); // FIXME: Text constructor makes to much.
+	return Text::Create( atlasCharSetFile, file, size, blurSize, glowBlurSize, outlineSize, generateMipMaps ); // FIXME: Text constructor makes to much.
 }
 
 // *******************************
@@ -53,11 +53,11 @@ std::string         AddPostfixToFileName( const std::string & file, const std::s
 
 ///////////////////////////////
 //
-TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile ) const
+TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 glowBlurSize, UInt32 oulineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile ) const
 {
     if( Path::Exists(file) )
     {
-        return LoadFontFile( file, size, blurSize, oulineSize, generateMipMaps, atlasCharSetFile );
+        return LoadFontFile( file, size, blurSize, glowBlurSize, oulineSize, generateMipMaps, atlasCharSetFile );
     }
     else
     {

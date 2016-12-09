@@ -1253,7 +1253,7 @@ void					TestScene::InitAssetsTest		()
         auto editor = m_project->GetProjectEditor();
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
-        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, 0, true );
         editor->LoadAsset( child->GetPlugin( "text" ), desc );
     });
 }

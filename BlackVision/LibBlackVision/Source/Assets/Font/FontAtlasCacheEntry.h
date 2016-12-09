@@ -29,6 +29,7 @@ public:
         static const std::string FONT_NAME;
         static const std::string FONT_SIZE;
         static const std::string BLUR_SIZE;
+        static const std::string GLOW_BLUR_SIZE;
         static const std::string OUTLINE_WIDTH;
         static const std::string FONT_FILE_NAME;
         static const std::string ATLAS_WIDTH;
@@ -52,6 +53,7 @@ public:
     std::string             GetName         () const;
     SizeType                GetFontSize     () const;
     SizeType                GetBlurSize     () const;
+    SizeType                GetGlowBlurSize () const;
     SizeType                GetOutlineWidth () const;
     std::string             GetFontFilePath () const;
     UInt32                  GetLevelsNum    () const;
@@ -61,12 +63,12 @@ public:
     TextAtlasPtr            GetTextAtlas    ();
 
     static FontAtlasCacheEntryPtr   Create  ( TextAtlasPtr & textAtlas, const std::string & fontName, SizeType fontSize,
-                                              SizeType blurSize , SizeType outlineWidth, const std::string & fontFilePath,
+                                              SizeType blurSize, SizeType glowBlurSize , SizeType outlineWidth, const std::string & fontFilePath,
                                               UInt32 mmLevelsNum, const std::wstring & charSet );
 
     FontAtlasCacheEntry ();
     FontAtlasCacheEntry ( TextAtlasPtr & textAtlas, const std::string & fontName, SizeType fontSize,
-                          SizeType blurSize, SizeType outlineWidth, const std::string & fontFilePath, UInt32 mmLevelsNum,
+                          SizeType blurSize, SizeType glowBlurSize, SizeType outlineWidth, const std::string & fontFilePath, UInt32 mmLevelsNum,
                           const std::wstring & charSet );
 };
 

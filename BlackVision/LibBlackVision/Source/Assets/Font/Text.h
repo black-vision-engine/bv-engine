@@ -19,6 +19,7 @@ private:
     TextAtlasPtr                        m_atlas;
     UInt32                              m_fontSize;
     UInt32                              m_blurSize;
+    UInt32                              m_glowBlurSize;
     UInt32                              m_outlineWidth; // if > 0 text is outlined
     IFontEnginePtr                      m_fontEngine;
     bool                                m_withMipmaps;
@@ -39,6 +40,7 @@ public:
                                             , const std::string & fontFile
                                             , UInt32 fontSize
                                             , UInt32 blurSize
+                                            , UInt32 glowBlurSize
                                             , UInt32 outlineSize
                                             , bool withMipmaps );
 
@@ -46,6 +48,7 @@ public:
                                             , const std::string & fontFile
                                             , UInt32 fontSize
                                             , UInt32 blurSize
+                                            , UInt32 glowBlurSize
                                             , UInt32 outlineSize
                                             , bool withMipmaps );
 

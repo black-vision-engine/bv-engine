@@ -40,9 +40,6 @@
     <Filter Include="Widgets\Scroller">
       <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Widgets\TextEffects">
-      <UniqueIdentifier>{43575d01-557b-4b91-b0f0-1b97e602acc6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Widgets\MeshLoader">
       <UniqueIdentifier>{c95511b3-3c0c-485b-afed-6ccc3168883d}</UniqueIdentifier>
     </Filter>
@@ -172,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp">
       <Filter>Widgets\Scroller</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp">
-      <Filter>Widgets\TextEffects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp">
       <Filter>Widgets</Filter>
@@ -324,9 +318,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h">
       <Filter>Widgets\Scroller</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h">
-      <Filter>Widgets\TextEffects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h">
       <Filter>Widgets</Filter>

@@ -12,13 +12,18 @@ class FontLoader : public AssetLoader
 {
 protected:
 
-    TextConstPtr            TryLoadFont         (	const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize,
-													bool generateMipMaps, const std::wstring & atlasCharSetFile ) const;
+    TextConstPtr            TryLoadFont     (   const std::string & file,
+                                                UInt32 size,
+                                                UInt32 blurSize,
+                                                UInt32 glowBlurSize,
+                                                UInt32 oulineSize,
+                                                bool generateMipMaps,
+                                                const std::wstring & atlasCharSetFile ) const;
 
 public:
 
-    explicit                FontLoader( ){}
-    virtual ~FontLoader(){}
+    explicit                FontLoader      (){}
+    virtual                 ~FontLoader     (){}
 };
 
 

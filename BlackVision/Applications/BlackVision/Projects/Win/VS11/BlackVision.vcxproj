@@ -212,7 +212,6 @@
     <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\TextEffects\TextEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -277,7 +276,6 @@
     <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />
     <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
     <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\TextEffects\TextEffects.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />

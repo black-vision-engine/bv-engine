@@ -21,7 +21,7 @@ private:
 
 public:
 
-    FontAtlasCacheEntryPtr          GetEntry            ( const std::string & fontName, SizeType fontSize, SizeType blurSize, 
+    FontAtlasCacheEntryPtr          GetEntry            ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType glowBlurSize, 
                                                           SizeType outlineWidth, bool withMipMaps, const std::wstring & charSetFileName );
 
     void                            AddEntry            ( FontAtlasCacheEntryConstPtr data );

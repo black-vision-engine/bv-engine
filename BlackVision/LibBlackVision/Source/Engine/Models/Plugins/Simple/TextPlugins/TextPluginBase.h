@@ -55,6 +55,7 @@ protected:
 
     SizeType                        m_fontSize;
     SizeType                        m_blurSize;
+    SizeType                        m_glowBlurSize;
     SizeType                        m_outlineSize;
 
     TextAtlasConstPtr               m_atlas;

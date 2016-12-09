@@ -42,7 +42,7 @@ inline std::shared_ptr< const FontAssetDesc >       DefaultAssets::GetDefaultDes
     static FontAssetDescConstPtr fontDesc;
 	if( !fontDesc )
     {
-        fontDesc = FontAssetDesc::Create( m_config.fontName, m_config.fontSize, 0, 0, false );
+        fontDesc = FontAssetDesc::Create( m_config.fontName, m_config.fontSize, 0, 0, 0, false );
     }
     return fontDesc;
 }
