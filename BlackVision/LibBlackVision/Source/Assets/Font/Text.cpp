@@ -242,14 +242,34 @@ void Text::BlurAtlas( TextAtlasPtr atlas ) const
         auto atlasW = atlas->GetWidth();
         auto atlasH = atlas->GetHeight();
         auto oldData = std::const_pointer_cast< MemoryChunk >( atlas->m_textureAsset->GetOriginal()->GetData() );
+        
+        MemoryChunkConstPtr finalAtlas = nullptr;
 
-        auto bluredData = image::BlurImage( oldData, atlasW, atlasH, atlas->GetBitsPerPixel(), (Float32)m_blurSize, image::BlurType::BT_GAUSSIAN );
+        {
+            auto bluredData = image::BlurImage( oldData, atlasW, atlasH, atlas->GetBitsPerPixel(), (Float32)m_blurSize, image::BlurType::BT_GAUSSIAN );
 
-        auto swapped = image::SwapChannels( bluredData, atlas->GetBitsPerPixel(), 0x00ff0000, 0xff000000, 0x00000000, 0x00000000 );
+            auto swapped = image::SwapChannels( bluredData, atlas->GetBitsPerPixel(), 0x00ff0000, 0xff000000, 0x00000000, 0x00000000 );
 
-        auto added = image::AddImages( oldData, swapped );
+            finalAtlas = image::AddImages( oldData, swapped );
+        }
 
-        auto newSingleTextureRes = SingleTextureAsset::Create( added, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
+        {
+            auto bluredData = image::BlurImage( oldData, atlasW, atlasH, atlas->GetBitsPerPixel(), (Float32)m_glowBlurSize, image::BlurType::BT_GAUSSIAN );
+
+            auto swapped = image::SwapChannels( bluredData, atlas->GetBitsPerPixel(), 0x00ff0000, 0xff000000, 0x00000000, 0x00000000 );
+
+            auto added = image::AddImages( oldData, swapped );
+
+            char * concatenated = new char[ finalAtlas->Size() * 2 ]; 
+
+            memcpy( concatenated, finalAtlas->Get(), finalAtlas->Size() );
+            memcpy( concatenated + finalAtlas->Size(), added->Get(), added->Size() );
+
+            finalAtlas = MemoryChunk::Create( concatenated, finalAtlas->Size() * 2 );
+        }
+
+
+        auto newSingleTextureRes = SingleTextureAsset::Create( finalAtlas, "", atlasW, atlasH * 2, TextureFormat::F_A8R8G8B8, true );
         
         std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );
     }
