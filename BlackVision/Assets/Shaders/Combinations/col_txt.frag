@@ -121,10 +121,12 @@ float animateAlpha()
 
 void main()
 {
-    float col1 = texture( AtlasTex0, uvCoord ).b;
-    float col2 = texture( AtlasTex0, uvCoord ).g;
-	float col3 = texture( AtlasTex0, uvCoord ).r;
-	float bluredOutlineCol = texture( AtlasTex0, uvCoord ).a;
+    float text = texture( AtlasTex0, uvCoord ).b;
+    float outline = texture( AtlasTex0, uvCoord ).g;
+	float blutedTextShadow = texture( AtlasTex0, uvCoord ).r;
+	float blutedOutlineShadow = texture( AtlasTex0, uvCoord ).a;
+	float bluredTextGlow = texture( AtlasTex0, uvCoord + vec2( 0.0, 0.5 )).r;
+    float bluredOutlineGlow = texture( AtlasTex0, uvCoord + vec2( 0.0, 0.5 )).a;
     
     vec4 c = color;
     vec4 oc = outlineColor;
@@ -156,17 +158,17 @@ void main()
 	
 	if( cc_num >= firstTextShCC && cc_num < firstTextOutCC ) 
 	{
-		result = a * col3 * sc;
+		result = a * blutedTextShadow * sc;
 	}
 	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
 	{
-		result = a * ( col2 * oc * ( 1 - col1 ) );
-		result = min( result +  glowStrength * outlineColor * bluredOutlineCol, 1.0 );
+		result = a * ( outline * oc * ( 1 - text ) );
+		result = min( result +  glowStrength * outlineColor * bluredOutlineGlow, 1.0 );
 	}
 	else 
 	{
-		result = a * col1 * c;
-        result = min( result +  glowStrength * color * col3, 1.0 );
+		result = a * text * c;
+        result = min( result +  glowStrength * color * bluredTextGlow, 1.0 );
 	}
 		
 	if( result.a == 0.0 )
