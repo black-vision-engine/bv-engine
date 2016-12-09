@@ -434,58 +434,130 @@ char *                  MakeThumbnailImpl   ( const char * in, UInt32 width, UIn
     return pixels;
 }
 
+char *                    BlurImageImpl     ( const char * data, UInt32 width, UInt32 height, UInt32 bpp, Float32 blurSize, BlurType filter ) 
+{
+    switch( filter ) 
+    {
+        case BlurType::BT_BOX:
+            return BoxBlurImage( data, width, height, bpp, blurSize );
+        case BlurType::BT_TRIANGLE:
+        {
+            char * pass1out = BoxBlurImage( data, width, height, bpp, blurSize / 2.f );
+            char * pass2out = BoxBlurImage( pass1out, width, height, bpp, blurSize / 2.f );
+            delete [] pass1out;
+            return pass2out;
+        }
+        case BlurType::BT_GAUSSIAN:
+        {
+            char * pass1out = BoxBlurImage( data, width, height, bpp, blurSize / 3.f );
+            char * pass2out = BoxBlurImage( pass1out, width, height, bpp, blurSize / 3.f );
+            char * pass3out = BoxBlurImage( pass2out, width, height, bpp, blurSize / 3.f );
+            delete [] pass1out;
+            delete [] pass2out;
+            return pass3out;
+        }
+        default:
+            return nullptr;
+    }
+}
+
 // *********************************
 //
-char *                    BlurImageImpl    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize )
+char *                    BoxBlurImage      ( const char * data, UInt32 width, UInt32 height, UInt32 bpp, Float32 blurSize )
 {
+    //blurSize = 0.1f;
+
+    //{ data; width; height; }
+
+    //const char test_data [] = { 
+    //    0,0,0,0, 0,0,0,0,           0,0,0,0,
+    //    0,0,0,0, -1,-1,-1,-1,       0,0,0,0,
+    //    0,0,0,0, 0,0,0,0,           0,0,0,0
+    //};
+
+    //width = 3;
+    //height = 3;
+
+    //SaveBMPImageImpl( "orig.bmp", data, width, height, bpp );
     auto numBytes = width * height * bpp / 8;
 
     char * tmp = new char[ numBytes ];
     char * out = new char[ numBytes ];
 
-    float kernelSizeDiv = 1.f / float( blurSize * 2 + 1 );
+    float kernelSizeDiv = 1.f / ( blurSize * 2 + 1 );
+
+    Int32 blurSizeCeil = ( Int32 ) std::ceilf( blurSize );
+    Float32 blurOverlap = 1.f - (blurSizeCeil - blurSize);
 
     for ( unsigned int y = 0; y < height; ++y )
     {
         Float4 currVal( 0.f, 0.f, 0.f, 0.f );
 
-        for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
-        {
-            currVal = currVal + GetPixelColorFloat4( i, y, data, width, height );
-            currVal = currVal * kernelSizeDiv;
+        for( int i = -blurSizeCeil; i <= blurSizeCeil; ++i )
+        {            
+            Float32 weight = ( i == - blurSizeCeil || i == blurSizeCeil ) ? blurOverlap : 1.f;
 
-            SetPixelColorFloat4( y, 0, out, width, height, currVal );
+            currVal = currVal + GetPixelColorFloat4( i, y, data, width, height ) * weight;
+            currVal = currVal * kernelSizeDiv;
         }
+
+        SetPixelColorFloat4( y, 0, tmp, height, width, currVal );
 
         for ( unsigned int x = 1; x < width; ++x )
         {
-            currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, data, width, height ) - GetPixelColorFloat4( x - (Int32)blurSize, y, data, width, height ) ) * kernelSizeDiv;
+            currVal = currVal + ( 
+                                    ( 
+                                        GetPixelColorFloat4( x + blurSizeCeil, y, data, width, height ) * blurOverlap +
+                                        GetPixelColorFloat4( x + blurSizeCeil - 1, y, data, width, height ) * ( 1.f - blurOverlap )
+                                    ) -
+                                    (
+                                        GetPixelColorFloat4( x - blurSizeCeil - 1, y, data, width, height ) * blurOverlap +
+                                        GetPixelColorFloat4( x - blurSizeCeil, y, data, width, height ) * ( 1.f - blurOverlap )
+                                    )
+                                ) *
+                                kernelSizeDiv;
             
             SetPixelColorFloat4( y, x, tmp, height, width, currVal );
         }
     }
 
+    //SaveBMPImageImpl( "blur_v.bmp", tmp, height, width, bpp );
+
     for ( unsigned int y = 0; y < width; ++y )
     {
         Float4 currVal( 0.f, 0.f, 0.f, 0.f );
 
-        for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
+        for( int i = -blurSizeCeil; i <= blurSizeCeil; ++i )
         {
-            currVal = currVal + GetPixelColorFloat4( i, y, tmp, height, width );
-            currVal = currVal * kernelSizeDiv;
+            Float32 weight = ( i == - blurSizeCeil || i == blurSizeCeil ) ? blurOverlap : 1.f;
 
-            SetPixelColorFloat4( y, 0, out, width, height, currVal );
+            currVal = currVal + GetPixelColorFloat4( i, y, tmp, height, width ) * weight;
+            currVal = currVal * kernelSizeDiv;
         }
+
+        SetPixelColorFloat4( y, 0, out, width, height, currVal );
 
         for ( unsigned int x = 1; x < height; ++x )
         {            
-            currVal = currVal + ( GetPixelColorFloat4( x + (Int32)blurSize, y, tmp, height, width ) - GetPixelColorFloat4( x - (Int32)blurSize, y, tmp, height, width ) ) * kernelSizeDiv;
+            currVal = currVal + (
+                                    ( 
+                                        GetPixelColorFloat4( x + blurSizeCeil, y, tmp, height, width )  * blurOverlap +
+                                        GetPixelColorFloat4( x + blurSizeCeil - 1, y, tmp, height, width )  * ( 1.f - blurOverlap )
+                                    ) -
+                                    (
+                                        GetPixelColorFloat4( x - blurSizeCeil - 1, y, tmp, height, width )  * blurOverlap +
+                                        GetPixelColorFloat4( x - blurSizeCeil, y, tmp, height, width )  * ( 1.f - blurOverlap )
+                                    )
+                                ) *
+                                kernelSizeDiv;
             
             SetPixelColorFloat4( y, x, out, width, height, currVal );
         }
     }
 
     delete [] tmp;
+
+    //SaveBMPImageImpl( "blur_h.bmp", out, width, height, bpp );
 
     return out;
 }
@@ -578,10 +650,10 @@ void SaveRAWImage( const std::string & filePath, MemoryChunkConstPtr data )
 
 // *********************************
 //
-MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, unsigned int blurSize )
+MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, Float32 blurSize, BlurType type )
 {
     auto numBytes = width * height * bpp / 8;
-    auto pixels = BlurImageImpl( data->Get(), width, height, bpp, blurSize );
+    auto pixels = BlurImageImpl( data->Get(), width, height, bpp, blurSize, type );
 
     return MemoryChunk::Create( pixels, numBytes );
 }

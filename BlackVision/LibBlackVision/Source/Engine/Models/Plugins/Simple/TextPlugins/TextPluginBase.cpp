@@ -33,6 +33,8 @@ const std::string TextPluginBase::PARAM::SHADOW_TX         = "shadowTx";
 const std::string TextPluginBase::PARAM::OUTLINE_TX      = "outlineTx";
 const std::string TextPluginBase::PARAM::OUTLINE_COLOR   = "outlineColor";
 
+const std::string TextPluginBase::PARAM::GLOW_STRENGTH   = "glowStrength";
+
 const std::string TextPluginBase::PARAM::SPACING         = "spacing";
 const std::string TextPluginBase::PARAM::ALIGNEMENT      = "alingment";
 const std::string TextPluginBase::PARAM::ALIGN_CHARACTER = "alignCharacter";
@@ -57,6 +59,8 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_STRENGTH, 0.f );
 
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_CC, 0 );
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_OUT_CC, 0 );
@@ -295,7 +299,7 @@ Float32                             TextPluginBase::BuildVACForText             
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
                                         text,
-                                        0,
+                                        m_blurSize,
                                         spacing,
                                         alignType,
                                         alignCh,
@@ -311,7 +315,7 @@ Float32                             TextPluginBase::BuildVACForText             
     auto textLength = TextHelper::BuildVACForText(  m_vaChannel.get(),
                                                     m_atlas,
                                                     text,
-                                                    0,
+                                                    m_blurSize,
                                                     spacing,
                                                     alignType,
                                                     alignCh,
