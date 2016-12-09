@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <algorithm>
+
 #include "AudioUtils.h"
 #include "CoreDEF.h"
 
@@ -27,6 +29,11 @@ namespace
 
 } //anonymous
 
+// *********************************
+//
+const UInt32        AudioUtils::DEFAULT_SAMPLE_RATE   = 48000;
+const AudioFormat   AudioUtils::DEFAULT_SAMPLE_FORMAT = AudioFormat::STEREO16;
+
 // ****************************
 //
 Int32       AudioUtils::ChannelsCount   ( AudioFormat format )
@@ -39,6 +46,29 @@ Int32       AudioUtils::ChannelsCount   ( AudioFormat format )
 Int32       AudioUtils::ChannelDepth ( AudioFormat format )
 {
     return AudioChannelDepth[ ( Int32 )format ]; 
+}
+
+// ****************************
+//
+void         AudioUtils::MixAudio16   ( char * outData, const char * inData, SizeType size )
+{
+    //FIXME: use better method for mixing two audio channels, e.g.
+    // factor = average(a1)
+    // a1 = (a1/max(a1))*factor
+    // a2 = (a2/max(a2))*factor
+    // output = ((a1+a2)/max(a1+a2))*factor
+
+    auto outData16 = reinterpret_cast< Int16 * >( outData );
+    auto inData16 = reinterpret_cast< const Int16 * >( inData );
+    auto size16 = size / sizeof( Int16 );
+
+    for( SizeType i = 0; i < size16; ++i )
+    {
+        auto sum = ( Float32 )outData16[ i ] / ( Float32 )SHRT_MAX + ( Float32 )inData16[ i ] / ( Float32 )SHRT_MAX;
+        sum = std::min( sum, 1.0f );
+        sum = std::max( sum, -1.0f );
+        outData16[ i ] = ( Int16 )( sum * SHRT_MAX );
+    }
 }
 
 } //audio

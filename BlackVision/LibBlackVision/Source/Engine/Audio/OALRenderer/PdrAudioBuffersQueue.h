@@ -42,7 +42,8 @@ public:
     
     bool                BufferData              ();
 
-    bool                GetBufferedData         ( MemoryChunkPtr data );
+    SizeType            GetBufferedDataSize     () const;
+    bool                MixBufferedData         ( MemoryChunkPtr data );
 
     void                ClearBuffers            ();
 

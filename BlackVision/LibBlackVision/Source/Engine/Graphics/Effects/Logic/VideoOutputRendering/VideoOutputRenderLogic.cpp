@@ -5,6 +5,7 @@
 #include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Audio/Resources/AudioBuffer.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
@@ -28,7 +29,7 @@ VideoOutputRenderLogic::VideoOutputRenderLogic          ( unsigned int height, b
     m_fps = 25; //FIXME: should be taken from videocard?
 
     m_videoOutputEffect = CreateFullscreenEffectInstance( FullscreenEffectType::FET_VIDEO_OUTPUT );
-    m_audioData = MemoryChunk::Create( DEFAULT_AUDIO_BUFFER_SIZE );
+    m_audioData = MemoryChunk::Create( audio::AudioUtils::DEFAULT_SAMPLE_RATE / m_fps * audio::AudioUtils::ChannelsCount( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT ) * audio::AudioUtils::ChannelDepth( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT ) );
 }
 
 // *********************************
@@ -68,7 +69,7 @@ void                            VideoOutputRenderLogic::Render          ( Render
 
     render->Disable   ( videoRenderTarget );
 }
-
+int test = 0;
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
 	renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );

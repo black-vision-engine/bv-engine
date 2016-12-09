@@ -11,10 +11,6 @@ class FFmpegAudioStreamDecoder : public FFmpegStreamDecoder
 {
 private:
 
-    static const Int32                  DEFAULT_CHANNELS;
-    static const UInt32                 DEFAULT_SAMPLE_RATE;
-    static const AVSampleFormat         DEFAULT_SAMPLE_FORMAT;
-
     static const AVSampleFormat         SUPPORTED_FORMATS[];
 
 private:
@@ -25,7 +21,7 @@ private:
     AVSampleFormat                      m_format;
     Int32                               m_nbChannels;
 
-//    bool                                m_needConversion;
+    bool                                m_needConversion;
 
 public:
 
@@ -43,6 +39,7 @@ private:
 
     static bool             IsSupportedFormat           ( AVSampleFormat format );
     static AudioFormat      ConvertFormat               ( AVSampleFormat format, Int32 nbChannels );
+    static AVSampleFormat   ConvertFormat               ( AudioFormat format, Int32 & nbChannels );
 
 };
 

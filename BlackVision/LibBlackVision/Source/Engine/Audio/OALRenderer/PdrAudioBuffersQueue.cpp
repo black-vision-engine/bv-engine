@@ -2,18 +2,13 @@
 
 #include "PdrAudioBuffersQueue.h"
 #include "Engine/Audio/OALRenderer/PdrOALConstants.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 
 namespace bv { namespace audio {
 
 
-const UInt32 PdrAudioBuffersQueue::QUEUE_SIZE    = 5;
+const UInt32 PdrAudioBuffersQueue::QUEUE_SIZE    = 15;
 
 // *******************************
 //
@@ -107,7 +102,14 @@ void    PdrAudioBuffersQueue::InitBuffers   ( Int32 frequency, AudioFormat forma
 
 // *******************************
 //
-bool    PdrAudioBuffersQueue::GetBufferedData  ( MemoryChunkPtr data )
+SizeType PdrAudioBuffersQueue::GetBufferedDataSize  () const
+{
+    return m_bufferedDataSize;
+}
+
+// *******************************
+//
+bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data )
 {
     auto dataSize = data->Size();
     auto dataOffset = ( SizeType )0;
@@ -118,11 +120,13 @@ bool    PdrAudioBuffersQueue::GetBufferedData  ( MemoryChunkPtr data )
         while( dataSize && m_bufferedDataSize >= dataSize )
         {
             auto chunkData = m_bufferedData.Front();
+            auto chunkRawData = chunkData->Get();
             auto chunkDataSize = chunkData->Size();
 
             auto rewriteSize = ( SizeType )std::min( chunkDataSize, dataSize );
             
-            memcpy( rawData + dataOffset, chunkData->Get(), rewriteSize );
+            //FIXME: assmuption that input data is always signed short (default format)
+            AudioUtils::MixAudio16( rawData + dataOffset, chunkRawData, rewriteSize );
 
             dataOffset += rewriteSize;
             dataSize -= rewriteSize;
@@ -131,8 +135,12 @@ bool    PdrAudioBuffersQueue::GetBufferedData  ( MemoryChunkPtr data )
 
             if( chunkDataSize > rewriteSize )
             {
-                auto offsetChunkData = MemoryChunk::Create( chunkDataSize - rewriteSize );
-                memcpy( offsetChunkData->GetWritable(), chunkData->Get() + rewriteSize, chunkDataSize - rewriteSize );
+                auto remainingSize = chunkDataSize - rewriteSize;
+                auto offsetChunkData = MemoryChunk::Create( remainingSize );
+                auto offsetChunkRawData = offsetChunkData->GetWritable();
+
+                memcpy( offsetChunkRawData, chunkData->Get() + rewriteSize, remainingSize );
+
                 m_bufferedData.PushFront( offsetChunkData );
             }
 
@@ -154,6 +162,8 @@ void    PdrAudioBuffersQueue::ClearBuffers  ()
 
     m_unqueuedBufferHandles.Clear();
     m_buffers.Clear();
+
+    m_bufferedDataSize = 0;
     m_bufferedData.Clear();
 }
 

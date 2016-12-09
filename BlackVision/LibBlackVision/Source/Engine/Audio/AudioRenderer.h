@@ -16,7 +16,6 @@ class AudioEntity;
 
 class AudioRenderer
 {
-
 private:
 
     typedef std::hash_map< const AudioEntity *, PdrSource * >       PdrSourceMap;
@@ -31,9 +30,8 @@ private:
 
     AudioEntityUpdateIDMap  m_audioEntityUpdateIDMap;
 
-    UInt32                  m_channels;
-    UInt32                  m_frequency;
-    UInt32                  m_channelDepth;
+    AudioFormat             m_format;
+    Int32                   m_frequency;
 
 public:
 
@@ -55,7 +53,7 @@ public:
     AudioBufferConstPtr GetBufferedData     ( MemoryChunkPtr data );
 
     UInt32              GetChannels         () const;
-    UInt32              GetFrequency        () const;
+    Int32               GetFrequency        () const;
     UInt32              GetChannelDepth     () const;
 
 private:

@@ -26,8 +26,6 @@ private:
 
     UInt32                          m_fps;
 
-    static const UInt32             DEFAULT_AUDIO_BUFFER_SIZE = 7680;   // 1920 * 2 * 2 - sample rate * depth * channels
-
 public:
 
     VideoOutputRenderLogic          ( unsigned int height, bool interlaceOdd = false );

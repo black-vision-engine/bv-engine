@@ -2,15 +2,12 @@
 
 #include "FFmpegAudioStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include "FFmpegUtils.h"
 
 
 namespace bv {
-
-const Int32             FFmpegAudioStreamDecoder::DEFAULT_CHANNELS      = 2;
-const UInt32            FFmpegAudioStreamDecoder::DEFAULT_SAMPLE_RATE   = 48000;
-const AVSampleFormat    FFmpegAudioStreamDecoder::DEFAULT_SAMPLE_FORMAT = AV_SAMPLE_FMT_S16;
 
 const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_U8 };
 
@@ -19,33 +16,32 @@ const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { 
 FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
     : FFmpegStreamDecoder( formatCtx, streamIdx, maxQueueSize )
     , m_swrCtx( nullptr )
-    //, m_needConversion( false )
+    , m_needConversion( false )
 {
-    m_sampleRate = DEFAULT_SAMPLE_RATE; //m_codecCtx->sample_rate;
-    m_format = DEFAULT_SAMPLE_FORMAT; //GetSupportedFormat( m_codecCtx->sample_fmt );
-    m_nbChannels = ( std::min )( m_codecCtx->channels, DEFAULT_CHANNELS );
+    m_sampleRate = audio::AudioUtils::DEFAULT_SAMPLE_RATE;
+    m_format = ConvertFormat( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT, m_nbChannels );
+    m_nbChannels = ( std::min )( m_codecCtx->channels, m_nbChannels );
 
     //FIXME: always convert audio to default settings
-
-    //if( !IsSupportedFormat( m_codecCtx->sample_fmt ) )
-    //{
-        //m_needConversion = true;
+    if( ( m_sampleRate != m_codecCtx->sample_rate ) || ( m_format != m_codecCtx->sample_fmt ) )
+    {
+        m_needConversion = true;
 
         m_swrCtx = swr_alloc();
         m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, m_format, m_sampleRate, 
             m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
         swr_init( m_swrCtx );
-    //}
+    }
 }
 
 // *******************************
 //
 FFmpegAudioStreamDecoder::~FFmpegAudioStreamDecoder    ()
 {
-    //if( m_needConversion )
-    //{
+    if( m_needConversion )
+    {
         swr_free( &m_swrCtx );
-    //}
+    }
 }
 
 // *******************************
@@ -69,14 +65,14 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
     auto frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, m_frame->nb_samples, m_format, 0 );
 	auto outBuffer = new uint8_t[ frameSize ];
 
-    //if( m_needConversion )
-    //{
+    if( m_needConversion )
+    {
         swr_convert( m_swrCtx, &outBuffer, m_frame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
-    //}
-    //else
-    //{
-        //memcpy( outBuffer, m_frame->data, frameSize );
-    //}
+    }
+    else
+    {
+        memcpy( outBuffer, m_frame->data, frameSize );
+    }
     
     AVMediaData mediaData;
 
@@ -150,6 +146,35 @@ AudioFormat             FFmpegAudioStreamDecoder::ConvertFormat         ( AVSamp
     }
 
     return AudioFormat::STEREO16;
+}
+
+// *******************************
+//
+AVSampleFormat          FFmpegAudioStreamDecoder::ConvertFormat         ( AudioFormat format, Int32 & nbChannels )
+{
+    if( format == AudioFormat::MONO8 )
+    {
+        nbChannels = 1;
+		return AV_SAMPLE_FMT_U8;
+    }
+    else if( format == AudioFormat::MONO16 )
+    {
+        nbChannels = 1;
+		return AV_SAMPLE_FMT_S16;
+    }
+    else if( format == AudioFormat::STEREO8 )
+    {
+        nbChannels = 2;
+		return AV_SAMPLE_FMT_U8;
+    }
+    else if( format == AudioFormat::STEREO16 )
+    {
+        nbChannels = 2;
+		return AV_SAMPLE_FMT_S16;
+    }
+
+    nbChannels = 2;
+	return AV_SAMPLE_FMT_S16;
 }
 
 } //bv

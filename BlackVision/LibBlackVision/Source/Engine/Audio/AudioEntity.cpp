@@ -99,20 +99,5 @@ UInt32                      AudioEntity::GetUpdateID        () const
     return m_updateID;
 }
 
-
-// *********************************
-//
-Int32                       AudioEntity::GetChannels        () const
-{
-	return AudioUtils::ChannelsCount( m_format );
-}
-
-// *********************************
-//
-Int32                       AudioEntity::GetChannelDepth () const
-{
-	return AudioUtils::ChannelDepth( m_format );
-}
-
 } //audio
 } //bv

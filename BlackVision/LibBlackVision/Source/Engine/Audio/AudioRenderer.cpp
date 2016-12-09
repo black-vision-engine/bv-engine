@@ -7,6 +7,7 @@
 #include "Engine/Audio/OALRenderer/PdrAudioBuffersQueue.h"
 #include "Engine/Audio/OALRenderer/PdrSource.h"
 #include "Engine/Audio/AudioEntity.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -20,9 +21,8 @@ namespace bv { namespace audio {
 // *********************************
 //
 	    AudioRenderer::AudioRenderer	()
-    : m_channels( 0 )
-    , m_frequency( 0 )
-    , m_channelDepth( 0 )
+    : m_format( AudioUtils::DEFAULT_SAMPLE_FORMAT )
+    , m_frequency( AudioUtils::DEFAULT_SAMPLE_RATE )
 {
     Initialize();
 }
@@ -58,20 +58,23 @@ void    AudioRenderer::Play             ( AudioEntity * audio )
     auto source = GetPdrSource( audio ); 
     auto queue = GetPdrAudioBuffersQueue( source, audio );
 
-    if( m_audioEntityUpdateIDMap[ audio ] < audio->GetUpdateID() )
+    if( queue && source )
     {
-        queue->Reinitialize( audio->GetFrequency(), audio->GetFormat() );
-        m_audioEntityUpdateIDMap[ audio ] = audio->GetUpdateID();
-    }
+        if( m_audioEntityUpdateIDMap[ audio ] < audio->GetUpdateID() )
+        {
+            queue->Reinitialize( audio->GetFrequency(), audio->GetFormat() );
+            m_audioEntityUpdateIDMap[ audio ] = audio->GetUpdateID();
+        }
 
-    if( !audio->IsEmpty() )
-    {
-        queue->PushData( audio->PopData() );
-    }
+        if( !audio->IsEmpty() )
+        {
+            queue->PushData( audio->PopData() );
+        }
 
-    if( queue->BufferData() )
-    {
-        source->Play();
+        if( queue->BufferData() )
+        {
+            source->Play();
+        }
     }
 }
 
@@ -135,14 +138,15 @@ PdrAudioBuffersQueue *  AudioRenderer::GetPdrAudioBuffersQueue      ( PdrSource 
 
     if( !m_bufferMap.count( source ) )
     {
-        if( autoCreate )
+        if( ( m_format != audio->GetFormat() ) || ( m_frequency != audio->GetFrequency() ) )
+        {
+            /** @brief all audio channels must be converted to the same format to work with videocards */
+            LOG_MESSAGE( SeverityLevel::error ) << "Audio was not converted to default format required by videocards";
+        }
+        else if( autoCreate )
         {
             queue = new PdrAudioBuffersQueue( source->GetHandle(), audio->GetFrequency(), audio->GetFormat() );
             m_bufferMap[ source ] = queue;
-
-            m_channels = audio->GetChannels();
-            m_frequency = audio->GetFrequency();
-            m_channelDepth = audio->GetChannelDepth();
         }
     }
     else
@@ -170,30 +174,33 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
 //
 AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data )
 {
-    AudioBufferPtr mixedAudioBuffer = audio::AudioBuffer::Create( data, 48000, AudioFormat::STEREO16 ); //FIXME
-
     for( auto & obj : m_bufferMap )
     {
-        if( obj.second->GetBufferedData( data ) )
+        if( data->Size() <= obj.second->GetBufferedDataSize() )
         {
-            //FIXME mix audio - for now only take one audio channel
-            return mixedAudioBuffer;
+            data->Clear();
+            break;
         }
     }
 
-    return mixedAudioBuffer;
+    for( auto & obj : m_bufferMap )
+    {
+        obj.second->MixBufferedData( data );
+    }
+
+    return audio::AudioBuffer::Create( data, m_frequency, m_format );
 }
 
 // *********************************
 //
 UInt32                  AudioRenderer::GetChannels                  () const
 {
-    return m_channels;
+    return AudioUtils::ChannelsCount( m_format );
 }
 
 // *********************************
 //
-UInt32                  AudioRenderer::GetFrequency                 () const
+Int32                   AudioRenderer::GetFrequency                 () const
 {
     return m_frequency;
 }
@@ -203,7 +210,7 @@ UInt32                  AudioRenderer::GetFrequency                 () const
 //
 UInt32                  AudioRenderer::GetChannelDepth                 () const
 {
-    return m_channelDepth;
+    return AudioUtils::ChannelDepth( m_format );
 }
 
 // *********************************
