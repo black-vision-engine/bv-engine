@@ -59,10 +59,24 @@ UInt64					ApplicationContext::GetTimestamp	() const
 
 // ***********************
 //
+UInt32                  ApplicationContext::GetClientHeight() const
+{
+    return m_clientHeight;
+}
+
+// ***********************
+//
+UInt32                  ApplicationContext::GetClientWidth() const
+{
+    return m_clientWidth;
+}
+
+// ***********************
+//
 void					ApplicationContext::SetResolution	( UInt32 width, UInt32 height )
 {
-	m_width = width;
-	m_height = height;
+	m_clientWidth = width;
+	m_clientHeight = height;
 }
 
 // ***********************

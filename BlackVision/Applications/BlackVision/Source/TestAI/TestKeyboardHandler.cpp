@@ -12,6 +12,8 @@
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 
+#include "Application/ApplicationContext.h"
+
 #include <glm/gtx/euler_angles.hpp>
 
 namespace bv {
@@ -168,6 +170,10 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 
 void TestKeyboardHandler::OnMouse             ( MouseAction action, int posX, int posY, BVAppLogic * logic )
 {
+    auto & context = ApplicationContext::Instance();
+    posX = static_cast< int >( posX * (double)context.GetWidth() / (double)context.GetClientWidth() );
+    posY = static_cast< int >( posY * (double)context.GetHeight() / (double)context.GetClientHeight() );
+
     if( action == MouseAction::LEFT_DOWN )
     {
         MouseEventPtr mouseEvent = std::make_shared< MouseEvent >();
