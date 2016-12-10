@@ -15,25 +15,27 @@ class AudioBuffer
 {
 private:
     
-    SizeType            m_size;
+    MemoryChunkConstPtr	m_data;
     Int32               m_frequency;
     AudioFormat         m_format;
-    char *		        m_data;
+
+    bool                m_eof;
 
 public:
 
-                    AudioBuffer	        ( SizeType size, Int32 frequency, AudioFormat format );
+                    AudioBuffer	        ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof = false );
     virtual         ~AudioBuffer	    ();
 
     SizeType		GetSize	            () const;
     Int32		    GetFrequency	    () const;
     AudioFormat		GetFormat	        () const;
 
-    const char *	Data			    () const;
-    void            WriteToBuffer       ( const char * src, SizeType size );
+    bool		    IsEOF	            () const;
 
-    static AudioBufferPtr   Create	    ( const std::vector< MemoryChunkConstPtr > & data, Int32 frequency, AudioFormat format );
-    static AudioBufferPtr   Create	    ( const char * data, SizeType size, Int32 frequency, AudioFormat format );
+    MemoryChunkConstPtr GetData			() const;
+    const char *	    GetRawData		() const;
+
+    static AudioBufferPtr   Create	    ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof );
 
 };
 

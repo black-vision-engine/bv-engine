@@ -76,11 +76,11 @@ public:
     virtual void                Mute                    ( bool mute ) override;
 
     //FIXME: decode first video frame
-    void                        ProcessFirstVideoFrame  ();
+    void                        ProcessFirstAVFrame     ();
 
 protected:
 	
-    void			            NextDataReady           ( AVMediaType type, UInt64 t );
+    bool			            NextDataReady           ( AVMediaType type, UInt64 t );
     virtual void			    NextDataReady           ( UInt64 t ) override;
 
 private:

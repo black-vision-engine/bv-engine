@@ -4,16 +4,15 @@
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Audio/Resources/AudioBuffer.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
+#include "Assets/Texture/TextureUtils.h"
+
 #include "VideoCardManager.h"
-
-
-
-#include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv {
@@ -27,7 +26,10 @@ VideoOutputRenderLogic::VideoOutputRenderLogic          ( unsigned int height, b
     , m_videoFrame( nullptr )
     , m_vidTargets( 2 )
 {
+    m_fps = 25; //FIXME: should be taken from videocard?
+
     m_videoOutputEffect = CreateFullscreenEffectInstance( FullscreenEffectType::FET_VIDEO_OUTPUT );
+    m_audioData = MemoryChunk::Create( audio::AudioUtils::DEFAULT_SAMPLE_RATE / m_fps * audio::AudioUtils::ChannelsCount( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT ) * audio::AudioUtils::ChannelDepth( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT ) );
 }
 
 // *********************************
@@ -67,14 +69,40 @@ void                            VideoOutputRenderLogic::Render          ( Render
 
     render->Disable   ( videoRenderTarget );
 }
-
-// *********************************
-//
+int test = 0;
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
-    renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
+	renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
+
+    videocards::AVFrameDescriptor desc;
+    desc.width = m_videoFrame->GetWidth();
+    desc.height = m_videoFrame->GetHeight();
+    desc.depth = TextureUtils::Channels( m_videoFrame->GetFormat() );
+
+    desc.channels = audioRenderer( ctx )->GetChannels();
+    desc.sampleRate = audioRenderer( ctx )->GetFrequency() / m_fps;
     
-    videocards::VideoCardManager::Instance().ProcessFrame( m_videoFrame->GetData() );
+    auto audioSize = desc.sampleRate * desc.channels * audioRenderer( ctx )->GetChannelDepth();
+    if( m_audioData->Size() != audioSize )
+    {
+        m_audioData = MemoryChunk::Create( audioSize );
+    }
+    
+    audioRenderer( ctx )->GetBufferedData( m_audioData );
+
+    desc.fieldModeEnabled = true;
+    desc.timeCodePresent = true;
+    desc.autoGenerateTimecode = true;
+
+	auto frame = std::make_shared< videocards::AVFrame >( m_videoFrame->GetData(), m_audioData, desc );
+
+	frame->m_TimeCode.h = 10;
+	frame->m_TimeCode.m = 22;
+	frame->m_TimeCode.s = 33;
+	frame->m_TimeCode.frame = 12;
+
+
+    videocards::VideoCardManager::Instance().QueueFrame( frame );
 }
 
 // *********************************

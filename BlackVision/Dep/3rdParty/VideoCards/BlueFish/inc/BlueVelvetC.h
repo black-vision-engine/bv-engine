@@ -19,31 +19,24 @@
     #define DLLLOCAL __attribute__ ((visibility("hidden")))
     #define BLUEVELVETC_API DLLEXPORT
 
+	#include <dispatch/dispatch.h>
     #include "BlueDriver_p.h"
 	#include "BlueVelvetCDefines.h"
-#elif (__linux__)
-    #define DLLEXPORT __attribute__ ((visibility("default")))
-    #define DLLLOCAL __attribute__ ((visibility("hidden")))
-    #define BLUEVELVETC_API DLLEXPORT
+#elif defined (__linux__)
+	#define BLUEVELVETC_API
 
     #include <BlueDriver_p.h>
-	#include "BlueHancUtils.h"
+	#include "BlueVelvetCDefines.h"
 #endif
 
 
-
-typedef void* BLUEVELVETC_HANDLE;
-
 //----------------------------------------------------------------------------
-// Some simple macros and definitions
-#define	BLUEVELVET_MAX_DEVICES	(5)			// Maximum number of Blue Cards recognised by driver
+typedef void* BLUEVELVETC_HANDLE;
 
 typedef int BErr;
 
 #define	BLUE_OK(a)				(!a)		// Test for succcess of a method returning BErr
 #define	BLUE_FAIL(a)			(a)			// Test for failure of a method returning BErr
-
-
 //----------------------------------------------------------------------------
 
 
@@ -87,17 +80,19 @@ extern "C" {
 	BLUEVELVETC_API BErr bfcVideoPlaybackAllocate(BLUEVELVETC_HANDLE pHandle, void** pAddress, unsigned long& ulBufferID, unsigned long& ulUnderrun);
 	BLUEVELVETC_API BErr bfcVideoPlaybackPresent(BLUEVELVETC_HANDLE pHandle, unsigned long& ulUniqueID, unsigned long ulBufferID, unsigned long ulCount, int iKeep, int iOdd=0);
 	BLUEVELVETC_API BErr bfcVideoPlaybackRelease(BLUEVELVETC_HANDLE pHandle, unsigned long ulBufferID);
+	
 #if defined (_WIN32)
 	BLUEVELVETC_API BErr bfcGetCaptureVideoFrameInfoEx(BLUEVELVETC_HANDLE pHandle, OVERLAPPED* pOverlap, struct blue_videoframe_info_ex& VideoFrameInfo, int iCompostLater, unsigned int* nCaptureFifoSize);
 #elif defined (__APPLE__)
 	BLUEVELVETC_API BErr bfcGetCaptureVideoFrameInfoEx(BLUEVELVETC_HANDLE pHandle, struct blue_videoframe_info_ex& VideoFrameInfo, int iCompostLater, unsigned int* nCaptureFifoSize);
 #elif defined(__linux__)
-	BLUEVELVETC_API BErr bfcGetCaptureVideoFrameInfoEx(BLUEVELVETC_HANDLE pHandle, int& iBufferId, unsigned int& nDroppedFrameCount, unsigned int& nFilledFrames, unsigned int& nFrameTimeStamp, unsigned int& nFrameVideoSignal);
+	BLUEVELVETC_API BErr bfcGetCaptureVideoFrameInfoEx(BLUEVELVETC_HANDLE pHandle, struct blue_videoframe_info_ex& VideoFrameInfo);
 #endif
 
 	//FRAMESTORE functions
 	BLUEVELVETC_API BErr bfcRenderBufferCapture(BLUEVELVETC_HANDLE pHandle, unsigned long ulBufferID);
 	BLUEVELVETC_API BErr bfcRenderBufferUpdate(BLUEVELVETC_HANDLE pHandle, unsigned long ulBufferID);
+	BLUEVELVETC_API BErr bfcGetRenderBufferCount(BLUEVELVETC_HANDLE pHandle, unsigned long& ulCount);
 
 	//AUDIO Helper functions (BlueHancUtils)
 	BLUEVELVETC_API BErr bfcEncodeHancFrameEx(BLUEVELVETC_HANDLE pHandle, unsigned int nCardType, struct hanc_stream_info_struct* pHancEncodeInfo, void* pAudioBuffer, unsigned int nAudioChannels, unsigned int nAudioSamples, unsigned int nSampleType, unsigned int nAudioFlags);
@@ -112,6 +107,11 @@ extern "C" {
     BLUEVELVETC_API BErr bfcSystemBufferWrite(BLUEVELVETC_HANDLE pHandle, unsigned char* pPixels, unsigned long ulSize, unsigned long ulBufferID, unsigned long ulOffset=0);
 #endif
 
+#if defined(__APPLE__)
+	BLUEVELVETC_API BErr bfcSystemBufferReadAsync(BLUEVELVETC_HANDLE pHandle, unsigned char* pPixels, unsigned long ulSize, dispatch_semaphore_t* sem, unsigned long ulBufferID, unsigned long ulOffset=0);
+    BLUEVELVETC_API BErr bfcSystemBufferWriteAsync(BLUEVELVETC_HANDLE pHandle, unsigned char* pPixels, unsigned long ulSize, dispatch_semaphore_t* sem, unsigned long ulBufferID, unsigned long ulOffset=0);
+#endif
+	
 	// RS422 Serial Port Functions
 	BLUEVELVETC_API BErr bfcSerialPortWaitForInputData(BLUEVELVETC_HANDLE pHandle, unsigned int nPortFlags, unsigned int& nBufferLength);
 	BLUEVELVETC_API BErr bfcSerialPortRead(BLUEVELVETC_HANDLE pHandle, unsigned int nPortFlags, unsigned char* pBuffer, unsigned int nReadLength);
@@ -140,7 +140,7 @@ extern "C" {
     BLUEVELVETC_API BErr bfcGetBytesPerLine(EVideoMode nVideoMode, EMemoryFormat nMemoryFormat, unsigned int& nBytesPerLine);
     BLUEVELVETC_API BErr bfcGetBytesPerFrame(EVideoMode nVideoMode, EMemoryFormat nMemoryFormat, EUpdateMethod nUpdateMethod, unsigned int& nBytesPerFrame);
     BLUEVELVETC_API BErr bfcGetGoldenValue(EVideoMode nVideoMode, EMemoryFormat nMemoryFormat, EUpdateMethod nUpdateMethod, unsigned int& nGoldenFrameSize);
-    BLUEVELVETC_API BErr bfcGetVBILines(EVideoMode nVideoMode, EUpdateMethod nUpdateMethod, unsigned int& nVBILinesPerFrame);
+    BLUEVELVETC_API BErr bfcGetVBILines(EVideoMode nVideoMode, EDMADataType nDataType, unsigned int& nVBILinesPerFrame);
     
     BLUEVELVETC_API BErr bfcGetVANCGoldenValue(unsigned int nCardType, EVideoMode nVideoMode, EMemoryFormat nMemoryFormat, EDMADataType nDataFormat, unsigned int& nVANCGoldenValue);
     BLUEVELVETC_API BErr bfcGetVANCLineBytes(unsigned int nCardType, EVideoMode nVideoMode, EMemoryFormat nMemoryFormat, unsigned int& nVANCLineBytes);
@@ -175,6 +175,7 @@ extern "C" {
 
 	//misc
 	BLUEVELVETC_API BErr bfcGetWindowsDriverHandle(BLUEVELVETC_HANDLE pHandle, HANDLE* pDriverHandle);
+	BLUEVELVETC_API BErr bfcSetDynamicMemoryFormatChange(BLUEVELVETC_HANDLE pHandle, OVERLAPPED* pOverlap, unsigned int nUniqueId, EMemoryFormat nMemoryFormat);
 #endif
 
 

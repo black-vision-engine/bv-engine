@@ -328,7 +328,7 @@ inline BLUE_UINT64 convert_countto_timecode(BLUE_UINT32 frame_count,BLUE_UINT32 
 	return rp188_timcode.ltc;
 }
 
-
+#ifdef __cplusplus
 inline BLUE_UINT64 convert_timecode_to_count(BLUE_UINT64 timecode,
 											 BLUE_UINT32 framePerSec,
 											 unsigned int & frames ,
@@ -345,6 +345,7 @@ inline BLUE_UINT64 convert_timecode_to_count(BLUE_UINT64 timecode,
 	frames =	 (BLUE_UINT32)((unsigned int)rp188_timecode.struct_ltc.ten_frame*10)+(unsigned int)rp188_timecode.struct_ltc.unit_frame;		
 	return rp188_timecode.ltc;
 }
+#endif
 
 // Determine endianess at run-time
 inline BLUE_UINT32 Int32SwapBigLittle(const BLUE_UINT32 i)

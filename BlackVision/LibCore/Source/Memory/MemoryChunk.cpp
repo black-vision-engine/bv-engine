@@ -76,11 +76,18 @@ char *          MemoryChunk::GetWritable    ()
 
 // ****************************
 //
+void            MemoryChunk::Clear          ()
+{
+    memset( m_memory, 0, m_size );
+}
+
+// ****************************
+//
 MemoryChunkPtr  MemoryChunk::Create         ( SizeType size )
 {
     auto mc = std::make_shared< MemoryChunk >( nullptr, 0 );
     mc->Allocate( size );
-
+    mc->Clear();
     return mc;
 }
 

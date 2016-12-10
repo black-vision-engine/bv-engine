@@ -99,10 +99,9 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer
 {
     auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
 
-    RenderRootNode( renderer, scenes, rt );
-    RenderRootNode( audioRenderer, scenes );
+    RenderRootNode( renderer, audioRenderer, scenes, rt );
 
-    FrameRendered( renderer );
+    FrameRendered( renderer, audioRenderer );
 
     UpdateOffscreenState();
 }
@@ -119,10 +118,10 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, audio::AudioRenderer
 //          Readback()
 //          Push()
 //
-void    RenderLogic::FrameRendered   ( Renderer * renderer )
+void    RenderLogic::FrameRendered   ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
-    auto ctx = GetContext( renderer );
+    auto ctx = GetContext( renderer, audioRenderer );
 
 
     if( m_screenShotLogic->ReadbackNeeded() )
@@ -152,10 +151,10 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
 // *********************************
 //
-void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & scenes, RenderTarget * rt )
+void    RenderLogic::RenderRootNode  ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes, RenderTarget * rt )
 {
     //FIXME: assumes only one renderer instance per application
-    auto ctx = GetContext( renderer );
+    auto ctx = GetContext( renderer, audioRenderer );
 
     assert( renderer == ctx->GetRenderer() );
 
@@ -179,19 +178,11 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, const SceneVec & sce
         ctx->GetRenderQueueAllocator()->Free();
         
         RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
+     
+        Play( audioRenderer, scene->GetRoot() );
     }
 
     disableBoundRT( ctx );
-}
-
-// *********************************
-//
-void    RenderLogic::RenderRootNode  ( audio::AudioRenderer * renderer, const SceneVec & scenes )
-{
-    for( auto & scene : scenes )
-    {
-        Play( renderer, scene->GetRoot() );
-    }
 }
 
 
@@ -269,7 +260,7 @@ void    RenderLogic::Play           ( audio::AudioRenderer * renderer, SceneNode
         auto audio = node->GetAudio();
         if( audio )
         {
-            renderer->Play( audio );
+            renderer->Proccess( audio );
         }
 
         for( unsigned int i = 0; i < ( UInt32 )node->NumChildNodes(); ++i )
@@ -319,11 +310,11 @@ void    RenderLogic::RenderGridLines    ( Scene * scene, RenderLogicContext * ct
 
 // *********************************
 //
-RenderLogicContext *    RenderLogic::GetContext         ( Renderer * renderer )
+RenderLogicContext *    RenderLogic::GetContext         ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     if( !m_ctx )
     {
-        m_ctx = new RenderLogicContext( renderer, &m_rtStackAllocator, &m_renderQueueAllocator, this );
+        m_ctx = new RenderLogicContext( renderer, &m_rtStackAllocator, &m_renderQueueAllocator, this, audioRenderer );
     }
 
     return m_ctx;
@@ -356,7 +347,7 @@ void                    RenderLogic::UpdateOffscreenState   ()
 //
 void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext * ctx )
 {
-    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+    auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 
     m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );
 

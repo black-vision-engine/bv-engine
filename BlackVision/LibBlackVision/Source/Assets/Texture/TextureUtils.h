@@ -12,6 +12,7 @@ struct TextureUtils
 	static TextureFormat				ToTextureFormat					( UInt32 bpp, UInt32 channelNum );
 	static TextureFormat				NearestSupportedTextureFormat	( TextureFormat format );
 	static UInt32						ToBPP							( TextureFormat format );
+	static UInt32						Channels						( TextureFormat format );
 
 	static MemoryChunkConstPtr		    LoadImage						( const std::string & path, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum );
 	static SingleTextureAssetConstPtr	LoadSingleTexture				( const SingleTextureAssetDescConstPtr & singleTextureResDesc, bool cacheOnDisk );

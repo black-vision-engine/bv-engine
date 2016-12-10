@@ -34,6 +34,8 @@ public:
     const char *                Get             () const;
     char *                      GetWritable     ();
 
+    void                        Clear           ();
+
     static  MemoryChunkPtr      Create          ( SizeType size );
 	static  MemoryChunkPtr      Create          ( char * mem, SizeType size );
 
