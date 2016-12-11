@@ -192,13 +192,6 @@ namespace bv { namespace model {
             m_lastParamValModel->AddValue( std::static_pointer_cast< IValue >( ValuesFactory::CreateValue( name, defaultValue ) ) );
         }
 
-        template< typename ValueType >
-        inline void                             SetValue                    ( std::string name, const ValueType & defaultValue )
-        {
-            //m_lastParamValModel->GetValue( name ) std::static_pointer_cast< IValue >( ValuesFactory::CreateValue( name, defaultValue ) ) );
-        }
-
-
 
 private:
         DefaultParamValModelPtr GetVacModel() const

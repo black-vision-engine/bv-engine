@@ -37,6 +37,7 @@ public:
         static const std::string        OUTLINE_TX;
 
         static const std::string        GLOW_STRENGTH;
+        static const std::string        GLOW_COLOR;
 
         static const std::string        SPACING;
         static const std::string        ALIGNEMENT;

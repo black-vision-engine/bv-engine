@@ -34,6 +34,7 @@ const std::string TextPluginBase::PARAM::OUTLINE_TX      = "outlineTx";
 const std::string TextPluginBase::PARAM::OUTLINE_COLOR   = "outlineColor";
 
 const std::string TextPluginBase::PARAM::GLOW_STRENGTH   = "glowStrength";
+const std::string TextPluginBase::PARAM::GLOW_COLOR      = "glowColor";
 
 const std::string TextPluginBase::PARAM::SPACING         = "spacing";
 const std::string TextPluginBase::PARAM::ALIGNEMENT      = "alingment";
@@ -59,6 +60,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_STRENGTH, 0.f );
 
