@@ -15,6 +15,7 @@ uniform int         cc_num;
 uniform int         cc_num_total;
 
 uniform float       glowStrength;
+uniform vec4        glowColor;
 
 uniform int         firstTextCC;
 uniform int         firstTextOutCC;
@@ -168,7 +169,7 @@ void main()
 	else 
 	{
 		result = a * text * c;
-        result = min( result +  glowStrength * color * bluredTextGlow, 1.0 );
+        result = min( result +  glowStrength * glowColor * bluredTextGlow, 1.0 );
 	}
 		
 	if( result.a == 0.0 )
