@@ -33,7 +33,7 @@ namespace bv {
 
 // *********************************
 //DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput()
-RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool enableSharedMemory )
+RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const glm::vec4 & clearColor, bool useReadback, bool useVideoCardOutput, bool enableSharedMemory, int scaleFactor )
     : m_rtStackAllocator( width, height, TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
     , m_videoOutputRenderLogic( nullptr )
@@ -41,6 +41,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
     , m_clearColor( clearColor )
     , m_enableSharedMemory( enableSharedMemory )
     , m_sharedMemoryVideoBuffer( nullptr )
+	, m_sharedMemoryScaleFactor(scaleFactor)
 {
     auto videoCardEnabled   = useReadback;
     auto previewAsVideoCard = useVideoCardOutput;
@@ -61,7 +62,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
 
     if( m_enableSharedMemory )
     {
-        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_R8G8B8 );
+        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_R8G8B8, m_sharedMemoryScaleFactor);
     }
 }
 

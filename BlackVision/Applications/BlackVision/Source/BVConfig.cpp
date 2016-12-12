@@ -40,7 +40,8 @@ BVConfig::BVConfig                      ()
     m_fullscreeMode = SerializationHelper::String2T< bool >( m_properties[ "FullScreen" ], true );
     m_isCameraPerspective = SerializationHelper::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
     m_readbackOn = SerializationHelper::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
-    m_renderToSharedMemory = SerializationHelper::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
+	m_renderToSharedMemory = SerializationHelper::String2T< bool >(m_properties["Renderer/RenderToSharedMemory"], false);
+	m_sharedMemoryScaleFactor = SerializationHelper::String2T< int >(m_properties["Renderer/SharedMemoryScaleFactor"], 1);
     m_sockerServerPort = SerializationHelper::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
 
     m_useDebugLayer = SerializationHelper::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );

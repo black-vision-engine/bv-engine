@@ -12,7 +12,7 @@ const std::wstring    SharedMemoryVideoBuffer::MAPPING_OBJECT_NAME = L"BV";
 
 // *********************************
 //
-SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor )
+SharedMemoryVideoBuffer::SharedMemoryVideoBuffer( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor )
     : m_isAllocated( false )
     , m_pBuf( nullptr )
     , m_scaleFactor( scaleFactor )
