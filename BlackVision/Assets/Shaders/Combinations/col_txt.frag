@@ -14,7 +14,7 @@ uniform float       alpha;
 uniform int         cc_num;
 uniform int         cc_num_total;
 
-uniform int 		glowEnabled;
+uniform bool 		glowEnabled;
 uniform float       glowStrength;
 uniform vec4        glowColor;
 
@@ -166,7 +166,7 @@ void main()
 	{
 		result = a * ( outline * oc * ( 1 - text ) );
 		
-		if( glowEnabled > 0 ) 
+		if( glowEnabled ) 
 		{
 			result = min( result +  glowStrength * outlineColor * bluredOutlineGlow, 1.0 );
 		}
@@ -175,7 +175,7 @@ void main()
 	{
 		result = a * text * c;
 		
-		if( glowEnabled > 0 ) 
+		if( glowEnabled ) 
 		{
 			result = min( result +  glowStrength * glowColor * bluredTextGlow, 1.0 );
 		}

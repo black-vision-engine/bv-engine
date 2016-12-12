@@ -64,7 +64,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, 0 ); // TODO: Add support for passing bool type paramter in shaders.
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false ); // TODO: Add support for passing bool type paramter in shaders.
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_STRENGTH, 0.f );
