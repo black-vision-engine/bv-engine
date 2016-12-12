@@ -30,12 +30,15 @@ public:
         static const std::string        ALPHA;
         static const std::string        FONT_SIZE;
 
+        static const std::string        SHADOW_ENABLED;
         static const std::string        SHADOW_COLOR;
         static const std::string        SHADOW_TX;
 
+        static const std::string        OUTLINE_ENABLED;
         static const std::string        OUTLINE_COLOR;
         static const std::string        OUTLINE_TX;
 
+        static const std::string        GLOW_ENABLED;
         static const std::string        GLOW_STRENGTH;
         static const std::string        GLOW_COLOR;
 
@@ -66,6 +69,10 @@ protected:
 
     ParamTransformPtr               m_outlineTxParam;
     ParamTransformPtr               m_glowTxParam;
+
+    ValueBoolPtr                    m_shadowEnabled;
+    ValueBoolPtr                    m_outlineEnabled;
+
 
     ValueIntPtr                     m_alignCharacter;
     ValueIntPtr                     m_firstTextCC;
