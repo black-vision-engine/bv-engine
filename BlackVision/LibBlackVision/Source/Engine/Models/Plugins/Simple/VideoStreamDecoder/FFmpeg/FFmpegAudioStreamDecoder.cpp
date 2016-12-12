@@ -2,6 +2,7 @@
 
 #include "FFmpegAudioStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include "FFmpegUtils.h"
 
@@ -17,16 +18,17 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, 
     , m_swrCtx( nullptr )
     , m_needConversion( false )
 {
-    m_sampleRate = m_codecCtx->sample_rate;
-    m_format = GetSupportedFormat( m_codecCtx->sample_fmt );
-    m_nbChannels = ( std::min )( m_codecCtx->channels, 2 );
+    m_sampleRate = audio::AudioUtils::DEFAULT_SAMPLE_RATE;
+    m_format = ConvertFormat( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT, m_nbChannels );
+    m_nbChannels = ( std::min )( m_codecCtx->channels, m_nbChannels );
 
-    if( !IsSupportedFormat( m_codecCtx->sample_fmt ) )
+    //FIXME: always convert audio to default settings
+    if( ( m_sampleRate != m_codecCtx->sample_rate ) || ( m_format != m_codecCtx->sample_fmt ) )
     {
         m_needConversion = true;
 
         m_swrCtx = swr_alloc();
-        m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, m_format, m_codecCtx->sample_rate, 
+        m_swrCtx = swr_alloc_set_opts( m_swrCtx, m_codecCtx->channel_layout, m_format, m_sampleRate, 
             m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
         swr_init( m_swrCtx );
     }
@@ -144,6 +146,35 @@ AudioFormat             FFmpegAudioStreamDecoder::ConvertFormat         ( AVSamp
     }
 
     return AudioFormat::STEREO16;
+}
+
+// *******************************
+//
+AVSampleFormat          FFmpegAudioStreamDecoder::ConvertFormat         ( AudioFormat format, Int32 & nbChannels )
+{
+    if( format == AudioFormat::MONO8 )
+    {
+        nbChannels = 1;
+		return AV_SAMPLE_FMT_U8;
+    }
+    else if( format == AudioFormat::MONO16 )
+    {
+        nbChannels = 1;
+		return AV_SAMPLE_FMT_S16;
+    }
+    else if( format == AudioFormat::STEREO8 )
+    {
+        nbChannels = 2;
+		return AV_SAMPLE_FMT_U8;
+    }
+    else if( format == AudioFormat::STEREO16 )
+    {
+        nbChannels = 2;
+		return AV_SAMPLE_FMT_S16;
+    }
+
+    nbChannels = 2;
+	return AV_SAMPLE_FMT_S16;
 }
 
 } //bv

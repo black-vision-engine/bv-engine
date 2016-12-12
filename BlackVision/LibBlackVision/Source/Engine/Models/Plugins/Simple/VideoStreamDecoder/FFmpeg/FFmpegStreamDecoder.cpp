@@ -174,21 +174,19 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time )
     if( time <= m_duration )
     {
         AVMediaData data;
-        if( m_outQueue.IsEmpty() )
-        {
-            // find the closest frame to given time
-            while( !IsDataQueueEmpty()
-                    && ( m_prevPTS <= GetCurrentPTS() )
-                    && ( GetCurrentPTS() <= time + GetOffset() ) )
-            {
-                success = m_bufferQueue.TryPop( data );
-            }
 
-            if( success )
-            {
-                m_outQueue.Push( data );
-                m_prevPTS = data.framePTS;
-            }
+        // find the closest frame to given time
+        while( !IsDataQueueEmpty()
+                && ( m_prevPTS <= GetCurrentPTS() )
+                && ( GetCurrentPTS() <= time + GetOffset() ) )
+        {
+            success = m_bufferQueue.TryPop( data );
+        }
+
+        if( success )
+        {
+            m_outQueue.Push( data );
+            m_prevPTS = data.framePTS;
         }
     }
     else

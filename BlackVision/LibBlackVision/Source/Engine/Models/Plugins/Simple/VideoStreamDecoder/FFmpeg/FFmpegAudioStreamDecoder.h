@@ -39,6 +39,7 @@ private:
 
     static bool             IsSupportedFormat           ( AVSampleFormat format );
     static AudioFormat      ConvertFormat               ( AVSampleFormat format, Int32 nbChannels );
+    static AVSampleFormat   ConvertFormat               ( AudioFormat format, Int32 & nbChannels );
 
 };
 

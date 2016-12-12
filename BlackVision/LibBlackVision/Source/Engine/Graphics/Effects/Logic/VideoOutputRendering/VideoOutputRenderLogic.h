@@ -22,6 +22,9 @@ private:
     bool                            m_interlaceOdd;
 
     Texture2DPtr                    m_videoFrame;
+    MemoryChunkPtr                  m_audioData;
+
+    UInt32                          m_fps;
 
 public:
 
