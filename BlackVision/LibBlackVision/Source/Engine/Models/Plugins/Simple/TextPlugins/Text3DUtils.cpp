@@ -139,7 +139,7 @@ void                                     Text3DUtils::ArrangeText               
     //float ccPaddingY = 1.f / aspectRatio;
 
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
-    auto spaceGlyphWidth    = (float)textRepresentation->GetGlyph( L'0' )->width / scaleRatio + spacing;
+    auto spaceGlyphWidth    = (float)textRepresentation->GetGlyph( L'0' )->advanceX / scaleRatio / 2 + spacing;
     auto newLineShift       = -(float) 1.5f * textRepresentation->GetGlyph( L'0' )->height / scaleRatio;
 
     unsigned int componentIdx = 0;

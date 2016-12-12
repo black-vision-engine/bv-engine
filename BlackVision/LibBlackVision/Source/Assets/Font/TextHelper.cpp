@@ -130,10 +130,13 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
     float texPadding = 1.f;
 
+    // Computing space character size
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
-    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', false )->width / aspectRatio  + spacing;
-    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', false )->height / aspectRatio;
+    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->advanceX / aspectRatio / 2 + spacing;
+    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
 
+
+    //
     unsigned int componentIdx = 0;
     unsigned int lineBeginComponentIdx = 0;
     unsigned int i = 0;
