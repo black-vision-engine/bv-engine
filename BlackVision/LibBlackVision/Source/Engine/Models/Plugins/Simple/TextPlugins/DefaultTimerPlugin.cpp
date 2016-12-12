@@ -83,7 +83,11 @@ bool IsPlaceHolder(wchar_t wch)
     return  wch == L'H'
         ||  wch == L'M'
         ||  wch == L'S'
-        ||  wch == L's';
+        ||  wch == L'D'
+        ||  wch == L'h'
+        ||  wch == L'm'
+        ||  wch == L's'
+        ||  wch == L'd';
 }
 
 void TimeFormatError()
@@ -169,10 +173,10 @@ bool    TimeValue::operator!=(const TimeValue& other) const
 //
 TimeValue::TimeValue( double time, int accuracy )
 {
-    this->fracOfSecond = int( ( time - floor( time ) ) * pow( 10, accuracy ) );
-    this->second    = int( time ) % 60;
-    this->minute    = int( time / 60 ) % 60;
-    this->hour      = int( time / (60 * 60 ) );
+    this->fracOfSecond = int( ( time - std::floor( time ) ) * pow( 10, accuracy ) );
+    this->second    = int( std::floor( time ) ) % 60;
+    this->minute    = int( std::floor( time ) / 60 ) % 60;
+    this->hour      = int( std::floor( time ) / (60 * 60 ) );
 }
 
 // *************************************
@@ -286,26 +290,13 @@ namespace
 
 ////////////////////////////
 //
-std::wstring        toTextPatern( const std::wstring& timePatern )
-{
-    auto timePaternCopy = timePatern;
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', L'#');
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', L'#');
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', L'#');
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L's', L'#');
-
-    return timePaternCopy;
-}
-
-////////////////////////////
-//
 std::wstring        toTimerInit( const std::wstring& timePatern, wchar_t wch )
 {
     auto timePaternCopy = timePatern;
     std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', wch);
     std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', wch);
     std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', wch);
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L's', wch);
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'D', wch);
 
     return timePaternCopy;
 }
@@ -643,7 +634,7 @@ void                                DefaultTimerPlugin::SetTime        ( TimeTyp
 
     if( m_currentTimeValue  != newTime )
     {
-        SetTimePatern( GenerateTimePatern( time ) );
+        /*SetTimePatern( GenerateTimePatern( time ) );*/
         m_currentTimeValue = newTime;
         Refresh( !m_started );
 		HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
@@ -704,6 +695,19 @@ bool            ResetTimerPlugin( IPluginPtr timerPlugin )
     if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
     {
         std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Reset( 0.f );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *************************************
+//
+bool            SetTimePaternTimerPlugin ( IPluginPtr timerPlugin, const std::wstring & patern )
+{
+    if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+    {
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->SetTimePatern( patern );
         return true;
     }
     else

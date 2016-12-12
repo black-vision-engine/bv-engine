@@ -336,6 +336,11 @@ void PluginEventsHandlers::TimerHandler        ( IEventPtr eventPtr )
         SetTimeTimerPlugin( timerplugin, time );
         StopTimerPlugin( timerplugin );
     }
+    else if( command == TimerEvent::Command::SetTimePatern )
+    {
+        SetTimePaternTimerPlugin( timerplugin, StringToWString( evtTimer->TimePatern ) );
+        StopTimerPlugin( timerplugin );
+    }
     else
     {
         SendSimpleErrorResponse( command, evtTimer->EventID, evtTimer->SocketID, "Unknown command" );
