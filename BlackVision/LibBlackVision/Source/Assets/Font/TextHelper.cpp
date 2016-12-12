@@ -138,6 +138,10 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     unsigned int lineBeginComponentIdx = 0;
     unsigned int i = 0;
 
+    auto ccChannelSize = vertexAttributeChannel->GetComponents().size();
+
+    glm::vec3 zfShift = glm::vec3( 0.f, 0.f, 0.00001f );
+
     while( i < text.size() )
     {
         lineBeginComponentIdx = componentIdx;
@@ -180,6 +184,14 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
                     auto kerShift = textAtlas->GetKerning( text[ i - 1 ], text[ i ] );
                     kerningShift.x = kerShift / aspectRatio;
                     translate += kerningShift;
+                }
+
+                if( i > 0 ) 
+                {
+                    translate += zfShift;
+                } else
+                {
+                    translate += float( ccChannelSize ) * zfShift;
                 }
 
                 // XYZ
