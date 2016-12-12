@@ -809,6 +809,7 @@ public:
         SetTime,
         SetTimeStart,
         SetTimeStop,
+        SetTimePatern,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -817,6 +818,7 @@ private:
 public:
     std::string                 NodeName;
     std::string                 SceneName;
+    std::string                 TimePatern;
     Command                     TimerCommand;
     float                       Hours;
     float                       Minutes;
