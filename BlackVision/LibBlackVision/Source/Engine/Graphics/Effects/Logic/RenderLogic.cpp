@@ -62,7 +62,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
 
     if( m_enableSharedMemory )
     {
-        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_R8G8B8, m_sharedMemoryScaleFactor);
+        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, m_sharedMemoryScaleFactor);
     }
 }
 
@@ -349,13 +349,24 @@ void                    RenderLogic::UpdateOffscreenState   ()
 void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext * ctx )
 {
     auto rt = m_offscreenDisplay->GetVideoRenderTarget();
+	{
+		HPROFILER_SECTION("Shared Memory Copy", PROFILER_THREAD1);
+		if (m_enableSharedMemory)
+		{
+			if(m_videoOutputRenderLogic->GetLastVideoFrame()!=nullptr)
+				m_sharedMemoryVideoBuffer->DistributeFrame(m_videoOutputRenderLogic->GetLastVideoFrame());
+		}
+	}
 
-    m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );
+	{
+		HPROFILER_SECTION("Wait for Sync", PROFILER_THREAD1);
 
-    if( m_enableSharedMemory )
-    {
-        m_sharedMemoryVideoBuffer->DistributeFrame( m_videoOutputRenderLogic->GetLastVideoFrame() );
-    }
+		m_videoOutputRenderLogic->VideoFrameRendered(rt, ctx);
+	}
+	
+
+   
+
 }
 
 // *********************************

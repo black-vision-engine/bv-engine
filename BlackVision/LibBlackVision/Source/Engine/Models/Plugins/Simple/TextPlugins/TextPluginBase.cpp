@@ -178,6 +178,7 @@ void                                TextPluginBase::SetPrevPlugin               
 
     auto ctx = m_psc->GetRendererContext();
     
+	ctx->depthCtx->enabled = false;
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;

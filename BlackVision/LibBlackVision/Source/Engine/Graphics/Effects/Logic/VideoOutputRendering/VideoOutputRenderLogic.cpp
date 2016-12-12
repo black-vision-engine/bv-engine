@@ -9,7 +9,7 @@
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
-
+#include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Assets/Texture/TextureUtils.h"
 
 #include "VideoCardManager.h"
@@ -72,37 +72,43 @@ void                            VideoOutputRenderLogic::Render          ( Render
 int test = 0;
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
-	renderer( ctx )->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
+	{
+		HPROFILER_SECTION("ReadColorTexture", PROFILER_THREAD1);
+		renderer(ctx)->ReadColorTexture(0, videoRenderTarget, m_videoFrame);
+	}
 
-    videocards::AVFrameDescriptor desc;
-    desc.width = m_videoFrame->GetWidth();
-    desc.height = m_videoFrame->GetHeight();
-    desc.depth = TextureUtils::Channels( m_videoFrame->GetFormat() );
+			videocards::AVFrameDescriptor desc;
+			desc.width = m_videoFrame->GetWidth();
+		desc.height = m_videoFrame->GetHeight();
+		desc.depth = TextureUtils::Channels(m_videoFrame->GetFormat());
 
-    desc.channels = audioRenderer( ctx )->GetChannels();
-    desc.sampleRate = audioRenderer( ctx )->GetFrequency() / m_fps;
+		desc.channels = audioRenderer(ctx)->GetChannels();
+		desc.sampleRate = audioRenderer(ctx)->GetFrequency() / m_fps;
+
+		auto audioSize = desc.sampleRate * desc.channels * audioRenderer(ctx)->GetChannelDepth();
+		if (m_audioData->Size() != audioSize)
+		{
+			m_audioData = MemoryChunk::Create(audioSize);
+		}
+
+		audioRenderer(ctx)->GetBufferedData(m_audioData);
+
+		desc.fieldModeEnabled = true;
+		desc.timeCodePresent = true;
+		desc.autoGenerateTimecode = true;
+
+		auto frame = std::make_shared< videocards::AVFrame >(m_videoFrame->GetData(), m_audioData, desc);
+
+		frame->m_TimeCode.h = 10;
+		frame->m_TimeCode.m = 22;
+		frame->m_TimeCode.s = 33;
+		frame->m_TimeCode.frame = 12;
+
+		{
+			HPROFILER_SECTION("QueueFrame", PROFILER_THREAD1);
+			videocards::VideoCardManager::Instance().QueueFrame(frame);
+		}
     
-    auto audioSize = desc.sampleRate * desc.channels * audioRenderer( ctx )->GetChannelDepth();
-    if( m_audioData->Size() != audioSize )
-    {
-        m_audioData = MemoryChunk::Create( audioSize );
-    }
-    
-    audioRenderer( ctx )->GetBufferedData( m_audioData );
-
-    desc.fieldModeEnabled = true;
-    desc.timeCodePresent = true;
-    desc.autoGenerateTimecode = true;
-
-	auto frame = std::make_shared< videocards::AVFrame >( m_videoFrame->GetData(), m_audioData, desc );
-
-	frame->m_TimeCode.h = 10;
-	frame->m_TimeCode.m = 22;
-	frame->m_TimeCode.s = 33;
-	frame->m_TimeCode.frame = 12;
-
-
-    videocards::VideoCardManager::Instance().QueueFrame( frame );
 }
 
 // *********************************
