@@ -170,10 +170,10 @@ void main()
 	}
 	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
 	{
-		result = a * ( outline * oc * ( 1 - text ) );
+		result = a * outline * oc;
 		if( glowEnabled ) 
 		{
-			result = min( result +  glowStrength * glowColor * result.a, 1.0 );
+			result = min( result +  ( glowStrength * glowColor * result.a ), 1.0 );
 		}
 	}
 	else 
