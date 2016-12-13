@@ -46,6 +46,7 @@ const std::string TextPluginBase::PARAM::ALIGN_CHARACTER    = "alignCharacter";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_CC      = "firstTextCC";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_OUT_CC  = "firstTextOutCC";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_SH_CC   = "firstTextShCC";
+const std::string TextPluginBase::PARAM::FIRST_TEXT_GLOW_CC = "firstTextGlowCC";
 
 // *******************************
 //
@@ -64,14 +65,15 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false ); // TODO: Add support for passing bool type paramter in shaders.
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_STRENGTH, 0.f );
 
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_CC, 0 );
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_OUT_CC, 0 );
     h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_SH_CC, 0 );
+    h.AddValue( TextPluginBase::PARAM::FIRST_TEXT_GLOW_CC, 0 );
 
     h.SetOrCreateVSModel();
     h.AddTransformParam( TextPluginBase::PARAM::OUTLINE_TX );
@@ -109,10 +111,11 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
     m_shadowEnabled     = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::SHADOW_ENABLED ) );
     m_outlineEnabled    = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::OUTLINE_ENABLED ) );
-
+    m_glowEnabled       = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::GLOW_ENABLED ) );
 
     m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
     m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
+    m_firstTextGlowCC   = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_GLOW_CC ) );
     m_firstTextShCC     = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_SH_CC ) );
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
@@ -288,6 +291,7 @@ Float32                             TextPluginBase::BuildVACForText             
     m_firstTextOutCC->SetValue( 0 );
     m_firstTextCC->SetValue( 0 );
     m_firstTextShCC->SetValue( 0 );
+    m_firstTextGlowCC->SetValue( 0 );
 
     if( m_blurSize > 0 && m_shadowEnabled ) 
     {
@@ -296,6 +300,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         text,
                                         m_blurSize,
                                         spacing,
+                                        0.0005f,
                                         alignType,
                                         alignCh,
                                         0,
@@ -304,9 +309,27 @@ Float32                             TextPluginBase::BuildVACForText             
                                         nullptr,
                                         useKerning );
 
-        m_firstTextOutCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
+        m_firstTextGlowCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
 
+    if( m_glowBlurSize > 0 && m_glowEnabled ) 
+    {
+        TextHelper::BuildVACForText(    m_vaChannel.get(),
+                                        m_atlas,
+                                        text,
+                                        m_glowBlurSize,
+                                        spacing,
+                                        0.001f,
+                                        alignType,
+                                        alignCh,
+                                        m_outlineSize,
+                                        viewWidth,
+                                        viewHeight,
+                                        nullptr,
+                                        useKerning );
+
+        m_firstTextOutCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
+    }
 
     if( m_outlineSize > 0 && m_outlineEnabled ) 
     {
@@ -315,6 +338,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         text,
                                         m_glowBlurSize,
                                         spacing,
+                                        0.0015f,
                                         alignType,
                                         alignCh,
                                         m_outlineSize,
@@ -331,6 +355,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     text,
                                                     m_glowBlurSize,
                                                     spacing,
+                                                    0.002f,
                                                     alignType,
                                                     alignCh,
                                                     0,
