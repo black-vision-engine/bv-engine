@@ -13,6 +13,7 @@ uniform mat4 outlineTx;
 
 uniform int         firstTextCC;
 uniform int         firstTextOutCC;
+uniform int         firstTextGlowCC;
 uniform int         firstTextShCC;
 
 uniform int     cc_num;
@@ -153,7 +154,7 @@ void main()
 	
     transform = MVP * transform;
 	
-	if( cc_num >= firstTextShCC && cc_num < firstTextOutCC ) 
+	if( cc_num >= firstTextShCC && cc_num < firstTextGlowCC ) 
 	{
 		transform = transform * shadowTx;
 	}

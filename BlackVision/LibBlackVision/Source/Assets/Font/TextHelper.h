@@ -41,7 +41,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontAsset.
-    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger = nullptr, bool useKerning = true );
+    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, SizeType blurSize, float spacing, float zFightingShift, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger = nullptr, bool useKerning = true );
 
     /////////////////////////////////////
     // Computes alignement and aplies text translation. Version PC translates positions and centers, version P only positions.
