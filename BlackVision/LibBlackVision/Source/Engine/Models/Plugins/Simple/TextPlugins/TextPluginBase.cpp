@@ -24,22 +24,26 @@ namespace bv { namespace model {
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
-const std::string TextPluginBase::PARAM::ALPHA           = "alpha";
-const std::string TextPluginBase::PARAM::FONT_SIZE       = "fontSize";
+const std::string TextPluginBase::PARAM::ALPHA              = "alpha";
+const std::string TextPluginBase::PARAM::FONT_SIZE          = "fontSize";
 
-const std::string TextPluginBase::PARAM::SHADOW_COLOR      = "shadowColor";
-const std::string TextPluginBase::PARAM::SHADOW_TX         = "shadowTx";
+const std::string TextPluginBase::PARAM::SHADOW_ENABLED     = "shadowEnabled";
+const std::string TextPluginBase::PARAM::SHADOW_COLOR       = "shadowColor";
+const std::string TextPluginBase::PARAM::SHADOW_TX          = "shadowTx";
 
-const std::string TextPluginBase::PARAM::OUTLINE_TX      = "outlineTx";
-const std::string TextPluginBase::PARAM::OUTLINE_COLOR   = "outlineColor";
+const std::string TextPluginBase::PARAM::OUTLINE_ENABLED    = "outlineEnabled";
+const std::string TextPluginBase::PARAM::OUTLINE_TX         = "outlineTx";
+const std::string TextPluginBase::PARAM::OUTLINE_COLOR      = "outlineColor";
 
-const std::string TextPluginBase::PARAM::GLOW_STRENGTH   = "glowStrength";
-const std::string TextPluginBase::PARAM::GLOW_COLOR      = "glowColor";
+const std::string TextPluginBase::PARAM::GLOW_ENABLED       = "glowEnabled";
+const std::string TextPluginBase::PARAM::GLOW_STRENGTH      = "glowStrength";
+const std::string TextPluginBase::PARAM::GLOW_COLOR         = "glowColor";
 
-const std::string TextPluginBase::PARAM::SPACING         = "spacing";
-const std::string TextPluginBase::PARAM::ALIGNEMENT      = "alingment";
-const std::string TextPluginBase::PARAM::ALIGN_CHARACTER = "alignCharacter";
-const std::string TextPluginBase::PARAM::FIRST_TEXT_CC   = "firstTextCC";
+const std::string TextPluginBase::PARAM::SPACING            = "spacing";
+const std::string TextPluginBase::PARAM::ALIGNEMENT         = "alingment";
+const std::string TextPluginBase::PARAM::ALIGN_CHARACTER    = "alignCharacter";
+
+const std::string TextPluginBase::PARAM::FIRST_TEXT_CC      = "firstTextCC";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_OUT_CC  = "firstTextOutCC";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_SH_CC   = "firstTextShCC";
 
@@ -60,6 +64,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALPHA, 1.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false ); // TODO: Add support for passing bool type paramter in shaders.
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_STRENGTH, 0.f );
@@ -74,8 +79,10 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
 
     h.SetOrCreatePluginModel();
 
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_ENABLED, false );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_ENABLED, false );
 
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
@@ -100,6 +107,9 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
     m_alignmentParam    = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
+    m_shadowEnabled     = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::SHADOW_ENABLED ) );
+    m_outlineEnabled    = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::OUTLINE_ENABLED ) );
+
 
     m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
     m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
@@ -279,7 +289,7 @@ Float32                             TextPluginBase::BuildVACForText             
     m_firstTextCC->SetValue( 0 );
     m_firstTextShCC->SetValue( 0 );
 
-    if( m_blurSize > 0 ) 
+    if( m_blurSize > 0 && m_shadowEnabled ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
@@ -298,7 +308,7 @@ Float32                             TextPluginBase::BuildVACForText             
     }
 
 
-    if( m_outlineSize > 0 ) 
+    if( m_outlineSize > 0 && m_outlineEnabled ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,

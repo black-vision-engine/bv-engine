@@ -7,6 +7,7 @@
 #include "Engine/Interfaces/IValue.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamInt.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamBool.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFloat.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamVec2.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamVec3.h"
@@ -46,7 +47,7 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
     switch( type )
     {
         case ParamType::PT_FLOAT1:
-			return new ShaderParamFloat( name, QueryTypedValue< ValueFloat >( value )->GetValue() );
+            return new ShaderParamFloat( name, QueryTypedValue< ValueFloat >( value )->GetValue() );
         case ParamType::PT_FLOAT2:
             return new ShaderParamVec2( name, QueryTypedValue< ValueVec2 >( value )->GetValue() );
         case ParamType::PT_FLOAT3:
@@ -58,10 +59,11 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
         case ParamType::PT_MAT3:
             return new ShaderParamMat3( name, QueryTypedValue< ValueMat3 >( value )->GetValue() );
         case ParamType::PT_MAT4:
-            return new ShaderParamMat4( name, QueryTypedValue< ValueMat4 >( value )->GetValue() );
-		case ParamType::PT_INT:
-			return new ShaderParamInt( name, QueryTypedValue< ValueInt >( value )->GetValue() );
-    
+            return new ShaderParamMat4( name, QueryTypedValue< ValueMat4 >( value )->GetValue() );  
+        case ParamType::PT_INT:
+            return new ShaderParamInt( name, QueryTypedValue< ValueInt >( value )->GetValue() );
+        case ParamType::PT_BOOL:
+            return new ShaderParamBool( name, QueryTypedValue< ValueBool >( value )->GetValue() );
         default:
             assert( false );
     }
@@ -89,7 +91,9 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
             return new ShaderParamMat3( name );
         case ParamType::PT_MAT4:
             return new ShaderParamMat4( name );
-    
+        case ParamType::PT_BOOL:
+            return new ShaderParamBool( name );
+        
         default:
             assert( false );
     }

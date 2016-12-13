@@ -83,6 +83,10 @@ bool            StopTimerPlugin( IPluginPtr timerPlugin );
 //
 bool            ResetTimerPlugin( IPluginPtr timerPlugin );
 
+// *************************************
+//
+bool            SetTimePaternTimerPlugin( IPluginPtr timerPlugin, const std::wstring & patern );
+
 
 // ***************************** PLUGIN ********************************** 
 class DefaultTimerPlugin : public TextPluginBase
@@ -142,6 +146,7 @@ private:
     friend bool     StartTimerPlugin    ( IPluginPtr timerPlugin );
     friend bool     StopTimerPlugin     ( IPluginPtr timerPlugin );
     friend bool     ResetTimerPlugin    ( IPluginPtr timerPlugin );
+    friend bool     SetTimePaternTimerPlugin ( IPluginPtr timerPlugin, const std::wstring & patern );
 
 public:
     explicit        DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

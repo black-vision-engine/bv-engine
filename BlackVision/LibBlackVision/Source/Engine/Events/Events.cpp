@@ -9,7 +9,7 @@
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
-
+#include "Tools/StringHeplers.h"
 
 #include <limits>
 
@@ -489,6 +489,7 @@ const std::string TIMER_HOURS_STRING                  = "Hours";
 const std::string TIMER_MINUTES_STRING                = "Minutes";
 const std::string TIMER_SECONDS_STRING                = "Seconds";
 const std::string TIMER_MILLISECONDS_STRING           = "Milliseconds";
+const std::string TIMER_TIME_PATERN_STRING            = "TimePatern";
 
 std::pair< TimerEvent::Command, const char* > TimerEventCommandMapping[] = 
 {
@@ -498,6 +499,7 @@ std::pair< TimerEvent::Command, const char* > TimerEventCommandMapping[] =
     , std::make_pair( TimerEvent::Command::SetTime, "SetTime" )
     , std::make_pair( TimerEvent::Command::SetTimeStart, "SetTimeStart" )
     , std::make_pair( TimerEvent::Command::SetTimeStop, "SetTimeStop" ) 
+    , std::make_pair( TimerEvent::Command::SetTimePatern, "SetTimePatern" ) 
     , std::make_pair( TimerEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -1766,6 +1768,7 @@ void                TimerEvent::Serialize            ( ISerializer& ser ) const
     ser.SetAttribute( SerializationHelper::TIMER_HOURS_STRING, SerializationHelper::T2String( Hours ) );
     ser.SetAttribute( SerializationHelper::TIMER_MINUTES_STRING, SerializationHelper::T2String( Minutes ) );
     ser.SetAttribute( SerializationHelper::TIMER_SECONDS_STRING, SerializationHelper::T2String( Seconds ) );
+    ser.SetAttribute( SerializationHelper::TIMER_TIME_PATERN_STRING, TimePatern );
     ser.SetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING, SerializationHelper::T2String( Milliseconds ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
 }
@@ -1780,10 +1783,12 @@ IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
         newEvent->TimerCommand      = SerializationHelper::String2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimerEvent::Command::Fail );
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+        newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->Hours             = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_STRING ), 0.0f );
         newEvent->Minutes           = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_STRING ), 0.0f );
         newEvent->Seconds           = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_STRING ), 0.0f );
         newEvent->Milliseconds      = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING ), 0.0f );
+        newEvent->TimePatern        = deser.GetAttribute( SerializationHelper::TIMER_TIME_PATERN_STRING );
 
         return newEvent;
     }
