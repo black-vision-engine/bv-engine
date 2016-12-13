@@ -20,6 +20,7 @@ uniform vec4        glowColor;
 
 uniform int         firstTextCC;
 uniform int         firstTextOutCC;
+uniform int         firstTextGlowCC;
 uniform int         firstTextShCC;
 
 uniform float       time;
@@ -158,17 +159,21 @@ void main()
     
 	vec4 result;
 	
-	if( cc_num >= firstTextShCC && cc_num < firstTextOutCC ) 
+	if( cc_num >= firstTextShCC && cc_num < firstTextGlowCC ) 
 	{
 		result = a * blutedTextShadow * sc;
+	}
+	else if ( cc_num >= firstTextGlowCC && cc_num < firstTextOutCC ) 
+	{
+		result = a * bluredOutlineGlow * glowStrength * glowColor;
+		result += a * bluredTextGlow * glowStrength * glowColor;
 	}
 	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
 	{
 		result = a * ( outline * oc * ( 1 - text ) );
-		
 		if( glowEnabled ) 
 		{
-			result = min( result +  glowStrength * outlineColor * bluredOutlineGlow, 1.0 );
+			result = min( result +  glowStrength * glowColor * result.a, 1.0 );
 		}
 	}
 	else 
@@ -177,7 +182,7 @@ void main()
 		
 		if( glowEnabled ) 
 		{
-			result = min( result +  glowStrength * glowColor * bluredTextGlow, 1.0 );
+			result = min( result +  glowStrength * glowColor * result.a, 1.0 );
 		}
 	}
 		

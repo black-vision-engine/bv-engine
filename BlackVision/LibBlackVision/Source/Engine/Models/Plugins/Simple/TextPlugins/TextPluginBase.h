@@ -48,6 +48,7 @@ public:
         static const std::string        FIRST_TEXT_CC;
         static const std::string        FIRST_TEXT_OUT_CC;
         static const std::string        FIRST_TEXT_SH_CC;
+        static const std::string        FIRST_TEXT_GLOW_CC;
     };
 
 protected:
@@ -72,11 +73,12 @@ protected:
 
     ValueBoolPtr                    m_shadowEnabled;
     ValueBoolPtr                    m_outlineEnabled;
-
+    ValueBoolPtr                    m_glowEnabled;
 
     ValueIntPtr                     m_alignCharacter;
     ValueIntPtr                     m_firstTextCC;
     ValueIntPtr                     m_firstTextOutCC;
+    ValueIntPtr                     m_firstTextGlowCC;
     ValueIntPtr                     m_firstTextShCC;
 
     bool                                        LoadResource                ( AssetDescConstPtr assetDescr, const std::string & name );
