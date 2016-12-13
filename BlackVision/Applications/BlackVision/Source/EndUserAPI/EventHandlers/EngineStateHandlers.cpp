@@ -178,11 +178,11 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         //std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
 
         JsonSerializeObject ser;
-        PrepareResponseTemplate( ser, command, mouseEvent->SocketID, result );
+        PrepareResponseTemplate( ser, command, mouseEvent->EventID, result );
         ser.SetAttribute( "Scene", nodeScene );
         ser.SetAttribute( "ClickedNode", nodePath );
 
-        SendResponse( ser, mouseEvent->SocketID, mouseEvent->SocketID );
+        SendResponse( ser, mouseEvent->SocketID, mouseEvent->EventID );
     }
     else if( command == MouseEvent::Command::MouseUp )
     {

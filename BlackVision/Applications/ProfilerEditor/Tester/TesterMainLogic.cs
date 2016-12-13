@@ -69,7 +69,7 @@ namespace ProfilerEditor.Tester
             TestsManager = new TestsManager();
 
             m_ipAddress = "127.0.0.1";
-            m_port = "11101";
+            m_port = "11011";
 
             State = TestsState.Init;
             IsConnected = false;
