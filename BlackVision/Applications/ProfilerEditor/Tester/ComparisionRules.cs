@@ -19,6 +19,14 @@ namespace ProfilerEditor.Tester
             m_compareExceptions = new List< ComparisionException.CmpException >();
 
             m_compareExceptions.Add( new ComparisionException.TreatAsWarningException( "local_time", "TimeLines" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "ListAllFolders" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "ListScenes" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "ListPresets" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "ListAssetsPaths" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "GetSceneThumbnail" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "GetAssetThumbnail" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "GetPresetThumbnail" ) );    
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "ListProjectNames" ) );
         }
 
 
@@ -29,7 +37,9 @@ namespace ProfilerEditor.Tester
 
             List < TestError > errorsList = new List< TestError >();
 
-            ComparatorSelector( expectedResponse.EventJSon, response.EventJSon, errorsList, expectedResponse, response );
+            KeyValuePair< string, JToken > tmpPair = new KeyValuePair< string, JToken >( "", expectedResponse.EventJSon );
+            if( !FindMatchingException( tmpPair, response.EventJSon, errorsList, expectedResponse, response ) )
+                ComparatorSelector( expectedResponse.EventJSon, response.EventJSon, errorsList, expectedResponse, response );
 
             return errorsList;
         }

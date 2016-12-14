@@ -93,10 +93,11 @@ namespace ProfilerEditor.Tester
             {
                 var expResp = ReferenceResponses[ (int)m_responsePtr ];
 
-                TestError error = new TestError( expResp );
+                TestError error = new TestError();
                 error.Message = "Reponse timeout: [ " + seconds.ToString() + " ] s";
                 error.FileRef = this;
                 error.IsError = ErrorRank.Warning;
+                error.ReferenceReponse = expResp;
 
                 if( !expResp.SyncEvent )
                     error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
@@ -342,8 +343,13 @@ namespace ProfilerEditor.Tester
                 newEvent.EventJSon = (JObject)evt;
                 newEvent.Time = time;
 
-                newEvent.EventName = evt[ "Event" ].ToString();
-                newEvent.CommandName = evt[ "Command" ].ToString();
+                var eventField = evt[ "Event" ];
+                var commandField = evt[ "Command" ];
+
+                if( eventField != null )
+                    newEvent.EventName = eventField.ToString();
+                if( commandField != null )
+                    newEvent.CommandName = commandField.ToString();
 
                 JToken eventID = evt[ "EventID" ];
                 if( eventID != null )
