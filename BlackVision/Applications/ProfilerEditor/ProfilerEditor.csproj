@@ -94,6 +94,7 @@
       <DependentUpon>ServerConnectionDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tester\ComparisionException\CmpException.cs" />
+    <Compile Include="Tester\ComparisionException\IgnoreException.cs" />
     <Compile Include="Tester\ComparisionException\TreatAsWarningException.cs" />
     <Compile Include="Tester\ComparisionRules.cs" />
     <Compile Include="Tester\Event.cs" />

@@ -188,6 +188,9 @@ namespace ProfilerEditor.Tester
 
         private void TestSingleFile( object parameter )
         {
+            if( !m_process.IsSpawned() )
+                RestartProcess();
+
             State = TestsState.Testing;
             m_testsManager.TestSingleFile();
 
