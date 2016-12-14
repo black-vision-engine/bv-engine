@@ -192,6 +192,8 @@ void                                TextPluginBase::SetPrevPlugin               
     auto ctx = m_psc->GetRendererContext();
     
     ctx->cullCtx->enabled = false;
+    ctx->depthCtx->enabled = true;
+    ctx->depthCtx->writable = false;
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
     ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
@@ -300,7 +302,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         text,
                                         m_blurSize,
                                         spacing,
-                                        0.0005f,
+                                        0.000f,
                                         alignType,
                                         alignCh,
                                         0,
@@ -319,7 +321,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         text,
                                         m_glowBlurSize,
                                         spacing,
-                                        0.001f,
+                                        0.00f,
                                         alignType,
                                         alignCh,
                                         m_outlineSize,
@@ -338,7 +340,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         text,
                                         m_glowBlurSize,
                                         spacing,
-                                        0.0015f,
+                                        0.00f,
                                         alignType,
                                         alignCh,
                                         m_outlineSize,
@@ -355,7 +357,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     text,
                                                     m_glowBlurSize,
                                                     spacing,
-                                                    0.002f,
+                                                    0.0f,
                                                     alignType,
                                                     alignCh,
                                                     0,

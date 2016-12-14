@@ -141,7 +141,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     unsigned int lineBeginComponentIdx = 0;
     unsigned int i = 0;
 
-    glm::vec3 zfShift = glm::vec3( 0.f, 0.f, 0.0001f );
+    glm::vec3 zfShift = glm::vec3( 0.f, 0.f, 0.0f );
 
     while( i < text.size() )
     {
