@@ -62,12 +62,17 @@ AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 //
 AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 {
-    auto frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, m_frame->nb_samples, m_format, 0 );
+    auto dst_nb_samples = av_rescale_rnd( swr_get_delay( m_swrCtx, m_frame->sample_rate ) + m_frame->nb_samples, m_sampleRate,  m_frame->sample_rate, AV_ROUND_UP);
+
+    auto frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, (int)dst_nb_samples, m_format, 0 );
+
 	auto outBuffer = new uint8_t[ frameSize ];
 
     if( m_needConversion )
     {
-        swr_convert( m_swrCtx, &outBuffer, m_frame->nb_samples, ( const uint8_t ** )m_frame->extended_data, m_frame->nb_samples );
+        auto sn = swr_convert( m_swrCtx, &outBuffer, (int)dst_nb_samples, ( const uint8_t ** )m_frame->data, m_frame->nb_samples );
+        int a = 0;
+        { sn; a; };
     }
     else
     {
@@ -78,7 +83,7 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 
     mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pts );
     mediaData.frameData = MemoryChunk::Create( ( char * )outBuffer, SizeType( frameSize ) );
-    mediaData.nbSamples = m_frame->nb_samples;
+    mediaData.nbSamples = dst_nb_samples;
 
     return mediaData;
 }

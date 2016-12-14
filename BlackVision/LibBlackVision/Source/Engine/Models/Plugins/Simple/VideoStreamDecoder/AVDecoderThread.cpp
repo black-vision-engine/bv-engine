@@ -107,14 +107,9 @@ void				AVDecoderThread::Run			    ()
     auto duration = m_decoder->GetDuration();
     m_timer.Start();
 
-    while( true )
+    while( m_running )
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
-
-        if( !m_running )
-        {
-            break;
-        }
 
         auto time = m_timer.ElapsedMillis();
         
