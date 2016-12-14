@@ -164,6 +164,7 @@ PdrAudioBuffersQueue *  AudioRenderer::GetPdrAudioBuffersQueue      ( PdrSource 
         {
             /** @brief all audio channels must be converted to the same format to work with videocards */
             LOG_MESSAGE( SeverityLevel::error ) << "Audio was not converted to default format required by videocards";
+            assert( false );
         }
         else if( autoCreate )
         {

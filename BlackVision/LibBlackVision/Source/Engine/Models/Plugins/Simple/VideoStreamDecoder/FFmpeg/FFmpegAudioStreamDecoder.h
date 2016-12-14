@@ -23,6 +23,9 @@ private:
 
     bool                                m_needConversion;
 
+    SizeType                            m_maxBufferSize;
+    uint8_t *                           m_tmpBuffer;
+
 public:
 
 							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 10 );

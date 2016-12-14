@@ -10,6 +10,7 @@ class AudioUtils
 {
 public:
     
+    static const UInt32                 DEFAULT_CHANNELS;
     static const UInt32                 DEFAULT_SAMPLE_RATE;
     static const AudioFormat            DEFAULT_SAMPLE_FORMAT;
 

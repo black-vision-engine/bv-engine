@@ -9,7 +9,7 @@
 
 namespace bv {
 
-const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[]   = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_U8 };
+const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[] = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_U8 };
 
 // *******************************
 //
@@ -32,6 +32,9 @@ FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, 
             m_codecCtx->channel_layout, m_codecCtx->sample_fmt, m_codecCtx->sample_rate, 0, nullptr );
         swr_init( m_swrCtx );
     }
+
+    m_maxBufferSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, m_sampleRate, AV_SAMPLE_FMT_FLT, 1 );
+    m_tmpBuffer = new uint8_t[ m_maxBufferSize ];
 }
 
 // *******************************
@@ -41,6 +44,11 @@ FFmpegAudioStreamDecoder::~FFmpegAudioStreamDecoder    ()
     if( m_needConversion )
     {
         swr_free( &m_swrCtx );
+    }
+
+    if( m_tmpBuffer )
+    {
+        delete m_tmpBuffer;
     }
 }
 
@@ -62,28 +70,40 @@ AudioFormat             FFmpegAudioStreamDecoder::GetFormat         () const
 //
 AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
 {
-    auto dst_nb_samples = av_rescale_rnd( swr_get_delay( m_swrCtx, m_frame->sample_rate ) + m_frame->nb_samples, m_sampleRate,  m_frame->sample_rate, AV_ROUND_UP);
-
-    auto frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, (int)dst_nb_samples, m_format, 0 );
-
-	auto outBuffer = new uint8_t[ frameSize ];
+    AVMediaData mediaData;
+    uint8_t * outBuffer = nullptr;
+    SizeType frameSize = 0;
+    Int32 outSamples = 0;
+    
 
     if( m_needConversion )
     {
-        auto sn = swr_convert( m_swrCtx, &outBuffer, (int)dst_nb_samples, ( const uint8_t ** )m_frame->data, m_frame->nb_samples );
-        int a = 0;
-        { sn; a; };
+        outSamples = ( Int32 )av_rescale_rnd( swr_get_delay( m_swrCtx, m_frame->sample_rate ) + m_frame->nb_samples, m_sampleRate, m_frame->sample_rate, AV_ROUND_UP );
+        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, outSamples, m_format, 1 );
+
+        if( frameSize > m_maxBufferSize )
+        {
+            m_maxBufferSize = frameSize;
+            delete m_tmpBuffer;
+            m_tmpBuffer = new uint8_t[ m_maxBufferSize ];
+        }
+        outSamples = swr_convert( m_swrCtx, &m_tmpBuffer, outSamples, ( const uint8_t ** )m_frame->data, m_frame->nb_samples );
+        
+        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, outSamples, m_format, 1 );
+        outBuffer = new uint8_t[ frameSize ];
+        memcpy( outBuffer, m_tmpBuffer, frameSize );
     }
     else
     {
+        outSamples = m_frame->nb_samples;
+        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, outSamples, m_format, 1 );
+        outBuffer = new uint8_t[ frameSize ];
         memcpy( outBuffer, m_frame->data, frameSize );
     }
-    
-    AVMediaData mediaData;
 
     mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pts );
-    mediaData.frameData = MemoryChunk::Create( ( char * )outBuffer, SizeType( frameSize ) );
-    mediaData.nbSamples = dst_nb_samples;
+    mediaData.frameData = MemoryChunk::Create( ( char * )outBuffer, frameSize );
+    mediaData.nbSamples = outSamples;
 
     return mediaData;
 }

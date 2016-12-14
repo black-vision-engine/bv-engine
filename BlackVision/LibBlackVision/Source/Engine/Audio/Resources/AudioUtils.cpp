@@ -31,6 +31,7 @@ namespace
 
 // *********************************
 //
+const UInt32        AudioUtils::DEFAULT_CHANNELS      = 2;
 const UInt32        AudioUtils::DEFAULT_SAMPLE_RATE   = 48000;
 const AudioFormat   AudioUtils::DEFAULT_SAMPLE_FORMAT = AudioFormat::STEREO16;
 
