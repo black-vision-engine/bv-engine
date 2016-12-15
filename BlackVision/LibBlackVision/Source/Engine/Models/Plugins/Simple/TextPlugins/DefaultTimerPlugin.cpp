@@ -22,6 +22,7 @@
 #include "Memory/MemoryLeaks.h"
 
 #include <algorithm>
+#include <regex>
 
 
 namespace bv { namespace model {
@@ -78,25 +79,130 @@ std::string             DefaultTimerPluginDesc::TextureName              ()
 namespace
 {
 
-bool IsPlaceHolder(wchar_t wch)
+bool IsPlaceHolderChar( wchar_t wch )
 {
-    return  wch == L'H'
-        ||  wch == L'M'
-        ||  wch == L'S'
-        ||  wch == L'D'
-        ||  wch == L'h'
-        ||  wch == L'm'
-        ||  wch == L's'
-        ||  wch == L'd';
+	wch = towlower( wch );
+
+	const static wchar_t schars [] = { L'h', L'm', L's', L'd' };
+
+	static std::set< wchar_t > scSet( schars, schars + sizeof( schars ) / sizeof( schars[ 0 ] ) );
+
+	return scSet.find( wch ) != scSet.end();
 }
+
+std::vector< std::pair< std::wstring, Int32 > > GetTimePaternGroups( std::wstring s )
+{
+	std::wregex word_regex( L"H+|M+|S+|D+|[hmsd]|[^HMSDhmsd]+" );
+	auto words_begin = std::wsregex_iterator( s.begin(), s.end(), word_regex );
+	auto words_end = std::wsregex_iterator();
+
+	std::vector< std::pair< std::wstring, Int32 > > ret;
+
+	for ( std::wsregex_iterator i = words_begin; i != words_end; ++i )
+	{
+		std::wsmatch match = *i;
+
+		auto matchStr = match.str();
+
+		if( IsPlaceHolderChar( matchStr[ 0 ] ) )
+		{
+			ret.push_back( std::make_pair( matchStr.substr( 0, 1 ), isupper( matchStr[ 0 ] ) ? matchStr.size() : 0 ) ); // H, M, S, D (length), h, m, s, d (0) 
+		}
+		else
+		{
+			ret.push_back( std::make_pair( matchStr, -1 ) ); // other strings.
+		}
+
+		
+		// std::wcout << L"  " << match_str << L'\n';
+	}
+
+	return ret;
+}
+
+void AddToTimeStringU( Int32 value, std::wstring & zeroTimeString, std::wstring & timeString, Int32 groupLength )
+{
+	auto rounded = value % ( 10 ^ groupLength );
+
+	const auto str = std::to_wstring( rounded );
+
+	for( auto i = 0; i < groupLength; ++i )
+	{
+		zeroTimeString.push_back( L'0' );
+		if( i < groupLength - str.size() )
+			timeString.push_back( L'0' );
+	}
+
+	timeString.append( str );
+}
+
+void AddToTimeStringL( Int32 value, std::wstring & zeroTimeString, std::wstring & timeString )
+{
+	if( value > 0 )
+	{
+		auto str = std::to_wstring( value );
+
+		zeroTimeString.append( std::wstring( str.size(), L'0' ) );
+
+		timeString.append( str );
+	}
+}
+
+std::wstring CreateTimeString( std::vector< std::pair< std::wstring, Int32 > > timePaternGroups, TimeType time )
+{
+	std::wstring zeroTimeString;
+	std::wstring timeString;
+
+	TimeValue timeValue( time, 10 );
+
+	for( const auto & group : timePaternGroups )
+	{
+		if( group.first == L"H" )
+		{
+			AddToTimeStringU( timeValue.hour, zeroTimeString, timeString, group.second );
+		}
+		else if ( group.first == L"M" )
+		{
+			AddToTimeStringU( timeValue.minute, zeroTimeString, timeString, group.second );
+		}
+		else if( group.first == L"S" )
+		{
+			AddToTimeStringU( timeValue.second, zeroTimeString, timeString, group.second );
+		}
+		else if( group.first == L"D" )
+		{
+			AddToTimeStringU( timeValue.fracOfSecond, zeroTimeString, timeString, group.second );
+		}
+		else if( group.first == L"h" )
+		{
+			AddToTimeStringL( timeValue.hour, zeroTimeString, timeString );
+		}
+		else if( group.first == L"m" )
+		{
+			AddToTimeStringL( timeValue.minute, zeroTimeString, timeString );
+		}
+		else if( group.first == L"s" )
+		{
+			AddToTimeStringL( timeValue.second, zeroTimeString, timeString );
+		}
+		else if( group.first == L"d" )
+		{
+			AddToTimeStringL( timeValue.fracOfSecond, zeroTimeString, timeString );
+		}
+	}
+}
+
+
 
 void TimeFormatError()
 {
     throw std::exception("wrong time format");
 }
 
+
 TimeInfo ParseTimePatern(const std::wstring& timePatern)
 {
+
     bool HPHPossible = true;
     bool MPHPossible = true;
     bool SPHPossible = true;
@@ -110,41 +216,47 @@ TimeInfo ParseTimePatern(const std::wstring& timePatern)
     {
         if(IsPlaceHolder(wch))
         {
-            switch ( wch )
-            {
-            case L'H':
-                if( !HPHPossible ) TimeFormatError();
-                if( timeInfo.hoursPlaceholderSize == 0 ) timeInfo.hoursPHStart = i - whiteSpaces;
-                timeInfo.hoursPlaceholderSize++;
-                break;
-            case L'M':
-                if(!MPHPossible) TimeFormatError();
-                if( timeInfo.minutesPlaceHolderSize == 0 ) timeInfo.minutesPHStart = i - whiteSpaces;
-                HPHPossible = false;
-                if(timeInfo.minutesPlaceHolderSize < 2)
-                    timeInfo.minutesPlaceHolderSize++;
-                else
-                    TimeFormatError();
-                break;
-            case L'S':
-                if(!SPHPossible) TimeFormatError();
-                if( timeInfo.secondsPlaceHolderSize == 0 ) timeInfo.secondsPHStart = i - whiteSpaces;
-                HPHPossible = false;
-                MPHPossible = false;
-                if(timeInfo.secondsPlaceHolderSize < 2)
-                    timeInfo.secondsPlaceHolderSize++;
-                else
-                    TimeFormatError();
-                break;
-            case L's':
-                if( timeInfo.fracOfSecondsPlaceholderSize == 0 ) timeInfo.fosPHStart = i - whiteSpaces;
-                HPHPossible = false;
-                MPHPossible = false;
-                SPHPossible = false;
-                if(!FSPHPossible) TimeFormatError();
-                timeInfo.fracOfSecondsPlaceholderSize++;
-                break;
-            }
+			if ( isupper(wch) ) 
+			{
+				switch (wch)
+				{
+				case L'H':
+					if (!HPHPossible) TimeFormatError();
+					if (timeInfo.hoursPlaceholderSize == 0) timeInfo.hoursPHStart = i - whiteSpaces;
+					timeInfo.hoursPlaceholderSize++;
+					break;
+				case L'M':
+					if (!MPHPossible) TimeFormatError();
+					if (timeInfo.minutesPlaceHolderSize == 0) timeInfo.minutesPHStart = i - whiteSpaces;
+					HPHPossible = false;
+					if (timeInfo.minutesPlaceHolderSize < 2)
+						timeInfo.minutesPlaceHolderSize++;
+					else
+						TimeFormatError();
+					break;
+				case L'S':
+					if (!SPHPossible) TimeFormatError();
+					if (timeInfo.secondsPlaceHolderSize == 0) timeInfo.secondsPHStart = i - whiteSpaces;
+					HPHPossible = false;
+					MPHPossible = false;
+					if (timeInfo.secondsPlaceHolderSize < 2)
+						timeInfo.secondsPlaceHolderSize++;
+					else
+						TimeFormatError();
+					break;
+				case L'D':
+					if (timeInfo.fracOfSecondsPlaceholderSize == 0) timeInfo.fosPHStart = i - whiteSpaces;
+					HPHPossible = false;
+					MPHPossible = false;
+					SPHPossible = false;
+					if (!FSPHPossible) TimeFormatError();
+					timeInfo.fracOfSecondsPlaceholderSize++;
+					break;
+				}
+			}
+			else
+			{
+			}
         }
 
         if(isspace(wch))
@@ -171,7 +283,7 @@ bool    TimeValue::operator!=(const TimeValue& other) const
 
 ////////////////////////////
 //
-TimeValue::TimeValue( double time, int accuracy )
+TimeValue::TimeValue( TimeType time, int accuracy )
 {
     this->fracOfSecond = int( ( time - std::floor( time ) ) * pow( 10, accuracy ) );
     this->second    = int( std::floor( time ) ) % 60;
@@ -318,6 +430,8 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
     m_vaChannel->ClearAll();
 
     TextPluginBase::BuildVACForText( timerInit, false );
+
+	HelperVertexAttributesChannel::SetTopologyUpdate(m_vaChannel);
 }
 
 ////////////////////////////

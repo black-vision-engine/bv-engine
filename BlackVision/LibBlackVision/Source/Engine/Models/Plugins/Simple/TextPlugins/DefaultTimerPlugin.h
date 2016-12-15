@@ -48,13 +48,18 @@ struct TimeValue
     int     minute;
     int     hour;
 
-    explicit    TimeValue( double time, int accuracy = 2 );
+    explicit    TimeValue( TimeType time, int accuracy = 2 );
 
     bool        operator!=(const TimeValue& other) const;
 };
 
 struct TimeInfo
 {
+	bool showHourLeadingZeros;
+	bool showMinuteLeadingZeros;
+	bool showSecondLeadingZeros;
+	bool showMilisecondLeadingZeros;
+
     int hoursPHStart;
     int hoursPlaceholderSize; // 0..
     int minutesPHStart;
