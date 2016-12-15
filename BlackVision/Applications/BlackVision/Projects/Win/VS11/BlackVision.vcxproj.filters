@@ -55,6 +55,9 @@
     <Filter Include="Widgets\Arrange">
       <UniqueIdentifier>{8acc0a3d-f935-4d70-b0ac-0189ba17394b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\Follow">
+      <UniqueIdentifier>{80de300a-c9d5-4e35-9839-905f4667b4cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -195,6 +198,9 @@
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Follow\Follow.cpp">
+      <Filter>Widgets\Follow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -347,6 +353,9 @@
       <Filter>EndUserAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\stdafxBVApp.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Follow\Follow.h">
+      <Filter>Widgets\Follow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

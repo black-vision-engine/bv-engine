@@ -169,6 +169,9 @@
     <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrentLimited.h">
       <Filter>DataTypes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Semaphore.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />

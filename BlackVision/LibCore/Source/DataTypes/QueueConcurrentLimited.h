@@ -5,6 +5,7 @@
 #include <condition_variable>
 
 #include "Threading/ScopedCriticalSection.h"
+#include "CoreDEF.h"
 
 
 namespace bv
@@ -144,8 +145,6 @@ void        QueueConcurrentLimited< T >::WaitAndPush        ( const T && val )
 
     std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
     m_bufferLockCond.wait( lock1 );
-
-    ScopedCriticalSection lock( m_criticalSection );
 
     m_queue.push( val );
 

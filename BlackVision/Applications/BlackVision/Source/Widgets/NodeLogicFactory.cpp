@@ -10,6 +10,7 @@
 #include "PieChart/PieChart.h"
 #include "AnalogWatch/AnalogWatch.h"
 #include "Arrange/Arrange.h"
+#include "Follow/Follow.h"
 
 
 namespace bv {
@@ -54,6 +55,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == nodelogic::Arrange::Type() )
     {
         return nodelogic::Arrange::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::Follow::Type() )
+    {
+        return nodelogic::Follow::Create( deser, logicParent );
     }
 
     return nullptr;
