@@ -201,6 +201,7 @@
     <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Follow\Follow.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Follow\Follow.h" />
     <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h" />
