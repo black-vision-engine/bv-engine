@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\..\Source\DataTypes\Queue.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrentLimited.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Semaphore.h" />
     <ClInclude Include="..\..\..\Source\DeclareWinTypes.h" />
     <ClInclude Include="..\..\..\Source\Expected.h" />
     <ClInclude Include="..\..\..\Source\IO\DirIO.h" />

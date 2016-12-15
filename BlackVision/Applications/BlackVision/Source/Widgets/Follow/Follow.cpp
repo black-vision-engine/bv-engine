@@ -9,7 +9,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "Widgets/NodeLogicHelper.h"
-
+#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
 
 
 namespace bv {
@@ -20,7 +20,16 @@ const std::string       Follow::m_type = "Follow";
 
 //const std::string       Follow::ACTION::ACTION_NAME        = "ActionName";
 
-//const std::string       Follow::PARAMETERS::PARAMETER_NAME = "ParamName";
+const std::string       Follow::PARAMETERS::OFFSET_X = "OffsetX";
+const std::string       Follow::PARAMETERS::OFFSET_Y = "OffsetY";
+const std::string       Follow::PARAMETERS::OFFSET_Z = "OffsetZ";
+
+const std::string       Follow::PARAMETERS::ALIGN_X = "AlignX";
+const std::string       Follow::PARAMETERS::ALIGN_Y = "AlignY";
+const std::string       Follow::PARAMETERS::ALIGN_Z = "AlignZ";
+
+const std::string       Follow::PARAMETERS::FOLLOWING_MODE = "FollowingMode";
+
 
 
 // ***********************
@@ -47,6 +56,20 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
 //
 Follow::~Follow()
 {}
+
+// ***********************
+//
+void        Follow::Initialize        ()
+{
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &Follow::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+}
+
+// ***********************
+//
+void        Follow::Deinitialize      ()
+{
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &Follow::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+}
 
 // ***********************
 //
@@ -106,6 +129,24 @@ bool                        Follow::HandleEvent     ( IDeserializer & eventDeser
 
     return false;
 }
+
+// ========================================================================= //
+// Handling removing of nodes
+// ========================================================================= //
+
+// ***********************
+//
+void                        Follow::NodeRemovedHandler  ( IEventPtr evt )
+{
+    if( evt->GetEventType() != NodeRemovedEvent::Type() )
+        return;
+
+    if( auto parentNode = m_parentNode.lock() )
+    {
+
+    }
+}
+
 
 }   // nodelogic
 }	// bv
