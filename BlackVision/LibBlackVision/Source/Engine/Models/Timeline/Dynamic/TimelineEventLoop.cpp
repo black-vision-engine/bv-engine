@@ -19,7 +19,7 @@ std::pair< LoopEventAction, const char* > lea2s[] =
 , std::make_pair( LoopEventAction::LEA_REVERSE, "reverse" )
 , std::make_pair( LoopEventAction::LEA_TOTAL, "" ) };
 
-template<> std::string T2String( const LoopEventAction& lea ) { return Enum2String( lea2s, lea ); }
+IMPLEMENT_ENUM_SERIALIZATION( LoopEventAction, lea2s );
 
 }
     
@@ -69,10 +69,10 @@ TimelineEventLoopPtr TimelineEventLoop::Create          ( const std::string & na
 TimelineEventLoopPtr TimelineEventLoop::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
     return TimelineEventLoop::Create( deser.GetAttribute( "name" ),
-        SerializationHelper::String2T< TimeType >( "time", 0.f ),
-        SerializationHelper::String2Enum< LoopEventAction >( SerializationHelper::lea2s, "action" ),
-        SerializationHelper::String2T< unsigned int >( "loopCount", 0 ),
-        SerializationHelper::String2T< TimeType >( "targetTime", 0.f ),
+        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
+        SerializationHelper::String2T( deser.GetAttribute( "action" ), LoopEventAction::LEA_TOTAL ),
+        SerializationHelper::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 0 ),
+        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "targetTime" ), 0.f ),
         timeline );
 }
 
