@@ -1,4 +1,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 
 namespace bv { namespace model {
 
@@ -56,61 +58,9 @@ public:
 
 }
 
-// Nie patrzeæ w dó³!!! Brzydkie !!!!!!
+DEFINE_ENUM_SET_PARAMETER( DefaultTorus::Plugin::OpenAngleMode );
+DEFINE_ENUM_SET_PARAMETER( DefaultTorus::Plugin::WeightCenter );
+DEFINE_ENUM_SET_PARAMETER( DefaultTorus::Plugin::MappingType );
 
-template<>
-inline bool SetParameter< DefaultTorus::Plugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::OpenAngleMode> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-template<>
-inline bool SetParameter< DefaultTorus::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::WeightCenter & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::WeightCenter> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-
-template<>
-inline bool SetParameter< DefaultTorus::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::MappingType & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::MappingType> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 } }

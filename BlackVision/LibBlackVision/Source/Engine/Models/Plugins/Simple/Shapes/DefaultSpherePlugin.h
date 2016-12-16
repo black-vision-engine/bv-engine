@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 namespace bv { namespace model { namespace DefaultSphere {
@@ -55,40 +56,9 @@ public:
 
 }	//DefaultSphere
 
-template<>
-inline bool SetParameter< DefaultSphere::Plugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultSphere::Plugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultSphere::Plugin::OpenAngleMode> ParamType;
 
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+DEFINE_ENUM_SET_PARAMETER( DefaultSphere::Plugin::OpenAngleMode );
+DEFINE_ENUM_SET_PARAMETER( DefaultSphere::Plugin::MappingType );
 
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}	
-
-template<>
-inline bool SetParameter< DefaultSphere::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultSphere::Plugin::MappingType & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultSphere::Plugin::MappingType> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}	
 
 }}

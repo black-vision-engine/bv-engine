@@ -17,7 +17,7 @@ enum GenericEnumType   : int    // bleee
 template< typename ValueType >
 inline bool SetParameter( IParameterPtr parameter, TimeType t, const ValueType & val )
 {
-    assert( !"If this function doesn't compile - don't fix it. It means that compiler didn't choose proper template spezialization" );
+    static_assert( !"If this function doesn't compile - don't fix it. It means that compiler didn't choose proper template spezialization" );
     return false;
 }
 
@@ -27,7 +27,7 @@ inline bool SetParameter( IParameterPtr parameter, TimeType t, const ValueType &
 template< typename ValueType >
 inline bool MoveParameterKey( IParameterPtr parameter, TimeType t, TimeType newTime )
 {
-    assert( !"If this function doesn't compile - don't fix it. It means that compiler didn't choose proper template spezialization" );
+    static_assert( !"If this function doesn't compile - don't fix it. It means that compiler didn't choose proper template spezialization" );
     return false;
 }
 
@@ -98,5 +98,24 @@ std::string                                         EvaluateParamToString( IPara
 
 } //model
 } //bv
+
+
+
+#define DEFINE_ENUM_SET_PARAMETER( enumName )                                                               \
+template<>                                                                                                  \
+inline bool ::bv::model::SetParameter< enumName >( ::bv::model::IParameterPtr param, TimeType t, const enumName & val )    \
+{                                                                                                           \
+    typedef ::bv::model::ParamEnum< enumName > ParamType;                                                     \
+                                                                                                            \
+    ParamType * typedParam = ::bv::model::QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();   \
+    if( typedParam == nullptr )                                                                             \
+    {                                                                                                       \
+        return false;                                                                                       \
+    }                                                                                                       \
+    typedParam->SetVal( val, t );                                                                           \
+    return true;                                                                                            \
+}
+
+
 
 #include "GenericParameterSetters.inl"

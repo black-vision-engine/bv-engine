@@ -26,7 +26,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCogW
     return CreateParameterEnum< DefaultCogWheel::Plugin::WeightCenter >( name, timeline );
 }
 	
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 	
 namespace DefaultCogWheel {

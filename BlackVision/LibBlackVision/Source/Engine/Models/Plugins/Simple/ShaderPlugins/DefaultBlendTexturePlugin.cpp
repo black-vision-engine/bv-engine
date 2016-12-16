@@ -38,8 +38,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultBlen
     return CreateParameterEnum< DefaultBlendTexturePlugin::BlendingMode >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
-
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 

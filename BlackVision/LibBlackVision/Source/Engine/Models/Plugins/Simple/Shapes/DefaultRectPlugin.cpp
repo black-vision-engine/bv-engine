@@ -27,7 +27,6 @@ static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultRect::Pl
     return CreateParameterEnum< DefaultRect::Plugin::WeightCenter >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 namespace DefaultRect {
 

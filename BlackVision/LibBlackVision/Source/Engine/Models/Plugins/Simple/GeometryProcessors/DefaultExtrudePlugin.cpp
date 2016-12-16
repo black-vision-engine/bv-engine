@@ -46,8 +46,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultExtr
     return CreateParameterEnum< DefaultExtrudePlugin::ExtrudeCurveType >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
-
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************

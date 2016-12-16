@@ -1,4 +1,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 
 namespace bv { namespace model {
 
@@ -41,41 +43,8 @@ private:
 
 }
 
+DEFINE_ENUM_SET_PARAMETER( DefaultSpring::Plugin::WeightCenter );
+DEFINE_ENUM_SET_PARAMETER( DefaultSpring::Plugin::MappingType );
 
-template<>
-inline bool SetParameter< DefaultSpring::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultSpring::Plugin::WeightCenter & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultSpring::Plugin::WeightCenter> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-template<>
-inline bool SetParameter< DefaultSpring::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultSpring::Plugin::MappingType & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultSpring::Plugin::MappingType> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 } }

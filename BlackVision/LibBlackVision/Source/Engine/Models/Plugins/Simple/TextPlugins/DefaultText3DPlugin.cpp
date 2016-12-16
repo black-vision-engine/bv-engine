@@ -51,7 +51,7 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< ParamEnumTA
     return CreateParameterEnum< ParamEnumTAT >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+
 
 
 const std::string        DefaultText3DPlugin::PARAMS::TEXT              = "text";

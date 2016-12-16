@@ -34,7 +34,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCirc
     return CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {

@@ -32,7 +32,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultElli
 
 
 	
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 DefaultEllipsePluginDesc::DefaultEllipsePluginDesc()
         : DefaultGeometryPluginDescBase( UID(), "ellipse" ) { }

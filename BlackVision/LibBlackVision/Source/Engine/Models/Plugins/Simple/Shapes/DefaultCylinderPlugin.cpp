@@ -7,6 +7,10 @@
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultCylinder::DefaultPlugin::OpenAngleMode );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultCylinder::DefaultPlugin::WeightCenter );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultCylinder::DefaultPlugin::MappingType );
+
 
 namespace bv { namespace model {
 
@@ -15,40 +19,6 @@ typedef ParamEnum< DefaultCylinder::DefaultPlugin::WeightCenter > ParamEnumWC;
 typedef ParamEnum< DefaultCylinder::DefaultPlugin::MappingType > ParamEnumMT;
 
 
-VoidPtr    ParamEnumOAM::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
-
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCylinder::DefaultPlugin::OpenAngleMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultCylinder::DefaultPlugin::OpenAngleMode >( name, timeline );
-}
-
-VoidPtr    ParamEnumWC::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
-
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCylinder::DefaultPlugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultCylinder::DefaultPlugin::WeightCenter >( name, timeline );
-}
-
-VoidPtr    ParamEnumMT::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
-
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCylinder::DefaultPlugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultCylinder::DefaultPlugin::MappingType >( name, timeline );
-}
-
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 namespace DefaultCylinder {
 

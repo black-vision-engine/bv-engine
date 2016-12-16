@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 
 namespace bv { namespace model {
 
@@ -63,61 +65,10 @@ public:
 
 } //DefaultCylinder
 
-// Nie patrzeæ w dó³!!! Brzydkie !!!!!!
 
-template<>
-inline bool SetParameter< DefaultCylinder::DefaultPlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-	typedef ParamEnum<DefaultCylinder::DefaultPlugin::OpenAngleMode> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-template<>
-inline bool SetParameter< DefaultCylinder::DefaultPlugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::WeightCenter & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultCylinder::DefaultPlugin::WeightCenter> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-template<>
-inline bool SetParameter< DefaultCylinder::DefaultPlugin::MappingType >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::MappingType & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultCylinder::DefaultPlugin::MappingType> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
+DEFINE_ENUM_SET_PARAMETER( DefaultCylinder::DefaultPlugin::OpenAngleMode );
+DEFINE_ENUM_SET_PARAMETER( DefaultCylinder::DefaultPlugin::WeightCenter );
+DEFINE_ENUM_SET_PARAMETER( DefaultCylinder::DefaultPlugin::MappingType );
 
 
 

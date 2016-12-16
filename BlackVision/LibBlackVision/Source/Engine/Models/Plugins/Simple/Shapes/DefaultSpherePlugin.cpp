@@ -36,7 +36,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSphe
     return CreateParameterEnum< DefaultSphere::Plugin::MappingType >( name, timeline );
 }
 	
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
 namespace DefaultSphere {
 

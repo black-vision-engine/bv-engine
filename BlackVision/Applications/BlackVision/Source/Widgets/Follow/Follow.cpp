@@ -8,13 +8,26 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Widgets/NodeLogicHelper.h"
 #include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+
+
+DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::FollowingMode );
+DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::BBAlignementX );
+DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::BBAlignementY );
+DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::BBAlignementZ );
+
+
+
 
 
 namespace bv {
 namespace nodelogic
 {
+
+
 
 const std::string       Follow::m_type = "Follow";
 
@@ -50,7 +63,17 @@ const std::string &     Follow::GetType             () const
 //
 Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
-{}
+{
+    model::ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( PARAMETERS::OFFSET_X, 0.0f, true, false );
+    h.AddSimpleParam( PARAMETERS::OFFSET_Y, 0.0f, true, false );
+    h.AddSimpleParam( PARAMETERS::OFFSET_Z, 0.0f, true, false );
+
+
+    m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
+}
 
 // ***********************
 //
@@ -75,7 +98,11 @@ void        Follow::Deinitialize      ()
 //
 void                        Follow::Update			( TimeType /*t*/ )
 {
-
+    //auto node = GetObservedNode();
+    //glm::vec3 followedPoint = GetBoxPoint( node, ... );
+    //glm::mat4 transformBox = GetBoxTransform( node, ... );
+    //glm::vec3 followedPoint = transformBox * followedPoint;
+    //ApplyTransform( followedPoint );
 }
 
 // ========================================================================= //

@@ -2,6 +2,10 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+
 
 #define START_MODEL( timeEval ) ModelHelper h( timeEval );
 
@@ -217,5 +221,30 @@ private:
         }
     };
 
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+
 } //model
 } //bv
+
+
+
+#define DEFINE_ENUM_PARAMETER_CREATOR( enumName )                       \
+namespace bv { namespace model {                                        \
+VoidPtr         ParamEnum< enumName >::QueryParamTyped  () \
+{                                                                       \
+    return std::static_pointer_cast< void >( shared_from_this() );      \
+}                                                                       \
+template<>                                                              \
+static IParameterPtr   ParametersFactory::CreateTypedParameter< enumName >                 ( const std::string & name, ITimeEvaluatorPtr timeline )  \
+{                                                                               \
+    return CreateParameterEnum< enumName >( name, timeline );           \
+}                                                                       \
+}}  // model // bv
+
+
+#define DEFINE_ENUM_PARAMETER_FUNCTIONS( enumName )     \
+DEFINE_ENUM_SET_PARAMETER( enumName )                   \
+DEFINE_ENUM_PARAMETER_CREATOR( enumName )               
+
+
+

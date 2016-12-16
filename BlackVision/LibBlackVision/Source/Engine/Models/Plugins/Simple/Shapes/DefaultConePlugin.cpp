@@ -49,7 +49,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCone
     return CreateParameterEnum< DefaultCone::DefaultConePlugin::MappingType >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 
 namespace DefaultCone {

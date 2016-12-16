@@ -35,8 +35,7 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSpri
     return CreateParameterEnum< DefaultSpring::Plugin::MappingType >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
-	
+
 namespace DefaultSpring {
 
 const std::string PN::TESSELATION = "tesselation";

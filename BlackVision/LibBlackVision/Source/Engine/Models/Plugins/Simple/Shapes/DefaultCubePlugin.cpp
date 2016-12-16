@@ -35,7 +35,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCube
     return CreateParameterEnum< DefaultCube::Plugin::MappingType >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
 namespace DefaultCube {
 

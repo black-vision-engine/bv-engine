@@ -46,7 +46,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultToru
     return CreateParameterEnum< DefaultTorus::Plugin::MappingType >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
 namespace DefaultTorus {
 

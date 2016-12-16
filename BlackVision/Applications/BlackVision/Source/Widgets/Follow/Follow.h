@@ -3,7 +3,7 @@
 #include "CoreDEF.h"
 #include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
 #include "Engine/Types/Values/TypedValues.h"
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 namespace bv
 {
@@ -31,7 +31,7 @@ DEFINE_CONST_PTR_TYPE( Follow );
 
 class Follow : public model::NodeLogicBase, public std::enable_shared_from_this< Follow >
 {
-private:
+public:
 
     enum FollowingMode
     {
@@ -108,6 +108,8 @@ private:
     void            NodeRemovedHandler      ( IEventPtr evt );
 
 };
+
+
 
 
 }   // nodelogic
