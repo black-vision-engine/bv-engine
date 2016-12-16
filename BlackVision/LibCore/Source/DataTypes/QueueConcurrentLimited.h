@@ -5,7 +5,8 @@
 #include <condition_variable>
 
 #include "Threading/ScopedCriticalSection.h"
-#include "CoreDEF.h"
+#include "Semaphore.h"
+
 
 
 namespace bv
@@ -17,27 +18,17 @@ class QueueConcurrentLimited
 {
 private:
 
-    SizeType                            m_maxSize;
-
-    mutable std::condition_variable     m_notFullCond;
-    mutable std::condition_variable     m_notEmptyCond;
-    mutable std::condition_variable     m_bufferLockCond;
-
-    mutable std::mutex                  m_mutexNotFull;
-    mutable std::mutex                  m_mutexBufferLock;
-    mutable std::mutex                  m_mutexNotEmpty;
+    Semaphore       m_notEmpty;
+    Semaphore       m_notFull;
+    std::mutex      m_bufferLock;
 
     std::queue< T >     m_queue;
+    SizeType            m_maxSize;
 
 public:
 
     explicit    QueueConcurrentLimited  ( SizeType maxSize );
                 ~QueueConcurrentLimited ();
-                QueueConcurrentLimited  ( const QueueConcurrentLimited< T > & );
-
-    bool        IsEmpty                 () const;
-    size_t      Size                    () const;
-    bool        IsFull                  () const;
 
     bool        TryPush                 ( const T & val );
     bool        TryPush                 ( const T && val );
@@ -50,15 +41,23 @@ public:
     bool        TryPop                  ( T & val );
     void        WaitAndPop              ( T & val );
 
-    void        Clear                   ();
+    /*void        Clear                   ();*/
+
+    bool        IsEmpty                 () const;
+    size_t      Size                    () const;
 };
 
 // *************************************
 //
 template< typename T >
 QueueConcurrentLimited< T >::QueueConcurrentLimited         ( SizeType maxSize )
-    : m_maxSize( maxSize )
-{}
+    :   m_notFull( maxSize )
+    ,   m_notEmpty( 0 )
+    ,   m_maxSize( maxSize )
+{
+    // Can cause deadlock.
+    assert( maxSize != 0 );
+}
 
 // *************************************
 //
@@ -66,73 +65,39 @@ template< typename T >
 QueueConcurrentLimited< T >::~QueueConcurrentLimited        ()
 {}
 
-// *************************************
-//
-template< typename T >
-QueueConcurrentLimited< T >::QueueConcurrentLimited         ( const QueueConcurrentLimited< T > & other )
-{
-    m_queue = other.m_queue;
-
-    m_notFullCond = other.m_notFullCond;
-    m_notEmptyCond = other.m_notEmptyCond;
-    m_bufferLockCond = other.m_bufferLockCond;
-
-    m_maxSize = other.m_maxSize;
-}
 
 // *************************************
-//
+//  Note: external use only
 template< typename T >
 bool        QueueConcurrentLimited< T >::IsEmpty            () const
 {
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-
-    auto ret = m_queue.empty();
-
-    m_bufferLockCond.notify_one();
-
-    return ret;
+    std::unique_lock< std::mutex > lock( m_mutexBufferLock );
+    return m_queue.empty();
 }
 
-// *************************************
-//
-template< typename T >
-bool        QueueConcurrentLimited< T >::IsFull             () const
-{
-    return Size() >= m_maxSize;
-}
 
 // *************************************
-//
+//  Note: external use only
 template< typename T >
 size_t      QueueConcurrentLimited< T >::Size               () const
 {
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-
-    auto s = m_queue.size();
-
-    m_bufferLockCond.notify_one();
-
-    return s;
+    std::unique_lock< std::mutex > lock( m_mutexBufferLock );
+    return m_queue.size();
 }
+
 
 // *************************************
 //
 template< typename T >
 void        QueueConcurrentLimited< T >::WaitAndPush        ( const T & val )
 {
-    std::unique_lock< std::mutex > lock( m_mutexNotFull );
-    m_notFullCond.wait( lock, [ = ] { return !IsFull(); } );
+    m_notFull.Down();
 
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-
+    m_bufferLock.lock();
     m_queue.push( val );
+    m_bufferLock.unlock();
 
-    m_bufferLockCond.notufy_one();
-    m_notEmptyCond.notify_one();
+    m_notEmpty.Up();
 }
 
 // ***********************
@@ -140,16 +105,13 @@ void        QueueConcurrentLimited< T >::WaitAndPush        ( const T & val )
 template< typename T >
 void        QueueConcurrentLimited< T >::WaitAndPush        ( const T && val )
 {
-    std::unique_lock< std::mutex > lock( m_mutexNotFull );
-    m_notFullCond.wait( lock, [ = ] { return !IsFull(); } );
+    m_notFull.Down();
 
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
+    m_bufferLock.lock();
+    m_queue.push( std::move( val ) );
+    m_bufferLock.unlock();
 
-    m_queue.push( val );
-
-    m_bufferLockCond.notify_one();
-    m_notEmptyCond.notify_one();
+    m_notEmpty.Up();
 }
 
 // *************************************
@@ -157,21 +119,17 @@ void        QueueConcurrentLimited< T >::WaitAndPush        ( const T && val )
 template< typename T >
 bool        QueueConcurrentLimited< T >::TryPush            ( const T & val )
 {
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-
-    if( Size() < m_maxSize )
+    if( m_notFull.TryDown() )
     {
+        m_bufferLock.lock();
         m_queue.push( val );
-        m_notEmptyCond.notify_one();
-        m_bufferLockCond.notify_one();
+        m_bufferLock.unlock();
+
+        m_notEmpty.Up();
+
         return true;
     }
-    else
-    {
-        m_bufferLockCond.notify_one();
-        return false;
-    }
+    return false;
 }
 
 // ***********************
@@ -179,21 +137,17 @@ bool        QueueConcurrentLimited< T >::TryPush            ( const T & val )
 template< typename T >
 bool        QueueConcurrentLimited< T >::TryPush            ( const T && val )
 {
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-
-    if( Size() < m_maxSize )
+    if( m_notFull.TryDown() )
     {
-        m_queue.push( val );
-        m_notEmptyCond.notify_one();
-        m_bufferLockCond.notify_one();
+        m_bufferLock.lock();
+        m_queue.push( std::move( val ) );
+        m_bufferLock.unlock();
+
+        m_notEmpty.Up();
+
         return true;
     }
-    else
-    {
-        m_bufferLockCond.notify_one();
-        return false;
-    }
+    return false;
 }
 
 // *************************************
@@ -201,19 +155,14 @@ bool        QueueConcurrentLimited< T >::TryPush            ( const T && val )
 template< typename T >
 bool        QueueConcurrentLimited< T >::Front              ( T & val )
 {
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
+    std::unique_lock< std::mutex > lock( m_bufferLock );
 
-    if( m_queue.empty() )
+    if( !m_queue.empty() )
     {
-        m_bufferLockCond.notify_one();
-        return false;
+        val = m_queue.front();
+        return true;
     }
-
-    val = m_queue.front();
-
-    m_bufferLockCond.notify_one();
-    return true;
+    return false;
 }
 
 // *************************************
@@ -221,25 +170,19 @@ bool        QueueConcurrentLimited< T >::Front              ( T & val )
 template< typename T >
 bool        QueueConcurrentLimited< T >::TryPop             ( T & val )
 {
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-    
-    if( m_queue.empty() )
+    if( m_notEmpty.TryDown() )
     {
-        m_notEmptyCond.notify_one();
-        m_bufferLockCond.notify_one();
-        return false;
-    }
-    else
-    {
+        m_bufferLock.lock();
+
         val = m_queue.front();
         m_queue.pop();
 
-        m_notEmptyCond.notify_one();
-        m_bufferLockCond.notify_one();
+        m_bufferLock.unlock();
 
+        m_notFull.Up();
         return true;
     }
+    return false;
 }
 
 // *************************************
@@ -247,33 +190,24 @@ bool        QueueConcurrentLimited< T >::TryPop             ( T & val )
 template< typename T >
 void        QueueConcurrentLimited< T >::WaitAndPop         ( T & val )
 {
-    std::unique_lock< std::mutex > lock( m_mutexNotEmpty );
-    m_notEmptyCond.wait( lock, [ = ] { return !IsEmpty(); } );
+    m_notEmpty.Down();
 
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
+    m_bufferLock.lock();
 
     val = m_queue.front();
     m_queue.pop();
 
-    m_notFullCond.notify_one();
-    m_bufferLockCond.notify_one();
+    m_bufferLock.unlock();
+
+    m_notFull.Up();
 }
 
 // *************************************
 //
-template< typename T >
-void        QueueConcurrentLimited< T >::Clear              ()
-{
-    std::unique_lock< std::mutex > lock1( m_mutexBufferLock );
-    m_bufferLockCond.wait( lock1 );
-
-    while( !m_queue.empty() )
-    {
-        m_queue.pop();
-    }
-
-    m_bufferLockCond.notify_one();
-}
+//template< typename T >
+//void        QueueConcurrentLimited< T >::Clear              ()
+//{
+//    while( TryPop() );
+//}
 
 } //bv

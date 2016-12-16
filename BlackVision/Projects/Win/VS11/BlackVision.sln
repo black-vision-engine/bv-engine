@@ -56,6 +56,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVAL", "..\..\..\LibBVAL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Triangulator", "..\..\..\Tools\Triangulator\Projects\Win\VS11\Triangulator.vcxproj", "{78AB5093-C110-4E57-97EB-A13BDD956729}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestConcurrentQueue", "..\..\..\Test\Tools\ConcurrentTest\Projects\Win\VS11\ConcurrentTest.vcxproj", "{146BBEE1-B02E-43BF-AEB8-63F14DF32246}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -400,6 +402,20 @@ Global
 		{78AB5093-C110-4E57-97EB-A13BDD956729}.Release|Win32.Build.0 = Release|Win32
 		{78AB5093-C110-4E57-97EB-A13BDD956729}.Release|x64.ActiveCfg = Release|x64
 		{78AB5093-C110-4E57-97EB-A13BDD956729}.Release|x64.Build.0 = Release|x64
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|Win32.ActiveCfg = Debug|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|Win32.Build.0 = Debug|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|x64.ActiveCfg = Debug|x64
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Debug|x64.Build.0 = Debug|x64
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|Any CPU.ActiveCfg = Release|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|Win32.ActiveCfg = Release|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|Win32.Build.0 = Release|Win32
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|x64.ActiveCfg = Release|x64
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -422,6 +438,7 @@ Global
 		{C7749607-3EB2-4F74-B453-FD859F41E8C1} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{0CC731C6-148D-4BEF-A579-DC5428FBF688} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{614EAC49-973C-4EF7-9464-6CE4DA2A16C1} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{146BBEE1-B02E-43BF-AEB8-63F14DF32246} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{BFD61862-778E-4636-9143-97D8262B7F6E} = {42BED5C7-ABA5-4BFD-AC21-2356DDD56684}
 	EndGlobalSection
 EndGlobal
