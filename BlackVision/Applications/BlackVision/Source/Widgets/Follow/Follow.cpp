@@ -70,7 +70,10 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddSimpleParam( PARAMETERS::OFFSET_X, 0.0f, true, false );
     h.AddSimpleParam( PARAMETERS::OFFSET_Y, 0.0f, true, false );
     h.AddSimpleParam( PARAMETERS::OFFSET_Z, 0.0f, true, false );
-
+    h.AddEnumParam( PARAMETERS::FOLLOWING_MODE, FollowingMode::Previous, true, false );
+    h.AddEnumParam( PARAMETERS::ALIGN_X, BBAlignementX::CenterX, true, false );
+    h.AddEnumParam( PARAMETERS::ALIGN_Y, BBAlignementY::CenterY, true, false );
+    h.AddEnumParam( PARAMETERS::ALIGN_Z, BBAlignementZ::CenterZ, true, false );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 }

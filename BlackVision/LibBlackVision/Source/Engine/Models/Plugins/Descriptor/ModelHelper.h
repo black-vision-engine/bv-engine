@@ -196,6 +196,12 @@ namespace bv { namespace model {
             m_lastParamValModel->AddValue( std::static_pointer_cast< IValue >( ValuesFactory::CreateValue( name, defaultValue ) ) );
         }
 
+        template< typename ValueType >
+        inline void                             AddEnumParam                ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+        {
+            AddParam< IntInterpolator, ValueType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, model::ParamEnum< ValueType > >
+                ( name, defaultValue, addValue, isState );
+        }
 
 private:
         DefaultParamValModelPtr GetVacModel() const
