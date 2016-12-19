@@ -211,6 +211,9 @@ model::BasicNodeConstPtr    Follow::GetObservedNode     ()
         if( mode == FollowingMode::FirstInSubtree )
         {
             auto brother = static_cast< const model::BasicNode * >( parentParent->GetChild( 0 ) );
+            if( brother == node.get() )
+                return nullptr;
+
             return brother->shared_from_this();
         }
         else if( mode == FollowingMode::Path )
