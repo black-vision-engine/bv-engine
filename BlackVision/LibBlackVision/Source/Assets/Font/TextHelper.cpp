@@ -103,7 +103,28 @@ TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & ass
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, float zFightingShift, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger, bool useKerning )
+std::vector< glm::vec2 >		TextHelper::GetAtlasCoordsForGlyph	( const Glyph * glyph, SizeType atlasW, SizeType atlasH, Float32 atlasBlurSize )
+{
+	std::vector< glm::vec2 > ret;
+
+	float texPadding = 1.f;
+
+	auto texLeft = ( ( float ) glyph->textureX - atlasBlurSize - texPadding ) / atlasW;
+	auto texTop = ( ( float ) glyph->textureY - atlasBlurSize - texPadding ) / atlasH;
+	auto texWidth = ( ( float ) glyph->width + 2 * atlasBlurSize + 2 * texPadding ) / atlasW;
+	auto texHeight = ( ( float ) glyph->height + 2 * atlasBlurSize + 2 * texPadding ) / atlasH;
+
+	ret.push_back( glm::vec2( texLeft, texTop + texHeight ) );
+	ret.push_back( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
+	ret.push_back( glm::vec2( texLeft, texTop ) );
+	ret.push_back( glm::vec2( texLeft + texWidth, texTop ) );
+
+	return ret;
+}
+
+// *********************************
+//
+float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -128,7 +149,6 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     float ccPaddingX = 1.f / aspectRatio;
     float ccPaddingY = 1.f / aspectRatio;
 
-    float texPadding = 1.f;
 
     // Computing space character size
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
@@ -140,8 +160,6 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     unsigned int componentIdx = 0;
     unsigned int lineBeginComponentIdx = 0;
     unsigned int i = 0;
-
-    glm::vec3 zfShift = glm::vec3( 0.f, 0.f, 0.0f );
 
     while( i < text.size() )
     {
@@ -182,25 +200,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
                 if( useKerning && i > 0 )
                 {
-                    auto kerShift = textAtlas->GetKerning( text[ i - 1 ], text[ i ] );
+					auto kerShift = textAtlas->GetKerning( text[ i - 1 ], text[ i ] );
                     kerningShift.x = kerShift / aspectRatio;
-                    translate += kerningShift;
-                }
-
-                if( i > 0 ) 
-                {
-                    //if( i % 2 == 0 )
-                    //{
-                    //    translate -= zfShift;
-                    //}
-                    //else
-                    //{
-                        translate += zfShift;
-//                    }
-                } 
-                else
-                {
-                    translate += zFightingShift;
+					translate += kerningShift;
                 }
 
                 // XYZ
@@ -225,23 +227,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
                 auto verTex0AttrChannel = std::make_shared< model::Float2AttributeChannel >( desc1, "textAtlasPosition", true );
 
-                float texLeft;
-                float texTop;
-                float texWidth;
-                float texHeight;
+				auto uvs = GetAtlasCoordsForGlyph( glyph, textAtlas->GetWidth(), textAtlas->GetHeight(), blurTexSize );
 
-                {
-                    texLeft = ( (float)glyph->textureX - blurTexSize - texPadding ) / textAtlas->GetWidth();
-                    texTop = ( (float)glyph->textureY - blurTexSize - texPadding ) / textAtlas->GetHeight();
-                    texWidth = ( (float)glyph->width + 2 * blurTexSize + 2 * texPadding ) / textAtlas->GetWidth();
-                    texHeight = ( (float)glyph->height + 2 * blurTexSize + 2 * texPadding ) / textAtlas->GetHeight();
-                }
-
-
-                verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop + texHeight ) );
-                verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
-                verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop ) );
-                verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
+                verTex0AttrChannel->AddAttributes( uvs );
 
                 connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
 

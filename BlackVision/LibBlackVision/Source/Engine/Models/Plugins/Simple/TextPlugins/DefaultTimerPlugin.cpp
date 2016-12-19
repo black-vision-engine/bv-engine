@@ -22,6 +22,7 @@
 #include "Memory/MemoryLeaks.h"
 
 #include <algorithm>
+#include <regex>
 
 
 namespace bv { namespace model {
@@ -29,6 +30,7 @@ namespace bv { namespace model {
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 const std::string        DefaultTimerPlugin::PARAM::PRECISION           = "precision";
+const std::string        DefaultTimerPlugin::PARAM::PRECISION_STOP		= "precisionStop";
 
 // *******************************
 //
@@ -55,6 +57,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     h.SetOrCreatePluginModel();
 
     h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION, 1 );
+	h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION_STOP, 2 );
 
     return model;
 }
@@ -78,82 +81,152 @@ std::string             DefaultTimerPluginDesc::TextureName              ()
 namespace
 {
 
-bool IsPlaceHolder(wchar_t wch)
+////////////////////////////
+//
+bool IsPlaceHolderChar( wchar_t wch )
 {
-    return  wch == L'H'
-        ||  wch == L'M'
-        ||  wch == L'S'
-        ||  wch == L'D'
-        ||  wch == L'h'
-        ||  wch == L'm'
-        ||  wch == L's'
-        ||  wch == L'd';
+	wch = towlower( wch );
+
+	const static wchar_t schars [] = { L'h', L'm', L's', L'd' };
+
+	static std::set< wchar_t > scSet( schars, schars + sizeof( schars ) / sizeof( schars[ 0 ] ) );
+
+	return scSet.find( wch ) != scSet.end();
 }
 
+////////////////////////////
+//
+std::vector< std::pair< std::wstring, Int32 > > GetTimePaternGroups( std::wstring s )
+{
+	std::wregex word_regex( L"H+|M+|S+|D+|[hmsd]|[^HMSDhmsd]+" );
+	auto words_begin = std::wsregex_iterator( s.begin(), s.end(), word_regex );
+	auto words_end = std::wsregex_iterator();
+
+	std::vector< std::pair< std::wstring, Int32 > > ret;
+
+	for ( std::wsregex_iterator i = words_begin; i != words_end; ++i )
+	{
+		std::wsmatch match = *i;
+
+		auto matchStr = match.str();
+
+		if( IsPlaceHolderChar( matchStr[ 0 ] ) )
+		{
+			ret.push_back( std::make_pair( matchStr.substr( 0, 1 ), isupper( matchStr[ 0 ] ) ? ( Int32 )matchStr.size() : 0 ) ); // H, M, S, D (length), h, m, s, d (0) 
+		}
+		else
+		{
+			ret.push_back( std::make_pair( matchStr, -1 ) ); // other strings.
+		}
+
+		
+		// std::wcout << L"  " << match_str << L'\n';
+	}
+
+	return ret;
+}
+
+////////////////////////////
+//
+void AddToTimeStringU( Int32 value, std::wstring & zeroTimeString, std::wstring & timeString, Int32 groupLength, wchar_t widestChar )
+{
+	auto rounded = value % Int32 ( std::pow( 10, groupLength ) );
+
+	const auto str = std::to_wstring( rounded );
+
+	for( auto i = 0; i < groupLength; ++i )
+	{
+		zeroTimeString.push_back( widestChar );
+		if( i < groupLength - str.size() )
+			timeString.push_back( L'0' );
+	}
+
+	timeString.append( str );
+}
+
+////////////////////////////
+//
+void AddToTimeStringL( Int32 value, std::wstring & zeroTimeString, std::wstring & timeString, wchar_t widestChar )
+{
+	auto str = std::to_wstring( value );
+
+	zeroTimeString.append( std::wstring( str.size(), widestChar ) );
+
+	timeString.append( str );
+}
+
+////////////////////////////
+//
+std::pair< std::wstring, std::wstring > CreateTimeString( std::vector< std::pair< std::wstring, Int32 > > timePaternGroups, TimeValue timeValue, wchar_t widestChar, std::set< SizeType > & consCharactersIdx )
+{
+	std::wstring zeroTimeString;
+	std::wstring timeString;
+
+	for( const auto & group : timePaternGroups )
+	{
+		if( group.first == L"H" )
+		{
+			AddToTimeStringU( timeValue.hour, zeroTimeString, timeString, group.second, widestChar );
+		}
+		else if ( group.first == L"M" )
+		{
+			AddToTimeStringU( timeValue.minute, zeroTimeString, timeString, group.second, widestChar );
+		}
+		else if( group.first == L"S" )
+		{
+			AddToTimeStringU( timeValue.second, zeroTimeString, timeString, group.second, widestChar );
+		}
+		else if( group.first == L"D" )
+		{
+			AddToTimeStringU( timeValue.fracOfSecond, zeroTimeString, timeString, group.second, widestChar );
+		}
+		else if( group.first == L"h" )
+		{
+			AddToTimeStringL( timeValue.hour, zeroTimeString, timeString, widestChar );
+		}
+		else if( group.first == L"m" )
+		{
+			AddToTimeStringL( timeValue.minute, zeroTimeString, timeString, widestChar );
+		}
+		else if( group.first == L"s" )
+		{
+			AddToTimeStringL( timeValue.second, zeroTimeString, timeString, widestChar );
+		}
+		else if( group.first == L"d" )
+		{
+			AddToTimeStringL( timeValue.fracOfSecond, zeroTimeString, timeString, widestChar );
+		}
+		else
+		{
+			for( SizeType i = zeroTimeString.size(); i < zeroTimeString.size() + group.first.size(); ++i )
+			{
+				consCharactersIdx.insert( i );
+			}
+			
+			zeroTimeString.append( group.first );
+			timeString.append( group.first );
+		}
+	}
+
+	return std::make_pair( zeroTimeString, timeString );
+}
+
+////////////////////////////
+//
 void TimeFormatError()
 {
     throw std::exception("wrong time format");
 }
 
-TimeInfo ParseTimePatern(const std::wstring& timePatern)
+////////////////////////////
+//
+std::pair< std::wstring, std::wstring > ParseTimePatern( const std::wstring& timePatern, TimeValue timeValue, wchar_t widestChar, std::set< SizeType > & consCharactersIdx )
 {
-    bool HPHPossible = true;
-    bool MPHPossible = true;
-    bool SPHPossible = true;
-    bool FSPHPossible = true;
+	auto groups = GetTimePaternGroups( timePatern );
 
-    TimeInfo timeInfo = {0,0,0,0};
+	auto timeStrings = CreateTimeString( groups, timeValue, widestChar, consCharactersIdx );
 
-    int i = 0;
-    int whiteSpaces = 0;
-    for( auto wch : timePatern )
-    {
-        if(IsPlaceHolder(wch))
-        {
-            switch ( wch )
-            {
-            case L'H':
-                if( !HPHPossible ) TimeFormatError();
-                if( timeInfo.hoursPlaceholderSize == 0 ) timeInfo.hoursPHStart = i - whiteSpaces;
-                timeInfo.hoursPlaceholderSize++;
-                break;
-            case L'M':
-                if(!MPHPossible) TimeFormatError();
-                if( timeInfo.minutesPlaceHolderSize == 0 ) timeInfo.minutesPHStart = i - whiteSpaces;
-                HPHPossible = false;
-                if(timeInfo.minutesPlaceHolderSize < 2)
-                    timeInfo.minutesPlaceHolderSize++;
-                else
-                    TimeFormatError();
-                break;
-            case L'S':
-                if(!SPHPossible) TimeFormatError();
-                if( timeInfo.secondsPlaceHolderSize == 0 ) timeInfo.secondsPHStart = i - whiteSpaces;
-                HPHPossible = false;
-                MPHPossible = false;
-                if(timeInfo.secondsPlaceHolderSize < 2)
-                    timeInfo.secondsPlaceHolderSize++;
-                else
-                    TimeFormatError();
-                break;
-            case L's':
-                if( timeInfo.fracOfSecondsPlaceholderSize == 0 ) timeInfo.fosPHStart = i - whiteSpaces;
-                HPHPossible = false;
-                MPHPossible = false;
-                SPHPossible = false;
-                if(!FSPHPossible) TimeFormatError();
-                timeInfo.fracOfSecondsPlaceholderSize++;
-                break;
-            }
-        }
-
-        if(isspace(wch))
-            whiteSpaces++;
-
-        ++i;
-    }
-
-    return timeInfo;
+	return timeStrings;
 }
 
 } // anonymous
@@ -171,7 +244,7 @@ bool    TimeValue::operator!=(const TimeValue& other) const
 
 ////////////////////////////
 //
-TimeValue::TimeValue( double time, int accuracy )
+TimeValue::TimeValue( TimeType time, int accuracy )
 {
     this->fracOfSecond = int( ( time - std::floor( time ) ) * pow( 10, accuracy ) );
     this->second    = int( std::floor( time ) ) % 60;
@@ -190,11 +263,13 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_defaultSeparator(L':')
     , m_secSeparator(L'.')
     , m_widestGlyph( L'0' ) 
+	, m_highestGlyph( L'0' )
     , m_started(false)
 {
     SetPrevPlugin( prev );
 
-    m_precisionParam = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
+	m_precisionParam = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::PRECISION ) );
+	m_precisionStopParam = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::PRECISION_STOP ) );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
@@ -211,14 +286,16 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
     auto success = TextPluginBase::LoadResource( assetDescr, DefaultTimerPluginDesc::TextureName() );
 	auto txAssetDescr = QueryTypedDesc< FontAssetDescConstPtr >( assetDescr );
 
+	InitWidestGlyph();
+
     if( success )
     {
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        m_timePatern = L""; // force reseting time patern. New font's loading.
+        m_zerosTimeString = L""; // force reseting zeros time patern. New font's loading.
 
-        SetTimePatern( GenerateTimePatern( 0.f ) );
+        SetTimePatern( L"h:m:s.dd" );
 
-        SetTime(0.);
+        SetTime( m_currentLocalTime / 1000.f, true );
 
         return true;
     }    
@@ -285,39 +362,34 @@ void                                DefaultTimerPlugin::Reset                   
 
 ////////////////////////////
 //
-namespace
-{
-
-////////////////////////////
-//
-std::wstring        toTimerInit( const std::wstring& timePatern, wchar_t wch )
-{
-    auto timePaternCopy = timePatern;
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', wch);
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', wch);
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', wch);
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'D', wch);
-
-    return timePaternCopy;
-}
-
-} // anonymous
-
-////////////////////////////
-//
 void                                DefaultTimerPlugin::SetTimePatern  ( const std::wstring& patern )
 {
-    if( m_timePatern == patern )
-        return;
-
     m_timePatern = patern;
-    m_timePaternInfo = ParseTimePatern( m_timePatern );
+	
+	std::wstring zerosTimeString;
 
-    auto timerInit = toTimerInit( m_timePatern, m_widestGlyph );
+	auto acc = m_started ? m_precisionParam->Evaluate() : m_precisionStopParam->Evaluate();
 
-    m_vaChannel->ClearAll();
+	m_constCharactersIdxs.clear();
 
-    TextPluginBase::BuildVACForText( timerInit, false );
+	std::tie( zerosTimeString, m_timeString ) = ParseTimePatern( m_timePatern, TimeValue( m_currentLocalTime / 1000.f, acc ), m_widestGlyph, m_constCharactersIdxs );
+
+	if( zerosTimeString != m_zerosTimeString )
+	{
+		m_vaChannel->ClearAll();
+
+		m_zerosTimeString = zerosTimeString;
+
+		TextPluginBase::BuildVACForText( m_zerosTimeString, false );
+
+		m_currentTimeValue = TimeValue( 0, acc ); // Force update time.
+
+		HelperVertexAttributesChannel::SetTopologyUpdate(m_vaChannel);
+
+		SetTime( m_currentLocalTime / 1000.f, true );
+	}
+
+	
 }
 
 ////////////////////////////
@@ -338,112 +410,58 @@ const Glyph *                       DefaultTimerPlugin::GetGlyph        ( wchar_
 
 ////////////////////////////
 //
-int TimeInfo::GetSize() const
+void                                DefaultTimerPlugin::Refresh         ( bool isPaused )
 {
-    return  hoursPlaceholderSize
-        +   minutesPlaceHolderSize
-        +   secondsPlaceHolderSize
-        +   fracOfSecondsPlaceholderSize;
+	{
+		isPaused;
+	}
+
+	auto cp = m_timeString;
+	cp.erase( std::remove( cp.begin(), cp.end(), L' ' ), cp.end() );
+	cp.erase( std::remove( cp.begin(), cp.end(), L'\n' ), cp.end() );
+
+	for( auto it = cp.begin(); it != cp.end(); ++it )
+	{
+		auto i = std::distance( cp.begin(), it );
+
+		if( m_constCharactersIdxs.find( i ) == m_constCharactersIdxs.end() )
+		{
+			SetValue( ( UInt32 ) i, *it );
+		}
+	}
 }
 
 ////////////////////////////
 //
-void                                DefaultTimerPlugin::Refresh         ( bool isPaused )
+void                              DefaultTimerPlugin::InitWidestGlyph ()
 {
-    int hPHSize = m_timePaternInfo.hoursPlaceholderSize;
-    int shift = m_timePaternInfo.hoursPHStart;
-    if( hPHSize > 0 )
-    {
-        int hour = m_currentTimeValue.hour;
-        auto hourStr = std::to_wstring( hour );
+	SizeType width = 0;
+	SizeType height = 0;
+	wchar_t widest = L'0';
+	wchar_t highest = L'0';
+	
+	static const std::wstring numbers = L"0123456789";
+	
+	for( auto wch : numbers )
+	{
+		auto w = m_atlas->GetGlyph( wch )->width;
+		if( w > width )
+		{
+			width = w;
+			widest = wch;
+		}
 
-        int zerosBefore = hPHSize > (int)hourStr.size() ? ( hPHSize - (int)hourStr.size() ) : 0;
+		auto h = m_atlas->GetGlyph( wch )->height;
+		if( h > height )
+		{
+			height = h;
+			highest = wch;
+		}
 
-        int i = 0;
-        for(; i < zerosBefore ; ++i )
-        {
-            SetValue( shift + i, L'0' );
-        }
-
-        for(; i < hPHSize; ++i )
-        {
-            SetValue( shift + i, hourStr[i - zerosBefore] );
-        }       
-    }
-
-    shift = m_timePaternInfo.minutesPHStart;
-    int mPHSize = m_timePaternInfo.minutesPlaceHolderSize;
-    if( mPHSize > 0 )
-    {
-        int minute = m_currentTimeValue.minute;
-        auto minuteStr = std::to_wstring( minute );
-
-        int zerosBefore = mPHSize > (int)minuteStr.size() ? ( mPHSize - (int)minuteStr.size() ) : 0;
-
-        int i = 0;
-        for(; i < zerosBefore ; ++i )
-        {
-            SetValue( shift + i, L'0' );
-        }
-
-        for(; i < mPHSize; ++i )
-        {
-            SetValue( shift + i, minuteStr[i - zerosBefore] );
-        }       
-    }
-
-    shift = m_timePaternInfo.secondsPHStart;
-    int sPHSize = m_timePaternInfo.secondsPlaceHolderSize;
-    if( sPHSize > 0 )
-    {
-        int second = m_currentTimeValue.second;
-        auto secondStr = std::to_wstring( second );
-
-        int zerosBefore = sPHSize > (int)secondStr.size() ? ( sPHSize - (int)secondStr.size() ) : 0;
-
-        int i = 0;
-        for(; i < zerosBefore ; ++i )
-        {
-            SetValue( shift + i, L'0' );
-        }
-
-        for(; i < sPHSize; ++i )
-        {
-            SetValue( shift + i, secondStr[i - zerosBefore] );
-        }       
-    }
-
-    shift = m_timePaternInfo.fosPHStart;
-    int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
-
-    int prec =  m_precisionParam->Evaluate();
-
-    prec = prec < 0 ? 0 : prec;
-
-    if( fosPHSize > 0 )
-    {
-        int fos = m_currentTimeValue.fracOfSecond;
-        auto fosStr = std::to_wstring( fos );
-
-        int zerosBefore = fosPHSize > (int)fosStr.size() ? ( fosPHSize - (int)fosStr.size() ) : 0;
-
-        int i = 0;
-        for(; i < zerosBefore ; ++i )
-        {
-            if( i > prec - 1 && ! isPaused )
-                SetValue( shift + i, L' ' );
-            else
-                SetValue( shift + i, L'0' );
-        }
-
-        for(; i < fosPHSize; ++i )
-        {
-            if( i > prec - 1 && ! isPaused )
-                SetValue( shift + i, L' ' );
-            else
-                SetValue( shift + i, fosStr[i - zerosBefore] );
-        }       
-    }
+	}
+	
+	m_highestGlyph = highest;
+	m_widestGlyph = widest;
 }
 
 ////////////////////////////
@@ -452,24 +470,19 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 {
     auto comps = m_vaChannel->GetComponents();
 
-    auto textureXNorm    = 0.f;
-    auto textureYNorm    = 0.f;
-    auto widthNorm       = 0.f;
-    auto heightNorm      = 0.f;
-
     if( wch != L' ' )
     {
         auto glyph = GetGlyph( wch );
-        auto zeroGlyph = GetGlyph( m_widestGlyph );
 
-        textureXNorm    = ((float)glyph->textureX /*+ (float)zeroGlyph->glyphX - 1.f*/ )  / m_atlas->GetWidth();
-        textureYNorm    = ((float)glyph->textureY /*+ (float)zeroGlyph->glyphY - 1.f*/ )  / m_atlas->GetHeight();
-        widthNorm       = ((float)zeroGlyph->width + 2.f )     / m_atlas->GetWidth();
-        heightNorm      = ((float)zeroGlyph->height + 2.f )    / m_atlas->GetHeight();
-    }
+		auto widestGlyph = GetGlyph( m_widestGlyph );
+		auto highestGlyph = GetGlyph( m_highestGlyph );
+		
+		auto uvsWidestGlyph = TextHelper::GetAtlasCoordsForGlyph( widestGlyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
+		auto uvsHighestGlyph = TextHelper::GetAtlasCoordsForGlyph( highestGlyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
 
-    if( IsPlaceHolder( m_timePatern[ connComp ] ) )
-    {
+		glm::vec2 wWH = uvsWidestGlyph[ 1 ] - uvsWidestGlyph[ 2 ];
+		glm::vec2 hWH = uvsHighestGlyph[ 1 ] - uvsHighestGlyph[ 2 ];
+
         if( connComp < comps.size() )
         {
             if( comps[ connComp ]->GetNumVertices() == 4 )
@@ -479,10 +492,12 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
                 auto& verts = uvChannel->GetVertices();
 
-                verts[ 0 ] = glm::vec2( textureXNorm, textureYNorm + heightNorm );
-                verts[ 1 ] = glm::vec2( textureXNorm  + widthNorm, textureYNorm + heightNorm );
-                verts[ 2 ] = glm::vec2( textureXNorm ,textureYNorm );
-                verts[ 3 ] = glm::vec2( textureXNorm + widthNorm, textureYNorm );
+				auto uvs = TextHelper::GetAtlasCoordsForGlyph( glyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
+
+                verts[ 0 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y );
+                verts[ 1 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y ); 
+                verts[ 2 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y - hWH.y );
+                verts[ 3 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y - hWH.y );
             }
         }
     }
@@ -490,153 +505,19 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
 ////////////////////////////
 //
-bool                                DefaultTimerPlugin::CheckTimeConsistency ( const std::wstring& time ) const
+void                                DefaultTimerPlugin::SetTime        ( TimeType time, bool forceUpdate )
 {
-    if( m_timePatern.size() != time.size() )
+	auto acc = m_started ? m_precisionParam->Evaluate() : m_precisionStopParam->Evaluate();
+
+    TimeValue   newTime( time, acc );
+
+    if( forceUpdate || m_currentTimeValue != newTime )
     {
-        return false;
-    }
-
-    for( unsigned int i = 0; i < m_timePatern.size(); ++i )
-    {
-        if( m_timePatern[ i ] == '#' )
-        {
-            if( time[ i ] >= '0' && time[ i ] <= '9' )
-            {
-                continue;
-            }
-        }
-        else
-        {
-            if( m_timePatern[ i ] == time[ i ] )
-                continue;
-        }
-
-        return false;
-    }
-
-    return true;
-}
-
-////////////////////////////
-//
-void                              DefaultTimerPlugin::InitBigestGlyph ()
-{
-    SizeType width   = 0;
-    wchar_t widest       = L'0';
-
-    static const std::wstring numbers = L"0123456789";
-
-    for( auto wch : numbers )
-    {
-        auto w = m_atlas->GetGlyph( wch )->width;
-        if( w > width )
-        {
-            width = w;
-            widest = wch;
-        }
-    }
-    
-    m_widestGlyph = widest;
-}
-
-////////////////////////////
-//
-std::wstring                        DefaultTimerPlugin::GenerateTimePatern( double time )
-{
-    double seconds  = std::floor( time );
-
-    double hour     = std::floor( seconds / 3600. );
-    double minute   = std::floor( ( time - hour ) / 60. );
-    double second   = std::floor( time - hour - minute );
-    // double hos      = std::floor( time - seconds * 100. );
-
-    std::wstring ret;
-
-    int ihour       = int( hour );
-
-    if( ihour > 0 )
-    {
-        int places = int( std::floor( std::log10( ihour ) ) );
-        auto hp = std::wstring( places + 1, L'H' );
-        ret.append( hp );
-        ret.push_back( m_defaultSeparator );
-        ret.append( L"MM" );
-        ret.push_back( m_defaultSeparator );
-        ret.append( L"SS" );
-
-        int prec =  m_precisionParam->Evaluate();
-        if( prec > 0 )
-        {
-            ret.push_back( m_secSeparator );
-            for( int i = 0; i < prec; ++i )
-                ret.append( L"s" );
-        }
-    }
-    else
-    {
-        auto iminute = int( minute );
-        if( iminute > 0 )
-        {
-            if( iminute >= 10 )
-            {
-                ret.append( L"MM" );
-            }
-            else
-            {
-                ret.push_back( L'M' );
-            }
-
-            ret.push_back( m_defaultSeparator );
-            ret.append( L"SS" );
-
-            auto prec =  m_precisionParam->Evaluate();
-            if( prec > 0 )
-            {
-                ret.push_back( m_secSeparator );
-
-                for( int i = 0; i < prec; ++i )
-                    ret.append( L"s" );
-            }
-        }
-        else
-        {
-            auto isecond = int( second );
-
-            if( isecond >= 10 )
-            {
-                ret.append( L"SS" );
-            }
-            else
-            {
-                ret.push_back( L'S' );
-            }
-
-            auto prec =  m_precisionParam->Evaluate();
-            if( prec > 0 )
-            {
-                ret.push_back( m_secSeparator );
-                for( int i = 0; i < prec; ++i )
-                    ret.append( L"s" );
-            }
-        }
-    }
-
-    return ret;
-}
-
-
-////////////////////////////
-//
-void                                DefaultTimerPlugin::SetTime        ( TimeType time )
-{
-    TimeValue   newTime( time, m_timePaternInfo.fracOfSecondsPlaceholderSize );
-
-    if( m_currentTimeValue  != newTime )
-    {
-        /*SetTimePatern( GenerateTimePatern( time ) );*/
         m_currentTimeValue = newTime;
+		SetTimePatern( m_timePatern );
+
         Refresh( !m_started );
+
 		HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
     }
 }

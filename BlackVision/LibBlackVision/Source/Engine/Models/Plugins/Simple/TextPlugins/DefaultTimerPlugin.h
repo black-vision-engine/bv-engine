@@ -48,23 +48,9 @@ struct TimeValue
     int     minute;
     int     hour;
 
-    explicit    TimeValue( double time, int accuracy = 2 );
+    explicit    TimeValue( TimeType time, int accuracy = 2 );
 
     bool        operator!=(const TimeValue& other) const;
-};
-
-struct TimeInfo
-{
-    int hoursPHStart;
-    int hoursPlaceholderSize; // 0..
-    int minutesPHStart;
-    int minutesPlaceHolderSize; // 0..2
-    int secondsPHStart;
-    int secondsPlaceHolderSize; // 0..2
-    int fosPHStart;
-    int fracOfSecondsPlaceholderSize; // 0..
-
-    int GetSize() const;
 };
 
 // *************************************
@@ -95,10 +81,12 @@ public:
     struct PARAM 
     {
         static const std::string        PRECISION;
+		static const std::string        PRECISION_STOP;
     };
 
 private:
     ParamIntPtr                     m_precisionParam;
+	ParamIntPtr                     m_precisionStopParam;
 
     bool                            m_started;
     unsigned long                   m_globalStartTime;
@@ -109,11 +97,13 @@ private:
     wchar_t                         m_defaultSeparator;
     wchar_t                         m_secSeparator;
     wchar_t                         m_widestGlyph;
+	wchar_t                         m_highestGlyph;
 
     std::wstring                    m_timePatern;
-    TimeInfo                        m_timePaternInfo;
 
-    bool            CheckTimeConsistency( const std::wstring & time ) const;
+	std::wstring                    m_zerosTimeString;
+	std::wstring                    m_timeString;
+	std::set< SizeType >			m_constCharactersIdxs;
 
     void            SetValue            ( unsigned int connComp, wchar_t wch );
     const Glyph *   GetGlyph            ( wchar_t wch ) const;
@@ -121,16 +111,16 @@ private:
 
     void            SetTimePatern       ( const std::wstring & patern );
 
-    std::wstring    GenerateTimePatern  ( double time );
-    void            InitBigestGlyph     ();
 private:
 
     
-    void            SetTime             ( TimeType time );
+    void            SetTime             ( TimeType time, bool forceUpdate = false );
 
     void            SetTime             ( int h, int m, int s, int hoSec );
 
     virtual bool    LoadResource        ( AssetDescConstPtr assetDescr ) override;
+
+	void			InitWidestGlyph		();
 
 private:
 
