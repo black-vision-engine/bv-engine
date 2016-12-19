@@ -132,6 +132,17 @@ void                                    AssetTracker::ProcessEvent          ( IE
             }
             break;
 
+        case AssetTrackerInternalEvent::Command::PlayAudio:
+            {
+                auto audio = GetAudio( typedEvent->PluginOwner );
+                if( audio )
+                {
+                    m_audioRenderer->Play( audio );
+                }
+            }
+            break;
+
+
         case AssetTrackerInternalEvent::Command::PauseAudio:
             {
                 auto audio = GetAudio( typedEvent->PluginOwner );
@@ -148,6 +159,16 @@ void                                    AssetTracker::ProcessEvent          ( IE
                 if( audio )
                 {
                     m_audioRenderer->Stop( audio );
+                }
+            }
+            break;
+            
+        case AssetTrackerInternalEvent::Command::EOFAudio:
+            {
+                auto audio = GetAudio( typedEvent->PluginOwner );
+                if( audio )
+                {
+                    m_audioRenderer->EndOfFile( audio );
                 }
             }
             break;

@@ -4,6 +4,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 #include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Audio/AudioRenderer.h"
 
 
 namespace bv {
@@ -17,10 +18,12 @@ private:
     RenderQueueStackAllocator *     m_renderQueueAllocator;
     RenderLogic *                   m_renderLogic;
     RenderTarget *                  m_boundRenderTarget;
+    
+    audio::AudioRenderer *          m_audioRenderer;
 
 public:
 
-        RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderQueueStackAllocator * rqStackAllocator, RenderLogic * renderLogic );
+        RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderQueueStackAllocator * rqStackAllocator, RenderLogic * renderLogic, audio::AudioRenderer * audioRenderer );
         ~RenderLogicContext ();
 
     Renderer *                      GetRenderer             () const;
@@ -28,6 +31,8 @@ public:
     RenderQueueStackAllocator *     GetRenderQueueAllocator () const;
     RenderLogic *                   GetRenderLogic          () const;
     RenderTarget *                  GetBoundRenderTarget    () const;
+
+    audio::AudioRenderer *          GetAudioRenderer        () const;
 
     void                            SetBoundRenderTarget    ( RenderTarget * target );
 
@@ -52,6 +57,13 @@ inline RenderTargetStackAllocator * allocator( RenderLogicContext * ctx )
 inline RenderLogic *                logic   ( RenderLogicContext * ctx )
 {
     return ctx->GetRenderLogic();
+}
+
+// *******************************
+//
+inline audio::AudioRenderer *       audioRenderer   ( RenderLogicContext * ctx )
+{
+    return ctx->GetAudioRenderer();
 }
 
 // *******************************

@@ -30,6 +30,8 @@ public:
 	BLUE_INT32		m_nIsAttached;
 	BLUE_INT32		m_iCardType;
 	BLUE_UINT32		m_nVideoMode;
+	
+	
 	BLUE_UINT32		m_nUpdateFormat;
 	BLUE_UINT32		m_nMemoryFormat;
 	BLUE_UINT32		m_InvalidVideoModeFlag;

@@ -101,13 +101,9 @@ BLUEFISH_API BLUE_UINT32 emb_audio_decoder( BLUE_UINT32 * src_hanc_buffer,
 										    BLUE_UINT32 req_audio_sample_count,
 										    BLUE_UINT32 required_audio_channels,
 											BLUE_UINT32 sample_type);
-BLUEFISH_API BERR blue_wait_video_sync_async(CBlueVelvet4 * pSdk,
-											LPOVERLAPPED pOverlap,
-											blue_video_sync_struct * sync_struct);
-BLUEFISH_API BERR blue_dma_read_async(	CBlueVelvet4 * pSdk,
-										LPOVERLAPPED pOverlap,
-										struct blue_dma_request_struct  *pUserDmaRequest);
-
+BLUEFISH_API BERR blue_wait_video_sync_async(CBlueVelvet4* pSdk, LPOVERLAPPED pOverlap, blue_video_sync_struct* sync_struct);
+BLUEFISH_API BERR blue_wait_external_ltc_input_sync(CBlueVelvet4* pSdk, LPOVERLAPPED pOverlap, blue_external_ltc_input_sync_struct* sync_struct);
+BLUEFISH_API BERR blue_dma_read_async(CBlueVelvet4* pSdk, LPOVERLAPPED pOverlap, struct blue_dma_request_struct* pUserDmaRequest);
 
 BLUEFISH_API BERR blue_load_1D_lookup_table(CBlueVelvet4 * pSdk, struct blue_1d_lookup_table_struct * lut);
 

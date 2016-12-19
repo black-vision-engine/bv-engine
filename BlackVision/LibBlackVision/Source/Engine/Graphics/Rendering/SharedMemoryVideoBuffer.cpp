@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include "Tools/Profiler/HerarchicalProfiler.h"
 #include "SharedMemoryVideoBuffer.h"
 
 
@@ -12,7 +12,7 @@ const std::wstring    SharedMemoryVideoBuffer::MAPPING_OBJECT_NAME = L"BV";
 
 // *********************************
 //
-SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor )
+SharedMemoryVideoBuffer::SharedMemoryVideoBuffer( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor )
     : m_isAllocated( false )
     , m_pBuf( nullptr )
     , m_scaleFactor( scaleFactor )
@@ -58,31 +58,39 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer        ( UInt32 width, UInt32 h
 
 // *********************************
 //
-void        SharedMemoryVideoBuffer::DistributeFrame                            ( Texture2DConstPtr frame )
+void        SharedMemoryVideoBuffer::DistributeFrame(Texture2DConstPtr frame)
 {
-    auto data = frame->GetData()->Get();
+	auto data = frame->GetData()->Get();
 
-    auto inPixelSize = ( UInt32 )frame->GetPixelSize();
-    auto outPixelSize = ( UInt32 )Texture::GetPixelSize( m_format );
+//	auto inPixelSize = (UInt32)frame->GetPixelSize();
+	//auto outPixelSize = (UInt32)Texture::GetPixelSize(m_format);
 
-    assert( inPixelSize >= outPixelSize );
+	//assert(inPixelSize >= outPixelSize);
 
-    //FIXME: interpolate
-    for( UInt32 j = 0; j < m_height; ++j )
-    {
-        int y_scaled_offset = j * m_width * outPixelSize;
-        int y_offset = j * m_width * ( UInt32 )pow( m_scaleFactor, 2 ) * inPixelSize;
+	//FIXME: interpolate
+	/**
+	{
+		HPROFILER_SECTION("Shared Memory step1", PROFILER_THREAD1);
+		for (UInt32 j = 0; j < m_height; ++j)
+		{
+			int y_scaled_offset = j * m_width * outPixelSize;
+			int y_offset = j * m_width * (UInt32)pow(m_scaleFactor, 2) * inPixelSize;
 
-        for( UInt32 i = 0; i < m_width; ++i )
-        {
-            int x_scaled_offset = i * outPixelSize;
-            int x_offset = i * inPixelSize * m_scaleFactor;
+			for (UInt32 i = 0; i < m_width; ++i)
+			{
+				int x_scaled_offset = i * outPixelSize;
+				int x_offset = i * inPixelSize * m_scaleFactor;
 
-            memcpy( &m_data[ y_scaled_offset + x_scaled_offset ], &data[ y_offset + x_offset ], outPixelSize );
-        }
-    }
+				memcpy(&m_data[y_scaled_offset + x_scaled_offset], &data[y_offset + x_offset], outPixelSize);
+			}
+		}
 
-    CopyMemory( ( PVOID )m_pBuf, m_data, m_buffSize * sizeof( char ) );
+	}
+	HPROFILER_SECTION("Shared Memory step2", PROFILER_THREAD1);*/
+
+	//CopyMemory((PVOID)m_pBuf, m_data, m_buffSize * sizeof(char));
+	unsigned int size = frame->GetHeight() * frame->GetWidth()* (unsigned int)frame->GetPixelSize();
+	CopyMemory((PVOID)m_pBuf, data,size );
 }
 
 // *********************************

@@ -348,23 +348,17 @@ inline void		NodeUpdater::UpdateAudio				()
 {
     if( m_audio && m_audioChannel )
     {
-        std::vector< MemoryChunkConstPtr > data;
         auto packet = m_audioChannel->PopPacket();
-        while( packet )
-        {
-            data.push_back( packet );
-            packet = m_audioChannel->PopPacket();
-        }
-
+        
         if( m_audioChannel->GetFormat() != m_audio->GetFormat() ||
             m_audioChannel->GetFrequency() != m_audio->GetFrequency() )
         {
             m_audio->Reinitialize( m_audioChannel->GetFrequency(), m_audioChannel->GetFormat() );
         }
 
-        if( !data.empty() )
+        if( packet )
         {
-            m_audio->PushData( data );
+            m_audio->PushData( packet );
         }
     }
 }

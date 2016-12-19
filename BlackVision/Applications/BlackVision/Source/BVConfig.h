@@ -50,6 +50,7 @@ private:
     bool            m_displayVideoCardOutput;
     bool            m_isCameraPerspective;
 	bool			m_renderToSharedMemory;
+	int				m_sharedMemoryScaleFactor;
     bool            m_vsync;
 
     Float32         m_defaultFOV;
@@ -113,7 +114,8 @@ public:
     inline bool                 ReadbackFlag            () const;
     inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
-	inline bool                 RenderToSharedMemory    () const;
+	inline bool                 RenderToSharedMemory() const;
+	inline int                  SharedMemoryScaleFactor() const;
 
     inline UInt32               EventLoopUpdateMillis   () const;
     inline UInt32               FPS                     () const;

@@ -159,10 +159,22 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\stdafx.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\DeclareWinTypes.h" />
+    <ClInclude Include="..\..\..\Source\Memory\LinearAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\CircularBufferConcurrent.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Deque.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\stdafxCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -241,6 +253,9 @@
       <Filter>Serialization</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
+    <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">

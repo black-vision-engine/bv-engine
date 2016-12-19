@@ -23,6 +23,9 @@ private:
 
     bool                                m_needConversion;
 
+    SizeType                            m_maxBufferSize;
+    uint8_t *                           m_tmpBuffer;
+
 public:
 
 							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 10 );
@@ -39,6 +42,7 @@ private:
 
     static bool             IsSupportedFormat           ( AVSampleFormat format );
     static AudioFormat      ConvertFormat               ( AVSampleFormat format, Int32 nbChannels );
+    static AVSampleFormat   ConvertFormat               ( AudioFormat format, Int32 & nbChannels );
 
 };
 

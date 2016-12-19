@@ -59,6 +59,7 @@ typedef enum _BGD_STATUS
 
 extern "C"
 {
+	//Init functions
 	BLUEGPUDIRECT_API BLUE_GPUDIRECT_HANDLE bfGpuDirect_Init(	int CardId,
 																EBlueVideoChannel VideoChannel,															
 																void* pGpuDevice,
@@ -67,6 +68,15 @@ extern "C"
 																unsigned int NumTextures,
 																unsigned int NumChunks,
 																EBLUE_GPUDIRECT_TEXTURE_TYPE eTextureType = GPUDIRECT_TEXTURE_TYPE_TEXTURE);
+	BLUEGPUDIRECT_API BLUE_GPUDIRECT_HANDLE bfGpuDirect_InitWithDefaultVideoMode(	int CardId,
+																					EBlueVideoChannel VideoChannel,															
+																					void* pGpuDevice,
+																					EBLUE_GPUDIRECT_CONTEXT_TYPE eContext,
+																					void* gpuTextures,
+																					unsigned int NumTextures,
+																					unsigned int NumChunks,
+																					EBLUE_GPUDIRECT_TEXTURE_TYPE eTextureType,
+																					EVideoMode eDefaultVideoInputMode);	//used for input channels when no valid input signal is currently available
 	BLUEGPUDIRECT_API void bfGpuDirect_Destroy(BLUE_GPUDIRECT_HANDLE pHandle);
 
 	//DMA functions
@@ -77,8 +87,23 @@ extern "C"
 	BLUEGPUDIRECT_API int bfGpuDirect_BeginProcessing(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture);
 	BLUEGPUDIRECT_API int bfGpuDirect_EndProcessing(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture);
 
-	//Error handling
+	//Error handling - for normal mode
 	BLUEGPUDIRECT_API int bfGpuDirect_GetLastError(BLUE_GPUDIRECT_HANDLE pHandle, int* pLowLevelError);
+
+	//RAW mode: init functions
+	BLUEGPUDIRECT_API BLUE_GPUDIRECT_HANDLE bfGpuDirect_InitRaw(void* pGpuDevice, EBLUE_GPUDIRECT_CONTEXT_TYPE eContext);
+	BLUEGPUDIRECT_API void bfGpuDirect_DestroyRaw(BLUE_GPUDIRECT_HANDLE pHandle);
+	BLUEGPUDIRECT_API int bfGpuDirect_RegisterTextureRaw(BLUE_GPUDIRECT_HANDLE pHandle, int iWidth, int iHeight, EMemoryFormat eMemoryFormat, void* hTexture, EBLUE_GPUDIRECT_TEXTURE_TYPE eTextureType = GPUDIRECT_TEXTURE_TYPE_TEXTURE);
+	BLUEGPUDIRECT_API int bfGpuDirect_GetTextureAddressRaw(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture, void** ppAddress);
+	//RAW mode: transfer functions
+	BLUEGPUDIRECT_API int bfGpuDirect_DownloadFromTextureRaw(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture);
+	BLUEGPUDIRECT_API int bfGpuDirect_UploadToTextureRaw(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture);
+	//RAW mode - Texture locking: needs to be done in rendering thread
+	BLUEGPUDIRECT_API int bfGpuDirect_BeginProcessingRaw(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture);
+	BLUEGPUDIRECT_API int bfGpuDirect_EndProcessingRaw(BLUE_GPUDIRECT_HANDLE pHandle, void* hTexture);
+
+	//Error handling - for RAW mode
+	BLUEGPUDIRECT_API int bfGpuDirect_GetLastErrorRaw(BLUE_GPUDIRECT_HANDLE pHandle, int* pLowLevelError);
 
 }	//extern "C"
 

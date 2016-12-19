@@ -82,7 +82,7 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 	varVal.ulVal = VideoChannel;
 	m_pSDK->SetCardProperty(DEFAULT_VIDEO_INPUT_CHANNEL, varVal);
 
-	m_pSDK->wait_input_video_synch(UPD_FMT_FRAME, FieldCount); //synchronise with the card before querying VIDEO_INPUT_SIGNAL_VIDEO_MODE
+	m_pSDK->wait_input_video_synch(UPD_FMT_FIELD, FieldCount); //synchronise with the card before querying VIDEO_INPUT_SIGNAL_VIDEO_MODE
 	varVal.vt = VT_UI4;
 	m_pSDK->QueryCardProperty(VIDEO_INPUT_SIGNAL_VIDEO_MODE, varVal);
 	if(varVal.ulVal >= m_InvalidVideoModeFlag)
@@ -236,7 +236,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
 			pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
 			pFrame->m_nCardBufferID = video_capture_frame.BufferId;
-			pThis->m_pFifoBuffer->m_threadsafebuffer.push(pFrame);
+			pThis->m_pFifoBuffer->PushFrame(pFrame);
 			bFirstFrame = FALSE;
 		}
 		else

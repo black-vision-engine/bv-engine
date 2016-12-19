@@ -146,6 +146,28 @@ UInt32                  TextureUtils::ToBPP                         ( TextureFor
 
 // ******************************
 //
+UInt32                  TextureUtils::Channels                      ( TextureFormat format )
+{
+    switch( format )
+    {
+    case TextureFormat::F_A32FR32FG32FB32F:
+    case TextureFormat::F_A8R8G8B8:
+        return 4;
+    case TextureFormat::F_R32FG32FB32F:
+    case TextureFormat::F_R8G8B8:
+        return 3;
+    case TextureFormat::F_A32F:
+    case TextureFormat::F_A8:
+    case TextureFormat::F_L8:
+        return 1;
+    default:
+        assert( !"Should never be here !" );
+        return 0;
+    }
+}
+
+// ******************************
+//
 SingleTextureAssetConstPtr  TextureUtils::LoadSingleTexture( const SingleTextureAssetDescConstPtr & singleTextureResDesc, bool cacheOnDisk )
 {
     auto key        = singleTextureResDesc->GetKey();

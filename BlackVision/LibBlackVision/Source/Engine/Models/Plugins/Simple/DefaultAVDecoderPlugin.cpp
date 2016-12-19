@@ -20,12 +20,6 @@
 #include "Engine/Events/Events.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv { namespace model {
 
 
@@ -202,7 +196,7 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                 }
 
                 //FIXME: decode first video frame
-                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
 
                 auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
@@ -375,15 +369,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             m_decoder->Seek( offset[ 0 ] );
             m_prevOffsetCounter = offset[ 1 ];
 
-            //clear audio buffer
-            AVMediaData mediaData;
-            m_decoder->GetAudioMediaData( mediaData );
-
-            //set video frame
-            if( m_decoderMode != DecoderMode::PLAY )
-            {
-                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstVideoFrame();
-            }
+            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
         }
 
         if( ParameterChanged( PARAM::MUTE ) )
@@ -398,6 +384,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
         {
             BroadcastHasFinishedEvent();
             m_isFinished = true;
+            TriggerEvent( AssetTrackerInternalEvent::Command::EOFAudio );
         }
     }
 }
@@ -408,6 +395,7 @@ void                                DefaultAVDecoderPlugin::Play                
 {
     m_decoder->Play();
     m_isFinished = false;
+    TriggerEvent( AssetTrackerInternalEvent::Command::PlayAudio );
 }
 
 // *************************************
@@ -482,7 +470,7 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
 {
     //update audio data
     AVMediaData mediaData;
-    if( m_decoder->GetAudioMediaData( mediaData ) )
+    while( m_decoder->GetAudioMediaData( mediaData ) )
     {
         m_audioChannel->PushPacket( mediaData.frameData );
     }

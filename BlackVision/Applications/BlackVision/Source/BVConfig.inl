@@ -81,6 +81,14 @@ inline bool     BVConfig::RenderToSharedMemory                   () const
 
 // *********************************
 //
+inline int     BVConfig::SharedMemoryScaleFactor() const
+{
+	return m_sharedMemoryScaleFactor;
+}
+
+
+// *********************************
+//
 inline UInt32       BVConfig::EventLoopUpdateMillis             () const
 {
     return m_eventLoopUpdateMillis;

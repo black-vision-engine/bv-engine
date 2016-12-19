@@ -12,12 +12,7 @@
 #include "Assets/DefaultAssets.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
+#include "Engine/Events/Events.h"
 
 
 namespace bv { namespace model {
@@ -162,6 +157,8 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
                 m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                 m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
 
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
+
                 SetAsset( 0, LAsset( DefaultAudioDecoderPluginDesc::AudioName(), assetDescr, nullptr ) );
 
                 UpdateDecoderState( m_decoderMode );
@@ -221,6 +218,8 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
         {
             m_decoder->Seek( offset[ 0 ] );
             m_prevOffsetCounter = offset[ 1 ];
+
+            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
         }
 
         HandlePerfectLoops();
@@ -230,6 +229,7 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
         {
             BroadcastHasFinishedEvent();
             m_isFinished = true;
+            TriggerAudioEvent( AssetTrackerInternalEvent::Command::EOFAudio );
         }
     }
 }
@@ -240,6 +240,7 @@ void                                DefaultAudioDecoderPlugin::Play             
 {
     m_decoder->Play();
     m_isFinished = false;
+    TriggerAudioEvent( AssetTrackerInternalEvent::Command::PlayAudio );
 }
 
 // *************************************

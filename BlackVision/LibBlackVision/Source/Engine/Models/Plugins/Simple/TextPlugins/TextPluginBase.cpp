@@ -191,6 +191,7 @@ void                                TextPluginBase::SetPrevPlugin               
 
     auto ctx = m_psc->GetRendererContext();
     
+	ctx->depthCtx->enabled = false;
     ctx->cullCtx->enabled = false;
     ctx->depthCtx->enabled = true;
     ctx->depthCtx->writable = false;
