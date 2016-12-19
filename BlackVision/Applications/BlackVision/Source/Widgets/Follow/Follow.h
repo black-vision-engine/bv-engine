@@ -35,9 +35,9 @@ public:
 
     enum FollowingMode
     {
-        Previous,
-        FirstInSubtree,
-        Path
+        Previous        = 0,
+        FirstInSubtree  = 1,
+        Path            = 2
     };
 
     enum BBAlignementX
@@ -85,6 +85,7 @@ private:
         static const std::string    ALIGN_Z;
 
         static const std::string    FOLLOWING_MODE;
+        static const std::string    FOLLOWING_NODE_PATH;
     };
 
 private:
@@ -99,6 +100,7 @@ private:
     BBAlignementZParamPtr   m_alignZ;
     
     FollowingModeParamPtr   m_followingMode;
+    ValueStringPtr          m_nodePath;
 
 public:
     explicit    Follow			        ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );

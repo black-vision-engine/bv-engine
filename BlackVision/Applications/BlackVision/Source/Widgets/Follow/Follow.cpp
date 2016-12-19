@@ -44,6 +44,7 @@ const std::string       Follow::PARAMETERS::ALIGN_Y = "AlignY";
 const std::string       Follow::PARAMETERS::ALIGN_Z = "AlignZ";
 
 const std::string       Follow::PARAMETERS::FOLLOWING_MODE = "FollowingMode";
+const std::string       Follow::PARAMETERS::FOLLOWING_NODE_PATH = "FollowingNodePath";
 
 
 
@@ -72,6 +73,7 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddSimpleParam( PARAMETERS::OFFSET_X, 0.0f, true, false );
     h.AddSimpleParam( PARAMETERS::OFFSET_Y, 0.0f, true, false );
     h.AddSimpleParam( PARAMETERS::OFFSET_Z, 0.0f, true, false );
+    h.AddSimpleParam( PARAMETERS::FOLLOWING_NODE_PATH, std::string( "" ), true, false );
     h.AddEnumParam( PARAMETERS::FOLLOWING_MODE, FollowingMode::Previous, false, false );
     h.AddEnumParam( PARAMETERS::ALIGN_X, BBAlignementX::CenterX, false, false );
     h.AddEnumParam( PARAMETERS::ALIGN_Y, BBAlignementY::CenterY, false, false );
@@ -88,6 +90,7 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     m_alignZ = QueryTypedEnum< BBAlignementZ >( PARAMETERS::ALIGN_Z );
 
     m_followingMode = QueryTypedEnum< FollowingMode >( PARAMETERS::FOLLOWING_MODE );
+    m_nodePath = QueryTypedValue< ValueStringPtr >( m_paramValModel->GetValue( PARAMETERS::FOLLOWING_NODE_PATH ) );
 }
 
 // ***********************
@@ -111,8 +114,10 @@ void        Follow::Deinitialize      ()
 
 // ***********************
 //
-void                        Follow::Update			( TimeType /*t*/ )
+void                        Follow::Update			( TimeType t )
 {
+    NodeLogicBase::Update( t );
+
     auto node = GetObservedNode();
     glm::vec3 followedPoint = GetBBPoint( node );
     glm::mat4 transformBox = GetBBTransform( node );
@@ -210,7 +215,8 @@ model::BasicNodeConstPtr    Follow::GetObservedNode     ()
         }
         else if( mode == FollowingMode::Path )
         {
-            assert( false );    // @todo Do in future.
+            auto foundNode = const_cast< bv::model::BasicNode * >( parentParent )->GetNode( m_nodePath->GetValue() );
+            return std::static_pointer_cast< bv::model::BasicNode >( foundNode );
         }
         else if( mode == FollowingMode::Previous )
         {

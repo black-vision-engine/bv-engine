@@ -150,6 +150,13 @@ namespace bv { namespace model {
                 ( model, timeEvaluator, name, defaultValue, addValue, isState );
         }
 
+        template<>
+        inline void                             AddSimpleParam< std::string > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const std::string& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< StringInterpolator, std::string, ModelParamType::MPT_STRING, ParamType::PT_STRING, ParamString >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
         template< typename ValueType >
         inline void                             AddSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
         {
