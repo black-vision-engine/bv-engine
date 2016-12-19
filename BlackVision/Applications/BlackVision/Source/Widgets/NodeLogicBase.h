@@ -29,7 +29,20 @@ public:
     virtual void                Serialize       ( ISerializer & ser ) const;
     virtual void                Deserialize     ( const IDeserializer & ser );
 
+protected:
+    template< typename EnumType >
+    std::shared_ptr< ParamEnum< EnumType > >        QueryTypedEnum  ( const std::string & name );
 };
+
+
+
+// ***********************
+//
+template< typename EnumType >
+inline std::shared_ptr< ParamEnum< EnumType > >     NodeLogicBase::QueryTypedEnum   ( const std::string & name )
+{
+    return QueryTypedParam< std::shared_ptr< ParamEnum< EnumType > > >( m_paramValModel->GetParameter( name ) );
+}
 
 }   // model
 }   // bv

@@ -42,24 +42,29 @@ public:
 
     enum BBAlignementX
     {
-        Left,
-        CenterX,
-        Right
+        Left        = 0,
+        CenterX     = 1,
+        Right       = 2
     };
 
     enum BBAlignementY
     {
-        Top,
-        CenterY,
-        Bottom
+        Bottom      = 0,
+        CenterY     = 1,
+        Top         = 2
     };
 
     enum BBAlignementZ
     {
-        Front,
-        CenterZ,
-        Back
+        Back        = 0,
+        CenterZ     = 1,
+        Front       = 2
     };
+
+    typedef std::shared_ptr< bv::model::ParamEnum< FollowingMode > > FollowingModeParamPtr;
+    typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementX > > BBAlignementXparamPtr;
+    typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementY > > BBAlignementYParamPtr;
+    typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementZ > > BBAlignementZParamPtr;
 
 private:
     static const std::string            m_type;
@@ -85,6 +90,15 @@ private:
 private:
     bv::model::BasicNodeWeakPtr         m_parentNode;
 
+    ValueFloatPtr           m_offsetX;
+    ValueFloatPtr           m_offsetY;
+    ValueFloatPtr           m_offsetZ;
+
+    BBAlignementXparamPtr   m_alignX;
+    BBAlignementYParamPtr   m_alignY;
+    BBAlignementZParamPtr   m_alignZ;
+    
+    FollowingModeParamPtr   m_followingMode;
 
 public:
     explicit    Follow			        ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
@@ -107,6 +121,11 @@ public:
 private:
     void            NodeRemovedHandler      ( IEventPtr evt );
 
+
+    model::BasicNodeConstPtr    GetObservedNode     ();
+    glm::vec3                   GetBBPoint          ( model::BasicNodeConstPtr & node );
+    glm::mat4                   GetBBTransform      ( model::BasicNodeConstPtr & node );
+    void                        ApplyTranslation    ( glm::vec3 & transform );
 };
 
 
