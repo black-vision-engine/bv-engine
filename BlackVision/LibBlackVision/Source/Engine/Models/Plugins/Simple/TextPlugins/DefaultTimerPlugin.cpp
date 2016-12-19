@@ -56,8 +56,8 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
 
     h.SetOrCreatePluginModel();
 
-    h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION, 2 );
-	h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION_STOP, 1 );
+    h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION, 1 );
+	h.AddSimpleParam( DefaultTimerPlugin::PARAM::PRECISION_STOP, 2 );
 
     return model;
 }
@@ -138,7 +138,7 @@ void AddToTimeStringU( Int32 value, std::wstring & zeroTimeString, std::wstring 
 	{
 		zeroTimeString.push_back( widestChar );
 		if( i < groupLength - str.size() )
-			timeString.push_back( widestChar );
+			timeString.push_back( L'0' );
 	}
 
 	timeString.append( str );
@@ -148,19 +148,16 @@ void AddToTimeStringU( Int32 value, std::wstring & zeroTimeString, std::wstring 
 //
 void AddToTimeStringL( Int32 value, std::wstring & zeroTimeString, std::wstring & timeString, wchar_t widestChar )
 {
-	if( value > 0 )
-	{
-		auto str = std::to_wstring( value );
+	auto str = std::to_wstring( value );
 
-		zeroTimeString.append( std::wstring( str.size(), widestChar ) );
+	zeroTimeString.append( std::wstring( str.size(), widestChar ) );
 
-		timeString.append( str );
-	}
+	timeString.append( str );
 }
 
 ////////////////////////////
 //
-std::pair< std::wstring, std::wstring > CreateTimeString( std::vector< std::pair< std::wstring, Int32 > > timePaternGroups, TimeValue timeValue, wchar_t widestChar )
+std::pair< std::wstring, std::wstring > CreateTimeString( std::vector< std::pair< std::wstring, Int32 > > timePaternGroups, TimeValue timeValue, wchar_t widestChar, std::set< SizeType > & consCharactersIdx )
 {
 	std::wstring zeroTimeString;
 	std::wstring timeString;
@@ -201,6 +198,11 @@ std::pair< std::wstring, std::wstring > CreateTimeString( std::vector< std::pair
 		}
 		else
 		{
+			for( SizeType i = zeroTimeString.size(); i < zeroTimeString.size() + group.first.size(); ++i )
+			{
+				consCharactersIdx.insert( i );
+			}
+			
 			zeroTimeString.append( group.first );
 			timeString.append( group.first );
 		}
@@ -218,11 +220,11 @@ void TimeFormatError()
 
 ////////////////////////////
 //
-std::pair< std::wstring, std::wstring > ParseTimePatern( const std::wstring& timePatern, TimeValue timeValue, wchar_t widestChar )
+std::pair< std::wstring, std::wstring > ParseTimePatern( const std::wstring& timePatern, TimeValue timeValue, wchar_t widestChar, std::set< SizeType > & consCharactersIdx )
 {
 	auto groups = GetTimePaternGroups( timePatern );
 
-	auto timeStrings = CreateTimeString( groups, timeValue, widestChar );
+	auto timeStrings = CreateTimeString( groups, timeValue, widestChar, consCharactersIdx );
 
 	return timeStrings;
 }
@@ -261,6 +263,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_defaultSeparator(L':')
     , m_secSeparator(L'.')
     , m_widestGlyph( L'0' ) 
+	, m_highestGlyph( L'0' )
     , m_started(false)
 {
     SetPrevPlugin( prev );
@@ -292,7 +295,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 
         SetTimePatern( L"h:m:s.dd" );
 
-        SetTime( 0. );
+        SetTime( m_currentLocalTime / 1000.f, true );
 
         return true;
     }    
@@ -367,7 +370,9 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
 	auto acc = m_started ? m_precisionParam->Evaluate() : m_precisionStopParam->Evaluate();
 
-	std::tie( zerosTimeString, m_timeString ) = ParseTimePatern( m_timePatern, TimeValue( m_currentLocalTime / 1000.f, acc ), m_widestGlyph );
+	m_constCharactersIdxs.clear();
+
+	std::tie( zerosTimeString, m_timeString ) = ParseTimePatern( m_timePatern, TimeValue( m_currentLocalTime / 1000.f, acc ), m_widestGlyph, m_constCharactersIdxs );
 
 	if( zerosTimeString != m_zerosTimeString )
 	{
@@ -380,7 +385,11 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 		m_currentTimeValue = TimeValue( 0, acc ); // Force update time.
 
 		HelperVertexAttributesChannel::SetTopologyUpdate(m_vaChannel);
+
+		SetTime( m_currentLocalTime / 1000.f, true );
 	}
+
+	
 }
 
 ////////////////////////////
@@ -415,7 +424,10 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
 	{
 		auto i = std::distance( cp.begin(), it );
 
-		SetValue( ( UInt32 ) i, *it );
+		if( m_constCharactersIdxs.find( i ) == m_constCharactersIdxs.end() )
+		{
+			SetValue( ( UInt32 ) i, *it );
+		}
 	}
 }
 
@@ -424,7 +436,9 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
 void                              DefaultTimerPlugin::InitWidestGlyph ()
 {
 	SizeType width = 0;
+	SizeType height = 0;
 	wchar_t widest = L'0';
+	wchar_t highest = L'0';
 	
 	static const std::wstring numbers = L"0123456789";
 	
@@ -436,8 +450,17 @@ void                              DefaultTimerPlugin::InitWidestGlyph ()
 			width = w;
 			widest = wch;
 		}
+
+		auto h = m_atlas->GetGlyph( wch )->height;
+		if( h > height )
+		{
+			height = h;
+			highest = wch;
+		}
+
 	}
 	
+	m_highestGlyph = highest;
 	m_widestGlyph = widest;
 }
 
@@ -452,8 +475,13 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
         auto glyph = GetGlyph( wch );
 
 		auto widestGlyph = GetGlyph( m_widestGlyph );
+		auto highestGlyph = GetGlyph( m_highestGlyph );
 		
 		auto uvsWidestGlyph = TextHelper::GetAtlasCoordsForGlyph( widestGlyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
+		auto uvsHighestGlyph = TextHelper::GetAtlasCoordsForGlyph( highestGlyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
+
+		glm::vec2 wWH = uvsWidestGlyph[ 1 ] - uvsWidestGlyph[ 2 ];
+		glm::vec2 hWH = uvsHighestGlyph[ 1 ] - uvsHighestGlyph[ 2 ];
 
         if( connComp < comps.size() )
         {
@@ -464,12 +492,12 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
                 auto& verts = uvChannel->GetVertices();
 
-				auto uvs = TextHelper::GetAtlasCoordsForGlyph( glyph, m_atlas->GetWidth(), m_atlas->GetHeight(), (Float32)m_blurSize );
+				auto uvs = TextHelper::GetAtlasCoordsForGlyph( glyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
 
-                verts[ 0 ] = uvs[ 0 ];
-                verts[ 1 ] = uvs[ 1 ];
-                verts[ 2 ] = uvs[ 2 ];
-                verts[ 3 ] = uvs[ 3 ];
+                verts[ 0 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y );
+                verts[ 1 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y ); 
+                verts[ 2 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y - hWH.y );
+                verts[ 3 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y - hWH.y );
             }
         }
     }
@@ -477,13 +505,13 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
 ////////////////////////////
 //
-void                                DefaultTimerPlugin::SetTime        ( TimeType time )
+void                                DefaultTimerPlugin::SetTime        ( TimeType time, bool forceUpdate )
 {
 	auto acc = m_started ? m_precisionParam->Evaluate() : m_precisionStopParam->Evaluate();
 
     TimeValue   newTime( time, acc );
 
-    if( m_currentTimeValue != newTime )
+    if( forceUpdate || m_currentTimeValue != newTime )
     {
         m_currentTimeValue = newTime;
 		SetTimePatern( m_timePatern );

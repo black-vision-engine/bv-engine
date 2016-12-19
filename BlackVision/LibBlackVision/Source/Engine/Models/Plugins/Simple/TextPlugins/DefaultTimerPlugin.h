@@ -97,12 +97,13 @@ private:
     wchar_t                         m_defaultSeparator;
     wchar_t                         m_secSeparator;
     wchar_t                         m_widestGlyph;
+	wchar_t                         m_highestGlyph;
 
     std::wstring                    m_timePatern;
 
 	std::wstring                    m_zerosTimeString;
 	std::wstring                    m_timeString;
-
+	std::set< SizeType >			m_constCharactersIdxs;
 
     void            SetValue            ( unsigned int connComp, wchar_t wch );
     const Glyph *   GetGlyph            ( wchar_t wch ) const;
@@ -113,7 +114,7 @@ private:
 private:
 
     
-    void            SetTime             ( TimeType time );
+    void            SetTime             ( TimeType time, bool forceUpdate = false );
 
     void            SetTime             ( int h, int m, int s, int hoSec );
 
