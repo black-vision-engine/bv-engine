@@ -1800,6 +1800,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.cpp">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4912,6 +4915,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.h">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

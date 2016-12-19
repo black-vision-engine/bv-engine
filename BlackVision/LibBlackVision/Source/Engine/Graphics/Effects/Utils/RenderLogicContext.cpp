@@ -13,11 +13,12 @@ namespace bv {
 
 // ***************************
 //
-RenderLogicContext::RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderQueueStackAllocator * rqStackAllocator, RenderLogic * renderLogic )
+RenderLogicContext::RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderQueueStackAllocator * rqStackAllocator, RenderLogic * renderLogic, audio::AudioRenderer * audioRenderer )
     : m_renderer( renderer )
     , m_rtAllocator( rtStackAllocator )
     , m_renderLogic( renderLogic )
     , m_renderQueueAllocator( rqStackAllocator )
+    , m_audioRenderer( audioRenderer )
 {
 }
 
@@ -60,6 +61,13 @@ RenderLogic *                   RenderLogicContext::GetRenderLogic          () c
 RenderTarget *                  RenderLogicContext::GetBoundRenderTarget    () const
 {
     return m_boundRenderTarget;
+}
+
+// ***************************
+//
+audio::AudioRenderer *          RenderLogicContext::GetAudioRenderer        () const
+{
+    return m_audioRenderer;
 }
 
 // ***************************

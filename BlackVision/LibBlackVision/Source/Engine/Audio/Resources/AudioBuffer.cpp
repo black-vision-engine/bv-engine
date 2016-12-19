@@ -3,37 +3,30 @@
 #include "AudioBuffer.h"
 
 
-
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv { namespace audio {
 
 
 // *********************************
 //
-AudioBuffer::AudioBuffer	( SizeType size, Int32 frequency, AudioFormat format )
-	: m_size( size )
+AudioBuffer::AudioBuffer	( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof )
+	: m_data( data )
 	, m_frequency( frequency )
     , m_format( format )
+    , m_eof( eof )
 {
-	m_data = new char[ m_size ];
 }
 
 // *********************************
 //
 AudioBuffer::~AudioBuffer   ()
 {
-    delete[] m_data;
 }
 
 // *********************************
 //
 SizeType            AudioBuffer::GetSize			    () const
 {
-	return m_size;
+	return m_data->Size();
 }
 
 // *********************************
@@ -45,56 +38,38 @@ Int32               AudioBuffer::GetFrequency	    () const
 
 // *********************************
 //
-AudioFormat         AudioBuffer::GetFormat           () const
+AudioFormat         AudioBuffer::GetFormat          () const
 {
 	return m_format;
 }
 
 // *********************************
 //
-const char *        AudioBuffer::Data				() const
+bool                AudioBuffer::IsEOF              () const
+{
+	return m_eof;
+}
+
+// *********************************
+//
+MemoryChunkConstPtr AudioBuffer::GetData			() const
 {
     return m_data;
 }
 
 // *********************************
 //
-void                AudioBuffer::WriteToBuffer       ( const char * src, SizeType size )
+const char *        AudioBuffer::GetRawData			() const
 {
-    memcpy( m_data, src, size );
-}
-    
-// *********************************
-//
-AudioBufferPtr      AudioBuffer::Create             ( const std::vector< MemoryChunkConstPtr > & data, Int32 frequency, AudioFormat format )
-{
-    SizeType size = 0;
-    for( auto & chunk : data )
-    {
-        size += chunk->Size();
-    }
-
-    auto buffer = std::make_shared< AudioBuffer >( size, frequency, format ); 
-
-    SizeType offset = 0;
-    for( auto & chunk : data )
-    {
-        memcpy( buffer->m_data + offset, chunk->Get(), chunk->Size() );
-        offset += chunk->Size();
-    }
-
-    return buffer;
+    return m_data->Get();
 }
 
 // *********************************
 //
-AudioBufferPtr      AudioBuffer::Create             ( const char * data, SizeType size, Int32 frequency, AudioFormat format )
+AudioBufferPtr      AudioBuffer::Create             ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof )
 {
-    auto buffer = std::make_shared< AudioBuffer >( size, frequency, format ); 
-    buffer->WriteToBuffer( data, size );
-    return buffer;
+    return std::make_shared< AudioBuffer >( data, frequency, format, eof ); 
 }
-
 
 } // audio
 } //bv

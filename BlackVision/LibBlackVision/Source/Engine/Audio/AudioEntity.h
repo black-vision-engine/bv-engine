@@ -23,6 +23,8 @@ protected:
 
 	UInt32							    m_updateID;
 
+    bool                                m_playing;
+
 public:
 
                                 AudioEntity     ( Int32 frequency, AudioFormat format );
@@ -36,10 +38,15 @@ public:
     void                        Clear           ();
     bool                        IsEmpty         () const;
 
-    void                        PushData        ( const std::vector< MemoryChunkConstPtr > & data );
+    void                        PushData        ( MemoryChunkConstPtr data );
     AudioBufferVec              PopData         ();
+    bool                        IsEOF           () const;
 
     UInt32                      GetUpdateID     () const;
+
+    bool                        IsPlaying       () const;
+    void                        Play            ();
+    void                        Stop            ();
 
 };
 

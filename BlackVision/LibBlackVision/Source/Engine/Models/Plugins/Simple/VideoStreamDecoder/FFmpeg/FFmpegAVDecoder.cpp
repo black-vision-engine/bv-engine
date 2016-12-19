@@ -162,12 +162,14 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
 
 // *********************************
 //
-void				FFmpegAVDecoder::NextDataReady	            ( AVMediaType type, UInt64 time )
+bool				FFmpegAVDecoder::NextDataReady	            ( AVMediaType type, UInt64 time )
 {
     if( m_streams.count( type ) )
     {
-        m_streams[ type ]->NextDataReady( time );
+        return m_streams[ type ]->NextDataReady( time );
     }
+
+    return false;
 }
 
 
@@ -358,21 +360,34 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
 // *********************************
 //
-void					FFmpegAVDecoder::ProcessFirstVideoFrame ()
+void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
 {
+    RestartDecoding();
+
     if( HasVideo() )
     {
-        RestartDecoding();
-
         auto decoder = m_streams[ AVMEDIA_TYPE_VIDEO ].get();
         while( decoder->IsOutQueueEmpty() && !IsFinished() )
         {
             NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS() );
         }
-        
-        StopDecoding();
     }
+        
+    if( HasAudio() )
+    {
+        auto i = 0;
+        auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
+        while( i < 5 && !IsFinished() )
+        {
+            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetDuration() ) )
+            {
+                i++;
+            }
+        }
 
+    }
+    
+    StopDecoding();
 }
 
 // *********************************

@@ -1,11 +1,12 @@
 #include "FifoPlayback.h"
-
+#include <iostream>
+#include "Bluefish/inc/BlueHancUtils.h"
 #include <process.h>
-
+#include "BVTimeCode.h"
 
 namespace bv { namespace videocards { namespace bluefish {
 
-
+#define MAX_HANC_BUFFER_SIZE (256*1024)
 extern struct blue_videomode_info gVideoModeInfo[];
 
 CFifoPlayback::CFifoPlayback() :
@@ -43,7 +44,7 @@ CFifoPlayback::~CFifoPlayback()
 
 }
 
-BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped)
+BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped, bool EnableAudioEmbedding, bool EnableVbiVanc, BLUE_UINT32 sdiOutput)
 {
     VARIANT varVal;
     //BLUE_INT32 card_type = CRD_INVALID;
@@ -62,9 +63,13 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 
     m_pSDK->device_attach(CardNumber, 0);
     m_nIsAttached = 1;
+	m_nVideoChannel = VideoChannel;
+	m_EnableEmbAudio = EnableAudioEmbedding;
+	m_EnableVbiVanc = EnableVbiVanc;
 
     m_iCardType = m_pSDK->has_video_cardtype(CardNumber);
 
+	m_SdiOutputConnector = sdiOutput;
 
     //Get number of supported outputs
     varVal.ulVal = 0;
@@ -258,107 +263,341 @@ void CFifoPlayback::StopThread()
     return;
 }
 
+int GetCardProperty(CBlueVelvet4* pSdk, BLUE_UINT32 prop, BLUE_UINT32& value)
+{
+	VARIANT varVal;
+	int errorCode;
+	varVal.vt = VT_UI4;
+	varVal.ulVal = value;
+	errorCode = pSdk->QueryCardProperty(prop, varVal);
+	value = varVal.ulVal;
+	return errorCode;
+}
 
 unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 {
-    CFifoPlayback* pThis = (CFifoPlayback*)pArg;
-    ULONG BufferId = 0;
-    ULONG CurrentFieldCount = 0;
-    ULONG LastFieldCount = 0;
-    //ULONG LastBufferTimeStamp = 0;
-    unsigned long* NotUsedAddress = NULL;
-    unsigned long Underrun = 0;
-    unsigned long LastUnderrun = 0;
-    unsigned long UniqueId = 0;
-    unsigned int nFramesTobuffer = 1;
-    unsigned int nFramesPlayed = 0;
-    //BOOL bPlaybackStarted = FALSE;
-    std::shared_ptr< CFrame > pFrame = nullptr;
+	CFifoPlayback* pThis = (CFifoPlayback*)pArg;
+	ULONG BufferId = 0;
+	ULONG CurrentFieldCount = 0;
+	ULONG LastFieldCount = 0;
+	//ULONG LastBufferTimeStamp = 0;
+	unsigned long* NotUsedAddress = NULL;
+	unsigned long Underrun = 0;
+	unsigned long LastUnderrun = 0;
+	unsigned long UniqueId = 0;
+	unsigned int nFramesTobuffer = 2;
+	unsigned int nFramesPlayed = 0;
+	//BOOL bPlaybackStarted = FALSE;
 
-    //make sure FIFO is not running
-    pThis->m_pSDK->video_playback_stop(0, 0);
+	// hanc / audio / vanc
 
-    LastFieldCount = CurrentFieldCount;
+	BLUE_UINT32* pHancBuffer = NULL;
+	
+	BLUE_UINT32* pVbiVancBuffer = NULL;
+	BLUE_UINT32 nAudioSequenceCount = 0; 
+	
+	
+	BLUE_UINT32	nBytesPerAudioChannel = 2;
+	BLUE_UINT32 nSampleType = AUDIO_CHANNEL_16BIT;//(AUDIO_CHANNEL_16BIT | AUDIO_CHANNEL_LITTLEENDIAN);
 
-    while(!pThis->m_nThreadStopping)
+	BLUE_UINT32 embAudioProp = 0;
+	BLUE_UINT32 aesAudioRouting = 0;
+	BLUE_UINT32 sdiOutputRouting = 0;
+	embAudioProp = blue_enable_hanc_timestamp_pkt;
+
+	
+
+	if (pThis->m_EnableEmbAudio)
+	{
+		embAudioProp |= (blue_emb_audio_enable | blue_emb_audio_group1_enable );
+	}
+
+	if (pThis->m_nVideoChannel == BLUE_VIDEO_OUTPUT_CHANNEL_D)
+	{
+		aesAudioRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHD, EPOCH_DEST_AES_ANALOG_AUDIO_OUTPUT, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+		sdiOutputRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHD, pThis->m_SdiOutputConnector, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+	}
+	else if (pThis->m_nVideoChannel == BLUE_VIDEO_OUTPUT_CHANNEL_C)
+	{
+		aesAudioRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHC, EPOCH_DEST_AES_ANALOG_AUDIO_OUTPUT, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+		sdiOutputRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHC, pThis->m_SdiOutputConnector, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+	}
+	else if (pThis->m_nVideoChannel == BLUE_VIDEO_OUTPUT_CHANNEL_B)
+	{
+		aesAudioRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHB, EPOCH_DEST_AES_ANALOG_AUDIO_OUTPUT, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+		sdiOutputRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHB, pThis->m_SdiOutputConnector, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+	}
+	else //if(nVideoChannel == BLUE_VIDEO_OUTPUT_CHANNEL_A)
+	{
+		aesAudioRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA, EPOCH_DEST_AES_ANALOG_AUDIO_OUTPUT, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+		sdiOutputRouting = EPOCH_SET_ROUTING(EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA, pThis->m_SdiOutputConnector, BLUE_CONNECTOR_PROP_SINGLE_LINK);
+	}
+
+
+	std::shared_ptr<CFrame> pFrame = NULL;
+
+	OVERLAPPED OverlapChA;
+	OverlapChA.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+//	DWORD BytesReturnedChA = 0;
+
+	//make sure FIFO is not running
+	pThis->m_pSDK->video_playback_stop(0, 0);
+
+	VARIANT varVal;
+	varVal.vt = VT_UI4;
+	varVal.ulVal = ENUM_BLACKGENERATOR_OFF;
+	pThis->m_pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
+
+	LastFieldCount = CurrentFieldCount;
+	ULONG LastUnderrunChA = 0;
+	ULONG UnderrunChA = 0;
+	
+	
+
+	int nCardType = pThis->m_pSDK->has_video_cardtype();
+
+	BLUE_UINT32 UpdateType = UPD_FMT_FIELD;
+	BLUE_UINT32 VideoMode = UPD_FMT_FIELD;
+	BLUE_UINT32 MemoryFormat = UPD_FMT_FIELD;
+	GetCardProperty(pThis->m_pSDK, VIDEO_MEMORY_FORMAT, MemoryFormat);
+	GetCardProperty(pThis->m_pSDK, VIDEO_MODE, VideoMode);
+	GetCardProperty(pThis->m_pSDK, VIDEO_UPDATE_TYPE, UpdateType);
+
+
+
+
+	
+
+
+
+	//hanc
+	
+	ULONG VideoGolden = BlueVelvetGolden(VideoMode, MemoryFormat, UpdateType);
+	ULONG PixelsPerLine = BlueVelvetLinePixels(VideoMode);
+	ULONG VBILines = BlueVelvetVANCLineCount(nCardType, pThis->m_nVideoMode, (UpdateType == UPD_FMT_FRAME) ? BLUE_DATA_FRAME : BLUE_DATA_FIELD1);
+	ULONG VBIBytesPerLine = 0;
+	ULONG VBIGolden = 0;
+
+	if (VideoMode == VID_FMT_PAL || VideoMode == VID_FMT_NTSC)
+	{
+		VBIBytesPerLine = BlueVelvetVANCLineBytes(nCardType, VideoMode, MemoryFormat);
+		VBIGolden = BlueVelvetVANCGoldenValue(nCardType, VideoMode, MemoryFormat, (UpdateType == UPD_FMT_FRAME) ? BLUE_DATA_FRAME : BLUE_DATA_FIELD1);
+	}
+	else
+	{
+		VBIBytesPerLine = BlueVelvetVANCLineBytes(nCardType, VideoMode, MEM_FMT_V210);
+		VBIGolden = BlueVelvetVANCGoldenValue(nCardType, VideoMode, MEM_FMT_V210, (UpdateType == UPD_FMT_FRAME) ? BLUE_DATA_FRAME : BLUE_DATA_FIELD1);
+	}
+
+	pHancBuffer = (BLUE_UINT32 *)VirtualAlloc(NULL, MAX_HANC_BUFFER_SIZE, MEM_COMMIT, PAGE_READWRITE);
+	pVbiVancBuffer = (BLUE_UINT32 *)VirtualAlloc(NULL, VBIGolden, MEM_COMMIT, PAGE_READWRITE);
+
+	if (VideoMode == VID_FMT_PAL || VideoMode == VID_FMT_NTSC)
+		memset(pVbiVancBuffer, 0, VBIGolden);
+	else
+		blue_init_vanc_buffer(nCardType, VideoMode, PixelsPerLine, VBILines, pVbiVancBuffer);
+
+
+	hanc_stream_info_struct hanc_stream_info;
+	::ZeroMemory(&hanc_stream_info, sizeof(hanc_stream_info));
+	hanc_stream_info.AudioDBNArray[0] = -1;
+	hanc_stream_info.AudioDBNArray[1] = -1;
+	hanc_stream_info.AudioDBNArray[2] = -1;
+	hanc_stream_info.AudioDBNArray[3] = -1;
+	hanc_stream_info.hanc_data_ptr = pHancBuffer;
+	hanc_stream_info.video_mode = pThis->m_nVideoMode;
+
+
+	{nAudioSequenceCount;}
+	{nBytesPerAudioChannel;}
+	{nSampleType;}
+	{PixelsPerLine;}
+	{nBytesPerAudioChannel;}
+	{VBIBytesPerLine;}
+	{VBILines;}
+	{VideoGolden;}
+
+	// audio
+
+	
+	{pHancBuffer;}
+
+	//timecode
+
+	BLUE_UINT32 nProcessHANC = 0;
+	BVBluefishTimeCode rp188_vitc;
+	BVBluefishTimeCode rp188_ltc;
+	BVBluefishTimeCode ext_ltc;
+	BVBluefishTimeCode sd_vitc;
+
+	{rp188_vitc;}
+	{rp188_ltc;}
+	{ext_ltc;}
+	{sd_vitc;}
+	
+	pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+	if (!(CurrentFieldCount & 0x1))
+		pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);	//we need to schedule the playback of field 0 at field 1 interrupt
+
+
+	BLUE_UINT32 nEmbAudioFlag = 0;
+	nEmbAudioFlag = (blue_emb_audio_enable | blue_emb_audio_group1_enable); // liczba kana³ów... do ogarniêcia...
+	
+
+    while( !pThis->m_nThreadStopping )
     {
-        pFrame = pThis->m_pFifoBuffer->m_threadsafebuffer.pop();
-
-        if(!pFrame)
+		
+        if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, UnderrunChA ) ) )
         {
-            //cout << "Couldn't get buffer from Live queue (playback)" << endl;
-            pThis->m_pSDK->wait_output_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
-            continue;
-        }
+			
+			pFrame = pThis->m_pFifoBuffer->PopFrame();
+			int odd = (int)(pFrame->m_FieldOdd);
+			if (!pFrame)
+			{
+				//std::cout << "Couldn't get buffer from Live queue (playback)" << std::endl;
+				pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+				continue;
+			}
+			
+			if ((UpdateType == UPD_FMT_FRAME) ||
+				((UpdateType == UPD_FMT_FIELD) && !odd))
+				nProcessHANC = 1;
+			else
+				nProcessHANC = 0;
+
+			
+			if (nProcessHANC)
+			{
+				rp188_vitc = pFrame->m_TimeCode.GetTimeCode(false);
+				rp188_ltc = pFrame->m_TimeCode.GetTimeCode(true);
+				ext_ltc = pFrame->m_TimeCode.GetTimeCode(true);
+				sd_vitc = pFrame->m_TimeCode.GetTimeCode(true);
+
+				if (pFrame->m_desc.autoGenerateTimecode)
+				{
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, false, rp188_vitc, false);
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, rp188_ltc, false);
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, ext_ltc, false);
+					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, sd_vitc, false);
+				}
+				hanc_stream_info.time_code = rp188_vitc.timecode_u64;			//RP188 VITC time code
+				hanc_stream_info.rp188_ltc_time_code = rp188_ltc.timecode_u64;	//RP188 LTC time code
+				hanc_stream_info.ltc_time_code = ext_ltc.timecode_u64;			//external LTC time code
+				hanc_stream_info.sd_vitc_time_code = sd_vitc.timecode_u64;		//this field is only valid for SD video signal 
+
+				if (!pFrame->m_desc.timeCodePresent)
+				{
+					hanc_stream_info.time_code = 0LL;			//RP188 VITC time code
+					hanc_stream_info.rp188_ltc_time_code = 0LL;	//RP188 LTC time code
+					hanc_stream_info.ltc_time_code = 0LL;			//external LTC time code
+					hanc_stream_info.sd_vitc_time_code = 0LL;		//this field is only valid for SD video signal 
+				}
+
+				encode_hanc_frame_ex(nCardType,
+					&hanc_stream_info,
+					pFrame->m_pAudioBuffer,
+					pFrame->m_desc.channels,
+					pFrame->m_desc.sampleRate,
+					nSampleType, //FIXME: get bit depth from frame
+					nEmbAudioFlag);
+
+				if (pThis->m_EnableVbiVanc)
+					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));
+				else
+					pThis->m_pSDK->system_buffer_write_async((unsigned char*)pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer(BufferId, BLUE_DATA_HANC));
+
+				pThis->m_pSDK->render_buffer_update(BlueBuffer_Image_HANC(BufferId));
+			}
+
+			if (pThis->m_EnableVbiVanc)
+			{
+				pThis->m_pSDK->system_buffer_write_async((PBYTE)pVbiVancBuffer, VBIGolden, NULL, nProcessHANC ? BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_VBI) : BlueImage_VBI_DMABuffer(BufferId, BLUE_DATA_VBI));
+				pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer, pFrame->m_nSize, NULL, nProcessHANC ? BlueImage_VBI_HANC_DMABuffer(BufferId, BLUE_DATA_IMAGE) : BlueImage_VBI_DMABuffer(BufferId, BLUE_DATA_IMAGE));
+				
+			/*	GetOverlappedResult(pThis->m_pSDK->m_hDevice, &OverlapChA, &BytesReturnedChA, TRUE);
+				ResetEvent(OverlapChA.hEvent);*/
+
+				pThis->m_pSDK->video_playback_present(UniqueId, nProcessHANC ? BlueBuffer_Image_VBI_HANC(BufferId) : BlueBuffer_Image_VBI(BufferId), 1, 0, odd);
+			}
+			else
+			{
+				pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer, pFrame->m_nSize, NULL, nProcessHANC ? BlueImage_HANC_DMABuffer(BufferId, BLUE_DATA_IMAGE) : BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE));
+				
+				/*GetOverlappedResult(pThis->m_pSDK->m_hDevice, &OverlapChA, &BytesReturnedChA, TRUE);
+				ResetEvent(OverlapChA.hEvent*);*/
 
 
-        if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
-        {
-            pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-                                                    pFrame->m_nSize,
-                                                    NULL, 
-                                                    BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
+				pThis->m_pSDK->video_playback_present(UniqueId, nProcessHANC ? BlueBuffer_Image_HANC(BufferId) : BlueBuffer_Image(BufferId), 1, 0, odd);
+			}
 
-            pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
-            nFramesPlayed++;
+			_EDMADataType dt = BLUE_DATA_FIELD1;
+			if (odd == 1)
+				dt = BLUE_DATA_FIELD2;
 
+		
+			
+			
+			//track UnderrunChA and UnderrunChB to see if frames were dropped
+			if (UnderrunChA != LastUnderrunChA)
+			{
+				std::cout << "Dropped a frame: ChA underruns: " << UnderrunChA << std::endl;
+				LastUnderrunChA = UnderrunChA;
+			}
+
+			nFramesPlayed++;
+
+            //if( bPlaybackStarted && Underrun != LastUnderrun )
+                //cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
             LastUnderrun = Underrun;
-            if(nFramesTobuffer > 0)
-            { 
-                nFramesTobuffer--;
-                if(nFramesTobuffer == 0)
-                {
-                    pThis->m_pSDK->video_playback_start(0, 0);
-                }
-            }
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+            
+            //pThis->m_pSDK->wait_output_video_synch( UPD_FMT_FIELD, CurrentFieldCount );
         }
-        else
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+		else {
+			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+			//std::cout << CurrentFieldCount << " waiting..." << std::endl;
+		}
+
+		if (nFramesTobuffer > 0)
+		{
+			nFramesTobuffer--;
+			if (nFramesTobuffer == 0)
+			{
+				pThis->m_pSDK->video_playback_start(0, 0);
+
+			}
+		}
     }
 
-            //if(bPlaybackStarted && Underrun != LastUnderrun)
-            //  cout << "Frame dropped (playback). Current underruns: " << Underrun << endl;
-            /*LastUnderrun = Underrun;
-            if(nFramesTobuffer > 0)
-            { 
-                nFramesTobuffer--;
-                if(nFramesTobuffer == 0)
-                {
-                    pThis->m_pSDK->video_playback_start(0, 0);
-                }
-            }
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
-        }
-        else
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
-    }
+	//turn on black generator (unless we want to keep displaying the last rendered frame)
+	varVal.ulVal = ENUM_BLACKGENERATOR_ON;
+	pThis->m_pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
+	varVal.ulVal = 0;
+	pThis->m_pSDK->SetCardProperty(FORCE_SD_VBI_OUTPUT_BUFFER_TO_V210, varVal);	//when changing this property the video output mode and video output engine need to be set again manually!
 
     bool blackout = false;
-    pFrame = std::make_shared<CFrame>(0,pThis->GoldenSize,pThis->BytesPerLine);
-    while(!blackout)
+    pFrame = std::make_shared<CFrame>( 0, pThis->GoldenSize, pThis->BytesPerLine );
+    while( !blackout )
     {
-        if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
+        if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, Underrun ) ) )
         {
-            pThis->m_pSDK->system_buffer_write_async(pFrame->m_pBuffer,
-                                                                    pFrame->m_nSize,
-                                                                    NULL, 
-                                                                    BlueImage_DMABuffer(BufferId, BLUE_DATA_IMAGE),0);
-        
-            cout << "Playback Black..." << endl;
-            pThis->m_pSDK->video_playback_present(UniqueId, BlueBuffer_Image(BufferId), 1, 0, 0);
+            pThis->m_pSDK->system_buffer_write_async( pFrame->m_pBuffer,
+                                                      pFrame->m_nSize,
+                                                      NULL,
+                                                      BlueImage_DMABuffer( BufferId, BLUE_DATA_IMAGE ), 0 );
+
+            //cout << "Playback Black..." << endl;
+            pThis->m_pSDK->video_playback_present( UniqueId, BlueBuffer_Image( BufferId ), 1, 0, 0 );
             blackout = true;
         }
         else
         {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount );
         }
     }
-    cout << "Playback Thread Stopped..." << endl;*/
-    
-    pThis->m_pSDK->video_playback_stop(100, 1);
+    //cout << "Playback Thread Stopped..." << endl;
 
-    _endthreadex(0);
+    pThis->m_pSDK->video_playback_stop( 100, 1 );
+    _endthreadex( 0 );
     return 0;
 }
 

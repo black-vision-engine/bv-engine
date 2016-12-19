@@ -7,17 +7,12 @@
 #include "Engine/Audio/OALRenderer/PdrAudioBuffersQueue.h"
 #include "Engine/Audio/OALRenderer/PdrSource.h"
 #include "Engine/Audio/AudioEntity.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "UseLoggerLibBlackVision.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv { namespace audio {
@@ -26,6 +21,8 @@ namespace bv { namespace audio {
 // *********************************
 //
 	    AudioRenderer::AudioRenderer	()
+    : m_format( AudioUtils::DEFAULT_SAMPLE_FORMAT )
+    , m_frequency( AudioUtils::DEFAULT_SAMPLE_RATE )
 {
     Initialize();
 }
@@ -54,34 +51,51 @@ void	AudioRenderer::Terminate        ()
 
 // *********************************
 //
-void    AudioRenderer::Play             ( AudioEntity * audio )
+void    AudioRenderer::Proccess         ( AudioEntity * audio )
 {
     //FIXME: no mechanism to free pdrsource & pdraudiobuffersqueue
 
     auto source = GetPdrSource( audio ); 
     auto queue = GetPdrAudioBuffersQueue( source, audio );
 
-    if( m_audioEntityUpdateIDMap[ audio ] < audio->GetUpdateID() )
+    if( queue && source )
     {
-        queue->Reinitialize( audio->GetFrequency(), audio->GetFormat() );
-        m_audioEntityUpdateIDMap[ audio ] = audio->GetUpdateID();
-    }
+        if( m_audioEntityUpdateIDMap[ audio ] < audio->GetUpdateID() )
+        {
+            queue->Reinitialize( audio->GetFrequency(), audio->GetFormat() );
+            m_audioEntityUpdateIDMap[ audio ] = audio->GetUpdateID();
+        }
 
-    if( !audio->IsEmpty() )
-    {
-        queue->PushData( audio->PopData() );
-    }
+        if( audio->IsEOF() && ( queue->GetBufferedDataSize() == 0 ) && queue->BufferingDone() )
+        {
+            audio->Stop();
+        }
 
-    if( queue->BufferData() )
-    {
-        source->Play();
+        if( !audio->IsEmpty() )
+        {
+            queue->PushData( audio->PopData() );
+        }
+
+        if( audio->IsPlaying() && queue->BufferData() )
+        {
+            source->Play();
+        }
     }
+}
+
+// *********************************
+//
+void    AudioRenderer::Play             ( AudioEntity * audio )
+{
+    audio->Play();
 }
 
 // *********************************
 //
 void    AudioRenderer::Pause            ( AudioEntity * audio )
 {
+    audio->Stop();
+
     auto source = GetPdrSource( audio, false ); 
     if( source )
     {
@@ -93,6 +107,7 @@ void    AudioRenderer::Pause            ( AudioEntity * audio )
 //
 void    AudioRenderer::Stop             ( AudioEntity * audio )
 {
+    audio->Stop();
     audio->Clear();
 
     auto source = GetPdrSource( audio, false );
@@ -105,6 +120,13 @@ void    AudioRenderer::Stop             ( AudioEntity * audio )
             queue->Reinitialize( audio->GetFrequency(), audio->GetFormat() );
         }
     }
+}
+
+// *********************************
+//
+void    AudioRenderer::EndOfFile        ( AudioEntity * audio )
+{
+    audio->PushData( nullptr );
 }
 
 // *********************************
@@ -138,7 +160,13 @@ PdrAudioBuffersQueue *  AudioRenderer::GetPdrAudioBuffersQueue      ( PdrSource 
 
     if( !m_bufferMap.count( source ) )
     {
-        if( autoCreate )
+        if( ( m_format != audio->GetFormat() ) || ( m_frequency != audio->GetFrequency() ) )
+        {
+            /** @brief all audio channels must be converted to the same format to work with videocards */
+            LOG_MESSAGE( SeverityLevel::error ) << "Audio was not converted to default format required by videocards";
+            assert( false );
+        }
+        else if( autoCreate )
         {
             queue = new PdrAudioBuffersQueue( source->GetHandle(), audio->GetFrequency(), audio->GetFormat() );
             m_bufferMap[ source ] = queue;
@@ -167,6 +195,55 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
 
 // *********************************
 //
+AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data )
+{
+    // check whether active audio buffer exists
+    if( IsAnySourcePlaying() )
+    {
+        // check whether any data needs uploading
+        if( IsAnyBufferReady( data->Size() ) )
+        {
+            data->Clear();
+        }
+
+        for( auto & obj : m_sources )
+        {        
+            auto queue = m_bufferMap.at( obj.second );
+            queue->MixBufferedData( data, obj.first->IsEOF() );
+        }
+    }
+    else
+    {
+        data->Clear();
+    }
+
+    return audio::AudioBuffer::Create( data, m_frequency, m_format, false );
+}
+
+// *********************************
+//
+UInt32                  AudioRenderer::GetChannels                  () const
+{
+    return AudioUtils::ChannelsCount( m_format );
+}
+
+// *********************************
+//
+Int32                   AudioRenderer::GetFrequency                 () const
+{
+    return m_frequency;
+}
+
+
+// *********************************
+//
+UInt32                  AudioRenderer::GetChannelDepth                 () const
+{
+    return AudioUtils::ChannelDepth( m_format );
+}
+
+// *********************************
+//
 template< typename MapType >
 void                    AudioRenderer::DeleteSinglePDR              ( MapType & resMap, typename MapType::key_type & key )
 {
@@ -180,6 +257,45 @@ void                    AudioRenderer::DeleteSinglePDR              ( MapType & 
 
         resMap.erase( it );
     }
+}
+
+// *********************************
+//
+bool                    AudioRenderer::IsAnySourcePlaying           () const
+{
+    for( auto & obj : m_sources )
+    {
+        if( obj.first->IsPlaying() )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// *********************************
+//
+bool                    AudioRenderer::IsAnyBufferReady             ( SizeType requestedBufferSize ) const
+{
+    for( auto & obj : m_sources )
+    {        
+        auto queue = m_bufferMap.at( obj.second );
+        if( !obj.first->IsEOF() )
+        {
+            if( requestedBufferSize <= queue->GetBufferedDataSize() )
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if( queue->GetBufferedDataSize() > 0 )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } // audio

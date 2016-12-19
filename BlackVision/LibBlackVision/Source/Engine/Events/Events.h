@@ -1383,8 +1383,10 @@ public:
     {
         RegisterAsset,
         UnregisterAsset,
+        PlayAudio,
         PauseAudio,
         StopAudio,
+        EOFAudio,
         ReleaseAudioResource,
         Fail            ///< Wrong command
     } Command;
