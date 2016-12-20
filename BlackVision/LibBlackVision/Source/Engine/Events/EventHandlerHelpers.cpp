@@ -180,7 +180,9 @@ ParameterPtr    GetNodeLogicParameter       ( BVProjectEditor * editor, const st
     auto logic = node->GetLogic();
     if( logic )
     {
-        logic->GetParameter( paramName );
+        auto param = logic->GetParameter( paramName );
+		if (param != nullptr)
+			return param;
     }
 
     LOG_MESSAGE( SeverityLevel::warning ) << "Node logic parameter not found";
