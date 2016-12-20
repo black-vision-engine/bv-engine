@@ -132,7 +132,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     // FIXME: should be set externally
-    bool enableUndo = false;
+    bool enableUndo = true;
 
     if( command == NodeStructureEvent::Command::AddNode )
     {
@@ -261,7 +261,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 
 
     // FIXME: should be set externally
-    bool enableUndo = false;
+    bool enableUndo = true;
 
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
