@@ -427,7 +427,13 @@ void        PluginEventsHandlers::ParamDescHandler    ( bv::IEventPtr eventPtr )
     ParamDescriptorEvent::Command command  = paramDescEvent->ParamCommand;
 
 
-    assert( paramDescEvent->Request != nullptr || command == ParamDescriptorEvent::RemoveParamDescriptor );
+    if( command == ParamDescriptorEvent::Command::Fail )
+    {
+        SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Unknown command" );
+        return;
+    }
+
+    assert( command == ParamDescriptorEvent::RemoveParamDescriptor || paramDescEvent->Request != nullptr );
     if( paramDescEvent->Request == nullptr && command != ParamDescriptorEvent::RemoveParamDescriptor )
     {
         SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Not valid request." );
@@ -519,8 +525,6 @@ void        PluginEventsHandlers::ParamDescHandler    ( bv::IEventPtr eventPtr )
         else
             SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Descriptor not found" );
     }
-    else
-        SendSimpleErrorResponse( command, paramDescEvent->EventID, paramDescEvent->SocketID, "Unknown command" );
 }
 
 } //bv
