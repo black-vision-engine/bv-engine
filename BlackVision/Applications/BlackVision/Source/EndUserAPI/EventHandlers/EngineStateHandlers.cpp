@@ -271,9 +271,15 @@ void    EngineStateHandlers::UndoRedoEvent            ( IEventPtr evt )
     else if( command == UndoRedoEvent::Command::SetOperationsBufferSize )
     {
         auto modelScene = editor->GetModelScene( scene );
-        modelScene->GetHistory().SetHistoryLength( buffSize );
-
-        SendSimpleResponse( command, undoEvent->EventID, undoEvent->SocketID, true );
+        if( modelScene )
+        {
+            modelScene->GetHistory().SetHistoryLength( buffSize );
+            SendSimpleResponse( command, undoEvent->EventID, undoEvent->SocketID, true );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, undoEvent->EventID, undoEvent->SocketID, "Scene not found" );
+        }
     }
     else
     {
