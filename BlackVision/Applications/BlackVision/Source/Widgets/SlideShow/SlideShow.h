@@ -1,63 +1,99 @@
 #pragma once
 
-#include "Widgets/NodeLogicBase.h"
-#include "Engine/Models/SceneModel.h"
-
 #include "CoreDEF.h"
+#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Engine/Types/Values/TypedValues.h"
 
 
-namespace bv { namespace nodelogic {
+namespace bv
+{
 
+namespace model
+{
+
+class BasicNode;
+DEFINE_PTR_TYPE( BasicNode );
+
+} // model
+
+
+
+
+namespace nodelogic
+{
 
 class SlideShow;
 
-DEFINE_PTR_TYPE( SlideShow )
-DEFINE_CONST_PTR_TYPE( SlideShow )
+DEFINE_PTR_TYPE( SlideShow );
+DEFINE_CONST_PTR_TYPE( SlideShow );
 
 
-class SlideShow:  public model::NodeLogicBase, public std::enable_shared_from_this< SlideShow >
+
+class SlideShow : public model::NodeLogicBase, public std::enable_shared_from_this< SlideShow >
 {
+public:
+
+    enum FadeType
+    {
+        NoFade,
+        FadeAlpha
+    };
+
+    typedef std::shared_ptr< bv::model::ParamEnum< FadeType > > FadeTypeParamPtr;
+
 private:
+    static const std::string            m_type;
 
-    static const std::string        m_type;
-
-    static const Float32            m_defaultFadeTime;
-
-    struct ACTION 
+    struct ACTION
     {
         static const std::string    START_SLIDE_SHOW;
         static const std::string    STOP_SLIDE_SHOW;
         static const std::string    PAUSE_SLIDE_SHOW;
     };
 
+    struct PARAMETERS
+    {
+        static const std::string    FADE_TYPE;
+        static const std::string    FADE_TIME;
+        static const std::string    PRESENCE_TIME;
+    };
+
 private:
+    bv::model::BasicNodeWeakPtr			m_parentNode;
 
-	model::BasicNodePtr				m_parentNode;
-    model::ITimeEvaluatorPtr        m_timeEval;
+    FadeTypeParamPtr                    m_fadeType;
+    ValueFloatPtr                       m_fadeTime;
+    ValueFloatPtr                       m_presenceTime;
 
-    Float32                         m_fadeInTime;       //in miliseconds
-    Float32                         m_fadeOutTime;      //in miliseconds
+    UInt64                              m_startTime;
+    UInt32                              m_nodeIdx;
+
+    bool                                m_started;
 
 public:
+    explicit                            SlideShow       ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
+                                        ~SlideShow		();
 
-	explicit                        SlideShow           ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval );
-	                                ~SlideShow          ();
+    virtual void                        Initialize		()				override {};
+    virtual void                        Update			( TimeType t )	override;
+    virtual void                        Deinitialize	()				override {};
 
-	static SlideShowPtr             Create              ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval );
 
-    virtual void                    Serialize           ( ISerializer & ser ) const override;
-    static SlideShowPtr             Create              ( const IDeserializer & deser, model::BasicNodePtr parent );
+    virtual const std::string &         GetType         () const override;
+    static const std::string &          Type            ();
 
-	virtual void	                Initialize		    ()				override {}
-	virtual void	                Update			    ( TimeType t )	override;
-	virtual void	                Deinitialize	    ()				override {}
+    virtual void                        Serialize       ( ISerializer & ser ) const override;
+    static SlideShowPtr			        Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode );
 
-    virtual const std::string &     GetType             () const override;
-    static const std::string &      Type                ();
+    virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 
-    virtual bool                    HandleEvent         ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
+private:
+    void            HideAllNodes            ();
+    void            ShowAllNodes            ( bool value = true );
+    void            ShowNode                ( int idx );
 };
 
-} //nodelogic
-} //bv
+
+}   // nodelogic
+}	// bv

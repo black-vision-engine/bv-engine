@@ -11,6 +11,7 @@
 #include "AnalogWatch/AnalogWatch.h"
 #include "Arrange/Arrange.h"
 #include "Follow/Follow.h"
+#include "SlideShow/SlideShow.h"
 
 
 namespace bv {
@@ -59,6 +60,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == nodelogic::Follow::Type() )
     {
         return nodelogic::Follow::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::SlideShow::Type() )
+    {
+        return nodelogic::SlideShow::Create( deser, logicParent );
     }
 
     return nullptr;

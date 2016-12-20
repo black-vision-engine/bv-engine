@@ -58,6 +58,9 @@
     <Filter Include="Widgets\Follow">
       <UniqueIdentifier>{80de300a-c9d5-4e35-9839-905f4667b4cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\SlideShow">
+      <UniqueIdentifier>{43392ea4-cb5a-4770-9f54-4d8e733c6365}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -200,6 +203,9 @@
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Follow\Follow.cpp">
       <Filter>Widgets\Follow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\SlideShow\SlideShow.cpp">
+      <Filter>Widgets\SlideShow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +361,9 @@
     <ClInclude Include="..\..\..\Source\stdafxBVApp.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Follow\Follow.h">
       <Filter>Widgets\Follow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\SlideShow\SlideShow.h">
+      <Filter>Widgets\SlideShow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

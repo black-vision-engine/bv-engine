@@ -1,182 +1,196 @@
-#include "stdafx.h"
-
+#include "stdafxBVApp.h"
 #include "SlideShow.h"
 
-#include "Engine/Events/EventHandlerHelpers.h"
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
+#include "Serialization/BV/BVDeserializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
+
+#include "Engine/Models/BasicNode.h"
+
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+#include "Engine/Events/EventManager.h"
 #include "Widgets/NodeLogicHelper.h"
 
-#include "Serialization/BV/BVDeserializeContext.h"
-#include "Serialization/SerializationHelper.h"
-#include "Tools/StringHeplers.h"
-
-#include "Engine/Models/BVProjectEditor.h"
+#include "System/Time.h"
 
 
-namespace bv { namespace nodelogic {
 
-
-const std::string           SlideShow::m_type                       = "slide_show";
-const Float32               SlideShow::m_defaultFadeTime            = 1000;
-
-// *******************************
-
-const std::string           SlideShow::ACTION::START_SLIDE_SHOW     = "StartSlideShow";
-const std::string           SlideShow::ACTION::STOP_SLIDE_SHOW      = "StopSlideShow";
-const std::string           SlideShow::ACTION::PAUSE_SLIDE_SHOW     = "PauseSlideShow";
-
-
-// *******************************
-//
-SlideShowPtr	            SlideShow::Create				( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval )
+namespace bv {
+namespace nodelogic
 {
-	return std::make_shared< SlideShow >( parent, timeEval );
-}
 
-// *******************************
-//
-SlideShow::SlideShow        ( model::BasicNodePtr parent, model::ITimeEvaluatorPtr timeEval )
-    : m_parentNode( parent )
-    , m_timeEval( timeEval )
-    , m_fadeInTime( m_defaultFadeTime )
-    , m_fadeOutTime( m_defaultFadeTime )
-{
-}
+const std::string       SlideShow::m_type = "SlideShow";
 
-// *******************************
-//
-SlideShow::~SlideShow     ()
-{
-}
+const std::string           SlideShow::ACTION::START_SLIDE_SHOW = "Start";
+const std::string           SlideShow::ACTION::STOP_SLIDE_SHOW  = "Stop";
+const std::string           SlideShow::ACTION::PAUSE_SLIDE_SHOW = "Pause";
 
-// *******************************
-//
-void		        SlideShow::Update			( TimeType )
-{
-}
+const std::string           SlideShow::PARAMETERS::FADE_TIME        = "FadeTime";
+const std::string           SlideShow::PARAMETERS::FADE_TYPE        = "FadeType";
+const std::string           SlideShow::PARAMETERS::PRESENCE_TIME    = "PresenceTime";
+
 
 // ***********************
 //
-void                SlideShow::Serialize       ( ISerializer & ser ) const
-{
-    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
-    assert( context != nullptr );
-
-    ser.EnterChild( "logic" );
-
-    ser.SetAttribute( "type", m_type );
-
-    if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
-    {
-        ser.SetAttribute( "fadeInTime", SerializationHelper::T2String( m_fadeInTime ) );
-        ser.SetAttribute( "fadeOutTime", SerializationHelper::T2String( m_fadeOutTime ) );
-
-        auto timeline = model::TimelineManager::GetInstance()->GetTimelinePath( m_timeEval );
-        ser.SetAttribute( "timelinePath", timeline );
-    }
-
-    ser.ExitChild();
-}
-
-// ***********************
-//
-SlideShowPtr            SlideShow::Create       ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
-{
-    auto timelinePath = deser.GetAttribute( "timelinePath" );
-
-    if( !timelinePath.empty() )
-    {
-        auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
-        if( deserContext )
-        {
-            model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
-            if( !sceneTimeline )
-            {
-                sceneTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
-            }
-            auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
-        
-            auto logic = SlideShow::Create( parent, timeEval );
-            
-            logic->m_fadeInTime = SerializationHelper::String2T< Float32 >( deser.GetAttribute( "fadeInTime" ), m_defaultFadeTime );
-            logic->m_fadeOutTime = SerializationHelper::String2T< Float32 >( deser.GetAttribute( "fadeOutTime" ), m_defaultFadeTime );
-
-            return logic;
-        }
-    }
-    return nullptr;
-}
-
-// ***********************
-//
-bool                    SlideShow::HandleEvent      ( IDeserializer & /*eventSer*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
-{
-    //std::string action = eventSer.GetAttribute( "Action" );
-
-    //auto context = static_cast< BVDeserializeContext * >( eventSer.GetDeserializeContext() );
-    //auto scene = editor->GetModelScene( context->GetSceneName() );
-
-    //if( action == ACTION::UPDATE_PIECHART )
-    //{
-    //    UpdateChart();
-    //    return true;
-    //}
-    //else if( action == ACTION::UPDATE_PIESLICE )
-    //{
-    //    auto sliceDescIdx = SerializationHelper::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
-    //    if( RemoveSlice( scene, sliceDescIdx, editor ) )
-    //    {
-    //        auto sliceDesc = SerializationHelper::DeserializeObject< PieSliceDesc >( eventSer, "pieSlice" );
-    //        if( sliceDesc )
-    //        {
-    //            AddSlice( scene, sliceDesc, sliceDescIdx, editor );
-    //            UpdateChart();
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
-    //else if( action == ACTION::ADD_PIESLICE )
-    //{
-    //    auto sliceDesc = SerializationHelper::DeserializeObject< PieSliceDesc >( eventSer, "pieSlice" );
-    //    if( sliceDesc )
-    //    {
-    //        AddSlice( scene, sliceDesc, ( UInt32 )m_slicesDesc.size(), editor );
-    //        UpdateChart();
-    //        return true;
-    //    }
-    //    return false;
-    //}
-    //else if( action == ACTION::REMOVE_PIESLICE )
-    //{
-    //    auto sliceDescIdx = SerializationHelper::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
-    //    if( RemoveSlice( scene, sliceDescIdx, editor ) )
-    //    {
-    //        UpdateChart();
-    //        return true;
-    //    }
-    //    return false;
-    //}
-    //else 
-    //{
-    //    response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
-    //}
-
-    return false;
-}
-
-// ***********************
-//
-const std::string &         SlideShow::Type                 ()
+const std::string &     SlideShow::Type            ()
 {
     return m_type;
 }
 
 // ***********************
 //
-const std::string &         SlideShow::GetType              () const
+const std::string &     SlideShow::GetType             () const
 {
     return Type();
 }
 
-} //nodelogic
-} //bv
+// ***********************
+//
+SlideShow::SlideShow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
+    :   m_parentNode( parent )
+    ,   m_nodeIdx( 0 )
+    ,   m_started( false )
+{
+    model::ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+    h.AddEnumParam( PARAMETERS::FADE_TYPE, FadeType::NoFade, false, false );
+    h.AddSimpleParam( PARAMETERS::FADE_TIME, 0.3f, true, false );
+    h.AddSimpleParam( PARAMETERS::PRESENCE_TIME, 3.0f, true, false );
+
+    m_paramValModel = std::static_pointer_cast<model::DefaultParamValModel>( h.GetModel()->GetPluginModel() );
+
+    m_fadeType = QueryTypedEnum< FadeType >( PARAMETERS::FADE_TYPE );
+    m_fadeTime = QueryTypedValue< ValueFloatPtr >( m_paramValModel->GetValue( PARAMETERS::FADE_TIME ) );
+    m_presenceTime = QueryTypedValue< ValueFloatPtr >( m_paramValModel->GetValue( PARAMETERS::PRESENCE_TIME ) );
+}
+
+// ***********************
+//
+SlideShow::~SlideShow()
+{}
+
+
+// ***********************
+//
+void                        SlideShow::Update			( TimeType t )
+{
+    NodeLogicBase::Update( t );
+
+    if( m_started )
+    {
+        auto delta = ( Time::Now() - m_startTime );
+        if( delta > m_presenceTime->GetValue() )
+        {
+            HideAllNodes();
+
+            m_nodeIdx++;
+            ShowNode( m_nodeIdx );
+        }
+    }
+}
+
+// ========================================================================= //
+// Serialization and deserialization
+// ========================================================================= //
+
+// ***********************
+//
+void                        SlideShow::Serialize       ( ISerializer & ser ) const
+{
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    assert( context != nullptr );
+
+    ser.EnterChild( "logic" );
+    ser.SetAttribute( "type", m_type );
+
+    if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
+    {
+        NodeLogicBase::Serialize( ser );
+    }
+
+    ser.ExitChild();    // logic
+}
+
+// ***********************
+//
+SlideShowPtr              SlideShow::Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode )
+{
+    auto timeline = SerializationHelper::GetDefaultTimeline( deser );
+    auto newLogic = std::make_shared< SlideShow >( parentNode, timeline );
+
+    newLogic->Deserialize( deser );
+
+    return newLogic;
+}
+
+// ========================================================================= //
+// Commands handling
+// ========================================================================= //
+
+// ***********************
+//
+bool                        SlideShow::HandleEvent     ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
+{
+    std::string action = eventDeser.GetAttribute( "Action" );
+
+    if( action == SlideShow::ACTION::START_SLIDE_SHOW )
+    {
+        HideAllNodes();
+
+        m_startTime = Time::Now();
+
+        m_nodeIdx = 0;
+        ShowNode( m_nodeIdx );
+
+        m_started = true;
+        return true;
+    }
+    else if( action == SlideShow::ACTION::PAUSE_SLIDE_SHOW )
+    {
+
+    }
+    else if( action == SlideShow::ACTION::STOP_SLIDE_SHOW )
+    {
+
+        m_started = false;
+        return true;
+    }
+
+    return false;
+}
+
+
+// ***********************
+//
+void        SlideShow::HideAllNodes ()
+{
+    ShowAllNodes( false );
+}
+
+// ***********************
+//
+void        SlideShow::ShowAllNodes ( bool value )
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        for( unsigned int i = 0; i < parentNode->GetNumChildren(); ++i )
+        {
+            parentNode->GetChild( i )->SetVisible( value );
+        }
+    }
+}
+
+// ***********************
+//
+void        SlideShow::ShowNode     ( int idx )
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        parentNode->GetChild( idx )->SetVisible( true );
+    }
+}
+
+}   // nodelogic
+}	// bv
