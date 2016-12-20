@@ -80,12 +80,15 @@ void                        SlideShow::Update			( TimeType t )
 
     if( m_started )
     {
-        auto delta = ( Time::Now() - m_startTime );
+        auto delta = ( Time::Now() - m_startTime ) * 0.001;
         if( delta > m_presenceTime->GetValue() )
         {
             HideAllNodes();
+            m_startTime = Time::Now();
 
-            m_nodeIdx++;
+            auto parentNode = m_parentNode.lock();
+
+            m_nodeIdx = ++m_nodeIdx % parentNode->GetNumChildren();
             ShowNode( m_nodeIdx );
         }
     }
