@@ -1225,6 +1225,7 @@ void    QueryHandlers::GetParamDescriptor       ( JsonSerializeObject & ser, IDe
     {
         PrepareResponseTemplate( ser, InfoEvent::Command::GetParamDescriptor, eventID, true );
         descriptor->Serialize( ser );
+        paramAddress.Serialize( ser );
     }
     else
     {

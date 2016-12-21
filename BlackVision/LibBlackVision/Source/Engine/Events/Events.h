@@ -321,9 +321,7 @@ public:
     static std::string&             Name                ();
 };
 
-template<> ParamDescriptorEvent::Command        SerializationHelper::String2T      ( const std::string& s, const ParamDescriptorEvent::Command& defaultVal );
-template<> std::string                          SerializationHelper::T2String      ( const ParamDescriptorEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( ParamDescriptorEvent::Command )
 DEFINE_PTR_TYPE( ParamDescriptorEvent )
 
 // ************************************* AssetEvent *************************************
