@@ -14,6 +14,7 @@ public:
 };
 
 DEFINE_CONST_PTR_TYPE( IReplicationModifier )
+DEFINE_PTR_TYPE( IReplicationModifier )
 
 } // nodelogic
 } // bv

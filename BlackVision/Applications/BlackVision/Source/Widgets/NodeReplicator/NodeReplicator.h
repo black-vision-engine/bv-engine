@@ -18,13 +18,23 @@ private:
 
     static const std::string        m_type;
 
+private:
+
+    explicit                        NodeReplicator  ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierPtr & modifier = nullptr );
+
+    model::BasicNodeWeakPtr         m_node;
+    IReplicationModifierPtr         m_repModifier;
+    SizeType                        m_repNum;
+    bool                            m_initialized;
+
+
 public:
 
     virtual void					Initialize		()				override;
-	virtual void					Update			( TimeType t )	override;
-	virtual void					Deinitialize	()				override;
+    virtual void					Update			( TimeType t )	override;
+    virtual void					Deinitialize	()				override;
 
-    static NodeReplicatorPtr        Create          ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
+    static NodeReplicatorPtr        Create          ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierPtr & modifier );
 
     virtual const std::string &     GetType         () const override;
     static const std::string &      Type            ();
@@ -37,15 +47,10 @@ public:
 
     virtual bool                    HandleEvent     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor ) override;
 
+
 private:
 
-    explicit                        NodeReplicator  ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
-
-    model::BasicNodeWeakPtr         m_node;
-    IReplicationModifierConstPtr    m_repModifier;
-    SizeType                        m_repNum;
-    bool                            m_initialized;
-
+    bool                            AddParamShift   ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 };
 
 } // nodelogic

@@ -51,9 +51,26 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
 ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( const IDeserializer& deser )
 {
     auto shiftModifier = ShiftReplicationModifier::Create();
+    AddParamShift( deser, shiftModifier );
 
+    return shiftModifier;
+}
+
+// *******************************
+//
+void                            ShiftReplicationModifier::AddParamShift ( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift )
+{
+    auto p = std::make_pair( pluginName, paramName );
+    auto mapKey = std::make_pair( p, shift.startTime );     // Parameter key time is part of map key. We can move multiple keys for one parameter.
+    m_paramsShifts[ mapKey ] = shift;
+}
+
+// ***********************
+//
+bool                            ShiftReplicationModifier::AddParamShift ( const IDeserializer & deser, ShiftReplicationModifierPtr & shiftModifier )
+{
     if( !deser.EnterChild( "paramShifts" ) )
-        return nullptr;
+        return false;
 
     if( deser.EnterChild( "paramShift" ) )
     {
@@ -64,14 +81,14 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
             std::string paramName = deser.GetAttribute( "paramName" );
 
             deser.EnterChild( "paramDelta" );
-                shift.deltaTime = SerializationHelper::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
-                shift.startTime = SerializationHelper::String2T( deser.GetAttribute( "startTime" ), 0.0f );
+            shift.deltaTime = SerializationHelper::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
+            shift.startTime = SerializationHelper::String2T( deser.GetAttribute( "startTime" ), 0.0f );
 
-                deser.EnterChild( "delta" );
+            deser.EnterChild( "delta" );
 
-                    shift.delta = SerializationHelper::CreateValue( deser, "delta" );
+            shift.delta = SerializationHelper::CreateValue( deser, "delta" );
 
-                deser.ExitChild();  // value 
+            deser.ExitChild();  // value 
 
             deser.ExitChild();  // paramDelta
 
@@ -79,20 +96,11 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
 
         } while( deser.NextChild() );
         deser.ExitChild();  // paramShift
+
+        deser.ExitChild();  // paramShifts
+        return true;
     }
-
-    deser.ExitChild();  // paramShifts
-
-    return shiftModifier;
-}
-
-// *******************************
-//
-void                            ShiftReplicationModifier::AddParamShift( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift )
-{
-    auto p = std::make_pair( pluginName, paramName );
-    auto mapKey = std::make_pair( p, shift.startTime );     // Parameter key time is part of map key. We can move multiple keys for one parameter.
-    m_paramsShifts[ mapKey ] = shift;
+    return false;
 }
 
 

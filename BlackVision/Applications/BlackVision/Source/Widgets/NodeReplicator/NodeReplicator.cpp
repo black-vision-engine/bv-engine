@@ -34,7 +34,7 @@ const std::string & NodeReplicator::GetType             () const
 
 // *******************************
 //
-NodeReplicator::NodeReplicator( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicator::NodeReplicator( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierPtr & modifier )
     : m_node( node )
     , m_repModifier( modifier )
     , m_repNum( repNum )
@@ -44,7 +44,7 @@ NodeReplicator::NodeReplicator( model::BasicNodeWeakPtr node, SizeType repNum, c
 
 // *******************************
 //
-NodeReplicatorPtr           NodeReplicator::Create( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicatorPtr           NodeReplicator::Create( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierPtr & modifier )
 {
     return NodeReplicatorPtr( new NodeReplicator( node, repNum, modifier ) );
 }
@@ -100,10 +100,10 @@ NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & des
 
     std::string modifierType = deser.GetAttribute( "type" );
         
-    IReplicationModifierConstPtr modifier;
+    IReplicationModifierPtr modifier;
     if( modifierType == "shiftReplicationModifier" )
     {
-        modifier = ShiftReplicationModifier::Create( deser );\
+        modifier = ShiftReplicationModifier::Create( deser );
     }
     else
     {
@@ -190,6 +190,10 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
             m_repNum = SerializationHelper::String2T< int >( eventSer.GetAttribute( "numRepetitions" ), 0 );
             return true;
         }
+        else if( action == "AddParamShift" )
+        {
+            return AddParamShift( eventSer, response, editor );
+        }
         else
         {
             response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
@@ -197,6 +201,14 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
     }
 
     return false;
+}
+
+// ***********************
+//
+bool            NodeReplicator::AddParamShift     ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * /*editor */)
+{
+    auto modifier = std::static_pointer_cast< ShiftReplicationModifier >( m_repModifier );
+    return modifier->AddParamShift( eventSer, modifier );
 }
 
 } // nodelogic

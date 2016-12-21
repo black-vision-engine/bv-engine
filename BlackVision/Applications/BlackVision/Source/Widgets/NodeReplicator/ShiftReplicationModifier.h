@@ -27,11 +27,12 @@ public:
     virtual void                            Apply               ( const model::BasicNodeConstPtr & prev, const model::BasicNodePtr & next, BVProjectEditor * editor, int repCounter ) const override;
 
     void                                    AddParamShift       ( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift );
+    static bool                             AddParamShift       ( const IDeserializer & deser, ShiftReplicationModifierPtr & modifier );
 
     static ShiftReplicationModifierPtr      Create  ();
 
-    virtual void                            Serialize           ( ISerializer& ser ) const override;
-    static ShiftReplicationModifierPtr      Create              ( const IDeserializer& deser );
+    virtual void                            Serialize           ( ISerializer & ser ) const override;
+    static ShiftReplicationModifierPtr      Create              ( const IDeserializer & deser );
 
 private:
 
