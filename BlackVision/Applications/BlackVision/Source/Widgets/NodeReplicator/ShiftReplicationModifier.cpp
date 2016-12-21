@@ -103,6 +103,25 @@ bool                            ShiftReplicationModifier::AddParamShift ( const 
     return false;
 }
 
+// ***********************
+//
+bool            ShiftReplicationModifier::RemoveParamShift  ( const std::string & pluginName, const std::string & paramName, TimeType startTime )
+{
+    auto p = std::make_pair( pluginName, paramName );
+    auto mapKey = std::make_pair( p, startTime );       // Parameter key time is part of map key. We can move multiple keys for one parameter.
+
+    m_paramsShifts.erase( mapKey );
+
+    return false;
+}
+
+// ***********************
+//
+void            ShiftReplicationModifier::ClearAllShifts    ()
+{
+    m_paramsShifts.clear();
+}
+
 
 // *******************************
 //

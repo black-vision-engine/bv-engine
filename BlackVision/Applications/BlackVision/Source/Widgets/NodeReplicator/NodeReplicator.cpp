@@ -194,6 +194,14 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
         {
             return AddParamShift( eventSer, response, editor );
         }
+        else if( action == "RemoveParamShift" )
+        {
+            return RemoveParamShift( eventSer, response, editor );
+        }
+        else if( action == "ClearShifts" )
+        {
+            return ClearShifts( eventSer, response, editor );
+        }
         else
         {
             response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only 'Replicate' command." );
@@ -205,10 +213,33 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
 
 // ***********************
 //
-bool            NodeReplicator::AddParamShift     ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * /*editor */)
+bool            NodeReplicator::AddParamShift       ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * /*editor */)
 {
     auto modifier = std::static_pointer_cast< ShiftReplicationModifier >( m_repModifier );
     return modifier->AddParamShift( eventSer, modifier );
+}
+
+// ***********************
+//
+bool            NodeReplicator::RemoveParamShift    ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
+{
+    auto modifier = std::static_pointer_cast< ShiftReplicationModifier >( m_repModifier );
+
+    std::string pluginName = eventSer.GetAttribute( "pluginName" );
+    std::string paramName = eventSer.GetAttribute( "paramName" );
+    TimeType startTime = SerializationHelper::String2T( eventSer.GetAttribute( "startTime" ), 0.0f );
+
+    return modifier->RemoveParamShift( pluginName, paramName, startTime );
+}
+
+// ***********************
+//
+bool            NodeReplicator::ClearShifts         ( IDeserializer & /*eventSer*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
+{
+    auto modifier = std::static_pointer_cast< ShiftReplicationModifier >( m_repModifier );
+    modifier->ClearAllShifts();
+
+    return true;
 }
 
 } // nodelogic

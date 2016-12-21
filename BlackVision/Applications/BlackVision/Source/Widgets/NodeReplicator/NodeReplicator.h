@@ -51,6 +51,8 @@ public:
 private:
 
     bool                            AddParamShift   ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
+    bool                            RemoveParamShift( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
+    bool                            ClearShifts     ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 };
 
 } // nodelogic
