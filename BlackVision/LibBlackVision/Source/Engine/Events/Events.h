@@ -1327,6 +1327,34 @@ DECLARE_ENUM_SERIALIZATION( UndoRedoEvent::Command )
 DEFINE_PTR_TYPE( UndoRedoEvent )
 
 
+// ************************************* GenericEvent *************************************
+class GenericEvent : public RemoteEvent
+{
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+
+    std::string                     CommandName;
+    IDeserializer *                 Request;
+
+public:
+
+    explicit                        GenericEvent        ()
+    {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+DEFINE_PTR_TYPE( GenericEvent )
+
 
 // ************************************* HightmapEvent *************************************
 class HightmapEvent : public RemoteEvent

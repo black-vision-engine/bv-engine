@@ -207,6 +207,9 @@
     <ClCompile Include="..\..\..\Source\Widgets\SlideShow\SlideShow.cpp">
       <Filter>Widgets\SlideShow</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\SlideShow\SlideShow.h">
       <Filter>Widgets\SlideShow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

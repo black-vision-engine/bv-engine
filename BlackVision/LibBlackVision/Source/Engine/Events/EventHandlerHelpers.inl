@@ -65,10 +65,18 @@ inline void             SendResponse                ( JsonSerializeObject & ser,
 // ***********************
 //
 template< typename CommandType >
-inline void             PrepareResponseTemplate     ( ISerializer & ser, CommandType commandType, Int32 eventID, bool success )
+inline void             PrepareResponseTemplate     ( ISerializer & ser, const CommandType & commandType, Int32 eventID, bool success )
+{
+    PrepareResponseTemplate( ser, SerializationHelper::T2String( commandType ), eventID, success );
+}
+
+// ***********************
+//
+template<>
+inline void             PrepareResponseTemplate< std::string >  ( ISerializer & ser, const std::string & commandName, Int32 eventID, bool success )
 {
     ser.SetAttribute( EVENT_ID_TYPE_STRING, SerializationHelper::T2String( eventID ) );
-    ser.SetAttribute( COMMAND_TYPE_STRING, SerializationHelper::T2String( commandType ) );
+    ser.SetAttribute( COMMAND_TYPE_STRING, commandName );
     if( success )
     {
         ser.SetAttribute( COMMAND_SUCCESS_STRING, TRUE_STRING );
@@ -83,6 +91,15 @@ inline void             PrepareResponseTemplate     ( ISerializer & ser, Command
 //
 template< typename CommandType >
 inline void             ErrorResponseTemplate       ( ISerializer & ser, CommandType commandType, int eventID, const char * errorString )
+{
+    PrepareResponseTemplate( ser, commandType, eventID, false );
+    ser.SetAttribute( ERROR_INFO_STRING, errorString );
+}
+
+// ***********************
+//
+template<>
+inline void             ErrorResponseTemplate< std::string >     ( ISerializer & ser, std::string commandType, int eventID, const char * errorString )
 {
     PrepareResponseTemplate( ser, commandType, eventID, false );
     ser.SetAttribute( ERROR_INFO_STRING, errorString );

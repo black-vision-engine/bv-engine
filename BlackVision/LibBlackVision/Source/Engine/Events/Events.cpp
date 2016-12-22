@@ -127,6 +127,9 @@ std::string UndoRedoEvent::m_sEventName             = "UndoRedoEvent";
 const EventType AssetTrackerInternalEvent::m_sEventType     = 0x3000002A;
 std::string AssetTrackerInternalEvent::m_sEventName         = "AssetTrackerInternalEvent";
 
+const EventType GenericEvent::m_sEventType          = 0x3000002B;
+std::string GenericEvent::m_sEventName              = "GenericEvent";
+
 
 // ************************************* Events Serialization *****************************************
 
@@ -2362,7 +2365,7 @@ EventType           GridLineEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 
-//******************* GridLineEvent *************
+//******************* UndoRedoEvent *************
 
 // *************************************
 //
@@ -2414,6 +2417,63 @@ const std::string&  UndoRedoEvent::GetName() const
 EventType           UndoRedoEvent::GetEventType() const
 {   return this->m_sEventType; }
 
+
+//******************* GenericEvent *************
+
+// *************************************
+//
+void                GenericEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( CommandName ) );
+}
+
+// *************************************
+//
+IEventPtr           GenericEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        GenericEventPtr newEvent = std::make_shared< GenericEvent >();
+        newEvent->CommandName = deser.GetAttribute( SerializationHelper::COMMAND_STRING );
+        newEvent->Request = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
+
+        return newEvent;
+    }
+    return nullptr;
+}
+// *************************************
+//
+IEventPtr           GenericEvent::Clone             () const
+{
+    return IEventPtr( new GenericEvent( *this ) );
+}
+
+// *************************************
+//
+EventType           GenericEvent::Type()
+{
+    return m_sEventType;
+}
+// *************************************
+//
+std::string&        GenericEvent::Name()
+{
+    return m_sEventName;
+}
+// *************************************
+//
+const std::string&  GenericEvent::GetName() const
+{
+    return Name();
+}
+// *************************************
+//
+EventType           GenericEvent::GetEventType() const
+{
+    return this->m_sEventType;
+}
 
 
 

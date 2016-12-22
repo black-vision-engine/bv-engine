@@ -12,6 +12,7 @@
 #include "TimelineHandlers.h"
 #include "NodeLogicHandlers.h"
 #include "VideoCardEventsHandlers.h"
+#include "GenericEventsHandlers.h"
 
 #include "Engine/Events/EventManager.h"
 
@@ -29,7 +30,8 @@ RemoteEventsHandlers::RemoteEventsHandlers()
 		m_assetEvents( nullptr ),
         m_timelineHandlers( nullptr ),
         m_nodeLogicHandlers( nullptr ),
-        m_videoCardHandlers( nullptr )
+        m_videoCardHandlers( nullptr ),
+        m_genericHandlers( nullptr )
 {}
 
 RemoteEventsHandlers::~RemoteEventsHandlers()
@@ -52,6 +54,8 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
         delete m_nodeLogicHandlers;
     if( m_videoCardHandlers )
         delete m_videoCardHandlers;
+    if( m_genericHandlers )
+        delete m_genericHandlers;
 }
 
 // ***********************
@@ -68,6 +72,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic * appLogic )
     m_timelineHandlers  = new TimelineHandlers( appLogic );
     m_nodeLogicHandlers = new NodeLogicHandlers( appLogic );
     m_videoCardHandlers = new VideoCardEventsHandlers( appLogic );
+    m_genericHandlers   = new GenericEventsHandlers( appLogic );
 
     
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::ParamHandler ), ParamKeyEvent::Type() );
@@ -101,7 +106,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic * appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::WidgetHandler ), NodeLogicEvent::Type() );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_videoCardHandlers, &VideoCardEventsHandlers::EventHandler ), VideoCardEvent::Type() );
-
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_genericHandlers, &GenericEventsHandlers::EventHandler ), GenericEvent::Type() );
 }
 
 // ***********************
