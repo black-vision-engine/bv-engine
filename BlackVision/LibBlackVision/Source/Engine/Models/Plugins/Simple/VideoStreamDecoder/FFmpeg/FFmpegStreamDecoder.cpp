@@ -11,9 +11,10 @@ namespace bv {
 //
 FFmpegStreamDecoder::FFmpegStreamDecoder                    ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
     : m_streamIdx( streamIdx )
-    , m_maxQueueSize( maxQueueSize )
     , m_offset( 0 )
     , m_prevPTS( 0 )
+	, m_bufferQueue( maxQueueSize )
+	, m_outQueue()
 {
     m_stream = formatCtx->streams[ streamIdx ];
 
@@ -104,17 +105,17 @@ void				FFmpegStreamDecoder::Reset				()
 
 // *******************************
 //
-bool			    FFmpegStreamDecoder::ProcessPacket      ( FFmpegDemuxer * demuxer )
+bool			    FFmpegStreamDecoder::ProcessPacket      ( FFmpegDemuxer * demuxer, bool block )
 {
-    if( m_bufferQueue.Size() < m_maxQueueSize )
+    //if( m_bufferQueue.Size() < m_maxQueueSize )
     {
-        auto packet = demuxer->GetPacket( m_streamIdx );
+        auto packet = demuxer->GetPacket( m_streamIdx, block );
         if( packet )
         {
             if( DecodePacket( packet->GetAVPacket() ) )
             {
                 auto data = ConvertFrame();
-                m_bufferQueue.Push( data );
+                m_bufferQueue.WaitAndPush( data );
 
                 return true;
             }
@@ -167,7 +168,7 @@ Int64               FFmpegStreamDecoder::ConvertTime        ( Float64 time )
 
 // *********************************
 //
-bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time )
+bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 {
     auto success = false;
 
@@ -175,13 +176,21 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time )
     {
         AVMediaData data;
 
-        // find the closest frame to given time
-        while( !IsDataQueueEmpty()
-                && ( m_prevPTS <= GetCurrentPTS() )
-                && ( GetCurrentPTS() <= time + GetOffset() ) )
-        {
-            success = m_bufferQueue.TryPop( data );
-        }
+		if( block )
+		{
+			success = m_bufferQueue.WaitAndPop( data );
+		}
+		else
+		{
+			// find the closest frame to given time
+			while( !IsDataQueueEmpty()
+				   && ( m_prevPTS <= GetCurrentPTS() )
+				   && ( GetCurrentPTS() <= time + GetOffset() ) )
+			{
+
+				success = m_bufferQueue.TryPop( data );
+			}
+		}
 
         if( success )
         {

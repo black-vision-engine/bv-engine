@@ -36,6 +36,13 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	m_running = false;
     m_stopped = false;
+
+	if( m_audioStreamDecoder )
+		m_audioStreamDecoder->Reset();
+
+	if( m_videoStreamDecoder )
+		m_videoStreamDecoder->Reset();
+	
 	m_cond.notify_one();
 }
 
@@ -71,20 +78,18 @@ void				FFmpegStreamsDecoderThread::Run			()
 {
     while( m_running )
     {
-        std::unique_lock< std::mutex > lock( m_mutex );
-        while( m_stopped )
+		std::unique_lock< std::mutex > lock( m_mutex );
+		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
+		//lock.unlock();
+
+        if( m_videoStreamDecoder && m_running )
         {
-            m_cond.wait( lock );
+            m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
         }
 
-        if( m_videoStreamDecoder )
+        if( m_audioStreamDecoder && m_running )
         {
-            m_videoStreamDecoder->ProcessPacket( m_demuxer );
-        }
-
-        if( m_audioStreamDecoder )
-        {
-            m_audioStreamDecoder->ProcessPacket( m_demuxer );
+            m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
         }
     }
 }

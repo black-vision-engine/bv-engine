@@ -80,8 +80,8 @@ public:
 
 protected:
 	
-    bool			            NextDataReady           ( AVMediaType type, UInt64 t );
-    virtual void			    NextDataReady           ( UInt64 t ) override;
+    bool			            NextDataReady           ( AVMediaType type, UInt64 t, bool block );
+    virtual bool			    NextDataReady           ( UInt64 t, bool block ) override;
 
 private:
 

@@ -109,16 +109,16 @@ void				AVDecoderThread::Run			    ()
 
     while( m_running )
     {
-		std::unique_lock< std::mutex > lock( m_mutex );
-
         auto time = m_timer.ElapsedMillis();
         
-        m_decoder->NextDataReady( time );
+        m_decoder->NextDataReady( time, true );
 
         if( time > duration ) 
         {
 			m_timer.Start();
         }
+
+		std::unique_lock< std::mutex > lock( m_mutex );
 
         if( m_decoder->IsFinished() )
 		{

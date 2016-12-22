@@ -3,7 +3,7 @@
 #include <map>
 
 #include "FFmpegDef.h"
-#include "DataTypes/QueueConcurrent.h"
+#include "DataTypes/QueueConcurrentLimited.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegPacket.h"
 
 
@@ -15,8 +15,8 @@ class FFmpegDemuxer
 
 private:
 
-    typedef std::shared_ptr< QueueConcurrent< FFmpegPacketPtr > >    PacketQueue;
-	typedef std::map< Int32, PacketQueue >			            PacketQueueMap;
+    typedef std::shared_ptr< QueueConcurrentLimited< FFmpegPacketPtr > >    PacketQueue;
+	typedef std::map< Int32, PacketQueue >									PacketQueueMap;
 
     static const UInt32         SAFE_SEEK_FRAMES;
     static const UInt32         MAX_QUEUE_SIZE;
@@ -43,7 +43,7 @@ public:
 	bool					    ProcessPacket			();
 
 	AVFormatContext *			GetFormatContext		() const;
-	FFmpegPacketPtr				GetPacket				( Int32 streamIdx );
+	FFmpegPacketPtr				GetPacket				( Int32 streamIdx, bool block );
 
 	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
 	void						DisableStream			( AVMediaType type, UInt32 idx = 0 );
@@ -53,8 +53,8 @@ public:
     */
 	void						Seek					( Int64 timestamp, Int32 streamIdx = -1 );
 
-	void						ClearPacketQueue		();
-	void						ClearPacketQueue		( Int32 streamIdx );
+	void						ClearPacketQueue		( bool removingDemuxer );
+	void						ClearPacketQueue		( Int32 streamIdx, bool removingDemuxer );
 
 	void						Reset					();
 	

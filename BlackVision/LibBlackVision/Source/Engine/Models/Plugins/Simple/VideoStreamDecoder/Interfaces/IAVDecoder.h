@@ -45,7 +45,7 @@ public:
 
 //protected:
 
-    virtual void					NextDataReady           ( UInt64 t ) = 0;
+    virtual bool					NextDataReady           ( UInt64 t, bool block ) = 0;
     
 	friend class AVDecoderThread;
 

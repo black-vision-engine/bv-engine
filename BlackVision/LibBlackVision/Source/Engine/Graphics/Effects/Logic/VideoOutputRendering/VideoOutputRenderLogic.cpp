@@ -69,7 +69,7 @@ void                            VideoOutputRenderLogic::Render          ( Render
 
     render->Disable   ( videoRenderTarget );
 }
-int test = 0;
+
 void    VideoOutputRenderLogic::VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx )
 {
 	{
