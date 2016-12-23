@@ -29,6 +29,7 @@ public:
     {
         static const std::string        ALPHA;
         static const std::string        FONT_SIZE;
+        static const std::string        NEW_LINE_SIZE;
 
         static const std::string        SHADOW_ENABLED;
         static const std::string        SHADOW_COLOR;
@@ -65,6 +66,7 @@ protected:
 
     TextAtlasConstPtr               m_atlas;
 
+    ValueFloatPtr                   m_newLineSize;
     ParamFloatPtr                   m_spacingParam;
     ParamIntPtr                     m_alignmentParam;
 

@@ -120,6 +120,7 @@ void                                     Text3DUtils::ArrangeText               
     auto alignement = layout.Tat;
     auto alignChar = layout.AlignChar;
     bool useKerning = layout.UseKerning;
+    float newLineSize = layout.NewLineSize;
 
     assert( textObj );
 
@@ -140,7 +141,7 @@ void                                     Text3DUtils::ArrangeText               
 
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
     auto spaceGlyphWidth    = (float)textRepresentation->GetGlyph( L'0' )->advanceX / scaleRatio / 2 + spacing;
-    auto newLineShift       = -(float) 1.5f * textRepresentation->GetGlyph( L'0' )->height / scaleRatio;
+    auto newLineShift       = -(float)newLineSize * textRepresentation->GetGlyph( L'0' )->height / scaleRatio;
 
     unsigned int componentIdx = 0;
     unsigned int lineBeginComponentIdx = 0;

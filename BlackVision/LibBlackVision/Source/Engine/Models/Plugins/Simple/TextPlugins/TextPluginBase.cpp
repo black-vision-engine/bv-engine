@@ -26,6 +26,7 @@ namespace bv { namespace model {
 
 const std::string TextPluginBase::PARAM::ALPHA              = "alpha";
 const std::string TextPluginBase::PARAM::FONT_SIZE          = "fontSize";
+const std::string TextPluginBase::PARAM::NEW_LINE_SIZE      = "newLineSize";
 
 const std::string TextPluginBase::PARAM::SHADOW_ENABLED     = "shadowEnabled";
 const std::string TextPluginBase::PARAM::SHADOW_COLOR       = "shadowColor";
@@ -85,6 +86,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::NEW_LINE_SIZE, 1.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
@@ -106,6 +108,7 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     , m_outlineSize( 0 )
     , m_atlas( nullptr )
 {
+    m_newLineSize       = QueryTypedValue< ValueFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::NEW_LINE_SIZE ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
     m_alignmentParam    = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
@@ -308,6 +311,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         0,
                                         viewWidth,
                                         viewHeight,
+                                        m_newLineSize->GetValue(),
                                         nullptr,
                                         useKerning );
 
@@ -326,6 +330,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_outlineSize,
                                         viewWidth,
                                         viewHeight,
+                                        m_newLineSize->GetValue(),
                                         nullptr,
                                         useKerning );
 
@@ -344,6 +349,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_outlineSize,
                                         viewWidth,
                                         viewHeight,
+                                        m_newLineSize->GetValue(),
                                         nullptr,
                                         useKerning );
 
@@ -360,6 +366,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     0,
                                                     viewWidth,
                                                     viewHeight,
+                                                    m_newLineSize->GetValue(),
                                                     nullptr,
                                                     useKerning );
 

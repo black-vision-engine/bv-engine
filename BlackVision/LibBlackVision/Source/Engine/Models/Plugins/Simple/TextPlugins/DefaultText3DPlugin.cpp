@@ -56,6 +56,7 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< ParamEnumTA
 
 const std::string        DefaultText3DPlugin::PARAMS::TEXT              = "text";
 const std::string        DefaultText3DPlugin::PARAMS::FONT_SIZE         = "fontSize";
+const std::string        DefaultText3DPlugin::PARAMS::NEW_LINE_SIZE     = "newLineSize";
 const std::string        DefaultText3DPlugin::PARAMS::SPACING           = "spacing";
 const std::string        DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH   = "maxTextLenght";
 const std::string        DefaultText3DPlugin::PARAMS::ALIGNEMENT        = "alignment";
@@ -87,14 +88,14 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     ModelHelper h( timeEvaluator );
     h.SetOrCreateVacModel();
 
-    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::TEXT, std::wstring( L"" ), true, true );
-    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::SPACING, 0.0f, true, true );
-    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH, 0.0f, true, true );
-    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::FONT_SIZE, 8.0f, true, true );
-    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true, true, true );
-    h.AddSimpleParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.', true, true );
-    h.AddParam< IntInterpolator, TextAlignmentType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumTAT >
-        ( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT, std::wstring( L"" ) );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::SPACING, 0.0f );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH, 0.0f );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::FONT_SIZE, 8.0f );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::NEW_LINE_SIZE, 1.0f );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.' );
+    h.AddEnumParam( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
 
     h.SetOrCreatePSModel();
     h.SetOrCreateVSModel();
@@ -156,6 +157,7 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
 
     m_fontSize              = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::FONT_SIZE ) );
     m_spacingValue          = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::SPACING ) );
+    m_newLineSize           = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::NEW_LINE_SIZE ) );
     m_maxTextLengthValue    = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::MAX_TEXT_LENGTH ) );
     m_textParam             = QueryTypedParam< ParamWStringPtr >( modelVAC->GetParameter( PARAMS::TEXT ) );
     m_useKerningValue       = QueryTypedValue< ValueBoolPtr >( modelVAC->GetValue( PARAMS::USE_KERNING ) );
@@ -208,6 +210,7 @@ void                                DefaultText3DPlugin::RebuildText            
     Text3DUtils::TextLayout layout;
     layout.Arranger = nullptr;
     layout.Size = m_fontSize->GetValue();
+    layout.NewLineSize = m_newLineSize->GetValue();
     layout.Spacing = m_spacingValue->GetValue();
     layout.Tat = m_alignmentParam->Evaluate();
     layout.AlignChar = static_cast< wchar_t >( m_alignCharacter->GetValue() );
@@ -238,6 +241,7 @@ void                                DefaultText3DPlugin::Update                 
         ParameterChanged( PARAMS::ALIGNEMENT ) ||
         ParameterChanged( PARAMS::SPACING ) ||
         ParameterChanged( PARAMS::FONT_SIZE ) ||
+        ParameterChanged( PARAMS::NEW_LINE_SIZE ) ||
         ParameterChanged( PARAMS::USE_KERNING ) ||
         ParameterChanged( PARAMS::ALIGN_CHARACTER ) )
     {

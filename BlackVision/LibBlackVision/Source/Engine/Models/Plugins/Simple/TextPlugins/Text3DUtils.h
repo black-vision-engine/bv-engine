@@ -19,6 +19,7 @@ public:
     {
         float                   Size;
         float                   Spacing;
+        float                   NewLineSize;
         FontAsset3DConstPtr     FontAsset;
         UInt32                  ViewWidth;
         UInt32                  ViewHeight;

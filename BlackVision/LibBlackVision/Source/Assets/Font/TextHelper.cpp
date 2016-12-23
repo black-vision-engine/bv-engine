@@ -124,7 +124,7 @@ std::vector< glm::vec2 >		TextHelper::GetAtlasCoordsForGlyph	( const Glyph * gly
 
 // *********************************
 //
-float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger, bool useKerning )
+float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, model::TextArranger * arranger, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -153,7 +153,7 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     // Computing space character size
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
     auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->advanceX / aspectRatio / 2 + spacing;
-    auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
+    auto newLineShift       = -(float)newLineSize * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
 
 
     //

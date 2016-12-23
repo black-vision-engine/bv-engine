@@ -184,6 +184,7 @@ void                                DefaultTextPlugin::Update                   
         ParameterChanged( TextPluginBase::PARAM::ALIGNEMENT ) ||
         ParameterChanged( TextPluginBase::PARAM::SPACING ) ||
         ParameterChanged( TextPluginBase::PARAM::ALIGN_CHARACTER ) ||
+        ParameterChanged( TextPluginBase::PARAM::NEW_LINE_SIZE ) ||
         ParameterChanged( TextPluginBase::PARAM::SHADOW_ENABLED ) ||
         ParameterChanged( TextPluginBase::PARAM::OUTLINE_ENABLED ) )
     {
