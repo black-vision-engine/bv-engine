@@ -107,8 +107,7 @@ void				AVDecoderThread::Run			    ()
     auto duration = m_decoder->GetDuration();
     m_timer.Start();
 
-	std::cout << "AVDecoder thread stating " << std::this_thread::get_id() << std::endl;
-
+	std::cout << "AVDecoder thread starting " << std::this_thread::get_id() << std::endl;
 
     while( m_running )
     {
@@ -146,8 +145,6 @@ void				AVDecoderThread::Run			    ()
 				m_timer.Start();
 			}
 		}
-
-		//time+= 1;
     }
 
 	std::cout << "AVDecoder thread dying " << std::this_thread::get_id() << std::endl;

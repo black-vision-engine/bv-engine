@@ -37,6 +37,9 @@ void				FFmpegDemuxerThread::Kill	    ()
 	m_running = false;
     m_stopped = false;
 	m_demuxer->ClearPacketQueue( true );
+
+	std::cout << "Killing demuxer thread " << std::this_thread::get_id() << std::endl;
+
     m_cond.notify_one();
 }
 

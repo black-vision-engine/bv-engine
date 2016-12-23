@@ -48,91 +48,41 @@ AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 	return m_formatCtx;
 }
 
-
-static int cccc = 0;
-
-static int ccccMax = 0;
-
-static Int64 maxTimeShiftPts = 0;
-
-static Int64 lastVideoFramePts = 0;
-
 // *******************************
 //
 bool			FFmpegDemuxer::ProcessPacket			()
 {
-
-    //FIXME: sync with clock instead of maxQueueSize
-    //auto process = false;
-    //for( auto & queue : m_packetQueue )
-    //{
-    //    if( queue.second->Size() < m_maxQueueSize )
-    //    {
-    //        process = true;
-    //    }
-    //}
-
-    //if( process )
+    auto ffmpegPacket = std::make_shared< FFmpegPacket >();
+    auto packet = ffmpegPacket->GetAVPacket();
+    auto error = av_read_frame( m_formatCtx, packet );
+	if( error < 0 ) 
     {
-        auto ffmpegPacket = std::make_shared< FFmpegPacket >();
-        auto packet = ffmpegPacket->GetAVPacket();
-        auto error = av_read_frame( m_formatCtx, packet );
-	    if( error < 0 ) 
-        {
-			std::lock_guard< std::mutex > lock( m_mutex );
-		    assert( error == AVERROR_EOF ); //error reading frame
-		    m_isEOF = true;
+		std::lock_guard< std::mutex > lock( m_mutex );
+		assert( error == AVERROR_EOF ); //error reading frame
+		m_isEOF = true;
 
-			for( auto & k : m_packetQueue )
-			{
-				k.second->EnqueueEndMessage();
-			}
-            return false;
-        }
-		else if( error == 0 )
+		for( auto & k : m_packetQueue )
 		{
-			auto currStream = packet->stream_index;
-
-			if( currStream == 0 )
-			{
-				cccc = 0;
-				if( packet->pts >  lastVideoFramePts )
-				{
-					auto diff = packet->pts - lastVideoFramePts;
-					if( diff > maxTimeShiftPts )
-					{
-						maxTimeShiftPts = diff;
-
-						std::cout << "maxTimeShiftPts " << maxTimeShiftPts << std::endl;
-						std::cout << "maxTimeShiftPts " << packet->pts << "   " << lastVideoFramePts << std::endl;
-					}
-				}
-
-				lastVideoFramePts = packet->pts;
-			}
-			else
-			{
-				cccc++;
-			}
-
-			if( ccccMax < cccc )
-			{
-				ccccMax = cccc;
-				std::cout << "ccccMax " << ccccMax << std::endl;
-			}
-
-			if( m_packetQueue.count( currStream ) > 0 )
-			{
-				m_packetQueue.at( currStream )->WaitAndPush( ffmpegPacket );
-				return true;
-			}
+			k.second->EnqueueEndMessage();
 		}
-		else 
-		{
-			std::cout << "Error " << error << std::endl;
-		}
+        return false;
     }
-    return false;
+	else if( error == 0 )
+	{
+		auto currStream = packet->stream_index;
+
+		if( m_packetQueue.count( currStream ) > 0 )
+		{
+			m_packetQueue.at( currStream )->WaitAndPush( ffmpegPacket );
+			return true;
+		}
+	}
+	else 
+	{
+		std::cout << "Error " << error << std::endl;
+	}
+    
+	return false;
 }
 
 // *******************************
@@ -143,8 +93,6 @@ FFmpegPacketPtr		FFmpegDemuxer::GetPacket				( Int32 streamIdx, bool block )
 
 	assert( m_packetQueue.count( streamIdx ) > 0 );
 
- //   if( !m_packetQueue.at( streamIdx )->IsEmpty() )
-	//{
 	if( block )
 	{
 		m_packetQueue.at( streamIdx )->WaitAndPop( packet );
@@ -153,7 +101,6 @@ FFmpegPacketPtr		FFmpegDemuxer::GetPacket				( Int32 streamIdx, bool block )
 	{
 		m_packetQueue.at( streamIdx )->TryPop( packet );
 	}
-//	}
 
 	return packet;
 }
@@ -255,13 +202,6 @@ void				FFmpegDemuxer::ClearPacketQueue		( Int32 streamIdx, bool removingDemuxer
 	{
 		queue->EnqueueEndMessage();
 	}
-
-    //while( !queue->IsEmpty() )
-    //{
-    //    FFmpegPacketPtr packet = nullptr;
-    //    queue->TryPop( packet );
-    //}
-    //queue->Clear();
 }
 
 // *******************************

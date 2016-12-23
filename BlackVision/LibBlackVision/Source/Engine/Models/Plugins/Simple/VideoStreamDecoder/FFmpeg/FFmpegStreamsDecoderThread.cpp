@@ -76,7 +76,7 @@ bool				FFmpegStreamsDecoderThread::Stopped		() const
 //
 void				FFmpegStreamsDecoderThread::Run			()
 {
-	std::cout << "Decoder thread stating " << std::this_thread::get_id() << std::endl;
+	std::cout << "Decoder thread starting " << std::this_thread::get_id() << std::endl;
     while( m_running )
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
@@ -86,8 +86,6 @@ void				FFmpegStreamsDecoderThread::Run			()
 		if( m_videoStreamDecoder && m_audioStreamDecoder )
 		{
 			auto streamIdx = m_demuxer->GetNextPacketTypeToDecode();
-
-			std::cout << "Decoding steam  " << streamIdx << std::endl;
 
 			if( m_videoStreamDecoder->GetStreamIdx() == streamIdx )
 			{

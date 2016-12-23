@@ -276,11 +276,6 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
 {
 	StopDecoding();
-    //auto paused = m_decoderThread->Paused() || m_decoderThread->Stopped();
-    //if( !paused )
-    //{
-    //    Pause();    // pause decoding threads
-    //}
 
     if( flushBuffers )
     {
@@ -303,10 +298,6 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
     }
 
 	RestartDecoding();
-    //if( !paused )
-    //{
-    //    Pause();    // unpause decoding threads
-    //}
 }
 
 // *********************************
