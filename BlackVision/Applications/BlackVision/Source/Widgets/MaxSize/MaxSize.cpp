@@ -118,8 +118,8 @@ void                        MaxSize::Update			( TimeType t )
 
         if( m_isProportional->GetValue() )
         {
-            float scaleFactor = std::max( rescale.x, rescale.y );
-            scaleFactor = std::max( scaleFactor, rescale.z );
+            float scaleFactor = std::min( rescale.x, rescale.y );
+            scaleFactor = std::min( scaleFactor, rescale.z );
 
             if( activeX )
                 rescale.x = scaleFactor;
