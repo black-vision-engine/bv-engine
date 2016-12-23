@@ -27,7 +27,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         auto vstreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO );
         if( vstreamIdx >= 0 )
         {
-            videoStreamDecoder = new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx, 1001 );
+            videoStreamDecoder = new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx, 10 );
             m_streams[ AVMEDIA_TYPE_VIDEO ] = std::move( std::unique_ptr< FFmpegVideoStreamDecoder >( videoStreamDecoder ) );
 
             videoDuration = videoStreamDecoder->GetDuration();
@@ -39,7 +39,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         auto astreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_AUDIO );
         if( astreamIdx >= 0 )
         {
-            audioStreamDecoder = new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx, 1000 );
+            audioStreamDecoder = new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx, 10000 );
             m_streams[ AVMEDIA_TYPE_AUDIO ] = std::move( std::unique_ptr< FFmpegAudioStreamDecoder >( audioStreamDecoder ) );
 
             audioDuration = audioStreamDecoder->GetDuration();
@@ -74,16 +74,21 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
 	m_streamsDecoderThread->Join();
 	m_streamsDecoderThread = nullptr;
 
+	for( auto & s : m_streams )
+	{
+		s.second->FinishQueue();
+	}
+
+	FlushBuffers();
+
 	m_decoderThread->Kill();
 	m_decoderThread->Join();
 	m_decoderThread = nullptr;
 
-
-
-    FlushBuffers();
+	m_streams.clear();
 
 	//force 
-    m_streams.clear();
+    
 
 	m_demuxer = nullptr;
 }
@@ -270,11 +275,12 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 //
 void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
 {
-    auto paused = m_decoderThread->Paused() || m_decoderThread->Stopped();
-    if( !paused )
-    {
-        Pause();    // pause decoding threads
-    }
+	StopDecoding();
+    //auto paused = m_decoderThread->Paused() || m_decoderThread->Stopped();
+    //if( !paused )
+    //{
+    //    Pause();    // pause decoding threads
+    //}
 
     if( flushBuffers )
     {
@@ -296,10 +302,11 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
         decoder->SetOffset( currPTS );
     }
 
-    if( !paused )
-    {
-        Pause();    // unpause decoding threads
-    }
+	RestartDecoding();
+    //if( !paused )
+    //{
+    //    Pause();    // unpause decoding threads
+    //}
 }
 
 // *********************************
@@ -409,13 +416,16 @@ void					FFmpegAVDecoder::RestartDecoding        ()
 void					FFmpegAVDecoder::StopDecoding           ()
 {
 	m_streamsDecoderThread->Stop();
+	m_demuxerThread->Stop();
+
 	while( !m_streamsDecoderThread->Stopped() );
 
     m_demuxerThread->Stop();
-
 	m_demuxer->ClearPacketQueue( false );
 
     while( !m_demuxerThread->Stopped() );
+
+	m_demuxer->ClearPacketQueue( false );
 }
 
 // *********************************

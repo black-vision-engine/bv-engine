@@ -66,6 +66,8 @@ public:
 
     bool                    NextDataReady               ( UInt64 time, bool block );
 
+	void					FinishQueue					();
+
 };
 
 DEFINE_UPTR_TYPE( FFmpegStreamDecoder )

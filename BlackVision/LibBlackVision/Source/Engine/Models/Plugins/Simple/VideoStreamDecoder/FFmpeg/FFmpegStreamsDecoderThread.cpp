@@ -76,22 +76,25 @@ bool				FFmpegStreamsDecoderThread::Stopped		() const
 //
 void				FFmpegStreamsDecoderThread::Run			()
 {
+	std::cout << "Decoder thread stating " << std::this_thread::get_id() << std::endl;
     while( m_running )
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
 		//lock.unlock();
 
-        if( m_videoStreamDecoder && m_running )
+        if( m_videoStreamDecoder )
         {
-            m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
+			m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
         }
 
-        if( m_audioStreamDecoder && m_running )
+        if( m_audioStreamDecoder )
         {
-            m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
+			m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
         }
     }
+
+	std::cout << "Decoder thread dying " << std::this_thread::get_id() << std::endl;
 }
 
 } //bv

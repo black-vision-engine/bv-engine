@@ -48,6 +48,15 @@ AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 	return m_formatCtx;
 }
 
+
+static int cccc = 0;
+
+static int ccccMax = 0;
+
+static Int64 maxTimeShiftPts = 0;
+
+static Int64 lastVideoFramePts = 0;
+
 // *******************************
 //
 bool			FFmpegDemuxer::ProcessPacket			()
@@ -74,7 +83,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
 		    assert( error == AVERROR_EOF ); //error reading frame
 		    m_isEOF = true;
 
-			for( auto k : m_packetQueue )
+			for( auto & k : m_packetQueue )
 			{
 				k.second->EnqueueEndMessage();
 			}
@@ -83,19 +92,44 @@ bool			FFmpegDemuxer::ProcessPacket			()
 		else if( error == 0 )
 		{
 			auto currStream = packet->stream_index;
+
+			if( currStream == 0 )
+			{
+				cccc = 0;
+				if( packet->pts >  lastVideoFramePts )
+				{
+					auto diff = packet->pts - lastVideoFramePts;
+					if( diff > maxTimeShiftPts )
+					{
+						maxTimeShiftPts = diff;
+
+						std::cout << "maxTimeShiftPts " << maxTimeShiftPts << std::endl;
+						std::cout << "maxTimeShiftPts " << packet->pts << "   " << lastVideoFramePts << std::endl;
+					}
+				}
+
+				lastVideoFramePts = packet->pts;
+			}
+			else
+			{
+				cccc++;
+			}
+
+			if( ccccMax < cccc )
+			{
+				ccccMax = cccc;
+				std::cout << "ccccMax " << ccccMax << std::endl;
+			}
+
 			if( m_packetQueue.count( currStream ) > 0 )
 			{
-				std::cout << "Demuxer pushing packer to " << currStream << " pts " << ffmpegPacket->GetAVPacket()->pts << std::endl;
 				m_packetQueue.at( currStream )->WaitAndPush( ffmpegPacket );
 				return true;
 			}
 		}
-		else
+		else 
 		{
-			int t = 0;
-			{
-				t; 
-			}
+			std::cout << "Error " << error << std::endl;
 		}
     }
     return false;
@@ -149,6 +183,8 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
+static int qS [] = { 10, 10000 };
+
 // *******************************
 //
 Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
@@ -159,7 +195,7 @@ Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
     {
 	    if( m_packetQueue.count( streamIdx ) == 0 )
 	    {
-            m_packetQueue.insert( std::make_pair( streamIdx, std::make_shared< QueueConcurrentLimited< FFmpegPacketPtr > >( 1000 ) ) );
+            m_packetQueue.insert( std::make_pair( streamIdx, std::make_shared< QueueConcurrentLimited< FFmpegPacketPtr > >( qS[ type ] ) ) );
 	    }
     }
 

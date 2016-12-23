@@ -38,6 +38,7 @@ FFmpegStreamDecoder::~FFmpegStreamDecoder                   ()
 {
     avcodec_close( m_codecCtx );
     av_frame_free( &m_frame );
+	m_bufferQueue.EnqueueEndMessage();
     m_bufferQueue.Clear();
 }
 
@@ -107,21 +108,27 @@ void				FFmpegStreamDecoder::Reset				()
 //
 bool			    FFmpegStreamDecoder::ProcessPacket      ( FFmpegDemuxer * demuxer, bool block )
 {
-    //if( m_bufferQueue.Size() < m_maxQueueSize )
+    auto packet = demuxer->GetPacket( m_streamIdx, block );
+    if( packet )
     {
-        auto packet = demuxer->GetPacket( m_streamIdx, block );
-        if( packet )
+        if( DecodePacket( packet->GetAVPacket() ) )
         {
-            if( DecodePacket( packet->GetAVPacket() ) )
-            {
-                auto data = ConvertFrame();
-                m_bufferQueue.WaitAndPush( data );
+            auto data = ConvertFrame();
+            m_bufferQueue.WaitAndPush( data );
 
-                return true;
-            }
-        }
-    }
-    return false;
+            return true;
+		}
+		else
+		{
+			return block;
+		}
+    } 
+	else if ( block )
+	{
+		m_bufferQueue.EnqueueEndMessage();
+	} 
+
+	return false;
 }
 
 // *******************************
@@ -172,31 +179,44 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 {
     auto success = false;
 
-    if( time <= m_duration )
-    {
-        AVMediaData data;
+	if( time <= m_duration )
+	{
+		//if( m_prevPTS < time + GetOffset() )
+		{
+			AVMediaData data;
 
-		if( block )
-		{
-			success = m_bufferQueue.WaitAndPop( data );
-		}
-		else
-		{
-			// find the closest frame to given time
-			while( !IsDataQueueEmpty()
-				   && ( m_prevPTS <= GetCurrentPTS() )
-				   && ( GetCurrentPTS() <= time + GetOffset() ) )
+			if( block )
 			{
+				auto offsest = GetOffset();
 
-				success = m_bufferQueue.TryPop( data );
+				auto pn = [ = ] ( const AVMediaData & avm )
+				{
+					return m_prevPTS <= avm.framePTS && avm.framePTS <= time + offsest;
+				};
+
+				success = m_bufferQueue.WaitAndPopUntil( data, pn );
+
+				success = data.frameData ? success : false;
+
+				//std::cout << "NextDataReady time get" << data.framePTS << std::endl;
+			}
+			else
+			{
+				// find the closest frame to given time
+				while( !IsDataQueueEmpty()
+					   && ( m_prevPTS <= GetCurrentPTS() )
+					   && ( GetCurrentPTS() <= time + GetOffset() ) )
+				{
+					success = m_bufferQueue.TryPop( data );
+				}
+			}
+
+			if( success )
+			{
+				m_outQueue.Push( data );
+				m_prevPTS = data.framePTS;
 			}
 		}
-
-        if( success )
-        {
-            m_outQueue.Push( data );
-            m_prevPTS = data.framePTS;
-        }
     }
     else
     {
@@ -204,6 +224,13 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
     }
 
     return success;
+}
+
+// *********************************
+//
+void				FFmpegStreamDecoder::FinishQueue					()
+{
+	m_bufferQueue.EnqueueEndMessage();
 }
 
 } //bv
