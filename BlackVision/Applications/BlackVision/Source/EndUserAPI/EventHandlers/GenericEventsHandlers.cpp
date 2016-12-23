@@ -6,6 +6,9 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
+#include "Engine/Models/Updaters/UpdatersHelpers.h"
+#include "Application/ApplicationContext.h"
+
 
 namespace bv
 {
@@ -37,6 +40,10 @@ void    GenericEventsHandlers::EventHandler             ( bv::IEventPtr evt )
         if( command == "SetWeightCenter" )
         {
             SetWeightCenterHandler( command, responseJSON, request, genericEvent->EventID );
+        }
+        else if( command == "AdjustToScreen" )
+        {
+            SetNodeScaleHandler( command, responseJSON, request, genericEvent->EventID );
         }
         else
         {
@@ -132,6 +139,63 @@ void    GenericEventsHandlers::SetWeightCenterHandler   ( const std::string & co
     auto transformParam = basicNode->GetFinalizePlugin()->GetParamTransform();
     transformParam->SetCenter( bbPoint, keyTime );
 
+    PrepareResponseTemplate( ser, command, eventID, true );
+}
+
+// ***********************
+//
+void    GenericEventsHandlers::SetNodeScaleHandler      ( const std::string & command, JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    std::string nodeName = request->GetAttribute( SerializationHelper::NODE_NAME_STRING );
+    std::string sceneName = request->GetAttribute( SerializationHelper::SCENE_NAME_STRING );
+
+    TimeType keyTime = SerializationHelper::String2T( request->GetAttribute( "Time" ), TimeType( 0.0 ) );
+
+    auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodeName );
+    if( scene == nullptr || node == nullptr )
+    {
+        ErrorResponseTemplate( ser, command, eventID, "Node not found." );
+        return;
+    }
+
+    auto basicNode = std::static_pointer_cast< const model::BasicNode >( node );
+
+    auto boundingVolume = basicNode->GetBoundingVolume();
+    auto bb = boundingVolume->GetBoundingBox();
+
+    auto transformParam = basicNode->GetFinalizePlugin()->GetParamTransform();
+    glm::vec3 scale;
+
+    glm::vec3 center = bb->Center();
+
+    Float32 screenWidth = (Float32)ApplicationContext::Instance().GetWidth();
+    Float32 screenHeight = (Float32)ApplicationContext::Instance().GetHeight();
+    Float32 aspect = screenWidth / screenHeight;
+
+
+    Camera tempCamera;
+    auto& currentCam = scene->GetCamerasLogic().GetCurrentCamera();
+    UpdatersHelpers::UpdateCamera( &tempCamera, currentCam );
+
+    if( tempCamera.IsPerspective() )
+    {
+        glm::vec3 cameraPos = tempCamera.GetPosition();
+        float dist = glm::length( center - cameraPos );
+
+        Float32 fovY = glm::radians( tempCamera.GetFOV() );
+        Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
+
+        scale.y = 2 * dist / d / bb->Height();
+        scale.x = aspect * scale.y;
+        scale.z = 1.0f;
+    }
+    else
+    {
+        assert( !"Implement me" );
+    }
+
+    transformParam->SetScale( scale, keyTime );
     PrepareResponseTemplate( ser, command, eventID, true );
 }
 
