@@ -108,7 +108,7 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
 {
-    m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
+	m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
 
     SetPrevPlugin( prev );
 

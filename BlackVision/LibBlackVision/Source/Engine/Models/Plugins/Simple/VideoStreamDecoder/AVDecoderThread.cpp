@@ -107,18 +107,20 @@ void				AVDecoderThread::Run			    ()
     auto duration = m_decoder->GetDuration();
     m_timer.Start();
 
+	std::cout << "AVDecoder thread starting " << std::this_thread::get_id() << std::endl;
+
     while( m_running )
     {
-		std::unique_lock< std::mutex > lock( m_mutex );
-
         auto time = m_timer.ElapsedMillis();
         
-        m_decoder->NextDataReady( time );
+        m_decoder->NextDataReady( time, true );
 
         if( time > duration ) 
         {
 			m_timer.Start();
         }
+
+		std::unique_lock< std::mutex > lock( m_mutex );
 
         if( m_decoder->IsFinished() )
 		{
@@ -144,6 +146,8 @@ void				AVDecoderThread::Run			    ()
 			}
 		}
     }
+
+	std::cout << "AVDecoder thread dying " << std::this_thread::get_id() << std::endl;
 }
 
 } //bv

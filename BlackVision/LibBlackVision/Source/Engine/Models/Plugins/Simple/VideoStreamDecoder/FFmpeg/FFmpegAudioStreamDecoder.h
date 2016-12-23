@@ -28,7 +28,7 @@ private:
 
 public:
 
-							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize = 10 );
+							FFmpegAudioStreamDecoder	( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize );
 							~FFmpegAudioStreamDecoder	();
 
     Int32                   GetSampleRate               () const;

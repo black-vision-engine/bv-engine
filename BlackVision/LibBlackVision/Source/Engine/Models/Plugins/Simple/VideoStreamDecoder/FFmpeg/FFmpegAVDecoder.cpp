@@ -27,7 +27,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         auto vstreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO );
         if( vstreamIdx >= 0 )
         {
-            videoStreamDecoder = new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx );
+            videoStreamDecoder = new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), vstreamIdx, 10 );
             m_streams[ AVMEDIA_TYPE_VIDEO ] = std::move( std::unique_ptr< FFmpegVideoStreamDecoder >( videoStreamDecoder ) );
 
             videoDuration = videoStreamDecoder->GetDuration();
@@ -39,7 +39,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         auto astreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_AUDIO );
         if( astreamIdx >= 0 )
         {
-            audioStreamDecoder = new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx );
+            audioStreamDecoder = new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx, 100 );
             m_streams[ AVMEDIA_TYPE_AUDIO ] = std::move( std::unique_ptr< FFmpegAudioStreamDecoder >( audioStreamDecoder ) );
 
             audioDuration = audioStreamDecoder->GetDuration();
@@ -64,22 +64,31 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
 {
     assert( m_decoderThread );
 	
+	StopDecoding();
+
+	m_demuxerThread->Kill();
+	m_demuxerThread->Join();
+	m_demuxerThread = nullptr;
+
+	m_streamsDecoderThread->Kill();
+	m_streamsDecoderThread->Join();
+	m_streamsDecoderThread = nullptr;
+
+	for( auto & s : m_streams )
+	{
+		s.second->FinishQueue();
+	}
+
+	FlushBuffers();
+
 	m_decoderThread->Kill();
 	m_decoderThread->Join();
 	m_decoderThread = nullptr;
 
-    m_streamsDecoderThread->Kill();
-    m_streamsDecoderThread->Join();
-    m_streamsDecoderThread = nullptr;
-
-    m_demuxerThread->Kill();
-	m_demuxerThread->Join();
-	m_demuxerThread = nullptr;
-
-    FlushBuffers();
+	m_streams.clear();
 
 	//force 
-    m_streams.clear();
+    
 
 	m_demuxer = nullptr;
 }
@@ -162,11 +171,11 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
 
 // *********************************
 //
-bool				FFmpegAVDecoder::NextDataReady	            ( AVMediaType type, UInt64 time )
+bool				FFmpegAVDecoder::NextDataReady	            ( AVMediaType type, UInt64 time, bool block )
 {
     if( m_streams.count( type ) )
     {
-        return m_streams[ type ]->NextDataReady( time );
+        return m_streams[ type ]->NextDataReady( time, block );
     }
 
     return false;
@@ -175,12 +184,14 @@ bool				FFmpegAVDecoder::NextDataReady	            ( AVMediaType type, UInt64 ti
 
 // *********************************
 //
-void				FFmpegAVDecoder::NextDataReady              ( UInt64 time )
+bool				FFmpegAVDecoder::NextDataReady              ( UInt64 time, bool block )
 {
+	bool result = true;
     for( auto & stream : m_streams )
     {
-        stream.second->NextDataReady( time );
+		result &= stream.second->NextDataReady( time, block );
     }
+	return result;
 }
 
 // *********************************
@@ -264,11 +275,7 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 //
 void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
 {
-    auto paused = m_decoderThread->Paused() || m_decoderThread->Stopped();
-    if( !paused )
-    {
-        Pause();    // pause decoding threads
-    }
+	StopDecoding();
 
     if( flushBuffers )
     {
@@ -290,17 +297,14 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
         decoder->SetOffset( currPTS );
     }
 
-    if( !paused )
-    {
-        Pause();    // unpause decoding threads
-    }
+	RestartDecoding();
 }
 
 // *********************************
 //
 void					FFmpegAVDecoder::FlushBuffers			() 
 {
-    m_demuxer->ClearPacketQueue();
+    m_demuxer->ClearPacketQueue( false );
     for( auto & stream : m_streams )
     {
         stream.second->Reset();
@@ -343,7 +347,7 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
         {
             m_streams[ AVMEDIA_TYPE_AUDIO ]->Reset();
 
-            m_demuxer->ClearPacketQueue( m_streams[ AVMEDIA_TYPE_AUDIO ]->GetStreamIdx() );
+            m_demuxer->ClearPacketQueue( m_streams[ AVMEDIA_TYPE_AUDIO ]->GetStreamIdx(), false );
             m_demuxer->DisableStream( AVMediaType::AVMEDIA_TYPE_AUDIO );
         }
         else
@@ -369,7 +373,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
         auto decoder = m_streams[ AVMEDIA_TYPE_VIDEO ].get();
         while( decoder->IsOutQueueEmpty() && !IsFinished() )
         {
-            NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS() );
+            NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS(), false );
         }
     }
         
@@ -379,7 +383,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
         auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
         while( i < 5 && !IsFinished() )
         {
-            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetDuration() ) )
+            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetDuration(), false ) )
             {
                 i++;
             }
@@ -402,11 +406,17 @@ void					FFmpegAVDecoder::RestartDecoding        ()
 //
 void					FFmpegAVDecoder::StopDecoding           ()
 {
+	m_streamsDecoderThread->Stop();
+	m_demuxerThread->Stop();
+
+	while( !m_streamsDecoderThread->Stopped() );
+
     m_demuxerThread->Stop();
+	m_demuxer->ClearPacketQueue( false );
+
     while( !m_demuxerThread->Stopped() );
 
-    m_streamsDecoderThread->Stop();
-    while( !m_streamsDecoderThread->Stopped() );
+	m_demuxer->ClearPacketQueue( false );
 }
 
 // *********************************

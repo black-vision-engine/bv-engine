@@ -36,6 +36,13 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	m_running = false;
     m_stopped = false;
+
+	if( m_audioStreamDecoder )
+		m_audioStreamDecoder->Reset();
+
+	if( m_videoStreamDecoder )
+		m_videoStreamDecoder->Reset();
+	
 	m_cond.notify_one();
 }
 
@@ -69,24 +76,41 @@ bool				FFmpegStreamsDecoderThread::Stopped		() const
 //
 void				FFmpegStreamsDecoderThread::Run			()
 {
+	std::cout << "Decoder thread starting " << std::this_thread::get_id() << std::endl;
     while( m_running )
     {
-        std::unique_lock< std::mutex > lock( m_mutex );
-        while( m_stopped )
-        {
-            m_cond.wait( lock );
-        }
+		std::unique_lock< std::mutex > lock( m_mutex );
+		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
+		lock.unlock();
 
-        if( m_videoStreamDecoder )
-        {
-            m_videoStreamDecoder->ProcessPacket( m_demuxer );
-        }
+		if( m_videoStreamDecoder && m_audioStreamDecoder )
+		{
+			auto streamIdx = m_demuxer->GetNextPacketTypeToDecode();
 
-        if( m_audioStreamDecoder )
-        {
-            m_audioStreamDecoder->ProcessPacket( m_demuxer );
-        }
+			if( m_videoStreamDecoder->GetStreamIdx() == streamIdx )
+			{
+				m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+			else
+			{
+				m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+		}
+		else
+		{
+			if( m_videoStreamDecoder )
+			{
+				m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+
+			if( m_audioStreamDecoder )
+			{
+				m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+		}
     }
+
+	std::cout << "Decoder thread dying " << std::this_thread::get_id() << std::endl;
 }
 
 } //bv

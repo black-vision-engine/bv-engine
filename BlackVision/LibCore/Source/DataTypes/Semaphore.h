@@ -33,7 +33,7 @@ public:
 
 // ***********************
 //
-void        Semaphore::Down()
+inline void        Semaphore::Down()
 {
     std::unique_lock< std::mutex > lock( m_mtx );
     while( m_count <= 0 )
@@ -44,7 +44,7 @@ void        Semaphore::Down()
 
 // ***********************
 //
-bool        Semaphore::TryDown()
+inline bool        Semaphore::TryDown()
 {
     std::unique_lock< std::mutex > lock( m_mtx );
         
@@ -59,7 +59,7 @@ bool        Semaphore::TryDown()
 
 // ***********************
 //
-void        Semaphore::Up()
+inline void        Semaphore::Up()
 {
     std::unique_lock< std::mutex > lock( m_mtx );
     m_count++;
