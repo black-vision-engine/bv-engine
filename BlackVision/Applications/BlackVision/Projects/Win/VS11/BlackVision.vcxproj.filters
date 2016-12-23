@@ -61,6 +61,9 @@
     <Filter Include="Widgets\SlideShow">
       <UniqueIdentifier>{43392ea4-cb5a-4770-9f54-4d8e733c6365}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\MaxSize">
+      <UniqueIdentifier>{a7c544f3-6f78-4314-9a94-c8a5d4fe6966}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -209,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\MaxSize\MaxSize.cpp">
+      <Filter>Widgets\MaxSize</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -370,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\MaxSize\MaxSize.h">
+      <Filter>Widgets\MaxSize</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
