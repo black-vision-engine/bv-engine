@@ -61,6 +61,8 @@ public:
 	bool						IsEOF					() const;
 	bool						IsPacketQueueEmpty		( Int32 streamIdx ) const;
 
+	AVMediaType					GetNextPacketTypeToDecode() const;
+
 private:
 
 

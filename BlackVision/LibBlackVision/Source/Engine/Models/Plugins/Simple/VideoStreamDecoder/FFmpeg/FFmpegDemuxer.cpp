@@ -183,7 +183,7 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
-static int qS [] = { 10, 10000 };
+static int qS [] = { 10, 10 };
 
 // *******************************
 //
@@ -283,6 +283,31 @@ Int32				FFmpegDemuxer::FindStreamIndex		( AVMediaType type, UInt32 idx ) const
 		}
 	}
 	return last;
+}
+
+// *******************************
+//
+AVMediaType			FFmpegDemuxer::GetNextPacketTypeToDecode() const
+{
+	if( m_packetQueue.size() == 2 )
+	{
+		FFmpegPacketPtr packet0, packet1;
+		m_packetQueue.at( 0 )->Front( packet0 );
+		m_packetQueue.at( 1 )->Front( packet1 );
+
+		if( packet1 && packet0 )
+		{
+			return packet0->GetAVPacket()->pts > packet1->GetAVPacket()->pts ? AVMediaType( 1 ) : AVMediaType( 0 );
+		}
+		else
+		{
+			return packet1 ? AVMediaType( 1 ) : AVMediaType( 0 );
+		}
+	}
+	else
+	{
+		return AVMediaType( 0 );
+	}
 }
 
 } //bv

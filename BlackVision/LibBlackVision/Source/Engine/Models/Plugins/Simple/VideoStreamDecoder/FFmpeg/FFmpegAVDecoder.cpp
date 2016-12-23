@@ -39,7 +39,7 @@ FFmpegAVDecoder::FFmpegAVDecoder		( AVAssetConstPtr asset )
         auto astreamIdx = m_demuxer->GetStreamIndex( AVMEDIA_TYPE_AUDIO );
         if( astreamIdx >= 0 )
         {
-            audioStreamDecoder = new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx, 10000 );
+            audioStreamDecoder = new FFmpegAudioStreamDecoder( asset, m_demuxer->GetFormatContext(), astreamIdx, 100 );
             m_streams[ AVMEDIA_TYPE_AUDIO ] = std::move( std::unique_ptr< FFmpegAudioStreamDecoder >( audioStreamDecoder ) );
 
             audioDuration = audioStreamDecoder->GetDuration();

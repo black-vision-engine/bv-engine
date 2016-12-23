@@ -81,17 +81,35 @@ void				FFmpegStreamsDecoderThread::Run			()
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
-		//lock.unlock();
+		lock.unlock();
 
-        if( m_videoStreamDecoder )
-        {
-			m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
-        }
+		if( m_videoStreamDecoder && m_audioStreamDecoder )
+		{
+			auto streamIdx = m_demuxer->GetNextPacketTypeToDecode();
 
-        if( m_audioStreamDecoder )
-        {
-			m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
-        }
+			std::cout << "Decoding steam  " << streamIdx << std::endl;
+
+			if( m_videoStreamDecoder->GetStreamIdx() == streamIdx )
+			{
+				m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+			else
+			{
+				m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+		}
+		else
+		{
+			if( m_videoStreamDecoder )
+			{
+				m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+
+			if( m_audioStreamDecoder )
+			{
+				m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
+			}
+		}
     }
 
 	std::cout << "Decoder thread dying " << std::this_thread::get_id() << std::endl;
