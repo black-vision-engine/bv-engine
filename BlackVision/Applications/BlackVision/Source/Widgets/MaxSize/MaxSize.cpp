@@ -84,11 +84,11 @@ void                        MaxSize::Update			( TimeType t )
     {
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
 
-        auto bb = node->GetBoundingVolume()->GetBoundingBox();
+        auto bb = node->GetBoundingBoxRecursive();
         
-        float width = bb->Width();
-        float height = bb->Height();
-        float depth = bb->Depth();
+        float width = bb.Width();
+        float height = bb.Height();
+        float depth = bb.Depth();
 
         bool activeX = m_maxWidth->GetValue() != 0.0f ? true : false;
         bool activeY = m_maxHeight->GetValue() != 0.0f ? true : false;
