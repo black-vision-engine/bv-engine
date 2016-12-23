@@ -328,6 +328,19 @@ float               TextHelper::ComputeAlignement( TextAlignmentType tat, glm::v
 
 // ***********************
 //
+std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo layout )
+{
+    text;
+    textRepr;
+    layout;
+
+
+
+    return std::vector<glm::vec3>();
+}
+
+// ***********************
+//
 void                TextHelper::ApplyAlignementPC   ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< model::IConnectedComponentPtr > & components )
 {
     auto alignmentTranslation = ComputeAlignement( tat, translate, translateDot );

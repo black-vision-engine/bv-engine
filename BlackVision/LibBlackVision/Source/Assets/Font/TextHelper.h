@@ -22,6 +22,20 @@ enum class TextAlignmentType
     Character
 };
 
+struct TextLayoutInfo
+{
+    float                   Size;
+    float                   Interspace;
+    float                   NewLineSize;
+    float                   AspectRatio;
+    TextAlignmentType       Tat;
+    wchar_t                 AlignChar;
+    SizeType                OutlineSize;
+    bool                    UseKerning;
+    bool                    UseOutline;
+};
+
+
 class TextHelper
 {
 public:
@@ -52,6 +66,9 @@ public:
 
     static float                        ComputeAlignement   ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot );
 
+    /////////////////////////////////////
+    // Makes letters arrangment.
+    static std::vector< glm::vec3 >     LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo layout );
 };
 
 
