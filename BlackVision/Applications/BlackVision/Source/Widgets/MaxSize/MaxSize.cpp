@@ -90,11 +90,16 @@ void                        MaxSize::Update			( TimeType t )
         float height = bb->Height();
         float depth = bb->Depth();
 
-        glm::vec3 rescale = transformParam->Transform().GetScale( 0.0f );
+        bool activeX = m_maxWidth->GetValue() != 0.0f ? true : false;
+        bool activeY = m_maxHeight->GetValue() != 0.0f ? true : false;
+        bool activeZ = m_maxDepth->GetValue() != 0.0f ? true : false;
 
-        bool needScaleX = width > m_maxWidth->GetValue() && m_maxWidth->GetValue() != 0.0f ? true : false;
-        bool needScaleY = height > m_maxHeight->GetValue() && m_maxHeight->GetValue() != 0.0f ? true : false;
-        bool needScaleZ = depth > m_maxDepth->GetValue() && m_maxDepth->GetValue() != 0.0f ? true : false;
+        glm::vec3 curScale = transformParam->Transform().GetScale( 0.0f );
+        glm::vec3 rescale = glm::vec3( activeX ? 1.0f : curScale.x, activeY ? 1.0f : curScale.y, activeZ ? 1.0f : curScale.z );
+
+        bool needScaleX = width > m_maxWidth->GetValue() && activeX ? true : false;
+        bool needScaleY = height > m_maxHeight->GetValue() && activeY ? true : false;
+        bool needScaleZ = depth > m_maxDepth->GetValue() && activeZ ? true : false;
 
         if( needScaleX )
         {
@@ -116,11 +121,11 @@ void                        MaxSize::Update			( TimeType t )
             float scaleFactor = std::max( rescale.x, rescale.y );
             scaleFactor = std::max( scaleFactor, rescale.z );
 
-            if( m_maxWidth->GetValue() != 0.0f )
+            if( activeX )
                 rescale.x = scaleFactor;
-            if( m_maxHeight->GetValue() != 0.0f )
+            if( activeY )
                 rescale.y = scaleFactor;
-            if( m_maxDepth->GetValue() != 0.0f )
+            if( activeZ )
                 rescale.z = scaleFactor;
         }
         
