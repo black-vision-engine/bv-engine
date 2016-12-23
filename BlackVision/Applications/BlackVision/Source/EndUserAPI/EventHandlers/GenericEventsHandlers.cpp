@@ -187,12 +187,14 @@ void    GenericEventsHandlers::SetNodeScaleHandler      ( const std::string & co
         Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
 
         scale.y = 2 * dist / d / bb->Height();
-        scale.x = aspect * scale.y;
+        scale.x = aspect * 2 * dist / d / bb->Width();
         scale.z = 1.0f;
     }
     else
     {
-        assert( !"Implement me" );
+        scale.x = 2 * aspect / bb->Height();
+        scale.y = 2.0f / bb->Width();
+        scale.z = 1.0f;
     }
 
     transformParam->SetScale( scale, keyTime );
