@@ -2,6 +2,7 @@
 
 #include "FFmpegDef.h"
 
+#include "DataTypes/QueueConcurrentLimited.h"
 #include "DataTypes/QueueConcurrent.h"
 
 #include "Assets/VideoStream/AVAsset.h"
@@ -24,14 +25,11 @@ protected:
 
     AVFrame *                           m_frame;
 
-
-    UInt32                              m_maxQueueSize;
-
     UInt64                              m_duration;
     UInt64                              m_prevPTS;
 
-    QueueConcurrent< AVMediaData >      m_bufferQueue;
-    QueueConcurrent< AVMediaData >	    m_outQueue;
+    QueueConcurrentLimited< AVMediaData >      m_bufferQueue;
+	QueueConcurrent< AVMediaData >	   m_outQueue;
 
     /** Starting frame timestamp (in stream time base), updated on seeking. */
     UInt64                              m_offset;
@@ -53,7 +51,7 @@ public:
 
     virtual void			Reset                       ();
 
-    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer );
+    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer, bool block = false );
 
     virtual bool            DecodePacket                ( AVPacket * packet );
     virtual AVMediaData     ConvertFrame                () = 0;
@@ -66,7 +64,9 @@ public:
     /** Converts time from seconds to the stream specific time base timestamp */
     Int64                   ConvertTime                 ( Float64 time );
 
-    bool                    NextDataReady               ( UInt64 time );
+    bool                    NextDataReady               ( UInt64 time, bool block );
+
+	void					FinishQueue					();
 
 };
 

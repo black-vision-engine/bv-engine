@@ -185,7 +185,12 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
         auto asset = LoadTypedAsset<AVAsset>( assetDescr );
         if( asset )
         {
-            m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
+			if( m_decoder )
+			{
+				m_decoder = nullptr;
+			}
+
+			m_decoder = std::make_shared< FFmpegAVDecoder >( asset );
 
             if( m_decoder->HasVideo() )
             {
@@ -353,31 +358,31 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             UpdateDecoderState( m_decoderMode );
         }
 
-        // edge case - looped timeline
-        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-        if( decoderModeTime < m_prevDecoderModeTime )
-        {
-            m_prevOffsetCounter = 0;
-        }
-        m_prevDecoderModeTime = decoderModeTime;
+        //// edge case - looped timeline
+        //auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
+        //if( decoderModeTime < m_prevDecoderModeTime )
+        //{
+        //    m_prevOffsetCounter = 0;
+        //}
+        //m_prevDecoderModeTime = decoderModeTime;
 
-        // update offset 
-        auto offset = m_offsetParam->Evaluate();
-        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
-        {
-            m_decoder->Seek( offset[ 0 ] );
-            m_prevOffsetCounter = offset[ 1 ];
+        //// update offset 
+        //auto offset = m_offsetParam->Evaluate();
+        //auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
+        //if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
+        //{
+        //    m_decoder->Seek( offset[ 0 ] );
+        //    m_prevOffsetCounter = offset[ 1 ];
 
-            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
-        }
+        //    std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
+        //}
 
-        if( ParameterChanged( PARAM::MUTE ) )
-        {
-            m_decoder->Mute( m_muteParam->Evaluate() );
-        }
+        //if( ParameterChanged( PARAM::MUTE ) )
+        //{
+        //    //m_decoder->Mute( m_muteParam->Evaluate() );
+        //}
 
-        HandlePerfectLoops();
+        //HandlePerfectLoops();
 
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )

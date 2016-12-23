@@ -17,7 +17,7 @@ FFmpegPacket::FFmpegPacket              ()
 //
 FFmpegPacket::~FFmpegPacket             ()
 {
-    av_packet_free( &m_packet );
+	av_packet_unref( m_packet );
 }
 
 // *******************************

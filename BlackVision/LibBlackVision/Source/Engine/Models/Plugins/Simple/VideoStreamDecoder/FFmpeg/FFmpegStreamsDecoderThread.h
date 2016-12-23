@@ -14,9 +14,6 @@
 namespace bv {
 
 
-class FFmpegAVDecoder;
-
-
 class FFmpegStreamsDecoderThread : public Thread
 {
 

@@ -36,6 +36,10 @@ void				FFmpegDemuxerThread::Kill	    ()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	m_running = false;
     m_stopped = false;
+	m_demuxer->ClearPacketQueue( true );
+
+	std::cout << "Killing demuxer thread " << std::this_thread::get_id() << std::endl;
+
     m_cond.notify_one();
 }
 
@@ -45,6 +49,7 @@ void				FFmpegDemuxerThread::Restart	()
 {
     std::unique_lock< std::mutex > lock( m_mutex );
     m_stopped = false;
+	std::cout << "Demuxer thread restatring " << std::this_thread::get_id() << std::endl;
 	m_cond.notify_one();
 }
 
@@ -54,6 +59,7 @@ void				FFmpegDemuxerThread::Stop		()
 {
     std::unique_lock< std::mutex > lock( m_mutex );
     m_stopped = true;
+	std::cout << "Demuxer thread stopping " << std::this_thread::get_id() << std::endl;
 	m_cond.notify_one();
 }
 
@@ -69,21 +75,38 @@ bool				FFmpegDemuxerThread::Stopped		() const
 //
 void				FFmpegDemuxerThread::Run			()
 {
-    while( m_running )
-    {
-        std::unique_lock< std::mutex > lock( m_mutex );
-        while( m_stopped )
-        {
-            m_cond.wait( lock );
-        }
-        
+	std::cout << "Demuxer thread starting " << std::this_thread::get_id() << std::endl;
+
+    while( true )
+    {        
+		std::unique_lock< std::mutex > lock( m_mutex );
+		
+		if( m_stopped )
+		{
+			std::cout << "Demuxer thread stopped " << std::this_thread::get_id() << std::endl;
+			std::cout << "Queue 0 empty " << m_demuxer->IsPacketQueueEmpty( 0 ) << std::endl;
+			std::cout << "Queue 1 empty " << m_demuxer->IsPacketQueueEmpty( 1 ) << std::endl;
+		}
+		
+		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
+		lock.unlock();
+
+		if( !m_running )
+		{
+			break;
+		}
+
+		// std::cout << "Demuxer thread process packet. " << std::this_thread::get_id() << std::endl;
         m_demuxer->ProcessPacket();
 
         if( m_demuxer->IsEOF() )
         {
+			std::unique_lock< std::mutex > lock( m_mutex );
             m_stopped = true;
         }
     }
+
+	std::cout << "Demuxer thread dying " << std::this_thread::get_id() << std::endl;
 }
 
 } //bv
