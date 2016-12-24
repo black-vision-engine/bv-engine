@@ -16,12 +16,13 @@ public:
 
 public:
 
-    static Int32        ChannelsCount   ( AudioFormat format );
-    static Int32        ChannelDepth    ( AudioFormat format );
+    static Int32		ChannelsCount	( AudioFormat format );
+    static Int32		ChannelDepth    ( AudioFormat format );
 
     /** @brief The most simple audio mixer */
-    static void         MixAudio16      ( char * outData, const char * inData, SizeType size );
+    static void			MixAudio16      ( char * outData, const char * inData, SizeType size );
 
+	static void			ApplyGain		( char * outData, const char * inData, SizeType size, Float32 gain );
 };
 
 } //audio

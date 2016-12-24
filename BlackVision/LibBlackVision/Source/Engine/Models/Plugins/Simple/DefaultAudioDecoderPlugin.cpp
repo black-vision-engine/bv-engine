@@ -14,6 +14,8 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
+#include "Engine/Audio/Resources/AudioUtils.h"
+
 
 namespace bv { namespace model {
 
@@ -22,6 +24,7 @@ const std::string        DefaultAudioDecoderPlugin::PARAM::DECODER_STATE  = "sta
 const std::string        DefaultAudioDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
 const std::string        DefaultAudioDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
 const std::string        DefaultAudioDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
+const std::string        DefaultAudioDecoderPlugin::PARAM::GAIN			  = "gain";
 
 typedef ParamEnum< DefaultAudioDecoderPlugin::DecoderMode > ParamEnumDM;
 
@@ -73,6 +76,7 @@ DefaultPluginParamValModelPtr   DefaultAudioDecoderPluginDesc::CreateDefaultMode
         ( DefaultAudioDecoderPlugin::PARAM::DECODER_STATE, DefaultAudioDecoderPlugin::DecoderMode::STOP, true, true );
     helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
+	helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::GAIN, 1.f );
 
     return model;
 }
@@ -120,6 +124,8 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
 
     m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
     m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
+
+	m_gainParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::GAIN ) );
 
     m_decoderMode =  m_decoderModeParam->Evaluate();
 
@@ -305,8 +311,21 @@ void                                DefaultAudioDecoderPlugin::UploadAudioFrame 
     AVMediaData mediaData;
     if( m_decoder->GetAudioMediaData( mediaData ) )
     {
-        m_audioChannel->PushPacket( mediaData.frameData );
+        m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
     }
+}
+
+// *************************************
+//
+MemoryChunkPtr						DefaultAudioDecoderPlugin::ApplyGain				( const MemoryChunkPtr & audioFrameData ) const
+{
+	auto size = audioFrameData->Size();
+
+	auto outData = MemoryChunk::Create( audioFrameData->Size() );
+
+	audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, m_gainParam->Evaluate() );
+
+	return outData;
 }
 
 // *************************************

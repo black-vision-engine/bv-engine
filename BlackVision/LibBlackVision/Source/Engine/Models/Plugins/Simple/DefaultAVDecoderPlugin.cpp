@@ -19,6 +19,8 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
+#include "Engine/Audio/Resources/AudioUtils.h"
+
 
 namespace bv { namespace model {
 
@@ -30,6 +32,7 @@ const std::string        DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET    = "offset
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED   = "loopEnabled";
 const std::string        DefaultAVDecoderPlugin::PARAM::LOOP_COUNT     = "loopCount";
 const std::string        DefaultAVDecoderPlugin::PARAM::MUTE           = "mute";
+const std::string        DefaultAVDecoderPlugin::PARAM::GAIN		   = "gain";
 
 typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamEnumDM;
 
@@ -82,6 +85,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::MUTE, false, true, true );
+	helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::GAIN, 1.f );
 
     helper.SetOrCreateVSModel();
     helper.AddTransformParam( DefaultAVDecoderPlugin::PARAM::TX_MAT, true );
@@ -155,7 +159,8 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
 
     m_muteParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::MUTE ) );
-    
+	m_gainParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::GAIN ) );
+
     m_decoderMode =  m_decoderModeParam->Evaluate();
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
@@ -477,8 +482,21 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
     AVMediaData mediaData;
     while( m_decoder->GetAudioMediaData( mediaData ) )
     {
-        m_audioChannel->PushPacket( mediaData.frameData );
+        m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
     }
+}
+
+// *************************************
+//
+MemoryChunkPtr						DefaultAVDecoderPlugin::ApplyGain				( const MemoryChunkPtr & audioFrameData ) const
+{
+	auto size = audioFrameData->Size();
+
+	auto outData = MemoryChunk::Create( audioFrameData->Size() );
+
+	audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, m_gainParam->Evaluate() );
+
+	return outData;
 }
 
 // *************************************

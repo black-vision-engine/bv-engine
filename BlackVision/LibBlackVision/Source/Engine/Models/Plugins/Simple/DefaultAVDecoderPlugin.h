@@ -47,6 +47,7 @@ public:
         static const std::string LOOP_ENABLED;
         static const std::string LOOP_COUNT;
         static const std::string MUTE;
+		static const std::string GAIN;
     };
 
 private:
@@ -79,6 +80,7 @@ private:
     UInt32                              m_loopCount;
 
     ParamBoolPtr                        m_muteParam;                 
+	ParamFloatPtr                       m_gainParam;
 
     AVAssetDescConstPtr                 m_assetDesc;
 
@@ -119,6 +121,7 @@ private:
     void                                        InitVertexAttributesChannel ();
 
     void                                        MarkOffsetChanges           ();
+	MemoryChunkPtr								ApplyGain					( const MemoryChunkPtr & audioFrameData ) const;
 
     void                                        BroadcastHasFinishedEvent   ();
     void                                        TriggerEvent                ( AssetTrackerInternalEvent::Command command );

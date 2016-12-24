@@ -44,6 +44,7 @@ public:
         static const std::string SEEK_OFFSET;
         static const std::string LOOP_ENABLED;
         static const std::string LOOP_COUNT;
+		static const std::string GAIN;
     };
 
 private:
@@ -69,6 +70,7 @@ private:
     ParamBoolPtr                        m_loopEnabledParam;                 
     ParamIntPtr                         m_loopCountParam;
     UInt32                              m_loopCount;
+	ParamFloatPtr						m_gainParam;
 
     AVAssetDescConstPtr                 m_assetDesc;
 
@@ -106,6 +108,8 @@ private:
 
     void                                        BroadcastHasFinishedEvent   ();
     void                                        TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command );
+
+	MemoryChunkPtr								ApplyGain					( const MemoryChunkPtr & audioFrameData ) const;
 
 };
 
