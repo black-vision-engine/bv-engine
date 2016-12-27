@@ -76,7 +76,8 @@ void         AudioUtils::MixAudio16   ( char * outData, const char * inData, Siz
 //
 void		AudioUtils::ApplyGain		( char * outData, const char * inData, SizeType size, Float32 gain )
 {
-	gain = std::min( gain, 0.f );
+	gain = std::min( gain, 0.f ); // Limit gain to range [0, 1]
+	gain = std::max( gain, 0.f );
 
 	auto outData16 = reinterpret_cast< Int16 * >( outData );
 	auto inData16 = reinterpret_cast< const Int16 * >( inData );
