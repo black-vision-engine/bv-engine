@@ -109,6 +109,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
+	, m_gain( 1.f )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -157,6 +158,8 @@ void BVAppLogic::Initialize         ()
     InitializeCommandsDebugLayer();
 
     ProjectManager::SetPMFolder( DefaultConfig.PMFolder() );
+
+	m_gain = DefaultConfig.GlobalGain();
 
     if( DefaultConfig.ReadbackFlag() )
     {
@@ -318,6 +321,7 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
                 HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
 
+				audioRenderer->SetGain( m_gain );
                 m_renderLogic->RenderFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
@@ -545,6 +549,13 @@ std::string                     BVAppLogic::GetEnvScene()
         return s;
     else
         return Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+}
+
+// *********************************
+//
+void							BVAppLogic::SetGain			( Float32 gain )
+{
+	m_gain = gain;
 }
 
 //// *********************************

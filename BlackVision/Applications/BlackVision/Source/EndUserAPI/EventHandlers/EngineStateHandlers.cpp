@@ -44,6 +44,7 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     unsigned int numFrames              = stateEvent->NumFrames;
     float requestedFPS                  = stateEvent->FPS;
     auto command                        = stateEvent->RenderingCommand;
+	auto gain							= stateEvent->Gain;
 
     // Converts to path inside project manager.
     std::string path = ProjectManager::GetInstance()->ToAbsPath( filePath ).Str();
@@ -66,6 +67,10 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
         if( m_enableLockQueue )
             GetDefaultEventManager().LockEvents( numFrames );
     }
+	else if( command == EngineStateEvent::Command::SetGain )
+	{
+		m_appLogic->SetGain( gain );
+	}
     else
     {
         SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );

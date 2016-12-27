@@ -26,6 +26,8 @@ public:
     void    Stop                ();
     void    Rewind              ();
 
+	void	SetGain				( float gain );
+
     bool    IsPlaying           () const;
     bool    IsPaused            () const;
     bool    IsStopped           () const;

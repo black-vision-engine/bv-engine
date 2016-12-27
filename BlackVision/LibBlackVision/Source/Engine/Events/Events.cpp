@@ -524,9 +524,10 @@ IMPLEMENT_ENUM_SERIALIZATION( VideoDecoderEvent::Command, VideoDecoderEventMappi
 // ========================================================================= //
 // EngineStateEvent
 // ========================================================================= //
-const std::string REQUESTED_FPS_STRING                = "FPS";
-const std::string NUM_FRAMES_STRING                   = "NumberFrames";
-const std::string RENDERING_FILE_PATH                  = "FilePath";
+const std::string REQUESTED_FPS_STRING              = "FPS";
+const std::string NUM_FRAMES_STRING                 = "NumberFrames";
+const std::string RENDERING_FILE_PATH               = "FilePath";
+const std::string GAIN_VAL_STRING					= "Gain";
 
 std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMapping[] = 
 {
@@ -534,6 +535,7 @@ std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMappi
     , std::make_pair( EngineStateEvent::Command::RenderOffscreen, "RenderOffscreen" )
     , std::make_pair( EngineStateEvent::Command::CloseApplication, "CloseApplication" )
     , std::make_pair( EngineStateEvent::Command::LockEventQueue, "LockEventQueue" )
+	, std::make_pair( EngineStateEvent::Command::SetGain, "SetGain" )
     , std::make_pair( EngineStateEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -1983,6 +1985,7 @@ void                EngineStateEvent::Serialize            ( ISerializer& ser ) 
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::REQUESTED_FPS_STRING, SerializationHelper::T2String( FPS ) );
     ser.SetAttribute( SerializationHelper::RENDERING_FILE_PATH, FilePath );
+	ser.SetAttribute( SerializationHelper::GAIN_VAL_STRING, SerializationHelper::T2String( Gain ) );
     ser.SetAttribute( SerializationHelper::NUM_FRAMES_STRING, SerializationHelper::T2String( NumFrames ) );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( RenderingCommand ) );
 }
@@ -1997,6 +2000,7 @@ IEventPtr                EngineStateEvent::Create          ( IDeserializer& dese
         newEvent->FilePath              = deser.GetAttribute( SerializationHelper::RENDERING_FILE_PATH );
         newEvent->FPS                   = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_STRING ), 60 );
         newEvent->NumFrames             = SerializationHelper::String2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_STRING ), 0 );
+		newEvent->Gain					= SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::GAIN_VAL_STRING ), 1.f );
         newEvent->RenderingCommand      = SerializationHelper::String2T<EngineStateEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), EngineStateEvent::Command::Fail );
 
         return newEvent;

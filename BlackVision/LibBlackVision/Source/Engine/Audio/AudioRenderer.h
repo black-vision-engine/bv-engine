@@ -33,6 +33,8 @@ private:
     AudioFormat             m_format;
     Int32                   m_frequency;
 
+	Float32					m_gain;
+
 public:
 
                         AudioRenderer       ();
@@ -48,6 +50,8 @@ public:
     void                Pause               ( AudioEntity * audio );
     void                Stop                ( AudioEntity * audio );
     void                EndOfFile           ( AudioEntity * audio );
+
+	void				SetGain				( Float32 gain );
 
     void                DeletePDR           ( const AudioEntity * audio );
 

@@ -81,6 +81,13 @@ inline bool     BVConfig::RenderToSharedMemory                   () const
 
 // *********************************
 //
+inline Float32  BVConfig::GlobalGain							() const
+{
+	return m_globalGain;
+}
+
+// *********************************
+//
 inline int     BVConfig::SharedMemoryScaleFactor() const
 {
 	return m_sharedMemoryScaleFactor;

@@ -57,6 +57,8 @@ private:
     BVProjectPtr                    m_bvProject;
 
     Renderer *                      m_renderer;
+
+	Float32							m_gain;
     audio::AudioRenderer *          m_audioRenderer;
     
     RenderLogic *                   m_renderLogic;
@@ -102,6 +104,8 @@ public:
 
     virtual void            ChangeState     ( BVAppState state );
     virtual BVAppState      GetState        ();
+
+	void			SetGain			( Float32 gain );
 
 public:
 

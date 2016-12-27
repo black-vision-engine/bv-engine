@@ -53,6 +53,8 @@ private:
 	int				m_sharedMemoryScaleFactor;
     bool            m_vsync;
 
+	Float32         m_globalGain;
+
     Float32         m_defaultFOV;
     Float32         m_defaultNearClippingPlane;
     Float32         m_defaultFarClippingPlane;
@@ -116,6 +118,8 @@ public:
     inline bool                 IsCameraPerspactive     () const;
 	inline bool                 RenderToSharedMemory() const;
 	inline int                  SharedMemoryScaleFactor() const;
+
+	inline Float32				GlobalGain				() const;
 
     inline UInt32               EventLoopUpdateMillis   () const;
     inline UInt32               FPS                     () const;

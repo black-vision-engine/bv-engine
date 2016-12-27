@@ -984,6 +984,7 @@ public:
         ScreenShot,
         CloseApplication,
         LockEventQueue,
+		SetGain,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -995,6 +996,7 @@ public:
     unsigned int                NumFrames;
     std::string                 FilePath;
     Command                     RenderingCommand;
+	float						Gain;
 
     //IDeserializer *             Request;
 

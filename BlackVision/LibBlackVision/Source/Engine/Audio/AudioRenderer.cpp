@@ -20,9 +20,10 @@ namespace bv { namespace audio {
 
 // *********************************
 //
-	    AudioRenderer::AudioRenderer	()
+AudioRenderer::AudioRenderer	()
     : m_format( AudioUtils::DEFAULT_SAMPLE_FORMAT )
     , m_frequency( AudioUtils::DEFAULT_SAMPLE_RATE )
+	, m_gain( 1.f )
 {
     Initialize();
 }
@@ -57,6 +58,8 @@ void    AudioRenderer::Proccess         ( AudioEntity * audio )
 
     auto source = GetPdrSource( audio ); 
     auto queue = GetPdrAudioBuffersQueue( source, audio );
+
+	source->SetGain( m_gain );
 
     if( queue && source )
     {
@@ -217,6 +220,11 @@ AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChun
         data->Clear();
     }
 
+	auto size = data->Size();
+	auto outData = MemoryChunk::Create( size );
+
+	audio::AudioUtils::ApplyGain( outData->GetWritable(), data->Get(), size, m_gain );
+
     return audio::AudioBuffer::Create( data, m_frequency, m_format, false );
 }
 
@@ -296,6 +304,13 @@ bool                    AudioRenderer::IsAnyBufferReady             ( SizeType r
         }
     }
     return false;
+}
+
+// *********************************
+//
+void					AudioRenderer::SetGain						( Float32 gain )
+{
+	m_gain = gain;
 }
 
 } // audio
