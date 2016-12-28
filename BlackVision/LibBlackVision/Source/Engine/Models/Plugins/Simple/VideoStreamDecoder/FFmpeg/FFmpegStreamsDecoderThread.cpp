@@ -91,11 +91,11 @@ void				FFmpegStreamsDecoderThread::Run			()
 			}
 
 			m_cond.wait( lock, [ = ] { return m_stopped == false; } );
-		}
 
-		if( !m_running )
-		{
-			break;
+			if( !m_running )
+			{
+				break;
+			}
 		}
 
 		if( m_videoStreamDecoder && m_audioStreamDecoder )

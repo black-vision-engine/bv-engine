@@ -384,7 +384,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 
         if( ParameterChanged( PARAM::MUTE ) )
         {
-            m_decoder->Mute( m_muteParam->Evaluate() );
+			m_decoder->Mute( m_muteParam->Evaluate() );
         }
 
         HandlePerfectLoops();

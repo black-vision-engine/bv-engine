@@ -14,6 +14,7 @@ namespace bv {
 FFmpegDemuxerThread::FFmpegDemuxerThread			( FFmpegDemuxer * demuxer )
 	: m_demuxer( demuxer )
 	, m_stopped( false )
+	, m_stopThread( false )
     , m_running( false )
 {
     if( m_demuxer )
@@ -48,6 +49,7 @@ void				FFmpegDemuxerThread::Kill	    ()
 void				FFmpegDemuxerThread::Restart	()
 {
     std::unique_lock< std::mutex > lock( m_mutex );
+	m_stopThread = false;
     m_stopped = false;
 	std::cout << "Demuxer thread restatring " << std::this_thread::get_id() << std::endl;
 	m_cond.notify_one();
@@ -58,7 +60,7 @@ void				FFmpegDemuxerThread::Restart	()
 void				FFmpegDemuxerThread::Stop		()
 {
     std::unique_lock< std::mutex > lock( m_mutex );
-    m_stopped = true;
+	m_stopThread = true;
 	std::cout << "Demuxer thread stopping " << std::this_thread::get_id() << std::endl;
 	m_cond.notify_one();
 }
@@ -79,21 +81,23 @@ void				FFmpegDemuxerThread::Run			()
 
     while( true )
     {        
-		std::unique_lock< std::mutex > lock( m_mutex );
-		
-		if( m_stopped )
 		{
-			std::cout << "Demuxer thread stopped " << std::this_thread::get_id() << std::endl;
-			std::cout << "Queue 0 empty " << m_demuxer->IsPacketQueueEmpty( 0 ) << std::endl;
-			std::cout << "Queue 1 empty " << m_demuxer->IsPacketQueueEmpty( 1 ) << std::endl;
-		}
+			std::unique_lock< std::mutex > lock( m_mutex );
 		
-		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
-		lock.unlock();
+			if( m_stopThread )
+			{
+				std::cout << "Demuxer thread stopped " << std::this_thread::get_id() << std::endl;
+				std::cout << "Queue 0 empty " << m_demuxer->IsPacketQueueEmpty( 0 ) << std::endl;
+				std::cout << "Queue 1 empty " << m_demuxer->IsPacketQueueEmpty( 1 ) << std::endl;
+				m_stopped = true;
+			}
+		
+			m_cond.wait( lock, [ = ] { return m_stopped == false; } );
 
-		if( !m_running )
-		{
-			break;
+			if( !m_running )
+			{
+				break;
+			}
 		}
 
 		// std::cout << "Demuxer thread process packet. " << std::this_thread::get_id() << std::endl;
