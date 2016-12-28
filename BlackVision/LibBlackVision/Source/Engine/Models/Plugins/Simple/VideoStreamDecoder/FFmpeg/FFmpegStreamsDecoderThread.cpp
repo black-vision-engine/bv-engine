@@ -19,6 +19,7 @@ FFmpegStreamsDecoderThread::FFmpegStreamsDecoderThread          ( FFmpegStreamDe
     , m_audioStreamDecoder( audioStreamDecoder )
     , m_demuxer( demuxer )
 	, m_stopped( false )
+	, m_stopThread( false )
     , m_running( true )
 {
 }
@@ -51,6 +52,7 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 void				FFmpegStreamsDecoderThread::Restart	    ()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
+	m_stopThread = false;
 	m_stopped = false;
     m_cond.notify_one();
 }
@@ -60,7 +62,7 @@ void				FFmpegStreamsDecoderThread::Restart	    ()
 void				FFmpegStreamsDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
-	m_stopped = true;
+	m_stopThread = true;
 	m_cond.notify_one();
 }
 
@@ -79,9 +81,17 @@ void				FFmpegStreamsDecoderThread::Run			()
 	std::cout << "Decoder thread starting " << std::this_thread::get_id() << std::endl;
     while( true )
     {
-		std::unique_lock< std::mutex > lock( m_mutex );
-		m_cond.wait( lock, [ = ] { return m_stopped == false; } );
-		//lock.unlock();
+		{
+			std::unique_lock< std::mutex > lock( m_mutex );
+
+			if( m_stopThread )
+			{
+				m_stopped = true;
+				m_stopThread = false;
+			}
+
+			m_cond.wait( lock, [ = ] { return m_stopped == false; } );
+		}
 
 		if( !m_running )
 		{

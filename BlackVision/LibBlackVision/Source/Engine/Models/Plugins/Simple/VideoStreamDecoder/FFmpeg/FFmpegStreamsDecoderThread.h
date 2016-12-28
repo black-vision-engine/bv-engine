@@ -23,9 +23,12 @@ private:
     FFmpegStreamDecoder *       m_audioStreamDecoder;
     FFmpegDemuxer *				m_demuxer;
 
+	mutable std::mutex			m_mutex1;
+
 	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
 
+	std::atomic< bool >			m_stopThread;
 	std::atomic< bool >			m_stopped;
 	std::atomic< bool >			m_running;
 
