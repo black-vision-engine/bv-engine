@@ -494,7 +494,7 @@ MemoryChunkPtr						DefaultAVDecoderPlugin::ApplyGain				( const MemoryChunkPtr 
 
 	auto outData = MemoryChunk::Create( audioFrameData->Size() );
 
-	audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, m_gainParam->Evaluate() );
+	audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, !m_muteParam->Evaluate() ? m_gainParam->Evaluate() : 0.f );
 
 	return outData;
 }
