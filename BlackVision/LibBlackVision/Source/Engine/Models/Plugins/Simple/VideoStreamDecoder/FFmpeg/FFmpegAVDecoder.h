@@ -30,9 +30,11 @@ private:
 	FFmpegDemuxerUPtr				        m_demuxer;
     FFmpegDemuxerThreadUPtr                 m_demuxerThread;
     
-    FFmpegStreamsDecoderThreadUPtr          m_streamsDecoderThread;
+	FFmpegStreamsDecoderThreadUPtr          m_videoStreamsDecoderThread;
+    FFmpegStreamsDecoderThreadUPtr          m_audioStreamsDecoderThread;
 
-	AVDecoderThreadUPtr			            m_decoderThread;
+	AVDecoderThreadUPtr			            m_videoDecoderThread;
+	AVDecoderThreadUPtr			            m_audioDecoderThread;
 
     UInt64                                  m_duration;
 
@@ -76,7 +78,7 @@ public:
     virtual void                Mute                    ( bool mute ) override;
 
     //FIXME: decode first video frame
-    void                        ProcessFirstAVFrame     ();
+    void                        ProcessFirstAVFrame     ( bool stopDecoding );
 
 protected:
 	

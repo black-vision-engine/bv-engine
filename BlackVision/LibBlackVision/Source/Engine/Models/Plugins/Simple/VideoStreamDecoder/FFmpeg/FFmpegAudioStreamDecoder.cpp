@@ -13,8 +13,8 @@ const AVSampleFormat        FFmpegAudioStreamDecoder::SUPPORTED_FORMATS[] = { AV
 
 // *******************************
 //
-FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
-    : FFmpegStreamDecoder( formatCtx, streamIdx, maxQueueSize )
+FFmpegAudioStreamDecoder::FFmpegAudioStreamDecoder     ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize, FFmpegDemuxer * demuxer )
+    : FFmpegStreamDecoder( formatCtx, streamIdx, maxQueueSize, demuxer )
     , m_swrCtx( nullptr )
     , m_needConversion( false )
 {

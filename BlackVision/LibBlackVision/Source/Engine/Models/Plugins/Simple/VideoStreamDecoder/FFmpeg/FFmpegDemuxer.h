@@ -63,6 +63,8 @@ public:
 
 	AVMediaType					GetNextPacketTypeToDecode() const;
 
+	void						EnqueueDummyMessage		( Int32 streamIdx );
+
 private:
 
 

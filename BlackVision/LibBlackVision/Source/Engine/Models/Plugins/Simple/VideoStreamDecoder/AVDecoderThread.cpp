@@ -8,7 +8,7 @@
 #include <chrono>
 
 
-
+#include "FFmpeg/FFmpegStreamDecoder.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -19,8 +19,8 @@ namespace bv {
 
 // *******************************
 //
-AVDecoderThread::AVDecoderThread				( IAVDecoder * decoder )
-	: m_decoder( decoder )
+AVDecoderThread::AVDecoderThread				( FFmpegStreamDecoder * streamDecoder )
+	: m_streamDecoder( streamDecoder )
     , m_paused( false )
 	, m_stopped( false )
     , m_running( false )
@@ -104,7 +104,7 @@ void				AVDecoderThread::Run			    ()
 		m_running = true;
 	}
 
-    auto duration = m_decoder->GetDuration();
+    auto duration = m_streamDecoder->GetDuration();
     m_timer.Start();
 
 	std::cout << "AVDecoder thread starting " << std::this_thread::get_id() << std::endl;
@@ -113,7 +113,7 @@ void				AVDecoderThread::Run			    ()
     {
         auto time = m_timer.ElapsedMillis();
         
-        m_decoder->NextDataReady( time, true );
+		m_streamDecoder->NextDataReady( time, true );
 
         if( time > duration ) 
         {
@@ -122,7 +122,7 @@ void				AVDecoderThread::Run			    ()
 
 		std::unique_lock< std::mutex > lock( m_mutex );
 
-        if( m_decoder->IsFinished() )
+        if( m_streamDecoder->IsFinished() )
 		{
 			m_stopped = true;
 		}
@@ -137,7 +137,7 @@ void				AVDecoderThread::Run			    ()
 			}
 		}
 
-		if ( m_stopped )
+		if ( m_stopped && m_running )
 		{
 			while( m_stopped )
 			{

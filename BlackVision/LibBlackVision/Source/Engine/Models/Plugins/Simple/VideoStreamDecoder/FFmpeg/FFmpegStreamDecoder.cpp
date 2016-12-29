@@ -9,12 +9,13 @@ namespace bv {
 
 // *******************************
 //
-FFmpegStreamDecoder::FFmpegStreamDecoder                    ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize )
+FFmpegStreamDecoder::FFmpegStreamDecoder                    ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize, FFmpegDemuxer * demuxer )
     : m_streamIdx( streamIdx )
     , m_offset( 0 )
     , m_prevPTS( 0 )
 	, m_bufferQueue( maxQueueSize )
 	, m_outQueue()
+	, m_demuxer( demuxer )
 {
     m_stream = formatCtx->streams[ streamIdx ];
 
@@ -71,6 +72,21 @@ void		        FFmpegStreamDecoder::UploadData         ()
 
 // *******************************
 //
+void				FFmpegStreamDecoder::ClearDataQueue		()
+{
+	m_bufferQueue.Clear();
+}
+
+// *******************************
+//
+void				FFmpegStreamDecoder::ClearOutQueue		()
+{
+	m_outQueue.Clear();
+}
+
+
+// *******************************
+//
 bool		        FFmpegStreamDecoder::PopData	        ( AVMediaData & data )
 {
     return m_outQueue.TryPop( data );
@@ -106,9 +122,9 @@ void				FFmpegStreamDecoder::Reset				()
 
 // *******************************
 //
-bool			    FFmpegStreamDecoder::ProcessPacket      ( FFmpegDemuxer * demuxer, bool block )
+bool			    FFmpegStreamDecoder::ProcessPacket      ( bool block )
 {
-    auto packet = demuxer->GetPacket( m_streamIdx, block );
+    auto packet = m_demuxer->GetPacket( m_streamIdx, block );
     if( packet )
     {
         if( DecodePacket( packet->GetAVPacket() ) )
@@ -135,13 +151,27 @@ bool			    FFmpegStreamDecoder::ProcessPacket      ( FFmpegDemuxer * demuxer, bo
 //
 bool                FFmpegStreamDecoder::DecodePacket       ( AVPacket * packet )
 {
-    assert( packet != nullptr );
-    if( avcodec_send_packet( m_codecCtx, packet ) == 0 )
-    {
-        return ( avcodec_receive_frame( m_codecCtx, m_frame ) == 0 );
-    }
+	assert( packet != nullptr );
 
-    return false;
+	if( packet->data != nullptr ) // If not dummy message
+	{
+		auto res = avcodec_send_packet( m_codecCtx, packet );
+
+		if( res == 0 )
+		{
+			return ( avcodec_receive_frame( m_codecCtx, m_frame ) == 0 );
+		}
+		else
+		{
+			auto err = AVUNERROR( res );
+			std::cout << "Packet decoding error: " << std::string( ( char * ) &err, 4 ) << std::endl;
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
 }
 
 // *********************************
@@ -185,14 +215,14 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 
 		if( block )
 		{
-			auto offsest = GetOffset();
+			auto offset = GetOffset();
 
 			auto pn = [ = ] ( const AVMediaData & avm )
 			{
-				return m_prevPTS <= avm.framePTS && avm.framePTS <= time + offsest;
+				return m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset;
 			};
 
-			success = m_bufferQueue.WaitAndPopUntil( data, pn );
+			success = m_bufferQueue.WaitAndPopUntil( data, pn ); // Tutaj dodaæ flagê która przerywa czekanie na nastêpnym dodanym elemencie do kolejki.
 
 			success = data.frameData ? success : false;
 		}
@@ -226,6 +256,20 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 void				FFmpegStreamDecoder::FinishQueue					()
 {
 	m_bufferQueue.EnqueueEndMessage();
+}
+
+// *********************************
+//
+bool				FFmpegStreamDecoder::IsFinished						() const
+{
+	bool finished = true;
+	finished &= m_demuxer->IsEOF();
+
+	finished &= m_demuxer->IsPacketQueueEmpty( GetStreamIdx() );
+	finished &= IsDataQueueEmpty();
+	finished &= IsOutQueueEmpty();
+
+	return finished;
 }
 
 } //bv

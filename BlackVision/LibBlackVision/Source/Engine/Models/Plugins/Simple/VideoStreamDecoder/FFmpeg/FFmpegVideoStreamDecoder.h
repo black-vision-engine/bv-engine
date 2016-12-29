@@ -25,7 +25,7 @@ private:
 
 public:
 
-                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize );
+                            FFmpegVideoStreamDecoder    ( AVAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize, FFmpegDemuxer * demuxer );
                             ~FFmpegVideoStreamDecoder   ();
 
     SizeType                GetFrameSize                () const;   

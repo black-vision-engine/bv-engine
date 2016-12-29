@@ -14,12 +14,14 @@
 namespace bv
 {
 
+class FFmpegStreamDecoder;
+
 class AVDecoderThread : public Thread
 {
 
 private:
 
-	IAVDecoder *				m_decoder;
+	FFmpegStreamDecoder *		m_streamDecoder;
 
 	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
@@ -31,7 +33,7 @@ private:
     SimpleTimer					m_timer;
 
 public:
-								AVDecoderThread	    ( IAVDecoder * decoder );
+								AVDecoderThread	    ( FFmpegStreamDecoder * streamDecoder );
 	virtual						~AVDecoderThread	();
 	void						Kill				();
 

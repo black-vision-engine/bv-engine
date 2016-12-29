@@ -14,10 +14,8 @@ namespace bv {
 
 // *******************************
 //
-FFmpegStreamsDecoderThread::FFmpegStreamsDecoderThread          ( FFmpegStreamDecoder * videoStreamDecoder, FFmpegStreamDecoder * audioStreamDecoder, FFmpegDemuxer * demuxer )
-	: m_videoStreamDecoder( videoStreamDecoder )
-    , m_audioStreamDecoder( audioStreamDecoder )
-    , m_demuxer( demuxer )
+FFmpegStreamsDecoderThread::FFmpegStreamsDecoderThread          ( FFmpegStreamDecoder * streamDecoder )
+	: m_streamDecoder( streamDecoder )
 	, m_stopped( false )
 	, m_stopThread( false )
     , m_running( true )
@@ -38,11 +36,8 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 	m_running = false;
     m_stopped = false;
 
-	if( m_audioStreamDecoder )
-		m_audioStreamDecoder->Reset();
-
-	if( m_videoStreamDecoder )
-		m_videoStreamDecoder->Reset();
+	if( m_streamDecoder )
+		m_streamDecoder->Reset();
 	
 	m_cond.notify_one();
 }
@@ -98,30 +93,9 @@ void				FFmpegStreamsDecoderThread::Run			()
 			}
 		}
 
-		if( m_videoStreamDecoder && m_audioStreamDecoder )
+		if( m_streamDecoder )
 		{
-			auto streamIdx = m_demuxer->GetNextPacketTypeToDecode();
-
-			if( m_videoStreamDecoder->GetStreamIdx() == streamIdx )
-			{
-				m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
-			}
-			else
-			{
-				m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
-			}
-		}
-		else
-		{
-			if( m_videoStreamDecoder )
-			{
-				m_videoStreamDecoder->ProcessPacket( m_demuxer, true );
-			}
-
-			if( m_audioStreamDecoder )
-			{
-				m_audioStreamDecoder->ProcessPacket( m_demuxer, true );
-			}
+			m_streamDecoder->ProcessPacket( true );
 		}
     }
 

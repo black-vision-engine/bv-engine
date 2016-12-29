@@ -206,7 +206,7 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                 }
 
                 //FIXME: decode first video frame
-                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( true );
 
                 auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
@@ -379,12 +379,7 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             m_decoder->Seek( offset[ 0 ] );
             m_prevOffsetCounter = offset[ 1 ];
 
-            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
-        }
-
-        if( ParameterChanged( PARAM::MUTE ) )
-        {
-			m_decoder->Mute( m_muteParam->Evaluate() );
+            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( m_decoderMode != PLAY );
         }
 
         HandlePerfectLoops();

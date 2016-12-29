@@ -21,6 +21,8 @@ protected:
     AVCodecContext *                    m_codecCtx;
     AVCodec *                           m_codec;
 
+	FFmpegDemuxer *						m_demuxer;
+
     Int32                               m_streamIdx;
 
     AVFrame *                           m_frame;
@@ -36,7 +38,7 @@ protected:
 
 public:
 
-    explicit                FFmpegStreamDecoder         ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize );
+    explicit                FFmpegStreamDecoder         ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize, FFmpegDemuxer * demuxer );
     virtual                 ~FFmpegStreamDecoder        ();
 
     UInt64                  GetDuration                 () const;   
@@ -46,12 +48,14 @@ public:
     void                    UploadData                  ();
     virtual bool            PopData                     ( AVMediaData & data );
     bool					IsDataQueueEmpty            () const;
+	void					ClearDataQueue				();
 
     bool					IsOutQueueEmpty		        () const;
+	void					ClearOutQueue				();
 
     virtual void			Reset                       ();
 
-    virtual bool            ProcessPacket               ( FFmpegDemuxer * demuxer, bool block = false );
+    virtual bool            ProcessPacket               ( bool block = false );
 
     virtual bool            DecodePacket                ( AVPacket * packet );
     virtual AVMediaData     ConvertFrame                () = 0;
@@ -68,6 +72,7 @@ public:
 
 	void					FinishQueue					();
 
+	bool					IsFinished					() const;
 };
 
 DEFINE_UPTR_TYPE( FFmpegStreamDecoder )

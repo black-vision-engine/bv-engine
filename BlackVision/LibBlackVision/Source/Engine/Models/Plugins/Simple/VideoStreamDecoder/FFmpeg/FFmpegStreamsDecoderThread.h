@@ -19,9 +19,7 @@ class FFmpegStreamsDecoderThread : public Thread
 
 private:
 
-    FFmpegStreamDecoder *       m_videoStreamDecoder;
-    FFmpegStreamDecoder *       m_audioStreamDecoder;
-    FFmpegDemuxer *				m_demuxer;
+    FFmpegStreamDecoder *       m_streamDecoder;
 
 	mutable std::mutex			m_mutex1;
 
@@ -34,7 +32,7 @@ private:
 
 public:
 
-                                FFmpegStreamsDecoderThread      ( FFmpegStreamDecoder * videoStreamDecoder, FFmpegStreamDecoder * audioStreamDecoder, FFmpegDemuxer * demuxer );
+                                FFmpegStreamsDecoderThread      ( FFmpegStreamDecoder * streamDecoder );
 	virtual					    ~FFmpegStreamsDecoderThread     ();
 	void						Kill				            ();
 

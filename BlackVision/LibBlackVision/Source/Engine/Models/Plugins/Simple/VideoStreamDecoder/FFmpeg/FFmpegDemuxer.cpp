@@ -61,10 +61,6 @@ bool			FFmpegDemuxer::ProcessPacket			()
 		assert( error == AVERROR_EOF ); //error reading frame
 		m_isEOF = true;
 
-		for( auto & k : m_packetQueue )
-		{
-			k.second->EnqueueEndMessage();
-		}
         return false;
     }
 	else if( error == 0 )
@@ -73,6 +69,8 @@ bool			FFmpegDemuxer::ProcessPacket			()
 
 		if( m_packetQueue.count( currStream ) > 0 )
 		{
+			std::cout << "Demuxer's pushing " <<  ffmpegPacket->GetAVPacket()->pts << " size " << m_packetQueue.at( currStream )->Size() << std::endl;
+			
 			m_packetQueue.at( currStream )->WaitAndPush( ffmpegPacket );
 			return true;
 		}
@@ -178,6 +176,16 @@ bool			    FFmpegDemuxer::IsPacketQueueEmpty	( Int32 streamIdx ) const
         return m_packetQueue.at( streamIdx )->IsEmpty();
     }
     return true;
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::EnqueueDummyMessage	( Int32 streamIdx )
+{
+	if( m_packetQueue.count( streamIdx ) )
+	{
+		m_packetQueue.at( streamIdx )->TryPush( std::make_shared< FFmpegPacket >() );
+	}
 }
 
 // *******************************
