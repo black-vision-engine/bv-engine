@@ -1,0 +1,39 @@
+#pragma once
+
+#include "Engine/Graphics/Effects/nrl/Logic/State/NRenderLogicState.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicCore.h"
+
+
+namespace bv { 
+
+class Renderer;
+   
+namespace nrl {
+
+class NRenderLogicImpl : public NRenderLogic
+{
+private:
+    
+    NRenderLogicState               m_state;
+
+    NRenderLogicCore                m_renderLogicCore;
+
+public:
+
+                            NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType = 2 );
+
+    virtual void            RenderFrame         ( Renderer * renderer, SceneNode * sceneRoot ) override;
+
+    virtual Preview *       GetPreview          () override;
+    virtual VideoOutput *   GetVideoOutput      () override;
+
+private:
+
+            void            Render              ( SceneNode * sceneRoot );
+
+};
+
+} // nrl
+} // bv
