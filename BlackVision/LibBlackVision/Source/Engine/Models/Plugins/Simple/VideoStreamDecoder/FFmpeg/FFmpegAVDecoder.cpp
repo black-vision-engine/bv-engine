@@ -145,14 +145,27 @@ void						FFmpegAVDecoder::Play				()
 //
 void						FFmpegAVDecoder::Pause				()
 {
-    if( m_audioDecoderThread->Pause() && m_videoDecoderThread->Pause() )
-    {
-        StopDecoding();
-    }
-    else
-    {
-        RestartDecoding();
-    }
+	auto paused = true;
+
+	if( m_audioDecoderThread )
+	{
+		paused &= m_audioDecoderThread->Pause();
+	}
+
+	if( m_videoDecoderThread )
+	{
+		paused &= m_videoDecoderThread->Pause();
+	}
+
+
+    //if( paused )
+    //{
+    //    StopDecoding();
+    //}
+    //else
+    //{
+    //    RestartDecoding();
+    //}
 }
 
 // *********************************

@@ -140,7 +140,7 @@ void				AVDecoderThread::Run			    ()
 		if ( m_stopped && m_running )
 		{
 			while( m_stopped )
-			{
+			{	
 				m_cond.wait( lock );
 				m_timer.Start();
 			}
