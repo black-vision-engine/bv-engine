@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Preview.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"

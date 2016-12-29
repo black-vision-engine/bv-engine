@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NNodeMaskFinalizeStep.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"

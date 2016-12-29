@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NRenderedData.h"
 
 #include <cassert>

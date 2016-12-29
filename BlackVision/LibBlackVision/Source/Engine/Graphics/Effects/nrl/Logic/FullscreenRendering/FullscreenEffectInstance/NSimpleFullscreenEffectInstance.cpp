@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NSimpleFullscreenEffectInstance.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/Impl/NFulscreenEffectVisualComponent.h"

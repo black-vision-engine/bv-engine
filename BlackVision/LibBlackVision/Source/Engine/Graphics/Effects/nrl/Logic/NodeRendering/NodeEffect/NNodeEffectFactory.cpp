@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NNodeEffectFactory.h"
 
 #include <cassert>

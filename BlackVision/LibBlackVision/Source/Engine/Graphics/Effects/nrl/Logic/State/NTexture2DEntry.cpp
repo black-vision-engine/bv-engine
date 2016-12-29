@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NTexture2DEntry.h"
 
 

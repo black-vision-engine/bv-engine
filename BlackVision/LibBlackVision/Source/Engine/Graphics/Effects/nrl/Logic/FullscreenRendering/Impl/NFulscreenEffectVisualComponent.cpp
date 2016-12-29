@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NFulscreenEffectVisualComponent.h"
 
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NFullscreenEffect.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"

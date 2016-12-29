@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NRenderContext.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"

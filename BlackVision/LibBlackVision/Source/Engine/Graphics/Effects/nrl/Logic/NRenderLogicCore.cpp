@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NRenderLogicCore.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"

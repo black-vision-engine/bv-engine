@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderResult.h"
 
 #include <cassert>

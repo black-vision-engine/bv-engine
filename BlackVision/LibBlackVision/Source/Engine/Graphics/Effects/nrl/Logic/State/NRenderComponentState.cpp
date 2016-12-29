@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NRenderComponentState.h"
 
 #include "Engine/Types/Values/TypedValues.h"

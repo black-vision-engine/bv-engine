@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NAlphaMaskFSEStep.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"

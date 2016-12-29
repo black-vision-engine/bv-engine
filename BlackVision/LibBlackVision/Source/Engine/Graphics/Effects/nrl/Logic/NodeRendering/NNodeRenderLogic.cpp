@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NNodeRenderLogic.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"

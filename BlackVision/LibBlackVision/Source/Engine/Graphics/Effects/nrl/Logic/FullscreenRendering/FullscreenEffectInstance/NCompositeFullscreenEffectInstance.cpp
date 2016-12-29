@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NCompositeFullscreenEffectInstance.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"

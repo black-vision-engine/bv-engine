@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NFullscreenEffectFactory.h"
 
 #include <cassert>
