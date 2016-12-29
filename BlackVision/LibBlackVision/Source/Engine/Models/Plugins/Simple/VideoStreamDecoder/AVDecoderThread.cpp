@@ -61,6 +61,16 @@ void				AVDecoderThread::Play	    ()
 
 // *******************************
 //
+void				AVDecoderThread::Restart	()
+{
+	std::unique_lock< std::mutex > lock( m_mutex );
+	m_paused = false;
+	m_stopped = false;
+	m_cond.notify_one();
+}
+
+// *******************************
+//
 void				AVDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );

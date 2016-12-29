@@ -476,6 +476,12 @@ void					FFmpegAVDecoder::RestartDecoding        ()
 
 	if( m_audioStreamsDecoderThread )
 		m_audioStreamsDecoderThread->Restart();
+
+	if( m_audioDecoderThread )
+		m_audioDecoderThread->Restart();
+
+	if( m_videoDecoderThread )
+		m_videoDecoderThread->Restart();
 }
 
 // *********************************

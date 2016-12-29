@@ -283,7 +283,7 @@ void                                DefaultAudioDecoderPlugin::HandlePerfectLoop
 
     if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
     {
-        m_decoder->Seek( 0.f, false );     // do not clear buffer
+        m_decoder->Seek( 0.f, true );     // do not clear buffer
         m_loopCount--;
     }
 }
