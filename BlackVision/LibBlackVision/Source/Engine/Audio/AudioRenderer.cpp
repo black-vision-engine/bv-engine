@@ -214,16 +214,19 @@ AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChun
             auto queue = m_bufferMap.at( obj.second );
             queue->MixBufferedData( data, obj.first->IsEOF() );
         }
+
+		auto size = data->Size();
+		auto outData = MemoryChunk::Create( size );
+
+		audio::AudioUtils::ApplyGain( outData->GetWritable(), data->Get(), size, m_gain );
+
+		data = outData;
     }
     else
     {
         data->Clear();
     }
 
-	auto size = data->Size();
-	auto outData = MemoryChunk::Create( size );
-
-	audio::AudioUtils::ApplyGain( outData->GetWritable(), data->Get(), size, m_gain );
 
     return audio::AudioBuffer::Create( data, m_frequency, m_format, false );
 }
