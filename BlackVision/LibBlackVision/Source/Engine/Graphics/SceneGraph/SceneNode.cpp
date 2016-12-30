@@ -22,7 +22,7 @@ namespace bv {
 // ********************************
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
-    : m_repr( new SceneNodeRepr( transformable ) )
+    : m_repr( new SceneNodeRepr( transformable, this ) )
     , m_nodeEffect( nullptr )
     , m_drawBoundingBox( false )
     , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )

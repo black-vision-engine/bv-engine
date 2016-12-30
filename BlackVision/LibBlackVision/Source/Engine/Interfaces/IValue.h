@@ -29,6 +29,8 @@ public:
 
 };
 
+typedef std::vector< IValuePtr > IValuePtrVec;
+
 // *********************************
 //
 template< typename ValueTypePtr >
