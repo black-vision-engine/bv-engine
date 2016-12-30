@@ -206,6 +206,8 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
         impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::binary );
     else if ( openMode == File::FOMReadWrite )
         impl->m_fileHandle = new std::fstream( fileName, std::ios::out | std::ios::binary );
+	else if( openMode == File::FOMWriteAppend )
+		impl->m_fileHandle = new std::fstream( fileName, std::ios::app | std::ios::binary );
 
     if( impl->m_fileHandle->good() )
         return impl;

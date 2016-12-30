@@ -239,7 +239,7 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 				return ( m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset ) && !flag;
 			};
 
-			success = m_bufferQueue.WaitAndPopUntil( data, pn ); // Tutaj dodaæ flagê która przerywa czekanie na nastêpnym dodanym elemencie do kolejki.
+			success = m_bufferQueue.WaitAndPopUntil( data, pn );
 
 			success = data.frameData ? success : false;
 		}
@@ -256,6 +256,14 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 
 		if( success )
 		{
+			std::cout 
+				<< "FFmpegStreamDecoderThread pushing frame " 
+				<< data.framePTS
+				<< " to queue " 
+				<< m_streamIdx 
+				<< " size " 
+				<< std::endl;
+
 			m_outQueue.Push( data );
 			m_prevPTS = data.framePTS;
 		}

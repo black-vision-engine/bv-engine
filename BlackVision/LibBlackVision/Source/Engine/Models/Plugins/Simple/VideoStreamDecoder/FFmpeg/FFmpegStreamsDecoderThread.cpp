@@ -36,6 +36,8 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 	m_running = false;
     m_stopped = false;
 
+	std::cout << "KILLING Decoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+
 	if( m_streamDecoder )
 		m_streamDecoder->Reset();
 	
@@ -47,9 +49,13 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 void				FFmpegStreamsDecoderThread::Restart	    ()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
-	m_stopThread = false;
-	m_stopped = false;
-    m_cond.notify_one();
+	if( m_stopped || m_stopThread )
+	{
+		std::cout << "RESTARTING Decoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+		m_stopThread = false;
+		m_stopped = false;
+		m_cond.notify_one();
+	}
 }
 
 // *******************************
@@ -57,6 +63,7 @@ void				FFmpegStreamsDecoderThread::Restart	    ()
 void				FFmpegStreamsDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
+	std::cout << "STOPPING Decoder thread strema id: "<< m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
 	m_stopThread = true;
 	m_cond.notify_one();
 }
@@ -73,7 +80,7 @@ bool				FFmpegStreamsDecoderThread::Stopped		() const
 //
 void				FFmpegStreamsDecoderThread::Run			()
 {
-	std::cout << "Decoder thread starting " << std::this_thread::get_id() << std::endl;
+	std::cout << "STARTING Decoder thread " << std::this_thread::get_id() << std::endl;
     while( true )
     {
 		{
@@ -83,9 +90,10 @@ void				FFmpegStreamsDecoderThread::Run			()
 			{
 				m_stopped = true;
 				m_stopThread = false;
+				std::cout << "STOPPED Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+				m_cond.wait( lock, [ = ] { return m_stopped == false; } );
+				std::cout << "STARTED Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
 			}
-
-			m_cond.wait( lock, [ = ] { return m_stopped == false; } );
 
 			if( !m_running )
 			{
@@ -99,7 +107,7 @@ void				FFmpegStreamsDecoderThread::Run			()
 		}
     }
 
-	std::cout << "Decoder thread dying " << std::this_thread::get_id() << std::endl;
+	std::cout << "DYING Decoder thread " << std::this_thread::get_id() << std::endl;
 }
 
 } //bv

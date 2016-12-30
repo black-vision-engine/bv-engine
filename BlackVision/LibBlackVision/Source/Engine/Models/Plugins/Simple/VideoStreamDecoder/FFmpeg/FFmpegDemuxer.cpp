@@ -48,6 +48,9 @@ AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 	return m_formatCtx;
 }
 
+static int numTypeFrame [] = { 0, 0 };
+static int current = 0;
+
 // *******************************
 //
 bool			FFmpegDemuxer::ProcessPacket			()
@@ -67,9 +70,28 @@ bool			FFmpegDemuxer::ProcessPacket			()
 	{
 		auto currStream = packet->stream_index;
 
+		if( currStream != current )
+		{
+			numTypeFrame[ current ] = 0;
+			current = currStream;
+		}
+
+		numTypeFrame[ current ]++;
+
 		if( m_packetQueue.count( currStream ) > 0 )
 		{
-			std::cout << "Demuxer's pushing " <<  ffmpegPacket->GetAVPacket()->pts << " size " << m_packetQueue.at( currStream )->Size() << std::endl;
+			//std::cout 
+			//	<< "Demuxer's pushing pts " 
+			//	<<  ffmpegPacket->GetAVPacket()->pts 
+			//	<< " dts "
+			//	<< ffmpegPacket->GetAVPacket()->dts
+			//	<< " to queue " 
+			//	<< currStream 
+			//	<< " size " 
+			//	<< m_packetQueue.at( currStream )->Size() 
+			//	<< " current size "
+			//	<< numTypeFrame[ current ]
+			//	<< std::endl;
 			
 			m_packetQueue.at( currStream )->WaitAndPush( ffmpegPacket );
 			return true;
@@ -115,8 +137,23 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 
 	std::lock_guard< std::mutex > lock( m_mutex );
 
+	auto f = File::Open( "test.txt", File::OpenMode::FOMWriteAppend );
+
+	std::stringstream out;
+
+	out << "Demuxer seek to ts: " << timestamp << std::endl;
+
+	f.Write( out.str() );
+
+	f.Close();
+
 	av_seek_frame( m_formatCtx, streamIdx, initTs, AVSEEK_FLAG_BACKWARD );
 	
+	if( initTs != 0 )
+	{
+		initTs = initTs;
+	}
+
 	m_isEOF = false; 
 }
 
@@ -128,7 +165,7 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
-static int qS [] = { 10, 100 };
+static int qS [] = { 8, 100 };
 
 // *******************************
 //

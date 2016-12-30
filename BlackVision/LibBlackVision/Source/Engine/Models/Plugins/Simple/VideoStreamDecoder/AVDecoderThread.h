@@ -33,10 +33,10 @@ private:
 	std::atomic< bool >			m_pauseThread;
 	std::atomic< bool >			m_paused;
 
-    SimpleTimer					m_timer;
+	const SimpleTimer &			m_timer;
 
 public:
-								AVDecoderThread	    ( FFmpegStreamDecoder * streamDecoder );
+								AVDecoderThread	    ( FFmpegStreamDecoder * streamDecoder, const SimpleTimer & timer );
 	virtual						~AVDecoderThread	();
 	void						Kill				();
 

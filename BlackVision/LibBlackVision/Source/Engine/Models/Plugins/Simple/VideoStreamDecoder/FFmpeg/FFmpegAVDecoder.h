@@ -40,6 +40,9 @@ private:
 
     bool                                    m_muted;
 
+	SimpleTimer								m_timer;
+	bool									m_paused;
+
 public:
 
 								FFmpegAVDecoder		    ( AVAssetConstPtr asset );
