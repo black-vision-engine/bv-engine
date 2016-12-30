@@ -26,8 +26,11 @@ private:
 	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
 
+	std::atomic< bool >			m_stopThread;
 	std::atomic< bool >			m_stopped;
 	std::atomic< bool >			m_running;
+
+	std::atomic< bool >			m_pauseThread;
 	std::atomic< bool >			m_paused;
 
     SimpleTimer					m_timer;

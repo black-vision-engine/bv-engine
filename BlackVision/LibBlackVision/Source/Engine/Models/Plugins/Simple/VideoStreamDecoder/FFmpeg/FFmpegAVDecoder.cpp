@@ -145,27 +145,8 @@ void						FFmpegAVDecoder::Play				()
 //
 void						FFmpegAVDecoder::Pause				()
 {
-	auto paused = true;
-
-	if( m_audioDecoderThread )
-	{
-		paused &= m_audioDecoderThread->Pause();
-	}
-
-	if( m_videoDecoderThread )
-	{
-		paused &= m_videoDecoderThread->Pause();
-	}
-
-
-    //if( paused )
-    //{
-    //    StopDecoding();
-    //}
-    //else
-    //{
-    //    RestartDecoding();
-    //}
+	m_audioDecoderThread->Pause();
+	m_videoDecoderThread->Pause();
 }
 
 // *********************************
@@ -427,7 +408,7 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
         m_muted = mute;
 
-        Pause();
+		Play();
     }
 }
 
@@ -511,6 +492,32 @@ void					FFmpegAVDecoder::StopDecoding           ()
 	{
 		m_streams[ AVMEDIA_TYPE_VIDEO ]->ClearDataQueue();
 		m_demuxer->EnqueueDummyMessage( m_demuxer->GetStreamIndex( AVMediaType::AVMEDIA_TYPE_VIDEO ) );
+	}
+
+	if( m_audioDecoderThread )
+		m_audioDecoderThread->Stop();
+
+	if( m_videoDecoderThread )
+		m_videoDecoderThread->Stop();
+
+	while( ( m_audioDecoderThread && !m_audioDecoderThread->Stopped() ) )
+	{
+		m_streams[ AVMEDIA_TYPE_AUDIO ]->ClearDataQueue();
+		m_streams[ AVMEDIA_TYPE_AUDIO ]->SetWaitingInterrupt();
+		m_streams[ AVMEDIA_TYPE_AUDIO ]->EnqueueDummyDataMessage();
+	}
+
+	while( m_videoDecoderThread && !m_videoDecoderThread->Stopped() )
+	{
+		m_streams[ AVMEDIA_TYPE_VIDEO ]->ClearDataQueue();
+		m_streams[ AVMEDIA_TYPE_VIDEO ]->SetWaitingInterrupt();
+		m_streams[ AVMEDIA_TYPE_VIDEO ]->EnqueueDummyDataMessage();
+	}
+
+	for( auto & s : m_streams )
+	{
+		s.second->ClearDataQueue();
+		s.second->ClearOutQueue();
 	}
 
 	// Remove dummy messages

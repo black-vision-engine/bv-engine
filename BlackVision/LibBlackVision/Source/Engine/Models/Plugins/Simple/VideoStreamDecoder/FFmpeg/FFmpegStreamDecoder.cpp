@@ -16,6 +16,7 @@ FFmpegStreamDecoder::FFmpegStreamDecoder                    ( AVFormatContext * 
 	, m_bufferQueue( maxQueueSize )
 	, m_outQueue()
 	, m_demuxer( demuxer )
+	, m_interruptWait( false )
 {
     m_stream = formatCtx->streams[ streamIdx ];
 
@@ -205,6 +206,20 @@ Int64               FFmpegStreamDecoder::ConvertTime        ( Float64 time )
 
 // *********************************
 //
+void				FFmpegStreamDecoder::SetWaitingInterrupt			()
+{
+	m_interruptWait = !m_interruptWait;
+}
+
+// *********************************
+//
+void				FFmpegStreamDecoder::EnqueueDummyDataMessage		()
+{
+	m_bufferQueue.TryPush( AVMediaData() );
+}
+
+// *********************************
+//
 bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 {
     auto success = false;
@@ -217,9 +232,11 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 		{
 			auto offset = GetOffset();
 
-			auto pn = [ = ] ( const AVMediaData & avm )
+			std::atomic< bool > & flag = m_interruptWait;
+
+			auto pn = [=, &flag ] ( const AVMediaData & avm )
 			{
-				return m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset;
+				return ( m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset ) && !flag;
 			};
 
 			success = m_bufferQueue.WaitAndPopUntil( data, pn ); // Tutaj dodaæ flagê która przerywa czekanie na nastêpnym dodanym elemencie do kolejki.

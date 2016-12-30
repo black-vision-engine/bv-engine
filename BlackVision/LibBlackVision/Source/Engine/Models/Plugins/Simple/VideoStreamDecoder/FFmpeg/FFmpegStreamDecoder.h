@@ -36,6 +36,8 @@ protected:
     /** Starting frame timestamp (in stream time base), updated on seeking. */
     UInt64                              m_offset;
 
+	std::atomic< bool >					m_interruptWait;
+
 public:
 
     explicit                FFmpegStreamDecoder         ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize, FFmpegDemuxer * demuxer );
@@ -73,6 +75,9 @@ public:
 	void					FinishQueue					();
 
 	bool					IsFinished					() const;
+
+	void					SetWaitingInterrupt			();
+	void					EnqueueDummyDataMessage		();
 };
 
 DEFINE_UPTR_TYPE( FFmpegStreamDecoder )
