@@ -109,16 +109,30 @@ audio::AudioEntity *    SceneNode::GetAudio             () const
 
 // ********************************
 //
-NodeEffectPtr   SceneNode::GetNodeEffect  ()
+NodeEffectPtr   SceneNode::GetNodeEffect                ()
 {
     return m_nodeEffect;
 }
 
 // ********************************
 //
-void            SceneNode::SetNodeEffect  ( NodeEffectPtr nodeEffect )
+void            SceneNode::SetNodeEffect                ( NodeEffectPtr nodeEffect )
 {
     m_nodeEffect = nodeEffect;
+}
+
+// ********************************
+//
+nrl::NNodeEffectPtr     SceneNode::GetNNodeEffect      ()
+{
+    return m_nNodeEffect;
+}
+
+// ********************************
+//
+void                    SceneNode::SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect )
+{
+    m_nNodeEffect = nNodeEffect;
 }
 
 // ********************************

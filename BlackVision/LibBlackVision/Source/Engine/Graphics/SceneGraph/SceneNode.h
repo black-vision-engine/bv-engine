@@ -2,7 +2,11 @@
 
 #include <vector>
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+
 #include "Engine/Audio/AudioEntity.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
@@ -11,23 +15,18 @@
 
 #include "SceneNodePerformance.h"
 
-#include "CoreDEF.h"
-
 
 namespace bv {
 
 class IValue;
 class TransformableEntity;
-class Renderer;
+class SceneNodeRepr;
+class RenderableEntity;
 
 namespace math = mathematics;
 
 class SceneNode
 {
-private:
-
-    typedef std::vector<SceneNode *>            SceneNodeVec;
-
 private:
 
     SceneNodeRepr *     m_repr;
@@ -65,6 +64,9 @@ public:
    
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
+
+    nrl::NNodeEffectPtr     GetNNodeEffect      ();
+    void                    SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect );
 
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;
