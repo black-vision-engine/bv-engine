@@ -1195,6 +1195,7 @@
     <None Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
+    <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />

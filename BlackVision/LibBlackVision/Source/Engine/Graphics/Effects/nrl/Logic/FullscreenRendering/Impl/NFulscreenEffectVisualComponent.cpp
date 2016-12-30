@@ -79,7 +79,7 @@ void    NFullscreenEffectVisualComponent::SyncTextures                  ( const 
     for( unsigned int i = 0; i < m_numRenderTargetTextures; ++i, ++k )
     {
         auto entry  = textures[ i ];
- 
+
         SyncStaticTexture( k, entry );
     }
 }
