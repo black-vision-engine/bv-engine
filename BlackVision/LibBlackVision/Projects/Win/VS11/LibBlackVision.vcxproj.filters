@@ -5293,5 +5293,8 @@
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.inl">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </None>
+    <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderablePass.inl">
+      <Filter>Engine\Graphics\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
