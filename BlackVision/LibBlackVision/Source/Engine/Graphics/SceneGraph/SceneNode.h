@@ -7,6 +7,8 @@
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffect.h"
+
 #include "SceneNodePerformance.h"
 
 #include "CoreDEF.h"
@@ -28,28 +30,24 @@ private:
 
 private:
 
-    SceneNodeVec                    m_sceneNodes;
+    SceneNodeRepr *     m_repr;
 
-    NodeEffectPtr                   m_nodeEffect;
+    NodeEffectPtr       m_nodeEffect;
+    nrl::NNodeEffectPtr m_nNodeEffect;
 
-    TransformableEntity *           m_transformable;
-
-    bool                            m_visible;
-
-    bool                            m_drawBoundingBox;
-    glm::vec4                       m_boundingBoxColor;
-
-    const mathematics::Box *        m_boundingBox;
-
-    audio::AudioEntity *            m_audio;
-
-    SceneNodePerformance *          m_performanceData;
+    //FIXME: use some sort of caps/flag here (instead of a single flag)
+    bool                m_visible;
+    bool                m_drawBoundingBox;
+    glm::vec4           m_boundingBoxColor;
 
 public:
 
                             SceneNode           ( TransformableEntity * transformable = nullptr );
                             ~SceneNode          ();
 
+    SceneNodeRepr *         GetRepr             ();
+
+    //FIXME: remove
     SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
@@ -60,8 +58,8 @@ public:
     SceneNode *             GetChild            ( unsigned int idx );
     bool                    HasChild            ( SceneNode * node ) const;
 
+    //FIXME: remove
     TransformableEntity *   GetTransformable    ();
-
     audio::AudioEntity *    GetAudio            () const;
     void                    SetAudio            ( audio::AudioEntity * audio );
    
@@ -82,8 +80,6 @@ private:
     void                    SetTransformable    ( TransformableEntity * transformable );
     void                    DeleteTransformable ();
 
-    void                    DeleteAudio         ();
-
 public:
 
     void                    Update              ( const Transform & parentTransform );
@@ -94,5 +90,7 @@ public:
     // FIXME: think of some better approach to dynamic node state manipulation
     friend class BVProjectTools;
 };
+
+RenderableEntity *  renderable  ( SceneNode * node );
 
 } // bv

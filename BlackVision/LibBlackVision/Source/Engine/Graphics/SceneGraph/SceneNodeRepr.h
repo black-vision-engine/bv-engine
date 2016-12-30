@@ -20,18 +20,26 @@ private:
 
 private:
 
-    SceneNodeVec            m_sceneNodes;
+    SceneNode *                 m_owner;
 
-    TransformableEntity *   m_transformable;
+    SceneNodeVec                m_sceneNodes;
+
+    TransformableEntity *       m_transformable;
+    audio::AudioEntity *        m_audio;
+
+    const mathematics::Box *    m_boundingBox;
+
+    SceneNodePerformance *      m_performanceData;
 
 public:
 
-                            SceneNodeRepr       ( TransformableEntity * transformable );
+                            SceneNodeRepr       ( TransformableEntity * transformable, SceneNode * owner );
                             ~SceneNodeRepr      ();
 
     SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
+    void                    AddChildNode        ( SceneNode * child, UInt32 idx );
     void                    DetachChildNode     ( SceneNode * node );
     SceneNode *             DetachChildNode     ( unsigned int idx );
 
@@ -39,12 +47,22 @@ public:
     bool                    HasChild            ( SceneNode * node ) const;
 
     TransformableEntity *   GetTransformable    ();
+    
+    audio::AudioEntity *    GetAudio            () const;
+    void                    SetAudio            ( audio::AudioEntity * audio );
 
-//FIXME: acces from BVSceneTools
+    void                    SetBoundingBox      ( const math::Box * bb );
+    const math::Box *       GetBoundingBox      () const;
+
+    SceneNodePerformance *  GetPerformanceData  ();
+
+//FIXME: access from BVSceneTools
 public:
 
     void                    SetTransformable    ( TransformableEntity * transformable );
     void                    DeleteTransformable ();
+
+    void                    DeleteAudio         ();
 
 public:
 
