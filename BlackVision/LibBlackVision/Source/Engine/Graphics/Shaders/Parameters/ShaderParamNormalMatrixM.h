@@ -18,6 +18,7 @@ private:
     glm::mat3   m_normalMat;
 
 public:
+
     ShaderParamNormalMatrixM                ( const std::string & name );
     ~ShaderParamNormalMatrixM               ();
 
