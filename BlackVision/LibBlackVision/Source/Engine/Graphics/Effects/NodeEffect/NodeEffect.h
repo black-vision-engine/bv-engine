@@ -14,52 +14,58 @@ enum class NodeEffectType : int
     NET_IMAGE_MASK,
     NET_WIREFRAME,
     NET_MIX_CHANNELS,
-    
+    /*
     NET_LIGHT_SCATTERING,
     NET_SHADOW,
     NET_BLUR,
 
     NET_BOUNDING_BOX,
-
+    */
     NET_TOTAL
 };
 
-
-class RenderablePass;
 class NodeEffectLogic;
-class SceneNode;
-class RenderLogicContext;
-class ITextureDescriptor;
-DEFINE_CONST_PTR_TYPE( ITextureDescriptor )
+class SceneNodeRepr;
+
+namespace nrl 
+{
+class NRenderContext;
+class NNodeEffectRenderLogic; 
+}
 
 class NodeEffect
 {
 private:
 
-    NodeEffectLogic *   m_logic;
-    NodeEffectType      m_type;
-    std::vector< ITextureDescriptorConstPtr > m_textures;
+    nrl::NNodeEffectRenderLogic *   m_nrlLogic;
+
+    NodeEffectType                  m_type;
 
 public:
 
                     NodeEffect                  ( NodeEffectLogic * logic,  NodeEffectType nodeEffectType );
                     ~NodeEffect                 ();
 
-    void            Update                      ();
-    void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
+    
+    void            Render                      ( SceneNodeRepr * node, nrl::NRenderContext * ctx );
+
+	// FIXME: these two methods are added because no valid rendering scheme was designed and right now we mix sorting, blending and inverse z-sorting
+	// FIXME: with two queues used to implement that - this suxxx, because it is not consistent and requires query functions as presented belov
+	// FIXME: at the very least, a separate query API should be added here, without specifying predefined functions
+	bool			IsBlendable_DIRTY_DESIGN_HACK	() const;
+	float			GetDepth_DIRTY_DESIGN_HACK		() const;
 
     //FIXME: remove when transition is finished - this doesn't seem to be required in this model
     NodeEffectType  GetType                     () const;
 
-    unsigned int    GetNumValues                () const;
+    //FIXME: remove when transition is finished - this doesn't seem to be required in this model
+    //unsigned int    GetNumValues                () const;
+
+    //FIXME: remove when transition is finished - this doesn't seem to be required in this model
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
+    //FIXME: remove when transition is finished - this doesn't seem to be required in this model
     IValuePtr       GetValue                    ( const std::string & name ) const;
 
-    void            AddTexture                  ( const ITextureDescriptorConstPtr & txDesc );
-    SizeType        GetNumTextures              () const;
-    ITextureDescriptorConstPtr GetTexture       ( SizeType i ) const;
-
-    void            GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const;
 };
 
 DEFINE_PTR_TYPE(NodeEffect)

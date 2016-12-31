@@ -9,6 +9,7 @@ namespace bv {
 class SamplerShaderParameters
 {
 private:
+
 	ShaderParamInt *	m_wrappingModeX;
 	ShaderParamInt *	m_wrappingModeY;
 	ShaderParamInt *	m_wrappingModeZ;

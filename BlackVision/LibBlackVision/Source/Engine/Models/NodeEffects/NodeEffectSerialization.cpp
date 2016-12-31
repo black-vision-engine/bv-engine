@@ -4,11 +4,7 @@
 #include "Serialization/SerializationHelper.inl"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
-
-
-
 #include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv { 
@@ -17,13 +13,13 @@ namespace SerializationHelper {
 
 std::pair< bv::NodeEffectType, const char* > ne2s[] = {
     std::make_pair( bv::NodeEffectType::NET_ALPHA_MASK, "alpha mask" )
-    , std::make_pair( bv::NodeEffectType::NET_BLUR, "blur" )
+//    , std::make_pair( bv::NodeEffectType::NET_BLUR, "blur" )
     , std::make_pair( bv::NodeEffectType::NET_DEFAULT, "default" )
-    , std::make_pair( bv::NodeEffectType::NET_LIGHT_SCATTERING, "light scattering" )
+//    , std::make_pair( bv::NodeEffectType::NET_LIGHT_SCATTERING, "light scattering" )
     , std::make_pair( bv::NodeEffectType::NET_MIX_CHANNELS, "mix channels" )
     , std::make_pair( bv::NodeEffectType::NET_NODE_MASK, "node mask" )
     , std::make_pair( bv::NodeEffectType::NET_WIREFRAME, "wireframe" )
-    , std::make_pair( bv::NodeEffectType::NET_SHADOW, "shadow" )
+//    , std::make_pair( bv::NodeEffectType::NET_SHADOW, "shadow" )
     , std::make_pair( bv::NodeEffectType::NET_IMAGE_MASK, "image mask" )
     , std::make_pair( bv::NodeEffectType::NET_TOTAL, "" ) };
 

@@ -19,6 +19,7 @@ public:
     static GenericShaderParam *     CreateMVPParameter              ();
     static GenericShaderParam *     CreateMVParameter               ();
     static GenericShaderParam *     CreatePParameter                ();
+
     static GenericShaderParam *     CreateNormalMatrixMVParameter   ();
     static GenericShaderParam *     CreateNormalMatrixMParameter    ();
     static GenericShaderParam *     CreateViewportMatrixParameter   ();
