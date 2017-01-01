@@ -587,6 +587,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\InitProcess.cpp" />
@@ -1152,6 +1153,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SceneUpdater.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\InitProcess.h" />

@@ -111,14 +111,12 @@ TriangleStrip *                                 NFullscreenEffectHelpers::Create
     float * vbData = CreateFullscreenQuadVBData();
     
     auto rad = CreateTriStripArrayData( 4, numUVChannels, vbData );
-    auto ret = new TriangleStrip( rad, effect );
+    // FIXME: nrl - verify nullptr bounding box
+    auto ret = new TriangleStrip( rad, nullptr, effect );
 
     delete[] vbData;
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    ret->SetWorldTransforms( vec );
+    ret->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
     return ret;
 }

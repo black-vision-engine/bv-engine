@@ -51,16 +51,4 @@ void    GenericShaderParam::Update          ( RenderableEntity * renderable, Cam
     //Intentionally left empty
 }
 
-//FIXME: temporary, REMOVE
-void *  GenericShaderParam::AccessValuePtr  ()
-{
-    return nullptr;
-}
-
-//FIXME: temporary, REMOVE
-void    GenericShaderParam::UpdateValuePtr  ( void * valuePtr )
-{
-    { valuePtr; }
-}
-
 } //bv

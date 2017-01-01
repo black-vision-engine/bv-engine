@@ -81,4 +81,11 @@ IValuePtr       NodeEffect::GetValue                    ( const std::string & na
     return m_nrlLogic->GetValue( name );
 }
 
+// **************************
+//
+void            NodeEffect::Update                      ()
+{
+    assert( false );
+}
+
 } //bv

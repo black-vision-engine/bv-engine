@@ -4,38 +4,13 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-#include "Engine/Models/Interfaces/IModelNode.h"
-
-#include "Engine/Interfaces/IShaderDataSource.h"
-#include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
-
-#include "Engine/Models/Plugins/Interfaces/IPluginListFinalized.h"
-
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
-
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamInt.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamFloat.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamVec2.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamVec3.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamVec4.h"
-
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamMat2.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamMat3.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamMat4.h"
-
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 #include "Engine/Models/ModelState.h"
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
-
 
 
 #include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv 
@@ -194,86 +169,33 @@ void    NodeUpdater::DoUpdate               ()
 void    NodeUpdater::UpdateNodeEffect       ()
 {
     auto nodeEffect = m_modelNode->GetNodeEffect();
+
     if( nodeEffect )
     {
-        auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+        auto sceneNNodeEffect = m_sceneNode->GetNNodeEffect();
 
-        if( sceneNodeEffect->GetType() != NodeEffectType::NET_DEFAULT )
+        //FIXME: nrl transition
+        if ( sceneNNodeEffect )
         {
             for( auto & val : nodeEffect->GetValues() )
-            {
-                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
-            }
+	        {
+		        UpdateValue( val, sceneNNodeEffect->GetValue( val->GetName() ) );
+	        }
+
+            sceneNNodeEffect->Update();
+        }
+        else
+        {
+            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+            for( auto & val : nodeEffect->GetValues() )
+	        {
+		        UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+	        }
 
             sceneNodeEffect->Update();
         }
     }
-
-//    // *******************************
-////
-//template< typename ValType, typename ShaderParamType >
-//void	UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
-//{
-//    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
-//}
-
-//    // *****************************
-////
-//void            UpdateShaderParam				( IValueConstPtr source, GenericShaderParam * dest )
-//{
-//    assert( source && source->GetType() == dest->Type() );
-//    
-//    switch( source->GetType() )
-//    {
-//    case ParamType::PT_FLOAT1:
-//        UpdateTypedShaderParam< ValueFloatPtr, ShaderParamFloat >( source, dest );
-//        break;
-//    case ParamType::PT_INT:
-//        UpdateTypedShaderParam< ValueIntPtr, ShaderParamInt >( source, dest );
-//        break;
-//    case ParamType::PT_FLOAT2:
-//        UpdateTypedShaderParam< ValueVec2Ptr, ShaderParamVec2 >( source, dest );
-//        break;
-//    case ParamType::PT_FLOAT3:
-//        UpdateTypedShaderParam< ValueVec3Ptr, ShaderParamVec3 >( source, dest );
-//        break;
-//    case ParamType::PT_FLOAT4:
-//        UpdateTypedShaderParam< ValueVec4Ptr, ShaderParamVec4 >( source, dest );
-//        break;
-//    case ParamType::PT_MAT2:
-//        UpdateTypedShaderParam< ValueMat2Ptr, ShaderParamMat2 >( source, dest );
-//        break;
-//    case ParamType::PT_MAT3:
-//        UpdateTypedShaderParam< ValueMat3Ptr, ShaderParamMat3 >( source, dest );
-//        break;
-//    case ParamType::PT_MAT4:
-//        UpdateTypedShaderParam< ValueMat4Ptr, ShaderParamMat4 >( source, dest );
-//        break;
-//    }
-//}
-    //auto nodeEffect = m_modelNode->GetNodeEffect();
-    //if( nodeEffect )
-    //{
-    //    auto sceneNNodeEffect = m_sceneNode->GetNNodeEffect();
-
-    //    if ( sceneNNodeEffect )
-    //    {
-    //        for( auto & val : nodeEffect->GetValues() )
-	   //     {
-		  //      UpdateValue( val, sceneNNodeEffect->GetValue( val->GetName() ) );
-	   //     }
-    //    }
-    //    else
-    //    {
-    //        auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-    //        for( auto & val : nodeEffect->GetValues() )
-	   //     {
-		  //      UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
-	   //     }
-    //    }
-    //}
-
 }
 
 // *****************************
@@ -364,41 +286,6 @@ void            NodeUpdater::RegisterShaderParams			( IValueSetConstPtr values, 
                 m_paramsMappingVec.push_back( Value2ShaderParam( source, dest ) );
             }
         }
-    }
-}
-
-// *****************************
-//
-void            NodeUpdater::UpdateShaderParam				( IValueConstPtr source, GenericShaderParam * dest )
-{
-    assert( source && source->GetType() == dest->Type() );
-    
-    switch( source->GetType() )
-    {
-    case ParamType::PT_FLOAT1:
-        UpdateTypedShaderParam< ValueFloatPtr, ShaderParamFloat >( source, dest );
-        break;
-    case ParamType::PT_INT:
-        UpdateTypedShaderParam< ValueIntPtr, ShaderParamInt >( source, dest );
-        break;
-    case ParamType::PT_FLOAT2:
-        UpdateTypedShaderParam< ValueVec2Ptr, ShaderParamVec2 >( source, dest );
-        break;
-    case ParamType::PT_FLOAT3:
-        UpdateTypedShaderParam< ValueVec3Ptr, ShaderParamVec3 >( source, dest );
-        break;
-    case ParamType::PT_FLOAT4:
-        UpdateTypedShaderParam< ValueVec4Ptr, ShaderParamVec4 >( source, dest );
-        break;
-    case ParamType::PT_MAT2:
-        UpdateTypedShaderParam< ValueMat2Ptr, ShaderParamMat2 >( source, dest );
-        break;
-    case ParamType::PT_MAT3:
-        UpdateTypedShaderParam< ValueMat3Ptr, ShaderParamMat3 >( source, dest );
-        break;
-    case ParamType::PT_MAT4:
-        UpdateTypedShaderParam< ValueMat4Ptr, ShaderParamMat4 >( source, dest );
-        break;
     }
 }
 

@@ -1,31 +1,40 @@
 #include "stdafx.h"
 #include "RenderingQueue.h"
 
-
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-
-
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
 
 #include "Memory/MemoryLeaks.h"
 
 
-
-namespace bv
-{
+namespace bv {
 
 namespace {
 
+// ************************************
+// FIXME: nrl - effect vs neffect
 bool HasEffect( SceneNode * node )
 {
     auto effect = node->GetNodeEffect();
+
     if( effect != nullptr && effect->GetType() != NodeEffectType::NET_DEFAULT )
+    {
         return true;
+    }
+
+    auto neffect = node->GetNNodeEffect();
+
+    if( neffect != nullptr && neffect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
+    {
+        return true;
+    }
+
     return false;
 }
 
@@ -44,8 +53,8 @@ RenderingQueue::~RenderingQueue()
 
 
 // ***********************
-//
-float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     float z = 0.0f;
 
@@ -88,8 +97,8 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
 
 
 // ***********************
-//
-void                RenderingQueue::QueueSingleNode     ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     if( !node->IsVisible() )
         return;
@@ -129,8 +138,8 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
 }
 
 // ***********************
-//
-void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     if( node->IsVisible() )
     {
@@ -148,8 +157,8 @@ void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, Rend
 }
 
 // ***********************
-//
-void                RenderingQueue::Render              ( RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::Render              ( nrl::NRenderContext * ctx )
 {
     // Opaque objects from front to back.
     for( auto & renderItem : m_opaqueNodes )
@@ -162,7 +171,6 @@ void                RenderingQueue::Render              ( RenderLogicContext * c
     {
         RenderNode( renderItem.first, ctx );
     }
-
 }
 
 // ***********************
@@ -178,8 +186,8 @@ void                RenderingQueue::ClearQueue          ()
 // ========================================================================= //
 
 // ***********************
-//
-void                RenderingQueue::RenderNode          ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::RenderNode          ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     // Function doesn't check if node is visible, beacause all nodes in m_transparentNodes
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
@@ -190,9 +198,17 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
 
     if( HasEffect( node ) )
     {
+        // FIXME: nrl - remove old effect implementation
         auto effect = node->GetNodeEffect();
-        effect->Render( node, ctx );
-    }
+
+        if( effect )
+        {
+            assert( false );
+            effect->Render( node, ctx );
+        }
+        else{
+            // FIXME: nrl - get NNodeEffect
+        }
     else
     {
         // Default render logic
@@ -206,4 +222,4 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
     END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
 }
 
-}	// bv
+} // bv

@@ -66,6 +66,8 @@ public:
     //FIXME: remove when transition is finished - this doesn't seem to be required in this model
     IValuePtr       GetValue                    ( const std::string & name ) const;
 
+    void            Update                      ();
+
 };
 
 DEFINE_PTR_TYPE(NodeEffect)

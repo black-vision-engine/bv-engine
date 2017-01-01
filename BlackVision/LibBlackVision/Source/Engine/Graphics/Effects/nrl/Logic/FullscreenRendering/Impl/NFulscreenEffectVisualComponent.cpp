@@ -114,7 +114,8 @@ void    NFullscreenEffectVisualComponent::SyncIValues                   ( const 
 
         numUpdated++;
 
-        param->UpdateValuePtr( val.get() );
+        //FIXME: nrl implement
+        //param->UpdateValuePtr( val.get() );
     }
 
     // FIXME: this test does not include repeated values, but at this moment it doesn't seem too important
