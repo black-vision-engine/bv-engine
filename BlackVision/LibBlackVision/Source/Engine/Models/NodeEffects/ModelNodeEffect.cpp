@@ -29,7 +29,8 @@ namespace
 std::map< NodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
 {
     std::map< NodeEffectType, UInt32 > m;
-    m[ NodeEffectType::NET_IMAGE_MASK ] = 1;
+    // FIXME: nrl - fix this
+    //    m[ NodeEffectType::NET_IMAGE_MASK ] = 1;
 
     return m;
 }

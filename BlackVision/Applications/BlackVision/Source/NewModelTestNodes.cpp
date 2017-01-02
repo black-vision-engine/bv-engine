@@ -321,6 +321,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::IT
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::ITimeEvaluatorPtr timeEvaluator )
 {
+    // FIXME: nrl - reimplement effects
     //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
 
     // // ROOT
@@ -329,6 +330,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model:
     //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
 
     //return root;
+
+    return nullptr;
 }
 
 // *****************************
@@ -385,21 +388,23 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateImageMaskTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    //auto root = CreateTextNode( timeEvaluator, 0, false );
+    // FIXME: nrl - reimplement effects
+    ////auto root = CreateTextNode( timeEvaluator, 0, false );
 
-    auto root = CreateTextureAnimationRectNode( timeEvaluator, false );
+    //auto root = CreateTextureAnimationRectNode( timeEvaluator, false );
 
-    auto effect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "image mask", timeEvaluator );
+    ////auto effect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "image mask", timeEvaluator );
 
-    auto pm = ProjectManager::GetInstance();
+    //auto pm = ProjectManager::GetInstance();
 
-    auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
+    //auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
 
-    effect->AddAsset( desc, 0 );
+    //effect->AddAsset( desc, 0 );
 
-    root->SetNodeEffect( effect );
+    //root->SetNodeEffect( effect );
 
-    return root;
+    //return root;
+    return nullptr;
 }
 
 // *****************************
@@ -589,34 +594,37 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeMultiGlobalEffectTest    ( mo
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/rus.jpg", false, 0.6f, 0.6f );
+    // FIXME: nrl - reimplement effects
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/rus.jpg", false, 0.6f, 0.6f );
 
-    // ROOT
-    auto root = bTex.CreateNode( "root", true );
+    //// ROOT
+    //auto root = bTex.CreateNode( "root", true );
 
-    auto shiftRepMod = nodelogic::ShiftReplicationModifier::Create();
+    //auto shiftRepMod = nodelogic::ShiftReplicationModifier::Create();
 
-    nodelogic::ParamValDelta delta;
+    //nodelogic::ParamValDelta delta;
 
-    delta.deltaTime = 0.f;
-    delta.startTime = 0.f;
-    auto v = std::make_shared< ValueVec3 >( "" );
-    delta.delta = v;
-    v->SetValue( glm::vec3( 0.4f, 0.4f, 0.0 ) );
+    //delta.deltaTime = 0.f;
+    //delta.startTime = 0.f;
+    //auto v = std::make_shared< ValueVec3 >( "" );
+    //delta.delta = v;
+    //v->SetValue( glm::vec3( 0.4f, 0.4f, 0.0 ) );
 
-    shiftRepMod->AddParamShift( "transform", "translation", delta );
+    //shiftRepMod->AddParamShift( "transform", "translation", delta );
 
-    auto repLogic = nodelogic::NodeReplicator::Create( root, 5, shiftRepMod );
+    //auto repLogic = nodelogic::NodeReplicator::Create( root, 5, shiftRepMod );
 
-    auto image = bTex.CreateNode( "piateczka", true );
+    //auto image = bTex.CreateNode( "piateczka", true );
 
-    root->AddChildToModelOnly( image );
+    //root->AddChildToModelOnly( image );
 
-    root->SetLogic( repLogic );
+    //root->SetLogic( repLogic );
 
-    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
+    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
 
-    return root;
+    //return root;
+
+    return nullptr;
 }
 
 // *****************************

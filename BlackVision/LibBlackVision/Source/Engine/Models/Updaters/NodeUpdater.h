@@ -148,12 +148,6 @@ private:
 private:
 
     void            RegisterShaderParams	( IValueSetConstPtr values, Shader * shader );
-    
-    
-    void			UpdateShaderParam		( IValueConstPtr source, GenericShaderParam * dest );
-
-    template< typename ValType, typename ShaderParamType >
-    void			UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest );
 
 private:
     
