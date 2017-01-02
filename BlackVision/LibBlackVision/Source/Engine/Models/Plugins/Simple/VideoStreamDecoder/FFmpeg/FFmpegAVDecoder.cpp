@@ -341,6 +341,8 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
 {
 	std::cout << "Seek to time: " << time << std::endl;
 
+	m_timer.Pause();
+
 	StopDecoding();
 
     if( flushBuffers )
@@ -364,6 +366,8 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
     }
 
 	RestartDecoding();
+
+	m_timer.Start();
 }
 
 // *********************************

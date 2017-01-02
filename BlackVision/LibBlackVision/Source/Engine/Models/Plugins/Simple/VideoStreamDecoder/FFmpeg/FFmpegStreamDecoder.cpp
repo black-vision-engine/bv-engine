@@ -256,12 +256,13 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 
 		if( success )
 		{
-			std::cout 
-				<< "FFmpegStreamDecoderThread pushing frame " 
+			std::cout
+				<< "FFmpegStreamDecoderThread pushing frame "
 				<< data.framePTS
-				<< " to queue " 
-				<< m_streamIdx 
-				<< " size " 
+				<< " to queue "
+				<< m_streamIdx
+				<< " size "
+				<< m_outQueue.Size()
 				<< std::endl;
 
 			m_outQueue.Push( data );
