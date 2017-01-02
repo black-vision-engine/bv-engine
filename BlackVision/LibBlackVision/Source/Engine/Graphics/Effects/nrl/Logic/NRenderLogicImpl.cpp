@@ -28,7 +28,7 @@ void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio
     auto renderResult = render_result( m_state );
     renderResult->UpdateOutputChannels();
 
-    Render( sceneRoot );
+    Render      ( sceneRoot );
 
     // FIXME: add an output renderTarget (possibly if necessary)
     // FIXME: nrl - add audio somewhere in this class
@@ -57,6 +57,7 @@ VideoOutput *   NRenderLogicImpl::GetVideoOutput    ()
 void             NRenderLogicImpl::Render           ( SceneNode * sceneRoot )
 {
 	m_renderLogicCore.Render( m_state.GetRenderResult(), sceneRoot, m_state.GetRenderContext() );
+    m_audioLogicCore.RenderAudio( sceneRoot, m_state.GetRenderContext() );
 }
 
 } //nrl

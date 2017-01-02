@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicCore.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NAudioLogicCore.h"
 
 
 namespace bv { 
@@ -19,6 +20,7 @@ private:
     NRenderLogicState               m_state;
 
     NRenderLogicCore                m_renderLogicCore;
+    NAudioLogicCore                 m_audioLogicCore;
 
 public:
 

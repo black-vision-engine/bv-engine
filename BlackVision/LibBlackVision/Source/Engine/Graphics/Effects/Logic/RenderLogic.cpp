@@ -261,6 +261,7 @@ void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ct
 //
 void    RenderLogic::Play           ( audio::AudioRenderer * renderer, SceneNode * node )
 {
+    // FIXME: and what about node effects???
     if ( node->IsVisible() )
     {
         auto audio = node->GetAudio();
