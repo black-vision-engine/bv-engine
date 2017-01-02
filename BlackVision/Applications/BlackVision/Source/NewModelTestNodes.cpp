@@ -321,55 +321,63 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::IT
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
 
-     // ROOT
-    auto root = bTex.CreateNode( "root", true );
+    // // ROOT
+    //auto root = bTex.CreateNode( "root", true );
 
-    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
+    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
 
-    return root;
+    //return root;
 }
 
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateBlurTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
-    //bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
-    //bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
-    //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
-    auto root = bTex.CreateNode( "root", true );
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
+    ////bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
+    ////bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
+    ////bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
+    //auto root = bTex.CreateNode( "root", true );
 
-    //auto text = CreateTextNode( timeEvaluator, 0, false );
+    ////auto text = CreateTextNode( timeEvaluator, 0, false );
 
-    //root->AddChildToModelOnly( text );
+    ////root->AddChildToModelOnly( text );
 
-    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
-    return root;
+    //return root;
+
+    // FIXME: nrl - implement in NNodeFactory
+    {timeEvaluator;}
+    return nullptr;
 }
 
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
-    //bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
-    //bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
-    //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
-    auto root = bTex.CreateNode( "root", true );
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
+    ////bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
+    ////bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
+    ////bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
+    //auto root = bTex.CreateNode( "root", true );
 
-    root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
+    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
 
-    //auto text = CreateTextNode( timeEvaluator, 0, false );
+    ////auto text = CreateTextNode( timeEvaluator, 0, false );
 
-    //root->AddChildToModelOnly( text );
+    ////root->AddChildToModelOnly( text );
 
-    //text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
-    //text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    ////text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
+    ////text->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
-    return root;
+    //return root;
+
+    // FIXME: nrl - implement in NNodeFactory
+    {timeEvaluator;}
+    return nullptr;
 }
 
 
@@ -468,109 +476,113 @@ model::BasicNodePtr CreateNodeInPos( TexturedRectNodeBuilder & bTex, Float32 X, 
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateNodeMultiGlobalEffectTest    ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = NewEmptyNodeWithTransform( timeEvaluator );
+    //auto root = NewEmptyNodeWithTransform( timeEvaluator );
 
-    TexturedRectNodeBuilder bTex( timeEvaluator, "textures/flagi_faliste/australia.tif", false, 0.6f, 0.6f );
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "textures/flagi_faliste/australia.tif", false, 0.6f, 0.6f );
 
-    auto posX = -1.9f;
-    auto posY = 1.0f;
+    //auto posX = -1.9f;
+    //auto posY = 1.0f;
 
-    // ROOT
-    auto e0node = CreateNodeInPos( bTex, posX, posY, "e0node", root );
+    //// ROOT
+    //auto e0node = CreateNodeInPos( bTex, posX, posY, "e0node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e1node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e1node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e2node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e2node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e3node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e3node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e4node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e4node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e5node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e5node", root );
 
-    posX = -1.9f;
-    posY -= 0.6f;
-    CreateNodeInPos( bTex, posX, posY, "e6node", root );
+    //posX = -1.9f;
+    //posY -= 0.6f;
+    //CreateNodeInPos( bTex, posX, posY, "e6node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e7node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e7node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e8node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e8node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e9node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e9node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e10node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e10node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e11node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e11node", root );
 
-    posX = -1.9f;
-    posY -= 0.6f;
-    CreateNodeInPos( bTex, posX, posY, "e12node", root );
+    //posX = -1.9f;
+    //posY -= 0.6f;
+    //CreateNodeInPos( bTex, posX, posY, "e12node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e13node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e13node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e14node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e14node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e15node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e15node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e16node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e16node", root );
 
-    posX += 0.7f;
-    CreateNodeInPos( bTex, posX, posY, "e17node", root );
+    //posX += 0.7f;
+    //CreateNodeInPos( bTex, posX, posY, "e17node", root );
 
-    posX = -1.9f;
-    posY -= 0.6f;
-    CreateNodeInPos( bTex, posX, posY, "e18node", root );
+    //posX = -1.9f;
+    //posY -= 0.6f;
+    //CreateNodeInPos( bTex, posX, posY, "e18node", root );
 
-    posX += 0.7f;
-    auto e19node = CreateNodeInPos( bTex, posX, posY, "e19node", root );
-    auto eff = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "shadow", timeEvaluator );
+    //posX += 0.7f;
+    //auto e19node = CreateNodeInPos( bTex, posX, posY, "e19node", root );
+    //auto eff = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_IMAGE_MASK, "shadow", timeEvaluator );
 
-    auto pm = ProjectManager::GetInstance();
+    //auto pm = ProjectManager::GetInstance();
 
-    auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
+    //auto desc = pm->GetAssetDesc( "", "textures", "butterfly1.png" );
 
-    eff->AddAsset( desc, 0 );
-    e19node->SetNodeEffect( eff );
+    //eff->AddAsset( desc, 0 );
+    //e19node->SetNodeEffect( eff );
 
-    posX += 0.7f;
-    auto e20node = CreateNodeInPos( bTex, posX, posY, "e20node", root );
-    e20node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
+    //posX += 0.7f;
+    //auto e20node = CreateNodeInPos( bTex, posX, posY, "e20node", root );
+    //e20node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_SHADOW, "shadow", timeEvaluator ) );
 
-    posX += 0.7f;
-    auto e21node = CreateNodeInPos( bTex, posX, posY, "e21node", root );
-    e21node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    //posX += 0.7f;
+    //auto e21node = CreateNodeInPos( bTex, posX, posY, "e21node", root );
+    //e21node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
-    posX += 0.7f;
-    auto e22node = CreateNodeInPos( bTex, posX, posY, "e22node", root );
-    e22node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    //posX += 0.7f;
+    //auto e22node = CreateNodeInPos( bTex, posX, posY, "e22node", root );
+    //e22node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
-    posX += 0.7f;
-    auto e23node = CreateNodeInPos( bTex, posX, posY, "e23node", root );
-    e23node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
+    //posX += 0.7f;
+    //auto e23node = CreateNodeInPos( bTex, posX, posY, "e23node", root );
+    //e23node->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BLUR, "blur", timeEvaluator ) );
 
 
-    // NET_IMAGE_MASK
-    // NET_LIGHT_SCATTERING,
-    // NET_SHADOW,
-    // NET_BLUR,
+    //// NET_IMAGE_MASK
+    //// NET_LIGHT_SCATTERING,
+    //// NET_SHADOW,
+    //// NET_BLUR,
 
-    //root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
+    ////root->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering", timeEvaluator ) );
 
-    return root;
+    //return root;
+
+    // FIXME: nrl - implement in NNodeFactory
+    {timeEvaluator;}
+    return nullptr;
 }
 
 // *****************************

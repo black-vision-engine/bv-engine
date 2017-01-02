@@ -134,70 +134,83 @@ NodeEffectPtr       CreateMixchannelsNodeEffect()
 //
 NodeEffectPtr       CreateBoundingBoxNodeEffect()
 {
-    auto logic = CreateNodeEffectLogic();
+    //auto logic = CreateNodeEffectLogic();
 
-    auto pre  = new DefaultPreFullscreenEffectLogic();
-    auto post = new BoundingBoxPostFullscreenEffectLogic();
+    //auto pre  = new DefaultPreFullscreenEffectLogic();
+    //auto post = new BoundingBoxPostFullscreenEffectLogic();
 
-    SetLogicComponents( logic, pre, nullptr, post );
+    //SetLogicComponents( logic, pre, nullptr, post );
 
-    return CreateNodeEffect( logic, NodeEffectType::NET_BOUNDING_BOX );
+    //return CreateNodeEffect( logic, NodeEffectType::NET_BOUNDING_BOX );
+
+    // FIXME: nrl - implement in NNodeFactory
+    return nullptr;
 }
 
 // **************************
 //
 NodeEffectPtr       CreateBlurEffect()
 {
-    auto logic = CreateNodeEffectLogic();
+    //auto logic = CreateNodeEffectLogic();
 
-    auto pre  = new BlurPreFullscreenEffectLogic();
-    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLUR, pre->GetValues() );
+    //auto pre  = new BlurPreFullscreenEffectLogic();
+    //auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLUR, pre->GetValues() );
 
-    SetLogicComponents( logic, pre, fse, nullptr );
+    //SetLogicComponents( logic, pre, fse, nullptr );
 
-    return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
+    //return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
+
+    // FIXME: nrl - implement in NNodeFactory
+    return nullptr;
 }
 
 // **************************
 //
 NodeEffectPtr       CreateShadowEffect()
 {
-    auto logic = CreateNodeEffectLogic();
+    //auto logic = CreateNodeEffectLogic();
 
-    auto pre  = new ShadowPreFullscreenEffectLogic();
-    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SHADOW, pre->GetValues() );
+    //auto pre  = new ShadowPreFullscreenEffectLogic();
+    //auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SHADOW, pre->GetValues() );
 
-    SetLogicComponents( logic, pre, fse, nullptr );
+    //SetLogicComponents( logic, pre, fse, nullptr );
 
-    return CreateNodeEffect( logic, NodeEffectType::NET_SHADOW );
+    //return CreateNodeEffect( logic, NodeEffectType::NET_SHADOW );
+
+    return nullptr;
 }
 
 // **************************
 //
 NodeEffectPtr       CreateImageMaskEffect()
 {
-    auto logic = CreateNodeEffectLogic();
+    //auto logic = CreateNodeEffectLogic();
 
-    auto pre  = new ImageMaskPreFullscreenEffectLogic();
-    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_IMAGE_MASK, pre->GetValues() );
+    //auto pre  = new ImageMaskPreFullscreenEffectLogic();
+    //auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_IMAGE_MASK, pre->GetValues() );
 
-    SetLogicComponents( logic, pre, fse, nullptr );
+    //SetLogicComponents( logic, pre, fse, nullptr );
 
-    return CreateNodeEffect( logic, NodeEffectType::NET_IMAGE_MASK );
+    //return CreateNodeEffect( logic, NodeEffectType::NET_IMAGE_MASK );
+
+    // FIXME: nrl - implement in NNodeFactory
+    return nullptr;
 }
 
 // **************************
 //
 NodeEffectPtr       CreateLightScatteringEffect()
 {
-    auto logic = CreateNodeEffectLogic();
+    //auto logic = CreateNodeEffectLogic();
 
-    auto pre  = new LightScatteringPreFullscreenEffectLogic();
-    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_LIGHT_SCATTERING, pre->GetValues() );
+    //auto pre  = new LightScatteringPreFullscreenEffectLogic();
+    //auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_LIGHT_SCATTERING, pre->GetValues() );
 
-    SetLogicComponents( logic, pre, fse, nullptr );
+    //SetLogicComponents( logic, pre, fse, nullptr );
 
-    return CreateNodeEffect( logic, NodeEffectType::NET_LIGHT_SCATTERING );
+    //return CreateNodeEffect( logic, NodeEffectType::NET_LIGHT_SCATTERING );
+
+    return nullptr;
 }
 
 } // anonoymnous
@@ -207,6 +220,7 @@ NodeEffectPtr       CreateLightScatteringEffect()
 //
 NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
 {
+    // FIXME: nrl - implement in NNodeFactory
     switch( nodeEffectType )
     {
         case  NodeEffectType::NET_DEFAULT:
@@ -219,16 +233,16 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateWireframeNodeEffect();
         case NodeEffectType::NET_MIX_CHANNELS:
             return CreateMixchannelsNodeEffect();
-        case NodeEffectType::NET_BOUNDING_BOX:
-            return CreateBoundingBoxNodeEffect();
-        case NodeEffectType::NET_BLUR:
-            return CreateBlurEffect();
-        case NodeEffectType::NET_SHADOW:
-            return CreateShadowEffect();
-        case NodeEffectType::NET_IMAGE_MASK:
-            return CreateImageMaskEffect();
-        case NodeEffectType::NET_LIGHT_SCATTERING:
-            return CreateLightScatteringEffect();
+        //case NodeEffectType::NET_BOUNDING_BOX:
+        //    return CreateBoundingBoxNodeEffect();
+        //case NodeEffectType::NET_BLUR:
+        //    return CreateBlurEffect();
+        //case NodeEffectType::NET_SHADOW:
+        //    return CreateShadowEffect();
+        //case NodeEffectType::NET_IMAGE_MASK:
+        //    return CreateImageMaskEffect();
+        //case NodeEffectType::NET_LIGHT_SCATTERING:
+        //    return CreateLightScatteringEffect();
         //Interlace and so on
         default:
             assert( false );
