@@ -146,6 +146,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer, audio::AudioRenderer
 
     if( m_useVideoCardOutput )
     {
+        // FIXME: nrl - audio should be handled based on this implementation
         OnVideoFrameRendered( ctx );
     }
 }
