@@ -129,13 +129,7 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     assert( vertexAttributeChannel );
     assert( textAtlas );
 
-    glm::vec3 translate(0.f);
-    glm::vec3 translateDot(0.f);
-    glm::vec3 interspace( spacing, 0.f ,0.f );
-    glm::vec3 newLineTranslation( 0.f );
-
     bool outline = false;
-
     if( outlineSize != 0 )
         outline = true;
 
@@ -156,130 +150,94 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     auto newLineShift       = -(float)newLineSize * textAtlas->GetGlyph( L'0', outline )->height / aspectRatio;
 
 
-    //
-    unsigned int componentIdx = 0;
-    unsigned int lineBeginComponentIdx = 0;
-    unsigned int i = 0;
+    TextLayoutInfo layoutInfo;
+    layoutInfo.AlignChar = alignChar;
+    layoutInfo.AspectRatio = aspectRatio;
+    layoutInfo.Interspace = spacing;
+    layoutInfo.NewLineSize = newLineShift;
+    layoutInfo.SpaceSize = spaceGlyphWidth;
+    layoutInfo.TextAlign = tat;
+    layoutInfo.UseKerning = useKerning;
+    layoutInfo.UseOutline = outline;
 
-    while( i < text.size() )
+    auto textLayout = TextHelper::LayoutLetters( text, textAtlas, layoutInfo );
+
+
+    for( unsigned int i = 0; i < text.size(); ++i )
     {
-        lineBeginComponentIdx = componentIdx;
+        auto wch = text[ i ];
+        glm::vec3 translate = glm::vec3( textLayout[ i ].x, 0.0, 0.0 );
+        glm::vec3 newLineTranslate = glm::vec3( 0.0f, textLayout[ i ].y, 0.0 );
 
-        for( ; i < text.size(); ++i )
+        if( IsWhitespace( wch ) )
+            continue;
+
+        model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
+
+        auto desc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+
+        auto posAttribChannel = std::make_shared< model::Float3AttributeChannel >( desc, "vertexPosition", true );
+
+        if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
-            auto wch = text[ i ];
+            glm::vec3 bearing = glm::vec3( ( (float)glyph->bearingX - float( outlineSize ) ) / aspectRatio, ( float( glyph->bearingY ) + float( outlineSize ) ) / aspectRatio, 0.f );
 
-            if( wch == L' ' )
+            glm::vec3 quadBottomLeft;
+            glm::vec3 quadBottomRight;
+            glm::vec3 quadTopLeft;
+            glm::vec3 quadTopRight;
+
+            // XYZ
+
             {
-                translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
-                continue;
+                quadTopLeft = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
+                quadTopRight = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
+                quadBottomLeft = glm::vec3( 0.f, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
+                quadBottomRight = glm::vec3( (float)glyph->width / aspectRatio, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
             }
 
-            if( wch == L'\n' || wch == L'\r' )
-            {
-                newLineTranslation += glm::vec3( 0.f, newLineShift, 0.f );
-                break;
-            }
+            posAttribChannel->AddAttribute( quadBottomLeft + translate + bearing + newLineTranslate );
+            posAttribChannel->AddAttribute( quadBottomRight + translate + bearing + newLineTranslate );
+            posAttribChannel->AddAttribute( quadTopLeft + translate + bearing + newLineTranslate );
+            posAttribChannel->AddAttribute( quadTopRight + translate + bearing + newLineTranslate );
 
-            model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
+            connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
 
-            auto desc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+            // UV
 
-            auto posAttribChannel = std::make_shared< model::Float3AttributeChannel >( desc, "vertexPosition", true );
+            auto desc1 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
-            {
-                glm::vec3 bearing = glm::vec3( ( (float)glyph->bearingX - float( outlineSize ) ) / aspectRatio, ( float( glyph->bearingY ) + float( outlineSize ) ) / aspectRatio, 0.f );
+            auto verTex0AttrChannel = std::make_shared< model::Float2AttributeChannel >( desc1, "textAtlasPosition", true );
 
-                glm::vec3 quadBottomLeft;
-                glm::vec3 quadBottomRight;
-                glm::vec3 quadTopLeft;
-                glm::vec3 quadTopRight;
+            auto uvs = GetAtlasCoordsForGlyph( glyph, textAtlas->GetWidth(), textAtlas->GetHeight(), blurTexSize );
 
-                auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
+            verTex0AttrChannel->AddAttributes( uvs );
 
-                if( useKerning && i > 0 )
-                {
-					auto kerShift = textAtlas->GetKerning( text[ i - 1 ], text[ i ] );
-                    kerningShift.x = kerShift / aspectRatio;
-					translate += kerningShift;
-                }
+            connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
 
-                // XYZ
+            // CC CENTER
 
-                {
-                    quadTopLeft = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
-                    quadTopRight = glm::vec3( (float)glyph->width / aspectRatio, 0.f, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
-                    quadBottomLeft = glm::vec3( 0.f, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
-                    quadBottomRight = glm::vec3( (float)glyph->width / aspectRatio, -(float)glyph->height / aspectRatio, 0.f ) + glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
-                }
+            auto desc2 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-                posAttribChannel->AddAttribute( quadBottomLeft + translate + bearing + newLineTranslation );
-                posAttribChannel->AddAttribute( quadBottomRight + translate + bearing + newLineTranslation );
-                posAttribChannel->AddAttribute( quadTopLeft + translate + bearing + newLineTranslation );
-                posAttribChannel->AddAttribute( quadTopRight + translate + bearing + newLineTranslation );
+            auto ccCenterAttrChannel = std::make_shared< model::Float2AttributeChannel >( desc2, "ccCenter", true );
 
-                connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
+            auto bottomLeft = ( quadBottomLeft + translate + bearing + newLineTranslate );
+            auto topRight = ( quadTopRight + translate + bearing + newLineTranslate );
 
-                // UV
+            float centerX = ( bottomLeft.x + topRight.x ) / 2.f;
+            float centerY = ( bottomLeft.y + topRight.y ) / 2.f;
 
-                auto desc1 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
 
-                auto verTex0AttrChannel = std::make_shared< model::Float2AttributeChannel >( desc1, "textAtlasPosition", true );
+            connComp->AddAttributeChannel( model::AttributeChannelPtr( ccCenterAttrChannel ) );
 
-				auto uvs = GetAtlasCoordsForGlyph( glyph, textAtlas->GetWidth(), textAtlas->GetHeight(), blurTexSize );
-
-                verTex0AttrChannel->AddAttributes( uvs );
-
-                connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
-
-                // CC CENTER
-
-                auto desc2 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-                auto ccCenterAttrChannel = std::make_shared< model::Float2AttributeChannel >( desc2, "ccCenter", true );
-
-                auto bottomLeft = ( quadBottomLeft + translate + bearing + newLineTranslation );
-                auto topRight = ( quadTopRight + translate + bearing + newLineTranslation );
-
-                float centerX = ( bottomLeft.x + topRight.x ) / 2.f;
-                float centerY = ( bottomLeft.y + topRight.y ) / 2.f;
-
-                ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
-                ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
-                ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
-                ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
-
-                connComp->AddAttributeChannel( model::AttributeChannelPtr( ccCenterAttrChannel ) );
-
-                vertexAttributeChannel->AddConnectedComponent( connComp );
-
-                if( wch == alignChar && tat == TextAlignmentType::Character )
-                {
-                    translateDot = translate;
-                }
-
-                translate += glm::vec3( ( glyph->advanceX ) / aspectRatio, 0.f, 0.f ) + interspace;
-                ++componentIdx;
-            }
-            else
-            {
-                translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
-                //assert( !( "Cannot find glyph for char " + wch) );
-            }
+            vertexAttributeChannel->AddConnectedComponent( connComp );
         }
-
-        // Apply alignement to current line and go to next.
-        auto components = vertexAttributeChannel->GetComponents();
-        std::vector< model::IConnectedComponentPtr > lineComponents( components.begin() + lineBeginComponentIdx, components.begin() + componentIdx );
-
-        TextHelper::ApplyAlignementPC( tat, translate, translateDot, lineComponents );
-
-        // End of line (or text) reached.
-        translateDot = glm::vec3( 0.f );
-        translate = glm::vec3( 0.f );
-        ++i;
     }
+
 
     auto components = vertexAttributeChannel->GetComponents();
     if( components.empty() ) // FIXME: We add one empty CC because of bug #72174842
@@ -292,7 +250,11 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
         vertexAttributeChannel = arranger->Arange( vertexAttributeChannel );
     }
 
-    return translate.x; // FIXME: This does not work for multiline text
+    // FIXME: Is this necessary ??? What for ?
+    if( textLayout.size() != 0 )
+        return textLayout.back().x; // FIXME: This does not work for multiline text
+    else
+        return 0.0f;
 }
 
 
@@ -328,15 +290,79 @@ float               TextHelper::ComputeAlignement( TextAlignmentType tat, glm::v
 
 // ***********************
 //
-std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo layout )
+std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout )
 {
-    text;
-    textRepr;
-    layout;
+    std::vector< glm::vec3 > resultLayout;
+    resultLayout.reserve( text.length() );
+
+    glm::vec3 translate( 0.0, 0.0, 0.0 );
+    glm::vec3 newLineTranslation( 0.0, 0.0, 0.0 );
+    glm::vec3 translateDot( 0.f );
+
+    unsigned int componentIdx = 0;
+    unsigned int lineBeginComponentIdx = 0;
+    unsigned int i = 0;
+
+    while( i < text.size() )
+    {
+        lineBeginComponentIdx = componentIdx;
+
+        for( ; i < text.size(); ++i )
+        {
+            auto wch = text[ i ];
+
+            if( wch == L' ' )
+            {
+                translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
+                resultLayout.push_back( translate );
+                continue;
+            }
+
+            if( wch == L'\n' || wch == L'\r' )
+            {
+                newLineTranslation += glm::vec3( 0.f, layout.NewLineSize, 0.f );
+                resultLayout.push_back( translate );
+                break;
+            }
+
+            if( auto glyph = textRepr->GetGlyph( wch, layout.UseOutline ) )
+            {
+                auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
+
+                if( layout.UseKerning && i > 0 )
+                {
+                    auto kerShift = textRepr->GetKerning( text[ i - 1 ], text[ i ] );
+                    kerningShift.x = kerShift / layout.AspectRatio;
+                    translate += kerningShift;
+                }
+
+                if( wch == layout.AlignChar && layout.TextAlign == TextAlignmentType::Character )
+                {
+                    translateDot = translate;
+                }
+
+                resultLayout.push_back( translate + newLineTranslation );
+
+                translate += glm::vec3( ( glyph->advanceX ) / layout.AspectRatio, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
+                ++componentIdx;
+            }
+            else
+            {
+                resultLayout.push_back( translate + newLineTranslation );
+                translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
+            }
+        }
+
+        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, resultLayout, lineBeginComponentIdx, componentIdx );
+
+        // End of line (or text) reached.
+        translateDot = glm::vec3( 0.f );
+        translate = glm::vec3( 0.f );
+        ++i;
+    }
 
 
-
-    return std::vector<glm::vec3>();
+    return resultLayout;
 }
 
 // ***********************
@@ -385,6 +411,31 @@ void                TextHelper::ApplyAlignementP    ( TextAlignmentType tat, glm
             }
         }
     }
+}
+
+// ***********************
+//
+void                TextHelper::ApplyAlignement     ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< glm::vec3 > & layout, int beginIdx, int endIdx )
+{
+    auto alignmentTranslation = ComputeAlignement( tat, translate, translateDot );
+
+    if( tat != TextAlignmentType::Left )
+    {
+        for( auto iter = layout.begin() + beginIdx; iter != layout.begin() + endIdx; iter++ )
+        {
+            iter->x += alignmentTranslation;
+        }
+    }
+}
+
+
+// ***********************
+//
+bool                TextHelper::IsWhitespace        ( wchar_t character )
+{
+    if( character == L' ' || character == L'\n' || character == L'\r' )
+        return true;
+    return false;
 }
 
 } // bv

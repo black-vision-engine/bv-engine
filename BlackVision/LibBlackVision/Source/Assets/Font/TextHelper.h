@@ -14,6 +14,8 @@ class TextArranger;
 
 class TextAtlas;
 
+// ***********************
+//
 enum class TextAlignmentType
 {
     Left    = 0 ,
@@ -22,15 +24,17 @@ enum class TextAlignmentType
     Character
 };
 
+
+// ***********************
+//
 struct TextLayoutInfo
 {
-    float                   Size;
     float                   Interspace;
     float                   NewLineSize;
+    float                   SpaceSize;
     float                   AspectRatio;
-    TextAlignmentType       Tat;
+    TextAlignmentType       TextAlign;
     wchar_t                 AlignChar;
-    SizeType                OutlineSize;
     bool                    UseKerning;
     bool                    UseOutline;
 };
@@ -63,12 +67,18 @@ public:
     // Computes alignement and aplies text translation. Version PC translates positions and centers, version P only positions.
     static void                         ApplyAlignementPC   ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< model::IConnectedComponentPtr > & components );
     static void                         ApplyAlignementP    ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< model::ConnectedComponentPtr > & components );
+    static void                         ApplyAlignement     ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< glm::vec3 > & layout, int beginIdx, int endIdx );
 
     static float                        ComputeAlignement   ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot );
 
     /////////////////////////////////////
     // Makes letters arrangment.
-    static std::vector< glm::vec3 >     LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo layout );
+    static std::vector< glm::vec3 >     LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout );
+
+    /////////////////////////////////////
+    // Other helpers
+    static bool                         IsWhitespace        ( wchar_t character );
+
 };
 
 

@@ -52,7 +52,7 @@ public:
     UInt32                  GetGlyphWidth   ( wchar_t c ) const;
     UInt32                  GetGlyphHeight  ( wchar_t c ) const;
 
-    const Glyph *           GetGlyph        ( wchar_t c, bool outline = false ) const;
+    const Glyph *           GetGlyph        ( wchar_t c, bool outline = false ) const override;
 
     MemoryChunkConstPtr     GetData         () const;
     MemoryChunkPtr          GetWritableData ();

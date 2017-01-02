@@ -35,7 +35,7 @@ public:
 public:
 
     Float32                 GetKerning      ( wchar_t c0, wchar_t c1 ) const;
-    const Glyph *           GetGlyph        ( wchar_t c ) const;
+    virtual const Glyph *   GetGlyph        ( wchar_t c, bool outline = false ) const;
 
 
 private:

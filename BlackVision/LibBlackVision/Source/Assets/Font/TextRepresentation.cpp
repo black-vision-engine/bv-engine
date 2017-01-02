@@ -34,7 +34,7 @@ Float32             TextRepresentation::GetKerning      ( wchar_t c0, wchar_t c1
 
 // ***********************
 //
-const Glyph *       TextRepresentation::GetGlyph    ( wchar_t c ) const
+const Glyph *       TextRepresentation::GetGlyph    ( wchar_t c, bool /*outline*/ ) const
 {
     auto it = m_glyphs.find( c );
 
