@@ -27,6 +27,7 @@ namespace bv { namespace model {
 const std::string TextPluginBase::PARAM::ALPHA              = "alpha";
 const std::string TextPluginBase::PARAM::FONT_SIZE          = "fontSize";
 const std::string TextPluginBase::PARAM::NEW_LINE_SIZE      = "newLineSize";
+const std::string TextPluginBase::PARAM::TEXT_BOX           = "textBox";
 
 const std::string TextPluginBase::PARAM::SHADOW_ENABLED     = "shadowEnabled";
 const std::string TextPluginBase::PARAM::SHADOW_COLOR       = "shadowColor";
@@ -86,6 +87,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::TEXT_BOX, glm::vec2( std::numeric_limits< float >::infinity(), std::numeric_limits< float >::infinity() ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::NEW_LINE_SIZE, 1.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
@@ -115,6 +117,7 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     m_shadowEnabled     = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::SHADOW_ENABLED ) );
     m_outlineEnabled    = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::OUTLINE_ENABLED ) );
     m_glowEnabled       = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::GLOW_ENABLED ) );
+    m_box               = QueryTypedValue< ValueVec2Ptr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::TEXT_BOX ) );
 
     m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
     m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
@@ -312,6 +315,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         viewWidth,
                                         viewHeight,
                                         m_newLineSize->GetValue(),
+                                        m_box->GetValue(),
                                         nullptr,
                                         useKerning );
 
@@ -331,6 +335,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         viewWidth,
                                         viewHeight,
                                         m_newLineSize->GetValue(),
+                                        m_box->GetValue(),
                                         nullptr,
                                         useKerning );
 
@@ -350,6 +355,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         viewWidth,
                                         viewHeight,
                                         m_newLineSize->GetValue(),
+                                        m_box->GetValue(),
                                         nullptr,
                                         useKerning );
 
@@ -367,6 +373,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     viewWidth,
                                                     viewHeight,
                                                     m_newLineSize->GetValue(),
+                                                    m_box->GetValue(),
                                                     nullptr,
                                                     useKerning );
 

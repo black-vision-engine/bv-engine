@@ -124,7 +124,7 @@ std::vector< glm::vec2 >		TextHelper::GetAtlasCoordsForGlyph	( const Glyph * gly
 
 // *********************************
 //
-float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, model::TextArranger * arranger, bool useKerning )
+float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, glm::vec2 box, model::TextArranger * arranger, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -156,6 +156,7 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     layoutInfo.Interspace = spacing;
     layoutInfo.NewLineSize = newLineShift;
     layoutInfo.SpaceSize = spaceGlyphWidth;
+    layoutInfo.MaxLength = box.x;
     layoutInfo.TextAlign = tat;
     layoutInfo.UseKerning = useKerning;
     layoutInfo.UseOutline = outline;
@@ -299,6 +300,8 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
     glm::vec3 newLineTranslation( 0.0, 0.0, 0.0 );
     glm::vec3 translateDot( 0.f );
 
+    unsigned int lastSpace = 0;
+
     unsigned int lineBeginIdx = 0;
     unsigned int i = 0;
 
@@ -312,6 +315,8 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
 
             if( wch == L' ' )
             {
+                lastSpace = i;
+
                 translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
                 resultLayout.push_back( translate );
                 continue;
@@ -319,6 +324,8 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
 
             if( wch == L'\n' || wch == L'\r' )
             {
+                lastSpace = i;
+
                 newLineTranslation += glm::vec3( 0.f, layout.NewLineSize, 0.f );
                 resultLayout.push_back( translate );
                 break;
@@ -348,6 +355,26 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
             {
                 resultLayout.push_back( translate + newLineTranslation );
                 translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
+            }
+
+            if( translate.x > layout.MaxLength )
+            {
+                newLineTranslation += glm::vec3( 0.f, layout.NewLineSize, 0.f );
+
+                // Note: If last space is enter, we break word and begin next line.
+                if( !( lineBeginIdx - 1 == lastSpace ) )
+                {
+                    i = lastSpace;  // This will ommit space. We have new line instead.
+                    resultLayout.erase( resultLayout.begin() + ( lastSpace + 1 ), resultLayout.end() );
+                }
+                else
+                {
+                    resultLayout.pop_back();
+                    i--;
+                    lastSpace = i;
+                }
+
+                break;
             }
         }
 
@@ -432,6 +459,15 @@ void                TextHelper::ApplyAlignement     ( TextAlignmentType tat, glm
 bool                TextHelper::IsWhitespace        ( wchar_t character )
 {
     if( character == L' ' || character == L'\n' || character == L'\r' )
+        return true;
+    return false;
+}
+
+// ***********************
+//
+bool                TextHelper::IsEnter             ( wchar_t character )
+{
+    if( character == L'\n' || character == L'\r' )
         return true;
     return false;
 }
