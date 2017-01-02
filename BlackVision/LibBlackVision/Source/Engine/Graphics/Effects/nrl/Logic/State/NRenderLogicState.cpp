@@ -13,6 +13,7 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
     , m_renderResult( &m_renderTargetAllocator, numTrackedRenderTargetsPerOutputType )
 {
     m_ctx.SetAllocator( &m_renderTargetAllocator );
+    m_ctx.SetRenderQueueAllocator( &m_renderQueueAllocator );
 }
 
 // **************************

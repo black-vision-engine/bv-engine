@@ -326,9 +326,6 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
                 FRAME_STATS_SECTION( "Render" );
 
 				audioRenderer->SetGain( m_gain );
-                //assert( false );
-                //FIXME: nrl - render frame to be reimplemented
-                { renderer; }
                 m_renderLogic->RenderFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )

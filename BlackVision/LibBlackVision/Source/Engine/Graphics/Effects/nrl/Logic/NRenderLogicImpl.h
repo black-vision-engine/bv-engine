@@ -32,7 +32,7 @@ public:
     virtual VideoOutput *   GetVideoOutput      () override;
 
 private:
-
+            void            RenderQueued        ( const SceneVec & scenes, RenderResult * result );
             void            Render              ( SceneNode * sceneRoot );
 
 };

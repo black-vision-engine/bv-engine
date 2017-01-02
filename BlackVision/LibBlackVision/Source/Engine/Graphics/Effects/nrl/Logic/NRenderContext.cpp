@@ -13,7 +13,9 @@ namespace bv { namespace nrl {
 //
 NRenderContext::NRenderContext		()
     : m_renderer( nullptr )
+    , m_audio( nullptr )
 	, m_rtAllocator( nullptr )
+    , m_renderQueueAllocator( nullptr )
 {    
 }
 
@@ -46,6 +48,13 @@ RenderTargetStackAllocator *	NRenderContext::GetRenderTargetAllocator		() const
 
 // ***************************
 //
+RenderQueueStackAllocator *     NRenderContext::GetRenderQueueAllocator         () const
+{
+    return m_renderQueueAllocator;
+}
+
+// ***************************
+//
 void                            NRenderContext::SetRenderer						( Renderer * renderer )
 {
 	m_renderer = renderer;
@@ -63,6 +72,13 @@ void                            NRenderContext::SetAudio                        
 void                            NRenderContext::SetAllocator					( RenderTargetStackAllocator * allocator )
 {
 	m_rtAllocator = allocator;
+}
+
+// ***************************
+//
+void                            NRenderContext::SetRenderQueueAllocator         ( RenderQueueStackAllocator * allocator )
+{
+    m_renderQueueAllocator = allocator;
 }
 
 // ***************************

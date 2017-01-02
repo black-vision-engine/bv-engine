@@ -28,13 +28,9 @@ void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio
     auto renderResult = render_result( m_state );
     renderResult->UpdateOutputChannels();
 
-	// FIXME: nrl - Render vector of scenes, not only first scene.
-	renderer->SetCamera( scenes[ 0 ]->GetCamera() );
-    Render      ( scenes[ 0 ]->GetRoot() );
-
-    // FIXME: add an output renderTarget (possibly if necessary)
+    RenderQueued( scenes, renderResult );
     // FIXME: nrl - add audio somewhere in this class
-    output_logic( m_state )->ProcessFrameData( ctx( m_state ), renderResult );
+    output_logic( m_state )->ProcessFrameData( context( m_state ), renderResult );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
@@ -56,7 +52,41 @@ VideoOutput *   NRenderLogicImpl::GetVideoOutput    ()
 
 // **************************
 //
-void             NRenderLogicImpl::Render           ( SceneNode * sceneRoot )
+void            NRenderLogicImpl::RenderQueued      ( const SceneVec & scenes, RenderResult * result )
+{
+    auto ctx = context( m_state );
+    auto r = renderer( ctx );
+
+    auto outputRenderTarget = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_FIRST_OUTPUT );
+
+    enable( ctx, outputRenderTarget );
+    clearBoundRT( ctx, glm::vec4() ); // FIXME: default clear color used - posisibly customize it a bit;
+
+    for( auto & scene : scenes )
+    {
+        r->Performance().AverageScenePerformanceData( scene );
+        r->SetCamera( scene->GetCamera() );
+        r->EnableScene( scene );
+ 
+        auto root = scene->GetRoot();
+
+        auto rq = queue_allocator( ctx )->Allocate();
+        rq->QueueNodeSubtree( root, ctx );
+        rq->Render( ctx );
+
+        queue_allocator( ctx )->Free();
+
+    //    RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
+        m_audioLogicCore.RenderAudio( root, ctx );
+
+    }
+
+    disableBoundRT( ctx );
+}
+
+// **************************
+//
+void            NRenderLogicImpl::Render            ( SceneNode * sceneRoot )
 {
 	m_renderLogicCore.Render( m_state.GetRenderResult(), sceneRoot, m_state.GetRenderContext() );
     m_audioLogicCore.RenderAudio( sceneRoot, m_state.GetRenderContext() );

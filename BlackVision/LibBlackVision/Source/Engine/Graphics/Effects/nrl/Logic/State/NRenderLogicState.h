@@ -15,6 +15,7 @@ class NRenderLogicState
 private:
 
     RenderTargetStackAllocator      m_renderTargetAllocator;
+    RenderQueueStackAllocator       m_renderQueueAllocator;
 
     NRenderContext					m_ctx;
 
@@ -52,7 +53,7 @@ inline OutputLogic  *           output_logic    ( NRenderLogicState & state )
 
 // ************************
 //
-inline NRenderContext *			ctx				( NRenderLogicState & state )
+inline NRenderContext *			context			( NRenderLogicState & state )
 {
 	return state.GetRenderContext();
 }

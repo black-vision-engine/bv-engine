@@ -3,6 +3,7 @@
 #include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 
 
 namespace bv { namespace nrl { 
@@ -14,6 +15,7 @@ private:
 
     Renderer *                      m_renderer;
     RenderTargetStackAllocator *    m_rtAllocator;
+    RenderQueueStackAllocator *     m_renderQueueAllocator;
 
 	const RenderTarget *			m_boundRenderTarget;
 
@@ -27,10 +29,12 @@ public:
     Renderer *                      GetRenderer             () const;
     audio::AudioRenderer *          GetAudio                () const;
     RenderTargetStackAllocator *    GetRenderTargetAllocator() const;
+    RenderQueueStackAllocator *     GetRenderQueueAllocator () const;
 
     void                            SetRenderer             ( Renderer * renderer );
     void                            SetAudio                ( audio::AudioRenderer * audio );
     void                            SetAllocator            ( RenderTargetStackAllocator * allocator );
+    void                            SetRenderQueueAllocator ( RenderQueueStackAllocator * allocator );
 
 	const RenderTarget *            GetBoundRenderTarget    () const;
 
@@ -64,6 +68,13 @@ inline audio::AudioRenderer *       audio           ( NRenderContext * ctx )
 inline RenderTargetStackAllocator * allocator		( NRenderContext * ctx )
 {
     return ctx->GetRenderTargetAllocator();
+}
+
+// *******************************
+//
+inline RenderQueueStackAllocator * queue_allocator	( NRenderContext * ctx )
+{
+    return ctx->GetRenderQueueAllocator();
 }
 
 // *******************************
