@@ -33,6 +33,7 @@ struct TextLayoutInfo
     float                   NewLineSize;
     float                   SpaceSize;
     float                   AspectRatio;
+    float                   MaxLength;
     TextAlignmentType       TextAlign;
     wchar_t                 AlignChar;
     bool                    UseKerning;
@@ -59,7 +60,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontAsset.
-    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, model::TextArranger * arranger = nullptr, bool useKerning = true );
+    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, glm::vec2 box, model::TextArranger * arranger = nullptr, bool useKerning = true );
 
 	static std::vector< glm::vec2 >		GetAtlasCoordsForGlyph( const Glyph * glyph, SizeType atlasW, SizeType atlasH, Float32 atlasBlurSize );
 
@@ -78,6 +79,7 @@ public:
     /////////////////////////////////////
     // Other helpers
     static bool                         IsWhitespace        ( wchar_t character );
+    static bool                         IsEnter             ( wchar_t character );
 
 };
 

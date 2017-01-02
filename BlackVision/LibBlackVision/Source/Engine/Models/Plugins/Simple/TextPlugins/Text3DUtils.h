@@ -24,6 +24,7 @@ public:
         UInt32                  ViewWidth;
         UInt32                  ViewHeight;
         model::TextArranger *   Arranger;
+        glm::vec2               Box;
         bool                    UseKerning;
         TextAlignmentType       Tat;
         wchar_t                 AlignChar;

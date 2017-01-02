@@ -62,7 +62,7 @@ const std::string        DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH   = "maxTe
 const std::string        DefaultText3DPlugin::PARAMS::ALIGNEMENT        = "alignment";
 const std::string        DefaultText3DPlugin::PARAMS::USE_KERNING       = "useKerning";
 const std::string        DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER   = "alignCharacter";
-
+const std::string        DefaultText3DPlugin::PARAMS::TEXT_BOX          = "textBox";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -96,6 +96,7 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.' );
     h.AddEnumParam( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT_BOX, glm::vec2( std::numeric_limits< float >::infinity(), std::numeric_limits< float >::infinity() ) );
 
     h.SetOrCreatePSModel();
     h.SetOrCreateVSModel();
@@ -218,6 +219,7 @@ void                                DefaultText3DPlugin::RebuildText            
     layout.UseKerning = m_useKerningValue->GetValue();
     layout.ViewWidth = ApplicationContext::Instance().GetWidth();
     layout.ViewHeight = ApplicationContext::Instance().GetHeight();
+    layout.Box = QueryTypedValue< ValueVec2Ptr >( GetValue( PARAMS::TEXT_BOX ) )->GetValue();
 
     auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_fontAsset, layout );
 
@@ -243,7 +245,8 @@ void                                DefaultText3DPlugin::Update                 
         ParameterChanged( PARAMS::FONT_SIZE ) ||
         ParameterChanged( PARAMS::NEW_LINE_SIZE ) ||
         ParameterChanged( PARAMS::USE_KERNING ) ||
-        ParameterChanged( PARAMS::ALIGN_CHARACTER ) )
+        ParameterChanged( PARAMS::ALIGN_CHARACTER ) ||
+        ParameterChanged( PARAMS::TEXT_BOX ) )
     {
         RebuildText();
     }

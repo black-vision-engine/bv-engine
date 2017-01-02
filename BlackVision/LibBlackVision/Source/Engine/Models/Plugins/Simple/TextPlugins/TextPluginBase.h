@@ -30,6 +30,7 @@ public:
         static const std::string        ALPHA;
         static const std::string        FONT_SIZE;
         static const std::string        NEW_LINE_SIZE;
+        static const std::string        TEXT_BOX;
 
         static const std::string        SHADOW_ENABLED;
         static const std::string        SHADOW_COLOR;
@@ -69,6 +70,7 @@ protected:
     ValueFloatPtr                   m_newLineSize;
     ParamFloatPtr                   m_spacingParam;
     ParamIntPtr                     m_alignmentParam;
+    ValueVec2Ptr                    m_box;
 
     ParamTransformPtr               m_outlineTxParam;
     ParamTransformPtr               m_glowTxParam;

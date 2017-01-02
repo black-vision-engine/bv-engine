@@ -186,7 +186,8 @@ void                                DefaultTextPlugin::Update                   
         ParameterChanged( TextPluginBase::PARAM::ALIGN_CHARACTER ) ||
         ParameterChanged( TextPluginBase::PARAM::NEW_LINE_SIZE ) ||
         ParameterChanged( TextPluginBase::PARAM::SHADOW_ENABLED ) ||
-        ParameterChanged( TextPluginBase::PARAM::OUTLINE_ENABLED ) )
+        ParameterChanged( TextPluginBase::PARAM::OUTLINE_ENABLED ) || 
+        ParameterChanged( TextPluginBase::PARAM::TEXT_BOX ) )
     {
         SetText( m_textParam->Evaluate() );
     }
