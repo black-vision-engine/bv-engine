@@ -117,7 +117,7 @@ public:
     //Convenience API - generalized model accessors
     BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
-    RenderLogic *                   GetRenderLogic      () const;
+    nrl::NRenderLogic *             GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
 
     void                            LoadScenes          ( const PathVec & pathVec );
