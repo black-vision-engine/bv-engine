@@ -41,7 +41,7 @@ const std::string TextPluginBase::PARAM::GLOW_STRENGTH      = "glowStrength";
 const std::string TextPluginBase::PARAM::GLOW_COLOR         = "glowColor";
 
 const std::string TextPluginBase::PARAM::SPACING            = "spacing";
-const std::string TextPluginBase::PARAM::ALIGNEMENT         = "alingment";
+const std::string TextPluginBase::PARAM::ALIGNEMENT         = "alignment";
 const std::string TextPluginBase::PARAM::ALIGN_CHARACTER    = "alignCharacter";
 
 const std::string TextPluginBase::PARAM::FIRST_TEXT_CC      = "firstTextCC";

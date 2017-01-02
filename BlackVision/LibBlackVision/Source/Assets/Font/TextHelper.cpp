@@ -299,13 +299,12 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
     glm::vec3 newLineTranslation( 0.0, 0.0, 0.0 );
     glm::vec3 translateDot( 0.f );
 
-    unsigned int componentIdx = 0;
-    unsigned int lineBeginComponentIdx = 0;
+    unsigned int lineBeginIdx = 0;
     unsigned int i = 0;
 
     while( i < text.size() )
     {
-        lineBeginComponentIdx = componentIdx;
+        lineBeginIdx = i;
 
         for( ; i < text.size(); ++i )
         {
@@ -344,7 +343,6 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 resultLayout.push_back( translate + newLineTranslation );
 
                 translate += glm::vec3( ( glyph->advanceX ) / layout.AspectRatio, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
-                ++componentIdx;
             }
             else
             {
@@ -353,7 +351,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
             }
         }
 
-        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, resultLayout, lineBeginComponentIdx, componentIdx );
+        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, resultLayout, lineBeginIdx, i );
 
         // End of line (or text) reached.
         translateDot = glm::vec3( 0.f );

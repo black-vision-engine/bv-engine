@@ -114,21 +114,11 @@ void                                     Text3DUtils::ArrangeText               
 {
     auto textObj = layout.FontAsset->GetText();
     auto textRepresentation = layout.FontAsset->GetTextGeometry();
-    auto spacing = layout.Spacing;
     auto viewWidth = layout.ViewWidth;
     auto viewHeight = layout.ViewHeight;
-    auto alignement = layout.Tat;
-    auto alignChar = layout.AlignChar;
-    bool useKerning = layout.UseKerning;
     float newLineSize = layout.NewLineSize;
 
     assert( textObj );
-
-    glm::vec3 translate(0.f);
-    glm::vec3 translateDot(0.f);
-    glm::vec3 interspace( spacing, 0.f ,0.f );
-    glm::vec3 newLineTranslation( 0.f );
-
 
     // Note: Atlas was created with specific font size. We must tak it into consideration while rescaling geometry.
     float fontRatio = layout.Size / textObj->GetFontSize();
@@ -136,89 +126,129 @@ void                                     Text3DUtils::ArrangeText               
     float scaleRatio = aspectRatio / fontRatio;
 
 
-    //float ccPaddingX = 1.f / aspectRatio;
-    //float ccPaddingY = 1.f / aspectRatio;
-
     // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
-    auto spaceGlyphWidth    = (float)textRepresentation->GetGlyph( L'0' )->advanceX / scaleRatio / 2 + spacing;
+    auto spaceGlyphWidth    = (float)textRepresentation->GetGlyph( L'0' )->advanceX / scaleRatio / 2 + layout.Spacing;
     auto newLineShift       = -(float)newLineSize * textRepresentation->GetGlyph( L'0' )->height / scaleRatio;
 
+
+    TextLayoutInfo layoutInfo;
+    layoutInfo.AlignChar = layout.AlignChar;
+    layoutInfo.AspectRatio = scaleRatio;
+    layoutInfo.Interspace = layout.Spacing;
+    layoutInfo.NewLineSize = newLineShift;
+    layoutInfo.SpaceSize = spaceGlyphWidth;
+    layoutInfo.TextAlign = layout.Tat;
+    layoutInfo.UseKerning = layout.UseKerning;
+    layoutInfo.UseOutline = false;
+
+    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo );
+
     unsigned int componentIdx = 0;
-    unsigned int lineBeginComponentIdx = 0;
-    unsigned int i = 0;
-
-    while( i < text.size() )
+    for( unsigned int i = 0; i < text.size(); ++i )
     {
-        lineBeginComponentIdx = componentIdx;
+        auto wch = text[ i ];
+        glm::vec3 translate = glm::vec3( textLayout[ i ].x, 0.0, 0.0 );
+        glm::vec3 newLineTranslate = glm::vec3( 0.0f, textLayout[ i ].y, 0.0 );
 
-        for( ; i < text.size(); ++i )
+        if( TextHelper::IsWhitespace( wch ) )
+            continue;
+
+
+        glm::vec3 letterTranslate = translate + newLineTranslate;// -glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
+
+
+        auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
+        auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
+        assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
+
+        // Note: FreeType unit is 1/64th of a pixel.
+        glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
+
+        for( auto & pos : posChannel->GetVertices() )
         {
-            auto wch = text[ i ];
-
-            if( wch == L' ' )
-            {
-                translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
-                continue;
-            }
-
-            if( wch == L'\n' || wch == L'\r' )
-            {
-                newLineTranslation += glm::vec3( 0.f, newLineShift, 0.f );
-                break;
-            }
-
-
-            if( auto glyph = textRepresentation->GetGlyph( wch ) )
-            {
-                auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
-
-                if( useKerning && i > 0 )
-                {
-                    auto kerShift = textRepresentation->GetKerning( text[ i - 1 ], text[ i ] );
-                    kerningShift.x = kerShift / scaleRatio;
-                    translate += kerningShift;
-                }
-
-                glm::vec3 letterTranslate = translate + newLineTranslation;// -glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
-
-                auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
-                auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
-                assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
-
-                // Note: FreeType unit is 1/64th of a pixel.
-                glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
-
-                for( auto & pos : posChannel->GetVertices() )
-                {
-                    pos = scaleFactor * pos + letterTranslate;
-                }
-
-                if( wch == alignChar && layout.Tat == TextAlignmentType::Character )
-                {
-                    translateDot = translate;
-                }
-
-
-                translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
-                componentIdx++;
-            }
-            else
-            {
-                translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
-                //assert( !( "Cannot find glyph for char " + wch) );
-            }
+            pos = scaleFactor * pos + letterTranslate;
         }
 
-        // Apply alignement to current line and go to next.
-        std::vector< model::ConnectedComponentPtr > lineComponents( components.begin() + lineBeginComponentIdx, components.begin() + componentIdx );
-
-        TextHelper::ApplyAlignementP( alignement, translate, translateDot, lineComponents );
-
-        // End of line (or text) reached.
-        translate = glm::vec3( 0.f );
-        translateDot = glm::vec3( 0.f );
-        ++i;
+        componentIdx++;
     }
+
+
+    //unsigned int componentIdx = 0;
+    //unsigned int lineBeginComponentIdx = 0;
+    //unsigned int i = 0;
+
+    //while( i < text.size() )
+    //{
+    //    lineBeginComponentIdx = componentIdx;
+
+    //    for( ; i < text.size(); ++i )
+    //    {
+    //        auto wch = text[ i ];
+
+    //        if( wch == L' ' )
+    //        {
+    //            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
+    //            continue;
+    //        }
+
+    //        if( wch == L'\n' || wch == L'\r' )
+    //        {
+    //            newLineTranslation += glm::vec3( 0.f, newLineShift, 0.f );
+    //            break;
+    //        }
+
+
+    //        if( auto glyph = textRepresentation->GetGlyph( wch ) )
+    //        {
+    //            auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
+
+    //            if( useKerning && i > 0 )
+    //            {
+    //                auto kerShift = textRepresentation->GetKerning( text[ i - 1 ], text[ i ] );
+    //                kerningShift.x = kerShift / scaleRatio;
+    //                translate += kerningShift;
+    //            }
+
+    //            glm::vec3 letterTranslate = translate + newLineTranslation;// -glm::vec3( ccPaddingX, ccPaddingY, 0.0 );
+
+    //            auto attributeChannel = components[ componentIdx ]->GetAttributeChannels();
+    //            auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
+    //            assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
+
+    //            // Note: FreeType unit is 1/64th of a pixel.
+    //            glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
+
+    //            for( auto & pos : posChannel->GetVertices() )
+    //            {
+    //                pos = scaleFactor * pos + letterTranslate;
+    //            }
+
+    //            if( wch == alignChar && layout.Tat == TextAlignmentType::Character )
+    //            {
+    //                translateDot = translate;
+    //            }
+
+
+    //            translate += glm::vec3( ( glyph->advanceX ) / scaleRatio, 0.f, 0.f ) + interspace;
+    //            componentIdx++;
+    //        }
+    //        else
+    //        {
+    //            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f ) + interspace;
+    //            //assert( !( "Cannot find glyph for char " + wch) );
+    //        }
+    //    }
+
+    //    // Apply alignement to current line and go to next.
+    //    std::vector< model::ConnectedComponentPtr > lineComponents( components.begin() + lineBeginComponentIdx, components.begin() + componentIdx );
+
+    //    TextHelper::ApplyAlignementP( alignement, translate, translateDot, lineComponents );
+
+    //    // End of line (or text) reached.
+    //    translate = glm::vec3( 0.f );
+    //    translateDot = glm::vec3( 0.f );
+    //    ++i;
+    //}
 
 
 }
