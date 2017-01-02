@@ -26,7 +26,7 @@ public:
 
                             NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType = 2 );
 
-    virtual void            RenderFrame         ( Renderer * renderer, audio::AudioRenderer * audio, SceneNode * sceneRoot ) override;
+    virtual void            RenderFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 
     virtual Preview *       GetPreview          () override;
     virtual VideoOutput *   GetVideoOutput      () override;

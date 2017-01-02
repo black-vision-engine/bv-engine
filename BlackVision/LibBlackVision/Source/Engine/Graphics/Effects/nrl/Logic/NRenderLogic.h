@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Graphics/SceneGraph/Scene.h"
+
 namespace bv { 
 
 class Renderer;
@@ -22,7 +24,7 @@ public:
 
     virtual                 ~NRenderLogic   ();
 
-    virtual void            RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audio, SceneNode * sceneRoot ) = 0;
+    virtual void            RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) = 0;
 
     // FIXME: temporary - just to make sure that required configurations are implemented in a valid manner
     virtual Preview *       GetPreview      () = 0;

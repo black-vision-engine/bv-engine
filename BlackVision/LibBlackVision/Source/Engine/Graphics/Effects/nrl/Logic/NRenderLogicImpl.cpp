@@ -16,7 +16,7 @@ NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, u
 
 // **************************
 //
-void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio::AudioRenderer * audio, SceneNode * sceneRoot )
+void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes )
 {
     if( !m_state.IsInitialized() )
     {
@@ -28,7 +28,9 @@ void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio
     auto renderResult = render_result( m_state );
     renderResult->UpdateOutputChannels();
 
-    Render      ( sceneRoot );
+	// FIXME: nrl - Render vector of scenes, not only first scene.
+	renderer->SetCamera( scenes[ 0 ]->GetCamera() );
+    Render      ( scenes[ 0 ]->GetRoot() );
 
     // FIXME: add an output renderTarget (possibly if necessary)
     // FIXME: nrl - add audio somewhere in this class
