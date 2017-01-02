@@ -999,13 +999,15 @@ void    Renderer::PassCCNumUniform  ( int i, SizeType num )
 //
 void    Renderer::FreeNodeEffectPDR ( const NodeEffect * nodeEffect )
 {
-    std::set< const RenderablePass * > passes;
-    nodeEffect->GetRenderPasses( &passes );
+    { nodeEffect; }
+    // FIXME: nrl update
+    //std::set< const RenderablePass * > passes;
+    //nodeEffect->GetRenderPasses( &passes );
 
-    for( auto p : passes )
-    {
-        m_PdrShaderMap.erase( p );
-    }
+    //for( auto p : passes )
+    //{
+    //    m_PdrShaderMap.erase( p );
+    //}
 }
 
 } //bv

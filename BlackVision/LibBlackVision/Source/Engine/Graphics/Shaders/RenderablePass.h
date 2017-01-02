@@ -38,3 +38,5 @@ public:
 };
 
 } //bv
+
+#include "RenderablePass.inl"

@@ -3,12 +3,7 @@
 #include "NodeEffect.h"
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
-
-
-
-
-#include "Memory/MemoryLeaks.h"
-
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffectRenderLogic.h"
 
 
 namespace bv {
@@ -16,24 +11,39 @@ namespace bv {
 // *********************************
 //
 NodeEffect::NodeEffect              ( NodeEffectLogic * logic, NodeEffectType neType )
-    : m_logic( logic )
-    , m_type( neType )
+    : m_type( neType )
+    , m_nrlLogic( nullptr )
 {
-    assert( m_logic );
+    { logic; }
+    m_nrlLogic = nullptr;
 }
 
 // *********************************
 //
 NodeEffect::~NodeEffect             ()
 {
-    delete m_logic;
+    delete m_nrlLogic;
 }
 
 // *********************************
 //
-void            NodeEffect::Render                      ( SceneNode * node, RenderLogicContext * ctx )
+void            NodeEffect::Render                      ( SceneNodeRepr * node, nrl::NRenderContext * ctx )
 {
-    m_logic->Render( node, ctx );
+    m_nrlLogic->Render( node, ctx );
+}
+
+// *********************************
+//
+bool			NodeEffect::IsBlendable_DIRTY_DESIGN_HACK	() const
+{
+	return m_nrlLogic->IsBlendable_DIRTY_DESIGN_HACK();
+}
+
+// *********************************
+//
+float			NodeEffect::GetDepth_DIRTY_DESIGN_HACK		() const
+{
+	return m_nrlLogic->GetDepth_DIRTY_DESIGN_HACK();
 }
 
 // *********************************
@@ -43,62 +53,39 @@ NodeEffectType  NodeEffect::GetType                     () const
     return m_type;
 }
 
-// *********************************
-//
-unsigned int    NodeEffect::GetNumValues                () const
-{
-    return m_logic->GetNumValues();
-}
+//// *********************************
+////
+//unsigned int    NodeEffect::GetNumValues                () const
+//{
+//    assert( false );
+//    //FIXME: implement
+//    return 0;
+//    //return m_logic->GetNumValues();
+//}
 
 // *********************************
 //
 IValuePtr       NodeEffect::GetValueAt                  ( unsigned int i ) const
 {
-    return m_logic->GetValueAt( i );
+    assert( false );
+    { i; }
+    //FIXME: implement
+    return nullptr;
+    //    return m_logic->GetValueAt( i );
 }
 
 // *********************************
 //
 IValuePtr       NodeEffect::GetValue                    ( const std::string & name ) const
 {
-    return m_logic->GetValue( name );
+    return m_nrlLogic->GetValue( name );
 }
 
-// *********************************
+// **************************
 //
 void            NodeEffect::Update                      ()
 {
-    m_logic->Update();
-}
-
-// *********************************
-//
-void            NodeEffect::AddTexture                  ( const ITextureDescriptorConstPtr & txDesc )
-{
-    m_textures.push_back( txDesc );
-    m_logic->AddTexture( txDesc );
-}
-
-// *********************************
-//
-void            NodeEffect::GetRenderPasses             ( std::set< const RenderablePass * > * passes ) const
-{
-    m_logic->GetRenderPasses( passes );
-}
-
-// *********************************
-//
-SizeType        NodeEffect::GetNumTextures              () const
-{
-    return m_textures.size();
-}
-
-// *********************************
-//
-ITextureDescriptorConstPtr NodeEffect::GetTexture       ( SizeType i ) const
-{
-    assert( i < m_textures.size() );
-    return m_textures[ i ];
+    assert( false );
 }
 
 } //bv

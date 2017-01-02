@@ -4,6 +4,8 @@
 
 #include <cassert>
 
+#include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
@@ -12,11 +14,7 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
-
-
-
 #include "Memory/MemoryLeaks.h"
-
 
 
 namespace bv {
@@ -24,198 +22,145 @@ namespace bv {
 // ********************************
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
-    : m_transformable( transformable )
+    : m_repr( new SceneNodeRepr( transformable, this ) )
     , m_nodeEffect( nullptr )
-    , m_boundingBox( nullptr )
     , m_drawBoundingBox( false )
     , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
-    , m_audio( nullptr )
 {
     m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
-    m_performanceData = new SceneNodePerformance();
 }
 
 // ********************************
 //
 SceneNode::~SceneNode          ()
 {
-    delete m_performanceData;
+    delete m_repr;
+}
 
-    DeleteTransformable();
-    DeleteAudio();
-
-    for ( auto node : m_sceneNodes )
-    {
-        delete node;
-    }
+// ********************************
+//
+SceneNodeRepr *         SceneNode::GetRepr              ()
+{
+    return m_repr;
 }
 
 // ********************************
 //
 SizeType                SceneNode::NumChildNodes        () const
 {
-    return m_sceneNodes.size();
+    return m_repr->NumChildNodes();
 }
 
 // ********************************
 //
 void                    SceneNode::AddChildNode         ( SceneNode * child )
 {
-    m_sceneNodes.push_back( child );
+    m_repr->AddChildNode( child );
 }
 
 // ********************************
 //
 void                    SceneNode::AddChildNode         ( SceneNode * child, UInt32 idx )
 {
-    if( idx < m_sceneNodes.size() )
-    {
-        m_sceneNodes.insert( m_sceneNodes.begin() + idx, child );
-    }
-    else
-    {
-        m_sceneNodes.push_back( child );
-    }
+    m_repr->AddChildNode( child, idx );
 }
 
 // ********************************
 //
 void                    SceneNode::DetachChildNode      ( SceneNode * node )
 {
-    for( auto it = m_sceneNodes.begin(); it != m_sceneNodes.end(); ++it )
-    {
-        if( *it == node )
-        {
-            m_sceneNodes.erase( it );
-
-            return;
-        }
-    }
-
-    assert( false );
+    m_repr->DetachChildNode( node );
 }
 
 // ********************************
 //
 SceneNode *             SceneNode::DetachChildNode      ( unsigned int idx )
 {
-    SceneNode * node = nullptr;
-
-    if( idx < m_sceneNodes.size() )
-    {
-        node = m_sceneNodes[ idx ];
-        m_sceneNodes.erase( m_sceneNodes.begin() + idx );
-    }
-
-    return node;
+    return m_repr->DetachChildNode( idx );
 }
 
 // ********************************
 //
 SceneNode *             SceneNode::GetChild             ( unsigned int idx )
 {
-    assert( idx < (unsigned int) NumChildNodes() );
-
-    return m_sceneNodes[ idx ];
+    return m_repr->GetChild( idx );
 }
 
 // ********************************
 //
 bool                    SceneNode::HasChild            ( SceneNode * node ) const
 {
-    for( auto child : m_sceneNodes )
-    {
-        if ( child == node )
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return m_repr->HasChild( node );
 }
 
 // ********************************
 //
 TransformableEntity *   SceneNode::GetTransformable     ()
 {
-    return m_transformable;
+    return m_repr->GetTransformable();
 }
 
 // ********************************
 //
 audio::AudioEntity *    SceneNode::GetAudio             () const
 {
-    return m_audio;
+    return m_repr->GetAudio();
 }
 
 // ********************************
 //
-NodeEffectPtr   SceneNode::GetNodeEffect  ()
+NodeEffectPtr   SceneNode::GetNodeEffect                ()
 {
     return m_nodeEffect;
 }
 
 // ********************************
 //
-void            SceneNode::SetNodeEffect  ( NodeEffectPtr nodeEffect )
+void            SceneNode::SetNodeEffect                ( NodeEffectPtr nodeEffect )
 {
     m_nodeEffect = nodeEffect;
 }
 
 // ********************************
 //
+nrl::NNodeEffectPtr     SceneNode::GetNNodeEffect      ()
+{
+    return m_nNodeEffect;
+}
+
+// ********************************
+//
+void                    SceneNode::SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect )
+{
+    m_nNodeEffect = nNodeEffect;
+}
+
+// ********************************
+//
 void            SceneNode::SetTransformable     ( TransformableEntity * transformable )
 {
-    DeleteTransformable();
-
-    m_transformable = transformable;
+    m_repr->SetTransformable( transformable );
 }
 
 // ********************************
 //
 void            SceneNode::DeleteTransformable  ()
 {
-    delete m_transformable;
-
-    m_transformable = nullptr;
+    m_repr->DeleteTransformable();
 }
 
 // ********************************
 //
 void            SceneNode::SetAudio             ( audio::AudioEntity * audio )
 {
-    DeleteAudio();
-    m_audio = audio;
-}
-
-// ********************************
-//
-void            SceneNode::DeleteAudio          ()
-{
-    if( m_audio )
-    {
-        // release allocated memory for this node audio entity
-        auto evt = std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::ReleaseAudioResource );
-        evt->SceneNodeOwner = this;
-        GetDefaultEventManager().TriggerEvent( evt );
-
-        delete m_audio;
-        m_audio = nullptr;
-    }
+    m_repr->SetAudio( audio );
 }
 
 // ********************************
 //
 void            SceneNode::Update               ( const Transform & parentTransform )
 {
-    m_transformable->UpdateTransform( parentTransform );
-
-    auto worldTransform = m_transformable->WorldTransform();
-
-    for ( auto node : m_sceneNodes )
-    {
-        node->Update( worldTransform );
-    }
+    m_repr->Update( parentTransform );
 }
 
 // ********************************
@@ -236,14 +181,14 @@ void                    SceneNode::SetVisible   ( bool visible )
 //
 void                    SceneNode::SetBoundingBox   ( const math::Box * bb )
 {
-    m_boundingBox = bb;
+    m_repr->SetBoundingBox( bb );
 }
 
 // ********************************
 //
 const math::Box *       SceneNode::GetBoundingBox   () const
 {
-    return m_boundingBox;
+    return m_repr->GetBoundingBox();
 }
 
 // ***********************
@@ -262,7 +207,7 @@ glm::vec4               SceneNode::GetBoundingBoxColor () const
 
 // ***********************
 //
-void               SceneNode::Select              ( glm::vec4 color )
+void                    SceneNode::Select              ( glm::vec4 color )
 {
     m_drawBoundingBox = true;
     m_boundingBoxColor = color;
@@ -279,7 +224,14 @@ void                    SceneNode::Unselect             ()
 //
 SceneNodePerformance *  SceneNode::GetPerformanceData  ()
 {
-    return m_performanceData;
+    return m_repr->GetPerformanceData();
+}
+
+// ********************************
+//
+RenderableEntity * renderable( SceneNode * node )
+{
+    return renderable( node->GetRepr() );
 }
 
 } //bv

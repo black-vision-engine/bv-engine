@@ -2,21 +2,26 @@
 
 #include <vector>
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+
 #include "Engine/Audio/AudioEntity.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
-#include "SceneNodePerformance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffect.h"
 
-#include "CoreDEF.h"
+#include "SceneNodePerformance.h"
 
 
 namespace bv {
 
 class IValue;
 class TransformableEntity;
-class Renderer;
+class SceneNodeRepr;
+class RenderableEntity;
 
 namespace math = mathematics;
 
@@ -24,32 +29,24 @@ class SceneNode
 {
 private:
 
-    typedef std::vector<SceneNode *>            SceneNodeVec;
+    SceneNodeRepr *     m_repr;
 
-private:
+    NodeEffectPtr       m_nodeEffect;
+    nrl::NNodeEffectPtr m_nNodeEffect;
 
-    SceneNodeVec                    m_sceneNodes;
-
-    NodeEffectPtr                   m_nodeEffect;
-
-    TransformableEntity *           m_transformable;
-
-    bool                            m_visible;
-
-    bool                            m_drawBoundingBox;
-    glm::vec4                       m_boundingBoxColor;
-
-    const mathematics::Box *        m_boundingBox;
-
-    audio::AudioEntity *            m_audio;
-
-    SceneNodePerformance *          m_performanceData;
+    //FIXME: use some sort of caps/flag here (instead of a single flag)
+    bool                m_visible;
+    bool                m_drawBoundingBox;
+    glm::vec4           m_boundingBoxColor;
 
 public:
 
                             SceneNode           ( TransformableEntity * transformable = nullptr );
                             ~SceneNode          ();
 
+    SceneNodeRepr *         GetRepr             ();
+
+    //FIXME: remove
     SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
@@ -60,13 +57,16 @@ public:
     SceneNode *             GetChild            ( unsigned int idx );
     bool                    HasChild            ( SceneNode * node ) const;
 
+    //FIXME: remove
     TransformableEntity *   GetTransformable    ();
-
     audio::AudioEntity *    GetAudio            () const;
     void                    SetAudio            ( audio::AudioEntity * audio );
    
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
+
+    nrl::NNodeEffectPtr     GetNNodeEffect      ();
+    void                    SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect );
 
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;
@@ -82,8 +82,6 @@ private:
     void                    SetTransformable    ( TransformableEntity * transformable );
     void                    DeleteTransformable ();
 
-    void                    DeleteAudio         ();
-
 public:
 
     void                    Update              ( const Transform & parentTransform );
@@ -94,5 +92,7 @@ public:
     // FIXME: think of some better approach to dynamic node state manipulation
     friend class BVProjectTools;
 };
+
+RenderableEntity *  renderable  ( SceneNode * node );
 
 } // bv

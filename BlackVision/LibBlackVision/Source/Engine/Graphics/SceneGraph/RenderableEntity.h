@@ -55,3 +55,5 @@ protected:
 DEFINE_UPTR_TYPE( RenderableEntity )
 
 } //bv
+
+#include "RenderableEntity.inl"

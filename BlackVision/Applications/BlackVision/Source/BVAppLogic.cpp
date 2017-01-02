@@ -12,7 +12,9 @@
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+// FIXME: nrl - render logic replacement
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
+//#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/NodeLogicFactory.h"
@@ -100,6 +102,7 @@ namespace
     }
 }
 
+// *********************************
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : m_bvProject( BVProject::Create( renderer, audioRenderer ) )
@@ -118,8 +121,9 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     m_renderer = renderer;
     m_audioRenderer = audioRenderer;
 
-    m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
-    
+    // nrl - render logic replacement
+    //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
+    m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
 
@@ -322,7 +326,10 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
                 FRAME_STATS_SECTION( "Render" );
 
 				audioRenderer->SetGain( m_gain );
-                m_renderLogic->RenderFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
+                assert( false );
+                //FIXME: nrl - render frame to be reimplemented
+                { renderer; }
+                // m_renderLogic->RenderFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
                 {
@@ -476,7 +483,7 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-RenderLogic *                   BVAppLogic::GetRenderLogic      () const
+nrl::NRenderLogic *             BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
 }

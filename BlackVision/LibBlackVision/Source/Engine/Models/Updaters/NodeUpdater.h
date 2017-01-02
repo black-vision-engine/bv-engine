@@ -22,6 +22,8 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
+#include "Engine/Models/Updaters/ShaderParamUpdater.h"
+
 //FIXME: this part suxx as hell
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
@@ -78,6 +80,7 @@ private:
     RenderableEntity *                          m_renderable;
     RenderableEntity *                          m_boundingBox;
     RenderableEntity *                          m_centerOfMass;
+
     model::ITransformChannelConstPtr            m_transformChannel;
     model::IStatedValuePtr                      m_transformStatedValue;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
@@ -147,12 +150,6 @@ private:
 private:
 
     void            RegisterShaderParams	( IValueSetConstPtr values, Shader * shader );
-    
-    
-    void			UpdateShaderParam		( IValueConstPtr source, GenericShaderParam * dest );
-
-    template< typename ValType, typename ShaderParamType >
-    void			UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest );
 
 private:
     
