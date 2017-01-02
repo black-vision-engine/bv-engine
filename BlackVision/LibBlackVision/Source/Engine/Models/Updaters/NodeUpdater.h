@@ -22,6 +22,8 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
+#include "Engine/Models/Updaters/ShaderParamUpdater.h"
+
 //FIXME: this part suxx as hell
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
