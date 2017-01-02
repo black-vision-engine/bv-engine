@@ -1978,9 +1978,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NAudioLogicCore.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5233,9 +5230,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.h">
       <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NAudioLogicCore.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

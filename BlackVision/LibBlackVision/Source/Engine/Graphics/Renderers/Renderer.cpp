@@ -109,7 +109,7 @@ Camera * Renderer::GetCamera        ()
 }
 
 // *********************************
-//
+// FIXME: nrl - refactor this one - its logic should be placed outside this class
 void Renderer::EnableScene          ( Scene * scene )
 {
     auto buffer = scene->GetLightsBuffer();

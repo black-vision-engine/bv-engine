@@ -1,11 +1,9 @@
 #pragma once
 
+#include "Engine/Graphics/SceneGraph/Scene.h"
 
-namespace bv { 
-
-class SceneNode;
-
-namespace nrl {
+      
+namespace bv {  namespace nrl {
 
 class RenderResult;
 class NRenderContext;
@@ -14,7 +12,7 @@ class NRenderLogicCore
 {
 public:
 
-    void                    Render          ( RenderResult * result, SceneNode * root, NRenderContext * ctx );
+    void                    Render          ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx );
 
 };
 

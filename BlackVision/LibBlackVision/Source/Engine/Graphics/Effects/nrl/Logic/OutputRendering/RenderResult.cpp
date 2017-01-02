@@ -52,8 +52,11 @@ const RenderTarget *		RenderResult::GetActiveRenderTarget		( RenderOutputChannel
 
 // **************************
 //
-void                    RenderResult::UpdateOutputChannels			()
+void                    RenderResult::UpdateOutputChannels			( const SceneVec & scenes )
 {
+    // FIXME: nrl - take scenes into account somehow
+    { scenes; }
+
     for( auto channel : m_renderOutputChannels )
     {
         channel->UpdateActiveRenderTargetIdx();

@@ -12,14 +12,15 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-void    NRenderLogicCore::Render    ( RenderResult * result, SceneNode * root, NRenderContext * ctx )
+void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
 {
-    if( root )
+    for( auto & scene : scenes )
     {
-        // FIXME: default implementation - renders to the first channel only
-		auto outputRenderTarget = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_FIRST_OUTPUT );
+        // FIXME: nrl - retrieve rt for each scene here
+        auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_FIRST_OUTPUT );
 
-        NNodeRenderLogic::Render( root, outputRenderTarget, ctx );
+        NNodeRenderLogic::RenderQueued( scene, rt, ctx );
+        NNodeRenderLogic::RenderAudio( scene, ctx );
     }
 }
 

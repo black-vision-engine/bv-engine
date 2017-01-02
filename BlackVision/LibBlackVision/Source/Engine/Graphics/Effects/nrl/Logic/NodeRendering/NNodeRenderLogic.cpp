@@ -2,13 +2,89 @@
 
 #include "NNodeRenderLogic.h"
 
+#include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
+#include "Engine/Audio/AudioRenderer.h"
+
 
 namespace bv { namespace nrl {
+
+// *********************************
+//
+void    NNodeRenderLogic::RenderAudio       ( Scene * scene, NRenderContext * ctx )
+{
+    auto rootNode = scene->GetRoot();
+
+    if( rootNode )
+    {
+        RenderAudio( rootNode, audio( ctx ) );
+    }
+}
+
+// *********************************
+//
+void    NNodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRenderer * audio )
+{
+    // FIXME: nrl - and what about node effects???
+    if ( node->IsVisible() )
+    {
+        auto nodeAudio = node->GetAudio();
+
+        if( nodeAudio )
+        {
+            audio->Proccess( nodeAudio );
+        }
+
+        for( unsigned int i = 0; i < ( UInt32 )node->NumChildNodes(); ++i )
+        {
+            RenderAudio( node->GetChild( i ), audio );
+        }
+    }
+}
+
+// *********************************
+//
+void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget * output, NRenderContext * ctx )
+{
+    auto renderer = ctx->GetRenderer();
+
+    renderer->Performance().AverageScenePerformanceData( scene );
+    renderer->SetCamera( scene->GetCamera() );
+
+    // FIXME: nrl - reimplement it somehow
+    renderer->EnableScene( scene );
+
+    RenderQueued( scene->GetRoot(), output, ctx );
+}
+
+// *********************************
+//
+void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx )
+{
+    enable( ctx, output );
+
+    // FIXME: default clear color used - posisibly customize it a bit;
+    clearBoundRT( ctx, glm::vec4() ); 
+
+    // FIXME: nrl - remove this method and implement its logic in some other place
+ 
+    auto queue = queue_allocator( ctx )->Allocate();
+    
+    queue->QueueNodeSubtree( node, ctx );
+    
+    queue->Render( ctx );
+
+    queue_allocator( ctx )->Free();
+
+    // FIXME: nrl - implement it back
+//    RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
+
+    disableBoundRT( ctx );
+}
 
 // *********************************
 //

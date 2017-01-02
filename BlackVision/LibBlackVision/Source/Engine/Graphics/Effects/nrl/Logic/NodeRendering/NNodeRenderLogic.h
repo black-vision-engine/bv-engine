@@ -3,9 +3,16 @@
 namespace bv {
 
 class Renderer;
+class Scene;
 class SceneNode;
 class SceneNodeRepr;
 class RenderTarget;
+
+namespace audio {
+
+class AudioRenderer;
+
+}
 
 namespace nrl {
 
@@ -16,6 +23,12 @@ class NNodeRenderLogic
 public:
 
 	// PUBLIC API
+    static void     RenderAudio     ( Scene * scene, NRenderContext * ctx );
+    static void     RenderAudio     ( SceneNode * node, audio::AudioRenderer * renderer );
+
+    static void     RenderQueued    ( Scene * scene, const RenderTarget * output, NRenderContext * ctx );
+    static void     RenderQueued    ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx );
+
     static void     Render          ( SceneNode * node, NRenderContext * ctx );
     static void     Render          ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx );
 

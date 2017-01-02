@@ -144,7 +144,7 @@ public:
     void    SetVSync            ( bool enable, int verticalBufferFrameCount );
     void    SetFlushFinish      ( bool flush, bool finish );
 
-    void    EnableScene         ( Scene * scene );
+    void    EnableScene         ( Scene * scene ); // FIXME: nrl - refactor this one - its logic should be placed outside this class
 
 public:
 

@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#include "Engine/Graphics/SceneGraph/Scene.h"
+
+
 namespace bv { 
 
 class RenderTargetStackAllocator;
@@ -39,7 +42,7 @@ public:
     const RenderOutputChannel *     GetRenderOutputChannel  ( RenderOutputChannelType roct ) const;
 	const RenderTarget *			GetActiveRenderTarget	( RenderOutputChannelType roct ) const;
 
-    void                            UpdateOutputChannels    ();
+    void                            UpdateOutputChannels    ( const SceneVec & scenes );
 
 };
 
