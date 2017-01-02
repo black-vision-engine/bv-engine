@@ -32,6 +32,13 @@ Renderer *	NRenderContext::GetRenderer			() const
 
 // ***************************
 //
+audio::AudioRenderer *          NRenderContext::GetAudio                        () const
+{
+    return m_audio;
+}
+
+// ***************************
+//
 RenderTargetStackAllocator *	NRenderContext::GetRenderTargetAllocator		() const
 {
     return m_rtAllocator;
@@ -42,6 +49,13 @@ RenderTargetStackAllocator *	NRenderContext::GetRenderTargetAllocator		() const
 void                            NRenderContext::SetRenderer						( Renderer * renderer )
 {
 	m_renderer = renderer;
+}
+
+// ***************************
+//
+void                            NRenderContext::SetAudio                        ( audio::AudioRenderer * audio )
+{
+    m_audio = audio;
 }
 
 // ***************************

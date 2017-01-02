@@ -2,6 +2,8 @@
 
 #include "NRenderLogicImpl.h"
 
+#include "Engine/Audio/AudioRenderer.h"
+
 
 namespace bv { namespace nrl {
 
@@ -14,11 +16,11 @@ NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, u
 
 // **************************
 //
-void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, SceneNode * sceneRoot )
+void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio::AudioRenderer * audio, SceneNode * sceneRoot )
 {
     if( !m_state.IsInitialized() )
     {
-        m_state.Initialize( renderer );
+        m_state.Initialize( renderer, audio );
     }
 
     renderer->PreDraw();
@@ -29,6 +31,7 @@ void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, Scene
     Render( sceneRoot );
 
     // FIXME: add an output renderTarget (possibly if necessary)
+    // FIXME: nrl - add audio somewhere in this class
     output_logic( m_state )->ProcessFrameData( ctx( m_state ), renderResult );
 
     renderer->PostDraw();

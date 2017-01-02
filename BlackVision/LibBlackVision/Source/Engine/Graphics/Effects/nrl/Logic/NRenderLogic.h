@@ -5,6 +5,12 @@ namespace bv {
 class Renderer;
 class SceneNode;
 
+namespace audio {
+
+class AudioRenderer;
+
+}
+
 namespace nrl {
 
 class Preview;
@@ -16,7 +22,7 @@ public:
 
     virtual                 ~NRenderLogic   ();
 
-    virtual void            RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot ) = 0;
+    virtual void            RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audio, SceneNode * sceneRoot ) = 0;
 
     // FIXME: temporary - just to make sure that required configurations are implemented in a valid manner
     virtual Preview *       GetPreview      () = 0;

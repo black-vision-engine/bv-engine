@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
@@ -10,10 +11,13 @@ class NRenderContext
 {
 private:
 
+
     Renderer *                      m_renderer;
     RenderTargetStackAllocator *    m_rtAllocator;
 
 	const RenderTarget *			m_boundRenderTarget;
+
+    audio::AudioRenderer *          m_audio;
 
 public:
 
@@ -21,9 +25,11 @@ public:
                                     ~NRenderContext		    ();
 
     Renderer *                      GetRenderer             () const;
+    audio::AudioRenderer *          GetAudio                () const;
     RenderTargetStackAllocator *    GetRenderTargetAllocator() const;
 
     void                            SetRenderer             ( Renderer * renderer );
+    void                            SetAudio                ( audio::AudioRenderer * audio );
     void                            SetAllocator            ( RenderTargetStackAllocator * allocator );
 
 	const RenderTarget *            GetBoundRenderTarget    () const;
@@ -44,6 +50,13 @@ public:
 inline Renderer *                   renderer		( NRenderContext * ctx )
 {
     return ctx->GetRenderer();
+}
+
+// *******************************
+//
+inline audio::AudioRenderer *       audio           ( NRenderContext * ctx )
+{
+    return ctx->GetAudio();
 }
 
 // *******************************

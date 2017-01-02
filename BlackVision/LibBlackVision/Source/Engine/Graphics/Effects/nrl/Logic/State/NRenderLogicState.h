@@ -8,11 +8,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
 
-namespace bv { 
-
-class Renderer;
-   
-namespace nrl {
+namespace bv { namespace nrl {
 
 class NRenderLogicState
 {
@@ -36,7 +32,7 @@ public:
     NRenderContext *			GetRenderContext	();
 
     bool                        IsInitialized       () const;
-    void                        Initialize          ( Renderer * renderer );
+    void                        Initialize          ( Renderer * renderer, audio::AudioRenderer * audio );
 
 };
 

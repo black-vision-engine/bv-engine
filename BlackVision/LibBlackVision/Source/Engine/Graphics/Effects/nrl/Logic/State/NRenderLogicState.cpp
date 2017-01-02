@@ -45,9 +45,10 @@ bool                        NRenderLogicState::IsInitialized       () const
 
 // **************************
 //
-void                        NRenderLogicState::Initialize          ( Renderer * renderer )
+void                        NRenderLogicState::Initialize          ( Renderer * renderer, audio::AudioRenderer * audio )
 {
     m_ctx.SetRenderer( renderer );
+    m_ctx.SetAudio( audio );
 
     m_initialized = true;
 }
