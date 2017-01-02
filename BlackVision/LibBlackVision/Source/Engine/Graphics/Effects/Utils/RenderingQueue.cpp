@@ -1,14 +1,11 @@
 #include "stdafx.h"
+
 #include "RenderingQueue.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
-#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
-
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -89,7 +86,9 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
     auto effect = renderableEntity->GetRenderableEffect();
 
     if( !effect )
+    {
         return false;   // No effect. Return value is indifferent.
+    }
 
     // FIXME: What if there're more passes then one.
     return effect->GetPass( 0 )->GetStateInstance()->GetAlphaState()->blendEnabled;
@@ -196,27 +195,22 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, nrl:
     BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
     BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
 
+    // FIXME: nrl - implement more expressive api in NNodeRenderLogic so that bb and queue rendering is supported in a better way
     if( HasEffect( node ) )
     {
-        // FIXME: nrl - remove old effect implementation
-        auto effect = node->GetNodeEffect();
-
-        if( effect )
-        {
-            assert( false );
-            effect->Render( node, ctx );
-        }
-        else{
-            // FIXME: nrl - get NNodeEffect
-        }
+        nrl::NNodeRenderLogic::Render( node, ctx );
+    }
     else
     {
-        // Default render logic
-        ctx->GetRenderLogic()->DrawNodeOnly( renderer( ctx ), node );
+        nrl::NNodeRenderLogic::RenderRoot( node->GetRepr(), ctx );
     }
 
+    // FIXME: WTF???? add to NNodeRenderLogic
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
-        ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
+    {
+        // FIXME: nrl - refactor bounding box rendering
+        //ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
+    }
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
     END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
