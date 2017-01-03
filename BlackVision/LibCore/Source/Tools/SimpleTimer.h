@@ -12,14 +12,16 @@ class SimpleTimer
 {
 private:
 
-    bool            m_paused;
-    unsigned long   m_startMillis;
+	mutable std::mutex	m_mutex;
 
-    unsigned long   m_startPause;
-    unsigned long   m_totalPausedTime;
+    bool				m_paused;
+    unsigned long		m_startMillis;
+
+    unsigned long		m_startPause;
+    unsigned long		m_totalPausedTime;
 
 #ifdef QPF_TIMER
-	UInt64	        m_timerFrequency;
+	UInt64				m_timerFrequency;
 #endif
 public:
 

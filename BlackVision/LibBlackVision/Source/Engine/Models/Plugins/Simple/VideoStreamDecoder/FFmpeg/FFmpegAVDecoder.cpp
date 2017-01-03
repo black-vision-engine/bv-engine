@@ -129,22 +129,12 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
 //
 void						FFmpegAVDecoder::Play				()
 {
+	RestartDecoding();
+
 	if( m_paused )
 		m_timer.UnPause();
 	else
 		m_timer.Start();
-
-	if( m_videoDecoderThread )
-	{
-		m_videoDecoderThread->Play();
-	}
-
-	if( m_audioDecoderThread )
-	{
-		m_audioDecoderThread->Play();
-	}
-
-    RestartDecoding();
 }
 
 // *********************************
@@ -165,26 +155,6 @@ void						FFmpegAVDecoder::Pause				()
 void						FFmpegAVDecoder::Stop				()
 {
 	m_timer.Pause();
-
-	if( m_videoDecoderThread )
-	{
-		m_videoDecoderThread->Stop();
-	}
-
-	if( m_audioDecoderThread )
-	{
-		m_audioDecoderThread->Stop();
-	}
-
-	while( m_audioDecoderThread && !m_audioDecoderThread->Stopped() )
-	{
-		m_streams[ AVMEDIA_TYPE_AUDIO ]->ProcessPacket();
-	}
-
-	while( m_videoDecoderThread && !m_videoDecoderThread->Stopped() )
-	{
-		m_streams[ AVMEDIA_TYPE_VIDEO ]->ProcessPacket();
-	}
 
     StopDecoding();
 }
