@@ -157,6 +157,8 @@ void						FFmpegAVDecoder::Stop				()
 	m_timer.Pause();
 
     StopDecoding();
+
+	m_timer.Reset();
 }
 
 // *********************************
@@ -165,7 +167,14 @@ bool			            FFmpegAVDecoder::GetVideoMediaData	( AVMediaData & mediaData 
 {
     if( HasVideo() )
     {
-        return m_streams[ AVMEDIA_TYPE_VIDEO ]->PopData( mediaData );
+		auto ret = m_streams[ AVMEDIA_TYPE_VIDEO ]->PopData( mediaData );
+
+		if( ret )
+		{
+			std::cout << "Video Media Data " << mediaData.framePTS << std::endl;
+		}
+
+		return ret;
     }
 
     return false;
@@ -177,7 +186,14 @@ bool			            FFmpegAVDecoder::GetAudioMediaData  ( AVMediaData & mediaData
 {
     if( HasAudio() )
     {
-        return m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );
+		auto ret = m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );
+
+		if( ret )
+		{
+			std::cout << "Audio Media Data " << mediaData.framePTS << std::endl;
+		}
+
+		return ret;
     }
 
     return false;
@@ -191,7 +207,7 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
 
     if( HasVideo() )
     {
-        Seek( frameTime );
+		Seek( frameTime, true, false );
         
         Play();
 
@@ -307,11 +323,9 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
+void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers, bool  restartDecoding )
 {
 	std::cout << "Seek to time: " << time << std::endl;
-
-	m_timer.Pause();
 
 	StopDecoding();
 
@@ -335,9 +349,8 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
         decoder->SetOffset( currPTS );
     }
 
-	RestartDecoding();
-
-	m_timer.Start();
+	if( restartDecoding )
+		RestartDecoding();
 }
 
 // *********************************
@@ -423,7 +436,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
         auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
         while( i < 5 && !IsFinished() )
         {
-            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetDuration(), false ) )
+            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetCurrentPTS(), false ) )
             {
                 i++;
             }
@@ -439,11 +452,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
 //
 void					FFmpegAVDecoder::RestartDecoding        ()
 {
-	if( m_audioDecoderThread )
-		m_audioDecoderThread->Restart();
-
-	if( m_videoDecoderThread )
-		m_videoDecoderThread->Restart();
+	m_demuxerThread->Restart();
 
 	if( m_audioStreamsDecoderThread )
 		m_audioStreamsDecoderThread->Restart();
@@ -451,7 +460,11 @@ void					FFmpegAVDecoder::RestartDecoding        ()
 	if( m_videoStreamsDecoderThread )
 		m_videoStreamsDecoderThread->Restart();
 
-	m_demuxerThread->Restart();
+	if( m_audioDecoderThread )
+		m_audioDecoderThread->Restart();
+
+	if( m_videoDecoderThread )
+		m_videoDecoderThread->Restart();
 }
 
 // *********************************

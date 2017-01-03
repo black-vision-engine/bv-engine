@@ -42,7 +42,7 @@ public:
 
 	void						Play				();
 	void						Stop				();
-	bool						Pause				();
+	void						Pause				();
 	void						Restart				();
 
 	bool						Paused				() const;

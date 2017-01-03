@@ -29,12 +29,27 @@ public:
                             ~SimpleTimer    ();
 
     void                    Start           ();
+	void					Reset			();
 
     void                    Pause           ();
     void                    UnPause         ();
 
-    inline TimeType         ElapsedTime     () const;
-    inline unsigned long    ElapsedMillis   () const;
+    inline TimeType         ElapsedTime     () const
+	{
+		std::unique_lock< std::mutex > lock( m_mutex );
+		return MillisToTime( ElapsedMillis() );
+	}
+
+	inline unsigned long    ElapsedMillis   () const
+	{
+		std::unique_lock< std::mutex > lock( m_mutex );
+		if( m_paused )
+		{
+			return m_startPause - m_startMillis - m_totalPausedTime;
+		}
+
+		return QueryMillis() - m_startMillis - m_totalPausedTime;
+	}
 
 private:
 
@@ -46,25 +61,5 @@ private:
     }
 
 };
-
-// *********************************
-//
-TimeType         SimpleTimer::ElapsedTime     () const
-{
-    return MillisToTime( ElapsedMillis() );
-}
-
-// *********************************
-//
-unsigned long    SimpleTimer::ElapsedMillis   () const
-{
-    if( m_paused )
-    {
-        return m_startPause - m_startMillis - m_totalPausedTime;
-    }
-
-
-	return QueryMillis() - m_startMillis - m_totalPausedTime;
-}
 
 } //bv

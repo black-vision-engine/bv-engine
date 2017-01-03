@@ -222,7 +222,7 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
         auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
         if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
         {
-            m_decoder->Seek( offset[ 0 ] );
+            m_decoder->Seek( offset[ 0 ], true, false );
             m_prevOffsetCounter = offset[ 1 ];
 
             std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( m_decoderMode != PLAY );
@@ -254,7 +254,7 @@ void                                DefaultAudioDecoderPlugin::Play             
 void                                DefaultAudioDecoderPlugin::Stop                     ()
 {
     m_decoder->Stop();
-    m_decoder->Seek( 0.f );
+    m_decoder->Seek( 0.f, true, false );
     TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
 }
 
@@ -283,7 +283,8 @@ void                                DefaultAudioDecoderPlugin::HandlePerfectLoop
 
     if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
     {
-        m_decoder->Seek( 0.f, true );     // do not clear buffer
+        m_decoder->Seek( 0.f, true, false );     // do not clear buffer
+		UpdateDecoderState( m_decoderMode );
         m_loopCount--;
     }
 }
