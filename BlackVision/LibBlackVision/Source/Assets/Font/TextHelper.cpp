@@ -301,8 +301,11 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
     glm::vec3 translateDot( 0.f );
 
     unsigned int lastSpace = 0;
+    glm::vec3 lastSpaceTranslate( 0.0, 0.0, 0.0 );
+    glm::vec3 lastGlyphTranslate( 0.0, 0.0, 0.0 );
 
     unsigned int lineBeginIdx = 0;
+    unsigned int lineEndIdx = 0;
     unsigned int i = 0;
 
     while( i < text.size() )
@@ -312,10 +315,12 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
         for( ; i < text.size(); ++i )
         {
             auto wch = text[ i ];
+            lineEndIdx = i + 1;         // All letters are potencial end of line.
 
             if( wch == L' ' )
             {
                 lastSpace = i;
+                lastSpaceTranslate = translate;
 
                 translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
                 resultLayout.push_back( translate );
@@ -348,6 +353,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 }
 
                 resultLayout.push_back( translate + newLineTranslation );
+                lastGlyphTranslate = translate;
 
                 translate += glm::vec3( ( glyph->advanceX ) / layout.AspectRatio, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
             }
@@ -365,11 +371,17 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 if( !( lineBeginIdx - 1 == lastSpace ) )
                 {
                     i = lastSpace;  // This will ommit space. We have new line instead.
+                    translate = lastSpaceTranslate;
+                    lineEndIdx = lastSpace;
+
                     resultLayout.erase( resultLayout.begin() + ( lastSpace + 1 ), resultLayout.end() );
                 }
                 else
                 {
                     resultLayout.pop_back();
+
+                    translate = lastGlyphTranslate;
+                    lineEndIdx = i;
                     i--;
                     lastSpace = i;
                 }
@@ -378,7 +390,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
             }
         }
 
-        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, resultLayout, lineBeginIdx, i );
+        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, resultLayout, lineBeginIdx, lineEndIdx );
 
         // End of line (or text) reached.
         translateDot = glm::vec3( 0.f );
