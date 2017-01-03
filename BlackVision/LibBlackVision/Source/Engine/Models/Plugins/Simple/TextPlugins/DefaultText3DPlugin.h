@@ -50,7 +50,6 @@ public:
         static const std::string        FONT_SIZE;
         static const std::string        NEW_LINE_SIZE;
         static const std::string        SPACING;
-        static const std::string        MAX_TEXT_LENGTH;
         static const std::string        ALIGNEMENT;
         static const std::string        USE_KERNING;
         static const std::string        ALIGN_CHARACTER;
@@ -67,7 +66,6 @@ private:
 
     ValueBoolPtr                    m_useKerningValue;
     ValueFloatPtr                   m_spacingValue;
-    ValueFloatPtr                   m_maxTextLengthValue;
     ValueFloatPtr                   m_fontSize;
     ValueFloatPtr                   m_newLineSize;
 
