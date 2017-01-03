@@ -58,7 +58,6 @@ const std::string        DefaultText3DPlugin::PARAMS::TEXT              = "text"
 const std::string        DefaultText3DPlugin::PARAMS::FONT_SIZE         = "fontSize";
 const std::string        DefaultText3DPlugin::PARAMS::NEW_LINE_SIZE     = "newLineSize";
 const std::string        DefaultText3DPlugin::PARAMS::SPACING           = "spacing";
-const std::string        DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH   = "maxTextLenght";
 const std::string        DefaultText3DPlugin::PARAMS::ALIGNEMENT        = "alignment";
 const std::string        DefaultText3DPlugin::PARAMS::USE_KERNING       = "useKerning";
 const std::string        DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER   = "alignCharacter";
@@ -90,7 +89,6 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
 
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT, std::wstring( L"" ) );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::SPACING, 0.0f );
-    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::MAX_TEXT_LENGTH, 0.0f );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::FONT_SIZE, 8.0f );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::NEW_LINE_SIZE, 1.0f );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true );
@@ -159,7 +157,6 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
     m_fontSize              = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::FONT_SIZE ) );
     m_spacingValue          = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::SPACING ) );
     m_newLineSize           = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::NEW_LINE_SIZE ) );
-    m_maxTextLengthValue    = QueryTypedValue< ValueFloatPtr >( modelVAC->GetValue( PARAMS::MAX_TEXT_LENGTH ) );
     m_textParam             = QueryTypedParam< ParamWStringPtr >( modelVAC->GetParameter( PARAMS::TEXT ) );
     m_useKerningValue       = QueryTypedValue< ValueBoolPtr >( modelVAC->GetValue( PARAMS::USE_KERNING ) );
     m_alignmentParam        = QueryTypedParam< ParamEnumTATPtr >( modelVAC->GetParameter( PARAMS::ALIGNEMENT ) );

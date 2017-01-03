@@ -195,7 +195,7 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
     
     //add gradient texture desc
-    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    VertexAttributesChannelDescriptor vaChannelDesc( *static_cast<const VertexAttributesChannelDescriptor *>( prevGeomChannel->GetDescriptor() ) );
     vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     
     if( !m_vaChannel )
@@ -223,8 +223,11 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 
         //add gradient uv channel
         auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        if( posChannel /*&& !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD )*/ )
         {
+            // Note: We generate uvs even if they exist. This is necessary in case of text plugin, but
+            // other plugins could use it's own UVs.
+
             //FIXME: only one texture - convex hull calculations
             auto uvs = new model::Float2AttributeChannel( desc, DefaultGradientPluginDesc::TextureName(), true );
             auto uvsPtr = Float2AttributeChannelPtr( uvs );
