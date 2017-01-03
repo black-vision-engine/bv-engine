@@ -85,6 +85,7 @@ void				AVDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
 	std::cout << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+	m_pauseThread = false;
     m_paused = false;
 	m_stopThread = true;
 	m_cond.notify_one();

@@ -28,6 +28,7 @@ SimpleTimer::~SimpleTimer           ()
 //
 void  SimpleTimer::Start            ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
     m_paused = false;
 
     m_startPause = 0;
@@ -49,6 +50,7 @@ void  SimpleTimer::Start            ()
 //
 void  SimpleTimer::Pause            ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
     if ( !m_paused )
     {
         m_paused = true;
@@ -60,6 +62,7 @@ void  SimpleTimer::Pause            ()
 //
 void  SimpleTimer::UnPause         ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
     if ( m_paused )
     {
         m_paused = false;
