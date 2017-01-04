@@ -169,14 +169,7 @@ bool			            FFmpegAVDecoder::GetVideoMediaData	( AVMediaData & mediaData 
 {
     if( HasVideo() )
     {
-		auto ret = m_streams[ AVMEDIA_TYPE_VIDEO ]->PopData( mediaData );
-
-		if( ret )
-		{
-			std::cout << "Video Media Data " << mediaData.framePTS << std::endl;
-		}
-
-		return ret;
+		return m_streams[ AVMEDIA_TYPE_VIDEO ]->PopData( mediaData );
     }
 
     return false;
@@ -188,14 +181,7 @@ bool			            FFmpegAVDecoder::GetAudioMediaData  ( AVMediaData & mediaData
 {
     if( HasAudio() )
     {
-		auto ret = m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );
-
-		if( ret )
-		{
-			std::cout << "Audio Media Data " << mediaData.framePTS << std::endl;
-		}
-
-		return ret;
+		return m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );;
     }
 
     return false;
