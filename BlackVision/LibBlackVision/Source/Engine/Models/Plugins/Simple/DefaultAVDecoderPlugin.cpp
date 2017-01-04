@@ -145,7 +145,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
-    m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
+    m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );
 
     SetPrevPlugin( prev );
 
