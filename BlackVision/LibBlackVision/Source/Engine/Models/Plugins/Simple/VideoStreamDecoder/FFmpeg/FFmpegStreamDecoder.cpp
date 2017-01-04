@@ -230,14 +230,14 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 {
     auto success = false;
 
-	if( time <= m_duration )
+	auto offset = GetOffset();
+
+	if( time + offset <= m_duration )
 	{
 		AVMediaData data;
 
 		if( block )
 		{
-			auto offset = GetOffset();
-
 			std::atomic< bool > & flag = m_interruptWait;
 
 			auto pn = [=, &flag ] ( const AVMediaData & avm )
@@ -256,7 +256,7 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 			// find the closest frame to given time
 			while( !IsDataQueueEmpty()
 					&& ( m_prevPTS <= GetCurrentPTS() )
-					&& ( GetCurrentPTS() <= time + GetOffset() ) )
+					&& ( GetCurrentPTS() <= time + offset ) )
 			{
 				success = m_bufferQueue.TryPop( data );
 			}
@@ -264,11 +264,6 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 
 		if( success )
 		{
-			if( m_streamIdx == 1 )
-			{
-				time = time;
-			}
-
 			//std::cout
 			//	<< "FFmpegStreamDecoderThread pushing frame "
 			//	<< data.framePTS

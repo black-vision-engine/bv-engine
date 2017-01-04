@@ -131,6 +131,8 @@ void						FFmpegAVDecoder::Play				()
 {
 	RestartDecoding();
 
+	//std::this_thread::sleep_for( std::chrono::seconds( 50 ) );
+
 	if( m_paused )
 		m_timer.UnPause();
 	else
@@ -329,6 +331,9 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers, bool  rest
 
 	StopDecoding();
 
+	m_timer.Pause();
+	m_timer.Reset();
+
     if( flushBuffers )
     {
         FlushBuffers();
@@ -426,7 +431,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
         auto decoder = m_streams[ AVMEDIA_TYPE_VIDEO ].get();
         while( decoder->IsOutQueueEmpty() && !IsFinished() )
         {
-            NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS(), false );
+            NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS() - decoder->GetOffset(), false );
         }
     }
         
@@ -436,7 +441,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
         auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
         while( i < 5 && !IsFinished() )
         {
-            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetCurrentPTS(), false ) )
+            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetCurrentPTS() - decoder->GetOffset(), false ) )
             {
                 i++;
             }
