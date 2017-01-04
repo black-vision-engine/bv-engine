@@ -59,12 +59,14 @@ void    GenericEventsHandlers::EventHandler             ( bv::IEventPtr evt )
 
 // ***********************
 //
-glm::vec3       GetBBPoint          ( model::BasicNodeConstPtr & node, const std::string & alignX, const std::string & alignY, const std::string & alignZ )
+glm::vec3       GetBBPoint          ( model::BasicNodeConstPtr & node, const std::string & alignX, const std::string & alignY, const std::string & alignZ, TimeType time )
 {
     if( node != nullptr )
     {
         auto boundingVolume = node->GetBoundingVolume();
         auto bb = boundingVolume->GetBoundingBox();
+
+        auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
 
         glm::vec3 BBPoint;
 
@@ -80,6 +82,11 @@ glm::vec3       GetBBPoint          ( model::BasicNodeConstPtr & node, const std
         {
             BBPoint.x = ( bb->xmax + bb->xmin ) / 2;
         }
+        else
+        {
+            auto center = transformParam->GetTransform().GetCenter( time );
+            BBPoint.x = center.x;
+        }
 
         if( alignY == "Bottom" )
         {
@@ -93,6 +100,11 @@ glm::vec3       GetBBPoint          ( model::BasicNodeConstPtr & node, const std
         {
             BBPoint.y = ( bb->ymax + bb->ymin ) / 2;
         }
+        else
+        {
+            auto center = transformParam->GetTransform().GetCenter( time );
+            BBPoint.y = center.y;
+        }
 
         if( alignZ == "Back" )
         {
@@ -105,6 +117,11 @@ glm::vec3       GetBBPoint          ( model::BasicNodeConstPtr & node, const std
         else if( alignZ == "Center" )
         {
             BBPoint.z = ( bb->zmax + bb->zmin ) / 2;
+        }
+        else
+        {
+            auto center = transformParam->GetTransform().GetCenter( time );
+            BBPoint.z = center.z;
         }
 
         return BBPoint;
@@ -134,7 +151,7 @@ void    GenericEventsHandlers::SetWeightCenterHandler   ( const std::string & co
     }
 
     auto basicNode = std::static_pointer_cast< const model::BasicNode >( node );
-    glm::vec3 bbPoint = GetBBPoint( basicNode, alignX, alignY, alignZ );
+    glm::vec3 bbPoint = GetBBPoint( basicNode, alignX, alignY, alignZ, keyTime );
 
     auto transformParam = basicNode->GetFinalizePlugin()->GetParamTransform();
     transformParam->SetCenter( bbPoint, keyTime );
