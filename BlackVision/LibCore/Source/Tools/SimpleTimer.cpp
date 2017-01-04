@@ -26,18 +26,30 @@ SimpleTimer::~SimpleTimer           ()
 
 // *********************************
 //
+void  SimpleTimer::Reset			()
+{
+	std::unique_lock< std::mutex > lock( m_mutex );
+
+	m_startMillis = QueryMillis();
+	m_startPause = m_startMillis;
+	m_totalPausedTime = 0;
+}
+
+// *********************************
+//
 void  SimpleTimer::Start            ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
     m_paused = false;
 
-    m_startPause = 0;
-    m_totalPausedTime = 0;
+	m_startPause = 0;
+	m_totalPausedTime = 0;
 
 #ifdef QPF_TIMER
 	LARGE_INTEGER freq;
 
 	QueryPerformanceFrequency( &freq );
-	m_timerFrequency = (unsigned long)freq.QuadPart / 1000;
+	m_timerFrequency = ( unsigned long ) freq.QuadPart / 1000;
 
 	m_startMillis = QueryMillis();		// Must be after query frequency.
 #else
@@ -49,6 +61,7 @@ void  SimpleTimer::Start            ()
 //
 void  SimpleTimer::Pause            ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
     if ( !m_paused )
     {
         m_paused = true;
@@ -60,6 +73,7 @@ void  SimpleTimer::Pause            ()
 //
 void  SimpleTimer::UnPause         ()
 {
+	std::unique_lock< std::mutex > lock( m_mutex );
     if ( m_paused )
     {
         m_paused = false;
@@ -81,5 +95,6 @@ unsigned long SimpleTimer::QueryMillis() const
 	return Time::Now();
 #endif
 }
+
 
 } //bv

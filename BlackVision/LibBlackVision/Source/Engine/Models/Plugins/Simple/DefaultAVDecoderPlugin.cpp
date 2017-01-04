@@ -145,7 +145,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
-    m_audioChannel = DefaultAudioChannel::Create( 44100, AudioFormat::STEREO16 );
+    m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );
 
     SetPrevPlugin( prev );
 
@@ -206,7 +206,7 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
                 }
 
                 //FIXME: decode first video frame
-                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( true );
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
 
                 auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultAVDecoderPluginDesc::TextureName(),
                     MemoryChunk::Create( m_decoder->GetVideoFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), 
@@ -379,7 +379,8 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             m_decoder->Seek( offset[ 0 ] );
             m_prevOffsetCounter = offset[ 1 ];
 
-            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( m_decoderMode != PLAY );
+            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
+			UpdateDecoderState( m_decoderMode );
         }
 
         HandlePerfectLoops();
@@ -435,9 +436,10 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
         m_loopCount = loopCount;
     }
 
-    if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
+    if( loopEnabled && m_decoder->IsFinished() && m_loopCount > 1 )
     {
-        m_decoder->Seek( 0.f, true );     // do not clear buffer
+        m_decoder->Seek( 0.f );
+		UpdateDecoderState( m_decoderMode );
         m_loopCount--;
     }
 }

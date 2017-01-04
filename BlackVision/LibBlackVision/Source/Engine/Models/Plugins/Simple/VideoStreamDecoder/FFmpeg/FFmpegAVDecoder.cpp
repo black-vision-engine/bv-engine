@@ -129,22 +129,14 @@ FFmpegAVDecoder::~FFmpegAVDecoder		()
 //
 void						FFmpegAVDecoder::Play				()
 {
+	RestartDecoding();
+
+	//std::this_thread::sleep_for( std::chrono::seconds( 50 ) );
+
 	if( m_paused )
 		m_timer.UnPause();
 	else
 		m_timer.Start();
-
-	if( m_videoDecoderThread )
-	{
-		m_videoDecoderThread->Play();
-	}
-
-	if( m_audioDecoderThread )
-	{
-		m_audioDecoderThread->Play();
-	}
-
-    RestartDecoding();
 }
 
 // *********************************
@@ -166,27 +158,9 @@ void						FFmpegAVDecoder::Stop				()
 {
 	m_timer.Pause();
 
-	if( m_videoDecoderThread )
-	{
-		m_videoDecoderThread->Stop();
-	}
-
-	if( m_audioDecoderThread )
-	{
-		m_audioDecoderThread->Stop();
-	}
-
-	while( m_audioDecoderThread && !m_audioDecoderThread->Stopped() )
-	{
-		m_streams[ AVMEDIA_TYPE_AUDIO ]->ProcessPacket();
-	}
-
-	while( m_videoDecoderThread && !m_videoDecoderThread->Stopped() )
-	{
-		m_streams[ AVMEDIA_TYPE_VIDEO ]->ProcessPacket();
-	}
-
     StopDecoding();
+
+	m_timer.Reset();
 }
 
 // *********************************
@@ -195,7 +169,7 @@ bool			            FFmpegAVDecoder::GetVideoMediaData	( AVMediaData & mediaData 
 {
     if( HasVideo() )
     {
-        return m_streams[ AVMEDIA_TYPE_VIDEO ]->PopData( mediaData );
+		return m_streams[ AVMEDIA_TYPE_VIDEO ]->PopData( mediaData );
     }
 
     return false;
@@ -207,7 +181,7 @@ bool			            FFmpegAVDecoder::GetAudioMediaData  ( AVMediaData & mediaData
 {
     if( HasAudio() )
     {
-        return m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );
+		return m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );;
     }
 
     return false;
@@ -221,7 +195,7 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
 
     if( HasVideo() )
     {
-        Seek( frameTime );
+		Seek( frameTime );
         
         Play();
 
@@ -337,18 +311,16 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers ) 
+void					FFmpegAVDecoder::Seek					( Float64 time )
 {
 	std::cout << "Seek to time: " << time << std::endl;
 
-	m_timer.Pause();
-
 	StopDecoding();
 
-    if( flushBuffers )
-    {
-        FlushBuffers();
-    }
+	m_timer.Pause();
+	m_timer.Reset();
+
+	FlushBuffers();
 
     // seek all streams to the nearest keyframe
     for( auto & stream : m_streams )
@@ -364,10 +336,6 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers )
         auto currPTS = Seek( decoder, FFmpegUtils::ConvertToMiliseconds( time ) );
         decoder->SetOffset( currPTS );
     }
-
-	RestartDecoding();
-
-	m_timer.Start();
 }
 
 // *********************************
@@ -434,7 +402,7 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
 // *********************************
 //
-void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
+void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
 {
     RestartDecoding();
 
@@ -443,7 +411,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
         auto decoder = m_streams[ AVMEDIA_TYPE_VIDEO ].get();
         while( decoder->IsOutQueueEmpty() && !IsFinished() )
         {
-            NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS(), false );
+            NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS() - decoder->GetOffset(), false );
         }
     }
         
@@ -453,27 +421,20 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
         auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
         while( i < 5 && !IsFinished() )
         {
-            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetDuration(), false ) )
+            if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetCurrentPTS() - decoder->GetOffset(), false ) )
             {
                 i++;
             }
         }
 
     }
-    
-	if ( stopDecoding )
-		StopDecoding();
 }
 
 // *********************************
 //
 void					FFmpegAVDecoder::RestartDecoding        ()
 {
-	if( m_audioDecoderThread )
-		m_audioDecoderThread->Restart();
-
-	if( m_videoDecoderThread )
-		m_videoDecoderThread->Restart();
+	m_demuxerThread->Restart();
 
 	if( m_audioStreamsDecoderThread )
 		m_audioStreamsDecoderThread->Restart();
@@ -481,7 +442,11 @@ void					FFmpegAVDecoder::RestartDecoding        ()
 	if( m_videoStreamsDecoderThread )
 		m_videoStreamsDecoderThread->Restart();
 
-	m_demuxerThread->Restart();
+	if( m_audioDecoderThread )
+		m_audioDecoderThread->Restart();
+
+	if( m_videoDecoderThread )
+		m_videoDecoderThread->Restart();
 }
 
 // *********************************

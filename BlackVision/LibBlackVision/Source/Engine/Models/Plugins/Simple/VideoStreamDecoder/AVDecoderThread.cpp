@@ -84,21 +84,27 @@ void				AVDecoderThread::Restart	()
 void				AVDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
-	std::cout << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
-    m_paused = false;
-	m_stopThread = true;
-	m_cond.notify_one();
+	if( !m_stopThread )
+	{
+		std::cout << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+		m_pauseThread = false;
+		m_paused = false;
+		m_stopThread = true;
+		m_cond.notify_one();
+	}
 }
 
 // *******************************
 //
-bool				AVDecoderThread::Pause		()	
+void				AVDecoderThread::Pause		()	
 {
-	std::cout << "PAUSING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
 	std::unique_lock< std::mutex > lock( m_mutex );
-	m_pauseThread = true;
-	m_cond.notify_one();
-    return m_paused;
+	if( !m_pauseThread )
+	{
+		std::cout << "PAUSING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+		m_pauseThread = true;
+		m_cond.notify_one();
+	}
 }
 
 // *******************************
@@ -124,7 +130,7 @@ void				AVDecoderThread::Run			    ()
 	{
 		std::unique_lock< std::mutex > lock( m_mutex );
         m_paused = false;
-		m_stopped = true;
+		m_stopThread = true;
 		m_running = true;
 	}
 
@@ -136,14 +142,15 @@ void				AVDecoderThread::Run			    ()
     {
         auto time = m_timer.ElapsedMillis();
         
+		//std::cout << "NextDataReady stream id: " << m_streamDecoder->GetStreamIdx() << " time " << time << std::endl;
 		m_streamDecoder->NextDataReady( time, true );
-
 
 		std::unique_lock< std::mutex > lock( m_mutex );
 		
 		if( time + m_streamDecoder->GetOffset() > duration || m_streamDecoder->IsFinished() )
 		{
-			m_stopped = true;
+			std::cout << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+			m_stopThread = true;
 		}
 
 		if ( m_pauseThread )

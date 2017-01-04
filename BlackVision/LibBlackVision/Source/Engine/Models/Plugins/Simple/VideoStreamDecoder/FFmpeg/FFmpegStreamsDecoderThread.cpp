@@ -63,9 +63,13 @@ void				FFmpegStreamsDecoderThread::Restart	    ()
 void				FFmpegStreamsDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
-	std::cout << "STOPPING Decoder thread strema id: "<< m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
-	m_stopThread = true;
-	m_cond.notify_one();
+
+	if( !m_stopThread )
+	{
+		std::cout << "STOPPING Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+		m_stopThread = true;
+		m_cond.notify_one();
+	}
 }
 
 // *******************************
@@ -89,7 +93,6 @@ void				FFmpegStreamsDecoderThread::Run			()
 			if( m_stopThread )
 			{
 				m_stopped = true;
-				m_stopThread = false;
 				std::cout << "STOPPED Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
 				m_cond.wait( lock, [ = ] { return m_stopped == false; } );
 				std::cout << "STARTED Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;

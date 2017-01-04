@@ -6,6 +6,8 @@
 
 #include "FFmpegUtils.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 
 namespace bv {
 
@@ -73,13 +75,13 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
     AVMediaData mediaData;
     uint8_t * outBuffer = nullptr;
     SizeType frameSize = 0;
-    Int32 outSamples = 0;
+    Int64 outSamples = 0;
     
 
     if( m_needConversion )
     {
-        outSamples = ( Int32 )av_rescale_rnd( swr_get_delay( m_swrCtx, m_frame->sample_rate ) + m_frame->nb_samples, m_sampleRate, m_frame->sample_rate, AV_ROUND_UP );
-        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, outSamples, m_format, 1 );
+        outSamples = av_rescale_rnd( swr_get_delay( m_swrCtx, m_frame->sample_rate ) + m_frame->nb_samples, m_sampleRate, m_frame->sample_rate, AV_ROUND_UP );
+        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, ( Int32 )outSamples, m_format, 1 );
 
         if( frameSize > m_maxBufferSize )
         {
@@ -87,16 +89,25 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
             delete m_tmpBuffer;
             m_tmpBuffer = new uint8_t[ m_maxBufferSize ];
         }
-        outSamples = swr_convert( m_swrCtx, &m_tmpBuffer, outSamples, ( const uint8_t ** )m_frame->data, m_frame->nb_samples );
+        outSamples = swr_convert( m_swrCtx, &m_tmpBuffer, ( Int32 )outSamples, ( const uint8_t ** )m_frame->data, m_frame->nb_samples );
         
-        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, outSamples, m_format, 1 );
-        outBuffer = new uint8_t[ frameSize ];
-        memcpy( outBuffer, m_tmpBuffer, frameSize );
+		if( outSamples >= 0 )
+		{
+			frameSize = ( SizeType ) av_samples_get_buffer_size( nullptr, m_nbChannels, ( Int32 ) outSamples, m_format, 1 );
+			outBuffer = new uint8_t[ frameSize ];
+			memcpy( outBuffer, m_tmpBuffer, frameSize );
+		}
+		else
+		{
+			outSamples = 0;
+			frameSize = 0;
+			LOG_MESSAGE( SeverityLevel::error ) << "Conversion Error";
+		}
     }
     else
     {
         outSamples = m_frame->nb_samples;
-        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, outSamples, m_format, 1 );
+        frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, ( Int32 )outSamples, m_format, 1 );
         outBuffer = new uint8_t[ frameSize ];
         memcpy( outBuffer, m_frame->data, frameSize );
     }

@@ -161,7 +161,9 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     layoutInfo.UseKerning = useKerning;
     layoutInfo.UseOutline = outline;
 
-    auto textLayout = TextHelper::LayoutLetters( text, textAtlas, layoutInfo );
+    bool useBox = box.x > 0.0f ? true : false;
+
+    auto textLayout = TextHelper::LayoutLetters( text, textAtlas, layoutInfo, useBox );
 
 
     for( unsigned int i = 0; i < text.size(); ++i )
@@ -169,6 +171,9 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
         auto wch = text[ i ];
         glm::vec3 translate = glm::vec3( textLayout[ i ].x, 0.0, 0.0 );
         glm::vec3 newLineTranslate = glm::vec3( 0.0f, textLayout[ i ].y, 0.0 );
+
+        if( abs( newLineTranslate.y ) > box.y )
+            break;
 
         if( IsWhitespace( wch ) )
             continue;
@@ -291,7 +296,7 @@ float               TextHelper::ComputeAlignement( TextAlignmentType tat, glm::v
 
 // ***********************
 //
-std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout )
+std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout, bool useBox )
 {
     std::vector< glm::vec3 > resultLayout;
     resultLayout.reserve( text.length() );
@@ -301,8 +306,11 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
     glm::vec3 translateDot( 0.f );
 
     unsigned int lastSpace = 0;
+    glm::vec3 lastSpaceTranslate( 0.0, 0.0, 0.0 );
+    glm::vec3 lastGlyphTranslate( 0.0, 0.0, 0.0 );
 
     unsigned int lineBeginIdx = 0;
+    unsigned int lineEndIdx = 0;
     unsigned int i = 0;
 
     while( i < text.size() )
@@ -312,10 +320,12 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
         for( ; i < text.size(); ++i )
         {
             auto wch = text[ i ];
+            lineEndIdx = i + 1;         // All letters are potencial end of line.
 
             if( wch == L' ' )
             {
                 lastSpace = i;
+                lastSpaceTranslate = translate;
 
                 translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
                 resultLayout.push_back( translate );
@@ -348,6 +358,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 }
 
                 resultLayout.push_back( translate + newLineTranslation );
+                lastGlyphTranslate = translate;
 
                 translate += glm::vec3( ( glyph->advanceX ) / layout.AspectRatio, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
             }
@@ -357,7 +368,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
             }
 
-            if( translate.x > layout.MaxLength )
+            if( useBox && translate.x > layout.MaxLength )
             {
                 newLineTranslation += glm::vec3( 0.f, layout.NewLineSize, 0.f );
 
@@ -365,11 +376,17 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 if( !( lineBeginIdx - 1 == lastSpace ) )
                 {
                     i = lastSpace;  // This will ommit space. We have new line instead.
+                    translate = lastSpaceTranslate;
+                    lineEndIdx = lastSpace;
+
                     resultLayout.erase( resultLayout.begin() + ( lastSpace + 1 ), resultLayout.end() );
                 }
                 else
                 {
                     resultLayout.pop_back();
+
+                    translate = lastGlyphTranslate;
+                    lineEndIdx = i;
                     i--;
                     lastSpace = i;
                 }
@@ -378,7 +395,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
             }
         }
 
-        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, resultLayout, lineBeginIdx, i );
+        TextHelper::ApplyAlignement( layout.TextAlign, translate, translateDot, text, resultLayout, layout.MaxLength, lineBeginIdx, lineEndIdx );
 
         // End of line (or text) reached.
         translateDot = glm::vec3( 0.f );
@@ -440,12 +457,37 @@ void                TextHelper::ApplyAlignementP    ( TextAlignmentType tat, glm
 
 // ***********************
 //
-void                TextHelper::ApplyAlignement     ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, std::vector< glm::vec3 > & layout, int beginIdx, int endIdx )
+void                TextHelper::ApplyAlignement     ( TextAlignmentType tat, glm::vec3 & translate, glm::vec3 & translateDot, const std::wstring& text, std::vector< glm::vec3 > & layout, float boxWidth, int beginIdx, int endIdx )
 {
-    auto alignmentTranslation = ComputeAlignement( tat, translate, translateDot );
-
-    if( tat != TextAlignmentType::Left )
+    if( tat == TextAlignmentType::Justification )
     {
+        auto widthUnderflow = boxWidth - translate.x;
+        auto iterBegin = text.begin() + beginIdx;
+        auto iterEnd = text.begin() + endIdx;
+
+        // Find first non-space character.
+        iterBegin = std::find_if_not( iterBegin, iterEnd, []( wchar_t c ) { return c == ' ' ? true : false; } );
+        // Find all spaces which will be extended.
+        auto numSpaces = std::count_if( iterBegin, iterEnd, []( wchar_t c ) { return c == ' ' ? true : false; } );
+
+        float additionalWidth = widthUnderflow / numSpaces;
+        float currentAdd = 0.0f;
+        for( ; iterBegin != iterEnd; iterBegin++ )
+        {
+            if( *iterBegin == ' ' )
+            {
+                currentAdd += additionalWidth;
+            }
+
+            auto layoutIdx = std::distance( text.begin(), iterBegin );
+            layout[ layoutIdx ].x += currentAdd;
+        }
+
+    }
+    else if( tat != TextAlignmentType::Left )
+    {
+        auto alignmentTranslation = ComputeAlignement( tat, translate, translateDot );
+
         for( auto iter = layout.begin() + beginIdx; iter != layout.begin() + endIdx; iter++ )
         {
             iter->x += alignmentTranslation;

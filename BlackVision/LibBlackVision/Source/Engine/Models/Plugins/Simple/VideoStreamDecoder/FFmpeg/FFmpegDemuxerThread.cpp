@@ -49,7 +49,7 @@ void				FFmpegDemuxerThread::Kill	    ()
 void				FFmpegDemuxerThread::Restart	()
 {
     std::unique_lock< std::mutex > lock( m_mutex );
-	if( m_stopThread || m_stopped )
+	if( m_stopThread )
 	{
 		m_stopThread = false;
 		m_stopped = false;
@@ -63,9 +63,14 @@ void				FFmpegDemuxerThread::Restart	()
 void				FFmpegDemuxerThread::Stop		()
 {
     std::unique_lock< std::mutex > lock( m_mutex );
-	m_stopThread = true;
-	std::cout << "STOPPING Demuxer thread " << std::this_thread::get_id() << std::endl;
-	m_cond.notify_one();
+
+	if( !m_stopThread )
+	{
+		std::cout << "STOPPING Demuxer thread " << std::this_thread::get_id() << std::endl;
+		m_stopThread = true;
+		m_cond.notify_one();
+	}
+
 }
 
 // *******************************
@@ -87,7 +92,7 @@ void				FFmpegDemuxerThread::Run			()
 		{
 			std::unique_lock< std::mutex > lock( m_mutex );
 		
-			if( m_stopThread || m_stopped )
+			if( m_stopThread )
 			{
 				std::cout << "STOPPED Demuxer thread " << std::this_thread::get_id() << std::endl;
 				std::cout << "Queue 0 empty " << m_demuxer->IsPacketQueueEmpty( 0 ) << std::endl;
@@ -110,7 +115,7 @@ void				FFmpegDemuxerThread::Run			()
         if( m_demuxer->IsEOF() )
         {
 			std::unique_lock< std::mutex > lock( m_mutex );
-            m_stopped = true;
+			m_stopThread = true;
         }
     }
 

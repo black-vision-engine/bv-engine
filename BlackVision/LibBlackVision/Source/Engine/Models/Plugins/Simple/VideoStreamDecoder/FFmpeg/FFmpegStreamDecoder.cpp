@@ -131,6 +131,12 @@ bool			    FFmpegStreamDecoder::ProcessPacket      ( bool block )
         if( DecodePacket( packet->GetAVPacket() ) )
         {
             auto data = ConvertFrame();
+
+			if( !data.frameData )
+			{
+				data.frameData = data.frameData;
+			}
+
             m_bufferQueue.WaitAndPush( data );
 
             return true;
@@ -224,19 +230,21 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 {
     auto success = false;
 
-	if( time <= m_duration )
+	auto offset = GetOffset();
+
+	if( time + offset <= m_duration )
 	{
 		AVMediaData data;
 
 		if( block )
 		{
-			auto offset = GetOffset();
-
 			std::atomic< bool > & flag = m_interruptWait;
 
 			auto pn = [=, &flag ] ( const AVMediaData & avm )
 			{
-				return ( m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset ) && !flag;
+				auto val = ( m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset ) && !flag;
+
+				return val;
 			};
 
 			success = m_bufferQueue.WaitAndPopUntil( data, pn );
@@ -248,7 +256,7 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 			// find the closest frame to given time
 			while( !IsDataQueueEmpty()
 					&& ( m_prevPTS <= GetCurrentPTS() )
-					&& ( GetCurrentPTS() <= time + GetOffset() ) )
+					&& ( GetCurrentPTS() <= time + offset ) )
 			{
 				success = m_bufferQueue.TryPop( data );
 			}
@@ -256,14 +264,14 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 
 		if( success )
 		{
-			std::cout
-				<< "FFmpegStreamDecoderThread pushing frame "
-				<< data.framePTS
-				<< " to queue "
-				<< m_streamIdx
-				<< " size "
-				<< m_outQueue.Size()
-				<< std::endl;
+			//std::cout
+			//	<< "FFmpegStreamDecoderThread pushing frame "
+			//	<< data.framePTS
+			//	<< " to queue "
+			//	<< m_streamIdx
+			//	<< " size "
+			//	<< m_outQueue.Size()
+			//	<< std::endl;
 
 			m_outQueue.Push( data );
 			m_prevPTS = data.framePTS;

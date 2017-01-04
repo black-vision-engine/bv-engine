@@ -72,7 +72,7 @@ public:
 	/** Accurate seeking of all attached streams.
 	@param[time] in seconds 
     */
-	virtual void				Seek					( Float64 time, bool flushBuffers = true ) override;
+	virtual void				Seek					( Float64 time ) override;
 	virtual void				FlushBuffers			() override;
 
 	virtual bool				IsEOF					() const override;
@@ -81,7 +81,7 @@ public:
     virtual void                Mute                    ( bool mute ) override;
 
     //FIXME: decode first video frame
-    void                        ProcessFirstAVFrame     ( bool stopDecoding );
+    void                        ProcessFirstAVFrame     ();
 
 protected:
 	

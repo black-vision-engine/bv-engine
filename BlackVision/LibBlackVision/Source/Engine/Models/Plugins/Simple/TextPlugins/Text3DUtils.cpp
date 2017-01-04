@@ -42,20 +42,70 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
 {
     std::vector< ConnectedComponentPtr > letters;
 
-    for( int l = 0; l < text.size(); ++l )
+    auto textObj = layout.FontAsset->GetText();
+    auto textRepresentation = layout.FontAsset->GetTextGeometry();
+    auto viewWidth = layout.ViewWidth;
+    auto viewHeight = layout.ViewHeight;
+    float newLineSize = layout.NewLineSize;
+
+    assert( textObj );
+
+    // Note: Atlas was created with specific font size. We must tak it into consideration while rescaling geometry.
+    float fontRatio = layout.Size / textObj->GetFontSize();
+    float aspectRatio = float( std::min( viewWidth, viewHeight ) ) / 2.f;
+    float scaleRatio = aspectRatio / fontRatio;
+
+
+    // Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
+    auto spaceGlyphWidth = (float)textRepresentation->GetGlyph( L'0' )->advanceX / scaleRatio / 2 + layout.Spacing;
+    auto newLineShift = -(float)newLineSize * textRepresentation->GetGlyph( L'0' )->height / scaleRatio;
+
+
+    TextLayoutInfo layoutInfo;
+    layoutInfo.AlignChar = layout.AlignChar;
+    layoutInfo.AspectRatio = scaleRatio;
+    layoutInfo.Interspace = layout.Spacing;
+    layoutInfo.NewLineSize = newLineShift;
+    layoutInfo.SpaceSize = spaceGlyphWidth;
+    layoutInfo.MaxLength = std::numeric_limits< float >::infinity();
+    layoutInfo.TextAlign = layout.Tat;
+    layoutInfo.UseKerning = layout.UseKerning;
+    layoutInfo.UseOutline = false;
+    layoutInfo.MaxLength = layout.Box.x;
+
+    bool useBox = layout.Box.x > 0.0f ? true : false;
+    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo, useBox );
+
+    unsigned int componentIdx = 0;
+    for( unsigned int i = 0; i < text.size(); ++i )
     {
-        if( text[ l ] == L' ' ||
-            text[ l ] == L'\n' ||
-            text[ l ] == L'\r' )
+        auto wch = text[ i ];
+        glm::vec3 translate = glm::vec3( textLayout[ i ].x, 0.0, 0.0 );
+        glm::vec3 newLineTranslate = glm::vec3( 0.0f, textLayout[ i ].y, 0.0 );
+
+        if( abs( newLineTranslate.y ) > layout.Box.y )
+            break;
+
+        if( TextHelper::IsWhitespace( wch ) )
             continue;
 
-        ConnectedComponentPtr component = CreateLetter( text[ l ], textAsset, layout );
-        assert( component );
+        glm::vec3 letterTranslate = translate + newLineTranslate;
 
-        letters.push_back( component );
+        letters.push_back( CreateLetter( wch, textAsset, layout ) );
+        auto attributeChannel = letters.back()->GetAttributeChannels();
+        auto posChannel = std::static_pointer_cast< Float3AttributeChannel >( attributeChannel[ 0 ] );
+        assert( posChannel->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION );
+
+        // Note: FreeType unit is 1/64th of a pixel.
+        glm::vec3 scaleFactor( 1.0f / ( scaleRatio * 64.0f ), 1.0f / ( scaleRatio * 64.0f ), 1.0f );
+
+        for( auto & pos : posChannel->GetVertices() )
+        {
+            pos = scaleFactor * pos + letterTranslate;
+        }
+
+        componentIdx++;
     }
-
-    ArrangeText( text, letters, layout );
 
     return letters;
 }
@@ -143,7 +193,8 @@ void                                     Text3DUtils::ArrangeText               
     layoutInfo.UseOutline = false;
     layoutInfo.MaxLength = layout.Box.x;
 
-    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo );
+    bool useBox = layout.Box.x > 0.0f ? true : false;
+    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo, useBox );
 
     unsigned int componentIdx = 0;
     for( unsigned int i = 0; i < text.size(); ++i )
