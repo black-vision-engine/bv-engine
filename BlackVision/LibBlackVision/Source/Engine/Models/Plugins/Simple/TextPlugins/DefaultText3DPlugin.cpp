@@ -94,7 +94,7 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.' );
     h.AddEnumParam( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
-    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT_BOX, glm::vec2( std::numeric_limits< float >::infinity(), std::numeric_limits< float >::infinity() ) );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT_BOX, glm::vec2( 0.0f, 0.0f ) );
 
     h.SetOrCreatePSModel();
     h.SetOrCreateVSModel();
