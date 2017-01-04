@@ -417,7 +417,7 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 
 // *********************************
 //
-void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
+void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
 {
     RestartDecoding();
 
@@ -443,9 +443,6 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ( bool stopDecoding )
         }
 
     }
-    
-	if ( stopDecoding )
-		StopDecoding();
 }
 
 // *********************************

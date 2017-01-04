@@ -163,7 +163,7 @@ bool                            DefaultAudioDecoderPlugin::LoadResource		( Asset
                 m_audioChannel->SetFrequency( m_decoder->GetSampleRate() );
                 m_audioChannel->SetFormat( m_decoder->GetAudioFormat() );
 
-                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( true );
+                std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
 
                 SetAsset( 0, LAsset( DefaultAudioDecoderPluginDesc::AudioName(), assetDescr, nullptr ) );
 
@@ -225,7 +225,7 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
             m_decoder->Seek( offset[ 0 ], true, false );
             m_prevOffsetCounter = offset[ 1 ];
 
-            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame( m_decoderMode != PLAY );
+            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
         }
 
         HandlePerfectLoops();

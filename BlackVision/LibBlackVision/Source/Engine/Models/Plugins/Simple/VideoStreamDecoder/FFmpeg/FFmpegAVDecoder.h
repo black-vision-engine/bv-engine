@@ -81,7 +81,7 @@ public:
     virtual void                Mute                    ( bool mute ) override;
 
     //FIXME: decode first video frame
-    void                        ProcessFirstAVFrame     ( bool stopDecoding );
+    void                        ProcessFirstAVFrame     ();
 
 protected:
 	
