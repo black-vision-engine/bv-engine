@@ -195,7 +195,7 @@ AVMediaData		            FFmpegAVDecoder::GetSingleFrame  	( TimeType frameTime 
 
     if( HasVideo() )
     {
-		Seek( frameTime, true, false );
+		Seek( frameTime );
         
         Play();
 
@@ -311,7 +311,7 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 
 // *********************************
 //
-void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers, bool  restartDecoding )
+void					FFmpegAVDecoder::Seek					( Float64 time )
 {
 	std::cout << "Seek to time: " << time << std::endl;
 
@@ -320,10 +320,7 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers, bool  rest
 	m_timer.Pause();
 	m_timer.Reset();
 
-    if( flushBuffers )
-    {
-        FlushBuffers();
-    }
+	FlushBuffers();
 
     // seek all streams to the nearest keyframe
     for( auto & stream : m_streams )
@@ -339,9 +336,6 @@ void					FFmpegAVDecoder::Seek					( Float64 time, bool flushBuffers, bool  rest
         auto currPTS = Seek( decoder, FFmpegUtils::ConvertToMiliseconds( time ) );
         decoder->SetOffset( currPTS );
     }
-
-	if( restartDecoding )
-		RestartDecoding();
 }
 
 // *********************************
