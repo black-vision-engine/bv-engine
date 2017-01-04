@@ -436,7 +436,7 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
         m_loopCount = loopCount;
     }
 
-    if( loopEnabled && m_decoder->IsEOF() && m_loopCount > 1 )
+    if( loopEnabled && m_decoder->IsFinished() && m_loopCount > 1 )
     {
         m_decoder->Seek( 0.f, true, false );     // do not clear buffer
 		UpdateDecoderState( m_decoderMode );
