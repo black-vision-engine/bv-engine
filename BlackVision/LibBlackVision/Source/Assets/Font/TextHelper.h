@@ -75,7 +75,7 @@ public:
 
     /////////////////////////////////////
     // Makes letters arrangment.
-    static std::vector< glm::vec3 >     LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout );
+    static std::vector< glm::vec3 >     LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout, bool useBox );
 
     /////////////////////////////////////
     // Other helpers

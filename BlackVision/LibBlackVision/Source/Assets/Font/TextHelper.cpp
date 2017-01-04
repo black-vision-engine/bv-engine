@@ -161,7 +161,9 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     layoutInfo.UseKerning = useKerning;
     layoutInfo.UseOutline = outline;
 
-    auto textLayout = TextHelper::LayoutLetters( text, textAtlas, layoutInfo );
+    bool useBox = box.x > 0.0f ? true : false;
+
+    auto textLayout = TextHelper::LayoutLetters( text, textAtlas, layoutInfo, useBox );
 
 
     for( unsigned int i = 0; i < text.size(); ++i )
@@ -294,7 +296,7 @@ float               TextHelper::ComputeAlignement( TextAlignmentType tat, glm::v
 
 // ***********************
 //
-std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout )
+std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wstring & text, TextRepresentationConstPtr textRepr, TextLayoutInfo & layout, bool useBox )
 {
     std::vector< glm::vec3 > resultLayout;
     resultLayout.reserve( text.length() );
@@ -366,7 +368,7 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
                 translate += glm::vec3( layout.SpaceSize, 0.f, 0.f ) + glm::vec3( layout.Interspace, 0.0, 0.0 );
             }
 
-            if( translate.x > layout.MaxLength )
+            if( useBox && translate.x > layout.MaxLength )
             {
                 newLineTranslation += glm::vec3( 0.f, layout.NewLineSize, 0.f );
 

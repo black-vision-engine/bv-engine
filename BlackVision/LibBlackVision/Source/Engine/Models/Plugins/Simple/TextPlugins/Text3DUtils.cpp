@@ -73,7 +73,8 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
     layoutInfo.UseOutline = false;
     layoutInfo.MaxLength = layout.Box.x;
 
-    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo );
+    bool useBox = layout.Box.x > 0.0f ? true : false;
+    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo, useBox );
 
     unsigned int componentIdx = 0;
     for( unsigned int i = 0; i < text.size(); ++i )
@@ -192,7 +193,8 @@ void                                     Text3DUtils::ArrangeText               
     layoutInfo.UseOutline = false;
     layoutInfo.MaxLength = layout.Box.x;
 
-    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo );
+    bool useBox = layout.Box.x > 0.0f ? true : false;
+    auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo, useBox );
 
     unsigned int componentIdx = 0;
     for( unsigned int i = 0; i < text.size(); ++i )
