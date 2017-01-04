@@ -83,7 +83,8 @@ void                MeshUtils::ProcessNormals       ( std::vector< glm::vec3 > &
 //
 void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > & uvs, FbxMesh * fbxMesh, Int32 vertexIdx, Int32 ctrlIdx )
 {
-    for( Int32 l = 0; l < fbxMesh->GetElementUVCount(); ++l )
+    auto countElements = fbxMesh->GetElementUVCount();
+    for( Int32 l = 0; l < countElements; ++l )
     {
         auto elUV = fbxMesh->GetElementUV( l );
         switch( elUV->GetMappingMode() )
@@ -131,13 +132,17 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
                 break;
         }
     }
+
+    if( countElements == 0 )
+        uvs.push_back( glm::vec2( 0.0, 0.0 ) );
 }
 
 // ******************************
 //
 void                MeshUtils::ProcessTangents      ( std::vector< glm::vec4 > & tangents, FbxMesh * fbxMesh, Int32 vertexIdx )
 {
-    for( Int32 l = 0; l < fbxMesh->GetElementTangentCount(); ++l )
+    auto countElements = fbxMesh->GetElementTangentCount();
+    for( Int32 l = 0; l < countElements; ++l )
     {
         auto elTangent = fbxMesh->GetElementTangent( l );
 
@@ -163,6 +168,9 @@ void                MeshUtils::ProcessTangents      ( std::vector< glm::vec4 > &
             }
         }
     }
+
+    if( countElements == 0 )
+        tangents.push_back( glm::vec4( 1.0, 0.0, 0.0, 1.0 ) );
 }
 
 // ******************************
