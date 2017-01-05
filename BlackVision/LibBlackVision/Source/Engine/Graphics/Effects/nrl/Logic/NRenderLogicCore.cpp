@@ -17,7 +17,7 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
     for( auto & scene : scenes )
     {
         // FIXME: nrl - retrieve rt for each scene here
-        auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_FIRST_OUTPUT );
+        auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
 
         NNodeRenderLogic::RenderQueued( scene, rt, ctx );
         NNodeRenderLogic::RenderAudio( scene, ctx );

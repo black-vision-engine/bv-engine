@@ -12,7 +12,7 @@ namespace nrl {
 class NFullscreenEffect;
 class RenderResult;
 class NRenderContext;
-
+ 
 class Preview
 {
 private:

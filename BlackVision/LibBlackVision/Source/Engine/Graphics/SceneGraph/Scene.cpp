@@ -14,11 +14,12 @@ namespace bv {
 
 // ********************************
 //
-                    Scene::Scene                    ()
-    :   m_root( nullptr )
-    ,   m_gridLines( nullptr )
-    ,   m_gridLinesVisible( false )
-    ,   m_camera( std::unique_ptr< Camera >( new Camera() ) )
+                    Scene::Scene                    ( unsigned int outputIdx )
+    : m_root( nullptr )
+    , m_gridLines( nullptr )
+    , m_gridLinesVisible( false )
+    , m_camera( std::unique_ptr< Camera >( new Camera() ) )
+    , m_outputChannelIdx( outputIdx )
 {
     auto lightsLayout = LightsLayout::Instance().GetBlockLayout();
     m_lightsBuffer = std::unique_ptr< UniformBuffer >( new UniformBuffer( lightsLayout, DataBuffer::Semantic::S_DYNAMIC ) );
@@ -36,21 +37,35 @@ namespace bv {
 
 // ********************************
 //
-SceneNode *         Scene::GetRoot                  () const
+SceneNode *         Scene::GetRoot              () const
 {
     return m_root;
 }
 
 // ********************************
 //
-void                Scene::SetRoot                  ( SceneNode * node )
+void                Scene::SetRoot              ( SceneNode * node )
 {
     m_root = node;
 }
 
 // ***********************
 //
-UniformBuffer *     Scene::GetCameraBuffer         () const
+void            Scene::SetOutputChannelIdx      ( unsigned int channelIdx )
+{
+    m_outputChannelIdx = channelIdx;
+}
+
+// ***********************
+//
+unsigned int    Scene::GetOutputChannelIdx      () const
+{
+    return m_outputChannelIdx;
+}
+
+// ***********************
+//
+UniformBuffer *     Scene::GetCameraBuffer      () const
 {
     return m_cameraBuffer.get();
 }
@@ -78,14 +93,14 @@ RenderableEntity *  Scene::GetGridLines             () const
 
 // ***********************
 //
-void                Scene::SetGridLinesRenderable  ( RenderableEntity * renderable )
+void                Scene::SetGridLinesRenderable   ( RenderableEntity * renderable )
 {
     m_gridLines = renderable;
 }
 
 // ***********************
 //
-void                Scene::SetGridLinesVisible ( bool visibility )
+void                Scene::SetGridLinesVisible      ( bool visibility )
 {
     m_gridLinesVisible = visibility;
 }

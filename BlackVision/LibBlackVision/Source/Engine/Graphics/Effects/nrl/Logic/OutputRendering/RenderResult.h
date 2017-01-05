@@ -14,8 +14,11 @@ namespace nrl {
 
 enum class RenderOutputChannelType : unsigned int
 {
-    ROCT_FIRST_OUTPUT = 0,
-    ROCT_SECOND_OUTPUT,
+    ROCT_OUTPUT_1 = 0,
+    ROCT_OUTPUT_2,
+    ROCT_OUTPUT_3,
+    ROCT_OUTPUT_4,
+    ROCT_OUTPUT_5,
 
     ROCT_TOTAL
 };
