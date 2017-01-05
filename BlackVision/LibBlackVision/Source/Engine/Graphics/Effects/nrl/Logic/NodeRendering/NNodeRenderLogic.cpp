@@ -71,11 +71,10 @@ void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, const RenderTarg
     clearBoundRT( ctx, glm::vec4() ); 
 
     // FIXME: nrl - remove this method and implement its logic in some other place
- 
     auto queue = queue_allocator( ctx )->Allocate();
-    
+   
     queue->QueueNodeSubtree( node, ctx );
-    
+   
     queue->Render( ctx );
 
     queue_allocator( ctx )->Free();
