@@ -742,6 +742,7 @@ void				        ProjectManagerImpl::InitializeAssets	()
     videoExts.push_back( ".*\\.yuv" );
     videoExts.push_back( ".*\\.avi" );
     videoExts.push_back( ".*\\.wmv" );
+	videoExts.push_back( ".*\\.gif" );
 
     auto vsaa = AVAssetAccessor::Create( GetRootDir() / "video", videoExts );
     RegisterCategory( AssetCategory::Create( "video", vsaa ) );

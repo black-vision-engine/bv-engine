@@ -190,7 +190,7 @@ void                                DefaultAudioDecoderPlugin::Update           
 {
     BasePlugin::Update( t );
 
-    MarkOffsetChanges();
+    ///MarkOffsetChanges();
 
     UpdateDecoder();
     UploadAudioFrame();

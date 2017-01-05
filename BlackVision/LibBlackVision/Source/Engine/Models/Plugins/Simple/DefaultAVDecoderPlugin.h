@@ -72,7 +72,7 @@ private:
 	DecoderModeParamPtr                 m_decoderModeParam;
 
 	/** time in seconds from the beginning of video */
-    ParamVec2Ptr                        m_offsetParam;                 
+    ParamFloatPtr                       m_offsetParam;                 
     Float32                             m_prevOffsetCounter;
 
     ParamBoolPtr                        m_loopEnabledParam;                 
