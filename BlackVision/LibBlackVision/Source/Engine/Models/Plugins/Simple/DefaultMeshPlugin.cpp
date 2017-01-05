@@ -16,6 +16,9 @@
 #include "Assets/Asset.h"
 
 
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
 
 #include "Memory/MemoryLeaks.h"
 
@@ -172,7 +175,8 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
         auto uv = std::make_shared< Float2AttributeChannel >( uvDesc, uvDesc->SuggestedDefaultName( 0 ), false );
         auto tangent = std::make_shared< Float4AttributeChannel >( tangentDesc, tangentDesc->SuggestedDefaultName( 0 ), false );
 
-        AddGeometry( m_meshAsset, pos, norm, uv, tangent, recursive );
+        glm::mat4 identity = glm::mat4( 1 );
+        AddGeometry( m_meshAsset, pos, norm, uv, tangent, identity, recursive );
 
         VertexAttributesChannelDescriptor vacDesc;
 
@@ -211,24 +215,69 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
 
 // *************************************
 //
-void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, bool recursive )
+void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, glm::mat4 & transform, bool recursive )
 {
     auto geometry = meshAsset->GetGeometry();
     if( geometry )
     {
-        posChannel->AddAttributes( geometry->positions );
-        normChannel->AddAttributes( geometry->normals );
-        uvChannel->AddAttributes( geometry->uvs );
-        tangentChannel->AddAttributes( geometry->tangents );
+        if( transform == glm::mat4( 1.0 ) )
+        {
+            posChannel->AddAttributes( geometry->positions );
+            normChannel->AddAttributes( geometry->normals );
+            uvChannel->AddAttributes( geometry->uvs );
+            tangentChannel->AddAttributes( geometry->tangents );
+        }
+        else
+        {
+            glm::mat4 normalMat = glm::transpose( glm::inverse( transform ) );
+
+            posChannel->GetVertices().reserve( posChannel->GetVertices().size() + geometry->positions.size() );
+            normChannel->GetVertices().reserve( normChannel->GetVertices().size() + geometry->positions.size() );
+            tangentChannel->GetVertices().reserve( tangentChannel->GetVertices().size() + geometry->positions.size() );
+
+            
+            for( int i = 0; i < geometry->positions.size(); ++i )
+                posChannel->AddAttribute( glm::vec3( transform * glm::vec4( geometry->positions[ i ], 1.0 ) ) );
+
+            for( int i = 0; i < geometry->positions.size(); ++i )
+                normChannel->AddAttribute( glm::vec3( normalMat * glm::vec4( geometry->normals[ i ], 0.0 ) ) );
+
+            for( int i = 0; i < geometry->positions.size(); ++i )
+                tangentChannel->AddAttribute( normalMat * geometry->tangents[ i ] );
+
+            // Don't need to transform uvs.
+            uvChannel->AddAttributes( geometry->uvs );
+        }
     }
 
     if( recursive )
     {
         for( UInt32 i = 0; i < meshAsset->NumChildren(); ++i )
         {
-            AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel, tangentChannel, /*binormalChannel,*/ recursive );
+            glm::mat4 childTransform = transform * ComputeTransform( meshAsset->GetChild( i ) );
+            AddGeometry( meshAsset->GetChild( i ), posChannel, normChannel, uvChannel, tangentChannel, childTransform, recursive );
         }
     }
+}
+
+// ***********************
+//
+glm::mat4   DefaultMeshPlugin::ComputeTransform                 ( MeshAssetConstPtr meshAsset )
+{
+    auto transform = meshAsset->GetTransform();
+    
+    if( transform )
+    {
+        return transform->transform;
+
+        //glm::mat4 translate = glm::translate( transform->translation );
+        //glm::mat4 rotate = glm::yawPitchRoll( transform->rotation.x, transform->rotation.y, transform->rotation.z );
+        //glm::mat4 scale = glm::scale( transform->scale );
+
+        //return translate * glm::translate( transform->center ) * rotate * scale * glm::translate( -transform->center );
+    }
+    else
+        return glm::mat4( 1.0 );
 }
 
 } // model
