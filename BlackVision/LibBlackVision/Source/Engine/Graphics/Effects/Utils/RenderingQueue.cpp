@@ -205,11 +205,11 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, nrl:
         nrl::NNodeRenderLogic::RenderRoot( node->GetRepr(), ctx );
     }
 
-    // FIXME: WTF???? add to NNodeRenderLogic
+    // FIXME: nrl - refactor bounding box rendering
+    // FIXME: bb color should be configured externally to the node bot let it be that way for the time being
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
     {
-        // FIXME: nrl - refactor bounding box rendering
-        //ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
+        nrl::NNodeRenderLogic::RenderBoundingBox( node, ctx );
     }
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );

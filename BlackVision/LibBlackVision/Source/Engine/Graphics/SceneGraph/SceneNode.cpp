@@ -200,7 +200,7 @@ bool                    SceneNode::IsSelected          () const
 
 // ***********************
 //
-glm::vec4               SceneNode::GetBoundingBoxColor () const
+const glm::vec4 &       SceneNode::GetBoundingBoxColor () const
 {
     return m_boundingBoxColor;
 }

@@ -55,6 +55,7 @@ private:
 
     RenderablePass *                m_boundingBoxEffect;
 
+    // FIXME: nrl - add shared memory to nrl pipeline
 	SharedMemoryVideoBuffer *       m_sharedMemoryVideoBuffer;
 	int						        m_sharedMemoryScaleFactor;
     bool                            m_enableSharedMemory;

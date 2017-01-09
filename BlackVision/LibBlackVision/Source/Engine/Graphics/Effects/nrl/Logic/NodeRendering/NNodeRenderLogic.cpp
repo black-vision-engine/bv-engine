@@ -5,8 +5,10 @@
 #include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
 #include "Engine/Audio/AudioRenderer.h"
 
@@ -55,7 +57,7 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->Performance().AverageScenePerformanceData( scene );
     renderer->SetCamera( scene->GetCamera() );
 
-    // FIXME: nrl - reimplement it somehow
+    // FIXME: nrl - reimplement it (do not use/remove EnableScene which contains logic <implemented in renderer> which does not belong there)
     renderer->EnableScene( scene );
 
     RenderQueued( scene->GetRoot(), output, ctx );
@@ -184,6 +186,38 @@ void    NNodeRenderLogic::RenderChildren    ( SceneNodeRepr * nodeRepr, NRenderC
     {
         Render( nodeRepr->GetChild( i ), ctx ); 
     }
+}
+
+// *********************************
+//
+void     NNodeRenderLogic::RenderBoundingBox( SceneNode * node, NRenderContext * ctx )
+{
+    // FIXME: nrl - a bit better initialization mechanics would be handy
+    static auto effect = std::make_shared< BoundingBoxEffect >();
+    static auto pass   = effect->GetPass( 0 );
+
+    const auto & color = node->GetBoundingBoxColor();
+    
+    // FIXME: nrl - rly "RenderableEntityWithBoundingBox"?
+    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
+    assert( obj );
+
+    auto bb = obj->GetBoundingBox();
+    if( bb )
+    {
+        auto renderer = ctx->GetRenderer();
+
+        auto param = Cast< ShaderParamVec4 * >( pass->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
+        param->SetValue( color );
+
+        renderer->Enable( pass, bb );
+        renderer->DrawRenderable( bb );
+
+        auto wc = obj->GetCenterOfMass();
+        renderer->Enable( pass, wc );
+        renderer->DrawRenderable( wc );
+    }
+
 }
 
 } // nrl
