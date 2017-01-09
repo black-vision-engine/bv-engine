@@ -42,5 +42,5 @@ void main()
     //if( col.a * alpha < 0.9 ) 
     //    discard; 
     //float maskFactor = getBlendValue( mask );
-    FragColor = mask.r * col.rgba * alpha;
+    FragColor = mask.a * col.rgba * alpha;
 }
