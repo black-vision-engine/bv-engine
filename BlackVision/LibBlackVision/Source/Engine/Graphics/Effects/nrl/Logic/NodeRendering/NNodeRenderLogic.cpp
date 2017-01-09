@@ -57,23 +57,28 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->Performance().AverageScenePerformanceData( scene );
     renderer->SetCamera( scene->GetCamera() );
 
-    // FIXME: nrl - reimplement it (do not use/remove EnableScene which contains logic <implemented in renderer> which does not belong there)
+    // FIXME: nrl - reimplement it (do not use/preferably remove EnableScene which contains logic <implemented in renderer> 
+    // FIXME: nrl - which does not belong there)
     renderer->EnableScene( scene );
 
-    RenderQueued( scene->GetRoot(), output, ctx );
+    enable( ctx, output );
+
+    // FIXME: nrl - default clear color used - posisibly customize it a bit;
+    clearBoundRT( ctx, glm::vec4() ); 
+
+    RenderQueued( scene->GetRoot(), ctx );
+
+    // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
+    RenderGridLines( scene, ctx );
+
+    disableBoundRT( ctx );
 }
 
 // *********************************
 //
-void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx )
+void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, NRenderContext * ctx )
 {
-    enable( ctx, output );
-
-    // FIXME: default clear color used - posisibly customize it a bit;
-    clearBoundRT( ctx, glm::vec4() ); 
-
-    // FIXME: nrl - remove this method and implement its logic in some other place
- 
+    // FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
     auto queue = queue_allocator( ctx )->Allocate();
     
     queue->QueueNodeSubtree( node, ctx );
@@ -81,11 +86,6 @@ void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, const RenderTarg
     queue->Render( ctx );
 
     queue_allocator( ctx )->Free();
-
-    // FIXME: nrl - implement it back
-//    RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
-
-    disableBoundRT( ctx );
 }
 
 // *********************************
@@ -141,6 +141,16 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
             effect->Render( repr, ctx );
         }
     }
+}
+
+// *********************************
+//
+void    NNodeRenderLogic::RenderGridLines   ( Scene * scene, NRenderContext * ctx )
+{
+    if( scene->GetGridLinesVisibility() )
+    {
+        renderer( ctx )->Draw( scene->GetGridLines() );
+    }    
 }
 
 // *********************************

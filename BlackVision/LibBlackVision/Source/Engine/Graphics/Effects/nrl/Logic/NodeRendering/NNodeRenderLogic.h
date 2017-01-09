@@ -18,6 +18,8 @@ namespace nrl {
 
 class NRenderContext;
 
+// FIXME: nrl - this static class is starting to get a bit messy
+// FIXME: nrl - think of splitting it into smaller and more manageable functional parts
 class NNodeRenderLogic
 {
 public:
@@ -27,7 +29,7 @@ public:
     static void     RenderAudio         ( SceneNode * node, audio::AudioRenderer * renderer );
 
     static void     RenderQueued        ( Scene * scene, const RenderTarget * output, NRenderContext * ctx );
-    static void     RenderQueued        ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx );
+    static void     RenderQueued        ( SceneNode * node, NRenderContext * ctx );
 
     static void     Render              ( SceneNode * node, NRenderContext * ctx );
     static void     Render              ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx );
@@ -35,6 +37,7 @@ public:
 private:
 
     static void     RenderImpl          ( SceneNode * node, NRenderContext * ctx );
+    static void     RenderGridLines     ( Scene * scene, NRenderContext * ctx );
 
 public:
 
