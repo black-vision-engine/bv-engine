@@ -44,8 +44,6 @@ public:
     NNodeEffectType     GetType         () const;
 
     virtual IValuePtr   GetValue        ( const std::string & name ) const = 0;
-    
-    virtual void        Update          ();
 
 };
 
