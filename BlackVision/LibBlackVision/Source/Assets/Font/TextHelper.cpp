@@ -124,7 +124,7 @@ std::vector< glm::vec2 >		TextHelper::GetAtlasCoordsForGlyph	( const Glyph * gly
 
 // *********************************
 //
-float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, glm::vec2 box, model::TextArranger * arranger, bool useKerning )
+float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, SizeType blurSize, float spacing, TextAlignmentType tat, wchar_t alignChar, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, float newLineSize, glm::vec2 box, model::TextArranger * arranger, bool useKerning, bool useBox )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -161,10 +161,8 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
     layoutInfo.UseKerning = useKerning;
     layoutInfo.UseOutline = outline;
 
-    bool useBox = box.x > 0.0f ? true : false;
 
     auto textLayout = TextHelper::LayoutLetters( text, textAtlas, layoutInfo, useBox );
-
 
     for( unsigned int i = 0; i < text.size(); ++i )
     {

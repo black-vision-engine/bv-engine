@@ -26,6 +26,7 @@ public:
         model::TextArranger *   Arranger;
         glm::vec2               Box;
         bool                    UseKerning;
+        bool                    UseBox;
         TextAlignmentType       Tat;
         wchar_t                 AlignChar;
     };

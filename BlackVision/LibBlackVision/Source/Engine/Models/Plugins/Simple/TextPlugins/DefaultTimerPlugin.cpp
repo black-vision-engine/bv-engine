@@ -380,7 +380,7 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
 		m_zerosTimeString = zerosTimeString;
 
-		TextPluginBase::BuildVACForText( m_zerosTimeString, false );
+		TextPluginBase::BuildVACForText( m_zerosTimeString, false, false );
 
 		m_currentTimeValue = TimeValue( 0, acc ); // Force update time.
 
