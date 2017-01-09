@@ -21,6 +21,8 @@
 
 #include "Engine/Audio/Resources/AudioUtils.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 
 namespace bv { namespace model {
 
@@ -474,6 +476,7 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame    
     AVMediaData mediaData;
     if( m_decoder->GetVideoMediaData( mediaData ) )
     {
+		// LOG_MESSAGE( SeverityLevel::debug ) << "Setting VIDEO frame with frame pts: " << mediaData.framePTS;
         std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
     }
 }
@@ -484,8 +487,9 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
 {
     //update audio data
     AVMediaData mediaData;
-    while( m_decoder->GetAudioMediaData( mediaData ) )
+    if( m_decoder->GetAudioMediaData( mediaData ) )
     {
+		// LOG_MESSAGE( SeverityLevel::debug ) << "Setting AUDIO frame with frame pts: " << mediaData.framePTS;
         m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
     }
 }

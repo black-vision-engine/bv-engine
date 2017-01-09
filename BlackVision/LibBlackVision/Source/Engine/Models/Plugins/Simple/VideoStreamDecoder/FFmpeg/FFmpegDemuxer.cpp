@@ -165,7 +165,7 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
-static int qS [] = { 8, 100 };
+static int qS [] = { 20, 100 };
 
 // *******************************
 //
