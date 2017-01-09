@@ -21,6 +21,7 @@
 #include "Engine/Models/AssetTracker.h"
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -145,35 +146,27 @@ Scene *             BVProjectTools::AddEngineScene                          ( BV
 void                BVProjectTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
-    auto nodeEffectType = NodeEffectType::NET_DEFAULT;
 
-    if ( modelNodeEffect )
+    if( modelNodeEffect )
     {
-        nodeEffectType = modelNodeEffect->GetType();
-    }
+        auto nodeEffectType = modelNodeEffect->GetType();
 
-    bool update = ( modelNodeEffect == nullptr );
-
-    if( !update && modelNodeEffect != nullptr )
-    {
-        bool hasProperNumAssetInitialized = ( modelNodeEffect->GetAssets().size() == modelNodeEffect->NumRequiredAssets() );
-
-        for( auto a : modelNodeEffect->GetAssets() )
+        if( nodeEffectType != NodeEffectType::NET_DEFAULT && nodeEffectType != NodeEffectType::NET_ALPHA_MASK && nodeEffectType != NodeEffectType::NET_NODE_MASK )
         {
-            hasProperNumAssetInitialized = hasProperNumAssetInitialized && ( a != nullptr );
+            node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
         }
-
-        update = update || hasProperNumAssetInitialized;
+        else
+        {
+            auto nNodeEffectType = nrl::NNodeEffectType( nodeEffectType );
+            node->SetNNodeEffect( nrl::CreateNodeEffect( nNodeEffectType ) );
+        }
     }
-
-    if( update )
+    else
     {
-        node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
-
-        UpdateEffectAssetData( node, modelNode );
+        auto nodeEffectType = nrl::NNodeEffectType::NNET_DEFAULT;
+        node->SetNNodeEffect( nrl::CreateNodeEffect( nodeEffectType ) );
     }
 }
-
 // *******************************
 //
 void                BVProjectTools::ReleaseUnusedResources                  ( Renderer * renderer, AssetTracker * assetTracker )

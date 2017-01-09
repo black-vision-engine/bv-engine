@@ -169,31 +169,25 @@ void    NodeUpdater::DoUpdate               ()
 void    NodeUpdater::UpdateNodeEffect       ()
 {
     auto nodeEffect = m_modelNode->GetNodeEffect();
-
     if( nodeEffect )
     {
         auto sceneNNodeEffect = m_sceneNode->GetNNodeEffect();
 
-        //FIXME: nrl transition
-        if ( sceneNNodeEffect )
+        if( sceneNNodeEffect )
         {
             for( auto & val : nodeEffect->GetValues() )
-	        {
-		        UpdateValue( val, sceneNNodeEffect->GetValue( val->GetName() ) );
-	        }
-
-            sceneNNodeEffect->Update();
+            {
+                UpdateValue( val, sceneNNodeEffect->GetValue( val->GetName() ) );
+            }
         }
         else
         {
             auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
             for( auto & val : nodeEffect->GetValues() )
-	        {
-		        UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
-	        }
-
-            sceneNodeEffect->Update();
+            {
+                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+            }
         }
     }
 }
