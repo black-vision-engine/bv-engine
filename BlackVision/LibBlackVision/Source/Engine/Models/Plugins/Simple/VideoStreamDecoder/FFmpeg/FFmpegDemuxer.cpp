@@ -2,6 +2,8 @@
 
 #include "FFmpegDemuxer.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 #include <cassert>
 
 
@@ -59,6 +61,7 @@ Int32				FFmpegDemuxer::UpdateMaxFrameNumInSeq	( Int32 streamIdx )
 			if( m_maxNumOfFramesInSeq[ streamIdx ] < m_currentFrameCount )
 			{
 				m_maxNumOfFramesInSeq[ streamIdx ] = m_currentFrameCount;
+				LOG_MESSAGE( SeverityLevel::debug ) << "Max num of frames in seq: " << streamIdx << " : " << m_maxNumOfFramesInSeq[ streamIdx ];
 			}
 		}
 
@@ -191,7 +194,7 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
-static int qS [] = { 8, 100 };
+static int qS [] = { 10000, 10000 };
 
 // *******************************
 //
