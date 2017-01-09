@@ -35,6 +35,10 @@ private:
 
 	mutable std::mutex			m_mutex;
 
+	std::map< Int32, Int32 >	m_maxNumOfFramesInSeq;
+	Int32						m_lastReadFrameIdx;
+	Int32						m_currentFrameCount;
+
 public:
 
 								FFmpegDemuxer			( const std::string & streamPath, UInt32 maxQueueSize = MAX_QUEUE_SIZE );
@@ -69,6 +73,7 @@ private:
 
 
     Int32						FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
+	Int32						UpdateMaxFrameNumInSeq	( Int32 streamIdx );
 
 };
 

@@ -19,6 +19,7 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQue
 	, m_formatCtx( nullptr )
 	, m_isEOF( false )
     , m_maxQueueSize( maxQueueSize )
+	, m_lastReadFrameIdx( -1 )
 {
 	av_register_all();
 
@@ -43,13 +44,40 @@ FFmpegDemuxer::~FFmpegDemuxer    ()
 
 // *******************************
 //
+Int32				FFmpegDemuxer::UpdateMaxFrameNumInSeq	( Int32 streamIdx )
+{
+	if( m_lastReadFrameIdx == streamIdx )
+	{
+		if( m_maxNumOfFramesInSeq.count( streamIdx ) == 0 )
+		{
+			m_maxNumOfFramesInSeq[ streamIdx ] = 1;
+			m_currentFrameCount = 1;
+		}
+		else
+		{
+			m_currentFrameCount++;
+			if( m_maxNumOfFramesInSeq[ streamIdx ] < m_currentFrameCount )
+			{
+				m_maxNumOfFramesInSeq[ streamIdx ] = m_currentFrameCount;
+			}
+		}
+
+		return m_maxNumOfFramesInSeq[ streamIdx ];
+	}
+	else
+	{
+		m_lastReadFrameIdx = streamIdx;
+		m_currentFrameCount = 0;
+		return UpdateMaxFrameNumInSeq( streamIdx );
+	}
+}
+
+// *******************************
+//
 AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 {
 	return m_formatCtx;
 }
-
-static int numTypeFrame [] = { 0, 0 };
-static int current = 0;
 
 // *******************************
 //
@@ -70,14 +98,6 @@ bool			FFmpegDemuxer::ProcessPacket			()
 	{
 		auto currStream = packet->stream_index;
 
-		if( currStream != current )
-		{
-			numTypeFrame[ current ] = 0;
-			current = currStream;
-		}
-
-		numTypeFrame[ current ]++;
-
 		if( m_packetQueue.count( currStream ) > 0 )
 		{
 			//std::cout 
@@ -93,6 +113,8 @@ bool			FFmpegDemuxer::ProcessPacket			()
 			//	<< numTypeFrame[ current ]
 			//	<< std::endl;
 			
+			UpdateMaxFrameNumInSeq( currStream );
+
 			m_packetQueue.at( currStream )->WaitAndPush( ffmpegPacket );
 			return true;
 		}
@@ -137,15 +159,15 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 
 	std::lock_guard< std::mutex > lock( m_mutex );
 
-	auto f = File::Open( "test.txt", File::OpenMode::FOMWriteAppend );
+	//auto f = File::Open( "test.txt", File::OpenMode::FOMWriteAppend );
 
-	std::stringstream out;
+	//std::stringstream out;
 
-	out << "Demuxer seek to ts: " << timestamp << std::endl;
+	//out << "Demuxer seek to ts: " << timestamp << std::endl;
 
-	f.Write( out.str() );
+	//f.Write( out.str() );
 
-	f.Close();
+	//f.Close();
 
 	av_seek_frame( m_formatCtx, streamIdx, initTs, AVSEEK_FLAG_BACKWARD );
 	
@@ -155,6 +177,10 @@ void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 	}
 
 	m_isEOF = false; 
+
+	m_maxNumOfFramesInSeq.clear();
+	m_lastReadFrameIdx = -1;
+	m_currentFrameCount = 0;
 }
 
 // *******************************
@@ -165,7 +191,7 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
-static int qS [] = { 20, 100 };
+static int qS [] = { 8, 100 };
 
 // *******************************
 //
