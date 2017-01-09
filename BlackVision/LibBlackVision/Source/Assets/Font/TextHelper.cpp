@@ -172,7 +172,7 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
         glm::vec3 translate = glm::vec3( textLayout[ i ].x, 0.0, 0.0 );
         glm::vec3 newLineTranslate = glm::vec3( 0.0f, textLayout[ i ].y, 0.0 );
 
-        if( abs( newLineTranslate.y ) > box.y )
+        if( useBox && abs( newLineTranslate.y ) > box.y )
             break;
 
         if( IsWhitespace( wch ) )
