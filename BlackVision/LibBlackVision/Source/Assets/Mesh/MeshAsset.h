@@ -24,6 +24,9 @@ public:
         glm::vec3                   translation;
         glm::vec3                   rotation;
         glm::vec3                   scale;
+        glm::vec3                   center;
+
+        glm::mat4                   transform;
     };
 
     struct MeshGeometry

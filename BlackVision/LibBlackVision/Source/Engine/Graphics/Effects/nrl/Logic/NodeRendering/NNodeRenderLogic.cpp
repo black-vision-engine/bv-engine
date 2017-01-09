@@ -80,9 +80,9 @@ void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, NRenderContext *
 {
     // FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
     auto queue = queue_allocator( ctx )->Allocate();
-    
+   
     queue->QueueNodeSubtree( node, ctx );
-    
+   
     queue->Render( ctx );
 
     queue_allocator( ctx )->Free();

@@ -90,6 +90,13 @@ void                    Float4AttributeChannel::AddAttributes   ( const std::vec
     m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
 }
 
+// ***********************
+//
+void                    Float4AttributeChannel::ReplaceAttributes( std::vector< glm::vec4 > && v )
+{
+    m_attributes = std::move( v );
+}
+
 
 //******************* Float3AttributeChannel *******************
 

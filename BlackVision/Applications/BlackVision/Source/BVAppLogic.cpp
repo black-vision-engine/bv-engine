@@ -428,8 +428,8 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
         //std::this_thread::sleep_for( std::chrono::milliseconds( DefaultConfig.FrameTimeMillis() - frameMillis ) );
-        //Sleep( DefaultConfig.FrameTimeMillis() - frameMillis );
-        //printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
+        Sleep( DefaultConfig.FrameTimeMillis() - frameMillis );
+        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
     }
 }
 

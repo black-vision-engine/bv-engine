@@ -9,7 +9,7 @@
 
 #include "DataTypes/Hash.h"
 
-
+#include <glm/gtc/type_ptr.hpp>
 
 
 #include "Memory/MemoryLeaks.h"
@@ -212,10 +212,23 @@ void                            MeshUtils::ProcessTransform       ( MeshAssetPtr
     auto translation = fbxNode->LclTranslation.Get();
     auto rotation = fbxNode->LclRotation.Get();
     auto scale = fbxNode->LclScaling.Get();
+    auto center = fbxNode->RotationPivot.Get();
+    auto localTransform = fbxNode->EvaluateLocalTransform();
+
+    //assert( fbxNode->PostRotation.Get() == fbxsdk::FbxDouble3( 0.0, 0.0, 0.0 ) );
+    //assert( fbxNode->PreRotation.Get() == fbxsdk::FbxDouble3( 0.0, 0.0, 0.0 ) );
+    //assert( fbxNode->ScalingOffset.Get() == fbxsdk::FbxDouble3( 0.0, 0.0, 0.0 ) );
+    //assert( fbxNode->ScalingPivot.Get() == fbxNode->RotationPivot.Get() );
 
     transform->translation = glm::vec3( translation[ 0 ], translation[ 1 ], translation[ 2 ] );
     transform->rotation = glm::vec3( rotation[ 0 ], rotation[ 1 ], rotation[ 2 ] );
     transform->scale = glm::vec3( scale[ 0 ], scale[ 1 ], scale[ 2 ] );
+    transform->center = glm::vec3( center[ 0 ], center[ 1 ], center[ 2 ] );
+    transform->transform = glm::mat4(
+        localTransform.mData[ 0 ][ 0 ], localTransform.mData[ 0 ][ 1 ], localTransform.mData[ 0 ][ 2 ], localTransform.mData[ 0 ][ 3 ],
+        localTransform.mData[ 1 ][ 0 ], localTransform.mData[ 1 ][ 1 ], localTransform.mData[ 1 ][ 2 ], localTransform.mData[ 1 ][ 3 ],
+        localTransform.mData[ 2 ][ 0 ], localTransform.mData[ 2 ][ 1 ], localTransform.mData[ 2 ][ 2 ], localTransform.mData[ 2 ][ 3 ], 
+        localTransform.mData[ 3 ][ 0 ], localTransform.mData[ 3 ][ 1 ], localTransform.mData[ 3 ][ 2 ], localTransform.mData[ 3 ][ 3 ] );
 
     meshAsset->SetTransform( transform );
 }

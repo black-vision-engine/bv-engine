@@ -54,6 +54,7 @@ public:
         static const std::string        USE_KERNING;
         static const std::string        ALIGN_CHARACTER;
         static const std::string        TEXT_BOX;
+        static const std::string        USE_TEXT_BOX;
     };
 
 private:

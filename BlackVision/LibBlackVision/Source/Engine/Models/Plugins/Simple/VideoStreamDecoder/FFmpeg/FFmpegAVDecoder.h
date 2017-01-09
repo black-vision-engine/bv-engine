@@ -77,6 +77,7 @@ public:
 
 	virtual bool				IsEOF					() const override;
 	virtual bool				IsFinished				() const override;
+	bool						IsFinished				( AVMediaType steamId ) const;
 
     virtual void                Mute                    ( bool mute ) override;
 

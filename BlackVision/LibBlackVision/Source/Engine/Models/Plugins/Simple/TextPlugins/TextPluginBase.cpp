@@ -28,6 +28,7 @@ const std::string TextPluginBase::PARAM::ALPHA              = "alpha";
 const std::string TextPluginBase::PARAM::FONT_SIZE          = "fontSize";
 const std::string TextPluginBase::PARAM::NEW_LINE_SIZE      = "newLineSize";
 const std::string TextPluginBase::PARAM::TEXT_BOX           = "textBox";
+const std::string TextPluginBase::PARAM::USE_TEXT_BOX       = "useTextBox";
 
 const std::string TextPluginBase::PARAM::SHADOW_ENABLED     = "shadowEnabled";
 const std::string TextPluginBase::PARAM::SHADOW_COLOR       = "shadowColor";
@@ -87,7 +88,8 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::TEXT_BOX, glm::vec2( 0.0f, 0.0f ) );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::TEXT_BOX, glm::vec2( 1.0f, 1.0f ) );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::USE_TEXT_BOX, false );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::NEW_LINE_SIZE, 1.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
@@ -288,7 +290,7 @@ DefaultTextureDescriptorPtr         TextPluginBase::LoadTexture                 
 
 // *************************************
 // 
-Float32                             TextPluginBase::BuildVACForText             ( const std::wstring & text, bool useKerning )
+Float32                             TextPluginBase::BuildVACForText             ( const std::wstring & text, bool useKerning, bool useBox )
 {
     auto alignType  = TextAlignmentType( m_alignmentParam->Evaluate() );
     auto alignCh    = (wchar_t)m_alignCharacter->GetValue();
@@ -317,7 +319,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_newLineSize->GetValue(),
                                         m_box->GetValue(),
                                         nullptr,
-                                        useKerning );
+                                        useKerning,
+                                        useBox);
 
         m_firstTextGlowCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
@@ -337,7 +340,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_newLineSize->GetValue(),
                                         m_box->GetValue(),
                                         nullptr,
-                                        useKerning );
+                                        useKerning,
+                                        useBox);
 
         m_firstTextOutCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
@@ -357,7 +361,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_newLineSize->GetValue(),
                                         m_box->GetValue(),
                                         nullptr,
-                                        useKerning );
+                                        useKerning,
+                                        useBox );
 
         m_firstTextCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
@@ -375,7 +380,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     m_newLineSize->GetValue(),
                                                     m_box->GetValue(),
                                                     nullptr,
-                                                    useKerning );
+                                                    useKerning,
+                                                    useBox );
 
 
     return textLength;

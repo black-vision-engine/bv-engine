@@ -58,7 +58,8 @@ protected:
 
     bool										InitVertexAttributesChannel ( bool recursive );
 
-    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, bool recursive );
+    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, glm::mat4 & transform, bool recursive );
+    glm::mat4                                   ComputeTransform            ( MeshAssetConstPtr meshAsset );
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 

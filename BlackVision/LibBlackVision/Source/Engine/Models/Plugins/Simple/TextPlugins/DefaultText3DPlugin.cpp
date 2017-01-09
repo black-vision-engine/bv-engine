@@ -62,6 +62,7 @@ const std::string        DefaultText3DPlugin::PARAMS::ALIGNEMENT        = "align
 const std::string        DefaultText3DPlugin::PARAMS::USE_KERNING       = "useKerning";
 const std::string        DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER   = "alignCharacter";
 const std::string        DefaultText3DPlugin::PARAMS::TEXT_BOX          = "textBox";
+const std::string        DefaultText3DPlugin::PARAMS::USE_TEXT_BOX      = "useTextBox";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -95,6 +96,7 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.' );
     h.AddEnumParam( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT_BOX, glm::vec2( 0.0f, 0.0f ) );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_TEXT_BOX, false );
 
     h.SetOrCreatePSModel();
     h.SetOrCreateVSModel();
@@ -217,6 +219,7 @@ void                                DefaultText3DPlugin::RebuildText            
     layout.ViewWidth = ApplicationContext::Instance().GetWidth();
     layout.ViewHeight = ApplicationContext::Instance().GetHeight();
     layout.Box = QueryTypedValue< ValueVec2Ptr >( GetValue( PARAMS::TEXT_BOX ) )->GetValue();
+    layout.UseBox = QueryTypedValue< ValueBoolPtr >( GetValue( PARAMS::USE_TEXT_BOX ) )->GetValue();
 
     auto connectedComponents = Text3DUtils::CreateText( m_textParam->Evaluate(), m_fontAsset, layout );
 
@@ -243,7 +246,8 @@ void                                DefaultText3DPlugin::Update                 
         ParameterChanged( PARAMS::NEW_LINE_SIZE ) ||
         ParameterChanged( PARAMS::USE_KERNING ) ||
         ParameterChanged( PARAMS::ALIGN_CHARACTER ) ||
-        ParameterChanged( PARAMS::TEXT_BOX ) )
+        ParameterChanged( PARAMS::TEXT_BOX ) ||
+        ParameterChanged( PARAMS::USE_TEXT_BOX ) )
     {
         RebuildText();
     }

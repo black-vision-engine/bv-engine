@@ -315,6 +315,9 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
 {
 	std::cout << "Seek to time: " << time << std::endl;
 
+	time = std::min( m_duration / 1000.0, time );
+	time = std::max( time, 0.0 );
+
 	StopDecoding();
 
 	m_timer.Pause();
@@ -366,12 +369,27 @@ bool					FFmpegAVDecoder::IsFinished				() const
     for( auto & stream : m_streams )
     {
         finished &= m_demuxer->IsPacketQueueEmpty( stream.second->GetStreamIdx() );
-        finished &= stream.second->IsDataQueueEmpty();
-        finished &= stream.second->IsOutQueueEmpty();
+		finished &= IsFinished( stream.first );
     }
 
     return finished;
 }
+
+// *********************************
+//
+bool					FFmpegAVDecoder::IsFinished				( AVMediaType steamId ) const
+{
+	bool finished = true;
+
+	if( m_streams.count( steamId ) )
+	{
+		finished &= m_streams.at( steamId )->IsDataQueueEmpty();
+		finished &= m_streams.at( steamId )->IsOutQueueEmpty();
+	}
+
+	return finished;
+}
+
 
 // *********************************
 //
@@ -409,7 +427,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
     if( HasVideo() )
     {
         auto decoder = m_streams[ AVMEDIA_TYPE_VIDEO ].get();
-        while( decoder->IsOutQueueEmpty() && !IsFinished() )
+        while( decoder->IsOutQueueEmpty() && !( decoder->IsDataQueueEmpty() && m_demuxer->IsPacketQueueEmpty( decoder->GetStreamIdx() ) ) )
         {
             NextDataReady( AVMEDIA_TYPE_VIDEO, decoder->GetCurrentPTS() - decoder->GetOffset(), false );
         }
@@ -419,7 +437,7 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
     {
         auto i = 0;
         auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
-        while( i < 5 && !IsFinished() )
+        while( i < 5 && !( decoder->IsDataQueueEmpty() && m_demuxer->IsPacketQueueEmpty( decoder->GetStreamIdx() ) ) )
         {
             if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetCurrentPTS() - decoder->GetOffset(), false ) )
             {
@@ -517,7 +535,7 @@ void					FFmpegAVDecoder::StopDecoding           ()
 Int64					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 time )
 {
     Int64 currTs = 0;
-    
+
     // decode packets till reaching frame with given timestamp
     while( !m_demuxer->IsEOF() )
     {
@@ -540,6 +558,11 @@ Int64					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 ti
 
         m_demuxer->ProcessPacket();
     }
+
+	if( m_demuxer->IsEOF() )
+	{
+		currTs = decoder->GetDuration();
+	}
 
     return currTs;
 }

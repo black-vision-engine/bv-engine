@@ -31,6 +31,7 @@ public:
         static const std::string        FONT_SIZE;
         static const std::string        NEW_LINE_SIZE;
         static const std::string        TEXT_BOX;
+        static const std::string        USE_TEXT_BOX;
 
         static const std::string        SHADOW_ENABLED;
         static const std::string        SHADOW_COLOR;
@@ -98,7 +99,7 @@ public:
 
     virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-    virtual Float32                             BuildVACForText             ( const std::wstring & text, bool useKerning );
+    virtual Float32                             BuildVACForText             ( const std::wstring & text, bool useKernin, bool useBoxg );
 
     explicit                                    TextPluginBase              (   const std::string & name,
                                                                                 const std::string & uid,

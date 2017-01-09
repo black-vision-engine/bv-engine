@@ -187,7 +187,8 @@ void                                DefaultTextPlugin::Update                   
         ParameterChanged( TextPluginBase::PARAM::NEW_LINE_SIZE ) ||
         ParameterChanged( TextPluginBase::PARAM::SHADOW_ENABLED ) ||
         ParameterChanged( TextPluginBase::PARAM::OUTLINE_ENABLED ) || 
-        ParameterChanged( TextPluginBase::PARAM::TEXT_BOX ) )
+        ParameterChanged( TextPluginBase::PARAM::TEXT_BOX ) ||
+        ParameterChanged( TextPluginBase::PARAM::USE_TEXT_BOX ) )
     {
         SetText( m_textParam->Evaluate() );
     }
@@ -250,7 +251,9 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 {
     m_vaChannel->ClearAll();
 
-    m_textLength = TextPluginBase::BuildVACForText( newText, true );
+    bool useBox = QueryTypedValue< ValueBoolPtr >( GetValue( TextPluginBase::PARAM::USE_TEXT_BOX ) )->GetValue();
+
+    m_textLength = TextPluginBase::BuildVACForText( newText, true, useBox );
 
     ScaleToMaxTextLength();
 

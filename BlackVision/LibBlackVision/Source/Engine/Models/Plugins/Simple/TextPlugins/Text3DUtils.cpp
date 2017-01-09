@@ -73,7 +73,7 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
     layoutInfo.UseOutline = false;
     layoutInfo.MaxLength = layout.Box.x;
 
-    bool useBox = layout.Box.x > 0.0f ? true : false;
+    bool useBox = layout.UseBox;
     auto textLayout = TextHelper::LayoutLetters( text, textRepresentation, layoutInfo, useBox );
 
     unsigned int componentIdx = 0;
@@ -83,7 +83,7 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
         glm::vec3 translate = glm::vec3( textLayout[ i ].x, 0.0, 0.0 );
         glm::vec3 newLineTranslate = glm::vec3( 0.0f, textLayout[ i ].y, 0.0 );
 
-        if( abs( newLineTranslate.y ) > layout.Box.y )
+        if( useBox && abs( newLineTranslate.y ) > layout.Box.y )
             break;
 
         if( TextHelper::IsWhitespace( wch ) )
