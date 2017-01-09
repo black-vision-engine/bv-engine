@@ -172,7 +172,7 @@ bool                FFmpegStreamDecoder::DecodePacket       ( AVPacket * packet 
 		{
 			auto err = AVUNERROR( res );
 			std::cout << "Packet decoding error: " << std::string( ( char * ) &err, 4 ) << std::endl;
-			return false;
+			throw std::runtime_error( "Packet decoding error" );
 		}
 	}
 	else

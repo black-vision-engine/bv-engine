@@ -2,12 +2,9 @@
 
 #include "DefaultAudioChannel.h"
 
-
-
-
 #include "Memory/MemoryLeaks.h"
 
-
+#include "UseLoggerLibBlackVision.h"
 
 namespace bv { namespace model {
 

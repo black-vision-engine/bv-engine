@@ -6,7 +6,13 @@
 
 namespace bv
 {
-class RenderLogicContext;
+
+namespace nrl {
+
+class nrl::NRenderContext;
+
+}
+
 class SceneNode;
 
 class RenderingQueue
@@ -22,20 +28,20 @@ public:
     RenderingQueue();
     ~RenderingQueue();
 
-    void                QueueSingleNode     ( SceneNode * node, RenderLogicContext * ctx );
-    void                QueueNodeSubtree    ( SceneNode * node, RenderLogicContext * ctx );
+    void                QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx );
+    void                QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx );
 
-    void                Render              ( RenderLogicContext * ctx );
+    void                Render              ( nrl::NRenderContext * ctx );
 
     void                ClearQueue          ();
 
 
 
-    static float        ComputeNodeZ        ( SceneNode * node, RenderLogicContext * ctx );
+    static float        ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx );
     static bool         IsTransparent       ( SceneNode * node );
 
 private:
-    void                RenderNode          ( SceneNode * node, RenderLogicContext * ctx );
+    void                RenderNode          ( SceneNode * node, nrl::NRenderContext * ctx );
 };
 
 

@@ -637,12 +637,13 @@ void                 BVProjectTools::UpdateEffectAssetData               ( Scene
         {
             if( ad->GetUID() == TextureAssetDesc::UID() )
             {
-                auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( ad );
-                auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "" );
+                //FIXME: nrl update
+                //auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( ad );
+                //auto defTexDesc = model::DefaultTextureDescriptor::LoadTexture( txAssetDescr, "" );
 
-                defTexDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+                //defTexDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
-                effect->AddTexture( defTexDesc );
+                //effect->AddTexture( defTexDesc );
             }
             else
             {

@@ -33,6 +33,10 @@ namespace audio {
     class AudioRenderer;
 }
 
+namespace nrl {
+    class NRenderLogic;
+}
+
 enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
@@ -61,8 +65,9 @@ private:
 	Float32							m_gain;
     audio::AudioRenderer *          m_audioRenderer;
     
-    RenderLogic *                   m_renderLogic;
-
+    // FIXME: nrl - render logic replacement
+    nrl::NRenderLogic *             m_renderLogic;
+    //RenderLogic *                   m_renderLogic;
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
@@ -112,7 +117,7 @@ public:
     //Convenience API - generalized model accessors
     BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
-    RenderLogic *                   GetRenderLogic      () const;
+    nrl::NRenderLogic *             GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
 
     void                            LoadScenes          ( const PathVec & pathVec );

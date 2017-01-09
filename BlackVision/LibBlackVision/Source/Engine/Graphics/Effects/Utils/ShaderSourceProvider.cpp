@@ -67,7 +67,7 @@ std::string             ShaderSourceProvider::ReadShader        ( const std::str
         assert( false );
     }
 
-    return shaderSource.str();
+	return shaderSource.str();
 }
 
 } //bv

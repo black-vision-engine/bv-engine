@@ -5,6 +5,8 @@
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 #include "Tools/HRTimer.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 #include <thread>
 #include <chrono>
 
@@ -36,7 +38,11 @@ void				FFmpegStreamsDecoderThread::Kill	        ()
 	m_running = false;
     m_stopped = false;
 
-	std::cout << "KILLING Decoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+	LOG_MESSAGE( SeverityLevel::debug )
+		<< "KILLING Decoder thread stream id: "
+		<< m_streamDecoder->GetStreamIdx()
+		<< " thread id: "
+		<< std::this_thread::get_id();
 
 	if( m_streamDecoder )
 		m_streamDecoder->Reset();
@@ -51,7 +57,12 @@ void				FFmpegStreamsDecoderThread::Restart	    ()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	if( m_stopped || m_stopThread )
 	{
-		std::cout << "RESTARTING Decoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+		LOG_MESSAGE( SeverityLevel::debug ) 
+			<< "RESTARTING Decoder thread stream id: " 
+			<< m_streamDecoder->GetStreamIdx() 
+			<< " thread id: " 
+			<< std::this_thread::get_id() << std::endl;
+
 		m_stopThread = false;
 		m_stopped = false;
 		m_cond.notify_one();
@@ -66,7 +77,12 @@ void				FFmpegStreamsDecoderThread::Stop		()
 
 	if( !m_stopThread )
 	{
-		std::cout << "STOPPING Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+		LOG_MESSAGE( SeverityLevel::debug ) 
+			<< "STOPPING Decoder thread strema id: " 
+			<< m_streamDecoder->GetStreamIdx() 
+			<< " thread id: " 
+			<< std::this_thread::get_id();
+
 		m_stopThread = true;
 		m_cond.notify_one();
 	}
@@ -84,33 +100,62 @@ bool				FFmpegStreamsDecoderThread::Stopped		() const
 //
 void				FFmpegStreamsDecoderThread::Run			()
 {
-	std::cout << "STARTING Decoder thread " << std::this_thread::get_id() << std::endl;
-    while( true )
-    {
-		{
-			std::unique_lock< std::mutex > lock( m_mutex );
+	LOG_MESSAGE( SeverityLevel::debug ) 
+		<< "STARTING Decoder thread " 
+		<< std::this_thread::get_id();
 
-			if( m_stopThread )
+	try
+	{
+		while( true )
+		{
 			{
-				m_stopped = true;
-				std::cout << "STOPPED Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
-				m_cond.wait( lock, [ = ] { return m_stopped == false; } );
-				std::cout << "STARTED Decoder thread strema id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+				std::unique_lock< std::mutex > lock( m_mutex );
+
+				if( m_stopThread )
+				{
+					LOG_MESSAGE( SeverityLevel::debug ) 
+						<< "STOPPED Decoder thread strema id: "
+						<< m_streamDecoder->GetStreamIdx() 
+						<< " thread id: " 
+						<< std::this_thread::get_id();
+
+					m_stopped = true;
+					m_cond.wait( lock, [ = ]
+					{
+						return m_stopped == false;
+					} );
+
+					LOG_MESSAGE( SeverityLevel::debug )
+						<< "STARTED Decoder thread strema id: " 
+						<< m_streamDecoder->GetStreamIdx() 
+						<< " thread id: " 
+						<< std::this_thread::get_id();
+				}
+
+				if( !m_running )
+				{
+					break;
+				}
 			}
 
-			if( !m_running )
+			if( m_streamDecoder )
 			{
-				break;
+				m_streamDecoder->ProcessPacket( true );
 			}
 		}
+	}
+	catch( const std::runtime_error & exc )
+	{
+		LOG_MESSAGE( SeverityLevel::error ) 
+			<< "Streams decoder error. Stream id: " 
+			<< m_streamDecoder->GetStreamIdx() 
+			<< ". THREAD ID: " << std::this_thread::get_id() << std::endl
+			<< exc.what();
+	}
 
-		if( m_streamDecoder )
-		{
-			m_streamDecoder->ProcessPacket( true );
-		}
-    }
-
-	std::cout << "DYING Decoder thread " << std::this_thread::get_id() << std::endl;
+	LOG_MESSAGE( SeverityLevel::debug ) 
+		<< "DYING Decoder thread " 
+		<< std::this_thread::get_id();
 }
 
 } //bv

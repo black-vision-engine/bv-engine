@@ -190,7 +190,7 @@ void                                DefaultAudioDecoderPlugin::Update           
 {
     BasePlugin::Update( t );
 
-    MarkOffsetChanges();
+    ///MarkOffsetChanges();
 
     UpdateDecoder();
     UploadAudioFrame();
@@ -311,7 +311,7 @@ void                                DefaultAudioDecoderPlugin::UploadAudioFrame 
 {
     //update audio data
     AVMediaData mediaData;
-    if( m_decoder->GetAudioMediaData( mediaData ) )
+	if( m_decoder->GetAudioMediaData( mediaData ) )
     {
         m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
     }

@@ -1,31 +1,37 @@
 #include "stdafx.h"
+
 #include "RenderingQueue.h"
 
-
-#include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
-#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-
-
-
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 
 
-
-namespace bv
-{
+namespace bv {
 
 namespace {
 
+// ************************************
+// FIXME: nrl - effect vs neffect
 bool HasEffect( SceneNode * node )
 {
     auto effect = node->GetNodeEffect();
+
     if( effect != nullptr && effect->GetType() != NodeEffectType::NET_DEFAULT )
+    {
         return true;
+    }
+
+    auto neffect = node->GetNNodeEffect();
+
+    if( neffect != nullptr && neffect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
+    {
+        return true;
+    }
+
     return false;
 }
 
@@ -44,8 +50,8 @@ RenderingQueue::~RenderingQueue()
 
 
 // ***********************
-//
-float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     float z = 0.0f;
 
@@ -80,7 +86,9 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
     auto effect = renderableEntity->GetRenderableEffect();
 
     if( !effect )
+    {
         return false;   // No effect. Return value is indifferent.
+    }
 
     // FIXME: What if there're more passes then one.
     return effect->GetPass( 0 )->GetStateInstance()->GetAlphaState()->blendEnabled;
@@ -88,8 +96,8 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
 
 
 // ***********************
-//
-void                RenderingQueue::QueueSingleNode     ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     if( !node->IsVisible() )
         return;
@@ -129,8 +137,8 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
 }
 
 // ***********************
-//
-void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     if( node->IsVisible() )
     {
@@ -148,8 +156,8 @@ void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, Rend
 }
 
 // ***********************
-//
-void                RenderingQueue::Render              ( RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::Render              ( nrl::NRenderContext * ctx )
 {
     // Opaque objects from front to back.
     for( auto & renderItem : m_opaqueNodes )
@@ -162,7 +170,6 @@ void                RenderingQueue::Render              ( RenderLogicContext * c
     {
         RenderNode( renderItem.first, ctx );
     }
-
 }
 
 // ***********************
@@ -178,8 +185,8 @@ void                RenderingQueue::ClearQueue          ()
 // ========================================================================= //
 
 // ***********************
-//
-void                RenderingQueue::RenderNode          ( SceneNode * node, RenderLogicContext * ctx )
+// FIXME: nrl - rendercontext added
+void                RenderingQueue::RenderNode          ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     // Function doesn't check if node is visible, beacause all nodes in m_transparentNodes
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
@@ -188,22 +195,25 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, Rend
     BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
     BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
 
+    // FIXME: nrl - implement more expressive api in NNodeRenderLogic so that bb and queue rendering is supported in a better way
     if( HasEffect( node ) )
     {
-        auto effect = node->GetNodeEffect();
-        effect->Render( node, ctx );
+        nrl::NNodeRenderLogic::Render( node, ctx );
     }
     else
     {
-        // Default render logic
-        ctx->GetRenderLogic()->DrawNodeOnly( renderer( ctx ), node );
+        nrl::NNodeRenderLogic::RenderRoot( node->GetRepr(), ctx );
     }
 
+    // FIXME: WTF???? add to NNodeRenderLogic
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
-        ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
+    {
+        // FIXME: nrl - refactor bounding box rendering
+        //ctx->GetRenderLogic()->RenderBoundingBox( node, ctx, node->GetBoundingBoxColor() );
+    }
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
     END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
 }
 
-}	// bv
+} // bv

@@ -146,6 +146,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer, audio::AudioRenderer
 
     if( m_useVideoCardOutput )
     {
+        // FIXME: nrl - audio should be handled based on this implementation
         OnVideoFrameRendered( ctx );
     }
 }
@@ -154,36 +155,39 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer, audio::AudioRenderer
 //
 void    RenderLogic::RenderRootNode  ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const SceneVec & scenes, RenderTarget * rt )
 {
-    //FIXME: assumes only one renderer instance per application
-    auto ctx = GetContext( renderer, audioRenderer );
+    { renderer; audioRenderer; scenes; rt; }
+    // FIXME: nrl - implement in NNodeRenderLogic
+    assert( false );
+    ////FIXME: assumes only one renderer instance per application
+    //auto ctx = GetContext( renderer, audioRenderer );
 
-    assert( renderer == ctx->GetRenderer() );
+    //assert( renderer == ctx->GetRenderer() );
 
-    // FIXME: verify that all rendering paths work as expected
-    enable( ctx, rt );
-        
-    clearBoundRT( ctx, m_clearColor );
+    //// FIXME: verify that all rendering paths work as expected
+    //enable( ctx, rt );
+    //    
+    //clearBoundRT( ctx, m_clearColor );
 
-    for( auto & scene : scenes )
-    {
-        renderer->Performance().AverageScenePerformanceData( scene );
+    //for( auto & scene : scenes )
+    //{
+    //    renderer->Performance().AverageScenePerformanceData( scene );
 
-        renderer->SetCamera( scene->GetCamera() );
+    //    renderer->SetCamera( scene->GetCamera() );
 
-        renderer->EnableScene( scene );
-        auto renderQueue = ctx->GetRenderQueueAllocator()->Allocate();
+    //    renderer->EnableScene( scene );
+    //    auto renderQueue = ctx->GetRenderQueueAllocator()->Allocate();
 
-        renderQueue->QueueNodeSubtree( scene->GetRoot(), ctx );
-        renderQueue->Render( ctx );
-        
-        ctx->GetRenderQueueAllocator()->Free();
-        
-        RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
-     
-        Play( audioRenderer, scene->GetRoot() );
-    }
+    //    renderQueue->QueueNodeSubtree( scene->GetRoot(), ctx );
+    //    renderQueue->Render( ctx );
+    //    
+    //    ctx->GetRenderQueueAllocator()->Free();
+    //    
+    //    RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
+    // 
+    //    Play( audioRenderer, scene->GetRoot() );
+    //}
 
-    disableBoundRT( ctx );
+    //disableBoundRT( ctx );
 }
 
 
@@ -205,23 +209,25 @@ glm::vec4 BoundingBoxColor( SceneNode * node )
 //
 void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ctx )
 {
-    if ( node->IsVisible() )
-    {
-        auto effect = node->GetNodeEffect();
+    // FIXME: nrl - implement in NNodeRenderLogic
+    {node; ctx;}
+    //if ( node->IsVisible() )
+    //{
+    //    auto effect = node->GetNodeEffect();
 
-        if( !effect || effect->GetType() ==  NodeEffectType::NET_DEFAULT )
-        {
-            // Default render logic
-            DrawNode( node, ctx );
-        }
-        else
-        {
-            effect->Render( node, ctx );
-        }
+    //    if( !effect || effect->GetType() ==  NodeEffectType::NET_DEFAULT )
+    //    {
+    //        // Default render logic
+    //        DrawNode( node, ctx );
+    //    }
+    //    else
+    //    {
+    //        effect->Render( node, ctx );
+    //    }
 
-        if( IsSelected( node ) && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr )
-            RenderBoundingBox( node, ctx, BoundingBoxColor( node ) );
-    }
+    //    if( IsSelected( node ) && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr )
+    //        RenderBoundingBox( node, ctx, BoundingBoxColor( node ) );
+    //}
 }
 
 // *********************************
@@ -256,6 +262,7 @@ void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ct
 //
 void    RenderLogic::Play           ( audio::AudioRenderer * renderer, SceneNode * node )
 {
+    // FIXME: and what about node effects???
     if ( node->IsVisible() )
     {
         auto audio = node->GetAudio();

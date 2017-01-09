@@ -21,6 +21,8 @@
 
 #include "Engine/Audio/Resources/AudioUtils.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 
 namespace bv { namespace model {
 
@@ -79,7 +81,7 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
     auto model  = helper.GetModel();
 
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
+    helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, 0.f, true, true );
     helper.AddParam< IntInterpolator, DefaultAVDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
@@ -152,7 +154,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
     
-    m_offsetParam = QueryTypedParam< ParamVec2Ptr >( GetParameter( PARAM::SEEK_OFFSET ) );
+    m_offsetParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::SEEK_OFFSET ) );
     m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
 
     m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
@@ -271,7 +273,7 @@ void                                DefaultAVDecoderPlugin::Update              
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-    MarkOffsetChanges();
+    // MarkOffsetChanges();
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
@@ -363,25 +365,32 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
             UpdateDecoderState( m_decoderMode );
         }
 
-        // edge case - looped timeline
-        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-        if( decoderModeTime < m_prevDecoderModeTime )
-        {
-            m_prevOffsetCounter = 0;
-        }
-        m_prevDecoderModeTime = decoderModeTime;
+		if( ParameterChanged( PARAM::SEEK_OFFSET ) )
+		{
+			m_decoder->Seek( m_offsetParam->Evaluate() );
 
-        // update offset 
-        auto offset = m_offsetParam->Evaluate();
-        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
-        {
-            m_decoder->Seek( offset[ 0 ] );
-            m_prevOffsetCounter = offset[ 1 ];
-
-            std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
+			std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
 			UpdateDecoderState( m_decoderMode );
-        }
+		}
+   //     // edge case - looped timeline
+   //     auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
+   //     if( decoderModeTime < m_prevDecoderModeTime )
+   //     {
+   //         m_prevOffsetCounter = 0;
+   //     }
+   //     m_prevDecoderModeTime = decoderModeTime;
+
+   //     // update offset 
+   //     auto offset = m_offsetParam->Evaluate();
+   //     auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
+   //     if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
+   //     {
+   //         m_decoder->Seek( offset[ 0 ] );
+   //         m_prevOffsetCounter = offset[ 1 ];
+
+   //         std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
+			//UpdateDecoderState( m_decoderMode );
+   //     }
 
         HandlePerfectLoops();
 
@@ -467,6 +476,7 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame    
     AVMediaData mediaData;
     if( m_decoder->GetVideoMediaData( mediaData ) )
     {
+		// LOG_MESSAGE( SeverityLevel::debug ) << "Setting VIDEO frame with frame pts: " << mediaData.framePTS;
         std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
     }
 }
@@ -477,8 +487,9 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
 {
     //update audio data
     AVMediaData mediaData;
-    while( m_decoder->GetAudioMediaData( mediaData ) )
+    if( m_decoder->GetAudioMediaData( mediaData ) )
     {
+		// LOG_MESSAGE( SeverityLevel::debug ) << "Setting AUDIO frame with frame pts: " << mediaData.framePTS;
         m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
     }
 }
@@ -500,12 +511,12 @@ MemoryChunkPtr						DefaultAVDecoderPlugin::ApplyGain				( const MemoryChunkPtr 
 //
 void                                DefaultAVDecoderPlugin::MarkOffsetChanges           ()
 {
-    auto counter = 0;
-    const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
-    for( auto & key : keys )
-    {
-        m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
-    }
+    //auto counter = 0;
+    //const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
+    //for( auto & key : keys )
+    //{
+    //    m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
+    //}
 }
 
 // *************************************

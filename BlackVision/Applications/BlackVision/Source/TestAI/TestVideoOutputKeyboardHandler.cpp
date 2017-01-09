@@ -70,59 +70,67 @@ void            TestVideoOutputKeyboardHandler::HandleKey       ( unsigned char 
 //
 void                    TestVideoOutputKeyboardHandler::SetChannelMapping   ( BVAppLogic * logic, unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx )
 {
-    auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
+    { logic; rIdx, gIdx, bIdx, aIdx; }
+    // FIXME: nrl - implement
+    //auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
 
-    if( vrl )
-    {
-        vrl->SetChannelMapping( rIdx, gIdx, bIdx, aIdx );
-    }
+    //if( vrl )
+    //{
+    //    vrl->SetChannelMapping( rIdx, gIdx, bIdx, aIdx );
+    //}
 }
 
 // *********************************
 //
 void                    TestVideoOutputKeyboardHandler::ToggleOverwriteAlpha            ( BVAppLogic * logic )
 {
-    m_overwriteAlpha = !m_overwriteAlpha;
+    // FIXME: nrl - implement
+    { logic; } 
+    //m_overwriteAlpha = !m_overwriteAlpha;
 
-    auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
+    //auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
 
-    if( vrl )
-    {
-        vrl->SetOverwriteAlpha( m_overwriteAlpha );
-    }
+    //if( vrl )
+    //{
+    //    vrl->SetOverwriteAlpha( m_overwriteAlpha );
+    //}
 }
 
 // *********************************
 //
 void                    TestVideoOutputKeyboardHandler::AddToAlpha                      ( BVAppLogic * logic, float val )
 {
-    m_alpha += val;
+    // FIXME: nrl - implement
+    { logic; val; }
+    //m_alpha += val;
 
-    if ( m_alpha > 1.f )
-        m_alpha = 1.f;
+    //if ( m_alpha > 1.f )
+    //    m_alpha = 1.f;
 
-    if ( m_alpha < 0.f )
-        m_alpha = 0.f;
+    //if ( m_alpha < 0.f )
+    //    m_alpha = 0.f;
 
 
-    auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
+    //auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
 
-    if( vrl )
-    {
-        vrl->SetAlpha( m_alpha );
-    }
+    //if( vrl )
+    //{
+    //    vrl->SetAlpha( m_alpha );
+    //}
 }
 
 // *********************************
 //
 void                    TestVideoOutputKeyboardHandler::SetHeight                       ( BVAppLogic * logic, int height )
 {
-    auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
+    // FIXME: nrl - implement
+    { logic; height; } 
+    //auto vrl = logic->GetRenderLogic()->GedVideoOutputRenderLogic();
 
-    if( vrl )
-    {
-        vrl->SetHeight( height );
-    }
+    //if( vrl )
+    //{
+    //    vrl->SetHeight( height );
+    //}
 }
 
 } //bv

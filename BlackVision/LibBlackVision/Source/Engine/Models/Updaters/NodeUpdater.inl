@@ -255,7 +255,7 @@ inline void     NodeUpdater::UpdateShaderParams				()
 {
     for( auto & pair : m_paramsMappingVec )
     {
-        UpdateShaderParam( pair.first, pair.second );
+        UpdateGenericShaderParam( pair.first, pair.second );
     }
 }
 
@@ -363,13 +363,13 @@ inline void		NodeUpdater::UpdateAudio				()
     }
 }
 
-// *******************************
-//
-template< typename ValType, typename ShaderParamType >
-void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
-{
-    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
-}
+//// *******************************
+////
+//template< typename ValType, typename ShaderParamType >
+//void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
+//{
+//    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+//}
 
 // *******************************
 //

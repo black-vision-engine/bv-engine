@@ -15,7 +15,7 @@ RenderMode::RenderMode()
     :   m_startTime( 0 ),
         m_frameNumber( 0 ),
         m_currentTime( 0 ),
-        m_renderMode( RenderingMode::RenderRealTime )
+        m_renderMode( RenderingMode::RM_RenderRealTime )
 {
     m_fps = DefaultConfig.TimerFPS();
 }
@@ -43,10 +43,12 @@ void RenderMode::SetRenderToFileMode( const std::string & filePath, float reques
     m_nextFrameOffset = TimeType( 1 / requestedFPS );
     m_framesToRender = numFrames;
 
-    if( m_renderLogic )
-	{
-        m_renderLogic->MakeScreenShot( filePath, numFrames, false );
-	}
+    // FIXME: nrl - implement
+    { filePath; }
+ //   if( m_renderLogic )
+	//{
+ //       m_renderLogic->MakeScreenShot( filePath, numFrames, false );
+	//}
 
     if( m_renderer )
     {
@@ -54,7 +56,7 @@ void RenderMode::SetRenderToFileMode( const std::string & filePath, float reques
         m_renderer->SetFlushFinish( false, false );
     }
 
-    m_renderMode = RenderingMode::RenderOffscreen;
+    m_renderMode = RenderingMode::RM_RenderOffscreen;
     m_currentTime = 0.0f;
 }
 
@@ -62,10 +64,12 @@ void RenderMode::SetRenderToFileMode( const std::string & filePath, float reques
 //
 void RenderMode::MakeScreenShot( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
 {
-    if( m_renderLogic )
-	{
-        m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
-	}
+    // FIXME: nrl - implement
+    { filePath; onRenderedEvent; asyncWrite; }
+ //   if( m_renderLogic )
+	//{
+ //       m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
+	//}
 }
 
 // ***********************
@@ -78,16 +82,16 @@ TimeType RenderMode::StartFrame( unsigned long millis )
     m_frameNumber++;
     m_realTime = TimeType( millis ) * TimeType( 0.001 );
 
-    if( m_renderMode == RenderingMode::RenderRealTime )
+    if( m_renderMode == RenderingMode::RM_RenderRealTime )
     {
         m_currentTime = m_realTime;
         return m_currentTime;
     }
-    else if( m_renderMode == RenderingMode::RenderOffscreen )
+    else if( m_renderMode == RenderingMode::RM_RenderOffscreen )
     {
         if( m_framesToRender == 0 )
         {// Rendering to file ended. Restore previous state.
-            m_renderMode = RenderingMode::RenderRealTime;
+            m_renderMode = RenderingMode::RM_RenderRealTime;
 
             m_renderer->SetVSync( !DefaultConfig.GetRendererInput().m_DisableVerticalSync, DefaultConfig.GetRendererInput().m_VerticalBufferFrameCount );
             m_renderer->SetFlushFinish( DefaultConfig.GetRendererInput().m_EnableGLFlush, DefaultConfig.GetRendererInput().m_EnableGLFinish );

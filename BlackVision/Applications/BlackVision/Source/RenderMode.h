@@ -1,18 +1,24 @@
 #pragma once
 
-#include "CoreDEF.h"
 #include <string>
+
+#include "CoreDEF.h"
 
 namespace bv
 {
 
-class RenderLogic;
+namespace nrl {
+class NRenderLogic;
+}
+
 class Renderer;
 
 enum RenderingMode
 {
-    RenderRealTime,
-    RenderOffscreen
+    RM_RenderRealTime,
+    RM_RenderOffscreen,
+
+    RM_Total
 };
 
 
@@ -20,8 +26,8 @@ class RenderMode
 {
 private:
 
-    RenderLogic*        m_renderLogic;
-    Renderer*           m_renderer;
+    nrl::NRenderLogic * m_renderLogic;
+    Renderer *          m_renderer;
 
     unsigned int        m_frameNumber;
     unsigned long       m_startTime;        ///< Milliseconds
@@ -39,11 +45,11 @@ public:
     RenderMode	();
     ~RenderMode	();
 
-    void        Init                        ( RenderLogic* logic, Renderer* renderer )      { m_renderLogic = logic; m_renderer = renderer; }
+    void        Init                        ( nrl::NRenderLogic * logic, Renderer * renderer )      { m_renderLogic = logic; m_renderer = renderer; }
     void        SetStartTime                ( unsigned long time );
     
-    void        SetRenderToFileMode         ( const std::string& filePath, float requestedFPS, unsigned int numFrames );
-    void        MakeScreenShot              ( const std::string& filePath, bool onRenderedEvent = false, bool asyncWrite = true );
+    void        SetRenderToFileMode         ( const std::string & filePath, float requestedFPS, unsigned int numFrames );
+    void        MakeScreenShot              ( const std::string & filePath, bool onRenderedEvent = false, bool asyncWrite = true );
     TimeType    StartFrame                  ( unsigned long millis );
 	TimeType	GetFramesDelta				() const;
 

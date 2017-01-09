@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "ImageMaskPreFullscreenEffectLogic.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -39,31 +40,35 @@ ImageMaskPreFullscreenEffectLogic::ImageMaskPreFullscreenEffectLogic            
 // *********************************
 //
 ImageMaskPreFullscreenEffectLogic::~ImageMaskPreFullscreenEffectLogic             ()
-{}
+{
+}
 
 // *********************************
 //
 void                        ImageMaskPreFullscreenEffectLogic::RenderImpl    ( SceneNode * node, RenderLogicContext * ctx, std::vector< RenderTarget * > & outputs )
 {
-    assert( outputs.size() == 1 );
-    
-    PFLogicUtils::RenderSceneNodeToRenderTarget( node, ctx, outputs[ 0 ] );
+    // FIXME: nrl - reimplement
+    { node; ctx; outputs; }
+    //assert( outputs.size() == 1 );
+    //
+    //PFLogicUtils::RenderSceneNodeToRenderTarget( node, ctx, outputs[ 0 ] );
 
-    auto screenWidth  = outputs[ 0 ]->Width();
-    auto screenHeight = outputs[ 0 ]->Height();
+    //auto screenWidth  = outputs[ 0 ]->Width();
+    //auto screenHeight = outputs[ 0 ]->Height();
 
-    auto txt = node->GetNodeEffect()->GetTexture( 0 );
+    //auto txt = node->GetNodeEffect()->GetTexture( 0 );
 
-    auto maskW = txt->GetWidth();
-    auto maskH = txt->GetHeight();
+    //auto maskW = txt->GetWidth();
+    //auto maskH = txt->GetHeight();
 
-    auto fit = m_fitVal->GetValue();
+    //auto fit = m_fitVal->GetValue();
 
-    auto maskAspect = m_maskAspectVal->GetValue();
+    //auto maskAspect = m_maskAspectVal->GetValue();
 
-    auto tx = CalculateMaskTransformation( maskW, maskH, screenWidth, screenHeight, maskAspect == 1, fit == 1, node,  ctx );
+    //auto tx = CalculateMaskTransformation( maskW, maskH, screenWidth, screenHeight, maskAspect == 1, fit == 1, node,  ctx );
 
-    m_maskTxVal->SetValue( tx );
+    //m_maskTxVal->SetValue( tx );
+
 }
 
 // *********************************
