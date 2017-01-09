@@ -24,7 +24,7 @@ public:
                     OutputLogic         ();
                     ~OutputLogic        ();
 
-    void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data );
+    void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes );
     
     Preview *       GetPreview          ();
     VideoOutput *   GetVideoOutput      ();
