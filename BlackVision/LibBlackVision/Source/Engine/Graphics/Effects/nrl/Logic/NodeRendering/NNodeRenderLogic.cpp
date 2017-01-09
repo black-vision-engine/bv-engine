@@ -5,8 +5,10 @@
 #include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
 #include "Engine/Audio/AudioRenderer.h"
 
@@ -55,22 +57,28 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->Performance().AverageScenePerformanceData( scene );
     renderer->SetCamera( scene->GetCamera() );
 
-    // FIXME: nrl - reimplement it somehow
+    // FIXME: nrl - reimplement it (do not use/preferably remove EnableScene which contains logic <implemented in renderer> 
+    // FIXME: nrl - which does not belong there)
     renderer->EnableScene( scene );
 
-    RenderQueued( scene->GetRoot(), output, ctx );
+    enable( ctx, output );
+
+    // FIXME: nrl - default clear color used - posisibly customize it a bit;
+    clearBoundRT( ctx, glm::vec4() ); 
+
+    RenderQueued( scene->GetRoot(), ctx );
+
+    // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
+    RenderGridLines( scene, ctx );
+
+    disableBoundRT( ctx );
 }
 
 // *********************************
 //
-void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, const RenderTarget * output, NRenderContext * ctx )
+void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, NRenderContext * ctx )
 {
-    enable( ctx, output );
-
-    // FIXME: default clear color used - posisibly customize it a bit;
-    clearBoundRT( ctx, glm::vec4() ); 
-
-    // FIXME: nrl - remove this method and implement its logic in some other place
+    // FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
     auto queue = queue_allocator( ctx )->Allocate();
    
     queue->QueueNodeSubtree( node, ctx );
@@ -78,11 +86,6 @@ void    NNodeRenderLogic::RenderQueued      ( SceneNode * node, const RenderTarg
     queue->Render( ctx );
 
     queue_allocator( ctx )->Free();
-
-    // FIXME: nrl - implement it back
-//    RenderGridLines( scene, ctx );          // FIXME: Use some generic solution when other editor helper object apear in engine.
-
-    disableBoundRT( ctx );
 }
 
 // *********************************
@@ -142,6 +145,16 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
 
 // *********************************
 //
+void    NNodeRenderLogic::RenderGridLines   ( Scene * scene, NRenderContext * ctx )
+{
+    if( scene->GetGridLinesVisibility() )
+    {
+        renderer( ctx )->Draw( scene->GetGridLines() );
+    }    
+}
+
+// *********************************
+//
 void    NNodeRenderLogic::Render            ( SceneNodeRepr * nodeRepr, const RenderTarget * output, NRenderContext * ctx )
 {
     enable( ctx, output );
@@ -183,6 +196,38 @@ void    NNodeRenderLogic::RenderChildren    ( SceneNodeRepr * nodeRepr, NRenderC
     {
         Render( nodeRepr->GetChild( i ), ctx ); 
     }
+}
+
+// *********************************
+//
+void     NNodeRenderLogic::RenderBoundingBox( SceneNode * node, NRenderContext * ctx )
+{
+    // FIXME: nrl - a bit better initialization mechanics would be handy
+    static auto effect = std::make_shared< BoundingBoxEffect >();
+    static auto pass   = effect->GetPass( 0 );
+
+    const auto & color = node->GetBoundingBoxColor();
+    
+    // FIXME: nrl - rly "RenderableEntityWithBoundingBox"?
+    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
+    assert( obj );
+
+    auto bb = obj->GetBoundingBox();
+    if( bb )
+    {
+        auto renderer = ctx->GetRenderer();
+
+        auto param = Cast< ShaderParamVec4 * >( pass->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
+        param->SetValue( color );
+
+        renderer->Enable( pass, bb );
+        renderer->DrawRenderable( bb );
+
+        auto wc = obj->GetCenterOfMass();
+        renderer->Enable( pass, wc );
+        renderer->DrawRenderable( wc );
+    }
+
 }
 
 } // nrl

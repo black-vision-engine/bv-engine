@@ -138,7 +138,8 @@ void    NFullscreenEffect::SetFullscreenCamera	( Renderer * renderer )
 //
 void    NFullscreenEffect::SetRendererCamera   ( Renderer * renderer )
 {
-    assert( m_rendererCamera != nullptr );
+    // FIXME: nrl 
+    //assert( m_rendererCamera != nullptr );
 
     renderer->SetCamera( m_rendererCamera );
 

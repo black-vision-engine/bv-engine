@@ -25,13 +25,5 @@ NNodeEffectType     NNodeEffect::GetType         () const
     return m_type;
 }
 
-// *********************************
-//
-void                NNodeEffect::Update          ()
-{
-    //FIXME: implement
-    assert( false );
-}
-
 } //nrl
 } //bv

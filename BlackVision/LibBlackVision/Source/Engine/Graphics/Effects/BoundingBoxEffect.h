@@ -20,4 +20,7 @@ private:
 
 };
 
+DEFINE_PTR_TYPE( BoundingBoxEffect )
+DEFINE_CONST_PTR_TYPE( BoundingBoxEffect )
+
 } //bv

@@ -31,7 +31,8 @@ void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio
     RenderQueued( scenes, renderResult );
 
     // FIXME: nrl - add audio somewhere in this class
-    output_logic( m_state )->ProcessFrameData( context( m_state ), renderResult );
+    output_logic( m_state )->ProcessFrameData( context( m_state ), renderResult, (unsigned int)scenes.size() );
+    
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
