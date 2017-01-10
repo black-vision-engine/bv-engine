@@ -142,7 +142,6 @@ void				AVDecoderThread::Run			    ()
     {
         auto time = m_timer.ElapsedMillis();
         
-		//std::cout << "NextDataReady stream id: " << m_streamDecoder->GetStreamIdx() << " time " << time << std::endl;
 		m_streamDecoder->NextDataReady( time, true );
 
 		std::unique_lock< std::mutex > lock( m_mutex );

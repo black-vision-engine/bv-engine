@@ -289,8 +289,6 @@ bool		QueueConcurrentLimited< T >::WaitAndPopUntil	( T & val, PredicateNextType 
 
 		m_bufferLock.lock();
 
-		//std::cout << "Size " << m_queue.size() << " Pop " << std::this_thread::get_id() << std::endl;
-
 		if( m_queue.size() == 0 && m_endMessage )
 		{
 			m_bufferLock.unlock();
@@ -312,6 +310,7 @@ bool		QueueConcurrentLimited< T >::WaitAndPopUntil	( T & val, PredicateNextType 
 		}
 
 		val = pval;
+
 		m_queue.pop();
 
 		m_bufferLock.unlock();

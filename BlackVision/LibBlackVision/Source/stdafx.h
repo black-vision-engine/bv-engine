@@ -74,7 +74,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
 
-
+#include "UseLoggerLibBlackVision.h"
 
 
 

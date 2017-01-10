@@ -33,6 +33,7 @@ DefaultAudioChannelPtr  DefaultAudioChannel::Create         ( Int32 frequency, A
 //
 void                    DefaultAudioChannel::PushPacket     ( MemoryChunkPtr packets )
 {
+	// LOG_MESSAGE( SeverityLevel::debug ) << " DefaultAudioChannel::PushPacket";
     m_packets.Push( packets );
 }
 
@@ -42,6 +43,7 @@ MemoryChunkPtr          DefaultAudioChannel::PopPacket      ()
 {
     if( !m_packets.IsEmpty() )
     {
+		// LOG_MESSAGE( SeverityLevel::debug ) << " DefaultAudioChannel::PopPacket";
         auto packets = m_packets.Front();
         m_packets.Pop();
         return packets;

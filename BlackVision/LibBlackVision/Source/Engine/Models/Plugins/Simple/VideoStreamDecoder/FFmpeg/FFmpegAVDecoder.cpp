@@ -3,6 +3,8 @@
 
 #include "FFmpegUtils.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 
 namespace bv {
 
@@ -145,11 +147,11 @@ void						FFmpegAVDecoder::Pause				()
 {
 	m_timer.Pause();
 	m_paused = true;
-	if( m_audioDecoderThread )
-		m_audioDecoderThread->Pause();
+	//if( m_audioDecoderThread )
+	//	m_audioDecoderThread->Pause();
 
-	if( m_videoDecoderThread )
-		m_videoDecoderThread->Pause();
+	//if( m_videoDecoderThread )
+	//	m_videoDecoderThread->Pause();
 }
 
 // *********************************
@@ -313,7 +315,7 @@ bool					FFmpegAVDecoder::HasAudio			    () const
 //
 void					FFmpegAVDecoder::Seek					( Float64 time )
 {
-	std::cout << "Seek to time: " << time << std::endl;
+	LOG_MESSAGE( SeverityLevel::debug ) << "Seek to time: " << time;
 
 	time = std::min( m_duration / 1000.0, time );
 	time = std::max( time, 0.0 );
@@ -341,16 +343,23 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
 		{
 			vdecoder->SetOffset( currPTS );
 		}
+		else
+		{
+			LOG_MESSAGE( SeverityLevel::debug ) << "VIDEO seek returns false.";
+		}
 
 		if( m_streams.count( AVMediaType::AVMEDIA_TYPE_AUDIO ) > 0 )
 		{
 			auto adecoder = m_streams[ AVMediaType::AVMEDIA_TYPE_AUDIO ].get();
 			adecoder->SetOffset( currPTS );
 
-			currPTS = 0;
 			if( Seek( adecoder, FFmpegUtils::ConvertToMiliseconds( time ), &currPTS ) )
 			{
 				adecoder->SetOffset( currPTS );
+			}
+			else
+			{
+				LOG_MESSAGE( SeverityLevel::debug ) << "AUDIO seek returns false.";
 			}
 		}
     }
