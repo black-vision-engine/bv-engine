@@ -64,6 +64,8 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         processed--;
     }
 
+	// LOG_MESSAGE( SeverityLevel::debug ) << "PdrAudioBuffersQueue::BufferData: m_unqueuedBufferHandles.Size() = " << m_unqueuedBufferHandles.Size();
+
     while( !m_buffers.IsEmpty() && !m_unqueuedBufferHandles.IsEmpty() )
     {
         auto buffer = m_buffers.Front();

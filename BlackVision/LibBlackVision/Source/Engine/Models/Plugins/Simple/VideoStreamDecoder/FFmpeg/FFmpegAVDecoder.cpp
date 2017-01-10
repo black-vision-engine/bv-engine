@@ -133,8 +133,6 @@ void						FFmpegAVDecoder::Play				()
 {
 	RestartDecoding();
 
-	//std::this_thread::sleep_for( std::chrono::seconds( 50 ) );
-
 	if( m_paused )
 		m_timer.UnPause();
 	else
@@ -183,7 +181,7 @@ bool			            FFmpegAVDecoder::GetAudioMediaData  ( AVMediaData & mediaData
 {
     if( HasAudio() )
     {
-		return m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );;
+		return m_streams[ AVMEDIA_TYPE_AUDIO ]->PopData( mediaData );
     }
 
     return false;

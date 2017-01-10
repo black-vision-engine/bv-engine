@@ -410,6 +410,7 @@ void                                DefaultAVDecoderPlugin::Play                
 {
     m_decoder->Play();
     m_isFinished = false;
+	std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
     TriggerEvent( AssetTrackerInternalEvent::Command::PlayAudio );
 }
 
@@ -426,7 +427,7 @@ void                                DefaultAVDecoderPlugin::Stop                
 //
 void                                DefaultAVDecoderPlugin::Pause               ()
 {
-    m_decoder->Pause();
+	m_decoder->Pause();
     TriggerEvent( AssetTrackerInternalEvent::Command::PauseAudio );
 }
 
@@ -474,9 +475,9 @@ void                                DefaultAVDecoderPlugin::UploadVideoFrame    
 {
     //update texture with video data
     AVMediaData mediaData;
-    if( m_decoder->GetVideoMediaData( mediaData ) )
-    {
-		// LOG_MESSAGE( SeverityLevel::debug ) << "Setting VIDEO frame with frame pts: " << mediaData.framePTS;
+
+    while( m_decoder->GetVideoMediaData( mediaData ) )
+    {		
         std::static_pointer_cast< DefaultVideoStreamDescriptor >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
     }
 }
@@ -487,10 +488,10 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
 {
     //update audio data
     AVMediaData mediaData;
-    if( m_decoder->GetAudioMediaData( mediaData ) )
+
+	while( m_decoder->GetAudioMediaData( mediaData ) )
     {
-		// LOG_MESSAGE( SeverityLevel::debug ) << "Setting AUDIO frame with frame pts: " << mediaData.framePTS;
-        m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
+		m_audioChannel->PushPacket( mediaData.frameData );
     }
 }
 

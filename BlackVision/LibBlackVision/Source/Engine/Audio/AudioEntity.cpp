@@ -96,6 +96,7 @@ AudioEntity::AudioBufferVec AudioEntity::PopData        ()
         }
         else
         {
+			m_audioData.Pop();
             break;
         }
     }

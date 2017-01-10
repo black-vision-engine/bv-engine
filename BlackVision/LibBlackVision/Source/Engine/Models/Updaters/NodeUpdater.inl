@@ -348,7 +348,7 @@ inline void		NodeUpdater::UpdateAudio				()
 {
     if( m_audio && m_audioChannel )
     {
-        auto packet = m_audioChannel->PopPacket();
+        
         
         if( m_audioChannel->GetFormat() != m_audio->GetFormat() ||
             m_audioChannel->GetFrequency() != m_audio->GetFrequency() )
@@ -356,10 +356,10 @@ inline void		NodeUpdater::UpdateAudio				()
             m_audio->Reinitialize( m_audioChannel->GetFrequency(), m_audioChannel->GetFormat() );
         }
 
-        if( packet )
-        {
-            m_audio->PushData( packet );
-        }
+		while( auto packet = m_audioChannel->PopPacket() )
+		{
+			m_audio->PushData( packet );
+		}
     }
 }
 

@@ -31,7 +31,7 @@ protected:
     UInt64                              m_prevPTS;
 
     QueueConcurrentLimited< AVMediaData >      m_bufferQueue;
-	QueueConcurrent< AVMediaData >	   m_outQueue;
+	QueueConcurrentLimited< AVMediaData >	   m_outQueue;
 
     /** Starting frame timestamp (in stream time base), updated on seeking. */
     UInt64                              m_offset;
