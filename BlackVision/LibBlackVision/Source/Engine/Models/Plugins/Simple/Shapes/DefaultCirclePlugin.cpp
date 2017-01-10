@@ -88,6 +88,9 @@ public:
 
     void GenerateGeometryNormals    ( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
     {
+        if( tesselation < 1 )
+            tesselation = 1;
+
         double angle_offset;
         if( mode == DefaultCirclePlugin::OpenAngleMode::CW )
             angle_offset = 0;

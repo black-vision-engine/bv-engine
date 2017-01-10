@@ -95,7 +95,7 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_KERNING, true );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::ALIGN_CHARACTER, (int)L'.' );
     h.AddEnumParam( DefaultText3DPlugin::PARAMS::ALIGNEMENT, TextAlignmentType::Left, true, true );
-    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT_BOX, glm::vec2( 0.0f, 0.0f ) );
+    h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::TEXT_BOX, glm::vec2( 1.0f, 1.0f ) );
     h.AddSimpleStatedParam( DefaultText3DPlugin::PARAMS::USE_TEXT_BOX, false );
 
     h.SetOrCreatePSModel();

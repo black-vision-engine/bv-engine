@@ -251,7 +251,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 {
     m_vaChannel->ClearAll();
 
-    bool useBox = QueryTypedValue< ValueBoolPtr >( GetValue( TextPluginBase::PARAM::USE_TEXT_BOX ) )->GetValue();
+    bool useBox = QueryTypedParam< ParamBoolPtr >( GetParameter( TextPluginBase::PARAM::USE_TEXT_BOX ) )->Evaluate();
 
     m_textLength = TextPluginBase::BuildVACForText( newText, true, useBox );
 
