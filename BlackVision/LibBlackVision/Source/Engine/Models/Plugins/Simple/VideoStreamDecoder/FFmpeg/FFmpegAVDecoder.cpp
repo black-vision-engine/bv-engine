@@ -347,9 +347,10 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
 			auto adecoder = m_streams[ AVMediaType::AVMEDIA_TYPE_AUDIO ].get();
 			adecoder->SetOffset( currPTS );
 
-			if( Seek( vdecoder, FFmpegUtils::ConvertToMiliseconds( time ), &currPTS ) )
+			currPTS = 0;
+			if( Seek( adecoder, FFmpegUtils::ConvertToMiliseconds( time ), &currPTS ) )
 			{
-				vdecoder->SetOffset( currPTS );
+				adecoder->SetOffset( currPTS );
 			}
 		}
     }
