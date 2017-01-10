@@ -14,7 +14,7 @@ FFmpegStreamDecoder::FFmpegStreamDecoder                    ( AVFormatContext * 
     , m_offset( 0 )
     , m_prevPTS( 0 )
 	, m_bufferQueue( maxQueueSize )
-	, m_outQueue( 4 )
+	, m_outQueue( 30 )
 	, m_demuxer( demuxer )
 	, m_interruptWait( false )
 {
@@ -277,9 +277,17 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 				m_outQueue.Clear();
 				m_outQueue.TryPush( data );
 			}
+			else
+			{
+				AVMediaData data;
 
-			m_prevPTS = data.framePTS;
-			
+				m_outQueue.TryPopUntil( data, [ = ] ( const AVMediaData & avm )
+				{
+					return avm.framePTS < time + offset - 50;
+				} );
+			}
+
+			m_prevPTS = data.framePTS;	
 		}
     }
     else

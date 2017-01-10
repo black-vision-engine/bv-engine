@@ -47,6 +47,9 @@ public:
 	bool        WaitAndPop              ( T & val );
 
 	template< typename PredicateNextType >
+	bool        TryPopUntil				( T & val, PredicateNextType predicateNext );
+
+	template< typename PredicateNextType >
 	bool        WaitAndPopUntil         ( T & val, PredicateNextType predicateNext );
 
 	void		EnqueueEndMessage		();
@@ -276,9 +279,56 @@ void		QueueConcurrentLimited< T >::EnqueueEndMessage	()
 	m_notEmpty.Up();
 }
 
+
 // *************************************
 //
+template< typename T >
+template< typename PredicateNextType >
+bool        QueueConcurrentLimited< T >::TryPopUntil		( T & val, PredicateNextType predicateNext )
+{
+	bool ret = false;
+	while( true )
+	{
+		if( m_notEmpty.TryDown() )
+		{
+			m_bufferLock.lock();
 
+			if( m_queue.size() == 0 && m_endMessage )
+			{
+				m_bufferLock.unlock();
+
+				m_notEmpty.Up();
+
+				return ret;
+			}
+
+			auto pval = m_queue.front();
+
+			if( !predicateNext( pval ) )
+			{
+				m_bufferLock.unlock();
+
+				m_notEmpty.Up();
+
+				break;
+			}
+
+			val = pval;
+			ret = true;
+			m_queue.pop();
+
+			m_bufferLock.unlock();
+
+			m_notFull.Up();
+		}
+		return ret;
+	}
+
+	return true;
+}
+
+// *************************************
+//
 template< typename T >
 template< typename PredicateNextType >
 bool		QueueConcurrentLimited< T >::WaitAndPopUntil	( T & val, PredicateNextType predicateNext )

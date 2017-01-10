@@ -66,6 +66,23 @@ bool    PdrAudioBuffersQueue::BufferData      ()
 
 	// LOG_MESSAGE( SeverityLevel::debug ) << "PdrAudioBuffersQueue::BufferData: m_unqueuedBufferHandles.Size() = " << m_unqueuedBufferHandles.Size();
 
+	
+	if( m_unqueuedBufferHandles.IsEmpty() && !m_buffers.IsEmpty() )
+	{
+		BVAL::bvalSourceStop( m_sourceHandle );
+
+		BVAL::bvalGetSourcei( m_sourceHandle, AL_BUFFERS_PROCESSED, &processed );
+
+		while( processed )
+		{
+			BVAL::bvalSourceUnqueueBuffers( m_sourceHandle, 1, &bufferId );
+			m_unqueuedBufferHandles.Push( bufferId );
+			processed--;
+		}
+
+		BVAL::bvalSourcePlay( m_sourceHandle );
+	}
+
     while( !m_buffers.IsEmpty() && !m_unqueuedBufferHandles.IsEmpty() )
     {
         auto buffer = m_buffers.Front();
