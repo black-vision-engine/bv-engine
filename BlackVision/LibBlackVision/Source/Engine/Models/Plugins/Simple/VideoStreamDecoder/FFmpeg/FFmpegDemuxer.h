@@ -46,6 +46,9 @@ public:
 
 	bool					    ProcessPacket			();
 
+	bool						IsAnyQueueFull			() const;
+	bool						IsQueueFull				( Int32 streamIdx ) const;
+
 	AVFormatContext *			GetFormatContext		() const;
 	FFmpegPacketPtr				GetPacket				( Int32 streamIdx, bool block );
 

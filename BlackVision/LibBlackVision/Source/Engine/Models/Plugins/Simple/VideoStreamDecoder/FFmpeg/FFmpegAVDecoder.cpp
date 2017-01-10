@@ -333,11 +333,25 @@ void					FFmpegAVDecoder::Seek					( Float64 time )
     }
 
     // accurate seek all stream to the given frame
-    for( auto & stream : m_streams )
+    if( m_streams.count( AVMediaType::AVMEDIA_TYPE_VIDEO ) > 0 )
     {
-        auto decoder = stream.second.get();
-        auto currPTS = Seek( decoder, FFmpegUtils::ConvertToMiliseconds( time ) );
-        decoder->SetOffset( currPTS );
+		auto vdecoder = m_streams[ AVMediaType::AVMEDIA_TYPE_VIDEO ].get();
+		Int64 currPTS;
+		if( Seek( vdecoder, FFmpegUtils::ConvertToMiliseconds( time ), &currPTS ) )
+		{
+			vdecoder->SetOffset( currPTS );
+		}
+
+		if( m_streams.count( AVMediaType::AVMEDIA_TYPE_AUDIO ) > 0 )
+		{
+			auto adecoder = m_streams[ AVMediaType::AVMEDIA_TYPE_AUDIO ].get();
+			adecoder->SetOffset( currPTS );
+
+			if( Seek( vdecoder, FFmpegUtils::ConvertToMiliseconds( time ), &currPTS ) )
+			{
+				vdecoder->SetOffset( currPTS );
+			}
+		}
     }
 }
 
@@ -532,39 +546,50 @@ void					FFmpegAVDecoder::StopDecoding           ()
 
 // *********************************
 //
-Int64					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 time )
+bool					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 time, Int64 * nearestTimestamp )
 {
-    Int64 currTs = 0;
+	*nearestTimestamp = 0;
 
     // decode packets till reaching frame with given timestamp
     while( !m_demuxer->IsEOF() )
     {
         while( decoder->ProcessPacket() )
         {
-            currTs = decoder->GetCurrentPTS();
+			*nearestTimestamp = decoder->GetCurrentPTS();
 
             decoder->UploadData();
 
-            if( currTs < time )
+            if( *nearestTimestamp < time )
             {
                 AVMediaData data;
                 decoder->PopData( data );
             }
             else
             {
-                return currTs;
+                return true;
             }
         }
 
-        m_demuxer->ProcessPacket();
+		
+		if( !m_demuxer->IsAnyQueueFull() )
+		{
+			m_demuxer->ProcessPacket();
+		}
+		else
+		{
+			return false;
+		}
     }
 
 	if( m_demuxer->IsEOF() )
 	{
-		currTs = decoder->GetDuration();
+		*nearestTimestamp = decoder->GetDuration();
+		return true;
 	}
-
-    return currTs;
+	else
+	{
+		return false;
+	}
 }
 
 } //bv

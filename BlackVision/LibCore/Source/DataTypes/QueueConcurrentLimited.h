@@ -54,6 +54,7 @@ public:
     void        Clear                   ();
 
     bool        IsEmpty                 () const;
+	bool        IsFull					() const;
     size_t      Size                    () const;
 };
 
@@ -84,6 +85,15 @@ bool        QueueConcurrentLimited< T >::IsEmpty            () const
 {
     std::unique_lock< std::mutex > lock( m_bufferLock );
     return m_queue.empty();
+}
+
+// *************************************
+//  Note: external use only
+template< typename T >
+bool        QueueConcurrentLimited< T >::IsFull				() const
+{
+	std::unique_lock< std::mutex > lock( m_bufferLock );
+	return m_queue.size() >= m_maxSize;
 }
 
 

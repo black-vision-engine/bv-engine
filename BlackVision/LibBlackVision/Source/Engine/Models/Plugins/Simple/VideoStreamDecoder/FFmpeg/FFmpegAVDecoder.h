@@ -97,8 +97,7 @@ private:
     /** Manually seek from current keyframe to frame with at given timestamp.
     @param[time] in miliseconds
     */
-    Int64				        Seek					( FFmpegStreamDecoder * decoder, Int64 time );
-
+	bool						Seek				    ( FFmpegStreamDecoder * decoder, Int64 time, Int64 * nearestTimestamp );
 };
 
 } //bv

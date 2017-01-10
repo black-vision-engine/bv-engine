@@ -84,6 +84,33 @@ AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 
 // *******************************
 //
+bool				FFmpegDemuxer::IsAnyQueueFull		() const
+{
+	for( auto & q : m_packetQueue )
+	{
+		if( q.second->IsFull() )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+// *******************************
+//
+bool				FFmpegDemuxer::IsQueueFull			( Int32 streamIdx ) const
+{
+	if( m_packetQueue.count( streamIdx ) > 0 )
+	{
+		return m_packetQueue.at( streamIdx )->IsEmpty();
+	}	
+
+	return false;
+}
+
+// *******************************
+//
 bool			FFmpegDemuxer::ProcessPacket			()
 {
     auto ffmpegPacket = std::make_shared< FFmpegPacket >();
@@ -194,7 +221,7 @@ void				FFmpegDemuxer::Reset				()
 	Seek( 0 );
 }
 
-static int qS [] = { 10000, 10000 };
+static int qS [] = { 8, 100 };
 
 // *******************************
 //
