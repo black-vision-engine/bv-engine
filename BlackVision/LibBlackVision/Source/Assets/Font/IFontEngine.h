@@ -19,6 +19,8 @@ public:
 
     virtual ContoursList        Create3dVerticies   ( wchar_t ch, float size )                                                                           = 0;
 
+    virtual UInt32              GetMaxLetterWidth   () const                                                                                             = 0;
+    virtual UInt32              GetMaxLetterHeight  () const                                                                                             = 0;
 };
 
 DEFINE_CONST_PTR_TYPE(IFontEngine)

@@ -84,6 +84,11 @@ private:
 
     ContoursList                MakeContours    ( const FT_GlyphSlot glyph );
 
+
+    // Inherited via IFontEngine
+    virtual UInt32              GetMaxLetterWidth   () const override;
+    virtual UInt32              GetMaxLetterHeight  () const override;
+
 };
 
 } // bv

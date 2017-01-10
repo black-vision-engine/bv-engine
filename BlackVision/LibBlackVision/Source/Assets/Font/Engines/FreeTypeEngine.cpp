@@ -582,6 +582,16 @@ ContoursList        FreeTypeEngine::MakeContours( const FT_GlyphSlot glyph )
     return ContoursList();
 }
 
+UInt32                  FreeTypeEngine::GetMaxLetterWidth() const
+{
+    return m_maxWidth;
+}
+
+UInt32                  FreeTypeEngine::GetMaxLetterHeight() const
+{
+    return m_maxWidth;
+}
+
 
 } // bv
 

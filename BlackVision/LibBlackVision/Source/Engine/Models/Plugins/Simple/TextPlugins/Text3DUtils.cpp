@@ -67,7 +67,6 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
     layoutInfo.Interspace = layout.Spacing;
     layoutInfo.NewLineSize = newLineShift;
     layoutInfo.SpaceSize = spaceGlyphWidth;
-    layoutInfo.MaxLength = std::numeric_limits< float >::infinity();
     layoutInfo.TextAlign = layout.Tat;
     layoutInfo.UseKerning = layout.UseKerning;
     layoutInfo.UseOutline = false;

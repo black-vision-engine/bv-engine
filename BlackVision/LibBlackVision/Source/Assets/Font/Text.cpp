@@ -154,6 +154,7 @@ TextAtlasPtr Text::BuildAtlas        () const
         AddToCache( atlas );
     }
 
+    
 #ifdef GENERATE_TEST_BMP_FILE
 
     image::SaveBMPImage( "test.bmp", atlas->GetData(), (unsigned int) atlas->GetWidth(), (unsigned int) atlas->GetHeight(), (unsigned int) atlas->GetBitsPerPixel() );

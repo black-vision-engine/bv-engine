@@ -31,7 +31,7 @@ private:
 public:
 
     explicit        TextGeometry    ( IFontEnginePtr engine )
-        :   m_fontEngine( engine )
+        : m_fontEngine( engine )
     {}
 
     const ContoursList &        CreateCharacter     ( wchar_t ch, float size ) const;

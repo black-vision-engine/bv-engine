@@ -54,7 +54,72 @@ const Glyph *       TextRepresentation::GetGlyph    ( wchar_t c, bool /*outline*
 //
 void                TextRepresentation::SetGlyph    ( wchar_t wch, const Glyph * glyph )
 {
+    if( glyph->width > m_maxWidth )
+        m_maxWidth = glyph->width;
+    if( glyph->height > m_maxHeight )
+        m_maxHeight = glyph->height;
+
     m_glyphs.insert( std::make_pair( wch, glyph ) );
+}
+
+// ***********************
+//
+UInt32              TextRepresentation::ComputeMaxWidth() const
+{
+    UInt32 maxWidth = 0;
+
+    for( auto& glyph : m_glyphs )
+    {
+        if( glyph.second->width > maxWidth )
+            maxWidth = glyph.second->width;
+    }
+
+    return maxWidth;
+}
+
+// ***********************
+//
+UInt32              TextRepresentation::ComputetMaxHeight() const
+{
+    UInt32 maxHeight = 0;
+
+    for( auto& glyph : m_glyphs )
+    {
+        if( glyph.second->height > maxHeight )
+            maxHeight = glyph.second->height;
+    }
+
+    return maxHeight;
+}
+
+// ***********************
+//
+Int32              TextRepresentation::ComputeMaxAdvanceX() const
+{
+    Int32 maxWidth = 0;
+
+    for( auto& glyph : m_glyphs )
+    {
+        if( glyph.second->advanceX > maxWidth )
+            maxWidth = glyph.second->advanceX;
+    }
+
+    return maxWidth;
+}
+
+// ***********************
+//
+Int32              TextRepresentation::ComputetMaxAdvanceY() const
+{
+    Int32 maxWidth = 0;
+
+    for( auto& glyph : m_glyphs )
+    {
+        if( glyph.second->advanceY > maxWidth )
+            maxWidth = glyph.second->advanceY;
+    }
+
+    return maxWidth;
 }
 
 } //bv

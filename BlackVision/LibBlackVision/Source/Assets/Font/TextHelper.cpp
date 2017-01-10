@@ -299,6 +299,11 @@ std::vector< glm::vec3 >        TextHelper::LayoutLetters       ( const std::wst
     std::vector< glm::vec3 > resultLayout;
     resultLayout.reserve( text.length() );
 
+    if( useBox )
+        // Note: This should be equal to max advance (with outline if exists) + interspace + max kerning. To much computing. For now
+        // I take doubled advance and hope it's ok. If something hang, you know what to do.
+        layout.MaxLength = std::max( layout.MaxLength, 2 * (float)textRepr->ComputeMaxAdvanceX() / layout.AspectRatio + layout.Interspace );
+
     glm::vec3 translate( 0.0, 0.0, 0.0 );
     glm::vec3 newLineTranslation( 0.0, 0.0, 0.0 );
     glm::vec3 translateDot( 0.f );
