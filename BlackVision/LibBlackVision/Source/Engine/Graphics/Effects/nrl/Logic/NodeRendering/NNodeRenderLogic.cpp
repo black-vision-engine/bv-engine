@@ -124,7 +124,9 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
     if( nEffect )
     {
         //RenderImpl( repr, ctx );
-        assert( nEffect->GetType() == nrl::NNodeEffectType::NNET_DEFAULT || nEffect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK );
+        assert( nEffect->GetType() == nrl::NNodeEffectType::NNET_DEFAULT ||
+				nEffect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK ||
+				nEffect->GetType() == nrl::NNodeEffectType::NNET_NODE_MASK );
 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
     }
