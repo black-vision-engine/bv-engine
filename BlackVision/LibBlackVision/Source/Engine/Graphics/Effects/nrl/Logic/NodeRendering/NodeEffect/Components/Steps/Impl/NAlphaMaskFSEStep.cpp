@@ -69,6 +69,7 @@ void                    NAlphaMaskFSEStep::ApplyImpl                    ( NRende
 //
 void                    NAlphaMaskFSEStep::FreeRenderTargets            ( NRenderContext * ctx, const NRenderedData * input )
 {
+	input;
     assert( input->GetNumEntries() == GetNumRequiredInputs() );
     assert( allocator( ctx )->GetTopIndex() == input->GetLastRenderTargetIdx() );
 

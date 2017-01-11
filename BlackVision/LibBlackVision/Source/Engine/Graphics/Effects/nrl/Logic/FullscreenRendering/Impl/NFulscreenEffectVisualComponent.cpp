@@ -111,6 +111,7 @@ void    NFullscreenEffectVisualComponent::SyncIValues                   ( const 
         auto param = shaderParams->AccessParam( val->GetName() );
 
         assert( param != nullptr );
+		param;
 
         numUpdated++;
 
@@ -174,6 +175,8 @@ void            NFullscreenEffectVisualComponent::SyncTexture                   
 //
 void            NFullscreenEffectVisualComponent::SyncSampler                         ( unsigned int i, const std::string & name, TextureFilteringMode tfm, TextureWrappingMode wrapX, TextureWrappingMode wrapY )
 {
+	name;
+
     auto & samplers = m_pixelShader->Samplers();
 
     auto sampler = samplers[ i ];

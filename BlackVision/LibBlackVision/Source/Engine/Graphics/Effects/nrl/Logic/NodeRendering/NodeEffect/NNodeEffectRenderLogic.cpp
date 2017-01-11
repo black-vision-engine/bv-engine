@@ -16,6 +16,7 @@ NNodeEffectRenderLogic::NNodeEffectRenderLogic      ( const std::vector< NNodeEf
 {
     for( auto pass : m_passes )
     {
+		pass;
         assert( pass != nullptr );
     }
 
