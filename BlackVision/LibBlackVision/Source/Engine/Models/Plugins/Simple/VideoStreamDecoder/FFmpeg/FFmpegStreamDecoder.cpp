@@ -219,7 +219,6 @@ void				FFmpegStreamDecoder::EnqueueDummyDataMessage		()
 //
 namespace
 {
-
 // *******************************
 //
 UInt64              GetFrontMediaDataPTS			( QueueConcurrentLimited< AVMediaData > & queue )
