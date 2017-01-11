@@ -123,7 +123,7 @@ NNodeEffectPtr       CreateNodeMaskNodeEffect   ()
 
 	auto nnerl = new NNodeEffectRenderLogic( passes );
 
-    return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_ALPHA_MASK );
+    return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_NODE_MASK );
 }
 
 // **************************
