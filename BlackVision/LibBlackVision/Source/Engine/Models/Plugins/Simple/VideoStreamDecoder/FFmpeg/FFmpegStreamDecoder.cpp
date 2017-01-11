@@ -53,15 +53,6 @@ UInt64              FFmpegStreamDecoder::GetDuration        () const
 
 // *******************************
 //
-UInt64              FFmpegStreamDecoder::GetCurrentPTS      ()
-{
-    AVMediaData data;
-    m_bufferQueue.Front( data );
-    return data.framePTS;
-}
-
-// *******************************
-//
 void		        FFmpegStreamDecoder::UploadData         ()
 {
     AVMediaData data;
@@ -226,43 +217,67 @@ void				FFmpegStreamDecoder::EnqueueDummyDataMessage		()
 
 // *********************************
 //
+namespace
+{
+
+// *******************************
+//
+UInt64              GetFrontMediaDataPTS			( QueueConcurrentLimited< AVMediaData > & queue )
+{
+	AVMediaData data;
+	queue.Front( data );
+	return data.framePTS;
+}
+
+// *********************************
+//
+bool	PopFromDataQueue( QueueConcurrentLimited< AVMediaData > & queue, UInt64 time, bool block, AVMediaData & data, UInt64 prevPTS, std::atomic< bool > & interruptWait )
+{
+	auto success = false;
+
+	if( block )
+	{
+		auto pn = [ =, &interruptWait ] ( const AVMediaData & avm )
+		{
+			auto val = ( prevPTS <= avm.framePTS && avm.framePTS <= time ) && !interruptWait;
+
+			return val;
+		};
+
+		success = queue.WaitAndPopUntil( data, pn );
+
+		// If the first frame doesn't satisfy the predicate WaitAndPopUntil returns empty frame.
+		// We have to upadate success flag accordingly.
+		success = data.frameData ? success : false;
+	}
+	else
+	{
+		// find the closest frame to given time
+		while( !queue.IsEmpty()
+			   && ( prevPTS <= GetFrontMediaDataPTS( queue ) )
+			   && ( GetFrontMediaDataPTS( queue ) <= time ) )
+		{
+			success = queue.TryPop( data );
+		}
+	}
+
+	return success;
+}
+
+} // anonymous
+
+// *********************************
+//
 bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 {
-    auto success = false;
+	time += GetOffset();
 
-	auto offset = GetOffset();
-
-	if( time + offset <= m_duration )
+	if( time <= m_duration )
 	{
 		AVMediaData data;
 
-		if( block )
-		{
-			std::atomic< bool > & flag = m_interruptWait;
-
-			auto pn = [=, &flag ] ( const AVMediaData & avm )
-			{
-				auto val = ( m_prevPTS <= avm.framePTS && avm.framePTS <= time + offset ) && !flag;
-
-				return val;
-			};
-
-			success = m_bufferQueue.WaitAndPopUntil( data, pn );
-
-			success = data.frameData ? success : false;
-		}
-		else
-		{
-			// find the closest frame to given time
-			while( !IsDataQueueEmpty()
-					&& ( m_prevPTS <= GetCurrentPTS() )
-					&& ( GetCurrentPTS() <= time + offset ) )
-			{
-				success = m_bufferQueue.TryPop( data );
-			}
-		}
-
-		if( success )
+		// Pop from data queue frame closes to a given timestamp.
+		if( PopFromDataQueue( m_bufferQueue, time, block, data, m_prevPTS, m_interruptWait ) )
 		{
 			//LOG_MESSAGE( SeverityLevel::debug )
 			//	<< "FFmpegStreamDecoderThread pushing frame "
@@ -271,23 +286,28 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 			//	<< m_streamIdx
 			//	<< " size "
 			//	<< m_outQueue.Size();
-
-			if( !m_outQueue.TryPush( data ) )
-			{
-				m_outQueue.Clear();
-				m_outQueue.TryPush( data );
-			}
-			else
-			{
+			
+			{	// Removing to old frames from the out queue. (older than 75 miliseconds are removed)
 				AVMediaData data;
 
 				m_outQueue.TryPopUntil( data, [ = ] ( const AVMediaData & avm )
 				{
-					return avm.framePTS < time + offset - 50;
+					return avm.framePTS < time - 75;
 				} );
 			}
 
+			// Push data to the out queue
+			if( !m_outQueue.TryPush( data ) )
+			{
+				// If still cannot push frame clear the queue.
+				m_outQueue.Clear();
+				m_outQueue.TryPush( data );
+			}
+
+			// Update previous frame presentation timestamp. (pts)
 			m_prevPTS = data.framePTS;	
+
+			return true;
 		}
     }
     else
@@ -295,7 +315,15 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
         m_prevPTS = 0;
     }
 
-    return success;
+    return false;
+}
+
+
+// *******************************
+//
+UInt64              FFmpegStreamDecoder::GetCurrentPTS					()
+{
+	return GetFrontMediaDataPTS( m_bufferQueue );
 }
 
 // *********************************
