@@ -8,6 +8,8 @@ layout (location = 0) out vec4 FragColor;
 in vec2 uvCoord; 
 
 uniform float alpha; 
+uniform int maskChannelIdx;
+
 layout (binding = 0) uniform sampler2D Texture; 
 layout (binding = 1) uniform sampler2D Mask; 
 
@@ -42,5 +44,5 @@ void main()
     //if( col.a * alpha < 0.9 ) 
     //    discard; 
     //float maskFactor = getBlendValue( mask );
-    FragColor = mask.a * col.rgba * alpha;
+    FragColor = mask[ maskChannelIdx ] * col.rgba * alpha;
 }

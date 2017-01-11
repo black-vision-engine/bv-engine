@@ -71,6 +71,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK:
             desc->AppendInputSamplerName( "Mask" );
+            desc->AppendIVal( ValuesFactory::CreateValueInt( "maskChannelIdx", 3 ) );
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA:
             desc->SetBlendFlag( true );
             desc->AppendInputSamplerName( "Texture" );
