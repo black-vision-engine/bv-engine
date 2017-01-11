@@ -391,7 +391,6 @@ void                                DefaultAVDecoderPlugin::Play                
 {
     m_decoder->Play();
     m_isFinished = false;
-	std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
     TriggerEvent( AssetTrackerInternalEvent::Command::PlayAudio );
 }
 

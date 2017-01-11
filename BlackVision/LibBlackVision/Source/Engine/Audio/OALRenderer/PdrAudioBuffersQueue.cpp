@@ -79,8 +79,6 @@ bool    PdrAudioBuffersQueue::BufferData      ()
 			m_unqueuedBufferHandles.Push( bufferId );
 			processed--;
 		}
-
-		BVAL::bvalSourcePlay( m_sourceHandle );
 	}
 
     while( !m_buffers.IsEmpty() && !m_unqueuedBufferHandles.IsEmpty() )
@@ -100,7 +98,12 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         success = true;
     }
 
-    return success;
+	auto enoughDataBuffers = m_unqueuedBufferHandles.Size() < QUEUE_SIZE - 1; // Start playing only if at least 2 frame are buffered.
+
+	if( success && !enoughDataBuffers )
+		LOG_MESSAGE( SeverityLevel::debug ) << "Not enought audio data buffered. Starting playing will be postponed.";
+
+    return success && enoughDataBuffers;
 }
 
 // *******************************
