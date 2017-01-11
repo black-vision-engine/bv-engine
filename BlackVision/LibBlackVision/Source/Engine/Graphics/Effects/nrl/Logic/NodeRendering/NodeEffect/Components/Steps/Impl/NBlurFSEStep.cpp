@@ -68,14 +68,14 @@ void                    NBlurFSEStep::FreeRenderTargets            ( NRenderCont
 
 // **************************
 //
-bool                    NBlurFSEStep::IsIdle                       ( SceneNodeRepr * nodeRepr ) const
+bool                    NBlurFSEStep::IsIdle                       ( SceneNodeRepr * ) const
 {
 	return false;
 }
 
 // **************************
 // If 
-bool                    NBlurFSEStep::IsFinal                      ( SceneNodeRepr * nodeRepr ) const
+bool                    NBlurFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
 	return false;
 }

@@ -117,12 +117,12 @@ NNodeEffectPtr       CreateNodeMaskNodeEffect   ()
     auto finalizeStep   = new NNodeMaskFinalizeStep ();
 
     auto fsePass        = new NFullscreenEffectPass ( preFSEStep, fseStep );
-    auto finPass        = new NFinalizePass( finalizeStep );
+    auto emptyPass		= new NEmptyPass();
 
     std::vector< NNodeEffectRenderPass * > passes( 2 );
 
     passes[ 0 ] = fsePass;
-    passes[ 1 ] = finPass;
+    passes[ 1 ] = emptyPass;
 
 	auto nnerl = new NNodeEffectRenderLogic( passes );
 

@@ -68,14 +68,14 @@ const NRenderedData *   NBlurPreFSEStep::ApplyImpl                   ( SceneNode
 
 // **************************
 //
-bool    NBlurPreFSEStep::IsIdle                    ( SceneNodeRepr * nodeRepr ) const
+bool    NBlurPreFSEStep::IsIdle                    ( SceneNodeRepr * ) const
 {
     return false;
 }
 
 // **************************
 // 
-bool    NBlurPreFSEStep::IsFinal                   ( SceneNodeRepr * nodeRepr ) const
+bool    NBlurPreFSEStep::IsFinal                   ( SceneNodeRepr * ) const
 {
     return false;
 
