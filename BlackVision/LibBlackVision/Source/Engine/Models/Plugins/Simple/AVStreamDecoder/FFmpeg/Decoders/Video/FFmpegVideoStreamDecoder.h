@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Decoders/FFmpegStreamDecoder.h"
 
-#include "Assets/VideoStream/AVAsset.h"
+#include "Assets/AVStream/AVAsset.h"
 #include "DataTypes/QueueConcurrent.h"
 
 

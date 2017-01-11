@@ -12,7 +12,7 @@
 
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
 
-#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
 
 namespace bv { namespace model {
 

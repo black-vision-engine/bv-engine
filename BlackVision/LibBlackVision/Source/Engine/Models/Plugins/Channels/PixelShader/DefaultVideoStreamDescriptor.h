@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
-#include "Assets/VideoStream/AVAsset.h"
-#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAsset.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
 

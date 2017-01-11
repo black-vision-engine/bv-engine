@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Assets/AssetLoader.h"
-#include "Assets/VideoStream/AVAsset.h"
-#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAsset.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 

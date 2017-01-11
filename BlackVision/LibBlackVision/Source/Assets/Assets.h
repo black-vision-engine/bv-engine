@@ -19,9 +19,9 @@
 #include "Assets/Font/3D/FontAsset3D.h"
 #include "Assets/Font/3D/Font3DLoader.h"
 
-#include "Assets/VideoStream/AVAssetDescriptor.h"
-#include "Assets/VideoStream/AVAsset.h"
-#include "Assets//VideoStream/AVAssetLoader.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAsset.h"
+#include "Assets//AVStream/AVAssetLoader.h"
 
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 #include "Assets/Mesh/MeshAsset.h"

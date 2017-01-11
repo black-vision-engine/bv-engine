@@ -2,8 +2,8 @@
 
 #include <mutex>
 
-#include "Assets/VideoStream/AVAsset.h"
-#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAsset.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
 
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/AVDecoderThread.h"

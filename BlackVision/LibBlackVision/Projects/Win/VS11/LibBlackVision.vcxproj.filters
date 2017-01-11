@@ -160,9 +160,6 @@
     <Filter Include="Serialization">
       <UniqueIdentifier>{68a74c00-da93-4352-a146-be6b6ea74fd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\VideoStream">
-      <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\NodeEffects">
       <UniqueIdentifier>{f4797669-e3c0-4f97-833c-4ea85f2ed340}</UniqueIdentifier>
     </Filter>
@@ -405,6 +402,9 @@
     </Filter>
     <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer">
       <UniqueIdentifier>{27b773b8-ef6e-46e5-9b3c-24d19db954c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\AVStream">
+      <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1672,18 +1672,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAsset.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
@@ -1989,6 +1977,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.cpp">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAsset.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetDescriptor.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetLoader.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetUtils.cpp">
+      <Filter>Assets\AVStream</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4859,18 +4859,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAsset.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
@@ -5242,6 +5230,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.h">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAsset.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetDescriptor.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetLoader.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetUtils.h">
+      <Filter>Assets\AVStream</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

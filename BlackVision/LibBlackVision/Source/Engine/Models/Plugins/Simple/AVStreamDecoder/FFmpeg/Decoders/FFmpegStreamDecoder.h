@@ -5,7 +5,7 @@
 #include "DataTypes/QueueConcurrentLimited.h"
 #include "DataTypes/QueueConcurrent.h"
 
-#include "Assets/VideoStream/AVAsset.h"
+#include "Assets/AVStream/AVAsset.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDefs.h"
 
 

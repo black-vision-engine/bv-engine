@@ -1,7 +1,7 @@
 #include "AVAssetAccessor.h"
 
-#include "Assets/VideoStream/AVAssetDescriptor.h"
-#include "Assets/VideoStream/AVAsset.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAsset.h"
 
 #include "IO/DirIO.h"
 #include "IO/FileIO.h"

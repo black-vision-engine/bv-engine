@@ -10,7 +10,7 @@
 
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
 
-#include "Assets/VideoStream/AVAssetDescriptor.h"
+#include "Assets/AVStream/AVAssetDescriptor.h"
 
 #include "Engine/Events/Events.h"
 

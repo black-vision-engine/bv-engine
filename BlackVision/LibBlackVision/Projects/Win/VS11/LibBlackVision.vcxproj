@@ -135,6 +135,10 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetManager.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayAsset.cpp" />
@@ -184,10 +188,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAsset.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Database\DatabaseEntry.cpp" />
     <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioEntity.cpp" />
@@ -625,6 +625,10 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetLoader.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.h" />
@@ -661,10 +665,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.h" />
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.h" />
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.h" />
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAsset.h" />
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h" />
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h" />
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h" />
     <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h" />
     <ClInclude Include="..\..\..\Source\Database\IDatabase.h" />
     <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h" />
