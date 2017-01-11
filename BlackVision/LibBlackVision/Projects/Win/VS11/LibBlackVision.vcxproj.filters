@@ -166,15 +166,6 @@
     <Filter Include="Engine\Models\NodeEffects">
       <UniqueIdentifier>{f4797669-e3c0-4f97-833c-4ea85f2ed340}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder">
-      <UniqueIdentifier>{2e59aefe-5105-4fc8-87df-8a8c3bbbb08d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces">
-      <UniqueIdentifier>{c9055392-946f-479d-9918-5f9ffd23dc2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg">
-      <UniqueIdentifier>{b85fcf6c-90be-4820-9c89-3f272705f078}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Plugins\Channels\Transform\VertexShader">
       <UniqueIdentifier>{35597ded-e812-4814-8ade-2f4ce1473665}</UniqueIdentifier>
     </Filter>
@@ -394,16 +385,25 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\FullscreenRendering\Impl">
       <UniqueIdentifier>{4283b225-107d-4548-9d83-3dc5d8b72649}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders">
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder">
+      <UniqueIdentifier>{2e59aefe-5105-4fc8-87df-8a8c3bbbb08d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces">
+      <UniqueIdentifier>{c9055392-946f-479d-9918-5f9ffd23dc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg">
+      <UniqueIdentifier>{b85fcf6c-90be-4820-9c89-3f272705f078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders">
       <UniqueIdentifier>{bc478c7d-4e8d-4468-83ca-a1f3acb644ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Audio">
-      <UniqueIdentifier>{baaba746-d279-4789-ad0f-186e58c4647b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Video">
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video">
       <UniqueIdentifier>{7db99adf-cd5b-4300-b4db-0153fbffbe93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer">
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio">
+      <UniqueIdentifier>{baaba746-d279-4789-ad0f-186e58c4647b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer">
       <UniqueIdentifier>{27b773b8-ef6e-46e5-9b3c-24d19db954c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1209,9 +1209,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClCompile>
@@ -1654,9 +1651,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAVDecoderPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
     </ClCompile>
@@ -1764,9 +1758,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
       <Filter>Assets\SVG</Filter>
@@ -1969,26 +1960,35 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio\FFmpegAudioStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video\FFmpegVideoStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Audio\FFmpegAudioStreamDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Audio</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Video\FFmpegVideoStreamDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Video</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamsDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\FFmpegStreamDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\FFmpegStreamsDecoderThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\AVDecoderThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\AVDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4125,12 +4125,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDef.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -4841,15 +4835,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAVDecoderPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDefs.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IAudioChannel.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
     </ClInclude>
@@ -4978,9 +4963,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
       <Filter>Engine\Graphics\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -5222,26 +5204,44 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio\FFmpegAudioStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Demuxer</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video\FFmpegVideoStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Audio\FFmpegAudioStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Audio</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Video\FFmpegVideoStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\Video</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamsDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\FFmpegStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders\FFmpegStreamsDecoderThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\Decoders</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\AVDecoderThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDefs.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\AVDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegDef.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 
 #include "Threading/Thread.h"
 #include "Tools/SimpleTimer.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 #include "DataTypes/QueueConcurrent.h"
 
 

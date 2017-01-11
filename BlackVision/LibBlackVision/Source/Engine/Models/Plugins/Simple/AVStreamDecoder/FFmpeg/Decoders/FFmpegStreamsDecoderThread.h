@@ -5,9 +5,9 @@
 
 #include "Threading/Thread.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Decoders/FFmpegStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Decoders/FFmpegStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 #include "DataTypes/QueueConcurrent.h"
 
 

@@ -2,7 +2,7 @@
 
 #include "FFmpegStreamsDecoderThread.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 #include "Tools/HRTimer.h"
 
 #include "UseLoggerLibBlackVision.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDefs.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDefs.h"
 
 
 namespace bv {

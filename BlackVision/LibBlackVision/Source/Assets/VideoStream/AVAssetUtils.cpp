@@ -9,7 +9,7 @@
 #include "LibImage.h"
 #include "Assets/Thumbnail/Impl/VideoStreamAssetThumbnail.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 #include "Assets/Texture/TextureUtils.h"        // ToBPP function
 
 

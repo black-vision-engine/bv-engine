@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
 #include "FFmpegVideoStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 
 #include <cassert>
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegUtils.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
 
 
 namespace bv {

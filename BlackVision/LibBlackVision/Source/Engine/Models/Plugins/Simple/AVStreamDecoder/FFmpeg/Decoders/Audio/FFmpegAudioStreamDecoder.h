@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Decoders/FFmpegStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Decoders/FFmpegStreamDecoder.h"
 
 #include "Assets/VideoStream/AVAsset.h"
 

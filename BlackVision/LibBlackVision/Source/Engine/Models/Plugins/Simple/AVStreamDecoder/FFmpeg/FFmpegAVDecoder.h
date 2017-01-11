@@ -5,15 +5,15 @@
 #include "Assets/VideoStream/AVAsset.h"
 #include "Assets/VideoStream/AVAssetDescriptor.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/AVDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/AVDecoderThread.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxerThread.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxerThread.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Decoders/Video/FFmpegVideoStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Decoders/Audio/FFmpegAudioStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Decoders/FFmpegStreamsDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Decoders/Video/FFmpegVideoStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Decoders/Audio/FFmpegAudioStreamDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Decoders/FFmpegStreamsDecoderThread.h"
 
 #include "DataTypes/QueueConcurrent.h"
 

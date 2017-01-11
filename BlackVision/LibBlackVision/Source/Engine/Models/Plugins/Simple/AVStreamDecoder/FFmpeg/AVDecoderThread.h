@@ -8,7 +8,7 @@
 
 #include "Threading/Thread.h"
 #include "Tools/SimpleTimer.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IAVDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
 
 
 namespace bv

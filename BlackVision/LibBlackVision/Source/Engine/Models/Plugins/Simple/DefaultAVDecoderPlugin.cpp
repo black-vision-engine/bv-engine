@@ -14,7 +14,7 @@
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
 
 #include "Assets/DefaultAssets.h"
 
