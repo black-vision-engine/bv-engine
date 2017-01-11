@@ -63,9 +63,6 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         m_unqueuedBufferHandles.Push( bufferId );
         processed--;
     }
-
-	// LOG_MESSAGE( SeverityLevel::debug ) << "PdrAudioBuffersQueue::BufferData: m_unqueuedBufferHandles.Size() = " << m_unqueuedBufferHandles.Size();
-
 	
 	if( m_unqueuedBufferHandles.IsEmpty() && !m_buffers.IsEmpty() )
 	{
