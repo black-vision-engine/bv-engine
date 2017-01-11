@@ -50,6 +50,7 @@ void TriangulatePlugin::InitializeVertexAttributesChannel()
 
 	VertexAttributesChannelDescriptor vaChannelDesc;
     vaChannelDesc.AddAttrChannelDesc( std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR ) );
+    vaChannelDesc.AddAttrChannelDesc( std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR ) );
     m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_TRIANGLES, vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
 }
 
@@ -88,15 +89,20 @@ void        TriangulatePlugin::ProcessVertexAttributesChannel()
             try
             {
                 auto connComp = ConnectedComponent::Create();
-                auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
-                auto vertChannel = std::make_shared< Float3AttributeChannel >( desc, "vert", false );
+                auto vertsDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
+                auto normDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR );
+
+                auto vertChannel = std::make_shared< Float3AttributeChannel >( vertsDesc, "vert", false );
+                auto normChannel = std::make_shared< Float3AttributeChannel >( normDesc, "norm", false );
 
                 Triangulator triangulator( std::move( contours ) );
                 auto mesh = triangulator.MakeMesh();
 
                 vertChannel->ReplaceAttributes( std::move( mesh.GetMeshSegments()[ 0 ] ) );
+                normChannel->GetVertices().resize( vertChannel->GetNumEntries(), glm::vec3( 0.0, 0.0, 1.0 ) );
 
                 connComp->AddAttributeChannel( vertChannel );
+                connComp->AddAttributeChannel( normChannel );
                 m_vaChannel->AddConnectedComponent( connComp );
             }
             catch( const std::runtime_error & error )
