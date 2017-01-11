@@ -19,6 +19,7 @@ enum class NNodeEffectType : int
     NNET_NODE_MASK,
     NNET_WIREFRAME,
     NNET_MIX_CHANNELS,
+	NNET_BLUR,
 
     NNET_TOTAL
 };
