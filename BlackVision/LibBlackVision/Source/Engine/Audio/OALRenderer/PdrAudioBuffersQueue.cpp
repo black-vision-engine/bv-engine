@@ -57,6 +57,7 @@ bool    PdrAudioBuffersQueue::BufferData      ()
     Int32 processed = 0;
     BVAL::bvalGetSourcei( m_sourceHandle, AL_BUFFERS_PROCESSED, &processed );
 
+	// Get indexes of already played buffers.
     while( processed )
     {
         BVAL::bvalSourceUnqueueBuffers( m_sourceHandle, 1, &bufferId );
@@ -64,6 +65,7 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         processed--;
     }
 	
+	// If there is no space to play the newest frames clear everything.
 	if( m_unqueuedBufferHandles.IsEmpty() && !m_buffers.IsEmpty() )
 	{
 		BVAL::bvalSourceStop( m_sourceHandle );
@@ -78,6 +80,7 @@ bool    PdrAudioBuffersQueue::BufferData      ()
 		}
 	}
 
+	// Fill bufffers with new frames to play.
     while( !m_buffers.IsEmpty() && !m_unqueuedBufferHandles.IsEmpty() )
     {
         auto buffer = m_buffers.Front();
