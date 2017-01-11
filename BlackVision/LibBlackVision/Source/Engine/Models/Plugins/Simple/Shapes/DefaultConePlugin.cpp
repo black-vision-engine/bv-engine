@@ -480,7 +480,7 @@ namespace ConeGenerator
                 generateUVCircuit( circle_center, bevel_radiusUV1, bevel_radiusUV2, verts, uvs, verts_index );
         }
 
-        void generateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+        void GenerateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
             if( mapping_type == DefaultConePlugin::MappingType::GOODMAPPING )
                 generateGOODMAPPING( verts, uvs );
@@ -551,7 +551,7 @@ namespace ConeGenerator
             if( inner_radius > 0.0 && inner_height > 0.0 )
                 generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs, gen_direction );
 
-            generateUV( verts, uvs );
+            GenerateUV( verts, uvs );
 
             GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }

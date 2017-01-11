@@ -95,7 +95,7 @@ public:
 
     void                            AddAttribute                    ( const glm::vec2 & v );
     void                            AddAttributes                   ( const std::vector< glm::vec2 > & v );
-
+    void                            ReplaceAttributes               ( std::vector< glm::vec2 > && v );
 };
 
 DEFINE_PTR_TYPE(Float2AttributeChannel)

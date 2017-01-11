@@ -235,5 +235,12 @@ void                    Float2AttributeChannel::AddAttributes ( const std::vecto
     m_attributes.insert( m_attributes.end(), v.begin(), v.end() );
 }
 
+// ***********************
+//
+void                    Float2AttributeChannel::ReplaceAttributes   ( std::vector< glm::vec2 >&& v )
+{
+    m_attributes = std::move( v );
+}
+
 } // model
 } // bv

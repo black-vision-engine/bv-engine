@@ -232,8 +232,8 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
             auto uvs = new model::Float2AttributeChannel( desc, DefaultGradientPluginDesc::TextureName(), true );
             auto uvsPtr = Float2AttributeChannelPtr( uvs );
             
-            Helper::UVGenerator::generateUV( std::static_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices().data(), posChannel->GetNumEntries(),
-                                            uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+            Helper::UVGenerator::GenerateUV( std::static_pointer_cast< Float3AttributeChannel >( posChannel ),
+                                             uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
 
             connComp->AddAttributeChannel( uvsPtr );
         }

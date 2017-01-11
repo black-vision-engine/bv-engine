@@ -140,7 +140,7 @@ namespace Generator
 		SphereGenerator( int stripe ) { stripe_num = static_cast<float>( stripe );}
 		~SphereGenerator(){}
 
-		glm::vec2 generateUV( float horizontal_angle, float vertical_angle )
+		glm::vec2 GenerateUV( float horizontal_angle, float vertical_angle )
 		{
 			///UVs are working good in texture mirror mode
 			const glm::vec2 bottomUV( 0.0, 0.0 );		// UV clipping
@@ -217,19 +217,19 @@ namespace Generator
 			float vertical_angle = float( PI ) - vertDeltaAngle;
 
 
-            uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, 1.0 ), bottomUV, topUV )*/generateUV( horizontalAngle2, static_cast<float>(PI) ) );
-			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, 1.0 ), bottomUV, topUV )*/generateUV( horizontalAngle1, static_cast<float>(PI) ) );
+            uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, 1.0 ), bottomUV, topUV )*/GenerateUV( horizontalAngle2, static_cast<float>(PI) ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, 1.0 ), bottomUV, topUV )*/GenerateUV( horizontalAngle1, static_cast<float>(PI) ) );
 			for( unsigned int i = 0; i < vertical_stripes - 1; ++i )
 			{
-                uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle2, vertical_angle ) );
-				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle1, vertical_angle ) );
+                uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, vertical_angle / PI ),  bottomUV, topUV )*/GenerateUV( horizontalAngle2, vertical_angle ) );
+				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/GenerateUV( horizontalAngle1, vertical_angle ) );
 
 				vertical_angle -= vertDeltaAngle;
 			}
 
-			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle2, vertical_angle ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle2, vertical_angle / PI ),  bottomUV, topUV )*/GenerateUV( horizontalAngle2, vertical_angle ) );
             vertical_angle -= vertDeltaAngle;
-   			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontalAngle1, vertical_angle ) );
+   			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontalAngle1, vertical_angle / PI ),  bottomUV, topUV )*/GenerateUV( horizontalAngle1, vertical_angle ) );
 
 
             //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );        

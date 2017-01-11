@@ -4,7 +4,7 @@
 //#include "../Dep/Common/glm/glm/core/func_geometric.hpp"
 
 
-
+#include <limits.h>
 
 
 #include "Memory/MemoryLeaks.h"
@@ -17,37 +17,38 @@ namespace Helper{
 
 	/**It would be better if that function took Float3AttributeChannelPtr as a parameter than 2 first params instead, 
 	but in texture plugin I couldn't cast AttributeChannelPtr to it.*/
-	void UVGenerator::generateUV( const glm::vec3 * pos, unsigned int verts_num, Float2AttributeChannelPtr uvs, glm::vec3 versorU, glm::vec3 versorV, bool scale )
-	{
-		float min[2] = { 100000.0f, 100000.0f };
-		float max[2] = { 0.0f, 0.0f };
+    void UVGenerator::GenerateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, glm::vec3 versorU, glm::vec3 versorV, bool scale )
+    {
+        float min[ 2 ] = { std::numeric_limits< float >::max(), std::numeric_limits< float >::max() };
+        float max[ 2 ] = { 0.0f, 0.0f };
 
-		std::vector<glm::vec2> temp_uvs;
-		temp_uvs.resize( verts_num );
+        auto vertsNum = verts->GetNumEntries();
 
-		for( unsigned int j = 0; j < verts_num; ++j )
-		{
-			glm::vec3 position = pos[j];
-			glm::vec2 new_UV( glm::dot( position, versorU ), glm::dot( position, versorV ) );
-			temp_uvs[j] = new_UV;
+        std::vector< glm::vec2 > tmpUVs;
+        tmpUVs.resize( vertsNum );
 
-			if( scale )
-			{
-				min[0] = std::min( min[0], new_UV.x );
-				min[1] = std::min( min[1], new_UV.y );
-				max[0] = std::max( max[0], new_UV.x );
-				max[1] = std::max( max[1], new_UV.y );
-			}
-		}
+        for( unsigned int j = 0; j < vertsNum; ++j )
+        {
+            glm::vec3 position = verts->GetVertices()[ j ];
+            glm::vec2 new_UV( glm::dot( position, versorU ), glm::dot( position, versorV ) );
+            tmpUVs[ j ] = new_UV;
 
-		if( scale )
-			scaleVec2( min, max, temp_uvs );
+            if( scale )
+            {
+                min[ 0 ] = std::min( min[ 0 ], new_UV.x );
+                min[ 1 ] = std::min( min[ 1 ], new_UV.y );
+                max[ 0 ] = std::max( max[ 0 ], new_UV.x );
+                max[ 1 ] = std::max( max[ 1 ], new_UV.y );
+            }
+        }
 
-		for( unsigned int j = 0; j < verts_num; ++j )
-			uvs->AddAttribute( temp_uvs[j] );
-	}
+        if( scale )
+            ScaleVec2( min, max, tmpUVs );
 
-	void UVGenerator::scaleVec2( float* min, float* max, std::vector<glm::vec2>& uvs )
+        uvs->ReplaceAttributes( std::move( tmpUVs ) );
+    }
+
+	void UVGenerator::ScaleVec2( float* min, float* max, std::vector<glm::vec2>& uvs )
 	{
 		glm::vec2 range( max[0] - min[0], max[1] - min[1] );
 		glm::vec2 min_value( min[0], min[1] );
@@ -58,7 +59,7 @@ namespace Helper{
 		}
 	}
 
-	void UVGenerator::scaleVec3( float* min, float* max, std::vector<glm::vec3>& uvws )
+	void UVGenerator::ScaleVec3( float* min, float* max, std::vector<glm::vec3>& uvws )
 	{
 		glm::vec3 range( max[0] - min[0], max[1] - min[1], max[2] - min[2] );
 		glm::vec3 min_value( min[0], min[1], min[2] );
@@ -69,17 +70,19 @@ namespace Helper{
 		}
 	}
 
-	void UVGenerator::generateUVW( const glm::vec3* pos, unsigned int verts_num , Float3AttributeChannelPtr uvs, glm::vec3 versorU, glm::vec3 versorV, glm::vec3 versorW, bool scale )
+	void UVGenerator::GenerateUVW( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr uvs, glm::vec3 versorU, glm::vec3 versorV, glm::vec3 versorW, bool scale )
 	{
-		float min[3] = { 100000.0f, 100000.0f, 100000.0f };
+		float min[3] = { std::numeric_limits< float >::max(), std::numeric_limits< float >::max(), std::numeric_limits< float >::max() };
 		float max[3] = { 0.0f, 0.0f, 0.0f };
 
-		std::vector<glm::vec3> temp_uvs;
-		temp_uvs.resize( verts_num );
+        auto vertsNum = verts->GetNumEntries();
 
-		for( unsigned int j = 0; j < verts_num; ++j )
+		std::vector<glm::vec3> temp_uvs;
+		temp_uvs.resize( vertsNum );
+
+		for( unsigned int j = 0; j < vertsNum; ++j )
 		{
-			glm::vec3 position = pos[j];
+			glm::vec3 position = verts->GetVertices()[ j ];
 			glm::vec3 new_UV( glm::dot( position, versorU ), glm::dot( position, versorV ), glm::dot( position, versorW ) );
 			temp_uvs[j] = new_UV;
 
@@ -95,10 +98,9 @@ namespace Helper{
 		}
 
 		if( scale )
-			scaleVec3( min, max, temp_uvs );
+			ScaleVec3( min, max, temp_uvs );
 
-		for( unsigned int j = 0; j < verts_num; ++j )
-			uvs->AddAttribute( temp_uvs[j] );
+        uvs->ReplaceAttributes( std::move( temp_uvs ) );
 	}
 
 

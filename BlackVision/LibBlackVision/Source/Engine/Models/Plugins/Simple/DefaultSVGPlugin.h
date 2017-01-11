@@ -33,6 +33,11 @@ public:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+private:
+
+    bool										InitVertexAttributesChannel ( bool recursive );
+    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, glm::mat4 & transform, bool recursive );
+
 };
 
 } // model
