@@ -7,7 +7,7 @@
 #include "MockScenes.h"
 #include "BVAppLogic.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/DefaultAVDecoderPlugin.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/BVProjectEditor.h"

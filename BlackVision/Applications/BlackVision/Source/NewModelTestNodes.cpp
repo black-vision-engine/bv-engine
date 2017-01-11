@@ -10,8 +10,8 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAudioDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/DefaultAVDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/DefaultAudioDecoderPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCirclePlugin.h"

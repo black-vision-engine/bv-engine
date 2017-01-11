@@ -19,7 +19,7 @@
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/DefaultAVDecoderPlugin.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 #include "ProjectManager.h"

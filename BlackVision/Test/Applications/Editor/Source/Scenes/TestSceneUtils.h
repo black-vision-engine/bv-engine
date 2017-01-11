@@ -35,7 +35,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultPiechartPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultAVDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/DefaultAVDecoderPlugin.h"
 
 #include "Tools/Utils.h"
 
