@@ -39,45 +39,39 @@ protected:
 	std::atomic< bool >					m_interruptWait;
 
 public:
-
     explicit                FFmpegStreamDecoder         ( AVFormatContext * formatCtx, Int32 streamIdx, UInt32 maxQueueSize, FFmpegDemuxer * demuxer );
     virtual                 ~FFmpegStreamDecoder        ();
 
-    UInt64                  GetDuration                 () const;   
+	Int32                   GetStreamIdx                () const;
+	UInt64                  GetDuration                 () const;
+	void					FinishQueue					();
+	bool                    NextDataReady               ( UInt64 time, bool block );
+	void                    UploadData                  ();
+	bool					IsFinished					() const;
 
-    virtual UInt64          GetCurrentPTS               ();
+	/** Converts time from seconds to the stream specific time base timestamp */
+	Int64                   ConvertTime                 ( Float64 time );
 
-    void                    UploadData                  ();
-    virtual bool            PopData                     ( AVMediaData & data );
-    bool					IsDataQueueEmpty            () const;
+	void                    SetOffset                   ( UInt64 offset );
+	UInt64                  GetOffset                   () const;
+
+	bool					IsDataQueueEmpty            () const;
+	bool					IsOutQueueEmpty		        () const;
 	void					ClearDataQueue				();
-
-    bool					IsOutQueueEmpty		        () const;
 	void					ClearOutQueue				();
 
-    virtual void			Reset                       ();
+	void					EnqueueDummyDataMessage		();
+	void					SetWaitingInterrupt			();
 
-    virtual bool            ProcessPacket               ( bool block = false );
+	virtual void			Reset                       ();
+	virtual bool            ProcessPacket               ( bool block = false );
+	virtual bool            PopData                     ( AVMediaData & data );
+	virtual UInt64          GetCurrentPTS               ();
+
+private:
 
     virtual bool            DecodePacket                ( AVPacket * packet );
     virtual AVMediaData     ConvertFrame                () = 0;
-
-    void                    SetOffset                   ( UInt64 offset );
-    UInt64                  GetOffset                   () const;
-
-    Int32                   GetStreamIdx                () const;
-
-    /** Converts time from seconds to the stream specific time base timestamp */
-    Int64                   ConvertTime                 ( Float64 time );
-
-    bool                    NextDataReady               ( UInt64 time, bool block );
-
-	void					FinishQueue					();
-
-	bool					IsFinished					() const;
-
-	void					SetWaitingInterrupt			();
-	void					EnqueueDummyDataMessage		();
 };
 
 DEFINE_UPTR_TYPE( FFmpegStreamDecoder )
