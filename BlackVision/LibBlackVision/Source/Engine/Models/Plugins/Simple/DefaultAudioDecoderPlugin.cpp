@@ -9,6 +9,8 @@
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
+
 #include "Assets/DefaultAssets.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"

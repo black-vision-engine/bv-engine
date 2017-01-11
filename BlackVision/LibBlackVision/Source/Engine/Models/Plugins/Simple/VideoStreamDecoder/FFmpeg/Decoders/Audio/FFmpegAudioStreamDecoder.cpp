@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
 #include "FFmpegAudioStreamDecoder.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegDemuxer.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 #include "Engine/Audio/Resources/AudioUtils.h"
 
-#include "FFmpegUtils.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegUtils.h"
 
 #include "UseLoggerLibBlackVision.h"
 
