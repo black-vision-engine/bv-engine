@@ -470,7 +470,7 @@ void                                DefaultAVDecoderPlugin::UploadAudioFrame    
 
 	while( m_decoder->GetAudioMediaData( mediaData ) )
     {
-		m_audioChannel->PushPacket( mediaData.frameData );
+		m_audioChannel->PushPacket( ApplyGain( mediaData.frameData ) );
     }
 }
 
