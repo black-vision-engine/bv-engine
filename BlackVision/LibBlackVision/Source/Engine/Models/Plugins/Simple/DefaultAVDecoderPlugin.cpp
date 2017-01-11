@@ -273,8 +273,6 @@ void                                DefaultAVDecoderPlugin::Update              
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-    // MarkOffsetChanges();
-
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
     {
@@ -372,25 +370,6 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
 			std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
 			UpdateDecoderState( m_decoderMode );
 		}
-   //     // edge case - looped timeline
-   //     auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-   //     if( decoderModeTime < m_prevDecoderModeTime )
-   //     {
-   //         m_prevOffsetCounter = 0;
-   //     }
-   //     m_prevDecoderModeTime = decoderModeTime;
-
-   //     // update offset 
-   //     auto offset = m_offsetParam->Evaluate();
-   //     auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-   //     if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( offsetTime < m_prevOffsetTime ) )
-   //     {
-   //         m_decoder->Seek( offset[ 0 ] );
-   //         m_prevOffsetCounter = offset[ 1 ];
-
-   //         std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
-			//UpdateDecoderState( m_decoderMode );
-   //     }
 
         HandlePerfectLoops();
 
@@ -506,18 +485,6 @@ MemoryChunkPtr						DefaultAVDecoderPlugin::ApplyGain				( const MemoryChunkPtr 
 	audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, !m_muteParam->Evaluate() ? m_gainParam->Evaluate() : 0.f );
 
 	return outData;
-}
-
-// *************************************
-//
-void                                DefaultAVDecoderPlugin::MarkOffsetChanges           ()
-{
-    //auto counter = 0;
-    //const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
-    //for( auto & key : keys )
-    //{
-    //    m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
-    //}
 }
 
 // *************************************

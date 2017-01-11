@@ -190,8 +190,6 @@ void                                DefaultAudioDecoderPlugin::Update           
 {
     BasePlugin::Update( t );
 
-    ///MarkOffsetChanges();
-
     UpdateDecoder();
     UploadAudioFrame();
 }
@@ -328,18 +326,6 @@ MemoryChunkPtr						DefaultAudioDecoderPlugin::ApplyGain				( const MemoryChunkP
 	audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, m_gainParam->Evaluate() );
 
 	return outData;
-}
-
-// *************************************
-//
-void                                DefaultAudioDecoderPlugin::MarkOffsetChanges        ()
-{
-    auto counter = 0;
-    const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
-    for( auto & key : keys )
-    {
-        m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
-    }
 }
 
 // *************************************

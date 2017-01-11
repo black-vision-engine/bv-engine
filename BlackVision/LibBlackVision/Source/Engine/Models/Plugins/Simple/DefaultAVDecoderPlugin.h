@@ -120,7 +120,6 @@ private:
 
     void                                        InitVertexAttributesChannel ();
 
-    void                                        MarkOffsetChanges           ();
 	MemoryChunkPtr								ApplyGain					( const MemoryChunkPtr & audioFrameData ) const;
 
     void                                        BroadcastHasFinishedEvent   ();
