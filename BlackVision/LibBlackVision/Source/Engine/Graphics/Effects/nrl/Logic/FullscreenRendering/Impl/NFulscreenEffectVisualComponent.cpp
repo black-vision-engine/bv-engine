@@ -16,12 +16,15 @@
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Models/Updaters/ShaderParamUpdater.h"
 
 
 namespace bv { namespace nrl {
 
 // **************************
-//
+// FIXME: nrl - valies are passed here from FSE state which is not the best possible approach
+// FIXME: nrl - only FSE shoould keep track of IValues and VisualComponent should be externally updated to make sure that its state is passed to ShaderParameters kept in this class
+// FIXME: nrl - right now it is left as it is (state is updated before rendering form m_values) but remove valules from this constructor as soon as all FSEs are implemented
 NFullscreenEffectVisualComponent::NFullscreenEffectVisualComponent    ( TriangleStrip * quad, unsigned int numRendenderTargetTextures, unsigned int numStaticTextures, const IValuePtrVec & values )
     : m_quad( quad )
     , m_numRenderTargetTextures( numRendenderTargetTextures )
@@ -33,6 +36,10 @@ NFullscreenEffectVisualComponent::NFullscreenEffectVisualComponent    ( Triangle
     auto pass = effect->GetPass( 0 );
 
     m_pixelShader   = pass->GetPixelShader();
+
+    auto shaderParams = m_pixelShader->GetParameters();
+
+    assert( shaderParams->NumParameters() == values.size() );
 }
 
 // **************************
@@ -48,6 +55,9 @@ void    NFullscreenEffectVisualComponent::Render                        ( Render
 {
     // At this point all input data must be synchronized.
     // This class is not responsible for tracking external sources of possible state changes.
+
+    // FIXME: nrl - this one should be called from some other place (so that values don't have to be tracked by this class which should only care about its shader parameters)
+    UpdateShaderParams();
 
     renderer->Draw( m_quad );
 }
@@ -146,6 +156,26 @@ NFullscreenEffectVisualComponent *   NFullscreenEffectVisualComponent::Create( c
     unsigned int numStaticTextures          = (unsigned int) textures.size();
     
     return new NFullscreenEffectVisualComponent( geom, numRenderTargetTextures, numStaticTextures, values );
+}
+
+// **************************
+//
+void            NFullscreenEffectVisualComponent::UpdateShaderParams                  ()
+{
+    auto shaderParams = m_pixelShader->GetParameters();
+
+    unsigned int i = 0;
+
+    for( auto & val : m_values )
+    {
+        auto param = shaderParams->AccessParam( i );
+
+        assert( param->Name() == val->GetName() );
+
+        UpdateGenericShaderParam( val, param );
+
+        ++i;
+    }
 }
 
 // **************************

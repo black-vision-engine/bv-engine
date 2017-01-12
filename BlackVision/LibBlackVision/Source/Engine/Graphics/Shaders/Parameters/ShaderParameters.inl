@@ -21,7 +21,7 @@ inline const GenericShaderParam *   ShaderParameters::GetParam          ( unsign
 inline const GenericShaderParam *   ShaderParameters::GetParam          ( const std::string & name ) const
 {
     for( auto param : m_shaderParams )
-    {\
+    {
         if( param->Name() == name )
         {
             return param;

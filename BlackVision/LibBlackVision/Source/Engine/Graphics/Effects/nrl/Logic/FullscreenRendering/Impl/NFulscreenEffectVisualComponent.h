@@ -48,6 +48,8 @@ public:
 
 private:
 
+    void            UpdateShaderParams                  ();
+
     unsigned int    FirstRenderTargetTextureIdx         () const;
     unsigned int    FirstStaticTextureIdx               () const;
 

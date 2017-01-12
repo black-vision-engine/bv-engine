@@ -172,6 +172,7 @@ ShaderParameters *                              NFullscreenEffectHelpers::Create
     // Create parameters
     for( auto val : values )
     {
+        // FIXME: nrl - this mapping relies on ordering so whenever shaderParams are updated it must be assured that they are accessed in the same exact order
         auto param = ShaderParamFactory::CreateGenericParameter( val.get() );
 
         shaderParams->AddParameter( param );
