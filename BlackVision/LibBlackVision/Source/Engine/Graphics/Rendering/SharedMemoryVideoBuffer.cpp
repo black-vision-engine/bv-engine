@@ -58,7 +58,7 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer( UInt32 width, UInt32 height, T
 
 // *********************************
 //
-void        SharedMemoryVideoBuffer::DistributeFrame(Texture2DConstPtr frame)
+void        SharedMemoryVideoBuffer::PushFrame(Texture2DConstPtr frame)
 {
 	auto data = frame->GetData()->Get();
 

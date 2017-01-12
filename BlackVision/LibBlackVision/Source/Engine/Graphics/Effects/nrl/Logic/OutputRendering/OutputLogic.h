@@ -4,6 +4,7 @@
 namespace bv { 
     
 class Renderer;    
+class SharedMemoryVideoBuffer;
 
 namespace nrl {
 
@@ -16,12 +17,17 @@ class OutputLogic
 {
 private:
 
-    Preview *       m_preview;
-    VideoOutput *   m_videoOutput;
+    // FIXME: nrl - any additional flags?
+    bool            m_videoOutputEnabled;
+    bool            m_useSharedMemory;
+
+    Preview *                   m_preview;
+    SharedMemoryVideoBuffer *   m_sharedMemoryVideoBuffer;
+    VideoOutput *               m_videoOutput;
 
 public:
 
-                    OutputLogic         ();
+                    OutputLogic         ( unsigned int width, unsigned int height, unsigned int sharedMemScaleFactor );
                     ~OutputLogic        ();
 
     void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes );

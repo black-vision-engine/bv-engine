@@ -22,7 +22,7 @@ private:
 
 public:
 
-                            NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType = 2 );
+                            NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
 
     virtual void            RenderFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 

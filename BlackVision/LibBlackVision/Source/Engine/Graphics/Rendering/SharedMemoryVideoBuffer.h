@@ -31,7 +31,7 @@ public:
                     SharedMemoryVideoBuffer                 ( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor = 4 );
                     ~SharedMemoryVideoBuffer                ();
 
-    void            DistributeFrame                         ( Texture2DConstPtr frame );
+    void            PushFrame                               ( Texture2DConstPtr frame );
 
 };
 

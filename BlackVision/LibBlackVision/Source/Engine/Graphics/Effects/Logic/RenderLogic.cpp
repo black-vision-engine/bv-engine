@@ -361,7 +361,7 @@ void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext
 		if (m_enableSharedMemory)
 		{
 			if(m_videoOutputRenderLogic->GetLastVideoFrame()!=nullptr)
-				m_sharedMemoryVideoBuffer->DistributeFrame(m_videoOutputRenderLogic->GetLastVideoFrame());
+				m_sharedMemoryVideoBuffer->PushFrame(m_videoOutputRenderLogic->GetLastVideoFrame());
 		}
 	}
 

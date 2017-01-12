@@ -8,18 +8,13 @@
 
 namespace bv { namespace nrl {
 
-
-
+    /*
+    Basic video output algo description
+    */
     //auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
     //auto ctx = GetContext( renderer, audioRenderer );
 
     //// FIXME: nrl - implement screenshot logic in the nrl model
-
-    //if( m_screenShotLogic->ReadbackNeeded() )
-    //{
-    //    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
-    //    m_screenShotLogic->FrameRendered( rt, ctx );
-    //}
 
     //if( m_displayVideoCardPreview )
     //{
@@ -34,7 +29,7 @@ namespace bv { namespace nrl {
 
     //BlitToPreview( prevRt, ctx );
 
-    //if( m_useVideoCardOutput )
+    //if( video card enabled )
     //{
     //    // FIXME: nrl - audio should be handled based on this implementation
     //    OnVideoFrameRendered( ctx );

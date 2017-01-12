@@ -9,8 +9,8 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
-    : m_state( width, height, numTrackedRenderTargetsPerOutputType ) 
+NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor )
+    : m_state( width, height, numTrackedRenderTargetsPerOutputType, sharedMemScaleFactor ) 
 {
 }
 

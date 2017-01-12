@@ -2,6 +2,8 @@
 
 #include "OutputLogic.h"
 
+#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Preview.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/VideoOutput.h"
@@ -13,12 +15,13 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputLogic::OutputLogic         ()
+OutputLogic::OutputLogic         ( unsigned int width, unsigned int height, unsigned int sharedMemScaleFactor )
     : m_preview( nullptr )
     , m_videoOutput( nullptr )
 {
     m_preview = new Preview();
     m_videoOutput = new VideoOutput();
+    m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, sharedMemScaleFactor );
 }
 
 // *********************************
