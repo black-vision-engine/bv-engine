@@ -16,7 +16,7 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
 {
     for( auto & scene : scenes )
     {
-        // FIXME: nrl - retrieve rt for each scene here
+        // FIXME: nrl - retrieve rt for each scene here (for each scene marked as a subgroup)
         auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
 
         NNodeRenderLogic::RenderQueued( scene, rt, ctx );

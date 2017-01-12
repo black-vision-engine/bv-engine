@@ -19,6 +19,9 @@ private:
     UniformBufferUPtr               m_lightsBuffer;
     UniformBufferUPtr               m_cameraBuffer;
     CameraUPtr                      m_camera;
+
+    //FIXME: channel can be set here, so it's pretty close to full scene->channel mapping
+    //FIXME: nrl - output channel logic has to be specified now
     unsigned int                    m_outputChannelIdx;
 
     // @todo Maybe it should be moved to container class for engine grid lines.

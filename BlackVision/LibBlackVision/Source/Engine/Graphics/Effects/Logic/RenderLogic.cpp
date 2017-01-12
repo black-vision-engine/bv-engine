@@ -124,7 +124,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer, audio::AudioRenderer
     auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
     auto ctx = GetContext( renderer, audioRenderer );
 
-
+    // FIXME: nrl - implement screenshot logic in the nrl model
     if( m_screenShotLogic->ReadbackNeeded() )
     {
         auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();

@@ -4,6 +4,7 @@
 namespace bv { namespace nrl {
 
 class RenderResult;
+class NRenderContext;
 
 class VideoOutput
 {
@@ -11,7 +12,7 @@ private:
 
 public:
 
-    void    HandleFrame( const RenderResult * result );
+    void    HandleFrame( NRenderContext * ctx, const RenderResult * result );
 
 };
 

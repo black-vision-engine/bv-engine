@@ -3,13 +3,43 @@
 #include "VideoOutput.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
 
 namespace bv { namespace nrl {
 
+    //auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+    //auto ctx = GetContext( renderer, audioRenderer );
+
+    //// FIXME: nrl - implement screenshot logic in the nrl model
+
+    //if( m_screenShotLogic->ReadbackNeeded() )
+    //{
+    //    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+    //    m_screenShotLogic->FrameRendered( rt, ctx );
+    //}
+
+    //if( m_displayVideoCardPreview )
+    //{
+    //    auto videoRt    = m_offscreenDisplay->GetVideoRenderTarget          ();
+    //    auto curFrameRt = m_offscreenDisplay->GetCurrentFrameRenderTarget   ();
+    //    auto prvFrameRt = m_offscreenDisplay->GetPreviousFrameRenderTarget  ();
+
+    //    m_videoOutputRenderLogic->Render( videoRt, curFrameRt, prvFrameRt, ctx );
+
+    //    prevRt = videoRt;
+    //}
+
+    //BlitToPreview( prevRt, ctx );
+
+    //if( m_useVideoCardOutput )
+    //{
+    //    // FIXME: nrl - audio should be handled based on this implementation
+    //    OnVideoFrameRendered( ctx );
+    //}
 // **************************
 //
-void    VideoOutput::HandleFrame( const RenderResult * result )
+void    VideoOutput::HandleFrame( NRenderContext * ctx, const RenderResult * result )
 {
     // FIXME: nrl - implement
  //   auto rt = m_offscreenDisplay->GetVideoRenderTarget();
@@ -66,7 +96,7 @@ void    VideoOutput::HandleFrame( const RenderResult * result )
 	//		videocards::VideoCardManager::Instance().QueueFrame(frame);
 	//	}
 
-    { result; }
+    { ctx; result; }
 }
 
 } //nrl

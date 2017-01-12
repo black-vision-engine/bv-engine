@@ -8,6 +8,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
+
 namespace bv { namespace nrl {
 
 // *********************************
@@ -17,6 +18,7 @@ OutputLogic::OutputLogic         ()
     , m_videoOutput( nullptr )
 {
     m_preview = new Preview();
+    m_videoOutput = new VideoOutput();
 }
 
 // *********************************
@@ -31,6 +33,7 @@ OutputLogic::~OutputLogic        ()
 //
 void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes )
 {
+    // FIXME: this is kinda hackish
     if( numScenes == 0 )
     {
         auto renderTarget = data->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
