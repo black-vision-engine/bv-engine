@@ -118,7 +118,7 @@ void    NNodeRenderLogic::Render            ( SceneNode * node, const RenderTarg
 void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * ctx )
 {
     // FIXME: nrl transition
-    auto nEffect = node->GetNNodeEffect();
+    auto nEffect = node->IsNNodeEffectEnabled() ? node->GetNNodeEffect() : nullptr;
     auto repr   = node->GetRepr();
 
     if( nEffect )

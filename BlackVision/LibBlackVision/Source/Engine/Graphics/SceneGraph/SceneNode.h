@@ -36,6 +36,7 @@ private:
 
     //FIXME: use some sort of caps/flag here (instead of a single flag)
     bool                m_visible;
+    bool                m_NNodeEffectEnabled;
     bool                m_drawBoundingBox;
     glm::vec4           m_boundingBoxColor;
 
@@ -62,6 +63,11 @@ public:
     audio::AudioEntity *    GetAudio            () const;
     void                    SetAudio            ( audio::AudioEntity * audio );
    
+    //FIXME: move to some wrapper class holding nnodeeffect along with node related state (right now only enabled/disabled)
+    bool                    IsNNodeEffectEnabled() const;
+    void                    EnableNNodeEffect   ();
+    void                    DisableNNodeEffect  ();
+
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
 

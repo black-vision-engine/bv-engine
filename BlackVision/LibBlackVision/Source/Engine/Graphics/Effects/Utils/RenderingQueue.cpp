@@ -27,7 +27,7 @@ bool HasEffect( SceneNode * node )
 
     auto neffect = node->GetNNodeEffect();
 
-    if( neffect != nullptr && neffect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
+    if( node->IsNNodeEffectEnabled() && neffect != nullptr && neffect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
     {
         return true;
     }

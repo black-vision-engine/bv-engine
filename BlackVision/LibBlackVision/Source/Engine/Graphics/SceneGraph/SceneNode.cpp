@@ -25,6 +25,7 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_repr( new SceneNodeRepr( transformable, this ) )
     , m_nodeEffect( nullptr )
     , m_drawBoundingBox( false )
+    , m_NNodeEffectEnabled( true ) // FIXME: enabled by default - is this right?
     , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
 {
     m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
@@ -109,6 +110,34 @@ audio::AudioEntity *    SceneNode::GetAudio             () const
 
 // ********************************
 //
+void            SceneNode::SetAudio             ( audio::AudioEntity * audio )
+{
+    m_repr->SetAudio( audio );
+}
+
+// ********************************
+//
+bool            SceneNode::IsNNodeEffectEnabled () const
+{
+    return m_NNodeEffectEnabled;
+}
+
+// ********************************
+//
+void            SceneNode::EnableNNodeEffect    ()
+{
+    m_NNodeEffectEnabled = true;
+}
+
+// ********************************
+//
+void            SceneNode::DisableNNodeEffect   ()
+{
+    m_NNodeEffectEnabled = false;
+}
+
+// ********************************
+//
 NodeEffectPtr   SceneNode::GetNodeEffect                ()
 {
     return m_nodeEffect;
@@ -147,13 +176,6 @@ void            SceneNode::SetTransformable     ( TransformableEntity * transfor
 void            SceneNode::DeleteTransformable  ()
 {
     m_repr->DeleteTransformable();
-}
-
-// ********************************
-//
-void            SceneNode::SetAudio             ( audio::AudioEntity * audio )
-{
-    m_repr->SetAudio( audio );
 }
 
 // ********************************
