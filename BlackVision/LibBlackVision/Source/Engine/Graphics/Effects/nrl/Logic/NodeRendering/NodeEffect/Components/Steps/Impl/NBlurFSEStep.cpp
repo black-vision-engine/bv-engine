@@ -52,6 +52,13 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
     assert( input );
 
     // FIXME: add sync here on smewhere else, where it fits
+	auto textureSize = GetState()->GetValueAt( 0 );
+
+	auto wrt = input->GetEntry( 0 )->Width();
+	auto hrt = input->GetEntry( 0 )->Height();
+
+	QueryTypedValue< ValueVec2Ptr >( textureSize )->SetValue( glm::vec2( wrt, hrt ) );
+
 	m_blurEffect->Render( ctx, *input );
 }
 
