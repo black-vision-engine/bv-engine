@@ -114,14 +114,15 @@ NNodeEffectPtr       CreateNodeMaskNodeEffect   ()
     auto alphaVal       = get_value( fseStep->GetState(), "alpha" );
     
     auto preFSEStep     = new NNodeMaskPreFSEStep   ( alphaVal, minAlphaThreshold );
+	auto finalizeStep	= new NNodeMaskFinalizeStep ();
 
     auto fsePass        = new NFullscreenEffectPass ( preFSEStep, fseStep );
-    auto emptyPass		= new NEmptyPass();
+	auto finPass		= new NFinalizePass( finalizeStep );
 
     std::vector< NNodeEffectRenderPass * > passes( 2 );
 
     passes[ 0 ] = fsePass;
-    passes[ 1 ] = emptyPass;
+	passes[ 1 ] = finPass;
 
 	auto nnerl = new NNodeEffectRenderLogic( passes );
 
@@ -143,15 +144,14 @@ NNodeEffectPtr       CreateBlurNodeEffect   ()
 
 	auto preFSEStep = new NBlurPreFSEStep();
 	auto fseStep = new NBlurFSEStep();
-	auto finalizeStep = new NDefaultFinalizeStep();
 
 	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
-	auto finPass = new NFinalizePass( finalizeStep );
+	auto emptyPass = new NEmptyPass();
 
 	std::vector< NNodeEffectRenderPass * > passes( 2 );
 
 	passes[ 0 ] = fsePass;
-	passes[ 1 ] = finPass;
+	passes[ 1 ] = emptyPass;
 
 	auto nnerl = new NNodeEffectRenderLogic( passes );
 

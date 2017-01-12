@@ -151,7 +151,10 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     {
         auto nodeEffectType = modelNodeEffect->GetType();
 
-        if( nodeEffectType != NodeEffectType::NET_DEFAULT && nodeEffectType != NodeEffectType::NET_ALPHA_MASK && nodeEffectType != NodeEffectType::NET_NODE_MASK )
+        if( nodeEffectType != NodeEffectType::NET_DEFAULT &&
+			nodeEffectType != NodeEffectType::NET_ALPHA_MASK &&
+			nodeEffectType != NodeEffectType::NET_NODE_MASK &&
+			nodeEffectType != NodeEffectType::NET_BLUR )
         {
             node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
         }

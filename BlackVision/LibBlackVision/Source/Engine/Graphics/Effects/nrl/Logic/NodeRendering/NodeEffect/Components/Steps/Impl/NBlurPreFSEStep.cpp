@@ -30,7 +30,7 @@ NBlurPreFSEStep::NBlurPreFSEStep          ()
 //
 unsigned int            NBlurPreFSEStep::GetNumOutputs               () const
 {
-    return 2;
+    return 1;
 }
 
 // **************************
