@@ -90,6 +90,18 @@ IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std:
 
 	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_BLUR );
 
+	auto blurSize = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+	auto blurKernelType = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
+	auto normalize = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "normalize", timeEvaluator );
+
+	blurSize->Parameter()->SetVal( 0.f, 0.f );
+	blurKernelType->Parameter()->SetVal( 0, 0.f );
+	normalize->Parameter()->SetVal( 1, 0.f );
+
+	effect->RegisterEvaluator( blurSize );
+	effect->RegisterEvaluator( blurKernelType );
+	effect->RegisterEvaluator( normalize );
+
 	return effect;
 }
 //
