@@ -43,12 +43,19 @@ void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx, const RenderRes
         disableBoundRT( ctx );
     }
 
+    // FIXME: nrl - add screenshot logic somewhere near this line of code - based on previous implementation
+    //if( m_screenShotLogic->ReadbackNeeded() )
+    //{
+    //    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+    //    m_screenShotLogic->FrameRendered( rt, ctx );
+    //}
+
     m_preview->ShowFrame( ctx, data );
 
     // FIXME: temporary
     if( m_videoOutput )
     {
-        m_videoOutput->HandleFrame( data );
+        m_videoOutput->HandleFrame( ctx, data );
     }
 }
 

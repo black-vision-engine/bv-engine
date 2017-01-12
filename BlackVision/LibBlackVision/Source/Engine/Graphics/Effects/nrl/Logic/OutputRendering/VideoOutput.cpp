@@ -8,6 +8,8 @@
 
 namespace bv { namespace nrl {
 
+
+
     //auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
     //auto ctx = GetContext( renderer, audioRenderer );
 
