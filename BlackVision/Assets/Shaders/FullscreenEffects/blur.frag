@@ -8,8 +8,8 @@ uniform sampler2D       Tex0;
 
 uniform float			blurSize;
 uniform vec2			textureSize;
-uniform int             vertical;
-uniform int             normalize = 1;
+uniform bool            vertical;
+uniform bool            normalize = true;
 uniform int             blurKernelType = 0;
 
 float blurSizeCeil = ceil( blurSize );
@@ -72,7 +72,7 @@ void pass0()
 
     sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * w1;
     
-    if( normalize != 0 )
+    if( normalize )
     {
         sum /= weight;
     }
@@ -102,7 +102,7 @@ void pass1()
 
     sum += texture( Tex0, uvCoord + vec2( pixelH * blurSizeCeil, 0 ) ) * w1;
     
-    if( normalize != 0 )
+    if( normalize )
     {
         sum /= weight;
     }
@@ -112,17 +112,9 @@ void pass1()
 
 void main()
 {
-    switch( vertical )
-    {
-    case 0:
-        pass0();
-        break;
-    case 1:
-        pass1();
-        break;
-    default:
-        FragColor = texture( Tex0, uvCoord );
-        break;
-    }
+	if ( vertical )
+		pass0();
+	else
+		pass1();
 }
 

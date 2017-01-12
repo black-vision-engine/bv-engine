@@ -11,6 +11,7 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat2.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat3.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat4.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamBool.h"
 
 
 namespace bv {
@@ -59,7 +60,10 @@ void            UpdateGenericShaderParam        ( IValueConstPtr source, Generic
     case ParamType::PT_MAT4:
         UpdateTypedShaderParam< ValueMat4Ptr, ShaderParamMat4 >( source, dest );
         break;
-    default:
+	case ParamType::PT_BOOL:
+		UpdateTypedShaderParam< ValueBoolPtr, ShaderParamBool >( source, dest );
+		break;
+	default:
         assert( false );
     }
 }

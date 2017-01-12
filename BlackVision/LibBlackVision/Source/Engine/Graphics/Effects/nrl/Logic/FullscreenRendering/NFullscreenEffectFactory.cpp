@@ -84,6 +84,10 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 		case NFullscreenEffectType::NFET_BLUR:
 			desc->AppendInputSamplerName( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blurSize" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "normalize" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "vertical" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueInt( "blurKernelType" ) );
 			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
