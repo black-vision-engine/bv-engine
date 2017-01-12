@@ -95,13 +95,13 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
                 {
                     case FbxGeometryElement::eDirect:
                     {
-                        uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( vertexIdx ) ) );
+                        uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( ctrlIdx ) ) );
                     }
                     break;
 
                     case FbxGeometryElement::eIndexToDirect:
                     {
-                        int id = elUV->GetIndexArray().GetAt( vertexIdx );
+                        int id = elUV->GetIndexArray().GetAt( ctrlIdx );
                         uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( id ) ) );
                     }
                     break;
@@ -117,9 +117,13 @@ void                MeshUtils::ProcessUVs           ( std::vector< glm::vec2 > &
                 switch ( elUV->GetReferenceMode() )
                 {
                     case FbxGeometryElement::eDirect:
+                    {
+                        uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( vertexIdx ) ) );
+                    }
                     case FbxGeometryElement::eIndexToDirect:
                     {
-                        uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( ctrlIdx ) ) );
+                        int id = elUV->GetIndexArray().GetAt( vertexIdx );
+                        uvs.push_back( FbxToGlm< glm::vec2 >( elUV->GetDirectArray().GetAt( id ) ) );
                     }
                     break;
                     default:
@@ -263,7 +267,7 @@ void                            MeshUtils::ProcessGeometry        ( MeshAssetPtr
                 positions.push_back( FbxToGlm< glm::vec3 >( fbxMesh->GetControlPointAt( ctrlIdx ) ) );
 
                 ProcessNormals( normals, fbxMesh, vertexIdx, ctrlIdx );
-                ProcessUVs( uvs, fbxMesh, vertexIdx, fbxMesh->GetTextureUVIndex( i, j ) );
+                ProcessUVs( uvs, fbxMesh, vertexIdx, ctrlIdx );
                 ProcessTangents( tangents, fbxMesh, vertexIdx );
 
                 vertexIdx++;

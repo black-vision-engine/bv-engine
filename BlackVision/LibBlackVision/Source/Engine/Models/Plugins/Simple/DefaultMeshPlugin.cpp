@@ -27,6 +27,9 @@
 namespace bv { namespace model {
 
 
+const std::string        DefaultMeshPlugin::PARAMS::FlipU    = "FlipU";
+const std::string        DefaultMeshPlugin::PARAMS::FlipV    = "FlipV";
+
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -50,6 +53,10 @@ DefaultPluginParamValModelPtr   DefaultMeshPluginDesc::CreateDefaultModel( ITime
 {
     ModelHelper helper( timeEvaluator );
     helper.SetOrCreatePSModel();
+
+    helper.AddSimpleStatedParam( DefaultMeshPlugin::PARAMS::FlipU, false );
+    helper.AddSimpleStatedParam( DefaultMeshPlugin::PARAMS::FlipV, false );
+
     return helper.GetModel();
 }
 
@@ -80,6 +87,7 @@ void DefaultMeshPlugin::SetPrevPlugin( IPluginPtr prev )
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
 }
+
 
 // *************************************
 // 
@@ -154,6 +162,13 @@ IPixelShaderChannelPtr              DefaultMeshPlugin::GetPixelShaderChannel    
 void                                DefaultMeshPlugin::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
+
+    if( ParameterChanged( PARAMS::FlipU ) ||
+        ParameterChanged( PARAMS::FlipV ) )
+    {
+
+    }
+
     m_psc->PostUpdate();    
 }
 
@@ -217,6 +232,9 @@ bool		DefaultMeshPlugin::InitVertexAttributesChannel		( bool recursive )
 //
 void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, glm::mat4 & transform, bool recursive )
 {
+    bool flipU = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAMS::FlipU ) )->Evaluate();
+    bool flipV = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAMS::FlipV ) )->Evaluate();
+
     auto geometry = meshAsset->GetGeometry();
     if( geometry )
     {
@@ -224,7 +242,7 @@ void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAs
         {
             posChannel->AddAttributes( geometry->positions );
             normChannel->AddAttributes( geometry->normals );
-            uvChannel->AddAttributes( geometry->uvs );
+            AddUVChannel( uvChannel, geometry->uvs, flipU, flipV );
             tangentChannel->AddAttributes( geometry->tangents );
         }
         else
@@ -245,8 +263,7 @@ void		DefaultMeshPlugin::AddGeometry		                ( MeshAssetConstPtr meshAs
             for( int i = 0; i < geometry->positions.size(); ++i )
                 tangentChannel->AddAttribute( normalMat * geometry->tangents[ i ] );
 
-            // Don't need to transform uvs.
-            uvChannel->AddAttributes( geometry->uvs );
+            AddUVChannel( uvChannel, geometry->uvs, flipU, flipV );
         }
     }
 
@@ -279,6 +296,34 @@ glm::mat4   DefaultMeshPlugin::ComputeTransform                 ( MeshAssetConst
     else
         return glm::mat4( 1.0 );
 }
+
+// ***********************
+//
+void        DefaultMeshPlugin::AddUVChannel                     ( Float2AttributeChannelPtr & uvChannel, const std::vector< glm::vec2 > & uvs, bool flipU, bool flipV )
+{
+    if( !flipU && !flipV )
+    {
+        uvChannel->AddAttributes( uvs );
+    }
+    else
+    {
+        uvChannel->GetVertices().reserve( uvChannel->GetVertices().size() + uvs.size() );
+
+        for( int i = 0; i < uvs.size(); ++i )
+        {
+            glm::vec2 newUV = uvs[ i ];
+            
+            if( flipU )
+                newUV.x = 1.0f - newUV.x;
+            if( flipV )
+                newUV.y = 1.0f - newUV.y;
+            
+            uvChannel->AddAttribute( newUV );
+        }
+    }
+}
+
+
 
 } // model
 } // bv

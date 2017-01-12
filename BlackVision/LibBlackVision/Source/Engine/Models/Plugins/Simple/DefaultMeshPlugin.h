@@ -32,6 +32,14 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultMeshPlugin : public BasePlugin
 {
+public:
+
+    struct PARAMS
+    {
+        static const std::string        FlipU;
+        static const std::string        FlipV;
+    };
+
 protected:
 
     DefaultPixelShaderChannelPtr    m_psc;
@@ -63,6 +71,7 @@ protected:
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
+    void                                        AddUVChannel                ( Float2AttributeChannelPtr & uvChannel, const std::vector< glm::vec2 > & uvs, bool flipU, bool flipV );
 };
 
 } // model
