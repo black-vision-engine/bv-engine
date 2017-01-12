@@ -38,7 +38,7 @@ Texture3DTest::~Texture3DTest     ()
 void    Texture3DTest::InitTexture          ()
 {
 	std::vector< GLubyte > checkImage( m_texSize.x * m_texSize.y * 4 );
-	unsigned int numLevels = 1 + ( unsigned int )( log( max( ( double )m_texSize.x, ( double )m_texSize.y ) ) / log ( 2.0 ) );
+	unsigned int numLevels = 1 + ( unsigned int )( log( std::max( ( double )m_texSize.x, ( double )m_texSize.y ) ) / log ( 2.0 ) );
 
 	GLuint checkboard = Checkboard( &checkImage[ 0 ],  m_texSize.x, m_texSize.y );
 	ClearColor( &checkImage[ 0 ], m_texSize.x, m_texSize.y, glm::uvec3( 255, 0, 0 ) );

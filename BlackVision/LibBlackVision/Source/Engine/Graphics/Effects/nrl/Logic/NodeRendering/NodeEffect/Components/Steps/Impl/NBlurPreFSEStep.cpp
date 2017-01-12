@@ -1,0 +1,85 @@
+#include "stdafx.h"
+
+#include "NBlurPreFSEStep.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/State/NRenderComponentState.h"
+
+#include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
+#include "Engine/Graphics/Resources/RenderTarget.h"
+
+#include "Engine/Types/Values/ValuesFactory.h"
+
+
+namespace bv { namespace nrl {
+
+// **************************
+//
+NBlurPreFSEStep::NBlurPreFSEStep          ()
+    : Parent( nullptr )
+    , m_renderResult( 1 )
+{
+    auto state = std::make_shared< NRenderComponentState >();
+
+    Parent::SetState( state );
+}
+
+// **************************
+//
+unsigned int            NBlurPreFSEStep::GetNumOutputs               () const
+{
+    return 1;
+}
+
+// **************************
+//
+void                    NBlurPreFSEStep::ReadInputState              ()
+{}
+
+// **************************
+//
+void                    NBlurPreFSEStep::AllocateRenderTargets       ( NRenderContext * ctx )
+{
+    auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+ 
+    m_renderResult.SetLastRenderTargetIdx( allocator( ctx )->GetTopIndex() );
+    m_renderResult.SetEntry( 0, rt0 );
+}
+
+// **************************
+//
+const NRenderedData *   NBlurPreFSEStep::ApplyImpl                   ( SceneNodeRepr * nodeRepr, NRenderContext * ctx )
+{       
+    assert( ctx->GetBoundRenderTarget() != nullptr );
+
+    NNodeRenderLogic::RenderRoot( nodeRepr, ctx );
+
+    auto mainRT = disableBoundRT( ctx );
+
+    // Render output
+	NNodeRenderLogic::Render( nodeRepr, m_renderResult.GetEntry( 0 ), ctx );
+
+    enable( ctx, mainRT );
+
+    return &m_renderResult;;
+}
+
+// **************************
+//
+bool    NBlurPreFSEStep::IsIdle                    ( SceneNodeRepr * ) const
+{
+    return false;
+}
+
+// **************************
+// 
+bool    NBlurPreFSEStep::IsFinal                   ( SceneNodeRepr * ) const
+{
+    return false;
+
+}
+
+} // nrl
+} // bv

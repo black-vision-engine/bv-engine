@@ -82,27 +82,28 @@ IModelNodeEffectPtr         CreateMixchannelsModelNodeEffect        ( const std:
     return effect;
 }
 
-//// **************************
-////
-//IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
-//{
-//    { name; }
-//    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_BLUR );
+// **************************
 //
-//    auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
-//    auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
-//    auto blurKernelTypeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
-//    
-//    blurSizeEval->Parameter()->SetVal( 10.5f, 0.f );
-//    normalizeEval->Parameter()->SetVal( 1, 0.f );
-//    blurKernelTypeEval->Parameter()->SetVal( 2, 0.f );
-//
-//    effect->RegisterEvaluator( blurSizeEval );
-//    effect->RegisterEvaluator( normalizeEval );
-//    effect->RegisterEvaluator( blurKernelTypeEval );
-//
-//    return effect;
-//}
+IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	name;
+
+	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_BLUR );
+
+	auto blurSize = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+	auto blurKernelType = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
+	auto normalize = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "normalize", timeEvaluator );
+
+	blurSize->Parameter()->SetVal( 0.f, 0.f );
+	blurKernelType->Parameter()->SetVal( 0, 0.f );
+	normalize->Parameter()->SetVal( 1, 0.f );
+
+	effect->RegisterEvaluator( blurSize );
+	effect->RegisterEvaluator( blurKernelType );
+	effect->RegisterEvaluator( normalize );
+
+	return effect;
+}
 //
 //// **************************
 ////
@@ -243,8 +244,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             return CreateWireframeModelNodeEffect( name, timeEvaluator );
         case NodeEffectType::NET_MIX_CHANNELS:
             return CreateMixchannelsModelNodeEffect( name, timeEvaluator );
-        //case NodeEffectType::NET_BLUR:
-        //    return CreateBlurModelNodeEffect( name, timeEvaluator );
+        case NodeEffectType::NET_BLUR:
+            return CreateBlurModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_LIGHT_SCATTERING:
         //    return CreateLightScatteringModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_SHADOW:

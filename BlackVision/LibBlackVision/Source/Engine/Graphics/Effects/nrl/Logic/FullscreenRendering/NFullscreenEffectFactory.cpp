@@ -57,7 +57,11 @@ NFullscreenEffectVisualComponentDesc    CreateDefaultDescriptor ( const std::str
 //
 void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEffectType nfseType )
 {
-    assert( nfseType == NFullscreenEffectType::NFET_SIMPLE_BLIT || nfseType == NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB || nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA || nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK );
+    assert( nfseType == NFullscreenEffectType::NFET_SIMPLE_BLIT ||
+			nfseType == NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB ||
+			nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA ||
+			nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK ||
+			nfseType == NFullscreenEffectType::NFET_BLUR );
 
     desc->SetBlendFlag( false );
     desc->SetCullFlag( false );
@@ -77,6 +81,10 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
             desc->AppendInputSamplerName( "Texture" );
             desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             break;
+		case NFullscreenEffectType::NFET_BLUR:
+			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
+			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
         case NFullscreenEffectType::NFET_VIDEO_OUTPUT:

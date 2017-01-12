@@ -89,7 +89,7 @@ bool                    NNodeMaskFSEStep::IsFinal                      ( SceneNo
 //
 float                   NNodeMaskFSEStep::GetAlpha                     () const
 {
-    auto val = GetState()->GetValueAt( 0 );
+    auto val = GetState()->GetValueAt( 1 );
 
     assert( val->GetName() == "alpha" );
 

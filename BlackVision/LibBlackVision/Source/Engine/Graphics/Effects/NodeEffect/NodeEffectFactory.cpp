@@ -151,17 +151,14 @@ NodeEffectPtr       CreateBoundingBoxNodeEffect()
 //
 NodeEffectPtr       CreateBlurEffect()
 {
-    //auto logic = CreateNodeEffectLogic();
+	auto logic = CreateNodeEffectLogic();
 
-    //auto pre  = new BlurPreFullscreenEffectLogic();
-    //auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLUR, pre->GetValues() );
+	auto pre = new BlurPreFullscreenEffectLogic();
+	auto fse = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLUR, pre->GetValues() );
 
-    //SetLogicComponents( logic, pre, fse, nullptr );
+	SetLogicComponents( logic, pre, fse, nullptr );
 
-    //return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
-
-    // FIXME: nrl - implement in NNodeFactory
-    return nullptr;
+	return CreateNodeEffect( logic, NodeEffectType::NET_BLUR );
 }
 
 // **************************
@@ -225,10 +222,10 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
     {
         case  NodeEffectType::NET_DEFAULT:
             return CreateDefaultNodeEffect();
-        case NodeEffectType::NET_ALPHA_MASK:
-            return CreateAlphaMaskNodeEffect();
-        case NodeEffectType::NET_NODE_MASK:
-            return CreateNodeMaskNodeEffect();
+        //case NodeEffectType::NET_ALPHA_MASK:
+        //    return CreateAlphaMaskNodeEffect();
+        //case NodeEffectType::NET_NODE_MASK:
+        //    return CreateNodeMaskNodeEffect();
         case NodeEffectType::NET_WIREFRAME:
             return CreateWireframeNodeEffect();
         case NodeEffectType::NET_MIX_CHANNELS:
