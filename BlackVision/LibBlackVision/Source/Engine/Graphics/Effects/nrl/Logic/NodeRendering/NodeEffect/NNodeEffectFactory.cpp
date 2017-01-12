@@ -114,7 +114,6 @@ NNodeEffectPtr       CreateNodeMaskNodeEffect   ()
     auto alphaVal       = get_value( fseStep->GetState(), "alpha" );
     
     auto preFSEStep     = new NNodeMaskPreFSEStep   ( alphaVal, minAlphaThreshold );
-    auto finalizeStep   = new NNodeMaskFinalizeStep ();
 
     auto fsePass        = new NFullscreenEffectPass ( preFSEStep, fseStep );
     auto emptyPass		= new NEmptyPass();
