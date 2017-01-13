@@ -89,6 +89,15 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "vertical" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "blurKernelType" ) );
 			break;
+		case NFullscreenEffectType::NFET_LIGHT_SCATTERING:
+			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "exposure" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "decay" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "density" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "weight" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueVec2( "lightPositionOnScreen" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueInt( "numSamples" ) );
+			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
         case NFullscreenEffectType::NFET_VIDEO_OUTPUT:

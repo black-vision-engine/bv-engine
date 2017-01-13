@@ -15,12 +15,13 @@ enum class NodeEffectType : int
     NET_WIREFRAME,
     NET_MIX_CHANNELS,
     /*
-    NET_LIGHT_SCATTERING,
+    
     NET_SHADOW,
     
 
     NET_BOUNDING_BOX,
     */
+	NET_LIGHT_SCATTERING,
 	NET_BLUR,
     NET_TOTAL
 };

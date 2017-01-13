@@ -25,6 +25,7 @@ enum class NFullscreenEffectType : int
     NFET_MIX_CHANNELS,
     NFET_VIDEO_OUTPUT,
     NFET_BLUR,
+	NFET_LIGHT_SCATTERING,
     //NFET_SHADOW
     //NFET_OUTLINE
     //TODO: and so on
@@ -40,7 +41,8 @@ const std::string GFetFile[] = {
 								"interlace.frag",
 								"mixchannels.frag",
 								"videooutput.frag",
-								"blur.frag"
+								"blur.frag",
+								"light_scattering.frag"
 							   };
 
 class NFullscreenEffectInstance;

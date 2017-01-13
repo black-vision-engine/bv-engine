@@ -20,6 +20,7 @@ enum class NNodeEffectType : int
     NNET_WIREFRAME,
     NNET_MIX_CHANNELS,
 	NNET_BLUR,
+	NNET_LIGHT_SCATTERING,
 
     NNET_TOTAL
 };

@@ -8,7 +8,7 @@ uniform float density;
 uniform float weight;
 uniform vec2 lightPositionOnScreen;
 uniform sampler2D Tex0;
-uniform float numSamples;
+uniform int numSamples;
 
 in vec2 uvCoord;
 
@@ -27,7 +27,7 @@ void main()
     
     FragColor = texture( Tex0, uvCoord );
 
-    for( int i = 0; i < int(numSamples); i++ )
+    for( int i = 0; i < numSamples; i++ )
     {
              textCoo -= deltaTextCoord;
              vec4 s = texture( Tex0, textCoo );

@@ -26,6 +26,9 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NBlurPreFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NBlurFSEStep.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NLightScatteringPreFSEStep.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NLightScatteringFSEStep.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/nrl/Logic/State/NFullscreenEffectComponentState.h"
 
@@ -165,6 +168,39 @@ NNodeEffectPtr       CreateBlurNodeEffect   ()
 
 // **************************
 //
+NNodeEffectPtr       CreateLightScatteringNodeEffect   ()
+{
+	//RenderLogic - default
+	//Passes
+	// - fse - default pre
+	//    - pre step - node mask
+	//    - fse step - node mask
+	// - fin - default rendering
+	//    - finalize step with default rendering
+	// Create STEPS
+
+
+	auto fseStep = new NLightScatteringFSEStep();
+
+	auto preFSEStep = new NLightScatteringPreFSEStep();
+
+	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
+
+	auto finalizeStep = new NDefaultFinalizeStep();
+	auto finPass = new NFinalizePass( finalizeStep );
+
+	std::vector< NNodeEffectRenderPass * > passes( 2 );
+
+	passes[ 0 ] = fsePass;
+	passes[ 1 ] = finPass;
+
+	auto nnerl = new NNodeEffectRenderLogic( passes );
+
+	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_LIGHT_SCATTERING );
+}
+
+// **************************
+//
 NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 {
     switch( nnodeEffectType )
@@ -177,6 +213,8 @@ NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
             return CreateNodeMaskNodeEffect();
 		case NNodeEffectType::NNET_BLUR:
 			return CreateBlurNodeEffect();
+		case NNodeEffectType::NNET_LIGHT_SCATTERING:
+			return CreateLightScatteringNodeEffect();
 		case NNodeEffectType::NNET_WIREFRAME:
             //return CreateWireframeNodeEffect();
         case NNodeEffectType::NNET_MIX_CHANNELS:

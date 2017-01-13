@@ -105,39 +105,39 @@ IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std:
 	return effect;
 }
 //
-//// **************************
-////
-//IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
-//{
-//    { name; }
-//    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_LIGHT_SCATTERING );
+// **************************
 //
-//    auto exposureEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "exposure", timeEvaluator );
-//    auto weightEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "weight", timeEvaluator );
-//    auto decayEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "decay", timeEvaluator );
-//    auto densityEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "density", timeEvaluator );
-//    auto lightPositionOnScreenEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "lightPositionOnScreen", timeEvaluator );
-//    auto numSamplesEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "numSamples", timeEvaluator );
-//
-//    exposureEval->Parameter()->SetVal( 0.005f, 0.f );
-//    weightEval->Parameter()->SetVal( 2.65f, 0.f );
-//    decayEval->Parameter()->SetVal( 1.0f, 0.f );
-//    densityEval->Parameter()->SetVal( 0.2f, 0.f );
-//    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.1f, 0.4f ), 0.f );
-//    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.6f ), 5.f );
-//    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.5f, 0.4f ), 10.f );
-//    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.1f ), 15.f );
-//    numSamplesEval->Parameter()->SetVal( 100.f, 0.f );
-//
-//    effect->RegisterEvaluator( exposureEval );
-//    effect->RegisterEvaluator( weightEval );
-//    effect->RegisterEvaluator( decayEval );
-//    effect->RegisterEvaluator( densityEval );
-//    effect->RegisterEvaluator( lightPositionOnScreenEval );
-//    effect->RegisterEvaluator( numSamplesEval );
-//
-//    return effect;
-//}
+IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+    { name; }
+    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_LIGHT_SCATTERING );
+
+    auto exposureEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "exposure", timeEvaluator );
+    auto weightEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "weight", timeEvaluator );
+    auto decayEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "decay", timeEvaluator );
+    auto densityEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "density", timeEvaluator );
+    auto lightPositionOnScreenEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "lightPositionOnScreen", timeEvaluator );
+    auto numSamplesEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "numSamples", timeEvaluator );
+
+    exposureEval->Parameter()->SetVal( 0.005f, 0.f );
+    weightEval->Parameter()->SetVal( 2.65f, 0.f );
+    decayEval->Parameter()->SetVal( 1.0f, 0.f );
+    densityEval->Parameter()->SetVal( 0.2f, 0.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.1f, 0.4f ), 0.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.6f ), 5.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.5f, 0.4f ), 10.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.1f ), 15.f );
+    numSamplesEval->Parameter()->SetVal( 100, 0.f );
+
+    effect->RegisterEvaluator( exposureEval );
+    effect->RegisterEvaluator( weightEval );
+    effect->RegisterEvaluator( decayEval );
+    effect->RegisterEvaluator( densityEval );
+    effect->RegisterEvaluator( lightPositionOnScreenEval );
+    effect->RegisterEvaluator( numSamplesEval );
+
+    return effect;
+}
 //
 //// **************************
 ////
@@ -246,8 +246,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             return CreateMixchannelsModelNodeEffect( name, timeEvaluator );
         case NodeEffectType::NET_BLUR:
             return CreateBlurModelNodeEffect( name, timeEvaluator );
-        //case NodeEffectType::NET_LIGHT_SCATTERING:
-        //    return CreateLightScatteringModelNodeEffect( name, timeEvaluator );
+        case NodeEffectType::NET_LIGHT_SCATTERING:
+            return CreateLightScatteringModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_SHADOW:
         //    return CreateShadowModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_BOUNDING_BOX:
