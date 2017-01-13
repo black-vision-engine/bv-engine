@@ -1999,6 +1999,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NLightScatteringPreFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5250,6 +5256,12 @@
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NLightScatteringPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowFSEStep.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
   </ItemGroup>
