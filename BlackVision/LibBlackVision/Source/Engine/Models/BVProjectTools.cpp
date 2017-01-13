@@ -154,7 +154,8 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
         if( nodeEffectType != NodeEffectType::NET_DEFAULT &&
 			nodeEffectType != NodeEffectType::NET_ALPHA_MASK &&
 			nodeEffectType != NodeEffectType::NET_NODE_MASK &&
-			nodeEffectType != NodeEffectType::NET_BLUR )
+			nodeEffectType != NodeEffectType::NET_BLUR &&
+			nodeEffectType != NodeEffectType::NET_LIGHT_SCATTERING )
         {
             node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
         }
