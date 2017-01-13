@@ -35,7 +35,14 @@ RenderOutputChannel::~RenderOutputChannel                                   ()
 
 // **************************
 //
-const bv::RenderTarget * RenderOutputChannel::GetActiveRenderTarget          () const
+unsigned int                RenderOutputChannel::GetNumRenderTargets        () const
+{
+    return m_renderTargets.size();
+}
+
+// **************************
+//
+const bv::RenderTarget *    RenderOutputChannel::GetActiveRenderTarget      () const
 {
     return GetRenderTarget( 0 );
 }

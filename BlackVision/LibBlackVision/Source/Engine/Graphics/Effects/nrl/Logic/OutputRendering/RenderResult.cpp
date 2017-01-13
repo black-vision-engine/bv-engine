@@ -13,24 +13,22 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-RenderResult::RenderResult                                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType )
+RenderResult::RenderResult                                      ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType )
     : m_renderOutputChannels( (unsigned int) RenderOutputChannelType::ROCT_TOTAL )
+    , m_containsValidData( (unsigned int) RenderOutputChannelType::ROCT_TOTAL )
 {
     for( unsigned int i = 0; i < m_renderOutputChannels.size(); ++i )
     {
         auto channel = new RenderOutputChannel( allocator, numTrackedRenderTargetsPerOutputType );
 
         m_renderOutputChannels[ i ] = channel;
+        m_containsValidData[ i ] = false;
     }
-
-    bool                            ContainsValidData       ( RenderOutputChannelType roct ) const;
-    void                            SetContainsValidData    ( RenderOutputChannelType roct, bool containsValidData );
-
 }
 
 // **************************
 //
-RenderResult::~RenderResult                                   ()
+RenderResult::~RenderResult                                     ()
 {
     for( auto channel : m_renderOutputChannels )
     {
@@ -40,14 +38,14 @@ RenderResult::~RenderResult                                   ()
 
 // **************************
 //
-const RenderOutputChannel * RenderResult::GetRenderOutputChannel	( RenderOutputChannelType roct ) const
+const RenderOutputChannel * RenderResult::GetRenderOutputChannel( RenderOutputChannelType roct ) const
 {
     return m_renderOutputChannels[ ( unsigned int ) roct ];
 }
 
 // **************************
 //
-const RenderTarget *		RenderResult::GetActiveRenderTarget		( RenderOutputChannelType roct ) const
+const RenderTarget *		RenderResult::GetActiveRenderTarget ( RenderOutputChannelType roct ) const
 {
 	auto channel = GetRenderOutputChannel( roct );
 
@@ -56,7 +54,7 @@ const RenderTarget *		RenderResult::GetActiveRenderTarget		( RenderOutputChannel
 
 // **************************
 //
-void                    RenderResult::UpdateOutputChannels			( const SceneVec & scenes )
+void                    RenderResult::UpdateOutputChannels      ( const SceneVec & scenes )
 {
     // FIXME: nrl - take scenes into account somehow
     { scenes; }
@@ -69,7 +67,21 @@ void                    RenderResult::UpdateOutputChannels			( const SceneVec & 
 
 // **************************
 //
-bool                    RenderResult::ContainsValidData             ( RenderOutputChannelType roct ) const
+bool                    RenderResult::IsActive                  ( RenderOutputChannelType roct ) const
+{
+    return GetRenderOutputChannel( roct )->IsActive();
+}
+
+// **************************
+//
+void                    RenderResult::SetIsActive               ( RenderOutputChannelType roct, bool isActive )
+{
+    m_renderOutputChannels[ ( unsigned int ) roct ]->SetActiveFlag( isActive );
+}
+
+// **************************
+//
+bool                    RenderResult::ContainsValidData         ( RenderOutputChannelType roct ) const
 {
     return m_containsValidData[ (unsigned int) roct ];
 }

@@ -27,6 +27,8 @@ public:
                             RenderOutputChannel         ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets );
                             ~RenderOutputChannel        ();
 
+    unsigned int            GetNumRenderTargets         () const;
+
     const RenderTarget *    GetActiveRenderTarget       () const;
     const RenderTarget *    GetPreviousRenderTarget     () const;
 

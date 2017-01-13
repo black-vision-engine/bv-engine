@@ -18,7 +18,6 @@ enum class RenderOutputChannelType : unsigned int
     ROCT_OUTPUT_2,
     ROCT_OUTPUT_3,
     ROCT_OUTPUT_4,
-    ROCT_OUTPUT_5,
 
     ROCT_TOTAL
 };
@@ -47,6 +46,9 @@ public:
 	const RenderTarget *			GetActiveRenderTarget	( RenderOutputChannelType roct ) const;
 
     void                            UpdateOutputChannels    ( const SceneVec & scenes );
+
+    bool                            IsActive                ( RenderOutputChannelType roct ) const;
+    void                            SetIsActive             ( RenderOutputChannelType roct, bool isActive );
 
     bool                            ContainsValidData       ( RenderOutputChannelType roct ) const;
     void                            SetContainsValidData    ( RenderOutputChannelType roct, bool containsValidData );
