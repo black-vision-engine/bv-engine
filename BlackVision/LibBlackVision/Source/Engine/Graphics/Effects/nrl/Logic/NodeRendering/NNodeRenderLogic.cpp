@@ -127,7 +127,8 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
         assert( nEffect->GetType() == nrl::NNodeEffectType::NNET_DEFAULT ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_NODE_MASK ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_BLUR );
+				nEffect->GetType() == nrl::NNodeEffectType::NNET_BLUR ||
+				nEffect->GetType() == nrl::NNodeEffectType::NNET_LIGHT_SCATTERING );
 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
     }

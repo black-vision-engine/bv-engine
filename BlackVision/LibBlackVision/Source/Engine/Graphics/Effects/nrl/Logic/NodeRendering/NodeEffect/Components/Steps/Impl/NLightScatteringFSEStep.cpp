@@ -76,7 +76,7 @@ bool                    NLightScatteringFSEStep::IsIdle                       ( 
 // If 
 bool                    NLightScatteringFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
-	return false;
+	return true;
 }
 
 } // nrl

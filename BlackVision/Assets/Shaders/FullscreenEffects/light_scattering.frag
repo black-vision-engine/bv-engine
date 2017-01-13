@@ -19,11 +19,11 @@ void main()
     deltaTextCoord         *= 1.0 /  numSamples * density;
     float illuminationDecay = 1.0;
 
-    if( length(lightPositionOnScreen - uvCoord) < 0.02 )
-    {
-        FragColor = vec4(1,0,0,1);
-        return;
-    }
+    // if( length(lightPositionOnScreen - uvCoord) < 0.02 )
+    // {
+        // FragColor = vec4(1,0,0,1);
+        // return;
+    // }
     
     FragColor = texture( Tex0, uvCoord );
 

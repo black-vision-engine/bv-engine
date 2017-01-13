@@ -61,7 +61,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			nfseType == NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB ||
 			nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA ||
 			nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK ||
-			nfseType == NFullscreenEffectType::NFET_BLUR );
+			nfseType == NFullscreenEffectType::NFET_BLUR ||
+			nfseType == NFullscreenEffectType::NFET_LIGHT_SCATTERING );
 
     desc->SetBlendFlag( false );
     desc->SetCullFlag( false );
