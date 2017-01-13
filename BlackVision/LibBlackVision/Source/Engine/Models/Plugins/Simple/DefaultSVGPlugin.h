@@ -1,6 +1,15 @@
 #pragma once
 
-#include "DefaultMeshPlugin.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/ResourceStateModel.h"
+
+#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
+#include "Engine/Models/Plugins/Plugin.h"
+
+#include "Assets/Mesh/MeshAsset.h"
+
 
 
 namespace bv {
@@ -23,9 +32,13 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultSVGPlugin : public DefaultMeshPlugin
+class DefaultSVGPlugin : public BasePlugin
 {
 protected:
+    DefaultPixelShaderChannelPtr    m_psc;
+    VertexAttributesChannelPtr      m_vaChannel;
+    MeshAssetConstPtr               m_meshAsset;
+
 public:
 
     explicit                                    DefaultSVGPlugin            ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -33,11 +46,17 @@ public:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
+
+    virtual void                                Update                      ( TimeType t ) override;
+
 private:
 
     bool										InitVertexAttributesChannel ( bool recursive );
-    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, glm::mat4 & transform, bool recursive );
+    void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, bool recursive );
 
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

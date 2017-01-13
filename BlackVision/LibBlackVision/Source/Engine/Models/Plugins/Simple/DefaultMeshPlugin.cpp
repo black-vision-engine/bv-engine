@@ -166,7 +166,7 @@ void                                DefaultMeshPlugin::Update                   
     if( ParameterChanged( PARAMS::FlipU ) ||
         ParameterChanged( PARAMS::FlipV ) )
     {
-
+        InitVertexAttributesChannel( true );
     }
 
     m_psc->PostUpdate();    
@@ -322,6 +322,7 @@ void        DefaultMeshPlugin::AddUVChannel                     ( Float2Attribut
         }
     }
 }
+
 
 
 
