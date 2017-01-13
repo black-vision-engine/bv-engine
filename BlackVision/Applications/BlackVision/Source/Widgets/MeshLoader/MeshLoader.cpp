@@ -202,6 +202,7 @@ model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPt
         model::SetParameterTranslation( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.f, transform->translation );
         model::SetParameterRotation( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.f, transform->rotation );
         model::SetParameterScale( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.f, transform->scale );
+        model::SetParameterCenterMass( transformPlugin->GetParameter( model::DefaultTransformPlugin::PARAM::SIMPLE_TRANSFORM ), 0.0f, transform->center );
     }
 
     auto geometry = asset->GetGeometry();
@@ -342,13 +343,42 @@ void                        MeshLoader::LoadTexture                 ( const std:
 {
     if( !txPath.empty() )
     {
+        std::string texturePath = TranslatePath( txPath );
+
         node->AddPlugin( pluginUID, pluginName, timeEval );
         auto txPlugin = node->GetPlugin( pluginName );
-        auto texDesc = TextureAssetDesc::Create( txPath, true );
+        auto texDesc = TextureAssetDesc::Create( texturePath, true );
         if( texDesc )
         {
             txPlugin->LoadResource( texDesc );
         }
+    }
+}
+
+// ***********************
+//
+std::string                 MeshLoader::TranslatePath               ( const std::string & txPath )
+{
+    auto assetDir = File::GetDirName( m_assetDesc->GetPath() );
+    auto textureFile = File::GetFileName( txPath, true );
+
+    auto assetPathVec = Path( assetDir ).Split();
+    if( assetPathVec.size() > 0 && assetPathVec[ 0 ] == "meshes" )
+    {
+        assetPathVec[ 0 ] = "textures";
+        
+        Path texturePath;
+        for( auto & elem : assetPathVec )
+        {
+            texturePath = texturePath / elem;
+        }
+
+        texturePath = texturePath / textureFile;
+        return texturePath.Str();
+    }
+    else
+    {
+        return "";
     }
 }
 
