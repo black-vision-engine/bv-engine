@@ -50,6 +50,7 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 {
     assert( input );
 
+	// FIXME: Some general mechanism should be implemented to set values in effect.
 	auto textureSize = GetState()->GetValueAt( 0 );
 	auto vertical = GetState()->GetValueAt( 3 );
 
@@ -71,6 +72,8 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 	// Run horizontal blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
 	m_blurEffect->Render( ctx, rd );
+
+	allocator( ctx )->Free();  // free allocated locally render target.
 }
 
 // **************************
@@ -81,7 +84,7 @@ void                    NBlurFSEStep::FreeRenderTargets            ( NRenderCont
     assert( input->GetNumEntries() == GetNumRequiredInputs() );
     assert( allocator( ctx )->GetTopIndex() == input->GetLastRenderTargetIdx() );
 
-    allocator( ctx )->Free( GetNumRequiredInputs() + 1 ); // +1 allocated in NBlurFSEStep::ApplyImpl
+    allocator( ctx )->Free( GetNumRequiredInputs() );
 }
 
 // **************************
