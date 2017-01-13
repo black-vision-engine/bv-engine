@@ -65,7 +65,7 @@ const NRenderedData *   NBlurPreFSEStep::ApplyImpl                   ( SceneNode
 
     enable( ctx, mainRT );
 
-    return &m_renderResult;;
+    return &m_renderResult;
 }
 
 // **************************

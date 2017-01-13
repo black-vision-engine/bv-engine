@@ -29,14 +29,14 @@ void main()
 
     for( int i = 0; i < numSamples; i++ )
     {
-             textCoo -= deltaTextCoord;
-             vec4 s = texture( Tex0, textCoo );
-        
-             s *= illuminationDecay * weight;
+		textCoo -= deltaTextCoord;
+		vec4 s = texture( Tex0, textCoo );
+	
+		s *= illuminationDecay * weight;
 
-             FragColor += s;
+		FragColor += s;
 
-             illuminationDecay *= decay;
+		illuminationDecay *= decay;
      }
      
      FragColor *= exposure;
