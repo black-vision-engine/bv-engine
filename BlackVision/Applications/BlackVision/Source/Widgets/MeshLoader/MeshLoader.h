@@ -74,7 +74,7 @@ private:
     void                            GetMeshes           ( MeshAssetConstPtr asset, std::vector< MeshAssetConstPtr > & meshes ) const;
 
     void                            LoadTexture         ( const std::string & txPath, const std::string & pluginUID, const std::string & pluginName, model::BasicNodePtr node, model::ITimeEvaluatorPtr timeEval );
-    
+    std::string                     TranslatePath       ( const std::string & txPath );
 };
 
 } //nodelogic

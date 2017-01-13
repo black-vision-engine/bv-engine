@@ -54,7 +54,7 @@ NFullscreenEffectVisualComponentDesc    CreateDefaultDescriptor ( const std::str
 }
 
 // **************************
-//
+// FIXME: nrl - implement it in a separate file (as a part of implementing FSE in a more generic way - so that FSEs don't have to be subclassed for each type - composition to the rescue)
 void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEffectType nfseType )
 {
     assert( nfseType == NFullscreenEffectType::NFET_SIMPLE_BLIT ||
