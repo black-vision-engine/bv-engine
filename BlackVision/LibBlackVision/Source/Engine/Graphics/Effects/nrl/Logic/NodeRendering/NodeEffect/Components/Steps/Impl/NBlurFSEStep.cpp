@@ -53,13 +53,28 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
     // FIXME: add sync here on smewhere else, where it fits
 	auto textureSize = GetState()->GetValueAt( 0 );
+	auto vertical = GetState()->GetValueAt( 3 );
 
 	auto wrt = input->GetEntry( 0 )->Width();
 	auto hrt = input->GetEntry( 0 )->Height();
 
 	QueryTypedValue< ValueVec2Ptr >( textureSize )->SetValue( glm::vec2( wrt, hrt ) );
 
-	m_blurEffect->Render( ctx, *input );
+	auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+
+	NRenderedData rd( 1 );
+	rd.SetEntry( 0, rt0 );
+
+	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( true );
+
+	m_blurEffect->Render( ctx, rt0, *input );
+
+	
+	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
+
+	m_blurEffect->Render( ctx, rd );
+
+	allocator( ctx )->Free( 1 );
 }
 
 // **************************
