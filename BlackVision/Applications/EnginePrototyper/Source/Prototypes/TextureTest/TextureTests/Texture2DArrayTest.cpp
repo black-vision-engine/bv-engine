@@ -38,7 +38,7 @@ Texture2DArrayTest::~Texture2DArrayTest     ()
 void    Texture2DArrayTest::InitTexture          ()
 {
 	std::vector< GLubyte > checkImage( m_texSize.x * m_texSize.y * 4 );
-	unsigned int numLevels = 1 + ( unsigned int )( log( max( ( double )m_texSize.x, ( double )m_texSize.y ) ) / log ( 2.0 ) );
+	unsigned int numLevels = 1 + ( unsigned int )( log( std::max( ( double )m_texSize.x, ( double )m_texSize.y ) ) / log ( 2.0 ) );
 	
 	GLuint checkboard = Checkboard( &checkImage[ 0 ],  m_texSize.x, m_texSize.y );
 	m_texture = new Texture2DArray( TextureFormat::F_A8R8G8B8, m_texSize.x, m_texSize.y, DataBuffer::Semantic::S_STATIC, 

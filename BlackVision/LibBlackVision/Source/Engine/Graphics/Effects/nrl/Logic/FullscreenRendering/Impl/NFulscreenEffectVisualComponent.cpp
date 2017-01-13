@@ -40,6 +40,7 @@ NFullscreenEffectVisualComponent::NFullscreenEffectVisualComponent    ( Triangle
     auto shaderParams = m_pixelShader->GetParameters();
 
     assert( shaderParams->NumParameters() == values.size() );
+	shaderParams;
 }
 
 // **************************
@@ -214,8 +215,8 @@ void            NFullscreenEffectVisualComponent::SyncSampler                   
     assert( sampler->GetName() == name );
 
     sampler->SetWrappingMode( EngineConstantsMapper::EngineConstant( wrapX ), SamplerWrapDirection::SWD_S );
-    sampler->SetWrappingMode( EngineConstantsMapper::EngineConstant( wrapY ), SamplerWrapDirection::SWD_T );
-    sampler->SetFilteringMode( EngineConstantsMapper::EngineConstant( tfm ) );    
+	sampler->SetWrappingMode( EngineConstantsMapper::EngineConstant( wrapY ), SamplerWrapDirection::SWD_T );
+	sampler->SetFilteringMode( EngineConstantsMapper::EngineConstant( tfm ) );
 }
 
 // **************************
@@ -223,7 +224,7 @@ void            NFullscreenEffectVisualComponent::SyncSampler                   
 void            NFullscreenEffectVisualComponent::SyncStaticTexture                   ( unsigned int i, const NTexture2DEntry & tex )
 {
     SyncTexture( i, tex.GetTexture() );
-    SyncSampler( i, tex.GetSamplerName(), tex.GetFilteringMode(), tex.GetWrappingModeX(), tex.GetWrappingModeY() );
+	SyncSampler( i, tex.GetSamplerName(), tex.GetFilteringMode(), tex.GetWrappingModeX(), tex.GetWrappingModeY() );
 }
 
 } //nrl

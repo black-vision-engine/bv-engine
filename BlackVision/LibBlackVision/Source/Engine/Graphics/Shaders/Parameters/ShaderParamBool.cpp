@@ -9,7 +9,7 @@ namespace bv {
 // ****************************
 //
 ShaderParamBool::ShaderParamBool              ( const std::string & name, bool value )
-    : GenericShaderParam( ShaderParamTypeTraits< ValueInt::ValueType >::paramType, name )
+    : GenericShaderParam( ShaderParamTypeTraits< ValueBool::ValueType >::paramType, name )
     , m_val( value )
 {
 }

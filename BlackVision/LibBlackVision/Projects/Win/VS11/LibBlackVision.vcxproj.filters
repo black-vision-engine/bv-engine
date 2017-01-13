@@ -1987,6 +1987,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\DefaultAVDecoderPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NBlurFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NBlurPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4008,9 +4014,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -5233,6 +5236,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\DefaultAVDecoderPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NBlurFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NBlurPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -315,6 +315,9 @@ void	NodeUpdater::UpdateValue			( IValueConstPtr source, IValuePtr dest )
         case ParamType::PT_MAT4:
             UpdateTypedValue< ValueMat4Ptr >( source, dest );
             break;
+		case ParamType::PT_BOOL:
+			UpdateTypedValue< ValueBoolPtr >( source, dest );
+			break;
         default:
             assert( false );
     }

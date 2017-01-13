@@ -23,6 +23,9 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NNodeMaskFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NNodeMaskFinalizeStep.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NBlurPreFSEStep.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NBlurFSEStep.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/nrl/Logic/State/NFullscreenEffectComponentState.h"
 
@@ -111,19 +114,48 @@ NNodeEffectPtr       CreateNodeMaskNodeEffect   ()
     auto alphaVal       = get_value( fseStep->GetState(), "alpha" );
     
     auto preFSEStep     = new NNodeMaskPreFSEStep   ( alphaVal, minAlphaThreshold );
-    auto finalizeStep   = new NNodeMaskFinalizeStep ();
+	auto finalizeStep	= new NNodeMaskFinalizeStep ();
 
     auto fsePass        = new NFullscreenEffectPass ( preFSEStep, fseStep );
-    auto finPass        = new NFinalizePass( finalizeStep );
+	auto finPass		= new NFinalizePass( finalizeStep );
 
     std::vector< NNodeEffectRenderPass * > passes( 2 );
 
     passes[ 0 ] = fsePass;
-    passes[ 1 ] = finPass;
+	passes[ 1 ] = finPass;
 
 	auto nnerl = new NNodeEffectRenderLogic( passes );
 
     return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_NODE_MASK );
+}
+
+// **************************
+//
+NNodeEffectPtr       CreateBlurNodeEffect   ()
+{
+	//RenderLogic - default
+	//Passes
+	// - fse - default pre
+	//    - pre step - node mask
+	//    - fse step - node mask
+	// - fin - default rendering
+	//    - finalize step with default rendering
+	// Create STEPS
+
+	auto preFSEStep = new NBlurPreFSEStep();
+	auto fseStep = new NBlurFSEStep();
+
+	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
+	auto emptyPass = new NEmptyPass();
+
+	std::vector< NNodeEffectRenderPass * > passes( 2 );
+
+	passes[ 0 ] = fsePass;
+	passes[ 1 ] = emptyPass;
+
+	auto nnerl = new NNodeEffectRenderLogic( passes );
+
+	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_BLUR );
 }
 
 // **************************
@@ -138,11 +170,13 @@ NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
             return CreateAlphaMaskNodeEffect();
         case NNodeEffectType::NNET_NODE_MASK:
             return CreateNodeMaskNodeEffect();
-        case NNodeEffectType::NNET_WIREFRAME:
+		case NNodeEffectType::NNET_BLUR:
+			return CreateBlurNodeEffect();
+		case NNodeEffectType::NNET_WIREFRAME:
             //return CreateWireframeNodeEffect();
         case NNodeEffectType::NNET_MIX_CHANNELS:
             //return CreateMixchannelsNodeEffect();
-        //Interlace and so on
+			//Interlace and so on
         default:
             assert( false );
     }

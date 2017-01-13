@@ -17,10 +17,11 @@ enum class NodeEffectType : int
     /*
     NET_LIGHT_SCATTERING,
     NET_SHADOW,
-    NET_BLUR,
+    
 
     NET_BOUNDING_BOX,
     */
+	NET_BLUR,
     NET_TOTAL
 };
 
