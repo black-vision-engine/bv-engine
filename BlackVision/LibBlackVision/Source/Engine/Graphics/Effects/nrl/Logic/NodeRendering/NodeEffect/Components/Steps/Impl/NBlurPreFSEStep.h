@@ -19,7 +19,7 @@ private:
 
 public:
 
-				                    NBlurPreFSEStep			();
+				                    NBlurPreFSEStep			( IValuePtr blurSize );
 
     virtual unsigned int            GetNumOutputs           () const override;
 
@@ -33,6 +33,8 @@ public:
 
     virtual bool                    IsIdle                  ( SceneNodeRepr * nodeRepr ) const override;
     virtual bool                    IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
+
+	Float32                         GetBlurSize             () const;
 };
 
 } // nrl

@@ -90,16 +90,25 @@ void                    NBlurFSEStep::FreeRenderTargets            ( NRenderCont
 
 // **************************
 //
+Float32					NBlurFSEStep::GetBlurSize				() const
+{
+	auto blurSize = GetState()->GetValueAt( 1 );
+
+	return QueryTypedValue< ValueFloatPtr >( blurSize )->GetValue();
+}
+
+// **************************
+//
 bool                    NBlurFSEStep::IsIdle                       ( SceneNodeRepr * ) const
 {
-	return false;
+	return GetBlurSize() == 0;
 }
 
 // **************************
 // If 
 bool                    NBlurFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
-	return false;
+	return GetBlurSize() != 0;
 }
 
 } // nrl

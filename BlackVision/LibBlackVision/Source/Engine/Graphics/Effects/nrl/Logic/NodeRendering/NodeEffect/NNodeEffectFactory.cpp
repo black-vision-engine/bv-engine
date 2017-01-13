@@ -142,16 +142,21 @@ NNodeEffectPtr       CreateBlurNodeEffect   ()
 	//    - finalize step with default rendering
 	// Create STEPS
 
-	auto preFSEStep = new NBlurPreFSEStep();
+	
 	auto fseStep = new NBlurFSEStep();
+	auto blurSizeVal = get_value( fseStep->GetState(), "blurSize" );
+
+	auto preFSEStep = new NBlurPreFSEStep( blurSizeVal );
 
 	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
-	auto emptyPass = new NEmptyPass();
+
+	auto finalizeStep = new NDefaultFinalizeStep();
+	auto finPass = new NFinalizePass( finalizeStep );
 
 	std::vector< NNodeEffectRenderPass * > passes( 2 );
 
 	passes[ 0 ] = fsePass;
-	passes[ 1 ] = emptyPass;
+	passes[ 1 ] = finPass;
 
 	auto nnerl = new NNodeEffectRenderLogic( passes );
 

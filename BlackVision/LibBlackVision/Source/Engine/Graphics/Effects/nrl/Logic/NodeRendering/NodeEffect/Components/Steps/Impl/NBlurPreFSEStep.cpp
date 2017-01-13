@@ -17,11 +17,13 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NBlurPreFSEStep::NBlurPreFSEStep          ()
+NBlurPreFSEStep::NBlurPreFSEStep          ( IValuePtr blurSize )
     : Parent( nullptr )
     , m_renderResult( 1 )
 {
     auto state = std::make_shared< NRenderComponentState >();
+
+	state->AppendValue( blurSize );
 
     Parent::SetState( state );
 }
@@ -68,16 +70,25 @@ const NRenderedData *   NBlurPreFSEStep::ApplyImpl                   ( SceneNode
 
 // **************************
 //
+Float32 NBlurPreFSEStep::GetBlurSize				() const
+{
+	auto blurSize = GetState()->GetValueAt( 0 );
+
+	return QueryTypedValue< ValueFloatPtr >( blurSize )->GetValue();
+}
+
+// **************************
+//
 bool    NBlurPreFSEStep::IsIdle                    ( SceneNodeRepr * ) const
 {
-    return false;
+	return GetBlurSize() == 0.f;
 }
 
 // **************************
 // 
 bool    NBlurPreFSEStep::IsFinal                   ( SceneNodeRepr * ) const
 {
-    return false;
+	return false;
 
 }
 
