@@ -13,6 +13,7 @@ namespace bv { namespace nrl {
 //
 RenderOutputChannel::RenderOutputChannel                                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets )
     : m_activeRenderTargetIdx( 0 )
+    , m_isActive( false )
 {
     for( unsigned int i = 0; i < numTrackedRenderTargets; ++i )
     {
@@ -69,6 +70,20 @@ unsigned int            RenderOutputChannel::GetNumRenderTargets            () c
 void                    RenderOutputChannel::UpdateActiveRenderTargetIdx    ()
 {
     m_activeRenderTargetIdx = ( m_activeRenderTargetIdx + 1 ) % GetNumRenderTargets();
+}
+
+// **************************
+//
+bool                    RenderOutputChannel::IsActive                       () const
+{
+    return m_isActive;
+}
+
+// **************************
+//
+void                    RenderOutputChannel::SetActiveFlag                  ( bool isActive )
+{
+    m_isActive = true;
 }
 
 } //bv

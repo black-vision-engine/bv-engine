@@ -30,6 +30,7 @@ class RenderResult
 private:
 
     std::vector< RenderOutputChannel * >    m_renderOutputChannels;
+    std::vector< bool >                     m_containsValidData;
 
 private:
 
@@ -39,14 +40,17 @@ private:
 
 public:
 
-    RenderResult                                            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
-    ~RenderResult                                           ();
+                                    RenderResult            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+                                    ~RenderResult           ();
 
     const RenderOutputChannel *     GetRenderOutputChannel  ( RenderOutputChannelType roct ) const;
 	const RenderTarget *			GetActiveRenderTarget	( RenderOutputChannelType roct ) const;
 
     void                            UpdateOutputChannels    ( const SceneVec & scenes );
 
+    bool                            ContainsValidData       ( RenderOutputChannelType roct ) const;
+    void                            SetContainsValidData    ( RenderOutputChannelType roct, bool containsValidData );
+    
 };
 
 } //nrl

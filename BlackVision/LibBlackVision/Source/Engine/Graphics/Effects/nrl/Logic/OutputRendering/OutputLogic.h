@@ -27,8 +27,7 @@ private:
 
 public:
 
-                    OutputLogic         ( unsigned int width, unsigned int height, unsigned int sharedMemScaleFactor );
-                    ~OutputLogic        ();
+    virtual         ~OutputLogic        () = 0;
 
     void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes );
     

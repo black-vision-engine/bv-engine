@@ -22,6 +22,10 @@ RenderResult::RenderResult                                    ( RenderTargetStac
 
         m_renderOutputChannels[ i ] = channel;
     }
+
+    bool                            ContainsValidData       ( RenderOutputChannelType roct ) const;
+    void                            SetContainsValidData    ( RenderOutputChannelType roct, bool containsValidData );
+
 }
 
 // **************************
@@ -61,6 +65,20 @@ void                    RenderResult::UpdateOutputChannels			( const SceneVec & 
     {
         channel->UpdateActiveRenderTargetIdx();
     }
+}
+
+// **************************
+//
+bool                    RenderResult::ContainsValidData             ( RenderOutputChannelType roct ) const
+{
+    return m_containsValidData[ (unsigned int) roct ];
+}
+
+// **************************
+//
+void                    RenderResult::SetContainsValidData          ( RenderOutputChannelType roct, bool containsValidData )
+{
+    m_containsValidData[ (unsigned int) roct ] = containsValidData;
 }
 
 } // nrl

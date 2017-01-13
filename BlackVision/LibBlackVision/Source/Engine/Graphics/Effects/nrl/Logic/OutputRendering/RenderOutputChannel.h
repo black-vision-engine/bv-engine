@@ -20,6 +20,8 @@ private:
 
     int                             m_activeRenderTargetIdx;
 
+    bool                            m_isActive;
+
 public:
 
                             RenderOutputChannel         ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets );
@@ -33,6 +35,9 @@ public:
     unsigned int            GetNumRenderTargets         () const;
 
     void                    UpdateActiveRenderTargetIdx ();
+
+    bool                    IsActive                    () const;
+    void                    SetActiveFlag               ( bool isActive );
 
 };
 

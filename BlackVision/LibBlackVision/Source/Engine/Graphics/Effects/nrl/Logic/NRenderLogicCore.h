@@ -14,6 +14,11 @@ public:
 
     void                    Render          ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx );
 
+private:
+
+    void                    PreRender       ( RenderResult * result );
+    void                    PostRender      ( RenderResult * result );
+
 };
 
 } //nrl
