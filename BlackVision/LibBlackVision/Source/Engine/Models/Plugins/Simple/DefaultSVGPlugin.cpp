@@ -69,20 +69,53 @@ std::string             DefaultSVGPluginDesc::AssetName                  ()
 
 // *************************************
 // 
+void DefaultSVGPlugin::SetPrevPlugin( IPluginPtr prev )
+{
+    BasePlugin::SetPrevPlugin( prev );
+
+    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+}
+
+// *************************************
+// 
 DefaultSVGPlugin::DefaultSVGPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : DefaultMeshPlugin( name, uid, prev, model )
+    : BasePlugin( name, uid, prev, model )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
 
     m_vaChannel = std::make_shared< VertexAttributesChannel >( PrimitiveType::PT_LINES );
 
-    DefaultMeshPlugin::SetPrevPlugin( prev );
+    DefaultSVGPlugin::SetPrevPlugin( prev );
 }
 
 // *************************************
 // 
 DefaultSVGPlugin::~DefaultSVGPlugin         ()
 {}
+
+// *************************************
+// 
+IVertexAttributesChannelConstPtr    DefaultSVGPlugin::GetVertexAttributesChannel  () const
+{
+    return m_vaChannel;
+}
+
+// *************************************
+// 
+IPixelShaderChannelPtr              DefaultSVGPlugin::GetPixelShaderChannel       () const
+{
+    return m_psc;
+}
+
+// *************************************
+// 
+void                                DefaultSVGPlugin::Update                      ( TimeType t )
+{
+    BasePlugin::Update( t );
+    m_psc->PostUpdate();
+}
 
 // *************************************
 //
@@ -95,8 +128,8 @@ bool		DefaultSVGPlugin::InitVertexAttributesChannel		( bool recursive )
         auto posDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
         auto pos = std::make_shared< Float3AttributeChannel >( posDesc, posDesc->SuggestedDefaultName( 0 ), false );
 
-        glm::mat4 identity = glm::mat4( 1 );
-        AddGeometry( m_meshAsset, pos, identity, recursive );
+
+        AddGeometry( m_meshAsset, pos, recursive );
 
         VertexAttributesChannelDescriptor vacDesc;
 
@@ -122,31 +155,19 @@ bool		DefaultSVGPlugin::InitVertexAttributesChannel		( bool recursive )
 
 // *************************************
 //
-void		DefaultSVGPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, glm::mat4 & transform, bool recursive )
+void		DefaultSVGPlugin::AddGeometry		                ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, bool recursive )
 {
     auto geometry = meshAsset->GetGeometry();
     if( geometry )
     {
-        if( transform == glm::mat4( 1.0 ) )
-        {
-            posChannel->AddAttributes( geometry->positions );
-        }
-        else
-        {
-            posChannel->GetVertices().reserve( posChannel->GetVertices().size() + geometry->positions.size() );
-
-
-            for( int i = 0; i < geometry->positions.size(); ++i )
-                posChannel->AddAttribute( glm::vec3( transform * glm::vec4( geometry->positions[ i ], 1.0 ) ) );
-        }
+        posChannel->AddAttributes( geometry->positions );
     }
 
     if( recursive )
     {
         for( UInt32 i = 0; i < meshAsset->NumChildren(); ++i )
         {
-            glm::mat4 childTransform = transform * ComputeTransform( meshAsset->GetChild( i ) );
-            AddGeometry( meshAsset->GetChild( i ), posChannel, childTransform, recursive );
+            AddGeometry( meshAsset->GetChild( i ), posChannel, recursive );
         }
     }
 }
