@@ -27,7 +27,7 @@ private:
 
 public:
 
-    virtual         ~OutputLogic        ();
+    virtual         ~OutputLogic        () = 0;
 
     void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes );
     

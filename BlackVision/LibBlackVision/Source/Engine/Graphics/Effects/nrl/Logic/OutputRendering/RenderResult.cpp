@@ -88,7 +88,7 @@ bool                    RenderResult::ContainsValidData         ( RenderOutputCh
 
 // **************************
 //
-void                    RenderResult::SetContainsValidData          ( RenderOutputChannelType roct, bool containsValidData )
+void                    RenderResult::SetContainsValidData      ( RenderOutputChannelType roct, bool containsValidData )
 {
     m_containsValidData[ (unsigned int) roct ] = containsValidData;
 }

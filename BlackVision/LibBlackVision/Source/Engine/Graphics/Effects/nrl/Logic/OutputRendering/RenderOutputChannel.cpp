@@ -37,7 +37,7 @@ RenderOutputChannel::~RenderOutputChannel                                   ()
 //
 unsigned int                RenderOutputChannel::GetNumRenderTargets        () const
 {
-    return m_renderTargets.size();
+    return (unsigned int) m_renderTargets.size();
 }
 
 // **************************
@@ -67,13 +67,6 @@ const RenderTarget *    RenderOutputChannel::GetRenderTarget                ( in
 
 // **************************
 //
-unsigned int            RenderOutputChannel::GetNumRenderTargets            () const
-{
-    return ( unsigned int ) m_renderTargets.size();
-}
-
-// **************************
-//
 void                    RenderOutputChannel::UpdateActiveRenderTargetIdx    ()
 {
     m_activeRenderTargetIdx = ( m_activeRenderTargetIdx + 1 ) % GetNumRenderTargets();
@@ -90,7 +83,7 @@ bool                    RenderOutputChannel::IsActive                       () c
 //
 void                    RenderOutputChannel::SetActiveFlag                  ( bool isActive )
 {
-    m_isActive = true;
+    m_isActive = isActive;
 }
 
 } //bv
