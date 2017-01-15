@@ -39,8 +39,8 @@ public:
         // FIXME: nrl - should be accessed via RenderResult, not delegated via OutputLogic
         //bool            IsActive                () const;
         //// void         ClearOutputChannel      ( NRenderContext * ctx, RenderOutputChannelType roct ); //FIXME nrl - implement it here?
-        //void            ActivateOutputChannel   ();
-        //void            DeactivateOutputChannel ();
+    void            ActivateOutputChannel   ( RenderOutputChannelType roct );
+    void            DeactivateOutputChannel ( RenderOutputChannelType roct );
 
     OutputPreview * GetOutputPreview        ();
     OutputVideo *   GetOutputVideo          ();

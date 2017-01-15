@@ -5,8 +5,7 @@
 #include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Preview.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/VideoOutput.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
@@ -28,16 +27,16 @@ OutputLogic::~OutputLogic        ()
 
 // *********************************
 //
-void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data )
+void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx  )
 {
     // FIXME: this is kinda hackish
-    if( numScenes == 0 )
+    auto data = m_renderResult;
+    if( data->IsActive( RenderOutputChannelType::ROCT_OUTPUT_1 ) && data->!ContainsValidData( RenderOutputChannelType::ROCT_OUTPUT_1 ) )
     {
-        auto renderTarget = data->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
+        auto outputRT = data->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
 
-        enable( ctx, renderTarget );
-        clearBoundRT( ctx, glm::vec4() ); // FIXME: default clear color used - posisibly customize it a bit
-        disableBoundRT( ctx );
+        // FIXME: nrl - this is so low level that should be implented in an addtional layer (not in NNodeRenderLogic per se)
+        NNodeRenderLogic::Clear( outputRT, ctx ); 
     }
 
     // FIXME: nrl - add screenshot logic somewhere near this line of code - based on previous implementation
