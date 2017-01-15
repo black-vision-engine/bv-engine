@@ -3,7 +3,6 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
@@ -20,7 +19,6 @@ private:
     NRenderContext					m_ctx;
 
     OutputLogic                     m_outputLogic;
-    RenderResult                    m_renderResult;
 
     bool                            m_initialized;
 

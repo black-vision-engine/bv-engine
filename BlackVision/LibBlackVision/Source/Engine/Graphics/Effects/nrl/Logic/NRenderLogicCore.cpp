@@ -77,7 +77,6 @@ void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderCont
 //
 void    NRenderLogicCore::ClearChannelState ( RenderResult * result, RenderOutputChannelType roct )
 {
-    if
 }
 
 } //nrl

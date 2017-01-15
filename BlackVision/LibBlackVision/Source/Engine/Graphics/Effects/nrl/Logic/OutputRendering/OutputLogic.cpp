@@ -15,13 +15,20 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
+OutputLogic::OutputLogic         ()
+    : m_outputs( (unsigned int) CustomOutputType::COT_TOTAL )
+{
+}
+
+// *********************************
+//
 OutputLogic::~OutputLogic        ()
 {
 }
 
 // *********************************
 //
-void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes )
+void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data )
 {
     // FIXME: this is kinda hackish
     if( numScenes == 0 )

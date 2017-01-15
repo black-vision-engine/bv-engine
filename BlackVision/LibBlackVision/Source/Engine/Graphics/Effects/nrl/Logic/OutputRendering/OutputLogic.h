@@ -1,5 +1,10 @@
 #pragma once
 
+#include <vector>
+
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+
 
 namespace bv { 
     
@@ -8,31 +13,38 @@ class SharedMemoryVideoBuffer;
 
 namespace nrl {
 
-class RenderResult;
-class Preview;
-class VideoOutput;
+class OutputPreview;
+class OutputVideo;
+class OutputStream;
+
 class NRenderContext;
 
 class OutputLogic
 {
 private:
 
-    // FIXME: nrl - any additional flags?
-    bool            m_videoOutputEnabled;
-    bool            m_useSharedMemory;
+    std::vector< OutputInstance * >     m_outputs;
 
-    Preview *                   m_preview;
-    SharedMemoryVideoBuffer *   m_sharedMemoryVideoBuffer;
-    VideoOutput *               m_videoOutput;
+    RenderResult *                      m_renderResult;
 
 public:
 
-    virtual         ~OutputLogic        ();
+                    OutputLogic             ();
+    virtual         ~OutputLogic            ();
 
-    void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes );
-    
-    Preview *       GetPreview          ();
-    VideoOutput *   GetVideoOutput      ();
+    void            ProcessFrameData        ( NRenderContext * ctx );
+
+    RenderResult *  AccessRenderResult      ();
+
+        // FIXME: nrl - should be accessed via RenderResult, not delegated via OutputLogic
+        //bool            IsActive                () const;
+        //// void         ClearOutputChannel      ( NRenderContext * ctx, RenderOutputChannelType roct ); //FIXME nrl - implement it here?
+        //void            ActivateOutputChannel   ();
+        //void            DeactivateOutputChannel ();
+
+    OutputPreview * GetOutputPreview        ();
+    OutputVideo *   GetOutputVideo          ();
+    OutputStream *  GetOutputStream         ();
 
 };
 
