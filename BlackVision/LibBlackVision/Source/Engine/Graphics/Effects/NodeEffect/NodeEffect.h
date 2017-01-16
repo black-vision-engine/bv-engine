@@ -20,6 +20,7 @@ enum class NodeEffectType : int
 	NET_BLUR,
 	NET_LIGHT_SCATTERING,
 	NET_SHADOW,
+	NET_GLOW,
 	
     NET_TOTAL
 };

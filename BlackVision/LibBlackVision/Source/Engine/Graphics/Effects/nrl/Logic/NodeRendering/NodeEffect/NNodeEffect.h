@@ -22,6 +22,7 @@ enum class NNodeEffectType : int
 	NNET_BLUR,
 	NNET_LIGHT_SCATTERING,
 	NNET_SHADOW,
+	NNET_GLOW,
 
     NNET_TOTAL
 };

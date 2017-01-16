@@ -174,6 +174,45 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
 
     return effect;
 }
+
+// **************************
+//
+IModelNodeEffectPtr         CreateGlowModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	{
+		name;
+	}
+	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_GLOW );
+
+	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
+	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+	auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "normalize", timeEvaluator );
+	auto innerEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "inner", timeEvaluator );
+	auto outerEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "outer", timeEvaluator );
+	auto blurKernelTypeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
+	auto glowStrengthEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "glowStrength", timeEvaluator );
+
+	colorEval->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), 0.f );
+	blurSizeEval->Parameter()->SetVal( 5.5f, 0.f );
+	blurSizeEval->Parameter()->SetVal( 205.5f, 5.f );
+	blurSizeEval->Parameter()->SetVal( 5.5f, 10.f );
+	normalizeEval->Parameter()->SetVal( 1, 0.f );
+	innerEval->Parameter()->SetVal( 0, false );
+	outerEval->Parameter()->SetVal( 0, true );
+	blurKernelTypeEval->Parameter()->SetVal( 0, 0.f );
+	glowStrengthEval->Parameter()->SetVal( 0, 1.f );
+
+	effect->RegisterEvaluator( colorEval );
+	effect->RegisterEvaluator( blurSizeEval );
+	effect->RegisterEvaluator( normalizeEval );
+	effect->RegisterEvaluator( innerEval );
+	effect->RegisterEvaluator( blurKernelTypeEval );
+	effect->RegisterEvaluator( outerEval );
+	effect->RegisterEvaluator( glowStrengthEval );
+
+	return effect;
+}
+
 //
 //// **************************
 ////
@@ -253,6 +292,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             return CreateLightScatteringModelNodeEffect( name, timeEvaluator );
         case NodeEffectType::NET_SHADOW:
             return CreateShadowModelNodeEffect( name, timeEvaluator );
+		case NodeEffectType::NET_GLOW:
+			return CreateGlowModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_BOUNDING_BOX:
         //    return CreateBoundingBoxModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_IMAGE_MASK:
