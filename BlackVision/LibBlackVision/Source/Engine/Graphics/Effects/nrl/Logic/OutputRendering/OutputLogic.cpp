@@ -41,16 +41,11 @@ OutputLogic::~OutputLogic                   ()
     }
 }
 
-// *********************************
-//
-void    OutputLogic::UpdateOutputChannels   ()
-{
-    m_renderResult.UpdateOutputChannels();
-}
+// ***************************************************** API directly related to frame rendering *****************************************************
 
 // *********************************
 // FIXME: nrl - add audio somewhere in this class
-void    OutputLogic::ProcessFrameData       ( NRenderContext * ctx  )
+void                OutputLogic::ProcessFrameData        ( NRenderContext * ctx )
 {
     for( auto output : m_outputs)
     {
@@ -75,18 +70,66 @@ void    OutputLogic::ProcessFrameData       ( NRenderContext * ctx  )
     }
 }
 
+// *********************************************** API relarted to global output state manipulation **************************************************
+
 // *********************************
 //
-Preview *       OutputLogic::GetPreview     ()
+bool                OutputLogic::IsEnabled               ( CustomOutputType outputType )
 {
-    return m_preview;
+    { outputType; }
+    return false;
 }
 
 // *********************************
 //
-VideoOutput *   OutputLogic::GetVideoOutput      ()
+void                OutputLogic::EnableOutput            ( CustomOutputType outputType )
 {
-    return m_videoOutput;
+    { outputType; }
+}
+
+// *********************************
+//
+void                OutputLogic::DisableOutput           ( CustomOutputType outputType )
+{
+    { outputType; }
+}
+
+// *********************************
+//
+OutputInstance *    OutputLogic::GetOutput               ( CustomOutputType outputType )
+{
+    { outputType; }
+    return nullptr;
+}
+
+// *********************************************** API related to render buffers state manipulation **************************************************
+
+// *********************************
+//
+RenderResult *      OutputLogic::AccessRenderResult      ()
+{
+    return nullptr;
+}
+
+// *********************************
+//
+void                OutputLogic::ActivateRenderChannel   ( RenderChannelType rct )
+{
+    { rct; }
+}
+
+// *********************************
+//
+void                OutputLogic::DeactivateRenderChannel ( RenderChannelType rct )
+{
+    { rct; }
+}
+
+// *********************************
+//
+void                OutputLogic::UpdateRenderChannels    ()
+{
+    m_renderResult.UpdateRenderChannels();
 }
 
 } //nrl

@@ -3,7 +3,7 @@
 #include "NRenderLogicCore.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderOutputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
@@ -13,14 +13,14 @@ namespace bv { namespace nrl {
 // **************************
 //
 NRenderLogicCore::NRenderLogicCore()
-    : m_allChannels( (unsigned int) RenderOutputChannelType::ROCT_TOTAL )
+    : m_allChannels( (unsigned int) RenderChannelType::RCT_TOTAL )
 {
-    m_allChannels[ (unsigned int) RenderOutputChannelType::ROCT_OUTPUT_1 ] = RenderOutputChannelType::ROCT_OUTPUT_1;
-    m_allChannels[ (unsigned int) RenderOutputChannelType::ROCT_OUTPUT_2 ] = RenderOutputChannelType::ROCT_OUTPUT_2;
-    m_allChannels[ (unsigned int) RenderOutputChannelType::ROCT_OUTPUT_3 ] = RenderOutputChannelType::ROCT_OUTPUT_3;
-    m_allChannels[ (unsigned int) RenderOutputChannelType::ROCT_OUTPUT_4 ] = RenderOutputChannelType::ROCT_OUTPUT_4;
+    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_1 ] = RenderChannelType::RCT_OUTPUT_1;
+    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_2 ] = RenderChannelType::RCT_OUTPUT_2;
+    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_3 ] = RenderChannelType::RCT_OUTPUT_3;
+    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_4 ] = RenderChannelType::RCT_OUTPUT_4;
 
-    assert( (unsigned int) RenderOutputChannelType::ROCT_OUTPUT_4 == (unsigned int) RenderOutputChannelType::ROCT_TOTAL - 1 );
+    assert( (unsigned int) RenderChannelType::RCT_OUTPUT_4 == (unsigned int) RenderChannelType::RCT_TOTAL - 1 );
 }
 
 // **************************
@@ -47,9 +47,9 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderRes
     for( auto & scene : scenes )
     {
         auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
-        assert( outIdx < (unsigned int) RenderOutputChannelType::ROCT_TOTAL );
+        assert( outIdx < (unsigned int) RenderChannelType::RCT_TOTAL );
 
-        auto outputType = ( RenderOutputChannelType ) outIdx;   
+        auto outputType = ( RenderChannelType ) outIdx;   
         auto outputRT = result->GetActiveRenderTarget( outputType );
 
         RenderScene( scene, outputRT, ctx );

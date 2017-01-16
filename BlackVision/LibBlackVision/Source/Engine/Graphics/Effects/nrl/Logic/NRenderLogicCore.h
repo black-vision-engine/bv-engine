@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/SceneGraph/Scene.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderOutputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
 
       
 namespace bv {  namespace nrl {
@@ -13,7 +13,7 @@ class NRenderLogicCore
 {
 private:
 
-    std::vector< RenderOutputChannelType > m_allChannels;
+    std::vector< RenderChannelType > m_allChannels;
 
 public:
 
