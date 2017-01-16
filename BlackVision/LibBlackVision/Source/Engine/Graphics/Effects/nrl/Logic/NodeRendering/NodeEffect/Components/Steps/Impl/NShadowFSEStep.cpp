@@ -27,6 +27,9 @@ NShadowFSEStep::NShadowFSEStep          ()
 	auto state = std::make_shared< NRenderComponentState >();
 
 	state->AppendValue( m_blurEffect->GetState()->GetValue( "blurSize" ) );
+	state->AppendValue( m_blurEffect->GetState()->GetValue( "blurKernelType" ) );
+	state->AppendValue( m_blurEffect->GetState()->GetValue( "normalize" ) );
+	state->AppendValue( m_shadowEffect->GetState()->GetValue( "color" ) );
 	state->AppendValue( m_shadowEffect->GetState()->GetValue( "shift" ) );
 	state->AppendValue( m_shadowEffect->GetState()->GetValue( "inner" ) );
 	state->AppendValue( m_shadowEffect->GetState()->GetValue( "outer" ) );
@@ -92,6 +95,9 @@ void                    NShadowFSEStep::ApplyImpl                    ( NRenderCo
 	rd2.SetEntry( 1, input->GetEntry( 0 ) );
 
 	m_shadowEffect->Render( ctx, rd2 );
+
+	allocator( ctx )->Free();
+	allocator( ctx )->Free();
 }
 
 // **************************
@@ -109,7 +115,7 @@ void                    NShadowFSEStep::FreeRenderTargets            ( NRenderCo
 //
 Float32					NShadowFSEStep::GetBlurSize		() const
 {
-	auto blurSize = GetState()->GetValueAt( 1 );
+	auto blurSize = GetState()->GetValueAt( 0 );
 
 	return QueryTypedValue< ValueFloatPtr >( blurSize )->GetValue();
 }
@@ -118,7 +124,7 @@ Float32					NShadowFSEStep::GetBlurSize		() const
 //
 glm::vec2 NShadowFSEStep::GetShift						() const
 {
-	auto shift = GetState()->GetValueAt( 1 );
+	auto shift = GetState()->GetValueAt( 4 );
 
 	return QueryTypedValue< ValueVec2Ptr >( shift )->GetValue();
 }
@@ -127,7 +133,7 @@ glm::vec2 NShadowFSEStep::GetShift						() const
 //
 bool NShadowFSEStep::GetInner							() const
 {
-	auto inner = GetState()->GetValueAt( 0 );
+	auto inner = GetState()->GetValueAt( 5 );
 
 	return QueryTypedValue< ValueBoolPtr >( inner )->GetValue();
 }
@@ -136,7 +142,7 @@ bool NShadowFSEStep::GetInner							() const
 //
 bool NShadowFSEStep::GetOuter							() const
 {
-	auto outer = GetState()->GetValueAt( 0 );
+	auto outer = GetState()->GetValueAt( 6 );
 
 	return QueryTypedValue< ValueBoolPtr >( outer )->GetValue();
 }
