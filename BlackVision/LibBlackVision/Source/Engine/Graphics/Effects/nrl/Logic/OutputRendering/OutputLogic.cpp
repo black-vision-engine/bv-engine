@@ -45,13 +45,17 @@ OutputLogic::~OutputLogic                   ()
 //
 void    OutputLogic::UpdateOutputChannels   ()
 {
-    m_renderResult->UpdateOutputChannels();
+    m_renderResult.UpdateOutputChannels();
 }
 
 // *********************************
 // FIXME: nrl - add audio somewhere in this class
 void    OutputLogic::ProcessFrameData       ( NRenderContext * ctx  )
 {
+    for( auto output : m_outputs)
+    {
+        if( output && output->
+    }
     // FIXME: this is kinda hackish
     auto data = m_renderResult;
 

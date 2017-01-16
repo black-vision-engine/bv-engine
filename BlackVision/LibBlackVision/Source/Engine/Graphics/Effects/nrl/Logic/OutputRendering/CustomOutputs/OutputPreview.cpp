@@ -44,7 +44,7 @@ void    Preview::ShowFrame( NRenderContext * ctx, const RenderResult * result )
     // FIXME: shader memory gets all outputs rendered to consecutive buffers in the memory
     // m_blitEffect->Render( rt, nullptr );
 
-    DefaultShow( ctx, result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 ) );
+    DefaultShow( ctx, result->GetActiveRenderTarget( RenderChannelType::RCT_OUTPUT_1 ) );
 
     // Make sure that local preview is displayed properly
     renderer( ctx )->DisplayColorBuffer();

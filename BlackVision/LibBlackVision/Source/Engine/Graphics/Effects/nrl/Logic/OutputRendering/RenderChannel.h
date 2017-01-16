@@ -10,19 +10,19 @@ class RenderTarget;
 
 namespace nrl {
 
-enum class RenderOutputChannelType : unsigned int
+enum class RenderChannelType : unsigned int
 {
-    ROCT_OUTPUT_1 = 0,
-    ROCT_OUTPUT_2,
-    ROCT_OUTPUT_3,
-    ROCT_OUTPUT_4,
+    RCT_OUTPUT_1 = 0,
+    RCT_OUTPUT_2,
+    RCT_OUTPUT_3,
+    RCT_OUTPUT_4,
 
-    ROCT_TOTAL
+    RCT_TOTAL
 };
 
 //////////////////////////////////////
 // Class used to store currently rendered render target along with the history of already rendered frames (right now only current and previous frames are stored)
-class RenderOutputChannel
+class RenderChannel
 {
 private:
 
@@ -34,8 +34,8 @@ private:
 
 public:
 
-                            RenderOutputChannel         ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets );
-                            ~RenderOutputChannel        ();
+                            RenderChannel               ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets );
+                            ~RenderChannel              ();
 
     unsigned int            GetNumRenderTargets         () const;
 

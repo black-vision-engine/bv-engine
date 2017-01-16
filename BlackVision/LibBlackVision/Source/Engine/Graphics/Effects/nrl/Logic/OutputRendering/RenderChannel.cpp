@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "RenderOutputChannel.h"
+#include "RenderChannel.h"
 
 #include <cassert>
 
@@ -11,7 +11,7 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-RenderOutputChannel::RenderOutputChannel                                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets )
+RenderChannel::RenderChannel                                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets )
     : m_activeRenderTargetIdx( 0 )
     , m_isActive( false )
 {
@@ -25,7 +25,7 @@ RenderOutputChannel::RenderOutputChannel                                    ( Re
 
 // **************************
 //
-RenderOutputChannel::~RenderOutputChannel                                   ()
+RenderChannel::~RenderChannel                                   ()
 {
     for( auto rt : m_renderTargets )
     {
@@ -35,28 +35,28 @@ RenderOutputChannel::~RenderOutputChannel                                   ()
 
 // **************************
 //
-unsigned int                RenderOutputChannel::GetNumRenderTargets        () const
+unsigned int                RenderChannel::GetNumRenderTargets        () const
 {
     return (unsigned int) m_renderTargets.size();
 }
 
 // **************************
 //
-const bv::RenderTarget *    RenderOutputChannel::GetActiveRenderTarget      () const
+const bv::RenderTarget *    RenderChannel::GetActiveRenderTarget      () const
 {
     return GetRenderTarget( 0 );
 }
 
 // **************************
 //
-const bv::RenderTarget * RenderOutputChannel::GetPreviousRenderTarget        () const
+const bv::RenderTarget * RenderChannel::GetPreviousRenderTarget        () const
 {
     return GetRenderTarget( -1 );
 }
 
 // **************************
 //
-const RenderTarget *    RenderOutputChannel::GetRenderTarget                ( int reversedIdx ) const
+const RenderTarget *    RenderChannel::GetRenderTarget                ( int reversedIdx ) const
 {
     assert( (-reversedIdx) < (int) m_renderTargets.size() );
 
@@ -67,21 +67,21 @@ const RenderTarget *    RenderOutputChannel::GetRenderTarget                ( in
 
 // **************************
 //
-void                    RenderOutputChannel::UpdateActiveRenderTargetIdx    ()
+void                    RenderChannel::UpdateActiveRenderTargetIdx    ()
 {
     m_activeRenderTargetIdx = ( m_activeRenderTargetIdx + 1 ) % GetNumRenderTargets();
 }
 
 // **************************
 //
-bool                    RenderOutputChannel::IsActive                       () const
+bool                    RenderChannel::IsActive                       () const
 {
     return m_isActive;
 }
 
 // **************************
 //
-void                    RenderOutputChannel::SetActiveFlag                  ( bool isActive )
+void                    RenderChannel::SetActiveFlag                  ( bool isActive )
 {
     m_isActive = isActive;
 }

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderOutputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
 
 
 namespace bv { 
@@ -16,8 +16,8 @@ class RenderResult
 {
 private:
 
-    std::vector< RenderOutputChannel * >    m_renderOutputChannels;
-    std::vector< bool >                     m_containsValidData;
+    std::vector< RenderChannel * >  m_renderChannels;
+    std::vector< bool >             m_containsValidData;
 
 private:
 
@@ -27,19 +27,19 @@ private:
 
 public:
 
-                                    RenderResult            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
-                                    ~RenderResult           ();
+                            RenderResult            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+                            ~RenderResult           ();
 
-    const RenderOutputChannel *     GetRenderOutputChannel  ( RenderOutputChannelType roct ) const;
-	const RenderTarget *			GetActiveRenderTarget	( RenderOutputChannelType roct ) const;
+    const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;
+	const RenderTarget *	GetActiveRenderTarget	( RenderChannelType rct ) const;
 
-    void                            UpdateOutputChannels    ();
+    void                    UpdateRenderChannels    ();
 
-    bool                            IsActive                ( RenderOutputChannelType roct ) const;
-    void                            SetIsActive             ( RenderOutputChannelType roct, bool isActive );
+    bool                    IsActive                ( RenderChannelType rct ) const;
+    void                    SetIsActive             ( RenderChannelType rct, bool isActive );
 
-    bool                            ContainsValidData       ( RenderOutputChannelType roct ) const;
-    void                            SetContainsValidData    ( RenderOutputChannelType roct, bool containsValidData );
+    bool                    ContainsValidData       ( RenderChannelType rct ) const;
+    void                    SetContainsValidData    ( RenderChannelType rct, bool containsValidData );
     
 };
 

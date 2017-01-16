@@ -6,7 +6,7 @@
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderOutputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
 
 
 namespace bv { namespace nrl {
@@ -14,14 +14,14 @@ namespace bv { namespace nrl {
 // **************************
 //
 RenderResult::RenderResult                                      ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType )
-    : m_renderOutputChannels( (unsigned int) RenderOutputChannelType::ROCT_TOTAL )
-    , m_containsValidData( (unsigned int) RenderOutputChannelType::ROCT_TOTAL )
+    : m_renderChannels( (unsigned int) RenderChannelType::RCT_TOTAL )
+    , m_containsValidData( (unsigned int) RenderChannelType::RCT_TOTAL )
 {
-    for( unsigned int i = 0; i < m_renderOutputChannels.size(); ++i )
+    for( unsigned int i = 0; i < m_renderChannels.size(); ++i )
     {
-        auto channel = new RenderOutputChannel( allocator, numTrackedRenderTargetsPerOutputType );
+        auto channel = new RenderChannel( allocator, numTrackedRenderTargetsPerOutputType );
 
-        m_renderOutputChannels[ i ] = channel;
+        m_renderChannels[ i ] = channel;
         m_containsValidData[ i ] = false;
     }
 }
@@ -30,7 +30,7 @@ RenderResult::RenderResult                                      ( RenderTargetSt
 //
 RenderResult::~RenderResult                                     ()
 {
-    for( auto channel : m_renderOutputChannels )
+    for( auto channel : m_renderChannels )
     {
         delete channel;
     }
@@ -38,25 +38,25 @@ RenderResult::~RenderResult                                     ()
 
 // **************************
 //
-const RenderOutputChannel * RenderResult::GetRenderOutputChannel( RenderOutputChannelType roct ) const
+const RenderChannel *       RenderResult::GetRenderChannel      ( RenderChannelType rct ) const
 {
-    return m_renderOutputChannels[ ( unsigned int ) roct ];
+    return m_renderChannels[ ( unsigned int ) rct ];
 }
 
 // **************************
 //
-const RenderTarget *		RenderResult::GetActiveRenderTarget ( RenderOutputChannelType roct ) const
+const RenderTarget *		RenderResult::GetActiveRenderTarget ( RenderChannelType rct ) const
 {
-	auto channel = GetRenderOutputChannel( roct );
+	auto channel = GetRenderChannel( rct );
 
 	return channel->GetActiveRenderTarget();
 }
 
 // **************************
 //
-void                    RenderResult::UpdateOutputChannels      ()
+void                    RenderResult::UpdateRenderChannels      ()
 {
-    for( auto channel : m_renderOutputChannels )
+    for( auto channel : m_renderChannels )
     {
         channel->UpdateActiveRenderTargetIdx();
     }
@@ -64,30 +64,30 @@ void                    RenderResult::UpdateOutputChannels      ()
 
 // **************************
 //
-bool                    RenderResult::IsActive                  ( RenderOutputChannelType roct ) const
+bool                    RenderResult::IsActive                  ( RenderChannelType rct ) const
 {
-    return GetRenderOutputChannel( roct )->IsActive();
+    return GetRenderChannel( rct )->IsActive();
 }
 
 // **************************
 //
-void                    RenderResult::SetIsActive               ( RenderOutputChannelType roct, bool isActive )
+void                    RenderResult::SetIsActive               ( RenderChannelType rct, bool isActive )
 {
-    m_renderOutputChannels[ ( unsigned int ) roct ]->SetActiveFlag( isActive );
+    m_renderChannels[ ( unsigned int ) rct ]->SetActiveFlag( isActive );
 }
 
 // **************************
 //
-bool                    RenderResult::ContainsValidData         ( RenderOutputChannelType roct ) const
+bool                    RenderResult::ContainsValidData         ( RenderChannelType rct ) const
 {
-    return m_containsValidData[ (unsigned int) roct ];
+    return m_containsValidData[ (unsigned int) rct ];
 }
 
 // **************************
 //
-void                    RenderResult::SetContainsValidData      ( RenderOutputChannelType roct, bool containsValidData )
+void                    RenderResult::SetContainsValidData      ( RenderChannelType rct, bool containsValidData )
 {
-    m_containsValidData[ (unsigned int) roct ] = containsValidData;
+    m_containsValidData[ (unsigned int) rct ] = containsValidData;
 }
 
 } // nrl
