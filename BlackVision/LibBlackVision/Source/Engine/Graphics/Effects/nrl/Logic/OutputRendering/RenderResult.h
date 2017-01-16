@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderOutputChannel.h"
 
 
@@ -34,7 +33,7 @@ public:
     const RenderOutputChannel *     GetRenderOutputChannel  ( RenderOutputChannelType roct ) const;
 	const RenderTarget *			GetActiveRenderTarget	( RenderOutputChannelType roct ) const;
 
-    void                            UpdateOutputChannels    ( const SceneVec & scenes );
+    void                            UpdateOutputChannels    ();
 
     bool                            IsActive                ( RenderOutputChannelType roct ) const;
     void                            SetIsActive             ( RenderOutputChannelType roct, bool isActive );

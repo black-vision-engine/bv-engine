@@ -45,6 +45,10 @@ void    Preview::ShowFrame( NRenderContext * ctx, const RenderResult * result )
     // m_blitEffect->Render( rt, nullptr );
 
     DefaultShow( ctx, result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 ) );
+
+    // Make sure that local preview is displayed properly
+    renderer( ctx )->DisplayColorBuffer();
+
 }
 
 // *********************************

@@ -34,12 +34,6 @@ public:
 
 };
 
-// ************************
-//
-inline RenderResult *           render_result   ( NRenderLogicState & state )
-{
-    return state.GetRenderResult();
-}
 
 // ************************
 //

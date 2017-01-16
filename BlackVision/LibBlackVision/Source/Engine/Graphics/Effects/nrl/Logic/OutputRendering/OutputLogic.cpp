@@ -17,7 +17,7 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputLogic::OutputLogic         ()
+OutputLogic::OutputLogic                    ()
     : m_outputs( (unsigned int) CustomOutputType::COT_TOTAL )
 {
     unsigned int i = 0;
@@ -32,7 +32,7 @@ OutputLogic::OutputLogic         ()
 
 // *********************************
 //
-OutputLogic::~OutputLogic        ()
+OutputLogic::~OutputLogic                   ()
 {
     for( auto output : m_outputs )
     {
@@ -42,7 +42,14 @@ OutputLogic::~OutputLogic        ()
 
 // *********************************
 //
-void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx  )
+void    OutputLogic::UpdateOutputChannels   ()
+{
+    m_renderResult->UpdateOutputChannels();
+}
+
+// *********************************
+// FIXME: nrl - add audio somewhere in this class
+void    OutputLogic::ProcessFrameData       ( NRenderContext * ctx  )
 {
     // FIXME: this is kinda hackish
     auto data = m_renderResult;
@@ -65,7 +72,7 @@ void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx  )
 
 // *********************************
 //
-Preview *       OutputLogic::GetPreview          ()
+Preview *       OutputLogic::GetPreview     ()
 {
     return m_preview;
 }

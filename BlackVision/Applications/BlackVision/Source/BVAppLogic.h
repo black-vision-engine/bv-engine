@@ -97,7 +97,7 @@ public:
     virtual void    ShutDown        ();
 
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
-    void            UpdateFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    void            HandleFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
 	FrameStatsCalculator *          GetStatsCalculator  ();
     const FrameStatsCalculator &    FrameStats          () const;

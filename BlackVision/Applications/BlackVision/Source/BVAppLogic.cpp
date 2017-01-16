@@ -284,16 +284,16 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
     TimeType time = m_renderMode.StartFrame( millis );
-    UpdateFrame( time, renderer, audioRenderer );
+
+    HandleFrame( time, renderer, audioRenderer );
 }
 
 // ***********************
 //
-void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer )
+void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
-    { audioRenderer; }
-
     assert( m_state != BVAppState::BVS_INVALID );
+
     if( m_state == BVAppState::BVS_RUNNING )
     {
         FRAME_STATS_FRAME();
@@ -327,7 +327,7 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer, audio::Au
                 FRAME_STATS_SECTION( "Render" );
 
 				audioRenderer->SetGain( m_gain );
-                m_renderLogic->RenderFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
+                m_renderLogic->HandleFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
                 {

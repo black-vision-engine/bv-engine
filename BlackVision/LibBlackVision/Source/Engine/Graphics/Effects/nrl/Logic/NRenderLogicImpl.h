@@ -6,11 +6,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicCore.h"
 
 
-namespace bv { 
-
-class Renderer;
-   
-namespace nrl {
+namespace bv { namespace nrl {
 
 class NRenderLogicImpl : public NRenderLogic
 {
@@ -24,11 +20,9 @@ public:
 
                             NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
 
-    virtual void            RenderFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
+    virtual void            HandleFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 
-
-    virtual Preview *       GetPreview          () override;
-    virtual VideoOutput *   GetVideoOutput      () override;
+    virtual OutputLogic *   GetOutputLogic      () override;
 
 private:
             void            RenderQueued        ( const SceneVec & scenes, RenderResult * result );

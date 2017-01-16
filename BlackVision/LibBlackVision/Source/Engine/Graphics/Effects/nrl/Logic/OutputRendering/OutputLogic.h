@@ -27,6 +27,8 @@ public:
 
     void                ProcessFrameData        ( NRenderContext * ctx );
 
+    void                UpdateOutputChannels    ();
+
     RenderResult *      AccessRenderResult      ();
 
         // FIXME: nrl - should be accessed via RenderResult, not delegated via OutputLogic
