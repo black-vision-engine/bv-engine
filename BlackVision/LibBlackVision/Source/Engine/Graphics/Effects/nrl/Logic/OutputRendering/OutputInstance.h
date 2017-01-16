@@ -21,11 +21,18 @@ class OutputInstance
 {
 private:
 
+    bool    m_isEnabled;
+
 public:
 
+                    OutputInstance      ();
     virtual         ~OutputInstance     ();
 
     virtual void    ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data ) = 0;
+
+    bool            IsEnabled           () const;
+    void            Enable              ();
+    void            Disable             ();
 
 };
 

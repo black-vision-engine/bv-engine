@@ -17,7 +17,7 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputLogic::OutputLogic                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput )
+OutputLogic::OutputLogic                                ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput )
     : m_outputs( (unsigned int) CustomOutputType::COT_TOTAL )
     , m_renderResult( allocator, numTrackedRenderTargetsPerOutput )
 {
@@ -33,7 +33,7 @@ OutputLogic::OutputLogic                    ( RenderTargetStackAllocator * alloc
 
 // *********************************
 //
-OutputLogic::~OutputLogic                   ()
+OutputLogic::~OutputLogic                               ()
 {
     for( auto output : m_outputs )
     {
@@ -45,28 +45,16 @@ OutputLogic::~OutputLogic                   ()
 
 // *********************************
 // FIXME: nrl - add audio somewhere in this class
-void                OutputLogic::ProcessFrameData        ( NRenderContext * ctx )
+void                OutputLogic::ProcessFrameData       ( NRenderContext * ctx )
 {
+    auto result = &m_renderResult;
+
     for( auto output : m_outputs)
     {
-        if( output && output->
-    }
-    // FIXME: this is kinda hackish
-    auto data = m_renderResult;
-
-    // FIXME: nrl - add screenshot logic somewhere near this line of code - based on previous implementation
-    //if( m_screenShotLogic->ReadbackNeeded() )
-    //{
-    //    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
-    //    m_screenShotLogic->FrameRendered( rt, ctx );
-    //}
-
-    m_preview->ShowFrame( ctx, data );
-
-    // FIXME: temporary
-    if( m_videoOutput )
-    {
-        m_videoOutput->HandleFrame( ctx, data );
+        if( output && output->IsEnabled() )
+        {
+            output->ProcessFrameData( ctx, result ); 
+        }
     }
 }
 
@@ -74,60 +62,58 @@ void                OutputLogic::ProcessFrameData        ( NRenderContext * ctx 
 
 // *********************************
 //
-bool                OutputLogic::IsEnabled               ( CustomOutputType outputType )
+bool                OutputLogic::IsEnabled              ( CustomOutputType outputType )
 {
-    { outputType; }
-    return false;
+    return GetOutput( outputType )->IsEnabled();
 }
 
 // *********************************
 //
-void                OutputLogic::EnableOutput            ( CustomOutputType outputType )
+void                OutputLogic::EnableOutput           ( CustomOutputType outputType )
 {
-    { outputType; }
+    GetOutput( outputType )->Enable();
 }
 
 // *********************************
 //
-void                OutputLogic::DisableOutput           ( CustomOutputType outputType )
+void                OutputLogic::DisableOutput          ( CustomOutputType outputType )
 {
-    { outputType; }
+    GetOutput( outputType )->Disable();
 }
 
 // *********************************
 //
-OutputInstance *    OutputLogic::GetOutput               ( CustomOutputType outputType )
+OutputInstance *    OutputLogic::GetOutput              ( CustomOutputType outputType )
 {
-    { outputType; }
-    return nullptr;
+    return m_outputs[ (unsigned int) outputType ];
 }
 
 // *********************************************** API related to render buffers state manipulation **************************************************
 
 // *********************************
 //
-RenderResult *      OutputLogic::AccessRenderResult      ()
+RenderResult *      OutputLogic::AccessRenderResult     ()
 {
-    return nullptr;
+    return &m_renderResult;
 }
 
 // *********************************
 //
-void                OutputLogic::ActivateRenderChannel   ( RenderChannelType rct )
+void                OutputLogic::ActivateRenderChannel  ( RenderChannelType rct )
 {
-    { rct; }
+    m_renderResult.SetIsActive( rct, true );
 }
 
 // *********************************
 //
-void                OutputLogic::DeactivateRenderChannel ( RenderChannelType rct )
+void                OutputLogic::DeactivateRenderChannel( RenderChannelType rct )
 {
-    { rct; }
+    m_renderResult.SetIsActive( rct, false );
 }
 
 // *********************************
 //
-void                OutputLogic::UpdateRenderChannels    ()
+void                OutputLogic::UpdateRenderChannels   ()
 {
     m_renderResult.UpdateRenderChannels();
 }

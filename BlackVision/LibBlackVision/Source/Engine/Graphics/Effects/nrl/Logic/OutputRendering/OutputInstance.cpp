@@ -7,8 +7,36 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputInstance::~OutputInstance ()
+OutputInstance::OutputInstance      ()
+    : m_isEnabled( false )
 {
+}
+
+// *********************************
+//
+OutputInstance::~OutputInstance     ()
+{
+}
+
+// *********************************
+//
+bool    OutputInstance::IsEnabled   () const
+{
+    return m_isEnabled;
+}
+
+// *********************************
+//
+void    OutputInstance::Enable      ()
+{
+    m_isEnabled = true;
+}
+
+// *********************************
+//
+void    OutputInstance::Disable     ()
+{
+    m_isEnabled = false;
 }
 
 } //nrl
