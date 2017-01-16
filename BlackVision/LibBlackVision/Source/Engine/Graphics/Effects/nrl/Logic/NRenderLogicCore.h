@@ -28,8 +28,6 @@ private:
     void                    PreRender           ( RenderResult * result );
     void                    PostRender          ( RenderResult * result, NRenderContext * ctx );
 
-    void                    ClearChannelState   ( RenderResult * result, RenderOutputChannelType roct );
-
 };
 
 } //nrl

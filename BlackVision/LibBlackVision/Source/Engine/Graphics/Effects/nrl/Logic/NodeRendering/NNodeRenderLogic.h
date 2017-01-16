@@ -25,7 +25,7 @@ class NNodeRenderLogic
 public:
 
 	// PUBLIC API
-    static void     Clear               ( RenderTarget * rt, NRenderContext * ctx, const glm::vec4 & color = glm::vec4(0.f) );
+    static void     Clear               ( const RenderTarget * rt, NRenderContext * ctx, const glm::vec4 & color = glm::vec4(0.f) );
     
     static void     RenderAudio         ( Scene * scene, NRenderContext * ctx );
     static void     RenderAudio         ( SceneNode * node, audio::AudioRenderer * renderer );

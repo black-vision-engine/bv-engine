@@ -27,10 +27,15 @@ NRenderLogicCore::NRenderLogicCore()
 //
 void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
 {
+    // Invalidate all active output channels
     PreRender   ( result );
 
+    // Render scenes to appropriate channels
     RenderScenes( scenes, result, ctx );
 
+    // Clear all active channels that are still invalid
+    // FIXME: nrl - one minor optimization is to skip clearing if a channel is already cleared but that is not very important
+    // FIXME: nrl - as all active channels are supposed to be cleared by RenderScenes() anyway
     PostRender  ( result, ctx );
 }
 
@@ -38,8 +43,13 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
 //
 void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
 {
+    // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
+        auto outIdx = scene->GetOutputChannelIdx();
+
+        assert( outIdx < (unsigned int) RenderOutputChannelType::ROCT_TOTAL );
+
         // FIXME: nrl - retrieve rt for each scene here (for each scene marked as a subgroup)
         auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
 
@@ -59,7 +69,10 @@ void    NRenderLogicCore::PreRender         ( RenderResult * result )
 
     for( auto channelType : m_allChannels )
     {
-        ClearChannelState( result, channelType );
+        if( result->IsActive( channelType ) )
+        {
+            result->SetContainsValidData( false );
+        }
     }
 }
 
@@ -71,12 +84,6 @@ void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderCont
     // FIXME: nrl - only then this state should be updated
 
     // Clear output render targets which were not used durint the RenderScenes phase
-}
-
-// **************************
-//
-void    NRenderLogicCore::ClearChannelState ( RenderResult * result, RenderOutputChannelType roct )
-{
 }
 
 } //nrl

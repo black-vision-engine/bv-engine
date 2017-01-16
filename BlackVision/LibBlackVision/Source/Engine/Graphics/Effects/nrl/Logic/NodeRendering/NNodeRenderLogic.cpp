@@ -17,7 +17,7 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-void    NNodeRenderLogic::Clear             ( RenderTarget * rt, NRenderContext * ctx, const glm::vec4 & color )
+void    NNodeRenderLogic::Clear             ( const RenderTarget * rt, NRenderContext * ctx, const glm::vec4 & color )
 {
     enable( ctx, rt );
     clearBoundRT( ctx, color );
