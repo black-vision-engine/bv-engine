@@ -34,7 +34,7 @@ OutputPreview::~OutputPreview           ()
 
 // *********************************
 //
-void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, const RenderResult * result )
+void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * result )
 {
     // FIXME: prepare one texture combining all required outputs and blit it to the output render target
     // FIXME: call BlitToPreview here

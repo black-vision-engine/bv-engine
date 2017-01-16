@@ -10,7 +10,7 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-void    OutputScreenshot::ProcessFrameData  ( NRenderContext * ctx, const RenderResult * result )
+void    OutputScreenshot::ProcessFrameData  ( NRenderContext * ctx, RenderResult * result )
 {
     { ctx; result; }
     assert( false );

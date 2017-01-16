@@ -10,7 +10,7 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-void    OutputVideo::ProcessFrameData( NRenderContext * ctx, const RenderResult * result )
+void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * result )
 {
     { ctx; result; }
     assert( false );

@@ -33,7 +33,7 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
     // Render scenes to appropriate channels
     RenderScenes( scenes, result, ctx );
 
-    // Clear all active channels that are still invalid
+    // Clear all active channels that are still invalid, invalidate readback textures
     // FIXME: nrl - one minor optimization is to skip clearing if a channel is already cleared but that is not very important
     // FIXME: nrl - as all active channels are supposed to be cleared by RenderScenes() anyway
     PostRender  ( result, ctx );
@@ -85,11 +85,16 @@ void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderCont
 {
     for( auto channelType : m_allChannels )
     {
-        if( result->IsActive( channelType ) && !result->ContainsValidData( channelType ) )
+        if( result->IsActive( channelType ) )
         {
-            auto rt = result->GetActiveRenderTarget( channelType );
+            if( !result->ContainsValidData( channelType ) )
+            {
+                auto rt = result->GetActiveRenderTarget( channelType );
 
-            NNodeRenderLogic::Clear( rt, ctx );
+                NNodeRenderLogic::Clear( rt, ctx );
+            }
+
+            result->InvalidateCachedTexture( channelType );
         }
     }
 }

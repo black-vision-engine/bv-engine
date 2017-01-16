@@ -12,7 +12,7 @@ class OutputScreenshot : public OutputInstance
 {
 public:
 
-    virtual void    ProcessFrameData( NRenderContext * ctx, const RenderResult * result ) override;
+    virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
 
 };
 
