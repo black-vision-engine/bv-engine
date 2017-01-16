@@ -15,8 +15,7 @@ class AudioRenderer;
 
 namespace nrl {
 
-class Preview;
-class VideoOutput;
+class OutputLogic;
 
 class NRenderLogic
 {
@@ -27,8 +26,7 @@ public:
     virtual void            RenderFrame     ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) = 0;
 
     // FIXME: temporary - just to make sure that required configurations are implemented in a valid manner
-    virtual Preview *       GetPreview      () = 0;
-    virtual VideoOutput *   GetVideoOutput  () = 0;
+    virtual OutputLogic *   GetOutputLogic  () = 0;
 
 };
 

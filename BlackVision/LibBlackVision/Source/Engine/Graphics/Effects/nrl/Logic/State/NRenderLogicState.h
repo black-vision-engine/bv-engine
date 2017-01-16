@@ -26,7 +26,6 @@ public:
 
                                 NRenderLogicState   ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
 
-    RenderResult *              GetRenderResult     ();
     OutputLogic *               GetOutputLogic      ();
     NRenderContext *			GetRenderContext	();
 

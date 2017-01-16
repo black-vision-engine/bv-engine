@@ -26,6 +26,7 @@ public:
 
     virtual void            RenderFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 
+
     virtual Preview *       GetPreview          () override;
     virtual VideoOutput *   GetVideoOutput      () override;
 
