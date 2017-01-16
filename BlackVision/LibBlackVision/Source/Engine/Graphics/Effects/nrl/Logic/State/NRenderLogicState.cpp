@@ -10,10 +10,11 @@ namespace bv { namespace nrl {
 NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor )
     : m_initialized( false )
     , m_renderTargetAllocator( width, height )
-    , m_outputLogic( /* pass appropriate constructor arguments here */ )
+    , m_outputLogic( &m_renderTargetAllocator, numTrackedRenderTargetsPerOutputType /* pass appropriate constructor arguments here */ )
 {
-    { sharedMemScaleFactor; }
-    { numTrackedRenderTargetsPerOutputType; }
+    // FIXME: nrl - THIS IS ONE HUGE HACK - IMPLEMENT VALID STATIC CONFIGURATION INIT MECHANISM AND USE IT
+    m_outputLogic.EnableOutput( CustomOutputType::COT_PREVIEW ); // FIXME: nrl - make sure that when this output is disabled, preview is not rendered
+    { sharedMemScaleFactor; } // FIXME: pass it to the output logic
 
     m_ctx.SetAllocator( &m_renderTargetAllocator );
     m_ctx.SetRenderQueueAllocator( &m_renderQueueAllocator );

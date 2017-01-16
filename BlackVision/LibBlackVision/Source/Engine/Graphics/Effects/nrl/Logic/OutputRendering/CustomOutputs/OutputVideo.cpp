@@ -1,12 +1,22 @@
 #include "stdafx.h"
 
-#include "VideoOutput.h"
+#include "OutputVideo.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
 
 namespace bv { namespace nrl {
+
+// **************************
+//
+void    OutputVideo::ProcessFrameData( NRenderContext * ctx, const RenderResult * result )
+{
+    { ctx; result; }
+    assert( false );
+
+    // FIXME: nrl - implement
+}
 
     /*
     Basic video output algo description
@@ -36,8 +46,8 @@ namespace bv { namespace nrl {
     //}
 // **************************
 //
-void    VideoOutput::HandleFrame( NRenderContext * ctx, const RenderResult * result )
-{
+//void    VideoOutput::HandleFrame( NRenderContext * ctx, const RenderResult * result )
+//{
     // FIXME: nrl - implement
  //   auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 	//{
@@ -93,8 +103,8 @@ void    VideoOutput::HandleFrame( NRenderContext * ctx, const RenderResult * res
 	//		videocards::VideoCardManager::Instance().QueueFrame(frame);
 	//	}
 
-    { ctx; result; }
-}
+//    { ctx; result; }
+//}
 
 } //nrl
 } //bv

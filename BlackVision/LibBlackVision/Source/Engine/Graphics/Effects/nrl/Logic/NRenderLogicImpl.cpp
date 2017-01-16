@@ -26,7 +26,7 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
 
     // 1. Access output logic associated with this RenderLogic instance and update (per frame) output buffers
     auto outputLogic = output_logic( m_state );
-    outputLogic->UpdateOutputChannels();
+    outputLogic->UpdateRenderChannels();
 
     // 2. Low level renderer per frame initialization
     renderer->PreDraw();

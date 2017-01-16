@@ -10,11 +10,9 @@ class NRenderContext;
 
 class OutputStream : public OutputInstance
 {
-private:
-
 public:
 
-    void    HandleFrame( NRenderContext * ctx, const RenderResult * result );
+    virtual void    ProcessFrameData( NRenderContext * ctx, const RenderResult * result ) override;
 
 };
 
