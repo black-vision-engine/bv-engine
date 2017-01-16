@@ -13,7 +13,13 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
     , m_outputLogic( &m_renderTargetAllocator, numTrackedRenderTargetsPerOutputType /* pass appropriate constructor arguments here */ )
 {
     // FIXME: nrl - THIS IS ONE HUGE HACK - IMPLEMENT VALID STATIC CONFIGURATION INIT MECHANISM AND USE IT
-    m_outputLogic.EnableOutput( CustomOutputType::COT_PREVIEW ); // FIXME: nrl - make sure that when this output is disabled, preview is not rendered
+    {
+        auto res = m_outputLogic.AccessRenderResult();
+
+        m_outputLogic.EnableOutput( CustomOutputType::COT_PREVIEW ); // FIXME: nrl - make sure that when this output is disabled, preview is not rendered
+        res->SetIsActive( RenderChannelType::RCT_OUTPUT_1, true );
+    }
+
     { sharedMemScaleFactor; } // FIXME: pass it to the output logic
 
     m_ctx.SetAllocator( &m_renderTargetAllocator );
