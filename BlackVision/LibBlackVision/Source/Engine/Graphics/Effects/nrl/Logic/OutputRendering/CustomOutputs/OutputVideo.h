@@ -10,9 +10,21 @@ class NRenderContext;
 
 class OutputVideo : public OutputInstance
 {
+private:
+
+    MemoryChunkPtr  m_audioData;
+
+    unsigned int    m_fps;
+
 public:
 
-    virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
+                            OutputVideo     ();
+
+    virtual void            ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
+
+private:
+
+    videocards::AVFramePtr  PrepareAVFrame  ( audio::AudioRenderer * audio, Texture2DPtr videoFrame );
 
 };
 

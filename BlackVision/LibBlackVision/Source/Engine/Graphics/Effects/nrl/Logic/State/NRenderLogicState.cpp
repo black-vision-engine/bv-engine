@@ -12,7 +12,7 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
     , m_renderTargetAllocator( width, height )
     , m_outputLogic( width, height, sharedMemScaleFactor, &m_renderTargetAllocator, numTrackedRenderTargetsPerOutputType /* pass appropriate constructor arguments here */ )
 {
-    // FIXME: nrl - THIS IS ONE HUGE HACK - IMPLEMENT VALID STATIC CONFIGURATION INIT MECHANISM AND USE IT
+    // FIXME: nrl - THIS IS ONE HUGE HACK - IMPLEMENT VALID STATIC CONFIGURATION INIT MECHANISM AND USE IT - BASED ON PAWELEK'S REQUIREMENTS
     {
         // Enable single render channel
         auto res = m_outputLogic.AccessRenderResult();
@@ -21,6 +21,7 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
         // Enable required outputs
         m_outputLogic.EnableOutput( CustomOutputType::COT_PREVIEW );    // FIXME: nrl - make sure that when this output is disabled, preview is not rendered
         m_outputLogic.EnableOutput( CustomOutputType::COT_STREAM_SHM ); // FIXME: nrl - make sure that when this output is disabled, shared memory oputput is not used
+        m_outputLogic.EnableOutput( CustomOutputType::COT_VIDEO );      // FIXME: nrl - make sure that when this output is disabled, video oputput is not used
     }
 
     m_ctx.SetAllocator( &m_renderTargetAllocator );
