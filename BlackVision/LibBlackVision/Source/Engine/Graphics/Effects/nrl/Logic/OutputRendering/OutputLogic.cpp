@@ -17,8 +17,9 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputLogic::OutputLogic                    ()
+OutputLogic::OutputLogic                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput )
     : m_outputs( (unsigned int) CustomOutputType::COT_TOTAL )
+    , m_renderResult( allocator, numTrackedRenderTargetsPerOutput )
 {
     unsigned int i = 0;
 

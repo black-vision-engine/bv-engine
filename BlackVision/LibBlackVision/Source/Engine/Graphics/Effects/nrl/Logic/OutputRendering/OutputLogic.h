@@ -18,11 +18,11 @@ private:
 
     std::vector< OutputInstance * >     m_outputs;
 
-    RenderResult *                      m_renderResult;
+    RenderResult                        m_renderResult;
 
 public:
 
-                        OutputLogic             ();
+                        OutputLogic             ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
     virtual             ~OutputLogic            ();
 
     void                ProcessFrameData        ( NRenderContext * ctx );
@@ -31,9 +31,6 @@ public:
 
     RenderResult *      AccessRenderResult      ();
 
-        // FIXME: nrl - should be accessed via RenderResult, not delegated via OutputLogic
-        //bool            IsActive                () const;
-        //// void         ClearOutputChannel      ( NRenderContext * ctx, RenderOutputChannelType roct ); //FIXME nrl - implement it here?
     void                ActivateOutputChannel   ( RenderOutputChannelType roct );
     void                DeactivateOutputChannel ( RenderOutputChannelType roct );
 
