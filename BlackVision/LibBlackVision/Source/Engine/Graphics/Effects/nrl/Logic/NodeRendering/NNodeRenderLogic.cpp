@@ -132,6 +132,7 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
 
     if( nEffect )
     {
+        // FIXME: nrl - remove whem all effects are implemented in nrl
         //RenderImpl( repr, ctx );
         assert( nEffect->GetType() == nrl::NNodeEffectType::NNET_DEFAULT ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK ||
