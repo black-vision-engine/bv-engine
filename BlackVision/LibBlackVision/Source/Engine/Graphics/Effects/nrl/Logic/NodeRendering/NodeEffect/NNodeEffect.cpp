@@ -2,6 +2,9 @@
 
 #include "NNodeEffect.h"
 
+// FIXME: Delete after solving problems with IsBlendable_DIRTY_DESIGN_HACK and GetDepth_DIRTY_DESIGN_HACK
+#include "NNodeEffectImpl.h"
+
 
 namespace bv { namespace nrl  {
 

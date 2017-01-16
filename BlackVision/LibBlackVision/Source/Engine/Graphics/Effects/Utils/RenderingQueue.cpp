@@ -58,8 +58,16 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
     if( HasEffect( node ) )
     {
         // Let effect compute z for itself instead of using bounding box.
-        // @todo 
-        //return z;
+        auto effect = node->GetNNodeEffect();
+        if( effect )
+        {
+            if( effect->IsDepthOverriden_DIRTY_DESIGN_HACK() )
+            {
+                return effect->GetDepth_DIRTY_DESIGN_HACK();
+            }
+            // In other cases depth is computet from node bounding box.
+        }
+        // Note: else there's old style effect set in this node. We can ignore him and compute z as for normal node.
     }
 
     auto box = node->GetBoundingBox();
@@ -68,10 +76,10 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
         auto camera = ctx->GetRenderer()->GetCamera();
 
         glm::vec3 boxCenter = glm::vec3( node->GetTransformable()->WorldTransform().Matrix() * glm::vec4( box->Center(), 1.0f ) );
-        glm::vec3 cameraDir = camera->GetDirection();
-        glm::vec3 cameraPos = camera->GetPosition();
+        const glm::vec3 & cameraDir = camera->GetDirection();
+        const glm::vec3 & cameraPos = camera->GetPosition();
 
-        // Camera direction is normalized.
+        // Camera direction is normalized. (It should be)
         z = glm::dot( ( boxCenter - cameraPos ), cameraDir );
     }
 
@@ -82,16 +90,36 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
 //
 bool                RenderingQueue::IsTransparent       ( SceneNode * node )
 {
-    auto renderableEntity = static_cast< bv::RenderableEntity * >( node->GetTransformable() );
-    auto effect = renderableEntity->GetRenderableEffect();
-
-    if( !effect )
+    if( HasEffect( node ) )
     {
-        return false;   // No effect. Return value is indifferent.
-    }
+        auto oldStyleEffect = node->GetNodeEffect();
+        if( oldStyleEffect )
+        {
+            // Old style efects are always blended.
+            return true;
+        }
 
-    // FIXME: What if there're more passes then one.
-    return effect->GetPass( 0 )->GetStateInstance()->GetAlphaState()->blendEnabled;
+        auto effect = node->GetNNodeEffect();
+        if( effect )
+        {
+            return effect->IsBlendable_DIRTY_DESIGN_HACK();
+        }
+        assert( !"Shouldn't be here" );
+        return true;
+    }
+    else
+    {
+        auto renderableEntity = static_cast<bv::RenderableEntity *>( node->GetTransformable() );
+        auto effect = renderableEntity->GetRenderableEffect();
+
+        if( !effect )
+        {
+            return false;   // No effect. Return value is indifferent.
+        }
+
+        // FIXME: What if there're more passes then one.
+        return effect->GetPass( 0 )->GetStateInstance()->GetAlphaState()->blendEnabled;
+    }
 }
 
 
@@ -106,7 +134,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl:
 
     float z = ComputeNodeZ( node, ctx );
     
-    if( IsTransparent( node ) || HasEffect( node ) )
+    if( IsTransparent( node )/* || HasEffect( node )*/ )
     {
         // Farthest elements are at the beginning of vector.
         auto iterator = m_transparentNodes.begin();

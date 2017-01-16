@@ -11,8 +11,11 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-NNodeEffectRenderLogic::NNodeEffectRenderLogic      ( const std::vector< NNodeEffectRenderPass * > & passes )
+NNodeEffectRenderLogic::NNodeEffectRenderLogic      ( const std::vector< NNodeEffectRenderPass * > & passes, bool useBlend, bool overrideDepth, float depth )
     : m_passes( passes )
+    , m_useBlend( useBlend )
+    , m_overrideDepth( overrideDepth )
+    , m_depth( depth )
 {
     for( auto pass : m_passes )
     {
@@ -58,10 +61,14 @@ void            NNodeEffectRenderLogic::Render  ( SceneNodeRepr * nodeRepr, NRen
 //
 bool			NNodeEffectRenderLogic::IsBlendable_DIRTY_DESIGN_HACK	() const
 {
-	// FIXME: implement
-	assert( false );
+	return m_useBlend;
+}
 
-	return false;
+// ***********************
+//
+bool            NNodeEffectRenderLogic::IsDepthOverriden_DIRTY_DESIGN_HACK() const
+{
+    return m_overrideDepth;
 }
 
 // *********************************
@@ -69,9 +76,9 @@ bool			NNodeEffectRenderLogic::IsBlendable_DIRTY_DESIGN_HACK	() const
 float			NNodeEffectRenderLogic::GetDepth_DIRTY_DESIGN_HACK      () const
 {
 	// FIXME: implement
-	assert( false );
+	/*assert( false );*/
 
-	return 0.0f;
+	return m_depth;
 }
 
 // *********************************
