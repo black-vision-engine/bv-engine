@@ -24,6 +24,7 @@ public:
 private:
 
     void                    RenderScenes        ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx );
+    void                    RenderScene         ( Scene * scene, const RenderTarget * outputRT, NRenderContext * ctx );
 
     void                    PreRender           ( RenderResult * result );
     void                    PostRender          ( RenderResult * result, NRenderContext * ctx );

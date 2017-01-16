@@ -46,33 +46,35 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderRes
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
-        auto outIdx = scene->GetOutputChannelIdx();
-
+        auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
         assert( outIdx < (unsigned int) RenderOutputChannelType::ROCT_TOTAL );
 
+        auto outputType = ( RenderOutputChannelType ) outIdx;   
+        auto outputRT = result->GetActiveRenderTarget( outputType );
 
-        // FIXME: nrl - retrieve rt for each scene here (for each scene marked as a subgroup)
-        auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
+        RenderScene( scene, outputRT, ctx );
 
-        NNodeRenderLogic::RenderQueued( scene, rt, ctx );
-        NNodeRenderLogic::RenderAudio( scene, ctx );
+        result->SetContainsValidData( outputType, true );
     }
+}
+
+// **************************
+//
+void    NRenderLogicCore::RenderScene       ( Scene * scene, const RenderTarget * outputRT, NRenderContext * ctx )
+{
+    NNodeRenderLogic::RenderQueued( scene, outputRT, ctx );
+    NNodeRenderLogic::RenderAudio( scene, ctx );
 }
 
 // **************************
 //
 void    NRenderLogicCore::PreRender         ( RenderResult * result )
 {
-    // FIXME: nrl - this is a bit of an overkill (not too expensive though) to update this state each frame instead of tracking it and updating only when a scene is (or scenes are) changed
-    // FIXME: nrl - only then this state should be updated
-
-    // Clear render result state
-
     for( auto channelType : m_allChannels )
     {
         if( result->IsActive( channelType ) )
         {
-            result->SetContainsValidData( false );
+            result->SetContainsValidData( channelType, false );
         }
     }
 }
@@ -81,10 +83,15 @@ void    NRenderLogicCore::PreRender         ( RenderResult * result )
 //
 void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderContext * ctx )
 {
-    // FIXME: nrl - this is a bit of an overkill (not too expensive though) to update this state each frame instead of tracking it and updating only when a scene is (or scenes are) changed
-    // FIXME: nrl - only then this state should be updated
+    for( auto channelType : m_allChannels )
+    {
+        if( result->IsActive( channelType ) && !result->ContainsValidData( channelType ) )
+        {
+            auto rt = result->GetActiveRenderTarget( channelType );
 
-    // Clear output render targets which were not used durint the RenderScenes phase
+            NNodeRenderLogic::Clear( rt, ctx );
+        }
+    }
 }
 
 } //nrl
