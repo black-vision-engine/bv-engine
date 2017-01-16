@@ -29,13 +29,13 @@ private:
 
 public:
 
-            OutputPreview   ();
-            ~OutputPreview  ();
+                    OutputPreview   ();
+                    ~OutputPreview  ();
 
-    void    ShowFrame       ( NRenderContext * ctx, const RenderResult * output );
+    virtual void    ProcessFrameData( NRenderContext * ctx, const RenderResult * result ) override;
 
-    void    SetShowDefault  ();
-    void    SetShowAlpha    ();
+    void            SetShowDefault  ();
+    void            SetShowAlpha    ();
 
 private:
 

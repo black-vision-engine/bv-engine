@@ -28,7 +28,7 @@ public:
                     OutputInstance      ();
     virtual         ~OutputInstance     ();
 
-    virtual void    ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data ) = 0;
+    virtual void    ProcessFrameData    ( NRenderContext * ctx, const RenderResult * result ) = 0;
 
     bool            IsEnabled           () const;
     void            Enable              ();
