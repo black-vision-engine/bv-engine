@@ -2,12 +2,15 @@
 
 #include "OutputLogic.h"
 
-#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
-
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputPreview.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputVideo.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputStream.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputScreenshot.h"
 
 
 namespace bv { namespace nrl {
@@ -17,12 +20,24 @@ namespace bv { namespace nrl {
 OutputLogic::OutputLogic         ()
     : m_outputs( (unsigned int) CustomOutputType::COT_TOTAL )
 {
+    unsigned int i = 0;
+
+    m_outputs[ (unsigned int) CustomOutputType::COT_PREVIEW ]       = new OutputPreview();      ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO ]         = new OutputVideo();        ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_STREAM ]        = new OutputStream();       ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_SCREENSHOT ]    = new OutputScreenshot();   ++i;
+
+    assert( i == (unsigned int) CustomOutputType::COT_TOTAL );
 }
 
 // *********************************
 //
 OutputLogic::~OutputLogic        ()
 {
+    for( auto output : m_outputs )
+    {
+        delete output;
+    }
 }
 
 // *********************************
@@ -31,13 +46,6 @@ void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx  )
 {
     // FIXME: this is kinda hackish
     auto data = m_renderResult;
-    if( data->IsActive( RenderOutputChannelType::ROCT_OUTPUT_1 ) && data->!ContainsValidData( RenderOutputChannelType::ROCT_OUTPUT_1 ) )
-    {
-        auto outputRT = data->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
-
-        // FIXME: nrl - this is so low level that should be implented in an addtional layer (not in NNodeRenderLogic per se)
-        NNodeRenderLogic::Clear( outputRT, ctx ); 
-    }
 
     // FIXME: nrl - add screenshot logic somewhere near this line of code - based on previous implementation
     //if( m_screenShotLogic->ReadbackNeeded() )

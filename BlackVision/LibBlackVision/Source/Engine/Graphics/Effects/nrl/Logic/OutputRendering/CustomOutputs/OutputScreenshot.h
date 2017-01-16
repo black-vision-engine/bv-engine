@@ -8,7 +8,7 @@ namespace bv { namespace nrl {
 class RenderResult;
 class NRenderContext;
 
-class OutputStream : public OutputInstance
+class OutputScreenshot : public OutputInstance
 {
 private:
 
