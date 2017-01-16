@@ -358,9 +358,6 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\NodeRendering">
       <UniqueIdentifier>{5b6a5c6e-e0db-4faa-bbee-59fe3ee5dfc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering">
-      <UniqueIdentifier>{ac3fdb7a-4f31-43aa-a77f-06736c193746}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\State">
       <UniqueIdentifier>{037c9216-9ede-49bd-ac84-486018f281e8}</UniqueIdentifier>
     </Filter>
@@ -405,6 +402,9 @@
     </Filter>
     <Filter Include="Assets\AVStream">
       <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering">
+      <UniqueIdentifier>{ac3fdb7a-4f31-43aa-a77f-06736c193746}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs">
       <UniqueIdentifier>{e957a900-8d57-447e-bcd2-de2e78eb537d}</UniqueIdentifier>

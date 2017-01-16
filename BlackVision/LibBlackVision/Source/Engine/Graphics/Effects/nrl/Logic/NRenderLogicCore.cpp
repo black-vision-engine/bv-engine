@@ -50,6 +50,7 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderRes
 
         assert( outIdx < (unsigned int) RenderOutputChannelType::ROCT_TOTAL );
 
+
         // FIXME: nrl - retrieve rt for each scene here (for each scene marked as a subgroup)
         auto rt = result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
 
