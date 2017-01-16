@@ -62,7 +62,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA ||
 			nfseType == NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK ||
 			nfseType == NFullscreenEffectType::NFET_BLUR ||
-			nfseType == NFullscreenEffectType::NFET_LIGHT_SCATTERING );
+			nfseType == NFullscreenEffectType::NFET_LIGHT_SCATTERING ||
+			nfseType == NFullscreenEffectType::NFET_SHADOW );
 
     desc->SetBlendFlag( false );
     desc->SetCullFlag( false );
@@ -98,6 +99,15 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "weight" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "lightPositionOnScreen" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "numSamples" ) );
+			break;
+		case NFullscreenEffectType::NFET_SHADOW:
+			desc->AppendInputSamplerName( "BluredTex0" );
+			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueVec4( "color" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueVec2( "shift" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "inner" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "outer" ) );
 			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
