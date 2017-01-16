@@ -17,13 +17,16 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NShadowPreFSEStep::NShadowPreFSEStep          ( IValuePtr blurSize )
+NShadowPreFSEStep::NShadowPreFSEStep          ( IValuePtr blurSize, IValuePtr shift, IValuePtr inner, IValuePtr outer )
     : Parent( nullptr )
     , m_renderResult( 1 )
 {
     auto state = std::make_shared< NRenderComponentState >();
 
 	state->AppendValue( blurSize );
+	state->AppendValue( shift );
+	state->AppendValue( inner );
+	state->AppendValue( outer );
 
     Parent::SetState( state );
 }
@@ -79,9 +82,37 @@ Float32 NShadowPreFSEStep::GetBlurSize				() const
 
 // **************************
 //
+glm::vec2 NShadowPreFSEStep::GetShift				() const
+{
+	auto shift = GetState()->GetValueAt( 1 );
+
+	return QueryTypedValue< ValueVec2Ptr >( shift )->GetValue();
+}
+
+// **************************
+//
+bool NShadowPreFSEStep::GetInner					() const
+{
+	auto inner = GetState()->GetValueAt( 2 );
+
+	return QueryTypedValue< ValueBoolPtr >( inner )->GetValue();
+}
+
+// **************************
+//
+bool NShadowPreFSEStep::GetOuter					() const
+{
+	auto outer = GetState()->GetValueAt( 3 );
+
+	return QueryTypedValue< ValueBoolPtr >( outer )->GetValue();
+}
+
+
+// **************************
+//
 bool    NShadowPreFSEStep::IsIdle                    ( SceneNodeRepr * ) const
 {
-	return GetBlurSize() == 0.f;
+	return  ( GetShift() == glm::vec2() && GetBlurSize() == 0.f && !GetInner() );
 }
 
 // **************************

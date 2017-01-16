@@ -37,7 +37,10 @@ public:
     virtual bool                IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
 
 private:
-	Float32						GetBlurSize				() const;
+	Float32                     GetBlurSize             () const;
+	glm::vec2                   GetShift				() const;
+	bool						GetInner				() const;
+	bool						GetOuter				() const;
 };
 
 } // nrl

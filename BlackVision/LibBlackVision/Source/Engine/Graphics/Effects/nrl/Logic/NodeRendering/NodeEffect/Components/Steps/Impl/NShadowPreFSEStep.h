@@ -19,7 +19,7 @@ private:
 
 public:
 
-				                    NShadowPreFSEStep			( IValuePtr blurSize );
+				                    NShadowPreFSEStep		( IValuePtr blurSize, IValuePtr shift, IValuePtr inner, IValuePtr outer );
 
     virtual unsigned int            GetNumOutputs           () const override;
 
@@ -35,6 +35,9 @@ public:
     virtual bool                    IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
 
 	Float32                         GetBlurSize             () const;
+	glm::vec2                       GetShift				() const;
+	bool							GetInner				() const;
+	bool							GetOuter				() const;
 };
 
 } // nrl

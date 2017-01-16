@@ -23,7 +23,15 @@ NShadowFSEStep::NShadowFSEStep          ()
     // FIXME: maybe one class is enough as we only use NFullscreenEffectType type here and always set FSE state as current state
     m_blurEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_BLUR );
 	m_shadowEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_SHADOW );
-    SetState( m_shadowEffect->GetState() );
+
+	auto state = std::make_shared< NRenderComponentState >();
+
+	state->AppendValue( m_blurEffect->GetState()->GetValue( "blurSize" ) );
+	state->AppendValue( m_shadowEffect->GetState()->GetValue( "shift" ) );
+	state->AppendValue( m_shadowEffect->GetState()->GetValue( "inner" ) );
+	state->AppendValue( m_shadowEffect->GetState()->GetValue( "outer" ) );
+
+	Parent::SetState( state );
 }
 
 // **************************
@@ -53,8 +61,8 @@ void                    NShadowFSEStep::ApplyImpl                    ( NRenderCo
     assert( input );
 
 	// FIXME: Some general mechanism should be implemented to set values in effect.
-	auto textureSize = GetState()->GetValueAt( 0 );
-	auto vertical = GetState()->GetValueAt( 3 );
+	auto textureSize = m_blurEffect->GetState()->GetValueAt( 0 );
+	auto vertical = m_blurEffect->GetState()->GetValueAt( 3 );
 
 	auto wrt = input->GetEntry( 0 )->Width();
 	auto hrt = input->GetEntry( 0 )->Height();
@@ -64,18 +72,26 @@ void                    NShadowFSEStep::ApplyImpl                    ( NRenderCo
 
 	// Allocate new render target for vertical blur pass
 	auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-	NRenderedData rd( 1 );
-	rd.SetEntry( 0, rt0 );
+	NRenderedData rd0( 1 );
+	rd0.SetEntry( 0, rt0 );
 
 	// Run vertical blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( true );
 	m_blurEffect->Render( ctx, rt0, *input );
 
+	auto rt1 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+	NRenderedData rd1( 1 );
+	rd1.SetEntry( 0, rt1 );
+
 	// Run horizontal blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
-	m_blurEffect->Render( ctx, rd );
+	m_blurEffect->Render( ctx, rt1, rd0 );
 
-	allocator( ctx )->Free();  // free allocated locally render target.
+	NRenderedData rd2( 2 );
+	rd2.SetEntry( 0, rt1 );
+	rd2.SetEntry( 1, input->GetEntry( 0 ) );
+
+	m_shadowEffect->Render( ctx, rd2 );
 }
 
 // **************************
@@ -91,7 +107,7 @@ void                    NShadowFSEStep::FreeRenderTargets            ( NRenderCo
 
 // **************************
 //
-Float32					NShadowFSEStep::GetBlurSize				() const
+Float32					NShadowFSEStep::GetBlurSize		() const
 {
 	auto blurSize = GetState()->GetValueAt( 1 );
 
@@ -100,19 +116,46 @@ Float32					NShadowFSEStep::GetBlurSize				() const
 
 // **************************
 //
-bool                    NShadowFSEStep::IsIdle                       ( SceneNodeRepr * ) const
+glm::vec2 NShadowFSEStep::GetShift						() const
 {
-	// Nothing to do if blur size is 0.
-	return GetBlurSize() == 0;
+	auto shift = GetState()->GetValueAt( 1 );
+
+	return QueryTypedValue< ValueVec2Ptr >( shift )->GetValue();
+}
+
+// **************************
+//
+bool NShadowFSEStep::GetInner							() const
+{
+	auto inner = GetState()->GetValueAt( 0 );
+
+	return QueryTypedValue< ValueBoolPtr >( inner )->GetValue();
+}
+
+// **************************
+//
+bool NShadowFSEStep::GetOuter							() const
+{
+	auto outer = GetState()->GetValueAt( 0 );
+
+	return QueryTypedValue< ValueBoolPtr >( outer )->GetValue();
+}
+
+
+// **************************
+//
+bool                    NShadowFSEStep::IsIdle			( SceneNodeRepr * ) const
+{
+	return  ( GetShift() == glm::vec2() && GetBlurSize() == 0.f && !GetInner() );
 }
 
 // **************************
 // If 
-bool                    NShadowFSEStep::IsFinal                      ( SceneNodeRepr * ) const
+bool                    NShadowFSEStep::IsFinal         ( SceneNodeRepr * scnNodeRepr ) const
 {
 	// if we've just rendered blured image fo not run next default finalize pass.
 	// else run it.
-	return GetBlurSize() != 0;
+	return !IsIdle( scnNodeRepr );
 }
 
 } // nrl
