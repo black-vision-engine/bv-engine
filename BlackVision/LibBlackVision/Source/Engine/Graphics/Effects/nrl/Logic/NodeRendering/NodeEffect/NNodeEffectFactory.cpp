@@ -199,6 +199,22 @@ NNodeEffectPtr       CreateLightScatteringNodeEffect   ()
 	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_LIGHT_SCATTERING );
 }
 
+// ***********************
+//
+NNodeEffectPtr       CreateZSortNodeEffect      ()
+{
+    auto finalizeStep = new NDefaultFinalizeStep();
+    auto finPass = new NFinalizePass( finalizeStep );
+
+    std::vector< NNodeEffectRenderPass * > passes( 1 );
+
+    passes[ 0 ] = finPass;
+
+    auto nnerl = new NNodeEffectRenderLogic( passes, false );
+
+    return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_Z_SORT );
+}
+
 // **************************
 //
 NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
@@ -215,6 +231,8 @@ NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 			return CreateBlurNodeEffect();
 		case NNodeEffectType::NNET_LIGHT_SCATTERING:
 			return CreateLightScatteringNodeEffect();
+        case NNodeEffectType::NNET_Z_SORT:
+            return CreateZSortNodeEffect();
 		case NNodeEffectType::NNET_WIREFRAME:
             //return CreateWireframeNodeEffect();
         case NNodeEffectType::NNET_MIX_CHANNELS:

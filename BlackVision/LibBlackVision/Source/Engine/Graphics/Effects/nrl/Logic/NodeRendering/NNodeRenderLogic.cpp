@@ -169,6 +169,32 @@ void    NNodeRenderLogic::Render            ( SceneNodeRepr * nodeRepr, const Re
     disableBoundRT( ctx );    
 }
 
+// ***********************
+//
+void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * nodeRepr, const RenderTarget * output, NRenderContext * ctx )
+{
+    enable( ctx, output );
+    clearBoundRT( ctx, glm::vec4() ); // FIXME: default clear color used - posisibly customize it a bit
+
+    RenderQueued( nodeRepr, ctx );
+
+    disableBoundRT( ctx );
+}
+
+// ***********************
+//
+void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * /*nodeRepr*/, NRenderContext * /*ctx*/ )
+{
+    //// FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
+    //auto queue = queue_allocator( ctx )->Allocate();
+
+    //queue->QueueNodeSubtree( nodeRepr, ctx );
+
+    //queue->Render( ctx );
+
+    //queue_allocator( ctx )->Free();
+}
+
 // *********************************
 //
 void    NNodeRenderLogic::Render            ( SceneNodeRepr * nodeRepr, NRenderContext * ctx )

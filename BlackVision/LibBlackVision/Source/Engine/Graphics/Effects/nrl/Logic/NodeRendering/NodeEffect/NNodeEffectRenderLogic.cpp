@@ -75,9 +75,6 @@ bool            NNodeEffectRenderLogic::IsDepthOverriden_DIRTY_DESIGN_HACK() con
 //
 float			NNodeEffectRenderLogic::GetDepth_DIRTY_DESIGN_HACK      () const
 {
-	// FIXME: implement
-	/*assert( false );*/
-
 	return m_depth;
 }
 
