@@ -12,12 +12,16 @@ class RenderTarget;
 
 namespace nrl {
 
+// FIXME: nrl - implement (if necessary) additional logic to cache readback textures
 class RenderResult
 {
 private:
 
     std::vector< RenderChannel * >  m_renderChannels;
     std::vector< bool >             m_containsValidData;
+
+    std::vector< Texture2DPtr >     m_cachedReadbackTextures;
+    std::vector< bool >             m_cachedReadbackUpToDate;
 
 private:
 
@@ -32,6 +36,9 @@ public:
 
     const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;
 	const RenderTarget *	GetActiveRenderTarget	( RenderChannelType rct ) const;
+    
+    void                    InvalidateCachedTexture ( RenderChannelType rct );
+    Texture2DPtr            ReadColorTexture        ( Renderer * renderer, RenderChannelType rct );
 
     void                    UpdateRenderChannels    ();
 

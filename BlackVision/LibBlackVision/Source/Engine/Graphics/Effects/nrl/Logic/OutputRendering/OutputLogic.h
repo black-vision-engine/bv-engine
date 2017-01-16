@@ -22,7 +22,7 @@ private:
 
 public:
 
-                        OutputLogic             ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
+                        OutputLogic             ( unsigned int width, unsigned int height, unsigned int shmScaleFactor, RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
     virtual             ~OutputLogic            ();
 
     // API directly related to frame rendering

@@ -32,7 +32,7 @@ public:
                     OutputPreview   ();
                     ~OutputPreview  ();
 
-    virtual void    ProcessFrameData( NRenderContext * ctx, const RenderResult * result ) override;
+    virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
 
     void            SetShowDefault  ();
     void            SetShowAlpha    ();

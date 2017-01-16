@@ -7,7 +7,7 @@ enum class CustomOutputType : unsigned int
 {
     COT_PREVIEW = 0,
     COT_VIDEO,
-    COT_STREAM,
+    COT_STREAM_SHM,
     COT_SCREENSHOT,
 
     COT_TOTAL
@@ -28,7 +28,7 @@ public:
                     OutputInstance      ();
     virtual         ~OutputInstance     ();
 
-    virtual void    ProcessFrameData    ( NRenderContext * ctx, const RenderResult * result ) = 0;
+    virtual void    ProcessFrameData    ( NRenderContext * ctx, RenderResult * result ) = 0;
 
     bool            IsEnabled           () const;
     void            Enable              ();
