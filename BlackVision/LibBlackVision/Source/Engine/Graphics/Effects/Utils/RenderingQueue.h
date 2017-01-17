@@ -31,6 +31,9 @@ public:
     void                QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx );
     void                QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx );
 
+    void                QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx );
+    void                QueueSingleNode     ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx );
+
     void                Render              ( nrl::NRenderContext * ctx );
 
     void                ClearQueue          ();
@@ -38,10 +41,15 @@ public:
 
 
     static float        ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx );
+    static float        ComputeNodeZ        ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx );
     static bool         IsTransparent       ( SceneNode * node );
+    static bool         IsTransparent       ( SceneNodeRepr * nodeRepr );
 
 private:
     void                RenderNode          ( SceneNode * node, nrl::NRenderContext * ctx );
+
+    void                QueueTransparent    ( SceneNode * node, float z );
+    void                QueueOpaque         ( SceneNode * node, float z );
 };
 
 

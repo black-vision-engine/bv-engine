@@ -3,6 +3,7 @@
 #include "RenderingQueue.h"
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+#include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
@@ -53,8 +54,6 @@ RenderingQueue::~RenderingQueue()
 // FIXME: nrl - rendercontext added
 float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx )
 {
-    float z = 0.0f;
-
     if( HasEffect( node ) )
     {
         // Let effect compute z for itself instead of using bounding box.
@@ -70,12 +69,21 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
         // Note: else there's old style effect set in this node. We can ignore him and compute z as for normal node.
     }
 
-    auto box = node->GetBoundingBox();
+    return ComputeNodeZ( node->GetRepr(), ctx );
+}
+
+// ***********************
+//
+float               RenderingQueue::ComputeNodeZ        ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx )
+{
+    float z = 0.0f;
+
+    auto box = nodeRepr->GetBoundingBox();
     if( box != nullptr )
     {
         auto camera = ctx->GetRenderer()->GetCamera();
 
-        glm::vec3 boxCenter = glm::vec3( node->GetTransformable()->WorldTransform().Matrix() * glm::vec4( box->Center(), 1.0f ) );
+        glm::vec3 boxCenter = glm::vec3( nodeRepr->GetTransformable()->WorldTransform().Matrix() * glm::vec4( box->Center(), 1.0f ) );
         const glm::vec3 & cameraDir = camera->GetDirection();
         const glm::vec3 & cameraPos = camera->GetPosition();
 
@@ -109,17 +117,24 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
     }
     else
     {
-        auto renderableEntity = static_cast<bv::RenderableEntity *>( node->GetTransformable() );
-        auto effect = renderableEntity->GetRenderableEffect();
-
-        if( !effect )
-        {
-            return false;   // No effect. Return value is indifferent.
-        }
-
-        // FIXME: What if there're more passes then one.
-        return effect->GetPass( 0 )->GetStateInstance()->GetAlphaState()->blendEnabled;
+        return IsTransparent( node->GetRepr() );
     }
+}
+
+// ***********************
+//
+bool                RenderingQueue::IsTransparent       ( SceneNodeRepr * nodeRepr )
+{
+    auto renderableEntity = static_cast<bv::RenderableEntity *>( nodeRepr->GetTransformable() );
+    auto effect = renderableEntity->GetRenderableEffect();
+
+    if( !effect )
+    {
+        return false;   // No effect. Return value is indifferent.
+    }
+
+    // FIXME: What if there're more passes then one.
+    return effect->GetPass( 0 )->GetStateInstance()->GetAlphaState()->blendEnabled;
 }
 
 
@@ -127,41 +142,44 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
 // FIXME: nrl - rendercontext added
 void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx )
 {
+    // Maybe it shouldn't be here.
     if( !node->IsVisible() )
         return;
 
-    BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node );
+    BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
 
     float z = ComputeNodeZ( node, ctx );
     
     if( IsTransparent( node )/* || HasEffect( node )*/ )
     {
-        // Farthest elements are at the beginning of vector.
-        auto iterator = m_transparentNodes.begin();
-        while( iterator != m_transparentNodes.end() )
-        {
-            if( z > iterator->second )
-                break;
-            iterator++;
-        }
-
-        m_transparentNodes.insert( iterator, std::make_pair( node, z ) );
+        QueueTransparent( node, z );
     }
     else
     {
-        // Nearest element are at the beginning of vector.
-        auto iterator = m_opaqueNodes.begin();
-        while( iterator != m_opaqueNodes.end() )
-        {
-            if( z < iterator->second )
-                break;
-            iterator++;
-        }
-
-        m_opaqueNodes.insert( iterator, std::make_pair( node, z ) );
+        QueueOpaque( node, z );
     }
 
-    END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node );
+    END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
+}
+
+// ***********************
+//
+void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx )
+{
+    BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), nodeRepr );
+
+    //float z = ComputeNodeZ( nodeRepr, ctx );
+
+    if( IsTransparent( nodeRepr ) )
+    {
+        //QueueTransparent( nodeRepr, z );
+    }
+    else
+    {
+        //QueueOpaque( nodeRepr, z );
+    }
+
+    END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), nodeRepr );
 }
 
 // ***********************
@@ -181,6 +199,50 @@ void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl:
             }
         }
     }
+}
+
+// ***********************
+//
+void                RenderingQueue::QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx )
+{
+    QueueSingleNode( nodeRepr, ctx );
+
+    for( Int32 i = 0; i < (Int32)nodeRepr->NumChildNodes(); ++i )
+    {
+        QueueNodeSubtree( nodeRepr->GetChild( i ), ctx );
+    }
+}
+
+// ***********************
+//
+void                RenderingQueue::QueueTransparent    ( SceneNode * node, float z )
+{
+    // Farthest elements are at the beginning of vector.
+    auto iterator = m_transparentNodes.begin();
+    while( iterator != m_transparentNodes.end() )
+    {
+        if( z > iterator->second )
+            break;
+        iterator++;
+    }
+
+    m_transparentNodes.insert( iterator, std::make_pair( node, z ) );
+}
+
+// ***********************
+//
+void                RenderingQueue::QueueOpaque         ( SceneNode * node, float z )
+{
+    // Nearest element are at the beginning of vector.
+    auto iterator = m_opaqueNodes.begin();
+    while( iterator != m_opaqueNodes.end() )
+    {
+        if( z < iterator->second )
+            break;
+        iterator++;
+    }
+
+    m_opaqueNodes.insert( iterator, std::make_pair( node, z ) );
 }
 
 // ***********************
@@ -220,8 +282,8 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, nrl:
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
     // and QueueSingleNode functions.
 
-    BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
-    BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
+    BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node->GetRepr() );
+    BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), node->GetRepr() );
 
     // FIXME: nrl - implement more expressive api in NNodeRenderLogic so that bb and queue rendering is supported in a better way
     if( HasEffect( node ) )
@@ -240,8 +302,8 @@ void                RenderingQueue::RenderNode          ( SceneNode * node, nrl:
         nrl::NNodeRenderLogic::RenderBoundingBox( node, ctx );
     }
 
-    END_CPU_RENDER_MESSURE( ctx->GetRenderer(), node );
-    END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node );
+    END_CPU_RENDER_MESSURE( ctx->GetRenderer(), node->GetRepr() );
+    END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), node->GetRepr() );
 }
 
 } // bv

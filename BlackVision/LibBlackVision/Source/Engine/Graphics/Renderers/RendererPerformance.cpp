@@ -3,6 +3,7 @@
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTimeQuery.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
 #include "tools/HRTimer.h"
@@ -37,7 +38,7 @@ void                RendererPerformance::FreeAllPDResources  ( RenderableEntity 
 
 // ***********************
 //
-void        RendererPerformance::BeginGPUQuery               ( SceneNode * sceneNode )
+void        RendererPerformance::BeginGPUQuery               ( SceneNodeRepr * sceneNode )
 {
     auto timer = GetTimeQuery( static_cast< RenderableEntity * >( sceneNode->GetTransformable() ) );
     timer->BeginQuery();
@@ -45,7 +46,7 @@ void        RendererPerformance::BeginGPUQuery               ( SceneNode * scene
 
 // ***********************
 //
-void        RendererPerformance::EndGPUQuery                 ( SceneNode * sceneNode )
+void        RendererPerformance::EndGPUQuery                 ( SceneNodeRepr * sceneNode )
 {
     auto timer = GetTimeQuery( static_cast< RenderableEntity * >( sceneNode->GetTransformable() ) );
     timer->EndQuery();
@@ -53,7 +54,7 @@ void        RendererPerformance::EndGPUQuery                 ( SceneNode * scene
 
 // ***********************
 //
-void        RendererPerformance::QueryPreviousGPUResult      ( SceneNode * sceneNode )
+void        RendererPerformance::QueryPreviousGPUResult      ( SceneNodeRepr * sceneNode )
 {
     auto timer = GetTimeQuery( static_cast< RenderableEntity * >( sceneNode->GetTransformable() ) );
     auto result = timer->QueryResult();
@@ -82,7 +83,7 @@ void                RendererPerformance::AverageScenePerformanceData  ( Scene * 
 {
     if( m_samplesAccumulated >= m_windowSize )
     {
-        AverageTreePerformanceData( scene->GetRoot() );
+        AverageTreePerformanceData( scene->GetRoot()->GetRepr() );
         m_samplesAccumulated = 0;
     }
     else
@@ -100,7 +101,7 @@ double      RendererPerformance::BeginCPURenderMessure       ()
 
 // ***********************
 //
-void        RendererPerformance::EndCPURenderMessure         ( SceneNode * sceneNode, double timeStart )
+void        RendererPerformance::EndCPURenderMessure         ( SceneNodeRepr * sceneNode, double timeStart )
 {
     sceneNode->GetPerformanceData()->CPURenderAccum += GTimer.CurElapsed() - timeStart;
 }
@@ -114,14 +115,14 @@ double      RendererPerformance::BeginCPUQueueingMessure     ()
 
 // ***********************
 //
-void        RendererPerformance::EndCPUQueueingMessure       ( SceneNode * sceneNode, double timeStart )
+void        RendererPerformance::EndCPUQueueingMessure       ( SceneNodeRepr * sceneNode, double timeStart )
 {
     sceneNode->GetPerformanceData()->SortNodeAccum += GTimer.CurElapsed() - timeStart;
 }
 
 // ***********************
 //
-void                RendererPerformance::AverageTreePerformanceData  ( SceneNode * node )
+void                RendererPerformance::AverageTreePerformanceData  ( SceneNodeRepr * node )
 {
     auto data = node->GetPerformanceData();
     data->CPURenderDuration = (double)data->CPURenderAccum / m_windowSize;
@@ -134,7 +135,7 @@ void                RendererPerformance::AverageTreePerformanceData  ( SceneNode
 
     for( Int32 i = 0; i < ( Int32 )node->NumChildNodes(); ++i )
     {
-        AverageTreePerformanceData( node->GetChild( i ) );
+        AverageTreePerformanceData( node->GetChild( i )->GetRepr() );
     }
 }
 

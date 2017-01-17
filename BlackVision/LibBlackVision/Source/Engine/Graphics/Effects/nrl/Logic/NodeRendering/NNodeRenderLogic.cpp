@@ -183,16 +183,16 @@ void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * nodeRepr, const Re
 
 // ***********************
 //
-void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * /*nodeRepr*/, NRenderContext * /*ctx*/ )
+void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * nodeRepr, NRenderContext * ctx )
 {
-    //// FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
-    //auto queue = queue_allocator( ctx )->Allocate();
+    // FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
+    auto queue = queue_allocator( ctx )->Allocate();
 
-    //queue->QueueNodeSubtree( nodeRepr, ctx );
+    queue->QueueNodeSubtree( nodeRepr, ctx );
 
-    //queue->Render( ctx );
+    queue->Render( ctx );
 
-    //queue_allocator( ctx )->Free();
+    queue_allocator( ctx )->Free();
 }
 
 // *********************************
