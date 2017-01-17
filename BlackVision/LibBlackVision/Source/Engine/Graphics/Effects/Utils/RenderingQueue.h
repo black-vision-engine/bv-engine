@@ -17,7 +17,26 @@ class SceneNode;
 
 class RenderingQueue
 {
-    typedef std::pair< SceneNode *, float > RenderItem;
+    //typedef std::pair< SceneNode *, float > RenderItem;
+
+    struct RenderItem
+    {
+        SceneNodeRepr *     Node;
+        float               Depth;
+        bool                UseEffect;
+
+        RenderItem( SceneNodeRepr * node, float depth )
+            : Node( node )
+            , Depth( depth )
+            , UseEffect( false )
+        {}
+
+        RenderItem( SceneNodeRepr * node, float depth, bool useEffect )
+            : Node( node )
+            , Depth( depth )
+            , UseEffect( useEffect )
+        {}
+    };
 
 private:
 
@@ -46,10 +65,10 @@ public:
     static bool         IsTransparent       ( SceneNodeRepr * nodeRepr );
 
 private:
-    void                RenderNode          ( SceneNode * node, nrl::NRenderContext * ctx );
+    void                RenderNode          ( RenderingQueue::RenderItem & renderItem, nrl::NRenderContext * ctx );
 
-    void                QueueTransparent    ( SceneNode * node, float z );
-    void                QueueOpaque         ( SceneNode * node, float z );
+    void                QueueTransparent    ( SceneNodeRepr * node, float z, bool useEffect = false );
+    void                QueueOpaque         ( SceneNodeRepr * node, float z, bool useEffect = false );
 };
 
 

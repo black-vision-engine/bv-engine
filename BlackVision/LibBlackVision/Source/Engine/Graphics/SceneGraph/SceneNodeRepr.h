@@ -56,6 +56,9 @@ public:
 
     SceneNodePerformance *  GetPerformanceData  ();
 
+//FIXME: hopefully temporary hack for RenderingQueue
+    SceneNode *             GetOwnerNode        ()  { return m_owner; }
+
 //FIXME: access from BVSceneTools
 public:
 
