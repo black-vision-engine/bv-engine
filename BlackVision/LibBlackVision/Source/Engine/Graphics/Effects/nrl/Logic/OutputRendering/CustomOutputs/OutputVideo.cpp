@@ -17,6 +17,7 @@ namespace bv { namespace nrl {
 //
 OutputVideo::OutputVideo     ()
     : m_audioData( nullptr )
+	, m_lastFrameHasAudio( true )
 {
     // FIXME: nrl - should be read from video cards configuration
     m_fps = 25; 
@@ -32,20 +33,20 @@ OutputVideo::OutputVideo     ()
 
 // **************************
 //
-void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * result )
+void    OutputVideo::ProcessFrameData(NRenderContext * ctx, RenderResult * result)
 {
-    // FIXME: nrl - default logic uses only RenderChannelType::RCT_OUTPUT_1 result channel to show the results
-    // FIXME: nrl - implement more logic here
-    auto rct = RenderChannelType::RCT_OUTPUT_1;
-    assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
-   
-    auto videoFrame = result->ReadColorTexture( renderer( ctx ), rct );
-    auto avFrame    = PrepareAVFrame( audio( ctx ), videoFrame );
+	// FIXME: nrl - default logic uses only RenderChannelType::RCT_OUTPUT_1 result channel to show the results
+	// FIXME: nrl - implement more logic here
+	auto rct = RenderChannelType::RCT_OUTPUT_1;
+	assert(result->IsActive(rct) && result->ContainsValidData(rct));
+
+	auto videoFrame = result->ReadColorTexture(renderer(ctx), rct);
+	auto avFrame = PrepareAVFrame(audio(ctx), videoFrame);
 
 	{
-        // FIXME: nrl - ask Witek about this one
-        //HPROFILER_SECTION("QueueFrame", PROFILER_THREAD1);
-		videocards::VideoCardManager::Instance().QueueFrame( avFrame );
+		// FIXME: nrl - ask Witek about this one
+		//HPROFILER_SECTION("QueueFrame", PROFILER_THREAD1);
+		videocards::VideoCardManager::Instance().QueueFrame(avFrame);
 	}
 }
 
@@ -59,23 +60,31 @@ videocards::AVFramePtr  OutputVideo::PrepareAVFrame ( audio::AudioRenderer * aud
 	desc.height = videoFrame->GetHeight();
 	desc.depth  = TextureUtils::Channels( videoFrame->GetFormat() );
 
-	desc.channels   = audio->GetChannels();
-	desc.sampleRate = audio->GetFrequency() / m_fps;
+	MemoryChunkPtr data = MemoryChunk::Create(1);
 
-	auto audioSize = desc.sampleRate * desc.channels * audio->GetChannelDepth();
+	desc.channels = 0;
+	desc.sampleRate = 0;
 
-	if ( m_audioData->Size() != audioSize )
+	if (!m_lastFrameHasAudio)
 	{
-		m_audioData = MemoryChunk::Create( audioSize );
+		desc.channels = audio->GetChannels();
+		desc.sampleRate = audio->GetFrequency() / m_fps;
+
+		auto audioSize = desc.sampleRate * desc.channels * audio->GetChannelDepth();
+
+		data = MemoryChunk::Create(audioSize);
+
+		auto ret = audio->GetBufferedData(data);
+		data = std::const_pointer_cast<MemoryChunk>(ret->GetData());
 	}
 
-	audio->GetBufferedData( m_audioData );
+	m_lastFrameHasAudio = !m_lastFrameHasAudio;
 
 	desc.fieldModeEnabled       = true;
 	desc.timeCodePresent        = true;
 	desc.autoGenerateTimecode   = true;
 
-	auto frame = std::make_shared< videocards::AVFrame >( videoFrame->GetData(), m_audioData, desc );
+	auto frame = std::make_shared< videocards::AVFrame >( videoFrame->GetData(), data, desc );
 
     // FIXME: nrl - what about this? Daria, Paweuek
 	frame->m_TimeCode.h = 10;

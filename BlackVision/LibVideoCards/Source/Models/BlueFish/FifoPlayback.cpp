@@ -464,8 +464,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				continue;
 			}
 
-			if ((UpdateType == UPD_FMT_FRAME) ||
-				((UpdateType == UPD_FMT_FIELD) && !odd))
+			if ((UpdateType == UPD_FMT_FRAME) || ((UpdateType == UPD_FMT_FIELD) && !odd))
 				nProcessHANC = 1;
 			else
 				nProcessHANC = 0;

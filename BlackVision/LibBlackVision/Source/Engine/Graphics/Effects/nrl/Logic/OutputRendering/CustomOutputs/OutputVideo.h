@@ -15,6 +15,7 @@ private:
     MemoryChunkPtr  m_audioData;
 
     unsigned int    m_fps;
+	bool			m_lastFrameHasAudio;
 
 public:
 

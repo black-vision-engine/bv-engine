@@ -230,11 +230,10 @@ AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, in
 
 	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
 
-	odd; mem_src; bytes_per_line;
-	//for (int i = odd, j = 0;i < height;i += 2, j++)
-	//{
-	//	memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
-	//}
+	for (int i = odd, j = 0;i < height;i += 2, j++)
+	{
+		memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
+	}
 
 	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
 
