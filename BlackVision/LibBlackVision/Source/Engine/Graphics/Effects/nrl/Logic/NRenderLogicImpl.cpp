@@ -31,7 +31,7 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
     // 2. Low level renderer per frame initialization
     renderer->PreDraw();
 
-    // 3. FIXME: nrl - RenderQueued is only one possible wy of rendering - this one needs additional inspection
+    // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
     RenderQueued( scenes, outputLogic->AccessRenderResult() );
 
     // 4. Low lecel rendere per frame cleanup

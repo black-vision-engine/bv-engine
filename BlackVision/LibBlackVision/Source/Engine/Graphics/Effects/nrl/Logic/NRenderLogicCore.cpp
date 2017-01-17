@@ -92,6 +92,8 @@ void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderCont
                 auto rt = result->GetActiveRenderTarget( channelType );
 
                 NNodeRenderLogic::Clear( rt, ctx );
+
+				result->SetContainsValidData( channelType, true );
             }
 
             result->InvalidateCachedTexture( channelType );
