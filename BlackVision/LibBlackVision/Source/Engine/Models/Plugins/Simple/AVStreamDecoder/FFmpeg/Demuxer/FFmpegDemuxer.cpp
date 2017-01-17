@@ -61,7 +61,6 @@ Int32				FFmpegDemuxer::UpdateMaxFrameNumInSeq	( Int32 streamIdx )
 			if( m_maxNumOfFramesInSeq[ streamIdx ] < m_currentFrameCount )
 			{
 				m_maxNumOfFramesInSeq[ streamIdx ] = m_currentFrameCount;
-				LOG_MESSAGE( SeverityLevel::debug ) << "Max num of frames in seq: " << streamIdx << " : " << m_maxNumOfFramesInSeq[ streamIdx ];
 			}
 		}
 

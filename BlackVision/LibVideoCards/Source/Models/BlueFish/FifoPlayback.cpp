@@ -298,7 +298,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	
 	
 	BLUE_UINT32	nBytesPerAudioChannel = 2;
-	BLUE_UINT32 nSampleType = AUDIO_CHANNEL_16BIT;//(AUDIO_CHANNEL_16BIT | AUDIO_CHANNEL_LITTLEENDIAN);
+	BLUE_UINT32 nSampleType = AUDIO_CHANNEL_16BIT;
 
 	BLUE_UINT32 embAudioProp = 0;
 	BLUE_UINT32 aesAudioRouting = 0;
