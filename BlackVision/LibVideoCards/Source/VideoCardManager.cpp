@@ -186,13 +186,14 @@ bool                        VideoCardManager::ProcessFrame          ()
 
     if( data )
     {
-		short  int odd = m_currentFrameNumber % 2;
+		short int odd = m_currentFrameNumber % 2;
 		m_currentFrameNumber++;
 		if( data->m_desc.fieldModeEnabled )
 		{
 			data = RetrieveFieldFromFrame( data, odd );
 		}
-		else{
+		else
+		{
             data = InterlacedFrame( data );
         }
 		odd = m_currentFrameNumber % 2;
@@ -214,6 +215,8 @@ bool                        VideoCardManager::ProcessFrame          ()
 //
 AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, int odd)
 {
+	
+
 	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
 
 	const char *mem_src = frame->m_videoData->Get();
@@ -227,11 +230,11 @@ AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, in
 
 	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
 
-
-	for (int i = odd, j = 0;i < height;i += 2, j++)
-	{
-		memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
-	}
+	odd; mem_src; bytes_per_line;
+	//for (int i = odd, j = 0;i < height;i += 2, j++)
+	//{
+	//	memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
+	//}
 
 	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
 

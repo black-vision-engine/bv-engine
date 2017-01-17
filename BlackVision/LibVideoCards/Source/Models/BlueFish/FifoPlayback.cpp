@@ -459,6 +459,11 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				continue;
 			}
 			
+			if( pThis->m_pFifoBuffer->IsEmptyFrame( pFrame ) )
+			{
+				continue;
+			}
+
 			if ((UpdateType == UPD_FMT_FRAME) ||
 				((UpdateType == UPD_FMT_FIELD) && !odd))
 				nProcessHANC = 1;

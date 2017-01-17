@@ -39,6 +39,7 @@ void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * r
     // FIXME: nrl - default logic uses only RenderChannelType::RCT_OUTPUT_1 result channel to show the results
     // FIXME: ntl - implement more logic here
     auto rct = RenderChannelType::RCT_OUTPUT_1;
+	rct;
     assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
 
     // FIXME: nrl - DefaultShow is only a very siple way of showing rendered result on preview - ask Pawelek about other possibilities

@@ -40,6 +40,13 @@ std::shared_ptr< CFrame >   CFifoBuffer::PopFrame       ()
 
 //**************************************
 //
+bool                        CFifoBuffer::IsEmptyFrame ( std::shared_ptr< CFrame > frm ) const
+{
+	return m_emptyFrame == frm;
+}
+
+//**************************************
+//
 void                        CFifoBuffer::PushEmptyFrame ()
 {
     m_frameBuffer.Push( m_emptyFrame );
