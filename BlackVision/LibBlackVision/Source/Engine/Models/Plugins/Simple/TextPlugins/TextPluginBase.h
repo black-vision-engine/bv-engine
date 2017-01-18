@@ -9,7 +9,12 @@
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
 
+#include "Assets/Font/TextHelper.h"
+
 namespace bv { namespace model {
+
+typedef ParamEnum< TextAlignmentType > ParamEnumTAT;
+DEFINE_PTR_TYPE( ParamEnumTAT );
 
 // ***************************** DESCRIPTOR **********************************
 class TextPluginBaseDesc : public BasePluginDescriptor
@@ -70,7 +75,7 @@ protected:
 
     ValueFloatPtr                   m_newLineSize;
     ParamFloatPtr                   m_spacingParam;
-    ParamIntPtr                     m_alignmentParam;
+	ParamEnumTATPtr                 m_alignmentParam;
     ValueVec2Ptr                    m_box;
 
     ParamTransformPtr               m_outlineTxParam;

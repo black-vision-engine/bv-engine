@@ -9,7 +9,6 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Assets/DefaultAssets.h"
-#include "Assets/Font/TextHelper.h"
 #include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
@@ -92,7 +91,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::USE_TEXT_BOX, false );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::NEW_LINE_SIZE, 1.0f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGNEMENT, 0 );
+    h.AddEnumParam( TextPluginBase::PARAM::ALIGNEMENT, TextAlignmentType::Left, true, true );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
 
     return h.GetModel();
@@ -114,7 +113,7 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
 {
     m_newLineSize       = QueryTypedValue< ValueFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::NEW_LINE_SIZE ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
-    m_alignmentParam    = QueryTypedParam< ParamIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
+    m_alignmentParam    = QueryTypedParam< ParamEnumTATPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
     m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
     m_shadowEnabled     = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::SHADOW_ENABLED ) );
     m_outlineEnabled    = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::OUTLINE_ENABLED ) );
