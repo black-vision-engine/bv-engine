@@ -25,6 +25,7 @@ protected:
 public:
 
                                         ModelNodeEffect     ( NodeEffectType type );
+                                        ModelNodeEffect     ( NodeEffectType type, DefaultParamValModelPtr model );
                                         ~ModelNodeEffect    ();
 
     virtual void                        Serialize           ( ISerializer & ser ) const override;
@@ -37,13 +38,16 @@ public:
     virtual bool                                    AddAsset            ( const AssetDescConstPtr & assetDesc, SizeType idx ) override;
     virtual bool                                    RemoveAsset         ( SizeType idx ) override;
     virtual AssetDescVec                            GetAssets           () const;
+
     virtual void                                    RegisterEvaluator   ( IParamValEvaluatorPtr paramEval ) override;
+    
     virtual IParameterPtr                           GetParameter        ( const std::string & name ) const override;
     virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
     virtual const std::vector< IValueConstPtr > &   GetValues           () const override;
 
 
     static ModelNodeEffectPtr						Create              ( NodeEffectType type );
+    static ModelNodeEffectPtr						Create              ( NodeEffectType type, DefaultParamValModelPtr model );
     static ISerializablePtr							Create              ( const IDeserializer & doc );
     static ModelNodeEffectPtr						CreateTyped 		( const IDeserializer & deser );
 

@@ -56,12 +56,19 @@ UInt32 GetEffectNumRequiredAssets( NodeEffectType effectType)
 
 // ********************************
 //
-ModelNodeEffect::ModelNodeEffect  ( NodeEffectType type )
+ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type )
     : m_type( type )
     , m_paramValModel( std::make_shared< DefaultParamValModel >() )
     , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
-{
-}
+{}
+
+// ***********************
+//
+ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type, DefaultParamValModelPtr model )
+    : m_type( type )
+    , m_paramValModel( model )
+    , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
+{}
 
 // ********************************
 //
@@ -237,6 +244,13 @@ const std::vector< IValueConstPtr > &       ModelNodeEffect::GetValues          
 ModelNodeEffectPtr                          ModelNodeEffect::Create             ( NodeEffectType type )
 {
     return std::make_shared< ModelNodeEffect >( type );
+}
+
+// ***********************
+//
+ModelNodeEffectPtr                          ModelNodeEffect::Create             ( NodeEffectType type, DefaultParamValModelPtr model )
+{
+    return std::make_shared< ModelNodeEffect >( type, model );
 }
 
 // ********************************

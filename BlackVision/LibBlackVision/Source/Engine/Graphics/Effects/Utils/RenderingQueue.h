@@ -71,5 +71,6 @@ private:
     void                QueueOpaque         ( SceneNodeRepr * node, float z, bool useEffect = false );
 };
 
+DEFINE_UPTR_TYPE( RenderingQueue );
 
 }	// bv

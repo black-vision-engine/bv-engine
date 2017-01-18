@@ -23,7 +23,8 @@ enum class NodeEffectType : int
     */
 	NET_BLUR,
 	NET_LIGHT_SCATTERING,
-	
+	NET_Z_SORT,
+
     NET_TOTAL
 };
 

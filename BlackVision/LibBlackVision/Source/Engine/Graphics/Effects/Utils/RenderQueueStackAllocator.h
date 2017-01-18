@@ -15,7 +15,7 @@ class RenderQueueStackAllocator
 {
 private:
 
-    std::vector< RenderingQueue >       m_renderQueues;
+    std::vector< RenderingQueueUPtr >   m_renderQueues;
     Int32                               m_currentIdx;
 
 public:
