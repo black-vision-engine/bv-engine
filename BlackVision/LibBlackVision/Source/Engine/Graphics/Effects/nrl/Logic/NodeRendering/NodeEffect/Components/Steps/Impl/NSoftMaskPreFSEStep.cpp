@@ -17,13 +17,11 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NSoftMaskPreFSEStep::NSoftMaskPreFSEStep          ( IValuePtr blurSize )
+NSoftMaskPreFSEStep::NSoftMaskPreFSEStep          ()
     : Parent( nullptr )
     , m_renderResult( 1 )
 {
     auto state = std::make_shared< NRenderComponentState >();
-
-	state->AppendValue( blurSize );
 
     Parent::SetState( state );
 }

@@ -22,6 +22,7 @@ enum class NodeEffectType : int
 	NET_SHADOW,
 	NET_Z_SORT,
 	NET_GLOW,
+	NET_SOFT_MASK,
 
     NET_TOTAL
 };

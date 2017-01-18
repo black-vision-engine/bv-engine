@@ -46,7 +46,8 @@ const std::string GFetFile[] = {
 								"blur.frag",
 								"light_scattering.frag",
 								"shadow.frag",
-								"glow.frag"
+								"glow.frag",
+								"soft_mask.frag"
 							   };
 
 class NFullscreenEffectInstance;

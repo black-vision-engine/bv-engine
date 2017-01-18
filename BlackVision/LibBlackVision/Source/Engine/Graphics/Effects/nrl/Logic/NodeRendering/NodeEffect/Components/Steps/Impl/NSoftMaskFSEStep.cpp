@@ -53,7 +53,6 @@ void                    NSoftMaskFSEStep::ApplyImpl                    ( NRender
 
 	// FIXME: Some general mechanism should be implemented to set values in effect.
 	auto textureSize = GetState()->GetValueAt( 0 );
-	auto vertical = GetState()->GetValueAt( 3 );
 
 	auto wrt = input->GetEntry( 0 )->Width();
 	auto hrt = input->GetEntry( 0 )->Height();

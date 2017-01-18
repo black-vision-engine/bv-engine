@@ -19,7 +19,7 @@ private:
 
 public:
 
-				                    NSoftMaskPreFSEStep			( IValuePtr blurSize );
+				                    NSoftMaskPreFSEStep			();
 
     virtual unsigned int            GetNumOutputs           () const override;
 

@@ -64,7 +64,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			nfseType == NFullscreenEffectType::NFET_BLUR ||
 			nfseType == NFullscreenEffectType::NFET_LIGHT_SCATTERING ||
 			nfseType == NFullscreenEffectType::NFET_SHADOW ||
-			nfseType == NFullscreenEffectType::NFET_GLOW);
+			nfseType == NFullscreenEffectType::NFET_GLOW ||
+			nfseType == NFullscreenEffectType::NFET_SOFT_MASK );
 
     desc->SetBlendFlag( false );
     desc->SetCullFlag( false );
@@ -120,6 +121,12 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "inner" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "outer" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "glowStrength" ) );
+			break;
+		case NFullscreenEffectType::NFET_SOFT_MASK:
+			desc->SetBlendFlag( true );
+			desc->SetDepthTestFlag( true );
+			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
