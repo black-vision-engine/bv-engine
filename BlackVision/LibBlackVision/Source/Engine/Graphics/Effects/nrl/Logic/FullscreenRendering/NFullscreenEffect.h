@@ -28,6 +28,7 @@ enum class NFullscreenEffectType : int
 	NFET_LIGHT_SCATTERING,
     NFET_SHADOW,
 	NFET_GLOW,
+	NFET_SOFT_MASK,
     //NFET_OUTLINE
     //TODO: and so on
 
