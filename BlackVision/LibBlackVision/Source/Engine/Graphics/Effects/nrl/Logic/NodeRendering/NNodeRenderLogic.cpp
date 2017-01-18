@@ -17,6 +17,15 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
+void    NNodeRenderLogic::Clear             ( const RenderTarget * rt, NRenderContext * ctx, const glm::vec4 & color )
+{
+    enable( ctx, rt );
+    clearBoundRT( ctx, color );
+    disableBoundRT( ctx );
+}
+
+// *********************************
+//
 void    NNodeRenderLogic::RenderAudio       ( Scene * scene, NRenderContext * ctx )
 {
     auto rootNode = scene->GetRoot();
@@ -123,13 +132,16 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
 
     if( nEffect )
     {
+        // FIXME: nrl - remove whem all effects are implemented in nrl
         //RenderImpl( repr, ctx );
         assert( nEffect->GetType() == nrl::NNodeEffectType::NNET_DEFAULT ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_NODE_MASK ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_BLUR ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_LIGHT_SCATTERING ||
-                nEffect->GetType() == nrl::NNodeEffectType::NNET_Z_SORT );
+				nEffect->GetType() == nrl::NNodeEffectType::NNET_SHADOW ||
+                                nEffect->GetType() == nrl::NNodeEffectType::NNET_Z_SORT ||
+				nEffect->GetType() == nrl::NNodeEffectType::NNET_GLOW );
 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
     }

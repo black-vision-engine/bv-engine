@@ -29,7 +29,14 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NLightScatteringPreFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NLightScatteringFSEStep.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NShadowPreFSEStep.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NShadowFSEStep.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NZSortFinalizeStep.h"
+
+
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NGlowPreFSEStep.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NGlowFSEStep.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/nrl/Logic/State/NFullscreenEffectComponentState.h"
@@ -219,6 +226,81 @@ NNodeEffectPtr       CreateZSortNodeEffect      ()
 
 // **************************
 //
+NNodeEffectPtr       CreateShadowNodeEffect   ()
+{
+	//RenderLogic - default
+	//Passes
+	// - fse - default pre
+	//    - pre step - node mask
+	//    - fse step - node mask
+	// - fin - default rendering
+	//    - finalize step with default rendering
+	// Create STEPS
+
+
+	auto fseStep = new NShadowFSEStep(  );
+
+	auto blurSizeVal = get_value( fseStep->GetState(), "blurSize" );
+	auto shiftVal = get_value( fseStep->GetState(), "shift" );
+	auto innerVal = get_value( fseStep->GetState(), "inner" );
+	auto outerVal = get_value( fseStep->GetState(), "outer" );
+
+	auto preFSEStep = new NShadowPreFSEStep( blurSizeVal, shiftVal, innerVal, outerVal );
+
+	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
+
+	auto finalizeStep = new NDefaultFinalizeStep();
+	auto finPass = new NFinalizePass( finalizeStep );
+
+	std::vector< NNodeEffectRenderPass * > passes( 2 );
+
+	passes[ 0 ] = fsePass;
+	passes[ 1 ] = finPass;
+
+	auto nnerl = new NNodeEffectRenderLogic( passes );
+
+	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_SHADOW );
+}
+
+// **************************
+//
+NNodeEffectPtr       CreateGlowNodeEffect   ()
+{
+	//RenderLogic - default
+	//Passes
+	// - fse - default pre
+	//    - pre step - node mask
+	//    - fse step - node mask
+	// - fin - default rendering
+	//    - finalize step with default rendering
+	// Create STEPS
+
+
+	auto fseStep = new NGlowFSEStep();
+
+	auto blurSizeVal = get_value( fseStep->GetState(), "blurSize" );
+	auto innerVal = get_value( fseStep->GetState(), "inner" );
+	auto outerVal = get_value( fseStep->GetState(), "outer" );
+
+	auto preFSEStep = new NGlowPreFSEStep( blurSizeVal, innerVal, outerVal );
+
+	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
+
+	auto finalizeStep = new NDefaultFinalizeStep();
+	auto finPass = new NFinalizePass( finalizeStep );
+
+	std::vector< NNodeEffectRenderPass * > passes( 2 );
+
+	passes[ 0 ] = fsePass;
+	passes[ 1 ] = finPass;
+
+	auto nnerl = new NNodeEffectRenderLogic( passes );
+
+	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_SHADOW );
+}
+
+// **************************
+//
 NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 {
     switch( nnodeEffectType )
@@ -233,8 +315,12 @@ NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 			return CreateBlurNodeEffect();
 		case NNodeEffectType::NNET_LIGHT_SCATTERING:
 			return CreateLightScatteringNodeEffect();
-        case NNodeEffectType::NNET_Z_SORT:
-            return CreateZSortNodeEffect();
+		case NNodeEffectType::NNET_SHADOW:
+			return CreateShadowNodeEffect();
+                case NNodeEffectType::NNET_Z_SORT:
+                        return CreateZSortNodeEffect();
+		case NNodeEffectType::NNET_GLOW:
+			return CreateGlowNodeEffect();
 		case NNodeEffectType::NNET_WIREFRAME:
             //return CreateWireframeNodeEffect();
         case NNodeEffectType::NNET_MIX_CHANNELS:

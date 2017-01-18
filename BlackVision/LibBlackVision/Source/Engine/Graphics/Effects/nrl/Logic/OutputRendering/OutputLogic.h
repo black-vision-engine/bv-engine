@@ -1,39 +1,47 @@
 #pragma once
 
+#include <vector>
+
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+
 
 namespace bv { 
     
-class Renderer;    
-class SharedMemoryVideoBuffer;
-
 namespace nrl {
 
-class RenderResult;
-class Preview;
-class VideoOutput;
 class NRenderContext;
 
 class OutputLogic
 {
 private:
 
-    // FIXME: nrl - any additional flags?
-    bool            m_videoOutputEnabled;
-    bool            m_useSharedMemory;
+    std::vector< OutputInstance * >     m_outputs;
 
-    Preview *                   m_preview;
-    SharedMemoryVideoBuffer *   m_sharedMemoryVideoBuffer;
-    VideoOutput *               m_videoOutput;
+    RenderResult                        m_renderResult;
 
 public:
 
-                    OutputLogic         ( unsigned int width, unsigned int height, unsigned int sharedMemScaleFactor );
-                    ~OutputLogic        ();
+                        OutputLogic             ( unsigned int width, unsigned int height, unsigned int shmScaleFactor, RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
+    virtual             ~OutputLogic            ();
 
-    void            ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes );
-    
-    Preview *       GetPreview          ();
-    VideoOutput *   GetVideoOutput      ();
+    // API directly related to frame rendering
+    void                ProcessFrameData        ( NRenderContext * ctx );
+
+    // API relarted to global output state manipulation
+    bool                IsEnabled               ( CustomOutputType outputType );
+    void                EnableOutput            ( CustomOutputType outputType );
+    void                DisableOutput           ( CustomOutputType outputType );
+
+    OutputInstance *    GetOutput               ( CustomOutputType outputType );
+
+    // API related to render buffers state manipulation
+    RenderResult *      AccessRenderResult      ();
+
+    void                ActivateRenderChannel   ( RenderChannelType rct );
+    void                DeactivateRenderChannel ( RenderChannelType rct );
+
+    void                UpdateRenderChannels    ();
 
 };
 

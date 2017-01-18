@@ -16,40 +16,36 @@ NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, u
 
 // **************************
 //
-void            NRenderLogicImpl::RenderFrame       ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes )
+void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes )
 {
+    // 0. Make sure that the state is properly initialized
     if( !m_state.IsInitialized() )
     {
         m_state.Initialize( renderer, audio );
     }
 
+    // 1. Access output logic associated with this RenderLogic instance and update (per frame) output buffers
+    auto outputLogic = output_logic( m_state );
+    outputLogic->UpdateRenderChannels();
+
+    // 2. Low level renderer per frame initialization
     renderer->PreDraw();
 
-    auto renderResult = render_result( m_state );
-    renderResult->UpdateOutputChannels( scenes );
+    // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
+    RenderQueued( scenes, outputLogic->AccessRenderResult() );
 
-    RenderQueued( scenes, renderResult );
-
-    // FIXME: nrl - add audio somewhere in this class
-    output_logic( m_state )->ProcessFrameData( context( m_state ), renderResult, (unsigned int)scenes.size() );
-    
-
+    // 4. Low lecel rendere per frame cleanup
     renderer->PostDraw();
-    renderer->DisplayColorBuffer();
+
+    // 5. Handle frame data rendered during this call and all logic associated with custom outputs
+    outputLogic->ProcessFrameData( context( m_state ) );
 }
 
 // **************************
 //
-Preview *       NRenderLogicImpl::GetPreview        ()
+OutputLogic *   NRenderLogicImpl::GetOutputLogic    ()
 {
-    return output_logic( m_state )->GetPreview();
-}
-
-// **************************
-//
-VideoOutput *   NRenderLogicImpl::GetVideoOutput    ()
-{
-    return output_logic( m_state )->GetVideoOutput();
+    return output_logic( m_state );
 }
 
 // **************************

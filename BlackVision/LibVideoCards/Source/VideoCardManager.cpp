@@ -186,13 +186,14 @@ bool                        VideoCardManager::ProcessFrame          ()
 
     if( data )
     {
-		short  int odd = m_currentFrameNumber % 2;
+		short int odd = m_currentFrameNumber % 2;
 		m_currentFrameNumber++;
 		if( data->m_desc.fieldModeEnabled )
 		{
 			data = RetrieveFieldFromFrame( data, odd );
 		}
-		else{
+		else
+		{
             data = InterlacedFrame( data );
         }
 		odd = m_currentFrameNumber % 2;
@@ -214,6 +215,8 @@ bool                        VideoCardManager::ProcessFrame          ()
 //
 AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, int odd)
 {
+	
+
 	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
 
 	const char *mem_src = frame->m_videoData->Get();
@@ -226,7 +229,6 @@ AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, in
 	int size = width * height/2 * pixel_depth + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
 
 	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
-
 
 	for (int i = odd, j = 0;i < height;i += 2, j++)
 	{

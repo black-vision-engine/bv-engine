@@ -78,6 +78,9 @@ bool    PdrAudioBuffersQueue::BufferData      ()
 			m_unqueuedBufferHandles.Push( bufferId );
 			processed--;
 		}
+
+		m_bufferedData.Clear();
+		m_bufferedDataSize = 0;
 	}
 
 	// Fill bufffers with new frames to play.
@@ -98,7 +101,7 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         success = true;
     }
 
-	auto enoughDataBuffers = m_unqueuedBufferHandles.Size() < QUEUE_SIZE - 1; // Start playing only if at least 2 frame are buffered.
+	auto enoughDataBuffers = m_unqueuedBufferHandles.Size() < QUEUE_SIZE - 1; // Start playing only if at least 2 frames are buffered.
 
 	if( success && !enoughDataBuffers )
 		LOG_MESSAGE( SeverityLevel::debug ) << "Not enought audio data buffered. Starting playing will be postponed.";
@@ -172,6 +175,9 @@ bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data, bool force
             }
 
         }
+
+		if( m_bufferedDataSize == 0 )
+			LOG_MESSAGE( SeverityLevel::debug ) << "m_bufferedDataSize == 0";
 
         return true;
     }

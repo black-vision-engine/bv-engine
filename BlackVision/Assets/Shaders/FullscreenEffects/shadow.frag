@@ -10,7 +10,8 @@ uniform sampler2D       Tex0;
 uniform vec4			color;
 uniform vec2			shift;
 uniform vec2			textureSize;
-uniform int			    inner;
+uniform bool			inner;
+uniform bool			outer;
 
 void main()
 {
@@ -20,15 +21,17 @@ void main()
     
     FragColor = ( 1.0 - col.a ) * color * alpha + col;
     
-    if( inner == 1 )
+    if( inner )
     {
         FragColor = ( 1.0 - alpha ) * color * col.a + alpha * col; // inner shadow and glow
     }
-    else if ( inner == 0 )
+	
+    if ( outer )
     {
         
     }
-    else 
+	
+     
     {
         FragColor = ( 1.0 - col.a ) * color * alpha + col + ( 1.0 - alpha ) * color * col.a + alpha * col;
     }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
 
@@ -13,7 +15,7 @@ class NFullscreenEffect;
 class RenderResult;
 class NRenderContext;
  
-class Preview
+class OutputPreview : public OutputInstance
 {
 private:
 
@@ -27,13 +29,13 @@ private:
 
 public:
 
-            Preview     ();
-            ~Preview    ();
+                    OutputPreview   ();
+                    ~OutputPreview  ();
 
-    void    ShowFrame       ( NRenderContext * ctx, const RenderResult * output );
+    virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
 
-    void    SetShowDefault  ();
-    void    SetShowAlpha    ();
+    void            SetShowDefault  ();
+    void            SetShowAlpha    ();
 
 private:
 

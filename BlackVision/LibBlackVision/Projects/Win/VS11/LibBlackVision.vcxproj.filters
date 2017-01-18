@@ -358,9 +358,6 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\NodeRendering">
       <UniqueIdentifier>{5b6a5c6e-e0db-4faa-bbee-59fe3ee5dfc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering">
-      <UniqueIdentifier>{ac3fdb7a-4f31-43aa-a77f-06736c193746}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\State">
       <UniqueIdentifier>{037c9216-9ede-49bd-ac84-486018f281e8}</UniqueIdentifier>
     </Filter>
@@ -405,6 +402,12 @@
     </Filter>
     <Filter Include="Assets\AVStream">
       <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering">
+      <UniqueIdentifier>{ac3fdb7a-4f31-43aa-a77f-06736c193746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs">
+      <UniqueIdentifier>{e957a900-8d57-447e-bcd2-de2e78eb537d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1834,16 +1837,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputLogic.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Preview.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\RenderOutputChannel.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\RenderResult.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\VideoOutput.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NNodeRenderLogic.cpp">
@@ -1999,7 +1993,37 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NLightScatteringPreFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NZSortFinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideo.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputPreview.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputInstance.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputScreenshot.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\RenderChannel.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NGlowFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputStreamSharedMem.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NGlowPreFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5081,16 +5105,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputLogic.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Preview.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\RenderOutputChannel.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\RenderResult.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\VideoOutput.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NNodeRenderLogic.h">
@@ -5256,6 +5271,36 @@
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NZSortFinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NShadowFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideo.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputPreview.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputInstance.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputScreenshot.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\RenderChannel.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NGlowFSEStep.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputStreamSharedMem.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NGlowPreFSEStep.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
   </ItemGroup>

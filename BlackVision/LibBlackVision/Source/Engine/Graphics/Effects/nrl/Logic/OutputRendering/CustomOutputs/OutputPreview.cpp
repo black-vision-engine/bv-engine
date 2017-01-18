@@ -1,9 +1,8 @@
 #include "stdafx.h"
 
-#include "Preview.h"
+#include "OutputPreview.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderOutputChannel.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 
@@ -14,7 +13,7 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-Preview::Preview     ()
+OutputPreview::OutputPreview            ()
     : m_defaultBlitEffect( nullptr )
     , m_blitEffectShowAplhaRGB( nullptr )
     , m_activeRenderOutput( 1 )
@@ -27,7 +26,7 @@ Preview::Preview     ()
 
 // *********************************
 //
-Preview::~Preview    ()
+OutputPreview::~OutputPreview           ()
 {
     delete m_defaultBlitEffect;
     delete m_blitEffectShowAplhaRGB;
@@ -35,35 +34,38 @@ Preview::~Preview    ()
 
 // *********************************
 //
-void    Preview::ShowFrame( NRenderContext * ctx, const RenderResult * result )
+void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * result )
 {
-    // FIXME: prepare one texture combining all required outputs and blit it to the output render target
-    // FIXME: call BlitToPreview here
-    //auto rt = result.GetRenderOutputChannel( RenderOutputChannelType::ROCT_FIRST_OUTPUT );
-    // FIXME: all outputs rendered next to each other (scaled down)
-    // FIXME: shader memory gets all outputs rendered to consecutive buffers in the memory
-    // m_blitEffect->Render( rt, nullptr );
+    // FIXME: nrl - default logic uses only RenderChannelType::RCT_OUTPUT_1 result channel to show the results
+    // FIXME: ntl - implement more logic here
+    auto rct = RenderChannelType::RCT_OUTPUT_1;
+	rct;
+    assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
 
-    DefaultShow( ctx, result->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 ) );
+    // FIXME: nrl - DefaultShow is only a very siple way of showing rendered result on preview - ask Pawelek about other possibilities
+    DefaultShow( ctx, result->GetActiveRenderTarget( RenderChannelType::RCT_OUTPUT_1 ) );
+
+    // Make sure that local preview is displayed properly
+    renderer( ctx )->DisplayColorBuffer();
 }
 
 // *********************************
 //
-void    Preview::SetShowDefault  ()
+void    OutputPreview::SetShowDefault  ()
 {
     m_activeBlit = m_defaultBlitEffect;
 }
 
 // *********************************
 //
-void    Preview::SetShowAlpha    ()
+void    OutputPreview::SetShowAlpha    ()
 {
     m_activeBlit = m_blitEffectShowAplhaRGB;
 }
 
 // *********************************
 //
-void    Preview::DefaultShow ( NRenderContext * ctx, const RenderTarget * rt )
+void    OutputPreview::DefaultShow ( NRenderContext * ctx, const RenderTarget * rt )
 {
     m_activeRenderOutput.SetEntry( 0, rt );
 

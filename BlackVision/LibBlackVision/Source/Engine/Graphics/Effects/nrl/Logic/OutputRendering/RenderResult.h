@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Graphics/SceneGraph/Scene.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
 
 
 namespace bv { 
@@ -12,24 +12,16 @@ class RenderTarget;
 
 namespace nrl {
 
-enum class RenderOutputChannelType : unsigned int
-{
-    ROCT_OUTPUT_1 = 0,
-    ROCT_OUTPUT_2,
-    ROCT_OUTPUT_3,
-    ROCT_OUTPUT_4,
-    ROCT_OUTPUT_5,
-
-    ROCT_TOTAL
-};
-
-class RenderOutputChannel;
-
+// FIXME: nrl - implement (if necessary) additional logic to cache readback textures
 class RenderResult
 {
 private:
 
-    std::vector< RenderOutputChannel * >    m_renderOutputChannels;
+    std::vector< RenderChannel * >  m_renderChannels;
+    std::vector< bool >             m_containsValidData;
+
+    std::vector< Texture2DPtr >     m_cachedReadbackTextures;
+    std::vector< bool >             m_cachedReadbackUpToDate;
 
 private:
 
@@ -39,14 +31,23 @@ private:
 
 public:
 
-    RenderResult                                            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
-    ~RenderResult                                           ();
+                            RenderResult            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+                            ~RenderResult           ();
 
-    const RenderOutputChannel *     GetRenderOutputChannel  ( RenderOutputChannelType roct ) const;
-	const RenderTarget *			GetActiveRenderTarget	( RenderOutputChannelType roct ) const;
+    const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;
+	const RenderTarget *	GetActiveRenderTarget	( RenderChannelType rct ) const;
+    
+    void                    InvalidateCachedTexture ( RenderChannelType rct );
+    Texture2DPtr            ReadColorTexture        ( Renderer * renderer, RenderChannelType rct );
 
-    void                            UpdateOutputChannels    ( const SceneVec & scenes );
+    void                    UpdateRenderChannels    ();
 
+    bool                    IsActive                ( RenderChannelType rct ) const;
+    void                    SetIsActive             ( RenderChannelType rct, bool isActive );
+
+    bool                    ContainsValidData       ( RenderChannelType rct ) const;
+    void                    SetContainsValidData    ( RenderChannelType rct, bool containsValidData );
+    
 };
 
 } //nrl

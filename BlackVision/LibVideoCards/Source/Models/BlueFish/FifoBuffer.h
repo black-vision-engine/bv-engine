@@ -26,6 +26,8 @@ public:
 
     void                        PushEmptyFrame  ();
 
+	bool                        IsEmptyFrame	( std::shared_ptr< CFrame > frm ) const;
+
 private:
 
     CircularBufferConcurrent< std::shared_ptr< CFrame >, FRAME_BUFFER_SIZE > m_frameBuffer;

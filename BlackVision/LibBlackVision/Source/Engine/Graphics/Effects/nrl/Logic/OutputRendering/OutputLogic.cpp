@@ -2,78 +2,120 @@
 
 #include "OutputLogic.h"
 
-#include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
-
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Preview.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/VideoOutput.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputPreview.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputVideo.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputStreamSharedMem.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputScreenshot.h"
 
 
 namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputLogic::OutputLogic         ( unsigned int width, unsigned int height, unsigned int sharedMemScaleFactor )
-    : m_preview( nullptr )
-    , m_videoOutput( nullptr )
+OutputLogic::OutputLogic                                ( unsigned int width, unsigned int height, unsigned int shmScaleFactor, RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput )
+    : m_outputs( (unsigned int) CustomOutputType::COT_TOTAL )
+    , m_renderResult( allocator, numTrackedRenderTargetsPerOutput )
 {
-    m_preview = new Preview();
-    m_videoOutput = new VideoOutput();
-    m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, sharedMemScaleFactor );
+    unsigned int i = 0;
+
+    m_outputs[ (unsigned int) CustomOutputType::COT_PREVIEW ]       = new OutputPreview();          ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO ]         = new OutputVideo();            ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_STREAM_SHM ]    = new OutputStreamSharedMem( width, height, shmScaleFactor );  ++i; // FIXME: nrl - pass arguments using appropriate descriptor (static data init)
+    m_outputs[ (unsigned int) CustomOutputType::COT_SCREENSHOT ]    = new OutputScreenshot();       ++i;
+
+    assert( i == (unsigned int) CustomOutputType::COT_TOTAL );
 }
 
 // *********************************
 //
-OutputLogic::~OutputLogic        ()
+OutputLogic::~OutputLogic                               ()
 {
-    delete m_preview;
-    delete m_videoOutput;
-}
-
-// *********************************
-//
-void    OutputLogic::ProcessFrameData    ( NRenderContext * ctx, const RenderResult * data, unsigned int numScenes )
-{
-    // FIXME: this is kinda hackish
-    if( numScenes == 0 )
+    for( auto output : m_outputs )
     {
-        auto renderTarget = data->GetActiveRenderTarget( RenderOutputChannelType::ROCT_OUTPUT_1 );
-
-        enable( ctx, renderTarget );
-        clearBoundRT( ctx, glm::vec4() ); // FIXME: default clear color used - posisibly customize it a bit
-        disableBoundRT( ctx );
-    }
-
-    // FIXME: nrl - add screenshot logic somewhere near this line of code - based on previous implementation
-    //if( m_screenShotLogic->ReadbackNeeded() )
-    //{
-    //    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
-    //    m_screenShotLogic->FrameRendered( rt, ctx );
-    //}
-
-    m_preview->ShowFrame( ctx, data );
-
-    // FIXME: temporary
-    if( m_videoOutput )
-    {
-        m_videoOutput->HandleFrame( ctx, data );
+        delete output;
     }
 }
 
+// ***************************************************** API directly related to frame rendering *****************************************************
+
+// *********************************
+// FIXME: nrl - add audio somewhere in this class
+void                OutputLogic::ProcessFrameData       ( NRenderContext * ctx )
+{
+    auto result = &m_renderResult;
+
+    for( auto output : m_outputs)
+    {
+        if( output && output->IsEnabled() )
+        {
+            output->ProcessFrameData( ctx, result ); 
+        }
+    }
+}
+
+// *********************************************** API relarted to global output state manipulation **************************************************
+
 // *********************************
 //
-Preview *       OutputLogic::GetPreview          ()
+bool                OutputLogic::IsEnabled              ( CustomOutputType outputType )
 {
-    return m_preview;
+    return GetOutput( outputType )->IsEnabled();
 }
 
 // *********************************
 //
-VideoOutput *   OutputLogic::GetVideoOutput      ()
+void                OutputLogic::EnableOutput           ( CustomOutputType outputType )
 {
-    return m_videoOutput;
+    GetOutput( outputType )->Enable();
+}
+
+// *********************************
+//
+void                OutputLogic::DisableOutput          ( CustomOutputType outputType )
+{
+    GetOutput( outputType )->Disable();
+}
+
+// *********************************
+//
+OutputInstance *    OutputLogic::GetOutput              ( CustomOutputType outputType )
+{
+    return m_outputs[ (unsigned int) outputType ];
+}
+
+// *********************************************** API related to render buffers state manipulation **************************************************
+
+// *********************************
+//
+RenderResult *      OutputLogic::AccessRenderResult     ()
+{
+    return &m_renderResult;
+}
+
+// *********************************
+//
+void                OutputLogic::ActivateRenderChannel  ( RenderChannelType rct )
+{
+    m_renderResult.SetIsActive( rct, true );
+}
+
+// *********************************
+//
+void                OutputLogic::DeactivateRenderChannel( RenderChannelType rct )
+{
+    m_renderResult.SetIsActive( rct, false );
+}
+
+// *********************************
+//
+void                OutputLogic::UpdateRenderChannels   ()
+{
+    m_renderResult.UpdateRenderChannels();
 }
 
 } //nrl
