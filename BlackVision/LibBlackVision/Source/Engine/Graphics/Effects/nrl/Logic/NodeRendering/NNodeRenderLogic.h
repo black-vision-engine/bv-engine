@@ -47,6 +47,9 @@ public:
     static void     Render              ( SceneNodeRepr * nodeRepr, NRenderContext * ctx );
     static void     Render              ( SceneNodeRepr * nodeRepr, const RenderTarget * output, NRenderContext * ctx );
 
+    static void     RenderQueued        ( SceneNodeRepr * nodeRepr, const RenderTarget * output, NRenderContext * ctx );
+    static void     RenderQueued        ( SceneNodeRepr * nodeRepr, NRenderContext * ctx );
+
 private:
 
     static void     RenderImpl          ( SceneNodeRepr * nodeRepr, NRenderContext * ctx );

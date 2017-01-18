@@ -32,6 +32,9 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NShadowPreFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NShadowFSEStep.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NZSortFinalizeStep.h"
+
+
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NGlowPreFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NGlowFSEStep.h"
 
@@ -205,6 +208,22 @@ NNodeEffectPtr       CreateLightScatteringNodeEffect   ()
 	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_LIGHT_SCATTERING );
 }
 
+// ***********************
+//
+NNodeEffectPtr       CreateZSortNodeEffect      ()
+{
+    auto sortStep = new NZSortFinalizeStep();
+    auto sortPass = new NFinalizePass( sortStep );
+
+    std::vector< NNodeEffectRenderPass * > passes( 1 );
+
+    passes[ 0 ] = sortPass;
+
+    auto nnerl = new NNodeEffectRenderLogic( passes, false );
+
+    return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_Z_SORT );
+}
+
 // **************************
 //
 NNodeEffectPtr       CreateShadowNodeEffect   ()
@@ -298,6 +317,8 @@ NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 			return CreateLightScatteringNodeEffect();
 		case NNodeEffectType::NNET_SHADOW:
 			return CreateShadowNodeEffect();
+                case NNodeEffectType::NNET_Z_SORT:
+                        return CreateZSortNodeEffect();
 		case NNodeEffectType::NNET_GLOW:
 			return CreateGlowNodeEffect();
 		case NNodeEffectType::NNET_WIREFRAME:

@@ -11,6 +11,7 @@ namespace bv
 class RenderableEntity;
 class PdrTimeQuery;
 class SceneNode;
+class SceneNodeRepr;
 class Scene;
 
 
@@ -29,19 +30,19 @@ public:
 
     void        FreeAllPDResources          ( RenderableEntity * renderable );
 
-    void        BeginGPUQuery               ( SceneNode * sceneNode );
-    void        EndGPUQuery                 ( SceneNode * sceneNode );
+    void        BeginGPUQuery               ( SceneNodeRepr * sceneNode );
+    void        EndGPUQuery                 ( SceneNodeRepr * sceneNode );
 
     double      BeginCPURenderMessure       ();
-    void        EndCPURenderMessure         ( SceneNode * sceneNode, double timeStart );
+    void        EndCPURenderMessure         ( SceneNodeRepr * sceneNode, double timeStart );
 
     double      BeginCPUQueueingMessure     ();
-    void        EndCPUQueueingMessure       ( SceneNode * sceneNode, double timeStart );
+    void        EndCPUQueueingMessure       ( SceneNodeRepr * sceneNode, double timeStart );
 
-    void        QueryPreviousGPUResult      ( SceneNode * sceneNode );
+    void        QueryPreviousGPUResult      ( SceneNodeRepr * sceneNode );
 
     void        AverageScenePerformanceData ( Scene * scene );
-    void        AverageTreePerformanceData  ( SceneNode * node );
+    void        AverageTreePerformanceData  ( SceneNodeRepr * node );
 
 private:
 

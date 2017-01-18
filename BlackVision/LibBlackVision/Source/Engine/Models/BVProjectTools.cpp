@@ -157,6 +157,7 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
 			nodeEffectType != NodeEffectType::NET_BLUR &&
 			nodeEffectType != NodeEffectType::NET_LIGHT_SCATTERING && 
 			nodeEffectType != NodeEffectType::NET_SHADOW && 
+            nodeEffectType != NodeEffectType::NET_Z_SORT &&
 			nodeEffectType != NodeEffectType::NET_GLOW )
         {
             node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );

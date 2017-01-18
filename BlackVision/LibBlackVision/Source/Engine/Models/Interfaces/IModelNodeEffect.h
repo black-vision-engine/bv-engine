@@ -25,9 +25,12 @@ public:
     virtual bool                                    RemoveAsset             ( SizeType idx ) = 0;
     virtual bool                                    AddAsset                ( const AssetDescConstPtr & assetDesc, SizeType idx ) = 0;
     virtual AssetDescVec                            GetAssets               () const = 0;
+
     virtual void                                    RegisterEvaluator       ( IParamValEvaluatorPtr paramEval ) = 0;
+    
     virtual IParameterPtr                           GetParameter            ( const std::string & name ) const = 0;
     virtual const std::vector< IParameterPtr > &    GetParameters           () const = 0;
+    
     virtual const std::vector< IValueConstPtr > &   GetValues               () const = 0;
 
 };

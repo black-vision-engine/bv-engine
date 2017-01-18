@@ -32,10 +32,10 @@ RenderingQueue *    RenderQueueStackAllocator::Allocate                    ()
 
     if( m_currentIdx >= ( Int32 )m_renderQueues.size() )
     {
-        m_renderQueues.push_back( RenderingQueue() );
+        m_renderQueues.push_back( RenderingQueueUPtr( new RenderingQueue() ) );
     }
 
-    return &m_renderQueues[ m_currentIdx ];
+    return m_renderQueues[ m_currentIdx ].get();
 }
 
 // ***********************
@@ -44,7 +44,7 @@ RenderingQueue *    RenderQueueStackAllocator::Top                         ()
 {
     assert( m_currentIdx < ( Int32 )m_renderQueues.size() );
     assert( m_currentIdx >= 0 );
-    return &m_renderQueues[ m_currentIdx ];
+    return m_renderQueues[ m_currentIdx ].get();
 }
 
 // ***********************
@@ -58,13 +58,13 @@ bool                RenderQueueStackAllocator::Free                        ()
 //
 bool                RenderQueueStackAllocator::Free                        ( unsigned int num )
 {
-    assert( m_currentIdx - num >= -1 );
-    if( m_currentIdx - num < -1 )
+    assert( m_currentIdx + 1 >= (int)num );
+    if( m_currentIdx + 1 < (int)num )
         return false;
 
     for( unsigned int i = 0; i < num; ++i )
     {
-        m_renderQueues[ m_currentIdx - i ].ClearQueue();
+        m_renderQueues[ m_currentIdx - i ]->ClearQueue();
     }
 
     m_currentIdx -= num;

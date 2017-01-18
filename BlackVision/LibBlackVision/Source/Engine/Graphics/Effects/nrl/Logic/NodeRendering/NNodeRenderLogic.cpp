@@ -140,6 +140,7 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_BLUR ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_LIGHT_SCATTERING ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_SHADOW ||
+                                nEffect->GetType() == nrl::NNodeEffectType::NNET_Z_SORT ||
 				nEffect->GetType() == nrl::NNodeEffectType::NNET_GLOW );
 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
@@ -179,6 +180,32 @@ void    NNodeRenderLogic::Render            ( SceneNodeRepr * nodeRepr, const Re
     RenderImpl( nodeRepr, ctx );
 
     disableBoundRT( ctx );    
+}
+
+// ***********************
+//
+void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * nodeRepr, const RenderTarget * output, NRenderContext * ctx )
+{
+    enable( ctx, output );
+    clearBoundRT( ctx, glm::vec4() ); // FIXME: default clear color used - posisibly customize it a bit
+
+    RenderQueued( nodeRepr, ctx );
+
+    disableBoundRT( ctx );
+}
+
+// ***********************
+//
+void    NNodeRenderLogic::RenderQueued      ( SceneNodeRepr * nodeRepr, NRenderContext * ctx )
+{
+    // FIXME: nrl - remove this method and implement its logic in some other place (if necessary)
+    auto queue = queue_allocator( ctx )->Allocate();
+
+    queue->QueueNodeSubtree( nodeRepr, ctx );
+
+    queue->Render( ctx );
+
+    queue_allocator( ctx )->Free();
 }
 
 // *********************************

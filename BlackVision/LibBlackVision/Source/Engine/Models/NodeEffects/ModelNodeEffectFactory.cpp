@@ -5,7 +5,7 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffect.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
-
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -270,6 +270,20 @@ IModelNodeEffectPtr         CreateGlowModelNodeEffect    ( const std::string & n
 //    return effect;
 //}
 
+// ***********************
+//
+IModelNodeEffectPtr         CreateZSortModelNodeEffect                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+    { name; }
+    ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( "useSort", false, true, false );
+
+    return ModelNodeEffect::Create( NodeEffectType::NET_Z_SORT, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
+}
+
+
 // ********************************
 //
 IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( NodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
@@ -298,6 +312,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
         //    return CreateBoundingBoxModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_IMAGE_MASK:
         //    return CreateImageMaskModelNodeEffect( name, timeEvaluator );
+        case NodeEffectType::NET_Z_SORT:
+            return CreateZSortModelNodeEffect( name, timeEvaluator );
         default:
             assert( false );
     }
