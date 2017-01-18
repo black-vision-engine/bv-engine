@@ -145,14 +145,15 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl:
     BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
 
     float z = ComputeNodeZ( node, ctx );
+    bool hasEffect = HasEffect( node );
     
     if( IsTransparent( node ) )
     {
-        QueueTransparent( node->GetRepr(), z );
+        QueueTransparent( node->GetRepr(), z, hasEffect );
     }
     else
     {
-        QueueOpaque( node->GetRepr(), z );
+        QueueOpaque( node->GetRepr(), z, hasEffect );
     }
 
     // FIXME: nrl - refactor bounding box rendering
