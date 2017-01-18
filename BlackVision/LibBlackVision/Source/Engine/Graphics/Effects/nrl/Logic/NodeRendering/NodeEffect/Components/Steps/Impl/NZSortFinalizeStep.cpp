@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "NZSortPreFSEStep.h"
+#include "NZSortFinalizeStep.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
@@ -18,7 +18,7 @@ namespace nrl {
 
 // **************************
 //
-NZSortPreFSEStep::NZSortPreFSEStep          ()
+NZSortFinalizeStep::NZSortFinalizeStep          ()
     : Parent( nullptr )
 {
     auto state = std::make_shared< NRenderComponentState >();
@@ -30,26 +30,7 @@ NZSortPreFSEStep::NZSortPreFSEStep          ()
 
 // **************************
 //
-unsigned int            NZSortPreFSEStep::GetNumOutputs               () const
-{
-    return 0;
-}
-
-// **************************
-//
-void                    NZSortPreFSEStep::ReadInputState              ()
-{}
-
-// **************************
-//
-void                    NZSortPreFSEStep::AllocateRenderTargets       ( NRenderContext * /*ctx*/ )
-{
-    // Effect doesn't use additional render targets
-}
-
-// **************************
-//
-const NRenderedData *   NZSortPreFSEStep::ApplyImpl                   ( SceneNodeRepr * nodeRepr, NRenderContext * ctx )
+void        NZSortFinalizeStep::Apply                   ( SceneNodeRepr * nodeRepr, NRenderContext * ctx )
 {
     assert( ctx->GetBoundRenderTarget() != nullptr );
 
@@ -61,28 +42,18 @@ const NRenderedData *   NZSortPreFSEStep::ApplyImpl                   ( SceneNod
     {
         NNodeRenderLogic::Render( nodeRepr, ctx );
     }
-
-    return nullptr;
 }
 
 // **************************
 //
-bool    NZSortPreFSEStep::IsIdle                    ( SceneNodeRepr * ) const
+bool        NZSortFinalizeStep::IsIdle                    ( SceneNodeRepr * ) const
 {
     return false;
-}
-
-// **************************
-// 
-bool    NZSortPreFSEStep::IsFinal                   ( SceneNodeRepr * ) const
-{
-    return false;
-
 }
 
 // ***********************
 //
-bool    NZSortPreFSEStep::UseSort()
+bool        NZSortFinalizeStep::UseSort()
 {
     auto useSort = GetState()->GetValueAt( 0 );
     return QueryTypedValue< ValueBoolPtr >( useSort )->GetValue();

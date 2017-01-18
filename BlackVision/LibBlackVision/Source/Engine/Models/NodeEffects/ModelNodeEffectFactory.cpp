@@ -228,6 +228,16 @@ IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std:
 //    return effect;
 //}
 
+// ***********************
+//
+IModelNodeEffectPtr         CreateZSortModelNodeEffect                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+    { name; }
+    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_Z_SORT );
+    return effect;
+}
+
+
 // ********************************
 //
 IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( NodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator )

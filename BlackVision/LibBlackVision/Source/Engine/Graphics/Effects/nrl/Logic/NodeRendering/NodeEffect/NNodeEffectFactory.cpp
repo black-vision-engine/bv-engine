@@ -29,6 +29,8 @@
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NLightScatteringPreFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NLightScatteringFSEStep.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NZSortFinalizeStep.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/nrl/Logic/State/NFullscreenEffectComponentState.h"
 
@@ -203,12 +205,12 @@ NNodeEffectPtr       CreateLightScatteringNodeEffect   ()
 //
 NNodeEffectPtr       CreateZSortNodeEffect      ()
 {
-    auto finalizeStep = new NDefaultFinalizeStep();
-    auto finPass = new NFinalizePass( finalizeStep );
+    auto sortStep = new NZSortFinalizeStep();
+    auto sortPass = new NFinalizePass( sortStep );
 
     std::vector< NNodeEffectRenderPass * > passes( 1 );
 
-    passes[ 0 ] = finPass;
+    passes[ 0 ] = sortPass;
 
     auto nnerl = new NNodeEffectRenderLogic( passes, false );
 
