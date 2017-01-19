@@ -136,8 +136,12 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "mirrorEnabled" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "polyDegree" ) );
 			break;
-        case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
+            desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR );
+            desc->AppendIVal( ValuesFactory::CreateValueInt( "channelMapping" ) );
+            desc->AppendIVal( ValuesFactory::CreateValueVec4( "channelMask" ) );
+            break;
+        case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_VIDEO_OUTPUT:
         default:
             assert( false );

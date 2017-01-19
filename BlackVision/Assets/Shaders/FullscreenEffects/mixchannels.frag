@@ -4,7 +4,7 @@ layout (location = 0) out vec4 FragColor;
 
 in vec2 uvCoord;
 
-layout (binding = 0) uniform sampler2D 	Tex0;
+layout (binding = 0) uniform sampler2D 	Texture;
 
 uniform int			channelMapping;
 uniform vec4		channelMask;
