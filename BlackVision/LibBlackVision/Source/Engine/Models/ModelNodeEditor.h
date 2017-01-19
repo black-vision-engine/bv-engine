@@ -22,12 +22,12 @@ public:
 
     BasicNodePtr			CopyNode			();
 
-    bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
+    bool                    AddPlugin			( IPluginPtr plugin, UInt32 & idx );
     bool                    DeletePlugin		( unsigned int idx );
     model::PluginWithIdx    DeletePlugin		( const std::string & name );
 
-    bool                    AttachPlugin		( unsigned int idx );
-    bool                    AttachPlugin		( BasicNodePtr sourceNode, unsigned int idx );
+    bool                    AttachPlugin		( UInt32 & idx );
+    bool                    AttachPlugin		( BasicNodePtr sourceNode, UInt32 & idx );
     bool                    DetachPlugin		( unsigned int idx );
     bool                    DetachPlugin		( const std::string & name );
 

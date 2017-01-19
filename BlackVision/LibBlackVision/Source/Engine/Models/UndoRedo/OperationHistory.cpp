@@ -51,7 +51,7 @@ void        OperationHistory::SetHistoryLength    ( UInt16 size )
 
 // ***********************
 //
-bool        OperationHistory::Undo                ( BVProjectEditor * editor, UInt16 numSteps )
+bool        OperationHistory::Undo                ( BVProjectEditor * editor, Int16 numSteps )
 {
     bool result = true;
 
@@ -75,11 +75,11 @@ bool        OperationHistory::Undo                ( BVProjectEditor * editor, UI
 
 // ***********************
 //
-bool        OperationHistory::Redo                ( BVProjectEditor * editor, UInt16 numSteps )
+bool        OperationHistory::Redo                ( BVProjectEditor * editor, Int16 numSteps )
 {
     bool result = true;
 
-    UInt16 maxRedoSteps = static_cast< UInt16 >( m_historyStack.size() - m_nextOp );
+    Int16 maxRedoSteps = static_cast< Int16 >( m_historyStack.size() - m_nextOp );
     if( maxRedoSteps < numSteps )
     {
         // We can't revert so many steps.

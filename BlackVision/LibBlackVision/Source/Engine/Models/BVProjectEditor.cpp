@@ -707,7 +707,7 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
 
 // *******************************
 //
-bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 idx, bool enableUndo )
+bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 & idx, bool enableUndo )
 {
     auto scene = m_project->GetModelScene( sceneName );
 
@@ -836,7 +836,7 @@ bool					BVProjectEditor::MovePlugin			( const std::string & destSceneName, cons
 
 // *******************************
 //
-bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 idx )
+bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 & idx )
 {
     if( node )
     {
