@@ -125,7 +125,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 		case NFullscreenEffectType::NFET_SOFT_MASK:
 			desc->SetBlendFlag( true );
 			desc->SetDepthTestFlag( true );
-			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			break;
         case NFullscreenEffectType::NFET_INTERLACE:
