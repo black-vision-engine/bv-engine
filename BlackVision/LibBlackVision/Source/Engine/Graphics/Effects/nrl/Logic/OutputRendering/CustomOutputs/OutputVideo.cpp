@@ -60,6 +60,7 @@ void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * resu
             m_videoRT = allocator( ctx )->CreateCustomRenderTarget( outputRT->Width(), outputRT->Height(), RenderTarget::RTSemantic::S_DRAW_READ );
         }
 
+        assert( false ); // FIXME: nrl - implement
         assert( outputRT->Width() == m_videoRT->Width() && outputRT->Height() == m_videoRT->Height() );
     }
 

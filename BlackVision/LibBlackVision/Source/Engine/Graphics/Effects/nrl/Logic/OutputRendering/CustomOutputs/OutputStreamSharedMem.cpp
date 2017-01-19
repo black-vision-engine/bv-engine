@@ -27,11 +27,16 @@ OutputStreamSharedMem::~OutputStreamSharedMem  ()
 //
 void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderResult * result )
 {
-    // FIXME: nrl - default logic uses only RenderChannelType::RCT_OUTPUT_1 result channel to show the results
-    // FIXME: ntl - implement more logic here
-    auto rct = RenderChannelType::RCT_OUTPUT_1;
+    // FIXME: nrl - use result to cache resacaled textures between outputs - it is a valid place as it is still a rendering result (e.g. when SD output is exactly the same as SHM output)
+    // FIXME: nrl - neither effecto nor readback are necessary in such case
+
+    auto rct = GetActiveRenderChannel();
     assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
+
+    // auto outputRT = result->GetActiveRenderTarget( rct );
     
+    assert( false ); // FIXME: nrl - implement
+
     auto tex = result->ReadColorTexture( renderer( ctx ), rct );
 
     m_shmVideoBuffer->PushFrame( tex );
