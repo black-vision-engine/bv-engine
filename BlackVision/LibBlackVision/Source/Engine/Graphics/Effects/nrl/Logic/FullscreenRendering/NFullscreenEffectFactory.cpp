@@ -126,7 +126,14 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->SetBlendFlag( true );
 			desc->SetDepthTestFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0" );
-			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "width" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "progress" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blankWidth" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueMat4( "maskTx" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "invert" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "alphaOnly" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "onlyObject" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "mirrorEnabled" ) );
 			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:

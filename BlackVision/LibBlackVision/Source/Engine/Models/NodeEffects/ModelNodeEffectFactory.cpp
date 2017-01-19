@@ -222,31 +222,31 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	}
 	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_SOFT_MASK );
 
-	//auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
-	//auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
-	//auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "normalize", timeEvaluator );
-	//auto innerEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "inner", timeEvaluator );
-	//auto outerEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "outer", timeEvaluator );
-	//auto blurKernelTypeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
-	//auto glowStrengthEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "glowStrength", timeEvaluator );
+	auto widthEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "width", timeEvaluator );
+	auto progressEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "progress", timeEvaluator );
+	auto blankWidthEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blankWidth", timeEvaluator );
+	auto maskTxEval = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "maskTx", timeEvaluator );
+	auto invertEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "invert", timeEvaluator );
+	auto alphaOnlyEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "alphaOnly", timeEvaluator );
+	auto onlyObjectEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "onlyObject", timeEvaluator );
+	auto mirrorEnabledEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "mirrorEnabled", timeEvaluator );
 
-	//colorEval->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), 0.f );
-	//blurSizeEval->Parameter()->SetVal( 5.5f, 0.f );
-	//blurSizeEval->Parameter()->SetVal( 205.5f, 5.f );
-	//blurSizeEval->Parameter()->SetVal( 5.5f, 10.f );
-	//normalizeEval->Parameter()->SetVal( 1, 0.f );
-	//innerEval->Parameter()->SetVal( 0, false );
-	//outerEval->Parameter()->SetVal( 0, true );
-	//blurKernelTypeEval->Parameter()->SetVal( 0, 0.f );
-	//glowStrengthEval->Parameter()->SetVal( 0, 1.f );
+	widthEval->Parameter()->SetVal( 0.2f, 0.f );
+	progressEval->Parameter()->SetVal( 0.5f, 0.f );
+	blankWidthEval->Parameter()->SetVal( 0.1f, 0.f );
+	invertEval->Parameter()->SetVal( false, 0.f );
+	alphaOnlyEval->Parameter()->SetVal( false, 0.f );
+	onlyObjectEval->Parameter()->SetVal( false, 0.f );
+	mirrorEnabledEval->Parameter()->SetVal( true, 0.f );
 
-	//effect->RegisterEvaluator( colorEval );
-	//effect->RegisterEvaluator( blurSizeEval );
-	//effect->RegisterEvaluator( normalizeEval );
-	//effect->RegisterEvaluator( innerEval );
-	//effect->RegisterEvaluator( blurKernelTypeEval );
-	//effect->RegisterEvaluator( outerEval );
-	//effect->RegisterEvaluator( glowStrengthEval );
+	effect->RegisterEvaluator( widthEval );
+	effect->RegisterEvaluator( progressEval );
+	effect->RegisterEvaluator( blankWidthEval );
+	effect->RegisterEvaluator( maskTxEval );
+	effect->RegisterEvaluator( invertEval );
+	effect->RegisterEvaluator( alphaOnlyEval );
+	effect->RegisterEvaluator( onlyObjectEval );
+	effect->RegisterEvaluator( mirrorEnabledEval );
 
 	return effect;
 }
