@@ -120,12 +120,13 @@ IPluginPtr                DefaultPluginListFinalized::GetPlugin           ( UInt
 //
 void                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin )
 {
-    AttachPlugin( plugin, ( unsigned int )m_plugins.size() );
+    UInt32 idx = (UInt32)m_plugins.size();
+    AttachPlugin( plugin, idx );
 }
 
 // *******************************
-//
-bool                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin, UInt32 idx )
+// idx will contain real index of attached plugin. idx can change when you provide number greater then plugins list length.
+bool                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin, UInt32 & idx )
 {
     if( plugin == nullptr )
     {

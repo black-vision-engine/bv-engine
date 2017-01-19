@@ -14,7 +14,7 @@ namespace bv {
 
 // ***********************
 //
-AddPluginOperation::AddPluginOperation  ( model::BasicNodePtr parent, model::IPluginPtr plugin, int idx )
+AddPluginOperation::AddPluginOperation  ( model::BasicNodePtr parent, model::IPluginPtr plugin, UInt32 idx )
     : m_parent( parent ), m_plugin( plugin ), m_idx( idx )
 {
 }
@@ -36,7 +36,7 @@ bool            AddPluginOperation::Redo                ( BVProjectEditor * edit
 
 // ***********************
 //
-DeletePluginOperation::DeletePluginOperation ( model::BasicNodePtr parent, model::IPluginPtr plugin, int idx )
+DeletePluginOperation::DeletePluginOperation ( model::BasicNodePtr parent, model::IPluginPtr plugin, UInt32 idx )
     : m_parent( parent ), m_plugin( plugin ), m_idx( idx )
 {
 }

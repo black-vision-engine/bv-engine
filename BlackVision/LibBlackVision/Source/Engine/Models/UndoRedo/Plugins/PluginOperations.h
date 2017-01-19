@@ -20,10 +20,10 @@ class AddPluginOperation : public IRevertable
 {
     model::BasicNodePtr     m_parent;
     model::IPluginPtr       m_plugin;
-    int                     m_idx;
+    UInt32                  m_idx;
 
 public:
-                            AddPluginOperation  ( model::BasicNodePtr parent, model::IPluginPtr plugin, int idx );
+                            AddPluginOperation  ( model::BasicNodePtr parent, model::IPluginPtr plugin, UInt32 idx );
 
     virtual bool            Undo                ( BVProjectEditor * editor );
     virtual bool            Redo                ( BVProjectEditor * editor );
@@ -33,10 +33,10 @@ class DeletePluginOperation : public IRevertable
 {
     model::BasicNodePtr     m_parent;
     model::IPluginPtr       m_plugin;
-    int                     m_idx;
+    UInt32                  m_idx;
 
 public:
-                            DeletePluginOperation ( model::BasicNodePtr parent, model::IPluginPtr plugin, int idx );
+                            DeletePluginOperation ( model::BasicNodePtr parent, model::IPluginPtr plugin, UInt32 idx );
 
     virtual bool            Undo                ( BVProjectEditor * editor );
     virtual bool            Redo                ( BVProjectEditor * editor );

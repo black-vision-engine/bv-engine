@@ -1206,7 +1206,9 @@ void					TestScene::InitAssetsTest		()
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
 
         auto anim = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_ANIMATION", "animation", editor->GetSceneDefaultTimeline( scene ) );
-        editor->AddPlugin( child, anim, 2 );
+        
+        UInt32 idx = 2;
+        editor->AddPlugin( child, anim, idx );
     });
 
     m_testSteps.push_back( [&]
@@ -1239,12 +1241,16 @@ void					TestScene::InitAssetsTest		()
         auto root = scene->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
 
+        UInt32 idx = 2;
+
         auto color = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_COLOR", "color", editor->GetSceneDefaultTimeline( scene ) );
-        editor->AddPlugin( child, color, 2 );
+        editor->AddPlugin( child, color, idx );
         SetParameter( child->GetPlugin( "color" )->GetParameter( "color" ), 0.0, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
+        idx = 3;
+
         auto text = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_TEXT", "text", editor->GetSceneDefaultTimeline( scene ) );
-        editor->AddPlugin( child, text, 3 );
+        editor->AddPlugin( child, text, idx );
         SetParameter( child->GetPlugin( "text" )->GetParameter( "text" ), 0.0, std::wstring( L"tekst" ) );
     });
 

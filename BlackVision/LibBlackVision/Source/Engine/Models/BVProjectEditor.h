@@ -132,7 +132,7 @@ public:
 /* PLUGINS */
     
     /* paths */
-    bool                    AddPlugin           ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 posIdx, bool enableUndo = false );
+    bool                    AddPlugin           ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32& posIdx, bool enableUndo = false );
     bool                    DeletePlugin        ( const std::string & sceneName, const std::string & nodePath, UInt32 pluginIdx );
     bool                    DeletePlugin        ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, bool enableUndo = false );
 
@@ -149,7 +149,7 @@ public:
     bool                    MovePlugin          ( const std::string & destSceneName, const std::string & destParentNode, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcParentNode, const std::string & pluginName, bool enableUndo = false );
 
     /* objects */
-    bool                    AddPlugin           ( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 posIdx );
+    bool                    AddPlugin           ( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32& posIdx );
     bool                    DeletePlugin        ( model::BasicNodePtr node, UInt32 pluginIdx );
     model::PluginWithIdx    DeletePlugin        ( model::BasicNodePtr node, const std::string & name );
 

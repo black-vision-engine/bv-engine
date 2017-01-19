@@ -36,7 +36,7 @@ public:
     IPluginPtr                      GetPlugin           ( UInt32 idx );
 
     void                            AttachPlugin        ( IPluginPtr plugin );
-    bool                            AttachPlugin        ( IPluginPtr plugin, UInt32 idx );
+    bool                            AttachPlugin        ( IPluginPtr plugin, UInt32& idx );
     IPluginPtr                      DetachPlugin        ( UInt32 idx );
     PluginWithIdx                   DetachPlugin        ( const std::string & name );
 

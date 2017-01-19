@@ -33,7 +33,7 @@ BasicNodePtr			ModelNodeEditor::CopyNode       ()
 
 // ********************************
 //
-bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
+bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, UInt32& idx )
 {
     if( plugin )
     {
@@ -70,7 +70,7 @@ bool			ModelNodeEditor::DeletePlugin				( unsigned int idx )
 
 // ********************************
 //
-bool				ModelNodeEditor::AttachPlugin			( unsigned int idx )
+bool				ModelNodeEditor::AttachPlugin			( UInt32 & idx )
 {
     if( m_node->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
     {
@@ -82,7 +82,7 @@ bool				ModelNodeEditor::AttachPlugin			( unsigned int idx )
 
 // ********************************
 //
-bool				ModelNodeEditor::AttachPlugin			( BasicNodePtr sourceNode, unsigned int idx )
+bool				ModelNodeEditor::AttachPlugin			( BasicNodePtr sourceNode, UInt32 & idx )
 {
     auto plugin = sourceNode->GetModelNodeEditor()->GetDetachedPlugin();
     if( plugin )

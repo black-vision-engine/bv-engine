@@ -26,8 +26,8 @@ public:
     void                AddOperation        ( IRevertableUPtr && operation );
 
 
-    bool                Undo                ( BVProjectEditor * editor, UInt16 numSteps );
-    bool                Redo                ( BVProjectEditor * editor, UInt16 numSteps );
+    bool                Undo                ( BVProjectEditor * editor, Int16 numSteps );
+    bool                Redo                ( BVProjectEditor * editor, Int16 numSteps );
 
     void                SetHistoryLength    ( UInt16 size );
 };
