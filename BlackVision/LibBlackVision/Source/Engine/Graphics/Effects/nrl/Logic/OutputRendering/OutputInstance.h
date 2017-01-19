@@ -31,16 +31,21 @@ private:
 
 public:
 
-                    OutputInstance      ( unsigned int width, unsigned int height ); // FIXME: nrl - pass resolution related parameters in a more generic way (config descriptor of some sort)
-    virtual         ~OutputInstance     ();
+                        OutputInstance          ( unsigned int width, unsigned int height ); // FIXME: nrl - pass resolution related parameters in a more generic way (config descriptor of some sort)
+    virtual             ~OutputInstance         ();
 
-    virtual void    ProcessFrameData    ( NRenderContext * ctx, RenderResult * result ) = 0;
+    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderResult * result ) = 0;
 
-    bool            IsEnabled           () const;
-    void            Enable              ();
-    void            Disable             ();
+    bool                IsEnabled               () const;
+    void                Enable                  ();
+    void                Disable                 ();
 
-    NOutputState &  AccessOutputState   ();
+    NOutputState &      AccessOutputState       ();
+
+protected:
+
+    // FIXME: nrl - convenience method, but unfortunately not a generic one
+    RenderChannelType   GetActiveRenderChannel  () const;
 
 };
 

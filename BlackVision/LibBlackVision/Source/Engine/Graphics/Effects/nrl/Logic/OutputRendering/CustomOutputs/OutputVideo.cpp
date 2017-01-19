@@ -34,15 +34,16 @@ OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
 
 // **************************
 //
-void    OutputVideo::ProcessFrameData(NRenderContext * ctx, RenderResult * result)
+void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * result )
 {
-	// FIXME: nrl - default logic uses only RenderChannelType::RCT_OUTPUT_1 result channel to show the results
-	// FIXME: nrl - implement more logic here
-	auto rct = RenderChannelType::RCT_OUTPUT_1;
-	assert(result->IsActive(rct) && result->ContainsValidData(rct));
+    auto rct = GetActiveRenderChannel();
+	// FIXME: nrl - this can be solved some other way around - Pawelek has to decide
+    assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
 
-	auto videoFrame = result->ReadColorTexture(renderer(ctx), rct);
-	auto avFrame = PrepareAVFrame(audio(ctx), videoFrame);
+
+	auto videoFrame = result->ReadColorTexture( renderer( ctx ), rct );
+
+	auto avFrame = PrepareAVFrame( audio( ctx ), videoFrame );
 
 	{
 		// FIXME: nrl - ask Witek about this one
