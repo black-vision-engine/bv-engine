@@ -29,16 +29,16 @@ bool orientation( vec2 p, vec2 u, vec2 p0 )
 
 float linearGradientAlpha( vec2 uv )
 {
-	vec2 p = ( vec4( progress + blankWidth, 0.0, 0.0, 1.0) * maskTx ).xy;
+	vec2 p = ( vec4( progress, 0.0, 0.0, 1.0) * maskTx ).xy;
 	vec2 v = ( vec4( 0.0, 1.0, 0.0, 0.0) * maskTx ).xy;
 
 	float d = distanceToLine( uv, p, v );
 	
 	float alpha = 1.0;
 	
-	if ( orientation( p, v, uv ) )
+	if ( orientation( p, v, uv ) || mirrorEnabled )
 	{
-		alpha = max( 0.0, ( width - d ) / width );
+		alpha = min( max( 0.0, ( width + blankWidth - d ) / width ) , 1.0 );
 	}
 	
 	
