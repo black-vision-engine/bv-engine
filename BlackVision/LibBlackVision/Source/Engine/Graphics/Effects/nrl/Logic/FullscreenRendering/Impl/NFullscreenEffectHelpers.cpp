@@ -88,9 +88,9 @@ Camera *                                        NFullscreenEffectHelpers::Displa
 
 // **************************
 //
-TriangleStrip *                                 NFullscreenEffectHelpers::CreateFullscreenRenderable    ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames, const NFullscreenEffectRendererState & rendererState )
+TriangleStrip *                                 NFullscreenEffectHelpers::CreateFullscreenRenderable    ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers, const NFullscreenEffectRendererState & rendererState )
 {
-    auto effect = CreateEffect( pixelShaderSrc, textures, values, rtInputSamplerNames, rendererState );
+    auto effect = CreateEffect( pixelShaderSrc, textures, values, rtInputSamplers, rendererState );
     auto quad   = CreateFullscreenQuad( effect );
 
     return quad;
@@ -152,20 +152,20 @@ TextureSampler *                                NFullscreenEffectHelpers::Create
 
 // **************************
 //
-TextureSampler *                                NFullscreenEffectHelpers::CreateRenderTargetSampler   ( const std::string & rtSamplerName )
+TextureSampler *                                NFullscreenEffectHelpers::CreateSampler             ( const NSamplerEntry & entry )
 {
-    auto wrapX  = TextureWrappingMode::TWM_CLAMP;
-    auto wrapY  = TextureWrappingMode::TWM_CLAMP;
-    auto fm     = TextureFilteringMode::TFM_POINT;
+    auto wrapX  = entry.GetWrappingModeX();
+    auto wrapY  = entry.GetWrappingModeY();
+    auto fm     = entry.GetFilteringMode();
 
-    auto sampler = CreateSampler( rtSamplerName, wrapX, wrapY, fm );
+    auto sampler = CreateSampler( entry.GetSamplerName(), wrapX, wrapY, fm );
 
     return sampler;
 }
 
 // **************************
 //
-ShaderParameters *                              NFullscreenEffectHelpers::CreatePixelShaderParams   ( const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames )
+ShaderParameters *                              NFullscreenEffectHelpers::CreatePixelShaderParams   ( const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers )
 {
     ShaderParameters * shaderParams = new ShaderParameters();
 
@@ -187,7 +187,7 @@ ShaderParameters *                              NFullscreenEffectHelpers::Create
     }
 
     // Create placeholders for render targets (textures retrieved from render targets)
-    for( auto samplerName : rtInputSamplerNames )
+    for( auto samplerEntry : rtInputSamplers )
     {
         shaderParams->AddTexture( nullptr );
     }
@@ -213,25 +213,26 @@ VertexShader *                                  NFullscreenEffectHelpers::Create
 
 // **************************
 //
-PixelShader *                                   NFullscreenEffectHelpers::CreatePixelShader         ( const std::string & shaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames )
+PixelShader *                                   NFullscreenEffectHelpers::CreatePixelShader         ( const std::string & shaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers )
 {
-    auto shaderParams = CreatePixelShaderParams( textures, values, rtInputSamplerNames );
+    auto shaderParams = CreatePixelShaderParams( textures, values, rtInputSamplers );
 
     auto shader = new PixelShader( shaderSrc, shaderParams );
-
-    // Add texture samples for input renderTargets
-    for( auto samplerName : rtInputSamplerNames )
-    {
-        auto sampler    = CreateRenderTargetSampler( samplerName );
-
-        shader->AddTextureSampler( sampler );
-    }
 
     // Add texture samples for input textures
     for( auto texEntry : textures )
     {
         auto sampler    = CreateSampler( texEntry );
         
+        shader->AddTextureSampler( sampler );
+    }
+
+
+    // Add texture samples for input renderTargets
+    for( auto samplerEntry : rtInputSamplers )
+    {
+        auto sampler    = CreateSampler( samplerEntry );
+
         shader->AddTextureSampler( sampler );
     }
 
@@ -268,10 +269,10 @@ RenderablePass *                                NFullscreenEffectHelpers::Create
 
 // **************************
 //
-RenderableEffectPtr                             NFullscreenEffectHelpers::CreateEffect                  ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames, const NFullscreenEffectRendererState & rendererState )
+RenderableEffectPtr                             NFullscreenEffectHelpers::CreateEffect                  ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers, const NFullscreenEffectRendererState & rendererState )
 {
     auto vs = CreateVertexShader();
-    auto ps = CreatePixelShader ( pixelShaderSrc, textures, values, rtInputSamplerNames );
+    auto ps = CreatePixelShader ( pixelShaderSrc, textures, values, rtInputSamplers );
 
     RenderablePass * pass = CreateRenderablePass( ps, vs, rendererState );
 
