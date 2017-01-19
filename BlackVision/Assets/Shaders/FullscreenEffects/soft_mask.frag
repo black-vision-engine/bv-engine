@@ -33,6 +33,8 @@ float linearGradientAlpha( vec2 uv )
 {
 	vec2 p = ( vec4( progress, 0.0, 0.0, 1.0) * maskTx ).xy;
 	vec2 v = ( vec4( 0.0, 1.0, 0.0, 0.0) * maskTx ).xy;
+	
+	v = normalize( v );
 
 	float d = distanceToLine( uv, p, v );
 	
