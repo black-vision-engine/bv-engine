@@ -134,6 +134,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "alphaOnly" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "onlyObject" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "mirrorEnabled" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueInt( "polyDegree" ) );
 			break;
         case NFullscreenEffectType::NFET_INTERLACE:
         case NFullscreenEffectType::NFET_MIX_CHANNELS:

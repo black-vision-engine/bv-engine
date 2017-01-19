@@ -15,6 +15,8 @@ uniform bool			alphaOnly;
 uniform bool            objectOnly;
 uniform bool            mirrorEnabled;
 
+uniform int            	polyDegree;
+
 float distanceToLine( vec2 p0, vec2 pl, vec2 pldir )
 {
 	float d = dot(p0 - pl, pldir);
@@ -48,7 +50,37 @@ float linearGradientAlpha( vec2 uv )
 	return alpha;
 }
 
+float circleGradientAlpha( vec2 uv )
+{
+	float progress = 0.05;
+	vec2 p = ( vec4( 0.5, 0.5, 0.0, 1.0) * maskTx ).xy;
+	
+	float dd = (p.x - uv.x) * (p.x - uv.x) + (p.y - uv.y) * (p.y - uv.y);
+	
+	float alpha = 1.0;
+	
+	if( dd > progress * progress || mirrorEnabled )
+	{
+		float d = abs(sqrt( dd ) - progress);
+		
+		alpha = min( max( 0.0, ( width + blankWidth - d ) / width ) , 1.0 );
+	}
+	
+	if( invert )
+		alpha = 1.0 - alpha;
+		
+	return alpha;
+}
+
 void main()
 {   
-    FragColor = texture( Tex0, uvCoord ) * linearGradientAlpha( uvCoord );
+
+	float alpha = 1.0;
+
+	if(polyDegree > 0)
+		alpha = linearGradientAlpha( uvCoord );
+	else
+		alpha = circleGradientAlpha( uvCoord );
+		
+	FragColor = texture( Tex0, uvCoord ) * alpha;
 }

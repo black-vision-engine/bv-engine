@@ -230,14 +230,16 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	auto alphaOnlyEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "alphaOnly", timeEvaluator );
 	auto onlyObjectEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "onlyObject", timeEvaluator );
 	auto mirrorEnabledEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "mirrorEnabled", timeEvaluator );
+	auto polyDegreeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "polyDegree", timeEvaluator );
 
-	widthEval->Parameter()->SetVal( 0.2f, 0.f );
-	progressEval->Parameter()->SetVal( 0.5f, 0.f );
-	blankWidthEval->Parameter()->SetVal( 0.1f, 0.f );
+	widthEval->Parameter()->SetVal( 0.02f, 0.f );
+	progressEval->Parameter()->SetVal( 0.05f, 0.f );
+	blankWidthEval->Parameter()->SetVal( 0.02f, 0.f );
 	invertEval->Parameter()->SetVal( false, 0.f );
 	alphaOnlyEval->Parameter()->SetVal( false, 0.f );
 	onlyObjectEval->Parameter()->SetVal( false, 0.f );
 	mirrorEnabledEval->Parameter()->SetVal( true, 0.f );
+	polyDegreeEval->Parameter()->SetVal( 0, 0.f );
 
 	effect->RegisterEvaluator( widthEval );
 	effect->RegisterEvaluator( progressEval );
@@ -247,6 +249,7 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	effect->RegisterEvaluator( alphaOnlyEval );
 	effect->RegisterEvaluator( onlyObjectEval );
 	effect->RegisterEvaluator( mirrorEnabledEval );
+	effect->RegisterEvaluator( polyDegreeEval );
 
 	return effect;
 }
