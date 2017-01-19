@@ -14,12 +14,18 @@ private:
 
     MemoryChunkPtr  m_audioData;
 
+    // FIXME: nrl - what about this one? How should it be cofigured? Ask Pawelek.
     unsigned int    m_fps;
+
 	bool			m_lastFrameHasAudio;
+
+    RenderTarget *  m_videoRT;
+    Texture2DPtr    m_videoTexture;
 
 public:
 
-                            OutputVideo     ();
+                            OutputVideo     ( unsigned int width, unsigned int height );
+                            ~OutputVideo    ();
 
     virtual void            ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
 

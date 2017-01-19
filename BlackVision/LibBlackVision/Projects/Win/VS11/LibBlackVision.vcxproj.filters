@@ -2032,6 +2032,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NSoftMaskPreFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NOutputState.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5314,6 +5320,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NSoftMaskPreFSEStep.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NOutputState.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

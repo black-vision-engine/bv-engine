@@ -119,4 +119,11 @@ RenderTarget *      RenderTargetStackAllocator::CreateRenderTarget          ( Re
     return RenderTargetFactory::CreateRenderTarget( semantic, m_width, m_height, m_fmt );
 }
 
+// *********************************
+//
+RenderTarget *      RenderTargetStackAllocator::CreateCustomRenderTarget    ( unsigned int width, unsigned int height, RenderTarget::RTSemantic semantic )
+{
+    return RenderTargetFactory::CreateRenderTarget( semantic, width, height, m_fmt );
+}
+
 } //bv

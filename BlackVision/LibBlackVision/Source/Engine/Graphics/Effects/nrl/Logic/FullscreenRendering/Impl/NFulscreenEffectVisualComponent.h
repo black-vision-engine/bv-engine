@@ -35,7 +35,7 @@ public:
 
     void                    Render                              ( Renderer * renderer );
 
-    void                    SyncRenderTargets                   ( const RenderTargetVec & renderTargets );
+    void                    SyncRenderTargets                   ( const RenderTargetVec & renderTargets ); // FIXME: nrl - possibly add an API to change sampler params as well (wrapX, wrapY, filteringMode) - not only the input render target
     void                    SyncTextures                        ( const NTexture2DEntryVec & textures );
     void                    SyncRenderState                     ( const NFullscreenEffectRendererState & state );
     void                    SyncIValues                         ( const IValuePtrVec & vals );

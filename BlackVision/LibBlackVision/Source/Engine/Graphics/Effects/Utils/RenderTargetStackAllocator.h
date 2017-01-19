@@ -37,6 +37,7 @@ public:
     unsigned int        GetTopIndex                 () const;
 
     RenderTarget *      CreateRenderTarget          ( RenderTarget::RTSemantic semantic );
+    RenderTarget *      CreateCustomRenderTarget    ( unsigned int width, unsigned int height, RenderTarget::RTSemantic semantic );
 
 }; 
 

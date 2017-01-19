@@ -15,10 +15,7 @@ NTexture2DEntry::NTexture2DEntry    ()
 //
 NTexture2DEntry::NTexture2DEntry    ( Texture2DPtr tex, const std::string & samplerName, TextureWrappingMode wrapX, TextureWrappingMode wrapY, TextureFilteringMode filteringMode )
     : m_texture( tex )
-    , m_samplerName( samplerName )
-    , m_wrapX( wrapX )
-    , m_wrapY( wrapY )
-    , m_filteringMode( filteringMode )
+    , m_samplerEntry( samplerName, wrapX, wrapY, filteringMode )
 {
 }
 
@@ -33,28 +30,28 @@ Texture2DPtr            NTexture2DEntry::GetTexture     () const
 //
 const std::string &     NTexture2DEntry::GetSamplerName () const
 {
-    return m_samplerName;
+    return m_samplerEntry.GetSamplerName();
 }
 
 // **************************
 //
 TextureWrappingMode     NTexture2DEntry::GetWrappingModeX() const
 {
-    return m_wrapX;
+    return m_samplerEntry.GetWrappingModeX();
 }
 
 // **************************
 //
 TextureWrappingMode     NTexture2DEntry::GetWrappingModeY() const
 {
-    return m_wrapY;
+    return m_samplerEntry.GetWrappingModeY();
 }
     
 // **************************
 //
 TextureFilteringMode    NTexture2DEntry::GetFilteringMode() const
 {
-    return m_filteringMode;
+    return m_samplerEntry.GetFilteringMode();
 }
 
 // **************************
@@ -68,28 +65,28 @@ void                    NTexture2DEntry::SetTexture     ( Texture2DPtr tex )
 //
 void                    NTexture2DEntry::SetSamplerName ( const std::string & samplerName )
 {
-    m_samplerName = samplerName;
+    return m_samplerEntry.SetSamplerName( samplerName );
 }
 
 // **************************
 //
 void                    NTexture2DEntry::SetWrappingModeX( TextureWrappingMode wrapX )
 {
-    m_wrapX = wrapX;
+    return m_samplerEntry.SetWrappingModeX( wrapX );
 }
 
 // **************************
 //
 void                    NTexture2DEntry::SetWrappingModeY( TextureWrappingMode wrapY )
 {
-    m_wrapY = wrapY;
+    return m_samplerEntry.SetWrappingModeX( wrapY );
 }
 
 // **************************
 //
 void                    NTexture2DEntry::SetFilteringMode( TextureFilteringMode filteringMode )
 {
-    m_filteringMode = filteringMode;
+    return m_samplerEntry.SetFilteringMode( filteringMode );
 }
 
 // **************************
@@ -97,10 +94,7 @@ void                    NTexture2DEntry::SetFilteringMode( TextureFilteringMode 
 void                    NTexture2DEntry::Set            ( Texture2DPtr tex, const std::string & samplerName, TextureWrappingMode wrapX, TextureWrappingMode wrapY, TextureFilteringMode filteringMode )
 {
     SetTexture( tex );
-    SetSamplerName( samplerName );
-    SetWrappingModeX( wrapX );
-    SetWrappingModeY( wrapY );
-    SetFilteringMode( filteringMode );
+    m_samplerEntry.Set( samplerName, wrapX, wrapY, filteringMode );
 }
 
 } // nrl

@@ -19,7 +19,7 @@ public:
 
     static  Camera *                                        DisplayCamera               ();
     
-    static  TriangleStrip *                                 CreateFullscreenRenderable  ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames, const NFullscreenEffectRendererState & rendererState );
+    static  TriangleStrip *                                 CreateFullscreenRenderable  ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers, const NFullscreenEffectRendererState & rendererState );
 
 private:
 
@@ -28,12 +28,12 @@ private:
 
     static  TextureSampler *                                CreateSampler               ( const std::string & samplerName, TextureWrappingMode wrapX, TextureWrappingMode wrapY, TextureFilteringMode filteringMode );
     static  TextureSampler *                                CreateSampler               ( const NTexture2DEntry & entry );
-    static  TextureSampler *                                CreateRenderTargetSampler   ( const std::string & rtSamplerName );
+    static  TextureSampler *                                CreateSampler               ( const NSamplerEntry & entry );
 
-    static  ShaderParameters *                              CreatePixelShaderParams     ( const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames );
+    static  ShaderParameters *                              CreatePixelShaderParams     ( const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers );
 
     static  VertexShader *                                  CreateVertexShader          ();
-    static  PixelShader *                                   CreatePixelShader           ( const std::string & shaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames );
+    static  PixelShader *                                   CreatePixelShader           ( const std::string & shaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers );
 
 public:
 
@@ -43,7 +43,7 @@ private:
 
 	static  RenderablePass *                                CreateRenderablePass        ( PixelShader * ps, VertexShader * vs, const NFullscreenEffectRendererState & rendererState );
 
-    static  RenderableEffectPtr                             CreateEffect                ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const std::vector< std::string > & rtInputSamplerNames, const NFullscreenEffectRendererState & rendererState );
+    static  RenderableEffectPtr                             CreateEffect                ( const std::string & pixelShaderSrc, const NTexture2DEntryVec & textures, const IValuePtrVec & values, const NSamplerEntryVec & rtInputSamplers, const NFullscreenEffectRendererState & rendererState );
 
     // Low level memory layout
     static  float *                                         CreateFullscreenQuadVBData  ();

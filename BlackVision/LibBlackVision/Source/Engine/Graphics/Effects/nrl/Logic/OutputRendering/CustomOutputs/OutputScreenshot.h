@@ -12,6 +12,8 @@ class OutputScreenshot : public OutputInstance
 {
 public:
 
+                    OutputScreenshot( unsigned int width, unsigned int height );
+ 
     virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
 
 };

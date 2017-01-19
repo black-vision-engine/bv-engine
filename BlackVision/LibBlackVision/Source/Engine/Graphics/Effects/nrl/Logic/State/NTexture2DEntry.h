@@ -1,9 +1,6 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/NSamplerEntry.h"
 
 
 namespace bv { namespace nrl {
@@ -14,12 +11,7 @@ private:
 
     Texture2DPtr            m_texture;
 
-    std::string             m_samplerName;
-
-    TextureWrappingMode     m_wrapX;
-    TextureWrappingMode     m_wrapY;
-
-    TextureFilteringMode    m_filteringMode;
+    NSamplerEntry           m_samplerEntry;
 
 public:
 

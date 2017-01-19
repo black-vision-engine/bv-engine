@@ -75,18 +75,18 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
     {
         case NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB:
         case NFullscreenEffectType::NFET_SIMPLE_BLIT:
-			desc->AppendInputSamplerName( "Texture" );
+			desc->AppendInputSamplerEntry( "Texture" );
 			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK:
-            desc->AppendInputSamplerName( "Mask" );
+            desc->AppendInputSamplerEntry( "Mask" );
             desc->AppendIVal( ValuesFactory::CreateValueInt( "maskChannelIdx", 3 ) );
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA:
             desc->SetBlendFlag( true );
-            desc->AppendInputSamplerName( "Texture" );
+            desc->AppendInputSamplerEntry( "Texture" );
             desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             break;
 		case NFullscreenEffectType::NFET_BLUR:
-			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blurSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "normalize" ) );
@@ -94,7 +94,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "blurKernelType" ) );
 			break;
 		case NFullscreenEffectType::NFET_LIGHT_SCATTERING:
-			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "exposure" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "decay" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "density" ) );
@@ -103,8 +103,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "numSamples" ) );
 			break;
 		case NFullscreenEffectType::NFET_SHADOW:
-			desc->AppendInputSamplerName( "BluredTex0" );
-			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendInputSamplerEntry( "BluredTex0" );
+			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueVec4( "color" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "shift" ) );
@@ -114,8 +114,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 		case NFullscreenEffectType::NFET_GLOW:
 			desc->SetBlendFlag( true );
 			desc->SetDepthTestFlag( true );
-			desc->AppendInputSamplerName( "BluredTex0" );
-			desc->AppendInputSamplerName( "Tex0" );
+			desc->AppendInputSamplerEntry( "BluredTex0" );
+			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueVec4( "color" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "inner" ) );

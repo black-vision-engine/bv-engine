@@ -16,7 +16,7 @@ class NFullscreenEffectVisualComponentDesc
 private:
 
     std::string                         m_pixelShaderSrc; 
-    std::vector< std::string >          m_rtInputSamplerNames;
+    NSamplerEntryVec                    m_rtInputSamplers;
 
     NFullscreenEffectComponentStatePtr  m_componentState;
 
@@ -26,10 +26,14 @@ public:
 
         //Raw getters
         const std::string &                     GetPixelShaderSrc       () const;
+
         const NTexture2DEntryVec &              GetStaticTextures       () const;
-        const std::vector< std::string > &      GetInputSamplerNames    () const;
+        const NSamplerEntryVec &                GetInputSamplers        () const;
+        
         const IValuePtrVec &                    GetValues               () const;
+        
         const NFullscreenEffectRendererState &  GetRendererState        () const;
+        
         NFullscreenEffectComponentStatePtr      GetComponentState       ();
 
         //Convenience setters
@@ -40,7 +44,8 @@ public:
         void                                    AppendTextureEntry      ( Texture2DPtr tex, const std::string & samplerName );
         void                                    AppendTextureEntry      ( Texture2DPtr tex, const std::string & samplerName, TextureWrappingMode wrapX, TextureWrappingMode wrapY, TextureFilteringMode filteringMode );
 
-        void                                    AppendInputSamplerName  ( const std::string & samplerName );
+        void                                    AppendInputSamplerEntry ( const std::string & samplerName );
+        void                                    AppendInputSamplerEntry ( const std::string & samplerName, TextureWrappingMode wrapX, TextureWrappingMode wrapY, TextureFilteringMode filteringMode );
 
         void                                    SetBlendFlag            ( bool flag );
         void                                    SetDepthTestFlag        ( bool flag );

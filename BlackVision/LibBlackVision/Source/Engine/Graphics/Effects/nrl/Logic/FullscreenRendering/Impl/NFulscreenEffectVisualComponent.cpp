@@ -22,7 +22,7 @@
 namespace bv { namespace nrl {
 
 // **************************
-// FIXME: nrl - valies are passed here from FSE state which is not the best possible approach
+// FIXME: nrl - values are passed here from FSE state which is not the best possible approach
 // FIXME: nrl - only FSE shoould keep track of IValues and VisualComponent should be externally updated to make sure that its state is passed to ShaderParameters kept in this class
 // FIXME: nrl - right now it is left as it is (state is updated before rendering form m_values) but remove valules from this constructor as soon as all FSEs are implemented
 NFullscreenEffectVisualComponent::NFullscreenEffectVisualComponent    ( TriangleStrip * quad, unsigned int numRendenderTargetTextures, unsigned int numStaticTextures, const IValuePtrVec & values )
@@ -40,7 +40,10 @@ NFullscreenEffectVisualComponent::NFullscreenEffectVisualComponent    ( Triangle
     auto shaderParams = m_pixelShader->GetParameters();
 
     assert( shaderParams->NumParameters() == values.size() );
-	shaderParams;
+    { shaderParams; }
+
+    // FIXME: nrl - make sure (by asserting) that m_numRenderTargetTextures corresponds to m_numRenderTargetTextures nullptr entries in the pixel shader (as well as numStaticTextures corresponds to the following
+    // FIXME: nrl - numStaticTextures entries with non nullptr entries corresponding to static textures)
 }
 
 // **************************
@@ -148,12 +151,12 @@ NFullscreenEffectVisualComponent *   NFullscreenEffectVisualComponent::Create( c
     auto & pixelShaderSource    = desc.GetPixelShaderSrc();
     auto & textures             = desc.GetStaticTextures();
     auto & values               = desc.GetValues();
-    auto & rtInputSamplerNames  = desc.GetInputSamplerNames();
+    auto & rtInputSamplers      = desc.GetInputSamplers();
     auto & rendererState        = desc.GetRendererState();
 
-    auto geom = NFullscreenEffectHelpers::CreateFullscreenRenderable( pixelShaderSource, textures, values, rtInputSamplerNames, rendererState );
+    auto geom = NFullscreenEffectHelpers::CreateFullscreenRenderable( pixelShaderSource, textures, values, rtInputSamplers, rendererState );
 
-    unsigned int numRenderTargetTextures    = (unsigned int) rtInputSamplerNames.size();
+    unsigned int numRenderTargetTextures    = (unsigned int) rtInputSamplers.size();
     unsigned int numStaticTextures          = (unsigned int) textures.size();
     
     return new NFullscreenEffectVisualComponent( geom, numRenderTargetTextures, numStaticTextures, values );
@@ -206,7 +209,7 @@ void            NFullscreenEffectVisualComponent::SyncTexture                   
 //
 void            NFullscreenEffectVisualComponent::SyncSampler                         ( unsigned int i, const std::string & name, TextureFilteringMode tfm, TextureWrappingMode wrapX, TextureWrappingMode wrapY )
 {
-	name;
+    { name; } // FIXME: nrl - this is not used - only the relative ordering is taken into account
 
     auto & samplers = m_pixelShader->Samplers();
 
