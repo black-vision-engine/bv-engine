@@ -29,6 +29,57 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
     m_outputs[ (unsigned int) CustomOutputType::COT_SCREENSHOT ]    = new OutputScreenshot      ( width, height  );                 ++i;
 
     assert( i == (unsigned int) CustomOutputType::COT_TOTAL );
+
+    // FIXME: nrl - default output channels configuration - should be read from some static config descriptor
+    {
+        // Preview
+        {
+            auto & state = m_outputs[ 0 ]->AccessOutputState();
+ 
+            state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
+            
+            state.SetRIdx( 0 );
+            state.SetGIdx( 1 );
+            state.SetBIdx( 2 );
+            state.SetAIdx( 3 );
+        }
+
+        // Video
+        {
+            auto & state = m_outputs[ 1 ]->AccessOutputState();
+ 
+            state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
+            
+            state.SetRIdx( 0 );
+            state.SetGIdx( 1 );
+            state.SetBIdx( 2 );
+            state.SetAIdx( 3 );
+        }
+
+        // SHM
+        {
+            auto & state = m_outputs[ 2 ]->AccessOutputState();
+ 
+            state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
+            
+            state.SetRIdx( 0 );
+            state.SetGIdx( 1 );
+            state.SetBIdx( 2 );
+            state.SetAIdx( 3 );
+        }
+
+        // Screenshot
+        {
+            auto & state = m_outputs[ 3 ]->AccessOutputState();
+ 
+            state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
+            
+            state.SetRIdx( 0 );
+            state.SetGIdx( 1 );
+            state.SetBIdx( 2 );
+            state.SetAIdx( 3 );
+        }
+    }
 }
 
 // *********************************

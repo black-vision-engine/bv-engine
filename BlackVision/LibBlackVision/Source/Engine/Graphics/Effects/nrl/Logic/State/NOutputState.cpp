@@ -139,6 +139,8 @@ RenderChannelType   NOutputState::GetActiveRenderChannel    () const
 //
 void                NOutputState::SetMaskedUChar            ( unsigned int val, unsigned int numBits )
 {
+    assert( val < 4 );
+
     m_channelMask = ( m_channelMask & ~( 0xFF << numBits ) ) | ( val & 0x3 ) << numBits;
 }
 
