@@ -261,6 +261,7 @@ private:
     /* node helpers */
 
     void                    NotifyRemovedNode    ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
+    void                    NotifyAddedNode      ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode );
 
     /* Undo/Redo */
 

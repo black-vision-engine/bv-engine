@@ -35,6 +35,7 @@
 
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
 
 
 // Undo/Redo operations
@@ -498,6 +499,7 @@ bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, mode
         sceneEditor->AddChildNode( QueryTyped( parentNode ), QueryTyped( childNode ) );
 
         m_engineSceneEditor->AddChildNode( engineParent, engineChild );
+        NotifyAddedNode( QueryTyped( childNode ), QueryTyped( parentNode ) );
     }
     else
     {
@@ -1910,6 +1912,19 @@ void                    BVProjectEditor::NotifyRemovedNode    ( model::BasicNode
 
     GetDefaultEventManager().TriggerEvent( removeEvent );
 }
+
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyAddedNode        ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode )
+{
+    auto addedEvent = std::make_shared< NodeAddedEvent >();
+    addedEvent->RemovedNode = addedNode;
+    addedEvent->ParentNode = parentNode;
+
+    GetDefaultEventManager().TriggerEvent( addedEvent );
+}
+
 
 // CUSTOM DEFAULTS
 

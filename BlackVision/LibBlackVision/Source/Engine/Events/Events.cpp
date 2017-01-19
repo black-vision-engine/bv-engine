@@ -24,12 +24,6 @@ namespace bv
 
 // ************************************* Static Events' Definitions *************************************
 
-const EventType PluginAddedEvent::m_sEventType      = 0x00000001;
-std::string PluginAddedEvent::m_sEventName          = "Event_PluginAdded";
-
-const EventType NodeAddedEvent::m_sEventType        = 0x00000002;
-std::string NodeAddedEvent::m_sEventName            = "Event_NodeAdded";
-
 const EventType FrameRenderedEvent::m_sEventType    = 0x00000003;
 std::string FrameRenderedEvent::m_sEventName        = "Event_FrameRendered";
 
@@ -710,113 +704,6 @@ std::pair< HightmapEvent::Command, const char* > HightmapEventCommandMapping[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( HightmapEvent::Command, HightmapEventCommandMapping );
 
-}
-
-// ************************************* PluginAddedEvent *************************************
-
-// *************************************
-//
-PluginAddedEvent::PluginAddedEvent                          ()
-    : m_addedPlugin( nullptr )
-{}
-
-// *************************************
-//
-PluginAddedEvent::PluginAddedEvent                          ( model::IPluginConstPtr plugin )
-    : m_addedPlugin( plugin )
-{}
-
-// *************************************
-//
-void                PluginAddedEvent::Serialize            ( ISerializer& ser ) const
-{    assert( !"Should not be serialized" );  }
-
-// *************************************
-//
-IEventPtr                PluginAddedEvent::Create          ( IDeserializer& deser )
-{
-    assert( !"Should not be deserialized" );
-    return nullptr;    
-}
-// *************************************
-//
-IEventPtr               PluginAddedEvent::Clone             () const
-{   return IEventPtr( new PluginAddedEvent( *this ) );  }
-
-// *************************************
-//
-EventType           PluginAddedEvent::Type()
-{   return m_sEventType;   }
-// *************************************
-//
-std::string&        PluginAddedEvent::Name()
-{   return m_sEventName;   }
-// *************************************
-//
-const std::string&  PluginAddedEvent::GetName() const
-{   return Name();   }
-// *************************************
-//
-EventType           PluginAddedEvent::GetEventType() const
-{   return this->m_sEventType; }
-
-// *************************************
-//
-model::IPluginConstPtr  PluginAddedEvent::GetPlugin         () const
-{    return m_addedPlugin;  }
-
-// ************************************* NodeAddedEvent *************************************
-
-// *************************************
-//
-NodeAddedEvent::NodeAddedEvent                              ()
-    : m_addedNode( nullptr )
-{}
-// *************************************
-//
-NodeAddedEvent::NodeAddedEvent                              ( model::IModelNodeConstPtr node )
-    : m_addedNode( node )
-{}
-
-// *************************************
-//
-void                NodeAddedEvent::Serialize            ( ISerializer& ser ) const
-{    assert( !"Should not be serialized" );  }
-
-// *************************************
-//
-IEventPtr                NodeAddedEvent::Create          ( IDeserializer& deser )
-{
-    assert( !"Should not be deserialized" );
-    return nullptr;    
-}
-// *************************************
-//
-IEventPtr               NodeAddedEvent::Clone             () const
-{   return IEventPtr( new NodeAddedEvent( *this ) );  }
-
-// *************************************
-//
-EventType           NodeAddedEvent::Type()
-{   return m_sEventType;   }
-// *************************************
-//
-std::string&        NodeAddedEvent::Name()
-{   return m_sEventName;   }
-// *************************************
-//
-const std::string&  NodeAddedEvent::GetName() const
-{   return Name();   }
-// *************************************
-//
-EventType           NodeAddedEvent::GetEventType() const
-{   return this->m_sEventType; }
-
-// *************************************
-//
-model::IModelNodeConstPtr  NodeAddedEvent::GetNode         () const
-{
-    return m_addedNode;
 }
 
 
