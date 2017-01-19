@@ -203,7 +203,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\PluginAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\PluginRemovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\ParamAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueueConcurrent.cpp" />
@@ -693,7 +697,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\CommonEventsStrings.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\PluginAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\PluginRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.h" />

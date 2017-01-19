@@ -409,6 +409,15 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs">
       <UniqueIdentifier>{e957a900-8d57-447e-bcd2-de2e78eb537d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Plugins">
+      <UniqueIdentifier>{bf03ccb9-af65-4025-bbd4-03e7ddbf9a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Nodes">
+      <UniqueIdentifier>{52b22a14-75f1-4bb7-94ef-47bf16146d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Logics">
+      <UniqueIdentifier>{6a64e9e1-af20-453f-b465-b130a72b799a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1738,9 +1747,6 @@
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp">
       <Filter>Assets\SVG</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
-      <Filter>Engine\Events\InnerEvents</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
       <Filter>Assets\SVG</Filter>
     </ClCompile>
@@ -2031,6 +2037,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\PluginAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\PluginRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4961,9 +4982,6 @@
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h">
       <Filter>Assets\SVG</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h">
-      <Filter>Engine\Events\InnerEvents</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h">
       <Filter>Assets\SVG</Filter>
     </ClInclude>
@@ -5314,6 +5332,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\PluginAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\PluginRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

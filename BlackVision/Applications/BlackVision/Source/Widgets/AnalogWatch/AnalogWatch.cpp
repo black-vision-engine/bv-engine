@@ -5,7 +5,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Widgets/NodeLogicHelper.h"
 
-#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 
 
 // warning C4996: 'localtime': This function or variable may be unsafe
