@@ -19,6 +19,8 @@ OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
     : OutputInstance( width, height )
     , m_audioData( nullptr )
 	, m_lastFrameHasAudio( true )
+    , m_videoRT( nullptr )
+    , m_videoTexture( nullptr )
 {
     // FIXME: nrl - should be read from video cards configuration
     m_fps = 25; 
@@ -34,12 +36,32 @@ OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
 
 // **************************
 //
+OutputVideo::~OutputVideo    ()
+{
+    delete m_videoRT;
+}
+
+// **************************
+//
 void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * result )
 {
     auto rct = GetActiveRenderChannel();
-	// FIXME: nrl - this can be solved some other way around - Pawelek has to decide
+
+	// FIXME: nrl - this can be solved some other way around - Pawelek has to decide (e.g. when the required render channel is not active black rame is displayed or process frame data does nothing)
     assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
 
+    auto outputRT = result->GetActiveRenderTarget( rct );
+
+    // FIXME: nrl - deferred initialization, a bit too generic right now
+    if( outputRT->Width() != GetWidth() || outputRT->Height() != GetHeight() )
+    {
+        if ( m_videoRT == nullptr )
+        {
+            m_videoRT = allocator( ctx )->CreateCustomRenderTarget( outputRT->Width(), outputRT->Height(), RenderTarget::RTSemantic::S_DRAW_READ );
+        }
+
+        assert( outputRT->Width() == m_videoRT->Width() && outputRT->Height() == m_videoRT->Height() );
+    }
 
 	auto videoFrame = result->ReadColorTexture( renderer( ctx ), rct );
 
@@ -48,7 +70,7 @@ void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * resu
 	{
 		// FIXME: nrl - ask Witek about this one
 		//HPROFILER_SECTION("QueueFrame", PROFILER_THREAD1);
-		videocards::VideoCardManager::Instance().QueueFrame(avFrame);
+		videocards::VideoCardManager::Instance().QueueFrame( avFrame );
 	}
 }
 

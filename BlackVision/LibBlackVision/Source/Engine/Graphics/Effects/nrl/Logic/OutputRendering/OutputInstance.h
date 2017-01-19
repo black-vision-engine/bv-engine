@@ -47,6 +47,11 @@ protected:
     // FIXME: nrl - convenience method, but unfortunately not a generic one
     RenderChannelType   GetActiveRenderChannel  () const;
 
+    unsigned int        GetWidth                () const;
+    unsigned int        GetHeight               () const;
+
+    unsigned int        GetChannelMapping       () const;
+
 };
 
 } //nrl

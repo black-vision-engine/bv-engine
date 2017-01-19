@@ -54,5 +54,26 @@ RenderChannelType   OutputInstance::GetActiveRenderChannel  () const
     return m_state.GetActiveRenderChannel();
 }
 
+// *********************************
+//
+unsigned int        OutputInstance::GetWidth                () const
+{
+    return m_state.GetWidth();
+}
+
+// *********************************
+//
+unsigned int        OutputInstance::GetHeight               () const
+{
+    return m_state.GetHeight();
+}
+
+// *********************************
+//
+unsigned int        OutputInstance::GetChannelMapping       () const
+{
+    return m_state.GetChannelMask();
+}
+
 } //nrl
 } //bv
