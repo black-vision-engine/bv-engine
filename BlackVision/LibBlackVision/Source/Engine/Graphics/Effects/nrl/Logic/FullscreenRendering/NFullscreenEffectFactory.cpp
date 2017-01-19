@@ -65,7 +65,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			nfseType == NFullscreenEffectType::NFET_LIGHT_SCATTERING ||
 			nfseType == NFullscreenEffectType::NFET_SHADOW ||
 			nfseType == NFullscreenEffectType::NFET_GLOW ||
-			nfseType == NFullscreenEffectType::NFET_SOFT_MASK );
+			nfseType == NFullscreenEffectType::NFET_SOFT_MASK ||
+			nfseType == NFullscreenEffectType::NFET_MIX_CHANNELS );
 
     desc->SetBlendFlag( false );
     desc->SetCullFlag( false );

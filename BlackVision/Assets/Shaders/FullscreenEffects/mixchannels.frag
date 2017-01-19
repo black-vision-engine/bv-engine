@@ -11,7 +11,7 @@ uniform vec4		channelMask;
 
 void main()
 {
-	vec4 col = texture( Tex0, uvCoord );
+	vec4 col = texture( Texture, uvCoord );
 
 	int rIdx = ( channelMapping >> 0 ) & 0x3;
 	int gIdx = ( channelMapping >> 2 ) & 0x3;
