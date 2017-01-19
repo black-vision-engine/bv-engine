@@ -15,8 +15,9 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-OutputVideo::OutputVideo     ()
-    : m_audioData( nullptr )
+OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
+    : OutputInstance( width, height )
+    , m_audioData( nullptr )
 	, m_lastFrameHasAudio( true )
 {
     // FIXME: nrl - should be read from video cards configuration

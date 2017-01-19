@@ -19,7 +19,7 @@ private:
 
 public:
 
-                            OutputVideo     ();
+                            OutputVideo     ( unsigned int width, unsigned int height );
 
     virtual void            ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
 

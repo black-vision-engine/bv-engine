@@ -13,8 +13,9 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputPreview::OutputPreview            ()
-    : m_defaultBlitEffect( nullptr )
+OutputPreview::OutputPreview            ( unsigned int width, unsigned int height )
+    : OutputInstance( width, height )
+    , m_defaultBlitEffect( nullptr )
     , m_blitEffectShowAplhaRGB( nullptr )
     , m_activeRenderOutput( 1 )
 {

@@ -7,8 +7,9 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputInstance::OutputInstance      ()
-    : m_isEnabled( false )
+OutputInstance::OutputInstance      ( unsigned int width, unsigned int height )
+    : m_state( width, height )
+    , m_isEnabled( false )
 {
 }
 
@@ -37,6 +38,13 @@ void    OutputInstance::Enable      ()
 void    OutputInstance::Disable     ()
 {
     m_isEnabled = false;
+}
+
+// *********************************
+//
+NOutputState &  OutputInstance::AccessOutputState   ()
+{
+    return m_state;
 }
 
 } //nrl

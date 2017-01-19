@@ -29,7 +29,7 @@ private:
 
 public:
 
-                    OutputPreview   ();
+                    OutputPreview   ( unsigned int width, unsigned int height );
                     ~OutputPreview  ();
 
     virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;

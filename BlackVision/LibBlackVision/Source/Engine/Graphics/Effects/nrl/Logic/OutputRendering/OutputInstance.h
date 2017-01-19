@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
+
 
 namespace bv { namespace nrl {
 
@@ -23,11 +25,13 @@ class OutputInstance
 {
 private:
 
-    bool    m_isEnabled;
+    NOutputState    m_state;
+
+    bool            m_isEnabled;
 
 public:
 
-                    OutputInstance      ();
+                    OutputInstance      ( unsigned int width, unsigned int height ); // FIXME: nrl - pass resolution related parameters in a more generic way (config descriptor of some sort)
     virtual         ~OutputInstance     ();
 
     virtual void    ProcessFrameData    ( NRenderContext * ctx, RenderResult * result ) = 0;
@@ -36,7 +40,8 @@ public:
     void            Enable              ();
     void            Disable             ();
 
-    
+    NOutputState &  AccessOutputState   ();
+
 };
 
 } //nrl

@@ -11,6 +11,7 @@ namespace bv { namespace nrl {
 // *********************************
 //
 OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned int height, unsigned int shmScaleFactor )
+    : OutputInstance( width, height )
 {
     m_shmVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, shmScaleFactor );
 }

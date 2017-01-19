@@ -10,6 +10,13 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
+OutputScreenshot::OutputScreenshot( unsigned int width, unsigned int height )
+    : OutputInstance( width, height )
+{
+}
+
+// *********************************
+//
 void    OutputScreenshot::ProcessFrameData  ( NRenderContext * ctx, RenderResult * result )
 {
     { ctx; result; }
