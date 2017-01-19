@@ -136,7 +136,7 @@ unsigned int        NOutputState::GetHeight                 () const
 
 // **************************
 //
-unsigned int        NOutputState::GetChannelMask            () const
+unsigned int        NOutputState::GetChannelMapping         () const
 {
     return m_channelMapping;
 }
@@ -190,6 +190,16 @@ void                NOutputState::SetMappedUChar            ( unsigned int val, 
 unsigned int        NOutputState::GetMappedUChar          ( unsigned int numBits ) const
 {
     return ( m_channelMapping & ( 0xFF << numBits ) ) >> numBits;
+}
+
+// **************************
+//
+glm::vec4           NOutputState::GetChannelMask          () const
+{
+    return glm::vec4( m_rMask ? 1.0f : 0.0f,
+                      m_gMask ? 1.0f : 0.0f,
+                      m_bMask ? 1.0f : 0.0f,
+                      m_aMask ? 1.0f : 0.0f );
 }
 
 // **************************

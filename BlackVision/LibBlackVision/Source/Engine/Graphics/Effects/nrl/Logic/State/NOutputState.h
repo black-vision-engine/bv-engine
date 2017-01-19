@@ -48,7 +48,7 @@ public:
     unsigned int        GetWidth                () const;
     unsigned int        GetHeight               () const;
 
-    unsigned int        GetChannelMask          () const;
+    unsigned int        GetChannelMapping       () const;
     unsigned int        GetRIdx                 () const;
     unsigned int        GetGIdx                 () const;
     unsigned int        GetBIdx                 () const;
@@ -56,6 +56,7 @@ public:
 
     RenderChannelType   GetActiveRenderChannel  () const;
 
+    glm::vec4           GetChannelMask          () const;
     bool                GetRChannelState        () const;
     bool                GetGChannelState        () const;
     bool                GetBChannelState        () const;
