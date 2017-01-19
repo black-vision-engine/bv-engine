@@ -90,7 +90,7 @@ bool                        AlphaMaskPreFullscreenEffectLogic::IsApplicable     
 {
     auto v = m_alphaValue->GetValue();
 
-    return  v > m_minAlphaThreshold && v <= m_maxAlphaThreshold;
+    return v > m_minAlphaThreshold && v <= m_maxAlphaThreshold;
 }
 
 } //bv

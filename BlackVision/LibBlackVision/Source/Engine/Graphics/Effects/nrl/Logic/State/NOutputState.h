@@ -12,7 +12,12 @@ private:
     unsigned int        m_width;
     unsigned int        m_height;
 
-    unsigned int        m_channelMask;
+    unsigned int        m_channelMapping;
+    
+    bool                m_rMask;
+    bool                m_gMask;
+    bool                m_bMask;
+    bool                m_aMask;
 
     RenderChannelType   m_activeRenderChannel;
 
@@ -23,8 +28,8 @@ public:
     void                SetWidth                ( unsigned int w );
     void                SetHeight               ( unsigned int h );
     
-    void                SetChannelMask          ( unsigned int channelMask );
-    void                SetChannelMask          ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx );
+    void                SetChannelMapping       ( unsigned int channelMapping );
+    void                SetChannelMapping       ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx );
 
     void                SetRIdx                 ( unsigned char rIdx );
     void                SetGIdx                 ( unsigned char gIdx );
@@ -33,10 +38,17 @@ public:
 
     void                SetActiveRenderChannel  ( RenderChannelType activeRenderChannel );
 
+    void                SetMaskState            ( bool rChannelEnabled, bool gChannelEnabled, bool bChannelEnabled, bool aChannelEnabled );
+
+    void                SetRChannelState        ( bool isEnabled );
+    void                SetGChannelState        ( bool isEnabled );
+    void                SetBChannelState        ( bool isEnabled );
+    void                SetAChannelState        ( bool isEnabled );
+
     unsigned int        GetWidth                () const;
     unsigned int        GetHeight               () const;
 
-    unsigned int        GetChannelMask          () const;
+    unsigned int        GetChannelMapping       () const;
     unsigned int        GetRIdx                 () const;
     unsigned int        GetGIdx                 () const;
     unsigned int        GetBIdx                 () const;
@@ -44,10 +56,16 @@ public:
 
     RenderChannelType   GetActiveRenderChannel  () const;
 
+    glm::vec4           GetChannelMask          () const;
+    bool                GetRChannelState        () const;
+    bool                GetGChannelState        () const;
+    bool                GetBChannelState        () const;
+    bool                GetAChannelState        () const;
+
 private:
 
-    void                SetMaskedUChar          ( unsigned int val, unsigned int numBits );
-    unsigned int        GetMaskedUChar          ( unsigned int numBits ) const;
+    void                SetMappedUChar          ( unsigned int val, unsigned int numBits );
+    unsigned int        GetMappedUChar          ( unsigned int numBits ) const;
 
 };
 

@@ -2,6 +2,8 @@
 
 #include "OutputStreamSharedMem.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
@@ -12,14 +14,20 @@ namespace bv { namespace nrl {
 //
 OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned int height, unsigned int shmScaleFactor )
     : OutputInstance( width, height )
+    , m_activeRenderOutput( 1 )
+    , m_shmRT( nullptr )
+    , m_shmTexture( nullptr )
 {
     m_shmVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, shmScaleFactor );
+
+    m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
 }
 
 // *********************************
 //
 OutputStreamSharedMem::~OutputStreamSharedMem  ()
 {
+    delete m_shmRT;
     delete m_shmVideoBuffer;
 }
 
@@ -30,16 +38,51 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
     // FIXME: nrl - use result to cache resacaled textures between outputs - it is a valid place as it is still a rendering result (e.g. when SD output is exactly the same as SHM output)
     // FIXME: nrl - neither effecto nor readback are necessary in such case
 
+    // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
+    UpdateEffectValues();
+
     auto rct = GetActiveRenderChannel();
     assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
 
-    // auto outputRT = result->GetActiveRenderTarget( rct );
+    auto channelRT = result->GetActiveRenderTarget( rct );
+
+    // FIXME: nrl - deferred initialization, a bit too generic right now
+    if( channelRT->Width() != GetWidth() || channelRT->Height() != GetHeight() )
+    {
+        if ( m_shmRT == nullptr )
+        {
+            m_shmRT = allocator( ctx )->CreateCustomRenderTarget( GetWidth(), GetHeight(), RenderTarget::RTSemantic::S_DRAW_READ );
+            
+        }
+
+        m_activeRenderOutput.SetEntry( 0, channelRT );
+
+        m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
+    }
+    else
+    {
+        assert( false );
+    }
+
+    renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
+
+    m_shmVideoBuffer->PushFrame( m_shmTexture );
+}
+
+// *********************************
+//
+void            OutputStreamSharedMem::UpdateEffectValues      ()
+{
+    auto state = m_mixChannelsEffect->GetState();
     
-    assert( false ); // FIXME: nrl - implement
+    auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
+    auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
 
-    auto tex = result->ReadColorTexture( renderer( ctx ), rct );
+    auto mapping = GetChannelMapping();
+    auto mask = GetChannelMask();
 
-    m_shmVideoBuffer->PushFrame( tex );
+    QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
+    QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
 }
 
 } //nrl
