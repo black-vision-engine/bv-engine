@@ -30,9 +30,9 @@ const NTexture2DEntryVec &              NFullscreenEffectVisualComponentDesc::Ge
 
 // **************************
 //
-const std::vector< std::string > &      NFullscreenEffectVisualComponentDesc::GetInputSamplerNames    () const
+const NSamplerEntryVec &                NFullscreenEffectVisualComponentDesc::GetInputSamplers          () const
 {
-    return m_rtInputSamplerNames;
+    return m_rtInputSamplers;
 }
 
 // **************************
@@ -86,9 +86,16 @@ void                                    NFullscreenEffectVisualComponentDesc::Ap
 
 // **************************
 //
-void                                    NFullscreenEffectVisualComponentDesc::AppendInputSamplerName  ( const std::string & samplerName )
+void                                    NFullscreenEffectVisualComponentDesc::AppendInputSamplerEntry ( const std::string & samplerName )
 {
-    m_rtInputSamplerNames.push_back( samplerName );
+    AppendInputSamplerEntry( samplerName, TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_POINT );
+}
+
+// **************************
+//
+void                                    NFullscreenEffectVisualComponentDesc::AppendInputSamplerEntry ( const std::string & samplerName, TextureWrappingMode wrapX, TextureWrappingMode wrapY, TextureFilteringMode filteringMode )
+{
+    m_rtInputSamplers.push_back( NSamplerEntry( samplerName, wrapX, wrapY, filteringMode ) );
 }
 
 // **************************

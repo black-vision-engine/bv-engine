@@ -111,6 +111,7 @@ TriangleStrip *                                 NFullscreenEffectHelpers::Create
     float * vbData = CreateFullscreenQuadVBData();
     
     auto rad = CreateTriStripArrayData( 4, numUVChannels, vbData );
+
     // FIXME: nrl - verify nullptr bounding box
     auto ret = new TriangleStrip( rad, nullptr, effect );
 
@@ -178,18 +179,21 @@ ShaderParameters *                              NFullscreenEffectHelpers::Create
         shaderParams->AddParameter( param );
     }
 
+    // FIXME: nrl - samplers must go first (@see NFullscreenEffectVisualcompoent::SyncRenderTargets and NFullscreenEffectVisualcompoent::SyncTextures)
+    // FIXME: nrl - @see CreatePixelShader
+
+    // Create placeholders for render targets (textures retrieved from render targets)
+    for( auto samplerEntry : rtInputSamplers )
+    {
+        shaderParams->AddTexture( nullptr );
+    }
+
     // Add input textures
     for( auto texEntry : textures )
     {
         auto tex        = texEntry.GetTexture();
 
         shaderParams->AddTexture( tex );
-    }
-
-    // Create placeholders for render targets (textures retrieved from render targets)
-    for( auto samplerEntry : rtInputSamplers )
-    {
-        shaderParams->AddTexture( nullptr );
     }
 
     return shaderParams;
@@ -219,20 +223,22 @@ PixelShader *                                   NFullscreenEffectHelpers::Create
 
     auto shader = new PixelShader( shaderSrc, shaderParams );
 
-    // Add texture samples for input textures
-    for( auto texEntry : textures )
-    {
-        auto sampler    = CreateSampler( texEntry );
-        
-        shader->AddTextureSampler( sampler );
-    }
-
+    // FIXME: nrl - samplers must go first (@see NFullscreenEffectVisualcompoent::SyncRenderTargets and NFullscreenEffectVisualcompoent::SyncTextures)
+    // FIXME: nrl - @see CreatePixelShaderParams
 
     // Add texture samples for input renderTargets
     for( auto samplerEntry : rtInputSamplers )
     {
         auto sampler    = CreateSampler( samplerEntry );
 
+        shader->AddTextureSampler( sampler );
+    }
+
+    // Add texture samples for input textures
+    for( auto texEntry : textures )
+    {
+        auto sampler    = CreateSampler( texEntry );
+        
         shader->AddTextureSampler( sampler );
     }
 
