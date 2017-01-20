@@ -67,7 +67,7 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 	NRenderedData rd( 1 );
 	rd.SetEntry( 0, rt0 );
 
-	// Clrear blur output render target.
+	// Clear blur output render target.
 	enable( ctx, rt0 );
 	clearBoundRT( ctx, glm::vec4() );
 	disableBoundRT( ctx );
