@@ -2071,6 +2071,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5383,6 +5386,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.h">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

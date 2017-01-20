@@ -211,6 +211,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\ParamAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueue.cpp" />
@@ -711,6 +712,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h" />

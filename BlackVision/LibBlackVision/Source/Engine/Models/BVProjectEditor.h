@@ -275,6 +275,7 @@ private:
 
     void                    NotifyPluginAdded   ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );
     void                    NotifyPluginRemoved ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );
+    void                    NotifyPluginMoved   ( model::BasePluginPtr plugin, model::BasicNodePtr srcParentNode, model::BasicNodePtr dstParentNode );
 
     void                    NotifyLogicAdded    ( model::BasicNodePtr parentNode, model::INodeLogicPtr logic );
     void                    NotifyLogicRemoved  ( model::BasicNodePtr parentNode, model::INodeLogicPtr logic );

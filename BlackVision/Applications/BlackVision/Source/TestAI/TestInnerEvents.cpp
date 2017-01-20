@@ -5,6 +5,7 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/InnerEvents/Plugins/PluginAddedEvent.h"
 #include "Engine/Events/InnerEvents/Plugins/PluginRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Plugins/PluginMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
@@ -12,6 +13,8 @@
 #include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeLogicAddedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeLogicRemovedEvent.h"
+
+#include "UseLoggerBVAppModule.h"
 
 
 namespace bv
@@ -31,7 +34,7 @@ TestInnerEvents::TestInnerEvents()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::NodeMoved ), NodeMovedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::NodeRemoved ), NodeRemovedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginAdded ), PluginAddedEvent::Type() );
-    //GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginMoved ), PluginMovedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginMoved ), PluginMovedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginRemoved ), PluginRemovedEvent::Type() );
 }
 
@@ -45,70 +48,70 @@ TestInnerEvents::~TestInnerEvents()
 //
 void        TestInnerEvents::NodeAdded      ( bv::IEventPtr evt )
 {
-    std::cout << "NodeAdded" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "NodeAdded" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::NodeRemoved    ( bv::IEventPtr evt )
 {
-    std::cout << "NodeRemoved" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "NodeRemoved" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::NodeMoved      ( bv::IEventPtr evt )
 {
-    std::cout << "NodeMoved" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "NodeMoved" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::PluginAdded    ( bv::IEventPtr evt )
 {
-    std::cout << "PluginAdded" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug )  << "PluginAdded" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::PluginMoved    ( bv::IEventPtr evt )
 {
-    std::cout << "PluginMoved" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "PluginMoved" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::PluginRemoved  ( bv::IEventPtr evt )
 {
-    std::cout << "PluginRemoved" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "PluginRemoved" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::LogicAdded     ( bv::IEventPtr evt )
 {
-    std::cout << "LogicAdded" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "LogicAdded" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::LogicRemoved   ( bv::IEventPtr evt )
 {
-    std::cout << "LogicRemoved" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "LogicRemoved" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::EffectAdded    ( bv::IEventPtr evt )
 {
-    std::cout << "EffectAdded" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "EffectAdded" << std::endl;
 }
 
 // ***********************
 //
 void        TestInnerEvents::EffectRemoved  ( bv::IEventPtr evt )
 {
-    std::cout << "EffectRemoved" << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "EffectRemoved" << std::endl;
 }
 
 

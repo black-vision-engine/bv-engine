@@ -36,6 +36,7 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/InnerEvents/Plugins/PluginAddedEvent.h"
 #include "Engine/Events/InnerEvents/Plugins/PluginRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Plugins/PluginMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
@@ -856,6 +857,7 @@ bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPlugin
         if( editor->AddPlugin( plugin, idx ) )
         {
             RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
+            NotifyPluginAdded( node, std::static_pointer_cast< model::BasePlugin >( plugin ) );
             return true;
         }
     }
@@ -872,6 +874,8 @@ model::PluginWithIdx					BVProjectEditor::DeletePlugin          ( model::BasicNo
         auto result = editor->DeletePlugin( name );
 
         RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
+        NotifyPluginRemoved( node, std::static_pointer_cast< model::BasePlugin >( result.first ) );
+
         return result;
     }
     return std::make_pair( nullptr, -1 );
@@ -1036,10 +1040,14 @@ bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::
             auto pluginIdx = srcNode->GetModelNodeEditor()->GetDetachedPluginIdx();
             srcScene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( srcNode, plugin, pluginIdx ) ) );
             auto result = AttachPlugin( destNode, destIdx );
+            
             if( result )
             {
                 destScene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation>( new AddPluginOperation( destNode, plugin, destIdx ) ) );
             }
+
+            NotifyPluginMoved( std::static_pointer_cast< model::BasePlugin >( plugin ), srcNode, destNode );
+
             return result;
         }
     }
@@ -1261,8 +1269,12 @@ bool                        BVProjectEditor::SetLogic            ( model::BasicN
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic, prevLogic ) ) );
-        NotifyLogicAdded( node, logic );
     }
+
+    if( prevLogic )
+        NotifyLogicRemoved( node, prevLogic );
+    if( logic )
+        NotifyLogicAdded( node, logic );
 
     return true;
 }
@@ -1306,6 +1318,7 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
     if( node && nodeEffect )
     {
         auto modelNode = QueryTyped( node );
+        auto curEffect = modelNode->GetNodeEffect();
         modelNode->SetNodeEffect( nodeEffect );
 
         auto engineNode = GetEngineNode( node );
@@ -1313,6 +1326,12 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
         m_project->DetachEffect( engineNode );
 
         BVProjectTools::UpdateSceneNodeEffect( engineNode, modelNode );
+
+        if( curEffect )
+            NotifyEffectRemoved( QueryTyped( node ), curEffect );
+        if( nodeEffect )
+            NotifyEffectAdded( QueryTyped( node ), nodeEffect );
+
         return true;
     }
 
@@ -1347,10 +1366,6 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
         {
             scene->GetHistory().AddOperation( std::unique_ptr< SetEffectOperation >( new SetEffectOperation( node, curEffect, newEffect ) ) );
         }
-
-        if( curEffect )
-            NotifyEffectRemoved( node, curEffect );
-        NotifyEffectAdded( node, newEffect );
 
         return result;
     }
@@ -1975,6 +1990,18 @@ void                    BVProjectEditor::NotifyPluginRemoved    ( model::BasicNo
 {
     auto sendEvent = std::make_shared< PluginRemovedEvent >();
     sendEvent->ParentNode = parentNode;
+    sendEvent->Plugin = plugin;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyPluginMoved      ( model::BasePluginPtr plugin, model::BasicNodePtr srcParentNode, model::BasicNodePtr dstParentNode )
+{
+    auto sendEvent = std::make_shared< PluginMovedEvent >();
+    sendEvent->SrcParentNode = srcParentNode;
+    sendEvent->DstParentNode = dstParentNode;
     sendEvent->Plugin = plugin;
 
     GetDefaultEventManager().TriggerEvent( sendEvent );
