@@ -88,6 +88,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA:
             desc->SetBlendFlag( true );
             desc->AppendInputSamplerEntry( "Texture" );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             break;
 		case NFullscreenEffectType::NFET_BLUR:
 			desc->AppendInputSamplerEntry( "Tex0" );
