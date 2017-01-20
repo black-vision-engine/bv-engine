@@ -60,16 +60,24 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 	// Set textureSize param value needed by blur shader.
 	QueryTypedValue< ValueVec2Ptr >( textureSize )->SetValue( glm::vec2( wrt, hrt ) );
 
+	auto mainRT = disableBoundRT( ctx );
+
 	// Allocate new render target for vertical blur pass
 	auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 	NRenderedData rd( 1 );
 	rd.SetEntry( 0, rt0 );
+
+	// Clrear blur output render target.
+	enable( ctx, rt0 );
+	clearBoundRT( ctx, glm::vec4() );
+	disableBoundRT( ctx );
 
 	// Run vertical blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( true );
 	m_blurEffect->Render( ctx, rt0, *input );
 
 	// Run horizontal blur pass
+	enable( ctx, mainRT );
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
 	m_blurEffect->Render( ctx, rd );
 
