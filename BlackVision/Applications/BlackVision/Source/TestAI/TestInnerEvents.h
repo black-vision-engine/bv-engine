@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Engine/Events/EventManager.h"
+#include "TestAI/TestKeyboardHandler.h"
 
 namespace bv {
 
 class BVAppLogic;
 
 
-class TestInnerEvents
+class TestInnerEvents : public TestKeyboardHandler
 {
 private:
 
