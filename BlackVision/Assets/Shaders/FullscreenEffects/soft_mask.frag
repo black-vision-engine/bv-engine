@@ -104,7 +104,7 @@ void main()
 	
 	if(polyDegree == 1)
 		alpha = linearGradientAlpha( uvNorm );
-	else if(polyDegree > 2)
+	else if(polyDegree > 1)
 		alpha = polygonGradientAlpha( uvNorm );
 	else
 		alpha = circleGradientAlpha( uvNorm );
