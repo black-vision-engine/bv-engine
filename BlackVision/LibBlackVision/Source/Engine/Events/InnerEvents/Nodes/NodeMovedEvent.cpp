@@ -8,7 +8,7 @@
 namespace bv
 {
 
-const EventType     NodeMovedEvent::m_sEventType = 0x40000002;
+const EventType     NodeMovedEvent::m_sEventType = EventManager::RegisterType();
 std::string         NodeMovedEvent::m_sEventName = "NodeMovedEvent";
 
 

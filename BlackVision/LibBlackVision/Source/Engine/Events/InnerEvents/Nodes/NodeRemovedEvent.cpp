@@ -7,7 +7,7 @@
 namespace bv
 {
 
-const EventType     NodeRemovedEvent::m_sEventType          = 0x40000000;
+const EventType     NodeRemovedEvent::m_sEventType          = EventManager::RegisterType();
 std::string         NodeRemovedEvent::m_sEventName          = "NodeRemovedEvent";
 
 
