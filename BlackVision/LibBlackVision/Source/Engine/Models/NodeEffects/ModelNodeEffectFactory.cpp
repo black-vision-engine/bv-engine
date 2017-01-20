@@ -213,6 +213,47 @@ IModelNodeEffectPtr         CreateGlowModelNodeEffect    ( const std::string & n
 	return effect;
 }
 
+// **************************
+//
+IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	{
+		name;
+	}
+	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_SOFT_MASK );
+
+	auto widthEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "width", timeEvaluator );
+	auto progressEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "progress", timeEvaluator );
+	auto blankWidthEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blankWidth", timeEvaluator );
+	auto maskTxEval = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "maskTx", timeEvaluator );
+	auto invertEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "invert", timeEvaluator );
+	auto alphaOnlyEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "alphaOnly", timeEvaluator );
+	auto onlyObjectEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "onlyObject", timeEvaluator );
+	auto mirrorEnabledEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "mirrorEnabled", timeEvaluator );
+	auto polyDegreeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "polyDegree", timeEvaluator );
+
+	widthEval->Parameter()->SetVal( 0.02f, 0.f );
+	progressEval->Parameter()->SetVal( 0.05f, 0.f );
+	blankWidthEval->Parameter()->SetVal( 0.02f, 0.f );
+	invertEval->Parameter()->SetVal( false, 0.f );
+	alphaOnlyEval->Parameter()->SetVal( false, 0.f );
+	onlyObjectEval->Parameter()->SetVal( false, 0.f );
+	mirrorEnabledEval->Parameter()->SetVal( true, 0.f );
+	polyDegreeEval->Parameter()->SetVal( 0, 0.f );
+
+	effect->RegisterEvaluator( widthEval );
+	effect->RegisterEvaluator( progressEval );
+	effect->RegisterEvaluator( blankWidthEval );
+	effect->RegisterEvaluator( maskTxEval );
+	effect->RegisterEvaluator( invertEval );
+	effect->RegisterEvaluator( alphaOnlyEval );
+	effect->RegisterEvaluator( onlyObjectEval );
+	effect->RegisterEvaluator( mirrorEnabledEval );
+	effect->RegisterEvaluator( polyDegreeEval );
+
+	return effect;
+}
+
 //
 //// **************************
 ////
@@ -308,6 +349,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             return CreateShadowModelNodeEffect( name, timeEvaluator );
 		case NodeEffectType::NET_GLOW:
 			return CreateGlowModelNodeEffect( name, timeEvaluator );
+		case NodeEffectType::NET_SOFT_MASK:
+			return CreateSoftMaskModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_BOUNDING_BOX:
         //    return CreateBoundingBoxModelNodeEffect( name, timeEvaluator );
         //case NodeEffectType::NET_IMAGE_MASK:

@@ -34,9 +34,11 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NZSortFinalizeStep.h"
 
-
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NGlowPreFSEStep.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NGlowFSEStep.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NSoftMaskPreFSEStep.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NSoftMaskFSEStep.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 #include "Engine/Graphics/Effects/nrl/Logic/State/NFullscreenEffectComponentState.h"
@@ -301,6 +303,39 @@ NNodeEffectPtr       CreateGlowNodeEffect   ()
 
 // **************************
 //
+NNodeEffectPtr       CreateSoftMaskNodeEffect   ()
+{
+	//RenderLogic - default
+	//Passes
+	// - fse - default pre
+	//    - pre step - node mask
+	//    - fse step - node mask
+	// - fin - default rendering
+	//    - finalize step with default rendering
+	// Create STEPS
+
+
+	auto fseStep = new NSoftMaskFSEStep();
+
+	auto preFSEStep = new NSoftMaskPreFSEStep();
+
+	auto fsePass = new NFullscreenEffectPass ( preFSEStep, fseStep );
+
+	auto finalizeStep = new NDefaultFinalizeStep();
+	auto finPass = new NFinalizePass( finalizeStep );
+
+	std::vector< NNodeEffectRenderPass * > passes( 2 );
+
+	passes[ 0 ] = fsePass;
+	passes[ 1 ] = finPass;
+
+	auto nnerl = new NNodeEffectRenderLogic( passes );
+
+	return std::make_shared< NNodeEffectImpl >( nnerl, NNodeEffectType::NNET_SOFT_MASK );
+}
+
+// **************************
+//
 NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 {
     switch( nnodeEffectType )
@@ -317,10 +352,12 @@ NNodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
 			return CreateLightScatteringNodeEffect();
 		case NNodeEffectType::NNET_SHADOW:
 			return CreateShadowNodeEffect();
-                case NNodeEffectType::NNET_Z_SORT:
-                        return CreateZSortNodeEffect();
+		case NNodeEffectType::NNET_Z_SORT:
+			return CreateZSortNodeEffect();
 		case NNodeEffectType::NNET_GLOW:
 			return CreateGlowNodeEffect();
+		case NNodeEffectType::NNET_SOFT_MASK:
+			return CreateSoftMaskNodeEffect();
 		case NNodeEffectType::NNET_WIREFRAME:
             //return CreateWireframeNodeEffect();
         case NNodeEffectType::NNET_MIX_CHANNELS:

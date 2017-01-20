@@ -51,6 +51,7 @@ protected:
     unsigned int        GetHeight               () const;
 
     unsigned int        GetChannelMapping       () const;
+    glm::vec4           GetChannelMask          () const;
 
 };
 

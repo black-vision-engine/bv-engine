@@ -22,8 +22,9 @@ enum class NNodeEffectType : int
 	NNET_BLUR,
 	NNET_LIGHT_SCATTERING,
 	NNET_SHADOW,
-        NNET_Z_SORT,
+    NNET_Z_SORT,
 	NNET_GLOW,
+	NNET_SOFT_MASK,
 
     NNET_TOTAL
 };

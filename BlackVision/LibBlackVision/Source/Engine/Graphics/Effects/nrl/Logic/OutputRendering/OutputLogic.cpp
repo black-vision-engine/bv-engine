@@ -23,10 +23,10 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
 {
     unsigned int i = 0;
 
-    m_outputs[ (unsigned int) CustomOutputType::COT_PREVIEW ]       = new OutputPreview         ( width, height );                  ++i;
-    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO ]         = new OutputVideo           ( width, height );                  ++i;
-    m_outputs[ (unsigned int) CustomOutputType::COT_STREAM_SHM ]    = new OutputStreamSharedMem ( width, height, shmScaleFactor );  ++i; // FIXME: nrl - pass arguments using appropriate descriptor (static data init)
-    m_outputs[ (unsigned int) CustomOutputType::COT_SCREENSHOT ]    = new OutputScreenshot      ( width, height  );                 ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_PREVIEW ]       = new OutputPreview         ( width, height );                          ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO ]         = new OutputVideo           ( width, height );                          ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_STREAM_SHM ]    = new OutputStreamSharedMem ( width / 2, height / 2, shmScaleFactor );  ++i; // FIXME: nrl - pass arguments using appropriate descriptor (static data init)
+    m_outputs[ (unsigned int) CustomOutputType::COT_SCREENSHOT ]    = new OutputScreenshot      ( width, height  );                         ++i;
 
     assert( i == (unsigned int) CustomOutputType::COT_TOTAL );
 

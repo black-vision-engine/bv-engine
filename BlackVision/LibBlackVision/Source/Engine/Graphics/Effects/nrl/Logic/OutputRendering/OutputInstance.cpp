@@ -72,6 +72,13 @@ unsigned int        OutputInstance::GetHeight               () const
 //
 unsigned int        OutputInstance::GetChannelMapping       () const
 {
+    return m_state.GetChannelMapping();
+}
+
+// *********************************
+//
+glm::vec4           OutputInstance::GetChannelMask          () const
+{
     return m_state.GetChannelMask();
 }
 
