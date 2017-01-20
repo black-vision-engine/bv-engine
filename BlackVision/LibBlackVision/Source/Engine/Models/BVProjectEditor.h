@@ -12,6 +12,15 @@ namespace model {
 
     class ITimeline;
     DEFINE_PTR_TYPE( ITimeline );
+
+    class BasePlugin;
+    DEFINE_PTR_TYPE( BasePlugin );
+
+    class INodeLogic;
+    DEFINE_PTR_TYPE( INodeLogic );
+
+    class IModelNodeEffect;
+    DEFINE_PTR_TYPE( IModelNodeEffect );
 } // model
 
 class BVProject;
@@ -260,9 +269,18 @@ private:
 
     /* node helpers */
 
-    void                    NotifyRemovedNode    ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
-    void                    NotifyAddedNode      ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode );
-    void                    NotifyMovedNode      ( model::BasicNodePtr node, model::BasicNodePtr srcParent, model::BasicNodePtr dstParent );
+    void                    NotifyRemovedNode   ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
+    void                    NotifyAddedNode     ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode );
+    void                    NotifyMovedNode     ( model::BasicNodePtr node, model::BasicNodePtr srcParent, model::BasicNodePtr dstParent );
+
+    void                    NotifyPluginAdded   ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );
+    void                    NotifyPluginRemoved ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );
+
+    void                    NotifyLogicAdded    ( model::BasicNodePtr parentNode, model::INodeLogicPtr logic );
+    void                    NotifyLogicRemoved  ( model::BasicNodePtr parentNode, model::INodeLogicPtr logic );
+
+    void                    NotifyEffectAdded   ( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect );
+    void                    NotifyEffectRemoved ( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect );
 
     /* Undo/Redo */
 

@@ -22,7 +22,7 @@ public:
     {}
 
     model::BasicNodePtr         ParentNode;
-    model::ModelNodeEffectPtr   Effect;
+    model::IModelNodeEffectPtr  Effect;
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );

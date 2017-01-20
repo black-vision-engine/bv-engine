@@ -1259,7 +1259,9 @@ bool                        BVProjectEditor::SetLogic            ( model::BasicN
     {
         auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
         auto scene = GetModelScene( sceneName );
+
         scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic, prevLogic ) ) );
+        NotifyLogicAdded( node, logic );
     }
 
     return true;
@@ -1269,13 +1271,16 @@ bool                        BVProjectEditor::SetLogic            ( model::BasicN
 //
 bool                        BVProjectEditor::RemoveLogic         ( model::BasicNodePtr node, bool enableUndo )
 {
+    auto logic = node->GetLogic();
     node->RemoveLogic();
 
     if( enableUndo )
     {
         auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
         auto scene = GetModelScene( sceneName );
-        scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeLogicOperation >( new RemoveNodeLogicOperation( scene, node, node->GetLogic() ) ) );
+
+        scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeLogicOperation >( new RemoveNodeLogicOperation( scene, node, logic ) ) );
+        NotifyLogicRemoved( node, logic );
     }
 
     return true;
@@ -1334,13 +1339,19 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
     {
         auto effect = SerializationHelper::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
-        auto node = GetNode( sceneName, nodePath );
+        auto node = QueryTyped( GetNode( sceneName, nodePath ) );
         auto curEffect = node->GetNodeEffect();
         auto result = SetNodeEffect( node, newEffect );
+
         if( result && enableUndo )
         {
-            scene->GetHistory().AddOperation( std::unique_ptr< SetEffectOperation >( new SetEffectOperation( QueryTyped( node ), curEffect, newEffect ) ) );
+            scene->GetHistory().AddOperation( std::unique_ptr< SetEffectOperation >( new SetEffectOperation( node, curEffect, newEffect ) ) );
         }
+
+        if( curEffect )
+            NotifyEffectRemoved( node, curEffect );
+        NotifyEffectAdded( node, newEffect );
+
         return result;
     }
 
@@ -1945,6 +1956,72 @@ void                    BVProjectEditor::NotifyMovedNode        ( model::BasicNo
     movedEvent->DstParentNode = dstParent;
 
     GetDefaultEventManager().TriggerEvent( movedEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyPluginAdded      ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin )
+{
+    auto sendEvent = std::make_shared< PluginAddedEvent >();
+    sendEvent->ParentNode = parentNode;
+    sendEvent->Plugin = plugin;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyPluginRemoved    ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin )
+{
+    auto sendEvent = std::make_shared< PluginRemovedEvent >();
+    sendEvent->ParentNode = parentNode;
+    sendEvent->Plugin = plugin;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyLogicAdded       ( model::BasicNodePtr parentNode, model::INodeLogicPtr logic )
+{
+    auto sendEvent = std::make_shared< NodeLogicAddedEvent >();
+    sendEvent->ParentNode = parentNode;
+    sendEvent->Logic = logic;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyLogicRemoved     ( model::BasicNodePtr parentNode, model::INodeLogicPtr logic )
+{
+    auto sendEvent = std::make_shared< NodeLogicRemovedEvent >();
+    sendEvent->ParentNode = parentNode;
+    sendEvent->Logic = logic;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyEffectAdded      ( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect )
+{
+    auto sendEvent = std::make_shared< NodeEffectAddedEvent >();
+    sendEvent->ParentNode = parentNode;
+    sendEvent->Effect = effect;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void BVProjectEditor::NotifyEffectRemoved( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect )
+{
+    auto sendEvent = std::make_shared< NodeEffectRemovedEvent >();
+    sendEvent->ParentNode = parentNode;
+    sendEvent->Effect = effect;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
 }
 
 
