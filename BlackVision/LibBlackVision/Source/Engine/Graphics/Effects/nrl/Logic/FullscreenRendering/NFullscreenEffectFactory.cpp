@@ -79,12 +79,15 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendInputSamplerEntry( "Texture" );
 			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK:
-            desc->AppendInputSamplerEntry( "Mask" );
+			desc->SetBlendFlag( true );
+			desc->AppendInputSamplerEntry( "Texture" );
+			desc->AppendInputSamplerEntry( "Mask" );
             desc->AppendIVal( ValuesFactory::CreateValueInt( "maskChannelIdx", 3 ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
+			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA:
             desc->SetBlendFlag( true );
             desc->AppendInputSamplerEntry( "Texture" );
-            desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             break;
 		case NFullscreenEffectType::NFET_BLUR:
 			desc->AppendInputSamplerEntry( "Tex0" );
