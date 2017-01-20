@@ -232,14 +232,27 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	auto mirrorEnabledEval = ParamValEvaluatorFactory::CreateSimpleBoolEvaluator( "mirrorEnabled", timeEvaluator );
 	auto polyDegreeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "polyDegree", timeEvaluator );
 
-	widthEval->Parameter()->SetVal( 0.02f, 0.f );
-	progressEval->Parameter()->SetVal( 0.05f, 0.f );
-	blankWidthEval->Parameter()->SetVal( 0.02f, 0.f );
+	widthEval->Parameter()->SetVal( 0.01f, 0.f );
+	progressEval->Parameter()->SetVal( 0.1f, 0.f );
+	blankWidthEval->Parameter()->SetVal( 0.0f, 0.f );
 	invertEval->Parameter()->SetVal( false, 0.f );
 	alphaOnlyEval->Parameter()->SetVal( false, 0.f );
 	onlyObjectEval->Parameter()->SetVal( false, 0.f );
-	mirrorEnabledEval->Parameter()->SetVal( false, 0.f );
-	polyDegreeEval->Parameter()->SetVal( 4, 0.f );
+	mirrorEnabledEval->Parameter()->SetVal( true, 0.f );
+	polyDegreeEval->Parameter()->SetVal( 0, 0.f );
+	polyDegreeEval->Parameter()->SetVal( 0, 0.f );
+	//polyDegreeEval->Parameter()->SetVal( 4, 1.f );
+	//polyDegreeEval->Parameter()->SetVal( 5, 2.f );
+	//polyDegreeEval->Parameter()->SetVal( 6, 3.f );
+	//polyDegreeEval->Parameter()->SetVal( 7, 4.f );
+	//polyDegreeEval->Parameter()->SetVal( 8, 5.f );
+	//polyDegreeEval->Parameter()->SetVal( 9, 6.f );
+	//polyDegreeEval->Parameter()->SetVal( 10, 7.f );
+	//polyDegreeEval->Parameter()->SetVal( 11, 8.f );
+	//polyDegreeEval->Parameter()->SetVal( 12, 9.f );
+	//polyDegreeEval->Parameter()->SetVal( 1, 10.f );
+
+	polyDegreeEval->Parameter()->SetVal( 120, 25.f );
 
 	effect->RegisterEvaluator( widthEval );
 	effect->RegisterEvaluator( progressEval );

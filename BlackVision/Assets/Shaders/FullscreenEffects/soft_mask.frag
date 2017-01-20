@@ -84,23 +84,14 @@ float polygonGradientAlpha( vec2 uv )
 {
 	float a = atan( uv.y - 0.5, uv.x - 0.5 );
 	
-	int n = int(floor( a * polyDegree / 2 * M_PI ));
-	//n = 3;
+	int n = int(floor( a * polyDegree / ( 2 * M_PI ) ) );
 
-
-	float p0a = n * 2 * M_PI / polyDegree;
-	float p1a = ( n + 1 ) * 2 * M_PI / polyDegree;
+	float p0a = ( n * 2 * M_PI / polyDegree );
+	float p1a = ( ( n + 1 ) * 2 * M_PI / polyDegree );
 	
-	//p0a = 0;
-	//p1a = M_PI / 2.0;
-
 	vec2 p0 = vec2( progress * cos(p0a), progress * sin(p0a) ) + vec2( 0.5, 0.5 );
 	vec2 p1 = vec2( progress * cos(p1a), progress * sin(p1a) ) + vec2( 0.5, 0.5 );
 	
-	//p0 = vec2(0.1, 0.0);
-	//p1 = vec2( 0.0, 0.1 );
-
-	//return linearGradientAlpha1( uv, vec2( 0.5, 0.5 ), vec2(0.1, 0.1) );
 	return linearGradientAlpha1( uv, p0, p1 - p0 );
 }
 
