@@ -262,6 +262,7 @@ private:
 
     void                    NotifyRemovedNode    ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
     void                    NotifyAddedNode      ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode );
+    void                    NotifyMovedNode      ( model::BasicNodePtr node, model::BasicNodePtr srcParent, model::BasicNodePtr dstParent );
 
     /* Undo/Redo */
 

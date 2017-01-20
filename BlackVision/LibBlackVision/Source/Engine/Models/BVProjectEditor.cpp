@@ -34,8 +34,16 @@
 #include "Engine/Models/BoundingVolume.h"
 
 #include "Engine/Events/EventManager.h"
-#include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Plugins/PluginAddedEvent.h"
+#include "Engine/Events/InnerEvents/Plugins/PluginRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeEffectAddedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeLogicAddedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeLogicRemovedEvent.h"
+
 
 
 // Undo/Redo operations
@@ -679,6 +687,8 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
             {
                 AddMoveOperation( srcScene, srcParentNode, destParentNode, srcNode, destIdx );
             }
+
+            NotifyMovedNode( srcNode, srcParentNode, destParentNode );
 
             return result;
         }
@@ -1923,6 +1933,18 @@ void                    BVProjectEditor::NotifyAddedNode        ( model::BasicNo
     addedEvent->ParentNode = parentNode;
 
     GetDefaultEventManager().TriggerEvent( addedEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyMovedNode        ( model::BasicNodePtr node, model::BasicNodePtr srcParent, model::BasicNodePtr dstParent )
+{
+    auto movedEvent = std::make_shared< NodeMovedEvent >();
+    movedEvent->Node = node;
+    movedEvent->SrcParentNode = srcParent;
+    movedEvent->DstParentNode = dstParent;
+
+    GetDefaultEventManager().TriggerEvent( movedEvent );
 }
 
 

@@ -22,7 +22,7 @@ public:
     {}
 
     model::BasicNodePtr         ParentNode;
-    model::BasePluginPtr        AddedPlugin;
+    model::BasePluginPtr        Plugin;
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
