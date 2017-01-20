@@ -8,10 +8,10 @@
 #include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
-#include "Engine/Events/InnerEvents/Logics/NodeEffectAdded.h"
-#include "Engine/Events/InnerEvents/Logics/NodeEffectRemoved.h"
-#include "Engine/Events/InnerEvents/Logics/NodeLogicAdded.h"
-#include "Engine/Events/InnerEvents/Logics/NodeLogicRemoved.h"
+#include "Engine/Events/InnerEvents/Logics/NodeEffectAddedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeLogicAddedEvent.h"
+#include "Engine/Events/InnerEvents/Logics/NodeLogicRemovedEvent.h"
 
 
 namespace bv

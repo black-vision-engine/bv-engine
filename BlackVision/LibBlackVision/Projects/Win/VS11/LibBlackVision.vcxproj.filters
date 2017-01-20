@@ -2059,16 +2059,16 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Plugins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAdded.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemoved.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAddedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAdded.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemoved.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5372,16 +5372,16 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Plugins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAdded.h">
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemoved.h">
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAddedEvent.h">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAdded.h">
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemoved.h">
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.h">
       <Filter>Engine\Events\InnerEvents\Logics</Filter>
     </ClInclude>
   </ItemGroup>

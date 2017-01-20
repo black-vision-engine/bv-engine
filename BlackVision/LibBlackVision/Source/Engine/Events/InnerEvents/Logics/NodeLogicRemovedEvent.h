@@ -2,7 +2,7 @@
 
 #include "Engine/Events/BaseEvent.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Interfaces/INodeLogic.h"
 
 
 namespace bv
@@ -11,18 +11,18 @@ namespace bv
 
 // *******************************
 //
-class PluginRemovedEvent : public BaseEvent
+class NodeLogicRemovedEvent : public BaseEvent
 {
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 
 public:
-    explicit        PluginRemovedEvent()
+    explicit        NodeLogicRemovedEvent()
     {}
 
     model::BasicNodePtr         ParentNode;
-    model::BasePluginPtr        RemovedPlugin;
+    model::INodeLogicPtr        Logic;
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -35,8 +35,9 @@ public:
 
 };
 
-DEFINE_PTR_TYPE( PluginRemovedEvent );
+DEFINE_PTR_TYPE( NodeLogicRemovedEvent );
 
 
 }   // bv
+
 
