@@ -127,6 +127,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->SetBlendFlag( true );
 			desc->SetDepthTestFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0" );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "aspectRatio" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "width" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "progress" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blankWidth" ) );

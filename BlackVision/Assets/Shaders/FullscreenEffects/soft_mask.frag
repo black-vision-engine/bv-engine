@@ -16,8 +16,9 @@ uniform bool 			invert;
 uniform bool			alphaOnly;
 uniform bool            objectOnly;
 uniform bool            mirrorEnabled;
-
 uniform int            	polyDegree;
+
+uniform float           aspectRatio;
 
 float distanceToLine( vec2 p0, vec2 pl, vec2 pldir )
 {
@@ -97,15 +98,16 @@ float polygonGradientAlpha( vec2 uv )
 
 void main()
 {   
-
 	float alpha = 1.0;
 
+	vec2 uvNorm = vec2( ( uvCoord.x - 0.5 ) * aspectRatio + 0.5, uvCoord.y );
+	
 	if(polyDegree == 1)
-		alpha = linearGradientAlpha( uvCoord );
+		alpha = linearGradientAlpha( uvNorm );
 	else if(polyDegree > 2)
-		alpha = polygonGradientAlpha( uvCoord );
+		alpha = polygonGradientAlpha( uvNorm );
 	else
-		alpha = circleGradientAlpha( uvCoord );
+		alpha = circleGradientAlpha( uvNorm );
 		
 	FragColor = texture( Tex0, uvCoord ) * alpha;
 }

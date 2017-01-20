@@ -52,13 +52,13 @@ void                    NSoftMaskFSEStep::ApplyImpl                    ( NRender
 	ctx;
 
 	//// FIXME: Some general mechanism should be implemented to set values in effect.
-	//auto textureSize = GetState()->GetValueAt( 0 );
+	auto aspectRatioVal = GetState()->GetValueAt( 0 );
 
-	//auto wrt = input->GetEntry( 0 )->Width();
-	//auto hrt = input->GetEntry( 0 )->Height();
+	auto wrt = input->GetEntry( 0 )->Width();
+	auto hrt = input->GetEntry( 0 )->Height();
 
 	//// Set textureSize param value needed by blur shader.
-	//QueryTypedValue< ValueVec2Ptr >( textureSize )->SetValue( glm::vec2( wrt, hrt ) );
+	QueryTypedValue< ValueFloatPtr >( aspectRatioVal )->SetValue( Float32( wrt ) / Float32( hrt ) );
 
 	m_softMaskEffect->Render( ctx, *input );
 }

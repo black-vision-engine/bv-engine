@@ -240,7 +240,8 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	onlyObjectEval->Parameter()->SetVal( false, 0.f );
 	mirrorEnabledEval->Parameter()->SetVal( true, 0.f );
 	polyDegreeEval->Parameter()->SetVal( 0, 0.f );
-	polyDegreeEval->Parameter()->SetVal( 0, 0.f );
+	polyDegreeEval->Parameter()->SetVal( 1, 3.f );
+	polyDegreeEval->Parameter()->SetVal( 1, 5.f );
 	//polyDegreeEval->Parameter()->SetVal( 4, 1.f );
 	//polyDegreeEval->Parameter()->SetVal( 5, 2.f );
 	//polyDegreeEval->Parameter()->SetVal( 6, 3.f );
