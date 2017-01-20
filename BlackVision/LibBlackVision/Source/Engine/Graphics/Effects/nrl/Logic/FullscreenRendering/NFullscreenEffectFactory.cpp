@@ -134,7 +134,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueMat4( "maskTx" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "invert" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "alphaOnly" ) );
-			desc->AppendIVal( ValuesFactory::CreateValueBool( "onlyObject" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "objectOnly" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "mirrorEnabled" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "polyDegree" ) );
 			break;

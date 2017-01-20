@@ -109,5 +109,24 @@ void main()
 	else
 		alpha = circleGradientAlpha( uvNorm );
 		
-	FragColor = texture( Tex0, uvCoord ) * alpha;
+	
+	if ( alphaOnly || objectOnly )
+	{
+		vec4 retColor = vec4( 0.0, 0.0, 0.0, 0.0 );
+		if ( alphaOnly )
+		{
+			retColor = retColor + vec4( alpha, alpha, alpha, alpha );
+		}
+		
+		if ( objectOnly )
+		{
+			retColor = retColor + texture( Tex0, uvCoord );
+		}
+		
+		FragColor = retColor;
+	}
+	else
+	{
+		FragColor = texture( Tex0, uvCoord ) * alpha;
+	}
 }

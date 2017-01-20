@@ -234,7 +234,7 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	h.AddSimpleParam( "blankWidth", 0.01f, true );
 	h.AddSimpleParam( "invert", false, true );
 	h.AddSimpleParam( "alphaOnly", false, true );
-	h.AddSimpleParam( "onlyObject", false, true );
+	h.AddSimpleParam( "objectOnly", false, true );
 	h.AddSimpleParam( "mirrorEnabled", true, true );
 	h.AddSimpleParam( "polyDegree", 4, true );
 
