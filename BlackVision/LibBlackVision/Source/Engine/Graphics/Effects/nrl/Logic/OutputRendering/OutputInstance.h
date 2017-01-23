@@ -34,7 +34,7 @@ public:
                         OutputInstance          ( unsigned int width, unsigned int height ); // FIXME: nrl - pass resolution related parameters in a more generic way (config descriptor of some sort)
     virtual             ~OutputInstance         ();
 
-    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderResult * result ) = 0;
+    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) = 0;
 
     bool                IsEnabled               () const;
     void                Enable                  ();

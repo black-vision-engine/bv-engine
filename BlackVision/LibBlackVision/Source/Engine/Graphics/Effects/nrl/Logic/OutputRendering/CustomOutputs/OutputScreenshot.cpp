@@ -17,9 +17,9 @@ OutputScreenshot::OutputScreenshot( unsigned int width, unsigned int height )
 
 // *********************************
 //
-void    OutputScreenshot::ProcessFrameData  ( NRenderContext * ctx, RenderResult * result )
+void    OutputScreenshot::ProcessFrameData  ( NRenderContext * ctx, RenderResult * input )
 {
-    { ctx; result; }
+    { ctx; input; }
     assert( false );
 
     // FIXME: nrl - implement

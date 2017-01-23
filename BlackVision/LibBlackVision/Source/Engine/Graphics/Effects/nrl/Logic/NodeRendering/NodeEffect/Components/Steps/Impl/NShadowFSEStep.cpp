@@ -73,10 +73,17 @@ void                    NShadowFSEStep::ApplyImpl                    ( NRenderCo
 	// Set textureSize param value needed by blur shader.
 	QueryTypedValue< ValueVec2Ptr >( textureSize )->SetValue( glm::vec2( wrt, hrt ) );
 
+	auto mainRT = disableBoundRT( ctx );
+
 	// Allocate new render target for vertical blur pass
 	auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 	NRenderedData rd0( 1 );
 	rd0.SetEntry( 0, rt0 );
+
+	// Clear blur output render target.
+	enable( ctx, rt0 );
+	clearBoundRT( ctx, glm::vec4() );
+	disableBoundRT( ctx );
 
 	// Run vertical blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( true );
@@ -86,6 +93,11 @@ void                    NShadowFSEStep::ApplyImpl                    ( NRenderCo
 	NRenderedData rd1( 1 );
 	rd1.SetEntry( 0, rt1 );
 
+	// Clear blur output render target.
+	enable( ctx, rt1 );
+	clearBoundRT( ctx, glm::vec4() );
+	disableBoundRT( ctx );
+
 	// Run horizontal blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
 	m_blurEffect->Render( ctx, rt1, rd0 );
@@ -93,6 +105,8 @@ void                    NShadowFSEStep::ApplyImpl                    ( NRenderCo
 	NRenderedData rd2( 2 );
 	rd2.SetEntry( 0, rt1 );
 	rd2.SetEntry( 1, input->GetEntry( 0 ) );
+
+	enable( ctx, mainRT );
 
 	m_shadowEffect->Render( ctx, rd2 );
 

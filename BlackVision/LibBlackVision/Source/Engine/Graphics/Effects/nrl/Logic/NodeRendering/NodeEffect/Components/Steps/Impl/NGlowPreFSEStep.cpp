@@ -57,8 +57,6 @@ const NRenderedData *   NGlowPreFSEStep::ApplyImpl                   ( SceneNode
 {       
     assert( ctx->GetBoundRenderTarget() != nullptr );
 
-    NNodeRenderLogic::RenderRoot( nodeRepr, ctx );
-
     auto mainRT = disableBoundRT( ctx );
 
     // Render output

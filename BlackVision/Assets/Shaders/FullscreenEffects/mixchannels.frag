@@ -18,5 +18,7 @@ void main()
 	int bIdx = ( channelMapping >> 4 ) & 0x3;
 	int aIdx = ( channelMapping >> 6 ) & 0x3;
 	
-	FragColor = vec4( channelMask[ 0 ] * col[ rIdx ], channelMask[ 1 ] * col[ gIdx ], channelMask[ 2 ] * col[ bIdx ], channelMask[ 3 ] * col[ aIdx ] );
+    // FragColor = col * channelMask;
+	// FragColor = vec4( channelMask[ 0 ] * col[ rIdx ], channelMask[ 1 ] * col[ gIdx ], channelMask[ 2 ] * col[ bIdx ], channelMask[ 3 ] * col[ aIdx ] );
+	FragColor = channelMask * vec4( col[ rIdx ], col[ gIdx ], col[ bIdx ], col[ aIdx ] );
 }

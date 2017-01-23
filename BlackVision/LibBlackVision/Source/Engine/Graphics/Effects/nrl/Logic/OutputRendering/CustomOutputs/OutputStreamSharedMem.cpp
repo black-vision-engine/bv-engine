@@ -33,7 +33,7 @@ OutputStreamSharedMem::~OutputStreamSharedMem  ()
 
 // *********************************
 //
-void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderResult * result )
+void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderResult * input )
 {
     // FIXME: nrl - use result to cache resacaled textures between outputs - it is a valid place as it is still a rendering result (e.g. when SD output is exactly the same as SHM output)
     // FIXME: nrl - neither effecto nor readback are necessary in such case
@@ -42,9 +42,9 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
     UpdateEffectValues();
 
     auto rct = GetActiveRenderChannel();
-    assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
+    assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
 
-    auto channelRT = result->GetActiveRenderTarget( rct );
+    auto channelRT = input->GetActiveRenderTarget( rct );
 
     // FIXME: nrl - deferred initialization, a bit too generic right now
     if( channelRT->Width() != GetWidth() || channelRT->Height() != GetHeight() )

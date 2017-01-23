@@ -43,14 +43,14 @@ OutputVideo::~OutputVideo    ()
 
 // **************************
 //
-void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * result )
+void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * input )
 {
     auto rct = GetActiveRenderChannel();
 
 	// FIXME: nrl - this can be solved some other way around - Pawelek has to decide (e.g. when the required render channel is not active black rame is displayed or process frame data does nothing)
-    assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
+    assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
 
-    auto outputRT = result->GetActiveRenderTarget( rct );
+    auto outputRT = input->GetActiveRenderTarget( rct );
 
     // FIXME: nrl - deferred initialization, a bit too generic right now
     if( outputRT->Width() != GetWidth() || outputRT->Height() != GetHeight() )
@@ -64,7 +64,7 @@ void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * resu
         assert( outputRT->Width() == m_videoRT->Width() && outputRT->Height() == m_videoRT->Height() );
     }
 
-	auto videoFrame = result->ReadColorTexture( renderer( ctx ), rct );
+	auto videoFrame = input->ReadColorTexture( renderer( ctx ), rct );
 
 	auto avFrame = PrepareAVFrame( audio( ctx ), videoFrame );
 

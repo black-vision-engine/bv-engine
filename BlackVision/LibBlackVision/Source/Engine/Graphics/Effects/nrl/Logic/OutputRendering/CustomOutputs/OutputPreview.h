@@ -22,24 +22,20 @@ private:
     //FIXME: this is the most basic logic. More advanced implementation would allow additional processing of RenderResult (see ShowFrame)
     NRenderedData           m_activeRenderOutput;
 
-    NFullscreenEffect *     m_activeBlit;
-
-    NFullscreenEffect *     m_defaultBlitEffect;
-    NFullscreenEffect *     m_blitEffectShowAplhaRGB;
+    NFullscreenEffect *     m_mixChannelsEffect;
 
 public:
 
                     OutputPreview   ( unsigned int width, unsigned int height );
                     ~OutputPreview  ();
 
-    virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * result ) override;
-
-    void            SetShowDefault  ();
-    void            SetShowAlpha    ();
+    virtual void    ProcessFrameData( NRenderContext * ctx, RenderResult * input ) override;
 
 private:
 
-    void    DefaultShow     ( NRenderContext * ctx, const RenderTarget * rt );
+    void    DefaultShow             ( NRenderContext * ctx, const RenderTarget * rt );
+
+    void    UpdateEffectValues      ();
 
 };
 

@@ -79,14 +79,19 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendInputSamplerEntry( "Texture" );
 			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK:
-            desc->AppendInputSamplerEntry( "Mask" );
+			desc->SetBlendFlag( true );
+			desc->AppendInputSamplerEntry( "Texture" );
+			desc->AppendInputSamplerEntry( "Mask" );
             desc->AppendIVal( ValuesFactory::CreateValueInt( "maskChannelIdx", 3 ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
+			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA:
             desc->SetBlendFlag( true );
             desc->AppendInputSamplerEntry( "Texture" );
-            desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             break;
 		case NFullscreenEffectType::NFET_BLUR:
+			desc->SetBlendFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blurSize" ) );
@@ -95,6 +100,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "blurKernelType" ) );
 			break;
 		case NFullscreenEffectType::NFET_LIGHT_SCATTERING:
+			desc->SetBlendFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "exposure" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "decay" ) );
@@ -104,6 +110,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "numSamples" ) );
 			break;
 		case NFullscreenEffectType::NFET_SHADOW:
+			desc->SetBlendFlag( true );
 			desc->AppendInputSamplerEntry( "BluredTex0" );
 			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
@@ -127,18 +134,19 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->SetBlendFlag( true );
 			desc->SetDepthTestFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0" );
+			desc->AppendIVal( ValuesFactory::CreateValueFloat( "aspectRatio" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "width" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "progress" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blankWidth" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueMat4( "maskTx" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "invert" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "alphaOnly" ) );
-			desc->AppendIVal( ValuesFactory::CreateValueBool( "onlyObject" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueBool( "objectOnly" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "mirrorEnabled" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "polyDegree" ) );
 			break;
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
-            desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR );
+            desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR ); // FIXME: add some room for additional parameters here (e.g. TFM_POINT)
             desc->AppendIVal( ValuesFactory::CreateValueInt( "channelMapping" ) );
             desc->AppendIVal( ValuesFactory::CreateValueVec4( "channelMask" ) );
             break;

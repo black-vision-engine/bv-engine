@@ -309,6 +309,7 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
             m_bvProject->Update( time );
         }
 
+        // FIXME: shouldn't it be already removed?
         m_remoteHandlers->UpdateHM();
 
         {
