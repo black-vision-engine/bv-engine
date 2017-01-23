@@ -46,16 +46,15 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
 
     auto channelRT = input->GetActiveRenderTarget( rct );
 
+    m_activeRenderOutput.SetEntry( 0, channelRT );
+
     // FIXME: nrl - deferred initialization, a bit too generic right now
     if( channelRT->Width() != GetWidth() || channelRT->Height() != GetHeight() )
     {
         if ( m_shmRT == nullptr )
         {
             m_shmRT = allocator( ctx )->CreateCustomRenderTarget( GetWidth(), GetHeight(), RenderTarget::RTSemantic::S_DRAW_READ );
-            
         }
-
-        m_activeRenderOutput.SetEntry( 0, channelRT );
 
         m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
 
@@ -65,11 +64,10 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
     }
     else
     {
-        
-        m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
-        
-    }
+        auto inputFrame = input->ReadColorTexture( renderer( ctx ), rct );
 
+        m_shmVideoBuffer->PushFrame( inputFrame );
+    }
 }
 
 // *********************************
@@ -90,3 +88,11 @@ void            OutputStreamSharedMem::UpdateEffectValues      ()
 
 } //nrl
 } //bv
+
+
+// Algo:
+// if w != origW || h != origH || state != rgba
+//  mixchannels->Render( output )
+//  tex = output->ReadTexture
+// else
+//  tex = result->ReadTexture

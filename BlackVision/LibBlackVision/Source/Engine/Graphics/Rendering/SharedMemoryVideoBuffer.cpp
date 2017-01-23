@@ -2,6 +2,8 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "SharedMemoryVideoBuffer.h"
 
+// #include "LibImage.h"
+
 
 namespace bv {
 
@@ -88,6 +90,14 @@ void        SharedMemoryVideoBuffer::PushFrame(Texture2DConstPtr frame)
 
 	}
 	HPROFILER_SECTION("Shared Memory step2", PROFILER_THREAD1);*/
+
+    auto dta = frame->GetData();
+
+    //static unsigned int i = 0;
+    //i++;
+    //bool result = image::SaveBMPImage( "shm_image.bmp", dta, frame->GetWidth(), frame->GetHeight(), 32 );
+
+    //assert( result );
 
 	//CopyMemory((PVOID)m_pBuf, m_data, m_buffSize * sizeof(char));
 	unsigned int size = frame->GetHeight() * frame->GetWidth()* (unsigned int)frame->GetPixelSize();

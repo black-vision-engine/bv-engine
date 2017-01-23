@@ -2,7 +2,7 @@
 2. Shared
 3. Video
 3_1/2. Warstwa do konfiguracji outputów
-  - statyczna (w, h, domyślny input)
+  - statyczna (w, h, domyślny input), domyślna konfiguracja włączonych outputów
   - dynamiczna (input, parametry stanu (mask, mix)) - sensowne API do tego
 4. Cache intermediate result in result
 5. Buffer free rect generation
@@ -21,5 +21,8 @@
 14. Generic Output implementation
   - no subclassing
   - UpdateEffectValues in a generic way
+  - ten shader FSE do przetwarzania mixchannels też użyć przed resztą - ładna kompozycja
+    - input->mix_channels (if necessary) -> output_component( readback_texture )
 15. Reimplementacja shared buf tak, żeby był przechowytwany w System i tylko wykorzystany na bazie niskopoziomowej implementacji
 16. Możliwość konfigurowania FSE (czyli jakiś generyczny deskryptor)
+17. Zmieniane shadery wcale się nie kopiują (e.g. mixchannels.frag z FullscreenEffects)
