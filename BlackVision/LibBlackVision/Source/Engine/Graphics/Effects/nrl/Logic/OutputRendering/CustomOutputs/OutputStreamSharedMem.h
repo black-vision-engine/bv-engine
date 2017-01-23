@@ -17,6 +17,7 @@ private:
 
     NFullscreenEffect *         m_mixChannelsEffect;
 
+    // FIXME: nlr - move to result somehow and cache it there
     RenderTarget *              m_shmRT;
     Texture2DPtr                m_shmTexture;
 
@@ -24,7 +25,7 @@ private:
 
 public:
 
-                    OutputStreamSharedMem   ( unsigned int width, unsigned int height, unsigned int shmScaleFactor );
+                    OutputStreamSharedMem   ( unsigned int width, unsigned int height );
                     ~OutputStreamSharedMem  ();
 
     virtual void    ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) override;

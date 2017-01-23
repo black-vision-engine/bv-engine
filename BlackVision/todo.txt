@@ -1,0 +1,25 @@
+1. Preview
+2. Shared
+3. Video
+3_1/2. Warstwa do konfiguracji outputów
+  - statyczna (w, h, domyślny input)
+  - dynamiczna (input, parametry stanu (mask, mix)) - sensowne API do tego
+4. Cache intermediate result in result
+5. Buffer free rect generation
+6. Optimize model evaluation
+7. Daria zadania
+8. skrypty (oskryptowane pythonowo parametry)
+9. klient, do pełnoprawnego sterowania silnikiem
+10. Project conf
+ - deps
+ - build times
+ - asset copying
+ - additional project for shaders only
+11. Wywalic gowno w formie kebaba
+12. Porządna klasa kontrolera nad klientem (zamiast GwFK - patrz punkt 9.)
+13. Generic FSE implementation
+14. Generic Output implementation
+  - no subclassing
+  - UpdateEffectValues in a generic way
+15. Reimplementacja shared buf tak, żeby był przechowytwany w System i tylko wykorzystany na bazie niskopoziomowej implementacji
+16. Możliwość konfigurowania FSE (czyli jakiś generyczny deskryptor)

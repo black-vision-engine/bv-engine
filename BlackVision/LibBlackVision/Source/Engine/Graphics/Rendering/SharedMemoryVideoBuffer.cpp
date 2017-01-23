@@ -22,7 +22,8 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer( UInt32 width, UInt32 height, T
     m_width = width / scaleFactor;
     m_height = height / scaleFactor;
     m_buffSize = m_width * m_height * ( UInt32 )Texture::GetPixelSize( m_format );
-
+    
+    // FIXME: nrl - move this low level implementation to system and just use it here
     m_hMapFile = CreateFileMapping( INVALID_HANDLE_VALUE,           // use paging file
                                     NULL,                           // default security
                                     PAGE_READWRITE,                 // read/write access

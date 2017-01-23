@@ -12,13 +12,13 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned int height, unsigned int shmScaleFactor )
+OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned int height )
     : OutputInstance( width, height )
     , m_activeRenderOutput( 1 )
     , m_shmRT( nullptr )
     , m_shmTexture( nullptr )
 {
-    m_shmVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, shmScaleFactor );
+    m_shmVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, 1 );
 
     m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
 }
@@ -58,15 +58,18 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
         m_activeRenderOutput.SetEntry( 0, channelRT );
 
         m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
+
+        renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
+
+        m_shmVideoBuffer->PushFrame( m_shmTexture );
     }
     else
     {
-        assert( false );
+        
+        m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
+        
     }
 
-    renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
-
-    m_shmVideoBuffer->PushFrame( m_shmTexture );
 }
 
 // *********************************
