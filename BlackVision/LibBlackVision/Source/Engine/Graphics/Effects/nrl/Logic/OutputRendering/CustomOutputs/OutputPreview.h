@@ -5,15 +5,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
 
-namespace bv { 
-    
-class RenderTarget;
-
-namespace nrl {
-
-class NFullscreenEffect;
-class RenderResult;
-class NRenderContext;
+namespace bv { namespace nrl {
  
 class OutputPreview : public OutputInstance
 {
