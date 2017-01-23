@@ -146,7 +146,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "polyDegree" ) );
 			break;
         case NFullscreenEffectType::NFET_MIX_CHANNELS:
-            desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR );
+            desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR ); // FIXME: add some room for additional parameters here (e.g. TFM_POINT)
             desc->AppendIVal( ValuesFactory::CreateValueInt( "channelMapping" ) );
             desc->AppendIVal( ValuesFactory::CreateValueVec4( "channelMask" ) );
             break;

@@ -31,7 +31,7 @@ public:
                     OutputStreamSharedMem   ( unsigned int width, unsigned int height, unsigned int shmScaleFactor );
                     ~OutputStreamSharedMem  ();
 
-    virtual void    ProcessFrameData        ( NRenderContext * ctx, RenderResult * result ) override;
+    virtual void    ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) override;
 
 private:
 

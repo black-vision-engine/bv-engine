@@ -14,50 +14,34 @@ namespace bv { namespace nrl {
 //
 OutputPreview::OutputPreview            ( unsigned int width, unsigned int height )
     : OutputInstance( width, height )
-    , m_defaultBlitEffect( nullptr )
-    , m_blitEffectShowAplhaRGB( nullptr )
+    , m_mixChannelsEffect( nullptr )
     , m_activeRenderOutput( 1 )
 {
-    m_defaultBlitEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_SIMPLE_BLIT );
-    m_blitEffectShowAplhaRGB = CreateFullscreenEffect( NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB ); 
-
-    m_activeBlit = m_defaultBlitEffect;
+    m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS ); 
 }
 
 // *********************************
 //
 OutputPreview::~OutputPreview           ()
 {
-    delete m_defaultBlitEffect;
-    delete m_blitEffectShowAplhaRGB;
+    delete m_mixChannelsEffect;
 }
 
 // *********************************
 //
-void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * result )
+void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * input )
 {
+    // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
+    UpdateEffectValues();
+
     auto rct = GetActiveRenderChannel();
-    assert( result->IsActive( rct ) && result->ContainsValidData( rct ) );
+    assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
 
     // FIXME: nrl - DefaultShow is only a very siple way of showing rendered result on preview - ask Pawelek about other possibilities
-    DefaultShow( ctx, result->GetActiveRenderTarget( rct ) );
+    DefaultShow( ctx, input->GetActiveRenderTarget( rct ) );
 
     // Make sure that local preview is displayed properly
     renderer( ctx )->DisplayColorBuffer();
-}
-
-// *********************************
-//
-void    OutputPreview::SetShowDefault  ()
-{
-    m_activeBlit = m_defaultBlitEffect;
-}
-
-// *********************************
-//
-void    OutputPreview::SetShowAlpha    ()
-{
-    m_activeBlit = m_blitEffectShowAplhaRGB;
 }
 
 // *********************************
@@ -66,7 +50,23 @@ void    OutputPreview::DefaultShow ( NRenderContext * ctx, const RenderTarget * 
 {
     m_activeRenderOutput.SetEntry( 0, rt );
 
-    m_activeBlit->Render( ctx, m_activeRenderOutput );
+    m_mixChannelsEffect->Render( ctx, m_activeRenderOutput );
+}
+
+// *********************************
+//
+void    OutputPreview::UpdateEffectValues      ()
+{
+    auto state = m_mixChannelsEffect->GetState();
+    
+    auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
+    auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
+
+    auto mapping    = GetChannelMapping();
+    auto mask       = GetChannelMask();
+
+    QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
+    QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
 }
 
 } //nrl
