@@ -9,10 +9,6 @@
 
 namespace bv { namespace nrl {
 
-class RenderResult;
-class NRenderContext;
-class NFullscreenEffect;
-
 class OutputStreamSharedMem : public OutputInstance
 {
 private:

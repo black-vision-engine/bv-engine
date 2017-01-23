@@ -5,9 +5,6 @@
 
 namespace bv { namespace nrl {
 
-class RenderResult;
-class NRenderContext;
-
 class OutputScreenshot : public OutputInstance
 {
 public:
