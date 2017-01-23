@@ -418,6 +418,9 @@
     <Filter Include="Engine\Events\InnerEvents\Logics">
       <UniqueIdentifier>{6a64e9e1-af20-453f-b465-b130a72b799a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Other">
+      <UniqueIdentifier>{cb4deab8-4527-42a0-a3cc-07ecdbc9504b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2073,6 +2076,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5389,6 +5404,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,10 @@
 #include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeLogicAddedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeLogicRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Other/CameraAddedEvent.h"
+#include "Engine/Events/InnerEvents/Other/CameraRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Other/LightAddedEvent.h"
+#include "Engine/Events/InnerEvents/Other/LightRemovedEvent.h"
 
 #include "UseLoggerBVAppModule.h"
 
@@ -36,6 +40,11 @@ TestInnerEvents::TestInnerEvents()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginAdded ), PluginAddedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginMoved ), PluginMovedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::PluginRemoved ), PluginRemovedEvent::Type() );
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::LightAdded ), LightAddedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::LightRemoved ), LightRemovedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::CameraAdded ), CameraAddedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TestInnerEvents::CameraRemoved ), CameraRemovedEvent::Type() );
 }
 
 // ***********************
@@ -112,6 +121,34 @@ void        TestInnerEvents::EffectAdded    ( bv::IEventPtr evt )
 void        TestInnerEvents::EffectRemoved  ( bv::IEventPtr evt )
 {
     LOG_MESSAGE( SeverityLevel::debug ) << "EffectRemoved" << std::endl;
+}
+
+// ***********************
+//
+void        TestInnerEvents::LightAdded     ( bv::IEventPtr evt )
+{
+    LOG_MESSAGE( SeverityLevel::debug ) << "LightAdded" << std::endl;
+}
+
+// ***********************
+//
+void        TestInnerEvents::LightRemoved   ( bv::IEventPtr evt )
+{
+    LOG_MESSAGE( SeverityLevel::debug ) << "LightRemoved" << std::endl;
+}
+
+// ***********************
+//
+void        TestInnerEvents::CameraAdded    ( bv::IEventPtr evt )
+{
+    LOG_MESSAGE( SeverityLevel::debug ) << "CameraAdded" << std::endl;
+}
+
+// ***********************
+//
+void        TestInnerEvents::CameraRemoved  ( bv::IEventPtr evt )
+{
+    LOG_MESSAGE( SeverityLevel::debug ) << "CameraRemoved" << std::endl;
 }
 
 

@@ -283,6 +283,12 @@ private:
     void                    NotifyEffectAdded   ( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect );
     void                    NotifyEffectRemoved ( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect );
 
+    void                    NotifyCameraAdded   ( model::CameraModelPtr camera );
+    void                    NotifyCameraRemoved ( model::CameraModelPtr camera );
+
+    void                    NotifyLightAdded    ( model::IModelLightPtr camera );
+    void                    NotifyLightRemoved  ( model::IModelLightPtr camera );
+
     /* Undo/Redo */
 
     void                    AddMoveOperation        ( model::SceneModelPtr scene, model::IModelNodePtr srcParent, model::IModelNodePtr destParent, model::IModelNodePtr movedNode, UInt32 destIdx );

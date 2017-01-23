@@ -44,6 +44,10 @@
 #include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeLogicAddedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeLogicRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Other/CameraAddedEvent.h"
+#include "Engine/Events/InnerEvents/Other/CameraRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Other/LightAddedEvent.h"
+#include "Engine/Events/InnerEvents/Other/LightRemovedEvent.h"
 
 
 
@@ -1125,8 +1129,11 @@ bool            BVProjectEditor::AddLight                    ( model::SceneModel
     {
         auto light = std::shared_ptr< model::IModelLight >( model::HelperModelLights::CreateModelLight( type, timeline ) );
         modelScene->AddLight( light );
+
         if( enableUndo )
             modelScene->GetHistory().AddOperation( std::unique_ptr< AddLightOperation >( new AddLightOperation( modelScene, light ) ) );
+
+        NotifyLightAdded( light );
         
         return true;
     }
@@ -1144,8 +1151,11 @@ bool            BVProjectEditor::RemoveLight                ( model::SceneModelP
         if( light )
         {
             auto result = modelScene->RemoveLight( idx );
+
             if( result && enableUndo )
                 modelScene->GetHistory().AddOperation( std::unique_ptr< DeleteLightOperation >( new DeleteLightOperation( modelScene, light, idx ) ) );
+
+            NotifyLightRemoved( light );
         }
     }
 
@@ -1185,7 +1195,15 @@ bool            BVProjectEditor::SetCurrentCamera            ( const std::string
 bool            BVProjectEditor::AddCamera                   ( model::SceneModelPtr scene )
 {
     if( scene )
-        return scene->GetCamerasLogic().AddCamera();
+    {
+        auto & cameraLogic = scene->GetCamerasLogic();
+        bool result = cameraLogic.AddCamera();
+
+        auto camera = cameraLogic.GetCamera( (unsigned int)cameraLogic.GetNumCameras() - 1 );
+        NotifyCameraAdded( camera );
+
+        return result;
+    }
     return false;
 }
 
@@ -1194,7 +1212,17 @@ bool            BVProjectEditor::AddCamera                   ( model::SceneModel
 bool            BVProjectEditor::RemoveCamera                ( model::SceneModelPtr scene, UInt32 idx )
 {
     if( scene )
-        return scene->GetCamerasLogic().RemoveCamera( idx );
+    {
+        auto & cameraLogic = scene->GetCamerasLogic();
+        
+        auto camera = cameraLogic.GetCamera( idx );
+        bool result = cameraLogic.RemoveCamera( idx );
+
+        if( result )
+            NotifyCameraRemoved( camera );
+
+        return result;
+    }
     return false;
 }
 
@@ -2042,11 +2070,51 @@ void                    BVProjectEditor::NotifyEffectAdded      ( model::BasicNo
 
 // ***********************
 //
-void BVProjectEditor::NotifyEffectRemoved( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect )
+void                    BVProjectEditor::NotifyEffectRemoved    ( model::BasicNodePtr parentNode, model::IModelNodeEffectPtr effect )
 {
     auto sendEvent = std::make_shared< NodeEffectRemovedEvent >();
     sendEvent->ParentNode = parentNode;
     sendEvent->Effect = effect;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyCameraAdded      ( model::CameraModelPtr camera )
+{
+    auto sendEvent = std::make_shared< CameraAddedEvent >();
+    sendEvent->Camera = camera;
+    
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyCameraRemoved    ( model::CameraModelPtr camera )
+{
+    auto sendEvent = std::make_shared< CameraRemovedEvent >();
+    sendEvent->Camera = camera;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyLightAdded       ( model::IModelLightPtr light )
+{
+    auto sendEvent = std::make_shared< LightAddedEvent >();
+    sendEvent->Light = light;
+
+    GetDefaultEventManager().TriggerEvent( sendEvent );
+}
+
+// ***********************
+//
+void                    BVProjectEditor::NotifyLightRemoved     ( model::IModelLightPtr light )
+{
+    auto sendEvent = std::make_shared< LightRemovedEvent >();
+    sendEvent->Light = light;
 
     GetDefaultEventManager().TriggerEvent( sendEvent );
 }

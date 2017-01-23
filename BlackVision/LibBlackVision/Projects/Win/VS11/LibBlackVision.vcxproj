@@ -210,6 +210,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.cpp" />
@@ -711,6 +715,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.h" />
