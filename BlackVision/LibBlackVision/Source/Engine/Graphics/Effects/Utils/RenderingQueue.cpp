@@ -286,7 +286,7 @@ void                RenderingQueue::RenderNode          ( RenderingQueue::Render
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
     // and QueueSingleNode functions.
 
-    BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
+    //BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
     BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );
 
     // FIXME: nrl - implement more expressive api in NNodeRenderLogic so that bb and queue rendering is supported in a better way
@@ -301,7 +301,7 @@ void                RenderingQueue::RenderNode          ( RenderingQueue::Render
     }
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );
-    END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
+    //END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
 }
 
 } // bv

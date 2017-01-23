@@ -62,12 +62,13 @@ void pass0()
     
     vec4 sum = texture( Tex0, uvCoord - vec2( pixelW * blurSizeCeil, 0 ) ) * weight;
       
-    for( int i = -t; i <= t; ++i )
+    for( int i = 0; i <= t; ++i )
     {   
         vec2 pixelDelta = vec2( i * pixelW, 0 );
         float w = evaluateWeight( i );
         sum += texture( Tex0, uvCoord + pixelDelta ) * w;
-        weight += w;
+		sum += texture( Tex0, uvCoord - pixelDelta ) * w;
+        weight += 2 * w;
     }
 
     sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * w1;
@@ -92,12 +93,13 @@ void pass1()
     
     vec4 sum = texture( Tex0, uvCoord - vec2( pixelH * blurSizeCeil, 0 ) ) * weight;
       
-    for( int i = -t; i <= t; ++i )
+    for( int i = 0; i <= t; ++i )
     {   
         vec2 pixelDelta = vec2( 0, i * pixelH );
         float w = evaluateWeight( i );
         sum += texture( Tex0, uvCoord + pixelDelta ) * w;
-        weight += w;
+		sum += texture( Tex0, uvCoord - pixelDelta ) * w;
+        weight += 2 * w;
     }
 
     sum += texture( Tex0, uvCoord + vec2( pixelH * blurSizeCeil, 0 ) ) * w1;
