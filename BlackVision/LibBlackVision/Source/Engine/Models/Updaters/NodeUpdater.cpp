@@ -148,8 +148,6 @@ void    NodeUpdater::DoUpdate               ()
 
             UpdateTexturesData();
             UpdateRendererState();
-
-            UpdateBoundingBox();
         }
         else
         {

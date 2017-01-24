@@ -16,35 +16,35 @@ float blurSizeCeil = ceil( blurSize );
 float blurSizeFloor = floor( blurSize );
 float subPixelWeight = blurSize - blurSizeFloor;
 
-float d = ( blurSizeCeil / 4 );
+// float d = ( blurSizeCeil / 4 );
 
-float gauss[ 5 ] = float[]( 0.22508352 , 0.11098164 , 0.01330373 , 0.00038771 , 0.0 );
-//float gauss[ 5 ] = float[]( 1.0 , 0.75 , 0.5 , 0.25 , 0.0 );
+// float gauss[ 5 ] = float[]( 0.22508352 , 0.11098164 , 0.01330373 , 0.00038771 , 0.0 );
+// //float gauss[ 5 ] = float[]( 1.0 , 0.75 , 0.5 , 0.25 , 0.0 );
 
-float evaluateWeight( float dist )
-{
-    switch( blurKernelType )
-    {
-        case 0: // Box filter
-            return 1.0;
+// float evaluateWeight( float dist )
+// {
+    // switch( blurKernelType )
+    // {
+        // case 0: // Box filter
+            // return 1.0;
             
-        case 1: // Triangle filter
-			dist = abs( dist );
-            return max( 0, ( ( blurSize ) - dist ) ) / ( blurSize );
+        // case 1: // Triangle filter
+			// dist = abs( dist );
+            // return max( 0, ( ( blurSize ) - dist ) ) / ( blurSize );
 
-        case 2: // Gaussian filter
-			dist = abs( dist );
-            float l = floor( dist / d );
-            float r = ceil( dist / d );
+        // case 2: // Gaussian filter
+			// dist = abs( dist );
+            // float l = floor( dist / d );
+            // float r = ceil( dist / d );
 
-            float t = ( dist / d ) - l;
+            // float t = ( dist / d ) - l;
 
-            return mix( gauss[ int( l ) ], gauss[ int( r ) ], t );
+            // return mix( gauss[ int( l ) ], gauss[ int( r ) ], t );
 
-        default:
-            return 1.0;      
-    }
-}
+        // default:
+            // return 1.0;      
+    // }
+// }
 
 void pass0()
 {
@@ -71,6 +71,12 @@ void pass0()
 		sum += texture( Tex0, uvCoord - pixelDelta );
         weight += 2;
     }
+	
+	if( t % 2 != 0 )
+	{
+		sum += texture( Tex0, uvCoord + t * pixelDelta );
+		sum += texture( Tex0, uvCoord - t * pixelDelta );
+	}
 
     sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * w1;
     
@@ -107,6 +113,13 @@ void pass1()
         weight += 2;
     }
 
+	if( t % 2 != 0 )
+	{
+		sum += texture( Tex0, uvCoord + t * pixelDelta );
+		sum += texture( Tex0, uvCoord - t * pixelDelta );
+	}
+
+	
     sum += texture( Tex0, uvCoord + vec2( pixelH * blurSizeCeil, 0 ) ) * w1;
     
     if( normalize )

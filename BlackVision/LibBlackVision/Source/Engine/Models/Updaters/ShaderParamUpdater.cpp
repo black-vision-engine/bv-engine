@@ -21,16 +21,16 @@ namespace {
 // *******************************
 //
 template< typename ValType, typename ShaderParamType >
-void	UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
+void	UpdateTypedShaderParam   ( const IValue * source, GenericShaderParam * dest )
 {
-    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+    static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType::element_type >( source )->GetValue() );
 }
 
 } // anonymous
 
 // *****************************
 //
-void            UpdateGenericShaderParam        ( IValueConstPtr source, GenericShaderParam * dest )
+void            UpdateGenericShaderParam        ( const IValue * source, GenericShaderParam * dest )
 {
     assert( source && source->GetType() == dest->Type() );
     
