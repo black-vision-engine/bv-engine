@@ -37,30 +37,12 @@ OutputStreamSharedMem::~OutputStreamSharedMem  ()
 //
 void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderResult * input )
 {
-    if( m_shmRT == nullptr )
-    {
-        auto w = GetWidth();
-        auto h = GetHeight();
-
-        m_shmRT = allocator( ctx )->CreateCustomRenderTarget( w, h, RenderTarget::RTSemantic::S_DRAW_READ );
-    }
-
-    // FIXME: nrl - use result to cache resacaled textures between outputs - it is a valid place as it is still a rendering result (e.g. when SD output is exactly the same as SHM output)
-    // FIXME: nrl - neither effecto nor readback are necessary in such case
-
     // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
     UpdateEffectValues();
+    
+    auto shmFrame = PrepareFrame( ctx, input );
 
-    auto rct = GetActiveRenderChannel();
-    assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
-
-    m_activeRenderOutput.SetEntry( 0, input->GetActiveRenderTarget( rct ) );
-    m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
-
-    renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
-
-    m_shmVideoBuffer->PushFrame( m_shmTexture );
-
+    m_shmVideoBuffer->PushFrame( shmFrame );
 }
 
 // *********************************
@@ -77,6 +59,56 @@ void            OutputStreamSharedMem::UpdateEffectValues      ()
 
     QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
     QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
+}
+
+// *********************************
+//
+Texture2DPtr    OutputStreamSharedMem::PrepareFrame             ( NRenderContext * ctx, RenderResult * input )
+{
+    auto rct = GetActiveRenderChannel();
+    assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
+
+    auto inputRenderTarget = input->GetActiveRenderTarget( rct );  
+
+    Texture2DPtr outputFrame;
+
+    if( GetWidth() == inputRenderTarget->Width() && GetHeight() == inputRenderTarget->Height() && AccessOutputState().RepresentsDefaultTexture() )
+    {
+        outputFrame = ReadDefaultTexture( ctx, input, rct );
+    }
+    else
+    {
+        outputFrame = ReadMixChannelsTexture( ctx, inputRenderTarget );
+    }
+
+    return outputFrame;
+}
+
+// *********************************
+//
+Texture2DPtr    OutputStreamSharedMem::ReadDefaultTexture      ( NRenderContext * ctx, RenderResult * input, RenderChannelType rct )
+{
+	return input->ReadColorTexture( renderer( ctx ), rct );
+}
+
+// *********************************
+//
+Texture2DPtr    OutputStreamSharedMem::ReadMixChannelsTexture  ( NRenderContext * ctx, const RenderTarget * inputRenderTarget )
+{
+    if( m_shmRT == nullptr )
+    {
+        auto w = GetWidth();
+        auto h = GetHeight();
+
+        m_shmRT = allocator( ctx )->CreateCustomRenderTarget( w, h, RenderTarget::RTSemantic::S_DRAW_READ );
+    }
+
+    m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
+    m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
+
+    renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
+
+    return m_shmTexture;
 }
 
 } //nrl

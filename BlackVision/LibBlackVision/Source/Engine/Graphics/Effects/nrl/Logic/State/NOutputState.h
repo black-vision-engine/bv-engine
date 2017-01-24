@@ -62,6 +62,8 @@ public:
     bool                GetBChannelState        () const;
     bool                GetAChannelState        () const;
 
+    bool                RepresentsDefaultTexture() const;
+
 private:
 
     void                SetMappedUChar          ( unsigned int val, unsigned int numBits );

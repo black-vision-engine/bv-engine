@@ -19,7 +19,10 @@
 12. Porządna klasa kontrolera nad klientem (zamiast GwFK - patrz punkt 9.)
 13. Generic FSE implementation
 14. Generic Output implementation
-  - i dodatkowy shader (mix channels) + readback tylko, jeśli naprawdę trzeba (w, h, state inne, niż domyślne)
+  - i dodatkowy shader (mix channels) + readback tylko, jeśli naprawdę trzeba (w, h, state inne, niż domyślne) - problem jest taki, że keszowanie w takim wypadku
+     wymagałoby zapamiętania w kluczu właśnie w, h i state, a to nie jest generyczny sposób keszowania (do tego potrzebny by był oddzielny kesz)
+     więc na razie zostaje tak, że dodatkowy efekt tylko, jeśli trzeba, ale wyniki dodatkowego efektu nie są keszowane (bo nawet jeśli da się skeszować w i h, to
+     zmiana state spowoduje, że i tak trzeba go wyrenderować jeszcze raz i jeszcze reaz robić readback)
   - no subclassing
   - UpdateEffectValues in a generic way
   - ten shader FSE do przetwarzania mixchannels też użyć przed resztą - ładna kompozycja
@@ -29,3 +32,7 @@
 17. Zmieniane shadery wcale się nie kopiują (e.g. mixchannels.frag z FullscreenEffects)
 18. Potestować zbuffering w render targetach
 18. m_activeRenderOutput zamienić na coś znaczącego i sensownego (bo to jest przecież input dla efektu)
+19. Opakować
+    m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
+    m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
+    w pojedyncze wywołanie

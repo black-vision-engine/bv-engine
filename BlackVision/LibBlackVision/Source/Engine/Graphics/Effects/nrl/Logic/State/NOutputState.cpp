@@ -230,5 +230,15 @@ bool                NOutputState::GetAChannelState        () const
     return m_aMask;
 }
 
+// **************************
+//
+bool                NOutputState::RepresentsDefaultTexture() const
+{
+    static unsigned int noMapping = ( 0 | 1 << 2 | 2 << 4 | 3 << 6 );
+    auto fullMask = m_rMask && m_bMask && m_gMask && m_aMask;
+
+    return fullMask && m_channelMapping == noMapping;
+}
+
 } //nrl
 } //bv

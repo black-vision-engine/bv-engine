@@ -17,7 +17,6 @@ private:
 
     NFullscreenEffect *         m_mixChannelsEffect;
 
-    // FIXME: nlr - move to result somehow and cache it there
     RenderTarget *              m_shmRT;
     Texture2DPtr                m_shmTexture;
 
@@ -33,6 +32,11 @@ public:
 private:
 
     void            UpdateEffectValues      ();
+
+    Texture2DPtr    PrepareFrame            ( NRenderContext * ctx, RenderResult * input );
+
+    Texture2DPtr    ReadDefaultTexture      ( NRenderContext * ctx, RenderResult * input, RenderChannelType rct );
+    Texture2DPtr    ReadMixChannelsTexture  ( NRenderContext * ctx, const RenderTarget * inputRenderTarget );
 
 };
 
