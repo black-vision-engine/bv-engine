@@ -32,6 +32,9 @@ public:
     bool                IsEnabled               ( CustomOutputType outputType );
     void                EnableOutput            ( CustomOutputType outputType );
     void                DisableOutput           ( CustomOutputType outputType );
+    
+    RenderChannelType   GetActiveRenderChannel  ( CustomOutputType outputType ) const;
+    bool                SetActiveRenderChannel  ( CustomOutputType outputType, RenderChannelType rct );
 
     OutputInstance *    GetOutput               ( CustomOutputType outputType );
 

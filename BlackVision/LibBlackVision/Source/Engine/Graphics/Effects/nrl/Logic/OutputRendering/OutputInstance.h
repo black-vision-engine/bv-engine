@@ -48,8 +48,6 @@ public:
 
     NOutputState &      AccessOutputState       ();
 
-protected:
-
     // FIXME: nrl - convenience method, but unfortunately not a generic one
     RenderChannelType   GetActiveRenderChannel  () const;
 

@@ -12,11 +12,13 @@ namespace bv {
 class Semaphore
 {
 private:
+
     std::mutex                  m_mtx;
     std::condition_variable     m_condVar;
     SizeType                    m_count;
 
 public:
+
     explicit        Semaphore( SizeType initCount )
         : m_count( initCount )
     {}

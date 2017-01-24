@@ -36,3 +36,4 @@
     m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
     m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
     w pojedyncze wywołanie
+20. Enable/Disable output, set active renderchannel, set output params, inicjalizacja outputów

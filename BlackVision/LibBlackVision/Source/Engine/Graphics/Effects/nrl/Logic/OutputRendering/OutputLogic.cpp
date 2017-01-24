@@ -148,6 +148,31 @@ void                OutputLogic::DisableOutput          ( CustomOutputType outpu
 
 // *********************************
 //
+RenderChannelType   OutputLogic::GetActiveRenderChannel  ( CustomOutputType outputType ) const
+{
+    return m_outputs[ (unsigned int) outputType ]->GetActiveRenderChannel();
+}
+
+// *********************************
+//
+bool                OutputLogic::SetActiveRenderChannel  ( CustomOutputType outputType, RenderChannelType rct )
+{
+    bool res = false;
+
+    if( m_renderResult.IsActive( rct ) )
+    {
+        auto & state = GetOutput( outputType )->AccessOutputState();
+
+        state.SetActiveRenderChannel( rct );
+
+        res = true;
+    }
+
+    return res;
+}
+
+// *********************************
+//
 OutputInstance *    OutputLogic::GetOutput              ( CustomOutputType outputType )
 {
     return m_outputs[ (unsigned int) outputType ];
