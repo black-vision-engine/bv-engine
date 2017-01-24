@@ -178,6 +178,9 @@
     <ClInclude Include="..\..\..\Source\DataTypes\Deque.h">
       <Filter>DataTypes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\SharedMemoryBuffer.h">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -261,6 +264,9 @@
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\SharedMemoryBuffer.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

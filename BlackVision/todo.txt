@@ -37,3 +37,5 @@
     m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
     w pojedyncze wywołanie
 20. Enable/Disable output, set active renderchannel, set output params, inicjalizacja outputów
+21. Wywalić stary kod render logic, w nowym zmienić nazwy (bez prefiksu N i bez namespace nrl)
+22. Dowiedziec się od Pawełka dlaczego jak jest shared video mem buffer, to jeśli jest < FullHD, to się nie wyświetla na podglądzie?
