@@ -3,8 +3,7 @@
 #include <queue>
 
 
-namespace bv
-{
+namespace bv {
 
 template< typename T >
 class Queue
@@ -135,4 +134,4 @@ void        Queue< T >::Clear       ()
     }
 }
 
-}
+} // bv

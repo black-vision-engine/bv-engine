@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <cassert>
 #include <queue>
 #include <condition_variable>
@@ -8,9 +7,7 @@
 #include "CoreDEF.h"
 
 
-
-namespace bv
-{
+namespace bv {
 
 class Semaphore
 {
@@ -67,6 +64,4 @@ inline void        Semaphore::Up()
     m_condVar.notify_one();
 }
 
-
-
-}   // bv
+} // bv

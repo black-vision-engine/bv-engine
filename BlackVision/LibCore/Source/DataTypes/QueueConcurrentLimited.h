@@ -11,9 +11,7 @@
 #include <thread>
 
 
-
-namespace bv
-{
+namespace bv {
 
 //Based on https://www.cs.mtu.edu/~shene/NSF-3/e-Book/SEMA/TM-example-buffer.html
 template< typename T >
@@ -59,6 +57,7 @@ public:
     bool        IsEmpty                 () const;
 	bool        IsFull					() const;
     size_t      Size                    () const;
+
 };
 
 // *************************************

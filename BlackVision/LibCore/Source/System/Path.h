@@ -45,6 +45,7 @@ public:
     static bool         IsValisPathName ( const std::string & path );
 
 private:
+
 	std::string			m_path;
 
 };

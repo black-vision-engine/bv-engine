@@ -3,8 +3,7 @@
 #include <deque>
 
 
-namespace bv
-{
+namespace bv {
 
 template< typename T >
 class Deque

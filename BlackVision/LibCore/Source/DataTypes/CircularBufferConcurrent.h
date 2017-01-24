@@ -5,8 +5,7 @@
 #include <boost\circular_buffer.hpp>
 
 
-namespace bv
-{
+namespace bv {
 
 //Based on implementation rom "C++ Concurrency in Action - Practical Multithreading" by Anthony Williams
 //See: www.justsoftwaresolutions.co.uk

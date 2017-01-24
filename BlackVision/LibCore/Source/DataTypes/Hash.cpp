@@ -16,8 +16,7 @@
 
 #pragma warning(pop)
 
-namespace bv
-{
+namespace bv {
 
 // ******************************
 //
