@@ -18,19 +18,21 @@ enum NamedPipeAccess
 class NamedPipe
 {
 private:
+
 	HANDLE			m_pipeHandle;
 
 	std::wstring	m_pipeName;
-protected:
 
 public:
-	NamedPipe();
-	~NamedPipe();
+
+    NamedPipe   ();
+	~NamedPipe  ();
 
 	bool			ConnectToNamedPipe		( const std::wstring& pipeName, NamedPipeAccess access, unsigned int waitMillis );
 	void			WriteToPipe				( const char* buffer, unsigned int bytesNum );
 
-	bool			IsValid					();
+	bool			IsValid					() const;
+
 };
 
 

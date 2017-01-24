@@ -2,11 +2,8 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "SharedMemoryVideoBuffer.h"
 
-// #include "LibImage.h"
-
 
 namespace bv {
-
 
 // *********************************
 //
@@ -45,7 +42,7 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer( UInt32 width, UInt32 height, T
         {
             printf( "Could not map view of file (%d).\n", GetLastError() );
 
-            CloseHandle(m_hMapFile);
+            CloseHandle( m_hMapFile );
         }
         else
         {
@@ -61,7 +58,7 @@ SharedMemoryVideoBuffer::SharedMemoryVideoBuffer( UInt32 width, UInt32 height, T
 
 // *********************************
 //
-void        SharedMemoryVideoBuffer::PushFrame(Texture2DConstPtr frame)
+void        SharedMemoryVideoBuffer::PushFrame( Texture2DConstPtr frame )
 {
 	auto data = frame->GetData()->Get();
 
@@ -91,17 +88,10 @@ void        SharedMemoryVideoBuffer::PushFrame(Texture2DConstPtr frame)
 	}
 	HPROFILER_SECTION("Shared Memory step2", PROFILER_THREAD1);*/
 
-    //auto dta = frame->GetData();
-
-    //static unsigned int i = 0;
-    //i++;
-    //bool result = image::SaveBMPImage( "shm_image.bmp", dta, frame->GetWidth(), frame->GetHeight(), 32 );
-
-    //assert( result );
-
 	//CopyMemory((PVOID)m_pBuf, m_data, m_buffSize * sizeof(char));
-	unsigned int size = frame->GetHeight() * frame->GetWidth()* (unsigned int)frame->GetPixelSize();
-	CopyMemory((PVOID)m_pBuf, data,size );
+	unsigned int size = frame->GetHeight() * frame->GetWidth() * (unsigned int) frame->GetPixelSize();
+
+    CopyMemory( (PVOID) m_pBuf, data, size );
 }
 
 // *********************************
@@ -111,6 +101,7 @@ SharedMemoryVideoBuffer::~SharedMemoryVideoBuffer()
     if( m_isAllocated )
     {
         UnmapViewOfFile( m_pBuf );
+
         CloseHandle( m_hMapFile );
     }
 }

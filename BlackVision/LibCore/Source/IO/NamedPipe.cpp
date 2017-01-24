@@ -5,24 +5,30 @@
 #include "assert.h"
 #include "windows.h"
 
+
 namespace bv {
 
-
+// *********************************
+//
 NamedPipe::NamedPipe()
 {
 	m_pipeHandle = nullptr;
 }
 
-
+// *********************************
+//
 NamedPipe::~NamedPipe()
 {
 	if( m_pipeHandle != nullptr )
+    {
 		CloseHandle( m_pipeHandle );
+    }
 }
 
 /**Connects to existing named pipe.
 
-@param pipeName Name of pipe. Should not contain \\.\pipe\ in begining. This string will be added.*/
+// *********************************
+//@param pipeName Name of pipe. Should not contain \\.\pipe\ in begining. This string will be added.*/
 bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAccess access, unsigned int waitMillis )
 {
 	std::wstring pipeFullName = L"\\\\.\\pipe\\" + pipeName;
@@ -30,14 +36,21 @@ bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAcces
 
 	int pipeAccess;
 	if( access == NamedPipeAccess::PipeRead )
+    {
 		pipeAccess = GENERIC_READ;
+    }
 	else if( access == NamedPipeAccess::PipeWrite )
+    {
 		pipeAccess = GENERIC_WRITE;
+    }
 	else
+    {
 		pipeAccess = GENERIC_READ | GENERIC_WRITE;
+    }
 
 	WaitNamedPipe( pipeFullName.c_str(), waitMillis );
-	m_pipeHandle = CreateFile( pipeFullName.c_str(), pipeAccess, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+	
+    m_pipeHandle = CreateFile( pipeFullName.c_str(), pipeAccess, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 	if( m_pipeHandle == INVALID_HANDLE_VALUE )
 	{
@@ -47,13 +60,15 @@ bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAcces
 	}
 	
 	DWORD mode = PIPE_READMODE_MESSAGE;
-	SetNamedPipeHandleState( m_pipeHandle, &mode, nullptr, nullptr );
+
+    SetNamedPipeHandleState( m_pipeHandle, &mode, nullptr, nullptr );
 
 	return true;
 }
 
-/**Funciotn writes message from buffer to pipe, if connection is valid.
-If connection has broken, this function sets pipe handle to invalid state and returns.*/
+// *********************************
+///**Funciotn writes message from buffer to pipe, if connection is valid.
+//If connection has broken, this function sets pipe handle to invalid state and returns.*/
 void NamedPipe::WriteToPipe( const char* buffer, unsigned int bytesNum )
 {
 	if( !IsValid() )
@@ -71,7 +86,7 @@ void NamedPipe::WriteToPipe( const char* buffer, unsigned int bytesNum )
 	}
 }
 
-bool NamedPipe::IsValid					()
+bool NamedPipe::IsValid					() const
 {
 	return ( m_pipeHandle != INVALID_HANDLE_VALUE );
 }
