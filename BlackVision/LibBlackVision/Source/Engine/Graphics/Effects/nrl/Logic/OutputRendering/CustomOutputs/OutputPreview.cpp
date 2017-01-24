@@ -7,6 +7,8 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
+#include "LibImage.h"
+
 
 namespace bv { namespace nrl {
 
@@ -39,11 +41,11 @@ void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * i
 
     // FIXME: remove - test non hd render targets
     {
-        static auto rt = allocator( ctx )->CreateCustomRenderTarget( 240, 135, RenderTarget::RTSemantic::S_DRAW_ONLY );
+        static auto rt = allocator( ctx )->CreateCustomRenderTarget( 240, 135, RenderTarget::RTSemantic::S_DRAW_READ );
         static auto eff = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
 
         auto state = eff->GetState();
-    
+
         auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
         auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
 
@@ -59,6 +61,18 @@ void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * i
 
         m_activeRenderOutput.SetEntry( 0, input->GetActiveRenderTarget( rct ) );
         eff->Render( ctx, rt, m_activeRenderOutput );
+
+        static Texture2DPtr tex;
+        renderer( ctx )->ReadColorTexture( 0, rt, tex );
+
+        auto dta = tex->GetData();
+
+        static unsigned int i = 0;
+        i++;
+        bool result = image::SaveBMPImage( "prv_image.bmp", dta, tex->GetWidth(), tex->GetHeight(), 32 );
+
+        assert( result );
+
 
         DefaultShow( ctx, rt );
     }

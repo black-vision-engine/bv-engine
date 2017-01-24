@@ -91,7 +91,7 @@ void        SharedMemoryVideoBuffer::PushFrame(Texture2DConstPtr frame)
 	}
 	HPROFILER_SECTION("Shared Memory step2", PROFILER_THREAD1);*/
 
-    auto dta = frame->GetData();
+    //auto dta = frame->GetData();
 
     //static unsigned int i = 0;
     //i++;
