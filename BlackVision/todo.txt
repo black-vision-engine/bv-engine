@@ -1,12 +1,15 @@
-1. Preview
-2. Shared
-3. Video
+1. Preview - done
+2. Shared - done
+3. Video - done (videocardmanager and all machinery for multiple cards to be implemented)
+4. Cache intermediate result in result - skipped
+
 3_1/2. Warstwa do konfiguracji outputów
   - statyczna (w, h, domyślny input), domyślna konfiguracja włączonych outputów
   - dynamiczna (input, parametry stanu (mask, mix)) - sensowne API do tego
-4. Cache intermediate result in result
 5. Buffer free rect generation
 6. Optimize model evaluation
+6_1/2. Optimize state changes (if shader doesn't change then don't reload it for each new node - just update uniforms if necessary)
+  - think of instancing for that matter
 7. Daria zadania
 8. skrypty (oskryptowane pythonowo parametry)
 9. klient, do pełnoprawnego sterowania silnikiem
