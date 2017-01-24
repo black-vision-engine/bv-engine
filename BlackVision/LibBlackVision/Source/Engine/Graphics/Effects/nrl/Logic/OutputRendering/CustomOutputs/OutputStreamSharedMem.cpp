@@ -7,6 +7,8 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
+#include "LibImage.h"
+
 
 namespace bv { namespace nrl {
 
@@ -35,6 +37,14 @@ OutputStreamSharedMem::~OutputStreamSharedMem  ()
 //
 void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderResult * input )
 {
+    if( m_shmRT == nullptr )
+    {
+        auto w = GetWidth();
+        auto h = GetHeight();
+
+        m_shmRT = allocator( ctx )->CreateCustomRenderTarget( w, h, RenderTarget::RTSemantic::S_DRAW_READ );
+    }
+
     // FIXME: nrl - use result to cache resacaled textures between outputs - it is a valid place as it is still a rendering result (e.g. when SD output is exactly the same as SHM output)
     // FIXME: nrl - neither effecto nor readback are necessary in such case
 
@@ -44,30 +54,21 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
     auto rct = GetActiveRenderChannel();
     assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
 
-    auto channelRT = input->GetActiveRenderTarget( rct );
+    m_activeRenderOutput.SetEntry( 0, input->GetActiveRenderTarget( rct ) );
+    m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
 
-    m_activeRenderOutput.SetEntry( 0, channelRT );
-
-    // FIXME: nrl - deferred initialization, a bit too generic right now
-    if( channelRT->Width() != GetWidth() || channelRT->Height() != GetHeight() || true )
+    renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
+    auto dta = m_shmTexture->GetData();
+    static unsigned int i = 0;
+    i++;
+    if( i == 2 )
     {
-        if ( m_shmRT == nullptr )
-        {
-            m_shmRT = allocator( ctx )->CreateCustomRenderTarget( GetWidth(), GetHeight(), RenderTarget::RTSemantic::S_DRAW_READ );
-        }
-
-        m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
-
-        renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
-
-        m_shmVideoBuffer->PushFrame( m_shmTexture );
+        bool result = image::SaveBMPImage( "prv_shm_image_1.bmp", dta, m_shmTexture->GetWidth(), m_shmTexture->GetHeight(), 32 );
+        assert( result );
     }
-    else
-    {
-        auto inputFrame = input->ReadColorTexture( renderer( ctx ), rct );
 
-        m_shmVideoBuffer->PushFrame( inputFrame );
-    }
+    m_shmVideoBuffer->PushFrame( m_shmTexture );
+
 }
 
 // *********************************
