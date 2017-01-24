@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "SharedMemoryVideoBuffer.h"
 

@@ -32,6 +32,7 @@
     <ClInclude Include="..\..\..\Source\IO\DirIO.h" />
     <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
+    <ClInclude Include="..\..\..\Source\IO\SharedMemoryBuffer.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Memory\LinearAllocator.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
@@ -75,6 +76,7 @@
     <ClCompile Include="..\..\..\Source\IO\DirIO.cpp" />
     <ClCompile Include="..\..\..\Source\IO\FileIO.cpp" />
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp" />
+    <ClCompile Include="..\..\..\Source\IO\SharedMemoryBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
