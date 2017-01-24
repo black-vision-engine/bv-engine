@@ -16,34 +16,30 @@ float blurSizeCeil = ceil( blurSize );
 float blurSizeFloor = floor( blurSize );
 float subPixelWeight = blurSize - blurSizeFloor;
 
+float d = ( blurSizeCeil / 4 );
+
 float gauss[ 5 ] = float[]( 0.22508352 , 0.11098164 , 0.01330373 , 0.00038771 , 0.0 );
 //float gauss[ 5 ] = float[]( 1.0 , 0.75 , 0.5 , 0.25 , 0.0 );
 
 float evaluateWeight( float dist )
 {
-    dist = abs( dist );
-
     switch( blurKernelType )
     {
         case 0: // Box filter
             return 1.0;
             
         case 1: // Triangle filter
+			dist = abs( dist );
             return max( 0, ( ( blurSize ) - dist ) ) / ( blurSize );
 
         case 2: // Gaussian filter
-
-            float d = ( blurSizeCeil / 4 );
-
+			dist = abs( dist );
             float l = floor( dist / d );
             float r = ceil( dist / d );
 
-            int li = int( l );
-            int ri = int( r );
-
             float t = ( dist / d ) - l;
 
-            return gauss[ li ] * ( 1 - t ) + gauss[ ri ] * t;
+            return mix( gauss[ int( l ) ], gauss[ int( r ) ], t );
 
         default:
             return 1.0;      
@@ -62,12 +58,13 @@ void pass0()
     
     vec4 sum = texture( Tex0, uvCoord - vec2( pixelW * blurSizeCeil, 0 ) ) * weight;
       
-    for( int i = -t; i <= t; ++i )
+    for( int i = 0; i <= t; ++i )
     {   
         vec2 pixelDelta = vec2( i * pixelW, 0 );
         float w = evaluateWeight( i );
         sum += texture( Tex0, uvCoord + pixelDelta ) * w;
-        weight += w;
+		sum += texture( Tex0, uvCoord - pixelDelta ) * w;
+        weight += 2 * w;
     }
 
     sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * w1;
@@ -92,12 +89,13 @@ void pass1()
     
     vec4 sum = texture( Tex0, uvCoord - vec2( pixelH * blurSizeCeil, 0 ) ) * weight;
       
-    for( int i = -t; i <= t; ++i )
+    for( int i = 0; i <= t; ++i )
     {   
         vec2 pixelDelta = vec2( 0, i * pixelH );
         float w = evaluateWeight( i );
         sum += texture( Tex0, uvCoord + pixelDelta ) * w;
-        weight += w;
+		sum += texture( Tex0, uvCoord - pixelDelta ) * w;
+        weight += 2 * w;
     }
 
     sum += texture( Tex0, uvCoord + vec2( pixelH * blurSizeCeil, 0 ) ) * w1;

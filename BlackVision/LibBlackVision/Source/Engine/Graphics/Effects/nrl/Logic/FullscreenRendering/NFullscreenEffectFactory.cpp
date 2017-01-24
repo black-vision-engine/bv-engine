@@ -92,7 +92,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
             break;
 		case NFullscreenEffectType::NFET_BLUR:
 			desc->SetBlendFlag( true );
-			desc->AppendInputSamplerEntry( "Tex0" );
+			desc->AppendInputSamplerEntry( "Tex0", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "blurSize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "normalize" ) );
