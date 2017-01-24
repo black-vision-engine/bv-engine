@@ -1,11 +1,16 @@
 #pragma once
 
-#include "win_sock.h"
+#include "IO/SharedMemoryBuffer.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 
 namespace bv {
+
+class SharedMemoryVideoBuffer;
+
+DEFINE_PTR_TYPE( SharedMemoryVideoBuffer )
+DEFINE_CONST_PTR_TYPE( SharedMemoryVideoBuffer )
 
 class SharedMemoryVideoBuffer
 {
@@ -15,28 +20,17 @@ private:
 
 private:
 
-    UInt32          m_scaleFactor;
+    SharedMemoryBufferPtr   m_buf;
 
-    UInt32          m_width;
-    UInt32          m_height;
+private:
 
-    UInt32          m_buffSize;
-
-    TextureFormat   m_format;
-
-    bool            m_isAllocated;
-
-    HANDLE          m_hMapFile;
-    LPCTSTR         m_pBuf;
-
-    char *          m_data;
+                                SharedMemoryVideoBuffer     ( SharedMemoryBufferPtr buf );
 
 public:
 
-                    SharedMemoryVideoBuffer                 ( UInt32 width, UInt32 height, TextureFormat format, UInt32 scaleFactor );
-                    ~SharedMemoryVideoBuffer                ();
+    void                        PushFrame                   ( Texture2DConstPtr frame );
 
-    void            PushFrame                               ( Texture2DConstPtr frame );
+    SharedMemoryVideoBufferPtr  Create                      ( UInt32 width, UInt32 height, TextureFormat format );
 
 };
 

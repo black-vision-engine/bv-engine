@@ -29,12 +29,11 @@ private:
 private:
 
                                     SharedMemoryBuffer  ( HANDLE hMapFile, LPTSTR pBuf, UInt32 bufferSize );
-
 public:
 
                                     ~SharedMemoryBuffer ();
 
-public:
+    UInt32                          GetBufferSize       () const;
 
     void                            Write               ( const char * data, UInt32 size );
 

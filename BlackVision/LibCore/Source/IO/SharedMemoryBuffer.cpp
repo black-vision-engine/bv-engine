@@ -24,6 +24,13 @@ SharedMemoryBuffer::~SharedMemoryBuffer                         ()
 
 // *********************************
 //
+UInt32                  SharedMemoryBuffer::GetBufferSize       () const
+{
+    return m_bufferSize;
+}
+
+// *********************************
+//
 void                    SharedMemoryBuffer::Write               ( const char * data, UInt32 size )
 {
     assert( size <= m_bufferSize );
