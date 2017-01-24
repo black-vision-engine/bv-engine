@@ -20,7 +20,7 @@ private:
     RenderTarget *              m_shmRT;
     Texture2DPtr                m_shmTexture;
 
-    SharedMemoryVideoBuffer *   m_shmVideoBuffer;
+    SharedMemoryVideoBufferPtr  m_shmVideoBuffer;
 
 public:
 

@@ -19,7 +19,7 @@ OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned in
     , m_shmTexture( nullptr )
     , m_shmVideoBuffer( nullptr )
 {
-    m_shmVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, 1 );
+    m_shmVideoBuffer = SharedMemoryVideoBuffer::Create( width, height, TextureFormat::F_A8R8G8B8 );
 
     m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
 }
@@ -29,7 +29,7 @@ OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned in
 OutputStreamSharedMem::~OutputStreamSharedMem  ()
 {
     delete m_shmRT;
-    delete m_shmVideoBuffer;
+    delete m_mixChannelsEffect;
 }
 
 // *********************************

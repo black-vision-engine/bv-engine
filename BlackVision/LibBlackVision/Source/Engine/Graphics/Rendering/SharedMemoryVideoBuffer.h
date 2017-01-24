@@ -24,13 +24,13 @@ private:
 
 private:
 
-                                SharedMemoryVideoBuffer     ( SharedMemoryBufferPtr buf );
+                                        SharedMemoryVideoBuffer     ( SharedMemoryBufferPtr buf );
 
 public:
 
-    void                        PushFrame                   ( Texture2DConstPtr frame );
+    void                                PushFrame                   ( Texture2DConstPtr frame );
 
-    SharedMemoryVideoBufferPtr  Create                      ( UInt32 width, UInt32 height, TextureFormat format );
+    static  SharedMemoryVideoBufferPtr  Create                      ( UInt32 width, UInt32 height, TextureFormat format );
 
 };
 

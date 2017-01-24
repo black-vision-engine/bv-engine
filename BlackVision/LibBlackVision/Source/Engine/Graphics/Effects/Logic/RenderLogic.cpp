@@ -62,7 +62,8 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
 
     if( m_enableSharedMemory )
     {
-        m_sharedMemoryVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, m_sharedMemoryScaleFactor);
+        // FIXME: nrl - deprecated
+        m_sharedMemoryVideoBuffer = nullptr; //new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, m_sharedMemoryScaleFactor);
     }
 }
 

@@ -45,6 +45,7 @@ OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
 OutputVideo::~OutputVideo    ()
 {
     delete m_videoRT;
+    delete m_mixChannelsEffect;
 }
 
 // **************************
