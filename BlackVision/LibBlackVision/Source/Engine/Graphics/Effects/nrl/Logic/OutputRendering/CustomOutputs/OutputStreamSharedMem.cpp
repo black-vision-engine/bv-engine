@@ -49,7 +49,7 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
     m_activeRenderOutput.SetEntry( 0, channelRT );
 
     // FIXME: nrl - deferred initialization, a bit too generic right now
-    if( channelRT->Width() != GetWidth() || channelRT->Height() != GetHeight() )
+    if( channelRT->Width() != GetWidth() || channelRT->Height() != GetHeight() || true )
     {
         if ( m_shmRT == nullptr )
         {
