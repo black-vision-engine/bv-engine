@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <type_traits>
 
 #include "BaseValue.h"
 #include "Mathematics/glm_inc.h"
@@ -9,9 +10,13 @@
 
 namespace bv {
 
-template< typename ValueType >
+template< typename ValueType, typename = void >
 struct Value2ParamTypeTrait
 { };
+
+template< typename ValueType >
+struct Value2ParamTypeTrait< ValueType, typename std::enable_if< std::is_enum< ValueType >::value >::type >
+{ const static ParamType ParamT = ParamType::PT_ENUM; };
 
 template<>
 struct Value2ParamTypeTrait< bool >

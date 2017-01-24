@@ -11,6 +11,8 @@
 
 #include "Assets/Font/TextHelper.h"
 
+#include "Engine/Types/TypeTraits.h"
+
 namespace bv { namespace model {
 
 typedef ParamEnum< TextAlignmentType > ParamEnumTAT;
@@ -26,6 +28,73 @@ public:
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
 };
 
+template< typename T >
+struct ValueParamState
+{
+	const static ParamType PT = Value2ParamTypeTrait< T >::ParamT;
+
+	typedef typename ValueT< T >::Type																			VType;
+	typedef SimpleParameterImpl< CompositeInterpolator< TimeType,
+								typename Type2InterpolatorType< T >::Type >, 
+								typename Type2InterpolatorType< T >::Type,
+		ParamType2ModelParamType< PT >::MPT >	PType;
+	typedef SimpleState< T >																					SType;
+
+	const VType *			valuePtr;
+	const PType *			paramPtr;
+	const IStatedValue *	statePtr;
+
+	ValueParamState()
+		: valuePtr( nullptr )
+		, paramPtr( nullptr )
+		, statePtr( nullptr )
+	{}
+
+	ValueParamState( const VType * value, const PType * param, const IStatedValue * state )
+		: valuePtr( value )
+		, paramPtr( param )
+		, statePtr( state )
+	{}
+
+	const T &		GetValue() const
+	{
+		assert( valuePtr != nullptr );
+		return valuePtr->GetValue();
+	}
+
+	const PType &	GetParameter() const
+	{
+		assert( paramPtr != nullptr );
+		return *paramPtr;
+	}
+
+	//PType &			GetParameter()
+	//{
+	//	assert( paramPtr != nullptr )
+	//	return *paramPtr;
+	//}
+
+	bool			Changed() const
+	{
+		assert( statePtr != nullptr );
+		return statePtr->StateChanged();
+	}
+};
+
+template< typename T >
+ValueParamState< T >		GetValueParamState( IParamValModel * paramValModel, const std::string & name )
+{
+	typedef typename ValueParamState< T >::VType	VType;
+	typedef typename ValueParamState< T >::PType	PType;
+	
+	auto v = paramValModel->GetValue( name );
+	auto p = paramValModel->GetParameter( name );
+
+	auto vT = v ? QueryTypedValue< VType >( v.get() ) : nullptr;
+	auto pT = p ? QueryTypedParam< PType >( p.get() ) : nullptr;
+
+	return ValueParamState< T >( vT, pT, paramValModel->GetState( name ).get() );
+}
 
 class TextPluginBase : public BasePlugin
 {
@@ -60,7 +129,6 @@ public:
     };
 
 protected:
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
@@ -73,19 +141,24 @@ protected:
 
     TextAtlasConstPtr               m_atlas;
 
-    ValueFloatPtr                   m_newLineSize;
-    ParamFloatPtr                   m_spacingParam;
-	ParamEnumTATPtr                 m_alignmentParam;
-    ValueVec2Ptr                    m_box;
+	ValueParamState< TextAlignmentType > m_alignment;
+
+	ValueParamState< Float32 >      m_newLineSize;
+	ValueParamState< Float32 >		m_spacing;
+
+	ValueParamState< glm::vec2 >    m_textBox;
+	ValueParamState< bool >			m_useTextBox;
+
+	ValueParamState< bool >			m_shadowEnabled;
+	ValueParamState< bool >         m_outlineEnabled;
+	ValueParamState< bool >         m_glowEnabled;
+
+	ValueParamState< Int32 >        m_alignCharacter;
 
     ParamTransformPtr               m_outlineTxParam;
     ParamTransformPtr               m_glowTxParam;
 
-    ValueBoolPtr                    m_shadowEnabled;
-    ValueBoolPtr                    m_outlineEnabled;
-    ValueBoolPtr                    m_glowEnabled;
 
-    ValueIntPtr                     m_alignCharacter;
     ValueIntPtr                     m_firstTextCC;
     ValueIntPtr                     m_firstTextOutCC;
     ValueIntPtr                     m_firstTextGlowCC;

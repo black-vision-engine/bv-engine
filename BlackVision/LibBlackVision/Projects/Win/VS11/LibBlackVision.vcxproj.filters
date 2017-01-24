@@ -5327,6 +5327,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Types\TypeTraits.h">
+      <Filter>Engine\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
