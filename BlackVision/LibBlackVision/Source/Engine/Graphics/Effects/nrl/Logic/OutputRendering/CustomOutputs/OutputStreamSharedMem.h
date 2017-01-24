@@ -34,6 +34,7 @@ private:
     void            UpdateEffectValues      ();
 
     Texture2DPtr    PrepareFrame            ( NRenderContext * ctx, RenderResult * input );
+    void            ProcessFrame            ( Texture2DPtr frame );
 
     Texture2DPtr    ReadDefaultTexture      ( NRenderContext * ctx, RenderResult * input, RenderChannelType rct );
     Texture2DPtr    ReadMixChannelsTexture  ( NRenderContext * ctx, const RenderTarget * inputRenderTarget );

@@ -7,8 +7,6 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
-#include "LibImage.h"
-
 
 namespace bv { namespace nrl {
 
@@ -19,6 +17,7 @@ OutputStreamSharedMem::OutputStreamSharedMem   ( unsigned int width, unsigned in
     , m_activeRenderOutput( 1 )
     , m_shmRT( nullptr )
     , m_shmTexture( nullptr )
+    , m_shmVideoBuffer( nullptr )
 {
     m_shmVideoBuffer = new SharedMemoryVideoBuffer( width, height, TextureFormat::F_A8R8G8B8, 1 );
 
@@ -37,12 +36,15 @@ OutputStreamSharedMem::~OutputStreamSharedMem  ()
 //
 void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderResult * input )
 {
+    //1. Update internal output state
     // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
     UpdateEffectValues();
     
+    //2. Prepare memory representation of current frame
     auto shmFrame = PrepareFrame( ctx, input );
 
-    m_shmVideoBuffer->PushFrame( shmFrame );
+    //3. Process memory representation of current frame
+    ProcessFrame( shmFrame );
 }
 
 // *********************************
@@ -86,6 +88,13 @@ Texture2DPtr    OutputStreamSharedMem::PrepareFrame             ( NRenderContext
 
 // *********************************
 //
+void            OutputStreamSharedMem::ProcessFrame            ( Texture2DPtr frame )
+{
+    m_shmVideoBuffer->PushFrame( frame );
+}
+
+// *********************************
+//
 Texture2DPtr    OutputStreamSharedMem::ReadDefaultTexture      ( NRenderContext * ctx, RenderResult * input, RenderChannelType rct )
 {
 	return input->ReadColorTexture( renderer( ctx ), rct );
@@ -113,11 +122,3 @@ Texture2DPtr    OutputStreamSharedMem::ReadMixChannelsTexture  ( NRenderContext 
 
 } //nrl
 } //bv
-
-
-// Algo:
-// if w != origW || h != origH || state != rgba
-//  mixchannels->Render( output )
-//  tex = output->ReadTexture
-// else
-//  tex = result->ReadTexture

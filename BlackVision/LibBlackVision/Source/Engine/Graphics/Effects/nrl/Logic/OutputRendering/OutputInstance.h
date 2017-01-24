@@ -12,7 +12,8 @@ namespace nrl {
 enum class CustomOutputType : unsigned int
 {
     COT_PREVIEW = 0,
-    COT_VIDEO,
+    COT_VIDEO_HD,
+    COT_VIDEO_SD,
     COT_STREAM_SHM,
     COT_SCREENSHOT,
 

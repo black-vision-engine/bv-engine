@@ -25,7 +25,8 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
     unsigned int f = shmScaleFactor;
 
     m_outputs[ (unsigned int) CustomOutputType::COT_PREVIEW ]       = new OutputPreview         ( width, height );          ++i;
-    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO ]         = new OutputVideo           ( width, height );          ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO_HD ]      = new OutputVideo           ( width, height );          ++i;
+    m_outputs[ (unsigned int) CustomOutputType::COT_VIDEO_SD ]      = new OutputVideo           ( width / 2, height / 2 );  ++i; // FIXME: nrl - pass arguments using appropriate descriptor (static data init)
     m_outputs[ (unsigned int) CustomOutputType::COT_STREAM_SHM ]    = new OutputStreamSharedMem ( width / f, height / f );  ++i; // FIXME: nrl - pass arguments using appropriate descriptor (static data init)
     m_outputs[ (unsigned int) CustomOutputType::COT_SCREENSHOT ]    = new OutputScreenshot      ( width, height  );         ++i;
 
@@ -45,7 +46,7 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
             state.SetAIdx( 3 );
         }
 
-        // Video
+        // Video HD
         {
             auto & state = m_outputs[ 1 ]->AccessOutputState();
  
@@ -57,7 +58,7 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
             state.SetAIdx( 3 );
         }
 
-        // SHM
+        // Video SD
         {
             auto & state = m_outputs[ 2 ]->AccessOutputState();
  
@@ -69,9 +70,21 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
             state.SetAIdx( 3 );
         }
 
-        // Screenshot
+        // SHM
         {
             auto & state = m_outputs[ 3 ]->AccessOutputState();
+ 
+            state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
+            
+            state.SetRIdx( 0 );
+            state.SetGIdx( 1 );
+            state.SetBIdx( 2 );
+            state.SetAIdx( 3 );
+        }
+
+        // Screenshot
+        {
+            auto & state = m_outputs[ 4 ]->AccessOutputState();
  
             state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
             

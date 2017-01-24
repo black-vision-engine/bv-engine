@@ -2,6 +2,8 @@
 
 #include "OutputVideo.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
@@ -17,8 +19,10 @@ namespace bv { namespace nrl {
 //
 OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
     : OutputInstance( width, height )
+    , m_activeRenderOutput( 1 )
     , m_audioData( nullptr )
 	, m_lastFrameHasAudio( true )
+    , m_mixChannelsEffect( nullptr )
     , m_videoRT( nullptr )
     , m_videoTexture( nullptr )
 {
@@ -31,6 +35,8 @@ OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
 
     auto memChunkSize       = numChannels * samplesPerFrame * bytesPerSample;
                         
+    m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
+
     m_audioData = MemoryChunk::Create( memChunkSize );
 }
 
@@ -45,28 +51,61 @@ OutputVideo::~OutputVideo    ()
 //
 void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * input )
 {
-    auto rct = GetActiveRenderChannel();
+    //1. Update internal output state
+    // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
+    UpdateEffectValues();
 
-	// FIXME: nrl - this can be solved some other way around - Pawelek has to decide (e.g. when the required render channel is not active black rame is displayed or process frame data does nothing)
+    //2. Prepare memory representation of current frame
+    auto videoFrame = PrepareFrame( ctx, input );
+
+    //3. Process memory representation of current frame
+    ProcessFrame( ctx, videoFrame );
+}
+
+// *********************************
+//
+void            OutputVideo::UpdateEffectValues         ()
+{
+    auto state = m_mixChannelsEffect->GetState();
+    
+    auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
+    auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
+
+    auto mapping = GetChannelMapping();
+    auto mask = GetChannelMask();
+
+    QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
+    QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
+}
+
+// *********************************
+//
+Texture2DPtr    OutputVideo::PrepareFrame               ( NRenderContext * ctx, RenderResult * input )
+{
+    auto rct = GetActiveRenderChannel();
     assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
 
-    auto outputRT = input->GetActiveRenderTarget( rct );
+    auto inputRenderTarget = input->GetActiveRenderTarget( rct );  
 
-    // FIXME: nrl - deferred initialization, a bit too generic right now
-    if( outputRT->Width() != GetWidth() || outputRT->Height() != GetHeight() )
+    Texture2DPtr outputFrame;
+
+    if( GetWidth() == inputRenderTarget->Width() && GetHeight() == inputRenderTarget->Height() && AccessOutputState().RepresentsDefaultTexture() )
     {
-        if ( m_videoRT == nullptr )
-        {
-            m_videoRT = allocator( ctx )->CreateCustomRenderTarget( outputRT->Width(), outputRT->Height(), RenderTarget::RTSemantic::S_DRAW_READ );
-        }
-
-        assert( false ); // FIXME: nrl - implement
-        assert( outputRT->Width() == m_videoRT->Width() && outputRT->Height() == m_videoRT->Height() );
+        outputFrame = ReadDefaultTexture( ctx, input, rct );
+    }
+    else
+    {
+        outputFrame = ReadMixChannelsTexture( ctx, inputRenderTarget );
     }
 
-	auto videoFrame = input->ReadColorTexture( renderer( ctx ), rct );
+    return outputFrame;
+}
 
-	auto avFrame = PrepareAVFrame( audio( ctx ), videoFrame );
+// *********************************
+//
+void            OutputVideo::ProcessFrame               ( NRenderContext * ctx, Texture2DPtr frame )
+{
+	auto avFrame = PrepareAVFrame( audio( ctx ), frame );
 
 	{
 		// FIXME: nrl - ask Witek about this one
@@ -75,9 +114,36 @@ void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * inpu
 	}
 }
 
+// *********************************
+//
+Texture2DPtr    OutputVideo::ReadDefaultTexture         ( NRenderContext * ctx, RenderResult * input, RenderChannelType rct )
+{
+	return input->ReadColorTexture( renderer( ctx ), rct );
+}
+
+// *********************************
+//
+Texture2DPtr    OutputVideo::ReadMixChannelsTexture     ( NRenderContext * ctx, const RenderTarget * inputRenderTarget )
+{
+    if( m_videoRT == nullptr )
+    {
+        auto w = GetWidth();
+        auto h = GetHeight();
+
+        m_videoRT = allocator( ctx )->CreateCustomRenderTarget( w, h, RenderTarget::RTSemantic::S_DRAW_READ );
+    }
+
+    m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
+    m_mixChannelsEffect->Render( ctx, m_videoRT, m_activeRenderOutput );
+
+    renderer( ctx )->ReadColorTexture( 0, m_videoRT, m_videoTexture );
+
+    return m_videoTexture;
+}
+
 // **************************
 //
-videocards::AVFramePtr  OutputVideo::PrepareAVFrame ( audio::AudioRenderer * audio, Texture2DPtr videoFrame )
+AVFramePtr  OutputVideo::PrepareAVFrame ( audio::AudioRenderer * audio, Texture2DPtr videoFrame )
 {
     videocards::AVFrameDescriptor desc;
 
