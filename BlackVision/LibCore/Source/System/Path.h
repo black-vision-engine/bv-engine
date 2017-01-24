@@ -6,12 +6,13 @@
 #include <vector>
 #include <iterator>
 
-namespace bv
-{
+
+namespace bv {
 
 class Path
 {
 public:
+
 	typedef std::vector< Path > PathVec;
 
 						Path			();

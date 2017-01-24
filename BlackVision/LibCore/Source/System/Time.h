@@ -2,13 +2,15 @@
 
 #include "CoreDEF.h"
 
-namespace bv
-{
+
+namespace bv {
 
 class Time
 {
 public:
+
     static UInt64       Now     ();
+
 }; 
 
 } // bv
