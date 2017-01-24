@@ -46,8 +46,6 @@ class CompositeTransform : public ISerializable
 {
 private:
 
-    SQTTransform        m_sqt;
-
     FloatInterpolator   m_translationX;
     FloatInterpolator   m_translationY;
     FloatInterpolator   m_translationZ;

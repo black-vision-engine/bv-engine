@@ -107,7 +107,7 @@ std::string             DefaultTextPluginDesc::UID                      ()
 //
 std::wstring            DefaultTextPlugin::GetText                      () const
 {
-    return m_textParam->Evaluate();
+    return m_text.GetParameter().Evaluate();
 }
 
 // *******************************
@@ -127,9 +127,8 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     //m_arranger = &CircleArranger; // INFO: Needed for testing arrangers only.
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
-    m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::TEXT ) );
-
-    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::MAX_TEXT_LENGTH ) );
+	m_text			= GetValueParamState< std::wstring >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::TEXT );
+	m_maxTextLength	= GetValueParamState< Float32 >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::MAX_TEXT_LENGTH );
 
     m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
     m_scaleValue->SetValue( glm::mat4( 1.0 ) );
@@ -152,7 +151,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 {
     auto success = TextPluginBase::LoadResource( assetDescr,  DefaultTextPluginDesc::TextureName() );
 
-    SetText( m_textParam->Evaluate() );
+    SetText( m_text.GetParameter().Evaluate() );
 
     return success;
 }
@@ -175,22 +174,29 @@ mathematics::RectConstPtr       DefaultTextPlugin::GetAABB      ( const glm::mat
 
 // *************************************
 // 
+bool								DefaultTextPlugin::NeedsSetText					() const
+{
+	return  m_text.Changed()
+		|| m_alignment.Changed()
+		|| m_spacing.Changed()
+		|| m_alignCharacter.Changed()
+		|| m_newLineSize.Changed()
+		|| m_shadowEnabled.Changed()
+		|| m_outlineEnabled.Changed()
+		|| m_textBox.Changed()
+		|| m_useTextBox.Changed();
+}
+
+// *************************************
+// 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
     TextPluginBase::Update( t );
 
-    if( ParameterChanged( PARAM::TEXT ) ||
-        ParameterChanged( TextPluginBase::PARAM::ALIGNEMENT ) ||
-        ParameterChanged( TextPluginBase::PARAM::SPACING ) ||
-        ParameterChanged( TextPluginBase::PARAM::ALIGN_CHARACTER ) ||
-        ParameterChanged( TextPluginBase::PARAM::NEW_LINE_SIZE ) ||
-        ParameterChanged( TextPluginBase::PARAM::SHADOW_ENABLED ) ||
-        ParameterChanged( TextPluginBase::PARAM::OUTLINE_ENABLED ) || 
-        ParameterChanged( TextPluginBase::PARAM::TEXT_BOX ) ||
-        ParameterChanged( TextPluginBase::PARAM::USE_TEXT_BOX ) )
+    if( NeedsSetText() )
     {
-        SetText( m_textParam->Evaluate() );
+        SetText( m_text.GetParameter().Evaluate() );
     }
 
     ScaleToMaxTextLength();
@@ -214,18 +220,19 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
         KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
         wchar_t c[2] = { evtTyped->GetChar() , '\0' };
 
+		auto text = m_text.GetParameter().Evaluate();
+
         if( c[0] == L'\b' )
         {
-            if( !m_textParam->Evaluate().empty() )
+            if( !text.empty() )
             {
-                auto text = m_textParam->Evaluate();
                 text.pop_back();
                 SetText( text );
             }
         }
         else
         {
-            SetText( m_textParam->Evaluate() + std::wstring( c ) );
+            SetText( text + std::wstring( c ) );
         }
     }
 }
@@ -236,7 +243,7 @@ void DefaultTextPlugin::ScaleToMaxTextLength        ()
 {
     m_scaleMat = glm::mat4( 1.0 ); // reset current scale.
 
-    auto maxTextLenght = m_maxTextLengthParam->Evaluate();
+    auto maxTextLenght = m_maxTextLength.GetParameter().Evaluate();
 
     if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
     {
@@ -251,7 +258,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 {
     m_vaChannel->ClearAll();
 
-    bool useBox = QueryTypedParam< ParamBoolPtr >( GetParameter( TextPluginBase::PARAM::USE_TEXT_BOX ) )->Evaluate();
+	bool useBox = m_useTextBox.GetParameter().Evaluate();
 
     m_textLength = TextPluginBase::BuildVACForText( newText, true, useBox );
 

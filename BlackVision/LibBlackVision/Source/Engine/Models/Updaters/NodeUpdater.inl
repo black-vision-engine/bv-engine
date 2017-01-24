@@ -58,13 +58,19 @@ inline  void    NodeUpdater::UpdateGeometry      ()
     if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
     {
         UpdateTopology();
+
         m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+
+		UpdateBoundingBox();
     }
     else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
     {
         UpdatePositions();
+
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+
+		UpdateBoundingBox();
     }
     else
     {
@@ -255,7 +261,7 @@ inline void     NodeUpdater::UpdateShaderParams				()
 {
     for( auto & pair : m_paramsMappingVec )
     {
-        UpdateGenericShaderParam( pair.first, pair.second );
+        UpdateGenericShaderParam( pair.first.get(), pair.second );
     }
 }
 

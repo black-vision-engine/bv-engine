@@ -9,6 +9,6 @@ namespace bv {
 
 class GenericShaderParam;
 
-void            UpdateGenericShaderParam    ( IValueConstPtr source, GenericShaderParam * dest );
+void            UpdateGenericShaderParam    ( const IValue * source, GenericShaderParam * dest );
 
 } // bv

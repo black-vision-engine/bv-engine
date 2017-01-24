@@ -1194,6 +1194,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreadedEvents.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Enums.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Types\TypeTraits.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />

@@ -58,13 +58,11 @@ public:
 
 private:
 
-    ParamWStringPtr                 m_textParam;
-    std::wstring                    m_currentText;
-    Float32                         m_currentSpacing;
+    ValueParamState< std::wstring > m_text;
 
     Float32                         m_textLength;
+	ValueParamState< Float32 >		m_maxTextLength;
 
-    ParamFloatPtr                   m_maxTextLengthParam;
     ParamFloatPtr                   m_timeParam;
     ValueMat4Ptr                    m_scaleValue;
     glm::mat4                       m_scaleMat;
@@ -85,6 +83,8 @@ private:
     virtual void                                Update                      ( TimeType t ) override;
 
     void                                        ScaleToMaxTextLength        ();
+
+	bool										NeedsSetText				() const;
 
 public:
 

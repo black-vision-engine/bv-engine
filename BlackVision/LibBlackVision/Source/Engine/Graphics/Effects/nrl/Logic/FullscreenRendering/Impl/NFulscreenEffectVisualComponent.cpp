@@ -176,7 +176,7 @@ void            NFullscreenEffectVisualComponent::UpdateShaderParams            
 
         assert( param->Name() == val->GetName() );
 
-        UpdateGenericShaderParam( val, param );
+        UpdateGenericShaderParam( val.get(), param );
 
         ++i;
     }

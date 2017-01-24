@@ -467,7 +467,7 @@ void                CompositeTransform::Serialize       ( ISerializer & ser, Tra
 glm::mat4x4         CompositeTransform::Evaluate        ( TimeType t ) const
 {
     auto rotQuat = glm::quat( glm::radians( GetRotation( t ) ) );
-    return m_sqt.Evaluate( GetTranslation( t ), rotQuat, GetScale( t ), GetCenter( t ) );
+    return SQTTransform::Evaluate( GetTranslation( t ), rotQuat, GetScale( t ), GetCenter( t ) );
 }
 
 } //bv

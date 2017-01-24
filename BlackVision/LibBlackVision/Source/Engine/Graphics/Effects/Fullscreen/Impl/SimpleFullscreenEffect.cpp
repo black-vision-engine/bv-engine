@@ -294,7 +294,7 @@ void                SimpleFullscreenEffect::Update              ()
 
         if( param != nullptr ) 
         {
-            UpdateGenericShaderParam( v, param );
+            UpdateGenericShaderParam( v.get(), param );
         }
     }
 }

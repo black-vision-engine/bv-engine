@@ -111,14 +111,17 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     , m_outlineSize( 0 )
     , m_atlas( nullptr )
 {
-    m_newLineSize       = QueryTypedValue< ValueFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::NEW_LINE_SIZE ) );
-    m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::SPACING ) );
-    m_alignmentParam    = QueryTypedParam< ParamEnumTATPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( PARAM::ALIGNEMENT ) );
-    m_alignCharacter    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::ALIGN_CHARACTER ) );
-    m_shadowEnabled     = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::SHADOW_ENABLED ) );
-    m_outlineEnabled    = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::OUTLINE_ENABLED ) );
-    m_glowEnabled       = QueryTypedValue< ValueBoolPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::GLOW_ENABLED ) );
-    m_box               = QueryTypedValue< ValueVec2Ptr >( GetPluginParamValModel()->GetPluginModel()->GetValue( PARAM::TEXT_BOX ) );
+    m_newLineSize       = GetValueParamState< Float32 >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::NEW_LINE_SIZE );
+    m_spacing			= GetValueParamState< Float32 >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::SPACING );
+    m_alignment			= GetValueParamState< TextAlignmentType >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::ALIGNEMENT );
+    m_alignCharacter    = GetValueParamState< Int32 >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::ALIGN_CHARACTER );
+
+	m_shadowEnabled		= GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::SHADOW_ENABLED );
+	m_outlineEnabled	= GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::OUTLINE_ENABLED );
+	m_glowEnabled		= GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::GLOW_ENABLED );
+
+	m_textBox			= GetValueParamState< glm::vec2 >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::TEXT_BOX );
+	m_useTextBox		= GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::USE_TEXT_BOX );
 
     m_firstTextCC       = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_CC ) );
     m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
@@ -291,9 +294,9 @@ DefaultTextureDescriptorPtr         TextPluginBase::LoadTexture                 
 // 
 Float32                             TextPluginBase::BuildVACForText             ( const std::wstring & text, bool useKerning, bool useBox )
 {
-    auto alignType  = TextAlignmentType( m_alignmentParam->Evaluate() );
-    auto alignCh    = (wchar_t)m_alignCharacter->GetValue();
-    auto spacing    = m_spacingParam->Evaluate();
+    auto alignType  = TextAlignmentType( m_alignment.GetParameter().Evaluate() );
+    auto alignCh    = (wchar_t)m_alignCharacter.GetValue();
+    auto spacing    = m_spacing.GetParameter().Evaluate();
 
     auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
@@ -303,7 +306,7 @@ Float32                             TextPluginBase::BuildVACForText             
     m_firstTextShCC->SetValue( 0 );
     m_firstTextGlowCC->SetValue( 0 );
 
-    if( m_blurSize > 0 && m_shadowEnabled ) 
+    if( m_blurSize > 0 && m_shadowEnabled.valuePtr->GetValue() ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
@@ -315,8 +318,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                         0,
                                         viewWidth,
                                         viewHeight,
-                                        m_newLineSize->GetValue(),
-                                        m_box->GetValue(),
+                                        m_newLineSize.GetValue(),
+                                        m_textBox.GetValue(),
                                         nullptr,
                                         useKerning,
                                         useBox);
@@ -324,7 +327,7 @@ Float32                             TextPluginBase::BuildVACForText             
         m_firstTextGlowCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
 
-    if( m_glowBlurSize > 0 && m_glowEnabled ) 
+    if( m_glowBlurSize > 0 && m_glowEnabled.GetValue() ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
@@ -336,8 +339,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_outlineSize,
                                         viewWidth,
                                         viewHeight,
-                                        m_newLineSize->GetValue(),
-                                        m_box->GetValue(),
+                                        m_newLineSize.GetValue(),
+                                        m_textBox.GetValue(),
                                         nullptr,
                                         useKerning,
                                         useBox);
@@ -345,7 +348,7 @@ Float32                             TextPluginBase::BuildVACForText             
         m_firstTextOutCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
 
-    if( m_outlineSize > 0 && m_outlineEnabled ) 
+    if( m_outlineSize > 0 && m_outlineEnabled.GetValue() ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,
@@ -357,8 +360,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                         m_outlineSize,
                                         viewWidth,
                                         viewHeight,
-                                        m_newLineSize->GetValue(),
-                                        m_box->GetValue(),
+                                        m_newLineSize.GetValue(),
+                                        m_textBox.GetValue(),
                                         nullptr,
                                         useKerning,
                                         useBox );
@@ -376,8 +379,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     0,
                                                     viewWidth,
                                                     viewHeight,
-                                                    m_newLineSize->GetValue(),
-                                                    m_box->GetValue(),
+                                                    m_newLineSize.GetValue(),
+                                                    m_textBox.GetValue(),
                                                     nullptr,
                                                     useKerning,
                                                     useBox );
