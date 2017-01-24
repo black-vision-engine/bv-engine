@@ -12,7 +12,7 @@
 9. klient, do pełnoprawnego sterowania silnikiem
 10. Project conf
  - deps
- - build times
+ - build times - teraz jest kurwa dramat (linkowanie, wypisywanie pdb w LibBlackVision)
  - asset copying
  - additional project for shaders only
 11. Wywalic gowno w formie kebaba
@@ -26,3 +26,4 @@
 15. Reimplementacja shared buf tak, żeby był przechowytwany w System i tylko wykorzystany na bazie niskopoziomowej implementacji
 16. Możliwość konfigurowania FSE (czyli jakiś generyczny deskryptor)
 17. Zmieniane shadery wcale się nie kopiują (e.g. mixchannels.frag z FullscreenEffects)
+18. Potestować zbuffering w render targetach

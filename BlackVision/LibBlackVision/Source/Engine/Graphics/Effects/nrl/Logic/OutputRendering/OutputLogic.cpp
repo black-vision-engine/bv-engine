@@ -38,7 +38,7 @@ OutputLogic::OutputLogic                                ( unsigned int width, un
             auto & state = m_outputs[ 0 ]->AccessOutputState();
  
             state.SetActiveRenderChannel( RenderChannelType::RCT_OUTPUT_1 );
-            
+
             state.SetRIdx( 0 );
             state.SetGIdx( 1 );
             state.SetBIdx( 2 );

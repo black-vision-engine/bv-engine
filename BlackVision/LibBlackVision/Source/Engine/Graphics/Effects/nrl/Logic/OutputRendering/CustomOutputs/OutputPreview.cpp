@@ -37,8 +37,33 @@ void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * i
     auto rct = GetActiveRenderChannel();
     assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
 
-    // FIXME: nrl - DefaultShow is only a very siple way of showing rendered result on preview - ask Pawelek about other possibilities
-    DefaultShow( ctx, input->GetActiveRenderTarget( rct ) );
+    // FIXME: remove - test non hd render targets
+    {
+        static auto rt = allocator( ctx )->CreateCustomRenderTarget( 240, 135, RenderTarget::RTSemantic::S_DRAW_ONLY );
+        static auto eff = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
+
+        auto state = eff->GetState();
+    
+        auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
+        auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
+
+        auto mapping    = GetChannelMapping();
+        auto mask       = GetChannelMask();
+
+        mask[0] = 1.0f;
+        mask[1] = 0.0f;
+        mask[2] = 0.0f;
+
+        QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
+        QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
+
+        m_activeRenderOutput.SetEntry( 0, input->GetActiveRenderTarget( rct ) );
+        eff->Render( ctx, rt, m_activeRenderOutput );
+
+        DefaultShow( ctx, rt );
+    }
+    //// FIXME: nrl - DefaultShow is only a very siple way of showing rendered result on preview - ask Pawelek about other possibilities
+    //DefaultShow( ctx, input->GetActiveRenderTarget( rct ) );
 
     // Make sure that local preview is displayed properly
     renderer( ctx )->DisplayColorBuffer();
