@@ -58,14 +58,6 @@ void    OutputStreamSharedMem::ProcessFrameData  ( NRenderContext * ctx, RenderR
     m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
 
     renderer( ctx )->ReadColorTexture( 0, m_shmRT, m_shmTexture );
-    auto dta = m_shmTexture->GetData();
-    static unsigned int i = 0;
-    i++;
-    if( i == 2 )
-    {
-        bool result = image::SaveBMPImage( "prv_shm_image_1.bmp", dta, m_shmTexture->GetWidth(), m_shmTexture->GetHeight(), 32 );
-        assert( result );
-    }
 
     m_shmVideoBuffer->PushFrame( m_shmTexture );
 
