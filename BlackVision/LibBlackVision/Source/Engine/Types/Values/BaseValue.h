@@ -48,7 +48,7 @@ public:
     virtual const char *    GetData         () const override;
     virtual SizeType        GetSize         () const override;
 
-    virtual VoidPtr         QueryValueTyped () override;
+    inline VoidPtr          QueryValueTyped () override;
 
     // *******************************
     //
@@ -117,7 +117,7 @@ SizeType        ValueImpl< ValType, paramType >::GetSize  () const
 // *******************************
 //
 template< typename ValType, ParamType paramType >
-VoidPtr          ValueImpl< ValType, paramType >::QueryValueTyped ()
+inline VoidPtr  ValueImpl< ValType, paramType >::QueryValueTyped ()
 {
     return std::static_pointer_cast< void >( shared_from_this() );
 }

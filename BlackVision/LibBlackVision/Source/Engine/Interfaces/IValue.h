@@ -34,26 +34,28 @@ typedef std::vector< IValuePtr > IValuePtrVec;
 // *********************************
 //
 template< typename ValueTypePtr >
-ValueTypePtr QueryTypedValue( IValuePtr val )
+inline ValueTypePtr QueryTypedValue( IValuePtr val )
 {
+#ifdef _DEBUG
     if( val->GetType() != ValueTypePtr::element_type::Type() )
     {
         return nullptr;
     }
-
+#endif
     return std::static_pointer_cast< ValueTypePtr::element_type >( val->QueryValueTyped() );
 }
 
 // *********************************
 //
 template< typename ValueTypeConstPtr >
-ValueTypeConstPtr QueryTypedValue( IValueConstPtr val )
+inline ValueTypeConstPtr QueryTypedValue( IValueConstPtr val )
 {
+#ifdef _DEBUG
     if( val->GetType() != ValueTypeConstPtr::element_type::Type() )
     {
         return nullptr;
     }
-
+#endif
     return std::static_pointer_cast< ValueTypeConstPtr::element_type >( std::const_pointer_cast< IValue >( val )->QueryValueTyped() );
 }
 
@@ -61,26 +63,28 @@ ValueTypeConstPtr QueryTypedValue( IValueConstPtr val )
 // *********************************
 //
 template< typename ValueType >
-ValueType * QueryTypedValue( IValue * val )
+inline ValueType * QueryTypedValue( IValue * val )
 {
+#ifdef _DEBUG
     if( val->GetType() != ValueType::Type() )
     {
         return nullptr;
     }
-
+#endif
     return static_cast< ValueType * >( val->QueryValueTyped().get() );
 }
 
 // *********************************
 //
 template< typename ValueType >
-const ValueType * QueryTypedValue( const IValue * val )
+inline const ValueType * QueryTypedValue( const IValue * val )
 {
+#ifdef _DEBUG
     if( val->GetType() != ValueType::Type() )
     {
         return nullptr;
     }
-
+#endif
     return static_cast< const ValueType * >( const_cast< IValue * >( val )->QueryValueTyped().get() );
 }
 
