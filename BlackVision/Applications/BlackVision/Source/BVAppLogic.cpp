@@ -37,7 +37,9 @@
 #include "testai/TestAIManager.h"
 //FIXME: end of remove
 
-#include"StatsFormatters.h"
+#include "StatsFormatters.h"
+
+#include "UseLoggerBVAppModule.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
