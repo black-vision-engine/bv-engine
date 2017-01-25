@@ -9,7 +9,6 @@ namespace bv { namespace model {
 class StaticShaderGenerator
 {
 private:
-
     std::string                             m_shadersDir;
     std::string                             m_shaderExtension;
     

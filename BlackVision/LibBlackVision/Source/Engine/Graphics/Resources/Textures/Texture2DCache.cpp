@@ -7,7 +7,9 @@
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
+#ifdef _DEBUG
 #define PRINT_TEXTURE_CACHE_STATS
+#endif // DEBUG
 
 
 

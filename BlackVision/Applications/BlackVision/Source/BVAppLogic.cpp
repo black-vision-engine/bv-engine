@@ -334,7 +334,14 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
                 {
                     //printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );
                     auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
-                    printf( "DROP: %.4f ms, cur time: %.4f ms, dropped %d frames\n", last_time * 1000.f, time * 1000.f, droppedFrames );
+                    LOG_MESSAGE( SeverityLevel::warning ) << 
+						"DROP: " << 
+						last_time * 1000.f << 
+						" ms, cur time: " << 
+						time * 1000.f << 
+						" ms, dropped " << 
+						droppedFrames << 
+						" frames";
                 }
 
                 last_time = time;

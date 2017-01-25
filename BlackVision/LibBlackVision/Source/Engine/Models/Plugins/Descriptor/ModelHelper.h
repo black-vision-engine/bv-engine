@@ -34,9 +34,9 @@ struct ValueParamState
 		ParamType2ModelParamType< PT >::MPT >	PType;
 	typedef SimpleState< T >																					SType;
 
-	const VType *			valuePtr;
-	const PType *			paramPtr;
-	const IStatedValue *	statePtr;
+	const VType *				valuePtr;
+	const PType *				paramPtr;
+	const SimpleState< T > *	statePtr;
 
 	ValueParamState()
 		: valuePtr(nullptr)
@@ -44,7 +44,7 @@ struct ValueParamState
 		, statePtr(nullptr)
 	{}
 
-	ValueParamState(const VType * value, const PType * param, const IStatedValue * state)
+	ValueParamState(const VType * value, const PType * param, const SimpleState< T > * state)
 		: valuePtr(value)
 		, paramPtr(param)
 		, statePtr(state)
@@ -81,7 +81,7 @@ ValueParamState< T >		GetValueParamState(IParamValModel * paramValModel, const s
 	auto vT = v ? QueryTypedValue< VType >(v.get()) : nullptr;
 	auto pT = p ? QueryTypedParam< PType >(p.get()) : nullptr;
 
-	return ValueParamState< T >(vT, pT, paramValModel->GetState(name).get());
+	return ValueParamState< T >(vT, pT, static_cast< const SimpleState< T > * >( paramValModel->GetState(name).get() ) );
 }
 
 

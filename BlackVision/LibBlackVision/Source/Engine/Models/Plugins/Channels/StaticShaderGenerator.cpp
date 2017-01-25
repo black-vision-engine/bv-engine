@@ -17,18 +17,32 @@
 
 namespace bv { namespace model {
 
+namespace
+{
+	static std::map< std::string, std::string >	g_loadedShaderSourceCache = std::map< std::string, std::string >();
+}
 // *****************************
 //
 std::string         StaticShaderGenerator::GenerateShaderSource( const std::vector< std::string > & uids ) const
 {
     std::string filename = GenerateFilename( uids );
-    if( Path::Exists( filename ) )
+
+	std::string shaderSource = "";
+
+	auto it = g_loadedShaderSourceCache.find( filename );
+
+	if ( it != g_loadedShaderSourceCache.end() )
+	{
+		shaderSource = it->second;
+	} 
+	else if( Path::Exists( filename ) )
     {
         LOG_MESSAGE( SeverityLevel::debug ) << "Loading pixel shader from: " << filename;
-        return ReadShaderContentsFromFile( filename );
+		shaderSource =  ReadShaderContentsFromFile( filename );
+		g_loadedShaderSourceCache[ filename ] = shaderSource;
     }
     else if( uids.size() == 1 && uids[ 0 ] == "DEFAULT_TRANSFORM" ) // FIXME (?)
-        return "";
+		shaderSource = "";
     else
     {
         LOG_MESSAGE( SeverityLevel::error ) << "File: " << filename << " does not exist. Loading default shader.";
@@ -36,14 +50,19 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
 		filename = m_shadersDir + "default." + m_shaderExtension;
 
 		if( Path::Exists( filename ) )
-			return ReadShaderContentsFromFile( filename );
+		{
+			shaderSource = ReadShaderContentsFromFile( filename );
+			g_loadedShaderSourceCache[ filename ] = shaderSource;
+		}
 		else
 		{
             LOG_MESSAGE( SeverityLevel::critical ) << "File: " << filename << " does not exist. Loading default shader failed!!!";
 			assert( false );
-			return "";
+			shaderSource = "";
 		}
     }
+
+	return shaderSource;
 }
 
 // *****************************
