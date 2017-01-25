@@ -25,7 +25,8 @@ namespace bv
 
 // ***********************
 //
-EndUserParamsLogic::EndUserParamsLogic()
+EndUserParamsLogic::EndUserParamsLogic  ( model::SceneModel * owner )
+    :   m_ownerScene( owner )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &EndUserParamsLogic::EffectAdded ), NodeEffectAddedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &EndUserParamsLogic::EffectRemoved ), NodeEffectRemovedEvent::Type() );
@@ -69,32 +70,68 @@ EndUserParamsLogic::~EndUserParamsLogic()
 //
 bool            EndUserParamsLogic::AddDescriptor   ( ParameterAddress && param, EndUserParamDescriptor && descriptor )
 {
-    m_paramsDescsMap[ param ] = std::move( descriptor );
-    return true;
+    switch( param.ParamTargetType )
+    {
+        case ParameterAddress::TargetType::PluginParam:
+            return m_pluginDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+        case ParameterAddress::TargetType::GlobalEffectParam:
+            return m_effectDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+        case ParameterAddress::TargetType::ResourceParam:
+            return m_pluginDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+        case ParameterAddress::TargetType::LightParam:
+            return m_lightDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+        case ParameterAddress::TargetType::NodeLogicParam:
+            return m_logicDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+        case ParameterAddress::TargetType::CameraParam:
+            return m_cameraDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+        default:
+            return false;
+    }
 }
 
 // ***********************
 //
-bool            EndUserParamsLogic::RemoveDescriptor( const ParameterAddress & param )
+bool            EndUserParamsLogic::RemoveDescriptor    ( const ParameterAddress & param )
 {
-    auto iter = m_paramsDescsMap.find( param );
-    if( iter != m_paramsDescsMap.end() )
+    switch( param.ParamTargetType )
     {
-        m_paramsDescsMap.erase( iter );
-        return true;
+        case ParameterAddress::TargetType::PluginParam:
+            return m_pluginDescs.RemoveDescriptor( param );
+        case ParameterAddress::TargetType::GlobalEffectParam:
+            return m_effectDescs.RemoveDescriptor( param );
+        case ParameterAddress::TargetType::ResourceParam:
+            return m_pluginDescs.RemoveDescriptor( param );
+        case ParameterAddress::TargetType::LightParam:
+            return m_lightDescs.RemoveDescriptor( param );
+        case ParameterAddress::TargetType::NodeLogicParam:
+            return m_logicDescs.RemoveDescriptor( param );
+        case ParameterAddress::TargetType::CameraParam:
+            return m_cameraDescs.RemoveDescriptor( param );
+        default:
+            return false;
     }
-    return false;
 }
 
 // ***********************
 //
 EndUserParamDescriptor *      EndUserParamsLogic::GetDescriptor   ( const ParameterAddress & param )
 {
-    auto iter = m_paramsDescsMap.find( param );
-    if( iter != m_paramsDescsMap.end() )
+    switch( param.ParamTargetType )
     {
-        return &iter->second;
+        case ParameterAddress::TargetType::PluginParam:
+            return m_pluginDescs.GetDescriptor( param );
+        case ParameterAddress::TargetType::GlobalEffectParam:
+            return m_effectDescs.GetDescriptor( param );
+        case ParameterAddress::TargetType::ResourceParam:
+            return m_pluginDescs.GetDescriptor( param );
+        case ParameterAddress::TargetType::LightParam:
+            return m_lightDescs.GetDescriptor( param );
+        case ParameterAddress::TargetType::NodeLogicParam:
+            return m_logicDescs.GetDescriptor( param );
+        case ParameterAddress::TargetType::CameraParam:
+            return m_cameraDescs.GetDescriptor( param );
     }
+
     return nullptr;
 }
 
@@ -174,64 +211,64 @@ void EndUserParamsLogic::CameraRemoved( bv::IEventPtr evt )
 
 // ***********************
 //
-void            EndUserParamsLogic::Serialize       ( ISerializer & ser ) const
+void            EndUserParamsLogic::Serialize       ( ISerializer & /*ser*/ ) const
 {
-    ser.EnterArray( "endUserParams" );
+    //ser.EnterArray( "endUserParams" );
 
-        for( auto & paramMapping : m_paramsDescsMap )
-        {
-            ser.EnterChild( "mapping" );
-                ser.EnterChild( "param" );
-                paramMapping.first.Serialize( ser );
-                ser.ExitChild();    // param
+    //    for( auto & paramMapping : m_paramsDescsMap )
+    //    {
+    //        ser.EnterChild( "mapping" );
+    //            ser.EnterChild( "param" );
+    //            paramMapping.first.Serialize( ser );
+    //            ser.ExitChild();    // param
 
-                paramMapping.second.Serialize( ser );
-            ser.ExitChild();    // mapping
-        }
+    //            paramMapping.second.Serialize( ser );
+    //        ser.ExitChild();    // mapping
+    //    }
 
-    ser.ExitChild();    // endUserParams
+    //ser.ExitChild();    // endUserParams
 }
 
 // ***********************
 //
-void            EndUserParamsLogic::Deserialize     ( const IDeserializer & deser )
+void            EndUserParamsLogic::Deserialize     ( const IDeserializer & /*deser*/ )
 {
-    if( deser.EnterChild( "endUserParams" ) )
-    {
-        if( deser.EnterChild( "mapping" ) )
-        {
-            do
-            {
-                bool paramValid = false;
-                bool descriptorValid = false;
+    //if( deser.EnterChild( "endUserParams" ) )
+    //{
+    //    if( deser.EnterChild( "mapping" ) )
+    //    {
+    //        do
+    //        {
+    //            bool paramValid = false;
+    //            bool descriptorValid = false;
 
-                ParameterAddress param;
-                if( deser.EnterChild( "param" ) )
-                {
-                    param = ParameterAddress::Create( deser );
+    //            ParameterAddress param;
+    //            if( deser.EnterChild( "param" ) )
+    //            {
+    //                param = ParameterAddress::Create( deser );
 
-                    deser.ExitChild();  // param
-                    paramValid = true;
-                }
+    //                deser.ExitChild();  // param
+    //                paramValid = true;
+    //            }
 
-                EndUserParamDescriptor descriptor;
-                if( deser.EnterChild( "paramDescriptor" ) )
-                {
-                    descriptor = EndUserParamDescriptor::Create( deser );
+    //            EndUserParamDescriptor descriptor;
+    //            if( deser.EnterChild( "paramDescriptor" ) )
+    //            {
+    //                descriptor = EndUserParamDescriptor::Create( deser );
 
-                    deser.ExitChild();  // paramDescriptor
-                    descriptorValid = true;
-                }
+    //                deser.ExitChild();  // paramDescriptor
+    //                descriptorValid = true;
+    //            }
 
-                if( paramValid && descriptorValid )
-                    AddDescriptor( std::move( param  ), std::move( descriptor ) );
+    //            if( paramValid && descriptorValid )
+    //                AddDescriptor( std::move( param  ), std::move( descriptor ) );
 
-            } while( deser.NextChild() );
+    //        } while( deser.NextChild() );
 
-            deser.ExitChild();  // mapping
-        }
-        deser.ExitChild();  // endUserParams
-    }
+    //        deser.ExitChild();  // mapping
+    //    }
+    //    deser.ExitChild();  // endUserParams
+    //}
 }
 
 }	// bv

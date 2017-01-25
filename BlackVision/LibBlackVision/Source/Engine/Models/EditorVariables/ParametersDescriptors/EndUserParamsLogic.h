@@ -3,6 +3,8 @@
 #include "EndUserParamDescriptor.h"
 #include "Engine/Events/ParamAddress.h"
 
+#include "ParameterMapping.h"
+
 #include <map>
 
 
@@ -14,35 +16,41 @@ namespace bv
 class ISerializer;
 class IDeserializer;
 
+namespace model
+{
+    class CameraModel;
+    DEFINE_PTR_TYPE( CameraModel );
+
+    class IModelLight;
+    DEFINE_PTR_TYPE( IModelLight );
+
+    class BasePlugin;
+    DEFINE_PTR_TYPE( BasePlugin );
+
+    class INodeLogic;
+    DEFINE_PTR_TYPE( INodeLogic );
+
+    class IModelNodeEffect;
+    DEFINE_PTR_TYPE( IModelNodeEffect );
+}
+
 
 
 class EndUserParamsLogic
 {
-public:
-
-    //union ParamContainer
-    //{
-    //    model::BasePluginPtr        Plugin;
-    //    model::IModelLightPtr       Light;
-    //    model::CameraModelPtr       Camera;
-    //    model::INodeLogicPtr        Logic;
-    //    model::IModelNodeEffectPtr  Effect;
-    //};
-
-    //struct PointerParamAddres
-    //{
-    //    model::BasicNodePtr         Node;
-    //    ParamContainer              Container;      // Depends on ParameterAddress::TargetType
-    //    model::IParameterPtr        Parameter;
-    //};
-
 private:
 
-    std::map< ParameterAddress, EndUserParamDescriptor >    m_paramsDescsMap;
+    model::SceneModel *         m_ownerScene;
+
+    ParameterMapping< model::CameraModelPtr >       m_cameraDescs;
+    ParameterMapping< model::IModelLightPtr >       m_lightDescs;
+    ParameterMapping< model::BasePluginPtr >        m_pluginDescs;
+    ParameterMapping< model::INodeLogicPtr >        m_logicDescs;
+    ParameterMapping< model::IModelNodeEffectPtr >  m_effectDescs;
 
 public:
-    explicit                EndUserParamsLogic();
-                            ~EndUserParamsLogic();
+    explicit                EndUserParamsLogic  ( model::SceneModel * owner );
+                            ~EndUserParamsLogic ();
 
     bool                    AddDescriptor   ( ParameterAddress && param, EndUserParamDescriptor && descriptor );
     bool                    RemoveDescriptor( const ParameterAddress & param );

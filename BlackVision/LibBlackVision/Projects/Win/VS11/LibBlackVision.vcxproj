@@ -438,6 +438,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLine.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.cpp" />
@@ -834,6 +835,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLine.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\GridLines\GridLinesLogic.h" />

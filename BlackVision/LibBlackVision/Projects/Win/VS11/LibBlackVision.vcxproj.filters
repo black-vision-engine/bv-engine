@@ -2089,6 +2089,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Other</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.cpp">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5416,6 +5419,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.h">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
