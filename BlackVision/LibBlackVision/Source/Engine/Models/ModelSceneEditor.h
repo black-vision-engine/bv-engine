@@ -40,7 +40,7 @@ public:
 
     BasicNodePtr            GetRootNode         () const;
 
-    IModelNodePtr           GetNode             ( const std::string & path, const std::string & separator ) const;
+    IModelNodePtr           GetNode             ( const std::string & path, const std::string & separator = "/" ) const;
 
 };
 
