@@ -49,6 +49,7 @@ public:
     virtual SizeType        GetSize         () const override;
 
     inline VoidPtr          QueryValueTyped () override;
+	inline void *           QueryThis		() override;
 
     // *******************************
     //
@@ -120,6 +121,14 @@ template< typename ValType, ParamType paramType >
 inline VoidPtr  ValueImpl< ValType, paramType >::QueryValueTyped ()
 {
     return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+// *******************************
+//
+template< typename ValType, ParamType paramType >
+inline void *  ValueImpl< ValType, paramType >::QueryThis()
+{
+	return this;
 }
 
 } //bv

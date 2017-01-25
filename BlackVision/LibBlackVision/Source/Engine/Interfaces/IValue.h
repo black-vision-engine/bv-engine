@@ -24,6 +24,7 @@ public:
     virtual const std::string & GetName         ()  const = 0;  
 
     virtual VoidPtr             QueryValueTyped () = 0;
+	virtual void *				QueryThis		() = 0;
 
     virtual ~IValue(){}
 
@@ -71,7 +72,7 @@ inline ValueType * QueryTypedValue( IValue * val )
         return nullptr;
     }
 #endif
-    return static_cast< ValueType * >( val->QueryValueTyped().get() );
+    return static_cast< ValueType * >( val->QueryThis() );
 }
 
 // *********************************
@@ -85,7 +86,7 @@ inline const ValueType * QueryTypedValue( const IValue * val )
         return nullptr;
     }
 #endif
-    return static_cast< const ValueType * >( const_cast< IValue * >( val )->QueryValueTyped().get() );
+    return static_cast< const ValueType * >( const_cast< IValue * >( val )->QueryThis() );
 }
 
 } // bv
