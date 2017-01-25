@@ -98,6 +98,10 @@ public:
 DefaultRoundedRectPlugin::DefaultRoundedRectPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
     : DefaultGeometryPluginBase( name, uid, prev, model )
 {
+	m_size = GetValueParamState< glm::vec2 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PN_SIZE );
+	m_bevels = GetValueParamState< glm::vec4 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PN_BEVELS );
+	m_tesselations = GetValueParamState< Int32 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PN_TESSELATION );
+
 	InitGeometry();
 }
 
@@ -109,9 +113,9 @@ std::vector<IGeometryGeneratorPtr>                 DefaultRoundedRectPlugin::Get
 
 bool                                DefaultRoundedRectPlugin::NeedsTopologyUpdate()
 {
-    return ParameterChanged( PN_SIZE )
-        || ParameterChanged( PN_BEVELS )
-        || ParameterChanged( PN_TESSELATION );
+    return m_size.Changed()
+        || m_bevels.Changed()
+        || m_tesselations.Changed();
 }
 
 glm::vec2                                   DefaultRoundedRectPlugin::GetSize()

@@ -1,4 +1,5 @@
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 namespace bv { namespace model {
 
@@ -21,6 +22,11 @@ public:
     static const std::string PN_TESSELATION;
 
 private:
+
+	ValueParamState< glm::vec2 >		m_size;
+	ValueParamState< glm::vec4 >		m_bevels;
+	ValueParamState< Int32 >			m_tesselations;
+
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
     virtual bool                                NeedsTopologyUpdate();
