@@ -190,7 +190,7 @@ inline typename ParameterMapping< ParamContainerTypePtr >::PtrParamAddress      
 template< typename ParamContainerTypePtr >
 inline bool             ParameterMapping< ParamContainerTypePtr >::AddDescriptor    ( model::SceneModel * owner, ParameterAddress && param, EndUserParamDescriptor && descriptor )
 {
-    if( IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
+    if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return false;
 
     PtrParamAddress paramPtr = FindParameter< ParamContainerTypePtr >( owner, param );
@@ -214,7 +214,7 @@ inline bool             ParameterMapping< ParamContainerTypePtr >::AddDescriptor
 template< typename ParamContainerTypePtr >
 inline bool             ParameterMapping< ParamContainerTypePtr >::RemoveDescriptor ( const ParameterAddress & param )
 {
-    if( param.ParamTargetType != GetParamTargetType< ParamContainerTypePtr >() )
+    if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return false;
 
     auto iter = m_str2PtrAddressMap.find( param );
@@ -249,7 +249,7 @@ inline void             ParameterMapping< ParamContainerTypePtr >::Deserialize  
 template< typename ParamContainerTypePtr >
 inline EndUserParamDescriptor *     ParameterMapping< ParamContainerTypePtr >::GetDescriptor    ( const ParameterAddress & param )
 {
-    if( param.ParamTargetType != GetParamTargetType< ParamContainerTypePtr >() )
+    if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return false;
 
     auto iter = m_str2PtrAddressMap.find( param );
