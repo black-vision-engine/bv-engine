@@ -61,6 +61,9 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
             deser.ExitChild(); //channels
         }
 
+		bool result = card->InitOutput();
+		{result;}
+
         VideoCard::AvailableVideoCards--;
 
         return card;
@@ -114,7 +117,7 @@ bool                    VideoCard::InitVideoCard        ()
 {
     if( InitDevice() )
     {
-        return InitOutput();
+        
     }
 
     return false;
@@ -249,10 +252,11 @@ void                    VideoCard::ProcessFrame         (AVFramePtr src_frame, i
         }
         else
         {
-            memcpy( rawFrame, src_frame->m_videoData->Get(), frame->GetRowBytes() * frame->GetHeight() );
+            memcpy( rawFrame, src_frame->m_videoData->Get(),frame->GetRowBytes() * frame->GetHeight() );
         }
 
         m_output->DisplayVideoFrameSync( frame );
+		
     }
 }
 

@@ -56,11 +56,13 @@ AVFramePtr          VideoCardManager::KILLER_FRAME = nullptr;
 
 //**************************************
 //
-VideoCardManager::VideoCardManager      ()
-    : m_keyActive( true )
-    , m_interlaceEnabled( true )
-    , m_dislpayMode( DisplayMode::HD )
-	, m_currentFrameNumber( 0 )
+VideoCardManager::VideoCardManager()
+	: m_keyActive(true)
+	, m_interlaceEnabled(true)
+	, m_dislpayMode(DisplayMode::HD)
+	, m_currentFrameNumber(0)
+	, m_PreviousFrame(NULL)
+	, m_InterlaceProducesFullFrames(false)
     , m_processThread( std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread() ) )
 	
 {
@@ -101,6 +103,11 @@ void                        VideoCardManager::ReadConfig            ( const IDes
             do
             {
                 auto name = deser.GetAttribute( "name" );
+				if (name == "BlackMagic")
+				{
+					m_InterlaceProducesFullFrames = true; // kinda hack - bluefish requires 50 x fields and blackamgic requires 25 x interlaced frames - they need different refresh rates and data size inside frame memory
+				}
+
                 if( IsRegistered( name ) )
                 {
                     auto videocard = m_descMap[ name ]->CreateVideoCard( deser );
@@ -188,7 +195,7 @@ bool                        VideoCardManager::ProcessFrame          ()
     {
 		short int odd = m_currentFrameNumber % 2;
 		m_currentFrameNumber++;
-		if( data->m_desc.fieldModeEnabled )
+		if( data->m_desc.fieldModeEnabled && !m_InterlaceProducesFullFrames)
 		{
 			data = RetrieveFieldFromFrame( data, odd );
 		}
@@ -246,8 +253,36 @@ AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, in
 //
 AVFramePtr         VideoCardManager::InterlacedFrame(AVFramePtr frame)
 {
+	int pixel_depth = frame->m_desc.depth;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
+	int width = frame->m_desc.width;
+	int height = frame->m_desc.height;
+	int bytes_per_line = width * pixel_depth;
+	int size = width * height * pixel_depth;
+
+	const char *mem_new = frame->m_videoData->Get();
 	
+	if (m_PreviousFrame == NULL)
+	{
+		
+		m_PreviousFrame = new char[size];
+	}
+	
+	char *mem_dst = new char[size];
+
+	for (int i = 0;i < height;i++)
+	{
+		if(i%2==1)
+			memcpy(&mem_dst[i*(bytes_per_line)], &m_PreviousFrame[i*(bytes_per_line)], bytes_per_line);
+		else
+			memcpy(&mem_dst[i*(bytes_per_line)], &mem_new[i*(bytes_per_line)], bytes_per_line);
+	}
+
 	// yet to be implemented
+	
+	memcpy(m_PreviousFrame, mem_new, size);
+
+	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
+	frame->m_videoData = ptr;
 
 	return frame;
 }
