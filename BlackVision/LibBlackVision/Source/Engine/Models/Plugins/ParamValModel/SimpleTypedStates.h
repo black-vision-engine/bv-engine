@@ -8,16 +8,16 @@ template< typename T >
 class SimpleState : public IStatedValue {
     T prevVal, curVal;
 public:
-    void Update( const T& val )
+	inline void Update( const T& val )
     {
         prevVal = curVal;
         curVal = val;
     }
-    virtual bool StateChanged() const override
+    inline bool StateChanged() const override
     {
         return prevVal != curVal;
     }
-    const T& GetValue() const
+	inline const T& GetValue() const
     {
         return curVal;
     }
