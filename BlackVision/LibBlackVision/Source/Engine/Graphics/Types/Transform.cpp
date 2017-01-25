@@ -1,8 +1,10 @@
 #include "stdafx.h"
 
+#define GLM_FORCE_SSE2
+
 #include "Transform.h"
 
-
+#include "glm/gtx/simd_mat4.hpp"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -48,7 +50,7 @@ void                Transform::Reset           ()
 void                Transform::SetMatrix       ( const glm::mat4 & m )
 {
     m_fwdTransform = m;
-    m_invTransform = glm::inverse( m );
+    m_invTransform = glm::mat4_cast( glm::inverse( glm::detail::fmat4x4SIMD( m ) ) );
 }
 
 // *********************************

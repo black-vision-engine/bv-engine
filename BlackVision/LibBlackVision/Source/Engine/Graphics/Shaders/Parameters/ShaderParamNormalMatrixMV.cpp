@@ -1,8 +1,11 @@
 #include "stdafx.h"
 
+#define GLM_FORCE_SSE2
+
+
 #include "ShaderParamNormalMatrixMV.h"
 
-
+#include "glm/gtx/simd_mat4.hpp"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -43,7 +46,8 @@ void            ShaderParamNormalMatrixMV::Update        ( RenderableEntity * re
         assert( camera != nullptr );    { camera; }
 
         auto mv = camera->GetViewMatrix() * renderable->WorldTransform().Matrix();
-        m_normalMat = glm::mat3( glm::transpose( glm::inverse( mv ) ) );
+
+        m_normalMat = glm::mat3( glm::mat4_cast(glm::transpose(glm::inverse(glm::detail::fmat4x4SIMD(mv)))) );
     }
 }
 
