@@ -570,20 +570,21 @@ ValueT CompositeInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeValueT t )
 template< class TimeValueT, class ValueT >
 ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( TimeValueT t ) const 
 { 
-    if( keys.size() == 0 )
+	auto size = keys.size();
+    if( size == 0 )
     {
         assert( false ); // FIXME: error handling FTW
         return ValueT();
     }
 
-    if( keys.size() == 1 )
+    if( size == 1 )
         return keys[ 0 ].val;
 
     if( t < keys[0].t )
         return PreEvaluate( t );
 
     SizeType i = 0;
-    while( t > keys[ i+1 ].t && i < keys.size()-2 )
+    while( t > keys[ i+1 ].t && i < size - 2 )
         i++;
 
     if( t > keys[ i+1 ].t )

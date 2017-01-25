@@ -93,6 +93,8 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
 { 
     m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
 
+	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM_BLEND_ENABLE );
+
 	SetPrevPlugin( prev );
 }
 
@@ -115,7 +117,7 @@ void                                DefaultColorPlugin::Update                  
 {
 	BasePlugin::Update( t );
 
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    if( m_blendEnabled.Changed() )
     {
         auto ctx = m_pixelShaderChannel->GetRendererContext();
         ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();

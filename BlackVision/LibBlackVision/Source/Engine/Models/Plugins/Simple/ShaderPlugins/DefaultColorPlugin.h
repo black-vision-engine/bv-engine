@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
 
@@ -36,6 +37,8 @@ private:
 
     DefaultPixelShaderChannelPtr            m_pixelShaderChannel;
     DefaultPluginParamValModelPtr           m_paramValModel;
+
+	ValueParamState< bool >					m_blendEnabled;
 
 public:
 

@@ -50,19 +50,19 @@ struct ValueParamState
 		, statePtr(state)
 	{}
 
-	const T &		GetValue() const
+	inline const T &		GetValue() const
 	{
 		assert(valuePtr != nullptr);
 		return valuePtr->GetValue();
 	}
 
-	const PType &	GetParameter() const
+	inline const PType &	GetParameter() const
 	{
 		assert(paramPtr != nullptr);
 		return *paramPtr;
 	}
 
-	bool			Changed() const
+	inline bool		Changed() const
 	{
 		assert(statePtr != nullptr);
 		return statePtr->StateChanged();
