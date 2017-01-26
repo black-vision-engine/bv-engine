@@ -30,7 +30,8 @@ public:
     AVFrameDescriptor       m_desc;
     BVTimeCode              m_TimeCode;
 
-    AVFrame     ( MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc );
+	AVFrame(MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc);
+	AVFrame();
     ~AVFrame    ();
             
 };

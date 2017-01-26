@@ -7,10 +7,14 @@ namespace bv { namespace videocards {
 
 // ****************************
 //
-AVFrame::AVFrame      ( MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc )
-    : m_videoData( videoData )
-    , m_audioData( audioData )
-    , m_desc( desc )
+AVFrame::AVFrame(MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc)
+	: m_videoData(videoData)
+	, m_audioData(audioData)
+	, m_desc(desc)
+{
+}
+
+AVFrame::AVFrame()
 {
 }
 
