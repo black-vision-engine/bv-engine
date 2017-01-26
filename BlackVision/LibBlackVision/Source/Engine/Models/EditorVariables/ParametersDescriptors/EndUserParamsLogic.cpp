@@ -27,6 +27,11 @@ namespace bv
 //
 EndUserParamsLogic::EndUserParamsLogic  ( model::SceneModel * owner )
     :   m_ownerScene( owner )
+    ,   m_cameraDescs( owner )
+    ,   m_effectDescs( owner )
+    ,   m_lightDescs( owner )
+    ,   m_logicDescs( owner )
+    ,   m_pluginDescs( owner )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &EndUserParamsLogic::EffectAdded ), NodeEffectAddedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &EndUserParamsLogic::EffectRemoved ), NodeEffectRemovedEvent::Type() );
@@ -73,17 +78,17 @@ bool            EndUserParamsLogic::AddDescriptor   ( ParameterAddress && param,
     switch( param.ParamTargetType )
     {
         case ParameterAddress::TargetType::PluginParam:
-            return m_pluginDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+            return m_pluginDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         case ParameterAddress::TargetType::GlobalEffectParam:
-            return m_effectDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+            return m_effectDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         case ParameterAddress::TargetType::ResourceParam:
-            return m_pluginDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+            return m_pluginDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         case ParameterAddress::TargetType::LightParam:
-            return m_lightDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+            return m_lightDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         case ParameterAddress::TargetType::NodeLogicParam:
-            return m_logicDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+            return m_logicDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         case ParameterAddress::TargetType::CameraParam:
-            return m_cameraDescs.AddDescriptor( m_ownerScene, std::move( param ), std::move( descriptor ) );
+            return m_cameraDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         default:
             return false;
     }
@@ -211,22 +216,18 @@ void EndUserParamsLogic::CameraRemoved( bv::IEventPtr evt )
 
 // ***********************
 //
-void            EndUserParamsLogic::Serialize       ( ISerializer & /*ser*/ ) const
+void            EndUserParamsLogic::Serialize       ( ISerializer & ser ) const
 {
-    //ser.EnterArray( "endUserParams" );
+    ser.EnterArray( "endUserParams" );
 
-    //    for( auto & paramMapping : m_paramsDescsMap )
-    //    {
-    //        ser.EnterChild( "mapping" );
-    //            ser.EnterChild( "param" );
-    //            paramMapping.first.Serialize( ser );
-    //            ser.ExitChild();    // param
+    m_cameraDescs.Serialize( ser );
+    m_effectDescs.Serialize( ser );
+    m_logicDescs.Serialize( ser );
+    m_pluginDescs.Serialize( ser );
+    m_lightDescs.Serialize( ser );
 
-    //            paramMapping.second.Serialize( ser );
-    //        ser.ExitChild();    // mapping
-    //    }
 
-    //ser.ExitChild();    // endUserParams
+    ser.ExitChild();    // endUserParams
 }
 
 // ***********************

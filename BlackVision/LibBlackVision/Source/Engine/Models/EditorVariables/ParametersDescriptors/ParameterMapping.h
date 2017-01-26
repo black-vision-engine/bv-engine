@@ -56,19 +56,25 @@ public:
         }
     };
 
-    typedef std::unordered_map< model::IParameterPtr, EndUserParamDescriptor >      ParamDescriptorMap;
-    typedef std::map< PtrParamAddress, ParameterAddress * >                         PtrParamStrParamMap;
-    typedef std::map< ParameterAddress, PtrParamAddress * >                         StrParamPtrParamMap;
+    //typedef std::unordered_map< model::IParameterPtr, EndUserParamDescriptor >      ParamDescriptorMap;
+    //typedef std::map< PtrParamAddress, ParameterAddress * >                         PtrParamStrParamMap;
+    typedef std::map< ParameterAddress, EndUserParamDescriptor >                    ParamDescriptorMap;
+    typedef std::multimap< PtrParamAddress, ParamDescriptorMap::iterator >          ParamPtr2AddressMap;
 
 private:
 
+    model::SceneModel *     m_ownerScene;
+
     ParamDescriptorMap      m_paramsDescsMap;
-    PtrParamStrParamMap     m_ptr2StrAddressMap;
-    StrParamPtrParamMap     m_str2PtrAddressMap;
+    ParamPtr2AddressMap     m_ptr2StrAddressMap;
 
 public:
+    explicit ParameterMapping( model::SceneModel * owner )
+        : m_ownerScene( owner )
+    {}
 
-    bool                    AddDescriptor   ( model::SceneModel * owner, ParameterAddress && param, EndUserParamDescriptor && descriptor );
+
+    bool                    AddDescriptor   ( ParameterAddress && param, EndUserParamDescriptor && descriptor );
     bool                    RemoveDescriptor( const ParameterAddress & param );
 
     void                    Serialize       ( ISerializer & ser ) const;
@@ -165,6 +171,24 @@ inline model::IModelNodeEffectPtr      GetParamContainer< model::IModelNodeEffec
 {    return node->GetNodeEffect();  }
 
 
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline std::string                      GetParameterMappingSerializationName   ()
+{
+    static_assert( false, "Specialize" );
+    return "";
+}
+
+template<> inline std::string                      GetParameterMappingSerializationName< model::IModelLightPtr >        ()   { return "LightParamsDescriptors"; }
+template<> inline std::string                      GetParameterMappingSerializationName< model::BasePluginPtr >         ()   { return "PluginParamsDescriptors"; }
+template<> inline std::string                      GetParameterMappingSerializationName< model::INodeLogicPtr >         ()   { return "LogicParamsDescriptors"; }
+template<> inline std::string                      GetParameterMappingSerializationName< model::IModelNodeEffectPtr >   ()   { return "EffectParamsDescriptors"; }
+template<> inline std::string                      GetParameterMappingSerializationName< model::CameraModelPtr >        ()   { return "CameraParamsDescriptors"; }
+
+
+
 // ***********************
 //
 template< typename ParamContainerTypePtr >
@@ -188,23 +212,20 @@ inline typename ParameterMapping< ParamContainerTypePtr >::PtrParamAddress      
 // ***********************
 //
 template< typename ParamContainerTypePtr >
-inline bool             ParameterMapping< ParamContainerTypePtr >::AddDescriptor    ( model::SceneModel * owner, ParameterAddress && param, EndUserParamDescriptor && descriptor )
+inline bool             ParameterMapping< ParamContainerTypePtr >::AddDescriptor    ( ParameterAddress && param, EndUserParamDescriptor && descriptor )
 {
     if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return false;
 
-    PtrParamAddress paramPtr = FindParameter< ParamContainerTypePtr >( owner, param );
+    PtrParamAddress paramPtr = FindParameter< ParamContainerTypePtr >( m_ownerScene, param );
+    if( paramPtr.Parameter != nullptr )
+    {
+        auto iter = m_paramsDescsMap.insert( std::make_pair( std::move( param ), std::move( descriptor ) ) );
 
-    auto leftIter = m_ptr2StrAddressMap.insert( std::make_pair< PtrParamAddress, ParameterAddress * >( std::move( paramPtr ), nullptr ) );
-    auto rightIter = m_str2PtrAddressMap.insert( std::make_pair< ParameterAddress, PtrParamAddress * >( std::move( param ), nullptr ) );
-
-    //assert( leftIter.second );
-    //assert( rightIter.second );
-
-    leftIter.first->second = const_cast< ParameterAddress * >( &rightIter.first->first );
-    rightIter.first->second = const_cast< PtrParamAddress * >( &leftIter.first->first );
-
-    m_paramsDescsMap[ leftIter.first->first.Parameter ] = std::move( descriptor );
+        auto insertValue = std::make_pair( paramPtr, iter.first );
+        m_ptr2StrAddressMap.insert( insertValue );
+        return true;
+    }
 
     return true;
 }
@@ -217,32 +238,86 @@ inline bool             ParameterMapping< ParamContainerTypePtr >::RemoveDescrip
     if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return false;
 
-    auto iter = m_str2PtrAddressMap.find( param );
-    if( iter == m_str2PtrAddressMap.end() ) return false;
+    PtrParamAddress paramPtr = FindParameter< ParamContainerTypePtr >( m_ownerScene, param );
+    
+    auto descIter = m_paramsDescsMap.find( param );
+    auto range = m_ptr2StrAddressMap.equal_range( paramPtr );
 
-    auto & parameter = iter->second->Parameter;
+    if( descIter == m_paramsDescsMap.end() ) return false;
 
-    auto numErased1 = m_paramsDescsMap.erase( parameter );
-    auto numErased2 = m_ptr2StrAddressMap.erase( *( iter->second ) );
-    m_str2PtrAddressMap.erase( iter );
+    for( auto ptrIter = range.first; ptrIter != range.second; ptrIter++ )
+    {
+        if( ptrIter->second == descIter )
+            ptrIter = m_ptr2StrAddressMap.erase( ptrIter );
+    }
 
-    assert( numErased1 == 1 );
-    assert( numErased2 == 1 );
-
+    m_paramsDescsMap.erase( descIter );
     return true;
 }
 
 // ***********************
 //
 template< typename ParamContainerTypePtr >
-inline void             ParameterMapping< ParamContainerTypePtr >::Serialize        ( ISerializer & /*ser*/ ) const
-{}
+inline void             ParameterMapping< ParamContainerTypePtr >::Serialize        ( ISerializer & ser ) const
+{
+    ser.EnterArray( GetParameterMappingSerializationName< ParamContainerTypePtr >() );
+
+        for( auto & paramMapping : m_paramsDescsMap )
+        {
+            ser.EnterChild( "mapping" );
+                ser.EnterChild( "param" );
+                paramMapping.first.Serialize( ser );
+                ser.ExitChild();    // param
+
+                paramMapping.second.Serialize( ser );
+            ser.ExitChild();    // mapping
+        }
+
+    ser.ExitChild();    // endUserParams
+}
 
 // ***********************
 //
 template< typename ParamContainerTypePtr >
-inline void             ParameterMapping< ParamContainerTypePtr >::Deserialize      ( const IDeserializer & /*deser*/ )
-{}
+inline void             ParameterMapping< ParamContainerTypePtr >::Deserialize      ( const IDeserializer & deser )
+{
+    if( deser.EnterChild( GetParameterMappingSerializationName< ParamContainerTypePtr >() ) )
+    {
+        if( deser.EnterChild( "mapping" ) )
+        {
+            do
+            {
+                bool paramValid = false;
+                bool descriptorValid = false;
+
+                ParameterAddress param;
+                if( deser.EnterChild( "param" ) )
+                {
+                    param = ParameterAddress::Create( deser );
+
+                    deser.ExitChild();  // param
+                    paramValid = true;
+                }
+
+                EndUserParamDescriptor descriptor;
+                if( deser.EnterChild( "paramDescriptor" ) )
+                {
+                    descriptor = EndUserParamDescriptor::Create( deser );
+
+                    deser.ExitChild();  // paramDescriptor
+                    descriptorValid = true;
+                }
+
+                if( paramValid && descriptorValid )
+                    AddDescriptor( std::move( param  ), std::move( descriptor ) );
+
+            } while( deser.NextChild() );
+
+            deser.ExitChild();  // mapping
+        }
+        deser.ExitChild();  // endUserParams
+    }
+}
 
 // ***********************
 //
@@ -250,12 +325,12 @@ template< typename ParamContainerTypePtr >
 inline EndUserParamDescriptor *     ParameterMapping< ParamContainerTypePtr >::GetDescriptor    ( const ParameterAddress & param )
 {
     if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
-        return false;
+        return nullptr;
 
-    auto iter = m_str2PtrAddressMap.find( param );
-    if( iter == m_str2PtrAddressMap.end() ) return nullptr;
-
-    return &m_paramsDescsMap[ iter->second->Parameter ];
+    auto result = m_paramsDescsMap.find( param );
+    if( result != m_paramsDescsMap.end() )
+        return &m_paramsDescsMap[ param ];
+    return nullptr;
 }
 
 
