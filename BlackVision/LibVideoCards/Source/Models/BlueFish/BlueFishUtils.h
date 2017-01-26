@@ -78,6 +78,7 @@ struct ChannelOption
     UInt32          OutputChannel;
     UInt32          EpochOutputMemInterface;
     UInt32          EpochSDIOutput;
+	UInt32          EpochSDIKeyOutput;
 };
 
 

@@ -119,6 +119,19 @@ UInt32      Channel::GetEpochSDIOutput          () const
 
 //**************************************
 //
+UInt32      Channel::GetEpochSDIKeyOutput       () const
+{
+	if( m_playbackData )
+	{
+		return ChannelOptions.at( m_channelName ).EpochSDIKeyOutput;
+	}
+
+	return 0;
+}
+
+
+//**************************************
+//
 UInt32      Channel::GetEpochOutputMemInterface () const
 {
     if( m_playbackData )
@@ -426,14 +439,17 @@ Channel::ChannelOptionMap     Channel::CreateChannelOptionMap   ()
     A.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_A;
     A.EpochSDIInput = EPOCH_SRC_SDI_INPUT_A;
     A.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_A;
-    A.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHA;
+	A.EpochSDIKeyOutput = EPOCH_DEST_SDI_OUTPUT_B;
+	A.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHA;
     A.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA;
+	
 
     ChannelOption B;
     B.InputChannel = BLUE_VIDEO_INPUT_CHANNEL_B;
     B.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_B;
     B.EpochSDIInput = EPOCH_SRC_SDI_INPUT_B;
     B.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_B;
+	B.EpochSDIKeyOutput = EPOCH_DEST_SDI_OUTPUT_C;
     B.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHB;
     B.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHB;
 
@@ -442,6 +458,7 @@ Channel::ChannelOptionMap     Channel::CreateChannelOptionMap   ()
     C.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_C;
     C.EpochSDIInput = EPOCH_SRC_SDI_INPUT_C;
     C.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_C;
+	C.EpochSDIKeyOutput = EPOCH_DEST_SDI_OUTPUT_D;
     C.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHC;
     C.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHC;
 
@@ -450,6 +467,7 @@ Channel::ChannelOptionMap     Channel::CreateChannelOptionMap   ()
     D.OutputChannel = BLUE_VIDEO_OUTPUT_CHANNEL_D;
     D.EpochSDIInput = EPOCH_SRC_SDI_INPUT_D;
     D.EpochSDIOutput = EPOCH_DEST_SDI_OUTPUT_D;
+	D.EpochSDIKeyOutput = EPOCH_DEST_SDI_OUTPUT_D;
     D.EpochInputMemInterface = EPOCH_DEST_INPUT_MEM_INTERFACE_CHD;
     D.EpochOutputMemInterface = EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHD;
 
