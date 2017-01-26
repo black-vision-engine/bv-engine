@@ -256,11 +256,9 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     Enable  ( vao );
 
     unsigned int firstVertex = 0;
-    auto ccNum = vao->GetNumConnectedComponents();
+	auto ccNum = vao->GetNumConnectedComponents();
     for( unsigned int i = 0; i < ccNum; ++i )
     {
-        PassCCNumUniform( i, ccNum );
-
         unsigned int numVertices = vao->GetNumVertices( i );
         BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
         firstVertex += numVertices;
@@ -286,8 +284,6 @@ bool     Renderer::DrawTriangles            ( Triangles * triangles )
     auto ccNum = vao->GetNumConnectedComponents();
     for( unsigned int i = 0; i < ccNum; ++i )
     {
-        PassCCNumUniform( i, ccNum );
-
         unsigned int numVertices = vao->GetNumVertices( i );
         BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
         firstVertex += numVertices;
@@ -315,8 +311,6 @@ bool     Renderer::DrawLines      ( Lines * lines )
     auto ccNum = vao->GetNumConnectedComponents();
     for( unsigned int i = 0; i < ccNum; ++i )
     {
-        PassCCNumUniform( i, ccNum );
-
 //assert( !BVGL::bvglGetError() );
 //
         unsigned int numVertices = vao->GetNumVertices( i );
@@ -972,28 +966,28 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
     }
 }
 
-// *********************************
+//// *********************************
+////
+//void    Renderer::PassCCNumUniform  ( int i, SizeType num )
+//{
+//    GLint id;
+//    BVGL::bvglGetIntegerv( GL_CURRENT_PROGRAM, &id );
 //
-void    Renderer::PassCCNumUniform  ( int i, SizeType num )
-{
-    GLint id;
-    BVGL::bvglGetIntegerv( GL_CURRENT_PROGRAM, &id );
-
-    auto loc = BVGL::bvglGetUniformLocation( id, "cc_num" );
-
-    if( loc >= 0 )
-    {
-        BVGL::bvglUniform1i( loc, i );
-    }
-
-    loc = BVGL::bvglGetUniformLocation( id, "cc_num_total" );
-    
-    if( loc >= 0 )
-    {
-        BVGL::bvglUniform1i( loc, ( bv::GLint )num );
-    }
-
-}
+//    auto loc = BVGL::bvglGetUniformLocation( id, "cc_num" );
+//
+//    if( loc >= 0 )
+//    {
+//        BVGL::bvglUniform1i( loc, i );
+//    }
+//
+//    loc = BVGL::bvglGetUniformLocation( id, "cc_num_total" );
+//    
+//    if( loc >= 0 )
+//    {
+//        BVGL::bvglUniform1i( loc, ( bv::GLint )num );
+//    }
+//
+//}
 
 // *********************************
 //
