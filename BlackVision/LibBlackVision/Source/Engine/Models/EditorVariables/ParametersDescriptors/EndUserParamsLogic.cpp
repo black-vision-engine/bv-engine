@@ -232,44 +232,18 @@ void            EndUserParamsLogic::Serialize       ( ISerializer & ser ) const
 
 // ***********************
 //
-void            EndUserParamsLogic::Deserialize     ( const IDeserializer & /*deser*/ )
+void            EndUserParamsLogic::Deserialize     ( const IDeserializer & deser )
 {
-    //if( deser.EnterChild( "endUserParams" ) )
-    //{
-    //    if( deser.EnterChild( "mapping" ) )
-    //    {
-    //        do
-    //        {
-    //            bool paramValid = false;
-    //            bool descriptorValid = false;
+    if( deser.EnterChild( "endUserParams" ) )
+    {
+        m_cameraDescs.Deserialize( deser );
+        m_effectDescs.Deserialize( deser );
+        m_logicDescs.Deserialize( deser );
+        m_pluginDescs.Deserialize( deser );
+        m_lightDescs.Deserialize( deser );
 
-    //            ParameterAddress param;
-    //            if( deser.EnterChild( "param" ) )
-    //            {
-    //                param = ParameterAddress::Create( deser );
-
-    //                deser.ExitChild();  // param
-    //                paramValid = true;
-    //            }
-
-    //            EndUserParamDescriptor descriptor;
-    //            if( deser.EnterChild( "paramDescriptor" ) )
-    //            {
-    //                descriptor = EndUserParamDescriptor::Create( deser );
-
-    //                deser.ExitChild();  // paramDescriptor
-    //                descriptorValid = true;
-    //            }
-
-    //            if( paramValid && descriptorValid )
-    //                AddDescriptor( std::move( param  ), std::move( descriptor ) );
-
-    //        } while( deser.NextChild() );
-
-    //        deser.ExitChild();  // mapping
-    //    }
-    //    deser.ExitChild();  // endUserParams
-    //}
+        deser.ExitChild();  // endUserParams
+    }
 }
 
 }	// bv

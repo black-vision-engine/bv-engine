@@ -140,11 +140,6 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     auto & editorSceneVariables = obj->GetSceneVariables();
     editorSceneVariables.Deserialize( deser );
 
-// end user params
-
-    auto & endUserParams = obj->GetEndUserParams();
-    endUserParams.Deserialize( deser );
-
 // gridlines
     obj->GetGridLinesLogic().Deserialize( deser );
 
@@ -155,6 +150,12 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     {
         obj->SetRootNode( node );
     }
+
+    // end user params
+    // Must be after attaching nodes.
+
+    auto & endUserParams = obj->GetEndUserParams();
+    endUserParams.Deserialize( deser );
 
     return obj;
 }
