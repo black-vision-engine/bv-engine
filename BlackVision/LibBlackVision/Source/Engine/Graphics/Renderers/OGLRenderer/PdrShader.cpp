@@ -295,7 +295,18 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
     }
 
-    m_program->SetUniform( sampler->GetName().c_str(), textureUnit );
+    int loc = sampler->GetCachedLoc();
+
+    if( loc >= 0 )
+    {
+        m_program->SetUniform( loc, textureUnit );
+    }
+    else
+    {
+        loc = m_program->SetUniform( sampler->GetName().c_str(), textureUnit );
+
+        sampler->CacheLoc( loc );
+    }
 }
 
 // *******************************

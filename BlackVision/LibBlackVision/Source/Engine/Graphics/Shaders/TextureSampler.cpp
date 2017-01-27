@@ -17,6 +17,7 @@ TextureSampler::TextureSampler  ( int id, const std::string & name,  SamplerSamp
     : m_id( id )
     , m_name( name )
     , m_samplingMode( ssm )
+    , m_loc( -1 )
 {
 	//Set default values - they will be overwritten in Shader
     for( int i = 0; i < (int) SamplerWrapDirection::SWD_TOTAL; ++i )
@@ -36,6 +37,7 @@ TextureSampler::TextureSampler  ( int id, const std::string & name,  SamplerSamp
     , m_samplingMode( ssm )
     , m_filteringMode( sfm )
     , m_borderColor( borderColor )
+    , m_loc( -1 )
 {
     for( int i = 0; i < (int) SamplerWrapDirection::SWD_TOTAL; ++i )
     {
@@ -45,71 +47,85 @@ TextureSampler::TextureSampler  ( int id, const std::string & name,  SamplerSamp
 
 // ******************************
 //
-TextureSampler::~TextureSampler ()
+TextureSampler::~TextureSampler                             ()
 {
 }
 
 // ******************************
 //
-int                     TextureSampler::GetId           () const
+int                     TextureSampler::GetId               () const
 {
     return m_id;
 }
 
 // ******************************
 //
-const std::string &     TextureSampler::GetName         () const
+const std::string &     TextureSampler::GetName             () const
 {
     return m_name;
 }
 
 // ******************************
 //
-SamplerSamplingMode     TextureSampler::SamplingMode    () const
+SamplerSamplingMode     TextureSampler::SamplingMode        () const
 {
     return m_samplingMode;
 }
 
 // ******************************
 //
-SamplerFilteringMode    TextureSampler::FilteringMode   () const
+SamplerFilteringMode    TextureSampler::FilteringMode       () const
 {
     return m_filteringMode;
 }
 
 // ******************************
 //
-SamplerWrappingMode     TextureSampler::WrappingMode    ( SamplerWrapDirection direction ) const
+SamplerWrappingMode     TextureSampler::WrappingMode        ( SamplerWrapDirection direction ) const
 {
     return m_wrappingMode[ (int) direction ];
 }
 
 // ******************************
 //
-const glm::vec4 &       TextureSampler::GetBorderColor  () const
+const glm::vec4 &       TextureSampler::GetBorderColor      () const
 {
     return m_borderColor;
 }
 
 // ******************************
 //
-void                    TextureSampler::SetBorderColor  ( const glm::vec4 & bc )
+void                    TextureSampler::SetBorderColor      ( const glm::vec4 & bc )
 {
     m_borderColor = bc;
 }
 
 // ******************************
 //
-void					TextureSampler::SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction )
+void					TextureSampler::SetWrappingMode     ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction )
 {
 	m_wrappingMode[ (int) wrap_direction ] = mode;
 }
 
 // ******************************
 //
-void                    TextureSampler::SetFilteringMode  ( SamplerFilteringMode mode )
+void                    TextureSampler::SetFilteringMode    ( SamplerFilteringMode mode )
 {
 	m_filteringMode = mode;
 }
 
+// ******************************
+//
+void                    TextureSampler::CacheLoc            ( int loc ) const
+{
+    m_loc = loc;
 }
+
+// ******************************
+//
+int                     TextureSampler::GetCachedLoc        () const
+{
+    return m_loc;
+}
+
+} // bv

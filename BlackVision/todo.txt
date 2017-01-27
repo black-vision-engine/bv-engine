@@ -2,6 +2,7 @@
 2. Shared - done
 3. Video - done (videocardmanager and all machinery for multiple cards to be implemented)
 4. Cache intermediate result in result - skipped
+15. Reimplementacja shared buf tak, żeby był przechowytwany w System i tylko wykorzystany na bazie niskopoziomowej implementacji
 
 3_1/2. Warstwa do konfiguracji outputów
   - statyczna (w, h, domyślny input), domyślna konfiguracja włączonych outputów
@@ -16,6 +17,7 @@
 10. Project conf
  - deps
  - build times - teraz jest kurwa dramat (linkowanie, wypisywanie pdb w LibBlackVision)
+ - każdorazowe pytanie o rebuild całości
  - asset copying
  - additional project for shaders only
 11. Wywalic gowno w formie kebaba
@@ -30,7 +32,6 @@
   - UpdateEffectValues in a generic way
   - ten shader FSE do przetwarzania mixchannels też użyć przed resztą - ładna kompozycja
     - input->mix_channels (if necessary) -> output_component( readback_texture )
-15. Reimplementacja shared buf tak, żeby był przechowytwany w System i tylko wykorzystany na bazie niskopoziomowej implementacji
 16. Możliwość konfigurowania FSE (czyli jakiś generyczny deskryptor)
 17. Zmieniane shadery wcale się nie kopiują (e.g. mixchannels.frag z FullscreenEffects)
 18. Potestować zbuffering w render targetach
@@ -42,3 +43,6 @@
 20. Enable/Disable output, set active renderchannel, set output params, inicjalizacja outputów
 21. Wywalić stary kod render logic, w nowym zmienić nazwy (bez prefiksu N i bez namespace nrl)
 22. Dowiedziec się od Pawełka dlaczego jak jest shared video mem buffer, to jeśli jest < FullHD, to się nie wyświetla na podglądzie?
+23. Podmienić implementację video output tak, żeby jedna instancja obsługiwała wszystkie karty video (w tym HD i SD).
+24. Zoptymalizować dopinanie samplerów.
+25. Przemyśleć generyczne rozwiązanie minimalizujące liczbę zmian stanów.
