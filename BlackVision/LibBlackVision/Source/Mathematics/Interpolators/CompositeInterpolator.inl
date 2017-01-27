@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CompositeInterpolator.h"
 
 #include "InterpolatorBasicTypes.h"
@@ -29,7 +31,7 @@ namespace bv {
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolerance )
+inline CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolerance )
     : m_type( CurveType::CT_LINEAR )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
@@ -39,7 +41,7 @@ CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolera
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( const CompositeInterpolator& that )
+inline CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( const CompositeInterpolator& that )
 { 
     keys = that.keys; 
     interpolators = that.interpolators;
@@ -52,7 +54,7 @@ CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( const Compos
 // *************************************
 //
 template< class TimeValueT, class ValueT >
-void                                        CompositeInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
+inline void                                        CompositeInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
@@ -85,7 +87,7 @@ void                                        CompositeInterpolator< TimeValueT, V
 //
 template< class TimeValueT, class ValueT >
 std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >
-CompositeInterpolator< TimeValueT, ValueT >::Create              ( float tolerance )
+inline CompositeInterpolator< TimeValueT, ValueT >::Create              ( float tolerance )
 {
     return std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >( new CompositeInterpolator< TimeValueT, ValueT >( tolerance ) );
 }
@@ -93,7 +95,7 @@ CompositeInterpolator< TimeValueT, ValueT >::Create              ( float toleran
 // *************************************
 //
 template< class TimeValueT, class ValueT >
-std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
 {
     auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
 
@@ -528,7 +530,7 @@ inline WrapMethod                                          CompositeInterpolator
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-WrapMethod                                          CompositeInterpolator< TimeValueT, ValueT >::GetWrapPreMethod   ()
+inline WrapMethod                                          CompositeInterpolator< TimeValueT, ValueT >::GetWrapPreMethod   ()
 {
     return m_preMethod;
 }
@@ -644,5 +646,23 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( Ti
 	return interpolators[ i ]->Evaluate( t );
 
 }
+
+// *******************************
+//
+template<>
+inline CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance )
+	: m_type( CurveType::CT_POINT )
+	, m_tolerance( tolerance )
+	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+{}
+
+// *******************************
+//
+template<>
+inline CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance )
+	: m_type( CurveType::CT_POINT )
+	, m_tolerance( tolerance )
+	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+{}
 
 } // bv

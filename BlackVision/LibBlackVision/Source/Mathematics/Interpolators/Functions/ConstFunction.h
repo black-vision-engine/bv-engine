@@ -1,4 +1,6 @@
-#include "../CompositeInterpolator.h"
+#pragma once
+
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
 
 namespace bv {
 

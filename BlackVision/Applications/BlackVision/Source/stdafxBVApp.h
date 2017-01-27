@@ -32,12 +32,15 @@
 #include <vector>
 #include <memory>
 
-#endif
-
 #undef near
 #undef far
 #undef max
 #undef min
 #undef LoadImage
 #undef LoadImageW
+
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
+#include "Mathematics/Interpolators/CompositeInterpolator.inl"
+
+#endif
 

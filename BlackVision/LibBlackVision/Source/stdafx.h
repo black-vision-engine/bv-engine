@@ -11,6 +11,8 @@
 #include "Mathematics/AABB.h"
 #include "Mathematics/Box.h"
 #include "Mathematics/Interpolators/Interpolators.h"
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
+#include "Mathematics/Interpolators/CompositeInterpolator.inl"
 
 #include "Engine/Models/BoundingVolume.h"
 

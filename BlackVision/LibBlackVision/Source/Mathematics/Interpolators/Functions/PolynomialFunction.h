@@ -1,3 +1,5 @@
+#pragma once
+
 namespace bv {
 
 template< class TimeValueT, class ValueT >
