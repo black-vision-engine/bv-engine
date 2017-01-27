@@ -169,7 +169,7 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, int val )
 
     if( loc >= 0 )
     {
-        SetUniformImpl( loc, val );
+        SetUniformImpl( loc, val ); // Is this possible to prevent setting  already set uniform here?
     } 
     else 
     {

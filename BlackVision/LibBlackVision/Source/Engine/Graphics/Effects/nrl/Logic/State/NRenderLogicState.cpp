@@ -22,7 +22,7 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
         // Enable required outputs
         m_outputLogic.EnableOutput( CustomOutputType::COT_PREVIEW );    // FIXME: nrl - make sure that when this output is disabled, preview is not rendered
         //m_outputLogic.EnableOutput( CustomOutputType::COT_STREAM_SHM ); // FIXME: nrl - make sure that when this output is disabled, shared memory oputput is not used
-        //m_outputLogic.EnableOutput( CustomOutputType::COT_VIDEO_HD );      // FIXME: nrl - make sure that when this output is disabled, video oputput is not used
+        m_outputLogic.EnableOutput( CustomOutputType::COT_VIDEO_HD );      // FIXME: nrl - make sure that when this output is disabled, video oputput is not used
         //m_outputLogic.EnableOutput( CustomOutputType::COT_VIDEO_SD );      // FIXME: nrl - make sure that when this output is disabled, video oputput is not used
     }
 

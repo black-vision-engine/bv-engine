@@ -65,7 +65,7 @@ struct ValueParamState
 	inline bool		Changed() const
 	{
 		assert(statePtr != nullptr);
-		return statePtr->StateChanged();
+		return statePtr->SimpleState< T >::StateChanged();
 	}
 };
 

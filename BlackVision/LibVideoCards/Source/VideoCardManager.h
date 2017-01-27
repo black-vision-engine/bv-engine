@@ -81,6 +81,7 @@ class VideoCardManager
 private:
 
     static AVFramePtr                  KILLER_FRAME;
+	char* m_PreviousFrame;
 
     std::hash_map< std::string, const IVideoCardDesc * >                m_descMap;
     std::vector< const IVideoCardDesc * >                               m_descVec;
@@ -90,7 +91,8 @@ private:
     /**@brief Circular blocking frame queue */
     CircularBufferConcurrent< AVFramePtr, FRAME_BUFFER_SIZE >  m_frameBuffer;
 
-    bool                                m_keyActive;
+	bool                                m_keyActive;
+	bool                                m_InterlaceProducesFullFrames;
 
     //FIXME: probably not needed
     bool                                m_interlaceEnabled;

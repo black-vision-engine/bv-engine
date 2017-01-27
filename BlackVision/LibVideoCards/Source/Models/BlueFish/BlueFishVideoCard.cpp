@@ -154,16 +154,20 @@ void            VideoCard::InitVideoCard            ()
         if( playbackChannel )
 		{
             playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(), 
-                channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
+            channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
 
-			if( channel->GetOutputType() == IOType::FILL || channel->GetOutputType() == IOType::KEY )
+			if( channel->GetOutputType() == IOType::FILL )
 			{
 				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_SINGLE_LINK );
 			}
+			else if( channel->GetOutputType() == IOType::KEY )
+			{
+				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
+			}
 			else if( channel->GetOutputType() == IOType::FILL_KEY )
-			{						
-				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), EPOCH_DEST_SDI_OUTPUT_A/*channel->GetEpochSDIOutput()*/, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
-				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), EPOCH_DEST_SDI_OUTPUT_B/*channel->GetEpochSDIOutput()*/, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
+			{				
+				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
+				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIKeyOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
 			}
 
             playbackChannel->InitThread();

@@ -16,7 +16,6 @@ SimpleRender/x64/Release/vc110.pdb
 SimpleRender/x64/Release/SimpleRender.lastbuildstate
 SimpleRender/x64/Release/SimpleRender.log
 SimpleRender/x64/Release/SimpleRender.unsuccessfulbuild
-VideoCards/*
 bin/*
 obj/*
 app/Win32/*

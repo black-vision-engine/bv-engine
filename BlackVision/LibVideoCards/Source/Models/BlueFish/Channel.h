@@ -64,6 +64,7 @@ public:
     UInt32          GetEpochOutputMemInterface  () const;
     UInt32          GetInputChannel             () const;
     UInt32          GetEpochSDIInput            () const;
+	UInt32			GetEpochSDIKeyOutput		() const;
     UInt32          GetEpochInputMemInterface   () const;
 
     CFifoCapture *  GetCaptureChannel   () const;

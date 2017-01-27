@@ -63,6 +63,8 @@ private:
 
     glm::vec4               m_borderColor;
 
+    mutable int             m_loc;
+
 public:
 
                             //FIXME: instead of passing whole array of wraping modes, it should be accessible via accessors (getters and setters)
@@ -83,6 +85,9 @@ public:
     void                    SetBorderColor  ( const glm::vec4 & );
 	void					SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction );
 	void					SetFilteringMode( SamplerFilteringMode mode );
+
+    void                    CacheLoc        ( int loc ) const;
+    int                     GetCachedLoc    () const;
 
     //FIXME: anisotropy
     //FIXME: LOD bias when LOD mipmapping is implemented

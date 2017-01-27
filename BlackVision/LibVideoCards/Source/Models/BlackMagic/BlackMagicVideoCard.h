@@ -4,6 +4,7 @@
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "BlackMagicUtils.h"
 #include "AVFrame.h"
+#include "BlackMagic\DeckLinkAPI_h.h"
 
 
 namespace bv { namespace videocards { namespace blackmagic {

@@ -80,14 +80,16 @@ private:
 
     RendererData *      m_RendererData;
 
-    typedef std::hash_map<const RenderablePass*, PdrShader*>                                    PdrShaderMapType;
-    typedef std::hash_map<const VertexBuffer*, PdrVertexBuffer*>                                PdrVertexBufferMapType;
-    typedef std::hash_map<const IndexBuffer*, PdrIndexBuffer*>                                  PdrIndexBufferMapType;
-    typedef std::hash_map<const VertexDescriptor*, PdrVertexDescriptor*>                        PdrVertexDescriptorType;
-    typedef std::hash_map<const VertexArray*, PdrVertexArrayObject*>                            PdrVertexArrayObjectMapType;
-    typedef std::hash_map<const VertexArraySingleVertexBuffer*, PdrVertexArrayObjectSingleVB*>  PdrVertexArrayObjectSingleVBMapType;
-    typedef std::hash_map<const Texture2D *, PdrTexture2D * >                                   PdrTexture2DMap;
-    typedef std::hash_map<const RenderTarget *, PdrRenderTarget * >                             PdrRenderTargetMap;
+    typedef std::hash_map< const RenderablePass*, PdrShader*>                                   PdrShaderMapType;
+    typedef std::hash_map< const VertexBuffer*, PdrVertexBuffer*>                               PdrVertexBufferMapType;
+    typedef std::hash_map< const IndexBuffer*, PdrIndexBuffer*>                                 PdrIndexBufferMapType;
+    typedef std::hash_map< const VertexDescriptor*, PdrVertexDescriptor*>                       PdrVertexDescriptorType;
+    typedef std::hash_map< const VertexArray*, PdrVertexArrayObject*>                           PdrVertexArrayObjectMapType;
+    typedef std::hash_map< const VertexArraySingleVertexBuffer*, PdrVertexArrayObjectSingleVB*> PdrVertexArrayObjectSingleVBMapType;
+    typedef std::hash_map< const Texture2D *, PdrTexture2D * >                                  PdrTexture2DMap;
+    typedef std::hash_map< const RenderTarget *, PdrRenderTarget * >                            PdrRenderTargetMap;
+    typedef std::hash_map< int, const Texture2D * >                                             EnabledTexture2DMap;
+    typedef std::hash_map< int, int >                                                           EnabledSamplerTexUnitsMap;
 
     typedef std::hash_map<const Texture *, UInt32 >												TextureUpdateIDMapType;
 
@@ -100,6 +102,8 @@ private:
     PdrVertexArrayObjectSingleVBMapType m_PdrVertexArrayObjectSingleVBMap;
     PdrRenderTargetMap                  m_PdrRenderTargetMap;
 
+    EnabledTexture2DMap                 m_enabledTexturesMap;
+    EnabledSamplerTexUnitsMap           m_enabledSamplerTexUnitsMap;
     TextureUpdateIDMapType              m_TextureUpdateIDMap;
 
     PdrDownloadPBO *					m_PdrPBOMemTransferRT;
@@ -167,12 +171,19 @@ public: //FIXME: private
     bool    IsRegistered        ( const Texture2D * texture );
     void    RegisterTexture2D   ( const Texture2D * texture, PdrTexture2D * pdrTexture );
 
+    int     GetSamplerTexUnit   ( int samplerLoc );
+    void    SetSamplerTexUnit   ( int samplerLoc, int textureUnit );
+
 public:
 
     void    Enable              ( const Texture2D * texture, int textureUnit );
 
     //FIXME: add disable methods so that current state can be cleared after frame is rendered
     void    Disable             ( const Texture2D * texture, int textureUnit );
+
+    bool    IsEnabled           ( const Texture2D * texture, int textureUnit );
+    void    SetEnabled          ( const Texture2D * texture, int textureUnit );
+    void    SetDisabled         ( const Texture2D * texture, int textureUnit );
 
     void    Enable              ( const RenderTarget * rt );
     void    Disable             ( const RenderTarget * rt );
@@ -242,7 +253,7 @@ private:
     template< typename MapType >
     void                        DeleteSinglePDR                 ( MapType & resMap, typename MapType::key_type & key );
 
-    void                        PassCCNumUniform                ( int i, SizeType num );
+//    void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
 
