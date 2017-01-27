@@ -52,29 +52,29 @@ public:
     static std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > 
                                                         Create              ( const IDeserializer & );
 
-    void                                                AddKey              ( TimeValueT t, const ValueT & v );
-    bool                                                RemoveKey           ( TimeValueT t );
-    bool                                                MoveKey             ( TimeValueT t, TimeValueT newTime );
+    inline void                                         AddKey              ( TimeValueT t, const ValueT & v );
+    inline bool                                         RemoveKey           ( TimeValueT t );
+    inline bool                                         MoveKey             ( TimeValueT t, TimeValueT newTime );
     inline ValueT                                       Evaluate            ( TimeValueT t ) const;
     
-    void                                                RemoveAllKeys       ();
+	inline void                                         RemoveAllKeys       ();
 
-    int                                                 GetNumKeys          ();
-    const std::vector< Key > &                          GetKeys             () const;
-    std::vector< Key > &                                GetKeys             ();
+	inline int                                          GetNumKeys          ();
+	inline const std::vector< Key > &                   GetKeys             () const;
+	inline std::vector< Key > &                         GetKeys             ();
 
-    void                                                SetGlobalCurveType  ( CurveType type );
-    void                                                SetAddedKeyCurveType ( CurveType type );
-    CurveType                                           GetCurveType        ();
+	inline void                                         SetGlobalCurveType  ( CurveType type );
+	inline void                                         SetAddedKeyCurveType ( CurveType type );
+	inline CurveType                                    GetCurveType        ();
 
-    void                                                SetWrapPostMethod   ( WrapMethod method );
-    void                                                SetWrapPreMethod    ( WrapMethod method );
-    WrapMethod                                          GetWrapPostMethod   ();
-    WrapMethod                                          GetWrapPreMethod    ();
+	inline void                                         SetWrapPostMethod   ( WrapMethod method );
+	inline void                                         SetWrapPreMethod    ( WrapMethod method );
+	inline WrapMethod                                   GetWrapPostMethod   ();
+	inline WrapMethod                                   GetWrapPreMethod    ();
 
 private:
-    ValueT                                              PreEvaluate         ( TimeValueT t ) const;
-    ValueT                                              PostEvaluate        ( TimeValueT t ) const;
+	inline ValueT                                       PreEvaluate         ( TimeValueT t ) const;
+	inline ValueT                                       PostEvaluate        ( TimeValueT t ) const;
 };
 
 
@@ -89,115 +89,6 @@ template<>
 CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance );
 
 
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-inline ValueT CompositeInterpolator< TimeValueT, ValueT >::PreEvaluate( TimeValueT t ) const
-{
-	TimeValueT tStart = keys.front().t;
-	TimeValueT tEnd = keys.back().t;
-
-	auto interval = tEnd - tStart;
-	if( interval <= m_tolerance )
-		return Evaluate( tStart );
-
-	t = t - tStart;
-
-	if( m_preMethod == WrapMethod::clamp )
-		return Evaluate( tStart );
-	else if( m_preMethod == WrapMethod::repeat )
-	{
-		TimeValueT q = interval;
-		TimeValueT r = std::modf( t, &q );
-		return Evaluate( tStart + r );
-	}
-	else if( m_preMethod == WrapMethod::pingPong )
-	{
-		TimeValueT q = interval;
-		TimeValueT r = std::modf( t, &q );
-
-		if( round( q ) % 2 == 0 )
-		{
-			return Evaluate( tStart + r );
-		}
-		else
-		{
-			return Evaluate( tStart + interval - r );
-		}
-	}
-
-	return Evaluate( t );
-}
-
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-inline ValueT CompositeInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeValueT t ) const
-{
-	TimeValueT tStart = keys.front().t;
-	TimeValueT tEnd = keys.back().t;
-
-	auto interval = tEnd - tStart;
-	if( interval <= m_tolerance )
-		return Evaluate( tEnd );
-
-	t = t - tStart;
-
-	if( m_postMethod == WrapMethod::clamp )
-		//return Evaluate( tEnd );
-		return keys.back().val; // FIXME(?)
-	else if( m_postMethod == WrapMethod::repeat )
-	{
-		TimeValueT q = interval;
-		TimeValueT r = divmod( t, &q );
-		return Evaluate( tStart + r );
-	}
-	else if( m_postMethod == WrapMethod::pingPong )
-	{
-		TimeValueT q = interval;
-		TimeValueT r = divmod( t, &q );
-
-		if( round( q ) % 2 == 0 )
-		{
-			return Evaluate( tStart + r );
-		}
-		else
-		{
-			return Evaluate( tStart + interval - r );
-		}
-	}
-
-	return Evaluate( t );
-}
-
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( TimeValueT t ) const
-{
-	auto size = keys.size();
-	if( size == 0 )
-	{
-		assert( false ); // FIXME: error handling FTW
-		return ValueT();
-	}
-
-	if( size == 1 )
-		return keys[ 0 ].val;
-
-	if( t < keys[ 0 ].t )
-		return PreEvaluate( t );
-
-	SizeType i = 0;
-	while( t > keys[ i + 1 ].t && i < size - 2 )
-		i++;
-
-	if( t > keys[ i + 1 ].t )
-		return PostEvaluate( t );
-
-	return interpolators[ i ]->Evaluate( t );
-
-}
 
 
 } // bv

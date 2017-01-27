@@ -1,17 +1,17 @@
-#include "stdafx.h"
-
 #include "CompositeInterpolator.h"
+
+#include "InterpolatorBasicTypes.h"
 
 #include "Functions/ConstFunction.h"
 #include "Functions/LinearFunction.h"
 #include "Functions/BezierFunction.h"
 #include "Functions/PolynomialFunction.h"
 
-#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
+#include "CompositeInterpolatorSerializationHelper.h"
+
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "Mathematics/Core/mathfuncs.h"
+#include "Mathematics/Core/MathFuncs.h"
 #include <vector>
 #include <array>
 //#include <initializer_list>
@@ -25,55 +25,6 @@
 
 
 namespace bv {
-
-namespace SerializationHelper {
-
-std::pair< WrapMethod, const char* > wm2s[] =
-{ std::make_pair( WrapMethod::clamp, "clamp" )
-, std::make_pair( WrapMethod::pingPong, "pingPong" )
-, std::make_pair( WrapMethod::repeat, "repeat" )
-, std::make_pair( WrapMethod::clamp, "" ) };
-
-template<> std::string T2String< WrapMethod >( const WrapMethod& wm )       { return Enum2String( wm2s, wm ); }
-template<> WrapMethod String2T( const std::string & s, const WrapMethod& default )
-{
-    if( s == "" ) 
-        return default; 
-    else 
-        return String2Enum( wm2s, s );
-}
-
-std::pair< CurveType, const char* > ct2s[] = 
-    { std::make_pair( CurveType::CT_BEZIER, "bezier" )
-    , std::make_pair( CurveType::CT_COSINE_LIKE, "cosine" ) 
-    , std::make_pair( CurveType::CT_LINEAR, "linear" ) 
-    , std::make_pair( CurveType::CT_POINT, "point" ) 
-    , std::make_pair( CurveType::CT_CUBIC_IN, "cubic_in" )
-    , std::make_pair( CurveType::CT_CUBIC_OUT, "cubic_out" )
-    , std::make_pair( CurveType::CT_ELASTIC_IN, "elastic_in" )
-    , std::make_pair( CurveType::CT_ELASTIC_OUT, "elastic_out" )
-    , std::make_pair( CurveType::CT_ELASTIC_IN_BOUNCE, "elastic_in_bounce" )
-    , std::make_pair( CurveType::CT_ELASTIC_OUT_BOUNCE, "elastic_out_bounce" )
-    , std::make_pair( CurveType::CT_QUARTIC_INOUT, "quadric_inout" )
-    , std::make_pair( CurveType::CT_CUBIC_INTOUT, "cubic_inout" )
-    , std::make_pair( CurveType::CT_BEZIER, "" )        // default
-};
-
-
-template<> std::string T2String< CurveType >( const CurveType& ct )
-{
-    return Enum2String( ct2s, ct );
-}
-
-template<> CurveType String2T( const std::string & s, const CurveType& default )
-{
-    if( s == "" ) 
-        return default; 
-    else 
-        return String2Enum( ct2s, s );
-}
-
-}
 
 // *******************************
 //
@@ -109,7 +60,7 @@ void                                        CompositeInterpolator< TimeValueT, V
 
         if( context->detailedInfo )
         {
-            ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( SerializationHelper::ct2s, m_type ) );
+            ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( SerializationHelper::MappingHelper::ct2s, m_type ) );
             SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
             SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
         }
@@ -160,7 +111,7 @@ std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInte
                 interpolator->AddKey( key->t, key->val );
                 if( key != keys.back() )
                 {
-                    interpolator->SetAddedKeyCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
+                    interpolator->SetAddedKeyCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::MappingHelper::ct2s, deser.GetAttribute( "type" ) ) );
                     if( deser.NextChild() == false )
                         if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
                             deser.ExitChild();
@@ -188,9 +139,9 @@ std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInte
         deser.ExitChild(); // exit "interpolations"
     }
 
-    interpolator->SetAddedKeyCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
-    interpolator->SetWrapPreMethod( SerializationHelper::String2Enum< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
-    interpolator->SetWrapPostMethod( SerializationHelper::String2Enum< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
+    interpolator->SetAddedKeyCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::MappingHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
+    interpolator->SetWrapPreMethod( SerializationHelper::String2Enum< WrapMethod >( SerializationHelper::MappingHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
+    interpolator->SetWrapPostMethod( SerializationHelper::String2Enum< WrapMethod >( SerializationHelper::MappingHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
 
     assert( interpolator->GetNumKeys() > 0 );
 
@@ -200,7 +151,7 @@ std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInte
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i, CurveType cType )
+inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i, CurveType cType )
 {
     typedef Key< TimeValueT, ValueT > Key;
 
@@ -240,19 +191,19 @@ void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, Va
 // *******************************
 //
 template<>
-void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t, CurveType )
+inline void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t, CurveType )
 {}
 
 // *******************************
 //
 template<>
-void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t, CurveType )
+inline void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t, CurveType )
 {}
 
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-std::shared_ptr< IEvaluator< TimeValueT, ValueT > > CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+inline std::shared_ptr< IEvaluator< TimeValueT, ValueT > > CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
         return std::make_shared< ConstEvaluator< TimeValueT, ValueT > >( k1.val );
@@ -292,7 +243,7 @@ std::shared_ptr< IEvaluator< TimeValueT, ValueT > > CreateDummyInterpolator( Cur
 // *******************************
 //
 template<>
-std::shared_ptr< IEvaluator< TimeType, std::wstring > > CreateDummyInterpolator( CurveType type, Key< TimeType, std::wstring  > k1, Key< TimeType, std::wstring  >, TimeType ) // FIXME maybe
+inline std::shared_ptr< IEvaluator< TimeType, std::wstring > > CreateDummyInterpolator( CurveType type, Key< TimeType, std::wstring  > k1, Key< TimeType, std::wstring  >, TimeType ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
     {
@@ -308,7 +259,7 @@ std::shared_ptr< IEvaluator< TimeType, std::wstring > > CreateDummyInterpolator(
 // *******************************
 //
 template<>
-std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpolator( CurveType type, Key< TimeType, std::string  > k1, Key< TimeType, std::string  >, TimeType ) // FIXME maybe
+inline std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpolator( CurveType type, Key< TimeType, std::string  > k1, Key< TimeType, std::string  >, TimeType ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
     {
@@ -323,7 +274,7 @@ std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpolator( 
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
+inline void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
     if( keys.empty() )
     {
@@ -397,7 +348,7 @@ void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValue
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t )
+inline bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t )
 {
     if( keys.size() <= 1 )
         return false;
@@ -441,7 +392,7 @@ bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-void CompositeInterpolator< TimeValueT, ValueT >::RemoveAllKeys     ()
+inline void CompositeInterpolator< TimeValueT, ValueT >::RemoveAllKeys     ()
 {
     //FIXME: is this correct?
     interpolators.clear();
@@ -451,7 +402,7 @@ void CompositeInterpolator< TimeValueT, ValueT >::RemoveAllKeys     ()
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-bool CompositeInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
+inline bool CompositeInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
 {
     // Find key to move
     SizeType index = std::numeric_limits<SizeType>::max();
@@ -486,7 +437,7 @@ bool CompositeInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValu
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-int                          CompositeInterpolator< TimeValueT, ValueT >::GetNumKeys()
+inline int                          CompositeInterpolator< TimeValueT, ValueT >::GetNumKeys()
 {
     return (int) keys.size();
 }
@@ -494,7 +445,7 @@ int                          CompositeInterpolator< TimeValueT, ValueT >::GetNum
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-const std::vector< Key< TimeValueT, ValueT > > &                          CompositeInterpolator< TimeValueT, ValueT >::GetKeys() const
+inline const std::vector< Key< TimeValueT, ValueT > > &                          CompositeInterpolator< TimeValueT, ValueT >::GetKeys() const
 {
     return keys;
 }
@@ -502,7 +453,7 @@ const std::vector< Key< TimeValueT, ValueT > > &                          Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-std::vector< Key< TimeValueT, ValueT > > &                                CompositeInterpolator< TimeValueT, ValueT >::GetKeys()
+inline std::vector< Key< TimeValueT, ValueT > > &                                CompositeInterpolator< TimeValueT, ValueT >::GetKeys()
 {
     return keys;
 }
@@ -510,7 +461,7 @@ std::vector< Key< TimeValueT, ValueT > > &                                Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
+inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
     if( keys.size() == 0 )
     {
@@ -537,7 +488,7 @@ void                                                CompositeInterpolator< TimeV
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeInterpolator< TimeValueT, ValueT >::SetAddedKeyCurveType( CurveType type )
+inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetAddedKeyCurveType( CurveType type )
 {
     m_type = type;
 }
@@ -545,7 +496,7 @@ void                                                CompositeInterpolator< TimeV
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-CurveType                                           CompositeInterpolator< TimeValueT, ValueT >::GetCurveType    ()
+inline CurveType                                           CompositeInterpolator< TimeValueT, ValueT >::GetCurveType    ()
 {
     return m_type;
 }
@@ -553,7 +504,7 @@ CurveType                                           CompositeInterpolator< TimeV
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeInterpolator< TimeValueT, ValueT >::SetWrapPostMethod  ( WrapMethod method )
+inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetWrapPostMethod  ( WrapMethod method )
 {
     m_postMethod = method;
 }
@@ -561,7 +512,7 @@ void                                                CompositeInterpolator< TimeV
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeInterpolator< TimeValueT, ValueT >::SetWrapPreMethod   ( WrapMethod method )
+inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetWrapPreMethod   ( WrapMethod method )
 {
     m_preMethod = method;
 }
@@ -569,7 +520,7 @@ void                                                CompositeInterpolator< TimeV
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-WrapMethod                                          CompositeInterpolator< TimeValueT, ValueT >::GetWrapPostMethod  ()
+inline WrapMethod                                          CompositeInterpolator< TimeValueT, ValueT >::GetWrapPostMethod  ()
 {
     return m_postMethod;
 }
@@ -582,37 +533,116 @@ WrapMethod                                          CompositeInterpolator< TimeV
     return m_preMethod;
 }
 
+
+
 // *******************************
 //
-template<>
-CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance )
-    : m_type( CurveType::CT_POINT )
-    , m_tolerance( tolerance )
-    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+template< class TimeValueT, class ValueT >
+inline ValueT CompositeInterpolator< TimeValueT, ValueT >::PreEvaluate( TimeValueT t ) const
 {
+	TimeValueT tStart = keys.front().t;
+	TimeValueT tEnd = keys.back().t;
+
+	auto interval = tEnd - tStart;
+	if( interval <= m_tolerance )
+		return Evaluate( tStart );
+
+	t = t - tStart;
+
+	if( m_preMethod == WrapMethod::clamp )
+		return Evaluate( tStart );
+	else if( m_preMethod == WrapMethod::repeat )
+	{
+		TimeValueT q = interval;
+		TimeValueT r = std::modf( t, &q );
+		return Evaluate( tStart + r );
+	}
+	else if( m_preMethod == WrapMethod::pingPong )
+	{
+		TimeValueT q = interval;
+		TimeValueT r = std::modf( t, &q );
+
+		if( round( q ) % 2 == 0 )
+		{
+			return Evaluate( tStart + r );
+		}
+		else
+		{
+			return Evaluate( tStart + interval - r );
+		}
+	}
+
+	return Evaluate( t );
 }
 
 // *******************************
 //
-template<>
-CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance )
-    : m_type( CurveType::CT_POINT )
-    , m_tolerance( tolerance )
-    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+template< class TimeValueT, class ValueT >
+inline ValueT CompositeInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeValueT t ) const
 {
+	TimeValueT tStart = keys.front().t;
+	TimeValueT tEnd = keys.back().t;
+
+	auto interval = tEnd - tStart;
+	if( interval <= m_tolerance )
+		return Evaluate( tEnd );
+
+	t = t - tStart;
+
+	if( m_postMethod == WrapMethod::clamp )
+		//return Evaluate( tEnd );
+		return keys.back().val; // FIXME(?)
+	else if( m_postMethod == WrapMethod::repeat )
+	{
+		TimeValueT q = interval;
+		TimeValueT r = divmod( t, &q );
+		return Evaluate( tStart + r );
+	}
+	else if( m_postMethod == WrapMethod::pingPong )
+	{
+		TimeValueT q = interval;
+		TimeValueT r = divmod( t, &q );
+
+		if( round( q ) % 2 == 0 )
+		{
+			return Evaluate( tStart + r );
+		}
+		else
+		{
+			return Evaluate( tStart + interval - r );
+		}
+	}
+
+	return Evaluate( t );
 }
 
+// *******************************
+//
+template< class TimeValueT, class ValueT >
+inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( TimeValueT t ) const
+{
+	auto size = keys.size();
+	if( size == 0 )
+	{
+		assert( false ); // FIXME: error handling FTW
+		return ValueT();
+	}
 
-template class CompositeInterpolator<TimeType, TimeType>;
-template class CompositeInterpolator<TimeType, bool>;
-template class CompositeInterpolator<TimeType, int>;
-template class CompositeInterpolator<TimeType, float>;
+	if( size == 1 )
+		return keys[ 0 ].val;
 
-template class CompositeInterpolator<TimeType, glm::vec2>;
-template class CompositeInterpolator<TimeType, glm::vec3>;
-template class CompositeInterpolator<TimeType, glm::vec4>;
+	if( t < keys[ 0 ].t )
+		return PreEvaluate( t );
 
-template class CompositeInterpolator< TimeType, std::string >;
-template class CompositeInterpolator< TimeType, std::wstring >;
+	SizeType i = 0;
+	while( t > keys[ i + 1 ].t && i < size - 2 )
+		i++;
+
+	if( t > keys[ i + 1 ].t )
+		return PostEvaluate( t );
+
+	return interpolators[ i ]->Evaluate( t );
+
+}
 
 } // bv

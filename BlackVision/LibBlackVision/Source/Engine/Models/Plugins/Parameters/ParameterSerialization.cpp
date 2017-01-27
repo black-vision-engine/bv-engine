@@ -9,6 +9,8 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
+
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
 #include "ParameterSerialization.h"

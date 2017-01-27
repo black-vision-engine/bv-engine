@@ -8,7 +8,7 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -141,8 +141,6 @@ model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserialize
 
 
 } //SerializationHelper
-
-
 
 } //bv
 

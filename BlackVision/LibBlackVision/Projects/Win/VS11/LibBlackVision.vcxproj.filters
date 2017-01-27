@@ -1339,9 +1339,6 @@
       <Filter>Mathematics\Transform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
@@ -2037,6 +2034,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5329,6 +5335,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Types\TypeTraits.h">
       <Filter>Engine\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h">
+      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -156,28 +156,28 @@ void            CompositeTransform::SetWrapPreMethod    ( WrapMethod method )
 //
 glm::vec3       CompositeTransform::GetTranslation      ( TimeType time ) const
 {
-    return glm::vec3( m_translationX.Evaluate( time ), m_translationY.Evaluate( time ), m_translationZ.Evaluate( time ) );
+    return glm::vec3( m_translationX.FloatInterpolator::Evaluate( time ), m_translationY.FloatInterpolator::Evaluate( time ), m_translationZ.FloatInterpolator::Evaluate( time ) );
 }
 
 // *************************************
 //
 glm::vec3       CompositeTransform::GetRotation         ( TimeType time ) const
 {
-    return glm::vec3( m_eulerPitch.Evaluate( time ), m_eulerYaw.Evaluate( time ), m_eulerRoll.Evaluate( time ) );
+    return glm::vec3( m_eulerPitch.FloatInterpolator::Evaluate( time ), m_eulerYaw.FloatInterpolator::Evaluate( time ), m_eulerRoll.FloatInterpolator::Evaluate( time ) );
 }
 
 // *************************************
 //
 glm::vec3       CompositeTransform::GetScale            ( TimeType time ) const
 {
-    return glm::vec3( m_scaleX.Evaluate( time ), m_scaleY.Evaluate( time ), m_scaleZ.Evaluate( time ) );
+    return glm::vec3( m_scaleX.FloatInterpolator::Evaluate( time ), m_scaleY.FloatInterpolator::Evaluate( time ), m_scaleZ.FloatInterpolator::Evaluate( time ) );
 }
 
 // *************************************
 //
 glm::vec3       CompositeTransform::GetCenter           ( TimeType time ) const
 {
-    return glm::vec3( m_centerX.Evaluate( time ), m_centerY.Evaluate( time ), m_centerZ.Evaluate( time ) );
+    return glm::vec3( m_centerX.FloatInterpolator::Evaluate( time ), m_centerY.FloatInterpolator::Evaluate( time ), m_centerZ.FloatInterpolator::Evaluate( time ) );
 }
 
 // *************************************

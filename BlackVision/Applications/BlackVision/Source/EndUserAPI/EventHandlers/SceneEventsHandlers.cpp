@@ -28,6 +28,7 @@
 #include "Assets/Thumbnail/Impl/PresetThumbnail.h"
 #include "Assets/Thumbnail/Impl/MeshAssetThumbnail.h"
 
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
 
 namespace bv
 {
