@@ -44,6 +44,7 @@ void            PdrTexture::Enable        ( Renderer * renderer, int textureUnit
 //
 void            PdrTexture::Disable       ( Renderer * renderer, int textureUnit )
 {
+    assert( false ); // FIXME: nrl - it seems that no textures are disabled but just in case they are - this is the place to find out
     { renderer; } // FIXME: suppress unused
     BVGL::bvglActiveTexture ( GL_TEXTURE0 + textureUnit );
     Unbind();

@@ -510,6 +510,30 @@ void    Renderer::RegisterTexture2D   ( const Texture2D * texture, PdrTexture2D 
 
 // *********************************
 //
+int     Renderer::GetSamplerTexUnit ( int samplerLoc )
+{
+    auto it = m_enabledSamplerTexUnitsMap.find( samplerLoc );
+
+    if( it == m_enabledSamplerTexUnitsMap.end() )
+    {
+        m_enabledSamplerTexUnitsMap[ samplerLoc ] = -1;
+    }
+
+    return m_enabledSamplerTexUnitsMap[ samplerLoc ];
+}
+
+// *********************************
+//
+void    Renderer::SetSamplerTexUnit ( int samplerLoc, int textureUnit )
+{
+    // FIXME: this assert does not hold - e.g. when textureUnit is cached for the first time (GetSamplerTexUnit(...) is not called beforehand)
+    // assert( m_enabledSamplerTexUnitsMap.find( samplerLoc ) != m_enabledSamplerTexUnitsMap.end() );
+
+    m_enabledSamplerTexUnitsMap[ samplerLoc ] = textureUnit;
+}
+
+// *********************************
+//
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
@@ -520,7 +544,12 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
         m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
     }
 
-    pdrTex2D->Enable( this, textureUnit );
+    if( !IsEnabled( texture, textureUnit ) )
+    {
+        pdrTex2D->Enable( this, textureUnit );
+
+        SetEnabled( texture, textureUnit );
+    }
 }
 
 // *********************************
@@ -529,6 +558,42 @@ void    Renderer::Disable             ( const Texture2D * texture, int textureUn
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
     pdrTex2D->Disable( this, textureUnit );
+
+    SetDisabled( texture, textureUnit );
+}
+
+// *********************************
+//
+bool    Renderer::IsEnabled           ( const Texture2D * texture, int textureUnit )
+{
+    auto it = m_enabledTexturesMap.find( textureUnit );
+
+    if ( it == m_enabledTexturesMap.end() )
+    {
+        m_enabledTexturesMap[ textureUnit ] = nullptr;
+    }
+
+    return m_enabledTexturesMap[ textureUnit ] == texture;
+}
+
+// *********************************
+//
+void    Renderer::SetEnabled          ( const Texture2D * texture, int textureUnit )
+{
+    assert( m_enabledTexturesMap.find( textureUnit ) != m_enabledTexturesMap.end() );
+
+    m_enabledTexturesMap[ textureUnit ] = texture;
+}
+
+// *********************************
+//
+void    Renderer::SetDisabled         ( const Texture2D * texture, int textureUnit )
+{
+    assert( m_enabledTexturesMap.find( textureUnit ) != m_enabledTexturesMap.end() );
+
+    { texture; }
+
+    m_enabledTexturesMap[ textureUnit ] = nullptr;
 }
 
 // *********************************
