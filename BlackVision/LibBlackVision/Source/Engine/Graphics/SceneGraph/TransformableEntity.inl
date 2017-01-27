@@ -16,6 +16,13 @@ inline void                TransformableEntity::SetLocalTransform   ( const Tran
 
 // *********************************
 //
+inline void                TransformableEntity::SetLocalTransform   ( Transform && t )
+{
+	m_localTransform = t;
+}
+
+// *********************************
+//
 inline const Transform &  TransformableEntity::WorldTransform       () const
 {
     return m_worldTransform;

@@ -21,6 +21,7 @@ public:
 
     inline const Transform &    LocalTransform                          () const;
     virtual inline void         SetLocalTransform                       ( const Transform & t );
+	virtual inline void         SetLocalTransform                       ( Transform && t );
 
     inline const Transform &    WorldTransform                          () const;
     inline void                 SetWorldTransform                       ( const Transform & transform );

@@ -36,12 +36,12 @@ inline  void    NodeUpdater::UpdateTransform     ()
     //FIXME: rili rili
     m_renderable->ResetLocalTransform();
 
-    auto transform = m_transformChannel->GetTransformValue();
+    const auto & transform = m_transformChannel->GetTransformValue();
     if( transform )
     {
         const glm::mat4 & mat = transform->GetValue();
 
-        m_renderable->SetLocalTransform( std::move( m_renderable->LocalTransform().Matrix() * mat ) );
+        m_renderable->SetLocalTransform( m_renderable->LocalTransform().Matrix() * mat );
 
         auto state = Cast< model::SimpleState< glm::mat4 >* >( m_transformStatedValue.get() );
         state->Update( mat );
