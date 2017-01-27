@@ -52,15 +52,41 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 	// FIXME: Some general mechanism should be implemented to set values in effect.
 	auto textureSize = GetState()->GetValueAt( 0 );
-	auto vertical = GetState()->GetValueAt( 3 );
 
 	auto wrt = input->GetEntry( 0 )->Width();
 	auto hrt = input->GetEntry( 0 )->Height();
+
+	auto blurQualityLevelVal = GetState()->GetValueAt( 4 );
+	auto blurQualityLevel = QueryTypedValue< ValueIntPtr >( blurQualityLevelVal );
+
+	auto blurSizeVal = GetState()->GetValueAt( 1 );
+	auto blurSize = QueryTypedValue< ValueFloatPtr >( blurSizeVal )->GetValue();
 
 	// Set textureSize param value needed by blur shader.
 	QueryTypedValue< ValueVec2Ptr >( textureSize )->SetValue( glm::vec2( wrt, hrt ) );
 
 	auto mainRT = disableBoundRT( ctx );
+
+	BlurInput( ctx, *input, blurSize, mainRT );
+}
+
+// **************************
+//
+const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output ) const
+{
+	if( !output )
+	{
+		// Allocate output render target if not passed
+		output = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+		NRenderedData rd( 1 );
+		rd.SetEntry( 0, output );
+
+	}
+
+	auto blurSizeVal = GetState()->GetValueAt( 1 );
+	QueryTypedValue< ValueFloatPtr >( blurSizeVal )->SetValue( blurSize );
+
+	auto vertical = GetState()->GetValueAt( 3 );
 
 	// Allocate new render target for vertical blur pass
 	auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
@@ -74,19 +100,21 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 	// Run vertical blur pass
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( true );
-	m_blurEffect->Render( ctx, rt0, *input );
+	m_blurEffect->Render( ctx, rt0, input );
 
 	// Run horizontal blur pass
-	enable( ctx, mainRT );
+	enable( ctx, output );
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
 	m_blurEffect->Render( ctx, rd );
 
 	allocator( ctx )->Free();  // free allocated locally render target.
+
+	return output;
 }
 
 // **************************
 //
-void                    NBlurFSEStep::FreeRenderTargets            ( NRenderContext * ctx, const NRenderedData * input )
+void                    NBlurFSEStep::FreeRenderTargets				( NRenderContext * ctx, const NRenderedData * input )
 {
 	input;
     assert( input->GetNumEntries() == GetNumRequiredInputs() );

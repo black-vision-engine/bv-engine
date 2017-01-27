@@ -37,6 +37,8 @@ public:
 
 private:
 	Float32						GetBlurSize				() const;
+
+	const RenderTarget *		BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output ) const;
 };
 
 } // nrl
