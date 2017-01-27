@@ -46,3 +46,4 @@
 23. Podmienić implementację video output tak, żeby jedna instancja obsługiwała wszystkie karty video (w tym HD i SD).
 24. Zoptymalizować dopinanie samplerów.
 25. Przemyśleć generyczne rozwiązanie minimalizujące liczbę zmian stanów.
+26. Shader caching. Teraz bez sensu jest tworzone tyle instancji, ile jest węzłów (nawet jeśli każdy węzeł ma identyczny shader)

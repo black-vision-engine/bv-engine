@@ -218,6 +218,7 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
 void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum )
 {
     int textureUnit = samplerNum;
+    bool textureUnitStateChanged = true;
 
     //FIXME: assert that texture type corresponds to sampler type
     switch( sampler->SamplingMode() )
@@ -243,6 +244,12 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
         }
         case SamplerSamplingMode::SSM_MODE_2D:
         {
+            if ( renderer->IsEnabled( texture, textureUnit ) )
+            {
+                textureUnitStateChanged = false;
+            }
+
+            // FIXME: does not enable texture but calls Update on the texture (which is bound - textureUnit binding is not touched)
             renderer->Enable( texture, textureUnit );
 
             //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
@@ -299,13 +306,20 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
     if( loc >= 0 )
     {
-        m_program->SetUniform( loc, textureUnit );
+        if( textureUnitStateChanged || textureUnit != renderer->GetSamplerTexUnit( loc ) )
+        {
+            m_program->SetUniform( loc, textureUnit );
+
+            renderer->SetSamplerTexUnit( loc, textureUnit );
+        }
     }
     else
     {
         loc = m_program->SetUniform( sampler->GetName().c_str(), textureUnit );
 
         sampler->CacheLoc( loc );
+
+        renderer->SetSamplerTexUnit( loc, textureUnit );
     }
 }
 
