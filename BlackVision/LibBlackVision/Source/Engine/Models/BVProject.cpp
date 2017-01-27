@@ -98,7 +98,7 @@ void            BVProject::Update( TimeType t )
         UpdatersManager::Get().UpdateStep();
 
         auto scenes = GetScenes();
-        auto identityTrans = Transform( glm::mat4( 1 ), glm::mat4( 1 ) );
+        auto identityTrans = Transform();
 
         for( auto & scene : scenes )
         {

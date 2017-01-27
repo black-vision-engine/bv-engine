@@ -93,7 +93,7 @@ TriangleStrip *                                 FullscreenUtils::CreateFullscree
 
     delete[] vbData;
 
-    ret->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+    ret->SetWorldTransform( glm::mat4( 1.0f ) );
 
     return ret;
 }

@@ -117,7 +117,7 @@ TriangleStrip *                                 NFullscreenEffectHelpers::Create
 
     delete[] vbData;
 
-    ret->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+    ret->SetWorldTransform( Transform() );
 
     return ret;
 }
