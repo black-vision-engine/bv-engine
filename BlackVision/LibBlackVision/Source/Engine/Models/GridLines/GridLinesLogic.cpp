@@ -251,7 +251,7 @@ void                            GridLinesLogic::ClearAll                ()
 //
 void                            GridLinesLogic::UpdateID                ()
 {
-    m_gridLinesUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
+    m_gridLinesUpdateID = ApplicationContext::Instance().GetUpdateCounter() + 1;
 }
 
 }   // model

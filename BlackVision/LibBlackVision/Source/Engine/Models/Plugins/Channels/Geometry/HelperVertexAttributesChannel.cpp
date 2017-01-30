@@ -26,7 +26,7 @@ void		HelperVertexAttributesChannel::SetAttributesUpdate		( VertexAttributesChan
 {
 	if( vaChannel )
 	{
-		vaChannel->SetAttributesUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
+		vaChannel->SetAttributesUpdateID( ApplicationContext::Instance().GetUpdateCounter() + 1 );
 	}
 }
 
@@ -56,7 +56,7 @@ void		HelperVertexAttributesChannel::SetTopologyUpdate		( VertexAttributesChanne
 {
 	if( vaChannel )
 	{
-		vaChannel->SetTopologyUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
+		vaChannel->SetTopologyUpdateID( ApplicationContext::Instance().GetUpdateCounter() + 1 );
 	}
 }
 

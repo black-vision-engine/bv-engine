@@ -196,7 +196,7 @@ void            CamerasLogic::ClearAll                ()
 //
 void            CamerasLogic::UpdateID                ()
 {
-    m_cameraUpdateID = ApplicationContext::Instance().GetTimestamp() + 1;
+    m_cameraUpdateID = ApplicationContext::Instance().GetUpdateCounter() + 1;
 }
 
 } // model
