@@ -67,7 +67,37 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 	auto mainRT = disableBoundRT( ctx );
 
-	BlurInput( ctx, *input, blurSize, mainRT );
+	auto stepsNum = blurQualityLevel->GetValue() + 1;
+
+	if( stepsNum > 0 )
+	{
+		NRenderedData rd( 1 );
+		rd.SetEntry( 0, input->GetEntry( 0 ) );
+
+		const RenderTarget * output = nullptr;
+
+		blurSize /= stepsNum;
+
+		for( auto i = 0; i < stepsNum - 1; ++i )
+		{
+			output = BlurInput( ctx, rd, blurSize, output );
+			auto oldInputRT = rd.GetEntry( 0 );
+			rd.SetEntry( 0, output );
+			output = oldInputRT;
+
+			// Clear blur output render target.
+			enable( ctx, output );
+			clearBoundRT( ctx, glm::vec4() );
+			disableBoundRT( ctx );
+		}
+
+		BlurInput( ctx, rd, blurSize, mainRT );
+
+		if( stepsNum > 1 )
+		{
+			allocator( ctx )->Free();
+		}
+	}
 }
 
 // **************************
@@ -80,7 +110,9 @@ const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const 
 		output = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 		NRenderedData rd( 1 );
 		rd.SetEntry( 0, output );
-
+		enable( ctx, output );
+		clearBoundRT( ctx, glm::vec4() );
+		disableBoundRT( ctx );
 	}
 
 	auto blurSizeVal = GetState()->GetValueAt( 1 );
