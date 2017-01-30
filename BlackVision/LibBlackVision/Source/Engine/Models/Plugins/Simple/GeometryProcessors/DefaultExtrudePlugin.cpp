@@ -163,8 +163,11 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     m_cosinusPeriod         = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD ) )->GetValue();
     ExtrudeCurveType curve  = QueryTypedParam< std::shared_ptr< ParamEnum< ExtrudeCurveType > > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
 
-    if( m_tesselation < 0 )
+    if( m_tesselation <= 0 )
         m_tesselation = 1;
+
+    if( curve >= ExtrudeCurveType::Total )
+        curve = ExtrudeCurveType::None;
 
     // Get previous plugin geometry channels
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
