@@ -237,10 +237,10 @@ vec4	BlendOverlay	( vec4 color1, vec4 color2 )
 	vec4 result;
 	vec4 col12 = 2.0 * color1 * color2;
 	
-	color1.r < 0.5 ? result.r = col12.r : result.r = 2.0 * ( color1.r + color2.r ) - 1.0 - col12.r;
-	color1.g < 0.5 ? result.g = col12.g : result.g = 2.0 * ( color1.g + color2.g ) - 1.0 - col12.g;
-	color1.b < 0.5 ? result.b = col12.b : result.b = 2.0 * ( color1.b + color2.b ) - 1.0 - col12.b;
-	color1.a < 0.5 ? result.a = col12.a : result.a = 2.0 * ( color1.a + color2.a ) - 1.0 - col12.a;
+	if( color1.r < 0.5 ) result.r = col12.r; else result.r = 2.0 * ( color1.r + color2.r ) - 1.0 - col12.r;
+	if( color1.g < 0.5 ) result.g = col12.g; else result.g = 2.0 * ( color1.g + color2.g ) - 1.0 - col12.g;
+	if( color1.b < 0.5 ) result.b = col12.b; else result.b = 2.0 * ( color1.b + color2.b ) - 1.0 - col12.b;
+	if( color1.a < 0.5 ) result.a = col12.a; else result.a = 2.0 * ( color1.a + color2.a ) - 1.0 - col12.a;
 	
 	return result;
 }
@@ -255,17 +255,25 @@ vec4	BlendSoftLight	( vec4 color1, vec4 color2 )
 	vec4 result;
 	vec4 col1Mul2 = 2.0 * color1 * color2;
 	
-	result.r = color2.r < 0.5	?  col1Mul2.r + pow( color1.r, 2.0 ) - col1Mul2.r * color1.r
-								: sqrt( color1.r ) * ( 2.0 * color2.r - 1.0 ) + 2.0 * color1.r - col1Mul2.r;
+	if( color2.r < 0.5	)
+		result.r = col1Mul2.r + pow( color1.r, 2.0 ) - col1Mul2.r * color1.r;
+	else
+		result.r = sqrt( color1.r ) * ( 2.0 * color2.r - 1.0 ) + 2.0 * color1.r - col1Mul2.r;
 
-	result.g = color2.g < 0.5	? col1Mul2.g + pow( color1.g, 2.0 ) - col1Mul2.g * color1.g
-								: sqrt( color1.g ) * ( 2.0 * color2.g - 1.0 ) + 2.0 * color1.g - col1Mul2.g;
+	if( color2.g < 0.5	)
+		result.g = col1Mul2.g + pow( color1.g, 2.0 ) - col1Mul2.g * color1.g;
+	else 
+		result.g = sqrt( color1.g ) * ( 2.0 * color2.g - 1.0 ) + 2.0 * color1.g - col1Mul2.g;
 
-	result.b = color2.b < 0.5	? col1Mul2.b + pow( color1.b, 2.0 ) - col1Mul2.b * color1.b
-								: sqrt( color1.b ) * ( 2.0 * color2.b - 1.0 ) + 2.0 * color1.b - col1Mul2.b;
+	if( color2.b < 0.5	)
+		result.b = col1Mul2.b + pow( color1.b, 2.0 ) - col1Mul2.b * color1.b;
+	else
+		result.b = sqrt( color1.b ) * ( 2.0 * color2.b - 1.0 ) + 2.0 * color1.b - col1Mul2.b;
 
-	result.a = color2.a < 0.5	? col1Mul2.a + pow( color1.a, 2.0 ) - col1Mul2.a * color1.a
-								: result.a = sqrt( color1.a ) * ( 2.0 * color2.a - 1.0 ) + 2.0 * color1.a - col1Mul2.a;
+	if( color2.a < 0.5	)
+		result.a = col1Mul2.a + pow( color1.a, 2.0 ) - col1Mul2.a * color1.a;
+	else
+		result.a = result.a = sqrt( color1.a ) * ( 2.0 * color2.a - 1.0 ) + 2.0 * color1.a - col1Mul2.a;
 					
 	return result;
 }
@@ -284,10 +292,10 @@ vec4	BlendColorDodge	( vec4 color1, vec4 color2 )
 	vec4 result;
 	
 	// OpenGL clamps automatically
-	result.r = color2.r == 1.0 ? color2.r : color1.r / (1.0 - color2.r );
-	result.g = color2.g == 1.0 ? color2.g : color1.g / (1.0 - color2.g );
-	result.b = color2.b == 1.0 ? color2.b : color1.b / (1.0 - color2.b );
-	result.a = color2.a == 1.0 ? color2.a : color1.a / (1.0 - color2.a );
+	if( color2.r == 1.0 ) result.r = color2.r; else result.r = color1.r / (1.0 - color2.r );
+	if( color2.g == 1.0 ) result.g = color2.g; else result.g = color1.g / (1.0 - color2.g );
+	if( color2.b == 1.0 ) result.b = color2.b; else result.b = color1.b / (1.0 - color2.b );
+	if( color2.a == 1.0 ) result.a = color2.a; else result.a = color1.a / (1.0 - color2.a );
 	
 	return result;	
 }
@@ -300,10 +308,10 @@ vec4	BlendColorBurn	( vec4 color1, vec4 color2 )
 	vec4 result;
 	
 	// OpenGL clamps automatically
-	result.r = color2.r == 0.0 ? color2.r : 1.0 - ( 1.0 - color1.r ) / color2.r;
-	result.g = color2.g == 0.0 ? color2.g : 1.0 - ( 1.0 - color1.g ) / color2.g;
-	result.b = color2.b == 0.0 ? color2.b : 1.0 - ( 1.0 - color1.b ) / color2.b;
-	result.a = color2.a == 0.0 ? color2.a : 1.0 - ( 1.0 - color1.a ) / color2.a;
+	if( color2.r == 0.0 ) result.r = color2.r; else result.r = 1.0 - ( 1.0 - color1.r ) / color2.r;
+	if( color2.g == 0.0 ) result.g = color2.g; else result.g = 1.0 - ( 1.0 - color1.g ) / color2.g;
+	if( color2.b == 0.0 ) result.b = color2.b; else result.b = 1.0 - ( 1.0 - color1.b ) / color2.b;
+	if( color2.a == 0.0 ) result.a = color2.a; else result.a = 1.0 - ( 1.0 - color1.a ) / color2.a;
 	
 	return result;	
 }
@@ -375,10 +383,10 @@ vec4	BlendReflect	( vec4 color1, vec4 color2 )
 	//(color2 == 1.0) ? color2 : min(color1 * color1 / (1.0 - color2), 1.0)
 	vec4 result;
 	
-	result.r = color2.r == 1.0 ? color2.r : color1.r * color1.r / (1.0 - color2.r);
-	result.g = color2.g == 1.0 ? color2.g : color1.g * color1.g / (1.0 - color2.g);
-	result.b = color2.b == 1.0 ? color2.b : color1.b * color1.b / (1.0 - color2.b);
-	result.a = color2.a == 1.0 ? color2.a : color1.a * color1.a / (1.0 - color2.a);
+	if( color2.r == 1.0 ) result.r = color2.r; else result.r = color1.r * color1.r / (1.0 - color2.r);
+	if( color2.g == 1.0 ) result.g = color2.g; else result.g = color1.g * color1.g / (1.0 - color2.g);
+	if( color2.b == 1.0 ) result.b = color2.b; else result.b = color1.b * color1.b / (1.0 - color2.b);
+	if( color2.a == 1.0 ) result.a = color2.a; else result.a = color1.a * color1.a / (1.0 - color2.a);
 	
 	return result;
 }
