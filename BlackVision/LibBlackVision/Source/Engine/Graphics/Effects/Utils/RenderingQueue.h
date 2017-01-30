@@ -44,8 +44,9 @@ private:
     std::vector< RenderItem >       m_opaqueNodes;
 
 public:
-    RenderingQueue();
-    ~RenderingQueue();
+
+    RenderingQueue  ();
+    ~RenderingQueue ();
 
     void                QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx );
     void                QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx );
@@ -56,7 +57,6 @@ public:
     void                Render              ( nrl::NRenderContext * ctx );
 
     void                ClearQueue          ();
-
 
 
     static float        ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx );

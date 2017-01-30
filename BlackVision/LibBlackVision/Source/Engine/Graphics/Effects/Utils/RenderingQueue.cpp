@@ -11,9 +11,7 @@
 #include "Memory/MemoryLeaks.h"
 
 
-namespace bv {
-
-namespace {
+namespace bv { namespace {
 
 // ************************************
 // FIXME: nrl - effect vs neffect
