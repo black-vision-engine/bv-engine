@@ -18,7 +18,7 @@ const UInt32	ApplicationContext::HD_HEIGHT = 1080;
 ApplicationContext::ApplicationContext						()
     : m_width( HD_WIDTH )
     , m_height( HD_HEIGHT )
-    , m_timestamp( 0 )
+    , m_updateCounter( 0 )
 {
 }
 
@@ -52,9 +52,9 @@ UInt32					ApplicationContext::GetHeight		() const
 
 // ***********************
 //
-UInt64					ApplicationContext::GetTimestamp	() const
+UInt64					ApplicationContext::GetUpdateCounter	() const
 {
-	return m_timestamp;
+	return m_updateCounter;
 }
 
 // ***********************
@@ -81,9 +81,16 @@ void					ApplicationContext::SetResolution	( UInt32 width, UInt32 height )
 
 // ***********************
 //
-void					ApplicationContext::SetTimestamp	( UInt64 timestamp )
+void					ApplicationContext::SetUpdateCounter	( UInt64 counter )
 {
-	m_timestamp = timestamp;
+	m_updateCounter = counter;
+}
+
+// ***********************
+//
+void                    ApplicationContext::IncrementUpdateCounter  ()
+{
+    m_updateCounter++;
 }
 
 }

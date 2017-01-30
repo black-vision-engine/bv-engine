@@ -16,14 +16,14 @@ namespace bv { namespace model {
 //
 void			HelperPixelShaderChannel::SetTexturesDataUpdate			( DefaultPixelShaderChannelPtr psChannel )
 {
-	psChannel->SetTexturesDataUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
+	psChannel->SetTexturesDataUpdateID( ApplicationContext::Instance().GetUpdateCounter() + 1 );
 }
 
 // ******************************
 //
 void			HelperPixelShaderChannel::SetRendererContextUpdate		( DefaultPixelShaderChannelPtr psChannel )
 {
-	psChannel->SetRendererContextUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
+	psChannel->SetRendererContextUpdateID( ApplicationContext::Instance().GetUpdateCounter() + 1 );
 }
 
 // ******************************

@@ -18,21 +18,22 @@ private:
     UInt32                  m_clientWidth;
     UInt32                  m_clientHeight;
 
-	UInt64					m_timestamp;
+	UInt64					m_updateCounter;
 
 public:
     static ApplicationContext &	Instance			();
 
 	UInt32					GetWidth				() const;
 	UInt32					GetHeight				() const;
-	UInt64					GetTimestamp			() const;
+	UInt64					GetUpdateCounter        () const;
 
     UInt32                  GetClientHeight         () const;
     UInt32                  GetClientWidth          () const;
 
 	//FIXME: shouldn't be public
 	void					SetResolution			( UInt32 width, UInt32 height );
-	void					SetTimestamp			( UInt64 timestamp );
+	void					SetUpdateCounter        ( UInt64 counter );
+    void                    IncrementUpdateCounter  ();
 
 protected:
 								ApplicationContext		();

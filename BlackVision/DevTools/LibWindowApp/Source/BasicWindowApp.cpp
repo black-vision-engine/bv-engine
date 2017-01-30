@@ -92,7 +92,7 @@ bool BasicWindowApp::OnIdle		()
     static auto curMillis = Time::Now();
 	auto timeDiff = Time::Now() - curMillis;
 
-	ApplicationContext::Instance().SetTimestamp( timeDiff );
+	ApplicationContext::Instance().SetUpdateCounter( timeDiff );
 
     m_appLogic->Update( float( timeDiff ) * 0.001f );
 

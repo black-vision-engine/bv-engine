@@ -222,7 +222,7 @@ void                    DefaultTextureDescriptor::SetBits           ( TextureAss
 
     m_texResource = texResource;
 
-    m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
+    m_updateID = ApplicationContext::Instance().GetUpdateCounter() + 1;
 }
 
 // **************************

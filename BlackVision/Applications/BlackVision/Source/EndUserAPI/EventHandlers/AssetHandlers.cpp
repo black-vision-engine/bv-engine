@@ -6,6 +6,8 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
+#include "Application/ApplicationContext.h"
+
 
 namespace bv
 {
@@ -63,6 +65,8 @@ void        AssetHandlers::LoadAsset            ( bv::IEventPtr eventPtr )
             SendSimpleErrorResponse( LoadAssetEvent::Command::LoadAsset, eventLoadAsset->EventID, eventLoadAsset->SocketID, "Wrong request" );
             return;
         }
+
+        ApplicationContext::Instance().SetUpdateCounter( ApplicationContext::Instance().GetUpdateCounter() + 1 );
 
         auto projectEditor = m_appLogic->GetBVProject()->GetProjectEditor();
         bool result = projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
