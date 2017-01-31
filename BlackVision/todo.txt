@@ -53,3 +53,4 @@
 28. Struktura projektu
   - poprawić tak, żeby includy wymagały poprawnego podania nazwy projektu (teraz jeśli nazwa pliku powtórzy się między projektami, to include nie wybierze popraawnie ścieżki)
   - np. #include "AVFrame.h" (jest tylko w LibVideoCards, ale tego z poziomu include w ogóle nie widać)
+29. Dodać do FSE (oraz do FSE factory) metody pozwalające na dodanie custo VS (na przykład blit na preview musi utrzymać skalę, a to wymaga generowania FSE quad tak, żeby utrztmać proporcje).
