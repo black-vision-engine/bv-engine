@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Output.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
@@ -9,7 +9,7 @@
 
 namespace bv { namespace nrl {
 
-class OutputStreamSharedMem : public OutputInstance
+class OutputStreamSharedMem : public Output
 {
 private:
 

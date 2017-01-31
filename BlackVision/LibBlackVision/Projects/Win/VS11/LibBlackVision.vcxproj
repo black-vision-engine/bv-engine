@@ -291,6 +291,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogicCore.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogicImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputInstance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputPreview.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputScreenshot.cpp" />
@@ -620,6 +621,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputInstance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideoContainer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderChannel.h" />

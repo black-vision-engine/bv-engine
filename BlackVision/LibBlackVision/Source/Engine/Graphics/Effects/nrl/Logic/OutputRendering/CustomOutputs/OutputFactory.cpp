@@ -3,7 +3,7 @@
 #include "OutputFactory.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputPreview.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputVideo.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputVideoContainer.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputStreamSharedMem.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputScreenshot.h"
 
@@ -26,15 +26,26 @@ Output *    CreateOutput( CustomOutputType cot )
 {
     switch( cot )
     {
-        case COT_PREVIEW:
-            return 
-        case COT_VIDEO:
-        case COT_STREAM_SHM:
-        case COT_SCREENSHOT:
+        case CustomOutputType::COT_PREVIEW:
+        {
+            auto res = new OutputPreview( widthHD, heightHD );
+            
+            assert( false );
+            // res->Enable();
+
+            return res;
+        }
+        case CustomOutputType::COT_VIDEO:
+            return new OutputVideoContainer();
+        case CustomOutputType::COT_STREAM_SHM:
+            return new OutputStreamSharedMem( widthSD, heightSD );
+        case CustomOutputType::COT_SCREENSHOT:
+            return new OutputScreenshot( widthHD, heightHD );
         default:
             assert( false );
-        return nullptr;
     };
+
+    return nullptr;
 }
 
 } // nrl

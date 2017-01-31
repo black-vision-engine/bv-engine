@@ -3,7 +3,7 @@
 #include <vector>
 #include <hash_map>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Output.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
@@ -54,7 +54,7 @@ class NRenderContext;
 class OutputVideo;
 
 // FIXME: nrl - this class is in a way responsible for handling intercard synchronization issues
-class OutputVideoContainer : public OutputInstance
+class OutputVideoContainer : public Output
 {
 private:
 
@@ -66,7 +66,7 @@ private:
 
 public:
 
-                    OutputVideoContainer    ( unsigned int widthHD, unsigned int heightHD );
+                    OutputVideoContainer    ();
                     ~OutputVideoContainer   ();
 
     virtual void    ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) override;

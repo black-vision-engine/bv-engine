@@ -4,6 +4,8 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffect.h"
+
 
 namespace bv { namespace nrl {
  

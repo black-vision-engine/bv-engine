@@ -3,11 +3,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
 
 
-namespace bv { 
-    
-class RenderTarget;
-    
-namespace nrl {
+namespace bv { namespace nrl {
 
 enum class CustomOutputType : unsigned int
 {
