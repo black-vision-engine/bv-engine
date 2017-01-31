@@ -699,7 +699,7 @@ void        Scroller::ShiftNodeToEnd      ( model::BasicNode * n )
     m_nodesStates.Acivate( n );
 
     Int32 lastIdx = (Int32)m_nodesStates.ActiveSize() - 1;
-    assert( lastIdx > 0 );
+    assert( lastIdx >= 0 );
 
     if( lastIdx > 1 )
     {
@@ -708,7 +708,9 @@ void        Scroller::ShiftNodeToEnd      ( model::BasicNode * n )
         m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = currShift;
     }
     else
+    {
         m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = InitialShift( m_nodesStates.m_actives[ lastIdx ] );
+    }
 }
 
 // ========================================================================= //

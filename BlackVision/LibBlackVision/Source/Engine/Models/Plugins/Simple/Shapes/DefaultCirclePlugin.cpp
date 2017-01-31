@@ -66,53 +66,62 @@ IPluginPtr                      DefaultCirclePluginDesc::CreatePlugin         ( 
 
 // *******************************
 //
-class CircleGenerator : public IGeometryNormalsGenerator
+class CircleGenerator : public IGeometryNormalsUVsGenerator
 {
 
 private:
 
-    int         tesselation;
-    float       inner_radius, outer_radius;
-    double      total_angle;
-    DefaultCirclePlugin::OpenAngleMode mode;
+    int         m_tesselation;
+    float       m_innerRadius, m_outerRadius;
+    double      m_totalAngle;
+    DefaultCirclePlugin::OpenAngleMode m_mode;
 
 public:
 
     CircleGenerator                 ( int n, float ir, float or, float oa, DefaultCirclePlugin::OpenAngleMode m )
-        : tesselation( n )
-        , inner_radius( ir )
-        , outer_radius( or )
-        , total_angle ( oa / 360.f * 2 * PI )
-        , mode( m )
+        : m_tesselation( n )
+        , m_innerRadius( ir )
+        , m_outerRadius( or )
+        , m_totalAngle ( oa / 360.f * 2 * PI )
+        , m_mode( m )
         {}
 
-    void GenerateGeometryNormals    ( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals ) 
+    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
     {
-        if( tesselation < 1 )
-            tesselation = 1;
+        if( m_tesselation < 1 )
+            m_tesselation = 1;
 
-        double angle_offset;
-        if( mode == DefaultCirclePlugin::OpenAngleMode::CW )
-            angle_offset = 0;
-        else if( mode == DefaultCirclePlugin::OpenAngleMode::CCW )
-            angle_offset = total_angle;
-        else if( mode == DefaultCirclePlugin::OpenAngleMode::SYMMETRIC )
-            angle_offset = total_angle/2;
+        double angleOffset;
+        if( m_mode == DefaultCirclePlugin::OpenAngleMode::CW )
+            angleOffset = 0;
+        else if( m_mode == DefaultCirclePlugin::OpenAngleMode::CCW )
+            angleOffset = m_totalAngle;
+        else if( m_mode == DefaultCirclePlugin::OpenAngleMode::SYMMETRIC )
+            angleOffset = m_totalAngle/2;
         else
         {
             assert( false );
             return;
         }
 
-        for( int i = 0; i <= tesselation; i++ )
+        float uvOuter = 0.5;
+        float uvInner = uvOuter * m_innerRadius / m_outerRadius;
+
+        for( int i = 0; i <= m_tesselation; i++ )
         {
-            double angle = i * total_angle / tesselation;
-            angle -= angle_offset;
+            double angle = i * m_totalAngle / m_tesselation;
+            angle -= angleOffset;
 
-            glm::vec3 unitVector = glm::vec3( cos( angle ), sin( angle ), 0 );
+            double cosAngle = cos( angle );
+            double sinAngle = sin( angle );
 
-            verts->AddAttribute( unitVector * inner_radius );
-            verts->AddAttribute( unitVector * outer_radius );
+            glm::vec3 unitVector = glm::vec3( cosAngle, sinAngle, 0 );
+
+            verts->AddAttribute( unitVector * m_innerRadius );
+            verts->AddAttribute( unitVector * m_outerRadius );
+
+            uvs->AddAttribute( glm::vec2( 0.5f + uvInner * cosAngle, 0.5 + uvInner * sinAngle ) );
+            uvs->AddAttribute( glm::vec2( 0.5f + uvOuter * cosAngle, 0.5 + uvOuter * sinAngle ) );
         }
 
         GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
