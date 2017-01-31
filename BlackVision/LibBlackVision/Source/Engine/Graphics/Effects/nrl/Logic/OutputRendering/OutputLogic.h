@@ -22,7 +22,7 @@ private:
 
 public:
 
-                        OutputLogic             ( unsigned int width, unsigned int height, unsigned int shmScaleFactor, RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
+                        OutputLogic             ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
     virtual             ~OutputLogic            ();
 
     // API directly related to frame rendering
@@ -33,9 +33,6 @@ public:
 
     // API related to render buffers state manipulation
     RenderResult *      AccessRenderResult      ();
-
-    void                ActivateRenderChannel   ( RenderChannelType rct );
-    void                DeactivateRenderChannel ( RenderChannelType rct );
 
     void                UpdateRenderChannels    ();
 

@@ -3,7 +3,7 @@
 #include "NRenderLogicCore.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderChannel.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 

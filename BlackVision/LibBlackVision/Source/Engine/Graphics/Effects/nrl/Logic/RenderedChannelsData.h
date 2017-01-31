@@ -12,8 +12,8 @@ class RenderTarget;
 
 namespace nrl {
 
-// FIXME: nrl - implement (if necessary) additional logic to cache readback textures
-class RenderResult
+// FIXME: nrl - implement (if necessary) additional logic to cache readback textures - or move this logic somewhere else
+class RenderedChanneslData
 {
 private:
 
@@ -26,13 +26,13 @@ private:
 private:
 
     //FIXME: use the 'delete' keyword
-    RenderResult                ( const RenderResult & src );
-    RenderResult &  operator =  ( RenderResult & src );
+    RenderedChanneslData                ( const RenderedChanneslData & src );
+    RenderedChanneslData &  operator =  ( RenderedChanneslData & src );
 
 public:
 
-                            RenderResult            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
-                            ~RenderResult           ();
+                            RenderedChanneslData    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+                            ~RenderedChanneslData   ();
 
     const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;
 	const RenderTarget *	GetActiveRenderTarget	( RenderChannelType rct ) const;
