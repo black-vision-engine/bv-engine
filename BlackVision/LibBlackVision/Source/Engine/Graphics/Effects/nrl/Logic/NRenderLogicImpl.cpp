@@ -9,7 +9,7 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor )
+NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
     : m_state( width, height, numTrackedRenderTargetsPerOutputType, sharedMemScaleFactor ) 
 {
 }
@@ -24,21 +24,21 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
         m_state.Initialize( renderer, audio );
     }
 
-    // 1. Access output logic associated with this RenderLogic instance and update (per frame) output buffers
-    auto outputLogic = output_logic( m_state );
-    outputLogic->UpdateRenderChannels();
+    // 1. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
+    auto renderdata     = render_channels_data( m_state );     
+    renderdata->UpdateRenderChannels();
 
     // 2. Low level renderer per frame initialization
     renderer->PreDraw();
 
     // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
-    RenderQueued( scenes, outputLogic->AccessRenderResult() );
+    RenderQueued( scenes, renderdata->AccessRenderResult() );
 
     // 4. Low lecel rendere per frame cleanup
     renderer->PostDraw();
 
     // 5. Handle frame data rendered during this call and all logic associated with custom outputs
-    outputLogic->ProcessFrameData( context( m_state ) );
+    output_logic( m_state )->ProcessFrameData( context( m_state ) );
 }
 
 // **************************
@@ -46,6 +46,13 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
 OutputLogic *   NRenderLogicImpl::GetOutputLogic    ()
 {
     return output_logic( m_state );
+}
+
+// **************************
+//
+RenderedChannelsData *  NRenderLogicImpl::GetRenderedChannelsData   ()
+{
+    return render_channels_data( m_state );
 }
 
 // **************************

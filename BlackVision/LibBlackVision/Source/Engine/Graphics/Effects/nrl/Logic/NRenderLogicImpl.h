@@ -18,11 +18,12 @@ private:
 
 public:
 
-                            NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
+                                    NRenderLogicImpl        ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType );
 
-    virtual void            HandleFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
+    virtual void                    HandleFrame             ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 
-    virtual OutputLogic *   GetOutputLogic      () override;
+    virtual OutputLogic *           GetOutputLogic          () override;
+    virtual RenderedChannelsData *  GetRenderedChannelsData () override;
 
 private:
             void            RenderQueued        ( const SceneVec & scenes, RenderResult * result );

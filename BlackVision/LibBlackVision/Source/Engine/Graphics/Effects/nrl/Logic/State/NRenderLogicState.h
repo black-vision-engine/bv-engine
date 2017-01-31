@@ -37,14 +37,21 @@ public:
 
 // ************************
 //
-inline OutputLogic  *           output_logic    ( NRenderLogicState & state )
+inline OutputLogic  *           output_logic            ( NRenderLogicState & state )
 {
     return state.GetOutputLogic();
 }
 
 // ************************
 //
-inline NRenderContext *			context			( NRenderLogicState & state )
+inline RenderedChannelsData *   rendered_channels_data  ( NRenderLogicState & state )
+{
+    return nullptr;
+}
+
+// ************************
+//
+inline NRenderContext *			context			        ( NRenderLogicState & state )
 {
 	return state.GetRenderContext();
 }
