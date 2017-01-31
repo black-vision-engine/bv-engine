@@ -101,11 +101,11 @@ bool BlackVisionApp::OnIdle		()
 
     unsigned long millis = m_timer.ElapsedMillis();
 
-    ApplicationContext::Instance().SetUpdateCounter( ApplicationContext::Instance().GetUpdateCounter() + 1 );
+    ApplicationContext::Instance().IncrementUpdateCounter();
 
     UpdateSubsystems( millis );
 
-    ApplicationContext::Instance().SetUpdateCounter( ApplicationContext::Instance().GetUpdateCounter() + 1 );
+    ApplicationContext::Instance().IncrementUpdateCounter();
 
     m_app->OnUpdate( millis, m_Renderer, m_audioRenderer );
 

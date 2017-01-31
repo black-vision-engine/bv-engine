@@ -36,6 +36,7 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
 
+#include "Application/ApplicationContext.h"
 
 // Undo/Redo operations
     // Nodes
@@ -1066,6 +1067,10 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
 {
     if( plugin && assetDesc )
     {
+        // This is necessary if multiple events come in one frame. That concerns situations when editor adds plugins first
+        // and than loads asset. Plugins that come after wouldn't update geometry.
+        ApplicationContext::Instance().IncrementUpdateCounter();
+
         auto success = plugin->LoadResource( assetDesc );
         BVProjectTools::ReleaseUnusedResources( m_project->m_renderer, m_project->GetAssetTracker() );
         return success;
