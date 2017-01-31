@@ -53,4 +53,8 @@
 28. Struktura projektu
   - poprawić tak, żeby includy wymagały poprawnego podania nazwy projektu (teraz jeśli nazwa pliku powtórzy się między projektami, to include nie wybierze popraawnie ścieżki)
   - np. #include "AVFrame.h" (jest tylko w LibVideoCards, ale tego z poziomu include w ogóle nie widać)
-29. Dodać do FSE (oraz do FSE factory) metody pozwalające na dodanie custo VS (na przykład blit na preview musi utrzymać skalę, a to wymaga generowania FSE quad tak, żeby utrztmać proporcje).
+29. Dodać do FSE (oraz do FSE factory) metody pozwalające na dodanie custo VS (na przykład blit na preview musi utrzymać skalę, a to wymaga generowania FSE quad tak, żeby utrztmać proporcje). To też do budzika pawełkowego.
+30. Tester do synchronizowania wielu kart video (czyli bez żadnego GL, na każdy output pchamy obrazek z ID outputu oraz timecodem - można wczytać takie sekwencje wcześniej)
+31. Ustawianie aktywnych kanałów render channel - z poziomu render logic
+32. OutputVideo ma pchać całą listę avframe do video card managera. OutputVideo pozwala konfigurować stan poszczególnych outputów (kanały, enable, disable). Powinien też keszować pośrednie wyniki (czyli tworzy tylko tyle nowych avframe, ile jest różnych wyników). Widać, że reaqdbacki też muszą się odbyć wcześniej.
+33. Override video output data - blank - pusta pamięć.

@@ -22,13 +22,6 @@ enum class OutputVideoChannel : unsigned int
     OVC_HD_6,
     OVC_HD_7,
     OVC_HD_8,
-    OVC_HD_9,
-    OVC_HD_10,
-    OVC_HD_11,
-    OVC_HD_12,
-    OVC_HD_14,
-    OVC_HD_15,
-    OVC_HD_16,
 
     OVC_SD_1,
     OVC_SD_2,
@@ -38,13 +31,6 @@ enum class OutputVideoChannel : unsigned int
     OVC_SD_6,
     OVC_SD_7,
     OVC_SD_8,
-    OVC_SD_9,
-    OVC_SD_10,
-    OVC_SD_11,
-    OVC_SD_12,
-    OVC_SD_14,
-    OVC_SD_15,
-    OVC_SD_16,
 
     OVC_TOTAL
 };
