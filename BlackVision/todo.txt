@@ -47,3 +47,9 @@
 24. Zoptymalizować dopinanie samplerów.
 25. Przemyśleć generyczne rozwiązanie minimalizujące liczbę zmian stanów.
 26. Shader caching. Teraz bez sensu jest tworzone tyle instancji, ile jest węzłów (nawet jeśli każdy węzeł ma identyczny shader)
+27. Okienko preview powinno
+  - mieścić się na domyślnym monitorze
+  - zachowywać proporcje (teraz jest jakies głupie rozciąganie - wystarczy poprawić vertex shader - bo renderowanie ma odbywać się do pełnowymiarowego 1920x1080 zawsze)
+28. Struktura projektu
+  - poprawić tak, żeby includy wymagały poprawnego podania nazwy projektu (teraz jeśli nazwa pliku powtórzy się między projektami, to include nie wybierze popraawnie ścieżki)
+  - np. #include "AVFrame.h" (jest tylko w LibVideoCards, ale tego z poziomu include w ogóle nie widać)
