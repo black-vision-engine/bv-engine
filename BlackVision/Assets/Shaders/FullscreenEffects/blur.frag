@@ -26,12 +26,12 @@ void pass0()
     
 	vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
 	
-	// if( subPixelWeight > 0 && blurSizeCeil != blurSizeFloor )
-	// {
-		// sum += texture( Tex0, uvCoord - vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
-		// sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
-		// weight += ( 2 * subPixelWeight );
-	// }
+	if( subPixelWeight > 0 && blurSizeCeil != blurSizeFloor )
+	{
+		sum += texture( Tex0, uvCoord - vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight * 0.5;
+		sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight * 0.5;
+		weight += subPixelWeight;
+	}
       
 	sum += texture( Tex0, uvCoord ) * 0.5;
 	weight += 0.5;
