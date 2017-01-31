@@ -1,6 +1,15 @@
+#pragma once
+
+
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
-namespace bv { namespace model {
+
+
+
+namespace bv {
+namespace model {
+
+
 
 class DefaultCirclePluginDesc : public DefaultGeometryPluginDescBase
 {
@@ -13,6 +22,9 @@ public:
 
     static  std::string                     UID                 ();
 };
+
+
+
 
 class DefaultCirclePlugin : public DefaultGeometryPluginBase
 {
@@ -41,22 +53,9 @@ public:
     //virtual void								Update                      ( TimeType t );
 };
 
-template<>
-inline bool SetParameter< DefaultCirclePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCirclePlugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultCirclePlugin::OpenAngleMode> ParamType;
 
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
+DEFINE_ENUM_SET_PARAMETER( DefaultCirclePlugin::OpenAngleMode );
 
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 } }
