@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderResult.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 
 
 namespace bv { 
@@ -16,9 +16,9 @@ class OutputLogic
 {
 private:
 
-    std::vector< OutputInstance * >     m_outputs;
+    std::vector< Output * >     m_outputs;
 
-    RenderResult                        m_renderResult;
+    RenderResult                m_renderResult;
 
 public:
 
@@ -29,14 +29,7 @@ public:
     void                ProcessFrameData        ( NRenderContext * ctx );
 
     // API relarted to global output state manipulation
-    bool                IsEnabled               ( CustomOutputType outputType );
-    void                EnableOutput            ( CustomOutputType outputType );
-    void                DisableOutput           ( CustomOutputType outputType );
-    
-    RenderChannelType   GetActiveRenderChannel  ( CustomOutputType outputType ) const;
-    bool                SetActiveRenderChannel  ( CustomOutputType outputType, RenderChannelType rct );
-
-    OutputInstance *    GetOutput               ( CustomOutputType outputType );
+    Output *            GetOutput               ( CustomOutputType outputType );
 
     // API related to render buffers state manipulation
     RenderResult *      AccessRenderResult      ();

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <hash_map>
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
@@ -56,8 +59,10 @@ class OutputVideoContainer : public OutputInstance
 private:
 
     // FIXME: nrl - add intermediate state here (for caching intermediate output results and minimize readback times)
+    // ReadbackCache    m_readbackCache;
 
-    std::vector< OutputVideo * >    m_outputs;
+    std::vector< OutputVideo * >                        m_outputs;
+    std::hash_map< OutputVideoChannel, OutputVideo * >  m_outputsMapping;
 
 public:
 
@@ -67,6 +72,10 @@ public:
     virtual void    ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) override;
 
     OutputVideo *   GetVideoOutput          ( OutputVideoChannel ovc );
+
+    // API for outputs manipulation
+    void            RegisterOutput          ( OutputVideo * output, OutputVideoChannel ovc );
+    bool            RemoveOutput            ( OutputVideoChannel ovc );
 
 };
 

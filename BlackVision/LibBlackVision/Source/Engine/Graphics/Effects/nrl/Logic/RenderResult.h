@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderChannel.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 namespace bv { 

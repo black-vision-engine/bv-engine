@@ -2,7 +2,7 @@
 
 #include "OutputLogic.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
@@ -173,7 +173,7 @@ bool                OutputLogic::SetActiveRenderChannel  ( CustomOutputType outp
 
 // *********************************
 //
-OutputInstance *    OutputLogic::GetOutput              ( CustomOutputType outputType )
+Output *            OutputLogic::GetOutput              ( CustomOutputType outputType )
 {
     return m_outputs[ (unsigned int) outputType ];
 }

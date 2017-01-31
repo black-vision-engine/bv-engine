@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
 
 namespace bv { namespace nrl {
  
-class OutputPreview : public OutputInstance
+class OutputPreview : public Output
 {
 private:
 
