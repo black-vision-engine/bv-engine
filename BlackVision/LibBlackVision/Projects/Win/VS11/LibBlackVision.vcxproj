@@ -896,6 +896,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\BlendingModeHelper.h" />
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h" />
     <ClInclude Include="..\..\..\Source\Application\ConsoleApplication.h" />
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h" />
@@ -1249,6 +1250,9 @@
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\BlendingModeHelper.cpp">
+      <FileType>Document</FileType>
+    </ClCompile>
     <None Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
