@@ -37,10 +37,9 @@ Output *    CreateOutput( CustomOutputType cot )
         }
         case CustomOutputType::COT_VIDEO:
             return new OutputVideoContainer();
-        case CustomOutputType::COT_STREAM_SHM:
-            return new OutputStreamSharedMem( widthSD, heightSD );
-        case CustomOutputType::COT_SCREENSHOT:
-            return new OutputScreenshot( widthHD, heightHD );
+        case CustomOutputType::COT_STREAM:
+            return nullptr;
+            // return new OutputStreamSharedMem( widthSD, heightSD );
         default:
             assert( false );
     };

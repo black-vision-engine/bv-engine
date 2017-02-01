@@ -60,3 +60,4 @@
 33. Override video output data - blank - pusta pamięć.
 34. Implementacja output stream - oraz w jego ramach podimplementacja outputu shared memory.
 35. Upewnić się, że struktura katalogów w nrl jest poprawna, a jeśli nie jest, to ją odpowiednio zmodyfikować.
+36. Namierzyć te miejsca, które w debug powinny lecieć na assert, ale w release NIE POWINNY WYWALAĆ silnika (generalnie nie powinny się zdarzać, ale zakładamy, że mogą i o ile coś może się brzydko renderować, to silnik powinien to przetrzymywać bez padu).
