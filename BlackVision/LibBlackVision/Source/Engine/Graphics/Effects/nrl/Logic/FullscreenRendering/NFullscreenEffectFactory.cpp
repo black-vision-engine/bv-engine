@@ -76,7 +76,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
     {
         case NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB:
         case NFullscreenEffectType::NFET_SIMPLE_BLIT:
-			desc->AppendInputSamplerEntry( "Texture" );
+			desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR );
 			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK:
 			desc->SetBlendFlag( true );
