@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/RenderChannel.h"
 
 
 namespace bv { namespace nrl {

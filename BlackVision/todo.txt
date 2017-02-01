@@ -59,3 +59,4 @@
 32. OutputVideo ma pchać całą listę avframe do video card managera. OutputVideo pozwala konfigurować stan poszczególnych outputów (kanały, enable, disable). Powinien też keszować pośrednie wyniki (czyli tworzy tylko tyle nowych avframe, ile jest różnych wyników). Widać, że reaqdbacki też muszą się odbyć wcześniej.
 33. Override video output data - blank - pusta pamięć.
 34. Implementacja output stream - oraz w jego ramach podimplementacja outputu shared memory.
+35. Upewnić się, że struktura katalogów w nrl jest poprawna, a jeśli nie jest, to ją odpowiednio zmodyfikować.

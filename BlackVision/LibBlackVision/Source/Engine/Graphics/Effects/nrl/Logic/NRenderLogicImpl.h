@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderLogicState.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicCore.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/NRenderLogicCore.h"
 
 
 namespace bv { namespace nrl {
@@ -26,7 +26,7 @@ public:
     virtual RenderedChannelsData *  GetRenderedChannelsData () override;
 
 private:
-            void            RenderQueued        ( const SceneVec & scenes, RenderResult * result );
+            void            RenderQueued        ( const SceneVec & scenes, RenderedChannelsData * result );
             void            Render              ( SceneNode * sceneRoot );
 
 };

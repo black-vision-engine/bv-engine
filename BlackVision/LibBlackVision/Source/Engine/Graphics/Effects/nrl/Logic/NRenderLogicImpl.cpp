@@ -10,7 +10,7 @@ namespace bv { namespace nrl {
 // **************************
 //
 NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
-    : m_state( width, height, numTrackedRenderTargetsPerOutputType, sharedMemScaleFactor ) 
+    : m_state( width, height, numTrackedRenderTargetsPerOutputType ) 
 {
 }
 
@@ -25,14 +25,14 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
     }
 
     // 1. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
-    auto renderdata     = render_channels_data( m_state );     
+    auto renderdata     = rendered_channels_data( m_state );     
     renderdata->UpdateRenderChannels();
 
     // 2. Low level renderer per frame initialization
     renderer->PreDraw();
 
     // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
-    RenderQueued( scenes, renderdata->AccessRenderResult() );
+    RenderQueued( scenes, renderdata );
 
     // 4. Low lecel rendere per frame cleanup
     renderer->PostDraw();
@@ -52,12 +52,12 @@ OutputLogic *   NRenderLogicImpl::GetOutputLogic    ()
 //
 RenderedChannelsData *  NRenderLogicImpl::GetRenderedChannelsData   ()
 {
-    return render_channels_data( m_state );
+    return rendered_channels_data( m_state );
 }
 
 // **************************
 //
-void            NRenderLogicImpl::RenderQueued      ( const SceneVec & scenes, RenderResult * result )
+void            NRenderLogicImpl::RenderQueued      ( const SceneVec & scenes, RenderedChannelsData * result )
 {
     auto ctx = context( m_state );
     

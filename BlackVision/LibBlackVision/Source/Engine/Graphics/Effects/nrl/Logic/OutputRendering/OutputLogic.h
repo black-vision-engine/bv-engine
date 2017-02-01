@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderedChannelsData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/RenderedChannelsData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 
 

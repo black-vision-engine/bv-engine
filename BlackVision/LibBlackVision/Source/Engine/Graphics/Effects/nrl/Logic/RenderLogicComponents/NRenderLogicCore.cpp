@@ -25,7 +25,7 @@ NRenderLogicCore::NRenderLogicCore()
 
 // **************************
 //
-void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
+void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsData * result, NRenderContext * ctx )
 {
     // Invalidate all active output channels
     PreRender   ( result );
@@ -41,7 +41,7 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
 
 // **************************
 //
-void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
+void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedChannelsData * result, NRenderContext * ctx )
 {
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
@@ -68,7 +68,7 @@ void    NRenderLogicCore::RenderScene       ( Scene * scene, const RenderTarget 
 
 // **************************
 //
-void    NRenderLogicCore::PreRender         ( RenderResult * result )
+void    NRenderLogicCore::PreRender         ( RenderedChannelsData * result )
 {
     for( auto channelType : m_allChannels )
     {
@@ -81,7 +81,7 @@ void    NRenderLogicCore::PreRender         ( RenderResult * result )
 
 // **************************
 //
-void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderContext * ctx )
+void    NRenderLogicCore::PostRender        ( RenderedChannelsData * result, NRenderContext * ctx )
 {
     for( auto channelType : m_allChannels )
     {
