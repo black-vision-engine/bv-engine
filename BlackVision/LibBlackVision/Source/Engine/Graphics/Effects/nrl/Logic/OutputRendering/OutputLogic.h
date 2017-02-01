@@ -18,8 +18,6 @@ private:
 
     std::vector< Output * >     m_outputs;
 
-    RenderResult                m_renderResult;
-
 public:
 
                         OutputLogic             ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
@@ -30,11 +28,6 @@ public:
 
     // API relarted to global output state manipulation
     Output *            GetOutput               ( CustomOutputType outputType );
-
-    // API related to render buffers state manipulation
-    RenderResult *      AccessRenderResult      ();
-
-    void                UpdateRenderChannels    ();
 
 };
 

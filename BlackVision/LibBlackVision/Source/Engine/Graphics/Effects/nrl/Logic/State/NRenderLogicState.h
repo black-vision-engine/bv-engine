@@ -6,6 +6,8 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/RenderedChannelsData.h"
+
 
 namespace bv { namespace nrl {
 
@@ -16,6 +18,8 @@ private:
     RenderTargetStackAllocator      m_renderTargetAllocator;
     RenderQueueStackAllocator       m_renderQueueAllocator;
 
+    RenderedChannelsData            m_renderedChannelsData;
+
     NRenderContext					m_ctx;
 
     OutputLogic                     m_outputLogic;
@@ -24,13 +28,15 @@ private:
 
 public:
 
-                                NRenderLogicState   ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
+                                NRenderLogicState       ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType );
 
-    OutputLogic *               GetOutputLogic      ();
-    NRenderContext *			GetRenderContext	();
+    OutputLogic *               GetOutputLogic          ();
+    NRenderContext *			GetRenderContext	    ();
+    RenderedChannelsData *      GetRenderedChannelsData ();
 
-    bool                        IsInitialized       () const;
-    void                        Initialize          ( Renderer * renderer, audio::AudioRenderer * audio );
+    bool                        IsInitialized           () const;
+
+    void                        Initialize              ( Renderer * renderer, audio::AudioRenderer * audio );
 
 };
 
@@ -46,7 +52,7 @@ inline OutputLogic  *           output_logic            ( NRenderLogicState & st
 //
 inline RenderedChannelsData *   rendered_channels_data  ( NRenderLogicState & state )
 {
-    return nullptr;
+    return state.GetRenderedChannelsData();
 }
 
 // ************************
