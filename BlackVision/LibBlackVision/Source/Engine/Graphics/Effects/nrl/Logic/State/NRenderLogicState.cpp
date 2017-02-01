@@ -11,6 +11,7 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
     : m_initialized( false )
     , m_renderTargetAllocator( width, height )
     , m_renderedChannelsData( &m_renderTargetAllocator, numTrackedRenderTargetsPerOutputType )
+    , m_outputLogic()
 
 {
     m_ctx.SetAllocator( &m_renderTargetAllocator );

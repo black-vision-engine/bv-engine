@@ -2053,6 +2053,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsData.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsDataDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5356,6 +5359,9 @@
       <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsData.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsDataDesc.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
     </ClInclude>
   </ItemGroup>
