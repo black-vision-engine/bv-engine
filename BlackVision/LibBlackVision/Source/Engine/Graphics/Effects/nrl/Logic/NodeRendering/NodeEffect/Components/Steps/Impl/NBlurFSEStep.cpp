@@ -170,6 +170,8 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 			allocator( ctx )->Free();
 		}
 	}
+
+	enable( ctx, mainRT );
 }
 
 // **************************
@@ -271,12 +273,21 @@ const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const 
 	m_blurEffect->Render( ctx, resizedHorizontallyBluredRT, input );
 	disableBoundRT( ctx );
 
+	// Allocate new render target for vertical blur pass
+	auto resizedVerticallyBluredRT = m_rtAllocators->Allocate( wrt, hrt, RenderTarget::RTSemantic::S_DRAW_ONLY );
+	rd.SetEntry( 0, resizedHorizontallyBluredRT );
+	enable( ctx, resizedVerticallyBluredRT );
+	clearBoundRT( ctx, glm::vec4() );
 
 	// Run horizontal blur pass
-	enable( ctx, output );
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
-	m_blurEffect->Render( ctx, rd );
+	m_blurEffect->Render( ctx, resizedVerticallyBluredRT, rd );
+	disableBoundRT( ctx );
 
+	rd.SetEntry( 0, resizedVerticallyBluredRT );
+	ResizeInput( ctx, rd, output );
+
+	m_rtAllocators->Free( wrt, hrt );
 	m_rtAllocators->Free( wrt, hrt );
 
 	//allocator( ctx )->Free();  // free allocated locally render target.
