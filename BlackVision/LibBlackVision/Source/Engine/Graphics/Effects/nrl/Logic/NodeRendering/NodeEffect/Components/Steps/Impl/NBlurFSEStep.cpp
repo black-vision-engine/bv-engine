@@ -180,7 +180,7 @@ const RenderTarget *	NBlurFSEStep::FastBlur						( NRenderContext * ctx, const N
 	{
 		NRenderedData inputResized( 1 );
 
-		//auto steps = int( floor( std::log( blurSize / 16 ) / std::log( 2 ) ) );
+		auto stepsNum = int( ceil( std::log( blurSize / 16 ) / std::log( 2 ) ) );
 
 		auto inputW = input.GetEntry( 0 )->Width();
 		auto inputH = input.GetEntry( 0 )->Height();
@@ -188,11 +188,35 @@ const RenderTarget *	NBlurFSEStep::FastBlur						( NRenderContext * ctx, const N
 		auto outputW = UInt32( std::ceil( inputW / 2.f ) );
 		auto outputH = UInt32( std::ceil( inputH / 2.f ) );
 
-		auto resizedRT = m_rtAllocators->Allocate( outputW, outputH, RenderTarget::RTSemantic::S_DRAW_ONLY );
+		RenderTarget * resizedRT = nullptr;
+		NRenderedData inputTmp( 1 );
+		inputTmp.SetEntry( 0, input.GetEntry( 0 ) );
 
-		ResizeInput( ctx, input, resizedRT );
-		inputResized.SetEntry( 0, resizedRT );
-		blurSize /= 2.f;
+		for( int i = 0; i < stepsNum; ++i )
+		{
+			resizedRT = m_rtAllocators->Allocate( outputW, outputH, RenderTarget::RTSemantic::S_DRAW_ONLY );
+
+			ResizeInput( ctx, inputTmp, resizedRT );
+			inputResized.SetEntry( 0, resizedRT );
+			blurSize /= 2.f;
+
+			if( i > 0 )
+			{
+				m_rtAllocators->Free( inputW, inputH );
+			}
+
+			inputW = outputW;
+			inputH = outputH;
+
+			if( i < stepsNum - 1 )
+			{
+				outputW = UInt32( std::ceil( inputW / 2.f ) );
+				outputH = UInt32( std::ceil( inputH / 2.f ) );
+
+				inputTmp.SetEntry( 0, resizedRT );
+			}
+		}
+
 
 		inputResized.SetEntry( 0, resizedRT );
 
