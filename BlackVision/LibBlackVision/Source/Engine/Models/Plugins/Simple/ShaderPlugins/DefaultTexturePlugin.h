@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/BlendingModeHelper.h"
+
 
 
 namespace bv { namespace model {

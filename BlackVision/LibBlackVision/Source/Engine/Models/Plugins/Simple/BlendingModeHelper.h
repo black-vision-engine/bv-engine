@@ -5,7 +5,6 @@
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 namespace bv {
@@ -58,20 +57,8 @@ public:
 typedef ParamEnum< BlendingModeHelper::BlendMode > ParamEnumBlendMode;
 
 
-template<>
-inline bool SetParameter< BlendingModeHelper::BlendMode >( IParameterPtr param, TimeType t, const BlendingModeHelper::BlendMode & val )
-{
-    ParamEnumBlendMode * typedParam = QueryTypedParam< std::shared_ptr< ParamEnumBlendMode > >( param ).get();
+DEFINE_ENUM_SET_PARAMETER( BlendingModeHelper::BlendMode );
 
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 // ***********************
 //
@@ -86,7 +73,6 @@ inline static IParameterPtr        ParametersFactory::CreateTypedParameter< Blen
     return CreateParameterEnum< BlendingModeHelper::BlendMode >( name, timeline );
 }
 
-#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 
 }   // model

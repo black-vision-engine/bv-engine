@@ -55,6 +55,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM_BLEND_ENABLE, true, true, true );
+	//helper.AddEnumParam( BlendingModeHelper::PARAM_BLEND_MODE, BlendingModeHelper::BlendMode::Alpha, true, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true );
@@ -201,13 +202,27 @@ void                                DefaultTexturePlugin::Update                
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
+	bool contextUpdateNeeded = false;
+
     if( ParameterChanged( PARAM_BLEND_ENABLE ) )
     {
         auto ctx = m_psc->GetRendererContext();
         ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
 
-        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        contextUpdateNeeded = true;
     }
+
+    if( ParameterChanged( BlendingModeHelper::PARAM_BLEND_MODE ) )
+    {
+        BlendingModeHelper::SetBlendRendererContext( m_psc, GetParameter( BlendingModeHelper::PARAM_BLEND_MODE ) );
+        contextUpdateNeeded = true;
+    }
+
+	if( contextUpdateNeeded )
+	{
+		HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+	}
+
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
