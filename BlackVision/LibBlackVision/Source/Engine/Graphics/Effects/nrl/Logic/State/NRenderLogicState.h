@@ -4,9 +4,9 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/RenderedChannelsData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
 
 
 namespace bv { namespace nrl {

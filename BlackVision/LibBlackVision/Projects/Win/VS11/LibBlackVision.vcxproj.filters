@@ -409,8 +409,11 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs">
       <UniqueIdentifier>{e957a900-8d57-447e-bcd2-de2e78eb537d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents">
-      <UniqueIdentifier>{2c7a5501-a372-436c-a3fa-67fbec7075bd}</UniqueIdentifier>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\Components">
+      <UniqueIdentifier>{f523a77e-491f-42e4-b821-2141cade031c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\Components\Initialization">
+      <UniqueIdentifier>{c561de89-c782-4b30-aea9-b71f858526c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2041,20 +2044,29 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputFactory.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\NRenderContext.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderContext.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\NRenderLogicCore.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderLogicCore.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderChannel.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderChannel.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsData.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderedChannelsData.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsDataDesc.cpp">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderedChannelsDataDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\NRenderLogicDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputLogicDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\RenderedChannelsDataDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5349,20 +5361,29 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputFactory.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\NRenderContext.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderContext.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\NRenderLogicCore.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderLogicCore.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderChannel.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderChannel.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsData.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderedChannelsData.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents\RenderedChannelsDataDesc.h">
-      <Filter>Engine\Graphics\Effects\nrl\Logic\RenderLogicComponents</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderedChannelsDataDesc.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\NRenderLogicDesc.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputLogicDesc.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\RenderedChannelsDataDesc.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

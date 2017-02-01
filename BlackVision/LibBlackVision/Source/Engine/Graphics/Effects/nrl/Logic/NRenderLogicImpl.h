@@ -3,7 +3,8 @@
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderLogicState.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/NRenderLogicCore.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderLogicCore.h"
 
 
 namespace bv { namespace nrl {

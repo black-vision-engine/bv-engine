@@ -6,7 +6,7 @@
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicComponents/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
 
 
 namespace bv { namespace nrl {
