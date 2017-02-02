@@ -21,7 +21,6 @@ public:
     RenderedChannelsDataDesc  &     AccessRenderedChannelsDataDesc  ();
     OutputLogicDesc  &              AccessOutputLogicDesc           ();
 
-
 };
 
 } //nrl
