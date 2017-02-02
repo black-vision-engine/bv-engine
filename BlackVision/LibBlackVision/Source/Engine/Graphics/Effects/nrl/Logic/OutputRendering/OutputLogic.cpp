@@ -202,5 +202,14 @@ void                OutputLogic::UpdateRenderChannels   ()
     m_renderResult.UpdateRenderChannels();
 }
 
+// *********************************
+// FIXME: implement
+OutputLogic *       OutputLogic::Create                 ( const OutputLogicDesc & desc )
+{
+    { desc; }
+
+    return nullptr;
+}
+
 } //nrl
 } //bv

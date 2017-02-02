@@ -61,3 +61,6 @@
 34. Implementacja output stream - oraz w jego ramach podimplementacja outputu shared memory.
 35. Upewnić się, że struktura katalogów w nrl jest poprawna, a jeśli nie jest, to ją odpowiednio zmodyfikować.
 36. Namierzyć te miejsca, które w debug powinny lecieć na assert, ale w release NIE POWINNY WYWALAĆ silnika (generalnie nie powinny się zdarzać, ale zakładamy, że mogą i o ile coś może się brzydko renderować, to silnik powinien to przetrzymywać bez padu).
+37. Tematy przegadane z Darią opisać.
+38. Zastanowić się nad alternatywnym grupowaniem plików (teraz jest meta, a może trzeba bardziej konkretnie - czyli nie state/output state/logic tylko logic/state output/state itd.) - przemyśleć i ewentualnie zgodnie z tym podzielić.
+39. Zdecydować czy komponenty render logic tworzone ze statycznych deskryptorów są trzymane jako wskaźniki (preferowane) i tworzone tylko przez metody create czy może inaczej. Ta pierwsza wersja jest preferowana, bo pozwala na initialization in place oraz przekazanie dodatkowych parametrów do create (czyli konstruktor tworzy obiekt, a potem, przed returnem jeszcze się go inicjalizuje i dopiero zwraca już w pełni poprawnym stanie).

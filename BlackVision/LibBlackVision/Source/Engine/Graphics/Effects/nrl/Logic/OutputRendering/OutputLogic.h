@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputLogicDesc.h"
 
 
 namespace bv { 
@@ -18,16 +19,24 @@ private:
 
     std::vector< Output * >     m_outputs;
 
+private:
+
+                            OutputLogic             ();
+
 public:
 
-                        OutputLogic             ();
-    virtual             ~OutputLogic            ();
+
+    virtual                 ~OutputLogic            ();
 
     // API directly related to frame rendering
-    void                ProcessFrameData        ( NRenderContext * ctx );
+    void                    ProcessFrameData        ( NRenderContext * ctx );
 
     // API relarted to global output state manipulation
-    Output *            GetOutput               ( CustomOutputType outputType );
+    Output *                GetOutput               ( CustomOutputType outputType );
+
+public:
+
+    static OutputLogic *    Create                  ( const OutputLogicDesc & desc );
 
 };
 

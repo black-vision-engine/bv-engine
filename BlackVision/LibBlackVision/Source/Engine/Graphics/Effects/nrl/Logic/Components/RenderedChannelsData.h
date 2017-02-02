@@ -5,6 +5,9 @@
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/RenderedChannelsDataDesc.h"
+
+
 namespace bv { 
 
 class RenderTargetStackAllocator;
@@ -29,9 +32,13 @@ private:
     RenderedChannelsData                ( const RenderedChannelsData & src );
     RenderedChannelsData &  operator =  ( RenderedChannelsData & src );
 
-public:
+private:
 
                             RenderedChannelsData    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+
+public:
+
+
                             ~RenderedChannelsData   ();
 
     const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;
@@ -47,7 +54,11 @@ public:
 
     bool                    ContainsValidData       ( RenderChannelType rct ) const;
     void                    SetContainsValidData    ( RenderChannelType rct, bool containsValidData );
-    
+  
+public:
+
+    static RenderedChannelsData *   Create          ( const  RenderedChannelsDataDesc & desc ); 
+
 };
 
 } //nrl

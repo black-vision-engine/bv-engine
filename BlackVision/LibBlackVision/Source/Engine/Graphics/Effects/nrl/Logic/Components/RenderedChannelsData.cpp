@@ -126,5 +126,14 @@ void                    RenderedChannelsData::SetContainsValidData          ( Re
     m_containsValidData[ (unsigned int) rct ] = containsValidData;
 }
 
+// **************************
+// FIXME: implement
+RenderedChannelsData *  RenderedChannelsData::Create                        ( const  RenderedChannelsDataDesc & desc )
+{
+    { desc; }
+
+    return nullptr;
+}
+
 } // nrl
 } // bv
