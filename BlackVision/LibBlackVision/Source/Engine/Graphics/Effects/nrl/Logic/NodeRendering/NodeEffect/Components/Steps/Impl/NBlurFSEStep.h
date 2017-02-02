@@ -6,6 +6,7 @@
 namespace bv { namespace nrl {
 
 class NFullscreenEffect;
+class RenderTargetsAllocators;
 
 class NBlurFSEStep : public NFullscreenEffectStep
 {
@@ -15,7 +16,10 @@ private:
 
 private:
 
-    NFullscreenEffect * m_blurEffect;
+    NFullscreenEffect *		m_blurEffect;
+	NFullscreenEffect *		m_simpleBlitEffect;
+
+	RenderTargetsAllocators * m_rtAllocators;
 
 public:
 
@@ -38,7 +42,9 @@ public:
 private:
 	Float32						GetBlurSize				() const;
 
-	const RenderTarget *		BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output ) const;
+	const RenderTarget *		FastBlur				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output );
+	const RenderTarget *		BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output );
+	void						ResizeInput				( NRenderContext * ctx, const NRenderedData & input, const RenderTarget * output );
 };
 
 } // nrl
