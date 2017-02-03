@@ -13,6 +13,8 @@
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
+#include "Engine/Graphics/Effects/Utils/ShaderSourceProvider.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/Impl/NFullscreenVSShader.h"
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/Impl/NFullscreenRenderableEffect.h"
 
@@ -106,9 +108,10 @@ TriangleStrip *                                 NFullscreenEffectHelpers::Create
 //
 TriangleStrip *                                 NFullscreenEffectHelpers::CreateFullscreenQuad        ( RenderableEffectPtr effect )
 {
-    unsigned int numUVChannels = 1;
+    unsigned int numUVChannels = 0;
 
-    float * vbData = CreateFullscreenQuadVBData();
+    //float * vbData = CreateFullscreenQuadVBData();
+	float * vbData = new float[ 4 * 3 ];
     
     auto rad = CreateTriStripArrayData( 4, numUVChannels, vbData );
 
@@ -208,7 +211,9 @@ VertexShader *                                  NFullscreenEffectHelpers::Create
 
     params->AddParameter( mvpParam );
 
-    auto source = NFullscreenVSShader::GenerateDefaultVS();
+	auto source = FSEShaderSourceProvider->ReadShader( "fse_default.vert" );
+
+    //auto source = NFullscreenVSShader::GenerateDefaultVS();
 
     auto shader = new VertexShader( source, params );
 
