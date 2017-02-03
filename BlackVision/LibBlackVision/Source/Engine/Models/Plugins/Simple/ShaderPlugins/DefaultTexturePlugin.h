@@ -7,7 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/Simple/BlendingModeHelper.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 
@@ -34,7 +35,6 @@ class DefaultTexturePlugin : public BasePlugin
 {
 public:
 
-    static const std::string        PARAM_BLEND_ENABLE;
     static const std::string        PARAM_ALPHA;
 
 protected:
@@ -46,6 +46,9 @@ protected:
 
     SizeType	                    m_textureWidth;
     SizeType	                    m_textureHeight;
+
+	ValueParamState< bool >						m_blendEnabled;
+	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
 
 public:
 

@@ -7,14 +7,22 @@
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
+
+
 namespace bv {
 namespace model {
 
-class BlendingModeHelper
+class BlendHelper
 {
 public:
 
-    static const std::string        PARAM_BLEND_MODE;
+	struct PARAM
+	{
+		static const std::string		BLEND_ENABLE;
+		static const std::string        BLEND_MODE;
+	};
 
     enum BlendMode
     {
@@ -55,15 +63,16 @@ public:
 
 
 public:
-    static void         SetBlendRendererContext   ( DefaultPixelShaderChannelPtr psc, IParameterPtr param );
-
+	static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM > & param );
+	static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const ParamEnum< BlendHelper::BlendMode > * param );
+	static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & blendMode );
 };
 
 
-typedef ParamEnum< BlendingModeHelper::BlendMode > ParamEnumBlendMode;
+typedef ParamEnum< BlendHelper::BlendMode > ParamEnumBlendMode;
 
 
-DEFINE_ENUM_SET_PARAMETER( BlendingModeHelper::BlendMode );
+DEFINE_ENUM_SET_PARAMETER( BlendHelper::BlendMode );
 
 
 // ***********************
@@ -74,9 +83,9 @@ inline VoidPtr    ParamEnumBlendMode::QueryParamTyped  ()
 }
 
 template<>
-inline static IParameterPtr        ParametersFactory::CreateTypedParameter< BlendingModeHelper::BlendMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+inline static IParameterPtr        ParametersFactory::CreateTypedParameter< BlendHelper::BlendMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return CreateParameterEnum< BlendingModeHelper::BlendMode >( name, timeline );
+    return CreateParameterEnum< BlendHelper::BlendMode >( name, timeline );
 }
 
 

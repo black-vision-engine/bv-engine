@@ -2035,17 +2035,14 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\BlendingModeHelper.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5342,8 +5339,9 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\BlendingModeHelper.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

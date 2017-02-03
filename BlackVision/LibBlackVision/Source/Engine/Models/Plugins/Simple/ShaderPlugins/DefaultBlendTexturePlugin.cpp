@@ -59,7 +59,7 @@ DefaultPluginParamValModelPtr   DefaultBlendTexturePluginDesc::CreateDefaultMode
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::ALPHA, 1.f, true );
-	helper.AddEnumParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, BlendingModeHelper::BlendMode::BM_Normal, true, true );
+	helper.AddEnumParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
 
 
     //Register all parameters and evaloators in models

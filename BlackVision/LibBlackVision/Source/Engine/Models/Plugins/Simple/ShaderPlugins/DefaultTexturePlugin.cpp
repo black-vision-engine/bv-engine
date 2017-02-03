@@ -20,7 +20,6 @@
 namespace bv { namespace model {
 
 
-const std::string        DefaultTexturePlugin::PARAM_BLEND_ENABLE   = "blend enable";
 const std::string        DefaultTexturePlugin::PARAM_ALPHA          = "alpha";
 
 
@@ -54,8 +53,8 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultTexturePlugin::PARAM_BLEND_ENABLE, true, true, true );
-	helper.AddEnumParam( BlendingModeHelper::PARAM_BLEND_MODE, BlendingModeHelper::BlendMode::BM_Normal, true, true );
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true );
@@ -87,8 +86,7 @@ std::string             DefaultTexturePluginDesc::TextureName               ()
     return "Tex0";
 }
 
-//FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
-//FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
+
 
 // ************************************************************************* PLUGIN *************************************************************************
 
@@ -104,8 +102,8 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     
-    ctx->alphaCtx->blendEnabled = std::static_pointer_cast< ParamBool >( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();;
-	BlendingModeHelper::SetBlendRendererContext( m_psc, GetParameter( BlendingModeHelper::PARAM_BLEND_MODE ) );
+    ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
+	BlendHelper::SetBlendRendererContext( m_psc, m_blendMode.GetParameter() );
     //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
@@ -119,6 +117,9 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+
+	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+	m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
 
     SetPrevPlugin( prev );
 
@@ -201,27 +202,7 @@ void                                DefaultTexturePlugin::Update                
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-	bool contextUpdateNeeded = false;
-
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
-    {
-        auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast< ParamBool >( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
-
-        contextUpdateNeeded = true;
-    }
-
-    if( ParameterChanged( BlendingModeHelper::PARAM_BLEND_MODE ) )
-    {
-        BlendingModeHelper::SetBlendRendererContext( m_psc, GetParameter( BlendingModeHelper::PARAM_BLEND_MODE ) );
-        contextUpdateNeeded = true;
-    }
-
-	if( contextUpdateNeeded )
-	{
-		HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
-	}
-
+	BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_blendMode );
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
