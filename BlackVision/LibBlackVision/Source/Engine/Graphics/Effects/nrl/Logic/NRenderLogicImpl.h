@@ -3,7 +3,8 @@
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderLogicState.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicCore.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderLogicCore.h"
 
 
 namespace bv { namespace nrl {
@@ -18,14 +19,15 @@ private:
 
 public:
 
-                            NRenderLogicImpl    ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
+                                    NRenderLogicImpl        ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType );
 
-    virtual void            HandleFrame         ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
+    virtual void                    HandleFrame             ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 
-    virtual OutputLogic *   GetOutputLogic      () override;
+    virtual OutputLogic *           GetOutputLogic          () override;
+    virtual RenderedChannelsData *  GetRenderedChannelsData () override;
 
 private:
-            void            RenderQueued        ( const SceneVec & scenes, RenderResult * result );
+            void            RenderQueued        ( const SceneVec & scenes, RenderedChannelsData * result );
             void            Render              ( SceneNode * sceneRoot );
 
 };

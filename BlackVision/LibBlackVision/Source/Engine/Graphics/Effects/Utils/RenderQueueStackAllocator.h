@@ -19,8 +19,9 @@ private:
     Int32                               m_currentIdx;
 
 public:
-    RenderQueueStackAllocator();
-    ~RenderQueueStackAllocator();
+
+    RenderQueueStackAllocator   ();
+    ~RenderQueueStackAllocator  ();
 
     RenderingQueue *    Allocate                    ();
     RenderingQueue *    Top                         ();
