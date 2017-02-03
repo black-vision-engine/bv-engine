@@ -16,34 +16,40 @@ public:
 
     static const std::string        PARAM_BLEND_MODE;
 
-    enum BlendMode : int
+    enum BlendMode
     {
-        Alpha = 0,
-        Normal,
-        Lighten,        ///< Blend equation max needed
-        Darken,         ///< Blend equation max needed
-        Multiply,
-        Average,
-        Add,
-        Subtract,
-        Difference,
-        Negation,
-        Screen,
-        Exclusion,
-        Overlay,
-        SoftLight,
-        HardLight,
-        ColorDodge,
-        ColorBurn,
-        LinearDodge,
-        LinearBurn,
-        LinearLight,
-        VividLight,
-        PinLight,
-        HardMix,
-        Reflect,
-        Glow,
-        Phoenix
+        BM_Normal = 0,
+        BM_Lighten,
+        BM_Darken,			// Blending function GL_MIN needed.
+        BM_Multiply,		// Blending function GL_MAX needed.
+        BM_Average,
+        BM_Add,
+        BM_Substract,		// Blending function GL_SUBTRACT needed.
+        BM_Difference,
+        BM_Negation,
+        BM_Exclusion,
+        BM_Screen,
+        BM_Overlay,
+        BM_SoftLight,
+        BM_HardLight,
+        BM_ColorDodge,
+        BM_ColorBurn,
+        BM_LinearDodge,
+        BM_LinearBurn,
+        BM_LinearLight,
+        BM_VividLight,
+        BM_PinLight,
+        BM_HardMix,
+        BM_Reflect,
+        BM_Glow,
+        BM_Phoenix,
+        BM_Hue,
+        BM_Saturation,
+        BM_Color,
+        BM_Luminosity,
+		BM_None,
+
+        BM_Total
     };
 
 

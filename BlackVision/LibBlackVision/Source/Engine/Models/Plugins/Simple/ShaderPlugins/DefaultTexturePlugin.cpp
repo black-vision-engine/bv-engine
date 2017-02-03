@@ -55,7 +55,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM_BLEND_ENABLE, true, true, true );
-	helper.AddEnumParam( BlendingModeHelper::PARAM_BLEND_MODE, BlendingModeHelper::BlendMode::Alpha, true, true );
+	helper.AddEnumParam( BlendingModeHelper::PARAM_BLEND_MODE, BlendingModeHelper::BlendMode::BM_Normal, true, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true );
@@ -104,9 +104,8 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    ctx->alphaCtx->blendEnabled = std::static_pointer_cast< ParamBool >( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();;
+	BlendingModeHelper::SetBlendRendererContext( m_psc, GetParameter( BlendingModeHelper::PARAM_BLEND_MODE ) );
     //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
@@ -207,7 +206,7 @@ void                                DefaultTexturePlugin::Update                
     if( ParameterChanged( PARAM_BLEND_ENABLE ) )
     {
         auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast< ParamBool >( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
 
         contextUpdateNeeded = true;
     }
