@@ -196,12 +196,6 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const
 
         BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
 
-		if( rt->HasMipmaps() )
-		{
-			BVGL::bvglTexStorage2D( GL_TEXTURE_2D, 4, GL_RGBA8, m_width, m_height );
-			BVGL::bvglGenerateMipmap( GL_TEXTURE_2D );
-		}
-
         //FIXME: no mipmaps here
         //FIXME: only NEAREST filters used here - should be just fine, but some implementations use linear filtering for some reasons here
         BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
@@ -253,9 +247,9 @@ void          PdrRenderTarget::PBODownloadData     ( unsigned int i )
 
 // ****************************
 //
-void			PdrRenderTarget::GenerateMipmaps	()
+void			PdrRenderTarget::GenerateMipmaps	( UInt32 i )
 {
-	BVGL::bvglBindTexture( GL_TEXTURE_2D, m_textures[ 0 ] );
+	BVGL::bvglBindTexture( GL_TEXTURE_2D, m_textures[ i ] );
 	BVGL::bvglGenerateMipmap( GL_TEXTURE_2D );
 }
 

@@ -192,6 +192,7 @@ public:
     void    ReadColorTexturSync ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );
 
 	void	GenerateMipmaps		( const RenderTarget * rt );
+	void	GenerateMipmaps		( const RenderTarget * rt, UInt32 i );
 
 public:
 

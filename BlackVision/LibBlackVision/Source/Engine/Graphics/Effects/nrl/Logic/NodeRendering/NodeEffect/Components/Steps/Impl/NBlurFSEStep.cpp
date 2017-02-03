@@ -178,68 +178,60 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 //
 const RenderTarget *	NBlurFSEStep::FastBlur						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output )
 {
-	if( blurSize > 16 )
+	auto blurSizeW = blurSize;
+	auto blurSizeH = blurSize;
+
+	if( blurSize <= 16 )
+	{
+		return BlurInput( ctx, input, blurSizeW, blurSizeH, output );
+	}
+	else
 	{
 		NRenderedData inputResized( 1 );
-
-		auto stepsNum = int( ceil( std::log( blurSize / 16 ) / std::log( 2 ) ) );
 
 		auto inputW = input.GetEntry( 0 )->Width();
 		auto inputH = input.GetEntry( 0 )->Height();
 
-		auto outputW = UInt32( std::ceil( inputW / 2.f ) );
-		auto outputH = UInt32( std::ceil( inputH / 2.f ) );
+		auto scale = blurSize / 16;
+
+		auto outputW = UInt32( ceil( inputW / scale ) );
+		auto outputH = UInt32( ceil( inputH / scale ) );
+
+		auto scaleW = Float32( outputW ) / Float32( inputW );
+		auto scaleH = Float32( outputH ) / Float32( inputH );
+
+		blurSizeW = blurSize * scaleW;
+		blurSizeH = blurSize * scaleH;
 
 		RenderTarget * resizedRT = nullptr;
+
+		resizedRT = m_rtAllocators->Allocate( outputW, outputH, RenderTarget::RTSemantic::S_DRAW_ONLY );
+
+		ResizeInput( ctx, input, resizedRT );
+
 		NRenderedData inputTmp( 1 );
-		inputTmp.SetEntry( 0, input.GetEntry( 0 ) );
+		inputTmp.SetEntry( 0, resizedRT );
 
-		for( int i = 0; i < stepsNum; ++i )
-		{
-			resizedRT = m_rtAllocators->Allocate( outputW, outputH, RenderTarget::RTSemantic::S_DRAW_ONLY );
+		auto bluredRT = BlurInput( ctx, inputTmp, blurSizeW, blurSizeH, nullptr );
 
-			ResizeInput( ctx, inputTmp, resizedRT );
-			inputResized.SetEntry( 0, resizedRT );
-			blurSize /= 2.f;
+		inputTmp.SetEntry( 0, bluredRT );
+		ResizeInput( ctx, inputTmp, output );
 
-			if( i > 0 )
-			{
-				m_rtAllocators->Free( inputW, inputH );
-			}
-
-			inputW = outputW;
-			inputH = outputH;
-
-			if( i < stepsNum - 1 )
-			{
-				outputW = UInt32( std::ceil( inputW / 2.f ) );
-				outputH = UInt32( std::ceil( inputH / 2.f ) );
-
-				inputTmp.SetEntry( 0, resizedRT );
-			}
-		}
-
-
-		inputResized.SetEntry( 0, resizedRT );
-
-		auto ret =  BlurInput( ctx, inputResized, blurSize, output );
-		m_rtAllocators->Free( outputW, outputH );
-		return ret;
-	}
-	else
-	{
-		return BlurInput( ctx, input, blurSize, output );
+		return output;
 	}
 }
 
 // **************************
 //
-const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output )
+const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSizeW, Float32 blurSizeH, const RenderTarget * output )
 {
+	auto wrt = input.GetEntry( 0 )->Width();
+	auto hrt = input.GetEntry( 0 )->Height();
+
 	if( !output )
 	{
 		// Allocate output render target if not passed
-		output = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+		output = m_rtAllocators->Allocate( wrt, hrt, RenderTarget::RTSemantic::S_DRAW_ONLY );
 		NRenderedData rd( 1 );
 		rd.SetEntry( 0, output );
 		enable( ctx, output );
@@ -248,12 +240,9 @@ const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const 
 	}
 
 	auto blurSizeVal = GetState()->GetValueAt( 1 );
-	QueryTypedValue< ValueFloatPtr >( blurSizeVal )->SetValue( blurSize );
+	QueryTypedValue< ValueFloatPtr >( blurSizeVal )->SetValue( blurSizeW );
 
 	auto vertical = GetState()->GetValueAt( 3 );
-
-	auto wrt = input.GetEntry( 0 )->Width();
-	auto hrt = input.GetEntry( 0 )->Height();
 
 	// Allocate new render target for vertical blur pass
 	auto resizedHorizontallyBluredRT = m_rtAllocators->Allocate( wrt, hrt, RenderTarget::RTSemantic::S_DRAW_ONLY );
@@ -273,21 +262,13 @@ const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const 
 	m_blurEffect->Render( ctx, resizedHorizontallyBluredRT, input );
 	disableBoundRT( ctx );
 
-	// Allocate new render target for vertical blur pass
-	auto resizedVerticallyBluredRT = m_rtAllocators->Allocate( wrt, hrt, RenderTarget::RTSemantic::S_DRAW_ONLY );
-	rd.SetEntry( 0, resizedHorizontallyBluredRT );
-	enable( ctx, resizedVerticallyBluredRT );
-	clearBoundRT( ctx, glm::vec4() );
-
 	// Run horizontal blur pass
+	QueryTypedValue< ValueFloatPtr >( blurSizeVal )->SetValue( blurSizeH );
 	QueryTypedValue< ValueBoolPtr >( vertical )->SetValue( false );
-	m_blurEffect->Render( ctx, resizedVerticallyBluredRT, rd );
+	rd.SetEntry( 0, resizedHorizontallyBluredRT );
+	m_blurEffect->Render( ctx, output, rd );
 	disableBoundRT( ctx );
 
-	rd.SetEntry( 0, resizedVerticallyBluredRT );
-	ResizeInput( ctx, rd, output );
-
-	m_rtAllocators->Free( wrt, hrt );
 	m_rtAllocators->Free( wrt, hrt );
 
 	//allocator( ctx )->Free();  // free allocated locally render target.

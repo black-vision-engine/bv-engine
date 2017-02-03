@@ -630,11 +630,29 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
 // *********************************
 //
+void	Renderer::GenerateMipmaps( const RenderTarget * rt, UInt32 i )
+{
+	if( rt->HasMipmaps( i ) )
+	{
+		PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+		pdrRt->GenerateMipmaps( i );
+	}
+}
+
+// *********************************
+//
 void	Renderer::GenerateMipmaps( const RenderTarget * rt )
 {
-	PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
-	pdrRt->GenerateMipmaps();
+	for( UInt32 i = 0; i < rt->NumTargets(); ++i )
+	{
+		if( rt->HasMipmaps( i ) )
+		{
+			PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+			pdrRt->GenerateMipmaps( i );
+		}
+	}
 }
+
 
 // ***********************
 //

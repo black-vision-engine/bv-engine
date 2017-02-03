@@ -18,9 +18,9 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt32 w, UInt32 h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt32 w, UInt32 h, bool hasDepthBuffer, const std::vector< UInt32 > & levels, RenderTarget::RTSemantic semantic )
     : m_numTargets( (UInt32) formats.size() )
-    , m_hasMipmaps( hasMipmaps )
+    , m_levels( levels )
     , m_hasDepthBuffer( hasDepthBuffer )
     , m_semantic( semantic )
 {
@@ -30,7 +30,7 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt3
 
     for( SizeType i = 0; i < m_numTargets; ++i )
     {
-        auto tx = std::make_shared< Texture2D >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC, 1 );
+        auto tx = std::make_shared< Texture2D >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC, levels.size() > i ? levels[ i ] : 1 );
         //tx->SetData( MemoryChunk::EMPTY(), formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
         m_ColorTextures.push_back( tx );    
     }
@@ -88,9 +88,12 @@ Texture2DPtr RenderTarget::ColorTexture ( UInt32 i ) const
 
 // *********************************
 //
-bool RenderTarget::HasMipmaps () const
+bool RenderTarget::HasMipmaps ( UInt32 i ) const
 {
-    return m_hasMipmaps;
+	if( m_levels.size() > i )
+		return m_levels[ i ] > 1;
+	else
+		return false;
 }
 
 // *********************************

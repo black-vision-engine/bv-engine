@@ -43,7 +43,7 @@ private:
 	Float32						GetBlurSize				() const;
 
 	const RenderTarget *		FastBlur				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output );
-	const RenderTarget *		BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output );
+	const RenderTarget *		BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSizeW, Float32 blurSizeH, const RenderTarget * output );
 	void						ResizeInput				( NRenderContext * ctx, const NRenderedData & input, const RenderTarget * output );
 };
 

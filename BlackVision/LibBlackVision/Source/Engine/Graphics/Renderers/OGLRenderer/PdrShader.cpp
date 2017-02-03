@@ -229,9 +229,16 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
             
+			auto minFilteringMode = sampler->FilteringMode();
+			auto magFilteringMode = sampler->FilteringMode();
+			if( magFilteringMode > SamplerFilteringMode::SFM_LINEAR )
+			{
+				magFilteringMode = SamplerFilteringMode( int( magFilteringMode ) % 2 );
+			}
+
             //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
-            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( minFilteringMode );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( magFilteringMode );
 
             BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, wrap_s );
 
@@ -256,9 +263,16 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
             GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
             
+			auto minFilteringMode = sampler->FilteringMode();
+			auto magFilteringMode = sampler->FilteringMode();
+			if( magFilteringMode > SamplerFilteringMode::SFM_LINEAR )
+			{
+				magFilteringMode = SamplerFilteringMode( int( magFilteringMode ) % 2 );
+			}
+
             //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
-            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( minFilteringMode );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( magFilteringMode );
 
             BVGL::bvglTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
             BVGL::bvglTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
@@ -281,9 +295,16 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
             GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
             GLint wrap_r = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_R ) );
             
+			auto minFilteringMode = sampler->FilteringMode();
+			auto magFilteringMode = sampler->FilteringMode();
+			if( magFilteringMode > SamplerFilteringMode::SFM_LINEAR )
+			{
+				magFilteringMode = SamplerFilteringMode( int( magFilteringMode ) % 2 );
+			}
+
             //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
-            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( minFilteringMode );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( magFilteringMode );
 
             BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, wrap_s );
             BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, wrap_t );
