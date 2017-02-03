@@ -25,7 +25,6 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt3
     , m_semantic( semantic )
 {
     assert( m_numTargets > 0 );
-    assert( hasMipmaps == false ); //FIXME: to be implemented
 
     //int numLevels = hasMipmaps ? 0 : 1;
 

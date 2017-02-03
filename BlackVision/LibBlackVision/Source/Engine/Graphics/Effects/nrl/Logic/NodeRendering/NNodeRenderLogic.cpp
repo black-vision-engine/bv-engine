@@ -180,6 +180,7 @@ void    NNodeRenderLogic::Render            ( SceneNodeRepr * nodeRepr, const Re
     clearBoundRT( ctx, glm::vec4() ); // FIXME: default clear color used - posisibly customize it a bit
 
     RenderImpl( nodeRepr, ctx );
+	renderer( ctx )->GenerateMipmaps( output );
 
     disableBoundRT( ctx );    
 }

@@ -16,7 +16,7 @@ namespace bv {
 
     // **************************
 //
-RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt )
+RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt, bool hasMipMaps )
 {
     auto retRT = static_cast< RenderTarget * >( nullptr );
 
@@ -26,7 +26,7 @@ RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget
     }
     else if( semantic == RenderTarget::RTSemantic::S_DRAW_ONLY )
     {
-        retRT = CreateAuxRenderTarget( width, height, fmt );    
+        retRT = CreateAuxRenderTarget( width, height, fmt, hasMipMaps );
     }
     else
     {
@@ -51,7 +51,7 @@ RenderTarget *  RenderTargetFactory::CreateDisplayRenderTarget    ( unsigned int
 
 // **************************
 //
-RenderTarget *  RenderTargetFactory::CreateAuxRenderTarget        ( unsigned int width, unsigned int height, TextureFormat fmt )
+RenderTarget *  RenderTargetFactory::CreateAuxRenderTarget        ( unsigned int width, unsigned int height, TextureFormat fmt, bool hasMipMaps )
 {
     assert( width > 0 );
     assert( height > 0 );
@@ -59,7 +59,7 @@ RenderTarget *  RenderTargetFactory::CreateAuxRenderTarget        ( unsigned int
     std::vector< TextureFormat > fmts( 1 );
     fmts[ 0 ] = fmt;
 
-    return new RenderTarget( fmts, width, height, true, false, RenderTarget::RTSemantic::S_DRAW_ONLY );
+    return new RenderTarget( fmts, width, height, true, hasMipMaps, RenderTarget::RTSemantic::S_DRAW_ONLY );
 }
 
 } //bv

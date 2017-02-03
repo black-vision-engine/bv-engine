@@ -126,4 +126,11 @@ RenderTarget *      RenderTargetStackAllocator::CreateCustomRenderTarget    ( un
     return RenderTargetFactory::CreateRenderTarget( semantic, width, height, m_fmt );
 }
 
+// *********************************
+//
+RenderTarget *      RenderTargetStackAllocator::CreateCustomRenderTarget    ( bool hasMipMaps, RenderTarget::RTSemantic semantic )
+{
+	return RenderTargetFactory::CreateRenderTarget( semantic, m_width, m_height, m_fmt, hasMipMaps );
+}
+
 } //bv

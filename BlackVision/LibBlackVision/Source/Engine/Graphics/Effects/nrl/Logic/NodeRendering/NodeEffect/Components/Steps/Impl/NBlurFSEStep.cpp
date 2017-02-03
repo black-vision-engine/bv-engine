@@ -313,10 +313,11 @@ void					NBlurFSEStep::ResizeInput					( NRenderContext * ctx, const NRenderedDa
 void                    NBlurFSEStep::FreeRenderTargets				( NRenderContext * ctx, const NRenderedData * input )
 {
 	input;
-    assert( input->GetNumEntries() == GetNumRequiredInputs() );
-    assert( allocator( ctx )->GetTopIndex() == input->GetLastRenderTargetIdx() );
+	ctx;
+    //assert( input->GetNumEntries() == GetNumRequiredInputs() );
+    //assert( allocator( ctx )->GetTopIndex() == input->GetLastRenderTargetIdx() );
 
-    allocator( ctx )->Free( GetNumRequiredInputs() );
+    //allocator( ctx )->Free( GetNumRequiredInputs() );
 }
 
 // **************************

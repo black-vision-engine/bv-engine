@@ -76,14 +76,20 @@ void    FBOProfilingPrototype2::Render         ()
     m_prog.Use();
 	m_rct.Render();
 
+	BVGL::bvglBindTexture( GL_TEXTURE_2D, m_texIds[ 0 ] );
+	BVGL::bvglGenerateMipmap( GL_TEXTURE_2D );
+
+	auto err = BVGL::bvglGetError();
+	err = err;
+
 	if( m_enableOffscreenRender )
 	{
 		Disable();
 
-		auto startTime = GTimer.CurElapsed();
-		auto col = ReadColor();
-		auto stopTime = GTimer.CurElapsed();
-		std::cout << "One frame time (read back) is: " << stopTime - startTime << std::endl;
+		//auto startTime = GTimer.CurElapsed();
+		//auto col = ReadColor();
+		//auto stopTime = GTimer.CurElapsed();
+		//std::cout << "One frame time (read back) is: " << stopTime - startTime << std::endl;
 	}
 
 	m_currFrame++;
@@ -147,7 +153,15 @@ bool    FBOProfilingPrototype2::PrepareShader  ()
 void    FBOProfilingPrototype2::Enable()
 {
 	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
+	auto err = BVGL::bvglGetError();
 	BVGL::bvglDrawBuffers( ( GLsizei )1, &m_drawBuff );
+	err = BVGL::bvglGetError();
+
+
+	BVGL::bvglBindTexture( GL_TEXTURE_2D, m_texIds[ 0 ] );
+	BVGL::bvglGenerateMipmap( GL_TEXTURE_2D );
+	err = BVGL::bvglGetError();
+	err = err;
 }
 
 // **************************
@@ -161,10 +175,8 @@ void    FBOProfilingPrototype2::Disable()
 //
 bool    FBOProfilingPrototype2::PrepareReadBackBuffers()
 {
-	BVGL::bvglGenBuffers( 2, m_pboID );
+	BVGL::bvglGenBuffers( 1, m_pboID );
 	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ 0 ] );
-    BVGL::bvglBufferData( GL_PIXEL_PACK_BUFFER, m_width * m_height * 4, 0, GL_STREAM_READ );
-	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ 1 ] );
     BVGL::bvglBufferData( GL_PIXEL_PACK_BUFFER, m_width * m_height * 4, 0, GL_STREAM_READ );
 
     BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
@@ -176,9 +188,16 @@ bool    FBOProfilingPrototype2::PrepareReadBackBuffers()
 
 	AddTextureForAttachment( 0 );
 
-	AddTextureForAttachment( 1 );
+	//AddTextureForAttachment( 1 );
 
 	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ 0 ], 0 );
+	//BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_texIds[ 1 ], 0 );
+
+	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
+	if( !CheckFramebuffersStatus() )
+	{
+		return false;
+	}
 
 	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, 0 );
 	if( !CheckFramebuffersStatus() )
@@ -256,8 +275,11 @@ MemoryChunkConstPtr FBOProfilingPrototype2::ReadColor( )
 //
 void	FBOProfilingPrototype2::AddTextureForAttachment( SizeType i )
 {
-	auto tx = new Texture2D( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, 1 );
-	tx->SetData( MemoryChunk::Create( m_width * m_height * 4 ) );
+	auto tx = new Texture2D( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, 4 );
+	tx->SetData( MemoryChunk::Create( m_width * m_height * 4 ), 0 );
+	tx->SetData( MemoryChunk::Create( m_width * m_height * 4 / 4 ), 1 );
+	tx->SetData( MemoryChunk::Create( m_width * m_height * 4 / 16 ), 2 );
+	tx->SetData( MemoryChunk::Create( m_width * m_height * 4 / 64 ), 3 );
     assert( !m_renderer->IsRegistered( tx ) );
 
     PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );
@@ -266,13 +288,18 @@ void	FBOProfilingPrototype2::AddTextureForAttachment( SizeType i )
     //m_drawBuff[ i ] = GL_COLOR_ATTACHMENT0 + i;
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
-        
+	auto err = BVGL::bvglGetError();
+	err = err;
     //FIXME: no mipmaps here
     //FIXME: only NEAREST filters used here - should be just fine, but some implementations use linear filtering for some reasons here
     BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
-    //BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pdrTx->GetTextureID(), 0 );
+	err = BVGL::bvglGetError();
+	err = err;
+
+	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0 );
+	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,  3 );
 
 	m_texIds[ i ] = pdrTx->GetTextureID();
 }

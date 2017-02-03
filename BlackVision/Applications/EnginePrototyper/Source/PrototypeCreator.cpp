@@ -28,14 +28,14 @@ bool			CreatePrototype			()
 
 	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype0::Create, "FBOProfilingPrototype0", 800, 600 );
 	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype1::Create, "FBOProfilingPrototype1", 800, 600 );
-	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype2::Create, "FBOProfilingPrototype2", 800, 600 );
+	success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype2::Create, "FBOProfilingPrototype2", 800, 600 );
 	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype3::Create, "FBOProfilingPrototype3", 800, 600 );
 
 	//success = BasicWindowApp::RegisterInitializer( &DrawingPrototype::Create, "DrawingPrototype", 800, 600 );
 
 	//success = BasicWindowApp::RegisterInitializer( &MultipassTest::Create, "MultipassTest", 800, 600 );
 
-	success = BasicWindowApp::RegisterInitializer( &TextureTest::Create, "TextureTest", 800, 600 );
+	//success = BasicWindowApp::RegisterInitializer( &TextureTest::Create, "TextureTest", 800, 600 );
 
 	BasicWindowApp::RegisterConsoleInitializer();
 

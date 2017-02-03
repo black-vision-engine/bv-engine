@@ -59,6 +59,7 @@ public:
     void            Disable             ( Renderer * renderer );
 
     void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex );
+	void            GenerateMipmaps		();
 
 private:
 

@@ -38,6 +38,7 @@ public:
 
     RenderTarget *      CreateRenderTarget          ( RenderTarget::RTSemantic semantic );
     RenderTarget *      CreateCustomRenderTarget    ( unsigned int width, unsigned int height, RenderTarget::RTSemantic semantic );
+	RenderTarget *      CreateCustomRenderTarget    ( bool hasMipMaps, RenderTarget::RTSemantic semantic );
 
 }; 
 
