@@ -46,8 +46,6 @@ void         BlendingModeHelper::SetBlendRendererContext   ( DefaultPixelShaderC
 			ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
 			ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ZERO;
 			break;
-		case bv::model::BlendingModeHelper::BM_Total:
-			break;
 		default:
 			// Color = Srgb + Drgb * (1 - Sa)
 			ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
