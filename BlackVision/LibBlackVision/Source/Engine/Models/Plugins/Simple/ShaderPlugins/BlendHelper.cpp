@@ -8,7 +8,7 @@ namespace bv {
 namespace model {
 
 
-const std::string        BlendHelper::PARAM::BLEND_MODE		= "blend mode";
+const std::string        BlendHelper::PARAM::BLEND_MODE		= "background blend mode";
 const std::string        BlendHelper::PARAM::BLEND_ENABLE	= "blend enable";
 
 

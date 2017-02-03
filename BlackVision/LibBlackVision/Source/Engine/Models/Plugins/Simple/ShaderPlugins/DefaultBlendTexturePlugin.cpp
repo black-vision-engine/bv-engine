@@ -22,7 +22,7 @@ namespace bv { namespace model {
 
 
 const std::string        DefaultBlendTexturePlugin::PARAMS::ALPHA             = "alpha2";
-const std::string        DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE     = "blendingMode";
+const std::string        DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE     = "blendMode";
 
 
 
@@ -59,7 +59,7 @@ DefaultPluginParamValModelPtr   DefaultBlendTexturePluginDesc::CreateDefaultMode
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::ALPHA, 1.f, true );
-	helper.AddEnumParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
+	helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, (int)BlendHelper::BlendMode::BM_Normal, true, true );
 
 
     //Register all parameters and evaloators in models
