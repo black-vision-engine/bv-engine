@@ -29,6 +29,11 @@ FFmpegStreamDecoder::FFmpegStreamDecoder                    ( AVFormatContext * 
     bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
     assert( !error ); { error; }
 
+	if( m_codecCtx->channel_layout == 0 )
+	{
+		m_codecCtx->channel_layout = av_get_default_channel_layout( m_codecCtx->channels );
+	}
+
     m_duration = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_stream->duration );
 
     m_frame = av_frame_alloc();
