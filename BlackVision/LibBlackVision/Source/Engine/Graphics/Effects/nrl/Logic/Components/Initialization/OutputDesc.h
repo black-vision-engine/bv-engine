@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
 
 
 namespace bv { namespace nrl {

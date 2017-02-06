@@ -8,6 +8,11 @@ namespace bv { namespace nrl {
 // **************************
 //
 OutputDesc::OutputDesc                                                      ()
+    : m_width( 1920 )
+    , m_height( 1080 )
+    , m_selectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 )
+    , m_outputType( CustomOutputType::COT_PREVIEW )
+    , m_outputChannelMapping( OutputChannelMapping::OCM_RGBA )
 {
 }
 
