@@ -5,15 +5,13 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 
 
-namespace bv {
-
-namespace {
+namespace bv { namespace {
 
 // ************************************
 // FIXME: nrl - effect vs neffect
