@@ -33,6 +33,8 @@ public:
     virtual GLuint      Bind            () = 0;
     virtual void        Unbind          () = 0;
 
+	virtual void		GenerateMipmaps	() = 0;
+
     //void				SetUpdated      ( bool updated );
 
     GLuint				GetTextureID    () const;

@@ -42,6 +42,12 @@ public:
 
 	UInt32						GetUpdateID		() const;
 	void						ForceUpdate		();
+
+	virtual bool				HasMipmaps		() const
+	{
+		assert( !"Reimplement in subclass" );
+		return false;
+	};
 	
 protected:
 

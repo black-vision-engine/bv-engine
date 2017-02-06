@@ -190,4 +190,14 @@ PdrTexture2D *  PdrTexture2D::Create            ( const Texture2D * texture )
     return new PdrTexture2D( texture );
 }
 
+// *******************************
+//
+void			PdrTexture2D::GenerateMipmaps	()
+{
+	GLint prevTex = Bind();
+
+	BVGL::bvglGenerateMipmap( GL_TEXTURE_2D );
+	BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
+}
+
 } // bv

@@ -44,10 +44,13 @@ void                    NBlurPreFSEStep::ReadInputState              ()
 //
 void                    NBlurPreFSEStep::AllocateRenderTargets       ( NRenderContext * ctx )
 {
-    auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
- 
-    m_renderResult.SetLastRenderTargetIdx( allocator( ctx )->GetTopIndex() );
-    m_renderResult.SetEntry( 0, rt0 );
+	if( m_renderResult.GetNumEntries() == 0 || m_renderResult.GetEntry( 0 ) == nullptr )
+	{
+		auto rt0 = allocator( ctx )->CreateCustomRenderTarget( 5, RenderTarget::RTSemantic::S_DRAW_ONLY );
+
+		m_renderResult.SetLastRenderTargetIdx( 1 );
+		m_renderResult.SetEntry( 0, rt0 );
+	}
 }
 
 // **************************

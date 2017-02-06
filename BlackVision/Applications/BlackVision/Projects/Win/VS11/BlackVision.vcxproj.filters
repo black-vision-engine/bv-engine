@@ -216,6 +216,9 @@
     <ClCompile Include="..\..\..\Source\Widgets\MaxSize\MaxSize.cpp">
       <Filter>Widgets\MaxSize</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestInnerEvents.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -379,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\MaxSize\MaxSize.h">
       <Filter>Widgets\MaxSize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h">
+      <Filter>TestAI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

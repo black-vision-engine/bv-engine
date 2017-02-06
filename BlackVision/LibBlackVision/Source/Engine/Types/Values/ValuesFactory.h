@@ -20,6 +20,7 @@ public:
     static ValueVec2Ptr         CreateValueVec2     ( const std::string & name );
     static ValueVec3Ptr         CreateValueVec3     ( const std::string & name );
     static ValueVec4Ptr         CreateValueVec4     ( const std::string & name );
+	static ValueVec4Ptr         CreateValueVec4     ( const std::string & name, const glm::vec4 & initVal );
     static ValueMat2Ptr         CreateValueMat2     ( const std::string & name );
     static ValueMat4Ptr         CreateValueMat4     ( const std::string & name ); 
     static ValueStringPtr       CreateValueString   ( const std::string & name );

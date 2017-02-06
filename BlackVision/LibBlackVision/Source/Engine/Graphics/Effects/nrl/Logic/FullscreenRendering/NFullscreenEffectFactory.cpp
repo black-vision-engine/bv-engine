@@ -76,7 +76,9 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
     {
         case NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB:
         case NFullscreenEffectType::NFET_SIMPLE_BLIT:
-			desc->AppendInputSamplerEntry( "Texture" );
+			desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
+			desc->AppendIVal( ValuesFactory::CreateValueVec4( "quadTransform", glm::vec4( 1.f, 1.f, 0.f, 0.f ) ) );
+			desc->AppendIVal( ValuesFactory::CreateValueVec4( "uvTransform", glm::vec4( 1.f, 1.f, 0.f, 0.f ) ) );
 			break;
 		case NFullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK:
 			desc->SetBlendFlag( true );
@@ -98,6 +100,8 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "normalize" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "vertical" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueInt( "blurKernelType" ) );
+			desc->AppendIVal( ValuesFactory::CreateValueVec4( "quadTransform", glm::vec4( 1.f, 1.f, 0.f, 0.f ) ) );
+			desc->AppendIVal( ValuesFactory::CreateValueVec4( "uvTransform", glm::vec4( 1.f, 1.f, 0.f, 0.f ) ) );
 			break;
 		case NFullscreenEffectType::NFET_LIGHT_SCATTERING:
 			desc->SetBlendFlag( true );

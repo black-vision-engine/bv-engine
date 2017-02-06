@@ -16,8 +16,15 @@ namespace bv {
 
     // **************************
 //
-RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt )
+RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt, UInt32 levels )
 {
+	if( levels > 1 )
+	{
+		auto maxLevelsNum = UInt32( std::floor( std::log( Float32( std::max( width, height ) ) ) / std::log( 2 ) ) + 1 );
+
+		levels = std::min( levels, maxLevelsNum );
+	}
+
     auto retRT = static_cast< RenderTarget * >( nullptr );
 
     if ( semantic == RenderTarget::RTSemantic::S_DRAW_READ )
@@ -26,7 +33,7 @@ RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget
     }
     else if( semantic == RenderTarget::RTSemantic::S_DRAW_ONLY )
     {
-        retRT = CreateAuxRenderTarget( width, height, fmt );    
+        retRT = CreateAuxRenderTarget( width, height, fmt, levels );
     }
     else
     {
@@ -46,12 +53,12 @@ RenderTarget *  RenderTargetFactory::CreateDisplayRenderTarget    ( unsigned int
     std::vector< TextureFormat > fmts( 1 );
     fmts[ 0 ] = fmt;
 
-    return new RenderTarget( fmts, width, height, true, false, RenderTarget::RTSemantic::S_DRAW_READ );
+    return new RenderTarget( fmts, width, height, true, std::vector< UInt32 >(), RenderTarget::RTSemantic::S_DRAW_READ );
 }
 
 // **************************
 //
-RenderTarget *  RenderTargetFactory::CreateAuxRenderTarget        ( unsigned int width, unsigned int height, TextureFormat fmt )
+RenderTarget *  RenderTargetFactory::CreateAuxRenderTarget        ( unsigned int width, unsigned int height, TextureFormat fmt, UInt32 levels )
 {
     assert( width > 0 );
     assert( height > 0 );
@@ -59,7 +66,10 @@ RenderTarget *  RenderTargetFactory::CreateAuxRenderTarget        ( unsigned int
     std::vector< TextureFormat > fmts( 1 );
     fmts[ 0 ] = fmt;
 
-    return new RenderTarget( fmts, width, height, true, false, RenderTarget::RTSemantic::S_DRAW_ONLY );
+	std::vector< UInt32 > targetsLevels( 1 );
+	targetsLevels[ 0 ] = levels;
+
+    return new RenderTarget( fmts, width, height, true, targetsLevels, RenderTarget::RTSemantic::S_DRAW_ONLY );
 }
 
 } //bv

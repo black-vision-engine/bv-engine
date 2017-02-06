@@ -17,8 +17,9 @@ public:
     RenderableEntity *          GetBoundingBox                          () const;
     RenderableEntity *          GetCenterOfMass                         () const;
 
-    virtual void                SetLocalTransform                       ( const Transform & t );
-    virtual void                UpdateTransform                         ( const Transform & transform );
+    virtual void                SetLocalTransform                       ( const Transform & t ) override;
+	virtual void                SetLocalTransform                       ( Transform && t ) override;
+    virtual void                UpdateTransform                         ( const Transform & transform ) override;
 };
 
 }

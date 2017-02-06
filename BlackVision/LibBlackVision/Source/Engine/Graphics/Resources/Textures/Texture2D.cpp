@@ -99,4 +99,11 @@ SizeType    Texture2D::RawFrameSize		( TextureFormat format, UInt32 width, UInt3
     return GetPixelSize( format ) * ( width >> level ) * ( height >> level );
 }
 
+// *********************************
+//
+bool		Texture2D::HasMipmaps		() const
+{
+	return m_levels > 1;
+}
+
 } //bv
