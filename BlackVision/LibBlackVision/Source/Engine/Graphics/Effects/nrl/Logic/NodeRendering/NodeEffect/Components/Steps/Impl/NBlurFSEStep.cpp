@@ -88,6 +88,7 @@ namespace bv { namespace nrl {
 //
 NBlurFSEStep::NBlurFSEStep          ()
     : Parent( nullptr )
+	, m_tmpRT( nullptr )
 {
     // FIXME: maybe one class is enough as we only use NFullscreenEffectType type here and always set FSE state as current state
     m_blurEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_BLUR );
@@ -103,6 +104,7 @@ NBlurFSEStep::~NBlurFSEStep           ()
 {
     delete m_blurEffect;
 	delete m_simpleBlitEffect;
+	delete m_tmpRT;
 }
 
 // **************************
@@ -147,29 +149,35 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 		NRenderedData rd( 1 );
 		rd.SetEntry( 0, input->GetEntry( 0 ) );
 
-		const RenderTarget * output = nullptr;
+		if( !m_tmpRT )
+		{
+			m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( MAXDWORD32, RenderTarget::RTSemantic::S_DRAW_ONLY );
+			enable( ctx, m_tmpRT );
+			clearBoundRT( ctx, glm::vec4() );
+			disableBoundRT( ctx );
+		}
 
 		blurSize /= stepsNum;
 
+		auto tmpOut = m_tmpRT;
+
 		for( auto i = 0; i < stepsNum - 1; ++i )
 		{
-			output = FastBlur( ctx, rd, blurSize, output );
+			FastBlur( ctx, rd, blurSize, tmpOut );
 			auto oldInputRT = rd.GetEntry( 0 );
-			rd.SetEntry( 0, output );
-			output = oldInputRT;
+			rd.SetEntry( 0, tmpOut );
+
+			renderer( ctx )->GenerateMipmaps( tmpOut );
+
+			tmpOut = oldInputRT;
 
 			// Clear blur output render target.
-			enable( ctx, output );
+			enable( ctx, tmpOut );
 			clearBoundRT( ctx, glm::vec4() );
 			disableBoundRT( ctx );
 		}
 
 		FastBlur( ctx, rd, blurSize, mainRT );
-
-		if( stepsNum > 1 )
-		{
-			allocator( ctx )->Free();
-		}
 	}
 
 	enable( ctx, mainRT );
@@ -177,19 +185,8 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 // **************************
 //
-const RenderTarget *	NBlurFSEStep::FastBlur						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output )
+void		NBlurFSEStep::FastBlur						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output )
 {
-	if( !output )
-	{
-		// Allocate output render target if not passed
-		output = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-		NRenderedData rd( 1 );
-		rd.SetEntry( 0, output );
-		enable( ctx, output );
-		clearBoundRT( ctx, glm::vec4() );
-		disableBoundRT( ctx );
-	}
-
 	auto blurSizeW = blurSize;
 	auto blurSizeH = blurSize;
 
@@ -230,7 +227,16 @@ const RenderTarget *	NBlurFSEStep::FastBlur						( NRenderContext * ctx, const N
 
 		SetQuadTransform( scaleW, scaleH, 0.f, 0.f );
 		SetUVTransform( scaleW, scaleH, 0.f, 0.f );
-		auto bluredRT = BlurInput( ctx, inputTmp, blurSizeW, blurSizeH, nullptr );
+
+		// Allocate output render target if not passed
+		auto bluredRT = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+		NRenderedData rd( 1 );
+		rd.SetEntry( 0, bluredRT );
+		enable( ctx, bluredRT );
+		clearBoundRT( ctx, glm::vec4() );
+		disableBoundRT( ctx );
+
+		BlurInput( ctx, inputTmp, blurSizeW, blurSizeH, bluredRT );
 
 		inputTmp.SetEntry( 0, bluredRT );
 		SetQuadTransform( 1.f, 1.f, 0.f, 0.f );
@@ -239,8 +245,6 @@ const RenderTarget *	NBlurFSEStep::FastBlur						( NRenderContext * ctx, const N
 
 		allocator( ctx )->Free();
 		allocator( ctx )->Free();
-
-		return output;
 	}
 }
 
@@ -266,21 +270,10 @@ void					NBlurFSEStep::SetUVTransform				( Float32 scaleX, Float32 scaleY, Float
 
 // **************************
 //
-const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSizeW, Float32 blurSizeH, const RenderTarget * output )
+void					NBlurFSEStep::BlurInput						( NRenderContext * ctx, const NRenderedData & input, Float32 blurSizeW, Float32 blurSizeH, const RenderTarget * output )
 {
 	auto wrt = input.GetEntry( 0 )->Width();
 	auto hrt = input.GetEntry( 0 )->Height();
-
-	if( !output )
-	{
-		// Allocate output render target if not passed
-		output = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-		NRenderedData rd( 1 );
-		rd.SetEntry( 0, output );
-		enable( ctx, output );
-		clearBoundRT( ctx, glm::vec4() );
-		disableBoundRT( ctx );
-	}
 
 	auto blurSizeVal = GetState()->GetValueAt( 1 );
 	QueryTypedValue< ValueFloatPtr >( blurSizeVal )->SetValue( blurSizeW );
@@ -315,8 +308,6 @@ const RenderTarget *	NBlurFSEStep::BlurInput						( NRenderContext * ctx, const 
 	allocator( ctx )->Free();
 
 	//allocator( ctx )->Free();  // free allocated locally render target.
-
-	return output;
 }
 
 // **************************
@@ -327,8 +318,8 @@ void					NBlurFSEStep::ResizeInput					( NRenderContext * ctx, const NRenderedDa
 	enable( ctx, output );
 	clearBoundRT( ctx, glm::vec4() );
 
-	m_simpleBlitEffect->Render( ctx, input );
-
+	m_simpleBlitEffect->Render( ctx, input ); 
+	
 	disableBoundRT( ctx );
 }
 

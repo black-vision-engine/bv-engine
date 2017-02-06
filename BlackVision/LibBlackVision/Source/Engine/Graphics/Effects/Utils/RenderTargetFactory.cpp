@@ -18,6 +18,13 @@ namespace bv {
 //
 RenderTarget *  RenderTargetFactory::CreateRenderTarget           ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt, UInt32 levels )
 {
+	if( levels > 1 )
+	{
+		auto maxLevelsNum = UInt32( std::floor( std::log( Float32( std::max( width, height ) ) ) / std::log( 2 ) ) + 1 );
+
+		levels = std::min( levels, maxLevelsNum );
+	}
+
     auto retRT = static_cast< RenderTarget * >( nullptr );
 
     if ( semantic == RenderTarget::RTSemantic::S_DRAW_READ )

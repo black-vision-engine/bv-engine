@@ -35,6 +35,7 @@ public:
 
     virtual GLuint		Bind			();
     virtual void		Unbind			();
+	virtual void		GenerateMipmaps	() override {};
 
     void				Update          ( const TextureCube * texture );
 

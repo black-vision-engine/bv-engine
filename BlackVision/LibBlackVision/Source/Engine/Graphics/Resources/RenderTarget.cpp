@@ -20,7 +20,6 @@ namespace bv {
 //
 RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt32 w, UInt32 h, bool hasDepthBuffer, const std::vector< UInt32 > & levels, RenderTarget::RTSemantic semantic )
     : m_numTargets( (UInt32) formats.size() )
-    , m_levels( levels )
     , m_hasDepthBuffer( hasDepthBuffer )
     , m_semantic( semantic )
 {
@@ -90,10 +89,7 @@ Texture2DPtr RenderTarget::ColorTexture ( UInt32 i ) const
 //
 bool RenderTarget::HasMipmaps ( UInt32 i ) const
 {
-	if( m_levels.size() > i )
-		return m_levels[ i ] > 1;
-	else
-		return false;
+	return ColorTexture( i )->HasMipmaps();
 }
 
 // *********************************

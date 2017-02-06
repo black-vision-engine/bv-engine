@@ -245,12 +245,4 @@ void          PdrRenderTarget::PBODownloadData     ( unsigned int i )
 	BVGL::bvglReadPixels( 0, 0, ( GLuint )m_width, ( GLuint )m_height, fmt, type, 0 );
 }
 
-// ****************************
-//
-void			PdrRenderTarget::GenerateMipmaps	( UInt32 i )
-{
-	BVGL::bvglBindTexture( GL_TEXTURE_2D, m_textures[ i ] );
-	BVGL::bvglGenerateMipmap( GL_TEXTURE_2D );
-}
-
 } //bv

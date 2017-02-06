@@ -27,7 +27,6 @@ protected:
  
     UInt32                      m_numTargets;
     
-	std::vector< UInt32 >		m_levels;
     bool                        m_hasDepthBuffer;
 
     RenderTarget::RTSemantic    m_semantic;

@@ -38,6 +38,8 @@ public:
     virtual GLuint  Bind				();
     virtual void    Unbind				();
 
+	virtual void	GenerateMipmaps		() override {};
+
     void            Update				( const Texture2DArray * textureArray );
 
     static PdrTexture2DArray *   Create	( const Texture2DArray * textureArray );
