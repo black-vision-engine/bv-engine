@@ -29,6 +29,9 @@ void		BlendHelper::SetBlendRendererContext	( DefaultPixelShaderChannelPtr psc, c
 
     auto ctx = psc->GetRendererContext();
 
+	ctx->alphaCtx->srcAlphaBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+	ctx->alphaCtx->dstAlphaBlendMode = model::AlphaContext::DstBlendMode::DBM_ZERO;
+
     BlendHelper::BlendMode blendMode = param->Evaluate();
 	switch( blendMode )
 	{
@@ -58,6 +61,8 @@ void		BlendHelper::SetBlendRendererContext	( DefaultPixelShaderChannelPtr psc, c
 			// Color = Srgb + Drgb * (1 - Sa)
 			ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
 			ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+			//ctx->alphaCtx->srcAlphaBlendMode = model::AlphaContext::SrcBlendMode::SBM_DST_ALPHA;
+			//ctx->alphaCtx->dstAlphaBlendMode = model::AlphaContext::DstBlendMode::DBM_ZERO;
 			break;
 	}
 }

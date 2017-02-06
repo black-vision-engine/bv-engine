@@ -27,9 +27,9 @@ public:
     enum BlendMode
     {
         BM_Normal = 0,
-        BM_Lighten,
+        BM_Lighten,			// Blending function GL_MAX needed.
         BM_Darken,			// Blending function GL_MIN needed.
-        BM_Multiply,		// Blending function GL_MAX needed.
+        BM_Multiply,
         BM_Average,
         BM_Add,
         BM_Substract,		// Blending function GL_SUBTRACT needed.
