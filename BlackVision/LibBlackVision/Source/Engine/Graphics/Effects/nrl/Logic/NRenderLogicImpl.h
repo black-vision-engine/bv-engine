@@ -25,7 +25,7 @@ private:
 
 private:
 
-                                    NRenderLogicImpl        ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType );
+                                    NRenderLogicImpl        ( unsigned int width, unsigned int height );
 
 public:
                             
@@ -38,7 +38,7 @@ public:
 
 private:
 
-    void                RenderQueued            ( const SceneVec & scenes, RenderedChannelsData * result );
+    void                RenderQueued            ( const SceneVec & scenes );
     void                Render                  ( SceneNode * sceneRoot );
 
 private:
@@ -50,7 +50,7 @@ private:
 
 public:
 
-    static NRenderLogicImpl *       Create                  ( const NRenderLogicDesc & desc );
+    static NRenderLogicImpl *   Create          ( NRenderLogicDesc & desc );
 
 };
 

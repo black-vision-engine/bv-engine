@@ -9,8 +9,8 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NRenderLogicImpl::NRenderLogicImpl      ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
-    : m_state( width, height, numTrackedRenderTargetsPerOutputType )
+NRenderLogicImpl::NRenderLogicImpl      ( unsigned int width, unsigned int height )
+    : m_state( width, height )
     , m_renderedChannelsData( nullptr )
     , m_outputLogic( nullptr )
 {
@@ -35,43 +35,40 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
     }
 
     // 1. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
-    auto renderdata     = rendered_channels_data( m_state );     
-    renderdata->UpdateRenderChannels();
+    m_renderedChannelsData->UpdateRenderChannels();
 
     // 2. Low level renderer per frame initialization
     renderer->PreDraw();
 
     // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
-    RenderQueued( scenes, renderdata );
+    RenderQueued( scenes );
 
     // 4. Low level rendere per frame cleanup
     renderer->PostDraw();
 
     // 5. Handle frame data rendered during this call and all logic associated with custom outputs
-    output_logic( m_state )->ProcessFrameData( context( m_state ) );
+    m_outputLogic->ProcessFrameData( context( m_state ) );
 }
 
 // **************************
 //
 OutputLogic *   NRenderLogicImpl::GetOutputLogic    ()
 {
-    return &m_outputLogic;
+    return m_outputLogic;
 }
 
 // **************************
 //
 RenderedChannelsData *  NRenderLogicImpl::GetRenderedChannelsData   ()
 {
-    return &m_renderedChannelsData;
+    return m_renderedChannelsData;
 }
 
 // **************************
 //
-void            NRenderLogicImpl::RenderQueued      ( const SceneVec & scenes, RenderedChannelsData * result )
+void            NRenderLogicImpl::RenderQueued      ( const SceneVec & scenes )
 {
-    auto ctx = context( m_state );
-    
-    m_renderLogicCore.Render( scenes, result, ctx );
+    m_renderLogicCore.Render( scenes, m_renderedChannelsData, context( m_state ) );
 }
 
 // **************************
@@ -96,24 +93,30 @@ void            NRenderLogicImpl::SetOutputLogic          ( OutputLogic * output
 //
 NRenderLogicState & NRenderLogicImpl::AccessState           ()
 {
-    reutrn m_state;
+    return m_state;
 }
 
 // **************************
 //
-NRenderLogicImpl *  NRenderLogicImpl::Create        ( const NRenderLogicDesc & desc )
+NRenderLogicImpl *  NRenderLogicImpl::Create        ( NRenderLogicDesc & desc )
 {
     auto w = desc.GetMainWidth();
     auto h = desc.GetMainHeight();
-    auto n = desc.AccessRenderedChannelsDataDesc().GetNumTrackedRenderTargets();
+
+    auto impl   = new NRenderLogicImpl( w, h );
     
-    auto impl = new NRenderLogicImpl( w, h, n );
+    auto alc    = impl->AccessState().GetRenderTargetStackAllocator();
 
+    auto & aold = desc.AccessOutputLogicDesc();
+    auto & rcdd = desc.AccessRenderedChannelsDataDesc();
 
-    impl->SetRenderedChannelsData( nullptr );
-    impl->SetOutputLogic( nullptr );
+    auto outLogic   = OutputLogic::Create( aold );
+    auto renChan    = RenderedChannelsData::Create( rcdd, alc );
+   
+    impl->SetRenderedChannelsData( renChan );
+    impl->SetOutputLogic( outLogic );
 
-    return nullptr;
+    return impl;
 }
 
 } //nrl
