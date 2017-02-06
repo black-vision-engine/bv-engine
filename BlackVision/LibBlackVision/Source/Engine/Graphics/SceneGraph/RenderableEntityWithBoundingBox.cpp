@@ -105,4 +105,16 @@ void                RenderableEntityWithBoundingBox::SetLocalTransform          
     }
 }
 
+// ***********************
+//
+void                RenderableEntityWithBoundingBox::SetLocalTransform                       ( Transform && t )
+{
+	RenderableEntity::SetLocalTransform( t );
+	if( m_renderableBoundingBox )
+	{
+		m_renderableBoundingBox->SetLocalTransform( t );
+		m_renderableCenterOfMass->SetLocalTransform( t );
+	}
+}
+
 }
