@@ -2,9 +2,7 @@
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 
 
 namespace bv { namespace nrl {
@@ -18,35 +16,42 @@ private:
 
     NRenderContext					m_ctx;
 
-    OutputLogic                     m_outputLogic;
-
     bool                            m_initialized;
 
 public:
 
-                                NRenderLogicState   ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType, unsigned int sharedMemScaleFactor );
+                                    NRenderLogicState               ( unsigned int width, unsigned int height );
 
-    OutputLogic *               GetOutputLogic      ();
-    NRenderContext *			GetRenderContext	();
+    NRenderContext *			    GetRenderContext	            ();
+    RenderTargetStackAllocator *    GetRenderTargetStackAllocator   ();
+    RenderQueueStackAllocator *     GetRenderQueueStackAllocator    ();
 
-    bool                        IsInitialized       () const;
-    void                        Initialize          ( Renderer * renderer, audio::AudioRenderer * audio );
+    bool                            IsInitialized                   () const;
+
+    void                            Initialize                      ( Renderer * renderer, audio::AudioRenderer * audio );
 
 };
 
 
 // ************************
 //
-inline OutputLogic  *           output_logic    ( NRenderLogicState & state )
+inline NRenderContext *			        context			        ( NRenderLogicState & state )
 {
-    return state.GetOutputLogic();
+	return state.GetRenderContext();
 }
 
 // ************************
 //
-inline NRenderContext *			context			( NRenderLogicState & state )
+inline RenderTargetStackAllocator *		render_target_allocator ( NRenderLogicState & state )
 {
-	return state.GetRenderContext();
+    return state.GetRenderTargetStackAllocator();
+}
+
+// ************************
+//
+inline RenderQueueStackAllocator *		render_queu_allocator   ( NRenderLogicState & state )
+{
+    return state.GetRenderQueueStackAllocator();
 }
 
 } // nrl

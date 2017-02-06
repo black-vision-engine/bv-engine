@@ -13,7 +13,7 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 // FIXME: nrl - render logic replacement
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
@@ -125,8 +125,11 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 
     // nrl - render logic replacement
     //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
+    
     // FIXME: nrl - pass all those arguments in a struct
-    m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2, DefaultConfig.SharedMemoryScaleFactor() ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    m_renderLogic = nrl::NRenderLogic::Create( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
+
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
 
@@ -158,6 +161,7 @@ void BVAppLogic::Initialize         ()
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
     bv::effect::InitializeLibEffect( m_renderer );
+
     SetNodeLogicFactory( new NodeLogicFactory );
 
     InitializeKbdHandler();
@@ -172,6 +176,7 @@ void BVAppLogic::Initialize         ()
     {
         //FIXME: maybe config should be read by bvconfig
         auto & videoCardManager = videocards::VideoCardManager::Instance();
+
         videoCardManager.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
         videoCardManager.ReadConfig( DefaultConfig.GetNode( "config" ) );
         videoCardManager.Start();
@@ -231,7 +236,7 @@ void BVAppLogic::LoadScene          ( void )
 
     auto pmSceneName = DefaultConfig.LoadSceneFromProjectManager();
 
-    if(!pmSceneName.empty())
+    if( !pmSceneName.empty() )
     {
         auto pm = ProjectManager::GetInstance();
         auto sceneModel = pm->LoadScene("", pmSceneName);

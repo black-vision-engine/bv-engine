@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
-#include "OutputInstance.h"
+#include "Output.h"
 
 
 namespace bv { namespace nrl {
 
 // *********************************
 //
-OutputInstance::OutputInstance                              ( unsigned int width, unsigned int height )
+Output::Output                                              ( unsigned int width, unsigned int height )
     : m_state( width, height )
     , m_isEnabled( false )
 {
@@ -15,41 +15,41 @@ OutputInstance::OutputInstance                              ( unsigned int width
 
 // *********************************
 //
-OutputInstance::~OutputInstance     ()
+Instance::~Instance                                         ()
 {
 }
 
 // *********************************
 //
-bool    OutputInstance::IsEnabled                           () const
+bool    Output::IsEnabled                                   () const
 {
     return m_isEnabled;
 }
 
 // *********************************
 //
-void    OutputInstance::Enable                              ()
+void    Output::Enable                                      ()
 {
     m_isEnabled = true;
 }
 
 // *********************************
 //
-void    OutputInstance::Disable                             ()
+void    Output::Disable                                     ()
 {
     m_isEnabled = false;
 }
 
 // *********************************
 //
-NOutputState &  OutputInstance::AccessOutputState           ()
+NOutputState &  Output::AccessOutputState                   ()
 {
     return m_state;
 }
 
 // *********************************
 //
-RenderChannelType   OutputInstance::GetActiveRenderChannel  () const
+RenderChannelType   Output::GetActiveRenderChannel          () const
 {
     return m_state.GetActiveRenderChannel();
 }

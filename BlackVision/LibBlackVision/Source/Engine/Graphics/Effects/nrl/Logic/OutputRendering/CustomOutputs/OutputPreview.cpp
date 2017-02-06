@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderResult.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
 
 

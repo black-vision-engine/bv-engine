@@ -1,19 +1,19 @@
 #include "stdafx.h"
 
-#include "RenderResult.h"
+#include "RenderedChannelsData.h"
 
 #include <cassert>
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
 
 
 namespace bv { namespace nrl {
 
 // **************************
 //
-RenderResult::RenderResult                                          ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType )
+RenderedChannelsData::RenderedChannelsData                                          ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType )
     : m_renderChannels( (unsigned int) RenderChannelType::RCT_TOTAL )
     , m_containsValidData( (unsigned int) RenderChannelType::RCT_TOTAL )
     , m_cachedReadbackTextures( (unsigned int) RenderChannelType::RCT_TOTAL )
@@ -33,7 +33,7 @@ RenderResult::RenderResult                                          ( RenderTarg
 
 // **************************
 //
-RenderResult::~RenderResult                                         ()
+RenderedChannelsData::~RenderedChannelsData                                         ()
 {
     for( auto channel : m_renderChannels )
     {
@@ -43,14 +43,14 @@ RenderResult::~RenderResult                                         ()
 
 // **************************
 //
-const RenderChannel *       RenderResult::GetRenderChannel          ( RenderChannelType rct ) const
+const RenderChannel *       RenderedChannelsData::GetRenderChannel          ( RenderChannelType rct ) const
 {
     return m_renderChannels[ ( unsigned int ) rct ];
 }
 
 // **************************
 //
-const RenderTarget *		RenderResult::GetActiveRenderTarget     ( RenderChannelType rct ) const
+const RenderTarget *		RenderedChannelsData::GetActiveRenderTarget     ( RenderChannelType rct ) const
 {
 	auto channel = GetRenderChannel( rct );
 
@@ -59,14 +59,14 @@ const RenderTarget *		RenderResult::GetActiveRenderTarget     ( RenderChannelTyp
 
 // **************************
 //
-void                        RenderResult::InvalidateCachedTexture   ( RenderChannelType rct )
+void                        RenderedChannelsData::InvalidateCachedTexture   ( RenderChannelType rct )
 {
     m_cachedReadbackUpToDate[ ( unsigned int) rct ] = false;
 }
 
 // **************************
 //
-Texture2DPtr                RenderResult::ReadColorTexture          ( Renderer * renderer, RenderChannelType rct )
+Texture2DPtr                RenderedChannelsData::ReadColorTexture          ( Renderer * renderer, RenderChannelType rct )
 {
     unsigned int idx = (unsigned int) rct;
 
@@ -90,7 +90,7 @@ Texture2DPtr                RenderResult::ReadColorTexture          ( Renderer *
 
 // **************************
 //
-void                    RenderResult::UpdateRenderChannels          ()
+void                    RenderedChannelsData::UpdateRenderChannels          ()
 {
     for( auto channel : m_renderChannels )
     {
@@ -100,30 +100,41 @@ void                    RenderResult::UpdateRenderChannels          ()
 
 // **************************
 //
-bool                    RenderResult::IsActive                      ( RenderChannelType rct ) const
+bool                    RenderedChannelsData::IsActive                      ( RenderChannelType rct ) const
 {
     return GetRenderChannel( rct )->IsActive();
 }
 
 // **************************
 //
-void                    RenderResult::SetIsActive                   ( RenderChannelType rct, bool isActive )
+void                    RenderedChannelsData::SetIsActive                   ( RenderChannelType rct, bool isActive )
 {
     m_renderChannels[ ( unsigned int ) rct ]->SetActiveFlag( isActive );
 }
 
 // **************************
 //
-bool                    RenderResult::ContainsValidData             ( RenderChannelType rct ) const
+bool                    RenderedChannelsData::ContainsValidData             ( RenderChannelType rct ) const
 {
     return m_containsValidData[ (unsigned int) rct ];
 }
 
 // **************************
 //
-void                    RenderResult::SetContainsValidData          ( RenderChannelType rct, bool containsValidData )
+void                    RenderedChannelsData::SetContainsValidData          ( RenderChannelType rct, bool containsValidData )
 {
     m_containsValidData[ (unsigned int) rct ] = containsValidData;
+}
+
+// **************************
+// FIXME: implement
+RenderedChannelsData *  RenderedChannelsData::Create                        ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator )
+{
+    // return new RenderedChannelsData();
+    { desc; }
+    { allocator; }
+
+    return nullptr;
 }
 
 } // nrl
