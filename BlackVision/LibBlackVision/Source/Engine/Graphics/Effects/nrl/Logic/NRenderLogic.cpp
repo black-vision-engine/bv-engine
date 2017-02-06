@@ -13,13 +13,10 @@ NRenderLogic::~NRenderLogic                     ()
 }
 
 // **************************
-// FIXME: implement
+//
 NRenderLogic *           NRenderLogic::Create   ( const NRenderLogicDesc & desc )
 {
-    
-    // NRenderLogicImpl(
-
-    return nullptr;
+    return NRenderLogicImpl::Create( desc );
 }
 
 } //nrl

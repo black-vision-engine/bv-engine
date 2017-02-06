@@ -9,9 +9,19 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NRenderLogicImpl::NRenderLogicImpl  ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
-    : m_state( width, height, numTrackedRenderTargetsPerOutputType ) 
+NRenderLogicImpl::NRenderLogicImpl      ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
+    : m_state( width, height, numTrackedRenderTargetsPerOutputType )
+    , m_renderedChannelsData( nullptr )
+    , m_outputLogic( nullptr )
 {
+}
+
+// **************************
+//
+NRenderLogicImpl::~NRenderLogicImpl     ()
+{
+    delete m_renderedChannelsData;
+    delete m_outputLogic;
 }
 
 // **************************
@@ -34,7 +44,7 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
     // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
     RenderQueued( scenes, renderdata );
 
-    // 4. Low lecel rendere per frame cleanup
+    // 4. Low level rendere per frame cleanup
     renderer->PostDraw();
 
     // 5. Handle frame data rendered during this call and all logic associated with custom outputs
@@ -45,14 +55,14 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
 //
 OutputLogic *   NRenderLogicImpl::GetOutputLogic    ()
 {
-    return output_logic( m_state );
+    return &m_outputLogic;
 }
 
 // **************************
 //
 RenderedChannelsData *  NRenderLogicImpl::GetRenderedChannelsData   ()
 {
-    return rendered_channels_data( m_state );
+    return &m_renderedChannelsData;
 }
 
 // **************************
@@ -62,6 +72,42 @@ void            NRenderLogicImpl::RenderQueued      ( const SceneVec & scenes, R
     auto ctx = context( m_state );
     
     m_renderLogicCore.Render( scenes, result, ctx );
+}
+
+// **************************
+//
+void            NRenderLogicImpl::SetRenderedChannelsData ( RenderedChannelsData * rcd )
+{
+    assert( m_renderedChannelsData == nullptr );
+
+    m_renderedChannelsData = rcd;
+}
+
+// **************************
+//
+void            NRenderLogicImpl::SetOutputLogic          ( OutputLogic * outputLogic )
+{
+    assert( m_outputLogic == nullptr );
+
+    m_outputLogic = outputLogic;
+}
+
+// **************************
+//
+NRenderLogicState & NRenderLogicImpl::AccessState           ()
+{
+    reutrn m_state;
+}
+
+// **************************
+//
+NRenderLogicImpl *  NRenderLogicImpl::Create        ( const NRenderLogicDesc & desc )
+{
+    auto w = desc.GetMainWidth();
+    auto h = desc.GetMainHeight();
+
+
+    return nullptr;
 }
 
 } //nrl

@@ -2,6 +2,9 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderLogicState.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderLogicCore.h"
@@ -15,11 +18,16 @@ private:
     
     NRenderLogicState               m_state;
 
+    RenderedChannelsData *          m_renderedChannelsData;
+    OutputLogic *                   m_outputLogic;
+
     NRenderLogicCore                m_renderLogicCore;
 
-public:
+private:
 
                                     NRenderLogicImpl        ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType );
+
+public:
 
     virtual void                    HandleFrame             ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 
@@ -27,8 +35,20 @@ public:
     virtual RenderedChannelsData *  GetRenderedChannelsData () override;
 
 private:
-            void            RenderQueued        ( const SceneVec & scenes, RenderedChannelsData * result );
-            void            Render              ( SceneNode * sceneRoot );
+
+    void                RenderQueued            ( const SceneVec & scenes, RenderedChannelsData * result );
+    void                Render                  ( SceneNode * sceneRoot );
+
+private:
+
+    void                SetRenderedChannelsData ( RenderedChannelsData * rcd );
+    void                SetOutputLogic          ( OutputLogic * outputLogic );
+
+    NRenderLogicState & AccessState             ();
+
+public:
+
+    static NRenderLogicImpl *       Create                  ( const NRenderLogicDesc & desc );
 
 };
 

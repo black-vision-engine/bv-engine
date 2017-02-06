@@ -7,11 +7,9 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType )
+NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height )
     : m_initialized( false )
     , m_renderTargetAllocator( width, height )
-    , m_renderedChannelsData( &m_renderTargetAllocator, numTrackedRenderTargetsPerOutputType )
-    , m_outputLogic()
 
 {
     m_ctx.SetAllocator( &m_renderTargetAllocator );
@@ -20,35 +18,35 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
 
 // **************************
 //
-OutputLogic *               NRenderLogicState::GetOutputLogic           ()
-{
-    return &m_outputLogic;
-}
-
-// **************************
-//
-NRenderContext *			NRenderLogicState::GetRenderContext		    ()
+NRenderContext *			    NRenderLogicState::GetRenderContext		            ()
 {
     return &m_ctx;
 }
 
 // **************************
 //
-RenderedChannelsData *      NRenderLogicState::GetRenderedChannelsData  ()
+RenderTargetStackAllocator *    NRenderLogicState::GetRenderTargetStackAllocator    ()
 {
-    return &m_renderedChannelsData;
+    return &m_renderTargetAllocator;
 }
 
 // **************************
 //
-bool                        NRenderLogicState::IsInitialized            () const
+RenderQueueStackAllocator *     NRenderLogicState::GetRenderQueueStackAllocator     ()
+{
+    return &m_renderQueueAllocator;
+}
+
+// **************************
+//
+bool                            NRenderLogicState::IsInitialized                    () const
 {
     return m_initialized;
 }
 
 // **************************
 //
-void                        NRenderLogicState::Initialize               ( Renderer * renderer, audio::AudioRenderer * audio )
+void                            NRenderLogicState::Initialize                       ( Renderer * renderer, audio::AudioRenderer * audio )
 {
     m_ctx.SetRenderer( renderer );
     m_ctx.SetAudio( audio );
