@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
 
 
 namespace bv { namespace model {
@@ -37,7 +38,6 @@ public:
 class DefaultGradientPlugin : public BasePlugin
 {
 public:
-    static const std::string        PARAM_BLEND_ENABLE;
     static const std::string        PARAM_ALPHA;
     
     static const std::string        PARAM_POINT1;
@@ -51,6 +51,9 @@ private:
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
+
+	ValueParamState< bool >						m_blendEnabled;
+	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
 
 public:
 
