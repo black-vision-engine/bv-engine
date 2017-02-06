@@ -57,7 +57,7 @@ public:
   
 public:
 
-    static RenderedChannelsData *   Create          ( const  RenderedChannelsDataDesc & desc ); 
+    static RenderedChannelsData *   Create          ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator ); 
 
 };
 

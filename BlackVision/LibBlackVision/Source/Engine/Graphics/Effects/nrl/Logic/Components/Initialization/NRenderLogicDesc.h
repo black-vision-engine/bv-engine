@@ -10,6 +10,9 @@ class NRenderLogicDesc
 {
 private:
 
+    unsigned int                m_mainWidth;
+    unsigned int                m_mainHeight;
+
     RenderedChannelsDataDesc    m_rcd;
     OutputLogicDesc             m_old;
 
@@ -20,6 +23,12 @@ public:
 
     RenderedChannelsDataDesc  &     AccessRenderedChannelsDataDesc  ();
     OutputLogicDesc  &              AccessOutputLogicDesc           ();
+
+    unsigned int                    GetMainWidth                    () const;
+    unsigned int                    GetMainHeight                   () const;
+
+    void                            SetMainWidth                    ( unsigned int width );
+    void                            SetMainHeight                   ( unsigned int height );
 
 };
 

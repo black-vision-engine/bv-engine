@@ -2,7 +2,8 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
+
 
 namespace bv { namespace nrl {
 
@@ -12,14 +13,19 @@ private:
 
     std::vector< bool >             m_channelsEnabledState;
 
+    unsigned int                    m_numTrackedRenderTargets;
+
 public:
 
-                RenderedChannelsDataDesc();
+                    RenderedChannelsDataDesc    ();
 
-    bool        IsEnabled               ( RenderChannelType rct );
+    bool            IsEnabled                   ( RenderChannelType rct );
 
-    void        SetEnabled              ( RenderChannelType rct );
-    void        SetDisabled             ( RenderChannelType rct );
+    void            SetEnabled                  ( RenderChannelType rct );
+    void            SetDisabled                 ( RenderChannelType rct );
+
+    unsigned int    GetNumTrackedRenderTargets  () const;
+    void            SetNumTrackedRenderTargets  ( unsigned int numTrackedRenderTargets );
 
 };
 

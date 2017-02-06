@@ -128,9 +128,11 @@ void                    RenderedChannelsData::SetContainsValidData          ( Re
 
 // **************************
 // FIXME: implement
-RenderedChannelsData *  RenderedChannelsData::Create                        ( const  RenderedChannelsDataDesc & desc )
+RenderedChannelsData *  RenderedChannelsData::Create                        ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator )
 {
+    // return new RenderedChannelsData();
     { desc; }
+    { allocator; }
 
     return nullptr;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/SceneGraph/Scene.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/NRenderLogicDesc.h"
 
 
@@ -33,7 +34,6 @@ public:
 
 public:
 
-    static NRenderLogic *           Create                  ( unsigned int width, unsigned int height );
     static NRenderLogic *           Create                  ( const NRenderLogicDesc & desc );
 
 };
