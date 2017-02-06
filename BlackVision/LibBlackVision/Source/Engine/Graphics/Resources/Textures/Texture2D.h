@@ -30,6 +30,8 @@ public:
     SizeType			RawFrameSize    ( UInt32 level = 0 ) const;
     static SizeType		RawFrameSize    ( TextureFormat format, UInt32 width, UInt32 height, UInt32 level = 0 );
 
+	virtual bool		HasMipmaps		() const override;
+
 };
 
 DEFINE_PTR_TYPE(Texture2D)

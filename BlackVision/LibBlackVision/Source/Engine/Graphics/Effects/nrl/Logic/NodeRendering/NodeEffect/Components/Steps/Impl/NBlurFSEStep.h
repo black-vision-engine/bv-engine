@@ -15,7 +15,10 @@ private:
 
 private:
 
-    NFullscreenEffect * m_blurEffect;
+    NFullscreenEffect *		m_blurEffect;
+	NFullscreenEffect *		m_simpleBlitEffect;
+
+	const RenderTarget *	m_tmpRT;
 
 public:
 
@@ -38,7 +41,11 @@ public:
 private:
 	Float32						GetBlurSize				() const;
 
-	const RenderTarget *		BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output ) const;
+	void						FastBlur				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSize, const RenderTarget * output );
+	void						BlurInput				( NRenderContext * ctx, const NRenderedData & input, Float32 blurSizeW, Float32 blurSizeH, const RenderTarget * output );
+	void						ResizeInput				( NRenderContext * ctx, const NRenderedData & input, const RenderTarget * output );
+	void						SetQuadTransform		( Float32 scaleX, Float32 scaleY, Float32 translateX, Float32 translateY );
+	void						SetUVTransform			( Float32 scaleX, Float32 scaleY, Float32 translateX, Float32 translateY );
 };
 
 } // nrl

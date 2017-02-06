@@ -12,18 +12,16 @@ uniform bool            vertical;
 uniform bool            normalize = true;
 uniform int             blurKernelType = 0;
 
-float blurSizeCeil = ceil( blurSize );
-float blurSizeFloor = floor( blurSize );
-float subPixelWeight = blurSize - blurSizeFloor;
+float blurSizeCeil 	= ceil( blurSize );
+float blurSizeFloor 	= floor( blurSize );
+float subPixelWeight 	= blurSize - blurSizeFloor;
 
 void pass0()
 {
     int t = int( blurSizeFloor );
-
     float pixelW = 1.0 / textureSize.x;
     
     float weight = 0.0;
-    
 	vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
 	
 	if( subPixelWeight > 0 && blurSizeCeil != blurSizeFloor )

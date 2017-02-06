@@ -628,6 +628,31 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
     pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
 }
 
+// *********************************
+//
+void	Renderer::GenerateMipmaps( const RenderTarget * rt, UInt32 i )
+{
+	auto tex = rt->ColorTexture( i );
+	if( tex && tex->HasMipmaps() )
+	{
+		GetPdrTexture2D( tex.get() )->GenerateMipmaps();
+	}
+}
+
+// *********************************
+//
+void	Renderer::GenerateMipmaps( const RenderTarget * rt )
+{
+	for( UInt32 i = 0; i < rt->NumTargets(); ++i )
+	{
+		if( rt->HasMipmaps( i ) )
+		{
+			GenerateMipmaps( rt, i );
+		}
+	}
+}
+
+
 // ***********************
 //
 void    Renderer::ReadColorTexturSync ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex )

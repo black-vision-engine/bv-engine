@@ -37,6 +37,8 @@ public:
     virtual GLuint  Bind			();
     virtual void    Unbind			();
 
+	virtual void	GenerateMipmaps	() override {};
+
     void            Update          ( const Texture3D * texture );
 
     static PdrTexture3D *   Create  ( const Texture3D * texture );

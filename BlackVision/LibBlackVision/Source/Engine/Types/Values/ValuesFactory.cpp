@@ -100,6 +100,17 @@ ValueVec4Ptr          ValuesFactory::CreateValueVec4     ( const std::string & n
 
 // *******************************
 //
+ValueVec4Ptr			ValuesFactory::CreateValueVec4    ( const std::string & name, const glm::vec4 & initVal )
+{
+	auto val = CreateValueVec4( name );
+
+	val->SetValue( initVal );
+
+	return val;
+}
+
+// *******************************
+//
 ValueMat2Ptr          ValuesFactory::CreateValueMat2     ( const std::string & name )
 {
     return std::make_shared< ValueMat2 >( name );
