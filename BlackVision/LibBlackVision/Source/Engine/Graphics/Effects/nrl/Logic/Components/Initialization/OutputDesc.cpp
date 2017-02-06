@@ -5,5 +5,88 @@
 
 namespace bv { namespace nrl {
 
+// **************************
+//
+OutputDesc::OutputDesc                                                      ()
+{
+}
+
+// **************************
+//
+OutputDesc::TOutputPropertiesVector &   OutputDesc::AccessReasonAllowedAce  ()
+{
+    return m_outputProperties;
+}
+
+// **************************
+//
+unsigned int                OutputDesc::GetWidth                            () const
+{
+    return m_width;
+}
+
+// **************************
+//
+unsigned int                OutputDesc::GetHeight                           () const
+{
+    return m_height;
+}
+
+// **************************
+//
+RenderChannelType           OutputDesc::GetSelectedRenderedChannel          () const
+{
+    return m_selectedRenderedChannel;
+}
+    
+// **************************
+//
+OutputChannelMapping        OutputDesc::GetOutputChannelMapping             () const
+{
+    return m_outputChannelMapping;
+}
+
+// **************************
+//
+CustomOutputType            OutputDesc::GetRepresentedOutputType            () const
+{
+    return m_outputType;
+}
+
+// **************************
+//
+void                        OutputDesc::SetWidth                            ( unsigned int width )
+{
+    m_width = width;
+}
+
+// **************************
+//
+void                        OutputDesc::SetHeight                           ( unsigned int height )
+{
+    m_height = height;
+}
+
+// **************************
+//
+void                        OutputDesc::SetSelectedRenderedChannel          ( RenderChannelType rct )
+{
+    m_selectedRenderedChannel = rct;
+}
+    
+// **************************
+//
+void                        OutputDesc::SetOutputChannelMapping             ( OutputChannelMapping ocm )
+{
+    m_outputChannelMapping = ocm;
+}
+
+// **************************
+//
+void                        OutputDesc::SetRepresentedOutputType            ( CustomOutputType cot )
+{
+    m_outputType = cot;
+}
+
 } //nrl
 } //bv

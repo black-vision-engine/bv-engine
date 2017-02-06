@@ -2065,6 +2065,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\RenderedChannelsDataDesc.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5377,6 +5380,9 @@
       <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\RenderedChannelsDataDesc.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputDesc.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
     </ClInclude>
   </ItemGroup>

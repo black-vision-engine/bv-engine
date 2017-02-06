@@ -42,6 +42,28 @@ private:
 
 public:
 
+                                OutputDesc                  ();
+                                    
+    TOutputPropertiesVector &   AccessReasonAllowedAce      ();
+
+    unsigned int                GetWidth                    () const;
+    unsigned int                GetHeight                   () const;
+
+    RenderChannelType           GetSelectedRenderedChannel  () const;
+    
+    OutputChannelMapping        GetOutputChannelMapping     () const;
+
+    CustomOutputType            GetRepresentedOutputType    () const;
+
+    void                        SetWidth                    ( unsigned int width );
+    void                        SetHeight                   ( unsigned int height );
+
+    void                        SetSelectedRenderedChannel  ( RenderChannelType rct );
+    
+    void                        SetOutputChannelMapping     ( OutputChannelMapping ocm );
+
+    void                        SetRepresentedOutputType    ( CustomOutputType cot );
+
     /*
     <property name="RenderChannels">
         <property name="RenderChannel_1" value="enabled" />
@@ -65,8 +87,8 @@ public:
         </Videocard>
         <Stream type="SharedMemory" name="bv_1" namespace="bv" width="640" height="360" renderChannel="RenderChannel_1" />
     </PhysicalOutputs>
-    
     */
+
     // FIXME: implement either a map or something based on currend vcm initialization code
 public:
 
