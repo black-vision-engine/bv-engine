@@ -29,8 +29,13 @@ const std::string        DefaultTexturePlugin::PARAM_ALPHA          = "alpha";
 //
 DefaultTexturePluginDesc::DefaultTexturePluginDesc                          ()
     : BasePluginDescriptor( UID(), "texture", "tx" )
-{
-}
+{}
+
+// *******************************
+//
+DefaultTexturePluginDesc::DefaultTexturePluginDesc( const std::string & uid, const std::string & defaultName, const std::string & abbrv )
+	: BasePluginDescriptor( uid, defaultName, abbrv )
+{}
 
 // *******************************
 //

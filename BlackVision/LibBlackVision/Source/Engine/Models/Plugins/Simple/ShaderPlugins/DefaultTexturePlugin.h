@@ -20,6 +20,7 @@ class DefaultTexturePluginDesc : public BasePluginDescriptor
 public:
 
     DefaultTexturePluginDesc                                    ();
+	DefaultTexturePluginDesc                                    ( const std::string & uid, const std::string & defaultName, const std::string & abbrv );
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
