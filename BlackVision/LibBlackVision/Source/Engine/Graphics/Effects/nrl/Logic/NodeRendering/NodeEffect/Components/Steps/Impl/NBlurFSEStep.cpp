@@ -203,7 +203,7 @@ void		NBlurFSEStep::FastBlur						( NRenderContext * ctx, const NRenderedData & 
 		auto inputW = input.GetEntry( 0 )->Width();
 		auto inputH = input.GetEntry( 0 )->Height();
 
-		auto scale = std::max( 1.f, blurSize / 16 );
+		auto scale = std::max( 1.f, blurSize / 10 );
 
 		auto outputW = UInt32( ceil( inputW / scale ) );
 		auto outputH = UInt32( ceil( inputH / scale ) );
