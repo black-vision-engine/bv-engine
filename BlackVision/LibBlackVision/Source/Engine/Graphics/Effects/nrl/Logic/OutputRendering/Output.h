@@ -16,6 +16,7 @@ enum class CustomOutputType : unsigned int
 
 class RenderResult;
 class NRenderContext;
+class OutputDesc;
 
 // FIXME: nrl - Right now it uses basic state in this class, when the whole output subsystem is designed, a separated mechanism should be used to configure it
 // FIXME: nrl - as well as additional static config mechanism (there are compile time params which can be changed only in the code, e.g. numTrackedFrameBuffers and static params which are read from the xml
@@ -27,6 +28,10 @@ public:
     virtual             ~Output                 ();
 
     virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) = 0;
+
+public:
+
+    static Output *     Create                  ( const OutputDesc & desc ); 
 
 };
 
