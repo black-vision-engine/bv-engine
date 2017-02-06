@@ -22,7 +22,7 @@ float	ComputeFadeAlpha();
 
 void main()
 {		
-	FragColor = ComputeFadeAlpha() * color;
+	FragColor = ComputeFadeAlpha() * vec4( color.rgb * color.a, color.a );
 }
 
 

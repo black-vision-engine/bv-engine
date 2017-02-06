@@ -26,14 +26,19 @@ void main()
 
 	float factor = dot(v1,v2) / dot(v2, v2);
 
-    vec4 color = color1 * factor + color2 * (1 - factor);
+	// Premultiply alpha before blending
+	vec4 colorPreMult1 = vec4( color1.rgb * color1.a, color1.a );
+	vec4 colorPreMult2 = vec4( color2.rgb * color2.a, color2.a );
+	vec4 outlineColorPreMult = vec4( outlineColor.rgb * outlineColor.a, outlineColor.a );
+	
+    vec4 color = colorPreMult1 * factor + colorPreMult2 * (1 - factor);
     
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
     
     vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
     
-	vec4 result = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
+	vec4 result = alpha * ( color * col1 + outlineColorPreMult * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
 	
 	if( result.a == 0.0 )
 		discard;

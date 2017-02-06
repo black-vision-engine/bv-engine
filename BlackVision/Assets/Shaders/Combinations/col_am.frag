@@ -11,5 +11,5 @@ uniform vec4 color;
 void main()
 {		
     vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
-    FragColor = color * alphaMask.a;
+    FragColor = vec4( color.rgb * color.a, color.a ) * alphaMask.a;
 }
