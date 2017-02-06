@@ -1,11 +1,47 @@
 #pragma once
 
+#include <hash_map>
+#include <vector>
+#include <string>
+
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+
 
 namespace bv { namespace nrl {
 
-class OutputLogicDesc
+enum class OutputChannelMapping : unsigned int
 {
+    OCM_R = 0,
+    OCM_G,
+    OCM_B,
+    OCM_A,
+    OCM_RGBA,
+
+    OCM_TOTAL
+};
+
+class OutputDesc
+{
+public:
+
+    typedef     std::hash_map< std::string, std::string >   TOutputPropertyMap;
+    typedef     std::vector< TOutputPropertyMap >           TOutputPropertiesVector;
+
 private:
+
+    TOutputPropertiesVector m_outputProperties;
+
+    unsigned int            m_width;
+    unsigned int            m_height;
+
+    RenderChannelType       m_selectedRenderedChannel;
+
+    OutputChannelMapping    m_outputChannelMapping;
+
+    CustomOutputType        m_outputType;
+
+public:
+
     /*
     <property name="RenderChannels">
         <property name="RenderChannel_1" value="enabled" />
