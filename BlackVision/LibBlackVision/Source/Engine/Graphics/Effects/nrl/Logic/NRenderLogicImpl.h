@@ -28,6 +28,8 @@ private:
                                     NRenderLogicImpl        ( unsigned int width, unsigned int height, unsigned int numTrackedRenderTargetsPerOutputType );
 
 public:
+                            
+                                    ~NRenderLogicImpl       ();
 
     virtual void                    HandleFrame             ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
 

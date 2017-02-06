@@ -12,6 +12,7 @@ private:
 
     unsigned int                m_mainWidth;
     unsigned int                m_mainHeight;
+    unsigned int                m_numTrackedRenderTargets;
 
     RenderedChannelsDataDesc    m_rcd;
     OutputLogicDesc             m_old;

@@ -105,7 +105,13 @@ NRenderLogicImpl *  NRenderLogicImpl::Create        ( const NRenderLogicDesc & d
 {
     auto w = desc.GetMainWidth();
     auto h = desc.GetMainHeight();
+    auto n = desc.AccessRenderedChannelsDataDesc().GetNumTrackedRenderTargets();
+    
+    auto impl = new NRenderLogicImpl( w, h, n );
 
+
+    impl->SetRenderedChannelsData( nullptr );
+    impl->SetOutputLogic( nullptr );
 
     return nullptr;
 }
