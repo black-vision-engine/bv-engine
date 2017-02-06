@@ -8,12 +8,15 @@
 #include "Engine/Models/Lights/ModelBaseLight.h"
 #include "Engine/Models/GridLines/GridLinesLogic.h"
 #include "Engine/Models/Cameras/CamerasLogic.h"
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 #include "Engine/Models/UndoRedo/OperationHistory.h"
 
 
-namespace bv { namespace model {
+namespace bv { 
+
+class EndUserParamsLogic;
+
+namespace model {
 
 class ModelSceneEditor;
 
@@ -35,7 +38,7 @@ private:
     ModelSceneEditor *		        m_modelSceneEditor;
     SceneVariables                  m_sceneVariables;       // Variables can be queried by editor.
     CamerasLogic                    m_camerasLogic;
-    EndUserParamsLogic              m_endUserParams;
+    EndUserParamsLogic *            m_endUserParams;
     
     OperationHistory                m_history;
 

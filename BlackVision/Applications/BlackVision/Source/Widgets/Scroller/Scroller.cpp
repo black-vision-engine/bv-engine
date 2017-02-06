@@ -9,7 +9,7 @@
 
 #include "Serialization/BV/BVDeserializeContext.h"
 
-#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
 #include "Tools/StringHeplers.h"

@@ -46,13 +46,7 @@ bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, UInt32& idx )
 //
 model::PluginWithIdx			ModelNodeEditor::DeletePlugin				( const std::string & name )
 {
-    auto result = m_node->GetPlugins()->DetachPlugin( name );
-    if( result.first )
-    {
-        result.first = nullptr;
-        return result;
-    }
-    return result;
+    return m_node->GetPlugins()->DetachPlugin( name );
 }
 
 // ********************************

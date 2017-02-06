@@ -3,6 +3,8 @@
 #include "EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
 
+#include "Engine/Models/ModelSceneEditor.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 
@@ -72,81 +74,128 @@ ParameterPtr    GetParameter            ( BVProjectEditor * editor, const Parame
 
 // ***********************
 //
+ParameterPtr    GetParameter                ( model::SceneModel * scene, const ParameterAddress & paramAddress )
+{
+    switch( paramAddress.ParamTargetType )
+    {
+        case ParameterAddress::TargetType::PluginParam:
+            return GetPluginParameter( scene, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamName );
+        case ParameterAddress::TargetType::GlobalEffectParam:
+            return GetGlobalEffectParameter( scene, paramAddress.NodeName, paramAddress.ParamName );
+        case ParameterAddress::TargetType::ResourceParam:
+            return GetResourceParameter( scene, paramAddress.NodeName, paramAddress.PluginName, paramAddress.ParamSubName, paramAddress.ParamName );
+        case ParameterAddress::TargetType::LightParam:
+            return GetLightParameter( scene, paramAddress.Index, paramAddress.ParamName );
+        case ParameterAddress::TargetType::NodeLogicParam:
+            return GetNodeLogicParameter( scene, paramAddress.NodeName, paramAddress.ParamName );
+        case ParameterAddress::TargetType::CameraParam:
+            return GetCameraParameter( scene, paramAddress.Index, paramAddress.ParamName );
+        default:
+            return nullptr;
+    }
+}
+
+// ***********************
+//
 ParameterPtr    GetPluginParameter          ( BVProjectEditor * editor, const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & paramName )
 {
-    auto node = editor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
+    auto scene = editor->GetModelScene( sceneName );
+    return GetPluginParameter( scene.get(), nodePath, pluginName, paramName );
+}
+
+// ***********************
+//
+ParameterPtr    GetPluginParameter          ( model::SceneModel * scene, const std::string & nodePath, const std::string & pluginName, const std::string & paramName )
+{
+    if( scene != nullptr )
     {
-        return nullptr;
+        auto node = scene->GetModelSceneEditor()->GetNode( nodePath );
+        if( node != nullptr )
+        {
+            auto plugin = node->GetPlugin( pluginName );
+            if( plugin != nullptr )
+            {
+                auto param = plugin->GetParameter( paramName );
+                if( param != nullptr )
+                {
+                    return param;
+                }
+            }
+        }
     }
 
-    auto plugin = node->GetPlugin( pluginName );
-    if( plugin == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
-        return nullptr;
-    }
-
-    auto param = plugin->GetParameter( paramName );
-    if( param == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
-        return nullptr;
-    }
-    return param;
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
+    return nullptr;
 }
 
 // ***********************
 //
 ParameterPtr    GetGlobalEffectParameter    ( BVProjectEditor * editor, const std::string & sceneName, const std::string & nodePath, const std::string & paramName )
 {
-    auto node = editor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
+    auto scene = editor->GetModelScene( sceneName );
+    return GetGlobalEffectParameter( scene.get(), nodePath, paramName );
+}
+
+// ***********************
+//
+ParameterPtr    GetGlobalEffectParameter    ( model::SceneModel * scene, const std::string & nodePath, const std::string & paramName )
+{
+    if( scene != nullptr )
     {
-        return nullptr;
+        auto node = scene->GetModelSceneEditor()->GetNode( nodePath );
+        if( node != nullptr )
+        {
+            auto effect = node->GetNodeEffect();
+            if( effect != nullptr )
+            {
+                auto param = effect->GetParameter( paramName );
+                if( param != nullptr )
+                {
+                    return param;
+                }
+            }
+        }
     }
 
-    auto effect = node->GetNodeEffect();
-    if( effect == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], effect not found";
-        return nullptr;
-    }
-
-    auto param = effect->GetParameter( paramName );
-    if( param == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], param [" + paramName + "] not found";
-        return nullptr;
-    }
-    return param;
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], param [" + paramName + "] not found";
+    return nullptr;
 }
 
 // ***********************
 //
 ParameterPtr    GetResourceParameter        ( BVProjectEditor * editor, const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & textureName, const std::string & paramName )
 {
-    auto node = editor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
+    auto scene = editor->GetModelScene( sceneName );
+    return GetResourceParameter( scene.get(), nodePath, pluginName, textureName, paramName );
+}
+
+// ***********************
+//
+ParameterPtr    GetResourceParameter        ( model::SceneModel * scene, const std::string & nodePath, const std::string & pluginName, const std::string & textureName, const std::string & paramName )
+{
+    if( scene != nullptr )
     {
-        return nullptr;
+        auto node = scene->GetModelSceneEditor()->GetNode( nodePath );
+        if( node != nullptr )
+        {
+            auto plugin = node->GetPlugin( pluginName );
+            if( plugin != nullptr )
+            {
+                auto resourceModel = plugin->GetResourceStateModel( textureName );
+                if( resourceModel != nullptr )
+                {
+                    auto param = resourceModel->GetParameter( paramName );
+                    if( param != nullptr )
+                    {
+                        return param;
+                    }
+                }
+            }
+        }
     }
 
-    auto plugin = node->GetPlugin( pluginName );
-    if( plugin == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
-        return nullptr;
-    }
-
-    auto resourceModel = plugin->GetResourceStateModel( textureName );
-    if( resourceModel == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
-        return nullptr;
-    }
-
-    return resourceModel->GetParameter( paramName );
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], plugin [" + pluginName + "], texture [" + textureName + "], param [" + paramName + "] not found";
+    return nullptr;
 }
 
 // ***********************
@@ -154,16 +203,27 @@ ParameterPtr    GetResourceParameter        ( BVProjectEditor * editor, const st
 ParameterPtr    GetLightParameter           ( BVProjectEditor * editor, const std::string & sceneName, UInt32 lightIndex, const std::string & paramName )
 {
     auto scene = editor->GetModelScene( sceneName );
-    if( scene )
+    return GetLightParameter( scene.get(), lightIndex, paramName );
+}
+
+// ***********************
+//
+ParameterPtr    GetLightParameter           ( model::SceneModel * scene, UInt32 lightIndex, const std::string & paramName )
+{
+    if( scene != nullptr )
     {
         auto light = scene->GetLight( lightIndex );
         if( light )
         {
-            return light->GetParameter( paramName );
+            auto param = light->GetParameter( paramName );
+            if( param != nullptr )
+            {
+                return param;
+            }
         }
     }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: not found";
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( lightIndex ) + "], param [" + paramName + "] not found";
     return nullptr;
 }
 
@@ -171,21 +231,32 @@ ParameterPtr    GetLightParameter           ( BVProjectEditor * editor, const st
 //
 ParameterPtr    GetNodeLogicParameter       ( BVProjectEditor * editor, const std::string & sceneName, const std::string & nodePath, const std::string & paramName )
 {
-    auto node = editor->GetNode( sceneName, nodePath );
-    if( node == nullptr )
+    auto scene = editor->GetModelScene( sceneName );
+    return GetNodeLogicParameter( scene.get(), nodePath, paramName );
+}
+
+// ***********************
+//
+ParameterPtr    GetNodeLogicParameter       ( model::SceneModel * scene, const std::string & nodePath, const std::string & paramName )
+{
+    if( scene != nullptr )
     {
-        return nullptr;
+        auto node = scene->GetModelSceneEditor()->GetNode( nodePath );
+        if( node != nullptr )
+        {
+            auto logic = node->GetLogic();
+            if( logic )
+            {
+                auto param = logic->GetParameter( paramName );
+                if( param != nullptr )
+                {
+                    return param;
+                }
+            }
+        }
     }
 
-    auto logic = node->GetLogic();
-    if( logic )
-    {
-        auto param = logic->GetParameter( paramName );
-		if (param != nullptr)
-			return param;
-    }
-
-    LOG_MESSAGE( SeverityLevel::warning ) << "Node logic parameter not found";
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "],  param [" + paramName + "] not found";
     return nullptr;
 }
 
@@ -194,18 +265,28 @@ ParameterPtr    GetNodeLogicParameter       ( BVProjectEditor * editor, const st
 ParameterPtr    GetCameraParameter          ( BVProjectEditor * editor, const std::string & sceneName, UInt32 cameraIndex, const std::string & paramName )
 {
     auto scene = editor->GetModelScene( sceneName );
-    if( scene )
+    return GetCameraParameter( scene.get(), cameraIndex, paramName );
+}
+
+// ***********************
+//
+ParameterPtr    GetCameraParameter          ( model::SceneModel * scene, UInt32 cameraIndex, const std::string & paramName )
+{
+    if( scene != nullptr )
     {
         auto camera = scene->GetCamerasLogic().GetCamera( cameraIndex );
         if( camera )
         {
-            return camera->GetParameter( paramName );
+            auto param = camera->GetParameter( paramName );
+            if( param != nullptr )
+            {
+                return param;
+            }
         }
     }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Camera parameter not found";
+    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( cameraIndex ) + "], param [" + paramName + "] not found";
     return nullptr;
 }
-
 
 } //bv
