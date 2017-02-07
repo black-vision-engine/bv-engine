@@ -2071,6 +2071,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\OutputCompositeVideo.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Preview\PreviewHandler.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Preview</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5378,6 +5381,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\OutputCompositeVideo.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Preview\PreviewHandler.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Preview</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
