@@ -16,130 +16,99 @@
 
 namespace bv { namespace model {
 
-    // ************************************************************************* DESCRIPTOR *************************************************************************
-
-    // *******************************
-    //
-    DefaultVideoInputPluginDesc::DefaultVideoInputPluginDesc                          ()
-        : BasePluginDescriptor( UID(), "video input", "tx" )
-    {
-    }
-
-    // *******************************
-    //
-    IPluginPtr              DefaultVideoInputPluginDesc::CreatePlugin              ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
-    {
-        return CreatePluginTyped< DefaultVideoInputPlugin >( name, prev, timeEvaluator );
-    }
-
-    // *******************************
-    //
-    DefaultPluginParamValModelPtr   DefaultVideoInputPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
-    {
-        //Create all models
-        DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-        DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-        DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
-
-        //Create all parameters and evaluators
-        SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-        SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-
-        ParamFloatPtr  paramVideoInputSource = ParametersFactory::CreateParameterFloat( "source", timeEvaluator );
-
-        //Register all parameters and evaloators in models
-        vsModel->RegisterAll( trTxEvaluator );
-        psModel->RegisterAll( alphaEvaluator );
-       
-        psModel->AddParameter( paramVideoInputSource );
-
-        //Set models structure
-        model->SetVertexShaderChannelModel( vsModel );
-        model->SetPixelShaderChannelModel( psModel );
-
-        //Set default values of all parameters
-        alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-        trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-        trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
-
-        //FIXME: integer parmeters should be used here
-        paramVideoInputSource->SetVal( (float) 0.f, TimeType( 0.f ) );
-
-        return model;
-    }
-
-    // *******************************
-    //
-    std::string             DefaultVideoInputPluginDesc::UID                       ()
-    {
-        return "DEFAULT_VIDEOINPUT";
-    }
-
-    // *******************************
-    //
-    std::string             DefaultVideoInputPluginDesc::VertexShaderSource        ()
-    {
-        //return "../dep/media/shaders/DefaultVideoInput.vert";
-        return NULL;
-    }
-
-    // *******************************
-    //
-    std::string             DefaultVideoInputPluginDesc::PixelShaderSource         ()
-    {
-        //return "../dep/media/shaders/DefaultVideoInput.frag";
-        return NULL;
-    }
-
-    // *******************************
-    //
-    std::string             DefaultVideoInputPluginDesc::TextureName               ()
-    {
-        return "Tex0";
-    }
-
-    // ************************************************************************* PLUGIN *************************************************************************
-
-    // *************************************
-    // 
-    DefaultVideoInputPlugin::DefaultVideoInputPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-        : DefaultTexturePlugin( name, uid, prev, model )
-    {
-        //auto txData = m_psc->GetTexturesDataImpl();
-
-        //auto vi = new DefaultVideoInput( 10, 10, 1.f ); // FIXME
-        //txData->AddTexture( vi->GetTexture() );
-        //vis.push_back( vi );
-    }
 
 
-    DefaultVideoInputPlugin::~DefaultVideoInputPlugin(void)
-    {
-    }
+// ************************************************************************* DESCRIPTOR *************************************************************************
+
+// *******************************
+//
+DefaultVideoInputPluginDesc::DefaultVideoInputPluginDesc                          ()
+    : DefaultTexturePluginDesc( UID(), "video input", "tx" )
+{}
+
+// *******************************
+//
+IPluginPtr              DefaultVideoInputPluginDesc::CreatePlugin              ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+{
+    return CreatePluginTyped< DefaultVideoInputPlugin >( name, prev, timeEvaluator );
+}
+
+// *******************************
+//
+DefaultPluginParamValModelPtr   DefaultVideoInputPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+{
+	auto model = DefaultTexturePluginDesc::CreateDefaultModel( timeEvaluator );
+
+	ModelHelper h( timeEvaluator, model );
+
+	h.SetOrCreatePSModel();
+	h.AddSimpleParam( "source", 0.0f );		//FIXME: integer parmeters should be used here
+
+    return model;
+}
+
+// *******************************
+//
+std::string             DefaultVideoInputPluginDesc::UID                       ()
+{
+    return "DEFAULT_VIDEOINPUT";
+}
+
+// *******************************
+//
+std::string             DefaultVideoInputPluginDesc::VertexShaderSource        ()
+{
+    //return "../dep/media/shaders/DefaultVideoInput.vert";
+    return NULL;
+}
+
+// *******************************
+//
+std::string             DefaultVideoInputPluginDesc::PixelShaderSource         ()
+{
+    //return "../dep/media/shaders/DefaultVideoInput.frag";
+    return NULL;
+}
+
+// *******************************
+//
+std::string             DefaultVideoInputPluginDesc::TextureName               ()
+{
+    return "Tex0";
+}
+
+// ************************************************************************* PLUGIN *************************************************************************
+
+// *************************************
+// 
+DefaultVideoInputPlugin::DefaultVideoInputPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+    : DefaultTexturePlugin( name, uid, prev, model )
+{}
+
+// *************************************
+// 
+DefaultVideoInputPlugin::~DefaultVideoInputPlugin(void)
+{}
 
 
-    int                                     DefaultVideoInputPlugin::GetSourceNumber()
-    {
-        auto param = GetParameter( "source" );
-        float fSource = QueryTypedParam< ParamFloatPtr > ( param )->Evaluate();
-        return (int) fSource;
-    }
+// *************************************
+// 
+int									DefaultVideoInputPlugin::GetSourceNumber()
+{
+    auto param = GetParameter( "source" );
+    float fSource = QueryTypedParam< ParamFloatPtr > ( param )->Evaluate();
+    return (int) fSource;
+}
 
+// *************************************
+// 
+void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
+{
+	DefaultTexturePlugin::Update( t );
 
-    void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
-    {
-		BasePlugin::Update( t );
-
-        HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
-
-        //desc.Update();
-
-        auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() == 1 );
-
-        //int source = GetSourceNumber();
-        //desc.SetCurrentInput( source );
-    }
+    auto txData = m_psc->GetTexturesDataImpl();
+    assert( txData->GetTextures().size() == 1 );
+}
 
 // *************************************
 // 
