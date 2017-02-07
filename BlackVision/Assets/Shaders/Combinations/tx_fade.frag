@@ -24,6 +24,7 @@ float	ComputeFadeAlpha();
 void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
+	col.rgb = col.rgb * col.a;
 	
 	float finalAlpha = alpha * ComputeFadeAlpha();
 	FragColor = col * finalAlpha;

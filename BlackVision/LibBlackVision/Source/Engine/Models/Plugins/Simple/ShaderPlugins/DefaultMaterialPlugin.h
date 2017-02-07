@@ -30,10 +30,8 @@ class DefaultMaterialPlugin : public BasePlugin
 {
 public:
     
-    struct PARAM {
-
-        static const std::string    BLEND_ENABLE;
-
+    struct PARAM
+    {
         static const std::string    DIFFUSE;
         static const std::string    AMBIENT;
         static const std::string    SPECULAR;
@@ -46,8 +44,6 @@ private:
 
     DefaultPixelShaderChannelPtr            m_pixelShaderChannel;
     DefaultPluginParamValModelPtr           m_paramValModel;
-
-	ValueParamState< bool >					m_blendEnabled;
 
 public:
 
