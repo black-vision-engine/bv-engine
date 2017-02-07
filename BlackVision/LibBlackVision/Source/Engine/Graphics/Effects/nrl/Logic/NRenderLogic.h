@@ -34,7 +34,7 @@ public:
 
 public:
 
-    static NRenderLogic *           Create                  ( const NRenderLogicDesc & desc );
+    static NRenderLogic *           Create                  ( NRenderLogicDesc & desc );
 
 };
 

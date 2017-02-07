@@ -3,7 +3,7 @@
 #include "Output.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputFactory.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputFactory.h"
 
 
 namespace bv { namespace nrl {

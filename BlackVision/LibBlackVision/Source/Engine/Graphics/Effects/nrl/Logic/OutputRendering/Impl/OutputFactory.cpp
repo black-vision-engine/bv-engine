@@ -2,11 +2,6 @@
 
 #include "OutputFactory.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputPreview.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputVideoContainer.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputStreamSharedMem.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputScreenshot.h"
-
 
 namespace bv { namespace nrl {
 
@@ -27,16 +22,7 @@ Output *    CreateOutput( CustomOutputType cot )
     switch( cot )
     {
         case CustomOutputType::COT_PREVIEW:
-        {
-            auto res = new OutputPreview( widthHD, heightHD );
-            
-            assert( false );
-            // res->Enable();
-
-            return res;
-        }
         case CustomOutputType::COT_VIDEO:
-            return new OutputVideoContainer();
         case CustomOutputType::COT_STREAM:
             return nullptr;
             // return new OutputStreamSharedMem( widthSD, heightSD );

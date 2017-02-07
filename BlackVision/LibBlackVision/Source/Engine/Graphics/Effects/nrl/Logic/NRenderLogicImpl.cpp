@@ -47,7 +47,7 @@ void            NRenderLogicImpl::HandleFrame       ( Renderer * renderer, audio
     renderer->PostDraw();
 
     // 5. Handle frame data rendered during this call and all logic associated with custom outputs
-    m_outputLogic->ProcessFrameData( context( m_state ) );
+    m_outputLogic->ProcessFrameData( context( m_state ), m_renderedChannelsData );
 }
 
 // **************************

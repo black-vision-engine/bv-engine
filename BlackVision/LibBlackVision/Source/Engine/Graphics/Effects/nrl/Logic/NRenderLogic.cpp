@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "NRenderLogic.h"
+
 #include "Engine\Graphics\Effects\nrl\Logic\NRenderLogicImpl.h"
 
 
@@ -14,7 +15,7 @@ NRenderLogic::~NRenderLogic                     ()
 
 // **************************
 //
-NRenderLogic *           NRenderLogic::Create   ( const NRenderLogicDesc & desc )
+NRenderLogic *           NRenderLogic::Create   ( NRenderLogicDesc & desc )
 {
     return NRenderLogicImpl::Create( desc );
 }
