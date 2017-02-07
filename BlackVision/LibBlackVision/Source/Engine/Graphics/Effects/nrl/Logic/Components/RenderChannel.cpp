@@ -108,5 +108,12 @@ Texture2DPtr            RenderChannel::ReadColorTexture                 ( Render
     return m_cachedReadbackTexture;
 }
 
+// **************************
+//
+void                    RenderChannel::InvalidateCachedTexture          () const
+{
+    m_cachedReadbackUpToDate = false;
+}
+
 } //bv
 } //nrl

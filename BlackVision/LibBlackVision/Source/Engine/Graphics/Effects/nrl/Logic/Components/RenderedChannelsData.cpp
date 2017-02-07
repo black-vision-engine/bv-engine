@@ -59,31 +59,18 @@ const RenderTarget *		RenderedChannelsData::GetActiveRenderTarget     ( RenderCh
 //
 void                        RenderedChannelsData::InvalidateCachedTexture   ( RenderChannelType rct )
 {
-    m_cachedReadbackUpToDate[ ( unsigned int) rct ] = false;
+    auto channel = GetRenderChannel( rct );
+
+    channel->InvalidateCachedTexture();
 }
 
 // **************************
 //
 Texture2DPtr                RenderedChannelsData::ReadColorTexture          ( Renderer * renderer, RenderChannelType rct )
 {
-    unsigned int idx = (unsigned int) rct;
+    auto channel = GetRenderChannel( rct );
 
-    auto & tex = m_cachedReadbackTextures[ idx ];
-
-    if( !m_cachedReadbackUpToDate[ idx ] )
-    {
-        auto rt = GetActiveRenderTarget( rct );
-
-        {
-            // FIXME: nrl - ask Witek about this one
-	        //HPROFILER_SECTION( "ReadColorTexture", PROFILER_THREAD1 );
-            renderer->ReadColorTexture( 0, rt, tex );
-        }
-
-        m_cachedReadbackUpToDate[ idx ] = true;
-    }
-
-    return tex;
+    return channel->ReadColorTexture( renderer );
 }
 
 // **************************

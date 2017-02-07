@@ -54,6 +54,7 @@ public:
     void                    SetActiveFlag               ( bool isActive );
 
     Texture2DPtr            ReadColorTexture            ( Renderer * renderer ) const;
+    void                    InvalidateCachedTexture     () const;
 
 };
 
