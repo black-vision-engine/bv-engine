@@ -36,7 +36,11 @@ class DefaultTexturePlugin : public BasePlugin
 {
 public:
 
-    static const std::string        PARAM_ALPHA;
+	struct PARAM
+	{
+		static const std::string        ALPHA;
+        static const std::string		TX_MAT;
+    };
 
 protected:
 

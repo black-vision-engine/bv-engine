@@ -45,6 +45,8 @@ public:
     static const std::string        PARAM_COLOR1;
     static const std::string        PARAM_COLOR2;
 
+    static const std::string        TX_MAT;
+
 private:
 
     DefaultPixelShaderChannelPtr    m_psc;

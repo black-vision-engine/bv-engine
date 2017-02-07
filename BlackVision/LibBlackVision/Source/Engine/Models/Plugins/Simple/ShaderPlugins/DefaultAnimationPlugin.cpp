@@ -26,6 +26,8 @@ const std::string        DefaultAnimationPlugin::PARAM_FRAME_NUM      = "frameNu
 const std::string        DefaultAnimationPlugin::PARAM_AUTO_PLAY      = "autoPlay";
 const std::string        DefaultAnimationPlugin::PARAM_FPS            = "fps";
 
+const std::string        DefaultAnimationPlugin::PARAM_TX_MAT         = "txMat";
+
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -51,12 +53,7 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
     //Create all models
     auto model  = helper.GetModel();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
-    //Create all parameters and evaluators
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
-    
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
 	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
@@ -69,17 +66,11 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FRAME_NUM, 0.f, true );    // FIXME: integer parmeters should be used here
 
 
-    vsModel->RegisterAll( trTxEvaluator );
+    helper.SetOrCreateVSModel();
+    helper.AddTransformParam( DefaultAnimationPlugin::PARAM_TX_MAT, true );
 
-    model->SetVertexShaderChannelModel( vsModel );
-
-    //Set default values of all parameters
-    //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
-
-    //FIXME: integer parmeters should be used here
-    //paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultAnimationPlugin::PARAM_TX_MAT );
+    SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
     return model;
 }
@@ -219,7 +210,7 @@ void                                DefaultAnimationPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, DefaultAnimationPlugin::PARAM_TX_MAT );
 
     FrameUpdate();
 

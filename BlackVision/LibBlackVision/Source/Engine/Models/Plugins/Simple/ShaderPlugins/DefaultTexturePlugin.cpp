@@ -20,7 +20,8 @@
 namespace bv { namespace model {
 
 
-const std::string        DefaultTexturePlugin::PARAM_ALPHA          = "alpha";
+const std::string        DefaultTexturePlugin::PARAM::ALPHA         = "alpha";
+const std::string        DefaultTexturePlugin::PARAM::TX_MAT        = "txMat";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -54,25 +55,18 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     auto model  = helper.GetModel();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
-    //Create all parameters and evaluators
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
 	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
 
     helper.SetOrCreatePSModel();
-    helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true );
+    helper.AddSimpleParam( DefaultTexturePlugin::PARAM::ALPHA, 1.f, true );
 
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
+    helper.SetOrCreateVSModel();
+    helper.AddTransformParam( DefaultTexturePlugin::PARAM::TX_MAT, true );
 
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-
-    //Set default values of all parameters
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultTexturePlugin::PARAM::TX_MAT );
+    SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
     return model;
 }
@@ -205,7 +199,7 @@ void                                DefaultTexturePlugin::Update                
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, DefaultTexturePlugin::PARAM::TX_MAT );
 
 	BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_blendMode );
 

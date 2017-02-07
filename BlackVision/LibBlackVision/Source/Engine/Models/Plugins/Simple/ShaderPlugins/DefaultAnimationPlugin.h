@@ -40,6 +40,8 @@ public:
     static const std::string        PARAM_ALPHA;
     static const std::string        PARAM_FRAME_NUM;
 
+    static const std::string        PARAM_TX_MAT;
+
 private:
 
     DefaultPixelShaderChannelPtr    m_psc;

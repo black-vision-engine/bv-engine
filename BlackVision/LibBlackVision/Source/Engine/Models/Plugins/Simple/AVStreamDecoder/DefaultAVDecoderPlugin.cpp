@@ -260,7 +260,7 @@ void                                DefaultAVDecoderPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, DefaultAVDecoderPlugin::PARAM::TX_MAT );
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
