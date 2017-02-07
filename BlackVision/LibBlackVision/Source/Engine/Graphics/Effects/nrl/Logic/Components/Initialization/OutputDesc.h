@@ -45,7 +45,7 @@ public:
 
                                 OutputDesc                  ();
                                     
-    TOutputPropertiesVector &   AccessReasonAllowedAce      ();
+    TOutputPropertiesVector &   AccessOutputProperties      ();
 
     unsigned int                GetWidth                    () const;
     unsigned int                GetHeight                   () const;

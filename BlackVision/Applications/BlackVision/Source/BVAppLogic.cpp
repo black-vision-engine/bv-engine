@@ -13,7 +13,6 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 // FIXME: nrl - render logic replacement
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
@@ -46,6 +45,8 @@
 
 #include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
 #include "EndUserAPI/JsonCommandsListener/JsonCommandsListener.h"
+
+#include "Initialization/RenderLogicInitializer.h"
 
 #include <thread>
 #include <chrono>
@@ -128,7 +129,9 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     
     // FIXME: nrl - pass all those arguments in a struct
     // m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
-    m_renderLogic = nrl::NRenderLogic::Create( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
+    // FIXME: prepare descriptor here
+
+    m_renderLogic = nrl::RenderLogicInitializer::CreateInstance( DefaultConfig );
 
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
