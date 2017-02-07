@@ -9,7 +9,7 @@ namespace bv { namespace nrl {
 //
 RenderedChannelsDataDesc::RenderedChannelsDataDesc()
     : m_channelsEnabledState( (unsigned int) RenderChannelType::RCT_TOTAL )
-    , m_numTrackedRenderTargets( 2 ) // FIXME: this default value may be read from some other place
+    , m_numTrackedRenderTargets( 2 ) // FIXME: nrl - this default value may be read from some other place
 {
     for ( auto it = m_channelsEnabledState.begin(); it != m_channelsEnabledState.end(); ++it )
     {
@@ -19,7 +19,7 @@ RenderedChannelsDataDesc::RenderedChannelsDataDesc()
 
 // **************************
 //
-bool            RenderedChannelsDataDesc::IsEnabled   ( RenderChannelType rct )
+bool            RenderedChannelsDataDesc::IsEnabled   ( RenderChannelType rct ) const
 {
     return m_channelsEnabledState[ (unsigned int) rct ];
 }

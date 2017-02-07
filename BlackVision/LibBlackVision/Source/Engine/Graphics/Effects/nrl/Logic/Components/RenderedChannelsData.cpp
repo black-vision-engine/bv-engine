@@ -127,14 +127,25 @@ void                    RenderedChannelsData::SetContainsValidData          ( Re
 }
 
 // **************************
-// FIXME: implement
+//
 RenderedChannelsData *  RenderedChannelsData::Create                        ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator )
 {
-    // return new RenderedChannelsData();
-    { desc; }
-    { allocator; }
+    RenderChannelType mapping[] = { RenderChannelType::RCT_OUTPUT_1, RenderChannelType::RCT_OUTPUT_2, RenderChannelType::RCT_OUTPUT_3, RenderChannelType::RCT_OUTPUT_4 };
 
-    return nullptr;
+    unsigned int numElts = (unsigned int) RenderChannelType::RCT_TOTAL;
+
+    assert( (unsigned int) RenderChannelType::RCT_OUTPUT_4 == ( (unsigned int) RenderChannelType::RCT_TOTAL ) - 1 );
+
+    auto res = new RenderedChannelsData( allocator, desc.GetNumTrackedRenderTargets() );
+
+    for( unsigned int i = 0; i < numElts; ++i )
+    {
+        auto outputType = mapping[ i ];
+
+        res->SetIsActive( outputType, desc.IsEnabled( outputType ) );
+    }
+
+    return res;
 }
 
 } // nrl

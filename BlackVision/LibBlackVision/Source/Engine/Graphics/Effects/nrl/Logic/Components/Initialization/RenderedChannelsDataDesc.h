@@ -19,7 +19,7 @@ public:
 
                     RenderedChannelsDataDesc    ();
 
-    bool            IsEnabled                   ( RenderChannelType rct );
+    bool            IsEnabled                   ( RenderChannelType rct ) const;
 
     void            SetEnabled                  ( RenderChannelType rct );
     void            SetDisabled                 ( RenderChannelType rct );
