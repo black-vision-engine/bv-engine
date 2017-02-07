@@ -421,11 +421,11 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream">
       <UniqueIdentifier>{c91b963c-aee2-415e-93ee-485578af53bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Video">
-      <UniqueIdentifier>{458b344c-c3c6-4e55-b420-8471c3994ae6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Preview">
       <UniqueIdentifier>{8b98a9ab-f4af-490c-82b3-4a5a609f77ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs">
+      <UniqueIdentifier>{8f32b9e2-a934-4161-aaef-9fc3f8a45e7d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2067,6 +2067,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\OutputCompositeVideo.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5372,6 +5375,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\OutputCompositeVideo.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
