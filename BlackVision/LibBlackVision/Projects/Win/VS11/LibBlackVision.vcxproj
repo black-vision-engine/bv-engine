@@ -297,13 +297,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\NNodeEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogicImpl.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputFactory.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputInstance.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputPreview.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputScreenshot.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputStreamSharedMem.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideoContainer.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideo.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputInstance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Output.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NFullscreenEffectComponentState.cpp" />
@@ -633,9 +629,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderLogicCore.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderedChannelsData.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputFactory.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputInstance.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideoContainer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputInstance.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -784,10 +780,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\NNodeEffectRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NRenderLogicImpl.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputPreview.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputScreenshot.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputStreamSharedMem.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputVideo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Output.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NFullscreenEffectComponentState.h" />

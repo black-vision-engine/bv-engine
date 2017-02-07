@@ -29,7 +29,7 @@ OutputPreview::~OutputPreview           ()
 
 // *********************************
 //
-void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderResult * input )
+void    OutputPreview::ProcessFrameData ( NRenderContext * ctx, RenderedChannelsData * input )
 {
     // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
     UpdateEffectValues();

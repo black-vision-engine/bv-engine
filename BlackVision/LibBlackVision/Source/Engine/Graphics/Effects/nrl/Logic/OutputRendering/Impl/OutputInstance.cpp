@@ -2,6 +2,8 @@
 
 #include "OutputInstance.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/FrameDataHandler.h"
+
 
 namespace bv { namespace nrl {
 
@@ -38,65 +40,36 @@ void    OutputInstance::ProcessFrameData                ( NRenderContext * ctx, 
 
 // *********************************
 //
-bool    Output::IsEnabled                                   () const
+bool    OutputInstance::IsEnabled                       () const
 {
     return m_isEnabled;
 }
 
 // *********************************
 //
-void    Output::Enable                                      ()
+void    OutputInstance::Enable                          ()
 {
     m_isEnabled = true;
 }
 
 // *********************************
 //
-void    Output::Disable                                     ()
+void    OutputInstance::Disable                         ()
 {
     m_isEnabled = false;
 }
 
 // *********************************
 //
-NOutputState &  Output::AccessOutputState                   ()
+NOutputState &  OutputInstance::AccessOutputState       ()
 {
     return m_state;
 }
 
 // *********************************
 //
-RenderChannelType   Output::GetActiveRenderChannel          () const
+void            OutputInstance::SyncHandlerState        ()
 {
-    return m_state.GetActiveRenderChannel();
-}
-
-// *********************************
-//
-unsigned int        OutputInstance::GetWidth                () const
-{
-    return m_state.GetWidth();
-}
-
-// *********************************
-//
-unsigned int        OutputInstance::GetHeight               () const
-{
-    return m_state.GetHeight();
-}
-
-// *********************************
-//
-unsigned int        OutputInstance::GetChannelMapping       () const
-{
-    return m_state.GetChannelMapping();
-}
-
-// *********************************
-//
-glm::vec4           OutputInstance::GetChannelMask          () const
-{
-    return m_state.GetChannelMask();
 }
 
 } //nrl
