@@ -16,8 +16,6 @@ namespace bv { namespace nrl {
 RenderedChannelsData::RenderedChannelsData                                          ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType )
     : m_renderChannels( (unsigned int) RenderChannelType::RCT_TOTAL )
     , m_containsValidData( (unsigned int) RenderChannelType::RCT_TOTAL )
-    , m_cachedReadbackTextures( (unsigned int) RenderChannelType::RCT_TOTAL )
-    , m_cachedReadbackUpToDate( (unsigned int) RenderChannelType::RCT_TOTAL )
 {
     for( unsigned int i = 0; i < m_renderChannels.size(); ++i )
     {

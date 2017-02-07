@@ -11,8 +11,10 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-RenderChannel::RenderChannel                                    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets )
+RenderChannel::RenderChannel                                            ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets )
     : m_activeRenderTargetIdx( 0 )
+    , m_cachedReadbackTexture( nullptr )
+    , m_cachedReadbackUpToDate( false )
     , m_isActive( false )
 {
     for( unsigned int i = 0; i < numTrackedRenderTargets; ++i )
@@ -25,7 +27,7 @@ RenderChannel::RenderChannel                                    ( RenderTargetSt
 
 // **************************
 //
-RenderChannel::~RenderChannel                                   ()
+RenderChannel::~RenderChannel                                           ()
 {
     for( auto rt : m_renderTargets )
     {
@@ -35,28 +37,28 @@ RenderChannel::~RenderChannel                                   ()
 
 // **************************
 //
-unsigned int                RenderChannel::GetNumRenderTargets        () const
+unsigned int                RenderChannel::GetNumRenderTargets          () const
 {
     return (unsigned int) m_renderTargets.size();
 }
 
 // **************************
 //
-const bv::RenderTarget *    RenderChannel::GetActiveRenderTarget      () const
+const bv::RenderTarget *    RenderChannel::GetActiveRenderTarget        () const
 {
     return GetRenderTarget( 0 );
 }
 
 // **************************
 //
-const bv::RenderTarget * RenderChannel::GetPreviousRenderTarget        () const
+const bv::RenderTarget * RenderChannel::GetPreviousRenderTarget         () const
 {
     return GetRenderTarget( -1 );
 }
 
 // **************************
 //
-const RenderTarget *    RenderChannel::GetRenderTarget                ( int reversedIdx ) const
+const RenderTarget *    RenderChannel::GetRenderTarget                  ( int reversedIdx ) const
 {
     assert( (-reversedIdx) < (int) m_renderTargets.size() );
 
@@ -67,23 +69,43 @@ const RenderTarget *    RenderChannel::GetRenderTarget                ( int reve
 
 // **************************
 //
-void                    RenderChannel::UpdateActiveRenderTargetIdx    ()
+void                    RenderChannel::UpdateActiveRenderTargetIdx      ()
 {
     m_activeRenderTargetIdx = ( m_activeRenderTargetIdx + 1 ) % GetNumRenderTargets();
 }
 
 // **************************
 //
-bool                    RenderChannel::IsActive                       () const
+bool                    RenderChannel::IsActive                         () const
 {
     return m_isActive;
 }
 
 // **************************
 //
-void                    RenderChannel::SetActiveFlag                  ( bool isActive )
+void                    RenderChannel::SetActiveFlag                    ( bool isActive )
 {
     m_isActive = isActive;
+}
+
+// **************************
+//
+Texture2DPtr            RenderChannel::ReadColorTexture                 ( Renderer * renderer ) const
+{
+    if( !m_cachedReadbackUpToDate )
+    {
+        auto rt = GetActiveRenderTarget();
+
+        {
+            // FIXME: nrl - ask Witek about this one
+	        //HPROFILER_SECTION( "ReadColorTexture", PROFILER_THREAD1 );
+            renderer->ReadColorTexture( 0, rt, m_cachedReadbackTexture );
+        }
+
+        m_cachedReadbackUpToDate = true;
+    }
+
+    return m_cachedReadbackTexture;
 }
 
 } //bv
