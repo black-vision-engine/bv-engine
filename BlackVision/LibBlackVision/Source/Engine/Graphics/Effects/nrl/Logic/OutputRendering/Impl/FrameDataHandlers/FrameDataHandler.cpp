@@ -5,6 +5,11 @@
 
 namespace bv { namespace nrl {
 
+// *********************************
+//
+FrameDataHandler::~FrameDataHandler   ()
+{
+}
 
 } //nrl
 } //bv

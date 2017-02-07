@@ -9,7 +9,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/Impl/NFullscreenEffectHelpers.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 
 
 namespace bv { namespace nrl {

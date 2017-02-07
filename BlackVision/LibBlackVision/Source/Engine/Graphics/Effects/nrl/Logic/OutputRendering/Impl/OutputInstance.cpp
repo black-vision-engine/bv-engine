@@ -2,6 +2,7 @@
 
 #include "OutputInstance.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/FrameDataHandler.h"
 
 
@@ -31,10 +32,12 @@ void    OutputInstance::ProcessFrameData                ( NRenderContext * ctx, 
     {
         SyncHandlerState();
 
-        auto rct = m_state.GetActiveRenderChannel();
+        auto rct = m_state.GetActiveRenderChannelType();
         assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
     
-        m_frameDataHandler->HandleFrameData( ctx, input->GetActiveRenderChannel( rct ) );
+        auto renderChannel = input->GetRenderChannel( rct );
+
+        m_frameDataHandler->HandleFrameData( m_state, ctx,  renderChannel );
     }
 }
 
@@ -70,6 +73,16 @@ NOutputState &  OutputInstance::AccessOutputState       ()
 //
 void            OutputInstance::SyncHandlerState        ()
 {
+    auto state      = m_frameDataHandler->GetInternalFSEState();
+    
+    auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
+    auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
+
+    auto mapping    = m_state.GetChannelMapping();
+    auto mask       = m_state.GetChannelMask();
+
+    QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
+    QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
 }
 
 } //nrl
