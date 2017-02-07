@@ -65,7 +65,7 @@ void             RenderLogicInitializer::InitializeDefaultPrv( OutputDesc & desc
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_PREVIEW );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-
+    desc.SetEnabled( true );
     // FIXME: nrl - append additional properties if necessary
 }
 
@@ -81,6 +81,7 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
+    desc.SetEnabled( false );
 
     // FIXME: nrl - append additional properties if necessary
 }
@@ -97,6 +98,7 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_VIDEO );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
+    desc.SetEnabled( false );
 
     // FIXME: nrl - append additional properties representing each separate video output
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig

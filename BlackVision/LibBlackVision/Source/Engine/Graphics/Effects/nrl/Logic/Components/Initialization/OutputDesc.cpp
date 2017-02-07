@@ -60,6 +60,13 @@ CustomOutputType            OutputDesc::GetRepresentedOutputType            () c
 
 // **************************
 //
+bool                        OutputDesc::IsEnabled                           () const
+{
+    return m_isEnabled;
+}
+
+// **************************
+//
 void                        OutputDesc::SetWidth                            ( unsigned int width )
 {
     m_width = width;
@@ -91,6 +98,13 @@ void                        OutputDesc::SetOutputChannelMapping             ( Ou
 void                        OutputDesc::SetRepresentedOutputType            ( CustomOutputType cot )
 {
     m_outputType = cot;
+}
+
+// **************************
+//
+void                        OutputDesc::SetEnabled                          ( bool isEnabled )
+{
+    m_isEnabled = isEnabled;
 }
 
 } //nrl

@@ -41,6 +41,8 @@ private:
 
     CustomOutputType        m_outputType;
 
+    bool                    m_isEnabled;
+
 public:
 
                                 OutputDesc                  ();
@@ -56,15 +58,18 @@ public:
 
     CustomOutputType            GetRepresentedOutputType    () const;
 
+    bool                        IsEnabled                   () const;
+
     void                        SetWidth                    ( unsigned int width );
     void                        SetHeight                   ( unsigned int height );
-
+    
     void                        SetSelectedRenderedChannel  ( RenderChannelType rct );
     
     void                        SetOutputChannelMapping     ( OutputChannelMapping ocm );
 
     void                        SetRepresentedOutputType    ( CustomOutputType cot );
 
+    void                        SetEnabled                  ( bool isEnabled );
     /*
     <property name="RenderChannels">
         <property name="RenderChannel_1" value="enabled" />
