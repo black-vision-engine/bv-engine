@@ -9,17 +9,8 @@ class RenderTarget;
     
 namespace nrl {
 
-enum class CustomOutputType : unsigned int
-{
-    COT_PREVIEW = 0,
-    COT_VIDEO,
-    COT_STREAM_SHM,
-    COT_SCREENSHOT,
 
-    COT_TOTAL
-};
-
-class RenderResult;
+class RenderedChannelsData;
 class NRenderContext;
 class NFullscreenEffect;
 
@@ -36,10 +27,10 @@ private:
 
 public:
 
-                        Output                  ( unsigned int width, unsigned int height ); // FIXME: nrl - pass resolution related parameters in a more generic way (config descriptor of some sort)
-    virtual             ~Output                 ();
+                        Output                  ( unsigned int width, unsigned int height );
+                        ~Output                 ();
 
-    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) = 0;
+    void                ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * input );
 
     bool                IsEnabled               () const;
     void                Enable                  ();
@@ -47,15 +38,8 @@ public:
 
     NOutputState &      AccessOutputState       ();
 
-    // FIXME: nrl - convenience method, but unfortunately not a generic one
-    RenderChannelType   GetActiveRenderChannel  () const;
-    void                SetActiveRenderChannel  ( RenderChannelType rct );
-
     unsigned int        GetWidth                () const;
     unsigned int        GetHeight               () const;
-
-    unsigned int        GetChannelMapping       () const;
-    glm::vec4           GetChannelMask          () const;
 
 };
 

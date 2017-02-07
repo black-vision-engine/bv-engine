@@ -3,6 +3,7 @@
 #include "Output.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputFactory.h"
 
 
 namespace bv { namespace nrl {
@@ -17,11 +18,9 @@ Output::~Output ()
 //
 Output *     Output::Create ( const OutputDesc & desc )
 {
-    { desc; }
+    auto res = CreateOutput( desc );
 
-    // FIXME: implement
-
-    return nullptr;
+    return res;
 }
 
 } //nrl

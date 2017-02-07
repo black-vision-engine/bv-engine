@@ -5,7 +5,9 @@
 
 namespace bv { namespace nrl { 
 
-Output *    CreateOutput( CustomOutputType cot );
+class OutputDesc;
+
+Output *    CreateOutput( const OutputDesc & desc );
 
 } //nrl
 } //bv

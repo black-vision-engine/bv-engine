@@ -14,7 +14,7 @@ enum class CustomOutputType : unsigned int
     COT_TOTAL
 };
 
-class RenderResult;
+class RenderedChannelsData;
 class NRenderContext;
 class OutputDesc;
 
@@ -27,7 +27,7 @@ public:
 
     virtual             ~Output                 ();
 
-    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderResult * input ) = 0;
+    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * input ) = 0;
 
 public:
 
