@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+
 
 namespace bv { 
 

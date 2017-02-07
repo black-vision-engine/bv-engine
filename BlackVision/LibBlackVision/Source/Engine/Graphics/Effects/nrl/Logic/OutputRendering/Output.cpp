@@ -18,7 +18,7 @@ Output::~Output ()
 //
 Output *     Output::Create ( const OutputDesc & desc )
 {
-    auto res = CreateOutput( desc );
+    auto res = OutputFactory::CreateOutput( desc );
 
     return res;
 }

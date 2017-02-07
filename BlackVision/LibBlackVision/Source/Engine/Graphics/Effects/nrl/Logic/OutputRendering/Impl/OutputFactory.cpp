@@ -2,6 +2,8 @@
 
 #include "OutputFactory.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
+
 
 namespace bv { namespace nrl {
 
@@ -29,6 +31,15 @@ Output *    CreateOutput( CustomOutputType cot )
         default:
             assert( false );
     };
+
+    return nullptr;
+}
+
+// *********************************
+//
+Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
+{
+    { desc; }
 
     return nullptr;
 }

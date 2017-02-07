@@ -57,18 +57,49 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
 //
 void             RenderLogicInitializer::InitializeDefaultPrv( OutputDesc & desc, const BVConfig & cfg )
 {
+    // FIXME: nrl - implement it by reading cfg instance
+    { cfg; }
+    
+    desc.SetWidth( 1920 );
+    desc.SetHeight( 1080 );
+    desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
+    desc.SetRepresentedOutputType( CustomOutputType::COT_PREVIEW );
+    desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
+
+    // FIXME: nrl - append additional properties if necessary
 }
 
 // *********************************
 //
 void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc, const BVConfig & cfg )
 {
+    // FIXME: nrl - implement it by reading cfg instance
+    { cfg; }
+    
+    desc.SetWidth( 1920 / 2 );
+    desc.SetHeight( 1080 / 2 );
+    desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
+    desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
+    desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
+
+    // FIXME: nrl - append additional properties if necessary
 }
 
 // *********************************
 //
 void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc, const BVConfig & cfg )
 {
+    // FIXME: nrl - implement it by reading cfg instance
+    { cfg; }
+    
+    desc.SetWidth( 1920 );
+    desc.SetHeight( 1080 );
+    desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
+    desc.SetRepresentedOutputType( CustomOutputType::COT_VIDEO );
+    desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
+
+    // FIXME: nrl - append additional properties representing each separate video output
+    // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
 }
 
 } // nrl

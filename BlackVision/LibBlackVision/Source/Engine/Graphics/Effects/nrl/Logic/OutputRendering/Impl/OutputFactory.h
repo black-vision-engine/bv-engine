@@ -7,7 +7,13 @@ namespace bv { namespace nrl {
 
 class OutputDesc;
 
-Output *    CreateOutput( const OutputDesc & desc );
+class OutputFactory
+{
+public:
+
+    static  Output *    CreateOutput( const OutputDesc & desc );
+
+};
 
 } //nrl
 } //bv

@@ -18,7 +18,7 @@ OutputDesc::OutputDesc                                                      ()
 
 // **************************
 //
-OutputDesc::TOutputPropertiesVector &   OutputDesc::AccessReasonAllowedAce  ()
+OutputDesc::TOutputPropertiesVector &   OutputDesc::AccessOutputProperties  ()
 {
     return m_outputProperties;
 }
