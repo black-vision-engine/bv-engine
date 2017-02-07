@@ -39,8 +39,7 @@ const std::string        DefaultGradientPlugin::PARAM_COLOR2        = "color2";
 //
 DefaultGradientPluginDesc::DefaultGradientPluginDesc                          ()
     : BasePluginDescriptor( UID(), "linear_gradient", "lg" )
-{
-}
+{}
 
 // *******************************
 //
@@ -113,7 +112,7 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     m_psc->GetRendererContext()->cullCtx->enabled = false;
 
-	 m_psc->GetRendererContext()->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
+	m_psc->GetRendererContext()->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
 	BlendHelper::SetBlendRendererContext( m_psc, m_blendMode.GetParameter() );
 }
 

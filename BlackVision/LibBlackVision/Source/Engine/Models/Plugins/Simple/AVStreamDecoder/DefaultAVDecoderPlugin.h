@@ -10,6 +10,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDecoder.h"
 
 #include "Assets/AVStream/AVAssetDescriptor.h"
@@ -87,6 +89,9 @@ private:
 
     bool                                m_isFinished;
 
+	ValueParamState< bool >						m_blendEnabled;
+	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
+
 public:
 
     explicit							        DefaultAVDecoderPlugin		( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -128,24 +133,9 @@ private:
 
 };
 
-// ***********************
-//
-template<>
-inline bool SetParameter< DefaultAVDecoderPlugin::DecoderMode >( IParameterPtr param, TimeType t, const DefaultAVDecoderPlugin::DecoderMode & val )
-{
-    typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamType;
 
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+DEFINE_ENUM_SET_PARAMETER( DefaultAVDecoderPlugin::DecoderMode );
 
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 } //model
 } //bv

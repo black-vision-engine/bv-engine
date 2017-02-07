@@ -8,6 +8,9 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+
+
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR **********************************
@@ -31,7 +34,6 @@ class DefaultAnimationPlugin : public BasePlugin
 {
 public:
 
-    static const std::string        PARAM_BLEND_ENABLE;
     static const std::string        PARAM_AUTO_PLAY;
     static const std::string        PARAM_FPS;
     
@@ -52,6 +54,9 @@ private:
     ParamFloatPtr                   m_paramFPS;
 
     UInt32                          m_texturesNum;
+
+	ValueParamState< bool >						m_blendEnabled;
+	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
 
 public:
 

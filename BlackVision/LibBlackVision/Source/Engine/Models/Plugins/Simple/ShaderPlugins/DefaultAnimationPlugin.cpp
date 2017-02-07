@@ -21,7 +21,6 @@
 
 namespace bv { namespace model {
 
-const std::string        DefaultAnimationPlugin::PARAM_BLEND_ENABLE   = "blend enable";
 const std::string        DefaultAnimationPlugin::PARAM_ALPHA          = "alpha";
 const std::string        DefaultAnimationPlugin::PARAM_FRAME_NUM      = "frameNum";
 const std::string        DefaultAnimationPlugin::PARAM_AUTO_PLAY      = "autoPlay";
@@ -59,7 +58,8 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
     
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_BLEND_ENABLE, true, true, true );
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
 
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_AUTO_PLAY, false, true, true );
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FPS, 24.f, true, true );
@@ -112,10 +112,9 @@ void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr pre
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-    //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+
+	ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
+	BlendHelper::SetBlendRendererContext( m_psc, m_blendMode.GetParameter() );
 }
 
 // *************************************
@@ -144,14 +143,16 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     m_paramAutoPlay = QueryTypedParam< ParamBoolPtr >( pluginModel->GetParameter( PARAM_AUTO_PLAY ) );
     m_paramFPS = QueryTypedParam< ParamFloatPtr >( pluginModel->GetParameter( PARAM_FPS ) );
 
+	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+	m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
+
     assert( m_paramFrameNum );
 }
 
 // *************************************
 // 
 DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
-{
-}
+{}
 
 // *************************************
 // 
@@ -222,13 +223,7 @@ void                                DefaultAnimationPlugin::Update              
 
     FrameUpdate();
 
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
-    {
-        auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
-
-        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
-    }
+	BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_blendMode );
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
