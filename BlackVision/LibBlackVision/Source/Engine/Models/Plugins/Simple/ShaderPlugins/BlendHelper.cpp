@@ -57,12 +57,17 @@ void		BlendHelper::SetBlendRendererContext	( DefaultPixelShaderChannelPtr psc, c
 			ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
 			ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ZERO;
 			break;
+        case bv::model::BlendHelper::BM_Normal:
+            // Color = Srgb + Drgb * (1 - Sa)
+            ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+            ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+            break;
+        case bv::model::BlendHelper::BM_Alpha:
 		default:
-			// Color = Srgb + Drgb * (1 - Sa)
-			ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+            // BM_Alpha
+			// For all not premultiplied textures
+			ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
 			ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-			//ctx->alphaCtx->srcAlphaBlendMode = model::AlphaContext::SrcBlendMode::SBM_DST_ALPHA;
-			//ctx->alphaCtx->dstAlphaBlendMode = model::AlphaContext::DstBlendMode::DBM_ZERO;
 			break;
 	}
 }

@@ -56,7 +56,7 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
-	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
 
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_AUTO_PLAY, false, true, true );
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FPS, 24.f, true, true );

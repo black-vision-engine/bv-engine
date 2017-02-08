@@ -57,7 +57,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
-	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM::ALPHA, 1.f, true );

@@ -56,6 +56,7 @@ public:
         BM_Color,
         BM_Luminosity,
 		BM_None,
+        BM_Alpha,
 
         BM_Total
     };
