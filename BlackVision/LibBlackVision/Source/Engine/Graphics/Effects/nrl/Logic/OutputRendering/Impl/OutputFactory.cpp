@@ -4,6 +4,9 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/Preview/PreviewHandler.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputInstance.h"
+
 
 namespace bv { namespace nrl {
 
@@ -15,31 +18,72 @@ const unsigned int heightHD = 1080;
 const unsigned int widthSD  = widthHD / 2;
 const unsigned int heightSD = heightHD / 2;
 
-} // anonymous
+// *********************************
+//
+void    SetChannelMapping( NOutputState & state, const OutputDesc & desc )
+{
+    state.SetChannelMapping( 0, 1, 2, 3 );
+    
+    bool maskR = false;
+    bool maskG = false;
+    bool maskB = false;
+    bool maskA = false;
+
+    switch( desc.GetOutputChannelMapping() )
+    {
+        case OutputChannelMapping::OCM_A:
+            maskA = true;
+            break;
+        case OutputChannelMapping::OCM_R:
+            maskR = true;
+            break;
+        case OutputChannelMapping::OCM_G:
+            maskG = true;
+            break;
+        case OutputChannelMapping::OCM_B:
+            maskB = true;
+            break;
+        case OutputChannelMapping::OCM_RGBA:
+            maskR = maskG = maskB = maskA = true;
+            break;
+        default:
+            assert( false );
+    }
+
+    state.SetMaskState( maskR, maskG, maskB, maskA );
+}
 
 // *********************************
 //
-Output *    CreateOutput( CustomOutputType cot )
+OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
 {
-    switch( cot )
-    {
-        case CustomOutputType::COT_PREVIEW:
-        case CustomOutputType::COT_VIDEO:
-        case CustomOutputType::COT_STREAM:
-            return nullptr;
-            // return new OutputStreamSharedMem( widthSD, heightSD );
-        default:
-            assert( false );
-    };
+    auto handler    = new PreviewHandler();
+    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler );
 
-    return nullptr;
+    auto & state    = output->AccessOutputState();
+
+    state.SetActiveRenderChannelType( desc.GetSelectedRenderedChannel() );
+
+    SetChannelMapping( state, desc );
+
+    return output;
 }
+
+} // anonymous
 
 // *********************************
 //
 Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
 {
-    { desc; }
+    switch( desc.GetRepresentedOutputType() )
+    {
+        case CustomOutputType::COT_PREVIEW:
+            return CreateOutputPreview( desc );
+        case CustomOutputType::COT_VIDEO:
+        case CustomOutputType::COT_STREAM:
+        default:
+            assert( false );
+    };
 
     return nullptr;
 }

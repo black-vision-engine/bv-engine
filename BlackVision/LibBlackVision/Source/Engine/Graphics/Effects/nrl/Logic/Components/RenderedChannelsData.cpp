@@ -23,9 +23,6 @@ RenderedChannelsData::RenderedChannelsData                                      
 
         m_renderChannels[ i ] = channel;
         m_containsValidData[ i ] = false;
-
-        m_cachedReadbackTextures[ i ] = nullptr;
-        m_cachedReadbackUpToDate[ i ] = false;
     }
 }
 
@@ -119,7 +116,7 @@ RenderedChannelsData *  RenderedChannelsData::Create                        ( co
 
     unsigned int numElts = (unsigned int) RenderChannelType::RCT_TOTAL;
 
-    assert( (unsigned int) RenderChannelType::RCT_OUTPUT_4 == ( (unsigned int) RenderChannelType::RCT_TOTAL ) - 1 );
+    assert( (unsigned int) RenderChannelType::RCT_OUTPUT_4 == ( ( (unsigned int) RenderChannelType::RCT_TOTAL ) - 1 ) );
 
     auto res = new RenderedChannelsData( allocator, desc.GetNumTrackedRenderTargets() );
 

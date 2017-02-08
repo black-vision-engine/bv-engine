@@ -23,9 +23,6 @@ private:
     std::vector< RenderChannel * >  m_renderChannels;
     std::vector< bool >             m_containsValidData;
 
-    std::vector< Texture2DPtr >     m_cachedReadbackTextures;
-    std::vector< bool >             m_cachedReadbackUpToDate;
-
 private:
 
     //FIXME: use the 'delete' keyword

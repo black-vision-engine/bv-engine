@@ -58,7 +58,11 @@ OutputLogic *       OutputLogic::Create                 ( OutputLogicDesc & desc
     {
         auto output = Output::Create( desc.AccessDesc( i ) );
         
-        res->AppendOutput( output );        
+        // FIXME: nrl - thikn of a common approach to handling nullptr outputs (or do not allow them at all)
+        if ( output )
+        {
+            res->AppendOutput( output );
+        }
     }
 
     return res;
