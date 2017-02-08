@@ -14,6 +14,10 @@ NRenderLogic *   RenderLogicInitializer::CreateInstance ( const BVConfig & cfg )
 {
     NRenderLogicDesc desc;
 
+    desc.SetMainWidth( 1920 );
+    desc.SetMainHeight( 1080 );
+    desc.SetNumTrackedRenderTargets( 2 );
+
     Initialize( desc.AccessRenderedChannelsDataDesc(), cfg );
     Initialize( desc.AccessOutputLogicDesc(), cfg );
 

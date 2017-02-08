@@ -8,8 +8,10 @@ namespace bv { namespace nrl {
 // **************************
 //
 NRenderLogicDesc::NRenderLogicDesc        ()
+    : m_mainWidth( 1920 )               // FIXME: nrl - read it from some cpp file with statically set values
+    , m_mainHeight( 1080 )              // FIXME: nrl - read it from some cpp file with statically set values
+    , m_numTrackedRenderTargets( 2 )    // FIXME: nrl - read it from some cpp file with statically set values
 {
-    /// FIXME: implement basic descs initialization here
 }
 
 // **************************
@@ -48,6 +50,13 @@ unsigned int                    NRenderLogicDesc::GetMainHeight                 
 
 // **************************
 //
+unsigned int                    NRenderLogicDesc::GetNumTrackedRenderTargets      () const
+{
+    return m_numTrackedRenderTargets;
+}
+
+// **************************
+//
 void                            NRenderLogicDesc::SetMainWidth                    ( unsigned int width )
 {
     m_mainWidth = width;
@@ -58,6 +67,13 @@ void                            NRenderLogicDesc::SetMainWidth                  
 void                            NRenderLogicDesc::SetMainHeight                   ( unsigned int height )
 {
     m_mainHeight = height;
+}
+
+// **************************
+//
+void                            NRenderLogicDesc::SetNumTrackedRenderTargets      ( unsigned int numRenderTargets )
+{
+    m_numTrackedRenderTargets = numRenderTargets;
 }
 
 } //nrl
