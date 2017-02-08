@@ -24,110 +24,104 @@ namespace bv
 
 // ************************************* Static Events' Definitions *************************************
 
-const EventType PluginAddedEvent::m_sEventType      = 0x00000001;
-std::string PluginAddedEvent::m_sEventName          = "Event_PluginAdded";
-
-const EventType NodeAddedEvent::m_sEventType        = 0x00000002;
-std::string NodeAddedEvent::m_sEventName            = "Event_NodeAdded";
-
-const EventType FrameRenderedEvent::m_sEventType    = 0x00000003;
+const EventType FrameRenderedEvent::m_sEventType    = EventManager::RegisterType();
 std::string FrameRenderedEvent::m_sEventName        = "Event_FrameRendered";
 
-const EventType TransformSetEvent::m_sEventType     = 0x00000004;
+const EventType TransformSetEvent::m_sEventType     = EventManager::RegisterType();
 std::string TransformSetEvent::m_sEventName         = "Event_TransformSet";
 
-const EventType KeyPressedEvent::m_sEventType       = 0x00000005;
+const EventType KeyPressedEvent::m_sEventType       = EventManager::RegisterType();
 std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
-const EventType ScreenShotRenderedEvent::m_sEventType       = 0x00000006;
+const EventType ScreenShotRenderedEvent::m_sEventType       = EventManager::RegisterType();
 std::string ScreenShotRenderedEvent::m_sEventName           = "ScreenShotRenderedEvent";
 
 // FIXME: MORE EVENTS IN ScrollerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
 
 
-const EventType LoadAssetEvent::m_sEventType        = 0x30000013;
+const EventType LoadAssetEvent::m_sEventType        = EventManager::RegisterType();
 std::string LoadAssetEvent::m_sEventName            = "LoadAssetEvent";
 
-const EventType ParamKeyEvent::m_sEventType         = 0x30000006;
+const EventType ParamKeyEvent::m_sEventType         = EventManager::RegisterType();
 std::string ParamKeyEvent::m_sEventName             = "ParamKeyEvent";
 
-const EventType NodeStructureEvent::m_sEventType    = 0x30000012;
+const EventType NodeStructureEvent::m_sEventType    = EventManager::RegisterType();
 std::string NodeStructureEvent::m_sEventName        = "NodeStructureEvent";
 
-const EventType PluginStructureEvent::m_sEventType  = 0x30000015;
+const EventType PluginStructureEvent::m_sEventType  = EventManager::RegisterType();
 std::string PluginStructureEvent::m_sEventName      = "PluginStructureEvent";
 
-const EventType ProjectEvent::m_sEventType          = 0x30000001;
+const EventType ProjectEvent::m_sEventType          = EventManager::RegisterType();
 std::string ProjectEvent::m_sEventName              = "ProjectEvent";
 
-const EventType ResponseEvent::m_sEventType         = 0x30000008;
+const EventType ResponseEvent::m_sEventType         = EventManager::RegisterType();
 std::string ResponseEvent::m_sEventName             = "ResponseEvent";
 
-const EventType InfoEvent::m_sEventType             = 0x30000007;
+const EventType InfoEvent::m_sEventType             = EventManager::RegisterType();
 std::string InfoEvent::m_sEventName                 = "InfoEvent";
 
-const EventType TimeLineEvent::m_sEventType         = 0x30000009;
+const EventType TimeLineEvent::m_sEventType         = EventManager::RegisterType();
 std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
 
-const EventType TimerEvent::m_sEventType            = 0x30000010;
+const EventType TimerEvent::m_sEventType            = EventManager::RegisterType();
 std::string TimerEvent::m_sEventName                = "TimerEvent";
 
-const EventType NodeLogicEvent::m_sEventType        = 0x30000011;
+const EventType NodeLogicEvent::m_sEventType        = EventManager::RegisterType();
 std::string NodeLogicEvent::m_sEventName            = "NodeLogicEvent";
 
-const EventType VideoCardEvent::m_sEventType        = 0x30000005;
+const EventType VideoCardEvent::m_sEventType        = EventManager::RegisterType();
 std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
 
-const EventType HightmapEvent::m_sEventType         = 0x30000014;
+const EventType HightmapEvent::m_sEventType         = EventManager::RegisterType();
 std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 
-const EventType EngineStateEvent::m_sEventType      = 0x30000016;
+const EventType EngineStateEvent::m_sEventType      = EventManager::RegisterType();
 std::string EngineStateEvent::m_sEventName          = "EngineStateEvent";
 
-const EventType SceneEvent::m_sEventType            = 0x30000017;
+const EventType SceneEvent::m_sEventType            = EventManager::RegisterType();
 std::string SceneEvent::m_sEventName                = "SceneEvent";
 
-const EventType AssetEvent::m_sEventType            = 0x30000018;
+const EventType AssetEvent::m_sEventType            = EventManager::RegisterType();
 std::string AssetEvent::m_sEventName                = "AssetEvent";
 
 
-const EventType GlobalEffectEvent::m_sEventType     = 0x30000019;
+const EventType GlobalEffectEvent::m_sEventType     = EventManager::RegisterType();
 std::string GlobalEffectEvent::m_sEventName         = "GlobalEffectEvent";
 
-const EventType TimelineKeyframeEvent::m_sEventType = 0x30000020;
+const EventType TimelineKeyframeEvent::m_sEventType = EventManager::RegisterType();
 std::string TimelineKeyframeEvent::m_sEventName     = "TimelineKeyframeEvent";
 
-const EventType MouseEvent::m_sEventType            = 0x30000021;
+const EventType MouseEvent::m_sEventType            = EventManager::RegisterType();
 std::string MouseEvent::m_sEventName                = "MouseEvent";
 
-const EventType SceneVariableEvent::m_sEventType    = 0x30000022;
+const EventType SceneVariableEvent::m_sEventType    = EventManager::RegisterType();
 std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
 
-const EventType ConfigEvent::m_sEventType           = 0x30000023;
+const EventType ConfigEvent::m_sEventType           = EventManager::RegisterType();
 std::string ConfigEvent::m_sEventName               = "ConfigEvent";
 
-const EventType GridLineEvent::m_sEventType         = 0x30000024;
+const EventType GridLineEvent::m_sEventType         = EventManager::RegisterType();
 std::string GridLineEvent::m_sEventName             = "GridLineEvent";
 
-const EventType LightEvent::m_sEventType            = 0x30000025;
+const EventType LightEvent::m_sEventType            = EventManager::RegisterType();
 std::string LightEvent::m_sEventName                = "LightEvent";
 
-const EventType CameraEvent::m_sEventType           = 0x30000026;
+const EventType CameraEvent::m_sEventType           = EventManager::RegisterType();
 std::string CameraEvent::m_sEventName               = "CameraEvent";
 
-const EventType VideoDecoderEvent::m_sEventType     = 0x30000027;
+const EventType VideoDecoderEvent::m_sEventType     = EventManager::RegisterType();
 std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
 
-const EventType ParamDescriptorEvent::m_sEventType  = 0x30000028;
+const EventType ParamDescriptorEvent::m_sEventType  = EventManager::RegisterType();
 std::string ParamDescriptorEvent::m_sEventName      = "ParamDescriptorEvent";
 
-const EventType UndoRedoEvent::m_sEventType         = 0x30000029;
+const EventType UndoRedoEvent::m_sEventType         = EventManager::RegisterType();
 std::string UndoRedoEvent::m_sEventName             = "UndoRedoEvent";
 
-const EventType AssetTrackerInternalEvent::m_sEventType     = 0x3000002A;
+const EventType AssetTrackerInternalEvent::m_sEventType     = EventManager::RegisterType();
 std::string AssetTrackerInternalEvent::m_sEventName         = "AssetTrackerInternalEvent";
 
-const EventType GenericEvent::m_sEventType          = 0x3000002B;
+const EventType GenericEvent::m_sEventType          = EventManager::RegisterType();
 std::string GenericEvent::m_sEventName              = "GenericEvent";
 
 
@@ -710,113 +704,6 @@ std::pair< HightmapEvent::Command, const char* > HightmapEventCommandMapping[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( HightmapEvent::Command, HightmapEventCommandMapping );
 
-}
-
-// ************************************* PluginAddedEvent *************************************
-
-// *************************************
-//
-PluginAddedEvent::PluginAddedEvent                          ()
-    : m_addedPlugin( nullptr )
-{}
-
-// *************************************
-//
-PluginAddedEvent::PluginAddedEvent                          ( model::IPluginConstPtr plugin )
-    : m_addedPlugin( plugin )
-{}
-
-// *************************************
-//
-void                PluginAddedEvent::Serialize            ( ISerializer& ser ) const
-{    assert( !"Should not be serialized" );  }
-
-// *************************************
-//
-IEventPtr                PluginAddedEvent::Create          ( IDeserializer& deser )
-{
-    assert( !"Should not be deserialized" );
-    return nullptr;    
-}
-// *************************************
-//
-IEventPtr               PluginAddedEvent::Clone             () const
-{   return IEventPtr( new PluginAddedEvent( *this ) );  }
-
-// *************************************
-//
-EventType           PluginAddedEvent::Type()
-{   return m_sEventType;   }
-// *************************************
-//
-std::string&        PluginAddedEvent::Name()
-{   return m_sEventName;   }
-// *************************************
-//
-const std::string&  PluginAddedEvent::GetName() const
-{   return Name();   }
-// *************************************
-//
-EventType           PluginAddedEvent::GetEventType() const
-{   return this->m_sEventType; }
-
-// *************************************
-//
-model::IPluginConstPtr  PluginAddedEvent::GetPlugin         () const
-{    return m_addedPlugin;  }
-
-// ************************************* NodeAddedEvent *************************************
-
-// *************************************
-//
-NodeAddedEvent::NodeAddedEvent                              ()
-    : m_addedNode( nullptr )
-{}
-// *************************************
-//
-NodeAddedEvent::NodeAddedEvent                              ( model::IModelNodeConstPtr node )
-    : m_addedNode( node )
-{}
-
-// *************************************
-//
-void                NodeAddedEvent::Serialize            ( ISerializer& ser ) const
-{    assert( !"Should not be serialized" );  }
-
-// *************************************
-//
-IEventPtr                NodeAddedEvent::Create          ( IDeserializer& deser )
-{
-    assert( !"Should not be deserialized" );
-    return nullptr;    
-}
-// *************************************
-//
-IEventPtr               NodeAddedEvent::Clone             () const
-{   return IEventPtr( new NodeAddedEvent( *this ) );  }
-
-// *************************************
-//
-EventType           NodeAddedEvent::Type()
-{   return m_sEventType;   }
-// *************************************
-//
-std::string&        NodeAddedEvent::Name()
-{   return m_sEventName;   }
-// *************************************
-//
-const std::string&  NodeAddedEvent::GetName() const
-{   return Name();   }
-// *************************************
-//
-EventType           NodeAddedEvent::GetEventType() const
-{   return this->m_sEventType; }
-
-// *************************************
-//
-model::IModelNodeConstPtr  NodeAddedEvent::GetNode         () const
-{
-    return m_addedNode;
 }
 
 

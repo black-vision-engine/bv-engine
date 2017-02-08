@@ -13,7 +13,7 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Widgets/NodeLogicHelper.h"
-#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 
 
 DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::FollowingMode );

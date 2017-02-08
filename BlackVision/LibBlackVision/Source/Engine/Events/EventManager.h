@@ -56,8 +56,9 @@ public:
 
     virtual void    LockEvents              ( unsigned int numFrames ) override;
     
-    
-    virtual const EventFactory &            GetEventFactory() override;
+
+    static EventType                        RegisterType    ();
+    virtual const EventFactory &            GetEventFactory () override;
 };
 
 } //bv

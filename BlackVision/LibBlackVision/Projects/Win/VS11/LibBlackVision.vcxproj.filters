@@ -427,6 +427,18 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs">
       <UniqueIdentifier>{8f32b9e2-a934-4161-aaef-9fc3f8a45e7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Plugins">
+      <UniqueIdentifier>{bf03ccb9-af65-4025-bbd4-03e7ddbf9a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Nodes">
+      <UniqueIdentifier>{52b22a14-75f1-4bb7-94ef-47bf16146d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Logics">
+      <UniqueIdentifier>{6a64e9e1-af20-453f-b465-b130a72b799a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Other">
+      <UniqueIdentifier>{cb4deab8-4527-42a0-a3cc-07ecdbc9504b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1753,9 +1765,6 @@
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp">
       <Filter>Assets\SVG</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
-      <Filter>Engine\Events\InnerEvents</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
       <Filter>Assets\SVG</Filter>
     </ClCompile>
@@ -2026,8 +2035,20 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
@@ -2076,6 +2097,42 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.cpp">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5006,9 +5063,6 @@
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h">
       <Filter>Assets\SVG</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h">
-      <Filter>Engine\Events\InnerEvents</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h">
       <Filter>Assets\SVG</Filter>
     </ClInclude>
@@ -5339,8 +5393,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\State</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Types\TypeTraits.h">
       <Filter>Engine\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h">
       <Filter>Mathematics\Interpolators</Filter>
@@ -5390,6 +5450,48 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.h">
+      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
+      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

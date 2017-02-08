@@ -54,7 +54,15 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
     {
         for( auto f : files )
         {
-            framesDesc.push_back( TextureAssetDesc::Create( "file:/" + f.Str(), true ) );
+			auto frame = TextureAssetDesc::Create( "file:/" + f.Str(), true );
+			if( frame )
+			{
+				framesDesc.push_back( frame );
+			}
+			else
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Cannot load frame animation '" << f.Str() << "'";
+			}
         }
     }
 
@@ -71,7 +79,7 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 	for( auto f : framesDesc )
 	{
 		framesAssets.push_back( LoadFrame( f ) );
-		printf( "\rLoaded %d out of %lld total frames                ", i + 1, ( Int64 )framesDesc.size() );
+		printf( "\rLoaded %d out of %lld total frames                ", i + 1, ( Int64 ) framesDesc.size() );
 		++i;
 	}
 

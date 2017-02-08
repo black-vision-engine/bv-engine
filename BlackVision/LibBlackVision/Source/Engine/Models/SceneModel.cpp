@@ -15,6 +15,7 @@
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
+#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 
 
@@ -38,6 +39,7 @@ SceneModel::SceneModel	( const std::string & name )
     , m_timeline( model::OffsetTimeEvaluator::Create( name, TimeType( 0.0 ) ) )
     , m_modelSceneEditor( nullptr )
     , m_camerasLogic( m_timeline )
+    , m_endUserParams( new EndUserParamsLogic( this ) )
 {
     m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
@@ -47,6 +49,7 @@ SceneModel::SceneModel	( const std::string & name )
                 SceneModel::~SceneModel	()
 {
     delete m_modelSceneEditor;
+    delete m_endUserParams;
 }
 
 // *******************************
@@ -78,7 +81,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
             m_camerasLogic.Serialize( ser );
             m_sceneVariables.Serialize( ser );
             m_gridLinesLogic.Serialize( ser );
-            m_endUserParams.Serialize( ser );
+            m_endUserParams->Serialize( ser );
         }
 
         if( m_sceneRootNode )
@@ -137,11 +140,6 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     auto & editorSceneVariables = obj->GetSceneVariables();
     editorSceneVariables.Deserialize( deser );
 
-// end user params
-
-    auto & endUserParams = obj->GetEndUserParams();
-    endUserParams.Deserialize( deser );
-
 // gridlines
     obj->GetGridLinesLogic().Deserialize( deser );
 
@@ -152,6 +150,12 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     {
         obj->SetRootNode( node );
     }
+
+    // end user params
+    // Must be after attaching nodes.
+
+    auto & endUserParams = obj->GetEndUserParams();
+    endUserParams.Deserialize( deser );
 
     return obj;
 }
@@ -291,7 +295,7 @@ CamerasLogic &              SceneModel::GetCamerasLogic     ()
 //
 EndUserParamsLogic &        SceneModel::GetEndUserParams    ()
 {
-    return m_endUserParams;
+    return *m_endUserParams;
 }
 
 // ***********************

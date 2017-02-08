@@ -284,6 +284,16 @@ IEventManager &     GetDefaultEventManager  ()
     return instance;
 }
 
+// ***********************
+//
+EventType           EventManager::RegisterType()
+{
+    static EventType nextType = 0x0001;
+    return nextType++;
+}
+
+// ***********************
+//
 const EventFactory &            EventManager::GetEventFactory()
 {
     return m_eventFactory;

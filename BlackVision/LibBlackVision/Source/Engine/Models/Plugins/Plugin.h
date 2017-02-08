@@ -116,6 +116,8 @@ protected:
 };
 
 
+DEFINE_PTR_TYPE( BasePlugin );
+
 
 ParamTransformPtr						    GetCurrentParamTransform( const IPlugin * pl );
 

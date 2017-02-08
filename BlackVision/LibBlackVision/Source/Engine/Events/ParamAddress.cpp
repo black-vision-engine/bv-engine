@@ -64,25 +64,39 @@ bool                 operator<       ( const ParameterAddress& address1, const P
 {
     if( address1.ParamTargetType < address2.ParamTargetType )
         return true;
-    if( address1.SceneName < address2.SceneName )
-        return true;
-    if( address1.ParamName < address2.ParamName )
-        return true;
-    if( address1.ParamSubName < address2.ParamSubName )
-        return true;
-
-    if( address1.ParamTargetType == ParameterAddress::CameraParam || address1.ParamTargetType == ParameterAddress::LightParam )
+    else if( address1.ParamTargetType == address2.ParamTargetType )
     {
-        return address1.Index < address2.Index;
-    }
-
-    if( address1.NodeName < address2.NodeName )
-        return true;
-
-    if( address1.ParamTargetType == ParameterAddress::PluginParam || address1.ParamTargetType == ParameterAddress::ResourceParam )
-    {
-        if( address1.PluginName < address2.PluginName )
+        if( address1.SceneName < address2.SceneName )
             return true;
+        else if( address1.SceneName == address2.SceneName )
+        {
+            if( address1.ParamName < address2.ParamName )
+                return true;
+            if( address1.ParamName == address2.ParamName )
+            {
+                if( address1.ParamSubName < address2.ParamSubName )
+                    return true;
+                else if( address1.ParamSubName == address2.ParamSubName )
+                {
+                    if( address1.ParamTargetType == ParameterAddress::CameraParam || address1.ParamTargetType == ParameterAddress::LightParam )
+                    {
+                        if( address1.Index < address2.Index )   return true;
+                        if( address1.Index > address2.Index )   return false;
+                    }
+
+                    if( address1.NodeName < address2.NodeName )
+                        return true;
+                    else if( address1.NodeName == address2.NodeName )
+                    {
+                        if( address1.ParamTargetType == ParameterAddress::PluginParam || address1.ParamTargetType == ParameterAddress::ResourceParam )
+                        {
+                            if( address1.PluginName < address2.PluginName )
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return false;

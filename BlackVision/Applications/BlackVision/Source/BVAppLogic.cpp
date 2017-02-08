@@ -31,6 +31,7 @@
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
 #include "TestAI/TestEditorsKeyboardHandler.h"
 #include "TestAI/TestVideoStreamDecoderKeyboardHandler.h"
+#include "TestAI/TestInnerEvents.h"
 
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
 #include "testai/TestAIManager.h"
@@ -535,6 +536,10 @@ void                            BVAppLogic::InitializeKbdHandler()
     else if( envScene == "GLOBAL_EFFECT_VIDEO_OUTPUT" )
     {
         m_kbdHandler = new TestVideoOutputKeyboardHandler();
+    }
+    else if( envScene == "SCENE_STRUCTURE_INNER_EVENTS" )
+    {
+        m_kbdHandler = new TestInnerEvents();
     }
     else
     {

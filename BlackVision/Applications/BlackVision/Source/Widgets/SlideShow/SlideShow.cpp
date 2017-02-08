@@ -9,7 +9,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
-#include "Engine/Events/InnerEvents/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/EventManager.h"
 #include "Widgets/NodeLogicHelper.h"
 

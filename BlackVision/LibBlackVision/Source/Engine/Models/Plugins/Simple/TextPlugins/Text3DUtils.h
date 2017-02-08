@@ -41,6 +41,7 @@ private:
     static std::vector< glm::vec3 >                 CreateLinesFromContour      ( const ContoursList & contours );
     static ConnectedComponentPtr                    CreateLetter                ( const wchar_t character, FontAsset3DConstPtr & textAsset, TextLayout layout );
     static void                                     ArrangeText                 ( const std::wstring & text, std::vector< ConnectedComponentPtr > & components, TextLayout layout );
+	static ConnectedComponentPtr					CreateEmptyCC				();
 };
 
 

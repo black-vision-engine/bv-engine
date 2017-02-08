@@ -23,61 +23,6 @@ const static unsigned int SEND_BROADCAST_EVENT = UINT_MAX;
 class Renderer;
 
 
-// ************************************* PluginAddedEvent *************************************
-class PluginAddedEvent : public BaseEvent
-{
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-    model::IPluginConstPtr      m_addedPlugin;
-public:
-
-    explicit                        PluginAddedEvent();
-    explicit                        PluginAddedEvent( model::IPluginConstPtr plugin );
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-
-    model::IPluginConstPtr          GetPlugin       () const;
-};
-
-DEFINE_PTR_TYPE(PluginAddedEvent)
-
-// ************************************* NodeAddedEvent *************************************
-class NodeAddedEvent;
-DEFINE_PTR_TYPE(NodeAddedEvent)
-DEFINE_CONST_PTR_TYPE(NodeAddedEvent)
-
-class NodeAddedEvent : public BaseEvent
-{
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-    model::IModelNodeConstPtr   m_addedNode;
-public:
-    explicit                        NodeAddedEvent      ();
-    explicit                        NodeAddedEvent      ( model::IModelNodeConstPtr node );
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-
-    model::IModelNodeConstPtr       GetNode             () const;
-};
-
 
 // ************************************* FrameRenderedEvent *************************************
 class FrameRenderedEvent : public BaseEvent
