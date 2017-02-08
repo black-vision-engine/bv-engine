@@ -5,6 +5,8 @@
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/Preview/PreviewHandler.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/Stream/SharedMemHandler.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputInstance.h"
 
 
@@ -55,11 +57,8 @@ void    SetChannelMapping( NOutputState & state, const OutputDesc & desc )
 
 // *********************************
 //
-OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
+void    InitializeDefault( OutputInstance * output, const OutputDesc & desc )
 {
-    auto handler    = new PreviewHandler();
-    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler );
-
     auto & state    = output->AccessOutputState();
 
     state.SetActiveRenderChannelType( desc.GetSelectedRenderedChannel() );
@@ -74,6 +73,28 @@ OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
     {
         output->Disable();
     }
+}
+
+// *********************************
+//
+OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
+{
+    auto handler    = new PreviewHandler();
+    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler );
+
+    InitializeDefault( output, desc );
+
+    return output;
+}
+
+// *********************************
+//
+OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
+{
+    auto handler    = new SharedMemHandler( desc.GetWidth(), desc.GetHeight() );
+    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler );
+
+    InitializeDefault( output, desc );
 
     return output;
 }
@@ -91,7 +112,7 @@ Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
         case CustomOutputType::COT_VIDEO:
             return nullptr;
         case CustomOutputType::COT_STREAM:
-            return nullptr;
+            return CreateOutputShm( desc ); // FIXME: nrl - implement generic CreateOutputStream,
         default:
             assert( false );
     };
