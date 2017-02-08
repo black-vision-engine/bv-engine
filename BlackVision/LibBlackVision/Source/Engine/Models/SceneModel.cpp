@@ -25,6 +25,8 @@
 
 namespace bv { namespace model {
 
+const UInt32 SceneModel::MAX_LIGTHS = 8;
+
 // *******************************
 //
 SceneModelPtr    SceneModel::Create		( const std::string & name )
@@ -227,9 +229,18 @@ OffsetTimeEvaluatorPtr		SceneModel::GetTimeline	()  const
 
 // *******************************
 //
-void                        SceneModel::AddLight            ( IModelLightPtr light ) 
+bool                        SceneModel::AddLight            ( IModelLightPtr light ) 
 {
-    m_lights.push_back( light );
+	if( m_lights.size() < MAX_LIGTHS - 1 )
+	{
+		m_lights.push_back( light );
+		return true;
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot add more than " << MAX_LIGTHS << " lights.";
+		return false;
+	}
 }
 
 // *******************************
