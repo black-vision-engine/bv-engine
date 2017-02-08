@@ -15,7 +15,6 @@
 namespace bv {
 
 
-
 // ***********************
 //
 AssetConstPtr       Font3DLoader::LoadAsset( const bv::AssetDescConstPtr & desc ) const
