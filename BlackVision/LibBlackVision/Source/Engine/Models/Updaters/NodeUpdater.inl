@@ -66,16 +66,12 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 
         m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
-
-		UpdateBoundingBox();
     }
     else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
     {
         UpdatePositions();
 
-        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
-
-		UpdateBoundingBox();
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();	
     }
     else
     {
@@ -85,6 +81,8 @@ inline  void    NodeUpdater::UpdateGeometry      ()
         vao->SetNeedsUpdateMemUpload( false );
         vao->SetNeedsUpdateRecreation( false );
     }
+
+	UpdateBoundingBox();
 }
 
 // *****************************

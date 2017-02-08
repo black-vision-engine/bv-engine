@@ -344,7 +344,7 @@ void NodeUpdater::UpdateBoundingBox(/* const model::BoundingVolume * bv */)
     assert( bv );
 
     UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-    //UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+    UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
     m_sceneNode->SetBoundingBox( bv->GetBoundingBox() );
 }
 
