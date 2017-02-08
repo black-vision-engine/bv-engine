@@ -8,6 +8,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/Stream/SharedMemHandler.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/OutputCompositeVideo.h"
 
 
 namespace bv { namespace nrl {
@@ -91,8 +92,8 @@ OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
 //
 OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
 {
-    auto handler    = new SharedMemHandler( desc.GetWidth(), desc.GetHeight() );
-    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler );
+    auto handler    = new SharedMemHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
+    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
 
     InitializeDefault( output, desc );
 

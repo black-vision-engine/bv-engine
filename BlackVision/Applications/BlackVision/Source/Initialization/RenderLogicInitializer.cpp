@@ -102,7 +102,7 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_VIDEO );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetEnabled( false );
+    desc.SetEnabled( true );
 
     // FIXME: nrl - append additional properties representing each separate video output
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
