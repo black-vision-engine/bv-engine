@@ -181,7 +181,7 @@ bool                            DefaultText3DPlugin::LoadResource  ( AssetDescCo
     if ( fontAssetDesc != nullptr )
     {
         // Translate font descriptor to descriptor for 3D asset.
-        auto font3DDesc = FontAsset3DDesc::Create( fontAssetDesc );
+        auto font3DDesc = FontAsset3DDesc::Create( fontAssetDesc, fontAssetDesc->GetFontSize() );
 
         auto fontResource = LoadTypedAsset< FontAsset3D >( font3DDesc );
         if( fontResource == nullptr )
