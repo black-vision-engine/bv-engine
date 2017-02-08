@@ -66,6 +66,15 @@ OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
 
     SetChannelMapping( state, desc );
 
+    if( desc.IsEnabled() )
+    {
+        output->Enable();
+    }
+    else
+    {
+        output->Disable();
+    }
+
     return output;
 }
 
@@ -80,7 +89,9 @@ Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
         case CustomOutputType::COT_PREVIEW:
             return CreateOutputPreview( desc );
         case CustomOutputType::COT_VIDEO:
+            return nullptr;
         case CustomOutputType::COT_STREAM:
+            return nullptr;
         default:
             assert( false );
     };
