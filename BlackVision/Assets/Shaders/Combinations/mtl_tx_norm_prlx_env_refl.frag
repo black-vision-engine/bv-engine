@@ -120,7 +120,7 @@ void main()
 	color += emission;
 	
 	vec4 texColor = texture( Tex0, ( texMat * vec4( texCoord, 0.0, 1.0 ) ).xy );
-	color = color * texColor.rgb * texColor.a;
+	color = color * texColor.rgb;
 	
 	vec3 envColor = computeEnvironment( viewDir, norm );
 	color = mix( color, envColor, computeReflectivity() );

@@ -14,8 +14,6 @@ void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
 	vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
-
-	col.rgb = col.rgb * col.a;
 	
     FragColor = col * alphaMask.a * alpha;
 }

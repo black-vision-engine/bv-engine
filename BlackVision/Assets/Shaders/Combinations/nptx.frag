@@ -11,6 +11,5 @@ uniform float alpha;
 void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
-	col.rgb = col.rgb * col.a;
 	FragColor = col * alpha;
 }

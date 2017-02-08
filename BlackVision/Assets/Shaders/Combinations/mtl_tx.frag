@@ -91,7 +91,7 @@ void main()
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
 	vec4 texColor = texture( Tex0, uvCoord );
 	
-	FragColor = vec4( ( emission + color ) * texColor.rgb * texColor.a, texColor.a * alpha );
+	FragColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
 }
 
 vec3 computeDirectionalLight	( DirectionalLight light, vec3 viewDir, vec3 norm )

@@ -104,7 +104,7 @@ void main()
 	vec3 emission = mtlEmission.rgb * mtlEmission.a;
 	vec4 texColor = texture( Tex0, uvCoord );
 	
-	vec4 resultColor = vec4( ( emission + color ) * texColor.rgb * texColor.a, texColor.a * alpha );
+	vec4 resultColor = vec4( ( emission + color ) * texColor.rgb, texColor.a * alpha );
 	
 	vec3 envColor = computeEnvironment( envReflection );
 	resultColor = mix( resultColor, vec4( envColor, 1.0 ), computeReflectivity() );

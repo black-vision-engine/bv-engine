@@ -45,7 +45,7 @@ DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( IT
 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
-	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultColorPlugin::PARAM::COLOR, glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ), true );
