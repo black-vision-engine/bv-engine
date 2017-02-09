@@ -10,6 +10,7 @@ namespace bv { namespace nrl {
 NOutputState::NOutputState                                      ( unsigned int w, unsigned int h )
     : m_width( w )
     , m_height( h )
+    , m_channelMapping( 0 )
 {
     SetChannelMapping( 0, 1, 2, 3 );
 
@@ -41,6 +42,8 @@ void                NOutputState::SetChannelMapping             ( unsigned int c
 //
 void                NOutputState::SetChannelMapping             ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx )
 {
+    m_channelMapping = 0;
+
     SetRIdx( rIdx );
     SetGIdx( gIdx );
     SetBIdx( bIdx );
