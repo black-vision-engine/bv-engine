@@ -2,11 +2,14 @@
 
 #include <vector>
 
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+
 
 namespace bv { 
 
 class RenderTargetStackAllocator;
 class RenderTarget;
+class Renderer;
 
 namespace nrl {
 
@@ -30,6 +33,9 @@ private:
 
     int                             m_activeRenderTargetIdx;
 
+    mutable Texture2DPtr            m_cachedReadbackTexture;
+    mutable bool                    m_cachedReadbackUpToDate;
+
     bool                            m_isActive;
 
 public:
@@ -48,6 +54,9 @@ public:
 
     bool                    IsActive                    () const;
     void                    SetActiveFlag               ( bool isActive );
+
+    Texture2DPtr            ReadColorTexture            ( Renderer * renderer ) const;
+    void                    InvalidateCachedTexture     () const;
 
 };
 
