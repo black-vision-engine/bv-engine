@@ -439,6 +439,9 @@
     <Filter Include="Engine\Events\InnerEvents\Other">
       <UniqueIdentifier>{cb4deab8-4527-42a0-a3cc-07ecdbc9504b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components">
+      <UniqueIdentifier>{c11e3233-4cf4-4892-a838-7b2bf96a2ff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2133,6 +2136,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\MockVideoHandler.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components\VideoInputChannel.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components\VideoInputChannelContainer.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5495,6 +5504,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\MockVideoHandler.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components\VideoInputChannel.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components\VideoInputChannelContainer.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
