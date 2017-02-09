@@ -66,16 +66,12 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 
         m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
-
-		UpdateBoundingBox();
     }
     else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
     {
         UpdatePositions();
 
-        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
-
-		UpdateBoundingBox();
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();	
     }
     else
     {
@@ -85,6 +81,8 @@ inline  void    NodeUpdater::UpdateGeometry      ()
         vao->SetNeedsUpdateMemUpload( false );
         vao->SetNeedsUpdateRecreation( false );
     }
+
+	UpdateBoundingBox();
 }
 
 // *****************************
@@ -189,6 +187,12 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
     unsigned int totalNumVertivces = vaChannel->TotalNumVertices();
     
+	if( totalNumVertivces == 0 )
+	{
+		//assert( false ); //FIXME: at this point empty geometry is not allowed
+		return;
+	}
+
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)

@@ -1133,14 +1133,15 @@ bool            BVProjectEditor::AddLight                    ( model::SceneModel
     if( modelScene && timeline )
     {
         auto light = std::shared_ptr< model::IModelLight >( model::HelperModelLights::CreateModelLight( type, timeline ) );
-        modelScene->AddLight( light );
+		if( modelScene->AddLight( light ) )
+		{
+			if( enableUndo )
+				modelScene->GetHistory().AddOperation( std::unique_ptr< AddLightOperation >( new AddLightOperation( modelScene, light ) ) );
 
-        if( enableUndo )
-            modelScene->GetHistory().AddOperation( std::unique_ptr< AddLightOperation >( new AddLightOperation( modelScene, light ) ) );
+			NotifyLightAdded( light );
 
-        NotifyLightAdded( light );
-        
-        return true;
+			return true;
+		}
     }
 
     return false;

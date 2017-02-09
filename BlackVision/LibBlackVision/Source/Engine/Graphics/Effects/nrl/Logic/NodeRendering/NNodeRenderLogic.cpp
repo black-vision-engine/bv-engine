@@ -72,9 +72,6 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
 
     enable( ctx, output );
 
-    // FIXME: nrl - default clear color used - posisibly customize it a bit;
-    clearBoundRT( ctx, glm::vec4() ); 
-
     RenderQueued( scene->GetRoot(), ctx );
 
     // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
