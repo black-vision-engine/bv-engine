@@ -41,10 +41,10 @@ SharedMemHandler::~SharedMemHandler     ()
 //
 void                                SharedMemHandler::HandleFrameData     ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * channel )
 {
-    //2. Prepare memory representation of current frame
+    //1. Prepare memory representation of current frame
     auto shmFrame = PrepareFrame( state, ctx, channel );
 
-    //3. Process memory representation of current frame
+    //2. Process memory representation of current frame
     ProcessFrame( shmFrame );
 }
 
@@ -90,7 +90,7 @@ Texture2DPtr    SharedMemHandler::ReadDefaultTexture                            
 }
 
 // **************************
-//
+// FIXME: implement is as a part of some readback cache
 Texture2DPtr    SharedMemHandler::ReadMixChannelsTexture                        ( NRenderContext * ctx, const RenderTarget * inputRenderTarget )
 {
     if( m_shmRT == nullptr )

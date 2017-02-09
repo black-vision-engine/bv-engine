@@ -100,6 +100,18 @@ OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
     return output;
 }
 
+// *********************************
+//
+OutputInstance *    CreateOutputVideo   ( const OutputDesc & desc )
+{
+    auto handler    = new SharedMemHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
+    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
+
+    InitializeDefault( output, desc );
+
+    return output;
+}
+
 } // anonymous
 
 // *********************************
@@ -111,7 +123,7 @@ Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
         case CustomOutputType::COT_PREVIEW:
             return CreateOutputPreview( desc );
         case CustomOutputType::COT_VIDEO:
-            return nullptr;
+            return CreateOutputVideo( desc );
         case CustomOutputType::COT_STREAM:
             return CreateOutputShm( desc ); // FIXME: nrl - implement generic CreateOutputStream,
         default:

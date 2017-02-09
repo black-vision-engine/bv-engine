@@ -1,11 +1,13 @@
 #include "stdafx.h"
 
-#include "OutputVideo.h"
+#include "MockVideoHandler.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
 
 #include "Engine/Audio/Resources/AudioUtils.h"
 #include "Assets/Texture/TextureUtils.h"
@@ -17,8 +19,9 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
-    : OutputInstance( width, height )
+MockVideoHandler::MockVideoHandler                          ( unsigned int width, unsigned int height )
+    : m_width( width )
+    , m_height( height )
     , m_activeRenderOutput( 1 )
     , m_audioData( nullptr )
 	, m_lastFrameHasAudio( true )
@@ -42,7 +45,7 @@ OutputVideo::OutputVideo     ( unsigned int width, unsigned int height )
 
 // **************************
 //
-OutputVideo::~OutputVideo    ()
+MockVideoHandler::~MockVideoHandler                         ()
 {
     delete m_videoRT;
     delete m_mixChannelsEffect;
@@ -50,49 +53,26 @@ OutputVideo::~OutputVideo    ()
 
 // **************************
 //
-void    OutputVideo::ProcessFrameData( NRenderContext * ctx, RenderResult * input )
+void    MockVideoHandler::HandleFrameData                   ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * inputChannel )
 {
-    //1. Update internal output state
-    // FIXME: nrl - this is a bit of an overkill, but let's update it every frame here
-    UpdateEffectValues();
+    //1. Prepare memory representation of current frame
+    auto videoFrame = PrepareFrame( state, ctx, inputChannel );
 
-    //2. Prepare memory representation of current frame
-    auto videoFrame = PrepareFrame( ctx, input );
-
-    //3. Process memory representation of current frame
+    //2. Process memory representation of current frame
     ProcessFrame( ctx, videoFrame );
 }
 
 // *********************************
 //
-void            OutputVideo::UpdateEffectValues         ()
+Texture2DPtr    MockVideoHandler::PrepareFrame              ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * inputChannel )
 {
-    auto state = m_mixChannelsEffect->GetState();
-    
-    auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
-    auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
-
-    auto mapping = GetChannelMapping();
-    auto mask = GetChannelMask();
-
-    QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
-    QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
-}
-
-// *********************************
-//
-Texture2DPtr    OutputVideo::PrepareFrame               ( NRenderContext * ctx, RenderResult * input )
-{
-    auto rct = GetActiveRenderChannel();
-    assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
-
-    auto inputRenderTarget = input->GetActiveRenderTarget( rct );  
+    auto inputRenderTarget = inputChannel->GetActiveRenderTarget();  
 
     Texture2DPtr outputFrame;
 
-    if( GetWidth() == inputRenderTarget->Width() && GetHeight() == inputRenderTarget->Height() && AccessOutputState().RepresentsDefaultTexture() )
+    if( m_width == inputRenderTarget->Width() && m_height == inputRenderTarget->Height() && state.RepresentsDefaultTexture() )
     {
-        outputFrame = ReadDefaultTexture( ctx, input, rct );
+        outputFrame = ReadDefaultTexture( ctx, inputChannel );
     }
     else
     {
@@ -104,7 +84,7 @@ Texture2DPtr    OutputVideo::PrepareFrame               ( NRenderContext * ctx, 
 
 // *********************************
 //
-void            OutputVideo::ProcessFrame               ( NRenderContext * ctx, Texture2DPtr frame )
+void            MockVideoHandler::ProcessFrame               ( NRenderContext * ctx, Texture2DPtr frame )
 {
 	auto avFrame = PrepareAVFrame( audio( ctx ), frame );
 
@@ -117,21 +97,18 @@ void            OutputVideo::ProcessFrame               ( NRenderContext * ctx, 
 
 // *********************************
 //
-Texture2DPtr    OutputVideo::ReadDefaultTexture         ( NRenderContext * ctx, RenderResult * input, RenderChannelType rct )
+Texture2DPtr    MockVideoHandler::ReadDefaultTexture         ( NRenderContext * ctx, const RenderChannel * inputChannel )
 {
-	return input->ReadColorTexture( renderer( ctx ), rct );
+	return inputChannel->ReadColorTexture( renderer( ctx ) );
 }
 
 // *********************************
-//
-Texture2DPtr    OutputVideo::ReadMixChannelsTexture     ( NRenderContext * ctx, const RenderTarget * inputRenderTarget )
+// FIXME: implement is as a part of some readback cache
+Texture2DPtr    MockVideoHandler::ReadMixChannelsTexture     ( NRenderContext * ctx, const RenderTarget * inputRenderTarget )
 {
     if( m_videoRT == nullptr )
     {
-        auto w = GetWidth();
-        auto h = GetHeight();
-
-        m_videoRT = allocator( ctx )->CreateCustomRenderTarget( w, h, RenderTarget::RTSemantic::S_DRAW_READ );
+        m_videoRT = allocator( ctx )->CreateCustomRenderTarget( m_width, m_height, RenderTarget::RTSemantic::S_DRAW_READ );
     }
 
     m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
@@ -144,7 +121,7 @@ Texture2DPtr    OutputVideo::ReadMixChannelsTexture     ( NRenderContext * ctx, 
 
 // **************************
 //
-AVFramePtr  OutputVideo::PrepareAVFrame ( audio::AudioRenderer * audio, Texture2DPtr videoFrame )
+AVFramePtr  MockVideoHandler::PrepareAVFrame                ( audio::AudioRenderer * audio, Texture2DPtr videoFrame )
 {
     videocards::AVFrameDescriptor desc;
 
@@ -183,7 +160,7 @@ AVFramePtr  OutputVideo::PrepareAVFrame ( audio::AudioRenderer * audio, Texture2
 	frame->m_TimeCode.m = 22;
 	frame->m_TimeCode.s = 33;
 	frame->m_TimeCode.frame = 12;
-   
+  
     return frame;
 }
 
