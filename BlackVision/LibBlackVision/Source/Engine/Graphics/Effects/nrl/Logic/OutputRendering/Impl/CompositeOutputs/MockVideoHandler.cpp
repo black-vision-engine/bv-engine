@@ -62,6 +62,13 @@ void    MockVideoHandler::HandleFrameData                   ( const NOutputState
     ProcessFrame( ctx, videoFrame );
 }
 
+// **************************
+//
+NFullscreenEffectComponentStatePtr  MockVideoHandler::GetInternalFSEState       ()
+{
+    return m_mixChannelsEffect->GetState();
+}
+
 // *********************************
 //
 Texture2DPtr    MockVideoHandler::PrepareFrame              ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * inputChannel )
@@ -70,7 +77,11 @@ Texture2DPtr    MockVideoHandler::PrepareFrame              ( const NOutputState
 
     Texture2DPtr outputFrame;
 
-    if( m_width == inputRenderTarget->Width() && m_height == inputRenderTarget->Height() && state.RepresentsDefaultTexture() )
+    bool wb = m_width == inputRenderTarget->Width();
+    bool hb = m_height == inputRenderTarget->Height();
+    bool sb = state.RepresentsDefaultTexture();
+
+    if( wb && hb && sb )
     {
         outputFrame = ReadDefaultTexture( ctx, inputChannel );
     }

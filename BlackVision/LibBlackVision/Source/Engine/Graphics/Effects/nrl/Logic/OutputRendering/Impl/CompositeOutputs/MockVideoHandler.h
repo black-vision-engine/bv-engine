@@ -51,6 +51,8 @@ public:
 
     virtual void    HandleFrameData         ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * inputChannel ) override;
 
+    virtual NFullscreenEffectComponentStatePtr  GetInternalFSEState () override;
+
 private:
 
     Texture2DPtr    PrepareFrame            ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * inputChannel );

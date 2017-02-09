@@ -10,6 +10,9 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputInstance.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/OutputCompositeVideo.h"
 
+// FIXME: remove
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/MockVideoHandler.h"
+
 
 namespace bv { namespace nrl {
 
@@ -104,7 +107,7 @@ OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
 //
 OutputInstance *    CreateOutputVideo   ( const OutputDesc & desc )
 {
-    auto handler    = new SharedMemHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
+    auto handler    = new MockVideoHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
     auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
 
     InitializeDefault( output, desc );

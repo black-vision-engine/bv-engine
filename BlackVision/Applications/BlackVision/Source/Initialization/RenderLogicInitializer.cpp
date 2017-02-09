@@ -80,8 +80,11 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     // FIXME: nrl - implement it by reading cfg instance
     { cfg; }
     
-    desc.SetWidth( 1920 / 2 );
-    desc.SetHeight( 1080 / 2 );
+    desc.SetWidth( 1920 );
+    desc.SetHeight( 1080 );
+    // Uncomment to make it BUG crash
+    //desc.SetWidth( 1920 / 2 );
+    //desc.SetHeight( 1080 / 2 );
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
