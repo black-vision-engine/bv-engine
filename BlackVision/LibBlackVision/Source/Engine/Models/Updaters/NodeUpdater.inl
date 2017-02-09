@@ -66,23 +66,34 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 
         m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+
+		UpdateBoundingBox( true );
     }
     else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
     {
         UpdatePositions();
 
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();	
+
+		UpdateBoundingBox( false );
     }
     else
     {
         RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
         VertexArraySingleVertexBuffer * vao = rad->VAO();
 
+		// FIXME: We want to prevent updatig the whole bb. We are apdating here only CoM. Should be moved to separated function.
+		{
+			auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+			auto bv = node->GetBoundingVolume().get();
+
+			UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+		}
+
         vao->SetNeedsUpdateMemUpload( false );
         vao->SetNeedsUpdateRecreation( false );
     }
-
-	UpdateBoundingBox();
 }
 
 // *****************************
@@ -243,12 +254,6 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 inline  void    NodeUpdater::UpdatePositions     ()
 {
     UpdatePositionsImpl( m_renderable, m_vertexAttributesChannel );
-    //
-    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
-
-    //auto bv = node->GetBoundingVolume();
-    //assert( bv );
-    //UpdateBoundingBox();
 }
 
 // *****************************
@@ -256,12 +261,6 @@ inline  void    NodeUpdater::UpdatePositions     ()
 inline  void    NodeUpdater::UpdateTopology      ()
 {
     UpdateTopologyImpl( m_renderable, m_vertexAttributesChannel );
-    //
-    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
-
-    //auto bv = node->GetBoundingVolume();
-    //assert( bv );
-    //UpdateBoundingBox( bv.get() );
 }
 
 // *****************************

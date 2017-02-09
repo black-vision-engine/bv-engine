@@ -336,15 +336,24 @@ void NodeUpdater::UpdateVACPtr()
 
 // ***********************
 //
-void NodeUpdater::UpdateBoundingBox(/* const model::BoundingVolume * bv */)
+void NodeUpdater::UpdateBoundingBox( bool recreate )
 {
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
     auto bv = node->GetBoundingVolume().get();
     assert( bv );
 
-    UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-    UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+	if( !recreate )
+	{
+		UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
+		UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+	}
+	else
+	{
+		UpdatersHelpers::RecreateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
+		UpdatersHelpers::RecreateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+	}
+
     m_sceneNode->SetBoundingBox( bv->GetBoundingBox() );
 }
 
