@@ -43,6 +43,17 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
 //
 void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
 {
+    // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
+    // override previously rendered scene. We have to do it here.
+    for( auto channelType : m_allChannels )
+    {
+        if( result->IsActive( channelType ) )
+        {
+            auto rt = result->GetActiveRenderTarget( channelType );
+            NNodeRenderLogic::Clear( rt, ctx );
+        }
+    }
+
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
