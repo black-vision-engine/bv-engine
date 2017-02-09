@@ -27,6 +27,8 @@ private:
     void                    RenderScenes        ( const SceneVec & scenes, RenderedChannelsData * result, NRenderContext * ctx );
     void                    RenderScene         ( Scene * scene, const RenderTarget * outputRT, NRenderContext * ctx );
 
+    void                    ClearActiveChannels ( RenderedChannelsData * result, NRenderContext * ctx );
+
     void                    PreRender           ( RenderedChannelsData * result );
     void                    PostRender          ( RenderedChannelsData * result, NRenderContext * ctx );
 

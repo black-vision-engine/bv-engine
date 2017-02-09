@@ -45,6 +45,10 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsD
 //
 void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedChannelsData * result, NRenderContext * ctx )
 {
+    // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
+    // override previously rendered scene. We have to do it here.
+    ClearActiveChannels( result, ctx );
+
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
@@ -66,6 +70,21 @@ void    NRenderLogicCore::RenderScene       ( Scene * scene, const RenderTarget 
 {
     NNodeRenderLogic::RenderQueued( scene, outputRT, ctx );
     NNodeRenderLogic::RenderAudio( scene, ctx );
+}
+
+// **************************
+//
+void    NRenderLogicCore::ClearActiveChannels   ( RenderedChannelsData * result, NRenderContext * ctx )
+{
+    for( auto channelType : m_allChannels )
+    {
+        if( result->IsActive( channelType ) )
+        {
+            auto rt = result->GetActiveRenderTarget( channelType );
+
+            NNodeRenderLogic::Clear( rt, ctx );
+        }
+    }
 }
 
 // **************************
