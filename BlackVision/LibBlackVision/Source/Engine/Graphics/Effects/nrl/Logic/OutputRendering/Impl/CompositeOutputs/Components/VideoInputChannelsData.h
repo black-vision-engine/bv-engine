@@ -10,26 +10,26 @@
 
 namespace bv { namespace nrl {
 
-class VideoInputChannelsContainer
+class VideoInputChannelsData
 {
 private:
 
-//    std::vector< RenderChannel * >  m_renderChannels;
+    std::vector< RenderChannel * >  m_renderChannels;
 
 private:
 
     //FIXME: use the 'delete' keyword
-    VideoInputChannelsContainer                ( const VideoInputChannelsContainer & src );
-    VideoInputChannelsContainer &  operator =  ( VideoInputChannelsContainer & src );
+    VideoInputChannelsData                ( const VideoInputChannelsData & src );
+    VideoInputChannelsData &  operator =  ( VideoInputChannelsData & src );
 
 private:
 
-                            VideoInputChannelsContainer    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+                            VideoInputChannelsData    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
 
 public:
 
 
-                            ~VideoInputChannelsContainer   ();
+                            ~VideoInputChannelsData   ();
 
     const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;    
     void                    InvalidateCachedTexture ( RenderChannelType rct );
@@ -46,7 +46,7 @@ public:
   
 public:
 
-    static VideoInputChannelsContainer *   Create   ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator ); 
+    static VideoInputChannelsData *   Create   ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator ); 
 
 };
 
