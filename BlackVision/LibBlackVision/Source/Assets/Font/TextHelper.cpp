@@ -28,6 +28,7 @@ model::VertexAttributesChannelPtr   TextHelper::CreateEmptyVACForText()
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+	vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_CUSTOM, ChannelRole::CR_PASSTHROUGH );
 
     return std::make_shared< model::VertexAttributesChannel>( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc );
 }
@@ -80,6 +81,17 @@ model::ConnectedComponentPtr         CreateEmptyCC()
     ccCenterChannel->AddAttribute( glm::vec2() );
 
     connComp->AddAttributeChannel( model::AttributeChannelPtr( ccCenterChannel ) );
+
+	auto desc3 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_CUSTOM, ChannelRole::CR_PASSTHROUGH );
+
+	auto ccIdChannel = std::make_shared< model::Float2AttributeChannel >( desc3, "cc_num", true );
+
+	ccIdChannel->AddAttribute( glm::vec2() );
+	ccIdChannel->AddAttribute( glm::vec2() );
+	ccIdChannel->AddAttribute( glm::vec2() );
+	ccIdChannel->AddAttribute( glm::vec2() );
+
+	connComp->AddAttributeChannel( model::AttributeChannelPtr( ccIdChannel ) );
 
     return connComp;
 }
@@ -238,7 +250,23 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
 
             connComp->AddAttributeChannel( model::AttributeChannelPtr( ccCenterAttrChannel ) );
 
-            vertexAttributeChannel->AddConnectedComponent( connComp );
+			// CC ID
+
+			auto desc3 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_CUSTOM, ChannelRole::CR_PASSTHROUGH );
+
+			auto ccIdAttrChannel = std::make_shared< model::Float2AttributeChannel >( desc3, "cc_num", true );
+
+			auto k = Float32( vertexAttributeChannel->GetComponents().size() );
+
+			ccIdAttrChannel->AddAttribute( glm::vec2( k, 0.f ) );
+			ccIdAttrChannel->AddAttribute( glm::vec2( k, 0.f ) );
+			ccIdAttrChannel->AddAttribute( glm::vec2( k, 0.f ) );
+			ccIdAttrChannel->AddAttribute( glm::vec2( k, 0.f ) );
+
+			connComp->AddAttributeChannel( model::AttributeChannelPtr( ccIdAttrChannel ) );
+
+			vertexAttributeChannel->AddConnectedComponent( connComp );
+
         }
     }
 
