@@ -140,7 +140,7 @@ private:
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
 
-    inline  void    UpdateBoundingBox   ();
+    inline  void    UpdateBoundingBox   ( bool recreate );
 
     inline	void	UpdateShaderParams  ();
     inline  void    UpdateTexturesData	();
