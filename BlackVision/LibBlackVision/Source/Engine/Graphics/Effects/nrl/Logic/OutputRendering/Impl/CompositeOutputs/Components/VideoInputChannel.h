@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
 #include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 
@@ -21,6 +23,8 @@ protected:
 public:
    
     virtual                     ~VideoInputChannel          ();
+
+    bool                        IsActive                    () const;
 
     virtual Texture2DPtr        ReadColorTexture            ( NRenderContext * ctx ) const;
     virtual void                InvalidateCachedTexture     () const;

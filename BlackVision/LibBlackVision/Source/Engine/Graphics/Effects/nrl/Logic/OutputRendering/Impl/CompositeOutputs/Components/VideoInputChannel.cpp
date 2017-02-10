@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "VideoInputChannel.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Components/VideoResizedInputChannel.h"
 
 
@@ -17,6 +18,13 @@ VideoInputChannel::VideoInputChannel                            ( const RenderCh
 //
 VideoInputChannel::~VideoInputChannel                           ()
 {
+}
+
+// **************************
+//
+bool            VideoInputChannel::IsActive                     () const
+{
+    return m_wrappedRenderChannel->IsActive();
 }
 
 // **************************
@@ -50,7 +58,7 @@ VideoInputChannel *  VideoInputChannel::Create                  ( const RenderCh
     }
     else
     {
-        res = new VideoResizedInputChannel( wrappedChannel );
+        res = new VideoResizedInputChannel( wrappedChannel, width, height );
     }
 
     return res;
