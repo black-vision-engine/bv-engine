@@ -3,8 +3,10 @@
 #include "NRenderLogicCore.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderChannel.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 
@@ -25,7 +27,7 @@ NRenderLogicCore::NRenderLogicCore()
 
 // **************************
 //
-void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
+void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsData * result, NRenderContext * ctx )
 {
     // Invalidate all active output channels
     PreRender   ( result );
@@ -41,18 +43,11 @@ void    NRenderLogicCore::Render    ( const SceneVec & scenes, RenderResult * re
 
 // **************************
 //
-void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderResult * result, NRenderContext * ctx )
+void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedChannelsData * result, NRenderContext * ctx )
 {
     // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
     // override previously rendered scene. We have to do it here.
-    for( auto channelType : m_allChannels )
-    {
-        if( result->IsActive( channelType ) )
-        {
-            auto rt = result->GetActiveRenderTarget( channelType );
-            NNodeRenderLogic::Clear( rt, ctx );
-        }
-    }
+    ClearActiveChannels( result, ctx );
 
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
@@ -79,7 +74,22 @@ void    NRenderLogicCore::RenderScene       ( Scene * scene, const RenderTarget 
 
 // **************************
 //
-void    NRenderLogicCore::PreRender         ( RenderResult * result )
+void    NRenderLogicCore::ClearActiveChannels   ( RenderedChannelsData * result, NRenderContext * ctx )
+{
+    for( auto channelType : m_allChannels )
+    {
+        if( result->IsActive( channelType ) )
+        {
+            auto rt = result->GetActiveRenderTarget( channelType );
+
+            NNodeRenderLogic::Clear( rt, ctx );
+        }
+    }
+}
+
+// **************************
+//
+void    NRenderLogicCore::PreRender         ( RenderedChannelsData * result )
 {
     for( auto channelType : m_allChannels )
     {
@@ -92,7 +102,7 @@ void    NRenderLogicCore::PreRender         ( RenderResult * result )
 
 // **************************
 //
-void    NRenderLogicCore::PostRender        ( RenderResult * result, NRenderContext * ctx )
+void    NRenderLogicCore::PostRender        ( RenderedChannelsData * result, NRenderContext * ctx )
 {
     for( auto channelType : m_allChannels )
     {
