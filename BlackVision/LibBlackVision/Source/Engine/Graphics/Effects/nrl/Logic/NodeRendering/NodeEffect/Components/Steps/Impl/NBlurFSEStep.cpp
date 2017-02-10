@@ -218,6 +218,10 @@ void		NBlurFSEStep::FastBlur						( NRenderContext * ctx, const NRenderedData & 
 
 		resizedRT = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 
+		enable( ctx, resizedRT );
+		clearBoundRT( ctx, glm::vec4() );
+		disableBoundRT( ctx );
+
 		SetQuadTransform( scaleW, scaleH, 0.f, 0.f );
 		SetUVTransform( 1.f, 1.f, 0.f, 0.f );
 		ResizeInput( ctx, input, resizedRT );
@@ -316,7 +320,7 @@ void					NBlurFSEStep::ResizeInput					( NRenderContext * ctx, const NRenderedDa
 {
 	// Clear blur output render target.
 	enable( ctx, output );
-	clearBoundRT( ctx, glm::vec4() );
+	//clearBoundRT( ctx, glm::vec4() );
 
 	m_simpleBlitEffect->Render( ctx, input ); 
 	

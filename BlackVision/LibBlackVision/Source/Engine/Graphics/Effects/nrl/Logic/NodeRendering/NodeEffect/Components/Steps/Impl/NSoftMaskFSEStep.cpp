@@ -85,7 +85,7 @@ bool                    NSoftMaskFSEStep::IsIdle                       ( SceneNo
 // If 
 bool                    NSoftMaskFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
-	return false;
+	return true;
 }
 
 } // nrl

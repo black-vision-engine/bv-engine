@@ -76,6 +76,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
     {
         case NFullscreenEffectType::NFET_PREVIEW_ALPHA_AND_RGB:
         case NFullscreenEffectType::NFET_SIMPLE_BLIT:
+			desc->SetBlendFlag( true );
 			desc->AppendInputSamplerEntry( "Texture", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
 			desc->AppendIVal( ValuesFactory::CreateValueVec4( "quadTransform", glm::vec4( 1.f, 1.f, 0.f, 0.f ) ) );
 			desc->AppendIVal( ValuesFactory::CreateValueVec4( "uvTransform", glm::vec4( 1.f, 1.f, 0.f, 0.f ) ) );
@@ -125,7 +126,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			break;
 		case NFullscreenEffectType::NFET_GLOW:
 			desc->SetBlendFlag( true );
-			desc->SetDepthTestFlag( true );
+			//desc->SetDepthTestFlag( true );
 			desc->AppendInputSamplerEntry( "BluredTex0" );
 			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );
@@ -136,7 +137,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			break;
 		case NFullscreenEffectType::NFET_SOFT_MASK:
 			desc->SetBlendFlag( true );
-			desc->SetDepthTestFlag( true );
+			//desc->SetDepthTestFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0" );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "aspectRatio" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "width" ) );
