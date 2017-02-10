@@ -189,7 +189,7 @@ NFullscreenEffectVisualComponentDesc	CreateDescriptor( NFullscreenEffectType nfs
 
 
 // **************************
-//
+// FIXME: add at least basic means of filtering configuration
 NFullscreenEffect *  CreateFullscreenEffect                  ( NFullscreenEffectType nfseType )
 {
 	auto desc = CreateDescriptor( nfseType );
