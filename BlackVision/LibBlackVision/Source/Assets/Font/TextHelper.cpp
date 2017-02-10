@@ -270,6 +270,16 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
         }
     }
 
+	auto ccNum = Float32( vertexAttributeChannel->GetComponents().size() );
+
+	for( auto & cc : vertexAttributeChannel->GetComponents() )
+	{
+		auto typedAC = std::static_pointer_cast< model::Float2AttributeChannel >( cc->GetAttributeChannels()[ 3 ] );
+		for( int i = 0; i < 4; ++i )
+		{
+			typedAC->GetVertices()[ i ].y = ccNum;
+		}
+	}
 
     auto components = vertexAttributeChannel->GetComponents();
     if( components.empty() ) // FIXME: We add one empty CC because of bug #72174842
