@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Components/VideoInputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
+
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 
@@ -12,6 +14,8 @@ namespace bv { namespace nrl {
 class VideoInputChannelsData
 {
 private:
+
+    const RenderedChannelsData *        m_renderedChannelsData;
 
     std::vector< VideoInputChannel * >  m_renderChannels;
 
@@ -23,25 +27,25 @@ private:
 
 private:
 
-                            VideoInputChannelsData    ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutputType );
+                                VideoInputChannelsData  ( const RenderedChannelsData * renderedChannelsData );
 
 public:
 
 
-                            ~VideoInputChannelsData   ();
+                                ~VideoInputChannelsData ();
 
     const VideoInputChannel *   GetInputChannel         ( RenderChannelType rct ) const;
 
     void                        InvalidateCachedTextres ();
     void                        InvalidateCachedTexture ( RenderChannelType rct );
-    Texture2DPtr                ReadColorTexture        ( Renderer * renderer, RenderChannelType rct );
+    Texture2DPtr                ReadColorTexture        ( Renderer * renderer, RenderChannelType rct ) const;
 
     bool                        IsActive                ( RenderChannelType rct ) const;
     bool                        ContainsValidData       ( RenderChannelType rct ) const;
   
 public:
 
-    static VideoInputChannelsData *   Create          ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator ); 
+    static VideoInputChannelsData *   Create            ( const RenderedChannelsData * renderedChannelsData ); 
 
 };
 

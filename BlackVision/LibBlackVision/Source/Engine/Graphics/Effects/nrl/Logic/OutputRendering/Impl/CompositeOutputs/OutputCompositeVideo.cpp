@@ -5,6 +5,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/FrameDataHandler.h"
 
+// FIXME: make sure that after each frame all VideoInputChannels are invalidated (so that no cached textures are used next frame)
 
 namespace bv { namespace nrl {
 
