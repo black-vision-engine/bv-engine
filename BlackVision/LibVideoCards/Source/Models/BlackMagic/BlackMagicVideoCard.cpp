@@ -282,6 +282,7 @@ UInt32                  VideoCard::EnumerateDevices     ()
             }
 
             iterator->Release();
+			if(deckLink!=nullptr)
             deckLink->Release();
         }
     }
