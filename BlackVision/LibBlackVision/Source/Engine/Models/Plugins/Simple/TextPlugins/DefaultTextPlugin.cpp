@@ -183,6 +183,7 @@ bool								DefaultTextPlugin::NeedsSetText					() const
 		|| m_newLineSize.Changed()
 		|| m_shadowEnabled.Changed()
 		|| m_outlineEnabled.Changed()
+		|| m_glowEnabled.Changed()
 		|| m_textBox.Changed()
 		|| m_useTextBox.Changed();
 }
