@@ -15,7 +15,7 @@ class VideoInputChannelsData
 {
 private:
 
-    const RenderedChannelsData *        m_renderedChannelsData;
+    const RenderedChannelsData *        m_wrappedRenderedChannelsData;
 
     std::vector< VideoInputChannel * >  m_renderChannels;
 
@@ -36,9 +36,9 @@ public:
 
     const VideoInputChannel *   GetInputChannel         ( RenderChannelType rct ) const;
 
-    void                        InvalidateCachedTextres ();
+    void                        InvalidateCachedTextures();
     void                        InvalidateCachedTexture ( RenderChannelType rct );
-    Texture2DPtr                ReadColorTexture        ( Renderer * renderer, RenderChannelType rct ) const;
+    Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, RenderChannelType rct ) const;
 
     bool                        IsActive                ( RenderChannelType rct ) const;
     bool                        ContainsValidData       ( RenderChannelType rct ) const;
