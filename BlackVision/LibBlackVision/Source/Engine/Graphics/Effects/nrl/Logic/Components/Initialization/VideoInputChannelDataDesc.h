@@ -1,6 +1,5 @@
 #pragma once
 
-#include <pair>
 #include <vector>
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"

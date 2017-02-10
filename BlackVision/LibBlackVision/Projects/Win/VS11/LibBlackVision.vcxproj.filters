@@ -2146,6 +2146,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components\VideoInputChannelsData.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\VideoInputChannelDataDesc.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5516,6 +5519,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components\VideoInputChannelsData.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\VideoInputChannelDataDesc.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

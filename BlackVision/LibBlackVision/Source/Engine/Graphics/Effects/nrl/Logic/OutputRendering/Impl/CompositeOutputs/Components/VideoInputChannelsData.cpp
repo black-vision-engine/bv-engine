@@ -9,9 +9,17 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-VideoInputChannelsData::VideoInputChannelsData                              ( const RenderedChannelsData * renderedChannelsData )
+VideoInputChannelsData::VideoInputChannelsData                              ( const RenderedChannelsData * renderedChannelsData /*, list of outputs and scales */ )
     : m_wrappedRenderedChannelsData( renderedChannelsData )
 {  
+    for ( unsigned int i = (unsigned int) RenderChannelType::RCT_OUTPUT_1; i < (unsigned int) RenderChannelType::RCT_TOTAL; ++i )
+    {
+        auto c = renderedChannelsData->GetRenderChannel( (RenderChannelType) i );
+
+        { c; }
+        // FIXME: nrl - implement via passing w, h of corresponding outputs
+//        auto vic = VideoInputChannel::Create( 
+    }
 }
 
 // **************************

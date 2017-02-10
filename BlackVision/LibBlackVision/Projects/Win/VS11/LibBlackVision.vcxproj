@@ -264,6 +264,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputLogicDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\RenderedChannelsDataDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\VideoInputChannelDataDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderLogicCore.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderChannel.cpp" />
@@ -646,6 +647,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputLogicDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\RenderedChannelsDataDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\VideoInputChannelDataDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\NRenderLogicCore.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\RenderChannel.h" />
