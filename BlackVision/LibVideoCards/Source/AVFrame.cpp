@@ -22,6 +22,7 @@ AVFrame::AVFrame()
 //
 AVFrame::~AVFrame     ()
 {
+	
 }
 
 } //videocards
