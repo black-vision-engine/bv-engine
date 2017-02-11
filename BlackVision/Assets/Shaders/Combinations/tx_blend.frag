@@ -10,9 +10,9 @@ uniform sampler2D BlendTex0;
 
 uniform float		alpha;
 uniform float		alpha2;
-uniform int			blendingMode;
+uniform int			blendMode;
 
-// blendingMode constant
+// blendMode constant
 #define Normal 		0
 #define Lighten		1
 #define Darken		2
@@ -42,6 +42,7 @@ uniform int			blendingMode;
 #define Saturation	26
 #define Color		27
 #define Luminosity	28
+#define None		29
 
 vec4	Blend			( vec4 color1, vec4 color2, int mode );
 vec4	BlendNormal		( vec4 color1, vec4 color2 );
@@ -73,6 +74,7 @@ vec4	BlendHue		( vec4 color1, vec4 color2 );
 vec4	BlendSaturation	( vec4 color1, vec4 color2 );
 vec4	BlendColor		( vec4 color1, vec4 color2 );
 vec4	BlendLuminosity	( vec4 color1, vec4 color2 );
+vec4	BlendNone		( vec4 color1, vec4 color2 );
 
 
 vec4 	Desaturate		(vec3 color, float Desaturation);
@@ -92,7 +94,7 @@ void main()
 	color1.rgb = color1.rgb * color1.a;
 	color2.rgb = color2.rgb * color2.a;
 	
-	FragColor = Blend( color1, color2, blendingMode );
+	FragColor = Blend( color1, color2, blendMode );
 }
 
 // ===================================== //
@@ -156,6 +158,8 @@ vec4	Blend		( vec4 color1, vec4 color2, int mode )
 		return BlendColor( color1, color2 );
 	else if( mode == Luminosity )
 		return BlendLuminosity( color1, color2 );
+	else if( mode == None )
+		return BlendNone( color1, color2 );	
 	
 	
 	return vec4( 0.0, 0.0, 0.0, 0.0 );
@@ -431,6 +435,11 @@ vec4	BlendLuminosity	( vec4 color1, vec4 color2 )
 	return vec4( HSLToRGB(vec3(color1HSL.r, color1HSL.g, RGBToHSL( vec3( color2 ) ).b)), color1.a * color2.a  );
 }
 
+// ===================================== //
+vec4	BlendNone		( vec4 color1, vec4 color2 )
+{
+	return color2;
+}
 
 /*
 ** Copyright (c) 2012, Romain Dura romain@shazbits.com

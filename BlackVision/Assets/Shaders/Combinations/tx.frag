@@ -13,5 +13,4 @@ void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
 	FragColor = col * alpha;
-	//FragColor = col * col.a * alpha;  //This one uses premultiplied RGB values
 }

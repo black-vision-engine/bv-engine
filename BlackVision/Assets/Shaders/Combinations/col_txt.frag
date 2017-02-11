@@ -178,7 +178,7 @@ void main()
 	}
 	else 
 	{
-		result = a * text * c;
+		result = a * text * vec4( c.rgb * c.a, c.a );
 		
 		if( glowEnabled ) 
 		{

@@ -50,41 +50,8 @@ public:
 
 }
 
+DEFINE_ENUM_SET_PARAMETER( DefaultCube::Plugin::WeightCenter );
+DEFINE_ENUM_SET_PARAMETER( DefaultCube::Plugin::MappingType );
 
-template<>
-inline bool SetParameter< DefaultCube::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCube::Plugin::WeightCenter & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultCube::Plugin::WeightCenter> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
-template<>
-inline bool SetParameter< DefaultCube::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultCube::Plugin::MappingType & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultCube::Plugin::MappingType> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 } }
