@@ -329,6 +329,10 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
     {
         if( textureUnitStateChanged || textureUnit != renderer->GetSamplerTexUnit( loc ) )
         {
+			renderer->SetDisabled( texture, textureUnit );
+			
+			renderer->Enable( texture, textureUnit );
+
             m_program->SetUniform( loc, textureUnit );
 
             renderer->SetSamplerTexUnit( loc, textureUnit );
