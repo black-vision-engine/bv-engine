@@ -85,6 +85,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_ENABLED, false );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_ENABLED, false );
+	h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::TEXT_BOX, glm::vec2( 1.0f, 1.0f ) );
