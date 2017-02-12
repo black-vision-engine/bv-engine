@@ -19,6 +19,7 @@ namespace bv { namespace model {
 
 
 const std::string        DefaultEnvironmentTexturePlugin::PARAM::Reflectivity   = "reflectivity";
+const std::string        DefaultEnvironmentTexturePlugin::PARAM::TxMat			= "txMat";
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -48,6 +49,7 @@ DefaultPluginParamValModelPtr   DefaultEnvironmentTexturePluginDesc::CreateDefau
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultEnvironmentTexturePlugin::PARAM::Reflectivity, 0.5f, true );
+	helper.AddTransformParam( DefaultEnvironmentTexturePlugin::PARAM::TxMat );
 
     return helper.GetModel();
 }
