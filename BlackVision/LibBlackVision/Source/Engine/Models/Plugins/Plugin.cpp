@@ -648,9 +648,9 @@ ISerializablePtr BasePlugin::Create                              ( const IDeseri
                 SetParameter( plugin->GetPluginParamValModel(), param );
             }
 
-            // Note: in this place values have their initial values written by plugins.
-            // This line evaluates new values.
-            plugin->GetPluginParamValModel()->Update();
+            //// Note: in this place values have their initial values written by plugins.
+            //// This line evaluates new values.
+            //plugin->GetPluginParamValModel()->Update();
         }
 
         // assets
