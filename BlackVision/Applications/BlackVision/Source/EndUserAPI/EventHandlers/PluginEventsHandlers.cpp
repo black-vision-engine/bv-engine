@@ -60,7 +60,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     model::IParameterPtr param = nullptr;
 
     // FIXME: should be set externally
-    bool enableUndo = true;
+    bool enableUndo = false;
 
     //<------- preserve compatibility code - delete me later & uncomment code below -------
     if( paramSubName.empty() )

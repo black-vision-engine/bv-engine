@@ -129,7 +129,8 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
             size_t i = 0;
             do
             {
-                interpolator->interpolators[ i++ ]->Deserialize( deser );
+				if(i < interpolator->interpolators.size())
+					interpolator->interpolators[ i++ ]->Deserialize( deser );
             } while( deser.NextChild() );
             deser.ExitChild(); // exit "interpolation"
         }
