@@ -30,7 +30,7 @@ void		BlendHelper::SetBlendRendererContext	( DefaultPixelShaderChannelPtr psc, c
     auto ctx = psc->GetRendererContext();
 
 	ctx->alphaCtx->srcAlphaBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-	ctx->alphaCtx->dstAlphaBlendMode = model::AlphaContext::DstBlendMode::DBM_ZERO;
+	ctx->alphaCtx->dstAlphaBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE;
 
     BlendHelper::BlendMode blendMode = param->Evaluate();
 	switch( blendMode )
