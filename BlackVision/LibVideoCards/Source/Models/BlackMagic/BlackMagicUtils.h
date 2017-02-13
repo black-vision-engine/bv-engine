@@ -23,6 +23,7 @@ struct ChannelOutputData
     bool                    interlaced;
     bool                    flipped;
     BMDDisplayMode          videoMode;
+	bool					enabled;
 };
 
 DEFINE_UPTR_TYPE( ChannelOutputData )

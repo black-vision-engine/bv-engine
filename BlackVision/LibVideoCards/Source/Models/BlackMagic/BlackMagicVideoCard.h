@@ -44,7 +44,7 @@ private:
 
 	IDeckLinkKeyer *							m_keyer;
 
-	void					InitDeclinkKeyer	( const ChannelOutputData & ch );
+	bool					InitDeclinkKeyer	( const ChannelOutputData & ch );
 
 public:
 

@@ -136,6 +136,8 @@ bool                    VideoCard::InitDevice           ()
 {
     IDeckLinkIterator * iterator;
 
+	bool success = false;
+
     if( SUCCESS( CoCreateInstance( CLSID_CDeckLinkIterator, NULL, CLSCTX_ALL, IID_IDeckLinkIterator, ( void** )&iterator ) ) )
     {
         auto idx = m_deviceID;
@@ -155,14 +157,24 @@ bool                    VideoCard::InitDevice           ()
             if( SUCCESS( m_device->QueryInterface( IID_IDeckLinkOutput, ( void** )&m_output ) ) &&
                 SUCCESS( m_device->QueryInterface( IID_IDeckLinkConfiguration, ( void** )&m_configuration ) ) )
             {
-                return true;
+				LOG_MESSAGE( SeverityLevel::info ) << "Initilizing Decklink device output success. Device ID: " << m_deviceID;
+				success = true;
             }
+			else
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Cannot initilize Decklink device output. Device ID: " << m_deviceID;
+				success = false;
+			}
         }
 
         iterator->Release();
     }
+	else
+	{
+		success = false;
+	}
 
-    return false;
+    return success;
 }
 
 //**************************************
@@ -171,6 +183,8 @@ bool                    VideoCard::InitOutput()
 {
     IDeckLinkDisplayModeIterator * displayModeIterator = nullptr;
     IDeckLinkDisplayMode * displayMode = nullptr;
+
+	bool success = false;
 
     for( auto & output : m_outputs )
     {
@@ -201,23 +215,20 @@ bool                    VideoCard::InitOutput()
                                                             bmdFrameFlagFlipVertical, &frame ) ) )
                 {
                     m_frames.push_back( frame );
-					InitDeclinkKeyer( output );
-                    return true;
+					success &= InitDeclinkKeyer( output );
                 }
 
                 displayMode->Release();
             }
-
-            displayModeIterator->Release();
         }
     }
     
-    return false;
+    return success;
 }
 
 //**************************************
 //
-void					VideoCard::InitDeclinkKeyer		( const ChannelOutputData & ch )
+bool					VideoCard::InitDeclinkKeyer		( const ChannelOutputData & ch )
 {
 	if( ch.type == IOType::KEY || ch.type == IOType::FILL_KEY )
 	{
@@ -225,11 +236,17 @@ void					VideoCard::InitDeclinkKeyer		( const ChannelOutputData & ch )
 		{
 			m_keyer->Enable( true );
 			m_keyer->SetLevel( 255 ); // Blend key completely onto the frame.
+			return true;
 		}
 		else
 		{
 			LOG_MESSAGE( SeverityLevel::error ) << "Cannot obtain the IDeckLinkKeyer interface.";
+			return false;
 		}
+	}
+	else
+	{
+		return true;
 	}
 }
 
@@ -237,14 +254,10 @@ void					VideoCard::InitDeclinkKeyer		( const ChannelOutputData & ch )
 //
 void                    VideoCard::SetVideoOutput       ( bool enable )
 {
-    { enable; }
-    //for( auto frame : m_frames )
-    //{
-    //    void * rawFrame;
-    //    frame->GetBytes( &rawFrame );
-
-    //    memset( rawFrame, 0, frame->GetRowBytes() * frame->GetHeight() );
-    //}
+	for( auto & o : m_outputs )
+	{
+		o.enabled = enable;
+	}
 }
 
 //**************************************
@@ -270,15 +283,17 @@ void                    VideoCard::ProcessFrame         (AVFramePtr src_frame, i
 	{odd;}
     for( UInt32 i = 0; i < ( UInt32 )m_outputs.size(); ++i )
     {
-        auto frame = m_frames[ i ];
+		if( m_outputs[ i ].enabled )
+		{
+			auto frame = m_frames[ i ];
 
-        void * rawFrame;
-        frame->GetBytes( &rawFrame );
+			void * rawFrame;
+			frame->GetBytes( &rawFrame );
 
-		memcpy( rawFrame, src_frame->m_videoData->Get(),frame->GetRowBytes() * frame->GetHeight() );
+			memcpy( rawFrame, src_frame->m_videoData->Get(), frame->GetRowBytes() * frame->GetHeight() );
 
-        m_output->DisplayVideoFrameSync( frame );
-		
+			m_output->DisplayVideoFrameSync( frame );
+		}		
     }
 }
 
