@@ -205,6 +205,8 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         IEventPtr evt = m_queues[ activeQueue ].Front();
         m_queues[ activeQueue ].Pop();
 
+
+
         EventType eventType = evt->GetEventType();
 
         auto listenersIt = m_eventListeners.find( eventType );
