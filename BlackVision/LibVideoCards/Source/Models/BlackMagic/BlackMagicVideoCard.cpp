@@ -2,6 +2,7 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "UseLoggerVideoModule.h"
 
 #define SUCCESS( hr ) ( ( ( HRESULT )( hr ) ) == S_OK )
 
@@ -87,6 +88,7 @@ VideoCard::VideoCard( UInt32 deviceID )
     , m_device( nullptr )
     , m_output( nullptr )
     , m_configuration( nullptr )
+	, m_keyer( nullptr )
 {
     InitVideoCard();
 }
@@ -95,10 +97,11 @@ VideoCard::VideoCard( UInt32 deviceID )
 //
 VideoCard::~VideoCard       ()
 {
-    while( !m_frames.empty() )
+    for ( auto & f : m_frames )
     {
-        m_frames[ 0 ]->Release();
+		f->Release();
     }
+
     m_frames.clear();
 
     if( m_output )
@@ -117,10 +120,14 @@ bool                    VideoCard::InitVideoCard        ()
 {
     if( InitDevice() )
     {
-        
+		LOG_MESSAGE( SeverityLevel::info ) << "BlackMagic device '" << m_deviceID << "' properly initialized.";
+		return true;
     }
-
-    return false;
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannor properly initilized BlackMagic device '" << m_deviceID << "'.";
+		return false;
+	}
 }
 
 //**************************************
@@ -194,6 +201,7 @@ bool                    VideoCard::InitOutput()
                                                             bmdFrameFlagFlipVertical, &frame ) ) )
                 {
                     m_frames.push_back( frame );
+					InitDeclinkKeyer( output );
                     return true;
                 }
 
@@ -205,6 +213,24 @@ bool                    VideoCard::InitOutput()
     }
     
     return false;
+}
+
+//**************************************
+//
+void					VideoCard::InitDeclinkKeyer		( const ChannelOutputData & ch )
+{
+	if( ch.type == IOType::KEY || ch.type == IOType::FILL_KEY )
+	{
+		if( SUCCESS( m_device->QueryInterface( IID_IDeckLinkKeyer, ( void** ) &m_keyer ) ) )
+		{
+			m_keyer->Enable( true );
+			m_keyer->SetLevel( 255 ); // Blend key completely onto the frame.
+		}
+		else
+		{
+			LOG_MESSAGE( SeverityLevel::error ) << "Cannot obtain the IDeckLinkKeyer interface.";
+		}
+	}
 }
 
 //**************************************
@@ -225,7 +251,10 @@ void                    VideoCard::SetVideoOutput       ( bool enable )
 //
 void                    VideoCard::AddOutput            ( ChannelOutputData output )
 {
-    m_outputs.push_back( output );
+	if( m_outputs.empty() )
+		m_outputs.push_back( output );
+	else
+		LOG_MESSAGE( SeverityLevel::error ) << "This type of card has only one output. Lastly added output has just been overided.";
 }
 
 //**************************************
@@ -246,14 +275,7 @@ void                    VideoCard::ProcessFrame         (AVFramePtr src_frame, i
         void * rawFrame;
         frame->GetBytes( &rawFrame );
 
-        if( m_outputs[ i ].type == IOType::KEY )
-        {
-            //FIXME: CopyAlphaBits
-        }
-        else
-        {
-            memcpy( rawFrame, src_frame->m_videoData->Get(),frame->GetRowBytes() * frame->GetHeight() );
-        }
+		memcpy( rawFrame, src_frame->m_videoData->Get(),frame->GetRowBytes() * frame->GetHeight() );
 
         m_output->DisplayVideoFrameSync( frame );
 		

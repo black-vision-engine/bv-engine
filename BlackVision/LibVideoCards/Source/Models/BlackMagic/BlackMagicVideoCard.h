@@ -42,6 +42,10 @@ private:
     std::vector< IDeckLinkMutableVideoFrame * > m_frames;
     std::vector< ChannelOutputData >            m_outputs;
 
+	IDeckLinkKeyer *							m_keyer;
+
+	void					InitDeclinkKeyer	( const ChannelOutputData & ch );
+
 public:
 
     static UInt32           AvailableVideoCards;
