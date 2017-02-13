@@ -56,6 +56,8 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     
     
     TimeType keyTime           = setParamEvent->Time;
+	if (keyTime != keyTime)
+		keyTime = 0.0; // hack na nan
 
     model::IParameterPtr param = nullptr;
 
