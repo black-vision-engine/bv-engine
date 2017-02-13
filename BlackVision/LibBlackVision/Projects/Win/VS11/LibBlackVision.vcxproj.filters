@@ -5420,7 +5420,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Output.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
     </ClInclude>
@@ -5522,6 +5521,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\VideoInputChannelDataDesc.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
+      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
