@@ -1,13 +1,16 @@
 #include "stdafx.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
+
+#include "Mathematics/Interpolators/CompositeInterpolator.inl"
+
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
-
-#include "UseLoggerLibBlackVision.h"
 
 
 
