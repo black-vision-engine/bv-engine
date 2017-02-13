@@ -7,10 +7,8 @@
 
 #include "Serialization/ISerializer.h"
 
-
-
-#include "Memory/MemoryLeaks.h"
-
+#include "System/Path.h"
+#include "ProjectManager.h"
 
 
 namespace bv
@@ -32,7 +30,7 @@ ser.ExitChild();
 
 // ***********************
 //
-ISerializablePtr     SingleTextureAssetDesc::Create          ( IDeserializer& /*dob*/ )
+ISerializablePtr        SingleTextureAssetDesc::Create          ( IDeserializer& /*dob*/ )
 {
     assert( !"implement me" );
     return nullptr;
@@ -40,36 +38,36 @@ ISerializablePtr     SingleTextureAssetDesc::Create          ( IDeserializer& /*
 
 // ***********************
 //
-const std::string &	SingleTextureAssetDesc::GetUID() const
+const std::string &	    SingleTextureAssetDesc::GetUID() const
 {
 	return SingleTextureAssetDesc::UID();
 }
 
 // ***********************
-const std::string &	SingleTextureAssetDesc::UID()
+const std::string &	    SingleTextureAssetDesc::UID()
 {
 	return SingleTextureAssetDesc::uid;
 }
 
 // ***********************
 //
-VoidConstPtr SingleTextureAssetDesc::QueryThis() const
+VoidConstPtr            SingleTextureAssetDesc::QueryThis() const
 {
 	return shared_from_this();
 }
 
 // ***********************
 //
-bool SingleTextureAssetDesc::IsCacheable	() const
+bool                    SingleTextureAssetDesc::IsCacheable	() const
 {
 	return m_isCacheable;
 }
 
 // ***********************
 //
-std::string	SingleTextureAssetDesc::GetKey	() const
+std::string	            SingleTextureAssetDesc::GetKey	() const
 {
-	return GetImagePath();
+	return m_imagePath + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_imagePath ) ) );
 }
 
 // ***********************
