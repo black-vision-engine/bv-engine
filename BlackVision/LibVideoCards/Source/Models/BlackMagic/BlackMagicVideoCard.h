@@ -5,6 +5,7 @@
 #include "BlackMagicUtils.h"
 #include "AVFrame.h"
 #include "BlackMagic\DeckLinkAPI_h.h"
+#include "BlackMagicVCThread.h"
 
 
 namespace bv { namespace videocards { namespace blackmagic {
@@ -44,7 +45,9 @@ private:
 
 	IDeckLinkKeyer *							m_keyer;
 
-	bool					InitDeclinkKeyer	( const ChannelOutputData & ch );
+	BlackMagicVCThreadUPtr						m_blackMagicVCThread;
+
+	bool					InitKeyer			( const ChannelOutputData & ch );
 
 public:
 

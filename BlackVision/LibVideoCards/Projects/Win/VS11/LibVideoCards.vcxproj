@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.h" />
@@ -42,6 +43,7 @@
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
     <ClCompile Include="..\..\..\Source\AVFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.cpp" />

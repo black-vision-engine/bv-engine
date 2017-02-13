@@ -91,6 +91,10 @@ VideoCard::VideoCard( UInt32 deviceID )
 	, m_keyer( nullptr )
 {
     InitVideoCard();
+
+	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread() );
+	m_blackMagicVCThread->Stop();
+	m_blackMagicVCThread->Start();
 }
 
 //**************************************
@@ -215,7 +219,7 @@ bool                    VideoCard::InitOutput()
                                                             bmdFrameFlagFlipVertical, &frame ) ) )
                 {
                     m_frames.push_back( frame );
-					success &= InitDeclinkKeyer( output );
+					success &= InitKeyer( output );
                 }
 
                 displayMode->Release();
@@ -228,7 +232,7 @@ bool                    VideoCard::InitOutput()
 
 //**************************************
 //
-bool					VideoCard::InitDeclinkKeyer		( const ChannelOutputData & ch )
+bool					VideoCard::InitKeyer			( const ChannelOutputData & ch )
 {
 	if( ch.type == IOType::KEY || ch.type == IOType::FILL_KEY )
 	{
