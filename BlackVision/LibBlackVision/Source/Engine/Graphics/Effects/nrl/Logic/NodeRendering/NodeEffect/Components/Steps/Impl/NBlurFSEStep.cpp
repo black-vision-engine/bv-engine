@@ -163,6 +163,10 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 		for( auto i = 0; i < stepsNum - 1; ++i )
 		{
+			enable( ctx, tmpOut );
+			clearBoundRT( ctx, glm::vec4() );
+			disableBoundRT( ctx );
+
 			FastBlur( ctx, rd, blurSize, tmpOut );
 			auto oldInputRT = rd.GetEntry( 0 );
 			rd.SetEntry( 0, tmpOut );
