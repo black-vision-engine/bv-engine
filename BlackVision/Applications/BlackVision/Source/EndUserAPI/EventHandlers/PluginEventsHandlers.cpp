@@ -56,11 +56,13 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     
     
     TimeType keyTime           = setParamEvent->Time;
+	if (keyTime != keyTime)
+		keyTime = 0.0; // hack na nan
 
     model::IParameterPtr param = nullptr;
 
     // FIXME: should be set externally
-    bool enableUndo = true;
+    bool enableUndo = false;
 
     //<------- preserve compatibility code - delete me later & uncomment code below -------
     if( paramSubName.empty() )

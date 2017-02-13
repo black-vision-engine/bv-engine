@@ -9,6 +9,7 @@ namespace bv
 
 namespace nrl {
 class NRenderLogic;
+class OutputScreenshot;
 }
 
 class Renderer;
@@ -58,6 +59,10 @@ public:
     TimeType        GetFrameTime        () const    { return m_currentTime; }
     unsigned int    GetFrameNumber      () const    { return m_frameNumber; }
     TimeType        GetRealTime         () const    { return m_realTime; }
+
+private:
+
+    nrl::OutputScreenshot *     GetScreenshotLogic  ();
 
 };
 

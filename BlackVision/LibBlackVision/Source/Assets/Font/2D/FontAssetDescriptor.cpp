@@ -4,6 +4,10 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "DataTypes/Hash.h"
+#include "ProjectManager.h"
+
+
 
 namespace bv {
 
@@ -148,6 +152,7 @@ const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
 std::string           FontAssetDesc::GetKey        () const
 {
     return  m_fontFileName + "_" +
+            std::to_string( Path::GetTimestamp( m_fontFileName ) ) + "_" +
             std::to_string( m_fontSize ) + "_" +
             std::to_string( m_blurSize ) + "_" +
             std::to_string( m_glowBlurSize ) + "_" +
