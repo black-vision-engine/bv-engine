@@ -101,6 +101,9 @@ VideoCard::VideoCard( UInt32 deviceID )
 //
 VideoCard::~VideoCard       ()
 {
+	m_blackMagicVCThread->Kill();
+	m_blackMagicVCThread->Join();
+
     for ( auto & f : m_frames )
     {
 		f->Release();
