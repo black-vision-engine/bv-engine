@@ -127,8 +127,7 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
 	if( out->GetType() != in->GetType() )
 	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << (int)out->GetType() << " != " << (int)in->GetType() << "'Check a type of param '" << in->GetName() << "' in the scene file." << std::endl
-			<< "Scene is not loaded properly !!!";
+		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << ( int ) out->GetType() << " != " << ( int ) in->GetType() << "'. Check a type of param '" << in->GetName() << "'.";
 	}
 	else
 	{
@@ -206,8 +205,7 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 		}
 		else
 		{
-			LOG_MESSAGE( SeverityLevel::error ) << "Unknown param type '" << (int)out->GetType() << "'. Check a type of param '" << out->GetName() << "' in the scene file." << std::endl
-				<< "Scene is not loaded properly !!!";
+			LOG_MESSAGE( SeverityLevel::error ) << "Unknown param type '" << ( int ) out->GetType() << "'. Check a type of param '" << out->GetName() << "'.";
 			return;
 		}
 	}
