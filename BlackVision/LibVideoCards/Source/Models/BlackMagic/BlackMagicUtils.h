@@ -9,6 +9,7 @@
 
 #include "CoreDEF.h"
 
+#define SUCCESS( hr ) ( ( ( HRESULT )( hr ) ) == S_OK )
 
 namespace bv { namespace videocards { namespace blackmagic {
 

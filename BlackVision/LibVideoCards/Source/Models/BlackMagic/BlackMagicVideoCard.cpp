@@ -4,8 +4,6 @@
 
 #include "UseLoggerVideoModule.h"
 
-#define SUCCESS( hr ) ( ( ( HRESULT )( hr ) ) == S_OK )
-
 
 namespace bv { namespace videocards { namespace blackmagic {
 
@@ -92,7 +90,7 @@ VideoCard::VideoCard( UInt32 deviceID )
 {
     InitVideoCard();
 
-	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread() );
+	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( m_output ) );
 	m_blackMagicVCThread->Stop();
 	m_blackMagicVCThread->Start();
 }
@@ -221,7 +219,7 @@ bool                    VideoCard::InitOutput()
                     SUCCESS( m_output->CreateVideoFrame( width, height, width * 4, BMDPixelFormat::bmdFormat8BitBGRA,
                                                             bmdFrameFlagFlipVertical, &frame ) ) )
                 {
-                    m_frames.push_back( frame );
+					m_blackMagicVCThread->SetDecklinkFrame( frame );
 					success &= InitKeyer( output );
                 }
 
@@ -281,25 +279,19 @@ void                    VideoCard::AddOutput            ( ChannelOutputData outp
 //
 void                    VideoCard::Start                ()
 {
+	m_blackMagicVCThread->Resume();
 }
 
 //**************************************
 //
-void                    VideoCard::ProcessFrame         (AVFramePtr src_frame, int odd )
+void                    VideoCard::ProcessFrame         (AVFramePtr avFrame, int odd )
 {
 	{odd;}
     for( UInt32 i = 0; i < ( UInt32 )m_outputs.size(); ++i )
     {
 		if( m_outputs[ i ].enabled )
 		{
-			auto frame = m_frames[ i ];
-
-			void * rawFrame;
-			frame->GetBytes( &rawFrame );
-
-			memcpy( rawFrame, src_frame->m_videoData->Get(), frame->GetRowBytes() * frame->GetHeight() );
-
-			m_output->DisplayVideoFrameSync( frame );
+			m_blackMagicVCThread->EnqueueFrame( avFrame );
 		}		
     }
 }
