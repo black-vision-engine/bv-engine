@@ -465,7 +465,7 @@ bool svgtiny_parse_path(IDeserializer & path, SVGAssetPtr mesh )
 AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  const
 {
     auto svgDesc = QueryTypedDesc< SVGAssetDescriptorConstPtr >( desc );
-    auto path = ProjectManager::GetInstance()->ToAbsPath( svgDesc->GetKey() ).Str(); // FIXME GetKey -> GetPath
+    auto path = ProjectManager::GetInstance()->ToAbsPath( svgDesc->GetPath() ).Str(); // FIXME GetKey -> GetPath
     
     auto mesh = std::make_shared< SVGAsset >( path );
     

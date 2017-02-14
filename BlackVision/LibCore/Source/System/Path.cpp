@@ -340,6 +340,17 @@ bool            Path::IsValisPathName   ( const std::string & path )
     return isWindowsName && isPortableDir;
 }
 
+// ***********************
+//
+std::time_t     Path::GetTimestamp      ( const Path & path )
+{
+    boost::system::error_code error;
+    auto timestamp = boost::filesystem::last_write_time( path.Str(), error );
+    if( !error )
+        return timestamp;
+    return 0;
+}
+
 // *********************************
 //
 StringVector    Path::Split				() const

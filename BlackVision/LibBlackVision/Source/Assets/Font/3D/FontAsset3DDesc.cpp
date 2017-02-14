@@ -4,6 +4,9 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "System/Path.h"
+#include "ProjectManager.h"
+
 
 namespace bv {
 
@@ -113,7 +116,8 @@ const std::wstring &    FontAsset3DDesc::GetAtlasCharSetFile () const
 //
 std::string             FontAsset3DDesc::GetKey		() const
 {
-    return  m_fontFileName + "_" +
+    return m_fontFileName + "_" +
+        std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_fontFileName ) ) ) + "_" +
         std::to_string( m_fontSize );
 }
 
