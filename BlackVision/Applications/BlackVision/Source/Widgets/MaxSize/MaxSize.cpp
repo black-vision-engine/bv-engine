@@ -83,7 +83,7 @@ void                        MaxSize::Update			( TimeType t )
     {
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
 
-		// If there isn't transform param in previuos plugins do nothing.
+		// If there isn't transform param in previuos plugin do nothing.
 		if( transformParam )
 		{
 			auto bb = node->GetBoundingBoxRecursive();

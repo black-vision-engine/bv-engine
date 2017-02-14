@@ -122,10 +122,15 @@ ParameterPtr    GetPluginParameter          ( model::SceneModel * scene, const s
                 }
             }
         }
-    }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
-    return nullptr;
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
+    }
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+	}
+
+	return nullptr;
 }
 
 // ***********************
@@ -155,10 +160,15 @@ ParameterPtr    GetGlobalEffectParameter    ( model::SceneModel * scene, const s
                 }
             }
         }
-    }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], param [" + paramName + "] not found";
-    return nullptr;
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], param [" + paramName + "] not found";
+    }
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+	}
+
+	return nullptr;
 }
 
 // ***********************
@@ -192,10 +202,15 @@ ParameterPtr    GetResourceParameter        ( model::SceneModel * scene, const s
                 }
             }
         }
-    }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], plugin [" + pluginName + "], texture [" + textureName + "], param [" + paramName + "] not found";
-    return nullptr;
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "], plugin [" + pluginName + "], texture [" + textureName + "], param [" + paramName + "] not found";
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+	}
+    
+	return nullptr;
 }
 
 // ***********************
@@ -221,9 +236,14 @@ ParameterPtr    GetLightParameter           ( model::SceneModel * scene, UInt32 
                 return param;
             }
         }
-    }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( lightIndex ) + "], param [" + paramName + "] not found";
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( lightIndex ) + "], param [" + paramName + "] not found";
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+	}
+
     return nullptr;
 }
 
@@ -253,10 +273,15 @@ ParameterPtr    GetNodeLogicParameter       ( model::SceneModel * scene, const s
                     return param;
                 }
             }
-        }
-    }
+		}
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "],  param [" + paramName + "] not found";
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "],  param [" + paramName + "] not found";
+    }
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+	}
+    
     return nullptr;
 }
 
@@ -283,9 +308,14 @@ ParameterPtr    GetCameraParameter          ( model::SceneModel * scene, UInt32 
                 return param;
             }
         }
-    }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( cameraIndex ) + "], param [" + paramName + "] not found";
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( cameraIndex ) + "], param [" + paramName + "] not found";
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+	}
+
     return nullptr;
 }
 
