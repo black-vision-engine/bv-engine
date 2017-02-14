@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <ctime>
 
 
 namespace bv {
@@ -43,6 +44,8 @@ public:
 	static PathVec		List			( const Path & path, bool recursive, const std::string exp = ".*" );
 	static Path			RelativePath	( const Path & path, const Path & start );
     static bool         IsValisPathName ( const std::string & path );
+
+    static std::time_t  GetTimestamp    ( const Path & path );
 
 private:
 
