@@ -124,7 +124,7 @@ void SetDefaultState( NFullscreenEffectVisualComponentDesc * desc, NFullscreenEf
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "inner" ) );
 			desc->AppendIVal( ValuesFactory::CreateValueBool( "outer" ) );
 			break;
-		case NFullscreenEffectType::NFET_GLOW:
+		case NFullscreenEffectType::NFET_GLOW: 
 			desc->SetBlendFlag( true );
 			//desc->SetDepthTestFlag( true );
 			desc->AppendInputSamplerEntry( "BluredTex0" );
@@ -190,7 +190,7 @@ NFullscreenEffectVisualComponentDesc	CreateDescriptor( NFullscreenEffectType nfs
 
 
 // **************************
-//
+// FIXME: add at least basic means of filtering configuration
 NFullscreenEffect *  CreateFullscreenEffect                  ( NFullscreenEffectType nfseType )
 {
 	auto desc = CreateDescriptor( nfseType );
