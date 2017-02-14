@@ -682,6 +682,15 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
         return false;
     }
 
+    if( srcNode == destParentNode )
+    {
+        LOG_MESSAGE( SeverityLevel::error )
+            << "[MoveNode] Trying to attach node as child of itself. Node: [" + srcNode->GetName()
+            + "], source scene: [" + srcScene->GetName()
+            + "], destination scene: [" + destScene->GetName() + "]";
+        return false;
+    }
+
     if( srcScene == destScene )
     {
         if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
