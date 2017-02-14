@@ -27,6 +27,7 @@ namespace ProfilerEditor.Tester
             m_compareExceptions.Add( new ComparisionException.IgnoreException( "GetAssetThumbnail" ) );
             m_compareExceptions.Add( new ComparisionException.IgnoreException( "GetPresetThumbnail" ) );    
             m_compareExceptions.Add( new ComparisionException.IgnoreException( "ListProjectNames" ) );
+            m_compareExceptions.Add( new ComparisionException.IgnoreException( "CheckTimelineTime" ) );
         }
 
 
