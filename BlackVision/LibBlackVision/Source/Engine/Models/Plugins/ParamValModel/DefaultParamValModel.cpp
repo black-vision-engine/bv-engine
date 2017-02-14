@@ -125,85 +125,90 @@ void                                        DefaultParamValModel::Update        
 
 void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
-    assert( out->GetType() == in->GetType() );
+	if( out->GetType() != in->GetType() )
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << ( int ) out->GetType() << " != " << ( int ) in->GetType() << "'. Check a type of param '" << in->GetName() << "'.";
+	}
+	else
+	{
+		out->SetTimeEvaluator( in->GetTimeEvaluator() );
 
-    out->SetTimeEvaluator( in->GetTimeEvaluator() );
+		if( out->GetType() == ModelParamType::MPT_VEC4 )
+		{
+			auto inT = QueryTypedParam< ParamVec4Ptr >( in );
+			auto outT = QueryTypedParam< ParamVec4Ptr >( out );
 
-    if( out->GetType() == ModelParamType::MPT_VEC4 )
-    {
-        auto inT = QueryTypedParam< ParamVec4Ptr >( in );
-        auto outT = QueryTypedParam< ParamVec4Ptr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_VEC3 )
+		{
+			auto inT = QueryTypedParam< ParamVec3Ptr >( in );
+			auto outT = QueryTypedParam< ParamVec3Ptr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    }
-    else if( out->GetType() == ModelParamType::MPT_VEC3 )
-    {
-        auto inT = QueryTypedParam< ParamVec3Ptr >( in );
-        auto outT = QueryTypedParam< ParamVec3Ptr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_VEC2 )
+		{
+			auto inT = QueryTypedParam< ParamVec2Ptr >( in );
+			auto outT = QueryTypedParam< ParamVec2Ptr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    } 
-    else if( out->GetType() == ModelParamType::MPT_VEC2 )
-    {
-        auto inT = QueryTypedParam< ParamVec2Ptr >( in );
-        auto outT = QueryTypedParam< ParamVec2Ptr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_FLOAT )
+		{
+			auto inT = QueryTypedParam< ParamFloatPtr >( in );
+			auto outT = QueryTypedParam< ParamFloatPtr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    } 
-    else if( out->GetType() == ModelParamType::MPT_FLOAT )
-    {
-        auto inT = QueryTypedParam< ParamFloatPtr >( in );
-        auto outT = QueryTypedParam< ParamFloatPtr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_INT )
+		{
+			auto inT = QueryTypedParam< ParamIntPtr >( in );
+			auto outT = QueryTypedParam< ParamIntPtr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    } 
-    else if( out->GetType() == ModelParamType::MPT_INT )
-    {
-        auto inT = QueryTypedParam< ParamIntPtr >( in );
-        auto outT = QueryTypedParam< ParamIntPtr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_BOOL )
+		{
+			auto inT = QueryTypedParam< ParamBoolPtr >( in );
+			auto outT = QueryTypedParam< ParamBoolPtr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    } 
-    else if( out->GetType() == ModelParamType::MPT_BOOL )
-    {
-        auto inT = QueryTypedParam< ParamBoolPtr >( in );
-        auto outT = QueryTypedParam< ParamBoolPtr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_TRANSFORM )
+		{
+			auto inT = QueryTypedParam< ParamTransformPtr >( in );
+			auto outT = QueryTypedParam< ParamTransformPtr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    } 
-    else if( out->GetType() == ModelParamType::MPT_TRANSFORM )
-    {
-        auto inT = QueryTypedParam< ParamTransformPtr >( in );
-        auto outT = QueryTypedParam< ParamTransformPtr >( out );
+			outT->Transform() = inT->Transform();
+		}
+		else if( out->GetType() == ModelParamType::MPT_ENUM )
+		{
+			auto inTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( in );
+			auto outTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( out );
 
-        outT->Transform() = inT->Transform();
-    }
-    else if( out->GetType() == ModelParamType::MPT_ENUM )
-    {
-        auto inTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( in );
-        auto outTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( out );
+			outTypedParam->AccessInterpolator() = inTypedParam->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_STRING )
+		{
+			auto inT = QueryTypedParam< ParamStringPtr >( in );
+			auto outT = QueryTypedParam< ParamStringPtr >( out );
 
-        outTypedParam->AccessInterpolator() = inTypedParam->AccessInterpolator();
-    }
-    else if( out->GetType() == ModelParamType::MPT_STRING )
-    {
-        auto inT = QueryTypedParam< ParamStringPtr >( in );
-        auto outT = QueryTypedParam< ParamStringPtr >( out );
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else if( out->GetType() == ModelParamType::MPT_WSTRING )
+		{
+			auto inT = QueryTypedParam< ParamWStringPtr >( in );
+			auto outT = QueryTypedParam< ParamWStringPtr >( out );
 
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    }
-    else if( out->GetType() == ModelParamType::MPT_WSTRING )
-    {
-        auto inT = QueryTypedParam< ParamWStringPtr >( in );
-        auto outT = QueryTypedParam< ParamWStringPtr >( out );
-
-        outT->AccessInterpolator() = inT->AccessInterpolator();
-    }
-    else
-    {
-        assert( false );
-        return;
-    }
+			outT->AccessInterpolator() = inT->AccessInterpolator();
+		}
+		else
+		{
+			LOG_MESSAGE( SeverityLevel::error ) << "Unknown param type '" << ( int ) out->GetType() << "'. Check a type of param '" << out->GetName() << "'.";
+			return;
+		}
+	}
 }
 
 // ***********************
