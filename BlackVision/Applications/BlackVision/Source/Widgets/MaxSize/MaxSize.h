@@ -60,10 +60,7 @@ public:
     explicit                            MaxSize			( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
                                         ~MaxSize		();
 
-    virtual void                        Initialize		()				override {}
-    virtual void                        Update			( TimeType t )	override;
-    virtual void                        Deinitialize	()				override {}
-
+    virtual void                        PostChildrenUpdate  ( TimeType )    override;
 
     virtual const std::string &         GetType         () const override;
     static const std::string &          Type            ();

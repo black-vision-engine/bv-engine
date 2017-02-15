@@ -669,6 +669,11 @@ void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
     {
+        if( m_nodeLogic )
+        {
+            m_nodeLogic->PreNodeUpdate( t );
+        }
+
         if ( m_modelNodeEffect )
         {
             m_modelNodeEffect->Update( t );
@@ -692,6 +697,11 @@ void BasicNode::Update( TimeType t )
         }
 
         m_boundingVolume->IncludeChildrenBox( GetBoundingBoxRecursive() );
+
+        if( m_nodeLogic )
+        {
+            m_nodeLogic->PostChildrenUpdate( t );
+        }
     }
 }
 

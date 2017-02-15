@@ -23,8 +23,11 @@ public:
 
 
     virtual void                Initialize      ()              override {}
-    virtual void                Update          ( TimeType )    override;
     virtual void                Deinitialize    ()              override {}
+
+    virtual void                PreNodeUpdate       ( TimeType )    override {};
+    virtual void                Update              ( TimeType )    override;
+    virtual void                PostChildrenUpdate  ( TimeType )    override {};
 
     virtual void                Serialize       ( ISerializer & ser ) const;
     virtual void                Deserialize     ( const IDeserializer & ser );

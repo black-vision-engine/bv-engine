@@ -63,11 +63,6 @@ void					    NodeReplicator::Initialize()
 
 // *******************************
 //
-void					    NodeReplicator::Update( TimeType )
-{}
-
-// *******************************
-//
 void					    NodeReplicator::Deinitialize()
 {}
 

@@ -48,6 +48,7 @@ void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * rende
     if( m_vao->NeedsUpdateMemUpload() )
     {
         renderer->Update( m_vao->GetVertexBuffer() );
+		m_vao->SetNeedsUpdateMemUpload( false );
     }
     else if( m_vao->NeedsUpdateRecreation() )
     {
@@ -56,6 +57,7 @@ void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * rende
 
         BVGL::bvglDeleteVertexArrays( 1, &m_vaoHandle );
         Create( renderer, m_vao );
+		m_vao->SetNeedsUpdateRecreation( false );
     }
 
     Bind( renderer );

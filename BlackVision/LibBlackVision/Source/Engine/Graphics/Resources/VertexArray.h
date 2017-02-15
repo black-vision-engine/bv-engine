@@ -55,8 +55,8 @@ private:
     //unsigned int        m_numVertices;
     //unsigned int        m_vertexBuferOffset;
 
-    bool                        m_needsUpdateMemUpload;
-    bool                        m_needsUpdateRecreation;
+    mutable bool                m_needsUpdateMemUpload;  // FIXME: Consider using mutable keyword here
+    mutable bool                m_needsUpdateRecreation; // FIXME: Consider using mutable keyword here
 
 public:
 
@@ -78,8 +78,8 @@ public:
     unsigned int                GetNumVertices                  ( unsigned int ccNum ) const;
     unsigned int                GetNumTotalVertices             () const;
 
-    void                        SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload );
-    void                        SetNeedsUpdateRecreation        ( bool needsUpdateRecreation );
+    void                        SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload ) const;
+    void                        SetNeedsUpdateRecreation        ( bool needsUpdateRecreation ) const;
 
     bool                        NeedsUpdateMemUpload            () const;
     bool                        NeedsUpdateRecreation           () const;

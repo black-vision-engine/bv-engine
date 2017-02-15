@@ -164,14 +164,14 @@ unsigned int                VertexArraySingleVertexBuffer::GetNumTotalVertices  
 
 // *******************************
 //
-void                        VertexArraySingleVertexBuffer::SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload )
+void                        VertexArraySingleVertexBuffer::SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload ) const
 {
     m_needsUpdateMemUpload = needsUpdateMemUpload;
 }
 
 // *******************************
 //
-void                        VertexArraySingleVertexBuffer::SetNeedsUpdateRecreation        ( bool needsUpdateRecreation )
+void                        VertexArraySingleVertexBuffer::SetNeedsUpdateRecreation        ( bool needsUpdateRecreation ) const
 {
     m_needsUpdateRecreation = needsUpdateRecreation;
 }

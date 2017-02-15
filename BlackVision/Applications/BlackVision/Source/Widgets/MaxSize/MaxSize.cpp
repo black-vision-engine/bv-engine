@@ -7,6 +7,7 @@
 #include "Serialization/BV/BVSerializeContext.h"
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/BoundingVolume.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
@@ -75,10 +76,8 @@ MaxSize::~MaxSize()
 
 // ***********************
 //
-void                        MaxSize::Update			( TimeType t )
+void                        MaxSize::PostChildrenUpdate ( TimeType t )
 {
-    NodeLogicBase::Update( t );
-
     if( auto node = m_parentNode.lock() )
     {
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
@@ -86,7 +85,7 @@ void                        MaxSize::Update			( TimeType t )
 		// If there isn't transform param in previuos plugin do nothing.
 		if( transformParam )
 		{
-			auto bb = node->GetBoundingBoxRecursive();
+			auto bb = *node->GetBoundingVolume()->GetChildrenBox();
 
 			float width = bb.Width();
 			float height = bb.Height();
@@ -132,6 +131,10 @@ void                        MaxSize::Update			( TimeType t )
 			}
 
 			transformParam->SetScale( rescale, 0.0f );
+
+            // Write new transformation data into values. This seems like hack. Calling update for the second time
+            // in the same frame could cause something bad and depend on implementation of TransformPlugin.
+            node->GetPlugin( "transform" )->Update( t );
 		}
     }
 }
