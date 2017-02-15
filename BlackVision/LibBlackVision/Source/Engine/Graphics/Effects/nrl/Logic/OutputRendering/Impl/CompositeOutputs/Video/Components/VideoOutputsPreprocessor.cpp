@@ -7,9 +7,18 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-const AVOutputsData &   VideoOutputsPreprocessor::GetAVOutputsData    () const
+const AVOutputsData &   VideoOutputsPreprocessor::Preprocess          ( RenderedChannelsData * input ) const
 {
+    { input; }
+
     return m_avFrames;
+}
+
+// *********************************
+//
+void                    VideoOutputsPreprocessor::InvalidateCachedData()
+{
+    // FIXME: implement
 }
 
 } //bv

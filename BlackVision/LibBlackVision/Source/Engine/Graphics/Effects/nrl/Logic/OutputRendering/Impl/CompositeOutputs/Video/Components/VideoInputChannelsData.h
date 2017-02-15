@@ -17,7 +17,12 @@ class VideoInputChannelsData
 {
 private:
 
-    VideoInputChannelsMap               m_videoOutputRenderChannels;
+    VideoInputChannelsMap               m_outputToChannelsMapping;
+    VideoInputChannelsVec               m_videoInputChannels;
+
+    const RenderedChannelsData *        m_originalRenderedChannelsData;
+
+    bool                                m_initialized;
 
 private:
 
@@ -34,7 +39,7 @@ public:
 
                                 ~VideoInputChannelsData ();
 
-    const VideoInputChannel *   GetInputChannel         ( RenderChannelType rct ) const;
+    const VideoInputChannel *   GetInputChannel         ( unsigned int videoOutputID ) const;
 
     void                        InvalidateCachedTextures();
     void                        InvalidateCachedTexture ( RenderChannelType rct );

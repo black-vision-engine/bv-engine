@@ -1,5 +1,11 @@
 #include "stdafx.h"
 
+#include <functional>
+#include <algorithm>
+#include <unordered_set>
+
+#include "CoreDEF.h"
+
 #include "OutputFactory.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
@@ -21,12 +27,41 @@ const unsigned int heightHD = 1080;
 const unsigned int widthSD  = widthHD / 2;
 const unsigned int heightSD = heightHD / 2;
 
-struct VideoOutputDesc
+struct VideoInputChannelDesc
 {
     unsigned int width;
     unsigned int height;
     unsigned int renderChannelID;
-    unsigned int outputID;
+
+};
+
+bool operator == ( VideoInputChannelDesc const & lhs, VideoInputChannelDesc const & rhs )
+{
+    return  ( lhs.width == rhs.width ) && 
+            ( lhs.height == rhs.height ) && 
+            ( lhs.renderChannelID == rhs.renderChannelID ); 
+}
+
+struct VideoOutputDesc
+{
+    VideoInputChannelDesc   inputDesc;
+
+    unsigned int            outputID;
+};
+
+struct VideoInputChannelDescHash
+{
+    size_t operator()( const VideoInputChannelDesc & in ) const
+    {
+        // FIXME: nrl - this kinda suck
+        UInt64 w = ( (UInt64) in.width ) & 0xFFFFFF;
+        UInt64 h = ( (UInt64) in.height ) & 0xFFFFFF;
+        UInt64 i = ( (UInt64) in.renderChannelID ) & 0xFFFF;
+
+        std::hash< UInt64 > hsh;
+        
+        return hsh( i << 48 | h << 24 | w );
+    }
 };
 
 // *********************************
@@ -114,7 +149,8 @@ Output *        CreateOutputVideo   ( const OutputDesc & desc )
 {
     auto & props  = desc.GetOutputProperties();
 
-    std::vector< VideoOutputDesc > res;
+    std::vector< VideoOutputDesc >                                          intRes;
+    std::unordered_set< VideoInputChannelDesc, VideoInputChannelDescHash >  inSet;
 
     for( auto & p : props )
     {
@@ -125,22 +161,44 @@ Output *        CreateOutputVideo   ( const OutputDesc & desc )
         assert( p.find( "outputID" ) != p.end() );
 
         VideoOutputDesc d;
+        auto & id = d.inputDesc;
 
-        d.width             = std::stoul( p.find( "width" )->second );
-        d.height            = std::stoul( p.find( "height" )->second );
-        d.renderChannelID   = std::stoul( p.find( "renderChannelID" )->second );
+        id.width            = std::stoul( p.find( "width" )->second );
+        id.height           = std::stoul( p.find( "height" )->second );
+        id.renderChannelID  = std::stoul( p.find( "renderChannelID" )->second );
+
         d.outputID          = std::stoul( p.find( "outputID" )->second );
     
-        res.push_back( d );
+        intRes.push_back( d );
+        inSet.insert( id );
     }
 
+    std::vector< VideoInputChannelDesc > inVector( inSet.begin(), inSet.end() );
+    
+    std::hash_map< unsigned int, unsigned int > outIdToInputMapping;
 
-    auto handler    = new MockVideoHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
-    auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
+    for( auto & d : intRes )
+    {
+        auto    oID = d.outputID;
+        auto &  id  = d.inputDesc;
 
-    InitializeDefault( output, desc );
+        auto it = std::find( inVector.begin(), inVector.end(), id );
 
-    return output;
+        assert( it != inVector.end() );
+
+        auto entryIdx = (unsigned int) (it - inVector.begin());
+
+        outIdToInputMapping[ oID ] = entryIdx;
+    }
+
+    //auto handler    = new MockVideoHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
+    //auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
+
+    //InitializeDefault( output, desc );
+
+    //return output;
+
+    return nullptr;
 }
 
 } // anonymous
