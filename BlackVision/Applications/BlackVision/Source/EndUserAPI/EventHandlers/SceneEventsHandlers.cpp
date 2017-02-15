@@ -152,7 +152,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
             unsigned int lastChildIdx = parentNodeCasted->GetNumChildren() - 1;
             auto addedChild = parentNodeCasted->GetChild( lastChildIdx );
 
-            result = addedChild->AddPlugin( "DEFAULT_TRANSFORM", editor->GetSceneDefaultTimeline( editor->GetModelScene( sceneName ) ) );
+            auto timeline = editor->GetSceneDefaultTimeline( editor->GetModelScene( sceneName ) );
+            auto plugin = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_TRANSFORM", "transform", timeline );
+
+            UInt32 addIdx = 0;
+            editor->AddPlugin( addedChild, plugin, addIdx );
         }
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
