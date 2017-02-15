@@ -17,10 +17,6 @@ class VideoInputChannelsData
 {
 private:
 
-    const RenderedChannelsData *        m_wrappedRenderedChannelsData;
-
-    std::vector< VideoInputChannel * >  m_renderChannels;
-
     VideoInputChannelsMap               m_videoOutputRenderChannels;
 
 private:
