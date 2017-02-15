@@ -79,8 +79,8 @@ inline  void    NodeUpdater::UpdateGeometry      ()
     }
     else
     {
-        RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
-        VertexArraySingleVertexBuffer * vao = rad->VAO();
+        // RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
+        // VertexArraySingleVertexBuffer * vao = rad->VAO();
 
 		// FIXME: We want to prevent updatig the whole bb. We are apdating here only CoM. Should be moved to separated function.
 		{
@@ -91,8 +91,8 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 			UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
 		}
 
-        vao->SetNeedsUpdateMemUpload( false );
-        vao->SetNeedsUpdateRecreation( false );
+        //vao->SetNeedsUpdateMemUpload( false ); // This should be unset unly after real update during render process.
+        //vao->SetNeedsUpdateRecreation( false );
     }
 }
 
