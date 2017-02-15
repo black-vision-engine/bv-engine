@@ -25,6 +25,13 @@ OutputDesc::TOutputPropertiesVector &   OutputDesc::AccessOutputProperties  ()
 
 // **************************
 //
+const OutputDesc::TOutputPropertiesVector & OutputDesc::GetOutputProperties () const
+{
+    return m_outputProperties;
+}
+
+// **************************
+//
 unsigned int                OutputDesc::GetWidth                            () const
 {
     return m_width;

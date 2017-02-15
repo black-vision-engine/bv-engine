@@ -45,31 +45,32 @@ private:
 
 public:
 
-                                OutputDesc                  ();
-                                    
-    TOutputPropertiesVector &   AccessOutputProperties      ();
+                                    OutputDesc                  ();
+                                        
+    TOutputPropertiesVector &       AccessOutputProperties      ();
+    const TOutputPropertiesVector & GetOutputProperties         () const;
 
-    unsigned int                GetWidth                    () const;
-    unsigned int                GetHeight                   () const;
+    unsigned int                    GetWidth                    () const;
+    unsigned int                    GetHeight                   () const;
 
-    RenderChannelType           GetSelectedRenderedChannel  () const;
+    RenderChannelType               GetSelectedRenderedChannel  () const;
     
-    OutputChannelMapping        GetOutputChannelMapping     () const;
+    OutputChannelMapping            GetOutputChannelMapping     () const;
 
-    CustomOutputType            GetRepresentedOutputType    () const;
+    CustomOutputType                GetRepresentedOutputType    () const;
 
-    bool                        IsEnabled                   () const;
+    bool                            IsEnabled                   () const;
 
-    void                        SetWidth                    ( unsigned int width );
-    void                        SetHeight                   ( unsigned int height );
+    void                            SetWidth                    ( unsigned int width );
+    void                            SetHeight                   ( unsigned int height );
     
-    void                        SetSelectedRenderedChannel  ( RenderChannelType rct );
+    void                            SetSelectedRenderedChannel  ( RenderChannelType rct );
     
-    void                        SetOutputChannelMapping     ( OutputChannelMapping ocm );
+    void                            SetOutputChannelMapping     ( OutputChannelMapping ocm );
 
-    void                        SetRepresentedOutputType    ( CustomOutputType cot );
+    void                            SetRepresentedOutputType    ( CustomOutputType cot );
 
-    void                        SetEnabled                  ( bool isEnabled );
+    void                            SetEnabled                  ( bool isEnabled );
     /*
     <property name="RenderChannels">
         <property name="RenderChannel_1" value="enabled" />

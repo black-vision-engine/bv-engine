@@ -10,9 +10,6 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputInstance.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/OutputCompositeVideo.h"
 
-// FIXME: remove
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/MockVideoHandler.h"
-
 
 namespace bv { namespace nrl {
 
@@ -23,6 +20,14 @@ const unsigned int heightHD = 1080;
 
 const unsigned int widthSD  = widthHD / 2;
 const unsigned int heightSD = heightHD / 2;
+
+struct VideoOutputDesc
+{
+    unsigned int width;
+    unsigned int height;
+    unsigned int renderChannelID;
+    unsigned int outputID;
+};
 
 // *********************************
 //
@@ -105,8 +110,31 @@ OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
 
 // *********************************
 //
-OutputInstance *    CreateOutputVideo   ( const OutputDesc & desc )
+Output *        CreateOutputVideo   ( const OutputDesc & desc )
 {
+    auto & props  = desc.GetOutputProperties();
+
+    std::vector< VideoOutputDesc > res;
+
+    for( auto & p : props )
+    {
+        // FIXME: nrl - this should be verified by Radek and/or Pawelek
+        assert( p.find( "width" ) != p.end() );
+        assert( p.find( "height" ) != p.end() );
+        assert( p.find( "renderChannelID" ) != p.end() );
+        assert( p.find( "outputID" ) != p.end() );
+
+        VideoOutputDesc d;
+
+        d.width             = std::stoul( p.find( "width" )->second );
+        d.height            = std::stoul( p.find( "height" )->second );
+        d.renderChannelID   = std::stoul( p.find( "renderChannelID" )->second );
+        d.outputID          = std::stoul( p.find( "outputID" )->second );
+    
+        res.push_back( d );
+    }
+
+
     auto handler    = new MockVideoHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
     auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
 

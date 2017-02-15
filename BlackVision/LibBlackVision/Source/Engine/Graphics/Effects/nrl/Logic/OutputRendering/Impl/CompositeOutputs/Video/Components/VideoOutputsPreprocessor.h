@@ -16,8 +16,9 @@ private:
 
 public:
 
-    const AVOutputsData &   GetAVOutputsData    () const;
-    void                    InvalidateCachedData( RenderedChannelsData * input );
+    const AVOutputsData &   Preprocess          ( RenderedChannelsData * input ) const;
+
+    void                    InvalidateCachedData();
 
 };
 
