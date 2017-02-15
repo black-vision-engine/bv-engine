@@ -5546,6 +5546,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoResizedInputChannel.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoTypes.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

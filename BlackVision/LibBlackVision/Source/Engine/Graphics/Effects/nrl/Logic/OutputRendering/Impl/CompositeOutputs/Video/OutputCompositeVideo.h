@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"

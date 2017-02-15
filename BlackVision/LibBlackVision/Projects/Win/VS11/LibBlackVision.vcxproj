@@ -663,6 +663,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoResizedInputChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\MockVideoHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\OutputCompositeVideo.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoTypes.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Preview\PreviewHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.h" />
