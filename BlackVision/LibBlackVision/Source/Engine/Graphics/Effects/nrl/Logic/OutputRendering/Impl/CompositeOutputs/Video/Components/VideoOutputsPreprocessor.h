@@ -9,7 +9,9 @@ class VideoOutputsPreprocessor
 {
 private:
 
-    AVOutputsData   m_avFrames;
+    AVOutputsData           m_avFrames;
+
+    VideoInputChannelsData  m_inputChannels;
 
 public:
 
