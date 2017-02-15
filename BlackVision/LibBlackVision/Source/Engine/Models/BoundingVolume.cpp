@@ -185,6 +185,13 @@ const mathematics::Box *           BoundingVolume::GetBoundingBox          () co
 
 // ***********************
 //
+const mathematics::Box *            BoundingVolume::GetChildrenBox          () const
+{
+    return &m_childrenBox;
+}
+
+// ***********************
+//
 IConnectedComponentPtr      BoundingVolume::BuildBoxRepresentation () const
 {
     //return BuildBoxComponent( m_box );
