@@ -125,7 +125,7 @@ void                                        DefaultParamValModel::Update        
 
 void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
-	if( out->GetType() != in->GetType() )
+	if( out->GetType() != in->GetType() ) // FIXME: This should be checked earlier. Not here. 
 	{
 		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << ( int ) out->GetType() << " != " << ( int ) in->GetType() << "'. Check a type of param '" << in->GetName() << "'.";
 	}
