@@ -32,6 +32,8 @@ public:
 
 	void						EnqueueFrame			( const AVFramePtr & frame );
 
+	void						EnqueueEndMessage		();
+
 	virtual void				Process					() override;
 };
 

@@ -27,6 +27,13 @@ void				BlackMagicVCThread::EnqueueFrame			( const AVFramePtr & frame )
 
 //**************************************
 //
+void				BlackMagicVCThread::EnqueueEndMessage		()
+{
+	m_frameQueue.EnqueueEndMessage();
+}
+
+//**************************************
+//
 void				BlackMagicVCThread::Process					()
 {
 	AVFramePtr srcFrame;

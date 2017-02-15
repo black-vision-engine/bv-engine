@@ -13,7 +13,6 @@
 
 namespace bv { namespace videocards { namespace blackmagic {
 
-
 //**************************************
 //
 struct ChannelOutputData

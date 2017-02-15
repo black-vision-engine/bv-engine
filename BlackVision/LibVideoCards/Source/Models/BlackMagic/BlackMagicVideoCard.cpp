@@ -84,39 +84,37 @@ const std::string &     VideoCardDesc::GetVideoCardUID  () const
 VideoCard::VideoCard( UInt32 deviceID )
     : m_deviceID( deviceID )
     , m_device( nullptr )
-    , m_output( nullptr )
+    , m_decklinkOutput( nullptr )
     , m_configuration( nullptr )
 	, m_keyer( nullptr )
+	, m_videoOutputDelegate( nullptr )
+	, m_frameQueue( 1 )
 {
     InitVideoCard();
-
-	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( m_output ) );
-	m_blackMagicVCThread->Stop();
-	m_blackMagicVCThread->Start();
 }
 
 //**************************************
 //
 VideoCard::~VideoCard       ()
 {
-	m_blackMagicVCThread->Kill();
-	m_blackMagicVCThread->Join();
+	if( m_decklinkOutput )
+	{
+		m_decklinkOutput->StopScheduledPlayback( 0, NULL, 0 );
 
-    for ( auto & f : m_frames )
-    {
-		f->Release();
-    }
+		m_frameQueue.EnqueueEndMessage();
 
-    m_frames.clear();
-
-    if( m_output )
-        m_output->Release();
+		m_decklinkOutput->DisableVideoOutput();
+		m_decklinkOutput->Release();
+	}		
 
     if( m_configuration )
         m_configuration->Release();
 
     if( m_device )
         m_device->Release();
+
+	if( m_videoOutputDelegate )
+		m_videoOutputDelegate->Release();
 }
 
 //**************************************
@@ -159,8 +157,11 @@ bool                    VideoCard::InitDevice           ()
 
         if( m_device )
         {
-            if( SUCCESS( m_device->QueryInterface( IID_IDeckLinkOutput, ( void** )&m_output ) ) &&
-                SUCCESS( m_device->QueryInterface( IID_IDeckLinkConfiguration, ( void** )&m_configuration ) ) )
+
+            if( 
+				SUCCESS( m_device->QueryInterface( IID_IDeckLinkOutput, ( void** )&m_decklinkOutput ) ) &&
+                SUCCESS( m_device->QueryInterface( IID_IDeckLinkConfiguration, ( void** )&m_configuration ) )
+				)
             {
 				LOG_MESSAGE( SeverityLevel::info ) << "Initilizing Decklink device output success. Device ID: " << m_deviceID;
 				success = true;
@@ -179,6 +180,16 @@ bool                    VideoCard::InitDevice           ()
 		success = false;
 	}
 
+	if( success )
+	{
+		m_videoOutputDelegate = new VideoOutputDelegate( this );
+		if( !SUCCESS( m_decklinkOutput->SetScheduledFrameCompletionCallback( m_videoOutputDelegate ) ) )
+		{
+			LOG_MESSAGE( SeverityLevel::error ) << "SetScheduledFrameCompletionCallback returned an error";
+			success = false;
+		}
+	}
+
     return success;
 }
 
@@ -187,43 +198,32 @@ bool                    VideoCard::InitDevice           ()
 bool                    VideoCard::InitOutput()
 {
     IDeckLinkDisplayModeIterator * displayModeIterator = nullptr;
-    IDeckLinkDisplayMode * displayMode = nullptr;
+    m_displayMode = nullptr;
 
 	bool success = false;
 
-    for( auto & output : m_outputs )
+    if( SUCCESS( m_decklinkOutput->GetDisplayModeIterator( &displayModeIterator ) ) )
     {
-        if( SUCCESS( m_output->GetDisplayModeIterator( &displayModeIterator ) ) )
+        while( SUCCESS( displayModeIterator->Next( &m_displayMode ) ) )
         {
-            while( SUCCESS( displayModeIterator->Next( &displayMode ) ) )
+            if( m_displayMode->GetDisplayMode() == m_output.videoMode )
             {
-                if( displayMode->GetDisplayMode() == output.videoMode )
-                {
-                    break;
-                }
-
-                displayMode->Release();
+                break;
             }
 
-            displayModeIterator->Release();
+			m_displayMode->Release();
+        }
 
-            if( displayMode )
+        displayModeIterator->Release();
+
+        if( m_displayMode )
+        {
+            if( SUCCESS( m_decklinkOutput->EnableVideoOutput( m_displayMode->GetDisplayMode(),
+                                                        BMDVideoOutputFlags::bmdVideoOutputFlagDefault ) ) )
             {
-                auto width = displayMode->GetWidth();
-                auto height = displayMode->GetHeight();
+				success &= InitKeyer( m_output );
 
-                IDeckLinkMutableVideoFrame * frame = nullptr;
-
-                if( SUCCESS( m_output->EnableVideoOutput( displayMode->GetDisplayMode(),
-                                                            BMDVideoOutputFlags::bmdVideoOutputFlagDefault ) ) &&
-                    SUCCESS( m_output->CreateVideoFrame( width, height, width * 4, BMDPixelFormat::bmdFormat8BitBGRA,
-                                                            bmdFrameFlagFlipVertical, &frame ) ) )
-                {
-					m_blackMagicVCThread->SetDecklinkFrame( frame );
-					success &= InitKeyer( output );
-                }
-
-                displayMode->Release();
+				m_displayMode->GetFrameRate( &m_frameDuration, &m_frameTimescale );
             }
         }
     }
@@ -259,27 +259,44 @@ bool					VideoCard::InitKeyer			( const ChannelOutputData & ch )
 //
 void                    VideoCard::SetVideoOutput       ( bool enable )
 {
-	for( auto & o : m_outputs )
-	{
-		o.enabled = enable;
-	}
+	m_output.enabled = enable;
 }
 
 //**************************************
 //
 void                    VideoCard::AddOutput            ( ChannelOutputData output )
 {
-	if( m_outputs.empty() )
-		m_outputs.push_back( output );
-	else
-		LOG_MESSAGE( SeverityLevel::error ) << "This type of card has only one output. Lastly added output has just been overided.";
+	m_output = output;
 }
 
 //**************************************
 //
 void                    VideoCard::Start                ()
 {
-	m_blackMagicVCThread->Resume();
+	m_uiTotalFrames = 0;
+
+	IDeckLinkMutableVideoFrame * pFrame;
+
+	auto w = m_displayMode->GetWidth();
+	auto h = m_displayMode->GetHeight();
+
+	// Set 3 frame preroll
+	for( unsigned i = 0; i < 3; i++ )
+	{
+		if( SUCCESS( m_decklinkOutput->CreateVideoFrame( w, h, w * 4, BMDPixelFormat::bmdFormat8BitBGRA,
+														 bmdFrameFlagFlipVertical, &pFrame ) ) )
+		{
+			if( SUCCESS( m_decklinkOutput->ScheduleVideoFrame( pFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
+			{
+				pFrame->Release();
+				pFrame = nullptr;
+
+				m_uiTotalFrames++;
+			}
+		}
+	}
+
+	m_decklinkOutput->StartScheduledPlayback( 10, 100, 1.0 );
 }
 
 //**************************************
@@ -287,13 +304,10 @@ void                    VideoCard::Start                ()
 void                    VideoCard::ProcessFrame         (AVFramePtr avFrame, int odd )
 {
 	{odd;}
-    for( UInt32 i = 0; i < ( UInt32 )m_outputs.size(); ++i )
-    {
-		if( m_outputs[ i ].enabled )
-		{
-			m_blackMagicVCThread->EnqueueFrame( avFrame );
-		}		
-    }
+	if( m_output.enabled )
+	{
+		m_frameQueue.WaitAndPush( avFrame );
+	}		
 }
 
 //**************************************
@@ -324,6 +338,35 @@ UInt32                  VideoCard::EnumerateDevices     ()
     }
 
     return ( UInt32 )deviceCount;
+}
+
+//**************************************
+//
+void							VideoCard::FrameCompleted		( IDeckLinkVideoFrame * complitedFrame )
+{
+	DisplayNextFrame( complitedFrame );
+}
+
+//**************************************
+//
+void							VideoCard::DisplayNextFrame		( IDeckLinkVideoFrame * completedFrame )
+{
+	//std::unique_lock< std::mutex > lock( m_mutex );
+
+	AVFramePtr srcFrame;
+
+	if( m_frameQueue.WaitAndPop( srcFrame ) )
+	{
+		void * rawFrame;
+		completedFrame->GetBytes( &rawFrame );
+
+		memcpy( rawFrame, srcFrame->m_videoData->Get(), completedFrame->GetRowBytes() * completedFrame->GetHeight() );
+
+		if( SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
+		{
+			m_uiTotalFrames++;
+		}
+	}
 }
 
 } //blackmagic
