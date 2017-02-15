@@ -22,12 +22,22 @@ public:
 
 private:
 
-    AVFramePtrMap   m_frames;
+    mutable AVFramePtrMap   m_frames;
+
+private:
+
+    // Disable copying (when delete keyword is not present)
+    AVOutputsData               ( const AVOutputsData & src );
+    AVOutputsData               ( const AVOutputsData && src );
+
+    AVOutputsData & operator =  ( const AVOutputsData & src );
 
 public:
 
-    AVFramePtr  GetAVFrame  ( unsigned int videoOutputId );
-    void        SetAVFrame  ( unsigned int videoOutputId, AVFramePtr frame );
+                AVOutputsData   ();
+
+    AVFramePtr  GetAVFrame      ( unsigned int videoOutputId ) const;
+    void        SetAVFrame      ( unsigned int videoOutputId, AVFramePtr frame );
 
 };
 

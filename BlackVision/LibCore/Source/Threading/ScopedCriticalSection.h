@@ -14,7 +14,7 @@ private:
 
 private:
 
-    //Disallow copying
+    //Disable copying
     ScopedCriticalSection               ( const ScopedCriticalSection & src );
     ScopedCriticalSection               ( const ScopedCriticalSection && src );
 

@@ -6,10 +6,16 @@
 
 
 namespace bv { namespace nrl {
-   
+
 // *********************************
 //
-AVFramePtr  AVOutputsData::GetAVFrame  ( unsigned int videoOutputId )
+AVOutputsData::AVOutputsData            ()
+{
+}
+
+// *********************************
+//
+AVFramePtr  AVOutputsData::GetAVFrame  ( unsigned int videoOutputId ) const
 {
     assert( m_frames.find( videoOutputId ) != m_frames.end() );
 
