@@ -144,7 +144,12 @@ BoundingVolume::BoundingVolume          ( const VertexAttributesChannel * vac, P
 void                    BoundingVolume::UpdateOwnBox                  ( const IVertexAttributesChannelConstPtr & vac )
 {
     if( vac == nullptr )
+    {
+        // Clear all boxes. Children box will be updated in future by outside world.
+        m_box = mathematics::Box();
+        m_childrenBox = m_box;
         return;
+    }
 
     auto typedVac = std::static_pointer_cast< const VertexAttributesChannel>( vac );
 
