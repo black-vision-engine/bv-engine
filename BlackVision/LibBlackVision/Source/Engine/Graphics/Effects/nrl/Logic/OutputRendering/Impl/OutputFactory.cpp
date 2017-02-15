@@ -8,10 +8,10 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/Stream/SharedMemHandler.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputInstance.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/OutputCompositeVideo.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/OutputCompositeVideo.h"
 
 // FIXME: remove
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/MockVideoHandler.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/MockVideoHandler.h"
 
 
 namespace bv { namespace nrl {

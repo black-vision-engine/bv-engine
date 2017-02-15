@@ -2,7 +2,7 @@
 
 #include "VideoInputChannel.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Components/VideoResizedInputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoResizedInputChannel.h"
 
 
 namespace bv { namespace nrl {

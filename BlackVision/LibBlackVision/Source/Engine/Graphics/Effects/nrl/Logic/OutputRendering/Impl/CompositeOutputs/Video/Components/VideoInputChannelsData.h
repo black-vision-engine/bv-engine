@@ -2,8 +2,10 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Components/VideoInputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
@@ -18,6 +20,8 @@ private:
     const RenderedChannelsData *        m_wrappedRenderedChannelsData;
 
     std::vector< VideoInputChannel * >  m_renderChannels;
+
+    VideoInputChannelsMap               m_videoOutputRenderChannels;
 
 private:
 

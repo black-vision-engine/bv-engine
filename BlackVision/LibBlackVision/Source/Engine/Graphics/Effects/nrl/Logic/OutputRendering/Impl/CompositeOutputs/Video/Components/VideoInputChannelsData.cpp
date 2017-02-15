@@ -2,7 +2,7 @@
 
 #include "VideoInputChannelsData.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Components/VideoInputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 
 
 namespace bv { namespace nrl {

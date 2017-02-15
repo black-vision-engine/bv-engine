@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Components/VideoInputChannel.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffect.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
