@@ -35,6 +35,22 @@ VideoInputChannelsData::~VideoInputChannelsData                             ()
 //
 void    VideoInputChannelsData::PreInitialize                               ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
 {
+    // FIXME: deferred initialization to be implemented
+    assert( m_outputToChannelsMapping.size() == 0 );
+    assert( m_videoInputChannels.size() == 0 );
+
+    // VInputChannel
+    for( auto & uo : uniqueOutputSetups )
+    {
+        { uo; }
+        m_videoInputChannels.push_back( nullptr );
+    }
+
+    for( auto & m : mapping )
+    {
+        m_outputToChannelsMapping[ m.first ] = nullptr;
+    }
+
 }
 
 //// **************************
