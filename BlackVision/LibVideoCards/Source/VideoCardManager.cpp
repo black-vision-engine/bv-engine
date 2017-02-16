@@ -215,7 +215,8 @@ bool                        VideoCardManager::ProcessFrame          ()
 
         {
             std::unique_lock< std::mutex > lock( m_mutex );
-            m_waitFramesProcessed.wait( lock, [ = ] { return m_numReadyCards == 1; }); // TODO: check num of cards properly./
+			auto numVideoCards = m_videoCards.size();
+            m_waitFramesProcessed.wait( lock, [ = ] { return m_numReadyCards == numVideoCards; }); // TODO: check num of cards properly./
 
             for( auto & videoCard : m_videoCards )
             {
@@ -235,6 +236,9 @@ void               VideoCardManager::FrameProcessingCompleted( UInt64 deviceID, 
 {
     static VideoCardManager & instance = VideoCardManager::Instance();
     success;deviceID;
+
+
+	std::unique_lock< std::mutex > lock( instance.m_mutex );
     instance.m_numReadyCards++;
     instance.m_waitFramesProcessed.notify_one();
 

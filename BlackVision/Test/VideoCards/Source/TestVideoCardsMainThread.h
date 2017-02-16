@@ -15,6 +15,8 @@ class VideoCardManager;
 class TestVideoCardsMainThread : public StoppableThread
 {
 private:
+	UInt64					m_frameNum;
+
     XMLDeserializer         m_deserializer;
 
     VideoCardManager &      m_vcm;
