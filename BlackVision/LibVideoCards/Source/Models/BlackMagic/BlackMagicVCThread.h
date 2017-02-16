@@ -13,6 +13,7 @@
 
 #include "BlackMagic/DeckLinkAPI_h.h"
 
+
 namespace bv { namespace videocards { namespace blackmagic 
 {
 

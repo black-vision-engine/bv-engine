@@ -69,7 +69,11 @@ public:
 
     virtual void            Start                       () override;
 
-    virtual void            ProcessFrame                ( AVFramePtr data, int odd ) override;
+    virtual void            ProcessFrame                ( AVFramePtr data ) override;
+
+    virtual void            DisplayFrame                () const {};
+
+    virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 
     static UInt32           EnumerateDevices            ();
 

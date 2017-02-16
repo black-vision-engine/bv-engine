@@ -8,6 +8,10 @@
 #include "BlackMagicVCThread.h"
 #include "VideoOutputDelegate.h"
 
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
+
 #include <ctime>
 
 namespace bv { namespace videocards { namespace blackmagic {
@@ -49,16 +53,19 @@ private:
 	UInt32										m_uiTotalFrames;
 
     ChannelOutputData							m_output;
-	BlackMagicVCThreadUPtr						m_blackMagicVCThread;
+    BlackMagicVCThreadUPtr						m_blackMagicVCThread;
 
-	UInt64										m_lastFrameTime;
+    UInt64										m_lastFrameTime;
 
-	VideoOutputDelegate	*						m_videoOutputDelegate;
+    VideoOutputDelegate	*						m_videoOutputDelegate;
 
-	typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
-	FrameQueue									m_frameQueue;
+    typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
+    FrameQueue									m_frameQueue;
 
-	mutable std::mutex							m_mutex;
+    mutable std::condition_variable             m_waitDisplay;
+    mutable std::mutex                          m_mutex;
+
+    FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
 
 	bool					InitKeyer			( const ChannelOutputData & ch );
 
@@ -76,7 +83,11 @@ public:
     void                    AddOutput           ( ChannelOutputData output );
 
     virtual void            Start               () override;
-    virtual void            ProcessFrame        ( AVFramePtr data, int odd ) override;
+    virtual void            ProcessFrame        ( AVFramePtr data ) override;
+    virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
+
+
+    virtual void            DisplayFrame        () const override;
 
 	bool                    InitVideoCard       ();
 private:

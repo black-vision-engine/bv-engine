@@ -99,6 +99,8 @@ private:
 
     DisplayMode                         m_dislpayMode;
 
+    mutable std::atomic< UInt64 >       m_numReadyCards;
+    mutable std::condition_variable     m_waitFramesProcessed;
     mutable std::mutex			        m_mutex;
 	Int32                               m_currentFrameNumber;
 
@@ -107,6 +109,8 @@ private:
     VideoCardProcessingThreadUPtr       m_processThread;
 
 private:
+    static void                         FrameProcessingCompleted( UInt64 deviceID, bool success );
+
 
                                         VideoCardManager        ();
                                         ~VideoCardManager       ();
