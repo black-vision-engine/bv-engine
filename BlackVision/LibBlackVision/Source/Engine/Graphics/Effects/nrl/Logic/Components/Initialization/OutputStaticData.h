@@ -13,6 +13,7 @@ struct OutputStaticData
     RenderChannelType   selectedRenderedChannel;
 
     OutputStaticData( unsigned int width_, unsigned int height_, RenderChannelType rct_ );
+    OutputStaticData();
 
 };
 

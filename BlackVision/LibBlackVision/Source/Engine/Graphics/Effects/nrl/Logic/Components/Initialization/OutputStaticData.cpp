@@ -14,5 +14,14 @@ OutputStaticData::OutputStaticData( unsigned int width_, unsigned int height_, R
 {    
 }
 
+// **************************
+//
+OutputStaticData::OutputStaticData()
+    : width( 0 )
+    , height( 0 )
+    , selectedRenderedChannel( RenderChannelType::RCT_TOTAL )
+{
+}
+
 } //nrl
 } //bv
