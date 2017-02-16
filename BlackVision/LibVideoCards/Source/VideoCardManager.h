@@ -99,6 +99,8 @@ private:
 
     DisplayMode                         m_dislpayMode;
 
+    mutable std::atomic< UInt64 >       m_numReadyCards;
+    mutable std::condition_variable     m_waitFramesProcessed;
     mutable std::mutex			        m_mutex;
 	Int32                               m_currentFrameNumber;
 
@@ -107,6 +109,8 @@ private:
     VideoCardProcessingThreadUPtr       m_processThread;
 
 private:
+    static void                         FrameProcessingCompleted( UInt64 deviceID, bool success );
+
 
                                         VideoCardManager        ();
                                         ~VideoCardManager       ();
@@ -129,12 +133,7 @@ public:
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */
     bool                                ProcessFrame            ();
-    
-    //FIXME: probably not needed
-    /**@brief Copies and interlaces full frame.
-    @return Returns interlaced copy of frame. */
-	AVFramePtr                 InterlacedFrame(AVFramePtr data);
-	AVFramePtr                 RetrieveFieldFromFrame(AVFramePtr data, int odd);
+   
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
