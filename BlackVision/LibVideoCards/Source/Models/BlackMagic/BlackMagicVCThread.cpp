@@ -33,7 +33,7 @@ void				BlackMagicVCThread::Process					()
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
-		m_videoCard->InterlaceFrame( srcFrame );
+		InterlaceFrame( srcFrame );
 		m_videoCard->FrameProcessed( srcFrame );
 	}
 }
