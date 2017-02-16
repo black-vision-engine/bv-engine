@@ -44,8 +44,8 @@ public:
 
 public:
 
-    static void			StaticInitializer		();
-    static void			LoggerInitializer		();
+    static void			StaticInitializer		( int argc, char * argv[] );
+    static void			LoggerInitializer		( int argc, char * argv[] );
     static bool			RegisterInitializer		();
 
 public:

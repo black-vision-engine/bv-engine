@@ -43,7 +43,7 @@ int main( int argc, char * argv[] )
 //TODO: Register (and/or) initialize all (possibly already registered) components
 //TODO: Load all generic resources
 
-    bv::InitSubsystem::CallInitializers();
+    bv::InitSubsystem::CallInitializers( argc, argv );
 
     assert( bv::ApplicationBase::ApplicationInstance != nullptr );
 

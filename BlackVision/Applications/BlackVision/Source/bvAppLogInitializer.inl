@@ -31,7 +31,7 @@ const std::string INIT_TEXT_STRING = "BlackVision initialized, version: ";
 
 // *********************************
 // Initializer function
-void			bv::BlackVisionApp::LoggerInitializer	()
+void			bv::BlackVisionApp::LoggerInitializer	( int /*argc*/, char * /*argv*/[] )
 {
 	auto& logger = Logger::GetLogger();
 	logger.SetFileRotationSize( 1024 * 1024 );		// Affects files added after that.
