@@ -1,6 +1,8 @@
 #include "TestVideoCardsUtils.h"
 #include "Assets/Texture/TextureUtils.h"
 
+#include <windows.h>
+
 namespace bv { namespace videocards {
 
 // ****************************
@@ -29,6 +31,13 @@ AVFramePtr   TestVideoCardsUtils::CreateTestFrame( int color, UInt32 w, UInt32 h
     memset( writable, color, size );
 
     return std::make_shared< videocards::AVFrame >( videoData, audioData, desc );
+}
+
+// ****************************
+//
+void        TestVideoCardsUtils::UpdateConsoleTitle( const std::wstring title )
+{
+    SetConsoleTitle( title.c_str() );
 }
 
 } // videocards

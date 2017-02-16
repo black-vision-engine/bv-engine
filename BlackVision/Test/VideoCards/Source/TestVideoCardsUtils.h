@@ -8,7 +8,9 @@ class TestVideoCardsUtils
 {
 public:
 
-    static AVFramePtr   CreateTestFrame( int color, UInt32 w, UInt32 h );
+    static AVFramePtr   CreateTestFrame     ( int color, UInt32 w, UInt32 h );
+
+    static void         UpdateConsoleTitle  ( const std::wstring title );
 
 };
 

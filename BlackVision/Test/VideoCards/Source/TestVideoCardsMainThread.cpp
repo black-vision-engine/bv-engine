@@ -51,7 +51,9 @@ void    TestVideoCardsMainThread::Process ()
     m_vcm.QueueFrame( frame );
 
     auto now = Time::Now();
-    LOG_MESSAGE( SeverityLevel::info ) << now - m_lastQueuedFrameTime;
+
+    TestVideoCardsUtils::UpdateConsoleTitle( std::to_wstring( 1000 / ( now - m_lastQueuedFrameTime ) ) + L" FPS" );
+
     m_lastQueuedFrameTime = now;
 
     m_buffer.push_back( frame );
