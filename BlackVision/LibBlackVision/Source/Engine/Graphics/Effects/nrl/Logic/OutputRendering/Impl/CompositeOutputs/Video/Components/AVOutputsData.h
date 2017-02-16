@@ -34,12 +34,15 @@ private:
 
 public:
 
-                AVOutputsData   ();
+                    AVOutputsData   ();
 
-    AVFramePtr  GetAVFrame      ( unsigned int videoOutputId ) const;
-    void        SetAVFrame      ( unsigned int videoOutputId, AVFramePtr frame );
+    AVFramePtr      GetAVFrame      ( unsigned int videoOutputId ) const;
+    void            SetAVFrame      ( unsigned int videoOutputId, AVFramePtr frame );
+
+    unsigned int    GetNumEntries   () const;
 
 };
+
 
 } //bv
 } //nrl

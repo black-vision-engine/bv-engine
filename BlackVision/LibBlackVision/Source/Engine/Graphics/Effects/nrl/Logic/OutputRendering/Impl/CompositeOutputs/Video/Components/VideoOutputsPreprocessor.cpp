@@ -25,8 +25,14 @@ void                    VideoOutputsPreprocessor::InvalidateCachedData  ()
 //
 void                    VideoOutputsPreprocessor::PreInitialize         ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
 {
+    assert( m_avFrames.GetNumEntries() == 0 );    
+
     { uniqueOutputSetups; }
-    { mapping; }
+
+    for( auto & a : mapping )
+    {
+        m_avFrames.SetAVFrame( a.first, nullptr );
+    }
 }
 
 } //bv

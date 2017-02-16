@@ -30,7 +30,7 @@ private:
 
     static std::vector< VideoOutputDesc >   ReadInputEntryVec           ( const OutputDesc::TOutputPropertiesVector & props );
 
-    static UintUintMapping                  ReadMapping     ( const std::vector< VideoOutputDesc > & videoOutputs );
+    static UintUintMapping                  ReadMapping                 ( const std::vector< VideoOutputDesc > & videoOutputs );
  
     static OutputStaticDataVec              ReadUniqueStaticDataVec     ( const std::vector< VideoOutputDesc > & inputVec );
 

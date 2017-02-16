@@ -9,13 +9,13 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-AVOutputsData::AVOutputsData            ()
+AVOutputsData::AVOutputsData                    ()
 {
 }
 
 // *********************************
 //
-AVFramePtr  AVOutputsData::GetAVFrame  ( unsigned int videoOutputId ) const
+AVFramePtr      AVOutputsData::GetAVFrame       ( unsigned int videoOutputId ) const
 {
     assert( m_frames.find( videoOutputId ) != m_frames.end() );
 
@@ -24,9 +24,16 @@ AVFramePtr  AVOutputsData::GetAVFrame  ( unsigned int videoOutputId ) const
 
 // *********************************
 //
-void        AVOutputsData::SetAVFrame  ( unsigned int videoOutputId, AVFramePtr frame )
+void            AVOutputsData::SetAVFrame       ( unsigned int videoOutputId, AVFramePtr frame )
 {
     m_frames[ videoOutputId ] = frame;
+}
+
+// *********************************
+//
+unsigned int    AVOutputsData::GetNumEntries   () const
+{
+    return (unsigned int) m_frames.size();
 }
 
 } //bv
