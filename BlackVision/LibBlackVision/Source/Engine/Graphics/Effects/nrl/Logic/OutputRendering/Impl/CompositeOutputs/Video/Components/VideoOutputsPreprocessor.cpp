@@ -7,7 +7,7 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-const AVOutputsData &   VideoOutputsPreprocessor::Preprocess          ( RenderedChannelsData * input ) const
+const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( RenderedChannelsData * input ) const
 {
     { input; }
 
@@ -16,9 +16,17 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess          ( Rendered
 
 // *********************************
 //
-void                    VideoOutputsPreprocessor::InvalidateCachedData()
+void                    VideoOutputsPreprocessor::InvalidateCachedData  ()
 {
     // FIXME: implement
+}
+
+// *********************************
+//
+void                    VideoOutputsPreprocessor::PreInitialize         ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
+{
+    { uniqueOutputSetups; }
+    { mapping; }
 }
 
 } //bv

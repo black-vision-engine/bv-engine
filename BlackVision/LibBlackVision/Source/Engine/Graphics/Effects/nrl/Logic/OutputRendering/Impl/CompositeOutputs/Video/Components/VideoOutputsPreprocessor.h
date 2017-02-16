@@ -20,6 +20,8 @@ public:
 
     void                    InvalidateCachedData();
 
+    void                    PreInitialize       ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
+
 };
 
 } //bv

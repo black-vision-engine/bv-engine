@@ -33,7 +33,7 @@ public:
 
 public:
 
-    static  OutputCompositeVideo * Create                   ( unsigned int width, unsigned int height, const OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
+    static  OutputCompositeVideo * Create                   ( unsigned int width, unsigned int height, OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
 
 };
 

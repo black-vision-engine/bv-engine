@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
+
+
 namespace bv { namespace nrl {
    
 class AVOutputsData;
@@ -12,6 +15,8 @@ private:
 public:
 
     void    HandleOutputsData   ( const AVOutputsData & outputs );
+
+    void    PreInitialize       ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
 
 };
 

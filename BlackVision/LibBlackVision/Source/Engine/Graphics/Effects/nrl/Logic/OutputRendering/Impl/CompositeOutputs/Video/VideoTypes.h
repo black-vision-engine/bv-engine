@@ -5,6 +5,8 @@
 
 #include "AVFrame.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/AVOutputsData.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputStaticData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 

@@ -36,8 +36,12 @@ void    OutputCompositeVideo::ProcessFrameData                      ( NRenderCon
 //
 OutputCompositeVideo *  OutputCompositeVideo::Create                ( unsigned int width, unsigned int height, OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
 {
+    auto res = new OutputCompositeVideo( width, height );
 
-    return nullptr;
+    res->m_outputsPreprocessor.PreInitialize( uniqueOutputSetups, mapping );
+    res->m_outputsHandler.PreInitialize( uniqueOutputSetups, mapping );
+
+    return res;
 }
 
 } //nrl

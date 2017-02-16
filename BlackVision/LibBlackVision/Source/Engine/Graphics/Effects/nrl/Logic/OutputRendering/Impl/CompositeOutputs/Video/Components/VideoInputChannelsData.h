@@ -2,10 +2,10 @@
 
 #include <vector>
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
-
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
@@ -45,11 +45,8 @@ public:
     const VideoInputChannel *   GetInputChannel         ( unsigned int videoOutputID ) const;
 
     void                        InvalidateCachedTextures();
-    void                        InvalidateCachedTexture ( RenderChannelType rct );
-    Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, RenderChannelType rct ) const;
-
-    bool                        IsActive                ( RenderChannelType rct ) const;
-    bool                        ContainsValidData       ( RenderChannelType rct ) const;
+    //void                        InvalidateCachedTexture ( RenderChannelType rct );
+    //Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, RenderChannelType rct ) const;
   
 public:
 
