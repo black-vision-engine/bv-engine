@@ -6,18 +6,27 @@
 
 #include "System/Time.h"
 
+#include "CoreDEF.h"
+
 #include "UseLoggerTestVideoCardsModule.h"
+
 
 namespace bv { namespace videocards {
 
 const std::string   CONFIG_PATH = "config.xml";
-
+const SizeType      BUFFER_SIZE = 10;
 // ****************************
 //
-TestVideoCardsMainThread::TestVideoCardsMainThread( AVFramePtr testFrame )
-    : m_testFrame( testFrame )
-    , m_vcm( VideoCardManager::Instance() )
+TestVideoCardsMainThread::TestVideoCardsMainThread()
+    : m_vcm( VideoCardManager::Instance() )
+    , m_lastQueuedFrameTime( 0 )
+    , m_buffer( BUFFER_SIZE )
 {
+    for( SizeType i = 0; i < BUFFER_SIZE; ++i )
+    {
+        m_buffer.push_back( TestVideoCardsUtils::CreateTestFrame( 0, 1920, 1080 ) );
+    }
+
     m_vcm.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
 
 
@@ -34,23 +43,18 @@ TestVideoCardsMainThread::TestVideoCardsMainThread( AVFramePtr testFrame )
 //
 void    TestVideoCardsMainThread::Process ()
 {
-    if( m_testFrame )
-    {
-        auto data = std::const_pointer_cast< MemoryChunk >( m_testFrame->m_videoData )->GetWritable();
+    auto frame = m_buffer.front();
+    auto data = std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable();
 
-        memset( data, rand(), m_testFrame->m_videoData->Size() );
+    memset( data, rand(), frame->m_videoData->Size() );
 
-        m_vcm.QueueFrame( m_testFrame );
+    m_vcm.QueueFrame( frame );
 
-        LOG_MESSAGE( SeverityLevel::info ) << Time::Now();
-    }
-    else
-    {
-        m_testFrame = TestVideoCardsUtils::CreateTestFrame( rand(), 1920, 1080 );
-        m_vcm.QueueFrame( m_testFrame );
-    }
-    
+    auto now = Time::Now();
+    LOG_MESSAGE( SeverityLevel::info ) << now - m_lastQueuedFrameTime;
+    m_lastQueuedFrameTime = now;
 
+    m_buffer.push_back( frame );
 }
 
 

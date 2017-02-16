@@ -6,6 +6,8 @@
 
 #include "Serialization/XML/XMLDeserializer.h"
 
+#include <boost/circular_buffer.hpp>
+
 namespace bv { namespace videocards {
 
 class VideoCardManager;
@@ -17,13 +19,15 @@ private:
 
     VideoCardManager &      m_vcm;
 
-    AVFramePtr              m_testFrame;
+    UInt64                  m_lastQueuedFrameTime;
+
+    boost::circular_buffer< AVFramePtr > m_buffer;
 
 public:
 
     void        Process                     () override;
 
-    explicit    TestVideoCardsMainThread    ( AVFramePtr testFrame = nullptr );
+    explicit    TestVideoCardsMainThread    ();
     virtual     ~TestVideoCardsMainThread   () {};
 
 
