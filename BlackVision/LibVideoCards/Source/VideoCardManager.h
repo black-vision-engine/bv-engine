@@ -137,8 +137,8 @@ public:
     //FIXME: probably not needed
     /**@brief Copies and interlaces full frame.
     @return Returns interlaced copy of frame. */
-	AVFramePtr                 InterlacedFrame(AVFramePtr data);
-	AVFramePtr                 RetrieveFieldFromFrame(AVFramePtr data, int odd);
+	//AVFramePtr                 InterlacedFrame(AVFramePtr data);
+	//AVFramePtr                 RetrieveFieldFromFrame(AVFramePtr data, int odd);
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 

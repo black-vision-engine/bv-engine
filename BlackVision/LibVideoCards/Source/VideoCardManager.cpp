@@ -237,37 +237,6 @@ void               VideoCardManager::FrameProcessingCompleted( UInt64 deviceID, 
     //instance.m_videoCards[ deviceID ]->DisplayFrame();
 }
 
-// *********************************
-//
-AVFramePtr         VideoCardManager::RetrieveFieldFromFrame(AVFramePtr frame, int odd)
-{
-	
-
-	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
-
-	const char *mem_src = frame->m_videoData->Get();
-
-	int pixel_depth = frame->m_desc.depth;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
-	int width = frame->m_desc.width;
-	int height = frame->m_desc.height;
-	int bytes_per_line = width * pixel_depth;
-
-	int size = width * height/2 * pixel_depth + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
-
-	char *mem_dst = new char[size];  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
-
-	for (int i = odd, j = 0;i < height;i += 2, j++)
-	{
-		memcpy(&mem_dst[j*(bytes_per_line)], &mem_src[i*(bytes_per_line)], bytes_per_line);
-	}
-
-	MemoryChunkConstPtr ptr = MemoryChunkConstPtr(new MemoryChunk((char*)mem_dst, size));  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
-
-	frame->m_videoData = ptr;
-
-	return frame;
-}
-
 //**************************************
 //
 IVideoCardPtr   VideoCardManager::GetVideoCard        ( UInt32 idx )
