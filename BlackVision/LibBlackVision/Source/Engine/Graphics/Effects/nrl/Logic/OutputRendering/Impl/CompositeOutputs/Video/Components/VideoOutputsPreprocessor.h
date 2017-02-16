@@ -12,7 +12,7 @@ private:
 
     AVOutputsData               m_avFrames;
 
-    VideoInputChannelsData *    m_inputChannels;
+    VideoInputChannelsData      m_inputChannels;
 
 public:
 

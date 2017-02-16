@@ -33,6 +33,9 @@ void                    VideoOutputsPreprocessor::PreInitialize         ( Output
     {
         m_avFrames.SetAVFrame( a.first, nullptr );
     }
+
+
+    m_inputChannels.PreInitialize( 
 }
 
 } //bv
