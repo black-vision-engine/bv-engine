@@ -26,7 +26,7 @@ NRenderLogicState::NRenderLogicState   ( unsigned int width, unsigned int height
 		//if (config::ConfigManager::GetBool("Debug/EnableOutput"))
         m_outputLogic.EnableOutput( CustomOutputType::COT_VIDEO_HD );      // FIXME: nrl - make sure that when this output is disabled, video oputput is not used
         //m_outputLogic.EnableOutput( CustomOutputType::COT_VIDEO_SD );      // FIXME: nrl - make sure that when this output is disabled, video oputput is not used
-        m_outputLogic.EnableOutput( CustomOutputType::COT_SCREENSHOT );
+        //m_outputLogic.EnableOutput( CustomOutputType::COT_SCREENSHOT );
     }
 
     m_ctx.SetAllocator( &m_renderTargetAllocator );

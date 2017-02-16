@@ -4,8 +4,11 @@
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "BlackMagicUtils.h"
 #include "AVFrame.h"
-#include "BlackMagic\DeckLinkAPI_h.h"
+#include "BlackMagic/DeckLinkAPI_h.h"
+#include "BlackMagicVCThread.h"
+#include "VideoOutputDelegate.h"
 
+#include <ctime>
 
 namespace bv { namespace videocards { namespace blackmagic {
 
@@ -27,7 +30,6 @@ public:
 
 };
 
-
 // ***************************************************************
 //
 class VideoCard : public IVideoCard
@@ -36,11 +38,29 @@ private:
 
     UInt32                                      m_deviceID;
     IDeckLink *                                 m_device;
-    IDeckLinkOutput *                           m_output;
+    IDeckLinkOutput *                           m_decklinkOutput;
     IDeckLinkConfiguration *                    m_configuration;
+	IDeckLinkKeyer *							m_keyer;
+	IDeckLinkDisplayMode *						m_displayMode;
+	IDeckLinkVideoConversion *					m_convertion;
 
-    std::vector< IDeckLinkMutableVideoFrame * > m_frames;
-    std::vector< ChannelOutputData >            m_outputs;
+	BMDTimeValue								m_frameDuration;
+	BMDTimeScale								m_frameTimescale;
+	UInt32										m_uiTotalFrames;
+
+    ChannelOutputData							m_output;
+	BlackMagicVCThreadUPtr						m_blackMagicVCThread;
+
+	UInt64										m_lastFrameTime;
+
+	VideoOutputDelegate	*						m_videoOutputDelegate;
+
+	typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
+	FrameQueue									m_frameQueue;
+
+	mutable std::mutex							m_mutex;
+
+	bool					InitKeyer			( const ChannelOutputData & ch );
 
 public:
 
@@ -51,10 +71,6 @@ public:
                             VideoCard           ( UInt32 deviceID );
     virtual                 ~VideoCard          () override;
 
-    bool                    InitVideoCard       ();
-    bool                    InitDevice          ();
-    bool                    InitOutput          ();
-
     virtual void            SetVideoOutput      ( bool enable ) override;
 
     void                    AddOutput           ( ChannelOutputData output );
@@ -62,10 +78,24 @@ public:
     virtual void            Start               () override;
     virtual void            ProcessFrame        ( AVFramePtr data, int odd ) override;
 
+	bool                    InitVideoCard       ();
+private:
+
+	bool                    InitDevice          ();
+	bool                    InitOutput          ();
+
+
+	void					FrameCompleted		( IDeckLinkVideoFrame * completedFrame );
+	void					DisplayNextFrame	( IDeckLinkVideoFrame * complitedFrame );
+
+	void					UpdateFrameTime		( UInt64 t );
+	UInt64					GetFrameTime		() const;
+
     static UInt32           EnumerateDevices    ();
 
+	friend class VideoOutputDelegate;
+	friend class VideoCardDesc;
 };
-
 
 } //bluefish
 } //videocards
