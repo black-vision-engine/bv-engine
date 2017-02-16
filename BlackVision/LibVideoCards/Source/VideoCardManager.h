@@ -133,12 +133,7 @@ public:
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */
     bool                                ProcessFrame            ();
-    
-    //FIXME: probably not needed
-    /**@brief Copies and interlaces full frame.
-    @return Returns interlaced copy of frame. */
-	//AVFramePtr                 InterlacedFrame(AVFramePtr data);
-	//AVFramePtr                 RetrieveFieldFromFrame(AVFramePtr data, int odd);
+   
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 

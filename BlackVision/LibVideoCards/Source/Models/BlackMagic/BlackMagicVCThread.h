@@ -9,27 +9,27 @@
 #include "DataTypes/QueueConcurrentLimited.h"
 
 #include "AVFrame.h"
-#include "BlackMagicUtils.h"
-
-#include "BlackMagic/DeckLinkAPI_h.h"
 
 
 namespace bv { namespace videocards { namespace blackmagic 
 {
 
+class VideoCard;
+
 class BlackMagicVCThread : public StoppableThread
 {
 	typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
 
-	FrameQueue						m_frameQueue;
+	FrameQueue					m_frameQueue;
 
-	IDeckLinkOutput *               m_output;
-	IDeckLinkMutableVideoFrame *	m_decklinkFrame;
+	MemoryChunkPtr				m_prevFrame;
+
+	VideoCard *					m_videoCard;
+
+	void						InterlaceFrame			( AVFramePtr frame );
 
 public:
-	explicit					BlackMagicVCThread		( IDeckLinkOutput * output );
-
-	void						SetDecklinkFrame		( IDeckLinkMutableVideoFrame * frame );
+	explicit					BlackMagicVCThread		( VideoCard * vc );
 
 	void						EnqueueFrame			( const AVFramePtr & frame );
 

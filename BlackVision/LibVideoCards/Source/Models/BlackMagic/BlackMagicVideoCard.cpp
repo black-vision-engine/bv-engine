@@ -92,9 +92,12 @@ VideoCard::VideoCard( UInt32 deviceID )
 	, m_keyer( nullptr )
 	, m_videoOutputDelegate( nullptr )
 	, m_frameQueue( 1 )
-	//, m_converToYUVNeeded( false )
 {
-    InitVideoCard();
+	InitVideoCard();
+
+	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this ) );
+	m_blackMagicVCThread->Stop();
+	m_blackMagicVCThread->Start();
 }
 
 //**************************************
@@ -327,7 +330,7 @@ void                    VideoCard::ProcessFrame         ( AVFramePtr avFrame )
 	//{
 		if( m_output.enabled )
 		{
-			m_frameQueue.WaitAndPush( avFrame );
+			m_blackMagicVCThread->EnqueueFrame( avFrame );
 		}
 	//}
 
@@ -375,6 +378,13 @@ UInt32                  VideoCard::EnumerateDevices     ()
     }
 
     return ( UInt32 )deviceCount;
+}
+
+//**************************************
+//
+void							VideoCard::FrameProcessed		( AVFramePtr frame )
+{
+	m_frameQueue.WaitAndPush( frame );
 }
 
 //**************************************

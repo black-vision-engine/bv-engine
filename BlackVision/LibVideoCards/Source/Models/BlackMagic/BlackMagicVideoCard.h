@@ -65,9 +65,9 @@ private:
     mutable std::condition_variable             m_waitDisplay;
     mutable std::mutex                          m_mutex;
 
-	MemoryChunkPtr								m_prevFrame;
-
     FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
+
+	void					FrameProcessed		( AVFramePtr frame );
 
 	bool					InitKeyer			( const ChannelOutputData & ch );
 
@@ -104,10 +104,9 @@ private:
 	void					UpdateFrameTime		( UInt64 t );
 	UInt64					GetFrameTime		() const;
 
-	void					InterlaceFrame		( AVFramePtr frame );
-
     static UInt32           EnumerateDevices    ();
 
+	friend class BlackMagicVCThread;
 	friend class VideoOutputDelegate;
 	friend class VideoCardDesc;
 };

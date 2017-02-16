@@ -233,8 +233,6 @@ void               VideoCardManager::FrameProcessingCompleted( UInt64 deviceID, 
 	std::unique_lock< std::mutex > lock( instance.m_mutex );
     instance.m_numReadyCards++;
     instance.m_waitFramesProcessed.notify_one();
-
-    //instance.m_videoCards[ deviceID ]->DisplayFrame();
 }
 
 //**************************************
