@@ -32,6 +32,14 @@ void    OutputCompositeVideo::ProcessFrameData                      ( NRenderCon
     m_outputsHandler.HandleOutputsData( av );
 }
 
+// *********************************
+//
+OutputCompositeVideo *  OutputCompositeVideo::Create                ( unsigned int width, unsigned int height, OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
+{
+
+    return nullptr;
+}
+
 } //nrl
 } //bv
 

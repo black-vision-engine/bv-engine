@@ -84,7 +84,7 @@ bool                        VideoInputChannelsData::ContainsValidData       ( Re
 
 // **************************
 //
-VideoInputChannelsData *    VideoInputChannelsData::Create                  ( const RenderedChannelsData * renderedChannelsData )
+VideoInputChannelsData *    VideoInputChannelsData::Create                  ( const std::vector< OutputStaticData > & uniqueOutputSetups, const std::hash_map< unsigned int, unsigned int > & mapping )
 {
     assert( renderedChannelsData != nullptr );
 

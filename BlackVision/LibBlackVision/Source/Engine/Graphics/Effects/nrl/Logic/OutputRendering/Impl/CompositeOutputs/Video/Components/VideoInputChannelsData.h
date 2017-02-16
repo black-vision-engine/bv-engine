@@ -53,7 +53,7 @@ public:
   
 public:
 
-    static VideoInputChannelsData *   Create            ( const RenderedChannelsData * renderedChannelsData ); 
+    static VideoInputChannelsData *   Create            ( const std::vector< OutputStaticData > & uniqueOutputSetups, const std::hash_map< unsigned int, unsigned int > & mapping );
 
 };
 

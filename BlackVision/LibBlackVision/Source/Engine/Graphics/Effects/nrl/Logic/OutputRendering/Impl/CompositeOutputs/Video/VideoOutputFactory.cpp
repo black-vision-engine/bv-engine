@@ -43,16 +43,8 @@ OutputCompositeVideo *  VideoOutputFactory::CreateCompositeVideoOutput( const Ou
     auto staticInputs   = ReadUniqueStaticDataVec( videoOutputs );
     auto mapping        = ReadMapping( videoOutputs );
 
-    // FIXME: nrl - implement later on
-    //auto handler    = new MockVideoHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
-    //auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
+    return OutputCompositeVideo::Create( desc.GetWidth(), desc.GetHeight(), staticInputs, mapping );
 
-    //InitializeDefault( output, desc );
-
-    //return output;
-
-    { mapping; staticInputs; }
-    return nullptr;
 };
 
 // *********************************
@@ -98,11 +90,11 @@ std::vector< VideoOutputFactory::VideoOutputDesc >   VideoOutputFactory::ReadInp
 
 // *********************************
 //
-std::hash_map< unsigned int, unsigned int >  VideoOutputFactory::ReadMapping     ( const std::vector< VideoOutputFactory::VideoOutputDesc > & videoOutputs )
+UintUintMapping VideoOutputFactory::ReadMapping ( const std::vector< VideoOutputFactory::VideoOutputDesc > & videoOutputs )
 {
     auto staticInputs = ReadUniqueStaticDataVec( videoOutputs );
 
-    std::hash_map< unsigned int, unsigned int > mapping;
+    UintUintMapping mapping;
 
     for( auto & d : videoOutputs )
     {
@@ -123,7 +115,7 @@ std::hash_map< unsigned int, unsigned int >  VideoOutputFactory::ReadMapping    
 
 // *********************************
 //
-std::vector< OutputStaticData >  VideoOutputFactory::ReadUniqueStaticDataVec     ( const std::vector< VideoOutputFactory::VideoOutputDesc > & inputVec )
+OutputStaticDataVec VideoOutputFactory::ReadUniqueStaticDataVec     ( const std::vector< VideoOutputFactory::VideoOutputDesc > & inputVec )
 {
     std::unordered_set< OutputStaticData, OutputStaticDataHash >    uniqueEntries;
 
@@ -132,7 +124,7 @@ std::vector< OutputStaticData >  VideoOutputFactory::ReadUniqueStaticDataVec    
         uniqueEntries.insert( d.staticOutputData );
     }
 
-    std::vector< OutputStaticData > res( uniqueEntries.begin(), uniqueEntries.end() );
+    OutputStaticDataVec res( uniqueEntries.begin(), uniqueEntries.end() );
 
     return res;
 }

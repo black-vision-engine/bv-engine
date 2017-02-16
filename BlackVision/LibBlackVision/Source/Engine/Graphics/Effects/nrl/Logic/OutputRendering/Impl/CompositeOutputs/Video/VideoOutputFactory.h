@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
+
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputDesc.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/OutputCompositeVideo.h"
 
@@ -28,9 +30,9 @@ private:
 
     static std::vector< VideoOutputDesc >   ReadInputEntryVec           ( const OutputDesc::TOutputPropertiesVector & props );
 
-    static std::hash_map< unsigned int, unsigned int >  ReadMapping     ( const std::vector< VideoOutputDesc > & videoOutputs );
+    static UintUintMapping                  ReadMapping     ( const std::vector< VideoOutputDesc > & videoOutputs );
  
-    static std::vector< OutputStaticData >  ReadUniqueStaticDataVec     ( const std::vector< VideoOutputDesc > & inputVec );
+    static OutputStaticDataVec              ReadUniqueStaticDataVec     ( const std::vector< VideoOutputDesc > & inputVec );
 
 };
 

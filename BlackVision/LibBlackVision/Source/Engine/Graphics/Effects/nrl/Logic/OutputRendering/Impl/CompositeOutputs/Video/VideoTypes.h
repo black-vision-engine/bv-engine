@@ -5,6 +5,7 @@
 
 #include "AVFrame.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputStaticData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 
 
@@ -20,6 +21,9 @@ typedef std::vector< VideoInputChannel * >                  VideoInputChannelsVe
 
 typedef std::hash_map< VideoCardID, VideoInputChannel * >   VideoInputChannelsMap;
 typedef std::hash_map< VideoCardID, AVFramePtr >            AVFramePtrMap;
+
+typedef std::vector< OutputStaticData >                     OutputStaticDataVec;
+typedef std::hash_map< unsigned int, unsigned int >         UintUintMapping;
 
 } // nrl
 } // bv
