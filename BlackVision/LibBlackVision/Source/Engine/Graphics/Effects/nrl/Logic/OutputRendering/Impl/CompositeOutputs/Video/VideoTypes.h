@@ -17,8 +17,9 @@ namespace nrl {
 typedef unsigned int VideoCardID;
 
 typedef std::vector< VideoInputChannel * >                  VideoInputChannelsVec;
-typedef std::hash_map< VideoCardID, AVFramePtr >            AVFramePtrMap;
+
 typedef std::hash_map< VideoCardID, VideoInputChannel * >   VideoInputChannelsMap;
+typedef std::hash_map< VideoCardID, AVFramePtr >            AVFramePtrMap;
 
 } // nrl
 } // bv

@@ -32,12 +32,15 @@ private:
 
 private:
 
-                                VideoInputChannelsData  ( const RenderedChannelsData * renderedChannelsData );
+                                VideoInputChannelsData  ();
 
 public:
 
 
                                 ~VideoInputChannelsData ();
+
+    bool                        IsInitialized           () const;
+    bool                        Initialize              ( const RenderedChannelsData * rcd ) const;
 
     const VideoInputChannel *   GetInputChannel         ( unsigned int videoOutputID ) const;
 

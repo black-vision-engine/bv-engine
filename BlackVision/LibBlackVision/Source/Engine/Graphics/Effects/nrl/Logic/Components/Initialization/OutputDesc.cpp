@@ -8,9 +8,7 @@ namespace bv { namespace nrl {
 // **************************
 //
 OutputDesc::OutputDesc                                                      ()
-    : m_width( 1920 )
-    , m_height( 1080 )
-    , m_selectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 )
+    : m_staticData( 1920, 1080, RenderChannelType::RCT_OUTPUT_1 )
     , m_outputType( CustomOutputType::COT_PREVIEW )
     , m_outputChannelMapping( OutputChannelMapping::OCM_RGBA )
 {
@@ -34,21 +32,21 @@ const OutputDesc::TOutputPropertiesVector & OutputDesc::GetOutputProperties () c
 //
 unsigned int                OutputDesc::GetWidth                            () const
 {
-    return m_width;
+    return m_staticData.width;
 }
 
 // **************************
 //
 unsigned int                OutputDesc::GetHeight                           () const
 {
-    return m_height;
+    return m_staticData.height;
 }
 
 // **************************
 //
 RenderChannelType           OutputDesc::GetSelectedRenderedChannel          () const
 {
-    return m_selectedRenderedChannel;
+    return m_staticData.selectedRenderedChannel;
 }
     
 // **************************
@@ -76,21 +74,21 @@ bool                        OutputDesc::IsEnabled                           () c
 //
 void                        OutputDesc::SetWidth                            ( unsigned int width )
 {
-    m_width = width;
+    m_staticData.width = width;
 }
 
 // **************************
 //
 void                        OutputDesc::SetHeight                           ( unsigned int height )
 {
-    m_height = height;
+    m_staticData.height = height;
 }
 
 // **************************
 //
 void                        OutputDesc::SetSelectedRenderedChannel          ( RenderChannelType rct )
 {
-    m_selectedRenderedChannel = rct;
+    m_staticData.selectedRenderedChannel = rct;
 }
     
 // **************************
