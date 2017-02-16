@@ -28,7 +28,7 @@ public:
     void        Process                     () override;
 
     explicit    TestVideoCardsMainThread    ();
-    virtual     ~TestVideoCardsMainThread   () {};
+    virtual     ~TestVideoCardsMainThread   ();
 
 
 };

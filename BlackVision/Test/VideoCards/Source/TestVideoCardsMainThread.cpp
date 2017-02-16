@@ -52,13 +52,20 @@ void    TestVideoCardsMainThread::Process ()
 
     auto now = Time::Now();
 
-    TestVideoCardsUtils::UpdateConsoleTitle( std::to_wstring( 1000 / ( now - m_lastQueuedFrameTime ) ) + L" FPS" );
+    TestVideoCardsUtils::SetFPS( now - m_lastQueuedFrameTime );
 
     m_lastQueuedFrameTime = now;
 
     m_buffer.push_back( frame );
 }
 
+// ****************************
+//
+TestVideoCardsMainThread::~TestVideoCardsMainThread   ()
+{
+    int t = 0;
+    t;
+}
 
 } // videocards
 } // bv

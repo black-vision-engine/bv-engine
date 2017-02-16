@@ -10,7 +10,9 @@ public:
 
     static AVFramePtr   CreateTestFrame     ( int color, UInt32 w, UInt32 h );
 
-    static void         UpdateConsoleTitle  ( const std::wstring title );
+    static bool         UpdateConsoleTitle  ( const std::wstring title );
+
+    static void         SetFPS              ( UInt64 frameTime );
 
 };
 

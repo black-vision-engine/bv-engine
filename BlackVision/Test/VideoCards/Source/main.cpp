@@ -22,6 +22,8 @@ int main()
     auto th = bv::videocards::RunTest ();
     th->Join();
 
+    delete th;
+
     return 0;
 }
 
