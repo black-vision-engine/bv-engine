@@ -1097,7 +1097,13 @@ void        SceneEventsHandlers::RestoreVisibilityState  ()
 {
     for( auto scene : m_scenesVisibilityState )
     {
-        scene.first->GetRootNode()->SetVisible( scene.second );
+        auto root = scene.first->GetRootNode();
+        
+        // For some reason root node can not exist anymore.
+        if( root )
+        {
+            root->SetVisible( scene.second );
+        }
     }
 
     m_scenesVisibilityState.clear();

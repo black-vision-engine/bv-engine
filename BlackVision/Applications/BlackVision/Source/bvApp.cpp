@@ -25,7 +25,7 @@
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
-void			bv::BlackVisionApp::StaticInitializer	()
+void			bv::BlackVisionApp::StaticInitializer	( int, char * [] )
 {
     
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
