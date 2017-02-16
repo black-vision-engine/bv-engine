@@ -8,6 +8,8 @@
 #include "BlackMagicVCThread.h"
 #include "VideoOutputDelegate.h"
 
+#include <ctime>
+
 namespace bv { namespace videocards { namespace blackmagic {
 
 // ***************************** DESCRIPTOR **********************************
@@ -40,6 +42,7 @@ private:
     IDeckLinkConfiguration *                    m_configuration;
 	IDeckLinkKeyer *							m_keyer;
 	IDeckLinkDisplayMode *						m_displayMode;
+	IDeckLinkVideoConversion *					m_convertion;
 
 	BMDTimeValue								m_frameDuration;
 	BMDTimeScale								m_frameTimescale;
@@ -48,12 +51,14 @@ private:
     ChannelOutputData							m_output;
 	BlackMagicVCThreadUPtr						m_blackMagicVCThread;
 
+	UInt64										m_lastFrameTime;
+
 	VideoOutputDelegate	*						m_videoOutputDelegate;
 
 	typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
 	FrameQueue									m_frameQueue;
 
-	std::mutex									m_mutex;
+	mutable std::mutex							m_mutex;
 
 	bool					InitKeyer			( const ChannelOutputData & ch );
 
@@ -82,6 +87,9 @@ private:
 
 	void					FrameCompleted		( IDeckLinkVideoFrame * completedFrame );
 	void					DisplayNextFrame	( IDeckLinkVideoFrame * complitedFrame );
+
+	void					UpdateFrameTime		( UInt64 t );
+	UInt64					GetFrameTime		() const;
 
     static UInt32           EnumerateDevices    ();
 

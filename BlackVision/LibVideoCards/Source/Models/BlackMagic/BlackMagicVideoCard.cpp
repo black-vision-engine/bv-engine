@@ -4,6 +4,9 @@
 
 #include "UseLoggerVideoModule.h"
 
+#include "System/Time.h"
+
+#include <chrono>
 
 namespace bv { namespace videocards { namespace blackmagic {
 
@@ -89,6 +92,7 @@ VideoCard::VideoCard( UInt32 deviceID )
 	, m_keyer( nullptr )
 	, m_videoOutputDelegate( nullptr )
 	, m_frameQueue( 1 )
+	//, m_converToYUVNeeded( false )
 {
     InitVideoCard();
 }
@@ -280,10 +284,12 @@ void                    VideoCard::Start                ()
 	auto w = m_displayMode->GetWidth();
 	auto h = m_displayMode->GetHeight();
 
-	// Set 3 frame preroll
-	for( unsigned i = 0; i < 3; i++ )
+	BMDPixelFormat displayFormat = BMDPixelFormat::bmdFormat8BitBGRA;
+
+	// Set 4 frame preroll
+	for( unsigned i = 0; i < 4; i++ )
 	{
-		if( SUCCESS( m_decklinkOutput->CreateVideoFrame( w, h, w * 4, BMDPixelFormat::bmdFormat8BitBGRA,
+		if( SUCCESS( m_decklinkOutput->CreateVideoFrame( w, h, w * 4, displayFormat,
 														 bmdFrameFlagFlipVertical, &pFrame ) ) )
 		{
 			if( SUCCESS( m_decklinkOutput->ScheduleVideoFrame( pFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
@@ -296,18 +302,34 @@ void                    VideoCard::Start                ()
 		}
 	}
 
-	m_decklinkOutput->StartScheduledPlayback( 10, 100, 1.0 );
+
+	m_decklinkOutput->StartScheduledPlayback( 0, m_frameTimescale, 1.0 );
 }
 
 //**************************************
 //
 void                    VideoCard::ProcessFrame         (AVFramePtr avFrame, int odd )
 {
-	{odd;}
-	if( m_output.enabled )
+	if( odd == 0 )
 	{
-		m_frameQueue.WaitAndPush( avFrame );
-	}		
+		if( m_output.enabled )
+		{
+			m_frameQueue.WaitAndPush( avFrame );
+		}
+	}
+
+	auto nextSync = GetFrameTime() + 20;
+
+	UpdateFrameTime( nextSync );
+							   
+	auto sleepFor = nextSync - Time::Now();
+
+	if( sleepFor > 0 )
+	{
+		std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
+
+		//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame: Slept for " << sleepFor << " miliseconds";
+	}
 }
 
 //**************************************
@@ -349,24 +371,48 @@ void							VideoCard::FrameCompleted		( IDeckLinkVideoFrame * complitedFrame )
 
 //**************************************
 //
+void							VideoCard::UpdateFrameTime		( UInt64 t )
+{
+	std::unique_lock< std::mutex > lock( m_mutex );
+	m_lastFrameTime = t;
+}
+
+//**************************************
+//
+UInt64							VideoCard::GetFrameTime			() const
+{
+	std::unique_lock< std::mutex > lock( m_mutex );
+	return m_lastFrameTime;
+}
+
+//**************************************
+//
 void							VideoCard::DisplayNextFrame		( IDeckLinkVideoFrame * completedFrame )
 {
 	//std::unique_lock< std::mutex > lock( m_mutex );
 
+	UpdateFrameTime( Time::Now() );
+
 	AVFramePtr srcFrame;
 
-	if( m_frameQueue.WaitAndPop( srcFrame ) )
+	if( m_frameQueue.TryPop( srcFrame ) )
 	{
 		void * rawFrame;
 		completedFrame->GetBytes( &rawFrame );
 
 		memcpy( rawFrame, srcFrame->m_videoData->Get(), completedFrame->GetRowBytes() * completedFrame->GetHeight() );
-
-		if( SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
-		{
-			m_uiTotalFrames++;
-		}
 	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output.";
+	}
+
+	if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
+	{
+		LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame.";
+	}
+
+	m_uiTotalFrames++;
 }
 
 } //blackmagic
