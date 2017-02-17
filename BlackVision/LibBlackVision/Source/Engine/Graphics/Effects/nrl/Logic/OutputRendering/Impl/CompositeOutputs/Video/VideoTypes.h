@@ -19,17 +19,17 @@ namespace nrl {
 
 typedef unsigned int VideoCardID;
 
-typedef std::vector< VideoCardID >                              VideoCardIDVec;
+typedef std::vector< VideoCardID >                                  VideoCardIDVec;
 
-typedef std::vector< VideoInputChannel * >                      VideoInputChannelsVec;
+typedef std::vector< VideoInputChannel * >                          VideoInputChannelsVec;
 
-typedef std::hash_map< VideoCardID, VideoInputChannel * >       VideoInputChannelsMap;
-typedef std::hash_map< VideoCardID, AVFramePtr >                AVFramePtrMap;
+typedef std::hash_map< VideoCardID, VideoInputChannel * >           VideoInputChannelsMap;
+typedef std::hash_map< VideoCardID, AVFramePtr >                    AVFramePtrMap;
 
-typedef std::vector< OutputStaticData >                         OutputStaticDataVec;
-typedef std::hash_map< unsigned int, unsigned int >             UintUintMapping;
+typedef std::vector< OutputStaticData >                             OutputStaticDataVec;
+typedef std::hash_map< unsigned int, unsigned int >                 UintUintMapping;
 
-typedef std::hash_map< VideoInputChannel *, VideoCardIDVec >    VideoInpuChannelToOutputMapping;
+typedef std::hash_map< const VideoInputChannel *, VideoCardIDVec >  VideoInpuChannelToOutputMapping;
 
 } // nrl
 } // bv

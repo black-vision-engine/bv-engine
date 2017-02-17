@@ -23,6 +23,7 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( Render
         m_initialized = true;
     }
 
+    m_inputChannels
     // FIXME: nrl - implement
     return m_avFrames;
 }

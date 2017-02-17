@@ -96,6 +96,33 @@ void    VideoInputChannelsData::PostInitialize                              ( co
     m_postInitialized = false;
 }
 
+// **************************
+//
+unsigned int                VideoInputChannelsData::GetNumVideoInputChannels() const
+{
+    return (unsigned int) m_videoInputChannels.size();
+}
+
+// **************************
+//
+const VideoInputChannel *   VideoInputChannelsData::GetVideoInputChannelAt  ( unsigned int idx ) const
+{
+    assert( idx < GetNumVideoInputChannels() );
+
+    return m_videoInputChannels[ idx ];
+}
+
+// **************************
+//
+const VideoCardIDVec &      VideoInputChannelsData::GetAsignedVideoCards    ( const VideoInputChannel * vic ) const
+{
+    assert( m_channelToOutputMaping.find( vic ) != m_channelToOutputMaping.end() );
+
+    auto it = m_channelToOutputMaping.find( vic );
+
+    return it->second;
+}
+
 //// **************************
 ////
 //const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( RenderChannelType rct ) const

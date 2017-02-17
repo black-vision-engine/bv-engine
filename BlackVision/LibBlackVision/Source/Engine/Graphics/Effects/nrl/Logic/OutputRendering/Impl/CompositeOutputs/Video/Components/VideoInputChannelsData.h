@@ -51,6 +51,10 @@ public:
 
     const VideoInputChannel *   GetInputChannel         ( unsigned int videoOutputID ) const;
 
+    unsigned int                GetNumVideoInputChannels() const;
+    const VideoInputChannel *   GetVideoInputChannelAt  ( unsigned int idx ) const;
+    const VideoCardIDVec &      GetAsignedVideoCards    ( const VideoInputChannel * vic ) const;
+
     void                        InvalidateCachedTextures();
     //void                        InvalidateCachedTexture ( RenderChannelType rct );
     //Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, RenderChannelType rct ) const;
