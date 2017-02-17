@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <set>
+
 #include "VideoInputChannelsData.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
@@ -48,6 +50,7 @@ void    VideoInputChannelsData::PostInitialize                              ( co
     assert( m_postInitialized == false );
     assert( m_videoInputChannels.size() == 0 );
     assert( m_outputToChannelsMapping.size() == 0 );
+    assert( m_channelToOutputMaping.size() == 0 );
 
     // Initialize unique video output setups
     for( auto & s : m_preUniqueOutputSetups )
@@ -67,6 +70,28 @@ void    VideoInputChannelsData::PostInitialize                              ( co
 
         m_outputToChannelsMapping[ videoCardID ] = vrc;
     }
+
+    // Add inverted mapping from channels to corresponding video outputs (multiple outputs per channel)
+    for ( auto vce : m_outputToChannelsMapping )
+    {
+        auto channel    = vce.second;
+        auto outputId   = vce.first;
+
+        m_channelToOutputMaping[ channel ].push_back( outputId );
+    }
+
+    // Remove duplicates
+    unsigned int sum = 0;
+
+    for( auto & e : m_channelToOutputMaping )
+    {
+        std::set< VideoCardID > s( e.second.begin(), e.second.end() );
+        e.second = VideoCardIDVec( s.begin(), s.end() );
+    
+        sum += (unsigned int) e.second.size();
+    }
+
+    assert( sum == (unsigned int) m_outputToChannelsMapping.size() );
 
     m_postInitialized = false;
 }

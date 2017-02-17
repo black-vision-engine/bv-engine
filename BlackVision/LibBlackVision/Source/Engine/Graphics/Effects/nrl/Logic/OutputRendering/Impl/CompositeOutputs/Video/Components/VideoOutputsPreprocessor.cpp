@@ -23,6 +23,7 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( Render
         m_initialized = true;
     }
 
+    // FIXME: nrl - implement
     return m_avFrames;
 }
 
@@ -38,7 +39,7 @@ void                    VideoOutputsPreprocessor::InvalidateCachedData  ()
 
 // *********************************
 //
-void                    VideoOutputsPreprocessor::PreInitialize         ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
+void                    VideoOutputsPreprocessor::Initialize         ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
 {
     assert( m_avFrames.GetNumEntries() == 0 );    
 

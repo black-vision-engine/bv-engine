@@ -38,7 +38,7 @@ OutputCompositeVideo *  OutputCompositeVideo::Create                ( unsigned i
 {
     auto res = new OutputCompositeVideo( width, height );
 
-    res->m_outputsPreprocessor.PreInitialize( uniqueOutputSetups, mapping );
+    res->m_outputsPreprocessor.Initialize( uniqueOutputSetups, mapping );
     res->m_outputsHandler.PreInitialize( uniqueOutputSetups, mapping );
 
     return res;

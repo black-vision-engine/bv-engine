@@ -17,15 +17,16 @@ class VideoInputChannelsData
 {
 private:
 
-    // FIXME: hackish deferred initialization
+    // Hackish deferred initialization
     OutputStaticDataVec                 m_preUniqueOutputSetups;
     UintUintMapping                     m_preMapping;
 
     bool                                m_preInitialized;
 
-    // FIXME: Initialization 
+    // Initialization 
     VideoInputChannelsMap               m_outputToChannelsMapping;
     VideoInputChannelsVec               m_videoInputChannels;
+    VideoInpuChannelToOutputMapping     m_channelToOutputMaping;
 
     const RenderedChannelsData *        m_originalRenderedChannelsData;
 
