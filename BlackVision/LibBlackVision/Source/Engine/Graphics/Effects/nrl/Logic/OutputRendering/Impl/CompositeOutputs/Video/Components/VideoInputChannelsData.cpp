@@ -212,14 +212,5 @@ bool                        VideoInputChannelsData::ContainsValidData       ( un
     return m_originalRenderedChannelsData->ContainsValidData( vc->GetWrappedChannel() );
 }
 
-//// **************************
-////
-//VideoInputChannelsData *    VideoInputChannelsData::Create                  ( const std::vector< OutputStaticData > & uniqueOutputSetups, const std::hash_map< unsigned int, unsigned int > & mapping )
-//{
-//    assert( renderedChannelsData != nullptr );
-//
-//    return new VideoInputChannelsData( renderedChannelsData );
-//}
-
 } //nrl
 } //bv

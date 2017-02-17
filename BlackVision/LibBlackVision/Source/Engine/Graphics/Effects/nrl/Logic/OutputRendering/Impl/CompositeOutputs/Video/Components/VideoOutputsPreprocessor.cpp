@@ -38,6 +38,8 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( NRende
 
         for( auto outputID : m_inputChannels.GetAsignedVideoCardIds( vic ) )
         {
+            assert( m_inputChannels.ContainsValidData( outputID ) );
+
             m_avFrames.SetAVFrame( outputID, frame );
         }
     }
@@ -51,7 +53,7 @@ void                    VideoOutputsPreprocessor::InvalidateCachedData  ()
 {
     if( m_initialized )
     {
-        m_inputChannels.InvalidateCachedTextures();
+        m_inputChannels.InvalidateCachedTextures();    
     }
 }
 

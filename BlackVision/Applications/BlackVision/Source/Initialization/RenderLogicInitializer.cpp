@@ -109,6 +109,24 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
 
     // FIXME: nrl - append additional properties representing each separate video output
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
+    auto & props = desc.AccessOutputProperties();
+    
+    props.resize( 2 );
+
+    auto & vc0 = props[ 0 ];
+
+    vc0[ "width" ] = "1920";
+    vc0[ "height" ] = "1080";
+    vc0[ "renderChannelID" ] = "0";
+    vc0[ "outputID" ] = "1";
+
+    auto & vc1 = props[ 1 ];
+
+    vc1[ "width" ] = "1920";
+    vc1[ "height" ] = "1080";
+    vc1[ "renderChannelID" ] = "0";
+    vc1[ "outputID" ] = "2";
+
 }
 
 } // nrl

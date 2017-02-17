@@ -16,8 +16,6 @@ public:
 
     void    HandleOutputsData   ( const AVOutputsData & outputs );
 
-    void    PreInitialize       ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
-
 };
 
 } //bv

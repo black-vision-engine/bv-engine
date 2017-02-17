@@ -9,7 +9,8 @@ namespace bv { namespace nrl {
 //
 void    VideoOutputsHandler::HandleOutputsData   ( const AVOutputsData & outputs )
 {
-	auto VCMInput = std::shared_ptr< videocards::VCMInputData >( new videocards::VCMInputData() );
+    // FIXME: nrl - can't it be created once ang simply replate the wrapped pointers?
+	auto VCMInput = std::make_shared< videocards::VCMInputData >();
 
 	for( auto it = outputs.begin(); it != outputs.end(); ++it )
 	{
@@ -17,14 +18,6 @@ void    VideoOutputsHandler::HandleOutputsData   ( const AVOutputsData & outputs
 	}
 
 	videocards::VideoCardManager::Instance().Display( VCMInput );
-}
-
-// *********************************
-//
-void    VideoOutputsHandler::PreInitialize      ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
-{
-    { uniqueOutputSetups; }
-    { mapping; }
 }
 
 } //bv

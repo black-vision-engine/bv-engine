@@ -12,7 +12,6 @@
 
 namespace bv { namespace nrl {
 
-// FIXME: nrl - implement (if necessary) additional logic to cache readback textures - or move this logic somewhere else
 class VideoInputChannelsData
 {
 private:
@@ -66,10 +65,6 @@ public:
   
     bool                        IsActive                ( unsigned int videoOutputID ) const;
     bool                        ContainsValidData       ( unsigned int videoOutputID ) const;
-
-public:
-
-    static VideoInputChannelsData *   Create            ( const std::vector< OutputStaticData > & uniqueOutputSetups, const std::hash_map< unsigned int, unsigned int > & mapping );
 
 };
 
