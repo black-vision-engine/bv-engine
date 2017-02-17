@@ -16,7 +16,7 @@ void    VideoOutputsHandler::HandleOutputsData   ( const AVOutputsData & outputs
 		VCMInput->SetAVFrame( it->first, it->second );
 	}
 
-	videocards::VideoCardManager::Instance().DisplayOutputs( VCMInput );
+	videocards::VideoCardManager::Instance().Display( VCMInput );
 }
 
 // *********************************

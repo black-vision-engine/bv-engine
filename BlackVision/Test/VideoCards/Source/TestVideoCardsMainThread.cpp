@@ -54,7 +54,11 @@ void    TestVideoCardsMainThread::Process ()
 		memset( &( data[ ( ( ( 2 * m_frameNum ) + i ) % 1080 ) * 1920 * 4 ] ), 255, 4 * 1920 );
 	}
 
-    m_vcm.QueueFrame( frame );
+    auto input = std::shared_ptr< VCMInputData >( new VCMInputData() );
+
+    input->SetAVFrame( 0, frame );
+
+    m_vcm.Display( input );
 
     auto now = Time::Now();
 

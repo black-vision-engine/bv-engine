@@ -314,7 +314,10 @@ void                    VideoCard::Start                ()
 
 
 
-	m_decklinkOutput->StartScheduledPlayback( 0, m_frameTimescale, 1.0 );
+    if( !SUCCESS( m_decklinkOutput->StartScheduledPlayback( 0, m_frameTimescale, 1.0 ) ) )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot start playback.";
+    }
 
 }
 

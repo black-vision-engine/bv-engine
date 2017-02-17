@@ -69,7 +69,7 @@ VideoCardManager::VideoCardManager()
 VideoCardManager::~VideoCardManager     ()
 {
     // kill processing thread with killer frame
-    DisplayOutputs( KILLER_FRAME );
+    Display( KILLER_FRAME );
 
     {
         std::unique_lock< std::mutex > lock( m_mutex );
@@ -209,7 +209,7 @@ AVFrameConstPtr	VCMInputData::GetAVFrame( UInt64 avOutputID ) const
 
 // *********************************
 //
-void						 VideoCardManager::DisplayOutputs		( const VCMInputDataConstPtr & outputs )
+void						 VideoCardManager::Display		        ( const VCMInputDataConstPtr & outputs )
 {
 	m_inputDataBuffer.Push( outputs );
 }
