@@ -51,6 +51,9 @@ void    VideoInputChannelsData::PostInitialize                              ( co
     assert( m_videoInputChannels.size() == 0 );
     assert( m_outputToChannelsMapping.size() == 0 );
     assert( m_channelToOutputMaping.size() == 0 );
+    assert( m_originalRenderedChannelsData == nullptr );
+
+    m_originalRenderedChannelsData = rcd;
 
     // Initialize unique video output setups
     for( auto & s : m_preUniqueOutputSetups )
@@ -98,6 +101,28 @@ void    VideoInputChannelsData::PostInitialize                              ( co
 
 // **************************
 //
+const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( unsigned int videoOutputID ) const
+{
+    assert( m_outputToChannelsMapping.find( videoOutputID ) != m_outputToChannelsMapping.end() );
+
+    auto it = m_outputToChannelsMapping.find( videoOutputID );
+
+    return it->second;
+}
+
+// **************************
+//
+VideoInputChannel *         VideoInputChannelsData::AccessInputChannel      ( unsigned int videoOutputID )
+{
+    assert( m_outputToChannelsMapping.find( videoOutputID ) != m_outputToChannelsMapping.end() );
+
+    auto it = m_outputToChannelsMapping.find( videoOutputID );
+
+    return it->second;
+}
+
+// **************************
+//
 unsigned int                VideoInputChannelsData::GetNumVideoInputChannels() const
 {
     return (unsigned int) m_videoInputChannels.size();
@@ -141,57 +166,52 @@ void                        VideoInputChannelsData::ToggleLastFrameHadAudio ( un
     channel->ToggleLastFrameHadAudio();
 }
 
-//// **************************
-////
-//const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( RenderChannelType rct ) const
-//{
-//    return m_renderChannels[ (unsigned int) rct ];
-//}
+// **************************
 //
-//// **************************
-////
-//void                        VideoInputChannelsData::InvalidateCachedTextures()
-//{
-//    for( auto channel : m_renderChannels )
-//    {
-//        channel->InvalidateCachedTexture();
-//    }
-//}
+void                        VideoInputChannelsData::InvalidateCachedTextures()
+{
+    for( auto channel : m_videoInputChannels )
+    {
+        channel->InvalidateCachedTexture();
+    }
+}
+
+// **************************
 //
-//// **************************
-////
-//void                        VideoInputChannelsData::InvalidateCachedTexture ( RenderChannelType rct )
-//{
-//    auto channel = GetInputChannel( rct );
+void                        VideoInputChannelsData::InvalidateCachedTexture ( unsigned int videoOutputID )
+{
+    auto channel = GetInputChannel( videoOutputID );
+
+    channel->InvalidateCachedTexture();
+}
+
+// **************************
 //
-//    channel->InvalidateCachedTexture();
-//}
+Texture2DPtr                VideoInputChannelsData::ReadColorTexture        ( NRenderContext * ctx, unsigned int videoOutputID ) const
+{
+    auto channel = GetInputChannel( videoOutputID );
+
+    return channel->ReadColorTexture( ctx );
+}
+
+// **************************
 //
-//// **************************
-////
-//Texture2DPtr                VideoInputChannelsData::ReadColorTexture        ( NRenderContext * ctx, RenderChannelType rct ) const
-//{
-//    auto channel = GetInputChannel( rct );
+bool                        VideoInputChannelsData::IsActive                ( unsigned int videoOutputID ) const
+{
+    auto channel = GetInputChannel( videoOutputID );
+
+    return channel->IsActive();
+}
+
+// **************************
 //
-//    return channel->ReadColorTexture( ctx );
-//}
-//
-//// **************************
-////
-//bool                        VideoInputChannelsData::IsActive                ( RenderChannelType rct ) const
-//{
-//    auto channel = GetInputChannel( rct );
-//
-//    return channel->IsActive();
-//}
-//
-//// **************************
-////
-//bool                        VideoInputChannelsData::ContainsValidData       ( RenderChannelType rct ) const
-//{
-//    return m_wrappedRenderedChannelsData->ContainsValidData( rct );
-//}
-//
+bool                        VideoInputChannelsData::ContainsValidData       ( unsigned int videoOutputID ) const
+{
+    auto vc = m_outputToChannelsMapping.find( videoOutputID )->second;
+
+    return m_originalRenderedChannelsData->ContainsValidData( vc->GetWrappedChannel() );
+}
+
 //// **************************
 ////
 //VideoInputChannelsData *    VideoInputChannelsData::Create                  ( const std::vector< OutputStaticData > & uniqueOutputSetups, const std::hash_map< unsigned int, unsigned int > & mapping )

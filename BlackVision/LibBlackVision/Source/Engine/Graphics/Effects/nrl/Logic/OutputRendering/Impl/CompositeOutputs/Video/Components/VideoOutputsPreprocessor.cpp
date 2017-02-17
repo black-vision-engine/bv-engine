@@ -51,7 +51,7 @@ void                    VideoOutputsPreprocessor::InvalidateCachedData  ()
 {
     if( m_initialized )
     {
-        // FIXME: implement
+        m_inputChannels.InvalidateCachedTextures();
     }
 }
 
@@ -85,12 +85,12 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 	desc.height = videoFrame->GetHeight();
 	desc.depth  = TextureUtils::Channels( videoFrame->GetFormat() );
 
-	MemoryChunkPtr data = MemoryChunk::Create(1);
+	MemoryChunkPtr data = MemoryChunk::Create( 1 );
 
 	desc.channels = 0;
 	desc.sampleRate = 0;
 
-    if (!channel->LastFrameHadAudio())
+    if ( !channel->LastFrameHadAudio() )
 	{
 		desc.channels = aud->GetChannels();
 		desc.sampleRate = aud->GetFrequency() / FPS_HACK;
@@ -100,7 +100,7 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 		data = MemoryChunk::Create( audioSize );
 
 		auto ret = aud->GetBufferedData( data );
-		data = std::const_pointer_cast<MemoryChunk>( ret->GetData() );
+		data = std::const_pointer_cast< MemoryChunk >( ret->GetData() );
 	}
 
     channel->ToggleLastFrameHadAudio();
@@ -118,7 +118,6 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 	frame->m_TimeCode.frame = 12;
   
     return frame;
-
 }
 
 } //bv

@@ -4,6 +4,9 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoResizedInputChannel.h"
 
+#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Assets/Texture/TextureUtils.h"
+
 
 namespace bv { namespace nrl {
 
@@ -58,6 +61,13 @@ void            VideoInputChannel::InvalidateCachedTexture      () const
 
 // **************************
 //
+const RenderChannel *   VideoInputChannel::GetWrappedChannel    () const
+{
+    return m_wrappedRenderChannel;
+}
+
+// **************************
+//
 VideoInputChannel *  VideoInputChannel::Create                  ( const RenderChannel * wrappedChannel, unsigned int width, unsigned int height )
 {
     auto rt = wrappedChannel->GetActiveRenderTarget();
@@ -75,6 +85,17 @@ VideoInputChannel *  VideoInputChannel::Create                  ( const RenderCh
     {
         res = new VideoResizedInputChannel( wrappedChannel, width, height );
     }
+
+    // FIXME: nrl - should be read from video cards configuration or remove or do something making sense, @see: VideoOutputsPreprocessor::PrepareAVFrame
+    //static unsigned int FPS_HACK = 25;
+
+    //auto samplesPerFrame    = audio::AudioUtils::DEFAULT_SAMPLE_RATE / FPS_HACK;
+    //auto bytesPerSample     = audio::AudioUtils::ChannelDepth( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT );
+    //auto numChannels        = audio::AudioUtils::ChannelsCount( audio::AudioUtils::DEFAULT_SAMPLE_FORMAT );
+
+    //auto memChunkSize       = numChannels * samplesPerFrame * bytesPerSample;
+
+    //res->m_audioData        = MemoryChunk::Create( memChunkSize );
 
     return res;
 }

@@ -52,6 +52,8 @@ public:
     bool                    ContainsValidData       ( RenderChannelType rct ) const;
     void                    SetContainsValidData    ( RenderChannelType rct, bool containsValidData );
   
+    bool                    ContainsValidData       ( const RenderChannel * channel ) const;
+
 public:
 
     static RenderedChannelsData *   Create          ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator ); 

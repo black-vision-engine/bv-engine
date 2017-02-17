@@ -60,9 +60,13 @@ public:
     void                        ToggleLastFrameHadAudio ( unsigned int videoOutputID ) const;
 
     void                        InvalidateCachedTextures();
-    //void                        InvalidateCachedTexture ( RenderChannelType rct );
-    //Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, RenderChannelType rct ) const;
+    void                        InvalidateCachedTexture ( unsigned int videoOutputID );
+
+    Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, unsigned int videoOutputID ) const;
   
+    bool                        IsActive                ( unsigned int videoOutputID ) const;
+    bool                        ContainsValidData       ( unsigned int videoOutputID ) const;
+
 public:
 
     static VideoInputChannelsData *   Create            ( const std::vector< OutputStaticData > & uniqueOutputSetups, const std::hash_map< unsigned int, unsigned int > & mapping );

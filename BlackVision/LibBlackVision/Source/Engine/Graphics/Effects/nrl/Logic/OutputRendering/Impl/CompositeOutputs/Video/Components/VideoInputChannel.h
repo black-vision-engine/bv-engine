@@ -18,6 +18,8 @@ protected:
     
     mutable bool            m_lastFrameHadAudio;
 
+    // MemoryChunkPtr          m_audioData;
+
 protected:
 
                                 VideoInputChannel           ( const RenderChannel * wrappedChannel );
@@ -33,6 +35,8 @@ public:
 
     virtual Texture2DPtr        ReadColorTexture            ( NRenderContext * ctx ) const;
     virtual void                InvalidateCachedTexture     () const;
+
+    const RenderChannel *       GetWrappedChannel           () const;
 
     static VideoInputChannel *  Create                      ( const RenderChannel * wrappedChannel, unsigned int width, unsigned int height );
 

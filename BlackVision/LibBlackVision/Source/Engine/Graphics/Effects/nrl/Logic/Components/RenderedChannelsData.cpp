@@ -110,6 +110,21 @@ void                    RenderedChannelsData::SetContainsValidData          ( Re
 
 // **************************
 //
+bool                    RenderedChannelsData::ContainsValidData             ( const RenderChannel * channel ) const
+{
+    for( unsigned int i = 0; i < m_containsValidData.size(); ++i )
+    {
+        if( m_renderChannels[ i ] == channel )
+        {
+            return m_containsValidData[ i ];
+        }
+    }
+
+    return false;
+}
+
+// **************************
+//
 RenderedChannelsData *  RenderedChannelsData::Create                        ( const RenderedChannelsDataDesc & desc, RenderTargetStackAllocator * allocator )
 {
     RenderChannelType mapping[] = { RenderChannelType::RCT_OUTPUT_1, RenderChannelType::RCT_OUTPUT_2, RenderChannelType::RCT_OUTPUT_3, RenderChannelType::RCT_OUTPUT_4 };

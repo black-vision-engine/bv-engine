@@ -152,10 +152,10 @@ AVFramePtr  MockVideoHandler::PrepareAVFrame                ( audio::AudioRender
 
 		auto audioSize = desc.sampleRate * desc.channels * audio->GetChannelDepth();
 
-		data = MemoryChunk::Create(audioSize);
+		data = MemoryChunk::Create( audioSize );
 
-		auto ret = audio->GetBufferedData(data);
-		data = std::const_pointer_cast<MemoryChunk>(ret->GetData());
+		auto ret = audio->GetBufferedData( data );
+		data = std::const_pointer_cast< MemoryChunk >( ret->GetData() );
 	}
 
 	m_lastFrameHasAudio = !m_lastFrameHasAudio;
