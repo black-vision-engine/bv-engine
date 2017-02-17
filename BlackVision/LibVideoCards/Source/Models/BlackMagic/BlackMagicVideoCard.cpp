@@ -92,6 +92,7 @@ VideoCard::VideoCard( UInt32 deviceID )
 	, m_keyer( nullptr )
 	, m_videoOutputDelegate( nullptr )
 	, m_frameQueue( 1 )
+	, m_frameNum( 0 )
 {
 	InitVideoCard();
 
@@ -320,33 +321,14 @@ void                    VideoCard::SetFrameProcessingCompletedCallback( FramePro
 //
 void                    VideoCard::ProcessFrame         ( AVFramePtr avFrame )
 {
-	//if( data->m_desc.fieldModeEnabled && !m_InterlaceProducesFullFrames)
-	//{
-	//	data = RetrieveFieldFromFrame( data, odd );
-	//}
-	//InterlaceFrame( avFrame );
-
-	//if( odd == 0 )
-	//{
-		if( m_output.enabled )
-		{
-			m_blackMagicVCThread->EnqueueFrame( avFrame );
-		}
-	//}
+	if( m_output.enabled )
+	{
+		m_blackMagicVCThread->EnqueueFrame( avFrame );
+	}
 
 	auto nextSync = GetFrameTime() + 20;
 
 	UpdateFrameTime( nextSync );
-
-							   
-	//auto sleepFor = nextSync - Time::Now();
-
-	//if( sleepFor > 0 )
-	//{
-	//	std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
-
-	//	//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame: Slept for " << sleepFor << " miliseconds";
-	//}
 }
 
 //**************************************
@@ -413,7 +395,11 @@ UInt64                          VideoCard::GetFrameTime         () const
 void                            VideoCard::DisplayFrame         () const
 {
     std::unique_lock< std::mutex > lock( m_mutex );
-    m_waitDisplay.notify_one();
+
+	m_frameNum++;
+
+	if( !m_frameQueue.IsEmpty() )
+		m_waitDisplay.notify_one();		
 }
 
 //**************************************

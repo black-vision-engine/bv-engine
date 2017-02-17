@@ -65,6 +65,8 @@ private:
     mutable std::condition_variable             m_waitDisplay;
     mutable std::mutex                          m_mutex;
 
+	mutable UInt64								m_frameNum;
+
     FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
 
 	void					FrameProcessed		( AVFramePtr frame );

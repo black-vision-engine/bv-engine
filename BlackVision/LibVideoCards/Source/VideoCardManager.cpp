@@ -208,7 +208,7 @@ bool                        VideoCardManager::ProcessFrame          ()
         {
             std::unique_lock< std::mutex > lock( m_mutex );
 			auto numVideoCards = m_videoCards.size();
-            m_waitFramesProcessed.wait( lock, [ = ] { return m_numReadyCards == numVideoCards; }); // TODO: check num of cards properly./
+            m_waitFramesProcessed.wait( lock, [ = ] { return m_numReadyCards == numVideoCards; });
 
             for( auto & videoCard : m_videoCards )
             {
