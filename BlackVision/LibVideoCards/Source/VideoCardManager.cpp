@@ -233,7 +233,11 @@ bool                        VideoCardManager::ProcessOutputsData     ()
 
         odd = m_currentFrameNumber % 2;
 
-        m_numReadyCards = 0;
+//        m_numReadyCards = 0;
+
+//        std::unique_lock< std::mutex > lock( m_mutex );
+
+//        auto numProcessingCards = 0;
 
         for( auto it = outputs->begin(); it != outputs->end(); ++it )
         {
@@ -241,24 +245,20 @@ bool                        VideoCardManager::ProcessOutputsData     ()
             
             for( auto i = cards.first; i != cards.second; ++i )
             {
-                i->second->ProcessFrame( it->second );
+                i->second->ProcessFrame( it->second );              
             }
         }
 
-		std::unique_lock< std::mutex > lock( m_mutex );
-		auto numVideoCards = m_videoCards.size();
-		m_waitFramesProcessed.wait( lock, [ = ]
-		{
-			return m_numReadyCards == numVideoCards;
-		} );
+		//m_waitFramesProcessed.wait( lock, [ = ]
+		//{
+		//	return m_numReadyCards == numProcessingCards;
+		//} );
 
+        for( auto & videoCard : m_videoCards )
         {
-            for( auto & videoCard : m_videoCards )
-            {
-                videoCard->DisplayFrame();
-            }
+            videoCard->DisplayFrame();
         }
-
+  
         return true;
     }
 
