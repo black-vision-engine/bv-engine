@@ -10,6 +10,7 @@
 
 #include "AVFrame.h"
 
+#include <boost/circular_buffer.hpp>
 
 namespace bv { namespace videocards { namespace blackmagic 
 {
@@ -20,16 +21,20 @@ class BlackMagicVCThread : public StoppableThread
 {
 	typedef QueueConcurrentLimited< AVFrameConstPtr >    FrameQueue;
 
-	FrameQueue					m_frameQueue;
+	boost::circular_buffer< MemoryChunkPtr > m_prevFramesBuffer;
 
 	MemoryChunkPtr				m_prevFrame;
+
+	FrameQueue					m_frameQueue;
+
+	bool						m_odd;
 
 	VideoCard *					m_videoCard;
 
 	AVFrameConstPtr				InterlaceFrame			( const AVFrameConstPtr & frame );
 
 public:
-	explicit					BlackMagicVCThread		( VideoCard * vc );
+	explicit					BlackMagicVCThread		( VideoCard * vc, SizeType frameSize );
 
 	void						EnqueueFrame			( const AVFrameConstPtr & frame );
 

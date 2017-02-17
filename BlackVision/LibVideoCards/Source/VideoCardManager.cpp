@@ -200,16 +200,20 @@ bool                        VideoCardManager::ProcessFrame          ()
 		odd = m_currentFrameNumber % 2;
 
         m_numReadyCards = 0;
+
         for( auto & videoCard : m_videoCards )
         {
             videoCard->ProcessFrame( data );
         }
 
-        {
-            std::unique_lock< std::mutex > lock( m_mutex );
-			auto numVideoCards = m_videoCards.size();
-            m_waitFramesProcessed.wait( lock, [ = ] { return m_numReadyCards == numVideoCards; });
+		std::unique_lock< std::mutex > lock( m_mutex );
+		auto numVideoCards = m_videoCards.size();
+		m_waitFramesProcessed.wait( lock, [ = ]
+		{
+			return m_numReadyCards == numVideoCards;
+		} );
 
+        {
             for( auto & videoCard : m_videoCards )
             {
                 videoCard->DisplayFrame();

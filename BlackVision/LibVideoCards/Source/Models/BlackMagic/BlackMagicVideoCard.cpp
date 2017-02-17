@@ -95,16 +95,17 @@ VideoCard::VideoCard( UInt32 deviceID )
 	, m_frameNum( 0 )
 {
 	InitVideoCard();
-
-	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this ) );
-	m_blackMagicVCThread->Stop();
-	m_blackMagicVCThread->Start();
 }
 
 //**************************************
 //
 VideoCard::~VideoCard       ()
 {
+	m_blackMagicVCThread->Stop();
+	m_blackMagicVCThread->EnqueueEndMessage();
+	m_blackMagicVCThread->WaitUntilStopped();
+	m_blackMagicVCThread->Kill();
+
 	if( m_decklinkOutput )
 	{
 		m_decklinkOutput->StopScheduledPlayback( 0, NULL, 0 );
@@ -306,8 +307,13 @@ void                    VideoCard::Start                ()
 		}
 	}
 
+	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this, h * w * 4 ) );
+	m_blackMagicVCThread->Start();
+
+
 
 	m_decklinkOutput->StartScheduledPlayback( 0, m_frameTimescale, 1.0 );
+
 }
 
 //**************************************
@@ -323,6 +329,7 @@ void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr 
 {
 	if( m_output.enabled )
 	{
+		//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame called at " << Time::Now();
 		m_blackMagicVCThread->EnqueueFrame( avFrame );
 	}
 }
@@ -394,11 +401,7 @@ void                            VideoCard::DisplayFrame         () const
 
 	m_frameNum++;
 
-	auto nextSync = GetFrameTime() + 20;
-
-	if( !m_frameQueue.IsEmpty() )
-		m_waitDisplay.notify_one();		
-
+	auto nextSync = m_lastFrameTime + 20;	
 
 	m_lastFrameTime = nextSync;
 }
@@ -423,10 +426,7 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
         LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output.";
     }
 
-    m_frameProcessingCompletedCallback( m_deviceID, true );
-
-    std::unique_lock< std::mutex > lock( m_mutex );
-    m_waitDisplay.wait( lock );
+    //m_frameProcessingCompletedCallback( m_deviceID, true );
 
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
     {
