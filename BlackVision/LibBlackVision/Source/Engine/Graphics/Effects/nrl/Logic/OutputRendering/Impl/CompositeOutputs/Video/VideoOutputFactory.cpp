@@ -44,7 +44,6 @@ OutputCompositeVideo *  VideoOutputFactory::CreateCompositeVideoOutput( const Ou
     auto mapping        = ReadMapping( videoOutputs );
 
     return OutputCompositeVideo::Create( desc.GetWidth(), desc.GetHeight(), staticInputs, mapping );
-
 };
 
 // *********************************

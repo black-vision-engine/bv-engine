@@ -74,7 +74,7 @@ void    VideoInputChannelsData::PostInitialize                              ( co
         m_outputToChannelsMapping[ videoCardID ] = vrc;
     }
 
-    // Add inverted mapping from channels to corresponding video outputs (multiple outputs per channel)
+    // Add inverse mapping from channels to corresponding video outputs (multiple outputs per channel)
     for ( auto vce : m_outputToChannelsMapping )
     {
         auto channel    = vce.second;
@@ -96,13 +96,14 @@ void    VideoInputChannelsData::PostInitialize                              ( co
 
     assert( sum == (unsigned int) m_outputToChannelsMapping.size() );
 
-    m_postInitialized = false;
+    m_postInitialized = true;
 }
 
 // **************************
 //
 const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( unsigned int videoOutputID ) const
 {
+    assert( m_postInitialized == true );
     assert( m_outputToChannelsMapping.find( videoOutputID ) != m_outputToChannelsMapping.end() );
 
     auto it = m_outputToChannelsMapping.find( videoOutputID );
@@ -114,6 +115,7 @@ const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( un
 //
 VideoInputChannel *         VideoInputChannelsData::AccessInputChannel      ( unsigned int videoOutputID )
 {
+    assert( m_postInitialized == true );
     assert( m_outputToChannelsMapping.find( videoOutputID ) != m_outputToChannelsMapping.end() );
 
     auto it = m_outputToChannelsMapping.find( videoOutputID );
@@ -125,6 +127,8 @@ VideoInputChannel *         VideoInputChannelsData::AccessInputChannel      ( un
 //
 unsigned int                VideoInputChannelsData::GetNumVideoInputChannels() const
 {
+    assert( m_postInitialized == true );
+
     return (unsigned int) m_videoInputChannels.size();
 }
 
@@ -132,6 +136,7 @@ unsigned int                VideoInputChannelsData::GetNumVideoInputChannels() c
 //
 const VideoInputChannel *   VideoInputChannelsData::GetVideoInputChannelAt  ( unsigned int idx ) const
 {
+    assert( m_postInitialized == true );
     assert( idx < GetNumVideoInputChannels() );
 
     return m_videoInputChannels[ idx ];
@@ -141,6 +146,7 @@ const VideoInputChannel *   VideoInputChannelsData::GetVideoInputChannelAt  ( un
 //
 const VideoCardIDVec &      VideoInputChannelsData::GetAsignedVideoCardIds  ( const VideoInputChannel * vic ) const
 {
+    assert( m_postInitialized == true );
     assert( m_channelToOutputMaping.find( vic ) != m_channelToOutputMaping.end() );
 
     auto it = m_channelToOutputMaping.find( vic );
@@ -152,6 +158,7 @@ const VideoCardIDVec &      VideoInputChannelsData::GetAsignedVideoCardIds  ( co
 //
 bool                        VideoInputChannelsData::LastFrameHadAudio       ( unsigned int videoOutputID ) const
 {
+    assert( m_postInitialized == true );
     auto channel = GetInputChannel( videoOutputID );
 
     return channel->LastFrameHadAudio();
@@ -161,6 +168,7 @@ bool                        VideoInputChannelsData::LastFrameHadAudio       ( un
 //
 void                        VideoInputChannelsData::ToggleLastFrameHadAudio ( unsigned int videoOutputID ) const
 {
+    assert( m_postInitialized == true );
     auto channel = GetInputChannel( videoOutputID );
 
     channel->ToggleLastFrameHadAudio();
@@ -170,6 +178,8 @@ void                        VideoInputChannelsData::ToggleLastFrameHadAudio ( un
 //
 void                        VideoInputChannelsData::InvalidateCachedTextures()
 {
+    assert( m_postInitialized == true );
+
     for( auto channel : m_videoInputChannels )
     {
         channel->InvalidateCachedTexture();
@@ -180,6 +190,8 @@ void                        VideoInputChannelsData::InvalidateCachedTextures()
 //
 void                        VideoInputChannelsData::InvalidateCachedTexture ( unsigned int videoOutputID )
 {
+    assert( m_postInitialized == true );
+
     auto channel = GetInputChannel( videoOutputID );
 
     channel->InvalidateCachedTexture();
@@ -189,6 +201,8 @@ void                        VideoInputChannelsData::InvalidateCachedTexture ( un
 //
 Texture2DPtr                VideoInputChannelsData::ReadColorTexture        ( NRenderContext * ctx, unsigned int videoOutputID ) const
 {
+    assert( m_postInitialized == true );
+
     auto channel = GetInputChannel( videoOutputID );
 
     return channel->ReadColorTexture( ctx );
@@ -198,6 +212,8 @@ Texture2DPtr                VideoInputChannelsData::ReadColorTexture        ( NR
 //
 bool                        VideoInputChannelsData::IsActive                ( unsigned int videoOutputID ) const
 {
+    assert( m_postInitialized == true );
+
     auto channel = GetInputChannel( videoOutputID );
 
     return channel->IsActive();
@@ -207,6 +223,8 @@ bool                        VideoInputChannelsData::IsActive                ( un
 //
 bool                        VideoInputChannelsData::ContainsValidData       ( unsigned int videoOutputID ) const
 {
+    assert( m_postInitialized == true );
+
     auto vc = m_outputToChannelsMapping.find( videoOutputID )->second;
 
     return m_originalRenderedChannelsData->ContainsValidData( vc->GetWrappedChannel() );

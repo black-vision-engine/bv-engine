@@ -56,7 +56,7 @@ Texture2DPtr    VideoInputChannel::ReadColorTexture             ( NRenderContext
 //
 void            VideoInputChannel::InvalidateCachedTexture      () const
 {
-    // Intentionally left empty
+    // Intentionally left empty as all textures cached in wrapped channels are up-to-date (and have already been read e.g. for preview or shm)
 }
 
 // **************************
