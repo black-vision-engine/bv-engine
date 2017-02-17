@@ -7,6 +7,20 @@ namespace bv { namespace videocards {
 
 // ****************************
 //
+AVFrameConstPtr	AVFrame::Create( const MemoryChunkConstPtr & videoData, const MemoryChunkConstPtr & audioData, const AVFrameDescriptor & desc )
+{
+	return std::make_shared< const AVFrame >( videoData, audioData, desc );
+}
+
+// ****************************
+//
+AVFrameConstPtr AVFrame::Create()
+{
+	return std::make_shared< const AVFrame >();
+}
+
+// ****************************
+//
 AVFrame::AVFrame(MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc)
 	: m_videoData(videoData)
 	, m_audioData(audioData)
