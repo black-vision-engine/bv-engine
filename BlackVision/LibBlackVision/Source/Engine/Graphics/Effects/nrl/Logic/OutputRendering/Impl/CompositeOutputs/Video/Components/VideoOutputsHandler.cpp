@@ -9,7 +9,14 @@ namespace bv { namespace nrl {
 //
 void    VideoOutputsHandler::HandleOutputsData   ( const AVOutputsData & outputs )
 {
-    { outputs; }
+	auto VCMInput = std::shared_ptr< videocards::VCMInputData >( new videocards::VCMInputData() );
+
+	for( auto it = outputs.begin(); it != outputs.end(); ++it )
+	{
+		VCMInput->SetAVFrame( it->first, it->second );
+	}
+
+	videocards::VideoCardManager::Instance().Display( VCMInput );
 }
 
 // *********************************
