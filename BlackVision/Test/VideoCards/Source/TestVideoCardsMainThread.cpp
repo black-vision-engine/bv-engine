@@ -51,7 +51,7 @@ void    TestVideoCardsMainThread::Process ()
 
 	for( int i = 0; i < 30; ++i )
 	{
-		memset( &( data[ ( ( ( 2 * m_frameNum ) + i ) % 1080 ) * 1920 * 4 ] ), 255, 4 * 1920 );
+		memset( &( data[ ( ( ( 30 * m_frameNum ) + i ) % 1080 ) * 1920 * 4 ] ), 255, 4 * 1920 );
 	}
 
     auto input = std::shared_ptr< VCMInputData >( new VCMInputData() );

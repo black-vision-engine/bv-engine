@@ -88,11 +88,11 @@ public:
 
     void                    AddOutput           ( ChannelOutputData output );
 
-
+    virtual void            PreStart            () override;
     virtual void            Start               () override;
     
 
-	virtual void            ProcessFrame        ( const AVFrameConstPtr & data ) override;
+	virtual void            ProcessFrame        ( const AVFrameConstPtr & data, UInt64 avOutputID ) override;
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
     virtual void            DisplayFrame        () const override;
 
