@@ -141,13 +141,15 @@ void                        VideoInputChannelsData::ToggleLastFrameHadAudio ( un
     channel->ToggleLastFrameHadAudio();
 }
 
-//// **************************
-////
-//const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( RenderChannelType rct ) const
-//{
-//    return m_renderChannels[ (unsigned int) rct ];
-//}
+// **************************
 //
+const VideoInputChannel *   VideoInputChannelsData::GetInputChannel         ( unsigned int videoOutputID ) const
+{
+    videoOutputID;
+    assert( false );
+    return nullptr;
+}
+
 //// **************************
 ////
 //void                        VideoInputChannelsData::InvalidateCachedTextures()
