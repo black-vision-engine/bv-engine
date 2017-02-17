@@ -30,16 +30,16 @@ bool            VideoInputChannel::IsActive                     () const
 
 // **************************
 //
-bool            VideoInputChannel::LastFrameHadAudio           () const
+bool            VideoInputChannel::LastFrameHadAudio            () const
 {
     return m_lastFrameHadAudio;
 }
 
 // **************************
 //
-void            VideoInputChannel::SetLastFrameHadAudio        ( bool flagValue )
+void            VideoInputChannel::ToggleLastFrameHadAudio      () const
 {
-    m_lastFrameHadAudio = flagValue;
+    m_lastFrameHadAudio = !m_lastFrameHadAudio;
 }
 
 // **************************
@@ -53,7 +53,7 @@ Texture2DPtr    VideoInputChannel::ReadColorTexture             ( NRenderContext
 //
 void            VideoInputChannel::InvalidateCachedTexture      () const
 {
-    // Intentionallu left empty
+    // Intentionally left empty
 }
 
 // **************************

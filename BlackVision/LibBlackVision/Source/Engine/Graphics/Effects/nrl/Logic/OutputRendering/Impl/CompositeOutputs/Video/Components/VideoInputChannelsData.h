@@ -57,7 +57,7 @@ public:
     const VideoCardIDVec &      GetAsignedVideoCardIds  ( const VideoInputChannel * vic ) const;
 
     bool                        LastFrameHadAudio       ( unsigned int videoOutputID ) const;
-    void                        SetLastFrameHadAudio    ( unsigned int videoOutputID, bool flagVal );
+    void                        ToggleLastFrameHadAudio ( unsigned int videoOutputID ) const;
 
     void                        InvalidateCachedTextures();
     //void                        InvalidateCachedTexture ( RenderChannelType rct );

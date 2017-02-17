@@ -2,7 +2,10 @@
 
 #include "VideoOutputsPreprocessor.h"
 
+#include "Engine/Audio/Resources/AudioUtils.h"
 #include "Assets/Texture/TextureUtils.h"
+
+#include "VideoCardManager.h"
 
 
 namespace bv { namespace nrl {
@@ -70,8 +73,12 @@ void                    VideoOutputsPreprocessor::Initialize            ( Output
 //
 AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRenderContext * ctx, const VideoInputChannel * channel )
 {
-    auto videoFrame = channel->ReadColorTexture( ctx );
+    // FIXME: nrl - should be read from video cards configuration or remove or do something making sense
+    static unsigned int FPS_HACK = 25;
+    auto aud = audio( ctx );
 
+    auto videoFrame = channel->ReadColorTexture( ctx );
+    
     videocards::AVFrameDescriptor desc;
 
 	desc.width  = videoFrame->GetWidth();
@@ -83,20 +90,20 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 	desc.channels = 0;
 	desc.sampleRate = 0;
 
-	if (!m_lastFrameHasAudio)
+    if (!channel->LastFrameHadAudio())
 	{
-		desc.channels = audio->GetChannels();
-		desc.sampleRate = audio->GetFrequency() / m_fps;
+		desc.channels = aud->GetChannels();
+		desc.sampleRate = aud->GetFrequency() / FPS_HACK;
 
-		auto audioSize = desc.sampleRate * desc.channels * audio->GetChannelDepth();
+		auto audioSize = desc.sampleRate * desc.channels * aud->GetChannelDepth();
 
-		data = MemoryChunk::Create(audioSize);
+		data = MemoryChunk::Create( audioSize );
 
-		auto ret = audio->GetBufferedData(data);
-		data = std::const_pointer_cast<MemoryChunk>(ret->GetData());
+		auto ret = aud->GetBufferedData( data );
+		data = std::const_pointer_cast<MemoryChunk>( ret->GetData() );
 	}
 
-	m_lastFrameHasAudio = !m_lastFrameHasAudio;
+    channel->ToggleLastFrameHadAudio();
 
 	desc.fieldModeEnabled       = true;
 	desc.timeCodePresent        = true;

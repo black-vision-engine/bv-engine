@@ -134,11 +134,11 @@ bool                        VideoInputChannelsData::LastFrameHadAudio       ( un
 
 // **************************
 //
-void                        VideoInputChannelsData::SetLastFrameHadAudio    ( unsigned int videoOutputID, bool flagVal )
+void                        VideoInputChannelsData::ToggleLastFrameHadAudio ( unsigned int videoOutputID ) const
 {
-    auto channel = AccessInputChannel( videoOutputID );
+    auto channel = GetInputChannel( videoOutputID );
 
-    channel->SetLastFrameHadAudio( flagVal );
+    channel->ToggleLastFrameHadAudio();
 }
 
 //// **************************

@@ -16,7 +16,7 @@ protected:
 
     const RenderChannel *   m_wrappedRenderChannel;
     
-    bool                    m_lastFrameHadAudio;
+    mutable bool            m_lastFrameHadAudio;
 
 protected:
 
@@ -29,7 +29,7 @@ public:
     bool                        IsActive                    () const;
 
     bool                        LastFrameHadAudio           () const;
-    void                        SetLastFrameHadAudio        ( bool flagValue );
+    void                        ToggleLastFrameHadAudio     () const;
 
     virtual Texture2DPtr        ReadColorTexture            ( NRenderContext * ctx ) const;
     virtual void                InvalidateCachedTexture     () const;
