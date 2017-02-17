@@ -13,7 +13,7 @@ BlackMagicVCThread::BlackMagicVCThread							( VideoCard * vc )
 
 //**************************************
 //
-void				BlackMagicVCThread::EnqueueFrame			( const AVFramePtr & frame )
+void				BlackMagicVCThread::EnqueueFrame			( const AVFrameConstPtr & frame )
 {
 	m_frameQueue.WaitAndPush( frame );
 }
@@ -29,7 +29,7 @@ void				BlackMagicVCThread::EnqueueEndMessage		()
 //
 void				BlackMagicVCThread::Process					()
 {
-	AVFramePtr srcFrame;
+	AVFrameConstPtr srcFrame;
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
@@ -40,8 +40,8 @@ void				BlackMagicVCThread::Process					()
 
 // *********************************
 //
-void			BlackMagicVCThread::InterlaceFrame( AVFramePtr frame )
- {
+AVFrameConstPtr		BlackMagicVCThread::InterlaceFrame( const AVFrameConstPtr & frame )
+{
 	int pixel_depth = frame->m_desc.depth;  // pobra? poni?sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jako? to opakowane w klas? typu Frame
 	int width = frame->m_desc.width;
 	int height = frame->m_desc.height;
@@ -68,9 +68,8 @@ void			BlackMagicVCThread::InterlaceFrame( AVFramePtr frame )
 	// yet to be implemented
 		
 	memcpy( memDst, memNew, size );
-	
-	MemoryChunkConstPtr ptr = MemoryChunkConstPtr( new MemoryChunk( ( char* ) memDst, size ) );  // ponownie - pewnie nie ma co tego tutaj tworzy? za ka?dym razem...
-	frame->m_videoData = ptr;
+
+	return AVFrame::Create( m_prevFrame, frame->m_audioData, frame->m_desc );
 }
 
 } // blackmagic

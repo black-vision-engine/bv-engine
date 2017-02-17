@@ -257,7 +257,7 @@ void							VideoCard::DisplayFrame             () const
 
 //**************************************
 //
-void                            VideoCard::ProcessFrame             ( AVFramePtr frame )
+void                            VideoCard::ProcessFrame             ( const AVFrameConstPtr & )
 {
     assert(false);
  //   for( auto channel : m_channels )

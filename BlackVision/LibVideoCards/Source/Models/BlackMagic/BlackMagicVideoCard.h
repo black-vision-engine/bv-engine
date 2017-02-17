@@ -55,11 +55,11 @@ private:
     ChannelOutputData							m_output;
     BlackMagicVCThreadUPtr						m_blackMagicVCThread;
 
-    UInt64										m_lastFrameTime;
+    mutable UInt64								m_lastFrameTime;
 
     VideoOutputDelegate	*						m_videoOutputDelegate;
 
-    typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
+    typedef QueueConcurrentLimited< AVFrameConstPtr >    FrameQueue;
     FrameQueue									m_frameQueue;
 
     mutable std::condition_variable             m_waitDisplay;
@@ -69,7 +69,7 @@ private:
 
     FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
 
-	void					FrameProcessed		( AVFramePtr frame );
+	void					FrameProcessed		( const AVFrameConstPtr & frame );
 
 	bool					InitKeyer			( const ChannelOutputData & ch );
 
@@ -82,23 +82,24 @@ public:
                             VideoCard           ( UInt32 deviceID );
     virtual                 ~VideoCard          () override;
 
+	bool                    InitVideoCard       ();
     virtual void            SetVideoOutput      ( bool enable ) override;
 
     void                    AddOutput           ( ChannelOutputData output );
 
+
     virtual void            Start               () override;
-    virtual void            ProcessFrame        ( AVFramePtr data ) override;
+    
+
+	virtual void            ProcessFrame        ( const AVFrameConstPtr & data ) override;
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
-
-
     virtual void            DisplayFrame        () const override;
 
-	bool                    InitVideoCard       ();
+	
 private:
 
 	bool                    InitDevice          ();
 	bool                    InitOutput          ();
-
 
 	void					FrameCompleted		( IDeckLinkVideoFrame * completedFrame );
 	void					DisplayNextFrame	( IDeckLinkVideoFrame * complitedFrame );

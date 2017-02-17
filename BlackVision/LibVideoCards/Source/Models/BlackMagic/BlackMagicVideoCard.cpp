@@ -319,16 +319,12 @@ void                    VideoCard::SetFrameProcessingCompletedCallback( FramePro
 
 //**************************************
 //
-void                    VideoCard::ProcessFrame         ( AVFramePtr avFrame )
+void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr & avFrame )
 {
 	if( m_output.enabled )
 	{
 		m_blackMagicVCThread->EnqueueFrame( avFrame );
 	}
-
-	auto nextSync = GetFrameTime() + 20;
-
-	UpdateFrameTime( nextSync );
 }
 
 //**************************************
@@ -364,7 +360,7 @@ UInt32                  VideoCard::EnumerateDevices     ()
 
 //**************************************
 //
-void							VideoCard::FrameProcessed		( AVFramePtr frame )
+void							VideoCard::FrameProcessed		( const AVFrameConstPtr & frame )
 {
 	m_frameQueue.WaitAndPush( frame );
 }
@@ -398,8 +394,13 @@ void                            VideoCard::DisplayFrame         () const
 
 	m_frameNum++;
 
+	auto nextSync = GetFrameTime() + 20;
+
 	if( !m_frameQueue.IsEmpty() )
 		m_waitDisplay.notify_one();		
+
+
+	m_lastFrameTime = nextSync;
 }
 
 //**************************************
@@ -408,7 +409,7 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
 {
     UpdateFrameTime( Time::Now() );
 
-    AVFramePtr srcFrame;
+    AVFrameConstPtr srcFrame;
 
     if( m_frameQueue.TryPop( srcFrame ) )
     {

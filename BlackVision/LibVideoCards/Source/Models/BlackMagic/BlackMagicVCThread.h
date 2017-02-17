@@ -18,7 +18,7 @@ class VideoCard;
 
 class BlackMagicVCThread : public StoppableThread
 {
-	typedef QueueConcurrentLimited< AVFramePtr >    FrameQueue;
+	typedef QueueConcurrentLimited< AVFrameConstPtr >    FrameQueue;
 
 	FrameQueue					m_frameQueue;
 
@@ -26,12 +26,12 @@ class BlackMagicVCThread : public StoppableThread
 
 	VideoCard *					m_videoCard;
 
-	void						InterlaceFrame			( AVFramePtr frame );
+	AVFrameConstPtr				InterlaceFrame			( const AVFrameConstPtr & frame );
 
 public:
 	explicit					BlackMagicVCThread		( VideoCard * vc );
 
-	void						EnqueueFrame			( const AVFramePtr & frame );
+	void						EnqueueFrame			( const AVFrameConstPtr & frame );
 
 	void						EnqueueEndMessage		();
 
