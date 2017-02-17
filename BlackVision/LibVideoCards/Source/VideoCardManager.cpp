@@ -173,6 +173,12 @@ void                        VideoCardManager::Start                 ()
     std::unique_lock< std::mutex > lock( m_mutex );
     
     m_processThread->Start();
+
+    for( auto & videoCard : m_videoCards )
+    {
+        videoCard->PreStart();
+    }
+
     for( auto & videoCard : m_videoCards )
     {
 		videoCard->Start();

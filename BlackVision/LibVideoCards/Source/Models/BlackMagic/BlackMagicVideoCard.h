@@ -88,7 +88,7 @@ public:
 
     void                    AddOutput           ( ChannelOutputData output );
 
-
+    virtual void            PreStart            () override;
     virtual void            Start               () override;
     
 

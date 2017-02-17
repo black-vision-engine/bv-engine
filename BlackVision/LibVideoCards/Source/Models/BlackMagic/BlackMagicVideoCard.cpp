@@ -282,7 +282,7 @@ void                    VideoCard::AddOutput            ( ChannelOutputData outp
 
 //**************************************
 //
-void                    VideoCard::Start                ()
+void                    VideoCard::PreStart            ()
 {
     m_uiTotalFrames = 0;
 
@@ -291,29 +291,32 @@ void                    VideoCard::Start                ()
     auto w = m_displayMode->GetWidth();
     auto h = m_displayMode->GetHeight();
 
-	BMDPixelFormat displayFormat = BMDPixelFormat::bmdFormat8BitBGRA;
+    BMDPixelFormat displayFormat = BMDPixelFormat::bmdFormat8BitBGRA;
 
-	// Set 4 frame preroll
-	for( unsigned i = 0; i < 4; i++ )
-	{
-		if( SUCCESS( m_decklinkOutput->CreateVideoFrame( w, h, w * 4, displayFormat,
-														 bmdFrameFlagFlipVertical, &pFrame ) ) )
-		{
-			if( SUCCESS( m_decklinkOutput->ScheduleVideoFrame( pFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
-			{
-				pFrame->Release();
-				pFrame = nullptr;
+    // Set 4 frame preroll
+    for( unsigned i = 0; i < 4; i++ )
+    {
+        if( SUCCESS( m_decklinkOutput->CreateVideoFrame( w, h, w * 4, displayFormat,
+                                                         bmdFrameFlagFlipVertical, &pFrame ) ) )
+        {
+            if( SUCCESS( m_decklinkOutput->ScheduleVideoFrame( pFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
+            {
+                pFrame->Release();
+                pFrame = nullptr;
 
-				m_uiTotalFrames++;
-			}
-		}
-	}
+                m_uiTotalFrames++;
+            }
+        }
+    }
 
-	m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this, h * w * 4 ) );
-	m_blackMagicVCThread->Start();
+    m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this, h * w * 4 ) );
+    m_blackMagicVCThread->Start();
+}
 
-
-
+//**************************************
+//
+void                    VideoCard::Start                ()
+{
     if( !SUCCESS( m_decklinkOutput->StartScheduledPlayback( 0, m_frameTimescale, 1.0 ) ) )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Cannot start playback.";
