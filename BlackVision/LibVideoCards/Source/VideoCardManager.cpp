@@ -245,7 +245,7 @@ bool                        VideoCardManager::ProcessOutputsData     ()
             
             for( auto i = cards.first; i != cards.second; ++i )
             {
-                i->second->ProcessFrame( it->second );              
+                i->second->ProcessFrame( it->second, it->first );
             }
         }
 

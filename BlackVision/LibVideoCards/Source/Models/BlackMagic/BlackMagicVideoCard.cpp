@@ -333,8 +333,9 @@ void                    VideoCard::SetFrameProcessingCompletedCallback( FramePro
 
 //**************************************
 //
-void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr & avFrame )
+void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr & avFrame, UInt64 avOutputID )
 {
+    assert( avOutputID == m_displayedOutputID );
 	if( m_output.enabled )
 	{
 		//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame called at " << Time::Now();
