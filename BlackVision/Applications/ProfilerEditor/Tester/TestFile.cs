@@ -329,6 +329,8 @@ namespace ProfilerEditor.Tester
 
                 startIdx = endIdx;
             }
+
+            PreprocessEvents();
         }
 
         public void         ParseSingleMessage( string msgString, ObservableCollection<Event> eventsCollection, TimeSpan time )
@@ -402,6 +404,15 @@ namespace ProfilerEditor.Tester
 
             TimeSpan span = new TimeSpan( hours / 24, hours % 24, minutes, seconds, millis );
             return span;
+        }
+
+        private void        PreprocessEvents    ()
+        {
+            // Replace groups of AddKey events with one event setting parameter to last value.
+            PreprocessFilters.AddKeyFilter.Preprocess( TestEvents, ReferenceResponses );
+
+
+
         }
 
         #endregion
