@@ -17,6 +17,7 @@ public:
 
     virtual                     ~IVideoCard             () {}
 
+    virtual void                PreStart                () = 0;
 	virtual void                Start                   () = 0;
 
 	virtual void                SetVideoOutput          ( bool enable ) = 0;
