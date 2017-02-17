@@ -52,6 +52,7 @@
     <ClInclude Include="..\..\..\Source\System\Time.h" />
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
+    <ClInclude Include="..\..\..\Source\Threading\StoppableThread.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
     <ClInclude Include="..\..\..\Source\Tools\Base64.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h" />
@@ -91,6 +92,7 @@
     <ClCompile Include="..\..\..\Source\System\Time.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
+    <ClCompile Include="..\..\..\Source\Threading\StoppableThread.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Base64.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp" />

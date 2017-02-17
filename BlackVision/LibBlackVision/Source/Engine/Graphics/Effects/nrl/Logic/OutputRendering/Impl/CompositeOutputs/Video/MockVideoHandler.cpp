@@ -102,7 +102,7 @@ void            MockVideoHandler::ProcessFrame               ( NRenderContext * 
 	{
 		// FIXME: nrl - ask Witek about this one
 		//HPROFILER_SECTION("QueueFrame", PROFILER_THREAD1);
-		videocards::VideoCardManager::Instance().QueueFrame( avFrame );
+		//videocards::VideoCardManager::Instance().QueueFrame( avFrame );
 	}
 }
 
