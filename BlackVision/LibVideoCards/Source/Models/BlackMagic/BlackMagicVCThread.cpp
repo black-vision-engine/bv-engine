@@ -43,7 +43,7 @@ void				BlackMagicVCThread::Process					()
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
-		m_videoCard->m_frameProcessingCompletedCallback( m_videoCard->m_deviceID, true );
+		//m_videoCard->m_frameProcessingCompletedCallback( m_videoCard->m_deviceID, true );
 
 		auto data = InterlaceFrame( srcFrame );
 
