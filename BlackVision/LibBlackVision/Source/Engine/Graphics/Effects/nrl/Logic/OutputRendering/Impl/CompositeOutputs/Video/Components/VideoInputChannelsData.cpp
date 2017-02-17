@@ -10,25 +10,20 @@ namespace bv { namespace nrl {
 // **************************
 //
 VideoInputChannelsData::VideoInputChannelsData                              ()
+    : m_preInitialized( false )
+    , m_postInitialized( false )
+    , m_originalRenderedChannelsData( nullptr )
 {  
-//    for ( unsigned int i = (unsigned int) RenderChannelType::RCT_OUTPUT_1; i < (unsigned int) RenderChannelType::RCT_TOTAL; ++i )
-//    {
-//        auto c = renderedChannelsData->GetRenderChannel( (RenderChannelType) i );
-//
-//        { c; }
-//        // FIXME: nrl - implement via passing w, h of corresponding outputs
-////        auto vic = VideoInputChannel::Create( 
-//    }
 }
 
 // **************************
 //
 VideoInputChannelsData::~VideoInputChannelsData                             ()
 {
-    //for ( auto channel : m_renderChannels )
-    //{
-    //    delete channel;
-    //}
+    for ( auto channel : m_videoInputChannels )
+    {
+        delete channel;
+    }
 }
 
 // **************************
@@ -36,21 +31,44 @@ VideoInputChannelsData::~VideoInputChannelsData                             ()
 void    VideoInputChannelsData::PreInitialize                               ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping )
 {
     // FIXME: deferred initialization to be implemented
-    assert( m_outputToChannelsMapping.size() == 0 );
+    assert( m_preInitialized == false );
+    assert( m_postInitialized == false );
+
+    m_preUniqueOutputSetups = uniqueOutputSetups;
+    m_preMapping = mapping;
+
+    m_preInitialized = true;
+}
+
+// **************************
+//
+void    VideoInputChannelsData::PostInitialize                              ( const RenderedChannelsData * rcd )
+{
+    assert( m_preInitialized == true );
+    assert( m_postInitialized == false );
     assert( m_videoInputChannels.size() == 0 );
+    assert( m_outputToChannelsMapping.size() == 0 );
 
-    // VInputChannel
-    for( auto & uo : uniqueOutputSetups )
+    // Initialize unique video output setups
+    for( auto & s : m_preUniqueOutputSetups )
     {
-        { uo; }
-        m_videoInputChannels.push_back( nullptr );
+        auto vrc = VideoInputChannel::Create( rcd->GetRenderChannel( s.selectedRenderedChannel ), s.width, s.height );
+
+        m_videoInputChannels.push_back( vrc );
     }
 
-    for( auto & m : mapping )
+    // Intialize mapping between video card outputs and unique setups
+    for( auto & e : m_preMapping )
     {
-        m_outputToChannelsMapping[ m.first ] = nullptr;
+        auto videoCardID    = e.first;
+        auto outputIdx      = e.second;
+
+        auto vrc            = m_videoInputChannels[ outputIdx ];
+
+        m_outputToChannelsMapping[ videoCardID ] = vrc;
     }
 
+    m_postInitialized = false;
 }
 
 //// **************************

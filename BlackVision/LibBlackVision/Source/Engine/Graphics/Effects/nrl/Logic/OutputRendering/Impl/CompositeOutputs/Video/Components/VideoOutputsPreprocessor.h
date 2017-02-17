@@ -10,17 +10,21 @@ class VideoOutputsPreprocessor
 {
 private:
 
+    bool                        m_initialized;
+
     AVOutputsData               m_avFrames;
 
     VideoInputChannelsData      m_inputChannels;
 
 public:
 
-    const AVOutputsData &   Preprocess          ( RenderedChannelsData * input ) const;
+                            VideoOutputsPreprocessor();
 
-    void                    InvalidateCachedData();
+    const AVOutputsData &   Preprocess              ( RenderedChannelsData * input );
 
-    void                    PreInitialize       ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
+    void                    InvalidateCachedData    ();
+
+    void                    PreInitialize           ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
 
 };
 

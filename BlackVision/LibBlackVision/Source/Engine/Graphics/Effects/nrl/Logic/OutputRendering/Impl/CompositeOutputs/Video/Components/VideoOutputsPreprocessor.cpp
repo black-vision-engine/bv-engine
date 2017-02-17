@@ -7,9 +7,21 @@ namespace bv { namespace nrl {
 
 // *********************************
 //
-const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( RenderedChannelsData * input ) const
+VideoOutputsPreprocessor::VideoOutputsPreprocessor()
+    : m_initialized( false )
 {
-    { input; }
+}
+
+// *********************************
+//
+const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( RenderedChannelsData * input )
+{
+    if( !m_initialized )
+    {
+        m_inputChannels.PostInitialize( input );
+    
+        m_initialized = true;
+    }
 
     return m_avFrames;
 }
@@ -18,7 +30,10 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( Render
 //
 void                    VideoOutputsPreprocessor::InvalidateCachedData  ()
 {
-    // FIXME: implement
+    if( m_initialized )
+    {
+        // FIXME: implement
+    }
 }
 
 // *********************************
@@ -27,15 +42,12 @@ void                    VideoOutputsPreprocessor::PreInitialize         ( Output
 {
     assert( m_avFrames.GetNumEntries() == 0 );    
 
-    { uniqueOutputSetups; }
-
     for( auto & a : mapping )
     {
         m_avFrames.SetAVFrame( a.first, nullptr );
     }
 
-
-    m_inputChannels.PreInitialize( 
+    m_inputChannels.PreInitialize( uniqueOutputSetups, mapping );
 }
 
 } //bv
