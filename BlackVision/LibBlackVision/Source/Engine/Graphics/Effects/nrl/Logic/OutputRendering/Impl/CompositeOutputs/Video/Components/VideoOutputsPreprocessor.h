@@ -3,8 +3,18 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/AVOutputsData.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannelsData.h"
 
+#include "AVFrame.h"
 
-namespace bv { namespace nrl {
+
+namespace bv { 
+
+namespace audio {
+    
+class AudioRenderer;
+
+}
+
+namespace nrl {
 
 class VideoOutputsPreprocessor
 {
@@ -20,11 +30,15 @@ public:
 
                             VideoOutputsPreprocessor();
 
-    const AVOutputsData &   Preprocess              ( RenderedChannelsData * input );
+    const AVOutputsData &   Preprocess              ( NRenderContext * ctx, RenderedChannelsData * input );
 
     void                    InvalidateCachedData    ();
 
     void                    Initialize              ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
+
+private:
+
+    AVFramePtr              PrepareAVFrame          ( NRenderContext * ctx, const VideoInputChannel * channel );
 
 };
 

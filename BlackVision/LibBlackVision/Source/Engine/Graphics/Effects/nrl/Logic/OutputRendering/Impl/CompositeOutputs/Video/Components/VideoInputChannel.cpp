@@ -11,6 +11,7 @@ namespace bv { namespace nrl {
 //
 VideoInputChannel::VideoInputChannel                            ( const RenderChannel * wrappedChannel )
     : m_wrappedRenderChannel( wrappedChannel )
+    , m_lastFrameHadAudio( true )
 {
 }
 
@@ -25,6 +26,20 @@ VideoInputChannel::~VideoInputChannel                           ()
 bool            VideoInputChannel::IsActive                     () const
 {
     return m_wrappedRenderChannel->IsActive();
+}
+
+// **************************
+//
+bool            VideoInputChannel::LastFrameHadAudio           () const
+{
+    return m_lastFrameHadAudio;
+}
+
+// **************************
+//
+void            VideoInputChannel::SetLastFrameHadAudio        ( bool flagValue )
+{
+    m_lastFrameHadAudio = flagValue;
 }
 
 // **************************

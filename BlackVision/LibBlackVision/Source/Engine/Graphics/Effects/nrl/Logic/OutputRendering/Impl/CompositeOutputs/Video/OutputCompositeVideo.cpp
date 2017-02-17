@@ -23,11 +23,11 @@ OutputCompositeVideo::~OutputCompositeVideo                         ()
 
 // *********************************
 //
-void    OutputCompositeVideo::ProcessFrameData                      ( NRenderContext *, RenderedChannelsData * input )
+void    OutputCompositeVideo::ProcessFrameData                      ( NRenderContext * ctx, RenderedChannelsData * input )
 {
     m_outputsPreprocessor.InvalidateCachedData  ();
 
-    auto & av = m_outputsPreprocessor.Preprocess( input );
+    auto & av = m_outputsPreprocessor.Preprocess( ctx, input );
 
     m_outputsHandler.HandleOutputsData( av );
 }

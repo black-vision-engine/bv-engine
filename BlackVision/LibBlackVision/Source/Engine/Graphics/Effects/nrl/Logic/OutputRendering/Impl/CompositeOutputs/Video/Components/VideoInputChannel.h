@@ -15,6 +15,8 @@ class VideoInputChannel
 protected:
 
     const RenderChannel *   m_wrappedRenderChannel;
+    
+    bool                    m_lastFrameHadAudio;
 
 protected:
 
@@ -25,6 +27,9 @@ public:
     virtual                     ~VideoInputChannel          ();
 
     bool                        IsActive                    () const;
+
+    bool                        LastFrameHadAudio           () const;
+    void                        SetLastFrameHadAudio        ( bool flagValue );
 
     virtual Texture2DPtr        ReadColorTexture            ( NRenderContext * ctx ) const;
     virtual void                InvalidateCachedTexture     () const;

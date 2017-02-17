@@ -50,10 +50,14 @@ public:
     void                        PostInitialize          ( const RenderedChannelsData * rcd );
 
     const VideoInputChannel *   GetInputChannel         ( unsigned int videoOutputID ) const;
+    VideoInputChannel *         AccessInputChannel      ( unsigned int videoOutputID );
 
     unsigned int                GetNumVideoInputChannels() const;
     const VideoInputChannel *   GetVideoInputChannelAt  ( unsigned int idx ) const;
-    const VideoCardIDVec &      GetAsignedVideoCards    ( const VideoInputChannel * vic ) const;
+    const VideoCardIDVec &      GetAsignedVideoCardIds  ( const VideoInputChannel * vic ) const;
+
+    bool                        LastFrameHadAudio       ( unsigned int videoOutputID ) const;
+    void                        SetLastFrameHadAudio    ( unsigned int videoOutputID, bool flagVal );
 
     void                        InvalidateCachedTextures();
     //void                        InvalidateCachedTexture ( RenderChannelType rct );

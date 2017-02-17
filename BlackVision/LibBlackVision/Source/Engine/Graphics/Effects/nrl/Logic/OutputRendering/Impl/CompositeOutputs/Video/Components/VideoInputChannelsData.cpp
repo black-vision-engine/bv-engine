@@ -114,13 +114,31 @@ const VideoInputChannel *   VideoInputChannelsData::GetVideoInputChannelAt  ( un
 
 // **************************
 //
-const VideoCardIDVec &      VideoInputChannelsData::GetAsignedVideoCards    ( const VideoInputChannel * vic ) const
+const VideoCardIDVec &      VideoInputChannelsData::GetAsignedVideoCardIds  ( const VideoInputChannel * vic ) const
 {
     assert( m_channelToOutputMaping.find( vic ) != m_channelToOutputMaping.end() );
 
     auto it = m_channelToOutputMaping.find( vic );
 
     return it->second;
+}
+
+// **************************
+//
+bool                        VideoInputChannelsData::LastFrameHadAudio       ( unsigned int videoOutputID ) const
+{
+    auto channel = GetInputChannel( videoOutputID );
+
+    return channel->LastFrameHadAudio();
+}
+
+// **************************
+//
+void                        VideoInputChannelsData::SetLastFrameHadAudio    ( unsigned int videoOutputID, bool flagVal )
+{
+    auto channel = AccessInputChannel( videoOutputID );
+
+    channel->SetLastFrameHadAudio( flagVal );
 }
 
 //// **************************
