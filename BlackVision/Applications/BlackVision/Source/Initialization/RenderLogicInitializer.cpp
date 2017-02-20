@@ -96,10 +96,7 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
 // *********************************
 //
 void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc, const BVConfig & cfg )
-{
-    // FIXME: nrl - implement it by reading cfg instance
-    { cfg; }
-    
+{   
     desc.SetWidth( 1920 );
     desc.SetHeight( 1080 );
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
@@ -111,14 +108,35 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
     auto & props = desc.AccessOutputProperties();
     
-    props.resize( 1 );
+    auto & deser = cfg.GetRenderChannelsNode();
 
-    auto & vc0 = props[ 0 ];
+    if( deser.EnterChild( "RenderChannel" ) )
+    {
+        do
+        {
+            auto rdID = deser.GetAttribute( "id" );
+            if( deser.EnterChild( "Output" ) )
+            {
+                std::hash_map< std::string, std::string > prop;
 
-    vc0[ "width" ] = "1920";
-    vc0[ "height" ] = "1080";
-    vc0[ "renderChannelID" ] = "0";
-    vc0[ "outputID" ] = "0";
+                do
+                {
+                    prop[ "outputID" ] = deser.GetAttribute( "id" );
+                    prop[ "width" ] = deser.GetAttribute( "width" );
+                    prop[ "height" ] = deser.GetAttribute( "height" );
+                    prop[ "renderChannelID" ] = rdID;
+
+                    props.push_back( prop );
+                }
+                while( deser.NextChild() );
+
+                deser.ExitChild(); // Output
+            }
+        }
+        while( deser.NextChild() );
+
+        deser.ExitChild(); // RenderChannel
+    }
 }
 
 } // nrl
