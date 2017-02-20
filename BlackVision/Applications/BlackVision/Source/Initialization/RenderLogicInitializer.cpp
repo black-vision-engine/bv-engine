@@ -108,7 +108,7 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
     auto & props = desc.AccessOutputProperties();
     
-    auto & deser = cfg.GetRenderChannelsNode();
+    auto & deser = cfg.GetNode( 3, "config", "videocards", "RenderChannels" );
 
     if( deser.EnterChild( "RenderChannel" ) )
     {

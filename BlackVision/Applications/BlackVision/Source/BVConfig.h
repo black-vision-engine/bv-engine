@@ -116,8 +116,8 @@ public:
     inline bool                 ReadbackFlag            () const;
     inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
-	inline bool                 RenderToSharedMemory() const;
-	inline int                  SharedMemoryScaleFactor() const;
+	inline bool                 RenderToSharedMemory    () const;
+	inline int                  SharedMemoryScaleFactor () const;
 
 	inline Float32				GlobalGain				() const;
 
@@ -156,7 +156,7 @@ public:
 
     inline Int32                SockerServerPort        () const;
 
-    const IDeserializer &       GetRenderChannelsNode   () const;
+    const IDeserializer &       GetNode                 ( int count, ... ) const;
 
 
     inline bool                 UseDebugLayer           () const;

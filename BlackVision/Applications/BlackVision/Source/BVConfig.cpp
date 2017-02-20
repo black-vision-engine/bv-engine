@@ -145,23 +145,36 @@ BVConfig::BVConfig                      ()
     m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
 }
 
+
 // *********************************
 //
-const IDeserializer &  BVConfig::GetRenderChannelsNode    () const
+const IDeserializer &  BVConfig::GetNode                    ( int count, ... ) const
 {
-    m_deserializer.Reset();
+    va_list args;
+    va_start( args, count );
 
-    if( m_deserializer.EnterChild( "config" ) &&
-        m_deserializer.EnterChild( "videocards" ) &&
-        m_deserializer.EnterChild( "RenderChannels" ) )
+    std::string path;
+
+    if( count > 0 )
     {
-        return m_deserializer;
+        m_deserializer.Reset();
+
+        for( int i = 0; i < count; ++i )
+        {
+            auto  n = va_arg( args, const char * );
+            path += n;
+
+            if( !m_deserializer.EnterChild( n ) )
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "Config path '" << path << "' doesn't exist.";
+                break;
+            }
+        }
+
+        va_end( args );
     }
-    else
-    {
-        LOG_MESSAGE( SeverityLevel::error ) << "Config config/videocards/RenderChannels doesn't exist.";
-        return m_deserializer;
-    }
+
+    return m_deserializer;
 }
 
 // *********************************
