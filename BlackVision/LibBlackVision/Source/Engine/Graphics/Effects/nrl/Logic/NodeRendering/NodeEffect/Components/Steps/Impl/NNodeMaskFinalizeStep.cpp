@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 

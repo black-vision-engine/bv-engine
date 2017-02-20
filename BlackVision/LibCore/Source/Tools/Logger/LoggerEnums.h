@@ -23,6 +23,7 @@ enum ModuleEnum : int
     ME_TCPServer        = 1 << 6,
     ME_LibVideoCards    = 1 << 7,
     ME_XMLScenParser    = 1 << 8,
+    ME_Tests            = 1 << 9,
 };
 
 /**Adding new modules - instruction:

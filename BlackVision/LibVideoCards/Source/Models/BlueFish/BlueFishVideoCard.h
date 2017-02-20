@@ -54,6 +54,10 @@ private:
 
 	std::vector< Channel * > m_channels;
 
+	MemoryChunkPtr			m_prevFrame;
+
+	void					RetrieveFieldFromFrame		( AVFramePtr frame, int odd );
+
 public:
 	                        VideoCard                   ( UInt32 deviceID );
 	virtual                 ~VideoCard                  () override; 
@@ -67,9 +71,20 @@ public:
 	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
 	Channel *			    GetChannelByName			( ChannelName channelName ) const;   
 
+    void                    PreStart                    () override
+    {
+        assert( false );
+    };
+
     virtual void            Start                       () override;
 
-    virtual void            ProcessFrame                ( AVFramePtr data, int odd ) override;
+    virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
+
+    virtual void            DisplayFrame                () const;
+
+    std::set< UInt64 >	    GetDisplayedVideoOutputsIDs () const override;
+
+    virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 
     static UInt32           EnumerateDevices            ();
 

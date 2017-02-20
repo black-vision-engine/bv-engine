@@ -64,6 +64,9 @@
     <Filter Include="Widgets\MaxSize">
       <UniqueIdentifier>{a7c544f3-6f78-4314-9a94-c8a5d4fe6966}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Initialization">
+      <UniqueIdentifier>{1c718d26-7c3f-4d78-a658-5b8b9c7aeed8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -215,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Widgets\MaxSize\MaxSize.cpp">
       <Filter>Widgets\MaxSize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp">
+      <Filter>Initialization</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestInnerEvents.cpp">
       <Filter>TestAI</Filter>
@@ -382,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\MaxSize\MaxSize.h">
       <Filter>Widgets\MaxSize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h">
+      <Filter>Initialization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h">
       <Filter>TestAI</Filter>
