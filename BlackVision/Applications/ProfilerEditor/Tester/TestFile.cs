@@ -410,8 +410,7 @@ namespace ProfilerEditor.Tester
         {
             // Replace groups of AddKey events with one event setting parameter to last value.
             PreprocessFilters.AddKeyFilter.Preprocess( TestEvents, ReferenceResponses );
-
-
+            PreprocessFilters.CheckTimelineTimeFilter.Preprocess( TestEvents, ReferenceResponses );
 
         }
 

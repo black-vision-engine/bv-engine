@@ -101,6 +101,8 @@
     <Compile Include="Tester\Event.cs" />
     <Compile Include="Tester\EventsViewModel.cs" />
     <Compile Include="Tester\PreprocessFilters\AddKeyFilter.cs" />
+    <Compile Include="Tester\PreprocessFilters\CheckTimelineTimeFilter.cs" />
+    <Compile Include="Tester\PreprocessFilters\FilterBase.cs" />
     <Compile Include="Tester\TesterMainLogic.cs" />
     <Compile Include="Tester\TestError.cs" />
     <Compile Include="Tester\TestFile.cs" />
