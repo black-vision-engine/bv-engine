@@ -31,6 +31,7 @@ public:
 class TextPluginBase : public BasePlugin
 {
 public:
+
     struct PARAM
     {
         static const std::string        ALPHA;
@@ -61,6 +62,7 @@ public:
     };
 
 protected:
+
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
