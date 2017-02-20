@@ -156,6 +156,9 @@ public:
 
     inline Int32                SockerServerPort        () const;
 
+    const IDeserializer &       GetRenderChannelsNode   () const;
+
+
     inline bool                 UseDebugLayer           () const;
     inline const std::string &  DebugFilePath           () const;
     inline bool                 LoadSceneFromEnv        () const;
