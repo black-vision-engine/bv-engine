@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-
+using System.Xml.Serialization;
 
 
 
@@ -26,8 +26,10 @@ namespace ProfilerEditor.Tester
     {
         private ObservableCollection< TestFile >    m_testFiles;
         private TestFile                            m_selectedFile;
-        private string                              m_testsPath;
         private TestError                           m_selectedError;
+
+        private string                              m_testsPath;
+        private string                              m_outputPath;
 
         private ObservableCollection< TestError >   m_errorList;
 
@@ -56,6 +58,7 @@ namespace ProfilerEditor.Tester
 
             m_comparisionRules = new ComparisionRules();
             m_break = false;
+            m_outputPath = "";
         }
 
         // ================================================= //
@@ -109,13 +112,19 @@ namespace ProfilerEditor.Tester
 
         public bool     StepToNextFile  ()
         {
+            // Try to select next file.
             for( int i = 0; i < TestFiles.Count; ++i )
             {
                 if( TestFiles[ i ] == SelectedFile )
                 {
                     // No more files on list.
                     if( i + 1 >= TestFiles.Count )
+                    {
+                        // Write result of previous test to file.
+                        WriteResultToFile( m_outputPath );
+
                         return false;
+                    }
 
                     // Choose next file as selected file.
                     SelectedFile = TestFiles[ i + 1 ];
@@ -250,6 +259,11 @@ namespace ProfilerEditor.Tester
 
         }
 
+        public void     UpdateOutputPath    ( string output )
+        {
+            m_outputPath = output;
+        }
+
 
         private string      ReadFile( string filePath )
         {
@@ -291,6 +305,13 @@ namespace ProfilerEditor.Tester
                     CurrentRealResponse = SelectedFile.CurrentRealResponse;
                 }
             }
+        }
+
+        private void        WriteResultToFile( string m_outputPath )
+        {
+            XmlSerializer ser = new XmlSerializer( typeof( ObservableCollection< TestError > ) );
+            using( TextWriter tw = new StreamWriter( Path.Combine( m_outputPath, "result.txt" ) ) )
+                ser.Serialize( tw, m_errorList );
         }
 
 

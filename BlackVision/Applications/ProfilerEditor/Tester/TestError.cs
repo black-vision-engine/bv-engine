@@ -27,6 +27,7 @@ namespace ProfilerEditor.Tester
         public Event            EventSent { get; set; }
         public Event            ReferenceReponse { get; set; }
         public Event            ReceivedResponse{ get; set; }
+
         public TestFile         FileRef { get; set; }
 
         public          TestError()

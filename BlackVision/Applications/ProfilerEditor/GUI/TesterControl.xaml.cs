@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Diagnostics;
+using System.Globalization;
+
 
 using BlackBurst.Backend.TCP;
 
@@ -29,6 +32,9 @@ namespace ProfilerEditor.GUI
         public TesterControl()
         {
             InitializeComponent();
+
+            if( Debugger.IsAttached )
+                CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo( "en-US" );
 
             m_testerLogic = new Tester.TesterMainLogic();
             DataContext = m_testerLogic;
