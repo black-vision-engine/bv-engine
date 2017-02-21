@@ -28,6 +28,7 @@ class BlackMagicVCThread : public StoppableThread
 	FrameQueue					m_frameQueue;
 
 	bool						m_odd;
+    bool						m_interlaceEnabled;
 
     UInt64                      m_frameDuration;
 
@@ -39,6 +40,7 @@ public:
 	explicit					BlackMagicVCThread		( VideoCard * vc, SizeType frameSize );
 
     void                        SetFrameDuration        ( UInt64 frameDuration );
+    void                        EnableInterlacing       ( bool enable );
 
 	void						EnqueueFrame			( const AVFrameConstPtr & frame );
 

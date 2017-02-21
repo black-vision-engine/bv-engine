@@ -16,9 +16,14 @@ VideoOutputDelegate::VideoOutputDelegate					( VideoCard * owner )
 //
 HRESULT VideoOutputDelegate::ScheduledFrameCompleted		( IDeckLinkVideoFrame * completedFrame, BMDOutputFrameCompletionResult result )
 {
-	if( result == BMDOutputFrameCompletionResult::bmdOutputFrameDisplayedLate )
+	if( result != BMDOutputFrameCompletionResult::bmdOutputFrameCompleted )
 	{
-		LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is delayed";
+        if( result == BMDOutputFrameCompletionResult::bmdOutputFrameDisplayedLate )
+		    LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is delayed";
+        else if ( result == BMDOutputFrameCompletionResult::bmdOutputFrameDropped )
+            LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is dropped";
+        else if( result == BMDOutputFrameCompletionResult::bmdOutputFrameFlushed )
+            LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is flushed";
 	}
 
 	m_owner->FrameCompleted( completedFrame );

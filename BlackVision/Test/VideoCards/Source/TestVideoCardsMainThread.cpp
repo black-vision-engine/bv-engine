@@ -58,6 +58,7 @@ void    TestVideoCardsMainThread::Process ()
 
     input->SetAVFrame( 0, frame );
     input->SetAVFrame( 1, frame );
+    input->SetAVFrame( 2, frame );
 
     m_vcm.Display( input );
 

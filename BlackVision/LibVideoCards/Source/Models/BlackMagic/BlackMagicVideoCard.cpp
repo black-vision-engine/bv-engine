@@ -312,7 +312,10 @@ void                    VideoCard::PreStart            ()
     m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this, h * w * 4 ) );
 
     if( m_output.interlaced )
+    {
+        m_blackMagicVCThread->EnableInterlacing( true );
         m_blackMagicVCThread->SetFrameDuration( UInt64( float( 1000 * m_frameDuration ) / m_frameTimescale ) / 2 );
+    }
 
     m_blackMagicVCThread->Start();
 }
@@ -445,7 +448,7 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output.";
+        LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output. " << m_deviceID;
     }
 
     //m_frameProcessingCompletedCallback( m_deviceID, true );
