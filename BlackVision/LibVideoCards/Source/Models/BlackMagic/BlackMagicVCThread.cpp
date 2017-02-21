@@ -63,7 +63,7 @@ void				BlackMagicVCThread::Process					()
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
-        auto biginFrameProcessingTime = Time::Now();
+        auto biginFrameProcessingTime = m_videoCard->GetFrameTime();
 
         AVFrameConstPtr processedFrame = nullptr;
 
@@ -77,13 +77,10 @@ void				BlackMagicVCThread::Process					()
 
         if( m_frameDuration > 0 )
         {
-            auto sleepFor = Int64( m_frameDuration ) - ( Int64( Time::Now() - biginFrameProcessingTime ) );
+            auto sleepFor = Int64( m_frameDuration ) - ( Int64( Time::Now() - biginFrameProcessingTime ) % Int64( m_frameDuration ) );
+            // sleep to the next multiple of m_frameDuration.
 
-            if( sleepFor > 0 )
-            {
-                std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
-                LOG_MESSAGE( SeverityLevel::debug ) << "Device " << m_videoCard->m_deviceID << " slept for " << sleepFor << " miliseconds";
-            }
+            std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
         }
 	}
 }

@@ -451,8 +451,6 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
         LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output. " << m_deviceID;
     }
 
-    //m_frameProcessingCompletedCallback( m_deviceID, true );
-
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
     {
         LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame.";
