@@ -162,7 +162,7 @@ const IDeserializer &  BVConfig::GetNode                    ( int count, ... ) c
         for( int i = 0; i < count; ++i )
         {
             auto  n = va_arg( args, const char * );
-            path += n;
+            path += n + '/';
 
             if( !m_deserializer.EnterChild( n ) )
             {

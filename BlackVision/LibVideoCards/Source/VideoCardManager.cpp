@@ -243,10 +243,13 @@ bool                        VideoCardManager::ProcessOutputsData     ()
             }
         }
 
-        for( auto & videoCard : m_videoCards )
-        {
-            videoCard->DisplayFrame();
-        }
+        //std::unique_lock< std::mutex > lock( m_mutex );
+        //m_waitFramesProcessed.wait( lock, [=] { return m_numReadyCards ==  } )
+
+        //for( auto & videoCard : m_videoCards )
+        //{
+        //    videoCard->DisplayFrame();
+        //}
   
         return true;
     }

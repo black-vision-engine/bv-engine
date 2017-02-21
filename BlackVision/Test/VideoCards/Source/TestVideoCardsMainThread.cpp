@@ -57,6 +57,7 @@ void    TestVideoCardsMainThread::Process ()
     auto input = std::shared_ptr< VCMInputData >( new VCMInputData() );
 
     input->SetAVFrame( 0, frame );
+    input->SetAVFrame( 1, frame );
 
     m_vcm.Display( input );
 
@@ -74,10 +75,7 @@ void    TestVideoCardsMainThread::Process ()
 // ****************************
 //
 TestVideoCardsMainThread::~TestVideoCardsMainThread   ()
-{
-    int t = 0;
-    t;
-}
+{}
 
 } // videocards
 } // bv

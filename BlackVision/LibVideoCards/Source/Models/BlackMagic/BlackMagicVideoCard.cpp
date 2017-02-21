@@ -310,6 +310,10 @@ void                    VideoCard::PreStart            ()
     }
 
     m_blackMagicVCThread = std::unique_ptr< BlackMagicVCThread >( new BlackMagicVCThread( this, h * w * 4 ) );
+
+    if( m_output.interlaced )
+        m_blackMagicVCThread->SetFrameDuration( UInt64( float( 1000 * m_frameDuration ) / m_frameTimescale ) / 2 );
+
     m_blackMagicVCThread->Start();
 }
 

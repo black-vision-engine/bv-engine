@@ -1,5 +1,6 @@
 #include "BlackMagicVCThread.h"
 #include "BlackMagicVideoCard.h"
+#include "System/Time.h"
 
 namespace bv { namespace videocards { namespace blackmagic 
 {
@@ -12,13 +13,21 @@ const SizeType      BUFFER_SIZE = 10;
 //**************************************
 //
 BlackMagicVCThread::BlackMagicVCThread							( VideoCard * vc, SizeType frameSize )
-	: m_frameQueue( 1 )
-	, m_videoCard( vc )
-	, m_odd( true )
-	, m_prevFramesBuffer( BUFFER_SIZE )
+    : m_frameQueue( 1 )
+    , m_videoCard( vc )
+    , m_odd( true )
+    , m_prevFramesBuffer( BUFFER_SIZE )
+    , m_frameDuration( 0 )
 {
 	for( SizeType i = 0; i < BUFFER_SIZE; ++i )
 		m_prevFramesBuffer.push_back( MemoryChunk::Create( frameSize ) );
+}
+
+//**************************************
+//
+void                BlackMagicVCThread::SetFrameDuration        ( UInt64 frameDuration )
+{
+    m_frameDuration = frameDuration;
 }
 
 //**************************************
@@ -43,12 +52,15 @@ void				BlackMagicVCThread::Process					()
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
-		//m_videoCard->m_frameProcessingCompletedCallback( m_videoCard->m_deviceID, true );
+        auto biginFrameProcessingTime = Time::Now();
 
 		auto data = InterlaceFrame( srcFrame );
 
 		if( data )
 			m_videoCard->FrameProcessed( data );
+
+        auto sleepFor = m_frameDuration - ( Time::Now() - biginFrameProcessingTime );
+        std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
 	}
 }
 

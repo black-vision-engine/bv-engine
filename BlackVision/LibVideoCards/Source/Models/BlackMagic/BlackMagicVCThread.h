@@ -29,12 +29,16 @@ class BlackMagicVCThread : public StoppableThread
 
 	bool						m_odd;
 
+    UInt64                      m_frameDuration;
+
 	VideoCard *					m_videoCard;
 
 	AVFrameConstPtr				InterlaceFrame			( const AVFrameConstPtr & frame );
 
 public:
 	explicit					BlackMagicVCThread		( VideoCard * vc, SizeType frameSize );
+
+    void                        SetFrameDuration        ( UInt64 frameDuration );
 
 	void						EnqueueFrame			( const AVFrameConstPtr & frame );
 
