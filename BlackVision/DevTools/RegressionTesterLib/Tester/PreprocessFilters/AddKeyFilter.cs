@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 
 
-namespace ProfilerEditor.Tester.PreprocessFilters
+namespace RegressionLib.PreprocessFilters
 {
     public class AddKeyFilter : FilterBase
     {

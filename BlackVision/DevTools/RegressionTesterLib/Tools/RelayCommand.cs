@@ -2,7 +2,7 @@
 using System.Windows.Input;
 
 
-namespace ProfilerEditor
+namespace Tools
 {
     public class RelayCommand : ICommand
     {

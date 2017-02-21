@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 
 
-namespace ProfilerEditor.Tester.ComparisionException
+namespace RegressionLib.ComparisionException
 {
     interface CmpException
     {

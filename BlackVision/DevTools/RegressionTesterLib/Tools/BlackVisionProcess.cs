@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.IO;
 
 
-namespace ProfilerEditor
+namespace Tools
 {
     public class BlackVisionProcess
     {

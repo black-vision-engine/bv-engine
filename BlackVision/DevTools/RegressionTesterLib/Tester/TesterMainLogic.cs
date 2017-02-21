@@ -11,9 +11,10 @@ using System.Windows.Input;
 using System.IO;
 using BlackBurst.Backend.TCP;
 using System.Windows.Threading;
+using Tools;
 
 
-namespace ProfilerEditor.Tester
+namespace RegressionLib
 {
     public enum TestsState
     {

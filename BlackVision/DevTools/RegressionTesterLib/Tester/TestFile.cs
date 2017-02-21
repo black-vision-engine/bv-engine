@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 
 
-namespace ProfilerEditor.Tester
+namespace RegressionLib
 {
     public class TestFile : INotifyPropertyChanged
     {

@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 
 
-namespace ProfilerEditor.Tester
+namespace RegressionLib
 {
 
     enum TestingMode

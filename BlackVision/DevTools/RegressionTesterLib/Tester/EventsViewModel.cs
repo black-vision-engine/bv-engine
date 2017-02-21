@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 
 
-namespace ProfilerEditor.Tester
+namespace RegressionLib
 {
     public class EventsViewModel : INotifyPropertyChanged
     {

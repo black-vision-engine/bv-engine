@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
 
-namespace ProfilerEditor.Tester.PreprocessFilters
+namespace RegressionLib.PreprocessFilters
 {
     public class FilterBase
     {

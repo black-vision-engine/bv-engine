@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 
-namespace ProfilerEditor.Tester
+namespace RegressionLib
 {
     public class Event
     {

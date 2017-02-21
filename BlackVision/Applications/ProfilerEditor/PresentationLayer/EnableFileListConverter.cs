@@ -14,9 +14,9 @@ namespace ProfilerEditor.PresentationLayer
 
         public object Convert( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
         {
-            Tester.TestsState state = (Tester.TestsState)value;
+            RegressionLib.TestsState state = (RegressionLib.TestsState)value;
 
-            if( state == Tester.TestsState.Init )
+            if( state == RegressionLib.TestsState.Init )
                 return true;
             return false;
         }
