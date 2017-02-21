@@ -6,6 +6,7 @@ syntax: glob
 *.vcxproj.user
 BlackVision/_Builds/*
 BlackVision/_Temp/*
+BlackVision/Dep/3rdParty/NuGetPackages/
 *.nvuser
 app/cache/*
 *.orig
