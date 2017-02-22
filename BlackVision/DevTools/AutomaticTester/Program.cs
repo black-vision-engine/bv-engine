@@ -63,7 +63,7 @@ namespace AutomaticTester
 
             bool pathExists = m_logic.UpdateTestPath( inputTestsDir );
 
-            if( verbose )
+            if( verbose && !pathExists )
             {
                 Console.WriteLine( "[Error] Path: [" + inputTestsDir + "] isn't valid directory" );
             }
@@ -76,6 +76,8 @@ namespace AutomaticTester
             {
                 m_logic.RunAllTests.Execute( null );
                 m_dispatcher.MainLoop();
+
+                m_logic.KillBV();
             }
             else
             {

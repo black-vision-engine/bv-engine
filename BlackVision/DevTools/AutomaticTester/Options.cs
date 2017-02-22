@@ -19,8 +19,8 @@ namespace AutomaticTester
         [Option( 'e', "exec", Required = true, HelpText = "BlackVision executable file." )]
         public string       BVExecPath { get; set; }
 
-        [Option( 'v', null, HelpText = "Print details during execution." )]
-        public bool Verbose { get; set; }
+        [Option( 'v', "verbose", HelpText = "Print details during execution." )]
+        public bool         Verbose { get; set; }
 
     }
 }

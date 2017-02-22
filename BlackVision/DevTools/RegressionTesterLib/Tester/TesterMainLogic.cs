@@ -154,7 +154,7 @@ namespace RegressionLib
         #endregion
 
 
-        public bool IsInitState( object parameter )
+        public bool         IsInitState( object parameter )
         {
             if( State == TestsState.Init )
                 return true;
@@ -162,7 +162,7 @@ namespace RegressionLib
                 return false;
         }
 
-        private void ChooseTestDir( object parameter )
+        private void        ChooseTestDir( object parameter )
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             dialog.SelectedPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -242,6 +242,11 @@ namespace RegressionLib
             await Task.Delay( 2000 );
         }
 
+
+        public void     KillBV()
+        {
+            m_process.KillEmAll();
+        }
 
         // ================================================= //
 
