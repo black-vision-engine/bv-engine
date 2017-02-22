@@ -9,11 +9,11 @@ pipeline {
         stage('Build') {
             steps {
 				checkout scm
-                echo 'Building..'
 				
 				for (int i = 0; i < configurations.size(); ++i) {
+					echo 'Building ${configurations[i]}'
 					bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=${configurations[i]} /maxcpucount:4 /p:Platform=\"x64\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
-                        echo "Testing the ${browsers[i]} browser"
+					echo 'Building ${configurations[i]} FINISHED'
                 }
 				
 				// bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=Debug /maxcpucount:4 /p:Platform=\"x64\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
