@@ -32,8 +32,10 @@ pipeline {
 		}
         stage('Test') {
             steps {
-				branch 'jenkins'
                 echo 'Testing..'
+				step([$class: 'XUnitBuilder',
+                thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                tools: [[$class: 'JUnitType', pattern: 'reports/**']]])
             }
         }
     }
