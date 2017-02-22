@@ -14,8 +14,8 @@ pipeline {
         }
 		stage('Archive'){
 			steps {
-				archive 'BlackVision/_Builds/x64-v110-Debug/Applications/BlackVision/**'
-				archive 'BlackVision/_Builds/x64-v110-Debug/Applications/EnginePrototyper/**'
+				archive 'BlackVision/_Builds/x64-v110-Debug/Applications/**'
+				archive 'BlackVision/_Builds/x64-v110-Debug/Tests/**'
 			}
 		}
         stage('Test') {
