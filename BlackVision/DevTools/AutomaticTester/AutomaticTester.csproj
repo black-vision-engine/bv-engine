@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BlackBurstLibs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="CommandLine">
       <HintPath>..\..\Dep\3rdParty\NuGetPackages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
@@ -48,6 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\ConnectionFailedEvent.cs" />
+    <Compile Include="Network\DispatchEvent.cs" />
+    <Compile Include="Network\EngineConnectedEvent.cs" />
+    <Compile Include="Network\EngineDiconnectedEvent.cs" />
+    <Compile Include="Network\EventDispatcher.cs" />
+    <Compile Include="Network\MsgReceivedEvent.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
