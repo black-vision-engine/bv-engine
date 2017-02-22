@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-				branch 'jenkins'
+				branch 'master'
                 echo 'Building..'
             }
         }
