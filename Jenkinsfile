@@ -31,11 +31,13 @@ pipeline {
 			}
 		}
         stage('Test') {
+		
             steps {
                 echo 'Testing..'
-				step([$class: 'XUnitBuilder',
-                thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-                tools: [[$class: 'JUnitType', pattern: 'reports/**']]])
+				
+				// step([$class: 'XUnitBuilder',
+                // thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                // tools: [[$class: 'JUnitType', pattern: 'reports/**']]])
             }
         }
     }
