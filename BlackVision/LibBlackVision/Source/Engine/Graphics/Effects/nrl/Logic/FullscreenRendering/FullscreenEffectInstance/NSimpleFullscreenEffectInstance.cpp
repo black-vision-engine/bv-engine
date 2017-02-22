@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/Impl/NFulscreenEffectVisualComponent.h"
 #include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 
 
 namespace bv { namespace nrl {
