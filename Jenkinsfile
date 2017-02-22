@@ -30,15 +30,15 @@ pipeline {
 				}
 			}
 		}
-        stage('Test') {
+        // stage('Test') {
 		
-            steps {
-                echo 'Testing..'
+            // steps {
+                // echo 'Testing..'
 				
-				// step([$class: 'XUnitBuilder',
-                // thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-                // tools: [[$class: 'JUnitType', pattern: 'reports/**']]])
-            }
-        }
+				// // step([$class: 'XUnitBuilder',
+                // // thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                // // tools: [[$class: 'JUnitType', pattern: 'reports/**']]])
+            // }
+        // }
     }
 }
