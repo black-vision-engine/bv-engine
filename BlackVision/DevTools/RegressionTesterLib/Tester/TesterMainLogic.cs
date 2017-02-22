@@ -154,7 +154,7 @@ namespace RegressionLib
         #endregion
 
 
-        private bool IsInitState( object parameter )
+        public bool         IsInitState( object parameter )
         {
             if( State == TestsState.Init )
                 return true;
@@ -162,7 +162,7 @@ namespace RegressionLib
                 return false;
         }
 
-        private void ChooseTestDir( object parameter )
+        private void        ChooseTestDir( object parameter )
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             dialog.SelectedPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -174,9 +174,25 @@ namespace RegressionLib
             }
         }
 
-        public void UpdateBVExecPath( string newPath )
+        public void         UpdateBVExecPath( string newPath )
         {
             m_process.BlackVisionPathName = newPath;
+        }
+
+        /// <summary>
+        /// Sets tests directory path.
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns>Returns false if path points to non existing directory.</returns>
+        public bool         UpdateTestPath( string newPath )
+        {
+            bool exists = Directory.Exists( newPath );
+
+            if( !exists )
+                return false;
+
+            m_testsManager.UpdateTestPath( newPath );
+            return true;
         }
 
         // ================================================= //
@@ -226,6 +242,11 @@ namespace RegressionLib
             await Task.Delay( 2000 );
         }
 
+
+        public void     KillBV()
+        {
+            m_process.KillEmAll();
+        }
 
         // ================================================= //
 

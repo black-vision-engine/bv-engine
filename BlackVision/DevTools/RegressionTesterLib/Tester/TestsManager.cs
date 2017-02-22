@@ -108,36 +108,52 @@ namespace RegressionLib
             return m_break;
         }
 
+        public bool     IsEnded ()
+        {
+            if( SelectedFile == null &&
+                ChooseNextFile() == null )
+                return true;
+            return false;
+        }
+
         // ================================================= //
 
         public bool     StepToNextFile  ()
         {
             // Try to select next file.
+            var nextFile = ChooseNextFile();
+            if( nextFile == null )
+            {
+                // Write result of previous test to file.
+                WriteResultToFile( m_outputPath );
+                return false;
+            }
+
+            // Choose next file as selected file.
+            SelectedFile = nextFile;
+            ParseFile( SelectedFile );
+
+            InitProgress();
+
+            return true;
+        }
+
+        private TestFile        ChooseNextFile()
+        {
+            // Function doesn't change SelectedFile.
             for( int i = 0; i < TestFiles.Count; ++i )
             {
                 if( TestFiles[ i ] == SelectedFile )
                 {
                     // No more files on list.
                     if( i + 1 >= TestFiles.Count )
-                    {
-                        // Write result of previous test to file.
-                        WriteResultToFile( m_outputPath );
-
-                        return false;
-                    }
-
-                    // Choose next file as selected file.
-                    SelectedFile = TestFiles[ i + 1 ];
-                    ParseFile( SelectedFile );
-
-                    InitProgress();
-
-                    return true;
+                        return null;
+                    else
+                        return TestFiles[ i + 1 ]; ;
                 }
             }
 
-            // Something very wrong ;)
-            return false;
+            return null;
         }
 
 
@@ -309,9 +325,9 @@ namespace RegressionLib
 
         private void        WriteResultToFile( string m_outputPath )
         {
-            XmlSerializer ser = new XmlSerializer( typeof( ObservableCollection< TestError > ) );
-            using( TextWriter tw = new StreamWriter( Path.Combine( m_outputPath, "result.txt" ) ) )
-                ser.Serialize( tw, m_errorList );
+            //XmlSerializer ser = new XmlSerializer( typeof( ObservableCollection< TestError > ) );
+            //using( TextWriter tw = new StreamWriter( Path.Combine( m_outputPath, "result.txt" ) ) )
+            //    ser.Serialize( tw, m_errorList );
         }
 
 

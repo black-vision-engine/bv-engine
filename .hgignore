@@ -48,3 +48,6 @@ BlackVision/Dep/3rdParty/ftgl_ext/poly2tri/poly2tri/x64/
 BlackVision/Dep/3rdParty/ftgl_ext/poly2tri/Win32/
 BlackVision/Dep/3rdParty/ftgl_ext/poly2tri/x64/
 BlackVision/Dep/3rdParty/ftgl_ext/msvc/
+BlackVision/Projects/Win/VS11/.vs/BlackVision/v15/Solution.VC.db-wal
+BlackVision/Projects/Win/VS11/.vs/BlackVision/v15/Solution.VC.db-shm
+*.user
