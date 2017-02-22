@@ -7,6 +7,7 @@ pipeline {
         stage('Build') {
             steps {
 				branch 'master'
+				checkout scm
                 echo 'Building..'
             }
         }
