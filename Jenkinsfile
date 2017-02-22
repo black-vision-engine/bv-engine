@@ -4,11 +4,10 @@ pipeline {
     agent any
 
     stages {
-		def configurations = ['Debug', 'Release']
-	
         stage('Build') {
             steps {
 				checkout scm
+				def configurations = ['Debug', 'Release']
 				
 				for (int i = 0; i < configurations.size(); ++i) {
 					echo 'Building ${configurations[i]}'
@@ -23,6 +22,9 @@ pipeline {
         }
 		stage('Archive'){
 			steps {
+			
+				def configurations = ['Debug', 'Release']
+			
 				for (int i = 0; i < configurations.size(); ++i) {
 					archive 'BlackVision/_Builds/x64-v110-${configurations[i]}/Applications/**'
 					archive 'BlackVision/_Builds/x64-v110-${configurations[i]}/Tests/**'
