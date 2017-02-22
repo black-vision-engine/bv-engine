@@ -9,6 +9,8 @@ pipeline {
 				branch 'master'
 				checkout scm
                 echo 'Building..'
+				
+				bat "\"${tool 'MSBuild'}\" BlackVision\Projects\Win\VS11\BlackVision.sln /p:Configuration=Release /p:Platform=\"x64\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
             }
         }
         stage('Test') {
