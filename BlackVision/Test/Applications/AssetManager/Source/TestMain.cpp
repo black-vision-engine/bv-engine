@@ -33,12 +33,12 @@ TEST(HashTest, Hash)
     auto h0 = Hash::FromString( imagePath_512x512 );
     auto h1 = Hash::FromString( imagePath );
     auto h2 = Hash::FromString( AssetsPath + std::string("checkerboard2_512X512.png") );
-    auto h3 = Hash::FromString( "1231312" );
+    auto h3 = Hash::FromString( "12312312" );
     auto h4 = Hash::FromString( "12312312" );
 
     ASSERT_TRUE( h0 == h2 );
     ASSERT_TRUE( h3 == h4 );
-    ASSERT_TRUE( ( h0 == h1 ) );
+    ASSERT_TRUE( !( h0 == h1 ) );
 }
 
 //TEST(LoadingTextureAndGeneratingMipMaps, AssetManager)
