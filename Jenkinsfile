@@ -27,8 +27,8 @@ pipeline {
 						def buildDir = 'BlackVision/_Builds/x64-v110-' + configurations[i]
 						def includes_app = buildDir + '/Applications/**'
 						def includes_tests = buildDir + '/Tests/**'
-						archive includes_app, fingerprint: true
-						archive includes_tests, fingerprint: true
+						archiveArtifacts artifacts: includes_app, fingerprint: true
+						archiveArtifacts artifacts: includes_tests, fingerprint: true
 					}
 				}
 			}
