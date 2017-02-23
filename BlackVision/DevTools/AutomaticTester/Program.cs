@@ -48,8 +48,13 @@ namespace AutomaticTester
             string inputTestsDir = options.InputTestsDir;
             m_logic.TestsManager.UpdateOutputPath( options.Output );
             string exec = options.BVExecPath;
+            string bvLogFile = Path.Combine( Directory.GetCurrentDirectory(), options.Output, Path.GetFileName( inputTestsDir.TrimEnd( Path.DirectorySeparatorChar ) ) ) + ".bvlog";
 
             m_logic.Port = options.Port;
+
+            // Add log file
+            m_logic.AddCmdLineArg( " -FileLog " + bvLogFile + " error" );
+
 
 
             bool validState = true;
