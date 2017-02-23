@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using System.Xml.Serialization;
+using System.Xml;
 
 
 
@@ -323,11 +323,70 @@ namespace RegressionLib
             }
         }
 
-        private void        WriteResultToFile( string m_outputPath )
+        private void        WriteResultToFile( string outputPath )
         {
-            //XmlSerializer ser = new XmlSerializer( typeof( ObservableCollection< TestError > ) );
-            //using( TextWriter tw = new StreamWriter( Path.Combine( m_outputPath, "result.txt" ) ) )
-            //    ser.Serialize( tw, m_errorList );
+            string testSuiteName = Path.GetFileName( m_testsPath.TrimEnd( Path.DirectorySeparatorChar ) );
+            string outFilePath = Path.Combine( outputPath, testSuiteName + ".xml" );
+
+
+            using( FileStream outputStream = File.Open( outFilePath, FileMode.Create ) )
+            {
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.CloseOutput = true;
+
+
+                using( XmlWriter writer = XmlWriter.Create( outputStream, settings ) )
+                {
+                    writer.WriteStartElement( "testsuites" );
+
+                    writer.WriteAttributeString( "tests", "1" );
+                    writer.WriteAttributeString( "name", testSuiteName );
+
+                    foreach( var file in m_testFiles )
+                    {
+                        WriteFileReport( writer, file );
+                    }
+
+                    writer.WriteEndElement();
+                }
+            }
+        }
+
+        private void        WriteFileReport( XmlWriter writer, TestFile file )
+        {
+            writer.WriteStartElement( "testsuite" );
+
+            writer.WriteAttributeString( "name", file.FileName );
+            writer.WriteAttributeString( "tests", file.TestEvents.Count.ToString() );
+            writer.WriteAttributeString( "failures", file.NumErrors.ToString() );
+            writer.WriteAttributeString( "warnings", file.NumWarnings.ToString() );
+            writer.WriteAttributeString( "disabled", "0" );
+
+            writer.WriteStartElement( "testcase" );
+            writer.WriteAttributeString( "name", file.FileName );
+            writer.WriteAttributeString( "status", "run" );
+            writer.WriteAttributeString( "classname", file.FileName );
+
+            foreach( var error in file.ErrorList )
+            {
+                if( error.IsError == ErrorRank.Error )
+                {
+                    writer.WriteStartElement( "failure" );
+                    writer.WriteAttributeString( "message", error.Message );
+                    writer.WriteEndElement();
+                }
+                else if( error.IsError == ErrorRank.Warning )
+                {
+                    writer.WriteStartElement( "warning" );
+                    writer.WriteAttributeString( "message", error.Message );
+                    writer.WriteEndElement();
+                }
+            }
+
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
         }
 
 
