@@ -24,8 +24,10 @@ pipeline {
 					def configurations = ['Debug', 'Release']
 				
 					for (int i = 0; i < configurations.size(); ++i) {
-						def includes = 'BlackVision/_Builds/x64-v110-' + configurations[i] + '/Applications/**', name: "app_" + configurations[i]
+						def includes = 'BlackVision/_Builds/x64-v110-' + configurations[i] + '/Applications/**'
+						def name =  "app_" + configurations[i]
 						echo includes
+						echo name
 						stash includes: 'BlackVision/_Builds/x64-v110-' + configurations[i] + '/Applications/**', name: "app_" + configurations[i]
 						stash includes: 'BlackVision/_Builds/x64-v110-' + configurations[i] + '/Tests/**', name: "tests_" + configurations[i]
 					}
