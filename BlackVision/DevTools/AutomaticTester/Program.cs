@@ -48,6 +48,7 @@ namespace AutomaticTester
             string inputTestsDir = options.InputTestsDir;
             string exec = options.BVExecPath;
 
+            m_logic.Port = options.Port;
 
 
             bool validState = true;
@@ -59,6 +60,12 @@ namespace AutomaticTester
 
                 Console.Write( "BlackVision executable:             " );
                 Console.WriteLine( exec );
+
+                Console.Write( "BlackVision IP:                     " );
+                Console.WriteLine( m_logic.IpAddress );
+
+                Console.Write( "BlackVision port:                   " );
+                Console.WriteLine( m_logic.Port );
             }
 
             bool pathExists = m_logic.UpdateTestPath( inputTestsDir );
@@ -74,10 +81,16 @@ namespace AutomaticTester
 
             if( validState )
             {
+                if( verbose )
+                    Console.WriteLine( "Start Testing..." );
+
                 m_logic.RunAllTests.Execute( null );
                 m_dispatcher.MainLoop();
 
                 m_logic.KillBV();
+
+                if( verbose )
+                    Console.WriteLine( "Test Ended." );
             }
             else
             {
