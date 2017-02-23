@@ -43,10 +43,21 @@ def generate_tests_report( testResPath ) {
     tools: [[$class: 'GoogleTestType', pattern: testResPath + '/**']]])
 }
 
+def removeDir( path ) {
+    if( fileExists( path ) ) {
+        dir( path ) {
+            deleteDir()
+        }
+    }
+}
+
 node {
     checkout scm
     
     def buildDir = 'BlackVision\\_Builds\\'
+    def tempDir = 'BlackVision\\_Temp\\'
+    
+    def testResPath = 'test_reports'
     
     def configurations = ['Debug', 'Release']
     def platforms = ['Win32', 'x64']
@@ -54,33 +65,35 @@ node {
     def currentConfiguration = configurations[0]
     def currentPlatform = platforms[1]
     
-    stage('Build') {
-	    make_build( currentConfiguration, currentPlatform )
+    stage('Clean') {
+        removeDir( buildDir )
+        removeDir( tempDir )
+        removeDir( testResPath )
+        removeDir( 'generatedJUnitFiles' )
+        removeDir( 'DefaultPMDir' )
     }
- 	stage('Archive') {
- 	    make_archive( buildDir, currentConfiguration, currentPlatform, true )
- 	}
-    stage('Test') {
-	
-        echo 'Testing..'
-		echo pwd()
-			
-		def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
+     stage('Build') {
+ 	    make_build( currentConfiguration, currentPlatform )
+     }
+  	stage('Archive') {
+  	    make_archive( buildDir, currentConfiguration, currentPlatform, true )
+  	}
+     stage('Test') {
+
+ 		def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
 		
-		echo testExecsList.size() + ' tests found.'
+ 		echo testExecsList.size() + ' tests found.'
 		
-		def testResPath = 'test_reports'
+ 		for( int i = 0; i < testExecsList.size(); ++i ) {
+ 		    try {
+ 		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
+ 		    }
+ 		    catch(err) {
+ 		        echo "test fail."
+ 		    }
+ 		}
 		
-		for( int i = 0; i < testExecsList.size(); ++i ) {
-		    try {
-		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
-		    }
-		    catch(err) {
-		        echo "test fail."
-		    }
-		}
-		
-		generate_tests_report( testResPath	)
+ 	    generate_tests_report( testResPath	)
 
     }
 }
