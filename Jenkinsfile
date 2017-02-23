@@ -1,5 +1,33 @@
 #!groovy
 
+def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
+  // build status of null means successfulnotifySuccessful
+  buildStatus =  buildStatus ?: 'SUCCESSFUL'
+
+  // Default values
+  def colorName = 'RED'
+  def colorCode = '#FF0000'
+  def subject = "${stageName}:   ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+  def summary = "${subject} (${env.BUILD_URL})"
+  def details = """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+
+  // Override default values based on build status
+  if (buildStatus == 'STARTED') {
+    color = 'YELLOW'
+    colorCode = '#FFFF00'
+  } else if (buildStatus == 'SUCCESSFUL') {
+    color = 'GREEN'
+    colorCode = '#00FF00'
+  } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }
+
+  // Send notifications
+  slackSend (color: colorCode, message: summary)
+}
+
 def get_tests_dir( buildDir, conf, platform ) {
      return buildDir + platform + '-v110-' + conf + '\\Tests\\'
 }
@@ -65,37 +93,65 @@ node {
     def currentConfiguration = configurations[0]
     def currentPlatform = platforms[1]
     
-    stage('Clean') {
-         removeDir( buildDir )
-         removeDir( tempDir )
-         removeDir( testResPath )
-         removeDir( 'generatedJUnitFiles' )
-         removeDir( 'DefaultPMDir' )
-    }
+    // stage('Clean') {
+    //     removeDir( buildDir )
+    //     removeDir( tempDir )
+    //     removeDir( testResPath )
+    //     removeDir( 'generatedJUnitFiles' )
+    //     removeDir( 'DefaultPMDir' )
+    // }
      stage('Build') {
- 	    make_build( currentConfiguration, currentPlatform )
+        try {
+            notifyBuild('STARTED', 'Build')
+ 	        make_build( currentConfiguration, currentPlatform )
+        } catch( e ){
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally {
+            notifyBuild(currentBuild.result, 'Build')
+        }
+        
      }
   	stage('Archive') {
-  	    make_archive( buildDir, currentConfiguration, currentPlatform, true )
+  	    
+  	    try {
+            notifyBuild('STARTED', 'Archive')
+ 	        make_archive( buildDir, currentConfiguration, currentPlatform, true )
+        } catch( e ){
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally {
+            notifyBuild(currentBuild.result, 'Archive')
+        }
   	}
     stage('Test') {
 
- 		def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
+
+  	    try {
+            notifyBuild('STARTED', 'Test')
+ 	        def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
 		
- 		echo testExecsList.size() + ' tests found.'
-		
- 		for( int i = 0; i < testExecsList.size(); ++i ) {
- 		    try {
- 		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
- 		    }
- 		    catch(err) {
- 		        echo "test fail."
- 		    }
- 		}
-		
- 	    generate_tests_report( testResPath	)
-    }
-    stage('Notify') {
-        slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+     		echo testExecsList.size() + ' tests found.'
+    		
+     		for( int i = 0; i < testExecsList.size(); ++i ) {
+     		    try {
+     		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
+     		    }
+     		    catch(err) {
+     		        echo "test fail."
+     		    }
+     		}
+    		
+     	    generate_tests_report( testResPath	)
+        } catch( e ){
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally {
+            notifyBuild(currentBuild.result, 'Test')
+        }
+
     }
 }
