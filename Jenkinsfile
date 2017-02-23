@@ -93,13 +93,13 @@ node {
     def currentConfiguration = configurations[0]
     def currentPlatform = platforms[1]
     
-    // stage('Clean') {
-    //     removeDir( buildDir )
-    //     removeDir( tempDir )
-    //     removeDir( testResPath )
-    //     removeDir( 'generatedJUnitFiles' )
-    //     removeDir( 'DefaultPMDir' )
-    // }
+    stage('Clean') {
+        removeDir( buildDir )
+        removeDir( tempDir )
+        removeDir( testResPath )
+        removeDir( 'generatedJUnitFiles' )
+        removeDir( 'DefaultPMDir' )
+    }
      stage('Build') {
         try {
             notifyBuild('STARTED', 'Build')
@@ -111,7 +111,6 @@ node {
         finally {
             notifyBuild(currentBuild.result, 'Build')
         }
-        
      }
   	stage('Archive') {
   	    
