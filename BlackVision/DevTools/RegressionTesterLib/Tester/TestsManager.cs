@@ -326,10 +326,13 @@ namespace RegressionLib
         private void        WriteResultToFile( string outputPath )
         {
             string testSuiteName = Path.GetFileName( m_testsPath.TrimEnd( Path.DirectorySeparatorChar ) );
-            string outFilePath = Path.Combine( outputPath, testSuiteName + ".xml" );
+            string reportFile = Path.Combine( outputPath, testSuiteName + ".xml" );
+
+            if( !Directory.Exists( outputPath ) )
+                Directory.CreateDirectory( outputPath );
 
 
-            using( FileStream outputStream = File.Open( outFilePath, FileMode.Create ) )
+            using( FileStream outputStream = File.Open( reportFile, FileMode.Create ) )
             {
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
@@ -340,8 +343,18 @@ namespace RegressionLib
                 {
                     writer.WriteStartElement( "testsuites" );
 
-                    writer.WriteAttributeString( "tests", "1" );
+                    writer.WriteAttributeString( "tests", m_testFiles.Count.ToString() );
                     writer.WriteAttributeString( "name", testSuiteName );
+
+                    int failedTest = 0;
+                    foreach( var file in m_testFiles )
+                    {
+                        if( file.NumErrors > 0 )
+                            failedTest++;
+                    }
+
+                    writer.WriteAttributeString( "failures", failedTest.ToString() );
+
 
                     foreach( var file in m_testFiles )
                     {
@@ -550,6 +563,9 @@ namespace RegressionLib
                 m_tabItemIdx = value;
             }
         }
+
+        public string TestsPath { get => m_testsPath; set => m_testsPath = value; }
+        public string OutputPath { get => m_outputPath; set => m_outputPath = value; }
 
         //public object TabItemIdx
         //{

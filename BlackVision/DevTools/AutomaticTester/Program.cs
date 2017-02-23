@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
 using System.Globalization;
-
+using System.IO;
 
 namespace AutomaticTester
 {
@@ -46,6 +46,7 @@ namespace AutomaticTester
 
             bool verbose = options.Verbose;
             string inputTestsDir = options.InputTestsDir;
+            m_logic.TestsManager.UpdateOutputPath( options.Output );
             string exec = options.BVExecPath;
 
             m_logic.Port = options.Port;
@@ -57,6 +58,9 @@ namespace AutomaticTester
             {
                 Console.Write( "Input tests directory:              " );
                 Console.WriteLine( inputTestsDir );
+
+                Console.Write( "Output directory:                   " );
+                Console.WriteLine( m_logic.TestsManager.OutputPath );
 
                 Console.Write( "BlackVision executable:             " );
                 Console.WriteLine( exec );
