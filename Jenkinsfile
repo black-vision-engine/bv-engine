@@ -37,6 +37,11 @@ def make_archive( buildDir, conf, platform, fEnabled ) {
     archiveArtifacts artifacts: includes_tests, fingerprint: fEnabled
 }
 
+def generate_tests_report( testResPath ) {
+    step([$class: 'XUnitBuilder',
+    thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+    tools: [[$class: 'GoogleTestType', pattern: testResPath + '/**']]])
+}
 
 node {
     checkout scm
@@ -64,18 +69,18 @@ node {
 		
 		echo testExecsList.size() + ' tests found.'
 		
+		def testResPath = 'test_reports'
+		
 		for( int i = 0; i < testExecsList.size(); ++i ) {
 		    try {
-		        bat testExecsList.get( i ) + " --gtest_output=xml:test_reports\\"
+		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
 		    }
 		    catch(err) {
 		        echo "test fail."
 		    }
 		}
 		
-			
-		step([$class: 'XUnitBuilder',
-        thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-        tools: [[$class: 'GoogleTestType', pattern: 'test_reports/**']]])
+		generate_tests_report( testResPath	)
+
     }
 }
