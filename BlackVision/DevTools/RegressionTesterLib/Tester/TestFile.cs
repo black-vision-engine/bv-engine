@@ -535,7 +535,11 @@ namespace RegressionLib
             }
         }
 
-        public List<TestError> ErrorList { get => m_errorList; set => m_errorList = value; }
+        public List<TestError> ErrorList
+        {
+            get { return m_errorList; }
+            set { m_errorList = value; }
+        }
 
         #endregion
 

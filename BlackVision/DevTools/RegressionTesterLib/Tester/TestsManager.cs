@@ -564,8 +564,16 @@ namespace RegressionLib
             }
         }
 
-        public string TestsPath { get => m_testsPath; set => m_testsPath = value; }
-        public string OutputPath { get => m_outputPath; set => m_outputPath = value; }
+        public string TestsPath
+        {
+            get { return m_testsPath; }
+            set { m_testsPath = value; }
+        }
+        public string OutputPath
+        {
+            get { return m_outputPath; }
+            set { m_outputPath = value; }
+        }
 
         //public object TabItemIdx
         //{
