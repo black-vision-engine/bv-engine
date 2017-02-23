@@ -66,11 +66,11 @@ node {
     def currentPlatform = platforms[1]
     
     stage('Clean') {
-        removeDir( buildDir )
-        removeDir( tempDir )
-        removeDir( testResPath )
-        removeDir( 'generatedJUnitFiles' )
-        removeDir( 'DefaultPMDir' )
+         removeDir( buildDir )
+         removeDir( tempDir )
+         removeDir( testResPath )
+         removeDir( 'generatedJUnitFiles' )
+         removeDir( 'DefaultPMDir' )
     }
      stage('Build') {
  	    make_build( currentConfiguration, currentPlatform )
@@ -78,7 +78,7 @@ node {
   	stage('Archive') {
   	    make_archive( buildDir, currentConfiguration, currentPlatform, true )
   	}
-     stage('Test') {
+    stage('Test') {
 
  		def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
 		
@@ -94,6 +94,8 @@ node {
  		}
 		
  	    generate_tests_report( testResPath	)
-
+    }
+    stage('Notify') {
+        slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
 }
