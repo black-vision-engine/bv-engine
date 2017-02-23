@@ -16,8 +16,14 @@ namespace AutomaticTester
         [Option( 'i', "input", Required = true, HelpText = "Input test file." )]
         public string       InputTestsDir { get; set; }
 
+        [Option( 'o', "output", DefaultValue = "", HelpText = "Output files directory." )]
+        public string       Output { get; set; }
+
         [Option( 'e', "exec", Required = true, HelpText = "BlackVision executable file." )]
         public string       BVExecPath { get; set; }
+
+        [Option( 'p', "port", DefaultValue = "11011", HelpText = "Connection port." )]
+        public string       Port { get; set; }
 
         [Option( 'v', "verbose", HelpText = "Print details during execution." )]
         public bool         Verbose { get; set; }

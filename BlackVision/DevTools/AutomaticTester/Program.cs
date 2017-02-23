@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
 using System.Globalization;
-
+using System.IO;
 
 namespace AutomaticTester
 {
@@ -46,7 +46,14 @@ namespace AutomaticTester
 
             bool verbose = options.Verbose;
             string inputTestsDir = options.InputTestsDir;
+            m_logic.TestsManager.UpdateOutputPath( options.Output );
             string exec = options.BVExecPath;
+            string bvLogFile = Path.Combine( Directory.GetCurrentDirectory(), options.Output, Path.GetFileName( inputTestsDir.TrimEnd( Path.DirectorySeparatorChar ) ) ) + ".bvlog";
+
+            m_logic.Port = options.Port;
+
+            // Add log file
+            m_logic.AddCmdLineArg( " -FileLog " + bvLogFile + " error" );
 
 
 
@@ -57,8 +64,17 @@ namespace AutomaticTester
                 Console.Write( "Input tests directory:              " );
                 Console.WriteLine( inputTestsDir );
 
+                Console.Write( "Output directory:                   " );
+                Console.WriteLine( m_logic.TestsManager.OutputPath );
+
                 Console.Write( "BlackVision executable:             " );
                 Console.WriteLine( exec );
+
+                Console.Write( "BlackVision IP:                     " );
+                Console.WriteLine( m_logic.IpAddress );
+
+                Console.Write( "BlackVision port:                   " );
+                Console.WriteLine( m_logic.Port );
             }
 
             bool pathExists = m_logic.UpdateTestPath( inputTestsDir );
@@ -74,10 +90,16 @@ namespace AutomaticTester
 
             if( validState )
             {
+                if( verbose )
+                    Console.WriteLine( "Start Testing..." );
+
                 m_logic.RunAllTests.Execute( null );
                 m_dispatcher.MainLoop();
 
                 m_logic.KillBV();
+
+                if( verbose )
+                    Console.WriteLine( "Test Ended." );
             }
             else
             {

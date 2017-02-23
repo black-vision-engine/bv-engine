@@ -43,6 +43,7 @@ namespace RegressionLib
         TestsManager                    m_testsManager;
         BlackVisionProcess              m_process;
 
+        string                          m_additionalArgs;
 
         // Hack: We need to make message from parts.
         string  m_message;
@@ -71,6 +72,8 @@ namespace RegressionLib
 
             m_ipAddress = "127.0.0.1";
             m_port = "11011";
+
+            m_additionalArgs = "";
 
             State = TestsState.Init;
             IsConnected = false;
@@ -179,6 +182,11 @@ namespace RegressionLib
             m_process.BlackVisionPathName = newPath;
         }
 
+        public void         AddCmdLineArg   ( string arg )
+        {
+            m_additionalArgs += arg;
+        }
+
         /// <summary>
         /// Sets tests directory path.
         /// </summary>
@@ -233,7 +241,7 @@ namespace RegressionLib
         private async void RestartProcess()
         {
             m_process.KillEmAll();
-            m_process.Start( "-DisableCrashReport" );
+            m_process.Start( "-DisableCrashReport " + m_additionalArgs );
 
             await Task.Delay( 2000 );
 
