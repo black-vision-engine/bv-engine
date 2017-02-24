@@ -45,7 +45,9 @@ def make_auto_tests( buildDir, conf, platform, outputDir ) {
     
     createDir( outputDir )
     
-    bat autoTesterExec + ' -e ' + get_app_dir(  buildDir, conf, platform ) + 'BlackVision.exe' + ' -v ' + '--output=' + outputDir
+    def HARDCODED_TEST_PATH = 'F:\\GoogleDrive\\bv_data\\Regression'
+    
+    bat autoTesterExec + ' -i ' + HARDCODED_TEST_PATH + ' -e ' + get_app_dir(  buildDir, conf, platform ) + 'BlackVision\\' + 'BlackVision.exe' + ' -v ' + '--output=' + outputDir
 }
 
 def make_build( conf, platform ) {
