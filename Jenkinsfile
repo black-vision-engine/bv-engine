@@ -25,7 +25,7 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
   }
 
   // Send notifications
-  slackSend (color: colorCode, message: summary)
+  // slackSend (color: colorCode, message: summary)
 }
 
 def get_tests_dir( buildDir, conf, platform ) {
@@ -34,6 +34,18 @@ def get_tests_dir( buildDir, conf, platform ) {
 
 def get_app_dir( buildDir, conf, platform ) {
      return buildDir + platform + '-v110-' + conf + '\\Applications\\'
+}
+
+def get_auto_tester_path( buildDir, conf, platform ) {
+     return buildDir + platform + '-v110-' + conf + '\\DevTools\\AutomaticTester\\AutomaticTester.exe'
+}
+
+def make_auto_tests( buildDir, conf, platform, outputDir ) {
+    def autoTesterExec = get_auto_tester_path( buildDir, conf, platform )
+    
+    createDir( outputDir )
+    
+    bat autoTesterExec + ' -e ' + get_app_dir(  buildDir, conf, platform ) + 'BlackVision.exe' + ' -v ' + '--output=' + outputDir
 }
 
 def make_build( conf, platform ) {
@@ -71,6 +83,10 @@ def generate_tests_report( testResPath ) {
     tools: [[$class: 'GoogleTestType', pattern: testResPath + '/**']]])
 }
 
+def createDir( path ) {
+    bat 'mkdir ' + path
+}
+
 def removeDir( path ) {
     if( fileExists( path ) ) {
         dir( path ) {
@@ -94,11 +110,11 @@ node {
     def currentPlatform = platforms[1]
     
     stage('Clean') {
-        removeDir( buildDir )
-        removeDir( tempDir )
+        //removeDir( buildDir )
+        //removeDir( tempDir )
         removeDir( testResPath )
-        removeDir( 'generatedJUnitFiles' )
-        removeDir( 'DefaultPMDir' )
+        //removeDir( 'generatedJUnitFiles' )
+        //removeDir( 'DefaultPMDir' )
     }
      stage('Build') {
         try {
@@ -142,6 +158,8 @@ node {
      		        echo "test fail."
      		    }
      		}
+    		
+    		make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
     		
      	    generate_tests_report( testResPath	)
         } catch( e ){
