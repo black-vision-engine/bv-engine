@@ -46,6 +46,9 @@ def make_auto_tests( buildDir, conf, platform, outputDir ) {
     createDir( outputDir )
     
     def HARDCODED_TEST_PATH = 'F:\\GoogleDrive\\bv_data\\Regression'
+    def HARDCODED_CONFIG_PATH = 'F:\\GoogleDrive\\bv_data\\bv_media\\configs\\auto_test_config.xml'
+    
+    copyFile( HARDCODED_CONFIG_PATH, get_app_dir( buildDir, conf, platform ) + 'BlackVision\\config.xml' )
     
     bat autoTesterExec + ' -i ' + HARDCODED_TEST_PATH + ' -e ' + get_app_dir(  buildDir, conf, platform ) + 'BlackVision\\' + 'BlackVision.exe' + ' -v ' + '--output=' + outputDir
 }
@@ -83,6 +86,10 @@ def generate_tests_report( testResPath ) {
     step([$class: 'XUnitBuilder',
     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
     tools: [[$class: 'GoogleTestType', pattern: testResPath + '/**']]])
+}
+
+def copyFile( src, dest ) {
+    bat 'xcopy ' + src + ' ' + dest
 }
 
 def createDir( path ) {
