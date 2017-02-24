@@ -89,7 +89,7 @@ def generate_tests_report( testResPath ) {
 }
 
 def copyFile( src, dest ) {
-    bat 'xcopy ' + src + ' ' + dest
+    bat 'copy /Y ' + src + ' ' + dest
 }
 
 def createDir( path ) {
