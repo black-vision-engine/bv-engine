@@ -90,6 +90,7 @@ public:
 
     virtual void            PreStart            () override;
     virtual void            Start               () override;
+    virtual void            Stop                () override;
     
 
 	virtual void            ProcessFrame        ( const AVFrameConstPtr & data, UInt64 avOutputID ) override;

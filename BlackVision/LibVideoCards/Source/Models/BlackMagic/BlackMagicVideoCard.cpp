@@ -110,8 +110,6 @@ VideoCard::~VideoCard       ()
 
 	if( m_decklinkOutput )
 	{
-		m_decklinkOutput->StopScheduledPlayback( 0, NULL, 0 );
-
 		m_frameQueue.EnqueueEndMessage();
 
 		m_decklinkOutput->DisableVideoOutput();
@@ -318,6 +316,17 @@ void                    VideoCard::PreStart            ()
     }
 
     m_blackMagicVCThread->Start();
+}
+
+//**************************************
+//
+void                    VideoCard::Stop                ()
+{
+    if( m_decklinkOutput )
+    {
+        //m_decklinkOutput->SetScheduledFrameCompletionCallback( NULL );
+        m_decklinkOutput->StopScheduledPlayback( 0, NULL, 0 );
+    }
 }
 
 //**************************************

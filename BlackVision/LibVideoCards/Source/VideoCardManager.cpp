@@ -185,6 +185,20 @@ void                        VideoCardManager::Start                 ()
     }
 }
 
+//**************************************
+//
+void                        VideoCardManager::Stop                    ()
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+
+    Display( KILLER_FRAME );
+
+    for( auto & videoCard : m_videoCards )
+    {
+        videoCard->Stop();
+    }
+}
+
 // *********************************
 //
 VCMInputData::VCMInputData()

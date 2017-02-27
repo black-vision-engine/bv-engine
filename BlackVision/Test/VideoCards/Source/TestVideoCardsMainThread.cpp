@@ -71,12 +71,17 @@ void    TestVideoCardsMainThread::Process ()
     m_buffer.push_back( frame );
 
 	m_frameNum++;
+
+    if( m_frameNum >= 500 )
+        this->Kill();
 }
 
 // ****************************
 //
 TestVideoCardsMainThread::~TestVideoCardsMainThread   ()
-{}
+{
+    m_vcm.Stop();
+}
 
 } // videocards
 } // bv

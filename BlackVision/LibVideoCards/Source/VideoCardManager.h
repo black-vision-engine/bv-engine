@@ -149,6 +149,7 @@ public:
     void                                SetKey                  ( bool active );
 
     void                                Start                   ();
+    void                                Stop                    ();
 
 	void								Display     			( const VCMInputDataConstPtr & outputs );
     

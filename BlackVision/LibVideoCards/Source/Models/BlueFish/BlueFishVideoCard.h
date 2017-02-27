@@ -78,6 +78,11 @@ public:
 
     virtual void            Start                       () override;
 
+    void                    Stop                        () override
+    {
+        assert( false );
+    };
+
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
 
     virtual void            DisplayFrame                () const;
