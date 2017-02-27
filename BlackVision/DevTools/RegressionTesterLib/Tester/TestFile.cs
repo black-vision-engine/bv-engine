@@ -158,7 +158,7 @@ namespace RegressionLib
             Event expectedResponse = FindCorespondingEvent( newEvent );
             CurrentResponse = expectedResponse;
 
-            if (m_testEventPtr >= TestEvents.Count)
+            if (m_testEventPtr > 0 && m_testEventPtr >= TestEvents.Count )
                 return null;
 
             if ( expectedResponse == null )
