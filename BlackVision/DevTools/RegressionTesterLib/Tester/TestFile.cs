@@ -158,7 +158,10 @@ namespace RegressionLib
             Event expectedResponse = FindCorespondingEvent( newEvent );
             CurrentResponse = expectedResponse;
 
-            if( expectedResponse == null )
+            if (m_testEventPtr >= TestEvents.Count)
+                return null;
+
+            if ( expectedResponse == null )
             {
                 TestError error = new TestError( newEvent );
                 error.Message = "Reference data doesn't contain this response.";
