@@ -20,7 +20,7 @@ namespace RegressionLib
 
         private List< TestError >               m_errorList;
 
-        private UInt32                          m_testEventPtr;
+        private int                             m_testEventPtr;
         private UInt32                          m_responsePtr;
 
         private int                             m_responseTimeout;
@@ -70,7 +70,7 @@ namespace RegressionLib
             if( m_testEventPtr + 1 >= TestEvents.Count )
                 return false;
 
-            if( TestEvents[ (int)m_testEventPtr - 1 ].Breakpoint )
+            if( TestEvents[ m_testEventPtr - 1 ].Breakpoint )
                 return true;
 
             return false;
@@ -82,11 +82,11 @@ namespace RegressionLib
         {
             if( ReferenceResponses.Count <= m_responsePtr )
             {
-                TestError error = new TestError( TestEvents[ (int)m_testEventPtr - 1 ] );
+                TestError error = new TestError( TestEvents[ m_testEventPtr - 1 ] );
                 error.Message = "No more responses in reference file";
                 error.FileRef = this;
                 error.IsError = ErrorRank.Warning;
-                error.EventSent = TestEvents[(int)m_testEventPtr - 1];
+                error.EventSent = TestEvents[ m_testEventPtr - 1 ];
                 error.ReceivedResponse = null;
 
                 m_responsePtr++;
@@ -105,7 +105,7 @@ namespace RegressionLib
                 error.ReferenceReponse = expResp;
 
                 if( !expResp.SyncEvent )
-                    error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+                    error.EventSent = TestEvents[ m_testEventPtr - 1 ];
 
                 // Ignore expected mesage and take next in queue.
                 expResp.Used = false;
@@ -136,17 +136,17 @@ namespace RegressionLib
             }
 
 
-            string sendEvent = TestEvents[ (int)m_testEventPtr ].GetUnformattedContent();
+            string sendEvent = TestEvents[ m_testEventPtr ].GetUnformattedContent();
 
             if( responseExist )
             {
-                var timeDiff2 = ReferenceResponses[(int)m_responsePtr].Time - TestEvents[(int)m_testEventPtr].Time;
+                var timeDiff2 = ReferenceResponses[(int)m_responsePtr].Time - TestEvents[ m_testEventPtr ].Time;
                 m_responseTimeout = (int)( timeDiff2.TotalSeconds * m_timeoutScale ) + m_additionalWaitTime;
             }
             else
                 m_responseTimeout = 0;
 
-            CurrentTestEvent = TestEvents[ (int)m_testEventPtr ];
+            CurrentTestEvent = TestEvents[ m_testEventPtr ];
             m_testEventPtr++;
 
             return sendEvent;
@@ -158,65 +158,69 @@ namespace RegressionLib
             Event expectedResponse = FindCorespondingEvent( newEvent );
             CurrentResponse = expectedResponse;
 
-            if (m_testEventPtr > 0 && m_testEventPtr >= TestEvents.Count )
-                return null;
-
-            if ( expectedResponse == null )
+            if (m_testEventPtr > 0 && m_testEventPtr < TestEvents.Count)
             {
-                TestError error = new TestError( newEvent );
-                error.Message = "Reference data doesn't contain this response.";
-                error.FileRef = this;
-                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
-                error.IsError = ErrorRank.Warning;
+                if (expectedResponse == null)
+                {
+                    TestError error = new TestError(newEvent);
+                    error.Message = "Reference data doesn't contain this response.";
+                    error.FileRef = this;
+                    error.EventSent = TestEvents[m_testEventPtr - 1];
+                    error.IsError = ErrorRank.Warning;
 
-                List < TestError > errorsList = new List< TestError >();
-                errorsList.Add( error );
-                m_errorList.Add( error );       // Local error list.
-                CountErrorsWarnings( errorsList );
+                    List<TestError> errorsList = new List<TestError>();
+                    errorsList.Add(error);
+                    m_errorList.Add(error);       // Local error list.
+                    CountErrorsWarnings(errorsList);
 
-                return errorsList;
-            }
+                    return errorsList;
+                }
 
-            if( expectedResponse.CommandName != newEvent.CommandName )
-            {
-                TestError error = new TestError( newEvent );
-                error.Message = "Command response from engine [ " + newEvent.CommandName + " ] and reference [ " + expectedResponse.CommandName + " ] are different";
-                error.FileRef = this;
-                error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
-                error.IsError = ErrorRank.Error;
+                if (expectedResponse.CommandName != newEvent.CommandName)
+                {
+                    TestError error = new TestError(newEvent);
+                    error.Message = "Command response from engine [ " + newEvent.CommandName + " ] and reference [ " + expectedResponse.CommandName + " ] are different";
+                    error.FileRef = this;
+                    error.EventSent = TestEvents[(int)m_testEventPtr - 1];
+                    error.IsError = ErrorRank.Error;
 
-                List < TestError > errorsList = new List< TestError >();
-                errorsList.Add( error );
-                m_errorList.Add( error );       // Local error list.
-                CountErrorsWarnings( errorsList );
+                    List<TestError> errorsList = new List<TestError>();
+                    errorsList.Add(error);
+                    m_errorList.Add(error);       // Local error list.
+                    CountErrorsWarnings(errorsList);
 
-                return errorsList;
-            }
+                    return errorsList;
+                }
 
-            // Reference and reponse comparision.
-            List < TestError > errors = rules.Compare( expectedResponse, newEvent );
-            expectedResponse.Used = true;
+                // Reference and reponse comparision.
+                List<TestError> errors = rules.Compare(expectedResponse, newEvent);
+                expectedResponse.Used = true;
 
-            if( errors == null )
-            {    
-                // There's no error in this response.
-                return null;
+                if (errors == null)
+                {
+                    // There's no error in this response.
+                    return null;
+                }
+                else
+                {
+                    CountErrorsWarnings(errors);
+
+                    // Complete error info.
+                    foreach (var error in errors)
+                    {
+                        error.FileRef = this;
+                        //if( !expectedResponse.SyncEvent )
+                        error.EventSent = TestEvents[(int)m_testEventPtr - 1];
+
+                        m_errorList.Add(error);       // Local error list.
+                    }
+
+                    return errors;
+                }
             }
             else
             {
-                CountErrorsWarnings( errors );
-
-                // Complete error info.
-                foreach( var error in errors )
-                {
-                    error.FileRef = this;
-                    //if( !expectedResponse.SyncEvent )
-                        error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
-
-                    m_errorList.Add( error );       // Local error list.
-                }
-
-                return errors;
+                return null;
             }
         }
 
