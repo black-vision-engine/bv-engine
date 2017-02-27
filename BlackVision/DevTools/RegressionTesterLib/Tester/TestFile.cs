@@ -18,6 +18,8 @@ namespace RegressionLib
         private ObservableCollection< Event >   m_referenceResponses;
         private ObservableCollection< Event >   m_realResponses;
 
+        private List< TestError >               m_errorList;
+
         private UInt32                          m_testEventPtr;
         private UInt32                          m_responsePtr;
 
@@ -45,6 +47,8 @@ namespace RegressionLib
             m_testEvents = new ObservableCollection< Event >();
             m_referenceResponses = new ObservableCollection< Event >();
             m_realResponses = new ObservableCollection< Event >();
+
+            m_errorList = new List< TestError >();
 
             NumErrors = 0;
             NumWarnings = 0;
@@ -86,6 +90,7 @@ namespace RegressionLib
                 error.ReceivedResponse = null;
 
                 m_responsePtr++;
+                m_errorList.Add( error );       // Local error list.
                 return error;
             }
 
@@ -106,6 +111,7 @@ namespace RegressionLib
                 expResp.Used = false;
                 m_responsePtr++;
 
+                m_errorList.Add( error );       // Local error list.
                 return error;
             }
             return null;
@@ -162,6 +168,7 @@ namespace RegressionLib
 
                 List < TestError > errorsList = new List< TestError >();
                 errorsList.Add( error );
+                m_errorList.Add( error );       // Local error list.
                 CountErrorsWarnings( errorsList );
 
                 return errorsList;
@@ -177,6 +184,7 @@ namespace RegressionLib
 
                 List < TestError > errorsList = new List< TestError >();
                 errorsList.Add( error );
+                m_errorList.Add( error );       // Local error list.
                 CountErrorsWarnings( errorsList );
 
                 return errorsList;
@@ -201,6 +209,8 @@ namespace RegressionLib
                     error.FileRef = this;
                     //if( !expectedResponse.SyncEvent )
                         error.EventSent = TestEvents[ (int)m_testEventPtr - 1 ];
+
+                    m_errorList.Add( error );       // Local error list.
                 }
 
                 return errors;
@@ -523,6 +533,12 @@ namespace RegressionLib
                 m_currentRealResponse = value;
                 NotifyPropertyChanged( "CurrentRealResponse" );
             }
+        }
+
+        public List<TestError> ErrorList
+        {
+            get { return m_errorList; }
+            set { m_errorList = value; }
         }
 
         #endregion

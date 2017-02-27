@@ -37,7 +37,7 @@ namespace Tools
                 return;
 
             m_blackVisionProcess = new Process();
-            m_blackVisionProcess.StartInfo.FileName = BlackVisionPathName;
+            m_blackVisionProcess.StartInfo.FileName = "BlackVision.exe";
             m_blackVisionProcess.StartInfo.WorkingDirectory = Path.GetDirectoryName( BlackVisionPathName );
             m_blackVisionProcess.StartInfo.Arguments = commandLineArg;
             m_blackVisionProcess.EnableRaisingEvents = true;

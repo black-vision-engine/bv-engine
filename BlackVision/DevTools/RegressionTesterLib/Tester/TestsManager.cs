@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using System.Xml.Serialization;
+using System.Xml;
 
 
 
@@ -323,11 +323,83 @@ namespace RegressionLib
             }
         }
 
-        private void        WriteResultToFile( string m_outputPath )
+        private void        WriteResultToFile( string outputPath )
         {
-            //XmlSerializer ser = new XmlSerializer( typeof( ObservableCollection< TestError > ) );
-            //using( TextWriter tw = new StreamWriter( Path.Combine( m_outputPath, "result.txt" ) ) )
-            //    ser.Serialize( tw, m_errorList );
+            string testSuiteName = Path.GetFileName( m_testsPath.TrimEnd( Path.DirectorySeparatorChar ) );
+            string reportFile = Path.Combine( outputPath, testSuiteName + ".xml" );
+
+            if( !Directory.Exists( outputPath ) )
+                Directory.CreateDirectory( outputPath );
+
+
+            using( FileStream outputStream = File.Open( reportFile, FileMode.Create ) )
+            {
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.CloseOutput = true;
+
+
+                using( XmlWriter writer = XmlWriter.Create( outputStream, settings ) )
+                {
+                    writer.WriteStartElement( "testsuites" );
+
+                    writer.WriteAttributeString( "tests", m_testFiles.Count.ToString() );
+                    writer.WriteAttributeString( "name", testSuiteName );
+
+                    int failedTest = 0;
+                    foreach( var file in m_testFiles )
+                    {
+                        if( file.NumErrors > 0 )
+                            failedTest++;
+                    }
+
+                    writer.WriteAttributeString( "failures", failedTest.ToString() );
+
+
+                    foreach( var file in m_testFiles )
+                    {
+                        WriteFileReport( writer, file );
+                    }
+
+                    writer.WriteEndElement();
+                }
+            }
+        }
+
+        private void        WriteFileReport( XmlWriter writer, TestFile file )
+        {
+            writer.WriteStartElement( "testsuite" );
+
+            writer.WriteAttributeString( "name", file.FileName );
+            writer.WriteAttributeString( "tests", file.TestEvents.Count.ToString() );
+            writer.WriteAttributeString( "failures", file.NumErrors.ToString() );
+            writer.WriteAttributeString( "warnings", file.NumWarnings.ToString() );
+            writer.WriteAttributeString( "disabled", "0" );
+
+            writer.WriteStartElement( "testcase" );
+            writer.WriteAttributeString( "name", file.FileName );
+            writer.WriteAttributeString( "status", "run" );
+            writer.WriteAttributeString( "classname", file.FileName );
+
+            foreach( var error in file.ErrorList )
+            {
+                if( error.IsError == ErrorRank.Error )
+                {
+                    writer.WriteStartElement( "failure" );
+                    writer.WriteAttributeString( "message", error.Message );
+                    writer.WriteEndElement();
+                }
+                else if( error.IsError == ErrorRank.Warning )
+                {
+                    writer.WriteStartElement( "warning" );
+                    writer.WriteAttributeString( "message", error.Message );
+                    writer.WriteEndElement();
+                }
+            }
+
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
         }
 
 
@@ -490,6 +562,17 @@ namespace RegressionLib
             {
                 m_tabItemIdx = value;
             }
+        }
+
+        public string TestsPath
+        {
+            get { return m_testsPath; }
+            set { m_testsPath = value; }
+        }
+        public string OutputPath
+        {
+            get { return m_outputPath; }
+            set { m_outputPath = value; }
         }
 
         //public object TabItemIdx
