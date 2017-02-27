@@ -119,11 +119,11 @@ node {
     def currentPlatform = platforms[1]
     
     stage('Clean') {
-        //removeDir( buildDir )
-        //removeDir( tempDir )
+        removeDir( buildDir )
+        removeDir( tempDir )
         removeDir( testResPath )
-        //removeDir( 'generatedJUnitFiles' )
-        //removeDir( 'DefaultPMDir' )
+        removeDir( 'generatedJUnitFiles' )
+        removeDir( 'DefaultPMDir' )
     }
      stage('Build') {
         try {
@@ -168,7 +168,7 @@ node {
      		    }
      		}
     		
-    		make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
+    		//make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
     		
      	    generate_tests_report( testResPath	)
         } catch( e ){
