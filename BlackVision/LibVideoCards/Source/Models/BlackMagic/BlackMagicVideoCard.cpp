@@ -10,6 +10,7 @@
 
 namespace bv { namespace videocards { namespace blackmagic {
 
+UInt32   VideoCard::PREROLL_FRAMES_NUM = 4;
 
 //**************************************
 //
@@ -103,11 +104,6 @@ VideoCard::VideoCard( UInt32 deviceID )
 //
 VideoCard::~VideoCard       ()
 {
-	m_blackMagicVCThread->Stop();
-	m_blackMagicVCThread->EnqueueEndMessage();
-	m_blackMagicVCThread->WaitUntilStopped();
-	m_blackMagicVCThread->Kill();
-
 	if( m_decklinkOutput )
 	{
 		m_frameQueue.EnqueueEndMessage();
@@ -291,8 +287,8 @@ void                    VideoCard::PreStart            ()
 
     BMDPixelFormat displayFormat = BMDPixelFormat::bmdFormat8BitBGRA;
 
-    // Set 4 frame preroll
-    for( unsigned i = 0; i < 4; i++ )
+    // Set PREROLL_FRAMES_NUM frame preroll
+    for( unsigned i = 0; i < PREROLL_FRAMES_NUM; i++ )
     {
         if( SUCCESS( m_decklinkOutput->CreateVideoFrame( w, h, w * 4, displayFormat,
                                                          bmdFrameFlagFlipVertical, &pFrame ) ) )
@@ -324,9 +320,16 @@ void                    VideoCard::Stop                ()
 {
     if( m_decklinkOutput )
     {
-        //m_decklinkOutput->SetScheduledFrameCompletionCallback( NULL );
+        m_decklinkOutput->SetScheduledFrameCompletionCallback( NULL );
         m_decklinkOutput->StopScheduledPlayback( 0, NULL, 0 );
     }
+
+    m_blackMagicVCThread->Stop();
+    m_blackMagicVCThread->EnqueueEndMessage();
+    m_frameQueue.Clear();
+    m_blackMagicVCThread->WaitUntilStopped();
+    m_blackMagicVCThread->Kill();
+
 }
 
 //**************************************
@@ -457,13 +460,12 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     }
     else
     {
-        completedFrame = completedFrame;
-        //LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output. " << m_deviceID;
+        LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output. " << m_deviceID;
     }
 
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
     {
-        LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame.";
+        LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame. " << m_deviceID;
     }
 
     m_uiTotalFrames++;

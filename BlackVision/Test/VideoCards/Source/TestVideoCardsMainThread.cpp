@@ -27,16 +27,16 @@ TestVideoCardsMainThread::TestVideoCardsMainThread()
         m_buffer.push_back( TestVideoCardsUtils::CreateTestFrame( 0, 1920, 1080 ) );
     }
 
+    m_vcm = new VideoCardManager();
+
     m_vcm->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
 
-
     m_deserializer.LoadFile( CONFIG_PATH );
-
     m_deserializer.Reset();
     m_deserializer.EnterChild( "config" );
-
-    m_vcm = new VideoCardManager();
+    
     m_vcm->ReadConfig( m_deserializer );
+
     m_vcm->Start();
 }
 

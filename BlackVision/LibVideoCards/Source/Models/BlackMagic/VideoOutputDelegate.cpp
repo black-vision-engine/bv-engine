@@ -24,8 +24,7 @@ HRESULT VideoOutputDelegate::ScheduledFrameCompleted		( IDeckLinkVideoFrame * co
             LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is dropped";
         else if( result == BMDOutputFrameCompletionResult::bmdOutputFrameFlushed )
         {
-            result = result;
-            // LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is flushed";
+            LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is flushed " << m_owner->m_deviceID;
             return S_OK;
         }
 	}

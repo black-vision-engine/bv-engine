@@ -70,6 +70,8 @@ private:
 
     FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
 
+    static UInt32   PREROLL_FRAMES_NUM;
+
 	void					FrameProcessed		( const AVFrameConstPtr & frame );
 
 	bool					InitKeyer			( const ChannelOutputData & ch );
