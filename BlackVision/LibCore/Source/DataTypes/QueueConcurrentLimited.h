@@ -298,7 +298,7 @@ bool        QueueConcurrentLimited< T >::TryPopUntil		( T & val, PredicateNextTy
 
 				m_notEmpty.Up();
 
-				return ret;
+				return false;
 			}
 
 			auto pval = m_queue.front();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Serialization/IDeserializer.h"
-
+#include <set>
 
 namespace bv { namespace videocards {
 

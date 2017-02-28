@@ -9,9 +9,9 @@
 
 #include "CoreDEF.h"
 
+#define SUCCESS( hr ) ( ( ( HRESULT )( hr ) ) == S_OK )
 
 namespace bv { namespace videocards { namespace blackmagic {
-
 
 //**************************************
 //
@@ -23,6 +23,7 @@ struct ChannelOutputData
     bool                    interlaced;
     bool                    flipped;
     BMDDisplayMode          videoMode;
+	bool					enabled;
 };
 
 DEFINE_UPTR_TYPE( ChannelOutputData )

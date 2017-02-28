@@ -7,9 +7,10 @@ namespace bv { namespace nrl {
 
 // **************************
 //
-NOutputState::NOutputState                                  ( unsigned int w, unsigned int h )
+NOutputState::NOutputState                                      ( unsigned int w, unsigned int h )
     : m_width( w )
     , m_height( h )
+    , m_channelMapping( 0 )
 {
     SetChannelMapping( 0, 1, 2, 3 );
 
@@ -18,29 +19,31 @@ NOutputState::NOutputState                                  ( unsigned int w, un
 
 // **************************
 //
-void                NOutputState::SetWidth                  ( unsigned int w )
+void                NOutputState::SetWidth                      ( unsigned int w )
 {
     m_width = w;
 }
 
 // **************************
 //
-void                NOutputState::SetHeight                 ( unsigned int h )
+void                NOutputState::SetHeight                     ( unsigned int h )
 {
     m_height = h;
 }
 
 // **************************
 //
-void                NOutputState::SetChannelMapping         ( unsigned int channelMapping )
+void                NOutputState::SetChannelMapping             ( unsigned int channelMapping )
 {
     m_channelMapping = channelMapping;
 }
 
 // **************************
 //
-void                NOutputState::SetChannelMapping         ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx )
+void                NOutputState::SetChannelMapping             ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx )
 {
+    m_channelMapping = 0;
+
     SetRIdx( rIdx );
     SetGIdx( gIdx );
     SetBIdx( bIdx );
@@ -49,42 +52,42 @@ void                NOutputState::SetChannelMapping         ( unsigned char rIdx
 
 // **************************
 //
-void                NOutputState::SetRIdx                   ( unsigned char rIdx )
+void                NOutputState::SetRIdx                       ( unsigned char rIdx )
 {
     SetMappedUChar( rIdx, 0 );
 }
 
 // **************************
 //
-void                NOutputState::SetGIdx                   ( unsigned char gIdx )
+void                NOutputState::SetGIdx                       ( unsigned char gIdx )
 {
     SetMappedUChar( gIdx, 2 );
 }
 
 // **************************
 //
-void                NOutputState::SetBIdx                   ( unsigned char bIdx )
+void                NOutputState::SetBIdx                       ( unsigned char bIdx )
 {
     SetMappedUChar( bIdx, 4 );
 }
 
 // **************************
 //
-void                NOutputState::SetAIdx                   ( unsigned char aIdx )
+void                NOutputState::SetAIdx                       ( unsigned char aIdx )
 {
     SetMappedUChar( aIdx, 6 );
 }
 
 // **************************
 //
-void                NOutputState::SetActiveRenderChannel    ( RenderChannelType activeRenderChannel )
+void                NOutputState::SetActiveRenderChannelType    ( RenderChannelType activeRenderChannel )
 {
     m_activeRenderChannel = activeRenderChannel;
 }
 
 // **************************
 //
-void                NOutputState::SetMaskState              ( bool rChannelEnabled, bool gChannelEnabled, bool bChannelEnabled, bool aChannelEnabled )
+void                NOutputState::SetMaskState                  ( bool rChannelEnabled, bool gChannelEnabled, bool bChannelEnabled, bool aChannelEnabled )
 {
     SetRChannelState( rChannelEnabled );
     SetGChannelState( gChannelEnabled );
@@ -94,91 +97,91 @@ void                NOutputState::SetMaskState              ( bool rChannelEnabl
 
 // **************************
 //
-void                NOutputState::SetRChannelState          ( bool isEnabled )
+void                NOutputState::SetRChannelState              ( bool isEnabled )
 {
     m_rMask = isEnabled;
 }
 
 // **************************
 //
-void                NOutputState::SetGChannelState          ( bool isEnabled )
+void                NOutputState::SetGChannelState              ( bool isEnabled )
 {
     m_gMask = isEnabled;
 }
 
 // **************************
 //
-void                NOutputState::SetBChannelState          ( bool isEnabled )
+void                NOutputState::SetBChannelState              ( bool isEnabled )
 {
     m_bMask = isEnabled;
 }
 
 // **************************
 //
-void                NOutputState::SetAChannelState          ( bool isEnabled )
+void                NOutputState::SetAChannelState              ( bool isEnabled )
 {
     m_aMask = isEnabled;
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetWidth                  () const
+unsigned int        NOutputState::GetWidth                      () const
 {
     return m_width;
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetHeight                 () const
+unsigned int        NOutputState::GetHeight                     () const
 {
     return m_height;
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetChannelMapping         () const
+unsigned int        NOutputState::GetChannelMapping             () const
 {
     return m_channelMapping;
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetRIdx                   () const
+unsigned int        NOutputState::GetRIdx                       () const
 {
     return GetMappedUChar( 0 );
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetGIdx                   () const
+unsigned int        NOutputState::GetGIdx                       () const
 {
     return GetMappedUChar( 2 );
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetBIdx                   () const
+unsigned int        NOutputState::GetBIdx                       () const
 {
     return GetMappedUChar( 4 );
 }
 
 // **************************
 //
-unsigned int        NOutputState::GetAIdx                   () const
+unsigned int        NOutputState::GetAIdx                       () const
 {
     return GetMappedUChar( 6 );
 }
 
 // **************************
 //
-RenderChannelType   NOutputState::GetActiveRenderChannel    () const
+RenderChannelType   NOutputState::GetActiveRenderChannelType    () const
 {
     return m_activeRenderChannel;
 }
 
 // **************************
 //
-void                NOutputState::SetMappedUChar            ( unsigned int val, unsigned int numBits )
+void                NOutputState::SetMappedUChar                ( unsigned int val, unsigned int numBits )
 {
     assert( val < 4 );
 
@@ -187,14 +190,14 @@ void                NOutputState::SetMappedUChar            ( unsigned int val, 
 
 // **************************
 //
-unsigned int        NOutputState::GetMappedUChar          ( unsigned int numBits ) const
+unsigned int        NOutputState::GetMappedUChar                ( unsigned int numBits ) const
 {
     return ( m_channelMapping & ( 0xFF << numBits ) ) >> numBits;
 }
 
 // **************************
 //
-glm::vec4           NOutputState::GetChannelMask          () const
+glm::vec4           NOutputState::GetChannelMask                () const
 {
     return glm::vec4( m_rMask ? 1.0f : 0.0f,
                       m_gMask ? 1.0f : 0.0f,
@@ -204,35 +207,35 @@ glm::vec4           NOutputState::GetChannelMask          () const
 
 // **************************
 //
-bool                NOutputState::GetRChannelState        () const
+bool                NOutputState::GetRChannelState          () const
 {
     return m_rMask;
 }
 
 // **************************
 //
-bool                NOutputState::GetGChannelState        () const
+bool                NOutputState::GetGChannelState          () const
 {
     return m_gMask;
 }
 
 // **************************
 //
-bool                NOutputState::GetBChannelState        () const
+bool                NOutputState::GetBChannelState          () const
 {
     return m_bMask;
 }
 
 // **************************
 //
-bool                NOutputState::GetAChannelState        () const
+bool                NOutputState::GetAChannelState          () const
 {
     return m_aMask;
 }
 
 // **************************
 //
-bool                NOutputState::RepresentsDefaultTexture() const
+bool                NOutputState::RepresentsDefaultTexture  () const
 {
     static unsigned int noMapping = ( 0 | 1 << 2 | 2 << 4 | 3 << 6 );
     auto fullMask = m_rMask && m_bMask && m_gMask && m_aMask;

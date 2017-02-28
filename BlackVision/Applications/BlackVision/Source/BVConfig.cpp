@@ -7,6 +7,8 @@
 #include "Serialization/SerializationHelper.inl"
 #include "VideoCardManager.h"
 
+#include "UseLoggerBVAppModule.h"
+
 #define USE_READBACK_API
 //#define FULLSCREEN_MODE
 #define PERSPECTIVE_CAMERA
@@ -142,6 +144,151 @@ BVConfig::BVConfig                      ()
 
     m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
 }
+
+
+// *********************************
+//
+const IDeserializer &  BVConfig::GetNode                    ( int count, ... ) const
+{
+    va_list args;
+    va_start( args, count );
+
+    std::string path;
+
+    if( count > 0 )
+    {
+        m_deserializer.Reset();
+
+        for( int i = 0; i < count; ++i )
+        {
+            auto  n = va_arg( args, const char * );
+            path += n + '/';
+
+            if( !m_deserializer.EnterChild( n ) )
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "Config path '" << path << "' doesn't exist.";
+                break;
+            }
+        }
+
+        va_end( args );
+    }
+
+    return m_deserializer;
+}
+
+// *********************************
+//
+//SizeType             BVConfig::GetNumRenderChannels    () const
+//{
+//    m_deserializer.Reset();
+//
+//    SizeType i = 0;
+//
+//    if( m_deserializer.EnterChild( "config" ) &&
+//        m_deserializer.EnterChild( "videocards" ) &&
+//        m_deserializer.EnterChild( "RenderChannels" )
+//       )
+//    {
+//        m_deserializer.EnterChild( "RenderChannel" );
+//
+//        do
+//        {
+//            if( m_deserializer.GetName() == "RenderChannel" )
+//                i++;
+//        }
+//        while( m_deserializer.NextChild() );
+//    }
+//
+//    return i;
+//}
+//
+//// *********************************
+////
+//SizeType             BVConfig::GetNumOutputs           ( const std::string & rcID ) const
+//{
+//    m_deserializer.Reset();
+//
+//    SizeType numOfOutputs = 0;
+//    SizeType i = 0;
+//
+//    if( m_deserializer.EnterChild( "config" ) && m_deserializer.EnterChild( "RenderChannels" ) )
+//    {
+//        do
+//        {
+//            if( !m_deserializer.EnterChild( "RenderChannel" ) || !m_deserializer.ExitChild() )
+//            {
+//                return 0;
+//            }
+//        }
+//        while( m_deserializer.NextChild() && i < rcIdx );
+//
+//        if( m_deserializer.EnterChild( "RenderChannel" ) )
+//        {
+//            do
+//            {
+//                if( m_deserializer.EnterChild( "Output" ) && m_deserializer.ExitChild() )
+//                {
+//                    numOfOutputs++;
+//                }
+//            }
+//            while( m_deserializer.NextChild() );
+//
+//            m_deserializer.ExitChild(); // RenderChannel
+//        }
+//
+//        m_deserializer.ExitChild(); // RenderChannels
+//        m_deserializer.ExitChild(); // config
+//    }
+//
+//    return numOfOutputs;
+//}
+//
+//// *********************************
+////
+//std::vector< BVConfig::KVMap >      BVConfig::GetOutputsProp          ( const std::string & rcID ) const
+//{
+//    m_deserializer.Reset();
+//
+//    std::vector< BVConfig::KVMap > properties;
+//
+//    if( m_deserializer.EnterChild( "config" ) &&
+//        m_deserializer.EnterChild( "videocards" ) && 
+//        m_deserializer.EnterChild( "RenderChannels" ) )
+//    {
+//        m_deserializer.EnterChild( "RenderChannel" );
+//        do
+//        {
+//            if( m_deserializer.GetName() == "RenderChannel" )
+//            {
+//                if( m_deserializer.GetAttribute( "id" ) == rcID )
+//                {
+//                    if( m_deserializer.EnterChild( "Output" ) )
+//                    {
+//                        do
+//                        {
+//                            BVConfig::KVMap p;
+//                            p[ "id" ] = m_deserializer.GetAttribute( "id" );
+//                            p[ "width" ] = m_deserializer.GetAttribute( "width" );
+//                            p[ "height" ] = m_deserializer.GetAttribute( "height" );
+//
+//                            properties.push_back( p );
+//                        }
+//                        while( m_deserializer.NextChild() );
+//
+//                        m_deserializer.ExitChild();
+//                    }
+//                }
+//            }
+//
+//        }
+//        while( m_deserializer.NextChild() );
+//        
+//        m_deserializer.ExitChild(); // RenderChannel
+//    }
+//
+//    return properties;
+//}
 
 // *********************************
 //
