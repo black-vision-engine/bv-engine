@@ -8,16 +8,14 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
-#include "Engine/Processes/ProcessManager.h"
-
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
+#include "Application/ApplicationContext.h"
 
 #include "StatsFormatters.h"
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
-#include "Application/ApplicationContext.h"
 #include "Application/Win32/DisableCrashReport.h"
 
 // Log initializer
@@ -51,7 +49,6 @@ namespace bv {
 //
 BlackVisionApp::BlackVisionApp	()
     : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode(), DefaultConfig.GetRendererInput() )
-    , m_processManager( nullptr )
     , m_app( nullptr )
 {
     ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
@@ -61,9 +58,6 @@ BlackVisionApp::BlackVisionApp	()
 //
 BlackVisionApp::~BlackVisionApp ()
 {
-    m_processManager->AbortAll( true );
-    delete m_processManager;
-
     m_app->ShutDown();
     delete m_app;
     FreeConsole();
@@ -87,8 +81,7 @@ void BlackVisionApp::OnMouse    ( MouseAction action, int posX, int posY )
 //
 void BlackVisionApp::OnPreidle  ()
 {
-    m_timer.Start();
-    m_app->SetStartTime( m_timer.ElapsedMillis() );
+    m_app->StartTime();
     m_app->ChangeState( BVAppState::BVS_RUNNING );    
 }
 
@@ -99,17 +92,9 @@ bool BlackVisionApp::OnIdle		()
     HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
     HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
 
-    unsigned long millis = m_timer.ElapsedMillis();
+    m_app->OnUpdate( m_Renderer, m_audioRenderer );
 
-    ApplicationContext::Instance().IncrementUpdateCounter();
-
-    UpdateSubsystems( millis );
-
-    ApplicationContext::Instance().IncrementUpdateCounter();
-
-    m_app->OnUpdate( millis, m_Renderer, m_audioRenderer );
-
-    PostFrame( millis );
+    PostFrame();
 
     if( m_app->GetState() == BVAppState::BVS_CLOSING )
         return false;
@@ -120,15 +105,13 @@ bool BlackVisionApp::OnIdle		()
 //
 void BlackVisionApp::OnPreMainLoop  ()
 {
-    m_timer.Start();
-    m_app->SetStartTime( m_timer.ElapsedMillis() );
+    m_app->StartTime();
 }
 
 // *********************************
 //FIXME: implement proper console and console handler
 bool BlackVisionApp::OnInitialize       ()
 {
-    m_processManager = new ProcessManager();
         //pablito
     InitializeLicenses      ();
 
@@ -152,15 +135,6 @@ void	BlackVisionApp::OnResize        ( int w, int h )
 {
     WindowedApplication::OnResize( w, h );
     ApplicationContext::Instance().SetResolution( w, h );
-}
-
-// *********************************
-//
-void    BlackVisionApp::UpdateSubsystems    ( unsigned long millis )
-{
-    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
-
-    m_processManager->Update( millis );
 }
 
 // *********************************
@@ -237,12 +211,15 @@ void    BlackVisionApp::InitializeSelfState ()
 
 // *********************************
 //
-void    BlackVisionApp::PostFrame           ( unsigned int millis )
+void    BlackVisionApp::PostFrame           ()
 {
 #ifndef PRODUCTION_BUILD
+
+    auto millis = m_app->GetTime();
+
     static unsigned int startMillis = millis;
 
-    m_app->PostFrameLogic( m_timer, millis );
+    m_app->PostFrameLogic();
     
     if( millis - startMillis > DefaultConfig.StatsRefreshMillisDelta() )
     {

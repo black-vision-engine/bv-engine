@@ -13,6 +13,8 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Services/BVServiceProvider.h"
 
+#include "Application/ApplicationContext.h"
+
 // FIXME: nrl - render logic replacement
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
@@ -285,19 +287,31 @@ void BVAppLogic::LoadScene          ( void )
 
 // *********************************
 //
-void BVAppLogic::SetStartTime       ( unsigned long millis )
+unsigned int BVAppLogic::StartTime       ()
 {
+    m_timer.Start();
+    auto millis = m_timer.ElapsedMillis();
     m_renderMode.SetStartTime( millis );
     m_bvProject->SetStartTime( millis );
+
+    return millis;
 }
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer )
+void BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
-    TimeType time = m_renderMode.StartFrame( millis );
+    m_frameStartTime = m_timer.ElapsedMillis();
+
+    ApplicationContext::Instance().IncrementUpdateCounter();
+
+    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
+
+    ApplicationContext::Instance().IncrementUpdateCounter();
+
+    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
 
     HandleFrame( time, renderer, audioRenderer );
 }
@@ -392,6 +406,13 @@ void BVAppLogic::OnKey           ( unsigned char c )
 
 // ***********************
 //
+unsigned int BVAppLogic::GetTime() const
+{
+    return m_timer.ElapsedMillis();
+}
+
+// ***********************
+//
 void BVAppLogic::OnMouse         ( MouseAction action, int posX, int posY )
 {
     m_kbdHandler->OnMouse( action, posX, posY, this );
@@ -427,7 +448,7 @@ void BVAppLogic::ShutDown           ()
 
 // *********************************
 //
-void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
+void    BVAppLogic::PostFrameLogic   ()
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
@@ -448,7 +469,7 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 #endif
     }
 
-    auto frameMillis = timer.ElapsedMillis() - millis;
+    auto frameMillis = m_timer.ElapsedMillis() - m_frameStartTime;
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
         std::this_thread::sleep_for( std::chrono::milliseconds( DefaultConfig.FrameTimeMillis() - frameMillis ) );

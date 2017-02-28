@@ -5,7 +5,6 @@
 #include <sstream>
 
 #include "Application/WindowedApplication.h"
-#include "Tools/SimpleTimer.h"
 
 //pablito
 //#include "SocketWrapper.h"
@@ -34,9 +33,6 @@ class BlackVisionApp : public WindowedApplication
 private:
 
     BVAppLogic *                m_app;
-    ProcessManager *            m_processManager; //FIXME: move to engine object
-
-    SimpleTimer                 m_timer;
 
 public:
 
@@ -64,15 +60,13 @@ public:
 
 private:
 
-    void            UpdateSubsystems			( unsigned long millis );
-
     void            InitializeConsole			();
     void            InitializeAppLogic			();
     void            InitializeSelfState			();
     // pablito
-    bool			InitializeLicenses      ();
+    bool			InitializeLicenses          ();
 
-    void            PostFrame					( unsigned int millis );
+    void            PostFrame                   ();
 };
 
 } //bv
