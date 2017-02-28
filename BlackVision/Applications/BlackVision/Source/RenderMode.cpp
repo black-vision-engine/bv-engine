@@ -4,7 +4,6 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/CustomOutputs/OutputScreenshot.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "BVConfig.h"
 
@@ -41,35 +40,41 @@ void        RenderMode::SetStartTime            ( unsigned long time )
 //
 void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, float requestedFPS, unsigned int numFrames )
 {
-    m_nextFrameOffset = TimeType( 1 / requestedFPS );
-    m_framesToRender = numFrames;
+    // FIXME: nrl - implement
+    { filePath; requestedFPS; numFrames; }
+    assert( false );
+    //m_nextFrameOffset = TimeType( 1 / requestedFPS );
+    //m_framesToRender = numFrames;
 
-    if( m_renderLogic && m_renderer )
-    {
-        auto screenshotLogic = GetScreenshotLogic();
-        screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
+    //if( m_renderLogic && m_renderer )
+    //{
+    //    auto screenshotLogic = GetScreenshotLogic();
+    //    screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
 
-        screenshotLogic->MakeScreenShot( filePath, numFrames, false );
+    //    screenshotLogic->MakeScreenShot( filePath, numFrames, false );
 
-        m_renderer->SetVSync( false, 0 );
-        m_renderer->SetFlushFinish( false, false );
-    }
+    //    m_renderer->SetVSync( false, 0 );
+    //    m_renderer->SetFlushFinish( false, false );
+    //}
 
-    m_renderMode = RenderingMode::RM_RenderOffscreen;
-    m_currentTime = m_realTime;
+    //m_renderMode = RenderingMode::RM_RenderOffscreen;
+    //m_currentTime = m_realTime;
 }
 
 // ***********************
 //
 void        RenderMode::MakeScreenShot          ( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
 {
-    if( m_renderLogic && m_renderer )
-    {
-        auto screenshotLogic = GetScreenshotLogic();
-        screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
+    // FIXME: nrl - implement
+    { filePath; onRenderedEvent; asyncWrite; }
+    assert( false );
+    //if( m_renderLogic && m_renderer )
+    //{
+    //    auto screenshotLogic = GetScreenshotLogic();
+    //    screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
 
-        screenshotLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
-    }
+    //    screenshotLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
+    //}
 }
 
 // ***********************
@@ -117,8 +122,12 @@ TimeType	RenderMode::GetFramesDelta				() const
 
 nrl::OutputScreenshot *     RenderMode::GetScreenshotLogic()
 {
-    auto outputLogic = m_renderLogic->GetOutputLogic();
-    return static_cast< nrl::OutputScreenshot * >( outputLogic->GetOutput( nrl::CustomOutputType::COT_SCREENSHOT ) );
+    // FIXME: nrl - implement
+    //auto outputLogic = m_renderLogic->GetOutputLogic();
+    //return static_cast< nrl::OutputScreenshot * >( outputLogic->GetOutput( nrl::CustomOutputType::COT_SCREENSHOT ) );
+
+    assert( false );
+    return nullptr;
 }
 
 } //bv

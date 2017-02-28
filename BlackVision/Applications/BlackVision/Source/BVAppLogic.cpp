@@ -11,9 +11,9 @@
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
+#include "Services/BVServiceProvider.h"
 
 // FIXME: nrl - render logic replacement
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
@@ -47,6 +47,8 @@
 
 #include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
 #include "EndUserAPI/JsonCommandsListener/JsonCommandsListener.h"
+
+#include "Initialization/RenderLogicInitializer.h"
 
 #include <thread>
 #include <chrono>
@@ -126,8 +128,13 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 
     // nrl - render logic replacement
     //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
+    
     // FIXME: nrl - pass all those arguments in a struct
-    m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2, DefaultConfig.SharedMemoryScaleFactor() ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // FIXME: prepare descriptor here
+
+    m_renderLogic = nrl::RenderLogicInitializer::CreateInstance( DefaultConfig );
+
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
 
@@ -159,6 +166,7 @@ void BVAppLogic::Initialize         ()
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
     bv::effect::InitializeLibEffect( m_renderer );
+
     SetNodeLogicFactory( new NodeLogicFactory );
 
     InitializeKbdHandler();
@@ -167,15 +175,18 @@ void BVAppLogic::Initialize         ()
 
     ProjectManager::SetPMFolder( DefaultConfig.PMFolder() );
 
-	m_gain = DefaultConfig.GlobalGain();
+    m_gain = DefaultConfig.GlobalGain();
 
     if( DefaultConfig.ReadbackFlag() )
     {
         //FIXME: maybe config should be read by bvconfig
-        auto & videoCardManager = videocards::VideoCardManager::Instance();
-        videoCardManager.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-        videoCardManager.ReadConfig( DefaultConfig.GetNode( "config" ) );
-        videoCardManager.Start();
+        m_videoCardManager = new videocards::VideoCardManager();
+
+        m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+        m_videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
+        m_videoCardManager->Start();
+
+        BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
     }
 }
 
@@ -232,7 +243,7 @@ void BVAppLogic::LoadScene          ( void )
 
     auto pmSceneName = DefaultConfig.LoadSceneFromProjectManager();
 
-    if(!pmSceneName.empty())
+    if( !pmSceneName.empty() )
     {
         auto pm = ProjectManager::GetInstance();
         auto sceneModel = pm->LoadScene("", pmSceneName);
@@ -411,6 +422,7 @@ void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
     m_remoteController->DeinitializeServer();
+    m_videoCardManager->Stop();
 }
 
 // *********************************

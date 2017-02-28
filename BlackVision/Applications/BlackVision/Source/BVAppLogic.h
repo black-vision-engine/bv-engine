@@ -37,6 +37,10 @@ namespace nrl {
     class NRenderLogic;
 }
 
+namespace videocards {
+    class VideoCardManager;
+}
+
 enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
@@ -75,6 +79,9 @@ private:
     RemoteController *              m_remoteController;
 
     RenderMode                      m_renderMode;
+
+    videocards::VideoCardManager *  m_videoCardManager;
+
     
     void            RefreshVideoInputScene  ();
 

@@ -132,12 +132,9 @@ bool BlackVisionApp::OnInitialize       ()
         //pablito
     InitializeLicenses      ();
 
-
     InitializeConsole       ();
     InitializeAppLogic      ();
     InitializeSelfState     ();
-
-
 
     return WindowedApplication::OnInitialize();
 }

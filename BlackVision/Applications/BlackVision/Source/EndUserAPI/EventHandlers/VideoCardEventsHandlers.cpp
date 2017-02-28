@@ -4,6 +4,7 @@
 
 #include "BVAppLogic.h"
 #include "VideoCardManager.h"
+#include "Services/BVServiceProvider.h"
 
 
 namespace bv {
@@ -30,23 +31,23 @@ void		VideoCardEventsHandlers::EventHandler   ( IEventPtr evt )
 		auto videoEvent = std::static_pointer_cast< VideoCardEvent >( evt );
         auto command = videoEvent->VideoCommand;
 
-        auto & videoCardManager = videocards::VideoCardManager::Instance();
+        auto videoCardManager = BVServiceProvider::GetInstance().GetVideoCardManager();
 
         if( command == VideoCardEvent::Command::EnableOutput )
         {
-            videoCardManager.SetVideoOutput( true );
+            videoCardManager->SetVideoOutput( true );
         }
         else if( command == VideoCardEvent::Command::DisableOutput )
         {
-            videoCardManager.SetVideoOutput( false );
+            videoCardManager->SetVideoOutput( false );
         }
         else if( command == VideoCardEvent::Command::EnableKey )
         {
-            videoCardManager.SetKey( true );
+            videoCardManager->SetKey( true );
         }
         else if( command == VideoCardEvent::Command::DisableKey )
         {
-            videoCardManager.SetKey( false );
+            videoCardManager->SetKey( false );
         }
     }
 }

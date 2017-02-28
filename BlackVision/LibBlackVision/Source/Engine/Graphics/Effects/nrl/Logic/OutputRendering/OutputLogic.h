@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputLogicDesc.h"
 
 
 namespace bv { 
@@ -16,35 +17,29 @@ class OutputLogic
 {
 private:
 
-    std::vector< OutputInstance * >     m_outputs;
+    std::vector< Output * >     m_outputs;
 
-    RenderResult                        m_renderResult;
+private:
+
+                            OutputLogic             ();
 
 public:
 
-                        OutputLogic             ( unsigned int width, unsigned int height, unsigned int shmScaleFactor, RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
-    virtual             ~OutputLogic            ();
+    virtual                 ~OutputLogic            ();
 
     // API directly related to frame rendering
-    void                ProcessFrameData        ( NRenderContext * ctx );
+    void                    ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * rcd );
 
     // API relarted to global output state manipulation
-    bool                IsEnabled               ( CustomOutputType outputType );
-    void                EnableOutput            ( CustomOutputType outputType );
-    void                DisableOutput           ( CustomOutputType outputType );
-    
-    RenderChannelType   GetActiveRenderChannel  ( CustomOutputType outputType ) const;
-    bool                SetActiveRenderChannel  ( CustomOutputType outputType, RenderChannelType rct );
+    Output *                GetOutput               ( CustomOutputType outputType );
 
-    OutputInstance *    GetOutput               ( CustomOutputType outputType );
+private:
 
-    // API related to render buffers state manipulation
-    RenderResult *      AccessRenderResult      ();
+    void                    AppendOutput            ( Output * output );
 
-    void                ActivateRenderChannel   ( RenderChannelType rct );
-    void                DeactivateRenderChannel ( RenderChannelType rct );
+public:
 
-    void                UpdateRenderChannels    ();
+    static OutputLogic *    Create                  ( OutputLogicDesc & desc );
 
 };
 
