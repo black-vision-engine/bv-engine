@@ -457,7 +457,8 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output. " << m_deviceID;
+        completedFrame = completedFrame;
+        //LOG_MESSAGE( SeverityLevel::info ) << "Frame dropped on video output. " << m_deviceID;
     }
 
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )

@@ -689,6 +689,7 @@
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp" />
+    <ClCompile Include="..\..\..\Source\Services\BVServiceProvider.cpp" />
     <ClCompile Include="..\..\..\Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -1288,6 +1289,7 @@
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h" />
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h" />
+    <ClInclude Include="..\..\..\Source\Services\BVServiceProvider.h" />
     <ClInclude Include="..\..\..\Source\stdafx.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>

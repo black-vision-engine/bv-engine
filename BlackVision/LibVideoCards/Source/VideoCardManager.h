@@ -80,10 +80,11 @@ class VideoCardProcessingThread : public Thread
 private:
 
     std::atomic< bool >     m_running;
+    VideoCardManager *      m_vcm;
 
 public:
 
-                        VideoCardProcessingThread   ();
+    explicit            VideoCardProcessingThread   ( VideoCardManager * vcm );
     virtual				~VideoCardProcessingThread  ();
     
 protected:
@@ -131,14 +132,14 @@ private:
     VideoCardProcessingThreadUPtr       m_processThread;
 
 private:
-    static void                         FrameProcessingCompleted( UInt64 deviceID, bool success );
-
-
-                                        VideoCardManager        ();
-                                        ~VideoCardManager       ();
+    //static void                         FrameProcessingCompleted( UInt64 deviceID, bool success );
 
 public:
     
+    explicit                            VideoCardManager        ();
+    virtual                             ~VideoCardManager       ();
+
+
     void                                ReadConfig              ( const IDeserializer & deser );
     void                                RegisterDescriptors     ( const std::vector< IVideoCardDesc * > & descriptors );
 
@@ -161,7 +162,7 @@ public:
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
 
-    static VideoCardManager &           Instance                ();
+   // static VideoCardManager &           Instance                ();
 
 };
 
