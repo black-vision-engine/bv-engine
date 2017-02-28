@@ -17,9 +17,8 @@ const std::string   CONFIG_PATH = "config.xml";
 const SizeType      BUFFER_SIZE = 10;
 // ****************************
 //
-TestVideoCardsMainThread::TestVideoCardsMainThread()
-    : m_vcm( VideoCardManager::Instance() )
-    , m_lastQueuedFrameTime( 0 )
+TestVideoCardsMainThread::TestVideoCardsMainThread() 
+    : m_lastQueuedFrameTime( 0 )
     , m_buffer( BUFFER_SIZE )
 	, m_frameNum( 0 )
 {
@@ -28,16 +27,17 @@ TestVideoCardsMainThread::TestVideoCardsMainThread()
         m_buffer.push_back( TestVideoCardsUtils::CreateTestFrame( 0, 1920, 1080 ) );
     }
 
-    m_vcm.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+    m_vcm = new VideoCardManager();
 
+    m_vcm->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
 
     m_deserializer.LoadFile( CONFIG_PATH );
-
     m_deserializer.Reset();
     m_deserializer.EnterChild( "config" );
+    
+    m_vcm->ReadConfig( m_deserializer );
 
-    m_vcm.ReadConfig( m_deserializer );
-    m_vcm.Start();
+    m_vcm->Start();
 }
 
 // ****************************
@@ -60,7 +60,7 @@ void    TestVideoCardsMainThread::Process ()
     input->SetAVFrame( 1, frame );
     input->SetAVFrame( 2, frame );
 
-    m_vcm.Display( input );
+    m_vcm->Display( input );
 
     auto now = Time::Now();
 
@@ -71,12 +71,19 @@ void    TestVideoCardsMainThread::Process ()
     m_buffer.push_back( frame );
 
 	m_frameNum++;
+
+    if( m_frameNum >= 500 )
+        this->Kill();
 }
 
 // ****************************
 //
 TestVideoCardsMainThread::~TestVideoCardsMainThread   ()
-{}
+{
+    m_vcm->Stop();
+
+    delete m_vcm;
+}
 
 } // videocards
 } // bv

@@ -445,6 +445,9 @@
     <Filter Include="Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components">
       <UniqueIdentifier>{97636704-50a1-4d2b-986c-509a7386062e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{606be5cd-3097-4db8-8fe8-59db16f6903e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2026,6 +2029,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NGlowFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs\OutputStreamSharedMem.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\CustomOutputs</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NGlowPreFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
@@ -2166,6 +2172,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoOutputFactory.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Services\BVServiceProvider.cpp">
+      <Filter>Services</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5560,6 +5569,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoOutputFactory.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Services\BVServiceProvider.h">
+      <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

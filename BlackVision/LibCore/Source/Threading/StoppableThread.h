@@ -24,6 +24,7 @@ class StoppableThread : public Thread
 
 public:
 	explicit					StoppableThread			();
+    virtual					    ~StoppableThread		();
 
 	virtual void				Run				    	() override;
 

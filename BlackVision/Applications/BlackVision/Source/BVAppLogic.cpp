@@ -11,8 +11,10 @@
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
+#include "Services/BVServiceProvider.h"
 
 // FIXME: nrl - render logic replacement
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
@@ -174,16 +176,18 @@ void BVAppLogic::Initialize         ()
 
     ProjectManager::SetPMFolder( DefaultConfig.PMFolder() );
 
-	m_gain = DefaultConfig.GlobalGain();
+    m_gain = DefaultConfig.GlobalGain();
 
     if( DefaultConfig.ReadbackFlag() )
     {
         //FIXME: maybe config should be read by bvconfig
-        auto & videoCardManager = videocards::VideoCardManager::Instance();
+        m_videoCardManager = new videocards::VideoCardManager();
 
-        videoCardManager.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-        videoCardManager.ReadConfig( DefaultConfig.GetNode( "config" ) );
-        videoCardManager.Start();
+        m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+        m_videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
+        m_videoCardManager->Start();
+
+        BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
     }
 }
 
@@ -419,6 +423,7 @@ void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
     m_remoteController->DeinitializeServer();
+    m_videoCardManager->Stop();
 }
 
 // *********************************

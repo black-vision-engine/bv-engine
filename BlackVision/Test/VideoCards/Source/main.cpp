@@ -2,14 +2,16 @@
 
 namespace bv { namespace videocards {
 
+static std::shared_ptr< TestVideoCardsMainThread > mt = nullptr;
+
 // ****************************
 //
 TestVideoCardsMainThread *  RunTest ()
 {
-    TestVideoCardsMainThread * mt = new TestVideoCardsMainThread();
+    mt = std::make_shared< TestVideoCardsMainThread >();
     mt->Start();
 
-    return mt;
+    return mt.get();
 }
 
 } // videocards
@@ -22,7 +24,7 @@ int main()
     auto th = bv::videocards::RunTest ();
     th->Join();
 
-    delete th;
+    bv::videocards::mt = nullptr;
 
     return 0;
 }

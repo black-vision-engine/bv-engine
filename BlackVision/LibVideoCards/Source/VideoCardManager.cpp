@@ -26,8 +26,9 @@ std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
 
 //**************************************
 //
-VideoCardProcessingThread::VideoCardProcessingThread    ()
+VideoCardProcessingThread::VideoCardProcessingThread    ( VideoCardManager * vcm )
     : m_running( true )
+    , m_vcm( vcm )
 {
 }
 
@@ -43,7 +44,7 @@ void            VideoCardProcessingThread::Run          ()
 {
     while( m_running )
     {
-        if( !VideoCardManager::Instance().ProcessOutputsData() )
+        if( !m_vcm->ProcessOutputsData() )
         {
             break;
         }
@@ -59,9 +60,9 @@ VideoCardManager::VideoCardManager()
 	, m_currentFrameNumber(0)
 	, m_PreviousFrame(NULL)
 	, m_InterlaceProducesFullFrames(false)
-    , m_processThread( std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread() ) )
 	, m_numReadyCards( 0 )
 {
+    m_processThread = std::unique_ptr< VideoCardProcessingThread >( new VideoCardProcessingThread( this ) );
 }
 
 //**************************************
@@ -114,7 +115,7 @@ void                        VideoCardManager::ReadConfig            ( const IDes
 						{
 							m_outputsToCardsMapping.insert( std::make_pair( id, videocard ) );
 						}
-                        videocard->SetFrameProcessingCompletedCallback( FrameProcessingCompleted );
+                        //videocard->SetFrameProcessingCompletedCallback( FrameProcessingCompleted );
                     }
                 }
             } while( deser.NextChild() );
@@ -185,6 +186,20 @@ void                        VideoCardManager::Start                 ()
     }
 }
 
+//**************************************
+//
+void                        VideoCardManager::Stop                    ()
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+
+    Display( KILLER_FRAME );
+
+    for( auto & videoCard : m_videoCards )
+    {
+        videoCard->Stop();
+    }
+}
+
 // *********************************
 //
 VCMInputData::VCMInputData()
@@ -242,14 +257,6 @@ bool                        VideoCardManager::ProcessOutputsData     ()
                 i->second->ProcessFrame( it->second, it->first );
             }
         }
-
-        //std::unique_lock< std::mutex > lock( m_mutex );
-        //m_waitFramesProcessed.wait( lock, [=] { return m_numReadyCards ==  } )
-
-        //for( auto & videoCard : m_videoCards )
-        //{
-        //    videoCard->DisplayFrame();
-        //}
   
         return true;
     }
@@ -257,18 +264,18 @@ bool                        VideoCardManager::ProcessOutputsData     ()
     return false;
 }
 
-// *********************************
+//// *********************************
+////
+//void               VideoCardManager::FrameProcessingCompleted( UInt64 deviceID, bool success )
+//{
+//    static VideoCardManager & instance = VideoCardManager::Instance();
+//    success;deviceID;
 //
-void               VideoCardManager::FrameProcessingCompleted( UInt64 deviceID, bool success )
-{
-    static VideoCardManager & instance = VideoCardManager::Instance();
-    success;deviceID;
-
-
-	std::unique_lock< std::mutex > lock( instance.m_mutex );
-    instance.m_numReadyCards++;
-    instance.m_waitFramesProcessed.notify_one();
-}
+//
+//	std::unique_lock< std::mutex > lock( instance.m_mutex );
+//    instance.m_numReadyCards++;
+//    instance.m_waitFramesProcessed.notify_one();
+//}
 
 //**************************************
 //
@@ -283,13 +290,13 @@ IVideoCardPtr   VideoCardManager::GetVideoCard        ( UInt32 idx )
     return nullptr;
 }
 
-// *********************************
-//
-VideoCardManager &      VideoCardManager::Instance             ()
-{
-    static VideoCardManager instance;
-    return instance;
-}
+//// *********************************
+////
+//VideoCardManager &      VideoCardManager::Instance             ()
+//{
+//    static VideoCardManager instance;
+//    return instance;
+//}
 
 } //videocards
 } //bv

@@ -1,4 +1,4 @@
-#pragma once
+pragma once
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
@@ -77,6 +77,11 @@ public:
     };
 
     virtual void            Start                       () override;
+
+    void                    Stop                        () override
+    {
+        assert( false );
+    };
 
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
 

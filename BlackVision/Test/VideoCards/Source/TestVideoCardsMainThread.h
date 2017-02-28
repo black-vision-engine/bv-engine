@@ -19,7 +19,7 @@ private:
 
     XMLDeserializer         m_deserializer;
 
-    VideoCardManager &      m_vcm;
+    VideoCardManager *      m_vcm;
 
     UInt64                  m_lastQueuedFrameTime;
 

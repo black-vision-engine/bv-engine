@@ -20,10 +20,13 @@ HRESULT VideoOutputDelegate::ScheduledFrameCompleted		( IDeckLinkVideoFrame * co
 	{
         if( result == BMDOutputFrameCompletionResult::bmdOutputFrameDisplayedLate )
 		    LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is delayed";
-        else if ( result == BMDOutputFrameCompletionResult::bmdOutputFrameDropped )
+        else if( result == BMDOutputFrameCompletionResult::bmdOutputFrameDropped )
             LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is dropped";
         else if( result == BMDOutputFrameCompletionResult::bmdOutputFrameFlushed )
-            LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is flushed";
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Scheduled frame is flushed " << m_owner->m_deviceID;
+            return S_OK;
+        }
 	}
 
 	m_owner->FrameCompleted( completedFrame );
