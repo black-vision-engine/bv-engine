@@ -93,10 +93,20 @@ namespace AutomaticTester
                 if( verbose )
                     Console.WriteLine( "Start Testing..." );
 
-                m_logic.RunAllTests.Execute( null );
-                m_dispatcher.MainLoop();
-
-                m_logic.KillBV();
+                try
+                {
+                    m_logic.RunAllTests.Execute( null );
+                    m_dispatcher.MainLoop();
+                }
+                catch( Exception e )
+                {
+                    if( verbose )
+                        Console.WriteLine( "Exception: " + e.Message );
+                }
+                finally
+                {
+                    m_logic.KillBV();
+                }
 
                 if( verbose )
                     Console.WriteLine( "Test Ended." );
