@@ -56,7 +56,7 @@ enum class BVAppState : int
 //FIXME: possibly add an interface such as IAppLogic (if necessary)
 class BVAppLogic
 {
-private:
+protected:
 
     SimpleTimer                     m_timer;
 

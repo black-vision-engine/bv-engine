@@ -225,6 +225,7 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestInnerEvents.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVTestAppLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -395,6 +396,7 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h">
       <Filter>TestAI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVTestAppLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />
