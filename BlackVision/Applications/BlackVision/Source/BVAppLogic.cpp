@@ -16,6 +16,7 @@
 #include "Application/ApplicationContext.h"
 
 // FIXME: nrl - render logic replacement
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
