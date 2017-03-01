@@ -99,7 +99,7 @@ public:
     void            Initialize      ();
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
-    void            LoadScene       ( void );
+    virtual void    LoadScene       ( void );
 
     unsigned int    StartTime       ();
     unsigned int    GetTime         () const;

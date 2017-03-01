@@ -13,7 +13,13 @@
 #include "Application/ApplicationContext.h"
 
 #include "StatsFormatters.h"
+
+#ifdef BV_TESTS
+#include "BVTestAppLogic.h"
+#else
 #include "BVAppLogic.h"
+#endif
+
 #include "BVConfig.h"
 
 #include "Application/Win32/DisableCrashReport.h"
@@ -196,8 +202,11 @@ void    BlackVisionApp::InitializeAppLogic  ()
         DisableCrashReport();
     }
 
+#ifdef BV_TESTS
+    m_app = new BVTestAppLogic( m_Renderer, m_audioRenderer );
+#else 
     m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
-
+#endif
     m_app->Initialize();
     m_app->LoadScene();
 }

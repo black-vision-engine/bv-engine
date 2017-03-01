@@ -22,14 +22,20 @@ BVTestAppLogic::~BVTestAppLogic     ()
 //
 void    BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
-    // Empty. Update in test framework is called manually.
+    // Empty. Updating in test framework is called manually.
+}
+// *********************************
+//
+void    BVTestAppLogic::LoadScene   ()
+{
+    // Empty. Test  Framework doesn't load any scene by default.
 }
 
 // *********************************
 //
-void    BVTestAppLogic::Update      ()
+void    BVTestAppLogic::Update      ( unsigned int millis )
 {
-    m_frameStartTime = m_timer.ElapsedMillis();
+    m_frameStartTime = millis;
 
     ApplicationContext::Instance().IncrementUpdateCounter();
 

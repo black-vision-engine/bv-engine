@@ -11,9 +11,10 @@ public:
                     BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
                     ~BVTestAppLogic     ();
 
-    virtual void    OnUpdate            ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    virtual void    OnUpdate            ( Renderer * renderer, audio::AudioRenderer * audioRenderer ) override;
+    virtual void    LoadScene           () override;
 
-    void            Update              ();
+    void            Update              ( unsigned int time );
 };
 
 } //bv
