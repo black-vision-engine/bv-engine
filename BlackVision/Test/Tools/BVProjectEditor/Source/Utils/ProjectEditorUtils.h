@@ -10,6 +10,7 @@ namespace bv
 
 
 
+
 /// Minimal context for ProjectEditor.
 class ProjectEditorContext
 {
@@ -21,11 +22,12 @@ private:
 public:
 
     explicit ProjectEditorContext();
+    ~ProjectEditorContext();
 
 
 
     BVProjectEditor*    Editor  ()      { return m_editor; }
-
+    BVProjectPtr        Project ()      { return m_project; }
 };
 
 

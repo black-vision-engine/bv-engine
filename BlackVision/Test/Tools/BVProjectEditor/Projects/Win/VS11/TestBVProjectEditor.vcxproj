@@ -123,11 +123,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\ProjectEditorUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Utils\ProjectEditorUtils.h" />
+    <ClInclude Include="..\..\..\Source\Utils\TwoScenesFixture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
