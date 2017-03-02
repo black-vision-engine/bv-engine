@@ -5570,6 +5570,9 @@
     <ClInclude Include="..\..\..\Source\Services\BVServiceProvider.h">
       <Filter>Services</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

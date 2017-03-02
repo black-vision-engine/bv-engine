@@ -271,3 +271,5 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
 } // model
 } // bv
+
+#include "DefaultTextPluginTests.inl"

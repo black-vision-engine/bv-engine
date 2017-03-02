@@ -4,6 +4,10 @@
 
 #include "Application/ApplicationContext.h"
 
+#include "UnitTest++.h"
+#include "TestReporterStdout.h"
+#include "XmlTestReporter.h"
+
 namespace bv
 {
 
@@ -22,8 +26,26 @@ BVTestAppLogic::~BVTestAppLogic     ()
 //
 void    BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
+    auto tl = UnitTest::Test::GetTestList();
+
+    UnitTest::TestList selectedTests;
+
+    tl.GetHead()->m_nextTest = nullptr;
+
+    selectedTests.Add( tl.GetHead() );
+
+    auto f = File::Open( tl.GetHead()->m_details.testName, File::OpenMode::FOMReadWrite );
+
+    UnitTest::XmlTestReporter reporter( *f.StreamBuf() );
+    UnitTest::TestRunner runner( reporter );
+    runner.RunTestsIf( selectedTests, 0, UnitTest::True(), 0 );
+
+    f.Close();
+
     // Empty. Updating in test framework is called manually.
 }
+
+
 // *********************************
 //
 void    BVTestAppLogic::LoadScene   ()

@@ -17,6 +17,23 @@ void                                BVServiceProvider::RegisterVideoCardManager(
     m_vcm = vcm;
 }
 
+#ifdef BV_TESTS
+// ******************************
+// 
+void                                BVServiceProvider::RegisterBVProject       ( BVProject * bvProj )
+{
+    m_bvProj = bvProj;
+}
+
+// ******************************
+// 
+BVProject *                         BVServiceProvider::GetBVProject             ()
+{
+    return m_bvProj;
+}
+
+#endif // BV_TESTS
+
 // ******************************
 // 
 videocards::VideoCardManager *      BVServiceProvider::GetVideoCardManager()

@@ -118,6 +118,7 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">-Zm250 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">-Zm250 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions);BV_TESTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ThirdPartyDir)/unittest-cpp/include;$(BOOST_INC);$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <CustomBuildStep />
     <CustomBuildStep />
@@ -167,6 +168,8 @@
     </Link>
     <Link>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UnitTest++.lib;BlueHancUtils.lib;BlueGpuDirect.lib;BlueVelvet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ThirdPartyDir)\unittest-cpp\lib\;$(ThirdPartyDir)/VideoCards/Bluefish/Lib/$(PlatformName)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Link>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
