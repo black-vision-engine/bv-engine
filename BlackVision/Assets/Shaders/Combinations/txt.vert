@@ -3,6 +3,10 @@
 layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec2 vertexTexCoord;
 layout (location = 2) in vec2 ccCenter;
+layout (location = 3) in vec2 cc_num;
+
+int cc_num_total = int( cc_num.y );
+int cc_id = int( cc_num.x );
 
 uniform mat4 MVP;
 uniform mat4 MV;
@@ -15,9 +19,6 @@ uniform int         firstTextCC;
 uniform int         firstTextOutCC;
 uniform int         firstTextGlowCC;
 uniform int         firstTextShCC;
-
-uniform int     cc_num;
-uniform int     cc_num_total;
 
 uniform float   time;
 
@@ -32,6 +33,8 @@ uniform int     transformTextEffectId;
 
 out vec2 uvCoord;
 out vec2 ccCenterCoord;
+flat out int ccId;
+flat out int ccTotal;
 
 int pseudoRandonInt( int seed, int total )  // Linear congruential generator
 {   
@@ -166,5 +169,7 @@ void main()
     gl_Position = transform * vec4( vertexPosition, 1.0 );
     uvCoord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
     ccCenterCoord = ccCenter;
+	ccId = cc_id;
+	ccTotal = cc_num_total;
 }
 

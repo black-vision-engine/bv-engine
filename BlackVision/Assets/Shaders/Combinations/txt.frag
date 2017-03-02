@@ -4,16 +4,15 @@ layout (location = 0) out vec4 FragColor;
 
 in vec2             uvCoord;
 in vec2             ccCenterCoord;
+flat in int			ccId;
+flat in int			ccTotal;
 
 uniform sampler2D   AtlasTex0;
 
-//uniform vec4        color;
 vec4 color = vec4( 1.0, 1.0, 1.0, 1.0 );
 uniform vec4        outlineColor;
 uniform vec4        shadowColor;
 uniform float       alpha;
-uniform int         cc_num;
-uniform int         cc_num_total;
 
 uniform bool 		glowEnabled;
 uniform float       glowStrength;
@@ -93,7 +92,7 @@ vec4 pseudoRandonColorAffine( vec4 begin, vec4 end, int i, int total )  // Linea
 
 float animateAlpha()
 {
-    float lf  = animAlphaOffset * float( cc_num_total + 1 );
+    float lf  = animAlphaOffset * float( ccTotal + 1 );
     int l = int( floor( lf ) );
     
     if( l < 0 )
@@ -106,18 +105,18 @@ float animateAlpha()
         lf = -lf;
     }
     
-    if( cc_num == l )
+    if( ccId == l )
     {
         float so = lf - float( l );
         float realAlpha = alpha * so + animAlpha * ( 1.0 - so );
         
         return realAlpha;
     }
-    else if( cc_num > l ) 
+    else if( ccId > l ) 
     {
         return animAlpha;
     }
-    else if( cc_num < l )
+    else if( ccId < l )
     {
         return alpha;
     }
@@ -140,13 +139,13 @@ void main()
     switch( colTextEffectId )
     {
     case 1:
-        c = pseudoRandonColorAffine( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
+        c = pseudoRandonColorAffine( rcc_beginColor, rcc_endColor, ccId, ccTotal );
          break;
     case 2:
-        c = pseudoRandonColorCube( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
+        c = pseudoRandonColorCube( rcc_beginColor, rcc_endColor, ccId, ccTotal );
         break;
     case 3:
-        c = gradientColor( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
+        c = gradientColor( rcc_beginColor, rcc_endColor, ccId, ccTotal );
         break;
     case 4:
         a = animateAlpha();
@@ -160,16 +159,16 @@ void main()
     
 	vec4 result;
 	
-	if( cc_num >= firstTextShCC && cc_num < firstTextGlowCC ) 
+	if( ccId >= firstTextShCC && ccId < firstTextGlowCC ) 
 	{
 		result = a * blutedTextShadow * sc;
 	}
-	else if ( cc_num >= firstTextGlowCC && cc_num < firstTextOutCC ) 
+	else if ( ccId >= firstTextGlowCC && ccId < firstTextOutCC ) 
 	{
 		result = a * bluredOutlineGlow * glowStrength * glowColor;
 		result += a * bluredTextGlow * glowStrength * glowColor;
 	}
-	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
+	else if ( ccId >= firstTextOutCC && ccId < firstTextCC ) 
 	{
 		result = a * outline * oc;
 		if( glowEnabled ) 
