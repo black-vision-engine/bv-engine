@@ -49,12 +49,20 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     OutputDesc vidDesc;
 
     InitializeDefaultPrv( prvDesc, cfg );
-    InitializeDefaultShm( shmDesc, cfg );
-    InitializeDefaultVid( vidDesc, cfg );
+
+    if( cfg.ReadbackFlag() )
+    {
+        InitializeDefaultShm( shmDesc, cfg );
+        InitializeDefaultVid( vidDesc, cfg );
+    }
 
     desc.AppendDesc( prvDesc );
-    desc.AppendDesc( shmDesc );
-    desc.AppendDesc( vidDesc );
+    
+    if( cfg.ReadbackFlag() )
+    {
+        desc.AppendDesc( shmDesc );
+        desc.AppendDesc( vidDesc );
+    }
 }
 
 // *********************************

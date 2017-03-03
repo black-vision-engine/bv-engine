@@ -120,6 +120,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 	, m_gain( 1.f )
+    , m_videoCardManager( nullptr )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -443,7 +444,8 @@ void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
     m_remoteController->DeinitializeServer();
-    m_videoCardManager->Stop();
+    if( m_videoCardManager )
+        m_videoCardManager->Stop();
 }
 
 // *********************************

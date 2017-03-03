@@ -97,6 +97,8 @@ private:
 
     void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
 
+    void                        InitDefaultConfiguration();
+
 public:
 
     const std::string &         PropertyValue           ( const std::string & key ) const;
