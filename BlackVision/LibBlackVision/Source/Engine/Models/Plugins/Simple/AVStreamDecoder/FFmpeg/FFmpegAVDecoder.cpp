@@ -444,7 +444,15 @@ void					FFmpegAVDecoder::Mute				        ( bool mute )
 //
 void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
 {
-    RestartDecoding();
+    // Starting only demuxed and decoders.
+    m_demuxerThread->Restart();
+
+    if( m_audioStreamsDecoderThread )
+        m_audioStreamsDecoderThread->Restart();
+
+    if( m_videoStreamsDecoderThread )
+        m_videoStreamsDecoderThread->Restart();
+
 
     if( HasVideo() )
     {
@@ -458,9 +466,12 @@ void					FFmpegAVDecoder::ProcessFirstAVFrame    ()
     if( HasAudio() )
     {
         auto i = 0;
+        auto t = 0;
         auto decoder = m_streams[ AVMEDIA_TYPE_AUDIO ].get();
-        while( i < 5 && !( decoder->IsDataQueueEmpty() && m_demuxer->IsPacketQueueEmpty( decoder->GetStreamIdx() ) ) )
+
+        while( t < 100 && i < 5 && !( decoder->IsDataQueueEmpty() && m_demuxer->IsPacketQueueEmpty( decoder->GetStreamIdx() ) ) )
         {
+            t++;
             if( NextDataReady( AVMEDIA_TYPE_AUDIO, decoder->GetCurrentPTS() - decoder->GetOffset(), false ) )
             {
                 i++;
