@@ -18,6 +18,8 @@ public:
     static Int64                ConvertToMiliseconds    ( Float64 seconds );
 
     static std::string          AVErrorToString         ( Int32 errCode );
+
+    static void                 AVCustomLog             ( void *, int level, const char * fmt, va_list vl );
 };
 
 } //bv

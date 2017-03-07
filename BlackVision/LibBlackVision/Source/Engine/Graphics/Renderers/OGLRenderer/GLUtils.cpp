@@ -78,7 +78,7 @@ void GLUtils::DumpGLInfo( bool dumpExtensions )
     BVGL::bvglGetIntegerv( GL_MAJOR_VERSION, &major );
     BVGL::bvglGetIntegerv( GL_MINOR_VERSION, &minor );
 
-    LOG_MESSAGE( SeverityLevel::info )
+    LOG_MESSAGE( SeverityLevel::info ) << std::endl
         << "GL Vendor    : " << vendor << std::endl
         << "GL Renderer  : " << renderer << std::endl
         << "GL Version   : " << version << std::endl
@@ -116,7 +116,7 @@ void GLUtils::DumpGLInfoCaps      ()
     BVGL::bvglGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &r8 );
     BVGL::bvglGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &r9 );
 
-    LOG_MESSAGE( SeverityLevel::info ) 
+    LOG_MESSAGE( SeverityLevel::info ) << std::endl
         <<  "Max vertex attribs:       " << r0 << std::endl
         <<  "Max texture units fixed:  " << r1 << std::endl
         <<  "Max texture size:         " << r2 << std::endl 
