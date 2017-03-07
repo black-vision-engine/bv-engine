@@ -5,6 +5,8 @@
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 #include "Engine/Types/Values/ValuesFactory.h"
 
+#include "UseLoggerLibEffect.h"
+
 #include "IO/FileIO.h"
 #include "System/Path.h"
 #include <sstream>
@@ -134,7 +136,7 @@ std::string				BlurEffect::ReadFile		( const std::string & fileName )
 {
 	if( Path::Exists( fileName ) )
     {
-        std::cout << "BlurEffect: Loading pixel shader from: " << fileName << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "BlurEffect: Loading pixel shader from: " << fileName;
 
 		std::stringstream shaderSource;
 
@@ -145,7 +147,7 @@ std::string				BlurEffect::ReadFile		( const std::string & fileName )
     }
     else
     {
-        std::cout << "BlurEffect: File " << fileName << " does not exist. Loading pixel shader failed." << std::endl;
+        LOG_MESSAGE( SeverityLevel::error ) << "BlurEffect: File " << fileName << " does not exist. Loading pixel shader failed.";
         assert( false );
         return "";
     }

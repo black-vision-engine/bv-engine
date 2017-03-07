@@ -2,6 +2,8 @@
 
 #include "FFmpegDemuxer.h"
 
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 #include <cassert>
@@ -150,7 +152,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
 	}
 	else 
 	{
-		std::cout << "Error " << error << std::endl;
+        LOG_MESSAGE( SeverityLevel::error ) << "Error " << FFmpegUtils::AVErrorToString( error );
 	}
     
 	return false;

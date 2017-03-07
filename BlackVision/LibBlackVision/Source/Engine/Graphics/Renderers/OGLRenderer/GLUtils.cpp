@@ -6,7 +6,7 @@
 
 #include "BVGL.h"
 
-
+#include "UseLoggerLibBlackVision.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -56,7 +56,7 @@ int GLUtils::CheckForOpenGLError( const char * file, int line )
 			message = "Unknown error";
 		}
 
-        printf("glError in file %s @ line %d: %s\n", file, line, message);
+        LOG_MESSAGE( SeverityLevel::error ) << "glError in file " << file << " @ line " << line << ": " << message;
         retCode = 1;
         glErr = BVGL::bvglGetError();
     }
@@ -78,11 +78,12 @@ void GLUtils::DumpGLInfo( bool dumpExtensions )
     BVGL::bvglGetIntegerv( GL_MAJOR_VERSION, &major );
     BVGL::bvglGetIntegerv( GL_MINOR_VERSION, &minor );
 
-    printf( "GL Vendor    : %s\n", vendor );
-    printf( "GL Renderer  : %s\n", renderer );
-    printf( "GL Version   : %s\n", version );
-    printf( "GL Version   : %d.%d\n", major, minor );
-    printf( "GLSL Version : %s\n", glslVersion );
+    LOG_MESSAGE( SeverityLevel::info )
+        << "GL Vendor    : " << vendor << std::endl
+        << "GL Renderer  : " << renderer << std::endl
+        << "GL Version   : " << version << std::endl
+        << "GL Version   : " << major << "." << minor << std::endl
+        << "GLSL Version : " << glslVersion;
 
     if( dumpExtensions )
     {
@@ -92,7 +93,7 @@ void GLUtils::DumpGLInfo( bool dumpExtensions )
 
         for( int i = 0; i < nExtensions; i++ )
         {
-            printf( "%s\n", BVGL::bvglGetStringi( GL_EXTENSIONS, i ) );
+            LOG_MESSAGE( SeverityLevel::info ) << BVGL::bvglGetStringi( GL_EXTENSIONS, i );
         }
     }
 }
@@ -115,19 +116,20 @@ void GLUtils::DumpGLInfoCaps      ()
     BVGL::bvglGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &r8 );
     BVGL::bvglGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &r9 );
 
-    printf( "Max vertex attribs:       %d\n", r0 );
-    printf( "Max texture units fixed:  %d\n", r1 );
-    printf( "Max texture size:         %d\n", r2 );
-    printf( "Max 3D texture size:      %d\n", r3 );
-    printf( "Max draw buffers:         %d\n", r4 );
-    printf( "Max varying floats:       %d\n", r5 );
+    LOG_MESSAGE( SeverityLevel::info ) 
+        <<  "Max vertex attribs:       " << r0 << std::endl
+        <<  "Max texture units fixed:  " << r1 << std::endl
+        <<  "Max texture size:         " << r2 << std::endl 
+        <<  "Max 3D texture size:      " << r3 << std::endl
+        <<  "Max draw buffers:         " << r4 << std::endl
+        <<  "Max varying floats:       " << r5 << std::endl
 
-    printf( "\n" );
+        << std::endl
 
-    printf( "Max vertex texture image units:    %d\n", r6 );
-    printf( "Max geometry texture image units:  %d\n", r7 );
-    printf( "Max texture image units:           %d\n", r8 );
-    printf( "Max combined texture image units:  %d\n", r9 );
+        << "Max vertex texture image units:    " << r6 << std::endl
+        << "Max geometry texture image units:  " << r7 << std::endl
+        << "Max texture image units:           " << r8 << std::endl
+        << "Max combined texture image units:  " << r9 << std::endl;
 
 }
 

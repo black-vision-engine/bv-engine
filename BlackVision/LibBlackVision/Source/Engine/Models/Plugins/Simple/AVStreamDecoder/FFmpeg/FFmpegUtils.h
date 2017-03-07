@@ -17,6 +17,7 @@ public:
 
     static Int64                ConvertToMiliseconds    ( Float64 seconds );
 
+    static std::string          AVErrorToString         ( Int32 errCode );
 };
 
 } //bv

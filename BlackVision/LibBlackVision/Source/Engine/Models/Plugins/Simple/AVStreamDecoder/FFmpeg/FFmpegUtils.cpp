@@ -86,4 +86,16 @@ Int64				        FFmpegUtils::ConvertToMiliseconds       ( Float64 seconds )
     return ( Int64 )( 1000 * seconds );
 }
 
+// *********************************
+//
+std::string                 FFmpegUtils::AVErrorToString            ( Int32 errCode )
+{
+    std::string errorStr;
+    errorStr.resize( 128 );
+
+    av_strerror( errCode, &errorStr[ 0 ], 128 );
+
+    return errorStr;
+}
+
 } //bv

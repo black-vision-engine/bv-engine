@@ -24,6 +24,7 @@ enum ModuleEnum : int
     ME_LibVideoCards    = 1 << 7,
     ME_XMLScenParser    = 1 << 8,
     ME_Tests            = 1 << 9,
+    ME_LibEffect        = 1 << 10,
 };
 
 /**Adding new modules - instruction:
