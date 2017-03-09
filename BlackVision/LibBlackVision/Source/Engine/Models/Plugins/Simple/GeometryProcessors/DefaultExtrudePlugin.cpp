@@ -8,7 +8,7 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <map>
 
-
+#include "UseLoggerLibBlackVision.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -194,7 +194,8 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     }
     else
     {
-        assert( !"This primitive topology is not supported yet" );
+        LOG_MESSAGE( SeverityLevel::error ) << "[PluginExtrude] input topology: [" << SerializationHelper::T2String( topology ) << "] is not supported.";
+        //assert( !"This primitive topology is not supported" );
         return;
     }
 
