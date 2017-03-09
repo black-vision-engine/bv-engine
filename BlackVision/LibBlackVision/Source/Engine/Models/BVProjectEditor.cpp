@@ -1308,7 +1308,7 @@ bool                        BVProjectEditor::SetLogic            ( model::BasicN
 
     if( enableUndo )
     {
-        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic, prevLogic ) ) );
@@ -1331,7 +1331,7 @@ bool                        BVProjectEditor::RemoveLogic         ( model::BasicN
 
     if( enableUndo )
     {
-        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeLogicOperation >( new RemoveNodeLogicOperation( scene, node, logic ) ) );
@@ -1995,7 +1995,7 @@ void                    BVProjectEditor::NotifyRemovedNode    ( model::BasicNode
 void                    BVProjectEditor::NotifyAddedNode        ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode )
 {
     auto addedEvent = std::make_shared< NodeAddedEvent >();
-    addedEvent->RemovedNode = addedNode;
+    addedEvent->AddedNode = addedNode;
     addedEvent->ParentNode = parentNode;
 
     GetDefaultEventManager().TriggerEvent( addedEvent );

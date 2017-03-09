@@ -19,27 +19,41 @@ namespace bv { namespace model
 struct NodeState
 {
     const IModelNode *  parent;
-    std::string         sceneName;
+    const SceneModel*   scene;
     std::string         path;
 
-    NodeState( const IModelNode * parent, const std::string & sceneName, const std::string & path )
+    NodeState( const IModelNode * parent, const SceneModel* scene, const std::string & path )
         : parent( parent )
-        , sceneName( sceneName )
+        , scene( scene )
         , path( path )
     {}
 };
 
 // ********************************
 //
-std::string                         ModelState::QueryNodeScene  ( const IModelNode * node ) const
+std::string                         ModelState::QueryNodeSceneName  ( const IModelNode * node ) const
 {
     if( auto ns = GetNodeState( node ) )
     {
-        return ns->sceneName;
+        return ns->scene->GetName();
     }
     else
     {
         return "";
+    }
+}
+
+// ***********************
+//
+const SceneModel *                  ModelState::QueryNodeScene  ( const IModelNode * node ) const
+{
+    if( auto ns = GetNodeState( node ) )
+    {
+        return ns->scene;
+    }
+    else
+    {
+        return nullptr;
     }
 }
 
@@ -166,14 +180,14 @@ bool                                ModelState::RegisterNode    ( const IModelNo
 
     if( sceneParent != nullptr )
     {
-        m_nodeStates[ node ] = new NodeState( parent, sceneParent->GetName(), sceneParent->GetName() + "/" + node->GetName() );
+        m_nodeStates[ node ] = new NodeState( parent, sceneParent.get(), sceneParent->GetName() + "/" + node->GetName() );
     }
     else
     {
         auto sceneNode = IsSceneRootNode( node, m_project );
         if( sceneNode != nullptr )
         {
-            m_nodeStates[ node ] = new NodeState( nullptr, sceneNode->GetName(), sceneNode->GetName() );
+            m_nodeStates[ node ] = new NodeState( nullptr, sceneNode.get(), sceneNode->GetName() );
             //if( parent != nullptr )
             //{
             //    assert( !"Scene root node cannnot have parent" );
@@ -183,7 +197,7 @@ bool                                ModelState::RegisterNode    ( const IModelNo
         else
         {
             std::string parentPath = QueryNodePath( parent );
-            std::string parentScene = QueryNodeScene( parent );
+            auto parentScene = QueryNodeScene( parent );
 
             auto path = parentPath.empty() ? node->GetName() : parentPath + "/" + node->GetName();
 
@@ -374,7 +388,7 @@ std::set< IModelNodeConstPtr >         ModelState::GetSelectedNodes()
 {
     std::set< IModelNodeConstPtr > ret;
 
-    for( auto node : m_selectedNodes )
+    for( auto & node : m_selectedNodes )
         ret.insert( node.first );
 
     return ret;

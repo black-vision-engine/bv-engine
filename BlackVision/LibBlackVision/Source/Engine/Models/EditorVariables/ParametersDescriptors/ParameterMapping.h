@@ -82,6 +82,15 @@ public:
 
     EndUserParamDescriptor *      GetDescriptor   ( const ParameterAddress & param );
 
+public:
+    // Tracking changes
+    void                    ContainerAdded      ( ParamContainerTypePtr & container, model::BasicNodePtr & parent );
+    void                    ContainerRemoved    ( ParamContainerTypePtr & container, model::BasicNodePtr & parent );
+    void                    ContainerMoved      ( ParamContainerTypePtr & container, model::BasicNodePtr & parent, model::BasicNodePtr & newParent );
+
+    void                    NodeAdded           ( model::BasicNodePtr & parent, model::BasicNodePtr & node );
+    void                    NodeRemoved         ( model::BasicNodePtr & parent, model::BasicNodePtr & node );
+    void                    NodeMoved           ( model::BasicNodePtr & parent, model::BasicNodePtr & newParent, model::BasicNodePtr & node );
 
 private:
     
@@ -331,6 +340,62 @@ inline EndUserParamDescriptor *     ParameterMapping< ParamContainerTypePtr >::G
     if( result != m_paramsDescsMap.end() )
         return &m_paramsDescsMap[ param ];
     return nullptr;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerAdded   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
+{
+    container;
+    parent;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerRemoved ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
+{
+    container;
+    parent;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerMoved   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent, model::BasicNodePtr & newParent )
+{
+    container;
+    parent;
+    newParent;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeAdded        ( model::BasicNodePtr & parent, model::BasicNodePtr & node )
+{
+    parent;
+    node;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeRemoved      ( model::BasicNodePtr & parent, model::BasicNodePtr & node )
+{
+    parent;
+    node;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeMoved        ( model::BasicNodePtr & parent, model::BasicNodePtr & newParent, model::BasicNodePtr & node )
+{
+    parent;
+    node;
+    newParent;
 }
 
 
