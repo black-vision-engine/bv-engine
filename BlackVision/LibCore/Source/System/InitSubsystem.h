@@ -8,10 +8,10 @@ class InitSubsystem
 {
 public:
 
-    typedef void (*Initializer)(void);
+    typedef void (*Initializer)( int argc, char * argv[] );
 
     static void AddInitializer		( Initializer fun );
-    static void CallInitializers	();
+    static void CallInitializers	( int argc, char * argv[] );
 
 private:
 

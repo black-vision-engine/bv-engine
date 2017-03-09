@@ -6,7 +6,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -53,56 +53,57 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
     if( c >= '1' && c <= '9' || c == '0' )
     { 
-        auto outputLogic = logic->GetRenderLogic()->GetOutputLogic();
+        //auto outputLogic = logic->GetRenderLogic()->GetOutputLogic();
 
-        auto preview = outputLogic->GetOutput( nrl::CustomOutputType::COT_PREVIEW );
-        auto & statePrev = preview->AccessOutputState();
+        //auto preview = outputLogic->GetOutput( nrl::CustomOutputType::COT_PREVIEW );
+        //auto & statePrev = preview->AccessOutputState();
 
-        auto shm = outputLogic->GetOutput( nrl::CustomOutputType::COT_STREAM_SHM );
-        auto & stateShm = shm->AccessOutputState();
+        //auto shm = outputLogic->GetOutput( nrl::CustomOutputType::COT_STREAM_SHM );
+        //auto & stateShm = shm->AccessOutputState();
 
         switch( c )
         {
-            case '1':
-                statePrev.SetChannelMapping( 0, 1, 2, 3 );
-                statePrev.SetMaskState( true, false, false, false );
-                break;
-            case '2':
-                statePrev.SetChannelMapping( 0, 1, 2, 3 );
-                statePrev.SetMaskState( false, true, false, false );
-                break;
-            case '3':
-                statePrev.SetChannelMapping( 0, 1, 2, 3 );
-                statePrev.SetMaskState( false, false, true, false );
-                break;
-            case '4':
-                statePrev.SetChannelMapping( 3, 3, 3, 3 );
-                statePrev.SetMaskState( true, true, true, true );
-                break;
-            case '5':
-                statePrev.SetChannelMapping( 0, 1, 2, 3 );
-                statePrev.SetMaskState( true, true, true, true );
-                break;
-            case '6':
-                stateShm.SetChannelMapping( 0, 1, 2, 3 );
-                stateShm.SetMaskState( true, false, false, false );
-                break;
-            case '7':
-                stateShm.SetChannelMapping( 0, 1, 2, 3 );
-                stateShm.SetMaskState( false, true, false, false );
-                break;
-            case '8':
-                stateShm.SetChannelMapping( 0, 1, 2, 3 );
-                stateShm.SetMaskState( false, false, true, false );
-                break;
-            case '9':
-                stateShm.SetChannelMapping( 3, 3, 3, 3 );
-                stateShm.SetMaskState( true, true, true, true );
-                break;
-            case '0':
-                stateShm.SetChannelMapping( 0, 1, 2, 3 );
-                stateShm.SetMaskState( true, true, true, true );
-                break;
+        //    case '1':
+        //        statePrev.SetChannelMapping( 0, 1, 2, 3 );
+        //        statePrev.SetMaskState( true, false, false, false );
+        //        break;
+        //    case '2':
+        //        statePrev.SetChannelMapping( 0, 1, 2, 3 );
+        //        statePrev.SetMaskState( false, true, false, false );
+        //        break;
+        //    case '3':
+        //        statePrev.SetChannelMapping( 0, 1, 2, 3 );
+        //        statePrev.SetMaskState( false, false, true, false );
+        //        break;
+        //    case '4':
+        //        statePrev.SetChannelMapping( 3, 3, 3, 3 );
+        //        statePrev.SetMaskState( true, true, true, true );
+        //        break;
+        //    case '5':
+        //        statePrev.SetChannelMapping( 0, 1, 2, 3 );
+        //        statePrev.SetMaskState( true, true, true, true );
+        //        break;
+        //    case '6':
+        //        stateShm.SetChannelMapping( 0, 1, 2, 3 );
+        //        stateShm.SetMaskState( true, false, false, false );
+        //        break;
+        //    case '7':
+        //        stateShm.SetChannelMapping( 0, 1, 2, 3 );
+        //        stateShm.SetMaskState( false, true, false, false );
+        //        break;
+        //    case '8':
+        //        stateShm.SetChannelMapping( 0, 1, 2, 3 );
+        //        stateShm.SetMaskState( false, false, true, false );
+        //        break;
+        //    case '9':
+        //        stateShm.SetChannelMapping( 3, 3, 3, 3 );
+        //        stateShm.SetMaskState( true, true, true, true );
+        //        break;
+        //    case '0':
+        //        stateShm.SetChannelMapping( 0, 1, 2, 3 );
+        //        stateShm.SetMaskState( true, true, true, true );
+        //        break;
+            case'1':
             default:
                 assert( false );
         }

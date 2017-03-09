@@ -42,6 +42,7 @@ public:
     void                                UpdateParam             ( const ParamTransform * param );
 
     const mathematics::Box *            GetBoundingBox          () const;
+    const mathematics::Box *            GetChildrenBox          () const;
 
     IConnectedComponentPtr              BuildBoxRepresentation  () const;
     IConnectedComponentPtr              BuildCenterRepresentation () const;

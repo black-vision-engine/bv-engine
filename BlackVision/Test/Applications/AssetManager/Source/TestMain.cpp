@@ -12,9 +12,10 @@
 
 namespace bv {
 
-auto imagePath = "Assets/AssetManager/checkerboard2.png";
-auto imagePath_512x512 = "Assets/AssetManager/checkerboard2_512X512.png";
-auto AssetsPath = "Assets/AssetManager/";
+auto imagePath = "TestAssets/AssetManager/checkerboard2.png";
+auto imagePath_512x512 = "TestAssets/AssetManager/checkerboard2_512X512.png";
+auto AssetsPath = std::string( "TestAssets/AssetManager/" );
+auto PMFilePrefix = std::string( "file:/" );
 
 TEST(LoadingThumbnailsTest, LoadingThumbnails)
 {
@@ -23,7 +24,8 @@ TEST(LoadingThumbnailsTest, LoadingThumbnails)
 
 TEST(HashTest, Hash)
 {
-    static char c[6] = {'a','a','a','a','a','a'};
+    static char * c = new char[ 6 ];
+    memset( c, 'a', 6 );
     auto m = MemoryChunk::Create( c , 6);
     auto str = EncodeBase64( m );
 
@@ -42,19 +44,19 @@ TEST(HashTest, Hash)
 
 TEST(LoadingTextureAndGeneratingMipMaps, AssetManager)
 {
-	auto res = LoadTextureAsset( imagePath, MipMapFilterType::BILINEAR );
+	auto res = LoadTextureAsset( PMFilePrefix + imagePath, MipMapFilterType::BILINEAR );
 	ASSERT_TRUE( res != nullptr );
 }
 
 TEST(LoadingTexture, AssetManager)
 {
-	auto res = LoadTextureAsset( imagePath );
+	auto res = LoadTextureAsset( PMFilePrefix + imagePath );
 	ASSERT_TRUE( res != nullptr );
 }  
 
 TEST(LoadingTexturePowefOf2Texture, AssetManager)
 {
-    auto typedRes = LoadTextureAsset( imagePath_512x512, MipMapFilterType::BILINEAR );
+    auto typedRes = LoadTextureAsset( PMFilePrefix + imagePath_512x512, MipMapFilterType::BILINEAR );
     ASSERT_TRUE( typedRes->GetOriginal()->GetData() == typedRes->GetMipMaps()->GetLevel( 0 )->GetData() );
 }  
 
@@ -69,16 +71,16 @@ TEST(LoadingTextureWitmMipmaps, AssetManager)
     auto props2 = image::GetImageProps( AssetsPath + std::string("checkerboard2_128X128.png") );
     ASSERT_TRUE( props2.error.empty() );
 
-	auto origDesc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_500X500.png"), propsOrig.width, propsOrig.height, EnumsUtils::Convert( propsOrig.format ), true );
+	auto origDesc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_500X500.png"), propsOrig.width, propsOrig.height, EnumsUtils::Convert( propsOrig.format ), true );
 	ASSERT_TRUE( origDesc != nullptr );
 
-	auto mm0Desc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), props0.width, props0.height, EnumsUtils::Convert( props0.format ), true );
+	auto mm0Desc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_512X512.png"), props0.width, props0.height, EnumsUtils::Convert( props0.format ), true );
 	ASSERT_TRUE( mm0Desc != nullptr );
 
-	auto mm1Desc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, EnumsUtils::Convert( props1.format ), true );
+	auto mm1Desc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, EnumsUtils::Convert( props1.format ), true );
 	ASSERT_TRUE( mm1Desc != nullptr );
 
-	auto mm2Desc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, EnumsUtils::Convert( props2.format ), true );
+	auto mm2Desc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, EnumsUtils::Convert( props2.format ), true );
 	ASSERT_TRUE( mm2Desc != nullptr );
 
     std::vector< SingleTextureAssetDescConstPtr > mmVec;
@@ -109,18 +111,18 @@ TEST(LoadingTextureWitmMipmaps, AssetManager)
 		auto props3 = image::GetImageProps( AssetsPath + std::string("checkerboard2_64X64.png") );
 		ASSERT_TRUE( props3.error.empty() );
 
-		origDesc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), propsOrig.width, propsOrig.height, EnumsUtils::Convert( propsOrig.format ), true );
+		origDesc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_512X512.png"), propsOrig.width, propsOrig.height, EnumsUtils::Convert( propsOrig.format ), true );
 		ASSERT_TRUE( origDesc != nullptr );
 
 		mm0Desc = origDesc;
 
-		mm1Desc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, EnumsUtils::Convert( props1.format ), true );
+		mm1Desc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, EnumsUtils::Convert( props1.format ), true );
 		ASSERT_TRUE( mm1Desc != nullptr );
 
-		mm2Desc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, EnumsUtils::Convert( props2.format ), true );
+		mm2Desc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, EnumsUtils::Convert( props2.format ), true );
 		ASSERT_TRUE( mm2Desc != nullptr );
 
-		auto mm3Desc = SingleTextureAssetDesc::Create( AssetsPath + std::string("checkerboard2_64X64.png"), props3.width, props3.height, EnumsUtils::Convert( props3.format ), true );
+		auto mm3Desc = SingleTextureAssetDesc::Create( PMFilePrefix + AssetsPath + std::string("checkerboard2_64X64.png"), props3.width, props3.height, EnumsUtils::Convert( props3.format ), true );
 		ASSERT_TRUE( mm3Desc != nullptr );
 
         mmVec.clear();

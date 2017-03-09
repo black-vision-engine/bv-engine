@@ -73,18 +73,17 @@
     </Window.Resources>
 
 
-    <Grid Name="mainWindowGrid" >
+    <Grid Name="mainWindowGrid" HorizontalAlignment="Stretch" >
         <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=Width}" Panel.ZIndex="99">
             <MenuItem Header="Options">
                 <MenuItem Header="Profiling Tool" Name="ProfilingTool" Click="ProfilingTool_Click"></MenuItem>
             </MenuItem>
         </Menu>
-        
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left">        
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch">        
             <Grid Margin="0,20,0,0" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="29*"/>
-                    <ColumnDefinition Width="1063*"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

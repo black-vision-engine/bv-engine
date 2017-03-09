@@ -2,7 +2,7 @@
 
 #include "NBlurFSEStep.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
@@ -163,6 +163,10 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 		for( auto i = 0; i < stepsNum - 1; ++i )
 		{
+			enable( ctx, tmpOut );
+			clearBoundRT( ctx, glm::vec4() );
+			disableBoundRT( ctx );
+
 			FastBlur( ctx, rd, blurSize, tmpOut );
 			auto oldInputRT = rd.GetEntry( 0 );
 			rd.SetEntry( 0, tmpOut );
@@ -217,6 +221,10 @@ void		NBlurFSEStep::FastBlur						( NRenderContext * ctx, const NRenderedData & 
 		RenderTarget * resizedRT = nullptr;
 
 		resizedRT = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+
+		enable( ctx, resizedRT );
+		clearBoundRT( ctx, glm::vec4() );
+		disableBoundRT( ctx );
 
 		SetQuadTransform( scaleW, scaleH, 0.f, 0.f );
 		SetUVTransform( 1.f, 1.f, 0.f, 0.f );
@@ -316,7 +324,7 @@ void					NBlurFSEStep::ResizeInput					( NRenderContext * ctx, const NRenderedDa
 {
 	// Clear blur output render target.
 	enable( ctx, output );
-	clearBoundRT( ctx, glm::vec4() );
+	//clearBoundRT( ctx, glm::vec4() );
 
 	m_simpleBlitEffect->Render( ctx, input ); 
 	

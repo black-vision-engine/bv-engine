@@ -34,6 +34,7 @@ public:
     struct PARAM
     {
         static const std::string        Reflectivity;
+		static const std::string        TxMat;
     };
 
 private:

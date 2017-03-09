@@ -24,6 +24,7 @@ public:
 
     virtual bool					IsCacheable	() const;
 
+    const std::string &             GetPath     () const;
     virtual std::string				GetKey		() const;
 //    virtual std::string             GetProposedShortKey () const;
 

@@ -86,6 +86,8 @@ public:
     BoundingVolumeConstPtr				    GetBoundingVolume		    () const;
     mathematics::Box				        GetBoundingBoxRecursive     () const;
 
+	void									RecreateBoundingVolume		();
+
     BasicNodePtr                            GetChild                ( unsigned int i );
     const BasicNode *                       GetChild                ( unsigned int i ) const;
     unsigned int                            GetNumPlugins           () const;

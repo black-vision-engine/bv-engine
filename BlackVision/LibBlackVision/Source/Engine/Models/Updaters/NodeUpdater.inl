@@ -67,23 +67,32 @@ inline  void    NodeUpdater::UpdateGeometry      ()
         m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
 
-		UpdateBoundingBox();
+		UpdateBoundingBox( true );
     }
     else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
     {
         UpdatePositions();
 
-        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+        m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();	
 
-		UpdateBoundingBox();
+		UpdateBoundingBox( false );
     }
     else
     {
-        RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
-        VertexArraySingleVertexBuffer * vao = rad->VAO();
+        // RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
+        // VertexArraySingleVertexBuffer * vao = rad->VAO();
 
-        vao->SetNeedsUpdateMemUpload( false );
-        vao->SetNeedsUpdateRecreation( false );
+		// FIXME: We want to prevent updatig the whole bb. We are apdating here only CoM. Should be moved to separated function.
+		{
+			auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
+
+			auto bv = node->GetBoundingVolume().get();
+
+			UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
+		}
+
+        //vao->SetNeedsUpdateMemUpload( false ); // This should be unset unly after real update during render process.
+        //vao->SetNeedsUpdateRecreation( false );
     }
 }
 
@@ -189,6 +198,12 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 
     unsigned int totalNumVertivces = vaChannel->TotalNumVertices();
     
+	if( totalNumVertivces == 0 )
+	{
+		//assert( false ); //FIXME: at this point empty geometry is not allowed
+		return;
+	}
+
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)
@@ -239,12 +254,6 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
 inline  void    NodeUpdater::UpdatePositions     ()
 {
     UpdatePositionsImpl( m_renderable, m_vertexAttributesChannel );
-    //
-    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
-
-    //auto bv = node->GetBoundingVolume();
-    //assert( bv );
-    //UpdateBoundingBox();
 }
 
 // *****************************
@@ -252,12 +261,6 @@ inline  void    NodeUpdater::UpdatePositions     ()
 inline  void    NodeUpdater::UpdateTopology      ()
 {
     UpdateTopologyImpl( m_renderable, m_vertexAttributesChannel );
-    //
-    //auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
-
-    //auto bv = node->GetBoundingVolume();
-    //assert( bv );
-    //UpdateBoundingBox( bv.get() );
 }
 
 // *****************************

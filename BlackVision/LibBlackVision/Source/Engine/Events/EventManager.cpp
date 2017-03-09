@@ -8,7 +8,7 @@
 #include <list>
 #include <chrono>
 
-
+#include "UseLoggerLibBlackVision.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -30,7 +30,7 @@ EventManager::EventManager                  ()
 //
 EventManager::~EventManager                 ()
 {
-    printf( "Default Event Manager shutdown\n" );
+    LOG_MESSAGE( SeverityLevel::info ) << "Default Event Manager shutdown.";
 }
 
 // *******************************
@@ -205,6 +205,8 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         IEventPtr evt = m_queues[ activeQueue ].Front();
         m_queues[ activeQueue ].Pop();
 
+
+
         EventType eventType = evt->GetEventType();
 
         auto listenersIt = m_eventListeners.find( eventType );
@@ -278,7 +280,7 @@ IEventManager &     GetDefaultEventManager  ()
     {
         initialized = true;
 
-        printf( "Default Event Manager initialized\n" );
+        LOG_MESSAGE( SeverityLevel::info ) << "Default Event Manager initialized.";
     }
 
     return instance;

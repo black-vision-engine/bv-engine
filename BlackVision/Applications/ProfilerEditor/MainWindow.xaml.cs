@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 
+using Tools;
 
 namespace ProfilerEditor
 {

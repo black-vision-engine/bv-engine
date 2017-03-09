@@ -13,8 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Diagnostics;
+using System.Globalization;
 
-using BlackBurst.Backend.TCP;
+using RegressionLib;
 
 
 namespace ProfilerEditor.GUI
@@ -24,13 +26,17 @@ namespace ProfilerEditor.GUI
     /// </summary>
     public partial class TesterControl : UserControl
     {
-        ProfilerEditor.Tester.TesterMainLogic               m_testerLogic;
+        RegressionLib.TesterMainLogic               m_testerLogic;
 
         public TesterControl()
         {
             InitializeComponent();
 
-            m_testerLogic = new Tester.TesterMainLogic();
+            // Note: Thanks to this we don't have to see polish messages in exceptions.
+            if( Debugger.IsAttached )
+                CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo( "en-US" );
+
+            m_testerLogic = new TesterMainLogic();
             DataContext = m_testerLogic;
 
 

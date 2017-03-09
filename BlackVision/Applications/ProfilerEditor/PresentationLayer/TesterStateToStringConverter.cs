@@ -14,13 +14,13 @@ namespace ProfilerEditor.PresentationLayer
 
         public object Convert( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
         {
-            Tester.TestsState state = (Tester.TestsState)value;
+            RegressionLib.TestsState state = (RegressionLib.TestsState)value;
 
-            if( state == Tester.TestsState.WaitingForResponse )
+            if( state == RegressionLib.TestsState.WaitingForResponse )
                 return "Waiting for response";
-            else if( state == Tester.TestsState.WaitingForInput )
+            else if( state == RegressionLib.TestsState.WaitingForInput )
                 return "Sending message";
-            else if( state == Tester.TestsState.Init )
+            else if( state == RegressionLib.TestsState.Init )
                 return "Test not started";
             else
                 return "Testing";

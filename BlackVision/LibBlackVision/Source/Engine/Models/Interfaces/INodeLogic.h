@@ -20,8 +20,11 @@ class INodeLogic : public IUpdatable, public ISerializable
 public:
 
 	virtual void					Initialize		()				= 0;
-	virtual void					Update			( TimeType t )	= 0;
 	virtual void					Deinitialize	()				= 0;
+
+    virtual void					Update			    ( TimeType t )  = 0;
+    virtual void                    PreNodeUpdate       ( TimeType t )  = 0;
+    virtual void                    PostChildrenUpdate  ( TimeType t )  = 0;
 
     virtual IParameterPtr                           GetParameter        ( const std::string & name ) const = 0;
     virtual const std::vector< IParameterPtr > &    GetParameters       () const = 0;

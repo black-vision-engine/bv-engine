@@ -591,9 +591,16 @@ BoundingVolumePtr CreateBoundingVolume( DefaultPluginListFinalizedPtr pluginList
 bool            BasicNode::AddPlugin                        ( IPluginPtr plugin )
 {
     m_pluginList->AttachPlugin( plugin );
-    m_boundingVolume = CreateBoundingVolume( m_pluginList );
+	RecreateBoundingVolume();
 
     return true;
+}
+
+// ********************************
+//
+void			BasicNode::RecreateBoundingVolume			()
+{
+	m_boundingVolume = CreateBoundingVolume( m_pluginList );
 }
 
 // ********************************
@@ -606,7 +613,7 @@ bool            BasicNode::AddPlugin                        ( const std::string 
     if( plugin )
     {
         m_pluginList->AttachPlugin( plugin );
-        m_boundingVolume = CreateBoundingVolume( m_pluginList );
+        RecreateBoundingVolume();
     
         return true;
     }
@@ -621,7 +628,7 @@ bool            BasicNode::AddPlugin                    ( const std::string & ui
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
-    m_boundingVolume = CreateBoundingVolume( m_pluginList );
+	RecreateBoundingVolume();
 
     return true;
 }
@@ -662,6 +669,11 @@ void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
     {
+        if( m_nodeLogic )
+        {
+            m_nodeLogic->PreNodeUpdate( t );
+        }
+
         if ( m_modelNodeEffect )
         {
             m_modelNodeEffect->Update( t );
@@ -685,6 +697,11 @@ void BasicNode::Update( TimeType t )
         }
 
         m_boundingVolume->IncludeChildrenBox( GetBoundingBoxRecursive() );
+
+        if( m_nodeLogic )
+        {
+            m_nodeLogic->PostChildrenUpdate( t );
+        }
     }
 }
 

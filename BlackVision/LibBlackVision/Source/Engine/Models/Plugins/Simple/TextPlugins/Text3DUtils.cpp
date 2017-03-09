@@ -38,6 +38,23 @@ VertexAttributesChannelPtr   Text3DUtils::CreateEmptyVACForText3D()
 
 // ***********************
 //
+ConnectedComponentPtr		Text3DUtils::CreateEmptyCC				()
+{
+	model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
+
+	auto desc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+
+	auto posAttribChannel = std::make_shared< model::Float3AttributeChannel >( desc, "vertexPosition", true );
+
+	posAttribChannel->AddAttribute( glm::vec3() );
+
+	connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
+
+	return connComp;
+}
+
+// ***********************
+//
 std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                  ( const std::wstring & text, FontAsset3DConstPtr textAsset, TextLayout layout )
 {
     std::vector< ConnectedComponentPtr > letters;
@@ -105,6 +122,9 @@ std::vector< ConnectedComponentPtr >     Text3DUtils::CreateText                
 
         componentIdx++;
     }
+
+	if( letters.empty() )
+		letters.push_back( CreateEmptyCC() );
 
     return letters;
 }

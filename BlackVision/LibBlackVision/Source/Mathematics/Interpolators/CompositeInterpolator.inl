@@ -20,8 +20,6 @@
 
 #include "Mathematics/glm_inc.h"
 
-
-
 #include "Memory/MemoryLeaks.h"
 
 
@@ -129,7 +127,14 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
             size_t i = 0;
             do
             {
-                interpolator->interpolators[ i++ ]->Deserialize( deser );
+				if( interpolator->interpolators.size() > i )
+				{
+					interpolator->interpolators[ i++ ]->Deserialize( deser );
+				}
+				else
+				{
+					LOG_MESSAGE( SeverityLevel::error ) << "Wrong number of interpolators for keys.";
+				}
             } while( deser.NextChild() );
             deser.ExitChild(); // exit "interpolation"
         }

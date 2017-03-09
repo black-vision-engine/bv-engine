@@ -3,6 +3,8 @@
 #include "FFmpegStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+
 
 namespace bv {
 
@@ -166,8 +168,7 @@ bool                FFmpegStreamDecoder::DecodePacket       ( AVPacket * packet 
 		}
 		else
 		{
-			auto err = AVUNERROR( res );
-			std::cout << "Packet decoding error: " << std::string( ( char * ) &err, 4 ) << std::endl;
+			LOG_MESSAGE( SeverityLevel::error ) << "Packet decoding error: " << FFmpegUtils::AVErrorToString( res );
 			throw std::runtime_error( "Packet decoding error" );
 		}
 	}

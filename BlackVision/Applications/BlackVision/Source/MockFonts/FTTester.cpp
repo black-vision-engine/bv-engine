@@ -10,6 +10,8 @@
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
 
+#include "UseLoggerBVAppModule.h"
+
 const std::string fontFile = "../dep/Media/fonts/ARIALUNI.TTF";
 FT_Library  GFreeType;
 FT_Face     face;
@@ -22,12 +24,13 @@ namespace {
 //
 void face_info( FT_Face face, const std::string & fontName )
 {
-    std::cout << "Font:            " << fontName << std::endl;
-    std::cout << "Num glyphs:      " << face->num_glyphs << std::endl;
-    std::cout << "Flags:           " << face->face_flags << std::endl;
-    std::cout << "Units per EM:    " << face->units_per_EM << std::endl;
-    std::cout << "Num fixed sizes: " << face->num_fixed_sizes << std::endl;
-    std::cout << "Available sizes: " << face->available_sizes << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug )
+    << "Font:            " << fontName << std::endl
+    << "Num glyphs:      " << face->num_glyphs << std::endl
+    << "Flags:           " << face->face_flags << std::endl
+    << "Units per EM:    " << face->units_per_EM << std::endl
+    << "Num fixed sizes: " << face->num_fixed_sizes << std::endl
+    << "Available sizes: " << face->available_sizes << std::endl;
 }
 }
 
@@ -39,19 +42,19 @@ void simple_freetype_test()
 
     if ( error )
     {
-        std::cout << "FreeType error: " << error << std::endl; 
+        LOG_MESSAGE( SeverityLevel::debug ) << "FreeType error: " << error;
         return;
     }
 
     error = FT_New_Face( GFreeType, fontFile.c_str(), 0, &face );
     if ( error == FT_Err_Unknown_File_Format )
     {
-        std::cout << "... the font file could be opened and read, but it appears that its font format is unsupported" << error << std::endl; 
+        LOG_MESSAGE( SeverityLevel::debug ) << "... the font file could be opened and read, but it appears that its font format is unsupported" << error;
         return;
     }
     else if ( error )
     {
-        std::cout << "... another error code means that the font file could not be opened or read, or simply that it is broken... error: " << error << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "... another error code means that the font file could not be opened or read, or simply that it is broken... error: " << error;
         return;
     }
     
@@ -65,14 +68,14 @@ void basic_write_atlas( const std::string & fontFile, const std::string & atlasF
     FT_Library ft;
     if (FT_Init_FreeType (&ft))
     {
-        std::cerr << "Could not init FreeType library\n" << std::endl;
+        LOG_MESSAGE( SeverityLevel::error ) << "Could not init FreeType library.";
         return;
     }
 
     FT_Face face;
     if (FT_New_Face (ft, fontFile.c_str(), 0, &face))
     {
-        std::cerr << "Could not open font\n" << std::endl;
+        LOG_MESSAGE( SeverityLevel::error ) << "Could not open font.";
         return;
     }
 
@@ -99,7 +102,7 @@ void basic_write_atlas( const std::string & fontFile, const std::string & atlasF
     {
         if (FT_Load_Char (face, i, FT_LOAD_RENDER)) 
         {
-            std::cerr << "Could not load character " << i << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "Could not load character " << i;
             return;
         }
 
@@ -118,7 +121,7 @@ void basic_write_atlas( const std::string & fontFile, const std::string & atlasF
         FT_Glyph glyph; // a handle to the glyph image
         if (FT_Get_Glyph (face->glyph, &glyph))
         {
-            std::cerr << "Could not get glyph handle " << i << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "Could not get glyph handle " << i;
             return;
         }
 

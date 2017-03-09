@@ -7,7 +7,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
 #include "Engine/Audio/AudioRenderer.h"
@@ -71,9 +71,6 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->EnableScene( scene );
 
     enable( ctx, output );
-
-    // FIXME: nrl - default clear color used - posisibly customize it a bit;
-    clearBoundRT( ctx, glm::vec4() ); 
 
     RenderQueued( scene->GetRoot(), ctx );
 

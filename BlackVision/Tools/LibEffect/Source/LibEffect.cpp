@@ -12,7 +12,6 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-
 namespace bv { namespace effect
 {
 

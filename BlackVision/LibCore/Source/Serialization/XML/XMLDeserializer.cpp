@@ -68,7 +68,15 @@ bool XMLDeserializer::LoadFile        ( const std::string & fileName )
 
         m_buf[ size ] = '\0';
 
-        m_rootDoc->parse< 0 >( m_buf );
+        try
+        {
+            m_rootDoc->parse< 0 >( m_buf );
+        }
+        catch( const std::exception & )
+        {
+            return false;
+        }
+
         m_doc = m_rootDoc;
 
         m_nodes.push( m_doc );
@@ -86,7 +94,15 @@ bool XMLDeserializer::Load                ( const std::string & xmlString )
     m_buf = new char[ xmlString.size() + 1 ];
     m_buf[ xmlString.size() ] = '\0';
 
-    m_rootDoc->parse< 0 >( m_buf );
+    try
+    {
+        m_rootDoc->parse< 0 >( m_buf );
+    }
+    catch( const std::exception & )
+    {
+        return false;
+    }
+
     m_doc = m_rootDoc;
 
     m_nodes.push( m_doc );

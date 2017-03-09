@@ -68,7 +68,6 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_STRENGTH, 0.f );
 
@@ -85,6 +84,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SHADOW_ENABLED, false );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::OUTLINE_ENABLED, false );
+	h.AddSimpleStatedParam( TextPluginBase::PARAM::GLOW_ENABLED, false );
 
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::TEXT_BOX, glm::vec2( 1.0f, 1.0f ) );
@@ -306,7 +306,7 @@ Float32                             TextPluginBase::BuildVACForText             
     m_firstTextShCC->SetValue( 0 );
     m_firstTextGlowCC->SetValue( 0 );
 
-    if( m_blurSize > 0 && m_shadowEnabled.valuePtr->GetValue() ) 
+    if( m_blurSize > 0 && m_shadowEnabled.GetValue() ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
                                         m_atlas,

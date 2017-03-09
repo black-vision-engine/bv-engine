@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "EnumsUtils.h"
-
+#include "Serialization/SerializationHelper.inl"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -31,4 +31,29 @@ TextureFormat	EnumsUtils::Convert	( image::ImageFormat ifmt )
 	return TextureFormatBV[ ( int )ifmt ];
 }
 
-} // bv
+
+
+namespace SerializationHelper {
+
+
+std::pair< bv::PrimitiveType, const char* > PrimitiveTypeMapping[] = {
+    std::make_pair( bv::PrimitiveType::PT_LINES, "Lines" ),
+    std::make_pair( bv::PrimitiveType::PT_LINE_LOOP, "LineLoop" ),
+    std::make_pair( bv::PrimitiveType::PT_LINE_STRIP, "LineStrip" ),
+    std::make_pair( bv::PrimitiveType::PT_POINTS, "Points" ),
+    std::make_pair( bv::PrimitiveType::PT_POLYGON, "Polygons" ),
+    std::make_pair( bv::PrimitiveType::PT_QUADS, "Quads" ),
+    std::make_pair( bv::PrimitiveType::PT_QUAD_MESH, "QuadMesh" ),
+    std::make_pair( bv::PrimitiveType::PT_QUAD_STRIP, "QuadStrip" ),
+    std::make_pair( bv::PrimitiveType::PT_TRIANGLES, "Triangles" ),
+    std::make_pair( bv::PrimitiveType::PT_TRIANGLE_FAN, "TriangleFan" ),
+    std::make_pair( bv::PrimitiveType::PT_TRIANGLE_MESH, "TriangleMesh" ),
+    std::make_pair( bv::PrimitiveType::PT_TRIANGLE_STRIP, "TriangleStrip" ),
+    std::make_pair( bv::PrimitiveType::PT_TOTAL, "" ),
+};
+
+IMPLEMENT_ENUM_SERIALIZATION( PrimitiveType, PrimitiveTypeMapping );
+
+
+}   // SerializationHelper
+}   // bv

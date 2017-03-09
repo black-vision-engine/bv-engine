@@ -5,6 +5,11 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
+#include "DataTypes/Hash.h"
+#include "ProjectManager.h"
+
+
+
 namespace bv {
 
 namespace { const std::string           uid = "SVG_ASSET_DESC"; }
@@ -37,9 +42,16 @@ bool					SVGAssetDescriptor::IsCacheable	() const
 
 // ***********************
 //
-std::string				SVGAssetDescriptor::GetKey		() const
+const std::string &     SVGAssetDescriptor::GetPath     () const
 {
     return m_path;
+}
+
+// ***********************
+//
+std::string				SVGAssetDescriptor::GetKey		() const
+{
+    return m_path + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_path ) ) );
 }
 
 // ***********************

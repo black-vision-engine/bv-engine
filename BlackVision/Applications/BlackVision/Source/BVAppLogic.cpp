@@ -11,9 +11,11 @@
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
+#include "Services/BVServiceProvider.h"
+
+#include "Application/ApplicationContext.h"
 
 // FIXME: nrl - render logic replacement
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
@@ -47,6 +49,8 @@
 
 #include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
 #include "EndUserAPI/JsonCommandsListener/JsonCommandsListener.h"
+
+#include "Initialization/RenderLogicInitializer.h"
 
 #include <thread>
 #include <chrono>
@@ -116,6 +120,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 	, m_gain( 1.f )
+    , m_videoCardManager( nullptr )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -126,8 +131,13 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 
     // nrl - render logic replacement
     //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
+    
     // FIXME: nrl - pass all those arguments in a struct
-    m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2, DefaultConfig.SharedMemoryScaleFactor() ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // FIXME: prepare descriptor here
+
+    m_renderLogic = nrl::RenderLogicInitializer::CreateInstance( DefaultConfig );
+
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
 
@@ -159,6 +169,7 @@ void BVAppLogic::Initialize         ()
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
     bv::effect::InitializeLibEffect( m_renderer );
+
     SetNodeLogicFactory( new NodeLogicFactory );
 
     InitializeKbdHandler();
@@ -167,15 +178,18 @@ void BVAppLogic::Initialize         ()
 
     ProjectManager::SetPMFolder( DefaultConfig.PMFolder() );
 
-	m_gain = DefaultConfig.GlobalGain();
+    m_gain = DefaultConfig.GlobalGain();
 
     if( DefaultConfig.ReadbackFlag() )
     {
         //FIXME: maybe config should be read by bvconfig
-        auto & videoCardManager = videocards::VideoCardManager::Instance();
-        videoCardManager.RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-        videoCardManager.ReadConfig( DefaultConfig.GetNode( "config" ) );
-        videoCardManager.Start();
+        m_videoCardManager = new videocards::VideoCardManager();
+
+        m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+        m_videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
+        m_videoCardManager->Start();
+
+        BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
     }
 }
 
@@ -232,7 +246,7 @@ void BVAppLogic::LoadScene          ( void )
 
     auto pmSceneName = DefaultConfig.LoadSceneFromProjectManager();
 
-    if(!pmSceneName.empty())
+    if( !pmSceneName.empty() )
     {
         auto pm = ProjectManager::GetInstance();
         auto sceneModel = pm->LoadScene("", pmSceneName);
@@ -274,19 +288,31 @@ void BVAppLogic::LoadScene          ( void )
 
 // *********************************
 //
-void BVAppLogic::SetStartTime       ( unsigned long millis )
+unsigned int BVAppLogic::StartTime       ()
 {
+    m_timer.Start();
+    auto millis = m_timer.ElapsedMillis();
     m_renderMode.SetStartTime( millis );
     m_bvProject->SetStartTime( millis );
+
+    return millis;
 }
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer )
+void BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
-    TimeType time = m_renderMode.StartFrame( millis );
+    m_frameStartTime = m_timer.ElapsedMillis();
+
+    ApplicationContext::Instance().IncrementUpdateCounter();
+
+    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
+
+    ApplicationContext::Instance().IncrementUpdateCounter();
+
+    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
 
     HandleFrame( time, renderer, audioRenderer );
 }
@@ -381,6 +407,13 @@ void BVAppLogic::OnKey           ( unsigned char c )
 
 // ***********************
 //
+unsigned int BVAppLogic::GetTime() const
+{
+    return m_timer.ElapsedMillis();
+}
+
+// ***********************
+//
 void BVAppLogic::OnMouse         ( MouseAction action, int posX, int posY )
 {
     m_kbdHandler->OnMouse( action, posX, posY, this );
@@ -411,11 +444,13 @@ void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
     m_remoteController->DeinitializeServer();
+    if( m_videoCardManager )
+        m_videoCardManager->Stop();
 }
 
 // *********************************
 //
-void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
+void    BVAppLogic::PostFrameLogic   ()
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
@@ -436,7 +471,7 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 #endif
     }
 
-    auto frameMillis = timer.ElapsedMillis() - millis;
+    auto frameMillis = m_timer.ElapsedMillis() - m_frameStartTime;
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
         std::this_thread::sleep_for( std::chrono::milliseconds( DefaultConfig.FrameTimeMillis() - frameMillis ) );

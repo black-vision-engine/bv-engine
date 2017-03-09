@@ -248,7 +248,7 @@ std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    
     glm::mat4 inverseTransform = glm::inverse( transform );
 
     inverseTransform = inverseTransform * parentInverseTrans;
-    glm::vec3 rayLocalDir = glm::vec3( inverseTransform * glm::vec4( rayDir, 0.0f ) );
+    glm::vec3 rayLocalDir = glm::normalize( glm::vec3( inverseTransform * glm::vec4( rayDir, 0.0f ) ) );
     glm::vec3 rayLocalPos = glm::vec3( inverseTransform * glm::vec4( rayPoint, 1.0f ) );
 
     std::pair< model::BasicNodePtr, Float32 > result = std::make_pair< model::BasicNodePtr, Float32 >( nullptr, std::numeric_limits< Float32 >::infinity() );
@@ -261,7 +261,9 @@ std::pair< model::BasicNodePtr, Float32 >   BVProjectTools::NodeIntersection    
     if( boundingVolume != nullptr )
     {
         boundingBox = boundingVolume->GetBoundingBox();
-        distance = boundingBox->RayIntersection( rayLocalPos, glm::normalize( rayLocalDir ), rayPointInside );
+        distance = boundingBox->RayIntersection( rayLocalPos, rayLocalDir, rayPointInside );
+
+		distance = glm::length( transform * glm::vec4( distance * rayLocalDir, 0.0f ) );
     }
 
     if( distance >= 0.0 || rayPointInside )

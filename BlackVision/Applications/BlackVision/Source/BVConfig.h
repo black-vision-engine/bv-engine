@@ -97,6 +97,8 @@ private:
 
     void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
 
+    void                        InitDefaultConfiguration();
+
 public:
 
     const std::string &         PropertyValue           ( const std::string & key ) const;
@@ -116,8 +118,8 @@ public:
     inline bool                 ReadbackFlag            () const;
     inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
-	inline bool                 RenderToSharedMemory() const;
-	inline int                  SharedMemoryScaleFactor() const;
+	inline bool                 RenderToSharedMemory    () const;
+	inline int                  SharedMemoryScaleFactor () const;
 
 	inline Float32				GlobalGain				() const;
 
@@ -155,6 +157,9 @@ public:
     inline const std::string &  PMFolder                () const;
 
     inline Int32                SockerServerPort        () const;
+
+    const IDeserializer &       GetNode                 ( int count, ... ) const;
+
 
     inline bool                 UseDebugLayer           () const;
     inline const std::string &  DebugFilePath           () const;

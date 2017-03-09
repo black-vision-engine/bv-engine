@@ -2,7 +2,8 @@
 
 #include "RenderMode.h"
 
-#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "BVConfig.h"
 
@@ -23,12 +24,11 @@ RenderMode::RenderMode()
 // ***********************
 //
 RenderMode::~RenderMode()
-{
-}
+{}
 
 // ***********************
 //
-void RenderMode::SetStartTime( unsigned long time )
+void        RenderMode::SetStartTime            ( unsigned long time )
 {
 	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
     m_startTime = time - time % d;
@@ -38,43 +38,48 @@ void RenderMode::SetStartTime( unsigned long time )
 
 // ***********************
 //
-void RenderMode::SetRenderToFileMode( const std::string & filePath, float requestedFPS, unsigned int numFrames )
+void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, float requestedFPS, unsigned int numFrames )
 {
-    m_nextFrameOffset = TimeType( 1 / requestedFPS );
-    m_framesToRender = numFrames;
-
     // FIXME: nrl - implement
-    { filePath; }
- //   if( m_renderLogic )
-	//{
- //       m_renderLogic->MakeScreenShot( filePath, numFrames, false );
-	//}
+    { filePath; requestedFPS; numFrames; }
+    assert( false );
+    //m_nextFrameOffset = TimeType( 1 / requestedFPS );
+    //m_framesToRender = numFrames;
 
-    if( m_renderer )
-    {
-        m_renderer->SetVSync( false, 0 );
-        m_renderer->SetFlushFinish( false, false );
-    }
+    //if( m_renderLogic && m_renderer )
+    //{
+    //    auto screenshotLogic = GetScreenshotLogic();
+    //    screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
 
-    m_renderMode = RenderingMode::RM_RenderOffscreen;
-    m_currentTime = 0.0f;
+    //    screenshotLogic->MakeScreenShot( filePath, numFrames, false );
+
+    //    m_renderer->SetVSync( false, 0 );
+    //    m_renderer->SetFlushFinish( false, false );
+    //}
+
+    //m_renderMode = RenderingMode::RM_RenderOffscreen;
+    //m_currentTime = m_realTime;
 }
 
 // ***********************
 //
-void RenderMode::MakeScreenShot( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
+void        RenderMode::MakeScreenShot          ( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
 {
     // FIXME: nrl - implement
     { filePath; onRenderedEvent; asyncWrite; }
- //   if( m_renderLogic )
-	//{
- //       m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
-	//}
+    assert( false );
+    //if( m_renderLogic && m_renderer )
+    //{
+    //    auto screenshotLogic = GetScreenshotLogic();
+    //    screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
+
+    //    screenshotLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
+    //}
 }
 
 // ***********************
 //
-TimeType RenderMode::StartFrame( unsigned long millis )
+TimeType    RenderMode::StartFrame              ( unsigned long millis )
 {
 	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
 	millis = millis - millis % d;
@@ -113,6 +118,16 @@ TimeType RenderMode::StartFrame( unsigned long millis )
 TimeType	RenderMode::GetFramesDelta				() const
 {
 	return 1.f / (float) m_fps;
+}
+
+nrl::OutputScreenshot *     RenderMode::GetScreenshotLogic()
+{
+    // FIXME: nrl - implement
+    //auto outputLogic = m_renderLogic->GetOutputLogic();
+    //return static_cast< nrl::OutputScreenshot * >( outputLogic->GetOutput( nrl::CustomOutputType::COT_SCREENSHOT ) );
+
+    assert( false );
+    return nullptr;
 }
 
 } //bv

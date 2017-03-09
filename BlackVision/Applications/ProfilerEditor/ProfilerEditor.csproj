@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -54,8 +54,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BlackBurstLibs">
-      <HintPath>BlackBurstLibs\BlackBurstLibs.dll</HintPath>
+    <Reference Include="BlackBurstLibs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DevTools\RegressionTesterLib\BlackBurstLibs\BlackBurstLibs.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json">
@@ -81,7 +82,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BlackVisionProcess.cs" />
     <Compile Include="GUI\TesterControl.xaml.cs">
       <DependentUpon>TesterControl.xaml</DependentUpon>
     </Compile>
@@ -90,20 +90,9 @@
     <Compile Include="PresentationLayer\IsErrorBrushConverter.cs" />
     <Compile Include="PresentationLayer\NotConverter.cs" />
     <Compile Include="PresentationLayer\TesterStateToStringConverter.cs" />
-    <Compile Include="RelayCommand.cs" />
     <Compile Include="ServerConnectionDialog.xaml.cs">
       <DependentUpon>ServerConnectionDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tester\ComparisionException\CmpException.cs" />
-    <Compile Include="Tester\ComparisionException\IgnoreException.cs" />
-    <Compile Include="Tester\ComparisionException\TreatAsWarningException.cs" />
-    <Compile Include="Tester\ComparisionRules.cs" />
-    <Compile Include="Tester\Event.cs" />
-    <Compile Include="Tester\EventsViewModel.cs" />
-    <Compile Include="Tester\TesterMainLogic.cs" />
-    <Compile Include="Tester\TestError.cs" />
-    <Compile Include="Tester\TestFile.cs" />
-    <Compile Include="Tester\TestsManager.cs" />
     <Page Include="GUI\TesterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,7 +167,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\DevTools\RegressionTesterLib\RegressionTesterLib.csproj">
+      <Project>{b73f6fd0-c1b9-4d07-b561-63d413fb8e18}</Project>
+      <Name>RegressionTesterLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

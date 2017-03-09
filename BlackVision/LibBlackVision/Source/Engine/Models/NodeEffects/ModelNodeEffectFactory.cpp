@@ -47,14 +47,17 @@ IModelNodeEffectPtr         CreateNodeMaskModelNodeEffect          ( const std::
     auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     auto maskIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskIdx", timeEvaluator );
     auto fgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "fgIdx", timeEvaluator );
+	auto maskChannelIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskChannelIdx", timeEvaluator );
 
     alphaEval->Parameter()->SetVal( 1.f, 0.f );
     maskIdxEval->Parameter()->SetVal( 0, 0.f );
     fgIdxEval->Parameter()->SetVal( 1, 0.f );
+	maskChannelIdxEval->Parameter()->SetVal( 1, 0.f );
 
     effect->RegisterEvaluator( alphaEval );
     effect->RegisterEvaluator( maskIdxEval );
     effect->RegisterEvaluator( fgIdxEval );
+	effect->RegisterEvaluator( maskChannelIdxEval );
     
     return effect;
 }

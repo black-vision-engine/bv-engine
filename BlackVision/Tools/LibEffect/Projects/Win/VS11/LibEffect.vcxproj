@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Effects\BlurEffect.h" />
     <ClInclude Include="..\..\..\Source\LibEffect.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerLibEffect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

@@ -84,7 +84,7 @@ bool					AVAssetDesc::IsCacheable	() const
 //
 std::string				AVAssetDesc::GetKey      () const
 {
-    return m_streamPath;
+    return m_streamPath + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_streamPath ) ) );
 }
 
 // ***********************

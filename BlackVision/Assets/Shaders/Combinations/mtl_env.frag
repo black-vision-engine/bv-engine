@@ -65,6 +65,7 @@ in vec3 		envReflection;	//reflection direction in world space
 // *** ENVIRONMENTAL MAP ***
 uniform sampler2D 	EnvMap0;
 uniform float		reflectivity;
+uniform mat4 		txMat;	
 
 #define M_PI 3.1415926535897932384626433832795
 
@@ -181,6 +182,8 @@ vec3 computeEnvironment			( vec3 reflectionVec )
 	vec2 uvCoord;
 	uvCoord.x = atan( reflectionVec.z, reflectionVec.x ) / ( 2 * M_PI ) + 0.5;
 	uvCoord.y = acos( reflectionVec.y ) / M_PI;
+	
+	uvCoord = ( txMat * vec4( uvCoord.x, uvCoord.y, 0.0, 1.0 ) ).xy;
 	
 	vec3 texColor = texture( EnvMap0, uvCoord ).xyz;
 	return texColor;

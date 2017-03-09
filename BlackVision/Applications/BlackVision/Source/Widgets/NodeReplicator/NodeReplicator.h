@@ -31,8 +31,12 @@ private:
 public:
 
     virtual void					Initialize		()				override;
-    virtual void					Update			( TimeType t )	override;
     virtual void					Deinitialize	()				override;
+
+    virtual void                PreNodeUpdate       ( TimeType )    override    {};
+    virtual void                Update              ( TimeType )    override    {};
+    virtual void                PostChildrenUpdate  ( TimeType )    override    {};
+
 
     static NodeReplicatorPtr        Create          ( model::BasicNodeWeakPtr node, SizeType repNum, const IReplicationModifierPtr & modifier );
 

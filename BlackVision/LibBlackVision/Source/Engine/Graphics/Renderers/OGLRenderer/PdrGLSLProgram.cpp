@@ -13,6 +13,7 @@
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
+#include "UseLoggerLibBlackVision.h"
 
 using std::ifstream;
 using std::ios;
@@ -298,7 +299,7 @@ void          PdrGLSLProgram::PostSetUniformFail    ( const string & name )
 {
     if ( m_verboseLogging )
     {
-        printf( "Uniform: %s not found.\n", name.c_str() );
+        LOG_MESSAGE( SeverityLevel::error ) <<"Uniform '" << name <<"' not found.";
     }
 }
 
@@ -308,7 +309,7 @@ void          PdrGLSLProgram::PostSetUniformFail    ( int loc )
 {
     if ( m_verboseLogging )
     {
-        printf("Uniform at loc: %d not found.\n", loc );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform at loc : " << loc << " not found.";
     }
 }
 

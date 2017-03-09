@@ -682,6 +682,15 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
         return false;
     }
 
+    if( srcNode == destParentNode )
+    {
+        LOG_MESSAGE( SeverityLevel::error )
+            << "[MoveNode] Trying to attach node as child of itself. Node: [" + srcNode->GetName()
+            + "], source scene: [" + srcScene->GetName()
+            + "], destination scene: [" + destScene->GetName() + "]";
+        return false;
+    }
+
     if( srcScene == destScene )
     {
         if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
@@ -1133,14 +1142,15 @@ bool            BVProjectEditor::AddLight                    ( model::SceneModel
     if( modelScene && timeline )
     {
         auto light = std::shared_ptr< model::IModelLight >( model::HelperModelLights::CreateModelLight( type, timeline ) );
-        modelScene->AddLight( light );
+		if( modelScene->AddLight( light ) )
+		{
+			if( enableUndo )
+				modelScene->GetHistory().AddOperation( std::unique_ptr< AddLightOperation >( new AddLightOperation( modelScene, light ) ) );
 
-        if( enableUndo )
-            modelScene->GetHistory().AddOperation( std::unique_ptr< AddLightOperation >( new AddLightOperation( modelScene, light ) ) );
+			NotifyLightAdded( light );
 
-        NotifyLightAdded( light );
-        
-        return true;
+			return true;
+		}
     }
 
     return false;
@@ -1718,10 +1728,7 @@ void                    BVProjectEditor::RefreshNode        (  model::BasicNodeP
     BVProjectTools::ClearSingleNode( sceneNode, renderer );
     BVProjectTools::SyncSingleNode( modelNode, sceneNode );
 
-    auto bv = RemoveConst( modelNode->GetBoundingVolume().get() );
-    assert( bv );
-    bv->UpdateVAC( RemoveConst( modelNode->GetFinalizePlugin()->GetVertexAttributesChannel().get() ) );
-    bv->UpdateParam( modelNode->GetFinalizePlugin()->GetParamTransform().get() );
+	modelNode->RecreateBoundingVolume();
 }
 
 // *******************************

@@ -2,7 +2,7 @@
 
 #include "NSoftMaskFSEStep.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
@@ -85,7 +85,7 @@ bool                    NSoftMaskFSEStep::IsIdle                       ( SceneNo
 // If 
 bool                    NSoftMaskFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
-	return false;
+	return true;
 }
 
 } // nrl
