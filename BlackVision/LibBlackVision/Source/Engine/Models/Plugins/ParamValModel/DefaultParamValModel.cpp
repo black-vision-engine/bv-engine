@@ -261,7 +261,15 @@ void                                        DefaultParamValModel::SetParameter  
     std::string name = param->GetName(); // FIXME: make this an argument
 
     auto prevParam = GetParameter( name );
-    CopyParameter( prevParam, param );
+
+    if( prevParam )
+    {
+        CopyParameter( prevParam, param );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Trying to set parameter: [" << name << "] which doesn't exist.";
+    }
 }
 
 // *******************************
