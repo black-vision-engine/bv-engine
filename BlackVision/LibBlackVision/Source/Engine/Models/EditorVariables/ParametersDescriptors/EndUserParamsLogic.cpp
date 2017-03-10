@@ -206,17 +206,60 @@ bool            FilterEvent     ( bv::IEventPtr evt, model::SceneModel * ownerSc
 // ***********************
 //
 void            EndUserParamsLogic::NodeAdded( bv::IEventPtr evt )
-{}
+{
+    if( !FilterEvent< NodeAddedEvent >( evt, m_ownerScene ) )
+    {
+        NodeAddedEventPtr event = std::static_pointer_cast< NodeAddedEvent >( evt );
+
+        m_effectDescs.NodeAdded( event->ParentNode, event->AddedNode );
+        m_logicDescs.NodeAdded( event->ParentNode, event->AddedNode );
+        m_pluginDescs.NodeAdded( event->ParentNode, event->AddedNode );
+    }
+}
 
 // ***********************
 //
 void            EndUserParamsLogic::NodeRemoved( bv::IEventPtr evt )
-{}
+{
+    if( !FilterEvent< NodeRemovedEvent >( evt, m_ownerScene ) )
+    {
+        NodeRemovedEventPtr event = std::static_pointer_cast< NodeRemovedEvent >( evt );
+
+        m_effectDescs.NodeRemoved( event->ParentNode, event->RemovedNode );
+        m_logicDescs.NodeRemoved( event->ParentNode, event->RemovedNode );
+        m_pluginDescs.NodeRemoved( event->ParentNode, event->RemovedNode );
+    }
+}
 
 // ***********************
 //
 void            EndUserParamsLogic::NodeMoved( bv::IEventPtr evt )
-{}
+{
+    if( evt->GetEventType() != NodeMovedEvent::Type() )
+        return;
+
+    NodeMovedEventPtr event = std::static_pointer_cast< NodeMovedEvent >( evt );
+    
+    auto scene = model::ModelState::GetInstance().QueryNodeScene( event->SrcParentNode.get() );
+    auto newScene = model::ModelState::GetInstance().QueryNodeScene( event->DstParentNode.get() );
+    
+    if( scene != m_ownerScene )
+        return;
+
+    // Descriptors are per scene.
+    if( scene != newScene )
+    {
+        // Remove Descriptor.
+        // FIXME: We should move descriptor to new scene.
+        m_effectDescs.NodeRemoved( event->SrcParentNode, event->Node );
+        m_logicDescs.NodeRemoved( event->SrcParentNode, event->Node );
+        m_pluginDescs.NodeRemoved( event->SrcParentNode, event->Node );
+    }
+
+    m_effectDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+    m_logicDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+    m_pluginDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+}
 
 
 // ***********************

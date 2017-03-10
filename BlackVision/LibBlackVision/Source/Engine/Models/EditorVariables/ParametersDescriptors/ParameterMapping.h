@@ -10,6 +10,7 @@
 #include "Engine/Models/Interfaces/IModelLight.h"
 
 #include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Models/ModelState.h"
 
 #include <unordered_map>
 #include <map>
@@ -94,7 +95,7 @@ public:
 
 private:
     
-
+    bool                    Compare             ( const PtrParamAddress & first, const PtrParamAddress & second );
 };
 
      
@@ -342,11 +343,28 @@ inline EndUserParamDescriptor *     ParameterMapping< ParamContainerTypePtr >::G
     return nullptr;
 }
 
+// ========================================================================= //
+// Descriptors update functions
+// ========================================================================= //
+
+
+template< typename ParamContainerTypePtr >
+inline bool                         ParameterMapping< ParamContainerTypePtr >::Compare          ( const PtrParamAddress & first, const PtrParamAddress & second )
+{
+    if( first.Node.get() < second.Node.get() )
+        return true;
+    return false;
+}
+
+
 // ***********************
 //
 template< typename ParamContainerTypePtr >
 inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerAdded   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
 {
+    // 
+
+
     container;
     parent;
 }
@@ -384,6 +402,9 @@ inline void                         ParameterMapping< ParamContainerTypePtr >::N
 template< typename ParamContainerTypePtr >
 inline void                         ParameterMapping< ParamContainerTypePtr >::NodeRemoved      ( model::BasicNodePtr & parent, model::BasicNodePtr & node )
 {
+    // We should save information about descriptor in case user will make undo.
+
+
     parent;
     node;
 }
@@ -391,12 +412,25 @@ inline void                         ParameterMapping< ParamContainerTypePtr >::N
 // ***********************
 //
 template< typename ParamContainerTypePtr >
-inline void                         ParameterMapping< ParamContainerTypePtr >::NodeMoved        ( model::BasicNodePtr & parent, model::BasicNodePtr & newParent, model::BasicNodePtr & node )
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeMoved        ( model::BasicNodePtr &, model::BasicNodePtr &, model::BasicNodePtr & node )
 {
-    parent;
     node;
-    newParent;
+
+    //std::string newNodePath = model::ModelState::GetInstance().QueryNodePath( node.get() );
+
+    //for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); iter++ )
+    //{
+    //    if( iter->first.Node == node )
+    //    {
+    //        ParameterAddress address = iter->second->First;
+
+
+
+    //    }
+    //}
 }
+
+
 
 
 }	// bv
