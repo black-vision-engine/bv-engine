@@ -9,6 +9,7 @@
 
 #ifdef _DEBUG
 #define PRINT_TEXTURE_CACHE_STATS
+#include "UseLoggerLibBlackVision.h"
 #endif // DEBUG
 
 
@@ -53,7 +54,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         if( it != m_tex2DCache.end() )
         {
 #ifdef PRINT_TEXTURE_CACHE_STATS
-            printf( "Reading texture %08X from cache\n", ( UInt32 )it->first );
+            LOG_MESSAGE( SeverityLevel::info ) << "Reading texture [" << ( UInt32 )it->first << "] from cache.";
 #endif 
             return it->second;
         }
@@ -68,7 +69,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
 
 #ifdef PRINT_TEXTURE_CACHE_STATS
-        printf( "Registering texture %08X in cache\n", ( UInt32 )txParams->GetUID() );
+        LOG_MESSAGE( SeverityLevel::info ) << "Registering texture [" << ( UInt32 )txParams->GetUID() << "] in cache.";
 #endif 
         m_tex2DCache[ txParams->GetUID() ] = tx;
         m_tex2DSet.insert( tx.get() );
@@ -125,7 +126,7 @@ bool            Texture2DCache::IsStored                ( Texture2DConstPtr tex 
 void            Texture2DCache::ClearCache              ()
 {
 #ifdef PRINT_TEXTURE_CACHE_STATS
-    printf( "Removing %lld entries from texture cache\n", ( UInt64 )m_tex2DCache.size() );
+    LOG_MESSAGE( SeverityLevel::info ) << "Removing all [" << ( UInt64 )m_tex2DCache.size() << "] entries from texture cache.";
 #endif 
     m_tex2DCache.clear();
     m_tex2DSet.clear();
