@@ -230,6 +230,12 @@ inline bool             ParameterMapping< ParamContainerTypePtr >::AddDescriptor
     PtrParamAddress paramPtr = FindParameter< ParamContainerTypePtr >( m_ownerScene, param );
     if( paramPtr.Parameter != nullptr )
     {
+        if( paramPtr.Node )
+        {
+            auto nodePath = model::ModelState::GetInstance().QueryNodePath( paramPtr.Node.get() );
+            param.NodeName = nodePath;
+        }
+
         auto iter = m_paramsDescsMap.insert( std::make_pair( std::move( param ), std::move( descriptor ) ) );
 
         auto insertValue = std::make_pair( paramPtr, iter.first );
@@ -319,7 +325,7 @@ inline void             ParameterMapping< ParamContainerTypePtr >::Deserialize  
                 }
 
                 if( paramValid && descriptorValid )
-                    AddDescriptor( std::move( param  ), std::move( descriptor ) );
+                    AddDescriptor( std::move( param ), std::move( descriptor ) );
 
             } while( deser.NextChild() );
 
@@ -337,9 +343,16 @@ inline EndUserParamDescriptor *     ParameterMapping< ParamContainerTypePtr >::G
     if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return nullptr;
 
-    auto result = m_paramsDescsMap.find( param );
-    if( result != m_paramsDescsMap.end() )
-        return &m_paramsDescsMap[ param ];
+    auto paramPtrAddress = FindParameter< ParamContainerTypePtr >( m_ownerScene, param );
+    auto range = m_ptr2StrAddressMap.equal_range( paramPtrAddress );
+
+    for( auto iter = range.first; iter != range.second; iter++ )
+    {
+        auto descIter = iter->second;
+        if( descIter->first.ParamSubName == param.ParamSubName )
+            return &descIter->second;
+    }
+
     return nullptr;
 }
 
@@ -414,20 +427,27 @@ inline void                         ParameterMapping< ParamContainerTypePtr >::N
 template< typename ParamContainerTypePtr >
 inline void                         ParameterMapping< ParamContainerTypePtr >::NodeMoved        ( model::BasicNodePtr &, model::BasicNodePtr &, model::BasicNodePtr & node )
 {
-    node;
+    std::string newNodePath = model::ModelState::GetInstance().QueryNodePath( node.get() );
 
-    //std::string newNodePath = model::ModelState::GetInstance().QueryNodePath( node.get() );
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); iter++ )
+    {
+        if( iter->first.Node == node )
+        {
+            auto descsMapIter = iter->second;
 
-    //for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); iter++ )
-    //{
-    //    if( iter->first.Node == node )
-    //    {
-    //        ParameterAddress address = iter->second->First;
+            ParameterAddress address = descsMapIter->first;
+            EndUserParamDescriptor desc = std::move( descsMapIter->second );
 
+            m_paramsDescsMap.erase( descsMapIter );
+            address.NodeName = newNodePath;
 
+            auto result = m_paramsDescsMap.insert( std::make_pair< ParameterAddress, EndUserParamDescriptor >( std::move( address ), std::move( desc ) ) );
+            assert( result.second );
+            auto changedElementIter = result.first;
 
-    //    }
-    //}
+            iter->second = changedElementIter;
+        }
+    }
 }
 
 

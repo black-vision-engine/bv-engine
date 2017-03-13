@@ -180,14 +180,14 @@ bool                                ModelState::RegisterNode    ( const IModelNo
 
     if( sceneParent != nullptr )
     {
-        m_nodeStates[ node ] = new NodeState( parent, sceneParent.get(), sceneParent->GetName() + "/" + node->GetName() );
+        m_nodeStates[ node ] = new NodeState( parent, sceneParent.get(), parent->GetName() + "/" + node->GetName() );
     }
     else
     {
-        auto sceneNode = IsSceneRootNode( node, m_project );
-        if( sceneNode != nullptr )
+        auto sceneModel = IsSceneRootNode( node, m_project );
+        if( sceneModel != nullptr )
         {
-            m_nodeStates[ node ] = new NodeState( nullptr, sceneNode.get(), sceneNode->GetName() );
+            m_nodeStates[ node ] = new NodeState( nullptr, sceneModel.get(), node->GetName() );
             //if( parent != nullptr )
             //{
             //    assert( !"Scene root node cannnot have parent" );
