@@ -376,8 +376,6 @@ template< typename ParamContainerTypePtr >
 inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerAdded   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
 {
     // 
-
-
     container;
     parent;
 }
@@ -387,8 +385,22 @@ inline void                         ParameterMapping< ParamContainerTypePtr >::C
 template< typename ParamContainerTypePtr >
 inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerRemoved ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
 {
-    container;
-    parent;
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); )
+    {
+        if( iter->first.Container == container )
+        {
+            assert( iter->first.Node == parent );   { parent;  }
+
+            auto descMapIter = iter->second;
+            m_paramsDescsMap.erase( descMapIter );
+
+            iter = m_ptr2StrAddressMap.erase( iter );
+        }
+        else
+        {
+            iter++;
+        }
+    }
 }
 
 // ***********************
@@ -396,9 +408,36 @@ inline void                         ParameterMapping< ParamContainerTypePtr >::C
 template< typename ParamContainerTypePtr >
 inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerMoved   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent, model::BasicNodePtr & newParent )
 {
-    container;
-    parent;
-    newParent;
+    std::string newNodePath = model::ModelState::GetInstance().QueryNodePath( newParent.get() );
+
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); )
+    {
+        if( iter->first.Container == container &&
+            iter->first.Node == parent )
+        {
+            auto descsMapIter = iter->second;
+
+            ParameterAddress address = descsMapIter->first;
+            EndUserParamDescriptor desc = std::move( descsMapIter->second );
+            PtrParamAddress ptrAddress = iter->first;
+
+            m_paramsDescsMap.erase( descsMapIter );
+            address.NodeName = newNodePath;
+
+            auto result = m_paramsDescsMap.insert( std::make_pair< ParameterAddress, EndUserParamDescriptor >( std::move( address ), std::move( desc ) ) );
+            assert( result.second );
+            auto changedElementIter = result.first;
+
+            ptrAddress.Node = newParent;
+
+            iter = m_ptr2StrAddressMap.erase( iter );
+            m_ptr2StrAddressMap.insert( std::make_pair< PtrParamAddress, ParamDescriptorMap::iterator >( std::move( ptrAddress ), std::move( changedElementIter ) ) );
+        }
+        else
+        {
+            iter++;
+        }
+    }
 }
 
 // ***********************
@@ -413,13 +452,28 @@ inline void                         ParameterMapping< ParamContainerTypePtr >::N
 // ***********************
 //
 template< typename ParamContainerTypePtr >
-inline void                         ParameterMapping< ParamContainerTypePtr >::NodeRemoved      ( model::BasicNodePtr & parent, model::BasicNodePtr & node )
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeRemoved      ( model::BasicNodePtr & /*parent*/, model::BasicNodePtr & node )
 {
-    // We should save information about descriptor in case user will make undo.
+    // TODO: In future we should remember erased descriptors. User can undo removal of node.
+    // In function NodeAdded we can check if added node is re-added by comparing pointers.
+    // Attention: We shouldn't hold shared pointers, memory must be freed. Better to use weak pointers.
+    // With raw pointers there would be danger, that new added node would be allocated under the same address as previous node.
+    // We can't distinguish between undo and new allocation then.
 
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); )
+    {
+        if( iter->first.Node == node )
+        {
+            auto descMapIter = iter->second;
+            m_paramsDescsMap.erase( descMapIter );
 
-    parent;
-    node;
+            iter = m_ptr2StrAddressMap.erase( iter );
+        }
+        else
+        {
+            iter++;
+        }
+    }
 }
 
 // ***********************

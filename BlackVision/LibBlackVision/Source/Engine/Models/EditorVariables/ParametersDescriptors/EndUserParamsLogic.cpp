@@ -255,10 +255,12 @@ void            EndUserParamsLogic::NodeMoved( bv::IEventPtr evt )
         m_logicDescs.NodeRemoved( event->SrcParentNode, event->Node );
         m_pluginDescs.NodeRemoved( event->SrcParentNode, event->Node );
     }
-
-    m_effectDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
-    m_logicDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
-    m_pluginDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+    else
+    {
+        m_effectDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+        m_logicDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+        m_pluginDescs.NodeMoved( event->SrcParentNode, event->DstParentNode, event->Node );
+    }
 }
 
 
@@ -281,6 +283,21 @@ void            EndUserParamsLogic::PluginMoved( bv::IEventPtr evt )
         return;
 
     PluginMovedEventPtr event = std::static_pointer_cast< PluginMovedEvent >( evt );
+
+    auto scene = model::ModelState::GetInstance().QueryNodeScene( event->SrcParentNode.get() );
+    auto newScene = model::ModelState::GetInstance().QueryNodeScene( event->DstParentNode.get() );
+
+    if( scene != m_ownerScene )
+        return;
+
+    if( scene != newScene )
+    {
+        // Remove Descriptor.
+        // FIXME: We should move descriptor to new scene.
+        m_pluginDescs.ContainerRemoved( event->Plugin, event->SrcParentNode );
+        return;
+    }
+
     m_pluginDescs.ContainerMoved( event->Plugin, event->SrcParentNode, event->DstParentNode );
 }
 
