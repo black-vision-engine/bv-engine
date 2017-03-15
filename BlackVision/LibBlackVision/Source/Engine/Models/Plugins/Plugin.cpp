@@ -711,7 +711,7 @@ ISerializablePtr BasePlugin::Create                              ( const IDeseri
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " couldn't be created";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Plugin [" << pluginName << "] couldn't be created";
     }
 
     return plugin;
