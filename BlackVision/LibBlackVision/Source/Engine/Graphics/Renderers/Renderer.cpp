@@ -147,8 +147,6 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
     SetFillState( m_currentStateInstance.GetFillState() );
     SetOffsetState( m_currentStateInstance.GetOffsetState() );
     SetStencilState( m_currentStateInstance.GetStencilState() );
-
-    m_RendererData->m_CurrentRS.UpdateState( stateInstance );
 }
 
 // *********************************

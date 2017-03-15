@@ -48,22 +48,31 @@ RendererData::RenderState::~RenderState         ()
 //
 void RendererData::RenderState::Initialize         ( const RendererStateInstance & inst )
 {
-    m_curState.SetStateIgnoreEmptyEntries( inst );
+    //m_curState.SetStateIgnoreEmptyEntries( inst );
+    { inst; }
 
-    InitializeAlphaState( inst.GetAlphaState() );
-    InitializeCullState( inst.GetCullState() );
-    InitializeDepthState( inst.GetDepthState() );
-    InitializeFillState( inst.GetFillState() );
-    InitializeOffsetState( inst.GetOffsetState() );
-    InitializeStencilState( inst.GetStencilState() );
+    m_curState.SetState( std::make_shared< AlphaState >() );
+    m_curState.SetState( std::make_shared< CullState >() );
+    m_curState.SetState( std::make_shared< DepthState >() );
+    m_curState.SetState( std::make_shared< FillState >() );
+    m_curState.SetState( std::make_shared< OffsetState >() );
+    m_curState.SetState( std::make_shared< StencilState >() );
+
+    m_curState.AssignState( inst.GetAlphaState() );
+    m_curState.AssignState( inst.GetCullState() );
+    m_curState.AssignState( inst.GetDepthState() );
+    m_curState.AssignState( inst.GetFillState() );
+    m_curState.AssignState( inst.GetOffsetState() );
+    m_curState.AssignState( inst.GetStencilState() );
+
+    InitializeAlphaState( m_curState.GetAlphaState() );
+    InitializeCullState( m_curState.GetCullState() );
+    InitializeDepthState( m_curState.GetDepthState() );
+    InitializeFillState( m_curState.GetFillState() );
+    InitializeOffsetState( m_curState.GetOffsetState() );
+    InitializeStencilState( m_curState.GetStencilState() );
 }
 
-// *********************************
-//
-void   RendererData::RenderState::UpdateState               ( const RendererStateInstance & inst )
-{
-    m_curState.SetStateIgnoreEmptyEntries( inst );
-}
 
 // *********************************
 //
