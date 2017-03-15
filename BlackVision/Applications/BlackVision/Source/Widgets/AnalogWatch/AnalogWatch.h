@@ -87,6 +87,8 @@ private:
     void            UpdateTime              ( model::BasicNode * node, float ratio );
 
     void            NodeRemovedHandler      ( IEventPtr evt );
+    void            NodeMovedHandler        ( IEventPtr evt );
+    void            NodeRemoved             ( model::BasicNode * parent, model::BasicNode * node );
 };
 
 }   // nodelogic
