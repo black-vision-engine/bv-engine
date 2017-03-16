@@ -17,7 +17,6 @@
 
 // FIXME: nrl - render logic replacement
 //#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
-#include "ModelInteractionEvents.h"
 
 #include "Widgets/NodeLogicFactory.h"
 
@@ -63,51 +62,6 @@
 namespace bv
 {
 extern HighResolutionTimer GTimer;
-namespace
-{
-    //FIXME: temporary
-    TransformSetEventPtr  GTransformSetEvent;
-
-    void GownoWFormieKebaba( TimeType t, BVAppLogic * logic )
-    {
-        { logic; }
-        //DETERMINSTIC TIME INTERVALS
-        //static TimeType tt = TimeType( 0.0 );
-        //tt += TimeType( 0.001 );
-
-        //TEST AI
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 5, logic );
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
-        
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
-
-        //Override alpha test events
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
-
-        //Override node mask test events
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 6, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
-
-        //PRE GOWNO
-        float tx = float( sin( t ) );
-        glm::vec3 kebab( tx, 0.f, 0.f );
-
-        //gowno
-        GTransformSetEvent->SetTranslation( kebab );
-    
-        GetDefaultEventManager().QueueEvent( GTransformSetEvent );
-    }
-
-    KeyPressedEventPtr  GKeyPressedEvent;
-
-    void KeyPressedSendEvent( unsigned char c )
-    {
-        GKeyPressedEvent->SetChar( c );
-        GetDefaultEventManager().QueueEvent( GKeyPressedEvent );
-    }
-}
 
 // *********************************
 //
@@ -122,8 +76,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 	, m_gain( 1.f )
     , m_videoCardManager( nullptr )
 {
-    GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
-    GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
     m_renderer = renderer;
@@ -327,8 +279,6 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
     {
         FRAME_STATS_FRAME();
         FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
-
-        GownoWFormieKebaba( time, this );
 
         {
             FRAME_STATS_SECTION( "Update Model" );
