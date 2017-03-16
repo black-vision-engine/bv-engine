@@ -253,12 +253,6 @@
     <Filter Include="Engine\Graphics\Rendering">
       <UniqueIdentifier>{a96ef61e-ff68-4bc1-a615-59e9c1661ba9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Rendering\Logic">
-      <UniqueIdentifier>{0e33dbe7-8ce5-4e9d-b656-0fefb3a45d64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Rendering\Logic\OfflineRendering">
-      <UniqueIdentifier>{f6868f42-ca33-4cfc-9ac9-dc9299fedeaf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\FSECreators">
       <UniqueIdentifier>{311d9919-a16e-4b3d-8281-d849d00bba2a}</UniqueIdentifier>
     </Filter>
@@ -1390,9 +1384,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.cpp">
       <Filter>Engine\Graphics\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp">
-      <Filter>Engine\Graphics\Rendering\Logic\OfflineRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
@@ -2172,6 +2163,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Services\BVServiceProvider.cpp">
       <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.cpp">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4676,9 +4670,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h">
       <Filter>Engine\Graphics\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h">
-      <Filter>Engine\Graphics\Rendering\Logic\OfflineRendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
@@ -5569,6 +5560,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Services\BVServiceProvider.h">
       <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.h">
+      <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

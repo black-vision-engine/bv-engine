@@ -60,10 +60,6 @@ public:
     unsigned int    GetFrameNumber      () const    { return m_frameNumber; }
     TimeType        GetRealTime         () const    { return m_realTime; }
 
-private:
-
-    nrl::OutputScreenshot *     GetScreenshotLogic  ();
-
 };
 
 } //bv

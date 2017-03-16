@@ -16,8 +16,6 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 #include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
-#include "Engine/Graphics/Rendering/Logic/OfflineRendering/ScreenShotLogic.h"
-
 #include "Tools/Profiler/HerarchicalProfiler.h"
 //#include "FrameStatsService.h"
 
@@ -55,8 +53,6 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, const gl
     m_displayVideoCardPreview   = previewAsVideoCard;
     m_useVideoCardOutput        = videoCardEnabled;
 
-    m_screenShotLogic           = new ScreenShotLogic( 1 );
-
     auto effect = new BoundingBoxEffect(); // FIXME: memory leak
     m_boundingBoxEffect         = effect->GetPass( 0 );
 
@@ -74,7 +70,6 @@ RenderLogic::~RenderLogic    ()
     delete m_offscreenDisplay;
     delete m_videoOutputRenderLogic;
     delete m_blitEffect;
-    delete m_screenShotLogic;
     delete m_ctx;
     
     if( m_sharedMemoryVideoBuffer )
@@ -124,13 +119,6 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer, audio::AudioRenderer
 {
     auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
     auto ctx = GetContext( renderer, audioRenderer );
-
-    // FIXME: nrl - implement screenshot logic in the nrl model
-    if( m_screenShotLogic->ReadbackNeeded() )
-    {
-        auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
-        m_screenShotLogic->FrameRendered( rt, ctx );
-    }
 
     if( m_displayVideoCardPreview )
     {
@@ -382,13 +370,6 @@ void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext
 VideoOutputRenderLogic *    RenderLogic::GedVideoOutputRenderLogic  ()
 {
     return m_videoOutputRenderLogic;
-}
-
-// *********************************
-//
-void                        RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames, bool onRenderedEvent, bool asyncWrite )
-{
-    m_screenShotLogic->MakeScreenShot( path, numFrames, onRenderedEvent, asyncWrite );
 }
 
 } //bv

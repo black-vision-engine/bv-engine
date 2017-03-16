@@ -40,41 +40,32 @@ void        RenderMode::SetStartTime            ( unsigned long time )
 //
 void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, float requestedFPS, unsigned int numFrames )
 {
-    // FIXME: nrl - implement
-    { filePath; requestedFPS; numFrames; }
-    assert( false );
-    //m_nextFrameOffset = TimeType( 1 / requestedFPS );
-    //m_framesToRender = numFrames;
+    m_nextFrameOffset = TimeType( 1 / requestedFPS );
+    m_framesToRender = numFrames;
 
-    //if( m_renderLogic && m_renderer )
-    //{
-    //    auto screenshotLogic = GetScreenshotLogic();
-    //    screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
+    if( m_renderLogic && m_renderer )
+    {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
 
-    //    screenshotLogic->MakeScreenShot( filePath, numFrames, false );
+        outputLogic->RequestScreenshot( filePath, nrl::RenderChannelType::RCT_OUTPUT_1, numFrames, false );
 
-    //    m_renderer->SetVSync( false, 0 );
-    //    m_renderer->SetFlushFinish( false, false );
-    //}
+        m_renderer->SetVSync( false, 0 );
+        m_renderer->SetFlushFinish( false, false );
+    }
 
-    //m_renderMode = RenderingMode::RM_RenderOffscreen;
-    //m_currentTime = m_realTime;
+    m_renderMode = RenderingMode::RM_RenderOffscreen;
+    m_currentTime = m_realTime;
 }
 
 // ***********************
 //
 void        RenderMode::MakeScreenShot          ( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
 {
-    // FIXME: nrl - implement
-    { filePath; onRenderedEvent; asyncWrite; }
-    assert( false );
-    //if( m_renderLogic && m_renderer )
-    //{
-    //    auto screenshotLogic = GetScreenshotLogic();
-    //    screenshotLogic->AccessOutputState().SetActiveRenderChannel( nrl::RenderChannelType::RCT_OUTPUT_1 );
-
-    //    screenshotLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
-    //}
+    if( m_renderLogic && m_renderer )
+    {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
+        outputLogic->RequestScreenshot( filePath, nrl::RenderChannelType::RCT_OUTPUT_1, 1, onRenderedEvent, asyncWrite );
+    }
 }
 
 // ***********************
@@ -118,16 +109,6 @@ TimeType    RenderMode::StartFrame              ( unsigned long millis )
 TimeType	RenderMode::GetFramesDelta				() const
 {
 	return 1.f / (float) m_fps;
-}
-
-nrl::OutputScreenshot *     RenderMode::GetScreenshotLogic()
-{
-    // FIXME: nrl - implement
-    //auto outputLogic = m_renderLogic->GetOutputLogic();
-    //return static_cast< nrl::OutputScreenshot * >( outputLogic->GetOutput( nrl::CustomOutputType::COT_SCREENSHOT ) );
-
-    assert( false );
-    return nullptr;
 }
 
 } //bv

@@ -46,8 +46,6 @@ private:
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
     RenderLogicContext *            m_ctx;
 
-    ScreenShotLogic*                m_screenShotLogic;
-
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
 
@@ -101,10 +99,6 @@ private:
 public:
 
     VideoOutputRenderLogic *        GedVideoOutputRenderLogic   ();
-
-public:
-
-    void    MakeScreenShot  ( const std::string& path, unsigned int numFrames, bool onRenderedEvent, bool asyncWrite = true );
 
 };
 

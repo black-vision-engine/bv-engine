@@ -6,6 +6,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 #include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputLogicDesc.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputScreenshot.h"
 
 namespace bv { 
     
@@ -18,6 +19,7 @@ class OutputLogic
 private:
 
     std::vector< Output * >     m_outputs;
+    OutputScreenshot            m_screenshotLogic;
 
 private:
 
@@ -32,6 +34,8 @@ public:
 
     // API relarted to global output state manipulation
     Output *                GetOutput               ( CustomOutputType outputType );
+
+    void                    RequestScreenshot       ( const std::string & filePath, RenderChannelType channelId, unsigned int numFrames = 1, bool onRenderedEvent = false, bool saveImgAsync = true );
 
 private:
 

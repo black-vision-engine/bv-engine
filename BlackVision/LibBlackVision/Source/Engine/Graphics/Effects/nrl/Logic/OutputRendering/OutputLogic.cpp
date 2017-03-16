@@ -32,6 +32,8 @@ void                OutputLogic::ProcessFrameData       ( NRenderContext * ctx, 
     {
         output->ProcessFrameData( ctx, rcd );
     }
+
+    m_screenshotLogic.ProcessFrameData( ctx, rcd );
 }
 
 // *********************************
@@ -39,6 +41,13 @@ void                OutputLogic::ProcessFrameData       ( NRenderContext * ctx, 
 Output *            OutputLogic::GetOutput              ( CustomOutputType outputType )
 {
     return m_outputs[ (unsigned int) outputType ];
+}
+
+// ***********************
+//
+void                OutputLogic::RequestScreenshot      ( const std::string & filePath, RenderChannelType channelId, unsigned int numFrames, bool onRenderedEvent, bool saveImgAsync )
+{
+    m_screenshotLogic.RequestScreenshot( filePath, channelId, numFrames, onRenderedEvent, saveImgAsync );
 }
 
 // *********************************

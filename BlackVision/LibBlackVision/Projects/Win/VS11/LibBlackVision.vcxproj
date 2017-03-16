@@ -326,6 +326,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputInstance.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Output.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\OutputLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NFullscreenEffectComponentState.cpp" />
@@ -372,7 +373,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\Renderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\WGLRenderer\WGLRenderer.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\DataBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\IndexBuffer.cpp" />
@@ -673,6 +673,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputInstance.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -850,7 +851,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTimeQuery.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrUniformBufferObject.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\UniformBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h" />
