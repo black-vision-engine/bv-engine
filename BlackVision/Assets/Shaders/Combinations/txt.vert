@@ -115,18 +115,18 @@ mat4 animLetterTransform()
         lf = -lf;
     }
     
-    if( cc_num == l )
+    if( cc_id == l )
     {
         float so = lf - float( l );
         float realScale = so + animScale * ( 1.0 - so );
         
         return scaleMatrix( vec3( realScale, realScale, 1.0 ) );
     }
-    else if( cc_num > l ) 
+    else if( cc_id > l ) 
     {
         return scaleMatrix( vec3( animScale, animScale, 1.0 ) );        
     }
-    else if( cc_num < l )
+    else if( cc_id < l )
     {
         return scaleMatrix( vec3( 1.0, 1.0, 1.0 ) );
     }
@@ -139,13 +139,13 @@ void main()
     switch( transformTextEffectId )
     {
     case 1:
-        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearRotationCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearRotationCC( transformEffectVal1, transformEffectVal2, cc_id, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
     case 2:
-        transform = transform *translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform *translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearScaleCC( transformEffectVal1, transformEffectVal2, cc_id, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;     
     case 3:
-        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_id, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
     case 4:
         transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * animLetterTransform() * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
@@ -157,11 +157,11 @@ void main()
 	
     transform = MVP * transform;
 	
-	if( cc_num >= firstTextShCC && cc_num < firstTextGlowCC ) 
+	if( cc_id >= firstTextShCC && cc_id < firstTextGlowCC ) 
 	{
 		transform = transform * shadowTx;
 	}
-	else if ( cc_num >= firstTextOutCC && cc_num < firstTextCC ) 
+	else if ( cc_id >= firstTextOutCC && cc_id < firstTextCC ) 
 	{
 		transform = transform * outlineTx;
 	}

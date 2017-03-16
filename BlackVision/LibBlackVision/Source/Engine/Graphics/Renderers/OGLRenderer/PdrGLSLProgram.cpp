@@ -44,31 +44,31 @@ bool compileAndLinkProgram  ( PdrGLSLProgram & prog, const std::string & vs, con
 {
     if( !prog.CompileShaderFromString( vs.c_str(),GLSLShader::VERTEX ) )
     {
-        printf( "Vertex shader failed to compile!\n%s", prog.Log().c_str() );
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
     if( !prog.CompileShaderFromString( ps.c_str(),GLSLShader::FRAGMENT ) )
     {
-        printf("Fragment shader failed to compile!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
     if ( gs != "" && !prog.CompileShaderFromString( gs.c_str(), GLSLShader::GEOMETRY ) )
     {
-        printf("Fragment shader failed to compile!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;    
     }
 
     if( !prog.Link() )
     {
-        printf("Shader program failed to link!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
     if( !prog.Validate() )
     {
-        printf("Program failed to validate!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
