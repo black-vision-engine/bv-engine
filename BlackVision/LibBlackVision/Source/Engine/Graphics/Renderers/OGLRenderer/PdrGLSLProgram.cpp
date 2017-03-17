@@ -295,21 +295,21 @@ void PdrGLSLProgram::BindFragDataLocation( GLuint location, const string & name 
 
 // *******************************
 //
-void          PdrGLSLProgram::PostSetUniformFail    ( const string & name )
+void          PdrGLSLProgram::PostGetUniformLocationFail    ( const string & name )
 {
     if ( m_verboseLogging )
     {
-        LOG_MESSAGE( SeverityLevel::error ) <<"Uniform '" << name <<"' not found.";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Uniform [" << name << "] not found.";
     }
 }
 
 // *******************************
 //
-void          PdrGLSLProgram::PostSetUniformFail    ( int loc )
+void          PdrGLSLProgram::PostGetUniformLocationFail    ( int loc )
 {
     if ( m_verboseLogging )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Uniform at loc : " << loc << " not found.";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Uniform at loc: [" << loc << "] not found.";
     }
 }
 

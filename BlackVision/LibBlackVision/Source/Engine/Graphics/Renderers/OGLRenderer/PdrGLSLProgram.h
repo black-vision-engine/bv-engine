@@ -25,9 +25,15 @@ class VertexShader;
 class GeometryShader;
 
 namespace GLSLShader {
-    enum GLSLShaderType {
-        VERTEX, FRAGMENT, GEOMETRY,
-        TESS_CONTROL, TESS_EVALUATION
+
+
+    enum GLSLShaderType
+    {
+        VERTEX,
+        FRAGMENT,
+        GEOMETRY,
+        TESS_CONTROL,
+        TESS_EVALUATION
     };
 };
 
@@ -109,8 +115,8 @@ private:
     inline void   SetUniformImpl        ( int loc, int val );
     inline void   SetUniformImpl        ( int loc, bool val );
 
-    void          PostSetUniformFail    ( const string & name );
-    void          PostSetUniformFail    ( int loc );
+    void          PostGetUniformLocationFail    ( const string & name );
+    void          PostGetUniformLocationFail    ( int loc );
 
 public:
 

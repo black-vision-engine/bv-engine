@@ -11,6 +11,11 @@ inline int  PdrGLSLProgram::GetUniformLocation( const string & name )
         int loc = BVGL::bvglGetUniformLocation( m_Handle, name.c_str() );
         m_uniformLocations[ name ] = loc;
 
+        if( loc < 0 )
+        {
+            PostGetUniformLocationFail( name );
+        }
+
         return loc;
     }
 
@@ -26,10 +31,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, float x, float y, f
     if( loc >= 0 )
     {
         SetUniformImpl( loc, x, y, z );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -44,10 +45,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, const vec3 & v )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, v );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -62,10 +59,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, const vec4 & v )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, v );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -80,10 +73,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, const vec2 & v )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, v );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -98,10 +87,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, const mat2 & m )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, m );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -116,10 +101,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, const mat3 & m )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, m );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -134,10 +115,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, const mat4 & m )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, m );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -152,10 +129,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, float val )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, val );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -170,10 +143,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, int val )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, val ); // Is this possible to prevent setting  already set uniform here?
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -188,10 +157,6 @@ inline int  PdrGLSLProgram::SetUniform( const string & name, bool val )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, val );
-    } 
-    else 
-    {
-        PostSetUniformFail( name );
     }
 
     return loc;
@@ -204,10 +169,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, float x, float y, float z )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, x, y, z );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -218,10 +179,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, const vec3 & v )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, v );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -232,10 +189,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, const vec4 & v )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, v );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -246,10 +199,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, const vec2 & v )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, v );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -260,10 +209,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, const mat2 & m )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, m );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -274,10 +219,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, const mat3 & m )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, m );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -288,10 +229,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, const mat4 & m )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, m );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -302,10 +239,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, float val )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, val );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -316,10 +249,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, int val )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, val );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
@@ -330,10 +259,6 @@ inline void PdrGLSLProgram::SetUniform( int loc, bool val )
     if( loc >= 0 )
     {
         SetUniformImpl( loc, val );
-    } 
-    else 
-    {
-        PostSetUniformFail( loc );
     }
 }
 
