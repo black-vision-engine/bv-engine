@@ -26,8 +26,8 @@ model::VertexAttributesChannelPtr   TextHelper::CreateEmptyVACForText()
     model::VertexAttributesChannelDescriptor vacDesc;
 
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_ATLASCOORD, ChannelRole::CR_PROCESSOR );
+    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_CUSTOM, ChannelRole::CR_PROCESSOR );
 	vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_CUSTOM, ChannelRole::CR_PASSTHROUGH );
 
     return std::make_shared< model::VertexAttributesChannel>( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc );
@@ -221,7 +221,7 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
 
             // UV
 
-            auto desc1 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            auto desc1 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_ATLASCOORD, ChannelRole::CR_PROCESSOR );
 
             auto verTex0AttrChannel = std::make_shared< model::Float2AttributeChannel >( desc1, "textAtlasPosition", true );
 
@@ -233,7 +233,7 @@ float							TextHelper::BuildVACForText     ( model::VertexAttributesChannel * v
 
             // CC CENTER
 
-            auto desc2 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            auto desc2 = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_CUSTOM, ChannelRole::CR_PROCESSOR );
 
             auto ccCenterAttrChannel = std::make_shared< model::Float2AttributeChannel >( desc2, "ccCenter", true );
 

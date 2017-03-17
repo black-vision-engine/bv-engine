@@ -77,6 +77,7 @@ enum class AttributeSemantic : int
 {
     AS_POSITION = 0,      
     AS_TEXCOORD,
+    AS_ATLASCOORD,
     AS_COLOR,
     AS_NORMAL,        
     AS_TANGENT,        
