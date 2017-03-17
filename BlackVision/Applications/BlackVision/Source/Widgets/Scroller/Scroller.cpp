@@ -10,6 +10,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
 #include "Tools/StringHeplers.h"
@@ -1522,16 +1523,43 @@ void            Scroller::NodeRemovedHandler  ( IEventPtr evt )
             return;
 
         NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
+        NodeRemoved( removedEvt->ParentNode.get(), removedEvt->RemovedNode.get() );
+    }
+}
 
-        // Scroller uses only closest children.
-        if( removedEvt->ParentNode != parentNode )
+// ***********************
+//
+void            Scroller::NodeMovedHandler  ( IEventPtr evt )
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        if( evt->GetEventType() != NodeMovedEvent::Type() )
             return;
 
-        if( m_nodesStates.Exist( removedEvt->RemovedNode.get() ) )
+        NodeMovedEventPtr event = std::static_pointer_cast< NodeMovedEvent >( evt );
+
+        if( event->SrcParentNode == event->DstParentNode )
+            return;
+
+        NodeRemoved( event->SrcParentNode.get(), event->Node.get() );
+    }
+}
+
+// ***********************
+//
+void            Scroller::NodeRemoved       ( model::BasicNode * parent, model::BasicNode * node )
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        // Scroller uses only closest children.
+        if( parent != parentNode.get() )
+            return;
+
+        if( m_nodesStates.Exist( node ) )
         {
-            m_nodesStates.Remove( removedEvt->RemovedNode.get() );
-            m_shifts.erase( removedEvt->RemovedNode.get() );
-            m_margins.erase( removedEvt->RemovedNode.get() );
+            m_nodesStates.Remove( node );
+            m_shifts.erase( node );
+            m_margins.erase( node );
         }
     }
 }

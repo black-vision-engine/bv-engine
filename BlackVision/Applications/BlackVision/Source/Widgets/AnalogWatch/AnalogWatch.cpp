@@ -289,6 +289,10 @@ void        AnalogWatch::NodeMovedHandler   ( IEventPtr evt )
         return;
 
     NodeMovedEventPtr movedEvent = std::static_pointer_cast< NodeMovedEvent >( evt );
+    
+    if( movedEvent->SrcParentNode == movedEvent->DstParentNode )
+        return;
+
     NodeRemoved( movedEvent->SrcParentNode.get(), movedEvent->Node.get() );
 }
 
