@@ -79,7 +79,7 @@ void				AVDecoderThread::Restart	()
 	}
 }
 
-// ******************************
+// *******************************
 //
 void				AVDecoderThread::Stop		()
 {
