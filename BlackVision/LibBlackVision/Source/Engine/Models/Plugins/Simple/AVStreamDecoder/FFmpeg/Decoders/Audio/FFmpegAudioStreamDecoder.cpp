@@ -109,7 +109,7 @@ AVMediaData		FFmpegAudioStreamDecoder::ConvertFrame		()
         outSamples = m_frame->nb_samples;
         frameSize = ( SizeType )av_samples_get_buffer_size( nullptr, m_nbChannels, ( Int32 )outSamples, m_format, 1 );
         outBuffer = new uint8_t[ frameSize ];
-        memcpy( outBuffer, m_frame->data, frameSize );
+        memcpy( outBuffer, m_frame->data[ 0 ], frameSize );
     }
 
     mediaData.framePTS = ( UInt64 )( 1000 * av_q2d( m_stream->time_base ) * m_frame->pts );
