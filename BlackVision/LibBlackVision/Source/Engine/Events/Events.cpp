@@ -1012,11 +1012,18 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
 
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
         newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );        
-        newEvent->Time              = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits<float>::quiet_NaN() );
+
+        auto ex = SerializationHelper::String2T< Float32 >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ) );
+
+        if( ex.isValid )
+            newEvent->Time = ex.ham;
+        else
+            return nullptr;
 
         return newEvent;
     }
-    return nullptr;    
+    else
+        return nullptr;    
 }
 
 // *************************************
