@@ -1607,7 +1607,13 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer & deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         TimeLineEventPtr newEvent   = std::make_shared< TimeLineEvent >();
-        newEvent->Time              = SerializationHelper::String2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ), std::numeric_limits<float>::quiet_NaN() );
+
+        auto ex = SerializationHelper::String2T< Float32 >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ) );
+        if( ex.isValid )
+            newEvent->Time = ex.ham;
+        else
+            return nullptr;
+
         newEvent->TimelineCommand   = SerializationHelper::String2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimeLineEvent::Command::Fail );
         newEvent->TimelineName      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         newEvent->TimelineType      = SerializationHelper::String2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_STRING ), bv::TimelineType::TT_OFFSET );
