@@ -67,6 +67,7 @@ public:
 	virtual bool            ProcessPacket               ( bool block = false );
 	virtual bool            PopData                     ( AVMediaData & data );
 	virtual UInt64          GetCurrentPTS               ();
+    virtual bool            IsAudio                     () const = 0;
 
 private:
 

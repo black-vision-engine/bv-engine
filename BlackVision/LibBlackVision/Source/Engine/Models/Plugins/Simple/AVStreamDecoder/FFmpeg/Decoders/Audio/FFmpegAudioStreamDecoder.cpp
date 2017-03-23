@@ -213,4 +213,11 @@ AVSampleFormat          FFmpegAudioStreamDecoder::ConvertFormat         ( AudioF
 	return AV_SAMPLE_FMT_S16;
 }
 
+// *******************************
+//
+bool                    FFmpegAudioStreamDecoder::IsAudio                     () const
+{
+    return true;
+}
+
 } //bv

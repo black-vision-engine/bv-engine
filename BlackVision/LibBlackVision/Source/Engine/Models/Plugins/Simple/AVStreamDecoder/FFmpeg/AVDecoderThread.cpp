@@ -159,6 +159,10 @@ void				AVDecoderThread::Run			    ()
         
 		m_streamDecoder->NextDataReady( time, true );
 
+        if( m_streamDecoder->IsAudio() ) 
+            while( !m_streamDecoder->IsDataQueueEmpty() && m_streamDecoder->GetCurrentPTS() < time + 100 )
+                m_streamDecoder->NextDataReady( m_streamDecoder->GetCurrentPTS(), true );
+
 		std::unique_lock< std::mutex > lock( m_mutex );
 		
 		if( time + m_streamDecoder->GetOffset() > duration || m_streamDecoder->IsFinished() )
