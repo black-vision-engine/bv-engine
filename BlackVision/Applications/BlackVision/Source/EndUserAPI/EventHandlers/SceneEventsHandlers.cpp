@@ -18,6 +18,8 @@
 #include "System/Path.h"
 #include "IO/FileIO.h"
 
+#include "Application/ApplicationContext.h"
+
 #include <limits>
 #undef LoadImageW
 #undef LoadImage
@@ -1194,11 +1196,11 @@ glm::vec3   SceneEventsHandlers::GetMeshTranslationToFitCamera            ( mode
     auto camFOV = glm::radians( model::QueryTypedParam< model::ParamFloatPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::FOV ) )->Evaluate() );
     auto camPos = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::POSITION ) )->Evaluate();
     auto camDir = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::DIRECTION ) )->Evaluate();
-    
-    auto camViewportW = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) )->Evaluate();
-    auto camViewportH = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) )->Evaluate();
-    
-    auto ratio = ( Float32 )(std::max)( camViewportW, camViewportH ) / ( Float32 )(std::min)( camViewportW, camViewportH );
+
+    auto height = ( float )ApplicationContext::Instance().GetHeight();
+    auto width = ( float )ApplicationContext::Instance().GetWidth();
+
+    auto ratio = ( Float32 )(std::max)( width, height ) / ( Float32 )(std::min)( width, height );
 
     auto camDist = ratio * bbRadius / ( 2.f * glm::tan( camFOV / 2.0f ) );
 

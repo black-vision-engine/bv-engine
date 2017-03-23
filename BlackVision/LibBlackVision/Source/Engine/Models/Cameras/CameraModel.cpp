@@ -17,8 +17,7 @@ namespace bv { namespace model {
 
 
 const std::string       CameraModel::PARAMETERS::IS_PERSPECTIVE         = "IsPerspective";
-const std::string       CameraModel::PARAMETERS::VIEWPORT_HEIGHT        = "ViewportHeight";
-const std::string       CameraModel::PARAMETERS::VIEWPORT_WIDTH         = "ViewportWidth";
+const std::string       CameraModel::PARAMETERS::VIEWPORT_SIZE          = "ViewportSize";
 const std::string       CameraModel::PARAMETERS::DIRECTION              = "Direction";
 const std::string       CameraModel::PARAMETERS::POSITION               = "Position";
 const std::string       CameraModel::PARAMETERS::FOV                    = "FOV";
@@ -36,8 +35,7 @@ CameraModel::CameraModel( ITimeEvaluatorPtr timeEvaluator )
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::FOV, 45.0f, true );
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::NEAR_CLIPPING_PLANE, 0.1f, true );
     AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::FAR_CLIPPING_PLANE, 100.0f, true );
-    AddIntParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_WIDTH, 1920, true );
-    AddIntParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_HEIGHT, 1080, true );
+    AddFloatParam( m_paramModel, timeEvaluator, PARAMETERS::VIEWPORT_SIZE, 2.0, true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::POSITION, glm::vec3( 0.0f, 0.0f, 5.0f ), true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::DIRECTION, glm::vec3( 0.0f, 0.0f, -1.0f ), true );
     AddVec3Param( m_paramModel, timeEvaluator, PARAMETERS::UP_VECTOR, glm::vec3( 0.0f, 1.0f, 0.0f ), true );

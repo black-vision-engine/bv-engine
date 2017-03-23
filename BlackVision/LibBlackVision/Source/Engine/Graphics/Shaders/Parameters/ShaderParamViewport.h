@@ -12,8 +12,8 @@ class ShaderParamViewport : public GenericShaderParam
 {
 private:
 
-    unsigned int    m_lastViewportWidth;
-    unsigned int    m_lastViewportHeight;
+    float       m_lastViewportWidth;
+    float       m_lastViewportHeight;
 
     glm::mat4   m_viewportMatrix;
 

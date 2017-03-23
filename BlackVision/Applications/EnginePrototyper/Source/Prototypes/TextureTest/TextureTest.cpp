@@ -68,7 +68,7 @@ void    TextureTest::Resize              ( UInt32 w, UInt32 h )
 	m_height = h;
 
     BVGL::bvglViewport( 0, 0, w, h );
-	m_camera->SetPerspective( 90.0f, w, h, 0.1f, 100.0f );
+	m_camera->SetPerspective( 90.0f, (float)w, (float)h, 0.1f, 100.0f );
 	m_projMat = m_camera->GetProjectionMatrix();
 }
 
