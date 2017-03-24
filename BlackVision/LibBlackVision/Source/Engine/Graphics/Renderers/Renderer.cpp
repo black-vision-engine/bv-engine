@@ -535,14 +535,19 @@ void    Renderer::SetSamplerTexUnit ( int samplerLoc, int textureUnit )
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
+    bool updated = false;
 
     if( texture->GetUpdateID() > m_TextureUpdateIDMap[ texture ] )
     {
         pdrTex2D->Update( texture );
         m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
+
+        updated = true;
     }
 
-    if( !IsEnabled( texture, textureUnit ) )
+    // Note: If texture was updated it must be rebound to shader even if it was eneabled.
+    // Update process can delete texture and create new one, which caused problems in the past.
+    if( updated || !IsEnabled( texture, textureUnit ) )
     {
         pdrTex2D->Enable( this, textureUnit );
 
