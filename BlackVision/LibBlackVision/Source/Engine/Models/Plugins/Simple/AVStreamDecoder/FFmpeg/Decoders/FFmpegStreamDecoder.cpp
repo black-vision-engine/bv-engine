@@ -330,6 +330,12 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
     return false;
 }
 
+// *******************************
+// Returns last played frame presentation time stamp
+UInt64              FFmpegStreamDecoder::GetLastPlayedFramePTS          () const
+{
+    return m_prevPTS - GetOffset();
+}
 
 // *******************************
 //

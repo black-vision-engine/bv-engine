@@ -31,6 +31,7 @@ public:
     void                    Start           ();
 	void					Reset			();
 
+    void                    PauseOnAsync    ( UInt64 t );
     void                    Pause           ();
     void                    UnPause         ();
 

@@ -146,7 +146,8 @@ void						FFmpegAVDecoder::Play				()
 //
 void						FFmpegAVDecoder::Pause				()
 {
-	m_timer.Pause();
+    auto lastPTS = GetLastPlayedFramePTS();
+	m_timer.PauseOnAsync( lastPTS );
 	m_paused = true;
 	//if( m_audioDecoderThread )
 	//	m_audioDecoderThread->Pause();
@@ -643,6 +644,20 @@ bool					FFmpegAVDecoder::Seek				    ( FFmpegStreamDecoder * decoder, Int64 tim
 	{
 		return false;
 	}
+}
+
+// *********************************
+// Returns last played frame presentation time stamp for all streams
+UInt64         FFmpegAVDecoder::GetLastPlayedFramePTS   () const
+{
+    UInt64 ts = 0;
+
+    for( auto & s : m_streams )
+    {
+        ts = std::max( s.second->GetLastPlayedFramePTS(), ts );
+    }
+
+    return ts;
 }
 
 } //bv

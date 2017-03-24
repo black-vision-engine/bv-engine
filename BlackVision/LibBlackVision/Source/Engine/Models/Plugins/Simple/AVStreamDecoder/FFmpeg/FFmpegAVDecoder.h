@@ -103,6 +103,8 @@ private:
     @param[time] in miliseconds
     */
 	bool						Seek				    ( FFmpegStreamDecoder * decoder, Int64 time, Int64 * nearestTimestamp );
+
+    UInt64                      GetLastPlayedFramePTS   () const;
 };
 
 } //bv
