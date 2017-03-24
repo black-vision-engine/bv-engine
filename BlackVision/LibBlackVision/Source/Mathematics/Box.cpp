@@ -224,6 +224,39 @@ glm::vec3   Box::Center             () const
     return center;
 }
 
+// ***********************
+//
+void        Box::Transform          ( const glm::mat4 & transformation )
+{
+    glm::vec4 BBPoints[ 8 ];
+    
+    BBPoints[ 0 ] = glm::vec4( xmin, ymin, zmin, 1.0 );
+    BBPoints[ 1 ] = glm::vec4( xmin, ymax, zmin, 1.0 );
+    BBPoints[ 2 ] = glm::vec4( xmax, ymax, zmin, 1.0 );
+    BBPoints[ 3 ] = glm::vec4( xmax, ymin, zmin, 1.0 );
+
+    BBPoints[ 4 ] = glm::vec4( xmin, ymin, zmax, 1.0 );
+    BBPoints[ 5 ] = glm::vec4( xmin, ymax, zmax, 1.0 );
+    BBPoints[ 6 ] = glm::vec4( xmax, ymax, zmax, 1.0 );
+    BBPoints[ 7 ] = glm::vec4( xmax, ymin, zmax, 1.0 );
+
+    for( int i = 0; i < 8; ++i )
+    {
+        BBPoints[ i ] = transformation * BBPoints[ i ];
+    }
+
+    for( int i = 0; i < 8; ++i )
+    {
+        xmin = std::min( xmin, BBPoints[ i ].x );
+        ymin = std::min( ymin, BBPoints[ i ].y );
+        zmin = std::min( zmin, BBPoints[ i ].z );
+
+        xmax = std::max( xmax, BBPoints[ i ].x );
+        ymax = std::max( ymax, BBPoints[ i ].y );
+        zmax = std::max( zmax, BBPoints[ i ].z );
+    }
+}
+
 // ******************************
 // 
 std::vector< glm::vec3 > Box::GetVerticies () const

@@ -56,7 +56,7 @@ void Camera::SetPerspective                         ( float fov, float aspectRat
 
 // *********************************
 //
-void Camera::SetPerspective                         ( float fov, unsigned int w, unsigned int h, float near, float far )
+void Camera::SetPerspective                         ( float fov, float w, float h, float near, float far )
 {
     assert( w > 0 );
     assert( h > 0 );
@@ -73,7 +73,7 @@ void  Camera::SetPerspective                        ( float aspectRatio )
 
 // ***********************
 //
-void Camera::SetOrthogonal           ( unsigned int w, unsigned int h, float near, float far )
+void Camera::SetOrthogonal           ( float w, float h, float near, float far )
 {
     m_isPerspective = false;
 
@@ -87,7 +87,7 @@ void Camera::SetOrthogonal           ( unsigned int w, unsigned int h, float nea
 
 // *********************************
 //
-void Camera::SetViewportSize                        ( unsigned int w, unsigned int h )
+void Camera::SetViewportSize                        ( float w, float h )
 {
     assert( w > 0 );
     assert( h > 0 );
@@ -103,7 +103,7 @@ void Camera::SetViewportSize                        ( unsigned int w, unsigned i
     }
     else
     {
-        SetFrustum( -aspect, aspect, -1.f, 1.f, m_nearClippingPlane, m_farClippingPlane );
+        SetFrustum( -w / 2, w / 2, -h / 2, h / 2, m_nearClippingPlane, m_farClippingPlane );
     }
 }
 
@@ -171,14 +171,14 @@ void Camera::SetProjectionMatrix                    ( const glm::mat4 & projecti
 
 // *********************************
 //
-unsigned int        Camera::GetViewportWidth        () const
+float               Camera::GetViewportWidth        () const
 {
     return m_viewportWidth;
 }
 
 // *********************************
 //
-unsigned int        Camera::GetViewportHeight       () const
+float               Camera::GetViewportHeight       () const
 {
     return m_viewportHeight;
 }

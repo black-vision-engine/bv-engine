@@ -724,7 +724,12 @@ mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
 
         for( UInt32 i = 0; i < m_children.size(); ++i )
         {
-            ret.Include( m_children[ i ]->GetBoundingBoxRecursive() );
+            const glm::mat4 & transform = m_children[ i ]->GetFinalizePlugin()->GetTransformChannel()->GetTransformValue()->GetValue();
+            
+            mathematics::Box childBox = m_children[ i ]->GetBoundingBoxRecursive();
+            childBox.Transform( transform );
+            
+            ret.Include( childBox );
         }
     }
 

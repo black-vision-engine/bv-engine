@@ -220,30 +220,32 @@ public:
 
     void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
     {
-		center_translate = computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
-		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
+        center_translate = computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
+        float angleOffset = computeAngleOffset( open_angle_mode, openangle );
 
-		int max_loop;
-		if( openangle != 0.0/* && openangle != 360 */)		// Uncomment if you want to see organ.
-			max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( openangle ) ) / ( TWOPI / tesselation ) ) ) );
-		else
-			max_loop = tesselation;
+        int maxLoop;
+        if( openangle != 0.0/* && openangle != 360 */ )		// Uncomment if you want to see organ.
+            maxLoop = static_cast< int >( ceil( float( ( TWOPI - TO_RADIANS( openangle ) ) / ( TWOPI / tesselation ) ) ) );
+        else
+            maxLoop = tesselation;
 
-        for( int j = 0; j < max_loop; j++ )
+        for( int j = 0; j < maxLoop; j++ )
+        {
             for( int i = 0; i <= tesselation; i++ )
             {
                 double phi = i * TWOPI / tesselation;
-                double theta = j * TWOPI / tesselation + angle_offset;
+                double theta = j * TWOPI / tesselation + angleOffset;
 
-                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-                uvs->AddAttribute( getUV( (float)phi, (float)theta ) );
+                verts->AddAttribute( glm::vec3( cos( theta ) * ( radius + radius2 * cos( phi ) ), sin( theta ) * ( radius + radius2 * cos( phi ) ), radius2 * sin( phi ) ) + center_translate );
+                uvs->AddAttribute( getUV( ( float )phi, ( float )theta ) );
 
                 phi = i * TWOPI / tesselation;
-				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) ) + angle_offset;
+                theta = computeAngle2Clamped( float( TWOPI / tesselation ), float( j ) ) + angleOffset;
 
-                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-				uvs->AddAttribute( getUV( (float)phi, (float)theta ) );
+                verts->AddAttribute( glm::vec3( cos( theta ) * ( radius + radius2 * cos( phi ) ), sin( theta ) * ( radius + radius2 * cos( phi ) ), radius2 * sin( phi ) ) + center_translate );
+                uvs->AddAttribute( getUV( ( float )phi, ( float )theta ) );
             }
+        }
 
         GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
