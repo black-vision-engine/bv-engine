@@ -41,6 +41,12 @@ struct Box
 
     glm::vec3           Center          () const;
 
+    bool                IsEmpty         () const        { return m_empty;  }
+
+    /*This function transforms bounding box but it remains axis aligned. This means that BB will be greater than
+    before transformation.*/
+    void                Transform       ( const glm::mat4 & transformation );
+
     std::vector< glm::vec3 > GetVerticies () const;
 };
 
