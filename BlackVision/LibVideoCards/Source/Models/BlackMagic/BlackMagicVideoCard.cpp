@@ -93,9 +93,10 @@ VideoCard::VideoCard( UInt32 deviceID )
     , m_decklinkOutput( nullptr )
     , m_configuration( nullptr )
 	, m_keyer( nullptr )
-	, m_videoOutputDelegate( nullptr )
+	, m_audioVideoOutputDelegate( nullptr )
 	, m_frameQueue( 1 )
 	, m_frameNum( 0 )
+    , m_audioEnabled( false )
 {
 	InitVideoCard();
 }
@@ -118,8 +119,8 @@ VideoCard::~VideoCard       ()
     if( m_device )
         m_device->Release();
 
-	if( m_videoOutputDelegate )
-		m_videoOutputDelegate->Release();
+	if( m_audioVideoOutputDelegate )
+        m_audioVideoOutputDelegate->Release();
 }
 
 //**************************************
@@ -187,8 +188,8 @@ bool                    VideoCard::InitDevice           ()
 
 	if( success )
 	{
-		m_videoOutputDelegate = new VideoOutputDelegate( this );
-		if( !SUCCESS( m_decklinkOutput->SetScheduledFrameCompletionCallback( m_videoOutputDelegate ) ) )
+		m_audioVideoOutputDelegate = new AudioVideoOutputDelegate( this );
+		if( !SUCCESS( m_decklinkOutput->SetScheduledFrameCompletionCallback( m_audioVideoOutputDelegate ) ) )
 		{
 			LOG_MESSAGE( SeverityLevel::error ) << "SetScheduledFrameCompletionCallback returned an error";
 			success = false;
@@ -196,6 +197,15 @@ bool                    VideoCard::InitDevice           ()
 	}
 
     return success;
+}
+
+//**************************************
+//
+bool					VideoCard::RenderAudioSamples  ( bool preroll )
+{
+    
+    preroll;
+    return true;
 }
 
 //**************************************
@@ -232,8 +242,21 @@ bool                    VideoCard::InitOutput()
             }
         }
     }
-    
+
     return success;
+}
+
+//**************************************
+//
+void                    VideoCard::EnableAudioChannel  ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount )
+{
+    if( SUCCESS( m_decklinkOutput->EnableAudioOutput( ConvertSampleRate( sampleRate ),
+                                                      ConvertSampleType( audioSampleType ),
+                                                      channelCount,
+                                                      BMDAudioOutputStreamType::bmdAudioOutputStreamContinuous ) ) )
+    {
+        m_audioEnabled = true;
+    }
 }
 
 //**************************************
@@ -272,6 +295,8 @@ void                    VideoCard::SetVideoOutput       ( bool enable )
 void                    VideoCard::AddOutput            ( ChannelOutputData output )
 {
 	m_output = output;
+
+    EnableAudioChannel( AudioSampleType::AV_SAMPLE_FMT_S16, 48000, 2 );
 }
 
 //**************************************
@@ -466,6 +491,16 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
     {
         LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame. " << m_deviceID;
+    }
+
+    if( srcFrame && srcFrame->m_desc.channels == 0 )
+    {
+        completedFrame = completedFrame;
+    }
+
+    if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(), ( unsigned long ) ( ( 48000 * m_frameDuration ) / m_frameTimescale ), 0, 0, NULL ) ) )
+    {
+        LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule audio frame. " << m_deviceID;
     }
 
     m_uiTotalFrames++;

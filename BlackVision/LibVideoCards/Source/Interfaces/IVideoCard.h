@@ -27,6 +27,8 @@ public:
     virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID ) = 0;
     virtual void                DisplayFrame            () const = 0;
 
+    virtual void                EnableAudioChannel      ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) = 0;
+
     virtual void                SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback  ) = 0;
 
 	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const = 0;

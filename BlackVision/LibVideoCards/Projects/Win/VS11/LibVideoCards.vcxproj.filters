@@ -62,7 +62,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Models\BlackMagic\VideoOutputDelegate.h">
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp">
       <Filter>Models\BlackMagic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Models\BlackMagic\VideoOutputDelegate.cpp">
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.cpp">
       <Filter>Models\BlackMagic</Filter>
     </ClCompile>
   </ItemGroup>

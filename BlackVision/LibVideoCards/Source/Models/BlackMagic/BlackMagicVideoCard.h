@@ -6,7 +6,7 @@
 #include "AVFrame.h"
 #include "BlackMagic/DeckLinkAPI_h.h"
 #include "BlackMagicVCThread.h"
-#include "VideoOutputDelegate.h"
+#include "AudioVideoOutputDelegate.h"
 
 #include <atomic>
 #include <mutex>
@@ -58,7 +58,7 @@ private:
 
     mutable UInt64								m_lastFrameTime;
 
-    VideoOutputDelegate	*						m_videoOutputDelegate;
+    AudioVideoOutputDelegate	*				m_audioVideoOutputDelegate;
 
     typedef QueueConcurrentLimited< AVFrameConstPtr >    FrameQueue;
     FrameQueue									m_frameQueue;
@@ -67,6 +67,8 @@ private:
     mutable std::mutex                          m_mutex;
 
 	mutable UInt64								m_frameNum;
+
+    bool                                        m_audioEnabled;
 
     FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
 
@@ -94,6 +96,7 @@ public:
     virtual void            Start               () override;
     virtual void            Stop                () override;
     
+    virtual void            EnableAudioChannel  ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) override;
 
 	virtual void            ProcessFrame        ( const AVFrameConstPtr & data, UInt64 avOutputID ) override;
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
@@ -109,13 +112,15 @@ private:
 	void					FrameCompleted		( IDeckLinkVideoFrame * completedFrame );
 	void					DisplayNextFrame	( IDeckLinkVideoFrame * complitedFrame );
 
+    bool					RenderAudioSamples  ( bool preroll );
+
 	void					UpdateFrameTime		( UInt64 t );
 	UInt64					GetFrameTime		() const;
 
     static UInt32           EnumerateDevices    ();
 
 	friend class BlackMagicVCThread;
-	friend class VideoOutputDelegate;
+	friend class AudioVideoOutputDelegate;
 	friend class VideoCardDesc;
 };
 
