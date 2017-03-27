@@ -2,27 +2,16 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Events/Interfaces/IEventManager.h"
-#include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Audio/AudioRenderer.h"
-#include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/BVProjectEditor.h"
-#include "Engine/Models/ModelState.h"
-
-#include "Tools/SimpleTimer.h"
-#include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Services/BVServiceProvider.h"
 
 #include "Application/ApplicationContext.h"
 
 // FIXME: nrl - render logic replacement
 #include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
-//#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 
 #include "Widgets/NodeLogicFactory.h"
 
 #include "System/Env.h"
-#include "BVConfig.h"
 #include "ProjectManager.h"
 #include "VideoCardManager.h"
 
@@ -37,7 +26,6 @@
 #include "TestAI/TestInnerEvents.h"
 
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
-#include "testai/TestAIManager.h"
 //FIXME: end of remove
 
 #include "StatsFormatters.h"
@@ -123,7 +111,7 @@ void BVAppLogic::Initialize         ()
 
     bv::effect::InitializeLibEffect( m_renderer );
 
-    SetNodeLogicFactory( new NodeLogicFactory );
+    SetNodeLogicFactory( new NodeLogicFactory() );
 
     InitializeKbdHandler();
     InitializeRemoteCommunication();
@@ -136,6 +124,7 @@ void BVAppLogic::Initialize         ()
     if( DefaultConfig.ReadbackFlag() )
     {
         //FIXME: maybe config should be read by bvconfig
+        //FIXME: move this initialization to some other place
         m_videoCardManager = new videocards::VideoCardManager();
 
         m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );

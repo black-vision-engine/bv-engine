@@ -8,6 +8,8 @@
 #include "Assets/AVStream/AVAsset.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDefs.h"
 
+#include <atomic>
+
 
 namespace bv {
 

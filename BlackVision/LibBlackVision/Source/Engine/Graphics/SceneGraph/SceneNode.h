@@ -8,7 +8,6 @@
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
 
 #include "Engine/Audio/AudioEntity.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffect.h"
@@ -31,7 +30,6 @@ private:
 
     SceneNodeRepr *     m_repr;
 
-    NodeEffectPtr       m_nodeEffect;
     nrl::NNodeEffectPtr m_nNodeEffect;
 
     //FIXME: use some sort of caps/flag here (instead of a single flag)
@@ -68,9 +66,7 @@ public:
     void                    EnableNNodeEffect   ();
     void                    DisableNNodeEffect  ();
 
-    NodeEffectPtr           GetNodeEffect       ();
-    void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
-
+    // FIXME: nrl - rename to GetNodeEffect during nrl -> default migration
     nrl::NNodeEffectPtr     GetNNodeEffect      ();
     void                    SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect );
 

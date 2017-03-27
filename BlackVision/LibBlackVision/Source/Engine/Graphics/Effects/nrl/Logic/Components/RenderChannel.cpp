@@ -4,6 +4,8 @@
 
 #include <cassert>
 
+
+#include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
 
