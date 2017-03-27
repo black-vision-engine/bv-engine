@@ -1,4 +1,4 @@
-pragma once
+#pragma once
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
