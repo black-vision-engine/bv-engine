@@ -106,6 +106,20 @@ void  SimpleTimer::UnPause         ()
 
 // *********************************
 //
+unsigned long    SimpleTimer::GetTickCount    ()
+{
+    return ::GetTickCount();
+}
+
+// *********************************
+//
+unsigned long    SimpleTimer::TimeGetTime     ()
+{
+    return timeGetTime();
+}
+
+// *********************************
+//
 unsigned long SimpleTimer::QueryMillis() const
 {
 #ifdef QPF_TIMER

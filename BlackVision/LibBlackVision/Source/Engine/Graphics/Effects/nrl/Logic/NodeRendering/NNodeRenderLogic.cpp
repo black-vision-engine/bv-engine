@@ -145,17 +145,9 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
     }
     else 
-    {   //Transition implementations
-        auto effect = node->GetNodeEffect();
-
-        if( !effect || effect->GetType() ==  NodeEffectType::NET_DEFAULT )
-        {
-            RenderImpl( repr, ctx );
-        }
-        else
-        {
-            effect->Render( repr, ctx );
-        }
+    {
+        // FIXME: nrl - transition implementations
+        assert( false );
     }
 }
 

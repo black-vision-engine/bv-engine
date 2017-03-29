@@ -25,16 +25,13 @@
 
 #include "Serialization/SerializationHelper.h"
 
-
 #include "Engine/Events/Events.h"
 #include "Engine/Events/EventManager.h"
-
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultGeometryProcessorBase.h"
-
 
 //#include "Memory/MemoryLeaks.h"
 //#include <vld.h>
@@ -54,7 +51,6 @@
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 #include "Assets/SVG/SVGAssetDescriptor.h"
 
-
 #include "Engine/Types/Values/ValuesFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
@@ -63,11 +59,7 @@
 
 
 #include "Engine/Graphics/State/RendererStateInstance.h"
-#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
-#include "Engine/Graphics/Effects/NodeEffect/Logic/PreFullScreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/Logic/PostFullScreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
@@ -76,7 +68,6 @@
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
 
 #include "UseLoggerLibBlackVision.h"
-
 
 
 #include <map>
@@ -93,4 +84,3 @@
 #undef min
 #undef LoadImage
 #undef LoadImageW
-

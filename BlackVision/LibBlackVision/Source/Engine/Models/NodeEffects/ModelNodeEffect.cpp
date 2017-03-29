@@ -26,19 +26,19 @@ namespace
 {
 // ********************************
 //
-std::map< NodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
+std::map< nrl::NNodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
 {
-    std::map< NodeEffectType, UInt32 > m;
+    std::map< nrl::NNodeEffectType, UInt32 > m;
     // FIXME: nrl - fix this
-    //    m[ NodeEffectType::NET_IMAGE_MASK ] = 1;
+    //    m[ nrl::NNodeEffectType::NET_IMAGE_MASK ] = 1;
 
     return m;
 }
-static std::map< NodeEffectType, UInt32 > effectNumRequiredAssets = EffectNumRequiredAssetsInit();
+static std::map< nrl::NNodeEffectType, UInt32 > effectNumRequiredAssets = EffectNumRequiredAssetsInit();
 
 // ********************************
 //
-UInt32 GetEffectNumRequiredAssets( NodeEffectType effectType)
+UInt32 GetEffectNumRequiredAssets( nrl::NNodeEffectType effectType)
 {
     auto it = effectNumRequiredAssets.find( effectType );
 
@@ -56,7 +56,7 @@ UInt32 GetEffectNumRequiredAssets( NodeEffectType effectType)
 
 // ********************************
 //
-ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type )
+ModelNodeEffect::ModelNodeEffect    ( nrl::NNodeEffectType type )
     : m_type( type )
     , m_paramValModel( std::make_shared< DefaultParamValModel >() )
     , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
@@ -64,7 +64,7 @@ ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type )
 
 // ***********************
 //
-ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type, DefaultParamValModelPtr model )
+ModelNodeEffect::ModelNodeEffect    ( nrl::NNodeEffectType type, DefaultParamValModelPtr model )
     : m_type( type )
     , m_paramValModel( model )
     , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
@@ -83,7 +83,7 @@ void                                        ModelNodeEffect::Serialize          
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
     ser.EnterChild( "effect" );
-    ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
+    ser.SetAttribute( "type", SerializationHelper::T2String< nrl::NNodeEffectType >( GetType() ) );
 
     if( context->detailedInfo )
     {
@@ -125,11 +125,11 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 {
     auto typeStr = deser.GetAttribute( "type" );
 
-    auto type = SerializationHelper::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
+    auto type = SerializationHelper::String2T< nrl::NNodeEffectType >( typeStr, nrl::NNodeEffectType::NNET_DEFAULT );
 
     auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 
-    if( type != NodeEffectType::NET_DEFAULT )
+    if( type != nrl::NNodeEffectType::NNET_DEFAULT )
     {
         auto retI = ModelNodeEffectFactory::CreateModelNodeEffect( type, "", deserContext->GetSceneTimeline() );
 
@@ -206,7 +206,7 @@ void                                        ModelNodeEffect::Update             
 
 // ********************************
 //
-NodeEffectType                              ModelNodeEffect::GetType            () const
+nrl::NNodeEffectType                              ModelNodeEffect::GetType      () const
 {
     return m_type;
 }
@@ -241,21 +241,21 @@ const std::vector< IValueConstPtr > &       ModelNodeEffect::GetValues          
 
 // ********************************
 //
-ModelNodeEffectPtr                          ModelNodeEffect::Create             ( NodeEffectType type )
+ModelNodeEffectPtr                          ModelNodeEffect::Create             ( nrl::NNodeEffectType type )
 {
     return std::make_shared< ModelNodeEffect >( type );
 }
 
 // ***********************
 //
-ModelNodeEffectPtr                          ModelNodeEffect::Create             ( NodeEffectType type, DefaultParamValModelPtr model )
+ModelNodeEffectPtr                          ModelNodeEffect::Create             ( nrl::NNodeEffectType type, DefaultParamValModelPtr model )
 {
     return std::make_shared< ModelNodeEffect >( type, model );
 }
 
 // ********************************
 //
-bool                                        ModelNodeEffect::AddAsset               ( const AssetDescConstPtr & assetDesc, SizeType idx )
+bool                                        ModelNodeEffect::AddAsset           ( const AssetDescConstPtr & assetDesc, SizeType idx )
 {
     if( idx < NumRequiredAssets() )
     {
@@ -270,7 +270,7 @@ bool                                        ModelNodeEffect::AddAsset           
 
 // ********************************
 //
-bool                                        ModelNodeEffect::RemoveAsset            ( SizeType idx )
+bool                                        ModelNodeEffect::RemoveAsset        ( SizeType idx )
 {
     if( idx < m_assetsDescs.size() )
     {
@@ -292,7 +292,7 @@ AssetDescVec                                ModelNodeEffect::GetAssets          
 
 // ********************************
 //
-UInt32                                      ModelNodeEffect::NumRequiredAssets   () const
+UInt32                                      ModelNodeEffect::NumRequiredAssets  () const
 {
     return GetEffectNumRequiredAssets( GetType() );
 }

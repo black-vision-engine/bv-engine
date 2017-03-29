@@ -34,7 +34,6 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrUniformBufferObject.h"
 
 #include "Engine/Graphics/SceneGraph/Scene.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 #include "Tools/HRTimer.h"
 
