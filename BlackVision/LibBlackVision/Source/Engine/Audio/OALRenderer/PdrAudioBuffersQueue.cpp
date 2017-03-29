@@ -103,15 +103,15 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         
     }
 
-    if( success )
-        LOG_MESSAGE( SeverityLevel::debug ) << "success:  m_unqueuedBufferHandles.size() == " << m_unqueuedBufferHandles.Size();
-    else
-        LOG_MESSAGE( SeverityLevel::debug ) << "fail: m_unqueuedBufferHandles.size() == " << m_unqueuedBufferHandles.Size();
+    //if( success )
+    //    LOG_MESSAGE( SeverityLevel::debug ) << "success:  m_unqueuedBufferHandles.size() == " << m_unqueuedBufferHandles.Size();
+    //else
+    //    LOG_MESSAGE( SeverityLevel::debug ) << "fail: m_unqueuedBufferHandles.size() == " << m_unqueuedBufferHandles.Size();
 
-    if( m_unqueuedBufferHandles.Size() > 13 )
-    {
-        success = success;
-    }
+    //if( m_unqueuedBufferHandles.Size() > 13 )
+    //{
+    //    success = success;
+    //}
 
 	//auto enoughDataBuffers = m_unqueuedBufferHandles.Size() < QUEUE_SIZE - 1; // Start playing only if at least 2 frames are buffered.
 

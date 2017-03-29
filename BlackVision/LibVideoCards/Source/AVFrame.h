@@ -7,6 +7,14 @@
 
 namespace bv { namespace videocards {
 
+enum class AudioSampleType : int
+{
+    AV_SAMPLE_FMT_S32 = 0,
+    AV_SAMPLE_FMT_S16,
+    AV_SAMPLE_FMT_U8,
+
+    AV_SAMPLE_FMT_TOTAL,
+};
 
 struct AVFrameDescriptor
 {

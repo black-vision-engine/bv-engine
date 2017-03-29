@@ -1,4 +1,4 @@
-#include "VideoOutputDelegate.h"
+#include "AudioVideoOutputDelegate.h"
 
 #include "UseLoggerVideoModule.h"
 
@@ -8,13 +8,13 @@ namespace bv { namespace videocards { namespace blackmagic {
 
 //**************************************
 //
-VideoOutputDelegate::VideoOutputDelegate					( VideoCard * owner )
+AudioVideoOutputDelegate::AudioVideoOutputDelegate					( VideoCard * owner )
 	: m_owner( owner )
 {}
 
 //**************************************
 //
-HRESULT VideoOutputDelegate::ScheduledFrameCompleted		( IDeckLinkVideoFrame * completedFrame, BMDOutputFrameCompletionResult result )
+HRESULT AudioVideoOutputDelegate::ScheduledFrameCompleted		( IDeckLinkVideoFrame * completedFrame, BMDOutputFrameCompletionResult result )
 {
 	if( result != BMDOutputFrameCompletionResult::bmdOutputFrameCompleted )
 	{
@@ -35,19 +35,29 @@ HRESULT VideoOutputDelegate::ScheduledFrameCompleted		( IDeckLinkVideoFrame * co
 
 //**************************************
 //
-HRESULT	VideoOutputDelegate::ScheduledPlaybackHasStopped	()
+HRESULT	AudioVideoOutputDelegate::ScheduledPlaybackHasStopped	()
 {
 	return S_OK;
 }
 
 //**************************************
 //
-VideoOutputDelegate::~VideoOutputDelegate()
+HRESULT AudioVideoOutputDelegate::RenderAudioSamples          ( BOOL preroll )
+{
+    if( m_owner->RenderAudioSamples( preroll ? true : false ) )
+        return S_OK;
+    else
+        return E_FAIL;
+}
+
+//**************************************
+//
+AudioVideoOutputDelegate::~AudioVideoOutputDelegate()
 {}
 
 //**************************************
 //
-HRESULT	VideoOutputDelegate::QueryInterface( REFIID, LPVOID *ppv )
+HRESULT	AudioVideoOutputDelegate::QueryInterface( REFIID, LPVOID *ppv )
 {
 	*ppv = NULL;
 	return E_NOINTERFACE;
@@ -55,14 +65,14 @@ HRESULT	VideoOutputDelegate::QueryInterface( REFIID, LPVOID *ppv )
 
 //**************************************
 //
-ULONG	VideoOutputDelegate::AddRef()
+ULONG	AudioVideoOutputDelegate::AddRef()
 {
 	return InterlockedIncrement( ( LONG* ) &m_refCount );
 }
 
 //**************************************
 //
-ULONG	VideoOutputDelegate::Release()
+ULONG	AudioVideoOutputDelegate::Release()
 {
 	ULONG			newRefValue;
 

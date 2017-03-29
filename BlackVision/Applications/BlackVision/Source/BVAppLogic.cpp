@@ -313,7 +313,7 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
                 {
                     //printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );
                     auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
-                    LOG_MESSAGE( SeverityLevel::warning ) << 
+                    LOG_MESSAGE( SeverityLevel::info ) << 
 						"DROP: " << 
 						last_time * 1000.f << 
 						" ms, cur time: " << 
@@ -425,7 +425,6 @@ void    BVAppLogic::PostFrameLogic   ()
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
         std::this_thread::sleep_for( std::chrono::milliseconds( DefaultConfig.FrameTimeMillis() - frameMillis ) );
-        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
     }
 }
 

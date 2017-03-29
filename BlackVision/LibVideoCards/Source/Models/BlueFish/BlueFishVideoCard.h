@@ -91,6 +91,8 @@ public:
 
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 
+    virtual void            EnableAudioChannel      ( AudioSampleType , UInt32 , UInt32 ) override {};
+
     static UInt32           EnumerateDevices            ();
 
 };

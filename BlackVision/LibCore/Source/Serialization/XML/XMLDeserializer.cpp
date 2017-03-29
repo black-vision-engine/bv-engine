@@ -146,6 +146,21 @@ std::string                                             XMLDeserializer::GetValu
 
 // *******************************
 //
+bool			                                        XMLDeserializer::HasAttribute           ( const std::string & name ) const
+{
+    return GetDoc()->first_attribute( name.c_str() ) != nullptr;
+}
+
+// *******************************
+//
+bool		                                            XMLDeserializer::HasAttribute            ( const std::wstring & ) const
+{
+    assert( !"This serializer doesn't supports wstrings" );
+    return false;
+}
+
+// *******************************
+//
 std::string			                                    XMLDeserializer::GetAttribute           ( const std::string & name ) const
 { 
     return GetValue( name );

@@ -52,6 +52,9 @@ public:
 
     std::string                                     GetValue                ( std::string name ) const;
 
+    virtual bool			                        HasAttribute            ( const std::string & name ) const override;
+    virtual bool		                            HasAttribute            ( const std::wstring& name ) const override;
+
     virtual std::string			                    GetAttribute            ( const std::string & name ) const override;
     virtual std::string			                    GetParentAttribute      ( const std::string & parentName, const std::string & attName ) const override;
     
