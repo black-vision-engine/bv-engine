@@ -379,7 +379,7 @@ void                    VideoCard::SetFrameProcessingCompletedCallback( FramePro
 //
 void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr & avFrame, UInt64 avOutputID )
 {
-    assert( avOutputID == m_displayedOutputID );
+    assert( avOutputID == m_displayedOutputID ); avOutputID;
 	if( m_output.enabled )
 	{
 		//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame called at " << Time::Now();
@@ -491,16 +491,19 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
     {
         LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame. " << m_deviceID;
+        m_decklinkOutput->FlushBufferedAudioSamples();
     }
-
-    if( srcFrame && srcFrame->m_desc.channels == 0 )
+    else
     {
-        completedFrame = completedFrame;
-    }
+        if( srcFrame && srcFrame->m_desc.channels == 0 )
+        {
+            completedFrame = completedFrame;
+        }
 
-    if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(), ( unsigned long ) ( ( 48000 * m_frameDuration ) / m_frameTimescale ), 0, 0, NULL ) ) )
-    {
-        LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule audio frame. " << m_deviceID;
+        if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(), ( unsigned long ) ( ( 2 * 48000 * m_frameDuration ) / m_frameTimescale ), 0, m_frameTimescale, NULL ) ) )
+        {
+            LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule audio frame. " << m_deviceID;
+        }
     }
 
     m_uiTotalFrames++;

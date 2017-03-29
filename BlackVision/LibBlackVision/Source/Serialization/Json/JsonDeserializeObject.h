@@ -42,6 +42,10 @@ public:
 
     bool                        NextChild           () const override;
 
+    bool    			        HasAttribute        ( const std::string& name ) const override;
+    bool		                HasAttribute        ( const std::wstring& name ) const override;
+
+
     std::wstring	        	GetAttribute        ( const std::wstring& name ) const override;
     std::wstring	        	GetParentAttribute  ( const std::wstring& parentName, const std::wstring& attName ) const override;
     bool                        EnterChild          ( const std::wstring& name ) const override;

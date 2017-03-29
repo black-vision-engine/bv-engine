@@ -114,6 +114,16 @@ Json::Value JsonDeserializeObject::GetJson() const
     return m_root;
 }
 
+
+// ***********************
+//
+bool JsonDeserializeObject::HasAttribute                ( const std::string& name ) const
+{
+    auto & attribute = ( *m_currentNode )[ name ];
+
+    return !attribute.isNull();
+}
+
 // ***********************
 //
 std::string JsonDeserializeObject::GetAttribute        ( const std::string& name ) const
@@ -250,6 +260,12 @@ ISerializer *       JsonDeserializeObject::CreateSerializer    () const
     
     return newSer;
 }
+
+// ***********************
+//
+bool		        JsonDeserializeObject::HasAttribute        ( const std::wstring & ) const
+{ assert( !"This serializer doesn't supports wstrings" ); return false; }
+
 
 std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
 {    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
