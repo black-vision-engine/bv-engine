@@ -9,12 +9,14 @@ namespace bv {  namespace nrl {
 
 class RenderedChannelsData;
 class NRenderContext;
+class NFullscreenEffect;
 
 class NRenderLogicCore
 {
 private:
 
     std::vector< RenderChannelType > m_allChannels;
+    NFullscreenEffect *     m_blitWithAlphaEffect;
 
 public:
 
