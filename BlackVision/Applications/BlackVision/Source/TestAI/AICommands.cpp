@@ -324,7 +324,7 @@ bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
     {
         auto effect = m_node->GetNodeEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        if( effect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK )
         {
             auto alpha = effect->GetParameter( "alpha" );
 
@@ -427,7 +427,7 @@ bool        AICommandEnableOverridenAlphaNM::TriggerImpl            ( TimeType t
     {
         auto effect = m_node->GetNodeEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        if( effect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK )
         {
             auto alpha = effect->GetParameter( "alpha" );
 

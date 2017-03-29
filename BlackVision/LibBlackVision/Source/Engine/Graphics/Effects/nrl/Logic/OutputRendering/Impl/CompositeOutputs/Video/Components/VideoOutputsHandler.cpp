@@ -4,6 +4,9 @@
 
 #include "Services/BVServiceProvider.h"
 
+#include "VideoCardManager.h"
+
+
 namespace bv { namespace nrl {
 
 // *********************************

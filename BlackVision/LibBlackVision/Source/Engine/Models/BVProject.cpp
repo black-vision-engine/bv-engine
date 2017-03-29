@@ -203,7 +203,11 @@ void							BVProject::SetStartTime	( unsigned long millis )
 //
 void                            BVProject::DetachEffect ( SceneNode * engineNode )
 {
-    m_renderer->FreeNodeEffectPDR( engineNode->GetNodeEffect().get() );
+    // FIXME: fix this code
+    { engineNode; }
+    assert( false );
+    // m_renderer->FreeNodeEffectPDR( engineNode->GetNNodeEffect().get() ); // FIXME: original code
+    m_renderer->FreeNodeEffectPDR( nullptr ); 
 
     //auto tEntity = engineNode->GetTransformable();
 

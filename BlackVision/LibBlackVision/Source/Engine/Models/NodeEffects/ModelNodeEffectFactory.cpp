@@ -16,18 +16,16 @@ namespace bv { namespace model {
 
 // **************************
 //
-IModelNodeEffectPtr         CreateDefaultModelNodeEffect            ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateDefaultModelNodeEffect            ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    return ModelNodeEffect::Create( NodeEffectType::NET_DEFAULT );
+    return ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_DEFAULT );
 }
 
 // **************************
 //
-IModelNodeEffectPtr         CreateAlphaMaskModelNodeEffect          ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateAlphaMaskModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_ALPHA_MASK );
+    auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_ALPHA_MASK );
     
     auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     alphaEval->Parameter()->SetVal( 1.f, 0.f );
@@ -39,10 +37,9 @@ IModelNodeEffectPtr         CreateAlphaMaskModelNodeEffect          ( const std:
 
 // **************************
 //
-IModelNodeEffectPtr         CreateNodeMaskModelNodeEffect          ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateNodeMaskModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_NODE_MASK );
+    auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_NODE_MASK );
 
     auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     auto maskIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskIdx", timeEvaluator );
@@ -64,18 +61,16 @@ IModelNodeEffectPtr         CreateNodeMaskModelNodeEffect          ( const std::
 
 // **************************
 //
-IModelNodeEffectPtr         CreateWireframeModelNodeEffect          ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateWireframeModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    return ModelNodeEffect::Create( NodeEffectType::NET_WIREFRAME );
+    return ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_WIREFRAME );
 }
 
 // **************************
 //
-IModelNodeEffectPtr         CreateMixchannelsModelNodeEffect        ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateMixchannelsModelNodeEffect        ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_MIX_CHANNELS );
+    auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_MIX_CHANNELS );
 
     auto fgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "channelMask", timeEvaluator );
     fgIdxEval->Parameter()->SetVal( 0, 0.f );
@@ -87,11 +82,9 @@ IModelNodeEffectPtr         CreateMixchannelsModelNodeEffect        ( const std:
 
 // **************************
 //
-IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-	name;
-
-	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_BLUR );
+	auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_BLUR );
 
 	auto blurSize = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 	auto blurKernelType = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
@@ -110,10 +103,9 @@ IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std:
 //
 // **************************
 //
-IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_LIGHT_SCATTERING );
+    auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_LIGHT_SCATTERING );
 
     auto exposureEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "exposure", timeEvaluator );
     auto weightEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "weight", timeEvaluator );
@@ -144,10 +136,9 @@ IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std:
 
 // **************************
 //
-IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
-    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_SHADOW );
+    auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_SHADOW );
  
     auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
     auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );
@@ -180,12 +171,9 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
 
 // **************************
 //
-IModelNodeEffectPtr         CreateGlowModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateGlowModelNodeEffect    ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-	{
-		name;
-	}
-	auto effect = ModelNodeEffect::Create( NodeEffectType::NET_GLOW );
+	auto effect = ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_GLOW );
 
 	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
@@ -218,12 +206,8 @@ IModelNodeEffectPtr         CreateGlowModelNodeEffect    ( const std::string & n
 
 // **************************
 //
-IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-	{
-		name;
-	}
-
 	SimpleTransformEvaluatorPtr maskTxEvaluator = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "maskTx", timeEvaluator );
 
 	ModelHelper h( timeEvaluator );
@@ -241,7 +225,7 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 	h.AddSimpleParam( "mirrorEnabled", false, true );
 	h.AddSimpleParam( "polyDegree", 4, true );
 
-	return ModelNodeEffect::Create( NodeEffectType::NET_SOFT_MASK, plModel );
+	return ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_SOFT_MASK, plModel );
 }
 
 //
@@ -303,49 +287,48 @@ IModelNodeEffectPtr         CreateSoftMaskModelNodeEffect    ( const std::string
 
 // ***********************
 //
-IModelNodeEffectPtr         CreateZSortModelNodeEffect                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         CreateZSortModelNodeEffect                  ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    { name; }
     ModelHelper h( timeEvaluator );
     h.SetOrCreatePluginModel();
 
     h.AddSimpleParam( "useSort", false, true, false );
 
-    return ModelNodeEffect::Create( NodeEffectType::NET_Z_SORT, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
+    return ModelNodeEffect::Create( nrl::NNodeEffectType::NNET_Z_SORT, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
 }
 
 
 // ********************************
 //
-IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( NodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( nrl::NNodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     switch( nodeEffectType )
     {
-        case  NodeEffectType::NET_DEFAULT:
+        case nrl::NNodeEffectType::NNET_DEFAULT:
             return CreateDefaultModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_ALPHA_MASK:
+        case nrl::NNodeEffectType::NNET_ALPHA_MASK:
             return CreateAlphaMaskModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_NODE_MASK:
+        case nrl::NNodeEffectType::NNET_NODE_MASK:
             return CreateNodeMaskModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_WIREFRAME:
+        case nrl::NNodeEffectType::NNET_WIREFRAME:
             return CreateWireframeModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_MIX_CHANNELS:
+        case nrl::NNodeEffectType::NNET_MIX_CHANNELS:
             return CreateMixchannelsModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_BLUR:
+        case nrl::NNodeEffectType::NNET_BLUR:
             return CreateBlurModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_LIGHT_SCATTERING:
+        case nrl::NNodeEffectType::NNET_LIGHT_SCATTERING:
             return CreateLightScatteringModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_SHADOW:
+        case nrl::NNodeEffectType::NNET_SHADOW:
             return CreateShadowModelNodeEffect( name, timeEvaluator );
-		case NodeEffectType::NET_GLOW:
+		case nrl::NNodeEffectType::NNET_GLOW:
 			return CreateGlowModelNodeEffect( name, timeEvaluator );
-		case NodeEffectType::NET_SOFT_MASK:
+        case nrl::NNodeEffectType::NNET_SOFT_MASK:
 			return CreateSoftMaskModelNodeEffect( name, timeEvaluator );
-        //case NodeEffectType::NET_BOUNDING_BOX:
+        //case nrl::NNodeEffectType::NNET_BOUNDING_BOX:
         //    return CreateBoundingBoxModelNodeEffect( name, timeEvaluator );
-        //case NodeEffectType::NET_IMAGE_MASK:
+        //case nrl::NNodeEffectType::NNET_IMAGE_MASK:
         //    return CreateImageMaskModelNodeEffect( name, timeEvaluator );
-        case NodeEffectType::NET_Z_SORT:
+        case nrl::NNodeEffectType::NNET_Z_SORT:
             return CreateZSortModelNodeEffect( name, timeEvaluator );
         default:
             assert( false );

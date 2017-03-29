@@ -17,7 +17,7 @@ private:
 
     model::ITimeEvaluatorPtr m_timeEval;
 
-    NodeEffectType           m_curSelectedNode;
+    nrl::NNodeEffectType    m_curSelectedNode;
     
     unsigned int            m_curWireframeNodeIdx;
     unsigned int            m_curMixChannelsPreset;

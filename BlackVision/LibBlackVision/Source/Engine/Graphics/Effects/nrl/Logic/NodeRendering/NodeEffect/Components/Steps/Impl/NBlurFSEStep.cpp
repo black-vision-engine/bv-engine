@@ -14,6 +14,7 @@
 
 #include <cmath>
 
+
 namespace bv { namespace nrl {
 
 //class RenderTargetsAllocators
@@ -151,7 +152,9 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 		if( !m_tmpRT )
 		{
-			m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( MAXDWORD32, RenderTarget::RTSemantic::S_DRAW_ONLY );
+            // FIXME: nrl - MAXDWORD32 - isn't that a hack???
+			// m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( MAXDWORD32, RenderTarget::RTSemantic::S_DRAW_ONLY );
+			m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( (UInt32)~(UInt32(0)), RenderTarget::RTSemantic::S_DRAW_ONLY );
 			enable( ctx, m_tmpRT );
 			clearBoundRT( ctx, glm::vec4() );
 			disableBoundRT( ctx );

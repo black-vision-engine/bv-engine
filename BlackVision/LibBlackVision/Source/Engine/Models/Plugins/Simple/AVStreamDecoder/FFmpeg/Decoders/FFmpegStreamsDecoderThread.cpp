@@ -2,13 +2,7 @@
 
 #include "FFmpegStreamsDecoderThread.h"
 
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
-#include "Tools/HRTimer.h"
-
 #include "UseLoggerLibBlackVision.h"
-
-#include <thread>
-#include <chrono>
 
 
 namespace bv {
