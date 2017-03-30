@@ -113,4 +113,12 @@ Float64             FFmpegVideoStreamDecoder::GetFrameRate      () const
     return m_frameRate;
 }
 
+// *******************************
+//
+bool                 FFmpegVideoStreamDecoder::IsAudio          () const
+{
+    return false;
+}
+
+
 } //bv

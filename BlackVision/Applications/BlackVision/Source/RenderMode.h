@@ -9,6 +9,7 @@ namespace bv
 
 namespace nrl {
 class NRenderLogic;
+class OutputScreenshot;
 }
 
 class Renderer;

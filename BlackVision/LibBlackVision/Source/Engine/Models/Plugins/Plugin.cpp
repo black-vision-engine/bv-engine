@@ -647,6 +647,10 @@ ISerializablePtr BasePlugin::Create                              ( const IDeseri
 
                 SetParameter( plugin->GetPluginParamValModel(), param );
             }
+
+            //// Note: in this place values have their initial values written by plugins.
+            //// This line evaluates new values.
+            //plugin->GetPluginParamValModel()->Update();
         }
 
         // assets
@@ -707,7 +711,7 @@ ISerializablePtr BasePlugin::Create                              ( const IDeseri
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " couldn't be created";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Plugin [" << pluginName << "] couldn't be created";
     }
 
     return plugin;

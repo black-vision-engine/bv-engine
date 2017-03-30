@@ -125,6 +125,67 @@ void                    RendererStateInstance::SetState( StencilStatePtr ss )
     m_stencilState = ss;
 }
 
+// ***********************
+//
+void                    RendererStateInstance::AssignState( AlphaStateConstPtr as )
+{
+    m_alphaState->blendEnabled = as->blendEnabled;
+    m_alphaState->blendColor = as->blendColor;
+    m_alphaState->srcRGBBlendMode = as->srcRGBBlendMode;
+    m_alphaState->dstRGBBlendMode = as->dstRGBBlendMode;
+    m_alphaState->srcAlphaBlendMode = as->srcAlphaBlendMode;
+    m_alphaState->dstAlphaBlendMode = as->dstAlphaBlendMode;
+}
+
+// ***********************
+//
+void                    RendererStateInstance::AssignState( CullStateConstPtr cs )
+{
+    m_cullState->enabled = cs->enabled;
+    m_cullState->isCCWOrdered = cs->isCCWOrdered;
+}
+
+// ***********************
+//
+void                    RendererStateInstance::AssignState( DepthStateConstPtr ds )
+{
+    m_depthState->enabled = ds->enabled;
+    m_depthState->writable = ds->writable;
+    m_depthState->compareMode = ds->compareMode;
+}
+
+// ***********************
+//
+void                    RendererStateInstance::AssignState( FillStateConstPtr fs )
+{
+    m_fillState->fillMode = fs->fillMode;
+}
+
+// ***********************
+//
+void                    RendererStateInstance::AssignState( OffsetStateConstPtr os )
+{
+    m_offsetState->bias = os->bias;
+    m_offsetState->fillEnabled = os->fillEnabled;
+    m_offsetState->linesEnabled = os->linesEnabled;
+    m_offsetState->pointsEnabled = os->pointsEnabled;
+    m_offsetState->scale = os->scale;
+}
+
+// ***********************
+//
+void                    RendererStateInstance::AssignState( StencilStateConstPtr ss )
+{
+    m_stencilState->actionFail = ss->actionFail;
+    m_stencilState->actionZFail = ss->actionZFail;
+    m_stencilState->actionZPass = ss->actionZPass;
+    m_stencilState->andMask = ss->andMask;
+    m_stencilState->compareMode = ss->compareMode;
+    m_stencilState->enabled = ss->enabled;
+    m_stencilState->reference = ss->reference;
+    m_stencilState->writeMask = ss->writeMask;
+}
+
 // *********************************
 //
 void                    RendererStateInstance::SetStateIgnoreEmptyEntries( const RendererStateInstance & inst )
@@ -150,42 +211,42 @@ void                    RendererStateInstance::SetStateIgnoreEmptyEntries( const
 
 // *********************************
 //
-AlphaStatePtr     RenderStateAccessor::AccessAlphaState( RendererStateInstance * inst )
+AlphaStatePtr &         RenderStateAccessor::AccessAlphaState( RendererStateInstance * inst )
 {
     return inst->m_alphaState;
 }
 
 // *********************************
 //
-CullStatePtr      RenderStateAccessor::AccessCullState( RendererStateInstance * inst )
+CullStatePtr &          RenderStateAccessor::AccessCullState( RendererStateInstance * inst )
 {
     return inst->m_cullState;
 }
 
 // *********************************
 //
-DepthStatePtr     RenderStateAccessor::AccessDepthState( RendererStateInstance * inst )
+DepthStatePtr &         RenderStateAccessor::AccessDepthState( RendererStateInstance * inst )
 {
     return inst->m_depthState;
 }
 
 // *********************************
 //
-FillStatePtr      RenderStateAccessor::AccessFillState( RendererStateInstance * inst )
+FillStatePtr &          RenderStateAccessor::AccessFillState( RendererStateInstance * inst )
 {
     return inst->m_fillState;
 }
 
 // *********************************
 //
-OffsetStatePtr    RenderStateAccessor::AccessOffsetState( RendererStateInstance * inst )
+OffsetStatePtr &        RenderStateAccessor::AccessOffsetState( RendererStateInstance * inst )
 {
     return inst->m_offsetState;
 }
 
 // *********************************
 //
-StencilStatePtr   RenderStateAccessor::AccessStencilState( RendererStateInstance * inst )
+StencilStatePtr &       RenderStateAccessor::AccessStencilState( RendererStateInstance * inst )
 {
     return inst->m_stencilState;
 }

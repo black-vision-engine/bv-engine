@@ -2,7 +2,7 @@
 
 #include "NBlurFSEStep.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
@@ -13,6 +13,7 @@
 #include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
 
 #include <cmath>
+
 
 namespace bv { namespace nrl {
 
@@ -151,7 +152,9 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 		if( !m_tmpRT )
 		{
-			m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( MAXDWORD32, RenderTarget::RTSemantic::S_DRAW_ONLY );
+            // FIXME: nrl - MAXDWORD32 - isn't that a hack???
+			// m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( MAXDWORD32, RenderTarget::RTSemantic::S_DRAW_ONLY );
+			m_tmpRT = allocator( ctx )->CreateCustomRenderTarget( (UInt32)~(UInt32(0)), RenderTarget::RTSemantic::S_DRAW_ONLY );
 			enable( ctx, m_tmpRT );
 			clearBoundRT( ctx, glm::vec4() );
 			disableBoundRT( ctx );
@@ -163,6 +166,10 @@ void                    NBlurFSEStep::ApplyImpl                    ( NRenderCont
 
 		for( auto i = 0; i < stepsNum - 1; ++i )
 		{
+			enable( ctx, tmpOut );
+			clearBoundRT( ctx, glm::vec4() );
+			disableBoundRT( ctx );
+
 			FastBlur( ctx, rd, blurSize, tmpOut );
 			auto oldInputRT = rd.GetEntry( 0 );
 			rd.SetEntry( 0, tmpOut );

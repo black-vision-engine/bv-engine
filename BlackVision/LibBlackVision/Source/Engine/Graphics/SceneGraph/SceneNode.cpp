@@ -9,8 +9,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
-
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
@@ -23,12 +21,10 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_repr( new SceneNodeRepr( transformable, this ) )
-    , m_nodeEffect( nullptr )
     , m_drawBoundingBox( false )
     , m_NNodeEffectEnabled( true ) // FIXME: enabled by default - is this right?
     , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
 {
-    m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
 }
 
 // ********************************
@@ -138,63 +134,49 @@ void            SceneNode::DisableNNodeEffect   ()
 
 // ********************************
 //
-NodeEffectPtr   SceneNode::GetNodeEffect                ()
-{
-    return m_nodeEffect;
-}
-
-// ********************************
-//
-void            SceneNode::SetNodeEffect                ( NodeEffectPtr nodeEffect )
-{
-    m_nodeEffect = nodeEffect;
-}
-
-// ********************************
-//
-nrl::NNodeEffectPtr     SceneNode::GetNNodeEffect      ()
+nrl::NNodeEffectPtr     SceneNode::GetNNodeEffect   ()
 {
     return m_nNodeEffect;
 }
 
 // ********************************
 //
-void                    SceneNode::SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect )
+void                    SceneNode::SetNNodeEffect   ( nrl::NNodeEffectPtr nNodeEffect )
 {
     m_nNodeEffect = nNodeEffect;
 }
 
 // ********************************
 //
-void            SceneNode::SetTransformable     ( TransformableEntity * transformable )
+void            SceneNode::SetTransformable         ( TransformableEntity * transformable )
 {
     m_repr->SetTransformable( transformable );
 }
 
 // ********************************
 //
-void            SceneNode::DeleteTransformable  ()
+void            SceneNode::DeleteTransformable      ()
 {
     m_repr->DeleteTransformable();
 }
 
 // ********************************
 //
-void            SceneNode::Update               ( const Transform & parentTransform )
+void            SceneNode::Update                   ( const Transform & parentTransform )
 {
     m_repr->Update( parentTransform );
 }
 
 // ********************************
 //
-bool                    SceneNode::IsVisible    () const
+bool                    SceneNode::IsVisible        () const
 {
     return m_visible;
 }
 
 // ********************************
 //
-void                    SceneNode::SetVisible   ( bool visible )
+void                    SceneNode::SetVisible       ( bool visible )
 {
     m_visible = visible;
 }

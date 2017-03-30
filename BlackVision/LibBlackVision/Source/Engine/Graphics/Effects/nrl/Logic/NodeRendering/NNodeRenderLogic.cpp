@@ -7,7 +7,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
 #include "Engine/Audio/AudioRenderer.h"
@@ -71,7 +71,7 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->EnableScene( scene );
 
     enable( ctx, output );
-
+    clearBoundRT( ctx, glm::vec4() );
     RenderQueued( scene->GetRoot(), ctx );
 
     // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
@@ -145,17 +145,9 @@ void     NNodeRenderLogic::RenderImpl      ( SceneNode * node, NRenderContext * 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
     }
     else 
-    {   //Transition implementations
-        auto effect = node->GetNodeEffect();
-
-        if( !effect || effect->GetType() ==  NodeEffectType::NET_DEFAULT )
-        {
-            RenderImpl( repr, ctx );
-        }
-        else
-        {
-            effect->Render( repr, ctx );
-        }
+    {
+        // FIXME: nrl - transition implementations
+        assert( false );
     }
 }
 

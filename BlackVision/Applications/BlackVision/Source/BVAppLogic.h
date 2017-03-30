@@ -8,6 +8,8 @@
 #include "Engine/Events/Events.h"
 #include "RenderMode.h"
 
+#include "Tools/SimpleTimer.h"
+
 #include "TestAI/TestKeyboardHandler.h"
 
 #include "FrameStatsService.h"
@@ -37,6 +39,10 @@ namespace nrl {
     class NRenderLogic;
 }
 
+namespace videocards {
+    class VideoCardManager;
+}
+
 enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
@@ -51,6 +57,8 @@ enum class BVAppState : int
 class BVAppLogic
 {
 private:
+
+    SimpleTimer                     m_timer;
 
     BVAppState                      m_state;
 
@@ -75,6 +83,11 @@ private:
     RemoteController *              m_remoteController;
 
     RenderMode                      m_renderMode;
+
+    videocards::VideoCardManager *  m_videoCardManager;
+
+    unsigned int                    m_frameStartTime;
+
     
     void            RefreshVideoInputScene  ();
 
@@ -88,15 +101,16 @@ public:
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     void            LoadScene       ( void );
 
-    void            SetStartTime    ( unsigned long millis );
+    unsigned int    StartTime       ();
+    unsigned int    GetTime         () const;
 
-    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    virtual void    OnUpdate        ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
     virtual void    OnKey           ( unsigned char c );
     virtual void    OnMouse         ( MouseAction action, int posX, int posY );
 
     virtual void    ShutDown        ();
 
-    void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
+    void            PostFrameLogic  ();
     void            HandleFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
 	FrameStatsCalculator *          GetStatsCalculator  ();

@@ -682,6 +682,15 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
         return false;
     }
 
+    if( srcNode == destParentNode )
+    {
+        LOG_MESSAGE( SeverityLevel::error )
+            << "[MoveNode] Trying to attach node as child of itself. Node: [" + srcNode->GetName()
+            + "], source scene: [" + srcScene->GetName()
+            + "], destination scene: [" + destScene->GetName() + "]";
+        return false;
+    }
+
     if( srcScene == destScene )
     {
         if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
@@ -1299,7 +1308,7 @@ bool                        BVProjectEditor::SetLogic            ( model::BasicN
 
     if( enableUndo )
     {
-        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic, prevLogic ) ) );
@@ -1322,7 +1331,7 @@ bool                        BVProjectEditor::RemoveLogic         ( model::BasicN
 
     if( enableUndo )
     {
-        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeLogicOperation >( new RemoveNodeLogicOperation( scene, node, logic ) ) );
@@ -1390,7 +1399,7 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
 
     if( timeEval )
     {
-        auto effect = SerializationHelper::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
+        auto effect = SerializationHelper::String2T< nrl::NNodeEffectType >( effectName , nrl::NNodeEffectType::NNET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
         auto curEffect = node->GetNodeEffect();
@@ -1986,7 +1995,7 @@ void                    BVProjectEditor::NotifyRemovedNode    ( model::BasicNode
 void                    BVProjectEditor::NotifyAddedNode        ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode )
 {
     auto addedEvent = std::make_shared< NodeAddedEvent >();
-    addedEvent->RemovedNode = addedNode;
+    addedEvent->AddedNode = addedNode;
     addedEvent->ParentNode = parentNode;
 
     GetDefaultEventManager().TriggerEvent( addedEvent );

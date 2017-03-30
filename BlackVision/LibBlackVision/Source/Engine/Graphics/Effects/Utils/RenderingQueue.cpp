@@ -5,23 +5,21 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 
 
-namespace bv {
-
-namespace {
+namespace bv { namespace {
 
 // ************************************
 // FIXME: nrl - effect vs neffect
 bool HasEffect( SceneNode * node )
 {
-    auto effect = node->GetNodeEffect();
+    auto effect = node->GetNNodeEffect();
 
-    if( effect != nullptr && effect->GetType() != NodeEffectType::NET_DEFAULT )
+    if( effect != nullptr && effect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
     {
         return true;
     }
@@ -100,13 +98,6 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
 {
     if( HasEffect( node ) )
     {
-        auto oldStyleEffect = node->GetNodeEffect();
-        if( oldStyleEffect )
-        {
-            // Old style efects are always blended.
-            return true;
-        }
-
         auto effect = node->GetNNodeEffect();
         if( effect )
         {

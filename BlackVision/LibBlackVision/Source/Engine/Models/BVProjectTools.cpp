@@ -20,7 +20,6 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/AssetTracker.h"
 
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
@@ -147,27 +146,12 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
 
+    // FIXME: nrl - make sure that this code works as expected
     if( modelNodeEffect )
     {
-        auto nodeEffectType = modelNodeEffect->GetType();
+        auto nNodeEffectType = modelNodeEffect->GetType();
 
-        if( nodeEffectType != NodeEffectType::NET_DEFAULT &&
-			nodeEffectType != NodeEffectType::NET_ALPHA_MASK &&
-			nodeEffectType != NodeEffectType::NET_NODE_MASK &&
-			nodeEffectType != NodeEffectType::NET_BLUR &&
-			nodeEffectType != NodeEffectType::NET_LIGHT_SCATTERING && 
-			nodeEffectType != NodeEffectType::NET_SHADOW && 
-            nodeEffectType != NodeEffectType::NET_Z_SORT &&
-			nodeEffectType != NodeEffectType::NET_GLOW && 
-			nodeEffectType != NodeEffectType::NET_SOFT_MASK )
-        {
-            node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
-        }
-        else
-        {
-            auto nNodeEffectType = nrl::NNodeEffectType( nodeEffectType );
-            node->SetNNodeEffect( nrl::CreateNodeEffect( nNodeEffectType ) );
-        }
+        node->SetNNodeEffect( nrl::CreateNodeEffect( nNodeEffectType ) );
     }
     else
     {
@@ -630,7 +614,7 @@ ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model
 //
 void                 BVProjectTools::UpdateEffectAssetData               ( SceneNode * node, model::BasicNodePtr modelNode )
 {
-    auto effect = node->GetNodeEffect();
+    auto effect = node->GetNNodeEffect();
     auto modelEffect = modelNode->GetNodeEffect();
 
     if( modelEffect != nullptr )

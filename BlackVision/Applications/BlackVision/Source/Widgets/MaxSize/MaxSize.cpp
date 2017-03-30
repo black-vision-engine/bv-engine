@@ -7,12 +7,12 @@
 #include "Serialization/BV/BVSerializeContext.h"
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/BoundingVolume.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/EventManager.h"
 #include "Widgets/NodeLogicHelper.h"
-
 
 
 namespace bv {
@@ -76,60 +76,66 @@ MaxSize::~MaxSize()
 
 // ***********************
 //
-void                        MaxSize::Update			( TimeType t )
+void                        MaxSize::PostChildrenUpdate ( TimeType t )
 {
-    NodeLogicBase::Update( t );
-
     if( auto node = m_parentNode.lock() )
     {
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
 
-        auto bb = node->GetBoundingBoxRecursive();
-        
-        float width = bb.Width();
-        float height = bb.Height();
-        float depth = bb.Depth();
+		// If there isn't transform param in previuos plugin do nothing.
+		if( transformParam )
+		{
+			auto bb = *node->GetBoundingVolume()->GetChildrenBox();
 
-        bool activeX = m_maxWidth->GetValue() != 0.0f ? true : false;
-        bool activeY = m_maxHeight->GetValue() != 0.0f ? true : false;
-        bool activeZ = m_maxDepth->GetValue() != 0.0f ? true : false;
+			float width = bb.Width();
+			float height = bb.Height();
+			float depth = bb.Depth();
 
-        glm::vec3 curScale = transformParam->Transform().GetScale( 0.0f );
-        glm::vec3 rescale = glm::vec3( activeX ? 1.0f : curScale.x, activeY ? 1.0f : curScale.y, activeZ ? 1.0f : curScale.z );
+			bool activeX = m_maxWidth->GetValue() != 0.0f ? true : false;
+			bool activeY = m_maxHeight->GetValue() != 0.0f ? true : false;
+			bool activeZ = m_maxDepth->GetValue() != 0.0f ? true : false;
 
-        bool needScaleX = width > m_maxWidth->GetValue() && activeX ? true : false;
-        bool needScaleY = height > m_maxHeight->GetValue() && activeY ? true : false;
-        bool needScaleZ = depth > m_maxDepth->GetValue() && activeZ ? true : false;
+			glm::vec3 curScale = transformParam->Transform().GetScale( 0.0f );
+			glm::vec3 rescale = glm::vec3( activeX ? 1.0f : curScale.x, activeY ? 1.0f : curScale.y, activeZ ? 1.0f : curScale.z );
 
-        if( needScaleX )
-        {
-            rescale.x = m_maxWidth->GetValue() / width;
-        }
+			bool needScaleX = width > m_maxWidth->GetValue() && activeX ? true : false;
+			bool needScaleY = height > m_maxHeight->GetValue() && activeY ? true : false;
+			bool needScaleZ = depth > m_maxDepth->GetValue() && activeZ ? true : false;
 
-        if( needScaleY )
-        {
-            rescale.y = m_maxHeight->GetValue() / height;
-        }
+			if( needScaleX )
+			{
+				rescale.x = m_maxWidth->GetValue() / width;
+			}
 
-        if( needScaleZ )
-        {
-            rescale.z = m_maxDepth->GetValue() / depth;
-        }
+			if( needScaleY )
+			{
+				rescale.y = m_maxHeight->GetValue() / height;
+			}
 
-        if( m_isProportional->GetValue() )
-        {
-            float scaleFactor = std::min( rescale.x, rescale.y );
-            scaleFactor = std::min( scaleFactor, rescale.z );
+			if( needScaleZ )
+			{
+				rescale.z = m_maxDepth->GetValue() / depth;
+			}
 
-            if( activeX )
-                rescale.x = scaleFactor;
-            if( activeY )
-                rescale.y = scaleFactor;
-            if( activeZ )
-                rescale.z = scaleFactor;
-        }
-        
-        transformParam->SetScale( rescale, 0.0f );
+			if( m_isProportional->GetValue() )
+			{
+				float scaleFactor = std::min( rescale.x, rescale.y );
+				scaleFactor = std::min( scaleFactor, rescale.z );
+
+				if( activeX )
+					rescale.x = scaleFactor;
+				if( activeY )
+					rescale.y = scaleFactor;
+				if( activeZ )
+					rescale.z = scaleFactor;
+			}
+
+			transformParam->SetScale( rescale, 0.0f );
+
+            // Write new transformation data into values. This seems like hack. Calling update for the second time
+            // in the same frame could cause something bad and depend on implementation of TransformPlugin.
+            node->GetPlugin( "transform" )->Update( t );
+		}
     }
 }
 

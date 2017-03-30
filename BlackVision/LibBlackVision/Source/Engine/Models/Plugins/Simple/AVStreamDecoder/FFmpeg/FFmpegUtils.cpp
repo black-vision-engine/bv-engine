@@ -86,4 +86,52 @@ Int64				        FFmpegUtils::ConvertToMiliseconds       ( Float64 seconds )
     return ( Int64 )( 1000 * seconds );
 }
 
+// *********************************
+//
+std::string                 FFmpegUtils::AVErrorToString            ( Int32 errCode )
+{
+    std::string errorStr;
+    errorStr.resize( 128 );
+
+    av_strerror( errCode, &errorStr[ 0 ], 128 );
+
+    return errorStr;
+}
+
+// *********************************
+//
+void                        FFmpegUtils::AVCustomLog                ( void * ptr, int level, const char * fmt, va_list vl )
+{
+    static std::mutex mutex;
+
+    if( level >= 0 || level <= 32 )
+    {
+        std::unique_lock< std::mutex > lock( mutex );
+        static int print_prefix = 1;
+        static std::string message;
+        std::string buf;
+        buf.resize( 1024 );
+
+        av_log_format_line( ptr, level, fmt, vl, &buf[ 0 ], ( int ) buf.size(), &print_prefix );
+        message.append( buf.substr( 0, strlen( &buf[ 0 ] ) ) );
+
+        if( print_prefix > 0 && message.size() > 0 )
+        {
+            if( message[ message.size() - 1 ] == '\n' )
+                message = message.substr( 0, message.size() - 1 );
+
+            if( level == 32 )
+                LOG_MESSAGE( SeverityLevel::info ) << message;
+            else if ( level == 24 )
+                LOG_MESSAGE( SeverityLevel::warning ) << message;
+            else if( level == 16 )
+                LOG_MESSAGE( SeverityLevel::error ) << message;
+            else if ( level == 0 || level == 8 )
+                LOG_MESSAGE( SeverityLevel::critical ) << message;
+
+            message.clear();
+        }
+    }
+}
+
 } //bv

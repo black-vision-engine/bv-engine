@@ -6,6 +6,7 @@
 #include "Widgets/NodeLogicHelper.h"
 
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
 
 
 // warning C4996: 'localtime': This function or variable may be unsafe
@@ -65,6 +66,7 @@ AnalogWatch::~AnalogWatch()
 void        AnalogWatch::Initialize        ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &AnalogWatch::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &AnalogWatch::NodeMovedHandler ), NodeMovedEvent::Type() );
 }
 
 // ***********************
@@ -272,26 +274,47 @@ void        AnalogWatch::ClearPosition           ( model::BasicNode * node )
 //
 void        AnalogWatch::NodeRemovedHandler  ( IEventPtr evt )
 {
+    if( evt->GetEventType() != NodeRemovedEvent::Type() )
+        return;
+
+    NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
+    NodeRemoved( removedEvt->ParentNode.get(), removedEvt->RemovedNode.get() );
+}
+
+// ***********************
+//
+void        AnalogWatch::NodeMovedHandler   ( IEventPtr evt )
+{
+    if( evt->GetEventType() != NodeMovedEvent::Type() )
+        return;
+
+    NodeMovedEventPtr movedEvent = std::static_pointer_cast< NodeMovedEvent >( evt );
+    
+    if( movedEvent->SrcParentNode == movedEvent->DstParentNode )
+        return;
+
+    NodeRemoved( movedEvent->SrcParentNode.get(), movedEvent->Node.get() );
+}
+
+// ***********************
+//
+void        AnalogWatch::NodeRemoved        ( model::BasicNode * parent, model::BasicNode * node )
+{
     if( auto parentNode = m_parentNode.lock() )
     {
-        if( evt->GetEventType() != NodeRemovedEvent::Type() )
-            return;
-
-        NodeRemovedEventPtr removedEvt = std::static_pointer_cast< NodeRemovedEvent >( evt );
-
         // AnalogWatch uses only closest children.
-        if( removedEvt->ParentNode != parentNode )
+        if( parent != parentNode.get() )
             return;
 
-        if( removedEvt->RemovedNode.get() == m_hourNode )
+        if( node == m_hourNode )
         {
             m_hourNode = nullptr;
         }
-        else if( removedEvt->RemovedNode.get() == m_minuteNode )
+        else if( node == m_minuteNode )
         {
             m_minuteNode = nullptr;
         }
-        else if( removedEvt->RemovedNode.get() == m_secondsNode )
+        else if( node == m_secondsNode )
         {
             m_secondsNode = nullptr;
         }

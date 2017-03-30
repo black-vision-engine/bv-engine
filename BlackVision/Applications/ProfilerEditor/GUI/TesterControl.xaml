@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1100" Background="White">
+             d:DesignHeight="800" d:DesignWidth="1100" Background="White" HorizontalAlignment="Stretch">
     <UserControl.Resources>
         <layer:NotConverter x:Key="NotConverter" />
         <layer:IsErrorBrushConverter x:Key="IsErrorBrushConverter"></layer:IsErrorBrushConverter>
@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="10*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="6*" />
-                <ColumnDefinition Width="Auto" />
+                <!--<ColumnDefinition Width="Auto" />-->
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Margin="2, 2, 2, 2" >
@@ -104,60 +104,57 @@
                     </TabItem>
 
                     <TabItem Header="Test content (event / response / reference response)" >
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <StackPanel Orientation="Horizontal">
-                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.TestEvents}" SelectedItem="{Binding CurrentTestEvent}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox IsChecked="{Binding Breakpoint}" >
-                                                            <CheckBox.Resources>
-                                                                <Style TargetType="{x:Type CheckBox}">
-                                                                    <Setter Property="Template" >
-                                                                        <Setter.Value>
-                                                                            <ControlTemplate TargetType="{x:Type CheckBox}">
-                                                                                <Ellipse Fill="{Binding Breakpoint, Converter={StaticResource BoolBrushConverter}}" Stroke="White" StrokeThickness="1" Width="15" Height="15"/>
-                                                                            </ControlTemplate>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </CheckBox.Resources>
-                                                        </CheckBox>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
-                                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
+                        <StackPanel Orientation="Horizontal" MaxHeight="700">
+                            <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.TestEvents}" SelectedItem="{Binding CurrentTestEvent}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox IsChecked="{Binding Breakpoint}" >
+                                                        <CheckBox.Resources>
+                                                            <Style TargetType="{x:Type CheckBox}">
+                                                                <Setter Property="Template" >
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                                                                            <Ellipse Fill="{Binding Breakpoint, Converter={StaticResource BoolBrushConverter}}" Stroke="White" StrokeThickness="1" Width="15" Height="15"/>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </CheckBox.Resources>
+                                                    </CheckBox>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                        <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                        <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
 
-                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.RealResponses}" SelectedItem="{Binding CurrentRealResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
-                                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
+                            <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.RealResponses}" SelectedItem="{Binding CurrentRealResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                        <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                        <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
 
-                                <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.ReferenceResponses}" SelectedItem="{Binding CurrentReferenceResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
-                                            <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
+                            <ListView MinHeight="400" ItemsSource="{Binding Path=SelectedFile.ReferenceResponses}" SelectedItem="{Binding CurrentReferenceResponse}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding EventID}" />
+                                        <GridViewColumn Header="Event Name" DisplayMemberBinding="{Binding EventName}" />
+                                        <GridViewColumn Header="Command Name" DisplayMemberBinding="{Binding CommandName}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
 
-                            </StackPanel>
-                        </ScrollViewer>
-
+                        </StackPanel>
                     </TabItem>
                 </TabControl>
 
@@ -176,7 +173,7 @@
                 <TextBox MinHeight="300" MaxHeight="500" Text="{Binding Path=CurrentRealResponse.EventContent}" IsReadOnly="True" />
             </StackPanel>
 
-            <GridSplitter Grid.Column="4" Width="3" Height="700" VerticalAlignment="Top" HorizontalAlignment="Stretch" ResizeDirection="Columns"/>
+            <!--<GridSplitter Grid.Column="4" Width="3" Height="700" VerticalAlignment="Top" HorizontalAlignment="Stretch" ResizeDirection="Columns"/>-->
             
         </Grid>
     </Expander>

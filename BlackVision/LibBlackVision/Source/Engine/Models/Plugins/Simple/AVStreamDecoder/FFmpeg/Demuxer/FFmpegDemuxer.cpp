@@ -2,6 +2,8 @@
 
 #include "FFmpegDemuxer.h"
 
+#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 #include <cassert>
@@ -25,6 +27,8 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQue
 {
 	av_register_all();
 
+    av_log_set_callback( FFmpegUtils::AVCustomLog );
+
 	bool error = false; 
 
 	error = avformat_open_input( &m_formatCtx, streamPath.c_str(), nullptr, nullptr ) != 0;
@@ -40,7 +44,9 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQue
 //
 FFmpegDemuxer::~FFmpegDemuxer    ()
 {
+    av_log_set_callback( nullptr );
 	avformat_close_input( &m_formatCtx );
+
 	ClearPacketQueue( false );
 }
 
@@ -150,7 +156,7 @@ bool			FFmpegDemuxer::ProcessPacket			()
 	}
 	else 
 	{
-		std::cout << "Error " << error << std::endl;
+        LOG_MESSAGE( SeverityLevel::error ) << "Error " << FFmpegUtils::AVErrorToString( error );
 	}
     
 	return false;

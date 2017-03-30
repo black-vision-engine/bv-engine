@@ -20,7 +20,7 @@ public:
     explicit        NodeAddedEvent()
     {}
 
-    model::BasicNodePtr         RemovedNode;
+    model::BasicNodePtr         AddedNode;
     model::BasicNodePtr         ParentNode;
 
 

@@ -145,9 +145,9 @@ private:
 public:
 	ClosureGenerator( IParamValModelPtr m, bool rot ) : Generator( m ), rotated( rot ) {}
 
-    void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr, Float3AttributeChannelPtr, Float2AttributeChannelPtr );
-	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
-	glm::vec2 computeUV( int loop_counter, double h, bool center  );
+    void            GenerateGeometryNormalsUVs      ( Float3AttributeChannelPtr, Float3AttributeChannelPtr, Float2AttributeChannelPtr );
+	void            GenerateClosure                 ( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outerLoop, bool inverseOrdering );
+	glm::vec2       computeUV                       ( int loop_counter, double h, bool center  );
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -234,58 +234,89 @@ void Generator::GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Flo
 	setLocalParameters();
 
     for( int i = 0; i < tesselation; i++ )
+    {
         for( int j = 0; j <= tesselation2; j++ )
         {
-            double crossSectionAngle = j *2*PI / tesselation2;
+            glm::vec3 point1;
+            glm::vec3 point2;
+            glm::vec2 uv1;
+            glm::vec2 uv2;
 
-            double h = double(i) / tesselation;
+            double crossSectionAngle = j * 2 * PI / tesselation2;
+
+            double h = double( i ) / tesselation;
             double turnsAngle = h * turns * PI;
 
-			float x = static_cast<float>( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
-			float y = static_cast<float>( h * delta + r2 * sin( crossSectionAngle ) );
-			float z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+            point1.x = static_cast< float >( cos( turnsAngle ) * ( cos( crossSectionAngle ) * r2 + r ) );
+            point1.y = static_cast< float >( h * delta + r2 * sin( crossSectionAngle ) );
+            point1.z = static_cast< float >( sin( turnsAngle ) * ( cos( crossSectionAngle ) * r2 + r ) );
 
-			verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
-            uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
+            uv1 = glm::vec2( double( j ) / tesselation, h );
 
-            h = double(i+1) / tesselation;
+            h = double( i + 1 ) / tesselation;
             turnsAngle = h * turns * PI;
 
-			x = static_cast<float>( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
-			y = static_cast<float>( h * delta + r2 * sin( crossSectionAngle ) );
-			z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+            point2.x = static_cast< float >( cos( turnsAngle ) * ( cos( crossSectionAngle ) * r2 + r ) );
+            point2.y = static_cast< float >( h * delta + r2 * sin( crossSectionAngle ) );
+            point2.z = static_cast< float >( sin( turnsAngle ) * ( cos( crossSectionAngle ) * r2 + r ) );
 
-			verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
-            uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
+            uv2 = glm::vec2( double( j ) / tesselation, h );
+
+            verts->AddAttribute( point2 + center_translate );
+            uvs->AddAttribute( uv2 );
+
+            verts->AddAttribute( point1 + center_translate );
+            uvs->AddAttribute( uv1 );
         }
+    }
 
     GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 }
 
-void ClosureGenerator::generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop )
+void ClosureGenerator::GenerateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outerLoop, bool inverseOrdering )
 {
-	
-    double h = double( outer_loop ) / tesselation;
+
+    double h = double( outerLoop ) / tesselation;
     double turnsAngle = h * turns * PI;
 
-	for( int j = 0; j <= tesselation2; j++ )
+    for( int j = 0; j <= tesselation2; j++ )
     {
-        double crossSectionAngle = j *2*PI / tesselation2;
+        glm::vec3 point1;
+        glm::vec3 point2;
+        glm::vec2 uv1;
+        glm::vec2 uv2;
 
-		float x = static_cast<float>( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
-		float y = static_cast<float>( h * delta + r2 * sin( crossSectionAngle ) );
-		float z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+        double crossSectionAngle = j * 2 * PI / tesselation2;
 
-		verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
-		uvs->AddAttribute( computeUV( j, h, false ) );
+        point1.x = static_cast< float >( cos( turnsAngle ) * ( cos( crossSectionAngle ) * r2 + r ) );
+        point1.y = static_cast< float >( h * delta + r2 * sin( crossSectionAngle ) );
+        point1.z = static_cast< float >( sin( turnsAngle ) * ( cos( crossSectionAngle ) * r2 + r ) );
 
-		x = static_cast<float>( cos( turnsAngle ) * r );
-		y = static_cast<float>( h * delta );
-		z = static_cast<float>( sin( turnsAngle ) * r );
+        uv1 = computeUV( j, h, false );
 
-		verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
-		uvs->AddAttribute( computeUV( j, h, true ) );
-	}
+        point2.x = static_cast< float >( cos( turnsAngle ) * r );
+        point2.y = static_cast< float >( h * delta );
+        point2.z = static_cast< float >( sin( turnsAngle ) * r );
+
+        uv2 = computeUV( j, h, true );
+
+        if( inverseOrdering )
+        {
+            verts->AddAttribute( point1 + center_translate );
+            uvs->AddAttribute( uv1 );
+
+            verts->AddAttribute( point2 + center_translate );
+            uvs->AddAttribute( uv2 );
+        }
+        else
+        {
+            verts->AddAttribute( point2 + center_translate );
+            uvs->AddAttribute( uv2 );
+
+            verts->AddAttribute( point1 + center_translate );
+            uvs->AddAttribute( uv1 );
+        }
+    }
 }
 
 void ClosureGenerator::GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
@@ -293,9 +324,9 @@ void ClosureGenerator::GenerateGeometryNormalsUVs( Float3AttributeChannelPtr ver
 	setLocalParameters();
 
 	if( rotated )
-		generateClosure( verts, uvs, tesselation );
+		GenerateClosure( verts, uvs, tesselation, false );
 	else
-		generateClosure( verts, uvs, 0 );
+		GenerateClosure( verts, uvs, 0, true );
 
     GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
 }

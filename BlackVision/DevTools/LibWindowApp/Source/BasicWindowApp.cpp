@@ -31,7 +31,7 @@ bool			BasicWindowApp::RegisterInitializer	( CreateLogicFunc logicFunc, const ch
 	if( AppInstance ) delete AppInstance;
 	AppInstance = new BasicWindowApp( logicFunc, title, xOffset, yOffset, width, height, fullScreen );
 
-    bv::InitSubsystem::AddInitializer( []() {
+    bv::InitSubsystem::AddInitializer( []( int, char * [] ) {
 		bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
 		bv::ApplicationBase::ApplicationInstance = AppInstance;
 	});
@@ -43,7 +43,7 @@ bool			BasicWindowApp::RegisterInitializer	( CreateLogicFunc logicFunc, const ch
 //
 bool			BasicWindowApp::RegisterConsoleInitializer		()
 {
-    bv::InitSubsystem::AddInitializer( [](){
+    bv::InitSubsystem::AddInitializer( []( int, char *[] ){
 		if( AllocConsole() )
 		{
 			FILE * dummy;

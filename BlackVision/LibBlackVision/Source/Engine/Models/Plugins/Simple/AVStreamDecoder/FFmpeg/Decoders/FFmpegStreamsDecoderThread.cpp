@@ -2,13 +2,7 @@
 
 #include "FFmpegStreamsDecoderThread.h"
 
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegAVDecoder.h"
-#include "Tools/HRTimer.h"
-
 #include "UseLoggerLibBlackVision.h"
-
-#include <thread>
-#include <chrono>
 
 
 namespace bv {
@@ -104,54 +98,57 @@ void				FFmpegStreamsDecoderThread::Run			()
 		<< "STARTING Decoder thread " 
 		<< std::this_thread::get_id();
 
-	try
+
+	while( true )
 	{
-		while( true )
-		{
-			{
-				std::unique_lock< std::mutex > lock( m_mutex );
+        {
+            std::unique_lock< std::mutex > lock( m_mutex );
 
-				if( m_stopThread )
-				{
-					LOG_MESSAGE( SeverityLevel::debug ) 
-						<< "STOPPED Decoder thread strema id: "
-						<< m_streamDecoder->GetStreamIdx() 
-						<< " thread id: " 
-						<< std::this_thread::get_id();
+            if( m_stopThread )
+            {
+                LOG_MESSAGE( SeverityLevel::debug )
+                    << "STOPPED Decoder thread strema id: "
+                    << m_streamDecoder->GetStreamIdx()
+                    << " thread id: "
+                    << std::this_thread::get_id();
 
-					m_stopped = true;
-					m_cond.wait( lock, [ = ]
-					{
-						return m_stopped == false;
-					} );
+                m_stopped = true;
+                m_cond.wait( lock, [ = ]
+                {
+                    return m_stopped == false;
+                } );
 
-					LOG_MESSAGE( SeverityLevel::debug )
-						<< "STARTED Decoder thread strema id: " 
-						<< m_streamDecoder->GetStreamIdx() 
-						<< " thread id: " 
-						<< std::this_thread::get_id();
-				}
+                LOG_MESSAGE( SeverityLevel::debug )
+                    << "STARTED Decoder thread strema id: "
+                    << m_streamDecoder->GetStreamIdx()
+                    << " thread id: "
+                    << std::this_thread::get_id();
+            }
 
-				if( !m_running )
-				{
-					break;
-				}
-			}
+            if( !m_running )
+            {
+                break;
+            }
+        }
 
-			if( m_streamDecoder )
-			{
-				m_streamDecoder->ProcessPacket( true );
-			}
-		}
-	}
-	catch( const std::runtime_error & exc )
-	{
-		LOG_MESSAGE( SeverityLevel::error ) 
-			<< "Streams decoder error. Stream id: " 
-			<< m_streamDecoder->GetStreamIdx() 
-			<< ". THREAD ID: " << std::this_thread::get_id() << std::endl
-			<< exc.what();
-	}
+        try
+        {
+            if( m_streamDecoder )
+            {
+                m_streamDecoder->ProcessPacket( true );
+            }
+
+        }
+        catch( const std::runtime_error & exc )
+        {
+            LOG_MESSAGE( SeverityLevel::error )
+                << "Streams decoder error. Stream id: "
+                << m_streamDecoder->GetStreamIdx()
+                << ". THREAD ID: " << std::this_thread::get_id() << std::endl
+                << exc.what();
+        }
+    }
+
 
 	LOG_MESSAGE( SeverityLevel::debug ) 
 		<< "DYING Decoder thread " 

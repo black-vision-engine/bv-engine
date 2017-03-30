@@ -37,9 +37,9 @@ namespace bv
 //
 bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, const Path & path )
 {
-    auto texDesc = std::static_pointer_cast< const SingleTextureAssetDesc >( g_pm0->GetAssetDesc( projectName, "textures", path ) );
+    auto texDesc = std::static_pointer_cast< const TextureAssetDesc >( g_pm0->GetAssetDesc( projectName, "textures", path ) );
 
-    return plugin->LoadResource( TextureAssetDesc::Create( texDesc ) );
+    return plugin->LoadResource( texDesc );
 }
 
 bv::model::SceneModelPtr CreateTestScene0()
@@ -47,6 +47,8 @@ bv::model::SceneModelPtr CreateTestScene0()
 	auto sceneName = "textured_rect";
 	auto scene = bv::model::SceneModel::Create( sceneName );
 	auto timeline = scene->GetTimeline();
+
+    model::TimelineManager::GetInstance()->AddTimeline( timeline );
 
     std::vector< model::IPluginDescriptor * > descriptors;
 
@@ -77,7 +79,7 @@ bv::model::SceneModelPtr CreateTestScene0()
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    
 
-	assert( false );
+	//assert( false );
 
 	scene->SetRootNode( root );
 
@@ -86,9 +88,9 @@ bv::model::SceneModelPtr CreateTestScene0()
 
 TEST( CleanAll, ProjectManager )
 {
-	if( Path::Exists( "d:\\bv_media" ) )
+	if( Path::Exists( "bv_media" ) )
 	{
-		Path::Remove( "d:\\bv_media" );
+		Path::Remove( "bv_media" );
 	}
 
 	if( Path::Exists( "bv_media1" ) )
@@ -100,9 +102,12 @@ TEST( CleanAll, ProjectManager )
 
 TEST( CreatingPM, ProjectManager )
 {
+    auto static TM = std::make_shared < model::TimelineManager >();
+
+    model::TimelineManager::SetInstance( TM.get() ); // FIXME: WTF? SetInstance? I don't know such a design patern.
     model::TimelineManager::GetInstance()->RegisterRootTimeline( model::OffsetTimeEvaluator::Create( "global timeline", TimeType( 0.0 ) ) );
 
-    ChangeProjectManagerInstanceTo( "d:\\bv_media" );
+    ChangeProjectManagerInstanceTo( "bv_media" );
 
     g_pm0 = ProjectManager::GetInstance();
 }

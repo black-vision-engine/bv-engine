@@ -78,21 +78,21 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     h.AddTransformParam( DefaultTextPlugin::PARAM::TX_MAT );
 
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_EFFECT_VAL1, 0.f );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_EFFECT_VAL2, 0.f );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_SCALE_OFFSET, 0.f );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_SCALE, 0.f );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_ALPHA_OFFSET, 0.f );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_ALPHA, 0.f );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_TEXT_EFFECT, 0, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_EFFECT_VAL1, 0.f, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_EFFECT_VAL2, 0.f, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_SCALE_OFFSET, 0.f, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_SCALE, 0.f, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_ALPHA_OFFSET, 0.f, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::ANIM_ALPHA, 0.f, true );
 
     h.SetOrCreatePSModel();
 
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::RCC_BEGIN_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::RCC_END_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::COL_TEXT_EFFECT, 0 );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::TX_TEXT_EFFECT, 0 );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::TIME, 0.f );
-    h.AddSimpleParam( DefaultTextPlugin::PARAM::EXPLOSION_CENTER, glm::vec2( 0.0, -0.2 ) );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::RCC_BEGIN_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ), true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::RCC_END_COLOR, glm::vec4( 0.f, 0.f, 0.f, 0.f ), true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::COL_TEXT_EFFECT, 0, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::TIME, 0.f, true );
+    h.AddSimpleParam( DefaultTextPlugin::PARAM::EXPLOSION_CENTER, glm::vec2( 0.0, -0.2 ), true );
 
     return model;
 }

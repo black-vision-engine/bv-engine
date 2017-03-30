@@ -180,12 +180,8 @@ void    NodeUpdater::UpdateNodeEffect       ()
         }
         else
         {
-            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-            for( auto & val : nodeEffect->GetValues() )
-            {
-                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
-            }
+            // FIXME: nrl transition
+            assert( false );
         }
     }
 }

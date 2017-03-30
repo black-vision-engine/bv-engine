@@ -26,11 +26,11 @@ void InitSubsystem::AddInitializer ( Initializer fun )
 
 // *********************************
 // FIXME: thread safety
-void InitSubsystem::CallInitializers	()
+void InitSubsystem::CallInitializers	( int argc, char * argv[] )
 {
     for ( int i = 0; i < m_sNumInitializers; ++i )
     {
-        m_sInitializers[i]();
+        m_sInitializers[i]( argc, argv );
     }
 }
 

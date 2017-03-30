@@ -669,6 +669,11 @@ void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
     {
+        if( m_nodeLogic )
+        {
+            m_nodeLogic->PreNodeUpdate( t );
+        }
+
         if ( m_modelNodeEffect )
         {
             m_modelNodeEffect->Update( t );
@@ -692,6 +697,11 @@ void BasicNode::Update( TimeType t )
         }
 
         m_boundingVolume->IncludeChildrenBox( GetBoundingBoxRecursive() );
+
+        if( m_nodeLogic )
+        {
+            m_nodeLogic->PostChildrenUpdate( t );
+        }
     }
 }
 
@@ -714,7 +724,12 @@ mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
 
         for( UInt32 i = 0; i < m_children.size(); ++i )
         {
-            ret.Include( m_children[ i ]->GetBoundingBoxRecursive() );
+            const glm::mat4 & transform = m_children[ i ]->GetFinalizePlugin()->GetTransformChannel()->GetTransformValue()->GetValue();
+            
+            mathematics::Box childBox = m_children[ i ]->GetBoundingBoxRecursive();
+            childBox.Transform( transform );
+            
+            ret.Include( childBox );
         }
     }
 

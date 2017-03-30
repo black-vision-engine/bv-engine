@@ -5,6 +5,8 @@
 
 #include <sys/stat.h>
 
+#include "UseLoggerLibBlackVision.h"
+
 namespace bv {
 
 // **************************
@@ -259,7 +261,7 @@ void GLSLProgram::SetUniform( const char * name, float x, float y, float z )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -282,7 +284,7 @@ void GLSLProgram::SetUniform( const char * name, const glm::vec4 & v )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -298,7 +300,7 @@ void GLSLProgram::SetUniform( const char * name, const glm::vec2 & v )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -314,7 +316,7 @@ void GLSLProgram::SetUniform( const char * name, const glm::mat4 & m )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -330,7 +332,7 @@ void GLSLProgram::SetUniform( const char * name, const glm::mat3 & m )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -346,7 +348,7 @@ void GLSLProgram::SetUniform( const char * name, float val )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -362,7 +364,7 @@ void GLSLProgram::SetUniform( const char * name, int val )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 
@@ -378,7 +380,7 @@ void GLSLProgram::SetUniform( const char * name, bool val )
     }
     else
     {
-        printf( "Uniform: %s not found.\n", name );
+        LOG_MESSAGE( SeverityLevel::error ) << "Uniform: '" << name << "' not found.";
     }
 }
 

@@ -62,6 +62,35 @@ std::size_t     VideoModeHash( UInt32 resolution, UInt32 refresh, bool interlace
     return seed;
 }
 
+//**************************************
+//
+BMDAudioSampleRate  ConvertSampleRate       ( UInt32 sampleRate )
+{
+    if( sampleRate == 48000 )
+        return BMDAudioSampleRate::bmdAudioSampleRate48kHz;
+    else
+    {
+        assert( !"Sample rate not supported for Black Magic card." );
+        return ( BMDAudioSampleRate )0;
+    }
+}
+
+//**************************************
+//
+BMDAudioSampleType  ConvertSampleType       ( AudioSampleType sampleType )
+{
+    switch( sampleType )
+    {
+    case AudioSampleType::AV_SAMPLE_FMT_S16:
+        return BMDAudioSampleType::bmdAudioSampleType16bitInteger;
+    case AudioSampleType::AV_SAMPLE_FMT_S32:
+        return BMDAudioSampleType::bmdAudioSampleType32bitInteger;
+    default:
+        assert( !"Audio sample type not supported for for Black Magic card." );
+        return ( BMDAudioSampleType )0;
+    }
+}
+
 } //blackmagic
 } //videocards
 } //bv

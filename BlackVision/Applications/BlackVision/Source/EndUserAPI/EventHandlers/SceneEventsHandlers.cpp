@@ -18,6 +18,8 @@
 #include "System/Path.h"
 #include "IO/FileIO.h"
 
+#include "Application/ApplicationContext.h"
+
 #include <limits>
 #undef LoadImageW
 #undef LoadImage
@@ -152,7 +154,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
             unsigned int lastChildIdx = parentNodeCasted->GetNumChildren() - 1;
             auto addedChild = parentNodeCasted->GetChild( lastChildIdx );
 
-            result = addedChild->AddPlugin( "DEFAULT_TRANSFORM", editor->GetSceneDefaultTimeline( editor->GetModelScene( sceneName ) ) );
+            auto timeline = editor->GetSceneDefaultTimeline( editor->GetModelScene( sceneName ) );
+            auto plugin = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_TRANSFORM", "transform", timeline );
+
+            UInt32 addIdx = 0;
+            editor->AddPlugin( addedChild, plugin, addIdx );
         }
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
@@ -469,7 +475,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
                         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
                 
-                        RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
+                        //RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
                     }
                     else
                     {
@@ -1093,7 +1099,13 @@ void        SceneEventsHandlers::RestoreVisibilityState  ()
 {
     for( auto scene : m_scenesVisibilityState )
     {
-        scene.first->GetRootNode()->SetVisible( scene.second );
+        auto root = scene.first->GetRootNode();
+        
+        // For some reason root node can not exist anymore.
+        if( root )
+        {
+            root->SetVisible( scene.second );
+        }
     }
 
     m_scenesVisibilityState.clear();
@@ -1184,11 +1196,11 @@ glm::vec3   SceneEventsHandlers::GetMeshTranslationToFitCamera            ( mode
     auto camFOV = glm::radians( model::QueryTypedParam< model::ParamFloatPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::FOV ) )->Evaluate() );
     auto camPos = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::POSITION ) )->Evaluate();
     auto camDir = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::DIRECTION ) )->Evaluate();
-    
-    auto camViewportW = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) )->Evaluate();
-    auto camViewportH = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) )->Evaluate();
-    
-    auto ratio = ( Float32 )(std::max)( camViewportW, camViewportH ) / ( Float32 )(std::min)( camViewportW, camViewportH );
+
+    auto height = ( float )ApplicationContext::Instance().GetHeight();
+    auto width = ( float )ApplicationContext::Instance().GetWidth();
+
+    auto ratio = ( Float32 )(std::max)( width, height ) / ( Float32 )(std::min)( width, height );
 
     auto camDist = ratio * bbRadius / ( 2.f * glm::tan( camFOV / 2.0f ) );
 

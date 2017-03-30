@@ -4,6 +4,8 @@
 
 #include "System/Time.h"
 
+#include <future>
+
 #include "win_sock.h"
 
 namespace bv
@@ -58,6 +60,26 @@ void  SimpleTimer::Start            ()
 }
 
 // *********************************
+// Pauses timer when time >= t
+void  SimpleTimer::PauseOnAsync    ( UInt64 t )
+{
+    if( t > ElapsedMillis() )
+    {
+        std::async( [ = ] ()
+        {
+            auto elapsed = ElapsedMillis();
+            while( elapsed < t && !m_paused )
+                elapsed = ElapsedMillis();
+            Pause();
+        } );
+    }
+    else
+    {
+        Pause();
+    }
+}
+
+// *********************************
 //
 void  SimpleTimer::Pause            ()
 {
@@ -80,6 +102,20 @@ void  SimpleTimer::UnPause         ()
 
 		m_totalPausedTime += QueryMillis() - m_startPause;
     }
+}
+
+// *********************************
+//
+unsigned long    SimpleTimer::GetTickCount    ()
+{
+    return ::GetTickCount();
+}
+
+// *********************************
+//
+unsigned long    SimpleTimer::TimeGetTime     ()
+{
+    return timeGetTime();
 }
 
 // *********************************

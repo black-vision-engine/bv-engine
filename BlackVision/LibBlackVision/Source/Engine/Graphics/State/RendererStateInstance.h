@@ -43,6 +43,13 @@ public:
     void                    SetState( OffsetStatePtr os );
     void                    SetState( StencilStatePtr ss );
 
+    void                    AssignState( AlphaStateConstPtr as );
+    void                    AssignState( CullStateConstPtr cs );
+    void                    AssignState( DepthStateConstPtr ds );
+    void                    AssignState( FillStateConstPtr fs );
+    void                    AssignState( OffsetStateConstPtr os );
+    void                    AssignState( StencilStateConstPtr ss );
+
     void                    SetStateIgnoreEmptyEntries( const RendererStateInstance & inst );
 
     friend class RenderStateAccessor;
@@ -52,12 +59,12 @@ class RenderStateAccessor
 {
 public:
 
-    static AlphaStatePtr    AccessAlphaState    ( RendererStateInstance * inst );
-    static CullStatePtr     AccessCullState     ( RendererStateInstance * inst );
-    static DepthStatePtr    AccessDepthState    ( RendererStateInstance * inst );
-    static FillStatePtr     AccessFillState     ( RendererStateInstance * inst );
-    static OffsetStatePtr   AccessOffsetState   ( RendererStateInstance * inst );
-    static StencilStatePtr  AccessStencilState  ( RendererStateInstance * inst );
+    static AlphaStatePtr &      AccessAlphaState    ( RendererStateInstance * inst );
+    static CullStatePtr &       AccessCullState     ( RendererStateInstance * inst );
+    static DepthStatePtr &      AccessDepthState    ( RendererStateInstance * inst );
+    static FillStatePtr &       AccessFillState     ( RendererStateInstance * inst );
+    static OffsetStatePtr &     AccessOffsetState   ( RendererStateInstance * inst );
+    static StencilStatePtr &    AccessStencilState  ( RendererStateInstance * inst );
 };
 
 }

@@ -105,16 +105,17 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
 SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 {
     auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+
+    // Add scene name to context
+    auto sceneName = deser.GetAttribute( "name" );
+    bvDeserCo->SetSceneName( sceneName );
+
 // assets
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
     bvDeserCo->SetAssets( assets );
 
     //FIXME: pass nullptr as camera because we don't have camera model yet
-    auto sceneName = deser.GetAttribute( "name" );
     auto obj = SceneModel::Create( sceneName );
-
-    // Add scene name to context
-    bvDeserCo->SetSceneName( sceneName );
 
 // timelines
     auto sceneTimeline = obj->GetTimeline();

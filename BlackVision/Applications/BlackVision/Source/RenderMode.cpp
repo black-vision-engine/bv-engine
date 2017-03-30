@@ -2,7 +2,8 @@
 
 #include "RenderMode.h"
 
-#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "BVConfig.h"
 
@@ -23,12 +24,11 @@ RenderMode::RenderMode()
 // ***********************
 //
 RenderMode::~RenderMode()
-{
-}
+{}
 
 // ***********************
 //
-void RenderMode::SetStartTime( unsigned long time )
+void        RenderMode::SetStartTime            ( unsigned long time )
 {
 	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
     m_startTime = time - time % d;
@@ -38,43 +38,39 @@ void RenderMode::SetStartTime( unsigned long time )
 
 // ***********************
 //
-void RenderMode::SetRenderToFileMode( const std::string & filePath, float requestedFPS, unsigned int numFrames )
+void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, float requestedFPS, unsigned int numFrames )
 {
     m_nextFrameOffset = TimeType( 1 / requestedFPS );
     m_framesToRender = numFrames;
 
-    // FIXME: nrl - implement
-    { filePath; }
- //   if( m_renderLogic )
-	//{
- //       m_renderLogic->MakeScreenShot( filePath, numFrames, false );
-	//}
-
-    if( m_renderer )
+    if( m_renderLogic && m_renderer )
     {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
+
+        outputLogic->RequestScreenshot( filePath, nrl::RenderChannelType::RCT_OUTPUT_1, numFrames, false );
+
         m_renderer->SetVSync( false, 0 );
         m_renderer->SetFlushFinish( false, false );
     }
 
     m_renderMode = RenderingMode::RM_RenderOffscreen;
-    m_currentTime = 0.0f;
+    m_currentTime = m_realTime;
 }
 
 // ***********************
 //
-void RenderMode::MakeScreenShot( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
+void        RenderMode::MakeScreenShot          ( const std::string & filePath, bool onRenderedEvent, bool asyncWrite )
 {
-    // FIXME: nrl - implement
-    { filePath; onRenderedEvent; asyncWrite; }
- //   if( m_renderLogic )
-	//{
- //       m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent, asyncWrite );
-	//}
+    if( m_renderLogic && m_renderer )
+    {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
+        outputLogic->RequestScreenshot( filePath, nrl::RenderChannelType::RCT_OUTPUT_1, 1, onRenderedEvent, asyncWrite );
+    }
 }
 
 // ***********************
 //
-TimeType RenderMode::StartFrame( unsigned long millis )
+TimeType    RenderMode::StartFrame              ( unsigned long millis )
 {
 	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
 	millis = millis - millis % d;

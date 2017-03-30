@@ -7,6 +7,14 @@
 
 namespace bv { namespace videocards {
 
+enum class AudioSampleType : int
+{
+    AV_SAMPLE_FMT_S32 = 0,
+    AV_SAMPLE_FMT_S16,
+    AV_SAMPLE_FMT_U8,
+
+    AV_SAMPLE_FMT_TOTAL,
+};
 
 struct AVFrameDescriptor
 {
@@ -21,6 +29,10 @@ struct AVFrameDescriptor
     UInt32  odd;
 };
 
+class AVFrame;
+DEFINE_PTR_TYPE( AVFrame )
+DEFINE_CONST_PTR_TYPE( AVFrame )
+
 class AVFrame
 {
 public:
@@ -29,14 +41,17 @@ public:
     MemoryChunkConstPtr     m_audioData;
     AVFrameDescriptor       m_desc;
     BVTimeCode              m_TimeCode;
+	
+	static AVFrameConstPtr	Create( const MemoryChunkConstPtr & videoData, const MemoryChunkConstPtr & audioData, const AVFrameDescriptor & desc );
+	static AVFrameConstPtr	Create();
 
-	AVFrame(MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc);
-	AVFrame();
+	AVFrame		( MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc );
+	AVFrame		();
     ~AVFrame    ();
             
 };
 
-DEFINE_PTR_TYPE( AVFrame )
+
 
 } //videocards
 } //bv

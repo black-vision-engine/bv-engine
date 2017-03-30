@@ -2,9 +2,11 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/RenderResult.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputInstance.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/OutputLogicDesc.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/OutputScreenshot.h"
 
 namespace bv { 
     
@@ -16,35 +18,32 @@ class OutputLogic
 {
 private:
 
-    std::vector< OutputInstance * >     m_outputs;
+    std::vector< Output * >     m_outputs;
+    OutputScreenshot            m_screenshotLogic;
 
-    RenderResult                        m_renderResult;
+private:
+
+                            OutputLogic             ();
 
 public:
 
-                        OutputLogic             ( unsigned int width, unsigned int height, unsigned int shmScaleFactor, RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargetsPerOutput );
-    virtual             ~OutputLogic            ();
+    virtual                 ~OutputLogic            ();
 
     // API directly related to frame rendering
-    void                ProcessFrameData        ( NRenderContext * ctx );
+    void                    ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * rcd );
 
     // API relarted to global output state manipulation
-    bool                IsEnabled               ( CustomOutputType outputType );
-    void                EnableOutput            ( CustomOutputType outputType );
-    void                DisableOutput           ( CustomOutputType outputType );
-    
-    RenderChannelType   GetActiveRenderChannel  ( CustomOutputType outputType ) const;
-    bool                SetActiveRenderChannel  ( CustomOutputType outputType, RenderChannelType rct );
+    Output *                GetOutput               ( CustomOutputType outputType );
 
-    OutputInstance *    GetOutput               ( CustomOutputType outputType );
+    void                    RequestScreenshot       ( const std::string & filePath, RenderChannelType channelId, unsigned int numFrames = 1, bool onRenderedEvent = false, bool saveImgAsync = true );
 
-    // API related to render buffers state manipulation
-    RenderResult *      AccessRenderResult      ();
+private:
 
-    void                ActivateRenderChannel   ( RenderChannelType rct );
-    void                DeactivateRenderChannel ( RenderChannelType rct );
+    void                    AppendOutput            ( Output * output );
 
-    void                UpdateRenderChannels    ();
+public:
+
+    static OutputLogic *    Create                  ( OutputLogicDesc & desc );
 
 };
 

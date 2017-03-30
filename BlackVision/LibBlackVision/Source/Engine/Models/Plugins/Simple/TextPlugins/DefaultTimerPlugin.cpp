@@ -17,6 +17,8 @@
 #include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/DefaultAssets.h"
 
+#include "Tools/SimpleTimer.h"
+
 #include "Application/ApplicationContext.h"
 
 #include "Memory/MemoryLeaks.h"
@@ -310,9 +312,10 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 void                                DefaultTimerPlugin::Update                      ( TimeType t )
 {
     //FIXME: UPDATER TO FIX
+    //FIXME: why GetTickCount() instead of TimeGetTime or something similar and more stable
     if( m_started )
     {
-        m_currentLocalTime = m_localStartTime + (GetTickCount() -  m_globalStartTime);
+        m_currentLocalTime = m_localStartTime + (SimpleTimer::GetTickCount() -  m_globalStartTime);
         /*m_currentLocalTime = m_localStartTime + ((unsigned long)( t * 1000.0f ) -  m_globalStartTime);*/
     }
 
@@ -335,7 +338,7 @@ void                                DefaultTimerPlugin::Start                   
     if(!m_started)
     {
         m_started = true;
-        m_globalStartTime = GetTickCount();
+        m_globalStartTime = SimpleTimer::GetTickCount(); // FIXME: why not use TimeGetTime which is more stable?
     }
 }
 
@@ -357,7 +360,7 @@ void                                DefaultTimerPlugin::Reset                   
 {
     m_currentLocalTime = unsigned long ( localTime * 1000.f );
     m_localStartTime = m_currentLocalTime;
-    m_globalStartTime = GetTickCount();
+    m_globalStartTime = SimpleTimer::GetTickCount(); // FIXME: why not use TimeGetTime which is more stable?
 }
 
 ////////////////////////////

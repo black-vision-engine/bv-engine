@@ -13,6 +13,7 @@
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 
 #include <map>
+#include <set>
 
 
 namespace bv {

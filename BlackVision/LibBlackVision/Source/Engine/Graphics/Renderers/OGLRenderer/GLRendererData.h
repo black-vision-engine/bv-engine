@@ -27,7 +27,6 @@ public:
                 ~RenderState            ();
 
         void    Initialize              ( const RendererStateInstance & inst );
-        void    UpdateState             ( const RendererStateInstance & inst );
 
     private:
 

@@ -13,6 +13,7 @@
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
+#include "UseLoggerLibBlackVision.h"
 
 using std::ifstream;
 using std::ios;
@@ -43,31 +44,31 @@ bool compileAndLinkProgram  ( PdrGLSLProgram & prog, const std::string & vs, con
 {
     if( !prog.CompileShaderFromString( vs.c_str(),GLSLShader::VERTEX ) )
     {
-        printf( "Vertex shader failed to compile!\n%s", prog.Log().c_str() );
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
     if( !prog.CompileShaderFromString( ps.c_str(),GLSLShader::FRAGMENT ) )
     {
-        printf("Fragment shader failed to compile!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
     if ( gs != "" && !prog.CompileShaderFromString( gs.c_str(), GLSLShader::GEOMETRY ) )
     {
-        printf("Fragment shader failed to compile!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;    
     }
 
     if( !prog.Link() )
     {
-        printf("Shader program failed to link!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
     if( !prog.Validate() )
     {
-        printf("Program failed to validate!\n%s", prog.Log().c_str());
+        LOG_MESSAGE( SeverityLevel::error ) << prog.Log();
         return false;
     }
 
@@ -294,21 +295,21 @@ void PdrGLSLProgram::BindFragDataLocation( GLuint location, const string & name 
 
 // *******************************
 //
-void          PdrGLSLProgram::PostSetUniformFail    ( const string & name )
+void          PdrGLSLProgram::PostGetUniformLocationFail    ( const string & name )
 {
     if ( m_verboseLogging )
     {
-        printf( "Uniform: %s not found.\n", name.c_str() );
+        LOG_MESSAGE( SeverityLevel::warning ) << "Uniform [" << name << "] not found.";
     }
 }
 
 // *******************************
 //
-void          PdrGLSLProgram::PostSetUniformFail    ( int loc )
+void          PdrGLSLProgram::PostGetUniformLocationFail    ( int loc )
 {
     if ( m_verboseLogging )
     {
-        printf("Uniform at loc: %d not found.\n", loc );
+        LOG_MESSAGE( SeverityLevel::warning ) << "Uniform at loc: [" << loc << "] not found.";
     }
 }
 

@@ -8,6 +8,8 @@
 #include "Assets/AVStream/AVAsset.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/Interfaces/IAVDefs.h"
 
+#include <atomic>
+
 
 namespace bv {
 
@@ -67,6 +69,8 @@ public:
 	virtual bool            ProcessPacket               ( bool block = false );
 	virtual bool            PopData                     ( AVMediaData & data );
 	virtual UInt64          GetCurrentPTS               ();
+    virtual UInt64          GetLastPlayedFramePTS       () const;
+    virtual bool            IsAudio                     () const = 0;
 
 private:
 

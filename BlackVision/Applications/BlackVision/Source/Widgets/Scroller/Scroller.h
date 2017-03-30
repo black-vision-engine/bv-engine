@@ -233,7 +233,8 @@ private:
 
 
     void                    NodeRemovedHandler  ( IEventPtr evt );
-
+    void                    NodeMovedHandler    ( IEventPtr evt );
+    void                    NodeRemoved         ( model::BasicNode * parent, model::BasicNode * node );
 };
 
 } 

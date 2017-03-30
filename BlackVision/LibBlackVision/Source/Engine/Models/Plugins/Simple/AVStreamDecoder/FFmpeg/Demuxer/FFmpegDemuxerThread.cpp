@@ -39,7 +39,7 @@ void				FFmpegDemuxerThread::Kill	    ()
     m_stopped = false;
 	m_demuxer->ClearPacketQueue( true );
 
-	std::cout << "KILLING demuxer thread " << std::this_thread::get_id() << std::endl;
+	LOG_MESSAGE( SeverityLevel::debug ) << "KILLING demuxer thread " << std::this_thread::get_id();
 
     m_cond.notify_one();
 }
@@ -53,7 +53,7 @@ void				FFmpegDemuxerThread::Restart	()
 	{
 		m_stopThread = false;
 		m_stopped = false;
-		std::cout << "RESTARTING Demuxer thread " << std::this_thread::get_id() << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "RESTARTING Demuxer thread " << std::this_thread::get_id();
 		m_cond.notify_one();
 	}
 }
@@ -66,7 +66,7 @@ void				FFmpegDemuxerThread::Stop		()
 
 	if( !m_stopThread )
 	{
-		std::cout << "STOPPING Demuxer thread " << std::this_thread::get_id() << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "STOPPING Demuxer thread " << std::this_thread::get_id();
 		m_stopThread = true;
 		m_cond.notify_one();
 	}
@@ -85,7 +85,7 @@ bool				FFmpegDemuxerThread::Stopped		() const
 //
 void				FFmpegDemuxerThread::Run			()
 {
-	std::cout << "STARTING Demuxer thread " << std::this_thread::get_id() << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "STARTING Demuxer thread " << std::this_thread::get_id();
 
     while( true )
     {        
@@ -94,12 +94,12 @@ void				FFmpegDemuxerThread::Run			()
 		
 			if( m_stopThread )
 			{
-				std::cout << "STOPPED Demuxer thread " << std::this_thread::get_id() << std::endl;
-				std::cout << "Queue 0 empty " << m_demuxer->IsPacketQueueEmpty( 0 ) << std::endl;
-				std::cout << "Queue 1 empty " << m_demuxer->IsPacketQueueEmpty( 1 ) << std::endl;
+                LOG_MESSAGE( SeverityLevel::debug ) << "STOPPED Demuxer thread " << std::this_thread::get_id();
+                LOG_MESSAGE( SeverityLevel::debug ) << "Queue 0 empty " << m_demuxer->IsPacketQueueEmpty( 0 );
+                LOG_MESSAGE( SeverityLevel::debug ) << "Queue 1 empty " << m_demuxer->IsPacketQueueEmpty( 1 );
 				m_stopped = true;
 				m_cond.wait( lock, [ = ] { return m_stopped == false; } );
-				std::cout << "STARTED Demuxer thread " << std::this_thread::get_id() << std::endl;
+                LOG_MESSAGE( SeverityLevel::debug ) << "STARTED Demuxer thread " << std::this_thread::get_id();
 			}
 		
 
@@ -119,7 +119,7 @@ void				FFmpegDemuxerThread::Run			()
         }
     }
 
-	std::cout << "DYING Demuxer thread  " << std::this_thread::get_id() << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "DYING Demuxer thread  " << std::this_thread::get_id();
 }
 
 } //bv

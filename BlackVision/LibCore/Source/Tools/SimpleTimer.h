@@ -31,6 +31,7 @@ public:
     void                    Start           ();
 	void					Reset			();
 
+    void                    PauseOnAsync    ( UInt64 t );
     void                    Pause           ();
     void                    UnPause         ();
 
@@ -50,6 +51,9 @@ public:
 
 		return QueryMillis() - m_startMillis - m_totalPausedTime;
 	}
+
+    static unsigned long    GetTickCount    ();
+    static unsigned long    TimeGetTime     ();
 
 private:
 

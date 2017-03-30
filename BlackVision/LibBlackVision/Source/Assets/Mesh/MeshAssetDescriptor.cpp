@@ -3,12 +3,7 @@
 #include "MeshAssetDescriptor.h"
 #include "Serialization/SerializationHelper.h"
 
-
-
-
-#include "Memory/MemoryLeaks.h"
-
-
+#include "System/Path.h"
 
 namespace bv
 {
@@ -59,28 +54,28 @@ MeshAssetDescConstPtr MeshAssetDesc::Create         ( const std::string & path, 
 
 // ***********************
 //
-const std::string &	MeshAssetDesc::GetUID() const
+const std::string &	        MeshAssetDesc::GetUID() const
 {
     return MeshAssetDesc::UID();
 }
 
 // ***********************
 //
-const std::string & MeshAssetDesc::UID()
+const std::string &         MeshAssetDesc::UID()
 {
     return MeshAssetDesc::uid;
 }
 
 // ***********************
 //
-bool MeshAssetDesc::IsCacheable() const
+bool                        MeshAssetDesc::IsCacheable() const
 {
     return true;
 }
 
 // ***********************
 //
-VoidConstPtr MeshAssetDesc::QueryThis() const
+VoidConstPtr                MeshAssetDesc::QueryThis() const
 {
     return shared_from_this();
 }
@@ -98,7 +93,7 @@ MeshAssetDesc::MeshAssetDesc( const std::string & path, const std::string & grou
 //
 std::string				MeshAssetDesc::GetKey		() const
 {
-    return m_path;
+    return m_path + std::to_string( Path::GetTimestamp( m_path ) );
 }
 
 // ***********************
