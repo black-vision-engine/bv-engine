@@ -54,6 +54,8 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedC
     // override previously rendered scene. We have to do it here.
     ClearActiveChannels( result, ctx );
 
+    std::vector< RenderTarget * > rts;
+
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
@@ -62,18 +64,12 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedC
 
         auto outputType = ( RenderChannelType ) outIdx;   
         auto outputRT = result->GetActiveRenderTarget( outputType );
-
-        auto intRT = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-        RenderScene( scene, intRT, ctx );
-
-        NRenderedData rData( 1 ); // FIXME: Clear this mess. Why do we need to create NRenderedData so often.
-        rData.SetEntry( 0, intRT );
-        m_blitWithAlphaEffect->Render( ctx, outputRT, rData );
-
-        allocator( ctx )->Free();
+        
+        RenderScene( scene, outputRT, ctx );
 
         result->SetContainsValidData( outputType, true );
     }
+
 }
 
 // **************************

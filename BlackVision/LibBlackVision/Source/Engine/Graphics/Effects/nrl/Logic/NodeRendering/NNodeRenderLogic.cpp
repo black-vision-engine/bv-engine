@@ -71,7 +71,6 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->EnableScene( scene );
 
     enable( ctx, output );
-    clearBoundRT( ctx, glm::vec4() );
     RenderQueued( scene->GetRoot(), ctx );
 
     // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
