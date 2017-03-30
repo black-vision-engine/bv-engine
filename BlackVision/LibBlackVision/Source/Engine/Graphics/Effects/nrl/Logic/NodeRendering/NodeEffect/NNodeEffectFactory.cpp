@@ -86,8 +86,8 @@ NNodeEffectPtr       CreateAlphaMaskNodeEffect()
 	//    - finalize step with default rendering
     // Create STEPS
     
-    float minAlphaThreshold = 0.01f;
-    float maxAlphaThreshold = 0.99f;
+    float minAlphaThreshold = -1.0f;
+    float maxAlphaThreshold = 1.1f;
 
     auto fseStep        = new NAlphaMaskFSEStep     ( minAlphaThreshold, maxAlphaThreshold );
     auto fseState       = fseStep->GetState();
