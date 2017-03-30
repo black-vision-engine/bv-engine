@@ -118,7 +118,7 @@ void                SceneUpdater::UpdateGridLines     ()
             linesRenderable->SetWidth( 1.0f );
 
             auto param = Cast< ShaderParamVec4 * >( linesRenderable->GetRenderableEffect()->GetPass( 0 )->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
-            param->SetValue( glm::vec4( 1.0, 0.7, 0.0, 0.8) );
+            param->SetValue( gridLinesLogic.GetColor() );
 
             m_scene->SetGridLinesRenderable( linesRenderable );
             m_gridLinesUpdateID = gridLinesLogic.GetUpdateID();
