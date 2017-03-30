@@ -180,13 +180,22 @@ void    Renderer::FreePdrResources   ()
 // FIXME: stencil is not required here so it is just fine, glClearColor and glClearDepth should be set only once, not every buffer clear - but there is no need to optimize it
 void	Renderer::ClearBuffers		()
 {
-    BVGL::bvglDepthMask( GL_TRUE );
+    if( !m_currentStateInstance.GetDepthState()->writable )
+    {
+        BVGL::bvglDepthMask( GL_TRUE );
+    }
+    
     //FIXME: it should be set once only, when clear color is changed
     BVGL::bvglClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //FIXME: implement
     BVGL::bvglClearDepth((GLclampd)m_ClearDepth);
     //glClearStencil((GLint)mClearStencil);
     BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    if( !m_currentStateInstance.GetDepthState()->writable )
+    {
+        BVGL::bvglDepthMask( GL_FALSE );
+    }
 }
 
 // *********************************
