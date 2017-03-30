@@ -30,6 +30,8 @@ protected:
     void                    AddPass             ( RenderablePass * pass );
 
 public:
+    
+    explicit                RenderableEffect    ( RenderablePass * pass );
 
     inline RenderablePass * GetPass             ( unsigned int index );
 

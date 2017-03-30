@@ -981,9 +981,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.cpp">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClCompile>
@@ -1189,9 +1186,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
@@ -1257,9 +1251,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.cpp">
       <Filter>Engine\Models\Updaters</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp">
       <Filter>Engine\Events</Filter>
@@ -1929,6 +1920,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.cpp">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4050,9 +4044,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -4274,9 +4265,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
@@ -4348,9 +4336,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.h">
       <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h">
       <Filter>Engine\Events</Filter>
@@ -5122,6 +5107,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
