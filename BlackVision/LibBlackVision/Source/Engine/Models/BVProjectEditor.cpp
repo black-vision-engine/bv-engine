@@ -1366,7 +1366,7 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
 
         auto engineNode = GetEngineNode( node );
 
-        m_project->DetachEffect( engineNode );
+        m_project->FreeEffectPDR( engineNode );
 
         BVProjectTools::UpdateSceneNodeEffect( engineNode, modelNode );
 
@@ -1620,6 +1620,7 @@ bool    BVProjectEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
 
     return false;
 }
+
     
 // *******************************
 //

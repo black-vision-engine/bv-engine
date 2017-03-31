@@ -58,7 +58,7 @@ private:
 
     explicit                    BVProject           ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
 
-    void                        DetachEffect        ( SceneNode * engineNode );
+    void                        FreeEffectPDR       ( SceneNode * engineNode );
 
 public:
 

@@ -1093,10 +1093,11 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
 
 // *********************************
 //
-void    Renderer::FreeNodeEffectPDR ( const NodeEffect * nodeEffect )
+void    Renderer::FreeNodeEffectPDR ( const nrl::NNodeEffect * nodeEffect )
 {
     { nodeEffect; }
     // FIXME: nrl update
+    assert( false );
     //std::set< const RenderablePass * > passes;
     //nodeEffect->GetRenderPasses( &passes );
 
