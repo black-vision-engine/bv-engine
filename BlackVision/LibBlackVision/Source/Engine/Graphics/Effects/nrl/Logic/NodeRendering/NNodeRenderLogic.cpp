@@ -8,7 +8,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
-#include "Engine/Graphics/Effects/BoundingBoxEffect.h"
+#include "Engine/Graphics/Effects/Utils/RenderableEffectFactory.h"
 
 #include "Engine/Audio/AudioRenderer.h"
 
@@ -71,7 +71,6 @@ void    NNodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget 
     renderer->EnableScene( scene );
 
     enable( ctx, output );
-
     RenderQueued( scene->GetRoot(), ctx );
 
     // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
@@ -238,7 +237,7 @@ void    NNodeRenderLogic::RenderChildren    ( SceneNodeRepr * nodeRepr, NRenderC
 void     NNodeRenderLogic::RenderBoundingBox( SceneNode * node, NRenderContext * ctx )
 {
     // FIXME: nrl - a bit better initialization mechanics would be handy
-    static auto effect = std::make_shared< BoundingBoxEffect >();
+    static auto effect = RenderableEffectFactory::CreateBoundingBoxEffect();
     static auto pass   = effect->GetPass( 0 );
 
     const auto & color = node->GetBoundingBoxColor();

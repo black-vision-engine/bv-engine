@@ -9,6 +9,9 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
 
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
+
+#include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
 
 namespace bv { namespace nrl {
 
@@ -23,6 +26,8 @@ NRenderLogicCore::NRenderLogicCore()
     m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_4 ] = RenderChannelType::RCT_OUTPUT_4;
 
     assert( (unsigned int) RenderChannelType::RCT_OUTPUT_4 == (unsigned int) RenderChannelType::RCT_TOTAL - 1 );
+
+    m_blitWithAlphaEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_BLIT_WITH_ALPHA );
 }
 
 // **************************
@@ -49,6 +54,8 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedC
     // override previously rendered scene. We have to do it here.
     ClearActiveChannels( result, ctx );
 
+    std::vector< RenderTarget * > rts;
+
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
@@ -57,11 +64,12 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedC
 
         auto outputType = ( RenderChannelType ) outIdx;   
         auto outputRT = result->GetActiveRenderTarget( outputType );
-
+        
         RenderScene( scene, outputRT, ctx );
 
         result->SetContainsValidData( outputType, true );
     }
+
 }
 
 // **************************

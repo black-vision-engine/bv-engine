@@ -70,6 +70,7 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
     m_assetTracker = std::unique_ptr< AssetTracker >( new AssetTracker( renderer, audioRenderer, m_projectEditor ) );
 }
 
+
 // *******************************
 //
 BVProject::~BVProject         ()
@@ -199,27 +200,12 @@ void							BVProject::SetStartTime	( unsigned long millis )
     m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
 }
 
-// *******************************
+
+// ***********************
 //
-void                            BVProject::DetachEffect ( SceneNode * engineNode )
+void                            BVProject::FreeEffectPDR        ( SceneNode * engineNode )
 {
-    // FIXME: fix this code
-    { engineNode; }
-    assert( false );
-    // m_renderer->FreeNodeEffectPDR( engineNode->GetNNodeEffect().get() ); // FIXME: original code
-    m_renderer->FreeNodeEffectPDR( nullptr ); 
-
-    //auto tEntity = engineNode->GetTransformable();
-
-    //if( tEntity != nullptr )
-    //{
-    //    if( auto rEntity = dynamic_cast< RenderableEntity * >( tEntity ) )
-    //    {
-    //        auto rEffect = rEntity->GetRenderableEffect();
-
-            
-    //    }
-    //}
+    m_renderer->FreeNodeEffectPDR( engineNode->GetNNodeEffect().get() );
 }
 
 // *******************************

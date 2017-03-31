@@ -19,6 +19,13 @@ RenderableEffect::RenderableEffect              ()
 {
 }
 
+// ***********************
+//
+RenderableEffect::RenderableEffect  ( RenderablePass * pass )
+{
+    m_passes.push_back( pass );
+}
+
 // *********************************
 //
 RenderableEffect::~RenderableEffect             ()

@@ -48,8 +48,12 @@ class PdrVertexDescriptor;
 class PdrVertexArrayObject;
 class PdrRenderTarget;
 class PdrDownloadPBO;
-class NodeEffect;
 class Scene;
+
+namespace nrl
+{
+    class NNodeEffect;
+}
 
 class TransformableEntity;
 
@@ -246,7 +250,7 @@ public:
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
 
-    void                        FreeNodeEffectPDR               ( const NodeEffect * nodeEffect );
+    void                        FreeNodeEffectPDR               ( const nrl::NNodeEffect * nodeEffect );
 
 private:
 

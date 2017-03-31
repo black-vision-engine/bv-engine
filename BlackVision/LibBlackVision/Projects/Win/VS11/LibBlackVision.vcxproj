@@ -220,9 +220,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\ParamAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueueConcurrent.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\NRenderLogicDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputLogicDesc.cpp" />
@@ -281,7 +279,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsPreprocessor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoResizedInputChannel.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\MockVideoHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\OutputCompositeVideo.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoOutputFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.cpp" />
@@ -302,12 +299,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NTexture2DEntry.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderQueueStackAllocator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.cpp" />
@@ -625,7 +622,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsPreprocessor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoResizedInputChannel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\MockVideoHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\OutputCompositeVideo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoOutputFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoTypes.h" />
@@ -635,6 +631,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputInstance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Impl\OutputScreenshot.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -732,8 +729,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\FullscreenRendering\FullscreenEffectInstance\NCompositeFullscreenEffectInstance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\FullscreenRendering\FullscreenEffectInstance\NFullscreenEffectInstance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\FullscreenRendering\FullscreenEffectInstance\NSimpleFullscreenEffectInstance.h" />
@@ -842,7 +837,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.h" />

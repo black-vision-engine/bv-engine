@@ -180,12 +180,19 @@ void    Renderer::FreePdrResources   ()
 // FIXME: stencil is not required here so it is just fine, glClearColor and glClearDepth should be set only once, not every buffer clear - but there is no need to optimize it
 void	Renderer::ClearBuffers		()
 {
+    auto ds = m_currentStateInstance.GetDepthState();
+    if( !ds->writable )
+        BVGL::bvglDepthMask( GL_TRUE );
+    
     //FIXME: it should be set once only, when clear color is changed
     BVGL::bvglClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //FIXME: implement
     BVGL::bvglClearDepth((GLclampd)m_ClearDepth);
     //glClearStencil((GLint)mClearStencil);
     BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    if( !ds->writable )
+        BVGL::bvglDepthMask( GL_FALSE );
 }
 
 // *********************************
@@ -1083,10 +1090,11 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
 
 // *********************************
 //
-void    Renderer::FreeNodeEffectPDR ( const NodeEffect * nodeEffect )
+void    Renderer::FreeNodeEffectPDR ( const nrl::NNodeEffect * nodeEffect )
 {
     { nodeEffect; }
     // FIXME: nrl update
+    assert( false );
     //std::set< const RenderablePass * > passes;
     //nodeEffect->GetRenderPasses( &passes );
 

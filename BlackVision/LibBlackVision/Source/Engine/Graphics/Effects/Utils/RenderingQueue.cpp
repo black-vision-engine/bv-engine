@@ -14,16 +14,9 @@
 namespace bv { namespace {
 
 // ************************************
-// FIXME: nrl - effect vs neffect
+//
 bool HasEffect( SceneNode * node )
 {
-    auto effect = node->GetNNodeEffect();
-
-    if( effect != nullptr && effect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
-    {
-        return true;
-    }
-
     auto neffect = node->GetNNodeEffect();
 
     if( node->IsNNodeEffectEnabled() && neffect != nullptr && neffect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
@@ -49,7 +42,7 @@ RenderingQueue::~RenderingQueue()
 
 
 // ***********************
-// FIXME: nrl - rendercontext added
+//
 float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     if( HasEffect( node ) )
@@ -64,7 +57,6 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
             }
             // In other cases depth is computet from node bounding box.
         }
-        // Note: else there's old style effect set in this node. We can ignore him and compute z as for normal node.
     }
 
     return ComputeNodeZ( node->GetRepr(), ctx );
@@ -130,7 +122,7 @@ bool                RenderingQueue::IsTransparent       ( SceneNodeRepr * nodeRe
 
 
 // ***********************
-// FIXME: nrl - rendercontext added
+// 
 void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
@@ -178,7 +170,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRe
 }
 
 // ***********************
-// FIXME: nrl - rendercontext added
+//
 void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx )
 {
     if( node->IsVisible() )
@@ -241,7 +233,7 @@ void                RenderingQueue::QueueOpaque         ( SceneNodeRepr * node, 
 }
 
 // ***********************
-// FIXME: nrl - rendercontext added
+//
 void                RenderingQueue::Render              ( nrl::NRenderContext * ctx )
 {
     // Opaque objects from front to back.
@@ -270,7 +262,7 @@ void                RenderingQueue::ClearQueue          ()
 // ========================================================================= //
 
 // ***********************
-// FIXME: nrl - rendercontext added
+//
 void                RenderingQueue::RenderNode          ( RenderingQueue::RenderItem & renderItem, nrl::NRenderContext * ctx )
 {
     // Function doesn't check if node is visible, beacause all nodes in m_transparentNodes
