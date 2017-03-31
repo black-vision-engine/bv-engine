@@ -4074,9 +4074,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -4139,9 +4136,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
       <Filter>Engine\Models\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
