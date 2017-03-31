@@ -61,7 +61,7 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
         }
     }
 
-    FIBITMAP * bitmap = FreeImage_Load( fiff, imageFilePath.c_str(), BMP_DEFAULT );
+    FIBITMAP * bitmap = FreeImage_Load( fiff, imageFilePath.c_str(), FIF_LOAD_NOPIXELS );
 
     if( bitmap == nullptr )
     {
