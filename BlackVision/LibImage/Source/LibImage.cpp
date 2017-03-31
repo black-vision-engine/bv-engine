@@ -48,15 +48,17 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
         return iprops;
     }
 
-    auto size = File::Size( imageFilePath );
-
-    FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( imageFilePath.c_str(), (int) size );
+    FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( imageFilePath.c_str(), 0 );
 
     if( fiff == FIF_UNKNOWN )
     {
-        ImageProperties iprops;
-        iprops.error = std::string("Unknown file format");
-        return iprops;
+        fiff = FreeImage_GetFIFFromFilename( imageFilePath.c_str() );
+        if( fiff == FIF_UNKNOWN )
+        {
+            ImageProperties iprops;
+            iprops.error = std::string( "Unknown file format" );
+            return iprops;
+        }
     }
 
     FIBITMAP * bitmap = FreeImage_Load( fiff, imageFilePath.c_str(), BMP_DEFAULT );
@@ -244,7 +246,8 @@ char *                    LoadImageImpl    ( const std::string & filePath, UInt3
 
     auto size = File::Size( filePath );
 
-    FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( filePath.c_str(), (int) size );
+    FIMEMORY * memory = nullptr;
+    char * pixels = nullptr;
 
     if( loadFromMemory )
     {
@@ -252,48 +255,47 @@ char *                    LoadImageImpl    ( const std::string & filePath, UInt3
 
         SizeType bytes = File::Read( bufToRead, filePath );
 
-        FIMEMORY * memory = FreeImage_OpenMemory( ( BYTE * ) bufToRead, ( DWORD ) bytes );
+        memory = FreeImage_OpenMemory( ( BYTE * ) bufToRead, ( DWORD ) bytes );
+
+        FREE_IMAGE_FORMAT fiff = FreeImage_GetFileTypeFromMemory( memory, 0 );
 
         bitmap = FreeImage_LoadFromMemory( fiff, memory, BMP_DEFAULT );
-
-        if( bitmap == nullptr )
-        {
-            return nullptr;
-        }
 
         delete[] bufToRead;
     }
     else
     {
+        FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( filePath.c_str(), 0 );
+
         bitmap = FreeImage_Load( fiff, filePath.c_str(), BMP_DEFAULT );
-        if( bitmap == nullptr )
+    }
+
+    if( bitmap )
+    {
+        auto bitmapcvt = ConvertToNearestSupported( bitmap, bpp, channelNum );
+
+        if( bitmapcvt != bitmap )
         {
-            return nullptr;
+            FreeImage_Unload( bitmap );
+        }
+
+        if( bitmapcvt )
+        {
+            *width = FreeImage_GetWidth( bitmapcvt );
+            *heigth = FreeImage_GetHeight( bitmapcvt );
+
+            auto numBytes = ( *width ) * ( *heigth ) * ( *bpp ) / 8;
+
+            pixels = new char[ numBytes ];
+
+            memcpy( pixels, FreeImage_GetBits( bitmapcvt ), numBytes );
+
+            FreeImage_Unload( bitmapcvt );
         }
     }
 
-    auto bitmapcvt = ConvertToNearestSupported( bitmap, bpp, channelNum );
-
-    if( bitmapcvt != bitmap )
-    {
-        FreeImage_Unload( bitmap );
-    }
-
-    if( bitmapcvt == nullptr )
-    {
-        return nullptr;
-    }
-
-    *width  = FreeImage_GetWidth( bitmapcvt );
-    *heigth = FreeImage_GetHeight( bitmapcvt );
-
-    auto numBytes = ( *width ) * ( *heigth ) * ( *bpp ) / 8;
-
-    char * pixels = new char[ numBytes ];
-
-    memcpy( pixels, FreeImage_GetBits( bitmapcvt ), numBytes );
-
-    FreeImage_Unload( bitmapcvt );
+    if( memory )
+        FreeImage_CloseMemory( memory );
 
     return pixels;
 }
