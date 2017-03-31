@@ -125,6 +125,13 @@ NFullscreenEffectComponentStatePtr NFullscreenEffect::GetState      ()
 
 // **************************
 //
+void    NFullscreenEffect::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_fseInst->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
+// **************************
+//
 void    NFullscreenEffect::SetFullscreenCamera	( Renderer * renderer )
 {
     assert( m_rendererCamera == nullptr );

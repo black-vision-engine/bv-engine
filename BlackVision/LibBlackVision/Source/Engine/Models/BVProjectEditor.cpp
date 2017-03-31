@@ -1366,14 +1366,19 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
 
         auto engineNode = GetEngineNode( node );
 
-        m_project->FreeEffectPDR( engineNode );
+        m_project->RemoveNodeEffect( engineNode );
 
         BVProjectTools::UpdateSceneNodeEffect( engineNode, modelNode );
 
         if( curEffect )
+        {
             NotifyEffectRemoved( QueryTyped( node ), curEffect );
+        }
+
         if( nodeEffect )
+        {
             NotifyEffectAdded( QueryTyped( node ), nodeEffect );
+        }
 
         return true;
     }

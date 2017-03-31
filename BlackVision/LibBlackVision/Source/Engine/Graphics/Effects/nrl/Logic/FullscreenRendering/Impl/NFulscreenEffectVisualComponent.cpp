@@ -146,6 +146,20 @@ const IValuePtrVec &    NFullscreenEffectVisualComponent::GetIValues    () const
 
 // **************************
 //
+void                    NFullscreenEffectVisualComponent::AppendRenderPasses_DIRTY_HACK       ( std::set< const RenderablePass * > * passes ) const
+{
+    auto eff = m_quad->GetRenderableEffect();
+
+    for( unsigned int i = 0; i < eff->NumPasses(); ++i )
+    {
+        auto pass = eff->GetPass( i );
+
+        passes->insert( pass );
+    }
+}
+
+// **************************
+//
 NFullscreenEffectVisualComponent *   NFullscreenEffectVisualComponent::Create( const NFullscreenEffectVisualComponentDesc & desc )
 {
     auto & pixelShaderSource    = desc.GetPixelShaderSrc();

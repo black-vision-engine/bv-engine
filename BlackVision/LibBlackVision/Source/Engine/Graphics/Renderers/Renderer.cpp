@@ -182,7 +182,9 @@ void	Renderer::ClearBuffers		()
 {
     auto ds = m_currentStateInstance.GetDepthState();
     if( !ds->writable )
+    {
         BVGL::bvglDepthMask( GL_TRUE );
+    }
     
     //FIXME: it should be set once only, when clear color is changed
     BVGL::bvglClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
@@ -192,7 +194,9 @@ void	Renderer::ClearBuffers		()
     BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     if( !ds->writable )
+    {
         BVGL::bvglDepthMask( GL_FALSE );
+    }
 }
 
 // *********************************
@@ -1090,18 +1094,18 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
 
 // *********************************
 //
-void    Renderer::FreeNodeEffectPDR ( const nrl::NNodeEffect * nodeEffect )
+void    Renderer::FreeNodeEffectPDR_DIRTY_HACK ( const nrl::NNodeEffect * nodeEffect )
 {
-    { nodeEffect; }
     // FIXME: nrl update
-    assert( false );
-    //std::set< const RenderablePass * > passes;
-    //nodeEffect->GetRenderPasses( &passes );
+    // FIXME: reimplement this szaj
+    std::set< const RenderablePass * > passes;
+    nodeEffect->GetRenderPasses_DIRTY_HACK( &passes );
 
-    //for( auto p : passes )
-    //{
-    //    m_PdrShaderMap.erase( p );
-    //}
+    for( auto p : passes )
+    {
+        // FIXME: this does not work as expected - no resources are freed from the device - which means that this is a device resource leak !!!
+        m_PdrShaderMap.erase( p );
+    }
 }
 
 } //bv

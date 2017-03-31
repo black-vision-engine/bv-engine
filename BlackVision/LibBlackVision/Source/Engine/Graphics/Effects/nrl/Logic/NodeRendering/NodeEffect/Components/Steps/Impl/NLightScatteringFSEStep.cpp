@@ -79,5 +79,12 @@ bool                    NLightScatteringFSEStep::IsFinal                      ( 
 	return true;
 }
 
+// **************************
+//
+void                NLightScatteringFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_lsEffect->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
 } // nrl
 } // bv

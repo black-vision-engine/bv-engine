@@ -77,5 +77,13 @@ IValuePtr   NFullscreenEffectPass::GetValue             ( const std::string & na
     return res;
 }
 
+// **************************
+//
+void        NFullscreenEffectPass::AppendRenderPasses_DIRTY_HACK    ( std::set< const RenderablePass * > * passes ) const
+{
+    m_preFullscreenStep->AppendRenderPasses_DIRTY_HACK( passes );
+    m_fullscreenStep->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
 } // nrl
 } // bv

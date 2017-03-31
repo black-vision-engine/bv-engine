@@ -38,7 +38,14 @@ IValuePtr   NNodeEffectImpl::GetValue        ( const std::string & name ) const
 
 // ***********************
 //
-bool        NNodeEffectImpl::IsBlendable_DIRTY_DESIGN_HACK() const
+void        NNodeEffectImpl::GetRenderPasses_DIRTY_HACK     ( std::set< const RenderablePass * > * passes ) const
+{
+    m_nodeEffectRenderLogic->GetRenderPasses_DIRTY_HACK( passes );
+}
+
+// ***********************
+//
+bool        NNodeEffectImpl::IsBlendable_DIRTY_DESIGN_HACK  () const
 {
     return m_nodeEffectRenderLogic->IsBlendable_DIRTY_DESIGN_HACK();
 }

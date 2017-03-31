@@ -31,6 +31,8 @@ public:
     virtual bool                    IsIdle          ( SceneNodeRepr * nodeRepr ) const;
     virtual bool                    IsFinal         ( SceneNodeRepr * nodeRepr ) const;
 
+    virtual void                    AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const;
+
 };
 
 } // nrl

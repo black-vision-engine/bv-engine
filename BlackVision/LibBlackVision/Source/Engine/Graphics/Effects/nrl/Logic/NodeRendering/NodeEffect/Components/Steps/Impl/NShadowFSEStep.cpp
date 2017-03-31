@@ -178,5 +178,13 @@ bool                    NShadowFSEStep::IsFinal         ( SceneNodeRepr * scnNod
 	return !IsIdle( scnNodeRepr );
 }
 
+// **************************
+//
+void                NShadowFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_blurEffect->AppendRenderPasses_DIRTY_HACK( passes );
+    m_shadowEffect->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
 } // nrl
 } // bv

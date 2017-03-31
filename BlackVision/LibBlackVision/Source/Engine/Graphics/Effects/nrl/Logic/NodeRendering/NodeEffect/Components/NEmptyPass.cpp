@@ -44,5 +44,12 @@ IValuePtr   NEmptyPass::GetValue        ( const std::string & name ) const
     return nullptr;
 }
 
+// **************************
+//
+void        NEmptyPass::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    { passes; }
+}
+
 } // nrl
 } // bv

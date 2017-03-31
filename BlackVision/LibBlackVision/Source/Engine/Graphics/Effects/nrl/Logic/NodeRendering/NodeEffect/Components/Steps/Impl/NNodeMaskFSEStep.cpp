@@ -87,6 +87,13 @@ bool                    NNodeMaskFSEStep::IsFinal                      ( SceneNo
 
 // **************************
 //
+void                NNodeMaskFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_blitAlphaMaskEffect->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
+// **************************
+//
 float                   NNodeMaskFSEStep::GetAlpha                     () const
 {
     auto val = GetState()->GetValueAt( 1 );

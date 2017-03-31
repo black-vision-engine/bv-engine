@@ -195,7 +195,7 @@ SceneVec                        BVProject::GetScenes        () const
 
 // *******************************
 //
-void							BVProject::SetStartTime	( unsigned long millis )
+void							BVProject::SetStartTime	    ( unsigned long millis )
 {
     m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
 }
@@ -203,14 +203,14 @@ void							BVProject::SetStartTime	( unsigned long millis )
 
 // ***********************
 //
-void                            BVProject::FreeEffectPDR        ( SceneNode * engineNode )
+void                            BVProject::RemoveNodeEffect ( SceneNode * engineNode )
 {
-    m_renderer->FreeNodeEffectPDR( engineNode->GetNNodeEffect().get() );
+    m_renderer->FreeNodeEffectPDR_DIRTY_HACK( engineNode->GetNNodeEffect().get() );
 }
 
 // *******************************
 //
-void                            BVProject::AddEngineScene       ( std::unique_ptr< Scene > scene, UInt32 idx )
+void                            BVProject::AddEngineScene   ( std::unique_ptr< Scene > scene, UInt32 idx )
 {
     if( idx < m_sceneVec.size() )
     {

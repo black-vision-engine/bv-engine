@@ -59,28 +59,38 @@ void            NNodeEffectRenderLogic::Render  ( SceneNodeRepr * nodeRepr, NRen
 
 // *********************************
 //
-bool			NNodeEffectRenderLogic::IsBlendable_DIRTY_DESIGN_HACK	() const
+void            NNodeEffectRenderLogic::GetRenderPasses_DIRTY_HACK          ( std::set< const RenderablePass * > * passes ) const
+{
+    for ( auto & pass : m_passes )
+    {
+        pass->AppendRenderPasses_DIRTY_HACK( passes );
+    }
+}
+
+// *********************************
+//
+bool			NNodeEffectRenderLogic::IsBlendable_DIRTY_DESIGN_HACK	    () const
 {
 	return m_useBlend;
 }
 
 // ***********************
 //
-bool            NNodeEffectRenderLogic::IsDepthOverriden_DIRTY_DESIGN_HACK() const
+bool            NNodeEffectRenderLogic::IsDepthOverriden_DIRTY_DESIGN_HACK  () const
 {
     return m_overrideDepth;
 }
 
 // *********************************
 //
-float			NNodeEffectRenderLogic::GetDepth_DIRTY_DESIGN_HACK      () const
+float			NNodeEffectRenderLogic::GetDepth_DIRTY_DESIGN_HACK          () const
 {
 	return m_depth;
 }
 
 // *********************************
 //
-IValuePtr       NNodeEffectRenderLogic::GetValue                        ( const std::string & name ) const
+IValuePtr       NNodeEffectRenderLogic::GetValue                            ( const std::string & name ) const
 {
     IValuePtr res = nullptr;
 

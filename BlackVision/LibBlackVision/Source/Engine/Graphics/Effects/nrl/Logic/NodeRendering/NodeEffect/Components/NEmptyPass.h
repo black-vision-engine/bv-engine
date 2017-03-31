@@ -18,6 +18,8 @@ public:
 
     virtual IValuePtr   GetValue        ( const std::string & name ) const override;
 
+    virtual void        AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const override;
+
 };
 
 } // nrl

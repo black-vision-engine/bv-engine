@@ -62,5 +62,12 @@ IValuePtr   NFinalizePass::GetValue         ( const std::string & name ) const
     return res;
 }
 
+// **************************
+//
+void        NFinalizePass::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_finalizeStep->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
 } // nrl
 } // bv
