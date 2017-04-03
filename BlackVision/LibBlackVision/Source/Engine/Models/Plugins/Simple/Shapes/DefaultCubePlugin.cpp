@@ -537,42 +537,23 @@ namespace Generator
             float bevel_step3 = bevelUV3 / mainPlaneTess;
 
             glm::vec2 preUV1;
-            glm::vec2 preUV2;
 
             int base = 0;
             for( int j = mainPlaneTess; j >= 0; --j )
             {
                 float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k, j );
-                float k_step2;
-                if( inverse )
-                    k_step2 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k + 1, j );
-                else
-                    k_step2 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k - 1, j );
 
                 preUV1 = getUV( k_step1, bevel_step1 * j, inverse, false );
-                preUV2 = getUV( k_step2, bevel_step1 * j, inverse, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
-                preUV2 = uvToZPlaneSpace( preUV2, face, CubicMappingPlane::MINUS_Z );
 
                 coords[ i ][ base + j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
-                //coords[ i ][ j + 1 ] = makeUV( preUV2, CubicMappingPlane::MINUS_Z );
-
-                //uvs->AddAttribute( makeUV( preUV1, CubicMappingPlane::MINUS_Z ) );
-                //uvs->AddAttribute( makeUV( preUV2, CubicMappingPlane::MINUS_Z ) );
             }
 
             base += mainPlaneTess + 1;
             for( int j = 0; j <= remainPlaneTess; ++j )
             {
                 preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, true );
-                preUV2;
-                if( inverse )
-                    preUV2 = getUV( bevel_step3 * ( k + 1 ), bevel_step2 * j, inverse, true );
-                else
-                    preUV2 = getUV( bevel_step3 * ( k - 1 ), bevel_step2 * j, inverse, true );
-
                 coords[ i ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
-                //coords[ i ][ j + 1 ] = makeUV( preUV2, static_cast< CubicMappingPlane >( face ) );
             }
 
 
@@ -580,60 +561,21 @@ namespace Generator
             for( int j = remainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, false );
-                preUV2;
-                if( inverse )
-                    preUV2 = getUV( bevel_step3 * ( k + 1 ), bevel_step2 * j, inverse, false );
-                else
-                    preUV2 = getUV( bevel_step3 * ( k - 1 ), bevel_step2 * j, inverse, false );
-
                 coords[ i ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
-                //coords[ i ][ j + 1 ] = makeUV( preUV2, static_cast< CubicMappingPlane >( face ) );
             }
 
             base += remainPlaneTess + 1;
             for( int j = 0; j <= mainPlaneTess; ++j )
             {
                 float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k, j );
-                float k_step2;
-                if( inverse )
-                    k_step2 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k + 1, j );
-                else
-                    k_step2 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k - 1, j );
+
                 preUV1 = getUV( k_step1, bevel_step1 * j, inverse, false );
-                preUV2 = getUV( k_step2, bevel_step1 * j, inverse, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::PLUS_Z );
-                preUV2 = uvToZPlaneSpace( preUV2, face, CubicMappingPlane::PLUS_Z );
                 preUV1 = makeUV( preUV1, CubicMappingPlane::PLUS_Z );
-                preUV2 = makeUV( preUV2, CubicMappingPlane::PLUS_Z );
 
                 coords[ i ][ base + j ] = preUV1;
-                //coords[ i ][ j + 1 ] = preUV2;
             }
 
-        }
-
-        void        GenerateFaceUVs     ( int face )
-        {
-            // Tesselated bevel consists of two regions. First regions maps UVs from main face, that we got in
-            // function parameter. Second region takes UVs from face following this face.
-            // We map half of tesselated lines into our main face. Remaining tesselation goes to next face.
-            int mainFaceTess = tesselation / 2;
-            int followingFaceTess = tesselation - mainFaceTess;
-
-            // Each face is built of tesselation + 1 lines.
-            int lineIdx = ( tesselation + 1 ) * face;
-
-            // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
-            // This function generates Uvs for this main plane.
-            GenerateMainFaceUVs( face );
-
-            // First lineIdx in face was used for main face.
-            lineIdx++;
-
-            for( int k = mainFaceTess; k > 0; --k )
-                GenerateBevelLineUV( followingFaceTess + lineIdx + mainFaceTess - k, face, k, false );
-            for( int k = 0; k < followingFaceTess; ++k )
-                GenerateBevelLineUV( lineIdx + k, ( face + 1 ) % 4, k, true );
         }
 
         void        GenerateMainFaceUVs( int face )
@@ -661,49 +603,37 @@ namespace Generator
             //float bevelStep3 = bevelUV3 / mainPlaneTess;
 
             glm::vec2 preUV1;
-            glm::vec2 preUV2;
 
             int base = 0;
             for( int j = mainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep1 * j, true, false );
-                preUV2 = getUV( bevelUV3, bevelStep1 * j, false, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
-                preUV2 = uvToZPlaneSpace( preUV2, face, CubicMappingPlane::MINUS_Z );
 
                 coords[ lineIdx ][ base + j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
             }
-
 
             base += mainPlaneTess + 1;
             for( int j = 0; j <= remainPlaneTess; ++j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep2 * j, true, true );
-                preUV2 = getUV( bevelUV3, bevelStep2 * j, false, true );
-
-                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast<CubicMappingPlane>( face ) );
+                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
             }
 
             base += remainPlaneTess + 1;
             for( int j = remainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep2 * j, true, false );
-                preUV2 = getUV( bevelUV3, bevelStep2 * j, false, false );
-
-                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast<CubicMappingPlane>( face ) );
+                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
             }
 
             base += remainPlaneTess + 1;
             for( int j = 0; j <= mainPlaneTess; ++j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep1 * j, true, false );
-                preUV2 = getUV( bevelUV3, bevelStep1 * j, false, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::PLUS_Z );
-                preUV2 = uvToZPlaneSpace( preUV2, face, CubicMappingPlane::PLUS_Z );
-                preUV1 = makeUV( preUV1, CubicMappingPlane::PLUS_Z );
-                preUV2 = makeUV( preUV2, CubicMappingPlane::PLUS_Z );
 
-                coords[ lineIdx ][ base + j ] = preUV1;
+                coords[ lineIdx ][ base + j ] = makeUV( preUV1, CubicMappingPlane::PLUS_Z );
             }
         }
 
@@ -722,6 +652,30 @@ namespace Generator
 				generateLineUV( ( face + 1 ) % 4, k, true, uvs );
 			
 		}
+
+        void        GenerateFaceUVs     ( int face )
+        {
+            // Tesselated bevel consists of two regions. First regions maps UVs from main face, that we got in
+            // function parameter. Second region takes UVs from face following this face.
+            // We map half of tesselated lines into our main face. Remaining tesselation goes to next face.
+            int mainFaceTess = tesselation / 2;
+            int followingFaceTess = tesselation - mainFaceTess;
+
+            // Each face is built of tesselation + 1 lines.
+            int lineIdx = ( tesselation + 1 ) * face;
+
+            // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
+            // This function generates Uvs for this main plane.
+            GenerateMainFaceUVs( face );
+
+            // First lineIdx in face was used for main face.
+            lineIdx++;
+
+            for( int k = mainFaceTess; k > 0; --k )
+                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, false );
+            for( int k = 0; k < followingFaceTess; ++k )
+                GenerateBevelLineUV( lineIdx + mainFaceTess + k, ( face + 1 ) % 4, k, true );
+        }
 
 
         void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
@@ -820,28 +774,28 @@ namespace Generator
             GenerateLine( 0, w, h, 0. );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / ( tesselation - 1 );
+                double angle = i * PI / 2 / tesselation;
                 GenerateLine( 1 + i, -w,  h, angle );
             }
 // left
             GenerateLine( t+1, -w,  h, PI/2 );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / ( tesselation - 1 ) + PI/2;
+                double angle = i * PI / 2 / tesselation + PI/2;
                 GenerateLine( t+2 + i, -w, -h, angle );
             }
 // bottom
             GenerateLine( 2*( t + 1 ), -w, -h, PI );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / ( tesselation - 1 ) + PI;
+                double angle = i * PI / 2 / tesselation + PI;
                 GenerateLine( 2*( t + 1 ) + 1 + i, w, -h, angle );
             }
 // right
             GenerateLine( 3*( t + 1 ), w, -h, 3*PI/2 );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / ( tesselation - 1 ) + 3*PI/2;
+                double angle = i * PI / 2 / tesselation + 3*PI/2;
                 GenerateLine( 3*( t + 1 ) + 1 + i, w, h, angle );
             }
         }
