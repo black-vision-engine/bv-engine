@@ -286,19 +286,19 @@ namespace Generator
 			if( tesselation < 2 )
 				tesselation = 2;
 
-            n = 4*(tesselation+1);
-            m = (tesselation+1) * 2;
+            n = 4 * ( tesselation + 1 );
+            m = ( tesselation + 1 ) * 2;
             assert( n >= 0 );
-            
+
             v = new glm::vec3*[ n ];
             norm = new glm::vec3*[ n ];
-            coords = new glm::vec2*[ n ];
+            coords = new glm::vec2*[ n + 2 ];
 
             for( int i = 0; i < n; i++ )
             {
                 v[ i ] = new glm::vec3[ m ];
                 norm[ i ] = new glm::vec3[ m ];
-                coords[ i ] = new glm::vec2[ m ];
+                coords[ i ] = new glm::vec2[ m + 2 ];       // Check UVs generation strategy to understand n + 2.
             }
         }
 
@@ -539,7 +539,7 @@ namespace Generator
             glm::vec2 preUV1;
             glm::vec2 preUV2;
 
-
+            int base = 0;
             for( int j = mainPlaneTess; j >= 0; --j )
             {
                 float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k, j );
@@ -554,13 +554,14 @@ namespace Generator
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
                 preUV2 = uvToZPlaneSpace( preUV2, face, CubicMappingPlane::MINUS_Z );
 
-                coords[ i ][ j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
+                coords[ i ][ base + j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
                 //coords[ i ][ j + 1 ] = makeUV( preUV2, CubicMappingPlane::MINUS_Z );
 
                 //uvs->AddAttribute( makeUV( preUV1, CubicMappingPlane::MINUS_Z ) );
                 //uvs->AddAttribute( makeUV( preUV2, CubicMappingPlane::MINUS_Z ) );
             }
 
+            base += mainPlaneTess + 1;
             for( int j = 0; j <= remainPlaneTess; ++j )
             {
                 preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, true );
@@ -570,11 +571,12 @@ namespace Generator
                 else
                     preUV2 = getUV( bevel_step3 * ( k - 1 ), bevel_step2 * j, inverse, true );
 
-                coords[ i ][ j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
+                coords[ i ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
                 //coords[ i ][ j + 1 ] = makeUV( preUV2, static_cast< CubicMappingPlane >( face ) );
             }
 
 
+            base += remainPlaneTess + 1;
             for( int j = remainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, false );
@@ -584,10 +586,11 @@ namespace Generator
                 else
                     preUV2 = getUV( bevel_step3 * ( k - 1 ), bevel_step2 * j, inverse, false );
 
-                coords[ i ][ j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
+                coords[ i ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
                 //coords[ i ][ j + 1 ] = makeUV( preUV2, static_cast< CubicMappingPlane >( face ) );
             }
 
+            base += remainPlaneTess + 1;
             for( int j = 0; j <= mainPlaneTess; ++j )
             {
                 float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k, j );
@@ -603,7 +606,7 @@ namespace Generator
                 preUV1 = makeUV( preUV1, CubicMappingPlane::PLUS_Z );
                 preUV2 = makeUV( preUV2, CubicMappingPlane::PLUS_Z );
 
-                coords[ i ][ j ] = preUV1;
+                coords[ i ][ base + j ] = preUV1;
                 //coords[ i ][ j + 1 ] = preUV2;
             }
 
@@ -618,22 +621,28 @@ namespace Generator
             int followingFaceTess = tesselation - mainFaceTess;
 
             // Each face is built of tesselation + 1 lines.
-            int coordsArrayIdx = ( tesselation + 1 ) * face;
+            int lineIdx = ( tesselation + 1 ) * face;
 
             // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
             // This function generates Uvs for this main plane.
             GenerateMainFaceUVs( face );
 
+            // First lineIdx in face was used for main face.
+            lineIdx++;
+
             for( int k = mainFaceTess; k > 0; --k )
-                GenerateBevelLineUV( coordsArrayIdx, face, k, false );
+                GenerateBevelLineUV( followingFaceTess + lineIdx + mainFaceTess - k, face, k, false );
             for( int k = 0; k < followingFaceTess; ++k )
-                GenerateBevelLineUV( coordsArrayIdx, ( face + 1 ) % 4, k, true );
+                GenerateBevelLineUV( lineIdx + k, ( face + 1 ) % 4, k, true );
         }
 
         void        GenerateMainFaceUVs( int face )
         {
             int mainPlaneTess = tesselation / 2;
             int remainPlaneTess = tesselation - mainPlaneTess;
+
+            // Each face is built of tesselation + 1 lines.
+            int lineIdx = ( tesselation + 1 ) * face;
 
             float dim1;
             float dim3;
@@ -654,6 +663,7 @@ namespace Generator
             glm::vec2 preUV1;
             glm::vec2 preUV2;
 
+            int base = 0;
             for( int j = mainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep1 * j, true, false );
@@ -661,25 +671,29 @@ namespace Generator
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
                 preUV2 = uvToZPlaneSpace( preUV2, face, CubicMappingPlane::MINUS_Z );
 
-                coords[ face ][ j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
+                coords[ lineIdx ][ base + j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
             }
 
+
+            base += mainPlaneTess + 1;
             for( int j = 0; j <= remainPlaneTess; ++j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep2 * j, true, true );
                 preUV2 = getUV( bevelUV3, bevelStep2 * j, false, true );
 
-                coords[ face ][ j ] = makeUV( preUV1, static_cast<CubicMappingPlane>( face ) );
+                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast<CubicMappingPlane>( face ) );
             }
 
-
+            base += remainPlaneTess + 1;
             for( int j = remainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep2 * j, true, false );
                 preUV2 = getUV( bevelUV3, bevelStep2 * j, false, false );
 
-                coords[ face ][ j ] = makeUV( preUV1, static_cast<CubicMappingPlane>( face ) );
+                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast<CubicMappingPlane>( face ) );
             }
+
+            base += remainPlaneTess + 1;
             for( int j = 0; j <= mainPlaneTess; ++j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep1 * j, true, false );
@@ -689,7 +703,7 @@ namespace Generator
                 preUV1 = makeUV( preUV1, CubicMappingPlane::PLUS_Z );
                 preUV2 = makeUV( preUV2, CubicMappingPlane::PLUS_Z );
 
-                coords[ face ][ j ] = preUV1;
+                coords[ lineIdx ][ base + j ] = preUV1;
             }
         }
 
@@ -718,40 +732,51 @@ namespace Generator
             int mainFaceTess = tesselation / 2;
             int followingFaceTess = tesselation - mainFaceTess;
 
-			
-            for( int i = 0; i < n-1; i++ )
-			{
+
+            for( int i = 0; i < n - 1; i++ )
+            {
+                int uvsIdx = 0;
+
                 for( int j = 0; j < m; j++ )
                 {
-                    verts->AddAttribute( v[ i   ][ j ] + center_translate );    normals->AddAttribute( norm[ i   ][ j ] );      uvs->AddAttribute( coords[ i ][ j ] );
-                    verts->AddAttribute( v[ i+1 ][ j ] + center_translate );    normals->AddAttribute( norm[ i+1 ][ j ] );      uvs->AddAttribute( coords[ i + 1 ][ j ] );
+                    verts->AddAttribute( v[ i ][ j ] + center_translate );      normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
 
-					if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
-					{
-						verts->AddAttribute( v[ i   ][ j ] + center_translate );    normals->AddAttribute( norm[ i   ][ j ] );  uvs->AddAttribute( coords[ i ][ j ] );
-						verts->AddAttribute( v[ i+1 ][ j ] + center_translate );    normals->AddAttribute( norm[ i+1 ][ j ] );  uvs->AddAttribute( coords[ i + 1 ][ j ] );
-					}
+                    if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
+                    {
+                        uvsIdx++;
+
+                        verts->AddAttribute( v[ i ][ j ] + center_translate );      normals->AddAttribute( norm[ i ][ j ] );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    }
+
+                    uvsIdx++;
                 }
-				// Degenerated triangle
-				verts->AddAttribute( v[ i+1 ][ m - 1 ] + center_translate );    normals->AddAttribute( norm[ i+1 ][ m - 1 ] );  uvs->AddAttribute( coords[ i + 1 ][ m - 1 ] );
-                verts->AddAttribute( v[ i+1 ][ 0 ] + center_translate );        normals->AddAttribute( norm[ i+1 ][ 0 ] );      uvs->AddAttribute( coords[ i + 1 ][ 0 ] );
-			}
+                // Degenerated triangle
+                verts->AddAttribute( v[ i + 1 ][ m - 1 ] + center_translate );    normals->AddAttribute( norm[ i + 1 ][ m - 1 ] );  uvs->AddAttribute( coords[ i + 1 ][ m - 1 ] );
+                verts->AddAttribute( v[ i + 1 ][ 0 ] + center_translate );        normals->AddAttribute( norm[ i + 1 ][ 0 ] );      uvs->AddAttribute( coords[ i + 1 ][ 0 ] );
+            }
 
+            int uvsIdx = 0;
             for( int j = 0; j < m; j++ )
             {
-                verts->AddAttribute( v[ n-1 ][ j ] + center_translate );    normals->AddAttribute( norm[ n-1 ][ j ] );          uvs->AddAttribute( coords[ n - 1 ][ j ] );
-                verts->AddAttribute( v[ 0   ][ j ] + center_translate );    normals->AddAttribute( norm[ 0   ][ j ] );          uvs->AddAttribute( coords[ 0 ][ j ] );
+                verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
+                verts->AddAttribute( v[ 0 ][ j ] + center_translate );          normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
 
-				if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
-				{
-					verts->AddAttribute( v[ n-1   ][ j ] + center_translate );  normals->AddAttribute( norm[ n-1 ][ j ] );      uvs->AddAttribute( coords[ n - 1 ][ j ] );
-					verts->AddAttribute( v[ 0 ][ j ] + center_translate );      normals->AddAttribute( norm[ 0 ][ j ] );        uvs->AddAttribute( coords[ 0 ][ j ] );
-				}
+                if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
+                {
+                    uvsIdx++;
+
+                    verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ 0 ][ j ] + center_translate );      normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
+                }
+
+                uvsIdx++;
             }
-			
-			// Degenerated triangle
-			verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );  normals->AddAttribute( norm[ 0 ][ 0 ] );                    uvs->AddAttribute( coords[ 0 ][ 0 ] );
-            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );  normals->AddAttribute( norm[ 0 ][ 0 ] );                    uvs->AddAttribute( coords[ 0 ][ 0 ] );
+
+            // Degenerated triangle
+            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
+            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
 
         }
 
