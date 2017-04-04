@@ -85,8 +85,6 @@ public:
 
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
 
-    virtual void            DisplayFrame                () const;
-
     std::set< UInt64 >	    GetDisplayedVideoOutputsIDs () const override;
 
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}

@@ -62,7 +62,8 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                         output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ), 0 );
                         output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ), 0 );
                         output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
-                        
+                        output->id = ( UInt32 ) SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ), 0 );
+
                         //FIXME?
                         output->updateFormat = UPD_FMT_FIELD;
                         output->memoryFormat = MEM_FMT_BGRA;
@@ -241,51 +242,29 @@ void                            VideoCard::Start                    ()
 
 //**************************************
 //
-void							VideoCard::DisplayFrame             () const
+void                            VideoCard::ProcessFrame             ( const AVFrameConstPtr & frame, UInt64 outputId )
 {
-	//   for( auto channel : m_channels )
-	//{
-	//       auto playbackChannel = channel->GetPlaybackChannel();
-	//       if( playbackChannel && !channel->PlaythroughEnabled() )
-	//	{
-	//           playbackChannel->m_pFifoBuffer->PushFrame(
-	//			std::make_shared< CFrame >(reinterpret_cast<const unsigned char *>(frame->m_videoData->Get()),
-	//				m_deviceID,
-	//				playbackChannel->GoldenSize,
-	//				playbackChannel->BytesPerLine,
-	//				odd,
-	//				(unsigned int)frame->m_audioData->Size(),
-	//				reinterpret_cast<const unsigned char *>(frame->m_audioData->Get()),
-	//				frame->m_TimeCode,
-	//				frame->m_desc
-	//				) );
-	//	}
-	//}   
-}
-
-//**************************************
-//
-void                            VideoCard::ProcessFrame             ( const AVFrameConstPtr &, UInt64 )
-{
-    assert(false);
- //   for( auto channel : m_channels )
-	//{
- //       auto playbackChannel = channel->GetPlaybackChannel();
- //       if( playbackChannel && !channel->PlaythroughEnabled() )
-	//	{
- //           playbackChannel->m_pFifoBuffer->PushFrame(
-	//			std::make_shared< CFrame >(reinterpret_cast<const unsigned char *>(frame->m_videoData->Get()),
-	//				m_deviceID,
-	//				playbackChannel->GoldenSize,
-	//				playbackChannel->BytesPerLine,
-	//				odd,
-	//				(unsigned int)frame->m_audioData->Size(),
-	//				reinterpret_cast<const unsigned char *>(frame->m_audioData->Get()),
-	//				frame->m_TimeCode,
-	//				frame->m_desc
-	//				) );
-	//	}
-	//}   
+    for( auto channel : m_channels )
+    {
+        if( channel->GetOutputId() == outputId )
+        {
+            auto playbackChannel = channel->GetPlaybackChannel();
+            if( playbackChannel && !channel->PlaythroughEnabled() )
+            {
+                playbackChannel->m_pFifoBuffer->PushFrame(
+                    std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
+                                                m_deviceID,
+                                                playbackChannel->GoldenSize,
+                                                playbackChannel->BytesPerLine,
+                                                0, // FIXME: pass odd properlly.
+                                                ( unsigned int ) frame->m_audioData->Size(),
+                                                reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
+                                                frame->m_TimeCode,
+                                                frame->m_desc
+                                                ) );
+            }
+        }
+	}   
 }
 
 //**************************************
