@@ -38,6 +38,12 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
         m_playbackData = std::move( output );
         m_playbackFifoBuffer = new CFifoBuffer();
         m_playbackChannel = new CFifoPlayback();
+
+        if( output->interlaced )
+        {
+            m_frameProcessingThread->EnableInterlacing( true );
+            //m_frameProcessingThread->SetFrameDuration( UInt64( 1000 / ( float(output->refresh) / 100.f ) ) );
+        }
     }
 }
 
