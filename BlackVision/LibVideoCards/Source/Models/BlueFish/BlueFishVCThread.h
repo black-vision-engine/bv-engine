@@ -22,9 +22,7 @@ class BlueFishVCThread : public StoppableThread
 {
 	typedef QueueConcurrentLimited< AVFrameConstPtr >    FrameQueue;
 
-	boost::circular_buffer< MemoryChunkPtr > m_prevFramesBuffer;
-
-	MemoryChunkPtr				m_prevFrame;
+	boost::circular_buffer< MemoryChunkPtr > m_outputFramesBuffer;
 
 	FrameQueue					m_frameQueue;
 

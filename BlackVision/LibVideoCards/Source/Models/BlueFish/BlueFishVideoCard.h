@@ -71,17 +71,9 @@ public:
 	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
 	Channel *			    GetChannelByName			( ChannelName channelName ) const;   
 
-    void                    PreStart                    () override
-    {
-        assert( false );
-    };
-
+    void                    PreStart                    () override;
     virtual void            Start                       () override;
-
-    void                    Stop                        () override
-    {
-        assert( false );
-    };
+    void                    Stop                        () override;
 
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
 

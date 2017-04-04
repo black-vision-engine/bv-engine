@@ -18,14 +18,14 @@ BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
     : m_frameQueue( 1 )
     , m_videoChannel( vc )
     , m_odd( true )
-    , m_prevFramesBuffer( BUFFER_SIZE )
+    , m_outputFramesBuffer( BUFFER_SIZE )
     , m_frameDuration( 0 )
     , m_interlaceEnabled( false )
 {
     frameSize = frameSize / ( vc->m_playbackData->interlaced ? 2 : 1 ) + 2048; // FIXME: Why + 2048
 
 	for( SizeType i = 0; i < BUFFER_SIZE; ++i )
-		m_prevFramesBuffer.push_back( MemoryChunk::Create( frameSize ) ); 
+        m_outputFramesBuffer.push_back( MemoryChunk::Create( frameSize ) );
 }
 
 
@@ -98,9 +98,11 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
     int height = frame->m_desc.height;
     int bytes_per_line = width * pixel_depth;
 
-    char * memDst = m_prevFrame->GetWritable();  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
+    auto outputFrame = m_outputFramesBuffer.front();
 
-    auto size = m_prevFrame->Size();
+    char * memDst = outputFrame->GetWritable();  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
+
+    auto size = outputFrame->Size();
 
     memset( memDst, 0, size );
 
@@ -109,7 +111,7 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         memcpy( &memDst[ j*( bytes_per_line ) ], &memSrc[ i*( bytes_per_line ) ], bytes_per_line );
     }
 
-    return AVFrame::Create( m_prevFrame, frame->m_audioData, frame->m_desc );
+    return AVFrame::Create( outputFrame, frame->m_audioData, frame->m_desc );
 }
 
 } // blackmagic

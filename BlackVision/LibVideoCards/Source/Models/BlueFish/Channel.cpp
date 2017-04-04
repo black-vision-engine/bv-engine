@@ -34,16 +34,19 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
 
     if( output )
     {
-        m_frameProcessingThread = new BlueFishVCThread( this, 1920 * 1080 * 4 ); // FIXME: Set frame size properly.
         m_playbackData = std::move( output );
         m_playbackFifoBuffer = new CFifoBuffer();
         m_playbackChannel = new CFifoPlayback();
 
-        if( output->interlaced )
+        m_frameProcessingThread = new BlueFishVCThread( this, 1920 * 1080 * 4 ); // FIXME: Set frame size properly.
+
+        if( m_playbackData->interlaced )
         {
             m_frameProcessingThread->EnableInterlacing( true );
             //m_frameProcessingThread->SetFrameDuration( UInt64( 1000 / ( float(output->refresh) / 100.f ) ) );
         }
+
+        m_frameProcessingThread->Start();
     }
 }
 
@@ -469,6 +472,7 @@ UInt64 Channel::GetFrameTime         () const
 //
 void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
 {
+    static int odd = 0;
     auto playbackChannel = GetPlaybackChannel();
     if( playbackChannel && !PlaythroughEnabled() )
     {
@@ -477,12 +481,14 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
                                         0, // FIXME: pass deviceID properlly.
                                         playbackChannel->GoldenSize,
                                         playbackChannel->BytesPerLine,
-                                        0, // FIXME: pass odd properlly.
+                                        odd, // FIXME: pass odd properlly.
                                         ( unsigned int ) frame->m_audioData->Size(),
                                         reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
                                         frame->m_TimeCode,
                                         frame->m_desc
                                         ) );
+
+        odd = ( odd + 1 ) % 2;
     }
 }
 

@@ -121,8 +121,12 @@ VideoCard::~VideoCard               ()
 //
 std::set< UInt64 >	VideoCard::GetDisplayedVideoOutputsIDs() const
 {
-    assert( false );
-    return std::set< UInt64 >();
+    std::set< UInt64 > ret;
+
+    for( auto ch : m_channels )
+        ret.insert( ch->GetOutputId() );
+
+    return ret;
 }
 
 //**************************************
@@ -232,7 +236,13 @@ Channel *       VideoCard::GetChannelByName         ( ChannelName channelName ) 
 
 //**************************************
 //
-void                            VideoCard::Start                    ()
+void                            VideoCard::PreStart                     ()
+{}
+
+
+//**************************************
+//
+void                            VideoCard::Start                        ()
 {
     for( auto channel : m_channels )
 	{
@@ -242,27 +252,38 @@ void                            VideoCard::Start                    ()
 
 //**************************************
 //
+void                            VideoCard::Stop                         ()
+{
+    for( auto channel : m_channels )
+    {
+        channel->StopThreads();
+    }
+};
+
+//**************************************
+//
 void                            VideoCard::ProcessFrame             ( const AVFrameConstPtr & frame, UInt64 outputId )
 {
     for( auto channel : m_channels )
     {
         if( channel->GetOutputId() == outputId )
         {
-            auto playbackChannel = channel->GetPlaybackChannel();
-            if( playbackChannel && !channel->PlaythroughEnabled() )
-            {
-                playbackChannel->m_pFifoBuffer->PushFrame(
-                    std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
-                                                m_deviceID,
-                                                playbackChannel->GoldenSize,
-                                                playbackChannel->BytesPerLine,
-                                                0, // FIXME: pass odd properlly.
-                                                ( unsigned int ) frame->m_audioData->Size(),
-                                                reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
-                                                frame->m_TimeCode,
-                                                frame->m_desc
-                                                ) );
-            }
+            channel->EnqueueFrame( frame );
+            //auto playbackChannel = channel->GetPlaybackChannel();
+            //if( playbackChannel && !channel->PlaythroughEnabled() )
+            //{
+            //    playbackChannel->m_pFifoBuffer->PushFrame(
+            //        std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
+            //                                    m_deviceID,
+            //                                    playbackChannel->GoldenSize,
+            //                                    playbackChannel->BytesPerLine,
+            //                                    0, // FIXME: pass odd properlly.
+            //                                    ( unsigned int ) frame->m_audioData->Size(),
+            //                                    reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
+            //                                    frame->m_TimeCode,
+            //                                    frame->m_desc
+            //                                    ) );
+            //}
         }
 	}   
 }
