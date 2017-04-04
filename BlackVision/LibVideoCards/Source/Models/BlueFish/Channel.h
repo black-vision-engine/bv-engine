@@ -9,6 +9,7 @@
 
 #include "CoreDEF.h"
 
+#include <atomic>
 
 namespace bv { namespace videocards { namespace bluefish {
 
@@ -43,6 +44,7 @@ private:
 
     unsigned int    m_PlaythroughThreadID;
 
+    std::atomic< int >      m_odd;
     mutable UInt64		    m_lastFrameTime;
     mutable std::mutex      m_mutex;
 

@@ -24,6 +24,7 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
     , m_playbackChannel( nullptr )
     , m_playbackFifoBuffer( nullptr )
     , m_frameProcessingThread( nullptr )
+    , m_odd( 0 )
 {
     if( input ) 
     {
@@ -472,7 +473,6 @@ UInt64 Channel::GetFrameTime         () const
 //
 void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
 {
-    static int odd = 0;
     auto playbackChannel = GetPlaybackChannel();
     if( playbackChannel && !PlaythroughEnabled() )
     {
@@ -481,14 +481,14 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
                                         0, // FIXME: pass deviceID properlly.
                                         playbackChannel->GoldenSize,
                                         playbackChannel->BytesPerLine,
-                                        odd, // FIXME: pass odd properlly.
+                                        m_odd, // FIXME: pass odd properlly.
                                         ( unsigned int ) frame->m_audioData->Size(),
                                         reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
                                         frame->m_TimeCode,
                                         frame->m_desc
                                         ) );
 
-        odd = ( odd + 1 ) % 2;
+        m_odd = ( m_odd + 1 ) % 2;
     }
 }
 
