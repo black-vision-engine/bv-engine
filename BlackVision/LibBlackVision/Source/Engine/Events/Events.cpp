@@ -209,6 +209,7 @@ std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
     , std::make_pair( SceneEvent::Command::DetachScene, "DetachScene" )
     , std::make_pair( SceneEvent::Command::MoveScene, "MoveScene" )
     , std::make_pair( SceneEvent::Command::CopyScene, "CopyScene" )
+    , std::make_pair( SceneEvent::Command::SetOutputChannel, "SetOutputChannel" )
     , std::make_pair( SceneEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 

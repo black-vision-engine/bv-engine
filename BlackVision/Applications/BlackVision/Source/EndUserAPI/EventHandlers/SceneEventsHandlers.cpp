@@ -55,61 +55,61 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 {
     assert( evt->GetEventType() == bv::SceneEvent::Type() );
 
-    bv::SceneEventPtr sceneEvent = std::static_pointer_cast< bv::SceneEvent >( evt );
+    bv::SceneEventPtr sceneEvent = std::static_pointer_cast<bv::SceneEvent>( evt );
 
-    std::string & sceneName        = sceneEvent->SceneName;
-    std::string & newSceneName    = sceneEvent->NewSceneName;
-    auto attachIndex            = sceneEvent->AttachIndex;
-    auto command                = sceneEvent->SceneCommand;
-    auto eventID                = sceneEvent->EventID;
+    std::string & sceneName = sceneEvent->SceneName;
+    std::string & newSceneName = sceneEvent->NewSceneName;
+    auto attachIndex = sceneEvent->AttachIndex;
+    auto command = sceneEvent->SceneCommand;
+    auto eventID = sceneEvent->EventID;
 
     bool result = true;
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
-    if( command == SceneEvent::Command::AddScene )
+
+    switch( command )
     {
-        editor->AddScene( newSceneName );
-    }
-    else if( command == SceneEvent::Command::RemoveScene )
-    {
-        result = editor->RemoveScene( sceneName );
-    }
-    else if( command == SceneEvent::Command::RemoveAllScenes )
-    {
-        editor->RemoveAllScenes();
-    }
-    else if( command == SceneEvent::Command::SetSceneVisible )
-    {
-        result = editor->SetSceneVisible( sceneName, true );
-    }
-    else if( command == SceneEvent::Command::SetSceneInvisible )
-    {
-        result = editor->SetSceneVisible( sceneName, false );
-    }
-    else if( command == SceneEvent::Command::RenameScene )
-    {
-        result = editor->RenameScene( sceneName, newSceneName );
-    }
-    else if( command == SceneEvent::Command::AttachScene )
-    {
-        result = editor->AttachScene( sceneName, attachIndex );
-    }
-    else if( command == SceneEvent::Command::DetachScene )
-    {
-        result = editor->DetachScene( sceneName );
-    }
-    else if( command == SceneEvent::Command::MoveScene )
-    {
-        result = editor->MoveScene( sceneName, attachIndex );
-    }
-    else if( command == SceneEvent::Command::CopyScene )
-    {
-        auto sceneCopy = editor->AddSceneCopy( sceneName );
-        if( sceneCopy == nullptr )
+        case SceneEvent::Command::AddScene:
+            editor->AddScene( newSceneName );
+            break;
+        case SceneEvent::Command::RemoveScene:
+            result = editor->RemoveScene( sceneName );
+            break;
+        case SceneEvent::Command::RemoveAllScenes:
+            editor->RemoveAllScenes();
+            break;
+        case SceneEvent::Command::SetSceneVisible:
+            result = editor->SetSceneVisible( sceneName, true );
+            break;
+        case SceneEvent::Command::SetSceneInvisible:
+            result = editor->SetSceneVisible( sceneName, false );
+            break;
+        case SceneEvent::Command::RenameScene:
+            result = editor->RenameScene( sceneName, newSceneName );
+            break;
+        case SceneEvent::Command::AttachScene:
+            result = editor->AttachScene( sceneName, attachIndex );
+            break;
+        case SceneEvent::Command::DetachScene:
+            result = editor->DetachScene( sceneName );
+            break;
+        case SceneEvent::Command::MoveScene:
+            result = editor->MoveScene( sceneName, attachIndex );
+            break;
+        case SceneEvent::Command::CopyScene:
+        {
+            auto sceneCopy = editor->AddSceneCopy( sceneName );
+            if( sceneCopy == nullptr )
+                result = false;
+            break;
+        }
+        case SceneEvent::Command::SetOutputChannel:
+            editor->SetSceneOutputChannel( sceneName, attachIndex );
+            result = true;
+            break;
+        default:
             result = false;
     }
-    else
-        result = false;
 
     SendSimpleResponse( command, eventID, sceneEvent->SocketID, result );
 }
