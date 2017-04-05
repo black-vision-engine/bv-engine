@@ -238,6 +238,16 @@ bool    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool 
     return false;
 }
 
+// ***********************
+//
+void    BVProjectEditor::SetSceneOutputChannel( const std::string & sceneName, UInt32 channel )
+{
+    auto scene = m_project->GetModelScene( sceneName );
+
+    if( scene )
+        scene->SetRenderChannelIdx( channel );
+}
+
 // *******************************
 //
 bool    BVProjectEditor::RenameScene			( const std::string & sceneName, const std::string & newSceneName )
@@ -1366,14 +1376,19 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
 
         auto engineNode = GetEngineNode( node );
 
-        m_project->FreeEffectPDR( engineNode );
+        m_project->RemoveNodeEffect( engineNode );
 
         BVProjectTools::UpdateSceneNodeEffect( engineNode, modelNode );
 
         if( curEffect )
+        {
             NotifyEffectRemoved( QueryTyped( node ), curEffect );
+        }
+
         if( nodeEffect )
+        {
             NotifyEffectAdded( QueryTyped( node ), nodeEffect );
+        }
 
         return true;
     }

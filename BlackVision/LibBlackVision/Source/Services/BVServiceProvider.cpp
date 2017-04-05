@@ -12,14 +12,21 @@ BVServiceProvider::BVServiceProvider()
 
 // ******************************
 // 
-void                                BVServiceProvider::RegisterVideoCardManager( videocards::VideoCardManager * vcm )
+void                                BVServiceProvider::RegisterVideoCardManager     ( videocards::VideoCardManager * vcm )
 {
     m_vcm = vcm;
 }
 
 // ******************************
 // 
-videocards::VideoCardManager *      BVServiceProvider::GetVideoCardManager()
+void                                BVServiceProvider::UnregisterVideoCardManager   ()
+{
+    m_vcm = nullptr;
+}
+
+// ******************************
+// 
+videocards::VideoCardManager *      BVServiceProvider::GetVideoCardManager          ()
 {
     return m_vcm;
 }

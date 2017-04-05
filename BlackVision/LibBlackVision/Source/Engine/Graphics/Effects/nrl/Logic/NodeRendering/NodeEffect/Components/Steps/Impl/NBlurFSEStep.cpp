@@ -17,74 +17,6 @@
 
 namespace bv { namespace nrl {
 
-//class RenderTargetsAllocators
-//{
-//	typedef std::map< 
-//		std::pair< UInt32, UInt32 >, 
-//		RenderTargetStackAllocator *
-//		>
-//		RTsMapType;
-//
-//	RTsMapType							m_rtAllocatorsMap;
-//
-//	//void					Clear( const RenderTarget * rt )
-//	//{
-//	//	auto prevRT = disableBoundRT( m_ctx );
-//	//	enable( m_ctx, rt );
-//	//	clearBoundRT( m_ctx, glm::vec4() );
-//	//	disableBoundRT( m_ctx );
-//
-//	//	if( prevRT )
-//	//		enable( m_ctx, prevRT );
-//	//}
-//
-//public:
-//
-//	explicit				RenderTargetsAllocators()
-//	{};
-//
-//	RenderTarget *			Allocate( UInt32 w, UInt32 h, RenderTarget::RTSemantic semantic )
-//	{
-//		auto k = std::make_pair( w, h );
-//
-//		auto it = m_rtAllocatorsMap.find( k );
-//
-//		if( it != m_rtAllocatorsMap.end() )
-//		{
-//			return it->second->Allocate( semantic );
-//		}
-//		else
-//		{
-//			 auto rt = new RenderTargetStackAllocator( w, h );
-//			 m_rtAllocatorsMap[ k ] = rt;
-//			 return rt->Allocate( semantic );
-//		}
-//	}
-//
-//	bool					Free( UInt32 w, UInt32 h )
-//	{
-//		auto it = m_rtAllocatorsMap.find( std::make_pair( w, h ) );
-//
-//		if( it != m_rtAllocatorsMap.end() )
-//		{
-//			return it->second->Free();
-//		}
-//		else
-//		{
-//			assert( false );
-//			return false;
-//		}
-//
-//	}
-//
-//	~RenderTargetsAllocators()
-//	{
-//		for( auto & allocator : m_rtAllocatorsMap )
-//			delete allocator.second;
-//	}
-//};
-
-
 // **************************
 //
 NBlurFSEStep::NBlurFSEStep          ()
@@ -364,12 +296,20 @@ bool                    NBlurFSEStep::IsIdle                       ( SceneNodeRe
 }
 
 // **************************
-// If 
+// If - FIXME: "If what
 bool                    NBlurFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
 	// if we've just rendered blured image fo not run next default finalize pass.
 	// else run it.
 	return GetBlurSize() != 0;
+}
+
+// **************************
+//
+void                    NBlurFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_blurEffect->AppendRenderPasses_DIRTY_HACK( passes );
+    m_simpleBlitEffect->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
 } // nrl

@@ -26,6 +26,8 @@ public:
 
     virtual IValuePtr   GetValue                ( const std::string & name ) const = 0;
 
+    virtual void        AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const = 0;
+
 };
 
 } // nrl

@@ -96,6 +96,13 @@ bool                    NAlphaMaskFSEStep::IsFinal                      ( SceneN
 
 // **************************
 //
+void                    NAlphaMaskFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_blitWithAlphaEffect->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
+// **************************
+//
 float                   NAlphaMaskFSEStep::GetAlpha                     () const
 {
     auto val = GetState()->GetValueAt( 0 );

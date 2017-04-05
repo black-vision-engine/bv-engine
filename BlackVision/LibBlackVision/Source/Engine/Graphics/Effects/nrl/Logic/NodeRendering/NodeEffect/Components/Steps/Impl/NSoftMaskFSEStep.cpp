@@ -82,10 +82,17 @@ bool                    NSoftMaskFSEStep::IsIdle                       ( SceneNo
 }
 
 // **************************
-// If 
+// If - FIXME: "If" what? 
 bool                    NSoftMaskFSEStep::IsFinal                      ( SceneNodeRepr * ) const
 {
 	return true;
+}
+
+// **************************
+//
+void                NSoftMaskFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_softMaskEffect->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
 } // nrl

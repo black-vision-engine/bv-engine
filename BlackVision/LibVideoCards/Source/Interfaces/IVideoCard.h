@@ -25,7 +25,6 @@ public:
 
     //TODO: handle frames from GPU
     virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID ) = 0;
-    virtual void                DisplayFrame            () const = 0;
 
     virtual void                EnableAudioChannel      ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) = 0;
 

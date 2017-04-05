@@ -55,5 +55,12 @@ void    NSimpleFullscreenEffectInstance::SyncState                  ( NFullscree
     // FIXME: implement
 }
 
+// **************************
+//
+void    NSimpleFullscreenEffectInstance::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_visualComponent->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
 } // nrl
 } // bv

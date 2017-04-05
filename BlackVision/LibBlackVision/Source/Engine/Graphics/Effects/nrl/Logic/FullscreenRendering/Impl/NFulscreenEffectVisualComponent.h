@@ -41,6 +41,7 @@ public:
     void                    SyncIValues                         ( const IValuePtrVec & vals );
 
     const IValuePtrVec &    GetIValues                          () const;
+    void                    AppendRenderPasses_DIRTY_HACK       ( std::set< const RenderablePass * > * passes ) const;
 
 public:
 

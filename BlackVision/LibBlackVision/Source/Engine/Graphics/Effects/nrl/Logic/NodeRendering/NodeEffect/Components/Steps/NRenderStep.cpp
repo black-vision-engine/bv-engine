@@ -58,5 +58,12 @@ bool                            NRenderStep::IsFinal        ( SceneNodeRepr * no
     return false;
 }
 
+// **************************
+//
+void                            NRenderStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    { passes; }
+}
+
 } // nrl
 } // bv

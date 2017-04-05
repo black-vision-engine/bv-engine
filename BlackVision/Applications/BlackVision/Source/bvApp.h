@@ -62,6 +62,7 @@ private:
 
     void            InitializeConsole			();
     void            InitializeAppLogic			();
+    void            DeinitializeAppLogic        ();
     void            InitializeSelfState			();
     // pablito
     bool			InitializeLicenses          ();

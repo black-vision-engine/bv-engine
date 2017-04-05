@@ -152,6 +152,7 @@ public:
     void    SetVSync            ( bool enable, int verticalBufferFrameCount );
     void    SetFlushFinish      ( bool flush, bool finish );
 
+    //FIXME: renderer should know nothing about the scene structure (especially high level structure of scenes)
     void    EnableScene         ( Scene * scene ); // FIXME: nrl - refactor this one - its logic should be placed outside this class
 
 public:
@@ -250,7 +251,7 @@ public:
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
 
-    void                        FreeNodeEffectPDR               ( const nrl::NNodeEffect * nodeEffect );
+    void                        FreeNodeEffectPDR_DIRTY_HACK    ( const nrl::NNodeEffect * nodeEffect ); //FIXME: renderer should know nothing about the scene structure (especially high level structure of nodes)
 
 private:
 

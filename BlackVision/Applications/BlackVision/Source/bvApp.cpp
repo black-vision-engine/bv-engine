@@ -126,6 +126,8 @@ bool BlackVisionApp::OnInitialize       ()
 //
 void BlackVisionApp::OnTerminate        ()
 {
+    DeinitializeAppLogic    ();
+
     WindowedApplication::OnTerminate();
 }
 
@@ -200,6 +202,14 @@ void    BlackVisionApp::InitializeAppLogic  ()
 
     m_app->Initialize();
     m_app->LoadScene();
+}
+
+// *********************************
+//
+void    BlackVisionApp::DeinitializeAppLogic()
+{
+    m_app->UnloadScenes();
+    m_app->Deinitialize();
 }
 
 // *********************************

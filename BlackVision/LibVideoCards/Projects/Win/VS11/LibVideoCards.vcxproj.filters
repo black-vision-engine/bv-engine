@@ -65,6 +65,9 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.cpp">
       <Filter>Models\BlackMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp">
+      <Filter>Models\BlueFish</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

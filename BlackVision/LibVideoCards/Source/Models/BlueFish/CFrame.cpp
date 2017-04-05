@@ -4,26 +4,26 @@
 namespace bv { namespace videocards { namespace bluefish {
 
 
-CFrame::CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
+CFrame::CFrame(BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
     : m_pAudioBuffer( nullptr )
     , m_nAudioSize( 0 )
 {
-    Init( ID, Size, BytesPerLine,0 );
+    Init( Size, BytesPerLine,0 );
 }
 
-CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
+CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
     : m_pAudioBuffer( nullptr )
     , m_nAudioSize( 0 )
 {
-    Init( ID, Size, BytesPerLine,Odd );
+    Init( Size, BytesPerLine,Odd );
     memcpy(m_pBuffer, buffer, Size);
 }
 
-CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc )
+CFrame::CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc )
     : m_desc( desc )
     , m_nAudioSize( audioSize )
 {
-    Init(ID, Size, BytesPerLine, Odd);
+    Init( Size, BytesPerLine, Odd);
     memcpy(m_pBuffer, buffer, Size);
 
     m_TimeCode = TimeCode;
@@ -52,10 +52,9 @@ CFrame::~CFrame()
     }
 }
 
-void    CFrame::Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
+void    CFrame::Init        (BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd)
 {
     m_pAudioBuffer = NULL;
-    m_nFrameID = ID;
     m_nCardBufferID = 0;
     m_nSize = Size;
     m_nBytesPerLine = BytesPerLine;

@@ -2,12 +2,14 @@
 
 #include "CoreDEF.h"
 
+#include <set> // FIXME: nrl - hack
 #include "Engine/Interfaces/IValue.h"
 
 
 namespace bv {
 
-class SceneNodeRepr;
+class SceneNodeRepr; 
+class RenderablePass; // FIXME: nrl - hack
 
 namespace nrl 
 {
@@ -55,6 +57,7 @@ public:
     // FIXME: these two methods are added because no valid rendering scheme was designed and right now we mix sorting, blending and inverse z-sorting
     // FIXME: with two queues used to implement that - this suxxx, because it is not consistent and requires query functions as presented belov
     // FIXME: at the very least, a separate query API should be added here, without specifying predefined functions
+    virtual void            GetRenderPasses_DIRTY_HACK          ( std::set< const RenderablePass * > * passes ) const = 0;
     virtual bool			IsBlendable_DIRTY_DESIGN_HACK	    () const = 0;
     virtual bool            IsDepthOverriden_DIRTY_DESIGN_HACK	() const = 0;
     virtual float			GetDepth_DIRTY_DESIGN_HACK		    () const = 0;

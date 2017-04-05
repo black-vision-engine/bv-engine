@@ -78,6 +78,8 @@ public:
 
     NFullscreenEffectComponentStatePtr GetState     ();
 
+    void                AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const;
+
 private:
 
     void    SetFullscreenCamera ( Renderer * renderer );

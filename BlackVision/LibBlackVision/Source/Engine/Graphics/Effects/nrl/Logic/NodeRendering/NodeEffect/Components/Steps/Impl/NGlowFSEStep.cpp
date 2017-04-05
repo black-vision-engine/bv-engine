@@ -167,5 +167,13 @@ bool                    NGlowFSEStep::IsFinal         ( SceneNodeRepr * scnNodeR
 	return !IsIdle( scnNodeRepr );
 }
 
+// **************************
+//
+void                NGlowFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const
+{
+    m_blurEffect->AppendRenderPasses_DIRTY_HACK( passes );
+    m_glowEffect->AppendRenderPasses_DIRTY_HACK( passes );
+}
+
 } // nrl
 } // bv

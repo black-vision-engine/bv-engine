@@ -31,6 +31,7 @@ protected:
 public:
 
     virtual void            SyncState                       ( NFullscreenEffectComponentStatePtr state ) override;
+    virtual void            AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const override;
 
 };
 

@@ -35,11 +35,14 @@ public:
 
     virtual bool                IsIdle                  ( SceneNodeRepr * nodeRepr ) const override;
     virtual bool                IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
+    virtual void                AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const override;
 
 private:
-	Float32                     GetBlurSize             () const;
+
+    Float32                     GetBlurSize             () const;
 	bool						GetInner				() const;
 	bool						GetOuter				() const;
+
 };
 
 } // nrl
