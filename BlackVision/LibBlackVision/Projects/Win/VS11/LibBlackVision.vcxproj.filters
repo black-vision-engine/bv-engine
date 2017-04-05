@@ -187,35 +187,8 @@
     <Filter Include="Engine\Graphics\Effects\Utils">
       <UniqueIdentifier>{457dcf57-1339-4d32-820a-48f1f4c5fb5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen">
-      <UniqueIdentifier>{db681d99-d172-4322-91a2-9d823125221e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic">
-      <UniqueIdentifier>{c2b20c88-d23c-4d95-acc8-390b1ad4225c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Utils">
       <UniqueIdentifier>{457dcf57-1339-4d32-820a-48f1f4c5fb5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic\VideoOutputRendering">
-      <UniqueIdentifier>{44035e72-4b3b-4ada-baaf-33b1ada04001}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect">
-      <UniqueIdentifier>{2ab7cdfd-ddff-495c-988b-7db7fbae6cfd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl">
-      <UniqueIdentifier>{a063a712-c340-48d7-a9fc-b6b5352529c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\Graph">
-      <UniqueIdentifier>{e71dc26a-36ca-4e84-9ba1-93b2d66212f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic">
-      <UniqueIdentifier>{43d446f0-5e12-4f1b-9635-b67e96810147}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PreImpl">
-      <UniqueIdentifier>{6f23f78e-197c-4dee-9498-fbf57a4c4278}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PostImpl">
-      <UniqueIdentifier>{376393a3-2168-46be-ba38-773c029d8d27}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Models\NodeEffects\Effects">
       <UniqueIdentifier>{3eb51f63-99ae-4a04-9561-8dec21ceef54}</UniqueIdentifier>
@@ -1073,12 +1046,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
@@ -4067,12 +4034,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
