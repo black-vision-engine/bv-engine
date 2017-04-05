@@ -800,8 +800,6 @@ namespace Generator
                 double angle = i * PI / 2 / tesselation + 3*PI/2;
                 GenerateLine( 3*( t + 1 ) + 1 + i, w, h, angle );
             }
-
-            GenerateLine( n - 1, w, h, 0.0f );
         }
     };
 }
