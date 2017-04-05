@@ -448,17 +448,6 @@ UInt64                          VideoCard::GetFrameTime         () const
     return m_lastFrameTime;
 }
 
-void                            VideoCard::DisplayFrame         () const
-{
-    std::unique_lock< std::mutex > lock( m_mutex );
-
-	m_frameNum++;
-
-	auto nextSync = m_lastFrameTime + 20;	
-
-	m_lastFrameTime = nextSync;
-}
-
 //**************************************
 //
 std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs() const
@@ -500,7 +489,7 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
             completedFrame = completedFrame;
         }
 
-        if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(), ( unsigned long ) ( ( 2 * 48000 * m_frameDuration ) / m_frameTimescale ), 0, m_frameTimescale, NULL ) ) )
+        if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(), ( unsigned long ) ( ( 2 * 48000 * m_frameDuration ) / ( 2 * m_frameTimescale ) ), 0, m_frameTimescale, NULL ) ) )
         {
             LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule audio frame. " << m_deviceID;
         }

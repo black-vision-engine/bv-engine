@@ -51,6 +51,7 @@ struct ChannelOutputData
     Int32                   referenceV;
     EUpdateMethod           updateFormat;
     EMemoryFormat           memoryFormat;
+    UInt64                  id;
 };
 
 DEFINE_UPTR_TYPE( ChannelOutputData )

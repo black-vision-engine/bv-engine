@@ -97,9 +97,11 @@ public:
                     ~BVAppLogic     ();
 
     void            Initialize      ();
+    void            Deinitialize    ();
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     void            LoadScene       ( void );
+    void            UnloadScenes    ();
 
     unsigned int    StartTime       ();
     unsigned int    GetTime         () const;
