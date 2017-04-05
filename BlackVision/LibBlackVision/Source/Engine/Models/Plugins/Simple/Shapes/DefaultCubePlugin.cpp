@@ -286,7 +286,7 @@ namespace Generator
 			if( tesselation < 2 )
 				tesselation = 2;
 
-            n = 4 * ( tesselation + 1 );
+            n = 4 * ( tesselation + 1 ) + 1;
             m = ( tesselation + 1 ) * 2;
             assert( n >= 0 );
 
@@ -586,7 +586,7 @@ namespace Generator
             int remainPlaneTess = tesselation - mainPlaneTess;
 
             // Each face is built of tesselation + 1 lines.
-            int lineIdx = ( tesselation + 1 ) * face;
+            int lineIdx = ( tesselation + 1 ) * face + mainPlaneTess;
 
             float dim1;
             float dim3;
@@ -666,6 +666,9 @@ namespace Generator
             // Each face is built of tesselation + 1 lines.
             int lineIdx = ( tesselation + 1 ) * face;
 
+            for( int k = mainFaceTess; k > 0; --k )
+                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
+
             // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
             // This function generates Uvs for this main plane.
             GenerateMainFaceUVs( face );
@@ -673,8 +676,6 @@ namespace Generator
             // First lineIdx in face was used for main face.
             lineIdx++;
 
-            for( int k = mainFaceTess; k > 0; --k )
-                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
             for( int k = 0; k < followingFaceTess; ++k )
                 GenerateBevelLineUV( lineIdx + mainFaceTess + k, ( face + 1 ) % 4, k, false );
         }
@@ -713,26 +714,26 @@ namespace Generator
                 verts->AddAttribute( v[ i + 1 ][ 0 ] + center_translate );        normals->AddAttribute( norm[ i + 1 ][ 0 ] );      uvs->AddAttribute( coords[ i + 1 ][ 0 ] );
             }
 
-            int uvsIdx = 0;
-            for( int j = 0; j < m; j++ )
-            {
-                verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
-                verts->AddAttribute( v[ 0 ][ j ] + center_translate );          normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
+            //int uvsIdx = 0;
+            //for( int j = 0; j < m; j++ )
+            //{
+            //    verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
+            //    verts->AddAttribute( v[ 0 ][ j ] + center_translate );          normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
 
-                if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
-                {
-                    uvsIdx++;
+            //    if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
+            //    {
+            //        uvsIdx++;
 
-                    verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
-                    verts->AddAttribute( v[ 0 ][ j ] + center_translate );      normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
-                }
+            //        verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
+            //        verts->AddAttribute( v[ 0 ][ j ] + center_translate );      normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
+            //    }
 
-                uvsIdx++;
-            }
+            //    uvsIdx++;
+            //}
 
-            // Degenerated triangle
-            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
-            verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
+            //// Degenerated triangle
+            //verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
+            //verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
 
         }
 
@@ -768,37 +769,55 @@ namespace Generator
 
         void GenerateV()
         {
+            int mainFaceTess = tesselation / 2;
+            int followingFaceTess = tesselation - mainFaceTess;
+
             double w = dims.x/2 - bevel, 
                 h = dims.y/2 - bevel;
             int t = tesselation;
 
+
+            // Note: We generate beveled lines around the cube. We must place first line in such way, that
+            // UV mapping won't break. First and last vertex must be doubled, because texture begins and ends there.
+            // In the past we generated main plane first and then following bevel. This process was repeated for each of 4 cube faces.
+            // Now bevel generation for first face is broken down into two parts: bevel before and bevel after main plane.
+            // This way we can apply UVs from different parts of texture without making complicated changes to traingulation code.
+
+            int idxOffset = 0;
+            for( int i = mainFaceTess - 1; i < tesselation; i++ )
+            {
+                double angle = i * PI / 2 / tesselation + 3 * PI / 2;
+                GenerateLine( idxOffset + i, w, h, angle );
+            }
+
+            idxOffset = followingFaceTess;
 // top
-            GenerateLine( 0, w, h, 0. );
+            GenerateLine( idxOffset, w, h, 0. );
             for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / tesselation;
-                GenerateLine( 1 + i, -w,  h, angle );
+                GenerateLine( idxOffset + 1 + i, -w,  h, angle );
             }
 // left
-            GenerateLine( t+1, -w,  h, PI/2 );
+            GenerateLine( idxOffset + t+1, -w,  h, PI/2 );
             for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / tesselation + PI/2;
-                GenerateLine( t+2 + i, -w, -h, angle );
+                GenerateLine( idxOffset + t+2 + i, -w, -h, angle );
             }
 // bottom
-            GenerateLine( 2*( t + 1 ), -w, -h, PI );
+            GenerateLine( idxOffset + 2*( t + 1 ), -w, -h, PI );
             for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / tesselation + PI;
-                GenerateLine( 2*( t + 1 ) + 1 + i, w, -h, angle );
+                GenerateLine( idxOffset + 2*( t + 1 ) + 1 + i, w, -h, angle );
             }
 // right
-            GenerateLine( 3*( t + 1 ), w, -h, 3*PI/2 );
-            for( int i = 0; i < tesselation; i++ )
+            GenerateLine( idxOffset + 3*( t + 1 ), w, -h, 3*PI/2 );
+            for( int i = 0; i < mainFaceTess + 1; i++ )
             {
                 double angle = i * PI / 2 / tesselation + 3*PI/2;
-                GenerateLine( 3*( t + 1 ) + 1 + i, w, h, angle );
+                GenerateLine( idxOffset + 3*( t + 1 ) + 1 + i, w, h, angle );
             }
         }
     };
