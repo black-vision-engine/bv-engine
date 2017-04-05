@@ -44,6 +44,8 @@ private:
     
     OperationHistory                m_history;
 
+    UInt32                          m_outputChannelIdx;
+
     std::vector< IModelLightPtr >   m_lights; //could be unique_ptr but serialization doesn't support that
 
 public:
@@ -78,6 +80,9 @@ public:
     CamerasLogic &          GetCamerasLogic     ();
     EndUserParamsLogic &    GetEndUserParams    ();
     OperationHistory &      GetHistory          ();
+
+    void                    SetOutputChannelIdx ( UInt32 channelIdx );
+    UInt32                  GetOutputChannelIdx () const;
 
     static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };

@@ -42,6 +42,7 @@ SceneModel::SceneModel	( const std::string & name )
     , m_modelSceneEditor( nullptr )
     , m_camerasLogic( m_timeline )
     , m_endUserParams( new EndUserParamsLogic( this ) )
+    , m_outputChannelIdx( 0 )
 {
     m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
@@ -63,6 +64,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
     ser.EnterChild( "scene" );
 
         ser.SetAttribute( "name", m_name );
+        ser.SetAttribute( "OutputChannel", SerializationHelper::T2String( m_outputChannelIdx ) );
 
         if( context->detailedInfo )
         {
@@ -116,6 +118,8 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 
     //FIXME: pass nullptr as camera because we don't have camera model yet
     auto obj = SceneModel::Create( sceneName );
+
+    obj->SetOutputChannelIdx( SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "OutputChannel" ), 0 ) );
 
 // timelines
     auto sceneTimeline = obj->GetTimeline();
@@ -323,6 +327,20 @@ SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
     //FIXME:camera can be nullptr because it's not used yet
     return SceneModel::Create( name );
+}
+
+// *******************************
+//
+void                        SceneModel::SetOutputChannelIdx     ( UInt32 channelIdx )
+{
+    m_outputChannelIdx = channelIdx;
+}
+
+// *******************************
+//
+UInt32                      SceneModel::GetOutputChannelIdx     () const
+{
+    return m_outputChannelIdx;
 }
 
 } // model
