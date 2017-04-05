@@ -245,7 +245,7 @@ void    BVProjectEditor::SetSceneOutputChannel( const std::string & sceneName, U
     auto scene = m_project->GetModelScene( sceneName );
 
     if( scene )
-        scene->SetOutputChannelIdx( channel );
+        scene->SetRenderChannelIdx( channel );
 }
 
 // *******************************
