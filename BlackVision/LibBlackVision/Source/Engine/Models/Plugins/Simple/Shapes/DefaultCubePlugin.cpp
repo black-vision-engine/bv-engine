@@ -515,8 +515,10 @@ namespace Generator
             uvs->AddAttribute( preUV2 );    // This should be uv coord from next line begin
 		}
 		
-        void        GenerateBevelLineUV      ( int i, int face, int k, bool inverse )
+        void        GenerateBevelLineUV      ( int i, int face, int k, bool isMainPlane )
         {
+            bool inverseU = !isMainPlane;
+
             int mainPlaneTess = tesselation / 2;
             int remainPlaneTess = tesselation - mainPlaneTess;
 
@@ -528,22 +530,22 @@ namespace Generator
                 dim1 = dims.x, dim3 = dims.y;
 
             float bevelUV1 = bevel / dim1;
-            float bevel_step1 = bevelUV1 / mainPlaneTess;
+            float bevelStep1 = bevelUV1 / mainPlaneTess;
 
             float bevelUV2 = bevel / dims.z;
-            float bevel_step2 = bevelUV2 / remainPlaneTess;
+            float bevelStep2 = bevelUV2 / remainPlaneTess;
 
             float bevelUV3 = bevel / dim3;
-            float bevel_step3 = bevelUV3 / mainPlaneTess;
+            float bevelStep3 = bevelUV3 / mainPlaneTess;
 
             glm::vec2 preUV1;
 
             int base = 0;
             for( int j = mainPlaneTess; j >= 0; --j )
             {
-                float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k, j );
+                float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevelStep3, k, j );
 
-                preUV1 = getUV( k_step1, bevel_step1 * j, inverse, false );
+                preUV1 = getUV( k_step1, bevelStep1 * j, inverseU, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
 
                 coords[ i ][ base + mainPlaneTess - j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
@@ -552,7 +554,7 @@ namespace Generator
             base += mainPlaneTess + 1;
             for( int j = 0; j <= remainPlaneTess; ++j )
             {
-                preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, true );
+                preUV1 = getUV( bevelStep3 * k, bevelStep2 * j, inverseU, true );
                 coords[ i ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
             }
 
@@ -560,16 +562,16 @@ namespace Generator
             base += remainPlaneTess + 1;
             for( int j = remainPlaneTess; j >= 0; --j )
             {
-                preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, false );
+                preUV1 = getUV( bevelStep3 * k, bevelStep2 * j, inverseU, false );
                 coords[ i ][ base + remainPlaneTess - j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
             }
 
             base += remainPlaneTess + 1;
             for( int j = 0; j <= mainPlaneTess; ++j )
             {
-                float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevel_step3, k, j );
+                float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevelStep3, k, j );
 
-                preUV1 = getUV( k_step1, bevel_step1 * j, inverse, false );
+                preUV1 = getUV( k_step1, bevelStep1 * j, inverseU, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::PLUS_Z );
                 preUV1 = makeUV( preUV1, CubicMappingPlane::PLUS_Z );
 
@@ -672,9 +674,9 @@ namespace Generator
             lineIdx++;
 
             for( int k = mainFaceTess; k > 0; --k )
-                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, false );
+                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
             for( int k = 0; k < followingFaceTess; ++k )
-                GenerateBevelLineUV( lineIdx + mainFaceTess + k, ( face + 1 ) % 4, k, true );
+                GenerateBevelLineUV( lineIdx + mainFaceTess + k, ( face + 1 ) % 4, k, false );
         }
 
 
