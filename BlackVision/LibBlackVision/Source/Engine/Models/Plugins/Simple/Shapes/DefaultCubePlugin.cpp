@@ -352,11 +352,11 @@ namespace Generator
 			return glm::vec2( u, v );
 		}
 
-		float compute_scaled_k( float bevelUV, int main_plane_tess, float bevel_step, int k, int j )
-		{
-			float k_scale = float(main_plane_tess - j) / (float)main_plane_tess;
-			return bevelUV - ( bevelUV - bevel_step * k ) * k_scale;
-		}
+		float compute_scaled_k( float bevelUV, int mainPlaneTess, float bevelStep, int k, int j )
+        {
+            float kScale = float( mainPlaneTess - j ) / ( float )mainPlaneTess;
+            return bevelUV - ( bevelUV - bevelStep * k ) * kScale;
+        }
 
 		void generateLineUV( int face, int k, bool inverse, Float2AttributeChannelPtr uvs )
 		{
@@ -546,7 +546,7 @@ namespace Generator
                 preUV1 = getUV( k_step1, bevel_step1 * j, inverse, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
 
-                coords[ i ][ base + j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
+                coords[ i ][ base + mainPlaneTess - j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
             }
 
             base += mainPlaneTess + 1;
@@ -561,7 +561,7 @@ namespace Generator
             for( int j = remainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, false );
-                coords[ i ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
+                coords[ i ][ base + remainPlaneTess - j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
             }
 
             base += remainPlaneTess + 1;
@@ -610,7 +610,7 @@ namespace Generator
                 preUV1 = getUV( bevelUV3, bevelStep1 * j, true, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
 
-                coords[ lineIdx ][ base + j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
+                coords[ lineIdx ][ base + mainPlaneTess - j ] = makeUV( preUV1, CubicMappingPlane::MINUS_Z );
             }
 
             base += mainPlaneTess + 1;
@@ -624,7 +624,7 @@ namespace Generator
             for( int j = remainPlaneTess; j >= 0; --j )
             {
                 preUV1 = getUV( bevelUV3, bevelStep2 * j, true, false );
-                coords[ lineIdx ][ base + j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
+                coords[ lineIdx ][ base + remainPlaneTess - j ] = makeUV( preUV1, static_cast< CubicMappingPlane >( face ) );
             }
 
             base += remainPlaneTess + 1;
@@ -798,6 +798,8 @@ namespace Generator
                 double angle = i * PI / 2 / tesselation + 3*PI/2;
                 GenerateLine( 3*( t + 1 ) + 1 + i, w, h, angle );
             }
+
+            GenerateLine( n - 1, w, h, 0.0f );
         }
     };
 }
