@@ -334,16 +334,6 @@ UInt32          Channel::GetMemoryFormat        () const
 
     return false;
 }
-////**************************************
-////
-//bool          Channel::HasPlaythroughChannel    () const
-//{
-//    if( m_captureChannel )
-//    {
-//        m_captureChannel->
-//    }
-//    return false;
-//}
 
 //**************************************
 //
@@ -478,7 +468,6 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
     {
         playbackChannel->m_pFifoBuffer->PushFrame(
             std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
-                                        0, // FIXME: pass deviceID properlly.
                                         playbackChannel->GoldenSize,
                                         playbackChannel->BytesPerLine,
                                         m_odd, // FIXME: pass odd properlly.

@@ -579,7 +579,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	pThis->m_pSDK->SetCardProperty(FORCE_SD_VBI_OUTPUT_BUFFER_TO_V210, varVal);	//when changing this property the video output mode and video output engine need to be set again manually!
 
     bool blackout = false;
-    pFrame = std::make_shared<CFrame>( 0, pThis->GoldenSize, pThis->BytesPerLine );
+    pFrame = std::make_shared<CFrame>(pThis->GoldenSize, pThis->BytesPerLine );
     while( !blackout )
     {
         if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, Underrun ) ) )
