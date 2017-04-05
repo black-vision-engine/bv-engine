@@ -297,8 +297,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NRenderLogicState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NSamplerEntry.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\State\NTexture2DEntry.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderingQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderQueueStackAllocator.cpp" />
@@ -827,8 +825,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperVertexShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.h" />
