@@ -30,14 +30,33 @@ NRenderLogic *   RenderLogicInitializer::CreateInstance ( const BVConfig & cfg )
 // FIXME: nrl - implement
 void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDesc & desc, const BVConfig & cfg )
 {
-    { cfg; }
+    auto & deser = cfg.GetNode( 2, "config", "RenderChannels" );
 
     desc.SetNumTrackedRenderTargets( 2 );
 
-    desc.SetEnabled ( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetDisabled( RenderChannelType::RCT_OUTPUT_2 );
-    desc.SetDisabled( RenderChannelType::RCT_OUTPUT_3 );
-    desc.SetDisabled( RenderChannelType::RCT_OUTPUT_4 );
+    if( deser.EnterChild( "RenderChannel" ) )
+    {
+        std::hash_map< std::string, std::string > prop;
+
+        do
+        {
+            auto id = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ), 0 );
+            auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+
+            if( ( RenderChannelType ) id < RenderChannelType::RCT_TOTAL )
+            {
+                if( enabled )
+                    desc.SetEnabled ( ( RenderChannelType ) id );
+                else
+                    desc.SetDisabled( ( RenderChannelType ) id );
+            }
+
+
+        }
+        while( deser.NextChild() );
+
+        deser.ExitChild(); // RenderChannel
+    }
 }
 
 // *********************************
