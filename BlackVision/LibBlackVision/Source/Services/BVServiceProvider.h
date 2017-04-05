@@ -13,9 +13,10 @@ class BVServiceProvider
 private:
     videocards::VideoCardManager *      m_vcm;
 
-    explicit                            BVServiceProvider       ();
+    explicit                            BVServiceProvider           ();
 
-    void                                RegisterVideoCardManager( videocards::VideoCardManager * vcm );
+    void                                RegisterVideoCardManager    ( videocards::VideoCardManager * vcm );
+    void                                UnregisterVideoCardManager  ();
 
 public:
 

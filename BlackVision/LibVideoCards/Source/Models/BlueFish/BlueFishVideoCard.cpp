@@ -2,6 +2,7 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "UseLoggerVideoModule.h"
 
 namespace bv { namespace videocards { namespace bluefish {
 
@@ -114,7 +115,8 @@ VideoCard::~VideoCard               ()
     }
     m_channels.clear();
 
-    m_SDK->device_detach();
+    if( !DetachVideoCard() )
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot properly detach device: " << m_deviceID;
 }
 
 //**************************************
@@ -127,6 +129,13 @@ std::set< UInt64 >	VideoCard::GetDisplayedVideoOutputsIDs() const
         ret.insert( ch->GetOutputId() );
 
     return ret;
+}
+
+//**************************************
+//
+bool            VideoCard::DetachVideoCard          ()
+{
+    return BLUE_OK( m_SDK->device_detach() );
 }
 
 //**************************************
@@ -269,21 +278,6 @@ void                            VideoCard::ProcessFrame             ( const AVFr
         if( channel->GetOutputId() == outputId )
         {
             channel->EnqueueFrame( frame );
-            //auto playbackChannel = channel->GetPlaybackChannel();
-            //if( playbackChannel && !channel->PlaythroughEnabled() )
-            //{
-            //    playbackChannel->m_pFifoBuffer->PushFrame(
-            //        std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
-            //                                    m_deviceID,
-            //                                    playbackChannel->GoldenSize,
-            //                                    playbackChannel->BytesPerLine,
-            //                                    0, // FIXME: pass odd properlly.
-            //                                    ( unsigned int ) frame->m_audioData->Size(),
-            //                                    reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
-            //                                    frame->m_TimeCode,
-            //                                    frame->m_desc
-            //                                    ) );
-            //}
         }
 	}   
 }
@@ -301,38 +295,6 @@ UInt32                          VideoCard::EnumerateDevices         ()
 	}
 
     return ( UInt32 )deviceCount;
-}
-
-// *********************************
-//
-void						VideoCard::RetrieveFieldFromFrame( AVFramePtr frame, int odd )
-{
-	// poni¿sza funkcja wycina z [data] co Nt¹ b¹dŸ co N+1¹ liniê (zamiast pe³nej ramki przekazujemy pó³pole, zamiast InterlacedFrame powinno byæ bardziej coœ w stylu ConvertProgressiveFrameToField
-
-	const char *memSrc = frame->m_videoData->Get();
-
-	int pixel_depth = frame->m_desc.depth;  // pobraæ poni¿sze informacje (wdepth,  width, height z configa, albo niech tu nie przychodzi RawData tylko jakoœ to opakowane w klasê typu Frame
-	int width = frame->m_desc.width;
-	int height = frame->m_desc.height;
-	int bytes_per_line = width * pixel_depth;
-
-	int size = width * height / 2 * pixel_depth + 2048; // z jakiegos powodu trzeba dodawaæ 2048 bajtów  poniewa¿ funkcja Bluefisha CalculateGoldenValue () zwraca tyle bajtów dla pó³pola HD, trzeab sprawdziæ jak to bedzie wygl¹daæ w SD
-
-	if( !m_prevFrame )
-		m_prevFrame = MemoryChunk::Create( size );
-
-	char * memDst = m_prevFrame->GetWritable();  // pewnie nie ma co tutaj tego za kazdym razem tworzyæ...
-
-	memset( memDst, 0, size );
-
-	for( int i = odd, j = 0; i < height; i += 2, j++ )
-	{
-		memcpy( &memDst[ j*( bytes_per_line ) ], &memSrc[ i*( bytes_per_line ) ], bytes_per_line );
-	}
-
-	MemoryChunkConstPtr ptr = MemoryChunkConstPtr( new MemoryChunk( ( char* ) memDst, size ) );  // ponownie - pewnie nie ma co tego tutaj tworzyæ za ka¿dym razem...
-
-	frame->m_videoData = ptr;
 }
 
 } //bluefish

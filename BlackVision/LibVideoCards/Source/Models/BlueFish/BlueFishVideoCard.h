@@ -54,15 +54,12 @@ private:
 
 	std::vector< Channel * > m_channels;
 
-	MemoryChunkPtr			m_prevFrame;
-
-	void					RetrieveFieldFromFrame		( AVFramePtr frame, int odd );
-
 public:
 	                        VideoCard                   ( UInt32 deviceID );
 	virtual                 ~VideoCard                  () override; 
 
     bool                    AttachVideoCard             ();
+    bool                    DetachVideoCard             ();
 	void                    InitVideoCard               ();
 
     virtual void            SetVideoOutput              ( bool enable ) override;

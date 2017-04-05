@@ -71,13 +71,13 @@ Channel::~Channel()
 
     if( m_playbackChannel )
     {
-        m_playbackChannel->StopThread();
         delete m_playbackChannel;
         m_playbackChannel = nullptr;
 
-        m_frameProcessingThread->Stop();
+        m_frameProcessingThread->Kill();
         m_frameProcessingThread->EnqueueEndMessage();
-        m_frameProcessingThread->WaitUntilStopped();
+        m_frameProcessingThread->Join();
+
         delete m_frameProcessingThread;
         m_frameProcessingThread = nullptr;
     }
