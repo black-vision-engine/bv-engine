@@ -134,14 +134,14 @@ void            SceneNode::DisableNNodeEffect   ()
 
 // ********************************
 //
-nrl::NNodeEffectPtr     SceneNode::GetNNodeEffect   ()
+nrl::NodeEffectPtr     SceneNode::GetNNodeEffect   ()
 {
     return m_nNodeEffect;
 }
 
 // ********************************
 //
-void                    SceneNode::SetNNodeEffect   ( nrl::NNodeEffectPtr nNodeEffect )
+void                    SceneNode::SetNNodeEffect   ( nrl::NodeEffectPtr nNodeEffect )
 {
     m_nNodeEffect = nNodeEffect;
 }

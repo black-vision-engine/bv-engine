@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NFullscreenEffectComponentState.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/FullscreenEffectComponentState.h"
 
 
 namespace bv { namespace nrl {
    
-class NOutputState;
+class OutputState;
 class RenderChannel;
-class NRenderContext;
+class RenderContext;
 
 class FrameDataHandler
 {
@@ -17,9 +17,9 @@ public:
 
     virtual                                     ~FrameDataHandler   ();
 
-    virtual void                                HandleFrameData     ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * channel ) = 0;
+    virtual void                                HandleFrameData     ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel ) = 0;
 
-    virtual NFullscreenEffectComponentStatePtr  GetInternalFSEState () = 0;
+    virtual FullscreenEffectComponentStatePtr  GetInternalFSEState () = 0;
 
 };
 

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
-#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffect.h"
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/FullscreenEffect.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/RenderedData.h"
 
 
 namespace bv { namespace nrl {
@@ -17,20 +17,20 @@ private:
     unsigned int            m_width;
     unsigned int            m_height;
 
-    mutable NRenderedData   m_activeRenderOutput;
+    mutable RenderedData   m_activeRenderOutput;
 
     mutable RenderTarget *  m_videoRT;
     mutable Texture2DPtr    m_cachedReadbackTexture;
     mutable bool            m_cachedReadbackUpToDate;
 
-    NFullscreenEffect *     m_blitEffect;
+    FullscreenEffect *     m_blitEffect;
 
 public:
 
                                 VideoResizedInputChannel    ( const RenderChannel * wrappedChannel, unsigned int width, unsigned int height );
                                 ~VideoResizedInputChannel   ();
 
-    virtual Texture2DPtr        ReadColorTexture            ( NRenderContext * ctx ) const override;
+    virtual Texture2DPtr        ReadColorTexture            ( RenderContext * ctx ) const override;
     virtual void                InvalidateCachedTexture     () const override;
 
 };

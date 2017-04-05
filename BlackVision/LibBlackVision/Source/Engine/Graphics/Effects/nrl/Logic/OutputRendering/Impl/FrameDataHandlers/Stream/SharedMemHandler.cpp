@@ -3,11 +3,11 @@
 #include "SharedMemHandler.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
-#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderContext.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/OutputState.h"
 
 
 namespace bv { namespace nrl {
@@ -25,7 +25,7 @@ SharedMemHandler::SharedMemHandler      ( unsigned int width, unsigned int heigh
 {
     m_shmVideoBuffer = SharedMemoryVideoBuffer::Create( width, height, TextureFormat::F_A8R8G8B8 );
 
-    m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
+    m_mixChannelsEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_MIX_CHANNELS );
 }
 
 // **************************
@@ -39,7 +39,7 @@ SharedMemHandler::~SharedMemHandler     ()
 
 // **************************
 //
-void                                SharedMemHandler::HandleFrameData     ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * channel )
+void                                SharedMemHandler::HandleFrameData     ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel )
 {
     //1. Prepare memory representation of current frame
     auto shmFrame = PrepareFrame( state, ctx, channel );
@@ -50,14 +50,14 @@ void                                SharedMemHandler::HandleFrameData     ( cons
 
 // **************************
 //
-NFullscreenEffectComponentStatePtr  SharedMemHandler::GetInternalFSEState       ()
+FullscreenEffectComponentStatePtr  SharedMemHandler::GetInternalFSEState       ()
 {
     return m_mixChannelsEffect->GetState();
 }
 
 // **************************
 //
-Texture2DPtr    SharedMemHandler::PrepareFrame                                  ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * inputChannel )
+Texture2DPtr    SharedMemHandler::PrepareFrame                                  ( const OutputState & state, RenderContext * ctx, const RenderChannel * inputChannel )
 {
     auto inputRenderTarget = inputChannel->GetActiveRenderTarget();  
 
@@ -88,14 +88,14 @@ void            SharedMemHandler::ProcessFrame                                  
 
 // **************************
 //
-Texture2DPtr    SharedMemHandler::ReadDefaultTexture                            ( NRenderContext * ctx, const RenderChannel * inputChannel )
+Texture2DPtr    SharedMemHandler::ReadDefaultTexture                            ( RenderContext * ctx, const RenderChannel * inputChannel )
 {
 	return inputChannel->ReadColorTexture( renderer( ctx ) );
 }
 
 // **************************
 // FIXME: implement is as a part of some readback cache
-Texture2DPtr    SharedMemHandler::ReadMixChannelsTexture                        ( NRenderContext * ctx, const RenderTarget * inputRenderTarget )
+Texture2DPtr    SharedMemHandler::ReadMixChannelsTexture                        ( RenderContext * ctx, const RenderTarget * inputRenderTarget )
 {
     if( m_shmRT == nullptr )
     {

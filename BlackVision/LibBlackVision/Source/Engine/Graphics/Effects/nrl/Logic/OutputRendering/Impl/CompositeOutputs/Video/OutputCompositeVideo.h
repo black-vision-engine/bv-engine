@@ -2,7 +2,7 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/OutputState.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 
@@ -29,7 +29,7 @@ public:
                                     OutputCompositeVideo    ( unsigned int width, unsigned int height );
                                     ~OutputCompositeVideo   ();
 
-    virtual void                    ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * input ) override;
+    virtual void                    ProcessFrameData        ( RenderContext * ctx, RenderedChannelsData * input ) override;
 
 public:
 

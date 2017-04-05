@@ -26,7 +26,7 @@ OutputInstance::~OutputInstance                         ()
 
 // *********************************
 //
-void    OutputInstance::ProcessFrameData                ( NRenderContext * ctx, RenderedChannelsData * input )
+void    OutputInstance::ProcessFrameData                ( RenderContext * ctx, RenderedChannelsData * input )
 {
     if( IsEnabled() )
     {
@@ -34,7 +34,7 @@ void    OutputInstance::ProcessFrameData                ( NRenderContext * ctx, 
 
         auto rct = m_state.GetActiveRenderChannelType();
         assert( input->IsActive( rct ) && input->ContainsValidData( rct ) );
-    
+ 
         auto renderChannel = input->GetRenderChannel( rct );
 
         m_frameDataHandler->HandleFrameData( m_state, ctx,  renderChannel );
@@ -64,7 +64,7 @@ void    OutputInstance::Disable                         ()
 
 // *********************************
 //
-NOutputState &  OutputInstance::AccessOutputState       ()
+OutputState &  OutputInstance::AccessOutputState       ()
 {
     return m_state;
 }
