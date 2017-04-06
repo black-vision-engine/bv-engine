@@ -47,7 +47,7 @@ void            VideoInputChannel::ToggleLastFrameHadAudio      () const
 
 // **************************
 //
-Texture2DPtr    VideoInputChannel::ReadColorTexture             ( NRenderContext * ctx ) const
+Texture2DPtr    VideoInputChannel::ReadColorTexture             ( RenderContext * ctx ) const
 {
     return m_wrappedRenderChannel->ReadColorTexture( renderer( ctx ) );
 }

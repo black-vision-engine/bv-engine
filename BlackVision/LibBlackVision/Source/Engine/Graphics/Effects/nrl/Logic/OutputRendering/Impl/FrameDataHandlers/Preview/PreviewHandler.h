@@ -2,9 +2,9 @@
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/FrameDataHandlers/FrameDataHandler.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NRenderedData.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/RenderedData.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffect.h"
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/FullscreenEffect.h"
 
 
 namespace bv { namespace nrl {
@@ -14,18 +14,18 @@ class PreviewHandler : public FrameDataHandler
 private:
 
     //FIXME: this is the most basic logic. More advanced implementation would allow additional processing of RenderResult (see ShowFrame)
-    NRenderedData           m_activeRenderOutput;
+    RenderedData           m_activeRenderOutput;
 
-    NFullscreenEffect *     m_mixChannelsEffect;
+    FullscreenEffect *     m_mixChannelsEffect;
 
 public:
 
                                                 PreviewHandler      ();
                                                 ~PreviewHandler     ();
 
-    virtual void                                HandleFrameData     ( const NOutputState & state, NRenderContext * ctx, const RenderChannel * channel ) override;
+    virtual void                                HandleFrameData     ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel ) override;
 
-    virtual NFullscreenEffectComponentStatePtr  GetInternalFSEState () override;
+    virtual FullscreenEffectComponentStatePtr  GetInternalFSEState () override;
 
 };
 

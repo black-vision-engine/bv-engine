@@ -2,7 +2,7 @@
 
 #include "VideoResizedInputChannel.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
 namespace bv { namespace nrl {
@@ -18,7 +18,7 @@ VideoResizedInputChannel::VideoResizedInputChannel  ( const RenderChannel * wrap
     , m_videoRT( nullptr )
     , m_cachedReadbackUpToDate( false )
 {
-    m_blitEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_SIMPLE_BLIT );
+    m_blitEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_SIMPLE_BLIT );
 }
 
 // **************************
@@ -31,7 +31,7 @@ VideoResizedInputChannel::~VideoResizedInputChannel ()
 
 // **************************
 //
-Texture2DPtr    VideoResizedInputChannel::ReadColorTexture          ( NRenderContext * ctx ) const
+Texture2DPtr    VideoResizedInputChannel::ReadColorTexture          ( RenderContext * ctx ) const
 {
     if( !m_cachedReadbackUpToDate )
     {

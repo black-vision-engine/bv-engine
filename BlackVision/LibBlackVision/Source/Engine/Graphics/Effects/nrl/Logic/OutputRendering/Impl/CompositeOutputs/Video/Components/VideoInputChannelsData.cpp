@@ -199,7 +199,7 @@ void                        VideoInputChannelsData::InvalidateCachedTexture ( un
 
 // **************************
 //
-Texture2DPtr                VideoInputChannelsData::ReadColorTexture        ( NRenderContext * ctx, unsigned int videoOutputID ) const
+Texture2DPtr                VideoInputChannelsData::ReadColorTexture        ( RenderContext * ctx, unsigned int videoOutputID ) const
 {
     assert( m_postInitialized == true );
 

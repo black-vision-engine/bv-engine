@@ -52,7 +52,7 @@ class Scene;
 
 namespace nrl
 {
-    class NNodeEffect;
+    class NodeEffect;
 }
 
 class TransformableEntity;
@@ -251,7 +251,7 @@ public:
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
 
-    void                        FreeNodeEffectPDR_DIRTY_HACK    ( const nrl::NNodeEffect * nodeEffect ); //FIXME: renderer should know nothing about the scene structure (especially high level structure of nodes)
+    void                        FreeNodeEffectPDR_DIRTY_HACK    ( const nrl::NodeEffect * nodeEffect ); //FIXME: renderer should know nothing about the scene structure (especially high level structure of nodes)
 
 private:
 

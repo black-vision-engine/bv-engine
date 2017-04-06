@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
-#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderContext.h"
 
 
 namespace bv { namespace nrl {
@@ -33,7 +33,7 @@ public:
     bool                        LastFrameHadAudio           () const;
     void                        ToggleLastFrameHadAudio     () const;
 
-    virtual Texture2DPtr        ReadColorTexture            ( NRenderContext * ctx ) const;
+    virtual Texture2DPtr        ReadColorTexture            ( RenderContext * ctx ) const;
     virtual void                InvalidateCachedTexture     () const;
 
     const RenderChannel *       GetWrappedChannel           () const;

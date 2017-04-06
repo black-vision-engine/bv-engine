@@ -5,8 +5,8 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -43,7 +43,7 @@ RenderingQueue::~RenderingQueue()
 
 // ***********************
 //
-float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx )
+float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::RenderContext * ctx )
 {
     if( HasEffect( node ) )
     {
@@ -64,7 +64,7 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
 
 // ***********************
 //
-float               RenderingQueue::ComputeNodeZ        ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx )
+float               RenderingQueue::ComputeNodeZ        ( SceneNodeRepr * nodeRepr, nrl::RenderContext * ctx )
 {
     float z = 0.0f;
 
@@ -123,7 +123,7 @@ bool                RenderingQueue::IsTransparent       ( SceneNodeRepr * nodeRe
 
 // ***********************
 // 
-void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx )
+void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::RenderContext * ctx )
 {
     BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
 
@@ -143,7 +143,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl:
     // FIXME: bb color should be configured externally to the node bot let it be that way for the time being
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
     {
-        nrl::NNodeRenderLogic::RenderBoundingBox( node, ctx );
+        nrl::NodeRenderLogic::RenderBoundingBox( node, ctx );
     }
 
     END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
@@ -151,7 +151,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl:
 
 // ***********************
 //
-void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx )
+void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRepr, nrl::RenderContext * ctx )
 {
     BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), nodeRepr );
 
@@ -171,7 +171,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRe
 
 // ***********************
 //
-void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx )
+void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl::RenderContext * ctx )
 {
     if( node->IsVisible() )
     {
@@ -190,7 +190,7 @@ void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl:
 
 // ***********************
 //
-void                RenderingQueue::QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx )
+void                RenderingQueue::QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, nrl::RenderContext * ctx )
 {
     QueueSingleNode( nodeRepr, ctx );
 
@@ -234,7 +234,7 @@ void                RenderingQueue::QueueOpaque         ( SceneNodeRepr * node, 
 
 // ***********************
 //
-void                RenderingQueue::Render              ( nrl::NRenderContext * ctx )
+void                RenderingQueue::Render              ( nrl::RenderContext * ctx )
 {
     // Opaque objects from front to back.
     for( auto & renderItem : m_opaqueNodes )
@@ -263,7 +263,7 @@ void                RenderingQueue::ClearQueue          ()
 
 // ***********************
 //
-void                RenderingQueue::RenderNode          ( RenderingQueue::RenderItem & renderItem, nrl::NRenderContext * ctx )
+void                RenderingQueue::RenderNode          ( RenderingQueue::RenderItem & renderItem, nrl::RenderContext * ctx )
 {
     // Function doesn't check if node is visible, beacause all nodes in m_transparentNodes
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
@@ -272,15 +272,15 @@ void                RenderingQueue::RenderNode          ( RenderingQueue::Render
     //BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
     BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );
 
-    // FIXME: nrl - implement more expressive api in NNodeRenderLogic so that bb and queue rendering is supported in a better way
+    // FIXME: nrl - implement more expressive api in NodeRenderLogic so that bb and queue rendering is supported in a better way
     if( renderItem.UseEffect )
     {
         auto ownerNode = renderItem.Node->GetOwnerNode();
-        nrl::NNodeRenderLogic::Render( ownerNode, ctx );
+        nrl::NodeRenderLogic::Render( ownerNode, ctx );
     }
     else
     {
-        nrl::NNodeRenderLogic::RenderRoot( renderItem.Node, ctx );
+        nrl::NodeRenderLogic::RenderRoot( renderItem.Node, ctx );
     }
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );

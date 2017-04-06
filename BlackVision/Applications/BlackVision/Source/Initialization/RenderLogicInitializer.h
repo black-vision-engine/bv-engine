@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderLogic.h"
 #include "BVConfig.h"
 
 
@@ -14,7 +14,7 @@ class RenderLogicInitializer
 {
 public:
 
-    static NRenderLogic *   CreateInstance  ( const BVConfig & cfg );
+    static RenderLogic *   CreateInstance  ( const BVConfig & cfg );
 
 private:
 

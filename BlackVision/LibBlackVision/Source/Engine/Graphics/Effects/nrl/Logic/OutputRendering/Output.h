@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/OutputState.h"
 
 
 namespace bv { namespace nrl {
@@ -15,7 +15,7 @@ enum class CustomOutputType : unsigned int
 };
 
 class RenderedChannelsData;
-class NRenderContext;
+class RenderContext;
 class OutputDesc;
 
 // FIXME: nrl - Right now it uses basic state in this class, when the whole output subsystem is designed, a separated mechanism should be used to configure it
@@ -27,7 +27,7 @@ public:
 
     virtual             ~Output                 ();
 
-    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * input ) = 0;
+    virtual void        ProcessFrameData        ( RenderContext * ctx, RenderedChannelsData * input ) = 0;
 
 public:
 

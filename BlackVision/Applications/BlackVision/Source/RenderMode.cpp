@@ -2,7 +2,7 @@
 
 #include "RenderMode.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderLogic.h"
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "BVConfig.h"
