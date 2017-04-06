@@ -365,6 +365,7 @@ namespace Generator
 
             int mainPlaneTess = tesselation / 2;
             int remainPlaneTess = tesselation - mainPlaneTess;
+            int uvTess = isMainPlane ? mainPlaneTess : remainPlaneTess;
 
             float dim1;
             float dim3;
@@ -380,7 +381,7 @@ namespace Generator
             float bevelStep2 = bevelUV2 / remainPlaneTess;
 
             float bevelUV3 = bevel / dim3;
-            float bevelStep3 = bevelUV3 / mainPlaneTess;
+            float bevelStep3 = bevelUV3 / uvTess;
 
             glm::vec2 preUV1;
 
@@ -430,7 +431,7 @@ namespace Generator
             int remainPlaneTess = tesselation - mainPlaneTess;
 
             // Each face is built of tesselation + 1 lines.
-            int lineIdx = ( tesselation + 1 ) * face + mainPlaneTess;
+            int lineIdx = ( tesselation + 1 ) * face + remainPlaneTess;
 
             float dim1;
             float dim3;
@@ -495,7 +496,7 @@ namespace Generator
             // Each face is built of tesselation + 1 lines.
             int lineIdx = ( tesselation + 1 ) * face;
 
-            for( int k = 0; k < mainFaceTess; ++k )
+            for( int k = 0; k < followingFaceTess; ++k )
                 GenerateBevelLineUV( lineIdx + k, face, k, false );  // face + 3 = face - 1
 
             // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
@@ -503,10 +504,10 @@ namespace Generator
             GenerateMainFaceUVs( face );
 
             // First lineIdx in face was used for main face.
-            lineIdx += mainFaceTess + 1;
+            lineIdx += followingFaceTess + 1;
 
-            for( int k = followingFaceTess; k > 0; --k )
-                GenerateBevelLineUV( lineIdx + followingFaceTess - k, face, k, true );
+            for( int k = mainFaceTess; k > 0; --k )
+                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
         }
 
 
