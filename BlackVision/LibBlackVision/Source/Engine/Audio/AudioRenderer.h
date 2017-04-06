@@ -55,7 +55,7 @@ public:
 
     void                DeletePDR           ( const AudioEntity * audio );
 
-    AudioBufferConstPtr GetBufferedData     ( MemoryChunkPtr data );
+    AudioBufferConstPtr GetBufferedData     ( MemoryChunkPtr data, const std::set< const audio::AudioEntity * > & audioEnts );
 
     UInt32              GetChannels         () const;
     Int32               GetFrequency        () const;

@@ -198,7 +198,7 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
 
 // *********************************
 //
-AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data )
+AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data, const std::set< const audio::AudioEntity * > & audioEnts )
 {
     // check whether active audio buffer exists
     if( IsAnySourcePlaying() )
@@ -211,8 +211,11 @@ AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChun
 
         for( auto & obj : m_sources )
         {        
-            auto queue = m_bufferMap.at( obj.second );
-            queue->MixBufferedData( data, obj.first->IsEOF() );
+            if( audioEnts.find( obj.first ) != audioEnts.end() )
+            {
+                auto queue = m_bufferMap.at( obj.second );
+                queue->MixBufferedData( data, obj.first->IsEOF() );
+            }
         }
 
 		auto size = data->Size();
