@@ -18,13 +18,14 @@ public:
 };
 
 struct PN {
-    static const std::string TESSELATION; // int tesselation
-    static const std::string DIMENSIONS; // VecParam3 Size[x,y,z]
-    static const std::string BEVEL; // VecParam1 Bevel 
-    static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
+    static const std::string TESSELATION;       // int tesselation
+    static const std::string DIMENSIONS;        // VecParam3 Size[x,y,z]
+    static const std::string BEVEL;             // VecParam1 Bevel 
+    static const std::string WEIGHTCENTERX;     // enum WeightCenter (MIN, MAX, CENTER)
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
 	static const std::string MAPPINGTYPE;
+    static const std::string SMOOTH_BEVEL;
 };
 
 class Plugin : public DefaultGeometryPluginBase
@@ -33,6 +34,9 @@ public:
     enum WeightCenter : int { MAX, MIN, CENTER };
 	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
 
+public:
+
+    ValueBoolPtr                                        m_smooth;
     ValueIntPtr										    m_tesselation;
     ValueFloatPtr										m_bevel;
     ValueVec3Ptr										m_dimensions;
@@ -40,6 +44,9 @@ public:
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
 	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
+
+
+
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 

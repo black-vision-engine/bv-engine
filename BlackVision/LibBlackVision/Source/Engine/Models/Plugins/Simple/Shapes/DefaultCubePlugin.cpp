@@ -45,6 +45,9 @@ const std::string PN::WEIGHTCENTERX = "weight center x";
 const std::string PN::WEIGHTCENTERY = "weight center y";
 const std::string PN::WEIGHTCENTERZ = "weight center z";
 const std::string PN::MAPPINGTYPE = "mapping type";
+const std::string PN::SMOOTH_BEVEL = "smooth bevel";
+
+
 
 PluginDesc::PluginDesc()
     : DefaultGeometryPluginDescBase( UID(), "cube" )
@@ -59,6 +62,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::BEVEL, 0.1f, true, true );
     h.AddSimpleParam( PN::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
     h.AddSimpleParam( PN::TESSELATION, 4, true, true );
+    h.AddSimpleParam( PN::SMOOTH_BEVEL, true, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultCube::PN::WEIGHTCENTERX, Plugin::WeightCenter::CENTER, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
@@ -86,11 +90,12 @@ std::string                     PluginDesc::UID                 ()
 #include "Mathematics/Defines.h"
 namespace Generator
 {
-    int tesselation;
-    float bevel;
-    glm::vec3 dims;
-	glm::vec3 center_translate;
-	Plugin::MappingType mapping_type;
+    int                     tesselation;
+    float                   bevel;
+    glm::vec3               dims;
+	glm::vec3               center_translate;
+	Plugin::MappingType     mapping_type;
+    bool                    smooth;
 
 
     template < typename T >
@@ -232,6 +237,9 @@ namespace Generator
                 verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
                 verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
                 verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+
+                verts->AddAttribute( glm::vec3( w, h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
                 verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
 			}
 			else
@@ -239,6 +247,9 @@ namespace Generator
                 verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
                 verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
                 verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+
+                verts->AddAttribute( glm::vec3( -w, h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
                 verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
 			}
 
@@ -254,6 +265,9 @@ namespace Generator
 			uvs->AddAttribute( makeUV( preUV1, mappingPlane ) );
 			uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
 			uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
+
+            uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
 			uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
                 
             //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
@@ -273,7 +287,7 @@ namespace Generator
         void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
             Init();
-            GenerateV();
+            Generate();
             CopyV( verts, uvs, normals );
             Deinit();
 
@@ -329,7 +343,7 @@ namespace Generator
 		/**@brief Gives UVs in parameter, good orientation in texture space
 		depending on face, that we compute currently.
 		@param[in] z MINUS_Z lub PLUS_Z.*/
-		glm::vec2 uvToZPlaneSpace( glm::vec2 uv, int face, CubicMappingPlane z )
+		glm::vec2       uvToZPlaneSpace( glm::vec2 uv, int face, CubicMappingPlane z )
 		{
 			float u;
 			float v;
@@ -352,13 +366,16 @@ namespace Generator
 			return glm::vec2( u, v );
 		}
 
-		float compute_scaled_k( float bevelUV, int mainPlaneTess, float bevelStep, int k, int j )
+        // ***********************
+        //
+		float       ComputeScaledU( float bevelUV, int mainPlaneTess, float bevelStep, int k, int j )
         {
             float kScale = float( mainPlaneTess - j ) / ( float )mainPlaneTess;
             return bevelUV - ( bevelUV - bevelStep * k ) * kScale;
         }
 
-		
+        // ***********************
+        //
         void        GenerateBevelLineUV      ( int i, int face, int k, bool isMainPlane )
         {
             bool inverseU = !isMainPlane;
@@ -388,7 +405,7 @@ namespace Generator
             int base = 0;
             for( int j = mainPlaneTess; j >= 0; --j )
             {
-                float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevelStep3, k, j );
+                float k_step1 = ComputeScaledU( bevelUV3, mainPlaneTess, bevelStep3, k, j );
 
                 preUV1 = getUV( k_step1, bevelStep1 * j, inverseU, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::MINUS_Z );
@@ -414,7 +431,7 @@ namespace Generator
             base += remainPlaneTess + 1;
             for( int j = 0; j <= mainPlaneTess; ++j )
             {
-                float k_step1 = compute_scaled_k( bevelUV3, mainPlaneTess, bevelStep3, k, j );
+                float k_step1 = ComputeScaledU( bevelUV3, mainPlaneTess, bevelStep3, k, j );
 
                 preUV1 = getUV( k_step1, bevelStep1 * j, inverseU, false );
                 preUV1 = uvToZPlaneSpace( preUV1, face, CubicMappingPlane::PLUS_Z );
@@ -425,6 +442,8 @@ namespace Generator
 
         }
 
+        // ***********************
+        //
         void        GenerateMainFaceUVs( int face )
         {
             int mainPlaneTess = tesselation / 2;
@@ -484,7 +503,8 @@ namespace Generator
             }
         }
 
-
+        // ***********************
+        //
         void        GenerateFaceUVs     ( int face )
         {
             // Tesselated bevel consists of two regions. First regions maps UVs from main face, that we got in
@@ -510,46 +530,71 @@ namespace Generator
                 GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
         }
 
+        // ***********************
+        //
+        void        CopyV       ( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
+        {
+            if( smooth )
+                CopySmooth( verts, uvs, normals );
+            else
+                CopyNonSmooth( verts, uvs, normals );
+        }
 
-        void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
+        // ***********************
+        //
+        void        CopySmooth      ( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
         {
             int mainFaceTess = tesselation / 2;
             int followingFaceTess = tesselation - mainFaceTess;
-
-			for( int face = 0; face < 4; ++face )
-                GenerateFaceUVs( face );
-
-            // Note: Normally last line should be connected to first line, but UVs are different so we separated them.
-            // Here we generate UVs for additional line added at the end.
-            GenerateBevelLineUV( n - 1, 3, 0, true );
-
 
             for( int i = 0; i < n - 1; i++ )
             {
                 int uvsIdx = 0;
 
-                for( int j = 0; j < m; j++ )
+                for( int j = 0; j < m - 1; j++ )
                 {
-                    verts->AddAttribute( v[ i ][ j ] + center_translate );      normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+
+                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j + 1 ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+
 
                     if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
                     {
                         uvsIdx++;
 
-                        verts->AddAttribute( v[ i ][ j ] + center_translate );      normals->AddAttribute( norm[ i ][ j ] );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+
+                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j + 1 ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
                     }
 
                     uvsIdx++;
                 }
-                // Degenerated triangle
-                verts->AddAttribute( v[ i + 1 ][ m - 1 ] + center_translate );    normals->AddAttribute( norm[ i + 1 ][ m - 1 ] );  uvs->AddAttribute( coords[ i + 1 ][ m - 1 ] );
-                verts->AddAttribute( v[ i + 1 ][ 0 ] + center_translate );        normals->AddAttribute( norm[ i + 1 ][ 0 ] );      uvs->AddAttribute( coords[ i + 1 ][ 0 ] );
             }
         }
 
-        void GenerateLine( int i, double x, double y, double a )
+        // ***********************
+        //
+        void        CopyNonSmooth   ( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
+        {
+            int mainFaceTess = tesselation / 2;
+            int followingFaceTess = tesselation - mainFaceTess;
+            followingFaceTess;
+            verts;
+            uvs;
+            normals;
+        }
+
+        // ***********************
+        //
+        void        GenerateLine( int i, double x, double y, double a )
         {
             double d = dims.z/2 - bevel;
             double b = bevel;
@@ -579,7 +624,9 @@ namespace Generator
             }
         }
 
-        void GenerateV()
+        // ***********************
+        //
+        void        Generate()
         {
             int mainFaceTess = tesselation / 2;
 
@@ -631,12 +678,23 @@ namespace Generator
                 double angle = i * PI / 2 / tesselation + 3*PI/2;
                 GenerateLine( lineIdxOffset + 3*( t + 1 ) + 1 + i, w, h, angle );
             }
+
+            // UV mapping
+
+            for( int face = 0; face < 4; ++face )
+                GenerateFaceUVs( face );
+
+            // Note: Normally last line should be connected to first line, but UVs are different so we separated them.
+            // Here we generate UVs for additional line added at the end.
+            GenerateBevelLineUV( n - 1, 3, 0, true );
+
         }
     };
 }
 
 std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 {
+    Generator::smooth = m_smooth->GetValue();
     Generator::bevel = m_bevel->GetValue();
     Generator::dims = m_dimensions->GetValue();
     Generator::tesselation = m_tesselation->GetValue();
@@ -663,12 +721,14 @@ bool                                Plugin::NeedsTopologyUpdate()
 		ParameterChanged( PN::WEIGHTCENTERX ) ||
 		ParameterChanged( PN::WEIGHTCENTERY ) ||
 		ParameterChanged( PN::WEIGHTCENTERZ ) ||
-		ParameterChanged( PN::MAPPINGTYPE );
+		ParameterChanged( PN::MAPPINGTYPE ) ||
+        ParameterChanged( PN::SMOOTH_BEVEL );
 }
 
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
     : DefaultGeometryPluginBase( name, uid, prev, model )
 {
+    m_smooth = QueryTypedValue< ValueBoolPtr >( GetValue( PN::SMOOTH_BEVEL ) );
     m_bevel = QueryTypedValue< ValueFloatPtr >( GetValue( PN::BEVEL ) );
     m_dimensions = QueryTypedValue< ValueVec3Ptr >( GetValue( PN::DIMENSIONS ) );
     m_tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
@@ -680,7 +740,7 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPINGTYPE ) );
 
     m_pluginParamValModel->Update();
-    InitGeometry();
+    InitGeometry( PrimitiveType::PT_TRIANGLES );
 }
 
 } } }
