@@ -770,7 +770,6 @@ namespace Generator
         void GenerateV()
         {
             int mainFaceTess = tesselation / 2;
-            int followingFaceTess = tesselation - mainFaceTess;
 
             double w = dims.x/2 - bevel, 
                 h = dims.y/2 - bevel;
@@ -784,13 +783,14 @@ namespace Generator
             // This way we can apply UVs from different parts of texture without making complicated changes to traingulation code.
 
             int idxOffset = 0;
-            for( int i = mainFaceTess - 1; i < tesselation; i++ )
+            for( int i = mainFaceTess; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / tesselation + 3 * PI / 2;
-                GenerateLine( idxOffset + i, w, h, angle );
+                GenerateLine( idxOffset, w, h, angle );
+
+                idxOffset++;
             }
 
-            idxOffset = followingFaceTess;
 // top
             GenerateLine( idxOffset, w, h, 0. );
             for( int i = 0; i < tesselation; i++ )
