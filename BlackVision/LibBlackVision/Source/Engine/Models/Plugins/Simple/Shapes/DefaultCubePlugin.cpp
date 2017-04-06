@@ -495,18 +495,18 @@ namespace Generator
             // Each face is built of tesselation + 1 lines.
             int lineIdx = ( tesselation + 1 ) * face;
 
-            for( int k = mainFaceTess; k > 0; --k )
-                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
+            for( int k = 0; k < followingFaceTess; ++k )
+                GenerateBevelLineUV( lineIdx + k, face, k, false );  // face + 3 = face - 1
 
             // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
             // This function generates Uvs for this main plane.
             GenerateMainFaceUVs( face );
 
             // First lineIdx in face was used for main face.
-            lineIdx++;
+            lineIdx += followingFaceTess + 1;
 
-            for( int k = 0; k < followingFaceTess; ++k )
-                GenerateBevelLineUV( lineIdx + mainFaceTess + k, ( face + 1 ) % 4, k, false );
+            for( int k = mainFaceTess; k > 0; --k )
+                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
         }
 
 
@@ -520,7 +520,7 @@ namespace Generator
 
             // Note: Normally last line should be connected to first line, but UVs are different so we separated them.
             // Here we generate UVs for additional line added at the end.
-            GenerateBevelLineUV( n - 1, 0, followingFaceTess, false );
+            GenerateBevelLineUV( n - 1, 3, 0, true );
 
 
             for( int i = 0; i < n - 1; i++ )
