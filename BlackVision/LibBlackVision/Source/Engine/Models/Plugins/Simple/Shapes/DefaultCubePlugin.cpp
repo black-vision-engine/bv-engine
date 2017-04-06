@@ -495,7 +495,7 @@ namespace Generator
             // Each face is built of tesselation + 1 lines.
             int lineIdx = ( tesselation + 1 ) * face;
 
-            for( int k = 0; k < followingFaceTess; ++k )
+            for( int k = 0; k < mainFaceTess; ++k )
                 GenerateBevelLineUV( lineIdx + k, face, k, false );  // face + 3 = face - 1
 
             // Cube is generated as big rectangular plane in the middle and small connected lines on bevel part.
@@ -503,10 +503,10 @@ namespace Generator
             GenerateMainFaceUVs( face );
 
             // First lineIdx in face was used for main face.
-            lineIdx += followingFaceTess + 1;
+            lineIdx += mainFaceTess + 1;
 
-            for( int k = mainFaceTess; k > 0; --k )
-                GenerateBevelLineUV( lineIdx + mainFaceTess - k, face, k, true );
+            for( int k = followingFaceTess; k > 0; --k )
+                GenerateBevelLineUV( lineIdx + followingFaceTess - k, face, k, true );
         }
 
 
@@ -546,28 +546,6 @@ namespace Generator
                 verts->AddAttribute( v[ i + 1 ][ m - 1 ] + center_translate );    normals->AddAttribute( norm[ i + 1 ][ m - 1 ] );  uvs->AddAttribute( coords[ i + 1 ][ m - 1 ] );
                 verts->AddAttribute( v[ i + 1 ][ 0 ] + center_translate );        normals->AddAttribute( norm[ i + 1 ][ 0 ] );      uvs->AddAttribute( coords[ i + 1 ][ 0 ] );
             }
-
-            //int uvsIdx = 0;
-            //for( int j = 0; j < m; j++ )
-            //{
-            //    verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
-            //    verts->AddAttribute( v[ 0 ][ j ] + center_translate );          normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
-
-            //    if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
-            //    {
-            //        uvsIdx++;
-
-            //        verts->AddAttribute( v[ n - 1 ][ j ] + center_translate );  normals->AddAttribute( norm[ n - 1 ][ j ] );        uvs->AddAttribute( coords[ n - 1 ][ uvsIdx ] );
-            //        verts->AddAttribute( v[ 0 ][ j ] + center_translate );      normals->AddAttribute( norm[ 0 ][ j ] );            uvs->AddAttribute( coords[ 0 ][ uvsIdx ] );
-            //    }
-
-            //    uvsIdx++;
-            //}
-
-            //// Degenerated triangle
-            //verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
-            //verts->AddAttribute( v[ 0 ][ 0 ] + center_translate );          normals->AddAttribute( norm[ 0 ][ 0 ] );            uvs->AddAttribute( coords[ 0 ][ 0 ] );
-
         }
 
         void GenerateLine( int i, double x, double y, double a )
