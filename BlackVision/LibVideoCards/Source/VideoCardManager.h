@@ -161,6 +161,7 @@ public:
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
+    UInt32                              GetRequiredFPS          () const;
 
    // static VideoCardManager &           Instance                ();
 

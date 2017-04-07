@@ -37,6 +37,9 @@
     <Filter Include="Mathematics">
       <UniqueIdentifier>{685a3969-2774-4166-8983-7caa43abd050}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mathematics\Core">
+      <UniqueIdentifier>{e6820752-5089-4e3a-92bc-a517e579bc30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -184,6 +187,9 @@
     <ClInclude Include="..\..\..\Source\Threading\StoppableThread.h">
       <Filter>Threading</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h">
+      <Filter>Mathematics\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -273,6 +279,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Threading\StoppableThread.cpp">
       <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp">
+      <Filter>Mathematics\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

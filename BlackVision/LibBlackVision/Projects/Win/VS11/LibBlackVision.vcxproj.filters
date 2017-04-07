@@ -10,9 +10,6 @@
     <Filter Include="Mathematics">
       <UniqueIdentifier>{43730b8b-4507-49ec-982a-d0fc06701406}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mathematics\Core">
-      <UniqueIdentifier>{a608c8e3-e0e3-429d-8a07-461e53f91293}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Mathematics\Interpolators">
       <UniqueIdentifier>{748c3ec0-2fff-425a-a41a-afefa02baa9b}</UniqueIdentifier>
     </Filter>
@@ -425,9 +422,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
       <Filter>Mathematics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp">
-      <Filter>Mathematics\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
@@ -1073,12 +1067,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
@@ -1937,9 +1925,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
       <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h">
-      <Filter>Mathematics\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h">
       <Filter>Mathematics\Interpolators</Filter>
@@ -4067,12 +4052,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>

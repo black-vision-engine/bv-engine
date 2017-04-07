@@ -26,6 +26,8 @@ private:
 
     VideoInputChannelsData      m_inputChannels;
 
+    UInt32                      m_lcmFPS;
+
 public:
 
                             VideoOutputsPreprocessor();

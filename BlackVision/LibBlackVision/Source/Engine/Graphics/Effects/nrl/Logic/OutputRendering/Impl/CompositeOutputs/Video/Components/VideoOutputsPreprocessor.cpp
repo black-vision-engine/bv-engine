@@ -5,6 +5,8 @@
 #include "Engine/Audio/Resources/AudioUtils.h"
 #include "Assets/Texture/TextureUtils.h"
 
+#include "Services/BVServiceProvider.h"
+
 #include "VideoCardManager.h"
 
 
@@ -14,6 +16,7 @@ namespace bv { namespace nrl {
 //
 VideoOutputsPreprocessor::VideoOutputsPreprocessor()
     : m_initialized( false )
+    , m_lcmFPS( 0 )
 {
 }
 
@@ -26,6 +29,8 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( NRende
         m_inputChannels.PostInitialize( input );
     
         m_initialized = true;
+
+        m_lcmFPS = BVServiceProvider::GetInstance().GetVideoCardManager()->GetRequiredFPS();
     }
 
     for( unsigned int i = 0; i < m_inputChannels.GetNumVideoInputChannels(); ++i )
@@ -75,8 +80,6 @@ void                    VideoOutputsPreprocessor::Initialize            ( Output
 //
 AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRenderContext * ctx, const VideoInputChannel * channel )
 {
-    // FIXME: nrl - should be read from video cards configuration or remove or do something making sense
-    static unsigned int FPS_HACK = 25;
     auto aud = audio( ctx );
 
     auto videoFrame = channel->ReadColorTexture( ctx );
@@ -92,10 +95,10 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 	desc.channels = 0;
 	desc.sampleRate = 0;
 
-    if ( !channel->LastFrameHadAudio() )
+    //if ( !channel->LastFrameHadAudio() )
 	{
 		desc.channels = aud->GetChannels();
-		desc.sampleRate = aud->GetFrequency() / FPS_HACK;
+		desc.sampleRate = aud->GetFrequency() / m_lcmFPS;
 
 		auto audioSize = desc.sampleRate * desc.channels * aud->GetChannelDepth();
 

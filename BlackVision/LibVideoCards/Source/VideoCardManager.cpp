@@ -4,6 +4,8 @@
 #include "Models/BlackMagic/BlackMagicVideoCard.h"
 #include "Models/BlueFish/BlueFishVideoCard.h"
 
+#include "Mathematics/Core/MathFuncs.h"
+
 //#include "UseLoggerVideoModule.h"
 
 
@@ -262,6 +264,20 @@ bool                        VideoCardManager::ProcessOutputsData     ()
     }
 
     return false;
+}
+
+// *********************************
+//
+UInt32                      VideoCardManager::GetRequiredFPS          () const
+{
+    UInt32 fps = 1;
+
+    for( auto & vc : m_videoCards )
+    {
+        fps = ::bv::mathematics::lcm( vc->GetRequiredFPS(), fps );
+    }
+
+    return fps;
 }
 
 //// *********************************

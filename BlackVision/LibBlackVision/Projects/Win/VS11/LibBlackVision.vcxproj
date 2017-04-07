@@ -602,7 +602,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\NRenderLogicDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\OutputDesc.h" />
@@ -1178,7 +1177,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />

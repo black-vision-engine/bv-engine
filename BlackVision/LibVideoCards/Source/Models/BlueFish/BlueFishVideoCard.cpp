@@ -2,6 +2,8 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "Mathematics/Core/mathfuncs.h"
+
 #include "UseLoggerVideoModule.h"
 
 namespace bv { namespace videocards { namespace bluefish {
@@ -295,6 +297,21 @@ UInt32                          VideoCard::EnumerateDevices         ()
 	}
 
     return ( UInt32 )deviceCount;
+}
+
+//**************************************
+//
+UInt32                          VideoCard::GetRequiredFPS  () const
+{
+    UInt32 fps = 1;
+
+    for( auto & ch : m_channels )
+    {
+        if( ch->m_playbackData )
+            fps = mathematics::lcm( ch->m_playbackData->refresh, fps );
+    }
+ 
+    return fps / 100;
 }
 
 } //bluefish
