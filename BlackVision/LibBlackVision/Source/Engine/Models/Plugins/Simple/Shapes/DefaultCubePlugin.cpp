@@ -634,7 +634,7 @@ namespace Generator
             if( triangleVector1 == glm::vec3( 0.0f, 0.0f, 0.0f ) )
             {
                 triangleVector1 = vert2 - vert1;
-                triangleVector2 = -triangleVector2;
+                triangleVector2 = triangleVector2;
             }
 
             return glm::normalize( glm::cross( triangleVector2, triangleVector1 ) );
