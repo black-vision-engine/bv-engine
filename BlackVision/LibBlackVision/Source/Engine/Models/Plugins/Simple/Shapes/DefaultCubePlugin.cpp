@@ -300,7 +300,7 @@ namespace Generator
             if( tesselation < 1 )
             {
                 // If tesselation is below 1, we have simple cube without bevel.
-                tesselation = 1;
+                tesselation = 0;
                 bevel = 0.0f;
             }
 
@@ -651,27 +651,30 @@ namespace Generator
             double d = dims.z/2 - bevel;
             double b = bevel;
 
+            int angleTesselation = tesselation > 0 ? tesselation : 1;       // Avoid division by zero.
+
             double sinA = sin( a );
             double cosA = cos( a );
             
             for( int j = 0; j <= tesselation; j++ )
             {
-                double angle2 = j * PI/2 / tesselation;
+                double angle2 = j * PI / 2 / angleTesselation;
 
                 double sinAngle2 = sin( angle2 );
                 double cosAngle2 = cos( angle2 );
-                
+
                 v[ i ][ j ] = glm::vec3( x - b * sinA * sinAngle2, y + b * cosA * sinAngle2, -d - b * cosAngle2 );
                 norm[ i ][ j ] = glm::normalize( glm::vec3( -sinA * sinAngle2, cosA * sinAngle2, -cosAngle2 ) );
             }
+
             for( int j = 0; j <= tesselation; j++ )
             {
-                double angle2 = j * PI/2 / tesselation + PI/2;
+                double angle2 = j * PI / 2 / angleTesselation + PI / 2;
 
                 double sinAngle2 = sin( angle2 );
                 double cosAngle2 = cos( angle2 );
-                
-                v[ i ][ tesselation + 1 + j ] = glm::vec3( x - b * sinA * sinAngle2, y + b * cosA * sinAngle2,  d - b * cosAngle2 );
+
+                v[ i ][ tesselation + 1 + j ] = glm::vec3( x - b * sinA * sinAngle2, y + b * cosA * sinAngle2, d - b * cosAngle2 );
                 norm[ i ][ tesselation + 1 + j ] = glm::normalize( glm::vec3( -sinA * sinAngle2, cosA * sinAngle2, -cosAngle2 ) );
             }
         }
@@ -684,8 +687,9 @@ namespace Generator
 
             double w = dims.x/2 - bevel, 
                 h = dims.y/2 - bevel;
-            int t = tesselation;
 
+            int t = tesselation;
+            int angleTesselation = tesselation > 0 ? tesselation : 1;       // Avoid division by zero.
 
             // Note: We generate beveled lines around the cube. We must place first line in such way, that
             // UV mapping won't break. First and last vertex must be doubled, because texture begins and ends there.
@@ -696,7 +700,7 @@ namespace Generator
             int lineIdxOffset = 0;
             for( int i = mainFaceTess; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / tesselation + 3 * PI / 2;
+                double angle = i * PI / 2 / angleTesselation + 3 * PI / 2;
                 GenerateLine( lineIdxOffset, w, h, angle );
 
                 lineIdxOffset++;
@@ -706,29 +710,29 @@ namespace Generator
             GenerateLine( lineIdxOffset, w, h, 0. );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / tesselation;
-                GenerateLine( lineIdxOffset + 1 + i, -w,  h, angle );
+                double angle = i * PI / 2 / angleTesselation;
+                GenerateLine( lineIdxOffset + 1 + i, -w, h, angle );
             }
 // left
-            GenerateLine( lineIdxOffset + t+1, -w,  h, PI/2 );
+            GenerateLine( lineIdxOffset + t + 1, -w, h, PI / 2 );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / tesselation + PI/2;
-                GenerateLine( lineIdxOffset + t+2 + i, -w, -h, angle );
+                double angle = i * PI / 2 / angleTesselation + PI / 2;
+                GenerateLine( lineIdxOffset + t + 2 + i, -w, -h, angle );
             }
 // bottom
-            GenerateLine( lineIdxOffset + 2*( t + 1 ), -w, -h, PI );
+            GenerateLine( lineIdxOffset + 2 * ( t + 1 ), -w, -h, PI );
             for( int i = 0; i < tesselation; i++ )
             {
-                double angle = i * PI / 2 / tesselation + PI;
-                GenerateLine( lineIdxOffset + 2*( t + 1 ) + 1 + i, w, -h, angle );
+                double angle = i * PI / 2 / angleTesselation + PI;
+                GenerateLine( lineIdxOffset + 2 * ( t + 1 ) + 1 + i, w, -h, angle );
             }
 // right
-            GenerateLine( lineIdxOffset + 3*( t + 1 ), w, -h, 3*PI/2 );
+            GenerateLine( lineIdxOffset + 3 * ( t + 1 ), w, -h, 3 * PI / 2 );
             for( int i = 0; i < mainFaceTess + 1; i++ )
             {
-                double angle = i * PI / 2 / tesselation + 3*PI/2;
-                GenerateLine( lineIdxOffset + 3*( t + 1 ) + 1 + i, w, h, angle );
+                double angle = i * PI / 2 / angleTesselation + 3 * PI / 2;
+                GenerateLine( lineIdxOffset + 3 * ( t + 1 ) + 1 + i, w, h, angle );
             }
 
             // UV mapping
