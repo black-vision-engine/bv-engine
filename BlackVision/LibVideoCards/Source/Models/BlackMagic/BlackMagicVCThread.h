@@ -25,6 +25,8 @@ class BlackMagicVCThread : public StoppableThread
 
 	MemoryChunkPtr				m_prevFrame;
 
+    MemoryChunkPtr              m_prevAudioData;
+
 	FrameQueue					m_frameQueue;
 
 	bool						m_odd;

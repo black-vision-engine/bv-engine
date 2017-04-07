@@ -17,8 +17,8 @@ namespace bv { namespace nrl {
 VideoOutputsPreprocessor::VideoOutputsPreprocessor()
     : m_initialized( false )
     , m_lcmFPS( 0 )
-{
-}
+    , m_currentAVFrame( nullptr )
+{}
 
 // *********************************
 //
@@ -90,39 +90,42 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 	desc.height = videoFrame->GetHeight();
 	desc.depth  = TextureUtils::Channels( videoFrame->GetFormat() );
 
-	MemoryChunkPtr data = MemoryChunk::Create( 1 );
-
 	desc.channels = 0;
 	desc.sampleRate = 0;
 
     //if ( !channel->LastFrameHadAudio() )
-	{
-		desc.channels = aud->GetChannels();
-		desc.sampleRate = aud->GetFrequency() / m_lcmFPS;
+	desc.channels = aud->GetChannels();
+	desc.sampleRate = aud->GetFrequency() / m_lcmFPS;
 
-		auto audioSize = desc.sampleRate * desc.channels * aud->GetChannelDepth();
+    if( !m_currentAVFrame )
+    {
+        m_currentAVFrame = videocards::AVFrame::Create();
 
-		data = MemoryChunk::Create( audioSize );
+        // FIXME: nrl - what about this? Daria, Paweuek
+        m_currentAVFrame->m_TimeCode.h = 10;
+        m_currentAVFrame->m_TimeCode.m = 22;
+        m_currentAVFrame->m_TimeCode.s = 33;
+        m_currentAVFrame->m_TimeCode.frame = 12;
+    }
 
-		auto ret = aud->GetBufferedData( data, channel->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
-		data = std::const_pointer_cast< MemoryChunk >( ret->GetData() );
-	}
+    m_currentAVFrame->m_videoData = videoFrame->GetData();
+    m_currentAVFrame->m_desc = desc;
 
-    channel->ToggleLastFrameHadAudio();
+    auto audioSize = desc.sampleRate * desc.channels * aud->GetChannelDepth();
+
+    if( !m_currentAVFrame->m_audioData || m_currentAVFrame->m_audioData->Size() != audioSize )
+        m_currentAVFrame->m_audioData = MemoryChunk::Create( audioSize );
+
+	auto ret = aud->GetBufferedData( std::const_pointer_cast< MemoryChunk >( m_currentAVFrame->m_audioData ),
+                                     channel->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+
+    //channel->ToggleLastFrameHadAudio();
 
 	desc.fieldModeEnabled       = true;
 	desc.timeCodePresent        = true;
 	desc.autoGenerateTimecode   = true;
 
-	auto frame = std::make_shared< videocards::AVFrame >( videoFrame->GetData(), data, desc );
-
-    // FIXME: nrl - what about this? Daria, Paweuek
-	frame->m_TimeCode.h = 10;
-	frame->m_TimeCode.m = 22;
-	frame->m_TimeCode.s = 33;
-	frame->m_TimeCode.frame = 12;
-  
-    return frame;
+    return m_currentAVFrame;
 }
 
 } //bv

@@ -43,7 +43,7 @@ public:
     BVTimeCode              m_TimeCode;
 	
 	static AVFrameConstPtr	Create( const MemoryChunkConstPtr & videoData, const MemoryChunkConstPtr & audioData, const AVFrameDescriptor & desc );
-	static AVFrameConstPtr	Create();
+	static AVFramePtr	    Create();
 
 	AVFrame		( MemoryChunkConstPtr videoData, MemoryChunkConstPtr audioData, AVFrameDescriptor desc );
 	AVFrame		();

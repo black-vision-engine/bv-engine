@@ -28,6 +28,8 @@ private:
 
     UInt32                      m_lcmFPS;
 
+    videocards::AVFramePtr      m_currentAVFrame;
+
 public:
 
                             VideoOutputsPreprocessor();
