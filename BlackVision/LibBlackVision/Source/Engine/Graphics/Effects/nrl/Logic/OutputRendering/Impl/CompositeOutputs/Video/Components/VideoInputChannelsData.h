@@ -61,7 +61,7 @@ public:
     void                        InvalidateCachedTextures();
     void                        InvalidateCachedTexture ( unsigned int videoOutputID );
 
-    Texture2DPtr                ReadColorTexture        ( NRenderContext * ctx, unsigned int videoOutputID ) const;
+    Texture2DPtr                ReadColorTexture        ( RenderContext * ctx, unsigned int videoOutputID ) const;
   
     bool                        IsActive                ( unsigned int videoOutputID ) const;
     bool                        ContainsValidData       ( unsigned int videoOutputID ) const;

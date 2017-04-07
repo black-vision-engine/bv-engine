@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/State/NOutputState.h"
+#include "Engine/Graphics/Effects/nrl/Logic/State/OutputState.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
 
@@ -16,7 +16,7 @@ class OutputInstance : public Output
 {
 private:
 
-    NOutputState        m_state;
+    OutputState        m_state;
 
     FrameDataHandler *  m_frameDataHandler;
 
@@ -27,13 +27,13 @@ public:
                         OutputInstance          ( unsigned int width, unsigned int height, FrameDataHandler * handler );
                         ~OutputInstance         ();
 
-    virtual void        ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * input ) override;
+    virtual void        ProcessFrameData        ( RenderContext * ctx, RenderedChannelsData * input ) override;
 
     bool                IsEnabled               () const;
     void                Enable                  ();
     void                Disable                 ();
 
-    NOutputState &      AccessOutputState       ();
+    OutputState &      AccessOutputState       ();
 
 private:
 

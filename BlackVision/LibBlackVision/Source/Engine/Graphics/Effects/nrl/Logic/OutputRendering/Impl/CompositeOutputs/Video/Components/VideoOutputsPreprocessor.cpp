@@ -19,7 +19,7 @@ VideoOutputsPreprocessor::VideoOutputsPreprocessor()
 
 // *********************************
 //
-const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( NRenderContext * ctx, RenderedChannelsData * input )
+const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( RenderContext * ctx, RenderedChannelsData * input )
 {
     if( !m_initialized )
     {
@@ -73,7 +73,7 @@ void                    VideoOutputsPreprocessor::Initialize            ( Output
 
 // *********************************
 //
-AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRenderContext * ctx, const VideoInputChannel * channel )
+AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( RenderContext * ctx, const VideoInputChannel * channel )
 {
     // FIXME: nrl - should be read from video cards configuration or remove or do something making sense
     static unsigned int FPS_HACK = 25;

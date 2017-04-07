@@ -3,7 +3,7 @@
 #include "OutputScreenshot.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
-#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderContext.h"
 
 #include "LibImage.h"
 
@@ -48,7 +48,7 @@ OutputScreenshot::OutputScreenshot()
 
 // *********************************
 //
-void    OutputScreenshot::ProcessFrameData  ( ScreenshotInfo & screenshotInfo, NRenderContext * ctx, const RenderChannel * channel )
+void    OutputScreenshot::ProcessFrameData  ( ScreenshotInfo & screenshotInfo, RenderContext * ctx, const RenderChannel * channel )
 {
     if( ReadbackNeeded( screenshotInfo ) )
     {
@@ -80,7 +80,7 @@ void    OutputScreenshot::ProcessFrameData  ( ScreenshotInfo & screenshotInfo, N
 
 // ***********************
 //
-void    OutputScreenshot::ProcessFrameData  ( NRenderContext * ctx, RenderedChannelsData * rcd )
+void    OutputScreenshot::ProcessFrameData  ( RenderContext * ctx, RenderedChannelsData * rcd )
 {
     for( auto & screenshotInfo : m_screenshotDescs )
     {

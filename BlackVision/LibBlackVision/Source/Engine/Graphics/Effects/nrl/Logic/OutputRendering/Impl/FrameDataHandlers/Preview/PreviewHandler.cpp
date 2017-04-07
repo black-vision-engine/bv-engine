@@ -3,9 +3,9 @@
 #include "PreviewHandler.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderChannel.h"
-#include "Engine/Graphics/Effects/nrl/Logic/Components/NRenderContext.h"
+#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderContext.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/NFullscreenEffectFactory.h"
+#include "Engine/Graphics/Effects/nrl/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
 namespace bv { namespace nrl {
@@ -16,7 +16,7 @@ PreviewHandler::PreviewHandler      ()
     : m_mixChannelsEffect( nullptr )
     , m_activeRenderOutput( 1 )
 {
-    m_mixChannelsEffect = CreateFullscreenEffect( NFullscreenEffectType::NFET_MIX_CHANNELS );
+    m_mixChannelsEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_MIX_CHANNELS );
 }
 
 // **************************
@@ -28,7 +28,7 @@ PreviewHandler::~PreviewHandler     ()
 
 // **************************
 //
-void                                PreviewHandler::HandleFrameData     ( const NOutputState &, NRenderContext * ctx, const RenderChannel * channel )
+void                                PreviewHandler::HandleFrameData     ( const OutputState &, RenderContext * ctx, const RenderChannel * channel )
 {
     m_activeRenderOutput.SetEntry( 0, channel->GetActiveRenderTarget() );
 
@@ -41,7 +41,7 @@ void                                PreviewHandler::HandleFrameData     ( const 
 
 // **************************
 //
-NFullscreenEffectComponentStatePtr  PreviewHandler::GetInternalFSEState ()
+FullscreenEffectComponentStatePtr  PreviewHandler::GetInternalFSEState ()
 {
     return m_mixChannelsEffect->GetState();
 }

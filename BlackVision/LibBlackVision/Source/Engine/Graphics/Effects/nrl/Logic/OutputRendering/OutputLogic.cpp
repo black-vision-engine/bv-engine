@@ -3,7 +3,7 @@
 #include "OutputLogic.h"
 
 #include "Engine/Graphics/Effects/nrl/Logic/Components/RenderedChannelsData.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NNodeRenderLogic.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeRenderLogic.h"
 
 
 namespace bv { namespace nrl {
@@ -26,7 +26,7 @@ OutputLogic::~OutputLogic                               ()
 
 // *********************************
 //
-void                OutputLogic::ProcessFrameData       ( NRenderContext * ctx, RenderedChannelsData * rcd )
+void                OutputLogic::ProcessFrameData       ( RenderContext * ctx, RenderedChannelsData * rcd )
 {
     for( auto output : m_outputs )
     {

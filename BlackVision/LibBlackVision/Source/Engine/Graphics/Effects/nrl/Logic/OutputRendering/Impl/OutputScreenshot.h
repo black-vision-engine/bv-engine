@@ -12,7 +12,7 @@ namespace bv {
 namespace nrl {
 
 
-class NRenderContext;
+class RenderContext;
 
 
 struct ScreenshotInfo
@@ -39,7 +39,7 @@ public:
 
     explicit        OutputScreenshot    ();
 
-    void            ProcessFrameData    ( NRenderContext * ctx, RenderedChannelsData * rcd );
+    void            ProcessFrameData    ( RenderContext * ctx, RenderedChannelsData * rcd );
     void            RequestScreenshot   ( const std::string & filePath, RenderChannelType channelId, unsigned int numFrames = 1, bool onRenderedEvent = false, bool saveImgAsync = true );
 
 private:
@@ -47,7 +47,7 @@ private:
     bool            ReadbackNeeded          ( ScreenshotInfo & screenshotInfo );
     void            RemoveFinalizedRequests ();
 
-    void            ProcessFrameData        ( ScreenshotInfo & screenshotInfo, NRenderContext * ctx, const RenderChannel * channel );
+    void            ProcessFrameData        ( ScreenshotInfo & screenshotInfo, RenderContext * ctx, const RenderChannel * channel );
 };
 
 

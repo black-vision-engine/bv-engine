@@ -23,7 +23,7 @@ const unsigned int heightSD = heightHD / 2;
 
 // *********************************
 //
-void    SetChannelMapping( NOutputState & state, const OutputDesc & desc )
+void    SetChannelMapping( OutputState & state, const OutputDesc & desc )
 {
     state.SetChannelMapping( 0, 1, 2, 3 );
     

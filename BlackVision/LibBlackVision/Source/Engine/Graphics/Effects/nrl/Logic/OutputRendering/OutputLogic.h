@@ -12,7 +12,7 @@ namespace bv {
     
 namespace nrl {
 
-class NRenderContext;
+class RenderContext;
 
 class OutputLogic
 {
@@ -30,7 +30,7 @@ public:
     virtual                 ~OutputLogic            ();
 
     // API directly related to frame rendering
-    void                    ProcessFrameData        ( NRenderContext * ctx, RenderedChannelsData * rcd );
+    void                    ProcessFrameData        ( RenderContext * ctx, RenderedChannelsData * rcd );
 
     // API relarted to global output state manipulation
     Output *                GetOutput               ( CustomOutputType outputType );

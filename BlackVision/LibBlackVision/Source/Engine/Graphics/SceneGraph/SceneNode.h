@@ -10,7 +10,7 @@
 #include "Engine/Audio/AudioEntity.h"
 #include "Mathematics/Box.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffect.h"
+#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 #include "SceneNodePerformance.h"
 
@@ -30,7 +30,7 @@ private:
 
     SceneNodeRepr *     m_repr;
 
-    nrl::NNodeEffectPtr m_nNodeEffect;
+    nrl::NodeEffectPtr m_nNodeEffect;
 
     //FIXME: use some sort of caps/flag here (instead of a single flag)
     bool                m_visible;
@@ -67,8 +67,8 @@ public:
     void                    DisableNNodeEffect  ();
 
     // FIXME: nrl - rename to GetNodeEffect during nrl -> default migration
-    nrl::NNodeEffectPtr     GetNNodeEffect      ();
-    void                    SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect );
+    nrl::NodeEffectPtr     GetNNodeEffect      ();
+    void                    SetNNodeEffect      ( nrl::NodeEffectPtr nNodeEffect );
 
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;

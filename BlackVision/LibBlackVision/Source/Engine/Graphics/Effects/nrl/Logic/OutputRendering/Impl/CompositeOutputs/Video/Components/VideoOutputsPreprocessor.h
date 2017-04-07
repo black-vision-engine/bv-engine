@@ -30,7 +30,7 @@ public:
 
                             VideoOutputsPreprocessor();
 
-    const AVOutputsData &   Preprocess              ( NRenderContext * ctx, RenderedChannelsData * input );
+    const AVOutputsData &   Preprocess              ( RenderContext * ctx, RenderedChannelsData * input );
 
     void                    InvalidateCachedData    ();
 
@@ -38,7 +38,7 @@ public:
 
 private:
 
-    AVFramePtr              PrepareAVFrame          ( NRenderContext * ctx, const VideoInputChannel * channel );
+    AVFramePtr              PrepareAVFrame          ( RenderContext * ctx, const VideoInputChannel * channel );
 
 };
 

@@ -7,7 +7,7 @@
 #include "Application/ApplicationContext.h"
 
 // FIXME: nrl - render logic replacement
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogicImpl.h"
+#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicImpl.h"
 
 #include "Widgets/NodeLogicFactory.h"
 
@@ -74,7 +74,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
     
     // FIXME: nrl - pass all those arguments in a struct
-    // m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // m_renderLogic = new nrl::RenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
     // FIXME: prepare descriptor here
 
     m_renderLogic = nrl::RenderLogicInitializer::CreateInstance( DefaultConfig );
@@ -486,7 +486,7 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-nrl::NRenderLogic *             BVAppLogic::GetRenderLogic      () const
+nrl::RenderLogic *             BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
 }

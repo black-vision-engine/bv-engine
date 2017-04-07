@@ -36,7 +36,7 @@ namespace audio {
 }
 
 namespace nrl {
-    class NRenderLogic;
+    class RenderLogic;
 }
 
 namespace videocards {
@@ -74,7 +74,7 @@ private:
     audio::AudioRenderer *          m_audioRenderer;
     
     // FIXME: nrl - render logic replacement
-    nrl::NRenderLogic *             m_renderLogic;
+    nrl::RenderLogic *             m_renderLogic;
     //RenderLogic *                   m_renderLogic;
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
@@ -133,7 +133,7 @@ public:
     //Convenience API - generalized model accessors
     BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
-    nrl::NRenderLogic *             GetRenderLogic      () const;
+    nrl::RenderLogic *             GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
 
     void                            LoadScenes          ( const PathVec & pathVec );
