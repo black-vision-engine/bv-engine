@@ -297,8 +297,12 @@ namespace Generator
         void Init() 
         {
             // It's a little hackisch. We should implement constraints in paramters.
-			if( tesselation < 2 )
-				tesselation = 2;
+            if( tesselation < 1 )
+            {
+                // If tesselation is below 1, we have simple cube without bevel.
+                tesselation = 1;
+                bevel = 0.0f;
+            }
 
             n = 4 * ( tesselation + 1 ) + 1;
             m = ( tesselation + 1 ) * 2;
