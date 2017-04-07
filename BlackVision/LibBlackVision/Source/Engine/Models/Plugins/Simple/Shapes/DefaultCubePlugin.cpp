@@ -537,7 +537,7 @@ namespace Generator
             if( smooth )
                 CopySmooth( verts, uvs, normals );
             else
-                CopyNonSmooth( verts, uvs, normals );
+                CopyFlat( verts, uvs, normals );
         }
 
         // ***********************
@@ -582,14 +582,62 @@ namespace Generator
 
         // ***********************
         //
-        void        CopyNonSmooth   ( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
+        void        CopyFlat    ( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, Float3AttributeChannelPtr normals )
         {
             int mainFaceTess = tesselation / 2;
             int followingFaceTess = tesselation - mainFaceTess;
-            followingFaceTess;
-            verts;
-            uvs;
-            normals;
+
+            for( int i = 0; i < n - 1; i++ )
+            {
+                int uvsIdx = 0;
+
+                for( int j = 0; j < m - 1; j++ )
+                {
+                    glm::vec3 normal = ComputeFlatNormal( v[ i ][ j ], v[ i + 1 ][ j ], v[ i ][ j + 1 ], v[ i + 1 ][ j + 1 ] );
+
+                    verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+
+                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+
+
+                    if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
+                    {
+                        uvsIdx++;
+
+                        normal = ComputeFlatNormal( v[ i ][ j ], v[ i + 1 ][ j ], v[ i ][ j + 1 ], v[ i + 1 ][ j + 1 ] );
+
+                        verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+
+                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+                    }
+
+                    uvsIdx++;
+                }
+            }
+        }
+
+        // ***********************
+        //
+        glm::vec3   ComputeFlatNormal       ( glm::vec3 & vert1, glm::vec3 & vert2, glm::vec3 & vert3, glm::vec3 & vert4 )
+        {
+            glm::vec3 triangleVector1 = vert4 - vert3;
+            glm::vec3 triangleVector2 = vert1 - vert3;
+
+            if( triangleVector1 == glm::vec3( 0.0f, 0.0f, 0.0f ) )
+            {
+                triangleVector1 = vert2 - vert1;
+                triangleVector2 = -triangleVector2;
+            }
+
+            return glm::normalize( glm::cross( triangleVector2, triangleVector1 ) );
         }
 
         // ***********************
