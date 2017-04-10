@@ -1211,8 +1211,8 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 
     auto plugin = root->GetPlugin( "cube" );
     assert( plugin );
-    model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::BEVEL ), 20.f, 0.4f );
-    model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::TESSELATION ), 0.f, 10 );
+    model::SetParameter( plugin->GetParameter( model::DefaultCubePlugin::PARAM::BEVEL ), 20.f, 0.4f );
+    model::SetParameter( plugin->GetParameter( model::DefaultCubePlugin::PARAM::TESSELATION ), 0.f, 10 );
 
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
