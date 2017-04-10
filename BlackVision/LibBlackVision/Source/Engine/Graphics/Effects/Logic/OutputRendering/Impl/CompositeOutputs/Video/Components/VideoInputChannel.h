@@ -36,6 +36,11 @@ public:
     virtual Texture2DPtr        ReadColorTexture            ( RenderContext * ctx ) const;
     virtual void                InvalidateCachedTexture     () const;
 
+    virtual UInt32              GetWidth                    () const;
+    virtual UInt32              GetHeight                   () const;
+    virtual TextureFormat       GetFormat                   () const;
+    virtual SizeType            GetRawFrameSize             () const;
+
     const RenderChannel *       GetWrappedChannel           () const;
 
     static VideoInputChannel *  Create                      ( const RenderChannel * wrappedChannel, unsigned int width, unsigned int height );

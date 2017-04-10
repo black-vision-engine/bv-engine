@@ -32,6 +32,8 @@ public:
 
 	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const = 0;
 
+    virtual UInt32              GetRequiredFPS          () const = 0;
+
 	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;
 	//virtual void                EnableVideoOutput       () = 0;
 	//virtual void                DisableVideoOutput      () = 0;

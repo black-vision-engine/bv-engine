@@ -82,6 +82,7 @@ public:
 
     static UInt32           EnumerateDevices            ();
 
+    UInt32                  GetRequiredFPS              () const override;
 };
 
 DEFINE_PTR_TYPE( VideoCard )

@@ -14,9 +14,9 @@ AVFrameConstPtr	AVFrame::Create( const MemoryChunkConstPtr & videoData, const Me
 
 // ****************************
 //
-AVFrameConstPtr AVFrame::Create()
+AVFramePtr AVFrame::Create()
 {
-	return std::make_shared< const AVFrame >();
+	return std::make_shared< AVFrame >();
 }
 
 // ****************************

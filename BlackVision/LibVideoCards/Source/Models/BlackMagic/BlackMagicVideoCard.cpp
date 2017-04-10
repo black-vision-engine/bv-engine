@@ -498,6 +498,13 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     m_uiTotalFrames++;
 }
 
+//**************************************
+//
+UInt32              VideoCard::GetRequiredFPS  () const
+{
+    return ( UInt32 )( m_frameTimescale / m_frameDuration );
+}
+
 } //blackmagic
 } //videocards
 } //bv

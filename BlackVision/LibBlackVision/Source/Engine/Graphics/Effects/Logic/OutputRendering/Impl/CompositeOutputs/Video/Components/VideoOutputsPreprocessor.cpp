@@ -5,17 +5,24 @@
 #include "Engine/Audio/Resources/AudioUtils.h"
 #include "Assets/Texture/TextureUtils.h"
 
+#include "Services/BVServiceProvider.h"
+
 #include "VideoCardManager.h"
 
 
 namespace bv { 
 
+namespace
+{
+const SizeType      BUFFER_SIZE = 10;
+}
+
 // *********************************
 //
 VideoOutputsPreprocessor::VideoOutputsPreprocessor()
     : m_initialized( false )
-{
-}
+    , m_lcmFPS( 0 )
+{}
 
 // *********************************
 //
@@ -25,6 +32,10 @@ const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( Render
     {
         m_inputChannels.PostInitialize( input );
     
+        m_lcmFPS = BVServiceProvider::GetInstance().GetVideoCardManager()->GetRequiredFPS();
+
+        InitializeAVBuffers( ctx );
+
         m_initialized = true;
     }
 
@@ -73,54 +84,67 @@ void                    VideoOutputsPreprocessor::Initialize            ( Output
 
 // *********************************
 //
-AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( RenderContext * ctx, const VideoInputChannel * channel )
+AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( RenderContext * ctx, const VideoInputChannel * vic )
 {
-    // FIXME: nrl - should be read from video cards configuration or remove or do something making sense
-    static unsigned int FPS_HACK = 25;
-    auto audi = aud( ctx );
+    if( m_currentAVFrames.find( vic ) != m_currentAVFrames.end() )
+        m_avFramesBuffer[ vic ].push_back( m_currentAVFrames[ vic ] );
 
-    auto videoFrame = channel->ReadColorTexture( ctx );
-    
-    videocards::AVFrameDescriptor desc;
+    auto avFrame = m_avFramesBuffer[ vic ].front();
+    m_currentAVFrames[ vic ] = avFrame;
 
-	desc.width  = videoFrame->GetWidth();
-	desc.height = videoFrame->GetHeight();
-	desc.depth  = TextureUtils::Channels( videoFrame->GetFormat() );
+    auto videoFrame = vic->ReadColorTexture( ctx );
+    avFrame->m_videoData = videoFrame->GetData();
 
-	MemoryChunkPtr data = MemoryChunk::Create( 1 );
+    auto aud_ = aud( ctx );
+	auto ret = aud_->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ),
+                                     vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
 
-	desc.channels = 0;
-	desc.sampleRate = 0;
+    return avFrame;
+}
 
-    if ( !channel->LastFrameHadAudio() )
-	{
-		desc.channels = audi->GetChannels();
-		desc.sampleRate = audi->GetFrequency() / FPS_HACK;
+// *********************************
+//
+void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( NRenderContext * ctx )
+    auto aud_ = aud( ctx );
 
-		auto audioSize = desc.sampleRate * desc.channels * audi->GetChannelDepth();
+    auto audioFrameSize = aud_->GetChannels() * aud_->GetChannelDepth() * aud_->GetFrequency() / m_lcmFPS;
 
-		data = MemoryChunk::Create( audioSize );
+    for( unsigned int i = 0; i < m_inputChannels.GetNumVideoInputChannels(); ++i )
+    {
+        auto vic = m_inputChannels.GetVideoInputChannelAt( i );
+        assert( vic->IsActive() );
 
-		auto ret = audi->GetBufferedData( data, channel->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
-		data = std::const_pointer_cast< MemoryChunk >( ret->GetData() );
-	}
+        videocards::AVFrameDescriptor desc;
 
-    channel->ToggleLastFrameHadAudio();
+        desc.width = vic->GetWidth();
+        desc.height = vic->GetHeight();
+        desc.depth = TextureUtils::Channels( vic->GetFormat() );
+        desc.channels = aud_->GetChannels();
+        desc.sampleRate = aud_->GetFrequency() / m_lcmFPS;
 
-	desc.fieldModeEnabled       = true;
-	desc.timeCodePresent        = true;
-	desc.autoGenerateTimecode   = true;
+        // FIXME: values are hardcoded.
+        desc.fieldModeEnabled = true;
+        desc.timeCodePresent = true;
+        desc.autoGenerateTimecode = true;
 
-	auto frame = std::make_shared< videocards::AVFrame >( videoFrame->GetData(), data, desc );
+        m_avFramesBuffer[ vic ] = boost::circular_buffer< AVFramePtr >( BUFFER_SIZE );
 
-    // FIXME: nrl - what about this? Daria, Paweuek
-	frame->m_TimeCode.h = 10;
-	frame->m_TimeCode.m = 22;
-	frame->m_TimeCode.s = 33;
-	frame->m_TimeCode.frame = 12;
-  
-    return frame;
+        for( SizeType i = 0; i < BUFFER_SIZE; ++i )
+        {
+            auto avFrame = videocards::AVFrame::Create();
+            avFrame->m_audioData = MemoryChunk::Create( audioFrameSize );
+            avFrame->m_desc = desc;
+
+            // FIXME: values are hardcoded.
+            avFrame->m_TimeCode.h = 10;
+            avFrame->m_TimeCode.m = 22;
+            avFrame->m_TimeCode.s = 33;
+            avFrame->m_TimeCode.frame = 12;
+
+            m_avFramesBuffer[ vic ].push_back( avFrame );
+        }
+    }
+
 }
 
 } //bv
-

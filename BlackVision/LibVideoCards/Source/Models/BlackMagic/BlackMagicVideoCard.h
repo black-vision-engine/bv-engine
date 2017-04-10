@@ -103,6 +103,8 @@ public:
 
 	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const override;
 	
+    virtual UInt32              GetRequiredFPS  () const override;
+
 private:
 
 	bool                    InitDevice          ();

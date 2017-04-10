@@ -42,8 +42,6 @@ public:
 
                                 VideoInputChannelsData  ();
                                 ~VideoInputChannelsData ();
-
-    bool                        IsInitialized           () const;
     
     void                        PreInitialize           ( OutputStaticDataVec & uniqueOutputSetups, const UintUintMapping & mapping );
     void                        PostInitialize          ( const RenderedChannelsData * rcd );

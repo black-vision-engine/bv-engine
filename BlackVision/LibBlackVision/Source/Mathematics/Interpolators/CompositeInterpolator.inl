@@ -569,7 +569,7 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::PreEvaluate( TimeValu
 		TimeValueT q = interval;
 		TimeValueT r = std::modf( t, &q );
 
-		if( round( q ) % 2 == 0 )
+		if( mathematics::round( q ) % 2 == 0 )
 		{
 			return Evaluate( tStart + r );
 		}
@@ -602,15 +602,15 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeVal
 	else if( m_postMethod == WrapMethod::repeat )
 	{
 		TimeValueT q = interval;
-		TimeValueT r = divmod( t, &q );
+		TimeValueT r = mathematics::divmod( t, &q );
 		return Evaluate( tStart + r );
 	}
 	else if( m_postMethod == WrapMethod::pingPong )
 	{
 		TimeValueT q = interval;
-		TimeValueT r = divmod( t, &q );
+		TimeValueT r = mathematics::divmod( t, &q );
 
-		if( round( q ) % 2 == 0 )
+		if( mathematics::round( q ) % 2 == 0 )
 		{
 			return Evaluate( tStart + r );
 		}
