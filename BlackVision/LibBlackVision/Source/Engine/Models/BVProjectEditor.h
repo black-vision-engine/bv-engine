@@ -70,6 +70,7 @@ public:
     void                    DeleteDetachedScenes();
 
     bool                    SetSceneVisible     ( const std::string & sceneName, bool visible );
+    void                    SetSceneOutputChannel   ( const std::string & sceneName, UInt32 channel );
 
     model::SceneModelPtr    GetModelScene       ( const std::string & sceneName ) const;
 

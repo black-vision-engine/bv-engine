@@ -27,8 +27,8 @@ public:
 	// PUBLIC API
     static void     Clear               ( const RenderTarget * rt, NRenderContext * ctx, const glm::vec4 & color = glm::vec4(0.f) );
     
-    static void     RenderAudio         ( Scene * scene, NRenderContext * ctx );
-    static void     RenderAudio         ( SceneNode * node, audio::AudioRenderer * renderer );
+    static void     RenderAudio         ( Scene * scene, NRenderContext * ctx, std::set< const audio::AudioEntity * > & audioEntities );
+    static void     RenderAudio         ( SceneNode * node, audio::AudioRenderer * renderer, std::set< const audio::AudioEntity * > & audioEntities );
 
     static void     RenderQueued        ( Scene * scene, const RenderTarget * output, NRenderContext * ctx );
     static void     RenderQueued        ( SceneNode * node, NRenderContext * ctx );

@@ -45,7 +45,7 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath, UInt32 maxQue
 FFmpegDemuxer::~FFmpegDemuxer    ()
 {
     av_log_set_callback( nullptr );
-	avformat_close_input( &m_formatCtx );
+    avformat_close_input( &m_formatCtx );
 
 	ClearPacketQueue( false );
 }

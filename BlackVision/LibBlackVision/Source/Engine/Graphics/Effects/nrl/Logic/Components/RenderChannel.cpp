@@ -117,5 +117,12 @@ void                    RenderChannel::InvalidateCachedTexture          () const
     m_cachedReadbackUpToDate = false;
 }
 
+// **************************
+//
+std::set< const audio::AudioEntity * > & RenderChannel::AccessRenderChannelAudioEntities() const
+{
+    return m_renderChannelAudioEntities;
+}
+
 } //bv
 } //nrl

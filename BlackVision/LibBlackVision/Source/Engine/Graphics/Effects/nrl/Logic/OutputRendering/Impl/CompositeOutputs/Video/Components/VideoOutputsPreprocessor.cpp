@@ -101,7 +101,7 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( NRende
 
 		data = MemoryChunk::Create( audioSize );
 
-		auto ret = aud->GetBufferedData( data );
+		auto ret = aud->GetBufferedData( data, channel->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
 		data = std::const_pointer_cast< MemoryChunk >( ret->GetData() );
 	}
 

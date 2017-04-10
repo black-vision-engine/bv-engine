@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp" />

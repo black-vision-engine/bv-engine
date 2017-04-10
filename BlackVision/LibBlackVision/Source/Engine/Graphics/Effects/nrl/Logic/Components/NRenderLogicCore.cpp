@@ -65,7 +65,8 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedC
         auto outputType = ( RenderChannelType ) outIdx;   
         auto outputRT = result->GetActiveRenderTarget( outputType );
         
-        RenderScene( scene, outputRT, ctx );
+        NNodeRenderLogic::RenderQueued( scene, outputRT, ctx );
+        NNodeRenderLogic::RenderAudio( scene, ctx, result->GetRenderChannel( outputType )->AccessRenderChannelAudioEntities() );
 
         result->SetContainsValidData( outputType, true );
     }
@@ -77,7 +78,6 @@ void    NRenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedC
 void    NRenderLogicCore::RenderScene       ( Scene * scene, const RenderTarget * outputRT, NRenderContext * ctx )
 {
     NNodeRenderLogic::RenderQueued( scene, outputRT, ctx );
-    NNodeRenderLogic::RenderAudio( scene, ctx );
 }
 
 // **************************

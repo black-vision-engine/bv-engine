@@ -36,6 +36,8 @@ private:
     mutable Texture2DPtr            m_cachedReadbackTexture;
     mutable bool                    m_cachedReadbackUpToDate;
 
+    mutable std::set< const audio::AudioEntity * > m_renderChannelAudioEntities;
+
     bool                            m_isActive;
 
 public:
@@ -58,6 +60,7 @@ public:
     Texture2DPtr            ReadColorTexture            ( Renderer * renderer ) const;
     void                    InvalidateCachedTexture     () const;
 
+    std::set< const audio::AudioEntity * > & AccessRenderChannelAudioEntities() const;
 };
 
 } //bv

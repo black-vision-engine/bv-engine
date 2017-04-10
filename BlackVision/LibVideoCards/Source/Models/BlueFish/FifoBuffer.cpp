@@ -21,7 +21,7 @@ CFifoBuffer::~CFifoBuffer()
 void                        CFifoBuffer::Init           ( UInt32 count, UInt32 size, UInt32 bytesPerLine )
 {
     { count; }
-    m_emptyFrame = std::make_shared< CFrame >( 0, size, bytesPerLine );
+    m_emptyFrame = std::make_shared< CFrame >( size, bytesPerLine );
 }
 
 //**************************************

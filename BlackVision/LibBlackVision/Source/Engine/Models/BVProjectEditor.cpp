@@ -238,6 +238,16 @@ bool    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool 
     return false;
 }
 
+// ***********************
+//
+void    BVProjectEditor::SetSceneOutputChannel( const std::string & sceneName, UInt32 channel )
+{
+    auto scene = m_project->GetModelScene( sceneName );
+
+    if( scene )
+        scene->SetRenderChannelIdx( channel );
+}
+
 // *******************************
 //
 bool    BVProjectEditor::RenameScene			( const std::string & sceneName, const std::string & newSceneName )

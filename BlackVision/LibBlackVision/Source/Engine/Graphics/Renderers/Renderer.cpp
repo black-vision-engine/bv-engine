@@ -633,7 +633,7 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
     if( !m_PdrPBOMemTransferRT )
     {
-        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), false );
+        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
     }
 
     //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );

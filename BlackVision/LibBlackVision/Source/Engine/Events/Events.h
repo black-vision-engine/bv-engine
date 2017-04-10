@@ -322,16 +322,17 @@ public:
         DetachScene,
         MoveScene,
         CopyScene,
+        SetOutputChannel,
         Fail            ///< Wrong command
     } Command;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    SceneEvent::Command                SceneCommand;
+    SceneEvent::Command             SceneCommand;
     std::string                     SceneName;
     std::string                     NewSceneName;
-    UInt32                            AttachIndex;
+    UInt32                          AttachIndex;
 
 public:
     explicit                        SceneEvent   () {}

@@ -216,7 +216,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 	pThis->m_pSDK->wait_input_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
 	while(!pThis->m_nThreadStopping)
 	{
-		pFrame = std::make_shared<CFrame>(1,pThis->GoldenSize,pThis->BytesPerLine);
+		pFrame = std::make_shared<CFrame>(pThis->GoldenSize,pThis->BytesPerLine);
 
 		if(!pFrame)
 			continue;

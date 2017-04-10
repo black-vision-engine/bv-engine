@@ -137,6 +137,20 @@ void BVAppLogic::Initialize         ()
 
 // *********************************
 //
+void BVAppLogic::Deinitialize    ()
+{
+    if( m_videoCardManager )
+    {
+        m_videoCardManager->Stop();
+
+        BVServiceProvider::GetInstance().UnregisterVideoCardManager();
+        delete m_videoCardManager;
+        m_videoCardManager = nullptr;
+    }
+}
+
+// *********************************
+//
 void BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
     m_bvProject->GetProjectEditor()->RemoveAllScenes();
@@ -146,6 +160,13 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
         auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
         m_bvProject->GetProjectEditor()->AddScene( scene );
     }
+}
+
+// *********************************
+//
+void BVAppLogic::UnloadScenes   ()
+{
+    m_bvProject->GetProjectEditor()->RemoveAllScenes();
 }
 
 // *********************************
