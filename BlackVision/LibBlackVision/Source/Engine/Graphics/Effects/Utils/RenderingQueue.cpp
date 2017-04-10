@@ -5,8 +5,8 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/Components/RenderContext.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 

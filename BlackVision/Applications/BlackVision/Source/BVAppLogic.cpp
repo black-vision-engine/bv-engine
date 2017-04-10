@@ -7,7 +7,7 @@
 #include "Application/ApplicationContext.h"
 
 // FIXME: nrl - render logic replacement
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogicImpl.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogicImpl.h"
 
 #include "Widgets/NodeLogicFactory.h"
 

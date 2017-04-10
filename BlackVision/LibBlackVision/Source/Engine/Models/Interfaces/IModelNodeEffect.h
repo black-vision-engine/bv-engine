@@ -9,7 +9,7 @@
 
 #include "Assets/AssetDescriptor.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NodeEffect.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 
 namespace bv { namespace model {

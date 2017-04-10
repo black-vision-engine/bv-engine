@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "BVConfig.h"
 
 

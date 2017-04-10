@@ -2,8 +2,8 @@
 
 #include "RenderLogicInitializer.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/RenderLogicDesc.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderLogicDesc.h"
 
 
 namespace bv { namespace nrl {

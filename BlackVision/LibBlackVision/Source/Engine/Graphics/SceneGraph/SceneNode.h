@@ -10,7 +10,7 @@
 #include "Engine/Audio/AudioEntity.h"
 #include "Mathematics/Box.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NodeEffect.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 #include "SceneNodePerformance.h"
 

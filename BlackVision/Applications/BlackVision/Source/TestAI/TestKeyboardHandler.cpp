@@ -4,9 +4,9 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/RenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/OutputLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/Output.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 

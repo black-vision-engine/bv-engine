@@ -20,7 +20,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/AssetTracker.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NodeEffectFactory.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
