@@ -30,11 +30,22 @@ public:
 class DefaultEnvironmentTexturePlugin : public BasePlugin
 {
 public:
+
+    enum MixMode
+    {
+        Blend = 0,
+        Decal,
+        Modulate,
+        Add,
+        Average,
+        AddSigned
+    };
     
     struct PARAM
     {
         static const std::string        Reflectivity;
 		static const std::string        TxMat;
+        static const std::string        EnvMixMode;
     };
 
 private:
