@@ -5,6 +5,8 @@
 
 #include "AVFrame.h"
 
+#include <vector>
+#include <boost/circular_buffer.hpp>
 
 namespace bv { 
 
@@ -19,6 +21,8 @@ namespace nrl {
 class VideoOutputsPreprocessor
 {
 private:
+    typedef std::map< const VideoInputChannel *, boost::circular_buffer< AVFramePtr > > AVFrameBuffersMap;
+    typedef std::map< const VideoInputChannel *, AVFramePtr >                           AVFramesMap;
 
     bool                        m_initialized;
 
@@ -28,7 +32,8 @@ private:
 
     UInt32                      m_lcmFPS;
 
-    videocards::AVFramePtr      m_currentAVFrame;
+    AVFrameBuffersMap           m_avFramesBuffer;
+    AVFramesMap                 m_currentAVFrames;
 
 public:
 
@@ -43,6 +48,8 @@ public:
 private:
 
     AVFramePtr              PrepareAVFrame          ( NRenderContext * ctx, const VideoInputChannel * channel );
+
+    void                    InitializeAVBuffers     ( NRenderContext * ctx );
 
 };
 

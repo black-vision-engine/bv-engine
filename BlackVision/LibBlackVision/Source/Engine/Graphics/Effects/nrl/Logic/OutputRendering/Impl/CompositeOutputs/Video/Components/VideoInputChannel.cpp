@@ -100,5 +100,33 @@ VideoInputChannel *  VideoInputChannel::Create                  ( const RenderCh
     return res;
 }
 
+// **************************
+//
+UInt32              VideoInputChannel::GetWidth                    () const
+{
+    return m_wrappedRenderChannel->GetActiveRenderTarget()->Width();
+}
+
+// **************************
+//
+UInt32              VideoInputChannel::GetHeight                   () const
+{
+    return m_wrappedRenderChannel->GetActiveRenderTarget()->Height();
+}
+
+// **************************
+//
+TextureFormat       VideoInputChannel::GetFormat                   () const
+{
+    return m_wrappedRenderChannel->GetActiveRenderTarget()->Format();
+}
+
+// **************************
+//
+SizeType             VideoInputChannel::GetRawFrameSize             () const
+{
+    return m_wrappedRenderChannel->GetActiveRenderTarget()->ColorTexture( 0 )->RawFrameSize();
+}
+
 } // nrl
 } // bv
