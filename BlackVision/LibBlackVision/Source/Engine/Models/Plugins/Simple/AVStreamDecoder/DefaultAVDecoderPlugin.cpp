@@ -136,6 +136,9 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 
     m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );
 
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+    m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
+
     SetPrevPlugin( prev );
 
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
@@ -151,9 +154,6 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 	m_gainParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::GAIN ) );
 
     m_decoderMode =  m_decoderModeParam->Evaluate();
-
-	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
-	m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< AVAssetDesc >() );
 }
