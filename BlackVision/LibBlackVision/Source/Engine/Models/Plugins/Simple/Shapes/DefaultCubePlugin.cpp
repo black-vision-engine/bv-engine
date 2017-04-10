@@ -83,15 +83,19 @@ namespace Generator
     glm::vec3               centerTranslate;
     bool                    smooth;
 
-    DefaultCubePlugin::MappingType     mapping_type;
+    DefaultCubePlugin::MappingType     mappingType;
 
 
+    // ***********************
+    //
     template < typename T >
     int sign( T val )
     {
         return ( T( 0 ) < val ) - ( val < T( 0 ) );
     }
 
+    // ***********************
+    //
     glm::vec3 computeWeightCenter( DefaultCubePlugin::WeightCenter centerX, DefaultCubePlugin::WeightCenter centerY, DefaultCubePlugin::WeightCenter centerZ )
     {
         glm::vec3 centerTranslate = glm::vec3( 0.0f, 0.0f, 0.0f );
@@ -120,6 +124,8 @@ namespace Generator
         return centerTranslate;
     }
 
+    // ***********************
+    //
     enum CubicMappingPlane
     {
         PLUS_X = 3,
@@ -130,6 +136,8 @@ namespace Generator
         MINUS_Z = 5
     };
 
+    // ***********************
+    //
     float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remainingValues )
     {
         float max = 0;
@@ -170,6 +178,8 @@ namespace Generator
         return max;
     }
 
+    // ***********************
+    //
     glm::vec2 makeUV( glm::vec2 pre_uv_coords, CubicMappingPlane plane )
     {
         glm::vec2 uv_translate;
@@ -190,6 +200,8 @@ namespace Generator
         return uv_coords + uv_translate;
     }
 
+    // ***********************
+    //
     glm::vec2 computeUV( glm::vec3 position )
     {
         CubicMappingPlane plane;
@@ -203,67 +215,6 @@ namespace Generator
     }
 
 
-    class SideComp : public IGeometryNormalsUVsGenerator
-    {
-        double d;
-    public:
-
-        void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
-        {
-            CubicMappingPlane mappingPlane;
-            if( d < 0 )
-                mappingPlane = CubicMappingPlane::MINUS_Z;
-            else
-                mappingPlane = CubicMappingPlane::PLUS_Z;
-
-            double w = dims.x / 2 - bevel,
-                h = dims.y / 2 - bevel;
-
-
-            if( d > 0 )
-            {
-                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-
-                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-            }
-            else
-            {
-                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-
-                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-            }
-
-
-            float bevelUV1 = bevel / dims.x;
-            float bevelUV2 = bevel / dims.y;
-            glm::vec2 preUV1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
-            glm::vec2 preUV2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
-            glm::vec2 preUV3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
-            glm::vec2 preUV4 = glm::vec2( bevelUV2, bevelUV1 );
-
-
-            uvs->AddAttribute( makeUV( preUV1, mappingPlane ) );
-            uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
-            uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
-
-            uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
-            uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
-            uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
-
-            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
-        }
-
-        SideComp( double d_ ) : d( d_ ) { }
-    };
-
     class MainComp : public IGeometryNormalsUVsGenerator
     {
         glm::vec3 **v;
@@ -272,6 +223,8 @@ namespace Generator
         int n, m;
     public:
 
+        // ***********************
+        //
         void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
             Init();
@@ -279,9 +232,14 @@ namespace Generator
             CopyV( verts, uvs, normals );
             Deinit();
 
-            //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+            double depth = Generator::dims.z / 2;
+
+            GenerateSideFace( depth, verts, normals, uvs );
+            GenerateSideFace( -depth, verts, normals, uvs );
         }
 
+        // ***********************
+        //
         void Init()
         {
             // It's a little hackisch. We should implement constraints in paramters.
@@ -308,6 +266,8 @@ namespace Generator
             }
         }
 
+        // ***********************
+        //
         void Deinit()
         {
             for( int i = 0; i < n; i++ )
@@ -321,6 +281,8 @@ namespace Generator
             delete[] coords;
         }
 
+        // ***********************
+        //
         glm::vec2 getUV( float bevel1, float bevel2, bool inverseU, bool inverseV )
         {
             float u = bevel1;
@@ -733,6 +695,59 @@ namespace Generator
             GenerateBevelLineUV( n - 1, 3, 0, true );
 
         }
+
+        // ***********************
+        //
+        void        GenerateSideFace        ( double d, Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs )
+        {
+            CubicMappingPlane mappingPlane;
+            if( d < 0 )
+                mappingPlane = CubicMappingPlane::MINUS_Z;
+            else
+                mappingPlane = CubicMappingPlane::PLUS_Z;
+
+            double w = dims.x / 2 - bevel,
+                h = dims.y / 2 - bevel;
+
+
+            if( d > 0 )
+            {
+                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+
+                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+            }
+            else
+            {
+                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+
+                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+            }
+
+
+            float bevelUV1 = bevel / dims.x;
+            float bevelUV2 = bevel / dims.y;
+            glm::vec2 preUV1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
+            glm::vec2 preUV2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
+            glm::vec2 preUV3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
+            glm::vec2 preUV4 = glm::vec2( bevelUV2, bevelUV1 );
+
+
+            uvs->AddAttribute( makeUV( preUV1, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
+
+            uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
+        }
     };
 }
 
@@ -748,14 +763,10 @@ std::vector<IGeometryGeneratorPtr>    DefaultCubePlugin::GetGenerators()
 																	m_weightCenterX->Evaluate(),
 																	m_weightCenterY->Evaluate(),
 																	m_weightCenterZ->Evaluate() );
-	Generator::mapping_type = m_mappingType->Evaluate();
-    
-    double depth = Generator::dims.z/2;
-    
+	Generator::mappingType = m_mappingType->Evaluate();
+
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( std::make_shared< Generator::MainComp >() );
-    gens.push_back( std::make_shared< Generator::SideComp >( depth ) );
-    gens.push_back( std::make_shared< Generator::SideComp >( -depth ) );
     return gens;
 }
 
