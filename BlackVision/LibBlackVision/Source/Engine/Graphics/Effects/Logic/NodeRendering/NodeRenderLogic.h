@@ -14,7 +14,7 @@ class AudioRenderer;
 
 }
 
-namespace nrl {
+
 
 class RenderContext;
 
@@ -64,5 +64,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

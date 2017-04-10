@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffectPass : public NodeEffectRenderPass
 {
@@ -33,5 +33,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

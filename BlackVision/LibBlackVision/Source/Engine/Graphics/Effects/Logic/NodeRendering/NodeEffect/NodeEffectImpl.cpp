@@ -5,11 +5,11 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffectRenderLogic.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
-NodeEffectImpl::NodeEffectImpl ( NodeEffectRenderLogic * renderLogic, NNodeEffectType type )
+NodeEffectImpl::NodeEffectImpl ( NodeEffectRenderLogic * renderLogic, NodeEffectType type )
     : NodeEffect( type )
     , m_nodeEffectRenderLogic( renderLogic )
 {
@@ -64,5 +64,5 @@ float       NodeEffectImpl::GetDepth_DIRTY_DESIGN_HACK() const
     return m_nodeEffectRenderLogic->GetDepth_DIRTY_DESIGN_HACK();
 }
 
-} // nrl
+
 } // bv

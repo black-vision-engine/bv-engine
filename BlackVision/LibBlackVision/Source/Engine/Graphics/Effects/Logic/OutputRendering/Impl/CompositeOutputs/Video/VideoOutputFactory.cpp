@@ -7,7 +7,7 @@
 #include <unordered_set>
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 struct OutputStaticDataHash
 {
@@ -128,5 +128,5 @@ OutputStaticDataVec VideoOutputFactory::ReadUniqueStaticDataVec     ( const std:
     return res;
 }
 
-} // nrl
+
 } // bv

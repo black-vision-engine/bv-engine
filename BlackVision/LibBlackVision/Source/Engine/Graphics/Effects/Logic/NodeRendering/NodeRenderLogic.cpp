@@ -13,7 +13,7 @@
 #include "Engine/Audio/AudioRenderer.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -32,7 +32,7 @@ void    NodeRenderLogic::RenderAudio       ( Scene * scene, RenderContext * ctx 
 
     if( rootNode )
     {
-        RenderAudio( rootNode, audio( ctx ) );
+        RenderAudio( rootNode, aud( ctx ) );
     }
 }
 
@@ -123,22 +123,22 @@ void    NodeRenderLogic::Render            ( SceneNode * node, const RenderTarge
 void     NodeRenderLogic::RenderImpl      ( SceneNode * node, RenderContext * ctx )
 {
     // FIXME: nrl transition
-    auto nEffect = node->IsNNodeEffectEnabled() ? node->GetNNodeEffect() : nullptr;
+    auto nEffect = node->IsNodeEffectEnabled() ? node->GetNodeEffect() : nullptr;
     auto repr   = node->GetRepr();
 
     if( nEffect )
     {
         // FIXME: nrl - remove whem all effects are implemented in nrl
         //RenderImpl( repr, ctx );
-        assert( nEffect->GetType() == nrl::NNodeEffectType::NNET_DEFAULT ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_ALPHA_MASK ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_NODE_MASK ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_BLUR ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_LIGHT_SCATTERING ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_SHADOW ||
-                nEffect->GetType() == nrl::NNodeEffectType::NNET_Z_SORT ||
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_GLOW || 
-				nEffect->GetType() == nrl::NNodeEffectType::NNET_SOFT_MASK
+        assert( nEffect->GetType() == NodeEffectType::NET_DEFAULT ||
+				nEffect->GetType() == NodeEffectType::NET_ALPHA_MASK ||
+				nEffect->GetType() == NodeEffectType::NET_NODE_MASK ||
+				nEffect->GetType() == NodeEffectType::NET_BLUR ||
+				nEffect->GetType() == NodeEffectType::NET_LIGHT_SCATTERING ||
+				nEffect->GetType() == NodeEffectType::NET_SHADOW ||
+                nEffect->GetType() == NodeEffectType::NET_Z_SORT ||
+				nEffect->GetType() == NodeEffectType::NET_GLOW || 
+				nEffect->GetType() == NodeEffectType::NET_SOFT_MASK
 				);
 
         nEffect->Render( repr, ctx ); //FIXME: test and implement
@@ -264,5 +264,5 @@ void     NodeRenderLogic::RenderBoundingBox( SceneNode * node, RenderContext * c
 
 }
 
-} // nrl
+
 } // bv

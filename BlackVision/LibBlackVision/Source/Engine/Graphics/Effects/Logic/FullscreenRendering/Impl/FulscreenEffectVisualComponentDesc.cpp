@@ -3,7 +3,7 @@
 #include "FulscreenEffectVisualComponentDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -119,5 +119,5 @@ void                                    FullscreenEffectVisualComponentDesc::Set
     m_componentState->AccessRendererState().SetCullFlag( flag );
 }
 
-} // nrl
+
 } // bv

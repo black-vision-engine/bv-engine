@@ -9,7 +9,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -125,4 +125,4 @@ std::set< const audio::AudioEntity * > & RenderChannel::AccessRenderChannelAudio
 }
 
 } //bv
-} //nrl
+

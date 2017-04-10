@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannel.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -230,5 +230,5 @@ bool                        VideoInputChannelsData::ContainsValidData       ( un
     return m_originalRenderedChannelsData->ContainsValidData( vc->GetWrappedChannel() );
 }
 
-} //nrl
+
 } //bv

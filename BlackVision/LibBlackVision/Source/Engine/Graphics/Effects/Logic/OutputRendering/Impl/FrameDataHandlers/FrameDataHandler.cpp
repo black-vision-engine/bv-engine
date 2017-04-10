@@ -3,7 +3,7 @@
 #include "FrameDataHandler.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -11,5 +11,5 @@ FrameDataHandler::~FrameDataHandler   ()
 {
 }
 
-} //nrl
+
 } //bv

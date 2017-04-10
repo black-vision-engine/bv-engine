@@ -17,9 +17,9 @@ namespace bv { namespace {
 //
 bool HasEffect( SceneNode * node )
 {
-    auto neffect = node->GetNNodeEffect();
+    auto neffect = node->GetNodeEffect();
 
-    if( node->IsNNodeEffectEnabled() && neffect != nullptr && neffect->GetType() != nrl::NNodeEffectType::NNET_DEFAULT )
+    if( node->IsNodeEffectEnabled() && neffect != nullptr && neffect->GetType() != NodeEffectType::NET_DEFAULT )
     {
         return true;
     }
@@ -43,12 +43,12 @@ RenderingQueue::~RenderingQueue()
 
 // ***********************
 //
-float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl::RenderContext * ctx )
+float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, RenderContext * ctx )
 {
     if( HasEffect( node ) )
     {
         // Let effect compute z for itself instead of using bounding box.
-        auto effect = node->GetNNodeEffect();
+        auto effect = node->GetNodeEffect();
         if( effect )
         {
             if( effect->IsDepthOverriden_DIRTY_DESIGN_HACK() )
@@ -64,7 +64,7 @@ float               RenderingQueue::ComputeNodeZ        ( SceneNode * node, nrl:
 
 // ***********************
 //
-float               RenderingQueue::ComputeNodeZ        ( SceneNodeRepr * nodeRepr, nrl::RenderContext * ctx )
+float               RenderingQueue::ComputeNodeZ        ( SceneNodeRepr * nodeRepr, RenderContext * ctx )
 {
     float z = 0.0f;
 
@@ -90,7 +90,8 @@ bool                RenderingQueue::IsTransparent       ( SceneNode * node )
 {
     if( HasEffect( node ) )
     {
-        auto effect = node->GetNNodeEffect();
+        auto effect = node->GetNodeEffect();
+
         if( effect )
         {
             return effect->IsBlendable_DIRTY_DESIGN_HACK();
@@ -123,7 +124,7 @@ bool                RenderingQueue::IsTransparent       ( SceneNodeRepr * nodeRe
 
 // ***********************
 // 
-void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl::RenderContext * ctx )
+void                RenderingQueue::QueueSingleNode     ( SceneNode * node, RenderContext * ctx )
 {
     BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
 
@@ -143,7 +144,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl:
     // FIXME: bb color should be configured externally to the node bot let it be that way for the time being
     if( node->IsSelected() && Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr  )
     {
-        nrl::NodeRenderLogic::RenderBoundingBox( node, ctx );
+        NodeRenderLogic::RenderBoundingBox( node, ctx );
     }
 
     END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
@@ -151,7 +152,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, nrl:
 
 // ***********************
 //
-void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRepr, nrl::RenderContext * ctx )
+void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRepr, RenderContext * ctx )
 {
     BEGIN_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), nodeRepr );
 
@@ -171,7 +172,7 @@ void                RenderingQueue::QueueSingleNode     ( SceneNodeRepr * nodeRe
 
 // ***********************
 //
-void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl::RenderContext * ctx )
+void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, RenderContext * ctx )
 {
     if( node->IsVisible() )
     {
@@ -190,7 +191,7 @@ void                RenderingQueue::QueueNodeSubtree    ( SceneNode * node, nrl:
 
 // ***********************
 //
-void                RenderingQueue::QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, nrl::RenderContext * ctx )
+void                RenderingQueue::QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, RenderContext * ctx )
 {
     QueueSingleNode( nodeRepr, ctx );
 
@@ -234,7 +235,7 @@ void                RenderingQueue::QueueOpaque         ( SceneNodeRepr * node, 
 
 // ***********************
 //
-void                RenderingQueue::Render              ( nrl::RenderContext * ctx )
+void                RenderingQueue::Render              ( RenderContext * ctx )
 {
     // Opaque objects from front to back.
     for( auto & renderItem : m_opaqueNodes )
@@ -263,7 +264,7 @@ void                RenderingQueue::ClearQueue          ()
 
 // ***********************
 //
-void                RenderingQueue::RenderNode          ( RenderingQueue::RenderItem & renderItem, nrl::RenderContext * ctx )
+void                RenderingQueue::RenderNode          ( RenderingQueue::RenderItem & renderItem, RenderContext * ctx )
 {
     // Function doesn't check if node is visible, beacause all nodes in m_transparentNodes
     // and m_opaqueNodes are visible. This have been checked in QueueNodeSubtree
@@ -276,11 +277,11 @@ void                RenderingQueue::RenderNode          ( RenderingQueue::Render
     if( renderItem.UseEffect )
     {
         auto ownerNode = renderItem.Node->GetOwnerNode();
-        nrl::NodeRenderLogic::Render( ownerNode, ctx );
+        NodeRenderLogic::Render( ownerNode, ctx );
     }
     else
     {
-        nrl::NodeRenderLogic::RenderRoot( renderItem.Node, ctx );
+        NodeRenderLogic::RenderRoot( renderItem.Node, ctx );
     }
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );

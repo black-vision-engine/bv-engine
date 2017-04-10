@@ -9,7 +9,7 @@ namespace bv {
 
 class SceneNodeRepr;
 
-namespace nrl {
+
 
 class RenderContext;
 class NodeEffectRenderPass;
@@ -44,5 +44,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

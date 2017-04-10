@@ -11,7 +11,7 @@ class Camera;
 class Renderer;
 class RenderTarget;
 
-namespace nrl {
+
 
 class RenderContext;
 
@@ -87,5 +87,5 @@ private:
 
 };
 
-} //nrl
+
 } //bv

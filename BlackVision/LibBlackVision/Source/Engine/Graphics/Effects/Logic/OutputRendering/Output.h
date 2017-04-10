@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/State/OutputState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 enum class CustomOutputType : unsigned int
 {
@@ -35,5 +35,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

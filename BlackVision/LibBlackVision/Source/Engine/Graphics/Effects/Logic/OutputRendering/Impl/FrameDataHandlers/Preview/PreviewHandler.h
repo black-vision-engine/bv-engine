@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffect.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
    
 class PreviewHandler : public FrameDataHandler
 {
@@ -29,5 +29,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

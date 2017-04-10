@@ -15,7 +15,7 @@
 #include <cmath>
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -312,5 +312,5 @@ void                    BlurFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set<
     m_simpleBlitEffect->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

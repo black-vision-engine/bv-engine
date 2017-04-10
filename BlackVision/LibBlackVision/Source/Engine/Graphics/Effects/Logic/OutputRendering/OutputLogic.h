@@ -10,7 +10,7 @@
 
 namespace bv { 
     
-namespace nrl {
+
 
 class RenderContext;
 
@@ -47,5 +47,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

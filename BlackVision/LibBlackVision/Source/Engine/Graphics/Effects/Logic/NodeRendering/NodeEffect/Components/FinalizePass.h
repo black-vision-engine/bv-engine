@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FinalizeStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FinalizePass : public NodeEffectRenderPass
 {
@@ -31,5 +31,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

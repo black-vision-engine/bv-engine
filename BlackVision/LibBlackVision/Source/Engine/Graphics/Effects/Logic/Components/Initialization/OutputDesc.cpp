@@ -3,7 +3,7 @@
 #include "OutputDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -112,5 +112,5 @@ void                        OutputDesc::SetEnabled                          ( bo
     m_isEnabled = isEnabled;
 }
 
-} //nrl
+
 } //bv

@@ -13,7 +13,7 @@
 #include "Engine/Types/Values/ValuesFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -110,5 +110,5 @@ bool    GlowPreFSEStep::IsFinal                   ( SceneNodeRepr * ) const
 
 }
 
-} // nrl
+
 } // bv

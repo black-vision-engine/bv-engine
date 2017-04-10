@@ -3,7 +3,7 @@
 #include "RenderLogicState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -54,5 +54,5 @@ void                            RenderLogicState::Initialize                    
     m_initialized = true;
 }
 
-} // nrl
+
 } // bv

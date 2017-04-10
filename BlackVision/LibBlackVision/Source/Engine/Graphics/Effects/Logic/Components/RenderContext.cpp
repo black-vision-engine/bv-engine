@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
 
-namespace bv { namespace nrl { 
+namespace bv {  
 
 
 // ***************************
@@ -137,5 +137,5 @@ void                            RenderContext::SetBoundRenderTarget			( const Re
     m_boundRenderTarget = rt;
 }
 
-} // nrl
+
 } // bv

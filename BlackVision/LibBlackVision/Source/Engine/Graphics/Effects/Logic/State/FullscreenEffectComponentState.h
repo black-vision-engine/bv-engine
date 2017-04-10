@@ -6,7 +6,7 @@
 // #include "Engine/Graphics/Effects/Logic/State/RenderedData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffectComponentState : public RenderComponentState
 {
@@ -45,5 +45,5 @@ private:
 DEFINE_PTR_TYPE(FullscreenEffectComponentState)
 DEFINE_CONST_PTR_TYPE(FullscreenEffectComponentState)
 
-} // nrl
+
 } // bv

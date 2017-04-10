@@ -3,7 +3,7 @@
 #include "OutputStaticData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -23,5 +23,5 @@ OutputStaticData::OutputStaticData()
 {
 }
 
-} //nrl
+
 } //bv

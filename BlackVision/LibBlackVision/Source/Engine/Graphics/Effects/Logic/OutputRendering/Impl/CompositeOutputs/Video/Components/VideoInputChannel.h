@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 //////////////////////////////////////
 // Wrapper for render channels - keeps track of readback textures
@@ -43,4 +43,4 @@ public:
 };
 
 } //bv
-} //nrl
+

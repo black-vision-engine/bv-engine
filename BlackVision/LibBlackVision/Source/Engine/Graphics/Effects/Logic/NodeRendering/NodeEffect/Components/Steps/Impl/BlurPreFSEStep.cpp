@@ -13,7 +13,7 @@
 #include "Engine/Types/Values/ValuesFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -93,5 +93,5 @@ bool    BlurPreFSEStep::IsFinal                   ( SceneNodeRepr * ) const
 
 }
 
-} // nrl
+
 } // bv

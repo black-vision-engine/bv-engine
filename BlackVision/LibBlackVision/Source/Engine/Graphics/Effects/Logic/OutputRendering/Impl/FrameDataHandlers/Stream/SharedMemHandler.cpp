@@ -10,7 +10,7 @@
 #include "Engine/Graphics/Effects/Logic/State/OutputState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
    
 // **************************
 //
@@ -110,5 +110,5 @@ Texture2DPtr    SharedMemHandler::ReadMixChannelsTexture                        
     return m_shmTexture;
 }
 
-} //nrl
+
 } //bv

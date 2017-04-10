@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/State/RenderedData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -35,5 +35,5 @@ void    CompositeFullscreenEffectInstance::SyncDynamicInput            ( const R
     { dynamicInput; }
 }
 
-} // nrl
+
 } // bv

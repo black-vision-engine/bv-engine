@@ -13,7 +13,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -86,5 +86,5 @@ void                LightScatteringFSEStep::AppendRenderPasses_DIRTY_HACK   ( st
     m_lsEffect->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

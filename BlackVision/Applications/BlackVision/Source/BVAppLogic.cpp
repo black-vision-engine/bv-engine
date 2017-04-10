@@ -74,10 +74,10 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
     
     // FIXME: nrl - pass all those arguments in a struct
-    // m_renderLogic = new nrl::RenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // m_renderLogic = new RenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
     // FIXME: prepare descriptor here
 
-    m_renderLogic = nrl::RenderLogicInitializer::CreateInstance( DefaultConfig );
+    m_renderLogic = RenderLogicInitializer::CreateInstance( DefaultConfig );
 
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
@@ -486,7 +486,7 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-nrl::RenderLogic *             BVAppLogic::GetRenderLogic      () const
+RenderLogic *             BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
 }

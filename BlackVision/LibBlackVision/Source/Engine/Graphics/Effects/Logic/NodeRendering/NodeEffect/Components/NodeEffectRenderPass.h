@@ -7,7 +7,7 @@ namespace bv {
 
 class SceneNodeRepr;
 
-namespace nrl {
+
 
 class RenderContext;
 
@@ -30,5 +30,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

@@ -13,7 +13,7 @@
 #include "Engine/Types/Values/ValuesFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 namespace {
 
@@ -161,5 +161,5 @@ int     NodeMaskPreFSEStep::GetFgIdx                   () const
     return QueryTypedValue< ValueIntPtr >( val )->GetValue();
 }
 
-} // nrl
+
 } // bv

@@ -10,7 +10,7 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class VideoInputChannelsData
 {
@@ -68,5 +68,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

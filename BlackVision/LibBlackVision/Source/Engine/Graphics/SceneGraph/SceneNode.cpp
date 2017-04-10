@@ -22,7 +22,7 @@ namespace bv {
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_repr( new SceneNodeRepr( transformable, this ) )
     , m_drawBoundingBox( false )
-    , m_NNodeEffectEnabled( true ) // FIXME: enabled by default - is this right?
+    , m_nodeEffectEnabled( true ) // FIXME: enabled by default - is this right?
     , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
 {
 }
@@ -113,37 +113,37 @@ void            SceneNode::SetAudio             ( audio::AudioEntity * audio )
 
 // ********************************
 //
-bool            SceneNode::IsNNodeEffectEnabled () const
+bool            SceneNode::IsNodeEffectEnabled () const
 {
-    return m_NNodeEffectEnabled;
+    return m_nodeEffectEnabled;
 }
 
 // ********************************
 //
-void            SceneNode::EnableNNodeEffect    ()
+void            SceneNode::EnableNodeEffect     ()
 {
-    m_NNodeEffectEnabled = true;
+    m_nodeEffectEnabled = true;
 }
 
 // ********************************
 //
-void            SceneNode::DisableNNodeEffect   ()
+void            SceneNode::DisableNodeEffect    ()
 {
-    m_NNodeEffectEnabled = false;
+    m_nodeEffectEnabled = false;
 }
 
 // ********************************
 //
-nrl::NodeEffectPtr     SceneNode::GetNNodeEffect   ()
+NodeEffectPtr   SceneNode::GetNodeEffect        ()
 {
-    return m_nNodeEffect;
+    return m_nodeEffect;
 }
 
 // ********************************
 //
-void                    SceneNode::SetNNodeEffect   ( nrl::NodeEffectPtr nNodeEffect )
+void                    SceneNode::SetNodeEffect   ( NodeEffectPtr nodeEffect )
 {
-    m_nNodeEffect = nNodeEffect;
+    m_nodeEffect = nodeEffect;
 }
 
 // ********************************

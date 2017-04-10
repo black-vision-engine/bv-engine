@@ -3,7 +3,7 @@
 #include "FullscreenEffectRendererState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -57,5 +57,5 @@ void    FullscreenEffectRendererState::SetCullFlag                     ( bool fl
 }
 
 
-} //nrl
+
 } //bv

@@ -3,7 +3,7 @@
 #include "FullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -39,6 +39,6 @@ void    FullscreenEffectStep::FreeRenderTargets( RenderContext * ctx, const Rend
     { ctx; input; }
 }
 
-} // nrl
+
 } // bv
 

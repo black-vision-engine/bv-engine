@@ -23,7 +23,7 @@
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 namespace {
 
@@ -414,5 +414,5 @@ glm::vec2                                       FullscreenEffectHelpers::BottomR
     return glm::vec2( 1.f, 0.f );
 }
 
-} //nrl
+
 } //bv

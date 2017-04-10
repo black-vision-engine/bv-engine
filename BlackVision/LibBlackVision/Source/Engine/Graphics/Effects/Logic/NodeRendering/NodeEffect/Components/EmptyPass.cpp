@@ -3,7 +3,7 @@
 #include "EmptyPass.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -51,5 +51,5 @@ void        EmptyPass::AppendRenderPasses_DIRTY_HACK   ( std::set< const Rendera
     { passes; }
 }
 
-} // nrl
+
 } // bv

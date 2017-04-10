@@ -9,7 +9,7 @@
 #include "Engine/Types/Values/TypedValues.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -92,5 +92,5 @@ float   AlphaMaskPreFSEStep::GetAlpha                  () const
     return QueryTypedValue< ValueFloatPtr >( val )->GetValue();
 }
 
-} // nrl
+
 } // bv

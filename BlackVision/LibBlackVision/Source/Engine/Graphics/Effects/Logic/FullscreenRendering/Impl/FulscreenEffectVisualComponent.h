@@ -11,7 +11,7 @@ class TriangleStrip;
 class Shader;
 class Renderer;
 
-namespace nrl {
+
 
 class FullscreenEffectVisualComponent
 {
@@ -61,5 +61,5 @@ private:
 
 };
 
-} //nrl
+
 } //bv

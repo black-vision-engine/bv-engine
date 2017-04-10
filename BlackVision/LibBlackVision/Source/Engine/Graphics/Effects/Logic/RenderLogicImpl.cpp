@@ -5,7 +5,7 @@
 #include "Engine/Audio/AudioRenderer.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -119,5 +119,5 @@ RenderLogicImpl *  RenderLogicImpl::Create        ( RenderLogicDesc & desc )
     return impl;
 }
 
-} //nrl
+
 } //bv

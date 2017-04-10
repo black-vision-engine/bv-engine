@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/FrameDataHandlers/FrameDataHandler.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -85,5 +85,5 @@ void            OutputInstance::SyncHandlerState        ()
     QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
 }
 
-} //nrl
+
 } //bv

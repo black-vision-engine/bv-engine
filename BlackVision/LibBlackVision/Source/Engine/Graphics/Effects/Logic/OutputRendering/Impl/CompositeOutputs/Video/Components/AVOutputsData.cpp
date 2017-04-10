@@ -5,7 +5,7 @@
 #include "AVOutputsData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -37,4 +37,4 @@ unsigned int    AVOutputsData::GetNumEntries   () const
 }
 
 } //bv
-} //nrl
+

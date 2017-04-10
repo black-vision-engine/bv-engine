@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/RenderStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FinalizeStep : public RenderStep
 {
@@ -25,5 +25,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

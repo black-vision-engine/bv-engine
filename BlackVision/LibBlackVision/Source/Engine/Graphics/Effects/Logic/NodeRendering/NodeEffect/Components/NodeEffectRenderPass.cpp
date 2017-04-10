@@ -3,7 +3,7 @@
 #include "NodeEffectRenderPass.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -11,5 +11,5 @@ NodeEffectRenderPass::~NodeEffectRenderPass   ()
 {
 }
 
-} // nrl
+
 } // bv

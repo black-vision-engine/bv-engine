@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/State/RenderedData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffect;
 
@@ -32,5 +32,5 @@ protected:
 
 };
 
-} // nrl
+
 } // bv

@@ -6,11 +6,11 @@
 #include "NodeEffectImpl.h"
 
 
-namespace bv { namespace nrl  {
+namespace bv {
 
 // *********************************
 //
-NodeEffect::NodeEffect     ( NNodeEffectType type )
+NodeEffect::NodeEffect     ( NodeEffectType type )
     : m_type( type )
 {
 }
@@ -23,10 +23,9 @@ NodeEffect::~NodeEffect    ()
 
 // *********************************
 //
-NNodeEffectType     NodeEffect::GetType         () const
+NodeEffectType     NodeEffect::GetType         () const
 {
     return m_type;
 }
 
-} //nrl
 } //bv

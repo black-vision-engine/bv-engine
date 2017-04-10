@@ -4,7 +4,7 @@
 #include "BVConfig.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderedChannelsDataDesc;
 class OutputLogicDesc;
@@ -27,5 +27,5 @@ private:
 
 };
 
-} // nrl
+
 } // bv

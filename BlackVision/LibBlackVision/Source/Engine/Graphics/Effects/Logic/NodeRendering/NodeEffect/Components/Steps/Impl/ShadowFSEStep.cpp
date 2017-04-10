@@ -13,7 +13,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -186,5 +186,5 @@ void                ShadowFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set< c
     m_shadowEffect->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

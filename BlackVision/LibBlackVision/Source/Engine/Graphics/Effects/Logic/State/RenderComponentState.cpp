@@ -5,7 +5,7 @@
 #include "Engine/Types/Values/TypedValues.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -297,5 +297,5 @@ void                RenderComponentState::SetSyncValues    ()
     SetSyncValues( true );
 }
 
-} // nrl
+
 } // bv

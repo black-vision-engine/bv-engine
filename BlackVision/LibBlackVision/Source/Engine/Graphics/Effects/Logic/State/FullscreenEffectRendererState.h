@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffectRendererState
 {
@@ -25,5 +25,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

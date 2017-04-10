@@ -3,7 +3,7 @@
 #include "FullscreenEffectComponentState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -95,5 +95,5 @@ void        FullscreenEffectComponentState::SetSyncRendererState               (
     SetSyncRendererState( true );
 }
 
-} // nrl
+
 } // bv

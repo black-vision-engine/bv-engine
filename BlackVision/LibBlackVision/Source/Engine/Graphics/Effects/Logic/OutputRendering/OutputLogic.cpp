@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -77,5 +77,5 @@ OutputLogic *       OutputLogic::Create                 ( OutputLogicDesc & desc
     return res;
 }
 
-} //nrl
+
 } //bv

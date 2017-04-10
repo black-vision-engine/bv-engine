@@ -3,7 +3,7 @@
 #include "FullscreenEffectInstance.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -20,5 +20,5 @@ void    FullscreenEffectInstance::Render                       ( RenderContext *
     Render( ctx );
 }
 
-} // nrl
+
 } // bv

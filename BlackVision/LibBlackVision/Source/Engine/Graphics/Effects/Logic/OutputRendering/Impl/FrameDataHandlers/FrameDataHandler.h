@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/State/FullscreenEffectComponentState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
    
 class OutputState;
 class RenderChannel;
@@ -23,5 +23,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

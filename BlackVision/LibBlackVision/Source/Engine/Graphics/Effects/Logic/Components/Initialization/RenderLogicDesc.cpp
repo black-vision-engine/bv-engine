@@ -3,7 +3,7 @@
 #include "RenderLogicDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -76,5 +76,5 @@ void                            RenderLogicDesc::SetNumTrackedRenderTargets     
     m_numTrackedRenderTargets = numRenderTargets;
 }
 
-} //nrl
+
 } //bv

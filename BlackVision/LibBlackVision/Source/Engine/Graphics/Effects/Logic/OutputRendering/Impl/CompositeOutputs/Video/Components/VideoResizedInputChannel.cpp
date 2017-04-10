@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -60,5 +60,5 @@ void            VideoResizedInputChannel::InvalidateCachedTexture   () const
     m_cachedReadbackUpToDate = false;
 }
 
-} // nrl
+
 } // bv

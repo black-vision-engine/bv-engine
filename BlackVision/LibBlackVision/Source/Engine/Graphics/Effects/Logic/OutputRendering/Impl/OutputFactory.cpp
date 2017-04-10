@@ -11,7 +11,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/OutputInstance.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 namespace {
 
@@ -131,5 +131,5 @@ Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
     return nullptr;
 }
 
-} // nrl
+
 } // bv

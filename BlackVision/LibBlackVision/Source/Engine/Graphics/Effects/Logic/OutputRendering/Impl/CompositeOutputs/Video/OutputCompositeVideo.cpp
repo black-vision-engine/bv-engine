@@ -5,7 +5,7 @@
 
 // FIXME: make sure that after each frame all VideoInputChannels are invalidated (so that no cached textures are used next frame)
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -43,5 +43,5 @@ OutputCompositeVideo *  OutputCompositeVideo::Create                ( unsigned i
     return res;
 }
 
-} //nrl
+
 } //bv

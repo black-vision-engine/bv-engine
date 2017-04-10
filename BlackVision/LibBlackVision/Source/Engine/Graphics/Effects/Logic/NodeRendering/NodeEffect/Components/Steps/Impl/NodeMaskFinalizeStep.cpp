@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -31,5 +31,5 @@ bool    NodeMaskFinalizeStep::IsIdle               ( SceneNodeRepr * nodeRepr ) 
     return nodeRepr->NumChildNodes() <= 2;
 }
 
-} // nrl
+
 } // bv

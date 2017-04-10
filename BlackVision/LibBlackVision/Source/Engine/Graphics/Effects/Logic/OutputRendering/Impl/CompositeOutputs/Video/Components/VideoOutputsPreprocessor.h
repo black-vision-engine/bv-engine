@@ -14,7 +14,7 @@ class AudioRenderer;
 
 }
 
-namespace nrl {
+
 
 class VideoOutputsPreprocessor
 {
@@ -43,4 +43,4 @@ private:
 };
 
 } //bv
-} //nrl
+

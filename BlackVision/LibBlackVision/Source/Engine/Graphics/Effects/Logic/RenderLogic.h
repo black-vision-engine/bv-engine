@@ -15,7 +15,6 @@ class AudioRenderer;
 
 }
 
-namespace nrl {
 
 class OutputLogic;
 class RenderedChannelsData;
@@ -38,5 +37,4 @@ public:
 
 };
 
-} // nrl
 } // bv

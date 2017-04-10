@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderLogicState
 {
@@ -54,5 +54,5 @@ inline RenderQueueStackAllocator *		render_queu_allocator   ( RenderLogicState &
     return state.GetRenderQueueStackAllocator();
 }
 
-} // nrl
+
 } // bv

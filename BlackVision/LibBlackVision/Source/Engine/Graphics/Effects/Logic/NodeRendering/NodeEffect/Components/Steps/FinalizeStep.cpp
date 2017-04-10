@@ -3,7 +3,7 @@
 #include "FinalizeStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -36,5 +36,5 @@ bool    FinalizeStep::IsFinal          ( SceneNodeRepr * nodeRepr ) const
     return true;
 }
 
-} // nrl
+
 } // bv

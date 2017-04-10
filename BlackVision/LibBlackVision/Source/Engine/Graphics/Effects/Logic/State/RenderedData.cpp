@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -72,5 +72,5 @@ unsigned int            RenderedData::GetLastRenderTargetIdx   () const
     return m_lastRenderTargetIdx;
 }
 
-} //nrl
+
 } //bv

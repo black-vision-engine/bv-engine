@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/OutputFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -23,5 +23,5 @@ Output *     Output::Create ( const OutputDesc & desc )
     return res;
 }
 
-} //nrl
+
 } //bv

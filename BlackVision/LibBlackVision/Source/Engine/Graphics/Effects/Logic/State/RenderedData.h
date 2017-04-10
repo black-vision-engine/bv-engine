@@ -7,7 +7,7 @@ namespace bv {
 
 class RenderTarget;
 
-namespace nrl {
+
 
 typedef std::vector< const RenderTarget * > RenderTargetVec;
 
@@ -36,5 +36,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

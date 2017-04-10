@@ -19,7 +19,7 @@
 #include "Engine/Models/Updaters/ShaderParamUpdater.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 // FIXME: nrl - values are passed here from FSE state which is not the best possible approach
@@ -244,5 +244,5 @@ void            FullscreenEffectVisualComponent::SyncStaticTexture              
 	SyncSampler( i, tex.GetSamplerName(), tex.GetFilteringMode(), tex.GetWrappingModeX(), tex.GetWrappingModeY() );
 }
 
-} //nrl
+
 } //bv

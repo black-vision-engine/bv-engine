@@ -3,7 +3,7 @@
 #include "FullscreenVSShader.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // ********************************
 //
@@ -175,5 +175,5 @@ std::string     FullscreenVSShader::GenerateMainEnd                ()
     return "}\n";
 }
 
-} //nrl
+
 } //bv

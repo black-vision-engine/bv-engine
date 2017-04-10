@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class NodeEffectRenderLogic;
 
@@ -15,7 +15,7 @@ private:
 
 public:
     
-                        NodeEffectImpl ( NodeEffectRenderLogic * renderLogic, NNodeEffectType type );
+                        NodeEffectImpl ( NodeEffectRenderLogic * renderLogic, NodeEffectType type );
                         ~NodeEffectImpl(); 
 
     virtual void        Render          ( SceneNodeRepr * node, RenderContext * ctx ) override;
@@ -32,5 +32,5 @@ public:
     virtual float			GetDepth_DIRTY_DESIGN_HACK		    () const override;
 };
 
-} // nrl
+
 } // bv

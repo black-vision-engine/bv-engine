@@ -8,7 +8,7 @@
 #include "Assets/Texture/TextureUtils.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -100,5 +100,5 @@ VideoInputChannel *  VideoInputChannel::Create                  ( const RenderCh
     return res;
 }
 
-} // nrl
+
 } // bv

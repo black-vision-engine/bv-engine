@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class SamplerEntry
 {
@@ -45,5 +45,5 @@ public:
 
 typedef std::vector< SamplerEntry > SamplerEntryVec;
 
-} // nrl
+
 } // bv

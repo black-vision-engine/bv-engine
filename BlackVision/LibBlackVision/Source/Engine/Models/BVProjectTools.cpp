@@ -151,12 +151,12 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     {
         auto nNodeEffectType = modelNodeEffect->GetType();
 
-        node->SetNNodeEffect( nrl::CreateNodeEffect( nNodeEffectType ) );
+        node->SetNodeEffect( CreateNodeEffect( nNodeEffectType ) );
     }
     else
     {
-        auto nodeEffectType = nrl::NNodeEffectType::NNET_DEFAULT;
-        node->SetNNodeEffect( nrl::CreateNodeEffect( nodeEffectType ) );
+        auto nodeEffectType = NodeEffectType::NET_DEFAULT;
+        node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
     }
 }
 // *******************************
@@ -614,7 +614,7 @@ ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model
 //
 void                 BVProjectTools::UpdateEffectAssetData               ( SceneNode * node, model::BasicNodePtr modelNode )
 {
-    auto effect = node->GetNNodeEffect();
+    auto effect = node->GetNodeEffect();
     auto modelEffect = modelNode->GetNodeEffect();
 
     if( modelEffect != nullptr )

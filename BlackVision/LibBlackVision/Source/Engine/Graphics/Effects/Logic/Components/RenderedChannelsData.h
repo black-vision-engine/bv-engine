@@ -13,7 +13,7 @@ namespace bv {
 class RenderTargetStackAllocator;
 class RenderTarget;
 
-namespace nrl {
+
 
 // FIXME: nrl - implement (if necessary) additional logic to cache readback textures - or move this logic somewhere else
 class RenderedChannelsData
@@ -60,5 +60,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

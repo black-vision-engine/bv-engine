@@ -18,7 +18,7 @@
 
 
 namespace bv {
-namespace nrl {
+
 
 
 // ***********************
@@ -138,5 +138,5 @@ void    OutputScreenshot::RemoveFinalizedRequests()
 
 
 
-} //nrl
+
 } //bv

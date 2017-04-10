@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderLogicDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -170,5 +170,5 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     }
 }
 
-} // nrl
+
 } // bv

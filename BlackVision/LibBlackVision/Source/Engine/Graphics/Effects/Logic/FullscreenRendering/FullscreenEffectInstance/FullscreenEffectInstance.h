@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/State/FullscreenEffectComponentState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderContext;
 
@@ -32,5 +32,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

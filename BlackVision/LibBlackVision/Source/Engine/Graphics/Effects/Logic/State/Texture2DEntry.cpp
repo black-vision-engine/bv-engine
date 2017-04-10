@@ -3,7 +3,7 @@
 #include "Texture2DEntry.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -97,5 +97,5 @@ void                    Texture2DEntry::Set            ( Texture2DPtr tex, const
     m_samplerEntry.Set( samplerName, wrapX, wrapY, filteringMode );
 }
 
-} // nrl
+
 } // bv

@@ -3,9 +3,9 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
-NodeEffectPtr   CreateNodeEffect( NNodeEffectType nnodeEffectType );
+NodeEffectPtr   CreateNodeEffect( NodeEffectType nodeEffectType );
 
-} //nrl
+
 } //bv

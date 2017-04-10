@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderChannel.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderedChannelsDataDesc
 {
@@ -29,5 +29,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

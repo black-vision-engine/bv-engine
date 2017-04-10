@@ -3,7 +3,7 @@
 #include "PreFullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -44,6 +44,6 @@ void                    PreFullscreenEffectStep::AllocateRenderTargets ( RenderC
     { ctx; }
 }
 
-} // nrl
+
 } // bv
 

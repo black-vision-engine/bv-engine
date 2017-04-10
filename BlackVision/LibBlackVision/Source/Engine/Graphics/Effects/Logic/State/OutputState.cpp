@@ -3,7 +3,7 @@
 #include "OutputState.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -243,5 +243,5 @@ bool                OutputState::RepresentsDefaultTexture  () const
     return fullMask && m_channelMapping == noMapping;
 }
 
-} //nrl
+
 } //bv

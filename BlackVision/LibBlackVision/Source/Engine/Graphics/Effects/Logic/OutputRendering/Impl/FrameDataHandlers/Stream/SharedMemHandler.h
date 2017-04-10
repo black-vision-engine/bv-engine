@@ -9,7 +9,7 @@
 #include "Engine/Graphics/Rendering/SharedMemoryVideoBuffer.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
    
 class SharedMemHandler : public FrameDataHandler
 {
@@ -47,5 +47,5 @@ private:
 
 };
 
-} //nrl
+
 } //bv

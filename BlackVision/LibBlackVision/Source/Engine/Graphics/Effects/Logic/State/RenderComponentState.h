@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/State/Texture2DEntry.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderComponentState
 {
@@ -73,5 +73,5 @@ inline IValuePtr   get_value( RenderComponentStatePtr state, const std::string &
     return state->GetValue( name );
 }
 
-} // nrl
+
 } // bv

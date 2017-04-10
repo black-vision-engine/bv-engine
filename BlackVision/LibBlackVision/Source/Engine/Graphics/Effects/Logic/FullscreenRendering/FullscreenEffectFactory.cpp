@@ -13,7 +13,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/Impl/FulscreenEffectVisualComponent.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 namespace {
 
@@ -198,5 +198,5 @@ FullscreenEffect *  CreateFullscreenEffect                  ( FullscreenEffectTy
     return CreateSimpleFSE( desc );
 }
 
-} // nrl
+
 } // bv

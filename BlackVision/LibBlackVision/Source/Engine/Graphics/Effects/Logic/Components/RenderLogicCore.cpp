@@ -14,7 +14,7 @@
 #include "Engine/Graphics/Effects/Logic/State/RenderedData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -131,5 +131,5 @@ void    RenderLogicCore::PostRender        ( RenderedChannelsData * result, Rend
     }
 }
 
-} //nrl
+
 } //bv

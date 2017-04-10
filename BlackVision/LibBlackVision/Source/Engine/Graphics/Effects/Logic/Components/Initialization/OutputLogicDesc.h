@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/OutputDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class OutputLogicDesc
 {
@@ -20,5 +20,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

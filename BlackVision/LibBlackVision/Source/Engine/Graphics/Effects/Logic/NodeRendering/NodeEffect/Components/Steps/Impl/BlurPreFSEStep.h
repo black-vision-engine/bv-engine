@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/PreFullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class BlurPreFSEStep : public PreFullscreenEffectStep
 {
@@ -37,5 +37,5 @@ public:
 	Float32                         GetBlurSize             () const;
 };
 
-} // nrl
+
 } // bv

@@ -13,7 +13,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -103,5 +103,5 @@ float                   NodeMaskFSEStep::GetAlpha                     () const
     return QueryTypedValue< ValueFloatPtr >( val )->GetValue();
 }
 
-} // nrl
+
 } // bv

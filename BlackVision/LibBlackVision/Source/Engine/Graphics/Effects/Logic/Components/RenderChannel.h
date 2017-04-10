@@ -11,7 +11,7 @@ class RenderTargetStackAllocator;
 class RenderTarget;
 class Renderer;
 
-namespace nrl {
+
 
 enum class RenderChannelType : unsigned int
 {
@@ -64,4 +64,4 @@ public:
 };
 
 } //bv
-} //nrl
+

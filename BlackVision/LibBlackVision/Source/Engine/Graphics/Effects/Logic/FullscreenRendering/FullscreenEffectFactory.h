@@ -5,10 +5,10 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffect.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 
 FullscreenEffect *	    CreateFullscreenEffect                  ( FullscreenEffectType nfseType );
 
-} // nrl
+
 } // bv

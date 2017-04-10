@@ -15,7 +15,7 @@ namespace bv {
     
 using videocards::AVFramePtr;
 
-namespace nrl {
+
 
 typedef unsigned int VideoCardID;
 
@@ -31,5 +31,5 @@ typedef std::hash_map< unsigned int, unsigned int >                 UintUintMapp
 
 typedef std::hash_map< const VideoInputChannel *, VideoCardIDVec >  VideoInpuChannelToOutputMapping;
 
-} // nrl
+
 } // bv

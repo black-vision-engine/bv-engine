@@ -10,7 +10,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoOutputsPreprocessor.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FrameDataHandler;
 
@@ -37,5 +37,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

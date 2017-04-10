@@ -3,7 +3,7 @@
 #include "FinalizePass.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -69,5 +69,5 @@ void        FinalizePass::AppendRenderPasses_DIRTY_HACK   ( std::set< const Rend
     m_finalizeStep->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

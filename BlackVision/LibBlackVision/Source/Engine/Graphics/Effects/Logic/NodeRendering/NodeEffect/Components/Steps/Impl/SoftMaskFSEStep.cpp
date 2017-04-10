@@ -13,7 +13,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -95,5 +95,5 @@ void                SoftMaskFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set<
     m_softMaskEffect->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

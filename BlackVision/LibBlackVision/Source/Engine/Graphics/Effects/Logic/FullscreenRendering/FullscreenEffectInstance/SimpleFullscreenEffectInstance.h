@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectInstance/FullscreenEffectInstance.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffectVisualComponent;
 
@@ -35,5 +35,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

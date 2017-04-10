@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/OutputStaticData.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 enum class OutputChannelMapping : unsigned int
 {
@@ -71,5 +71,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

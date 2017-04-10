@@ -3,7 +3,7 @@
 #include "SamplerEntry.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -87,5 +87,5 @@ void                    SamplerEntry::Set            ( const std::string & sampl
     SetFilteringMode( filteringMode );
 }
 
-} // nrl
+
 } // bv

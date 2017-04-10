@@ -10,7 +10,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderLogicCore.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderLogicImpl : public RenderLogic
 {
@@ -54,5 +54,4 @@ public:
 
 };
 
-} // nrl
 } // bv

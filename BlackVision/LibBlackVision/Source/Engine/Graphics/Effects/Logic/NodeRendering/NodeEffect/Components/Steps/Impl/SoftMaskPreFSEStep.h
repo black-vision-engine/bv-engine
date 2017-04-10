@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/PreFullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class SoftMaskPreFSEStep : public PreFullscreenEffectStep
 {
@@ -35,5 +35,5 @@ public:
     virtual bool                    IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
 };
 
-} // nrl
+
 } // bv

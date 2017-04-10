@@ -3,7 +3,7 @@
 #include "RenderStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -65,5 +65,5 @@ void                            RenderStep::AppendRenderPasses_DIRTY_HACK   ( st
     { passes; }
 }
 
-} // nrl
+
 } // bv

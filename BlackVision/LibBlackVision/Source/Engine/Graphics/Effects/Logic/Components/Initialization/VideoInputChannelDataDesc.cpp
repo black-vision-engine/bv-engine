@@ -3,8 +3,8 @@
 #include "VideoInputChannelDataDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 
-} //nrl
+
 } //bv

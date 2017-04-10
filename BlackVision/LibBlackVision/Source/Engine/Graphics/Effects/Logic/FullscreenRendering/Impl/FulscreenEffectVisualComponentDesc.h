@@ -9,7 +9,7 @@
 #include "Engine/Graphics/Effects/Logic/State/Texture2DEntry.h"
 #include "Engine/Graphics/Effects/Logic/State/FullscreenEffectComponentState.h"
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffectVisualComponentDesc
 {
@@ -53,5 +53,5 @@ public:
 
 };
 
-} //nrl
+
 } //bv

@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffect;
 
@@ -50,5 +50,5 @@ private:
 	void						SetUVTransform			( Float32 scaleX, Float32 scaleY, Float32 translateX, Float32 translateY );
 };
 
-} // nrl
+
 } // bv

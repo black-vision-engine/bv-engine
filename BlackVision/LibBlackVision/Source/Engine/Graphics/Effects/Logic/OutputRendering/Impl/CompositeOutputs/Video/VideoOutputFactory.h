@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/OutputCompositeVideo.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class VideoOutputFactory
 {
@@ -36,5 +36,5 @@ private:
 
 };
 
-} // nrl
+
 } // bv

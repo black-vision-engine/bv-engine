@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -25,5 +25,5 @@ void    DefaultFinalizeStep::Apply		        ( SceneNodeRepr * nodeRepr, RenderCo
     NodeRenderLogic::Render( nodeRepr, ctx );
 }
 
-} // nrl
+
 } // bv

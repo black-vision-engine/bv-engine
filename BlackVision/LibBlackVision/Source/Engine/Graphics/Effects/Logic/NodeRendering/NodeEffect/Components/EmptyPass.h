@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/NodeEffectRenderPass.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class EmptyPass : public NodeEffectRenderPass
 {
@@ -22,5 +22,5 @@ public:
 
 };
 
-} // nrl
+
 } // bv

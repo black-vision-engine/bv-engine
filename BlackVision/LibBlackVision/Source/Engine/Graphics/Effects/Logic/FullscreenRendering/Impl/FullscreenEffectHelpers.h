@@ -11,7 +11,7 @@ namespace bv {
 class Camera;
 class TriangleStrip;
 
-namespace nrl {
+
 
 class FullscreenEffectHelpers
 {
@@ -61,5 +61,5 @@ private:
 
 };
 
-} //nrl
+
 } //bv

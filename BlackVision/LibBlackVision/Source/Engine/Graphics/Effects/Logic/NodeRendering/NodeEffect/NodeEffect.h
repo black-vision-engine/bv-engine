@@ -3,6 +3,7 @@
 #include "CoreDEF.h"
 
 #include <set> // FIXME: nrl - hack
+
 #include "Engine/Interfaces/IValue.h"
 
 
@@ -11,24 +12,21 @@ namespace bv {
 class SceneNodeRepr; 
 class RenderablePass; // FIXME: nrl - hack
 
-namespace nrl 
+enum class NodeEffectType : int
 {
+    NET_DEFAULT = 0,
+    NET_ALPHA_MASK,
+    NET_NODE_MASK,
+    NET_WIREFRAME,
+    NET_MIX_CHANNELS,
+	NET_BLUR,
+	NET_LIGHT_SCATTERING,
+	NET_SHADOW,
+    NET_Z_SORT,
+	NET_GLOW,
+	NET_SOFT_MASK,
 
-enum class NNodeEffectType : int
-{
-    NNET_DEFAULT = 0,
-    NNET_ALPHA_MASK,
-    NNET_NODE_MASK,
-    NNET_WIREFRAME,
-    NNET_MIX_CHANNELS,
-	NNET_BLUR,
-	NNET_LIGHT_SCATTERING,
-	NNET_SHADOW,
-    NNET_Z_SORT,
-	NNET_GLOW,
-	NNET_SOFT_MASK,
-
-    NNET_TOTAL
+    NET_TOTAL
 };
 
 class RenderContext;
@@ -37,11 +35,11 @@ class NodeEffect
 {
 private:
 
-    NNodeEffectType     m_type;
+    NodeEffectType      m_type;
 
 protected:
     
-                        NodeEffect     ( NNodeEffectType type );
+                        NodeEffect     ( NodeEffectType type );
 
 public:
 
@@ -49,7 +47,7 @@ public:
 
     virtual void        Render          ( SceneNodeRepr * node, RenderContext * ctx ) = 0;
 
-    NNodeEffectType     GetType         () const;
+    NodeEffectType      GetType         () const;
 
     virtual IValuePtr   GetValue        ( const std::string & name ) const = 0;
 
@@ -66,5 +64,4 @@ public:
 DEFINE_PTR_TYPE(NodeEffect)
 DEFINE_CONST_PTR_TYPE(NodeEffect)
 
-} // nrl
 } // bv

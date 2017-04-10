@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -62,5 +62,5 @@ void    SimpleFullscreenEffectInstance::AppendRenderPasses_DIRTY_HACK   ( std::s
     m_visualComponent->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

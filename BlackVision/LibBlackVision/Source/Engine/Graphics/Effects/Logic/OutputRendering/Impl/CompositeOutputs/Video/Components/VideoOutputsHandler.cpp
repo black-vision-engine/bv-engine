@@ -7,7 +7,7 @@
 #include "VideoCardManager.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -25,4 +25,4 @@ void    VideoOutputsHandler::HandleOutputsData   ( const AVOutputsData & outputs
 }
 
 } //bv
-} //nrl
+

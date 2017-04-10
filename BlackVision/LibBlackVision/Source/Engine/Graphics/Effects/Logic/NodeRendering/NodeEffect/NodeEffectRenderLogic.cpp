@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/NodeEffectRenderPass.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -107,5 +107,5 @@ IValuePtr       NodeEffectRenderLogic::GetValue                            ( con
     return res;
 }
 
-} //nrl 
+ 
 } //bv

@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/State/SamplerEntry.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class Texture2DEntry
 {
@@ -42,5 +42,5 @@ public:
 
 typedef std::vector< Texture2DEntry > Texture2DEntryVec;
 
-} // nrl
+
 } // bv

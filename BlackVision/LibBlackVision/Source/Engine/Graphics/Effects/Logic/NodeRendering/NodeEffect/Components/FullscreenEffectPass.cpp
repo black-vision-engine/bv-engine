@@ -3,7 +3,7 @@
 #include "FullscreenEffectPass.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -85,5 +85,5 @@ void        FullscreenEffectPass::AppendRenderPasses_DIRTY_HACK    ( std::set< c
     m_fullscreenStep->AppendRenderPasses_DIRTY_HACK( passes );
 }
 
-} // nrl
+
 } // bv

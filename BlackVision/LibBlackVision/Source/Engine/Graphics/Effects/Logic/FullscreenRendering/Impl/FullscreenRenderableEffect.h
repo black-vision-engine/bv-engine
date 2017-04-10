@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 
 class NFullscreenRenderableEffect : public RenderableEffect
@@ -17,5 +17,5 @@ public:
 DEFINE_PTR_TYPE(NFullscreenRenderableEffect)
 DEFINE_CONST_PTR_TYPE(NFullscreenRenderableEffect)
 
-} //nrl
+
 } // bv

@@ -3,7 +3,7 @@
 #include "FullscreenRenderableEffect.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -12,5 +12,5 @@ NFullscreenRenderableEffect::NFullscreenRenderableEffect  ( RenderablePass * pas
     AddPass( pass );
 }
 
-} //nrl
+
 } //bv

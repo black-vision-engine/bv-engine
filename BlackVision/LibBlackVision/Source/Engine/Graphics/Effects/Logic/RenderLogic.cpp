@@ -5,7 +5,7 @@
 #include "Engine\Graphics\Effects\Logic\RenderLogicImpl.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -20,5 +20,4 @@ RenderLogic *           RenderLogic::Create   ( RenderLogicDesc & desc )
     return RenderLogicImpl::Create( desc );
 }
 
-} //nrl
 } //bv

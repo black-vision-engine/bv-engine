@@ -46,7 +46,7 @@
 #include "Engine/Types/Values/ValuesFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -68,9 +68,9 @@ NodeEffectPtr       CreateDefaultNodeEffect    ()
     passes[ 0 ] = emptyPass;
     passes[ 1 ] = finPass;
 
-	auto nnerl = new NodeEffectRenderLogic( passes );
+	auto nerl = new NodeEffectRenderLogic( passes );
 
-    return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_DEFAULT );
+    return std::make_shared< NodeEffectImpl >( nerl, NodeEffectType::NET_DEFAULT );
 }
 
 // **************************
@@ -105,7 +105,7 @@ NodeEffectPtr       CreateAlphaMaskNodeEffect()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-    return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_ALPHA_MASK );
+    return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_ALPHA_MASK );
 }
  
 // **************************
@@ -140,7 +140,7 @@ NodeEffectPtr       CreateNodeMaskNodeEffect   ()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-    return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_NODE_MASK );
+    return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_NODE_MASK );
 }
 
 // **************************
@@ -174,7 +174,7 @@ NodeEffectPtr       CreateBlurNodeEffect   ()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-	return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_BLUR );
+	return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_BLUR );
 }
 
 // **************************
@@ -207,7 +207,7 @@ NodeEffectPtr       CreateLightScatteringNodeEffect   ()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-	return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_LIGHT_SCATTERING );
+	return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_LIGHT_SCATTERING );
 }
 
 // ***********************
@@ -223,7 +223,7 @@ NodeEffectPtr       CreateZSortNodeEffect      ()
 
     auto nnerl = new NodeEffectRenderLogic( passes, false );
 
-    return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_Z_SORT );
+    return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_Z_SORT );
 }
 
 // **************************
@@ -261,7 +261,7 @@ NodeEffectPtr       CreateShadowNodeEffect   ()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-	return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_SHADOW );
+	return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_SHADOW );
 }
 
 // **************************
@@ -298,7 +298,7 @@ NodeEffectPtr       CreateGlowNodeEffect   ()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-	return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_SHADOW );
+	return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_SHADOW );
 }
 
 // **************************
@@ -331,36 +331,36 @@ NodeEffectPtr       CreateSoftMaskNodeEffect   ()
 
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
-	return std::make_shared< NodeEffectImpl >( nnerl, NNodeEffectType::NNET_SOFT_MASK );
+	return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_SOFT_MASK );
 }
 
 // **************************
 //
-NodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
+NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
 {
     switch( nnodeEffectType )
     {
-        case  NNodeEffectType::NNET_DEFAULT:
+        case  NodeEffectType::NET_DEFAULT:
             return CreateDefaultNodeEffect();
-        case NNodeEffectType::NNET_ALPHA_MASK:
+        case NodeEffectType::NET_ALPHA_MASK:
             return CreateAlphaMaskNodeEffect();
-        case NNodeEffectType::NNET_NODE_MASK:
+        case NodeEffectType::NET_NODE_MASK:
             return CreateNodeMaskNodeEffect();
-		case NNodeEffectType::NNET_BLUR:
+		case NodeEffectType::NET_BLUR:
 			return CreateBlurNodeEffect();
-		case NNodeEffectType::NNET_LIGHT_SCATTERING:
+		case NodeEffectType::NET_LIGHT_SCATTERING:
 			return CreateLightScatteringNodeEffect();
-		case NNodeEffectType::NNET_SHADOW:
+		case NodeEffectType::NET_SHADOW:
 			return CreateShadowNodeEffect();
-		case NNodeEffectType::NNET_Z_SORT:
+		case NodeEffectType::NET_Z_SORT:
 			return CreateZSortNodeEffect();
-		case NNodeEffectType::NNET_GLOW:
+		case NodeEffectType::NET_GLOW:
 			return CreateGlowNodeEffect();
-		case NNodeEffectType::NNET_SOFT_MASK:
+		case NodeEffectType::NET_SOFT_MASK:
 			return CreateSoftMaskNodeEffect();
-		case NNodeEffectType::NNET_WIREFRAME:
+		case NodeEffectType::NET_WIREFRAME:
             //return CreateWireframeNodeEffect();
-        case NNodeEffectType::NNET_MIX_CHANNELS:
+        case NodeEffectType::NET_MIX_CHANNELS:
             //return CreateMixchannelsNodeEffect();
 			//Interlace and so on
         default:
@@ -370,7 +370,7 @@ NodeEffectPtr       CreateNodeEffect( NNodeEffectType nnodeEffectType )
     return nullptr;
 }
 
-} //nrl
+
 } //bv
 
 

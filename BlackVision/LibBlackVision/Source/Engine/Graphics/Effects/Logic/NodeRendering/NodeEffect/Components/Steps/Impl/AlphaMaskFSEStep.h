@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenEffect;
 
@@ -47,5 +47,5 @@ private:
 
 };
 
-} // nrl
+
 } // bv

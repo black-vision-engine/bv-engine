@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Output.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FrameDataHandler;
 
@@ -41,5 +41,5 @@ private:
 
 };
 
-} //nrl
+
 } //bv

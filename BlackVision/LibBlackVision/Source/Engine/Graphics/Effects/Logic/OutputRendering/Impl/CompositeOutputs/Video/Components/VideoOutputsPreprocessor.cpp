@@ -8,7 +8,7 @@
 #include "VideoCardManager.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
@@ -77,7 +77,7 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
 {
     // FIXME: nrl - should be read from video cards configuration or remove or do something making sense
     static unsigned int FPS_HACK = 25;
-    auto aud = audio( ctx );
+    auto audi = aud( ctx );
 
     auto videoFrame = channel->ReadColorTexture( ctx );
     
@@ -94,14 +94,14 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
 
     if ( !channel->LastFrameHadAudio() )
 	{
-		desc.channels = aud->GetChannels();
-		desc.sampleRate = aud->GetFrequency() / FPS_HACK;
+		desc.channels = audi->GetChannels();
+		desc.sampleRate = audi->GetFrequency() / FPS_HACK;
 
-		auto audioSize = desc.sampleRate * desc.channels * aud->GetChannelDepth();
+		auto audioSize = desc.sampleRate * desc.channels * audi->GetChannelDepth();
 
 		data = MemoryChunk::Create( audioSize );
 
-		auto ret = aud->GetBufferedData( data, channel->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+		auto ret = audi->GetBufferedData( data, channel->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
 		data = std::const_pointer_cast< MemoryChunk >( ret->GetData() );
 	}
 
@@ -123,4 +123,4 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
 }
 
 } //bv
-} //nrl
+

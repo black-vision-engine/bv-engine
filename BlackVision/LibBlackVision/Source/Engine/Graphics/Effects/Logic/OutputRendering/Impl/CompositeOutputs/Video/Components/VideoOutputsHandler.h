@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoTypes.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
    
 class AVOutputsData;
 
@@ -19,4 +19,4 @@ public:
 };
 
 } //bv
-} //nrl
+

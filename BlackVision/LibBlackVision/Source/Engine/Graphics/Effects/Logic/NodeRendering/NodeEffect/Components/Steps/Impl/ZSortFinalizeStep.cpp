@@ -14,7 +14,7 @@
 
 
 namespace bv {
-namespace nrl {
+
 
 // **************************
 //
@@ -59,5 +59,5 @@ bool        ZSortFinalizeStep::UseSort()
     return QueryTypedValue< ValueBoolPtr >( useSort )->GetValue();
 }
 
-} // nrl
+
 } // bv

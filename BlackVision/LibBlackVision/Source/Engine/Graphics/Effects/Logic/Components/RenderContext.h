@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderQueueStackAllocator.h"
 
 
-namespace bv { namespace nrl { 
+namespace bv {  
 
 class RenderContext
 {
@@ -58,7 +58,7 @@ inline Renderer *                   renderer		( RenderContext * ctx )
 
 // *******************************
 //
-inline audio::AudioRenderer *       audio           ( RenderContext * ctx )
+inline audio::AudioRenderer *       aud             ( RenderContext * ctx )
 {
     return ctx->GetAudio();
 }
@@ -105,5 +105,5 @@ inline void                         clearBoundRT	( RenderContext * ctx, const gl
     ctx->ClearBoundRT( col );
 }
 
-} // nrl
+
 } // bv

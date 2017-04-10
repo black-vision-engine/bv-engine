@@ -10,7 +10,7 @@ namespace bv {
 
 using videocards::AVFramePtr;
 
-namespace nrl {
+
    
 class AVOutputsData
 {
@@ -53,4 +53,4 @@ public:
 
 
 } //bv
-} //nrl
+

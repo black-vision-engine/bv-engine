@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class FullscreenVSShader
 {
@@ -35,5 +35,5 @@ private:
 
 };
 
-} //nrl
+
 } //bv

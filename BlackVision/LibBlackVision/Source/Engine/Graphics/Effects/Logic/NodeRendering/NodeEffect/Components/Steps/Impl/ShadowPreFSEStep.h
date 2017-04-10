@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/PreFullscreenEffectStep.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class ShadowPreFSEStep : public PreFullscreenEffectStep
 {
@@ -40,5 +40,5 @@ public:
 	bool							GetOuter				() const;
 };
 
-} // nrl
+
 } // bv

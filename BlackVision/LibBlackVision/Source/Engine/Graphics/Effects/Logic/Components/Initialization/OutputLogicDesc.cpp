@@ -5,7 +5,7 @@
 #include "OutputLogicDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -30,5 +30,5 @@ void            OutputLogicDesc::AppendDesc          ( const OutputDesc & desc )
     m_outputDescriptors.push_back( desc );
 }
 
-} //nrl
+
 } //bv

@@ -47,7 +47,7 @@ void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, 
     {
         auto outputLogic = m_renderLogic->GetOutputLogic();
 
-        outputLogic->RequestScreenshot( filePath, nrl::RenderChannelType::RCT_OUTPUT_1, numFrames, false );
+        outputLogic->RequestScreenshot( filePath, RenderChannelType::RCT_OUTPUT_1, numFrames, false );
 
         m_renderer->SetVSync( false, 0 );
         m_renderer->SetFlushFinish( false, false );
@@ -64,7 +64,7 @@ void        RenderMode::MakeScreenShot          ( const std::string & filePath, 
     if( m_renderLogic && m_renderer )
     {
         auto outputLogic = m_renderLogic->GetOutputLogic();
-        outputLogic->RequestScreenshot( filePath, nrl::RenderChannelType::RCT_OUTPUT_1, 1, onRenderedEvent, asyncWrite );
+        outputLogic->RequestScreenshot( filePath, RenderChannelType::RCT_OUTPUT_1, 1, onRenderedEvent, asyncWrite );
     }
 }
 

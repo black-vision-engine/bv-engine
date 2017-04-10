@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
    
 // **************************
 //
@@ -46,5 +46,5 @@ FullscreenEffectComponentStatePtr  PreviewHandler::GetInternalFSEState ()
     return m_mixChannelsEffect->GetState();
 }
 
-} //nrl
+
 } //bv

@@ -1414,7 +1414,7 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
 
     if( timeEval )
     {
-        auto effect = SerializationHelper::String2T< nrl::NNodeEffectType >( effectName , nrl::NNodeEffectType::NNET_DEFAULT );
+        auto effect = SerializationHelper::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
         auto curEffect = node->GetNodeEffect();

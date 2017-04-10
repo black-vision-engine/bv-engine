@@ -6,7 +6,7 @@
 
 
 namespace bv {
-namespace nrl {
+
 
 class ZSortFinalizeStep : public FinalizeStep
 {
@@ -29,5 +29,5 @@ public:
     bool            UseSort                 ();
 };
 
-} // nrl
+
 } // bv

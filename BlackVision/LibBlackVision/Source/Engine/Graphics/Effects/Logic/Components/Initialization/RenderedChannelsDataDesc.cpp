@@ -3,7 +3,7 @@
 #include "RenderedChannelsDataDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // **************************
 //
@@ -52,5 +52,5 @@ void            RenderedChannelsDataDesc::SetNumTrackedRenderTargets  ( unsigned
     m_numTrackedRenderTargets = numTrackedRenderTargets;
 }
 
-} //nrl
+
 } //bv
