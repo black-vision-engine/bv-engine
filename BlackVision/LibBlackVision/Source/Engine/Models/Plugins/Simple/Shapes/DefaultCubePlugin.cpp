@@ -7,82 +7,69 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultCubePlugin::WeightCenter );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultCubePlugin::MappingType );
+
 namespace bv { namespace model {
 	
-typedef ParamEnum< DefaultCube::Plugin::WeightCenter > ParamEnumWC;
-typedef ParamEnum< DefaultCube::Plugin::MappingType > ParamEnumMT;
-	
 
-VoidPtr    ParamEnumWC::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
 
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCube::Plugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultCube::Plugin::WeightCenter >( name, timeline );
-}
-
-VoidPtr    ParamEnumMT::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
-
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCube::Plugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultCube::Plugin::MappingType >( name, timeline );
-}
-
-	
-namespace DefaultCube {
-
-const std::string PN::TESSELATION = "tesselation";
-const std::string PN::DIMENSIONS = "dimensions";
-const std::string PN::BEVEL = "bevel";
-const std::string PN::WEIGHTCENTERX = "weight center x";
-const std::string PN::WEIGHTCENTERY = "weight center y";
-const std::string PN::WEIGHTCENTERZ = "weight center z";
-const std::string PN::MAPPINGTYPE = "mapping type";
-const std::string PN::SMOOTH_BEVEL = "smooth bevel";
+typedef ParamEnum< DefaultCubePlugin::WeightCenter > ParamEnumWC;
+typedef ParamEnum< DefaultCubePlugin::MappingType > ParamEnumMT;
 
 
 
-PluginDesc::PluginDesc()
+const std::string       DefaultCubePlugin::PARAM::TESSELATION = "tesselation";
+const std::string       DefaultCubePlugin::PARAM::DIMENSIONS = "dimensions";
+const std::string       DefaultCubePlugin::PARAM::BEVEL = "bevel";
+const std::string       DefaultCubePlugin::PARAM::WEIGHTCENTERX = "weight center x";
+const std::string       DefaultCubePlugin::PARAM::WEIGHTCENTERY = "weight center y";
+const std::string       DefaultCubePlugin::PARAM::WEIGHTCENTERZ = "weight center z";
+const std::string       DefaultCubePlugin::PARAM::MAPPINGTYPE = "mapping type";
+const std::string       DefaultCubePlugin::PARAM::SMOOTH_BEVEL = "smooth bevel";
+
+
+// ***********************
+//
+DefaultCubePluginDesc::DefaultCubePluginDesc()
     : DefaultGeometryPluginDescBase( UID(), "cube" )
-{
-}
+{}
 
-DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
+// ***********************
+//
+DefaultPluginParamValModelPtr   DefaultCubePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper h( timeEvaluator );
 
     h.SetOrCreateVacModel();
-    h.AddSimpleParam( PN::BEVEL, 0.1f, true, true );
-    h.AddSimpleParam( PN::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
-    h.AddSimpleParam( PN::TESSELATION, 4, true, true );
-    h.AddSimpleParam( PN::SMOOTH_BEVEL, true, true, true );
-	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( DefaultCube::PN::WEIGHTCENTERX, Plugin::WeightCenter::CENTER, true, true );
-	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( DefaultCube::PN::WEIGHTCENTERY, Plugin::WeightCenter::MIN, true, true );
-	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( DefaultCube::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
-  	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
-		( PN::MAPPINGTYPE, Plugin::MappingType::OLDSTYLE, true, true );
+    h.AddSimpleParam( DefaultCubePlugin::PARAM::BEVEL, 0.1f, true, true );
+    h.AddSimpleParam( DefaultCubePlugin::PARAM::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
+    h.AddSimpleParam( DefaultCubePlugin::PARAM::TESSELATION, 4, true, true );
+    h.AddSimpleParam( DefaultCubePlugin::PARAM::SMOOTH_BEVEL, true, true, true );
+	h.AddParam< IntInterpolator, DefaultCubePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCubePlugin::PARAM::WEIGHTCENTERX, DefaultCubePlugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, DefaultCubePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCubePlugin::PARAM::WEIGHTCENTERY, DefaultCubePlugin::WeightCenter::MIN, true, true );
+	h.AddParam< IntInterpolator, DefaultCubePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCubePlugin::PARAM::WEIGHTCENTERZ, DefaultCubePlugin::WeightCenter::CENTER, true, true );
+  	h.AddParam< IntInterpolator, DefaultCubePlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( DefaultCubePlugin::PARAM::MAPPINGTYPE, DefaultCubePlugin::MappingType::OLDSTYLE, true, true );
     
     h.SetOrCreatePSModel();
 
     return h.GetModel();
 }
     
-IPluginPtr                      PluginDesc::CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+// ***********************
+//
+IPluginPtr                      DefaultCubePluginDesc::CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< Plugin >( name, prev, timeEvaluator );
+    return CreatePluginTyped< DefaultCubePlugin >( name, prev, timeEvaluator );
 }
 
-std::string                     PluginDesc::UID                 ()
+// ***********************
+//
+std::string                     DefaultCubePluginDesc::UID                 ()
 {
     return "DEFAULT_CUBE";
 }
@@ -93,126 +80,127 @@ namespace Generator
     int                     tesselation;
     float                   bevel;
     glm::vec3               dims;
-	glm::vec3               center_translate;
-	Plugin::MappingType     mapping_type;
+    glm::vec3               centerTranslate;
     bool                    smooth;
+
+    DefaultCubePlugin::MappingType     mapping_type;
 
 
     template < typename T >
     int sign( T val )
     {
-        return (T(0) < val) - (val < T(0));
+        return ( T( 0 ) < val ) - ( val < T( 0 ) );
     }
 
-	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
-	{
-		glm::vec3 centerTranslate = glm::vec3( 0.0f, 0.0f, 0.0f );
+    glm::vec3 computeWeightCenter( DefaultCubePlugin::WeightCenter centerX, DefaultCubePlugin::WeightCenter centerY, DefaultCubePlugin::WeightCenter centerZ )
+    {
+        glm::vec3 centerTranslate = glm::vec3( 0.0f, 0.0f, 0.0f );
 
-		if( centerX == Plugin::WeightCenter::MAX )
-			centerTranslate += glm::vec3( -dims.x / 2, 0.0, 0.0 );
-		else if( centerX == Plugin::WeightCenter::CENTER )
-			centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
-		else if( centerX == Plugin::WeightCenter::MIN )
-			centerTranslate += glm::vec3( dims.x / 2, 0.0, 0.0 );
-	
-		if( centerY == Plugin::WeightCenter::MAX )
-			centerTranslate += glm::vec3( 0.0f, -dims.y / 2, 0.0f );
-		else if( centerY == Plugin::WeightCenter::CENTER )
-			centerTranslate += glm::vec3( 0.0f, 0.0, 0.0f );
-		else if( centerY == Plugin::WeightCenter::MIN )
-			centerTranslate += glm::vec3( 0.0f, dims.y / 2, 0.0f );
+        if( centerX == DefaultCubePlugin::WeightCenter::MAX )
+            centerTranslate += glm::vec3( -dims.x / 2, 0.0, 0.0 );
+        else if( centerX == DefaultCubePlugin::WeightCenter::CENTER )
+            centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+        else if( centerX == DefaultCubePlugin::WeightCenter::MIN )
+            centerTranslate += glm::vec3( dims.x / 2, 0.0, 0.0 );
 
-		if( centerZ == Plugin::WeightCenter::MAX )
-			centerTranslate += glm::vec3( 0.0, 0.0, -dims.z / 2 );
-		else if( centerZ == Plugin::WeightCenter::CENTER )
-			centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
-		else if( centerZ == Plugin::WeightCenter::MIN )
-			centerTranslate += glm::vec3( 0.0, 0.0, dims.z / 2 );
-		
-		return centerTranslate;
-	}
+        if( centerY == DefaultCubePlugin::WeightCenter::MAX )
+            centerTranslate += glm::vec3( 0.0f, -dims.y / 2, 0.0f );
+        else if( centerY == DefaultCubePlugin::WeightCenter::CENTER )
+            centerTranslate += glm::vec3( 0.0f, 0.0, 0.0f );
+        else if( centerY == DefaultCubePlugin::WeightCenter::MIN )
+            centerTranslate += glm::vec3( 0.0f, dims.y / 2, 0.0f );
 
-	enum CubicMappingPlane
-	{
-		PLUS_X = 3,
-		MINUS_X = 1,
-		PLUS_Y = 0,
-		MINUS_Y = 2,
-		PLUS_Z = 4,
-		MINUS_Z = 5
-	};
+        if( centerZ == DefaultCubePlugin::WeightCenter::MAX )
+            centerTranslate += glm::vec3( 0.0, 0.0, -dims.z / 2 );
+        else if( centerZ == DefaultCubePlugin::WeightCenter::CENTER )
+            centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+        else if( centerZ == DefaultCubePlugin::WeightCenter::MIN )
+            centerTranslate += glm::vec3( 0.0, 0.0, dims.z / 2 );
 
-	float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remainingValues )
-	{
-		float max = 0;
-		if( abs( direction.x ) > abs( direction.y ) )
-		{
-			if( abs( direction.x ) > abs( direction.z ) )
-			{
-				max = abs( direction.x );
-				plane = direction.x < 0 ? CubicMappingPlane::MINUS_X : CubicMappingPlane::PLUS_X;
-				remainingValues.x = direction.y;
-				remainingValues.y = direction.z;
-			}
-			else
-			{
-				max = abs( direction.z );
-				plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
-				remainingValues.x = direction.x;
-				remainingValues.y = direction.y;
-			}
-		}
-		else
-		{
-			if( abs( direction.y ) > abs( direction.z ) )
-			{
-				max = abs( direction.y );
-				plane = direction.y < 0 ? CubicMappingPlane::MINUS_Y : CubicMappingPlane::PLUS_Y;
-				remainingValues.x = direction.x;
-				remainingValues.y = direction.z;
-			}
-			else
-			{
-				max = abs( direction.z );
-				plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
-				remainingValues.x = direction.x;
-				remainingValues.y = direction.y;
-			}
-		}
-		return max;
-	}
+        return centerTranslate;
+    }
 
-	glm::vec2 makeUV( glm::vec2 pre_uv_coords, CubicMappingPlane plane )
-	{
-		glm::vec2 uv_translate;
-		glm::vec2 uv_coords = pre_uv_coords / glm::vec2( 4.0, 3.0 );
+    enum CubicMappingPlane
+    {
+        PLUS_X = 3,
+        MINUS_X = 1,
+        PLUS_Y = 0,
+        MINUS_Y = 2,
+        PLUS_Z = 4,
+        MINUS_Z = 5
+    };
 
-		if( plane == CubicMappingPlane::PLUS_X )
-			uv_translate = glm::vec2( 0.0, 1.0 / 3.0 );
-		else if( plane == CubicMappingPlane::MINUS_X )
-			uv_translate = glm::vec2( 1.0 / 2.0, 1.0 / 3.0 );
-		else if( plane == CubicMappingPlane::PLUS_Y )
-			uv_translate = glm::vec2( 3.0 / 4.0, 1.0 / 3.0 );
-		else if( plane == CubicMappingPlane::MINUS_Y )
-			uv_translate = glm::vec2( 1.0 / 4.0, 1.0 / 3.0 );
-		else if( plane == CubicMappingPlane::PLUS_Z )
-			uv_translate = glm::vec2( 1.0 / 2.0, 0.0 );
-		else if( plane == CubicMappingPlane::MINUS_Z )
-			uv_translate = glm::vec2( 1.0 / 2.0, 2.0 / 3.0 );
-		return uv_coords + uv_translate;
-	}
+    float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remainingValues )
+    {
+        float max = 0;
+        if( abs( direction.x ) > abs( direction.y ) )
+        {
+            if( abs( direction.x ) > abs( direction.z ) )
+            {
+                max = abs( direction.x );
+                plane = direction.x < 0 ? CubicMappingPlane::MINUS_X : CubicMappingPlane::PLUS_X;
+                remainingValues.x = direction.y;
+                remainingValues.y = direction.z;
+            }
+            else
+            {
+                max = abs( direction.z );
+                plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
+                remainingValues.x = direction.x;
+                remainingValues.y = direction.y;
+            }
+        }
+        else
+        {
+            if( abs( direction.y ) > abs( direction.z ) )
+            {
+                max = abs( direction.y );
+                plane = direction.y < 0 ? CubicMappingPlane::MINUS_Y : CubicMappingPlane::PLUS_Y;
+                remainingValues.x = direction.x;
+                remainingValues.y = direction.z;
+            }
+            else
+            {
+                max = abs( direction.z );
+                plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
+                remainingValues.x = direction.x;
+                remainingValues.y = direction.y;
+            }
+        }
+        return max;
+    }
 
-	glm::vec2 computeUV( glm::vec3 position )
-	{
-		CubicMappingPlane plane;
-		glm::vec2 uv_coords;
-		float max_value = choosePlane( position, plane, uv_coords );
+    glm::vec2 makeUV( glm::vec2 pre_uv_coords, CubicMappingPlane plane )
+    {
+        glm::vec2 uv_translate;
+        glm::vec2 uv_coords = pre_uv_coords / glm::vec2( 4.0, 3.0 );
 
-		uv_coords = uv_coords / glm::vec2( 2*max_value, 2*max_value );
-		uv_coords += glm::vec2( 0.5, 0.5 );
+        if( plane == CubicMappingPlane::PLUS_X )
+            uv_translate = glm::vec2( 0.0, 1.0 / 3.0 );
+        else if( plane == CubicMappingPlane::MINUS_X )
+            uv_translate = glm::vec2( 1.0 / 2.0, 1.0 / 3.0 );
+        else if( plane == CubicMappingPlane::PLUS_Y )
+            uv_translate = glm::vec2( 3.0 / 4.0, 1.0 / 3.0 );
+        else if( plane == CubicMappingPlane::MINUS_Y )
+            uv_translate = glm::vec2( 1.0 / 4.0, 1.0 / 3.0 );
+        else if( plane == CubicMappingPlane::PLUS_Z )
+            uv_translate = glm::vec2( 1.0 / 2.0, 0.0 );
+        else if( plane == CubicMappingPlane::MINUS_Z )
+            uv_translate = glm::vec2( 1.0 / 2.0, 2.0 / 3.0 );
+        return uv_coords + uv_translate;
+    }
 
-		return makeUV( uv_coords, plane );
-	}
+    glm::vec2 computeUV( glm::vec3 position )
+    {
+        CubicMappingPlane plane;
+        glm::vec2 uv_coords;
+        float max_value = choosePlane( position, plane, uv_coords );
+
+        uv_coords = uv_coords / glm::vec2( 2 * max_value, 2 * max_value );
+        uv_coords += glm::vec2( 0.5, 0.5 );
+
+        return makeUV( uv_coords, plane );
+    }
 
 
     class SideComp : public IGeometryNormalsUVsGenerator
@@ -222,54 +210,54 @@ namespace Generator
 
         void GenerateGeometryNormalsUVs( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals, Float2AttributeChannelPtr uvs ) override
         {
-			CubicMappingPlane mappingPlane;
-			if( d < 0 )
-				mappingPlane = CubicMappingPlane::MINUS_Z;
-			else
-				mappingPlane = CubicMappingPlane::PLUS_Z;
+            CubicMappingPlane mappingPlane;
+            if( d < 0 )
+                mappingPlane = CubicMappingPlane::MINUS_Z;
+            else
+                mappingPlane = CubicMappingPlane::PLUS_Z;
 
-            double w = dims.x/2 - bevel, 
-                h = dims.y/2 - bevel;
-
-
-			if( d > 0 )
-			{
-                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-
-                verts->AddAttribute( glm::vec3( w, h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
-			}
-			else
-			{
-                verts->AddAttribute( glm::vec3(  w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3(  w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-
-                verts->AddAttribute( glm::vec3( -w, h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-                verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
-			}
+            double w = dims.x / 2 - bevel,
+                h = dims.y / 2 - bevel;
 
 
-			float bevelUV1 = bevel / dims.x;
-			float bevelUV2 = bevel / dims.y;
-			glm::vec2 preUV1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
-			glm::vec2 preUV2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
-			glm::vec2 preUV3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
-			glm::vec2 preUV4 = glm::vec2( bevelUV2, bevelUV1 );
+            if( d > 0 )
+            {
+                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+
+                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, 1.0 ) );
+            }
+            else
+            {
+                verts->AddAttribute( glm::vec3( w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+
+                verts->AddAttribute( glm::vec3( -w, h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+                verts->AddAttribute( glm::vec3( -w, -h, d ) + centerTranslate );   normals->AddAttribute( glm::vec3( 0.0, 0.0, -1.0 ) );
+            }
 
 
-			uvs->AddAttribute( makeUV( preUV1, mappingPlane ) );
-			uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
-			uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
+            float bevelUV1 = bevel / dims.x;
+            float bevelUV2 = bevel / dims.y;
+            glm::vec2 preUV1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
+            glm::vec2 preUV2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
+            glm::vec2 preUV3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
+            glm::vec2 preUV4 = glm::vec2( bevelUV2, bevelUV1 );
+
+
+            uvs->AddAttribute( makeUV( preUV1, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
+            uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
 
             uvs->AddAttribute( makeUV( preUV3, mappingPlane ) );
             uvs->AddAttribute( makeUV( preUV2, mappingPlane ) );
-			uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
-                
+            uvs->AddAttribute( makeUV( preUV4, mappingPlane ) );
+
             //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
 
@@ -294,7 +282,7 @@ namespace Generator
             //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
         }
 
-        void Init() 
+        void Init()
         {
             // It's a little hackisch. We should implement constraints in paramters.
             if( tesselation < 1 )
@@ -333,46 +321,46 @@ namespace Generator
             delete[] coords;
         }
 
-		glm::vec2 getUV( float bevel1, float bevel2, bool inverseU, bool inverseV )
-		{
-			float u = bevel1;
-			float v = bevel2;
-			if( inverseU )
-				u = 1 - u;
-			if( inverseV )
-				v = 1 - v;
-			return glm::vec2(u, v);
-		}
+        glm::vec2 getUV( float bevel1, float bevel2, bool inverseU, bool inverseV )
+        {
+            float u = bevel1;
+            float v = bevel2;
+            if( inverseU )
+                u = 1 - u;
+            if( inverseV )
+                v = 1 - v;
+            return glm::vec2( u, v );
+        }
 
-		/**@brief Gives UVs in parameter, good orientation in texture space
-		depending on face, that we compute currently.
-		@param[in] z MINUS_Z lub PLUS_Z.*/
-		glm::vec2       uvToZPlaneSpace( glm::vec2 uv, int face, CubicMappingPlane z )
-		{
-			float u;
-			float v;
-			z;
+        /**@brief Gives UVs in parameter, good orientation in texture space
+        depending on face, that we compute currently.
+        @param[in] z MINUS_Z lub PLUS_Z.*/
+        glm::vec2       uvToZPlaneSpace( glm::vec2 uv, int face, CubicMappingPlane z )
+        {
+            float u;
+            float v;
+            z;
 
-			if( face == 0 )
-				u = 1 - uv.y, v = uv.x;
-			else if( face == 1 )
-				u = uv.x, v = uv.y;
-			else if( face == 2 )
-				u = uv.y, v = 1 - uv.x;
-			else if( face == 3 )
-				u = 1 - uv.x, v = 1 - uv.y;
-			else
-				u = 0, v = 0;	// Error
+            if( face == 0 )
+                u = 1 - uv.y, v = uv.x;
+            else if( face == 1 )
+                u = uv.x, v = uv.y;
+            else if( face == 2 )
+                u = uv.y, v = 1 - uv.x;
+            else if( face == 3 )
+                u = 1 - uv.x, v = 1 - uv.y;
+            else
+                u = 0, v = 0;	// Error
 
-			if( z == CubicMappingPlane::PLUS_Z )
-				v = 1 - v;
+            if( z == CubicMappingPlane::PLUS_Z )
+                v = 1 - v;
 
-			return glm::vec2( u, v );
-		}
+            return glm::vec2( u, v );
+        }
 
         // ***********************
         //
-		float       ComputeScaledU( float bevelUV, int mainPlaneTess, float bevelStep, int k, int j )
+        float       ComputeScaledU( float bevelUV, int mainPlaneTess, float bevelStep, int k, int j )
         {
             float kScale = float( mainPlaneTess - j ) / ( float )mainPlaneTess;
             return bevelUV - ( bevelUV - bevelStep * k ) * kScale;
@@ -557,26 +545,26 @@ namespace Generator
 
                 for( int j = 0; j < m - 1; j++ )
                 {
-                    verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i ][ j ] + centerTranslate );          normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
 
-                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
-                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j + 1 ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j + 1 ] + centerTranslate );  normals->AddAttribute( norm[ i + 1 ][ j + 1 ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
 
 
                     if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
                     {
                         uvsIdx++;
 
-                        verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i ][ j ] + centerTranslate );          normals->AddAttribute( norm[ i ][ j ] );            uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
 
-                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
-                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( norm[ i + 1 ][ j + 1 ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( norm[ i ][ j + 1 ] );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( norm[ i + 1 ][ j ] );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j + 1 ] + centerTranslate );  normals->AddAttribute( norm[ i + 1 ][ j + 1 ] );    uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
                     }
 
                     uvsIdx++;
@@ -599,13 +587,13 @@ namespace Generator
                 {
                     glm::vec3 normal = ComputeFlatNormal( v[ i ][ j ], v[ i + 1 ][ j ], v[ i ][ j + 1 ], v[ i + 1 ][ j + 1 ] );
 
-                    verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i ][ j ] + centerTranslate );          normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
 
-                    verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
-                    verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                    verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                    verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                    verts->AddAttribute( v[ i + 1 ][ j + 1 ] + centerTranslate );  normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
 
 
                     if( j == mainFaceTess || j == tesselation + 1 + followingFaceTess )
@@ -614,13 +602,13 @@ namespace Generator
 
                         normal = ComputeFlatNormal( v[ i ][ j ], v[ i + 1 ][ j ], v[ i ][ j + 1 ], v[ i + 1 ][ j + 1 ] );
 
-                        verts->AddAttribute( v[ i ][ j ] + center_translate );          normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i ][ j ] + centerTranslate );          normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
 
-                        verts->AddAttribute( v[ i ][ j + 1 ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
-                        verts->AddAttribute( v[ i + 1 ][ j ] + center_translate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
-                        verts->AddAttribute( v[ i + 1 ][ j + 1 ] + center_translate );  normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i ][ j + 1 ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i ][ uvsIdx + 1 ] );
+                        verts->AddAttribute( v[ i + 1 ][ j ] + centerTranslate );      normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx ] );
+                        verts->AddAttribute( v[ i + 1 ][ j + 1 ] + centerTranslate );  normals->AddAttribute( normal );        uvs->AddAttribute( coords[ i + 1 ][ uvsIdx + 1 ] );
                     }
 
                     uvsIdx++;
@@ -648,14 +636,14 @@ namespace Generator
         //
         void        GenerateLine( int i, double x, double y, double a )
         {
-            double d = dims.z/2 - bevel;
+            double d = dims.z / 2 - bevel;
             double b = bevel;
 
             int angleTesselation = tesselation > 0 ? tesselation : 1;       // Avoid division by zero.
 
             double sinA = sin( a );
             double cosA = cos( a );
-            
+
             for( int j = 0; j <= tesselation; j++ )
             {
                 double angle2 = j * PI / 2 / angleTesselation;
@@ -685,8 +673,8 @@ namespace Generator
         {
             int mainFaceTess = tesselation / 2;
 
-            double w = dims.x/2 - bevel, 
-                h = dims.y/2 - bevel;
+            double w = dims.x / 2 - bevel,
+                h = dims.y / 2 - bevel;
 
             int t = tesselation;
             int angleTesselation = tesselation > 0 ? tesselation : 1;       // Avoid division by zero.
@@ -706,28 +694,28 @@ namespace Generator
                 lineIdxOffset++;
             }
 
-// top
+            // top
             GenerateLine( lineIdxOffset, w, h, 0. );
             for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / angleTesselation;
                 GenerateLine( lineIdxOffset + 1 + i, -w, h, angle );
             }
-// left
+            // left
             GenerateLine( lineIdxOffset + t + 1, -w, h, PI / 2 );
             for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / angleTesselation + PI / 2;
                 GenerateLine( lineIdxOffset + t + 2 + i, -w, -h, angle );
             }
-// bottom
+            // bottom
             GenerateLine( lineIdxOffset + 2 * ( t + 1 ), -w, -h, PI );
             for( int i = 0; i < tesselation; i++ )
             {
                 double angle = i * PI / 2 / angleTesselation + PI;
                 GenerateLine( lineIdxOffset + 2 * ( t + 1 ) + 1 + i, w, -h, angle );
             }
-// right
+            // right
             GenerateLine( lineIdxOffset + 3 * ( t + 1 ), w, -h, 3 * PI / 2 );
             for( int i = 0; i < mainFaceTess + 1; i++ )
             {
@@ -748,13 +736,15 @@ namespace Generator
     };
 }
 
-std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
+// ***********************
+//
+std::vector<IGeometryGeneratorPtr>    DefaultCubePlugin::GetGenerators()
 {
     Generator::smooth = m_smooth->GetValue();
     Generator::bevel = m_bevel->GetValue();
     Generator::dims = m_dimensions->GetValue();
     Generator::tesselation = m_tesselation->GetValue();
-	Generator::center_translate = Generator::computeWeightCenter(
+	Generator::centerTranslate = Generator::computeWeightCenter(
 																	m_weightCenterX->Evaluate(),
 																	m_weightCenterY->Evaluate(),
 																	m_weightCenterZ->Evaluate() );
@@ -769,34 +759,38 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
     return gens;
 }
 
-bool                                Plugin::NeedsTopologyUpdate()
+// ***********************
+//
+bool                                DefaultCubePlugin::NeedsTopologyUpdate()
 {
-    return ParameterChanged( PN::BEVEL ) || 
-        ParameterChanged( PN::DIMENSIONS ) ||
-        ParameterChanged( PN::TESSELATION )	||
-		ParameterChanged( PN::WEIGHTCENTERX ) ||
-		ParameterChanged( PN::WEIGHTCENTERY ) ||
-		ParameterChanged( PN::WEIGHTCENTERZ ) ||
-		ParameterChanged( PN::MAPPINGTYPE ) ||
-        ParameterChanged( PN::SMOOTH_BEVEL );
+    return ParameterChanged( PARAM::BEVEL ) || 
+        ParameterChanged( PARAM::DIMENSIONS ) ||
+        ParameterChanged( PARAM::TESSELATION )	||
+		ParameterChanged( PARAM::WEIGHTCENTERX ) ||
+		ParameterChanged( PARAM::WEIGHTCENTERY ) ||
+		ParameterChanged( PARAM::WEIGHTCENTERZ ) ||
+		ParameterChanged( PARAM::MAPPINGTYPE ) ||
+        ParameterChanged( PARAM::SMOOTH_BEVEL );
 }
 
-Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
+// ***********************
+//
+DefaultCubePlugin::DefaultCubePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
     : DefaultGeometryPluginBase( name, uid, prev, model )
 {
-    m_smooth = QueryTypedValue< ValueBoolPtr >( GetValue( PN::SMOOTH_BEVEL ) );
-    m_bevel = QueryTypedValue< ValueFloatPtr >( GetValue( PN::BEVEL ) );
-    m_dimensions = QueryTypedValue< ValueVec3Ptr >( GetValue( PN::DIMENSIONS ) );
-    m_tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
+    m_smooth = QueryTypedValue< ValueBoolPtr >( GetValue( PARAM::SMOOTH_BEVEL ) );
+    m_bevel = QueryTypedValue< ValueFloatPtr >( GetValue( PARAM::BEVEL ) );
+    m_dimensions = QueryTypedValue< ValueVec3Ptr >( GetValue( PARAM::DIMENSIONS ) );
+    m_tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PARAM::TESSELATION ) );
 
-	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
-	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
-	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
+	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PARAM::WEIGHTCENTERX ) );
+	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PARAM::WEIGHTCENTERY ) );
+	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PARAM::WEIGHTCENTERZ ) );
 
-	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPINGTYPE ) );
+	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PARAM::MAPPINGTYPE ) );
 
     m_pluginParamValModel->Update();
     InitGeometry( PrimitiveType::PT_TRIANGLES );
 }
 
-} } }
+} }
