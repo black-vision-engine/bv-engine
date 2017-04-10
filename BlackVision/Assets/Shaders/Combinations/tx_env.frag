@@ -26,6 +26,8 @@ void main()
 	vec3 envColor = computeEnvironment( envReflection );
 	
 	vec4 color = texture( Tex0, uvCoord );
+	color.rgb = color.rgb;
+	
 	color = mix( color, vec4( envColor, 1.0 ), reflectivity );
 	
 	FragColor = color * alpha;

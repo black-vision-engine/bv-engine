@@ -24,13 +24,15 @@
 
 namespace bv { namespace model {
 
-const std::string        DefaultGradientPlugin::PARAM_BLEND_ENABLE  = "blend enable";
+
 const std::string        DefaultGradientPlugin::PARAM_ALPHA         = "alpha";
 
 const std::string        DefaultGradientPlugin::PARAM_POINT1        = "point1";
 const std::string        DefaultGradientPlugin::PARAM_POINT2        = "point2";
 const std::string        DefaultGradientPlugin::PARAM_COLOR1        = "color1";
 const std::string        DefaultGradientPlugin::PARAM_COLOR2        = "color2";
+
+const std::string        DefaultGradientPlugin::TX_MAT              = "txMat";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -39,8 +41,7 @@ const std::string        DefaultGradientPlugin::PARAM_COLOR2        = "color2";
 //
 DefaultGradientPluginDesc::DefaultGradientPluginDesc                          ()
     : BasePluginDescriptor( UID(), "linear_gradient", "lg" )
-{
-}
+{}
 
 // *******************************
 //
@@ -59,11 +60,9 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     auto model  = helper.GetModel();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
-    //Create all parameters and evaluators
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_BLEND_ENABLE, true, true, true );
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultGradientPlugin::PARAM_ALPHA, 1.f, true );
@@ -73,15 +72,11 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     helper.AddSimpleParam( DefaultGradientPlugin::PARAM_COLOR1, glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), true );
     helper.AddSimpleParam( DefaultGradientPlugin::PARAM_COLOR2, glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), true );
 
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
+    helper.SetOrCreateVSModel();
+    helper.AddTransformParam( DefaultGradientPlugin::TX_MAT, true );
 
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-
-    //Set default values of all parameters
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultGradientPlugin::TX_MAT );
+    SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
     return model;
 }
@@ -111,6 +106,9 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
     m_psc->GetRendererContext()->cullCtx->enabled = false;
+
+	m_psc->GetRendererContext()->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
+	BlendHelper::SetBlendRendererContext( m_psc, m_blendMode.GetParameter() );
 }
 
 // *************************************
@@ -123,6 +121,9 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+
+	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+	m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
 
     SetPrevPlugin( prev );
 }
@@ -160,15 +161,9 @@ void                                DefaultGradientPlugin::Update               
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, DefaultGradientPlugin::TX_MAT );
 
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
-    {
-        auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
-
-        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
-    }
+	BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_blendMode );
     
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )

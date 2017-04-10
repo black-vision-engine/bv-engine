@@ -1779,7 +1779,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
-    </ClCompile>
+	</ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
@@ -1788,6 +1788,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\OutputRendering\Output.cpp">
       <Filter>Engine\Graphics\Effects\nrl\Logic\OutputRendering</Filter>
@@ -5026,6 +5029,10 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\nrl\Logic\Components\Initialization\VideoInputChannelDataDesc.h">
       <Filter>Engine\Graphics\Effects\nrl\Logic\Components\Initialization</Filter>
