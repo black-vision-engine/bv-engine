@@ -5,6 +5,8 @@
 #include "Mathematics/glm_inc.h"
 #include "Engine/Audio/Resources/AudioBuffer.h"
 
+#include <set>
+
 
 namespace bv { namespace audio {
 
