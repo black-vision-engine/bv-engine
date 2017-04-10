@@ -115,7 +115,7 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetEnabled( true );
+    desc.SetEnabled( false );
 
     // FIXME: nrl - append additional properties if necessary
 }
