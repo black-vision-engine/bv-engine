@@ -396,13 +396,13 @@ namespace Generator
                 dim1 = dims.x, dim3 = dims.y;
 
             float bevelUV1 = bevel / dim1;
-            float bevelStep1 = bevelUV1 / mainPlaneTess;
+            float bevelStep1 = bevelUV1 / ( mainPlaneTess ? mainPlaneTess : 1 );        // Prevent from division by 0.
 
             float bevelUV2 = bevel / dims.z;
-            float bevelStep2 = bevelUV2 / remainPlaneTess;
+            float bevelStep2 = bevelUV2 / ( remainPlaneTess ? remainPlaneTess : 1 );    // Prevent from division by 0.
 
             float bevelUV3 = bevel / dim3;
-            float bevelStep3 = bevelUV3 / uvTess;
+            float bevelStep3 = bevelUV3 / ( uvTess ? uvTess : 1 );      // Prevent from division by 0.
 
             glm::vec2 preUV1;
 
@@ -464,10 +464,10 @@ namespace Generator
                 dim1 = dims.x, dim3 = dims.y;
 
             float bevelUV1 = bevel / dim1;
-            float bevelStep1 = bevelUV1 / mainPlaneTess;
+            float bevelStep1 = bevelUV1 / ( mainPlaneTess ? mainPlaneTess : 1 );        // Prevent from division by 0.
 
             float bevelUV2 = bevel / dims.z;
-            float bevelStep2 = bevelUV2 / remainPlaneTess;
+            float bevelStep2 = bevelUV2 / ( remainPlaneTess ? remainPlaneTess : 1 );    // Prevent from division by 0.
 
             float bevelUV3 = bevel / dim3;
             //float bevelStep3 = bevelUV3 / mainPlaneTess;
