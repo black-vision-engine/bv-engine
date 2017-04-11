@@ -25,7 +25,7 @@ protected:
                                 VideoInputChannel           ( const RenderChannel * wrappedChannel );
 
 public:
-   
+
     virtual                     ~VideoInputChannel          ();
 
     bool                        IsActive                    () const;

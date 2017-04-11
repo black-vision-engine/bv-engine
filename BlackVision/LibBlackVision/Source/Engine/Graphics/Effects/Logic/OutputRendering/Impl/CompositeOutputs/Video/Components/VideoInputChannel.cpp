@@ -8,7 +8,7 @@
 #include "Assets/Texture/TextureUtils.h"
 
 
-namespace bv { 
+namespace bv {
 
 // **************************
 //
@@ -119,6 +119,13 @@ UInt32              VideoInputChannel::GetHeight                   () const
 TextureFormat       VideoInputChannel::GetFormat                   () const
 {
     return m_wrappedRenderChannel->GetActiveRenderTarget()->Format();
+}
+
+// **************************
+//
+SizeType             VideoInputChannel::GetRawFrameSize             () const
+{
+    return m_wrappedRenderChannel->GetActiveRenderTarget()->ColorTexture( 0 )->RawFrameSize();
 }
 
 } // bv
