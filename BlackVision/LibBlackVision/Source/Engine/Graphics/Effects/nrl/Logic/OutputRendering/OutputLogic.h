@@ -19,7 +19,7 @@ class OutputLogic
 private:
 
     std::vector< Output * >     m_outputs;
-    OutputScreenshot            m_screenshotLogic;
+    OutputScreenshot            m_screenshotLogic; // FIXME: Implement it using the outputs handlers design model.
 
 private:
 
