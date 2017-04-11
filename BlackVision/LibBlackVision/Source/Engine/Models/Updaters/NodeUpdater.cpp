@@ -169,13 +169,13 @@ void    NodeUpdater::UpdateNodeEffect       ()
     auto nodeEffect = m_modelNode->GetNodeEffect();
     if( nodeEffect )
     {
-        auto sceneNNodeEffect = m_sceneNode->GetNNodeEffect();
+        auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-        if( sceneNNodeEffect )
+        if( sceneNodeEffect )
         {
             for( auto & val : nodeEffect->GetValues() )
             {
-                UpdateValue( val, sceneNNodeEffect->GetValue( val->GetName() ) );
+                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
             }
         }
         else

@@ -10,7 +10,7 @@ class ModelNodeEffectFactory
 {
 public:
 
-    static IModelNodeEffectPtr      CreateModelNodeEffect         ( nrl::NNodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    static IModelNodeEffectPtr      CreateModelNodeEffect         ( NodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 
 };
 

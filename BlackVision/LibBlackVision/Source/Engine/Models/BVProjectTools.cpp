@@ -20,7 +20,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/AssetTracker.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffectFactory.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -151,12 +151,12 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     {
         auto nNodeEffectType = modelNodeEffect->GetType();
 
-        node->SetNNodeEffect( nrl::CreateNodeEffect( nNodeEffectType ) );
+        node->SetNodeEffect( CreateNodeEffect( nNodeEffectType ) );
     }
     else
     {
-        auto nodeEffectType = nrl::NNodeEffectType::NNET_DEFAULT;
-        node->SetNNodeEffect( nrl::CreateNodeEffect( nodeEffectType ) );
+        auto nodeEffectType = NodeEffectType::NET_DEFAULT;
+        node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
     }
 }
 // *******************************
@@ -614,7 +614,7 @@ ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model
 //
 void                 BVProjectTools::UpdateEffectAssetData               ( SceneNode * node, model::BasicNodePtr modelNode )
 {
-    auto effect = node->GetNNodeEffect();
+    auto effect = node->GetNodeEffect();
     auto modelEffect = modelNode->GetNodeEffect();
 
     if( modelEffect != nullptr )

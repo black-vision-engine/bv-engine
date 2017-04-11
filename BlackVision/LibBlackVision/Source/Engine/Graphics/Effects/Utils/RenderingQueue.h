@@ -7,12 +7,7 @@
 namespace bv
 {
 
-namespace nrl {
-
-class nrl::NRenderContext;
-
-}
-
+class RenderContext;
 class SceneNode;
 
 class RenderingQueue
@@ -48,24 +43,24 @@ public:
     RenderingQueue  ();
     ~RenderingQueue ();
 
-    void                QueueSingleNode     ( SceneNode * node, nrl::NRenderContext * ctx );
-    void                QueueNodeSubtree    ( SceneNode * node, nrl::NRenderContext * ctx );
+    void                QueueSingleNode     ( SceneNode * node, RenderContext * ctx );
+    void                QueueNodeSubtree    ( SceneNode * node, RenderContext * ctx );
 
-    void                QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx );
-    void                QueueSingleNode     ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx );
+    void                QueueNodeSubtree    ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
+    void                QueueSingleNode     ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
 
-    void                Render              ( nrl::NRenderContext * ctx );
+    void                Render              ( RenderContext * ctx );
 
     void                ClearQueue          ();
 
 
-    static float        ComputeNodeZ        ( SceneNode * node, nrl::NRenderContext * ctx );
-    static float        ComputeNodeZ        ( SceneNodeRepr * nodeRepr, nrl::NRenderContext * ctx );
+    static float        ComputeNodeZ        ( SceneNode * node, RenderContext * ctx );
+    static float        ComputeNodeZ        ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
     static bool         IsTransparent       ( SceneNode * node );
     static bool         IsTransparent       ( SceneNodeRepr * nodeRepr );
 
 private:
-    void                RenderNode          ( RenderingQueue::RenderItem & renderItem, nrl::NRenderContext * ctx );
+    void                RenderNode          ( RenderingQueue::RenderItem & renderItem, RenderContext * ctx );
 
     void                QueueTransparent    ( SceneNodeRepr * node, float z, bool useEffect = false );
     void                QueueOpaque         ( SceneNodeRepr * node, float z, bool useEffect = false );
@@ -73,4 +68,4 @@ private:
 
 DEFINE_UPTR_TYPE( RenderingQueue );
 
-}	// bv
+} // bv
