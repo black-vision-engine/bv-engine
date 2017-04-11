@@ -189,7 +189,7 @@ bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data, bool force
         }
 
 		if( m_bufferedDataSize == 0 )
-			LOG_MESSAGE( SeverityLevel::debug ) << "m_bufferedDataSize == 0";
+			LOG_MESSAGE( SeverityLevel::debug ) << "Audio buffer data is empty.";
 
         return true;
     }

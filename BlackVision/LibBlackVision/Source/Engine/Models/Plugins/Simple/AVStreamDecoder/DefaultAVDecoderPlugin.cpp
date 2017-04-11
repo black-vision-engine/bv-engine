@@ -420,17 +420,25 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
     if( ParameterChanged( PARAM::LOOP_COUNT ) )
     {
         if( loopCount == 0 )
-        {
             loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
-        }
+
         m_loopCount = loopCount;
     }
 
-    if( loopEnabled && m_decoder->IsFinished() && m_loopCount > 1 )
+    
+    if( m_decoder->IsFinished() )
     {
         m_decoder->Seek( 0.f );
-		UpdateDecoderState( m_decoderMode );
-        m_loopCount--;
+
+        if( loopEnabled && m_loopCount > 1 )
+            m_loopCount--;
+        else
+        {
+            m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+            m_decoderMode = m_decoderModeParam->Evaluate();
+        }
+
+        UpdateDecoderState( m_decoderMode );
     }
 }
 
