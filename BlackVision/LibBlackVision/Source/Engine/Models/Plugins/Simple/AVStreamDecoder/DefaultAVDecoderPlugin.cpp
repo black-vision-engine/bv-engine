@@ -141,7 +141,6 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_decoder( nullptr )
-    , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
@@ -378,6 +377,8 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
         {
+            m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+
             BroadcastHasFinishedEvent();
             m_isFinished = true;
             TriggerEvent( AssetTrackerInternalEvent::Command::EOFAudio );
@@ -415,30 +416,39 @@ void                                DefaultAVDecoderPlugin::Pause               
 //
 void                                DefaultAVDecoderPlugin::HandlePerfectLoops  ()
 {
-    auto loopEnabled = m_loopEnabledParam->Evaluate();
-    auto loopCount = m_loopCountParam->Evaluate();
-    if( ParameterChanged( PARAM::LOOP_COUNT ) )
+    m_decoderMode = m_decoderModeParam->Evaluate();
+    if( m_decoderMode == DecoderMode::RESTART )
     {
-        if( loopCount == 0 )
-            loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
-
-        m_loopCount = loopCount;
+        UpdateDecoderState( DecoderMode::STOP );
+        m_decoderModeParam->SetVal( DecoderMode::PLAY, 0.f );
     }
-
-    
-    if( m_decoder->IsFinished() )
+    else
     {
-        m_decoder->Seek( 0.f );
-
-        if( loopEnabled && m_loopCount > 1 )
-            m_loopCount--;
-        else
+        auto loopEnabled = m_loopEnabledParam->Evaluate();
+        auto loopCount = m_loopCountParam->Evaluate();
+        if( ParameterChanged( PARAM::LOOP_COUNT ) )
         {
-            m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
-            m_decoderMode = m_decoderModeParam->Evaluate();
+            if( loopCount == 0 )
+                loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
+
+            m_loopCount = loopCount;
         }
 
-        UpdateDecoderState( m_decoderMode );
+
+        if( m_decoder->IsFinished() )
+        {
+            m_decoder->Seek( 0.f );
+
+            if( loopEnabled && m_loopCount > 1 )
+                m_loopCount--;
+            else
+            {
+                m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+                m_decoderMode = m_decoderModeParam->Evaluate();
+            }
+
+            UpdateDecoderState( m_decoderMode );
+        }
     }
 }
 
@@ -446,6 +456,12 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
 //
 void                                DefaultAVDecoderPlugin::UpdateDecoderState          ( DecoderMode mode )
 {
+    if( mode == DecoderMode::RESTART )
+    {
+        UpdateDecoderState( DecoderMode::STOP );
+        m_decoderModeParam->SetVal( DecoderMode::PLAY, 0.f );
+    }
+
     switch( mode )
     {
         case DecoderMode::PLAY:

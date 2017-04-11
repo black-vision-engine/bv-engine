@@ -37,7 +37,7 @@ class DefaultAVDecoderPlugin : public BasePlugin
 {
 public:
 
-    enum DecoderMode : int { STOP, PLAY, PAUSE };
+    enum DecoderMode : int { STOP, PLAY, PAUSE, RESTART };
 
     struct PARAM
     {
@@ -74,7 +74,6 @@ private:
 
 	/** time in seconds from the beginning of video */
     ParamFloatPtr                       m_offsetParam;                 
-    Float32                             m_prevOffsetCounter;
 
     ParamBoolPtr                        m_loopEnabledParam;                 
     ParamIntPtr                         m_loopCountParam;

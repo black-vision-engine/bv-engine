@@ -73,7 +73,7 @@ DefaultPluginParamValModelPtr   DefaultAudioDecoderPluginDesc::CreateDefaultMode
     auto model  = helper.GetModel();
 
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
+    helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::SEEK_OFFSET, 0.f, true, true );
     helper.AddParam< IntInterpolator, DefaultAudioDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultAudioDecoderPlugin::PARAM::DECODER_STATE, DefaultAudioDecoderPlugin::DecoderMode::STOP, true, true );
     helper.AddSimpleParam( DefaultAudioDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
@@ -109,7 +109,6 @@ void					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
 DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, model )
     , m_decoder( nullptr )
-    , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
@@ -121,7 +120,7 @@ DefaultAudioDecoderPlugin::DefaultAudioDecoderPlugin				        ( const std::str
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
     
-    m_offsetParam = QueryTypedParam< ParamVec2Ptr >( GetParameter( PARAM::SEEK_OFFSET ) );
+    m_offsetParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::SEEK_OFFSET ) );
     m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
 
     m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
@@ -202,31 +201,19 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
 {
     if( m_decoder )
     {
-        m_decoderMode =  m_decoderModeParam->Evaluate();
+        m_decoderMode = m_decoderModeParam->Evaluate();
 
         if( ParameterChanged( PARAM::DECODER_STATE ) )
         {
             UpdateDecoderState( m_decoderMode );
         }
 
-        // edge case - looped timeline
-        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-        if( decoderModeTime < m_prevDecoderModeTime )
+        if( ParameterChanged( PARAM::SEEK_OFFSET ) )
         {
-            m_prevOffsetCounter = 0;
-        }
-        m_prevDecoderModeTime = decoderModeTime;
-
-        // update offset 
-        auto offset = m_offsetParam->Evaluate();
-        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
-        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
-        {
-            m_decoder->Seek( offset[ 0 ] );
-            m_prevOffsetCounter = offset[ 1 ];
+            m_decoder->Seek( m_offsetParam->Evaluate() );
 
             std::static_pointer_cast< FFmpegAVDecoder >( m_decoder )->ProcessFirstAVFrame();
-			UpdateDecoderState( m_decoderMode );
+            UpdateDecoderState( m_decoderMode );
         }
 
         HandlePerfectLoops();
@@ -234,6 +221,8 @@ void                                DefaultAudioDecoderPlugin::UpdateDecoder    
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
         {
+            m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+
             BroadcastHasFinishedEvent();
             m_isFinished = true;
             TriggerAudioEvent( AssetTrackerInternalEvent::Command::EOFAudio );
@@ -271,30 +260,39 @@ void                                DefaultAudioDecoderPlugin::Pause            
 //
 void                                DefaultAudioDecoderPlugin::HandlePerfectLoops       ()
 {
-    auto loopEnabled = m_loopEnabledParam->Evaluate();
-    auto loopCount = m_loopCountParam->Evaluate();
-    if( ParameterChanged( PARAM::LOOP_COUNT ) )
+    m_decoderMode = m_decoderModeParam->Evaluate();
+    if( m_decoderMode == DecoderMode::RESTART )
     {
-        if( loopCount == 0 )
-            loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
-
-        m_loopCount = loopCount;
+        UpdateDecoderState( DecoderMode::STOP );
+        m_decoderModeParam->SetVal( DecoderMode::PLAY, 0.f );
     }
-
-
-    if( m_decoder->IsFinished() )
+    else
     {
-        m_decoder->Seek( 0.f );
-
-        if( loopEnabled && m_loopCount > 1 )
-            m_loopCount--;
-        else
+        auto loopEnabled = m_loopEnabledParam->Evaluate();
+        auto loopCount = m_loopCountParam->Evaluate();
+        if( ParameterChanged( PARAM::LOOP_COUNT ) )
         {
-            m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
-            m_decoderMode = m_decoderModeParam->Evaluate();
+            if( loopCount == 0 )
+                loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
+
+            m_loopCount = loopCount;
         }
 
-        UpdateDecoderState( m_decoderMode );
+
+        if( m_decoder->IsFinished() )
+        {
+            m_decoder->Seek( 0.f );
+
+            if( loopEnabled && m_loopCount > 1 )
+                m_loopCount--;
+            else
+            {
+                m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+                m_decoderMode = m_decoderModeParam->Evaluate();
+            }
+
+            UpdateDecoderState( m_decoderMode );
+        }
     }
 }
 
@@ -302,6 +300,12 @@ void                                DefaultAudioDecoderPlugin::HandlePerfectLoop
 //
 void                                DefaultAudioDecoderPlugin::UpdateDecoderState       ( DecoderMode mode )
 {
+    if( mode == DecoderMode::RESTART )
+    {
+        UpdateDecoderState( DecoderMode::STOP );
+        m_decoderModeParam->SetVal( DecoderMode::PLAY, 0.f );
+    }
+
     switch( mode )
     {
         case DecoderMode::PLAY:

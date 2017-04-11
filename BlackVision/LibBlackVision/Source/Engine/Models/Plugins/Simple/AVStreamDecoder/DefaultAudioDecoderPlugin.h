@@ -38,7 +38,7 @@ class DefaultAudioDecoderPlugin : public BasePlugin
 {
 public:
 
-    enum DecoderMode : int { STOP, PLAY, PAUSE };
+    enum DecoderMode : int { STOP, PLAY, PAUSE, RESTART };
 
     struct PARAM
     {
@@ -66,8 +66,7 @@ private:
     DecoderModeParamPtr                 m_decoderModeParam;
 
     /** time in seconds from the beginning of video */
-    ParamVec2Ptr                        m_offsetParam;                 
-    Float32                             m_prevOffsetCounter;
+    ParamFloatPtr                       m_offsetParam;
 
     ParamBoolPtr                        m_loopEnabledParam;                 
     ParamIntPtr                         m_loopCountParam;
