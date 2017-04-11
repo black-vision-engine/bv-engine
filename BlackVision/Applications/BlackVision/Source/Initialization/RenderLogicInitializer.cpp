@@ -2,17 +2,17 @@
 
 #include "RenderLogicInitializer.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/Components/Initialization/NRenderLogicDesc.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderLogicDesc.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 // *********************************
 //
-NRenderLogic *   RenderLogicInitializer::CreateInstance ( const BVConfig & cfg )
+RenderLogic *   RenderLogicInitializer::CreateInstance ( const BVConfig & cfg )
 {
-    NRenderLogicDesc desc;
+    RenderLogicDesc desc;
 
     desc.SetMainWidth( 1920 );
     desc.SetMainHeight( 1080 );
@@ -21,7 +21,7 @@ NRenderLogic *   RenderLogicInitializer::CreateInstance ( const BVConfig & cfg )
     Initialize( desc.AccessRenderedChannelsDataDesc(), cfg );
     Initialize( desc.AccessOutputLogicDesc(), cfg );
 
-    auto res = NRenderLogic::Create( desc );
+    auto res = RenderLogic::Create( desc );
 
     return res;
 }
@@ -46,9 +46,13 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
             if( ( RenderChannelType ) id < RenderChannelType::RCT_TOTAL )
             {
                 if( enabled )
+                {
                     desc.SetEnabled ( ( RenderChannelType ) id );
+                }
                 else
+                {
                     desc.SetDisabled( ( RenderChannelType ) id );
+                }
             }
 
 
@@ -166,5 +170,5 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     }
 }
 
-} // nrl
+
 } // bv

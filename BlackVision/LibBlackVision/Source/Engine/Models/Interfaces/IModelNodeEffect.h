@@ -9,12 +9,12 @@
 
 #include "Assets/AssetDescriptor.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffect.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 
 namespace bv { namespace model {
 
-class IModelNodeEffect : public bv::IUpdatable, public bv::ISerializable
+class IModelNodeEffect : public IUpdatable, public ISerializable
 {
 public:
 
@@ -23,7 +23,7 @@ public:
     virtual void                                    Serialize               ( ISerializer & ser ) const = 0;
 
     virtual void                                    Update                  ( TimeType t ) = 0;
-    virtual bv::nrl::NNodeEffectType			    GetType			        () const = 0;
+    virtual NodeEffectType			                GetType			        () const = 0;
 
     virtual UInt32                                  NumRequiredAssets       () const = 0;
     virtual bool                                    RemoveAsset             ( SizeType idx ) = 0;

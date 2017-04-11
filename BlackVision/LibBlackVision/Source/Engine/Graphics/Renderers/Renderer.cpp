@@ -1094,7 +1094,7 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
 
 // *********************************
 //
-void    Renderer::FreeNodeEffectPDR_DIRTY_HACK ( const nrl::NNodeEffect * nodeEffect )
+void    Renderer::FreeNodeEffectPDR_DIRTY_HACK ( const NodeEffect * nodeEffect )
 {
     // FIXME: nrl update
     // FIXME: reimplement this szaj
