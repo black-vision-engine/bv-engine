@@ -26,19 +26,20 @@ void    NodeRenderLogic::Clear             ( const RenderTarget * rt, RenderCont
 
 // *********************************
 //
-void    NodeRenderLogic::RenderAudio       ( Scene * scene, RenderContext * ctx )
+void    NodeRenderLogic::RenderAudio       ( Scene * scene, RenderContext * ctx, std::set< const audio::AudioEntity * > & audioEntities )
+
 {
     auto rootNode = scene->GetRoot();
 
     if( rootNode )
     {
-        RenderAudio( rootNode, aud( ctx ) );
+        RenderAudio( rootNode, aud( ctx ), audioEntities );
     }
 }
 
 // *********************************
 //
-void    NodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRenderer * audio )
+void    NodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRenderer * audio, std::set< const audio::AudioEntity * > & audioEntities )
 {
     // FIXME: nrl - and what about node effects???
     if ( node->IsVisible() )
@@ -48,11 +49,12 @@ void    NodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRende
         if( nodeAudio )
         {
             audio->Proccess( nodeAudio );
+            audioEntities.insert( nodeAudio );
         }
 
         for( unsigned int i = 0; i < ( UInt32 )node->NumChildNodes(); ++i )
         {
-            RenderAudio( node->GetChild( i ), audio );
+            RenderAudio( node->GetChild( i ), audio, audioEntities );
         }
     }
 }

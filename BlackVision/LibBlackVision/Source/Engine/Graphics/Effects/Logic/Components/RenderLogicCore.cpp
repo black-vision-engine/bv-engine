@@ -13,20 +13,20 @@
 
 #include "Engine/Graphics/Effects/Logic/State/RenderedData.h"
 
-
-namespace bv { 
+namespace bv
+{
 
 // **************************
 //
 RenderLogicCore::RenderLogicCore()
-    : m_allChannels( (unsigned int) RenderChannelType::RCT_TOTAL )
+    : m_allChannels( ( unsigned int ) RenderChannelType::RCT_TOTAL )
 {
-    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_1 ] = RenderChannelType::RCT_OUTPUT_1;
-    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_2 ] = RenderChannelType::RCT_OUTPUT_2;
-    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_3 ] = RenderChannelType::RCT_OUTPUT_3;
-    m_allChannels[ (unsigned int) RenderChannelType::RCT_OUTPUT_4 ] = RenderChannelType::RCT_OUTPUT_4;
+    m_allChannels[ ( unsigned int ) RenderChannelType::RCT_OUTPUT_1 ] = RenderChannelType::RCT_OUTPUT_1;
+    m_allChannels[ ( unsigned int ) RenderChannelType::RCT_OUTPUT_2 ] = RenderChannelType::RCT_OUTPUT_2;
+    m_allChannels[ ( unsigned int ) RenderChannelType::RCT_OUTPUT_3 ] = RenderChannelType::RCT_OUTPUT_3;
+    m_allChannels[ ( unsigned int ) RenderChannelType::RCT_OUTPUT_4 ] = RenderChannelType::RCT_OUTPUT_4;
 
-    assert( (unsigned int) RenderChannelType::RCT_OUTPUT_4 == (unsigned int) RenderChannelType::RCT_TOTAL - 1 );
+    assert( ( unsigned int ) RenderChannelType::RCT_OUTPUT_4 == ( unsigned int ) RenderChannelType::RCT_TOTAL - 1 );
 
     m_blitWithAlphaEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_BLIT_WITH_ALPHA );
 }
@@ -55,18 +55,17 @@ void    RenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedCh
     // override previously rendered scene. We have to do it here.
     ClearActiveChannels( result, ctx );
 
-    std::vector< RenderTarget * > rts;
-
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
     {
         auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
-        assert( outIdx < (unsigned int) RenderChannelType::RCT_TOTAL );
+        assert( outIdx < ( unsigned int ) RenderChannelType::RCT_TOTAL );
 
-        auto outputType = ( RenderChannelType ) outIdx;   
+        auto outputType = ( RenderChannelType ) outIdx;
         auto outputRT = result->GetActiveRenderTarget( outputType );
-        
-        RenderScene( scene, outputRT, ctx );
+
+        NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
+        NodeRenderLogic::RenderAudio( scene, ctx, result->GetRenderChannel( outputType )->AccessRenderChannelAudioEntities() );
 
         result->SetContainsValidData( outputType, true );
     }
@@ -78,7 +77,6 @@ void    RenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedCh
 void    RenderLogicCore::RenderScene       ( Scene * scene, const RenderTarget * outputRT, RenderContext * ctx )
 {
     NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
-    NodeRenderLogic::RenderAudio( scene, ctx );
 }
 
 // **************************
@@ -123,13 +121,12 @@ void    RenderLogicCore::PostRender        ( RenderedChannelsData * result, Rend
 
                 NodeRenderLogic::Clear( rt, ctx );
 
-				result->SetContainsValidData( channelType, true );
+                result->SetContainsValidData( channelType, true );
             }
 
             result->InvalidateCachedTexture( channelType );
         }
     }
 }
-
 
 } //bv
