@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "BVConfig.h"
 
 
-namespace bv { namespace nrl {
+namespace bv { 
 
 class RenderedChannelsDataDesc;
 class OutputLogicDesc;
@@ -14,7 +14,7 @@ class RenderLogicInitializer
 {
 public:
 
-    static NRenderLogic *   CreateInstance  ( const BVConfig & cfg );
+    static RenderLogic *   CreateInstance  ( const BVConfig & cfg );
 
 private:
 
@@ -27,5 +27,5 @@ private:
 
 };
 
-} // nrl
+
 } // bv

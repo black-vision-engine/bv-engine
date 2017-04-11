@@ -4,9 +4,9 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/OutputLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/Output.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -55,10 +55,10 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
     { 
         //auto outputLogic = logic->GetRenderLogic()->GetOutputLogic();
 
-        //auto preview = outputLogic->GetOutput( nrl::CustomOutputType::COT_PREVIEW );
+        //auto preview = outputLogic->GetOutput( CustomOutputType::COT_PREVIEW );
         //auto & statePrev = preview->AccessOutputState();
 
-        //auto shm = outputLogic->GetOutput( nrl::CustomOutputType::COT_STREAM_SHM );
+        //auto shm = outputLogic->GetOutput( CustomOutputType::COT_STREAM_SHM );
         //auto & stateShm = shm->AccessOutputState();
 
         switch( c )

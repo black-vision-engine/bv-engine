@@ -5,6 +5,7 @@
 
 #include "Assets/Assets.h"
 
+
 namespace bv { namespace model {
 
 class ModelNodeEffect;
@@ -15,7 +16,7 @@ class ModelNodeEffect : public IModelNodeEffect
 {
 protected:
 
-    nrl::NNodeEffectType             m_type;
+    NodeEffectType                  m_type;
 
     //FIXME: ParamValModel should be replaced with separate models for FSE & Pre/PostFSELogic
     DefaultParamValModelPtr         m_paramValModel;
@@ -24,15 +25,15 @@ protected:
 
 public:
 
-                                        ModelNodeEffect     ( nrl::NNodeEffectType type );
-                                        ModelNodeEffect     ( nrl::NNodeEffectType type, DefaultParamValModelPtr model );
+                                        ModelNodeEffect     ( NodeEffectType type );
+                                        ModelNodeEffect     ( NodeEffectType type, DefaultParamValModelPtr model );
                                         ~ModelNodeEffect    ();
 
     virtual void                        Serialize           ( ISerializer & ser ) const override;
 
     virtual void                        Update              ( TimeType t ) override;
     
-    virtual nrl::NNodeEffectType        GetType		        () const override;
+    virtual NodeEffectType              GetType		        () const override;
 
     virtual UInt32                                  NumRequiredAssets   () const override;
     virtual bool                                    AddAsset            ( const AssetDescConstPtr & assetDesc, SizeType idx ) override;
@@ -46,8 +47,8 @@ public:
     virtual const std::vector< IValueConstPtr > &   GetValues           () const override;
 
 
-    static ModelNodeEffectPtr						Create              ( nrl::NNodeEffectType type );
-    static ModelNodeEffectPtr						Create              ( nrl::NNodeEffectType type, DefaultParamValModelPtr model );
+    static ModelNodeEffectPtr						Create              ( NodeEffectType type );
+    static ModelNodeEffectPtr						Create              ( NodeEffectType type, DefaultParamValModelPtr model );
     static ISerializablePtr							Create              ( const IDeserializer & doc );
     static ModelNodeEffectPtr						CreateTyped 		( const IDeserializer & deser );
 

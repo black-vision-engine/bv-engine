@@ -50,10 +50,8 @@ class PdrRenderTarget;
 class PdrDownloadPBO;
 class Scene;
 
-namespace nrl
-{
-    class NNodeEffect;
-}
+// FIXME: nrl - dirty hack, remove all high level rendering logic from this class
+class NodeEffect;
 
 class TransformableEntity;
 
@@ -251,7 +249,7 @@ public:
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
 
-    void                        FreeNodeEffectPDR_DIRTY_HACK    ( const nrl::NNodeEffect * nodeEffect ); //FIXME: renderer should know nothing about the scene structure (especially high level structure of nodes)
+    void                        FreeNodeEffectPDR_DIRTY_HACK    ( const NodeEffect * nodeEffect ); //FIXME: renderer should know nothing about the scene structure (especially high level structure of nodes)
 
 private:
 

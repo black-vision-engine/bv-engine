@@ -205,7 +205,7 @@ void							BVProject::SetStartTime	    ( unsigned long millis )
 //
 void                            BVProject::RemoveNodeEffect ( SceneNode * engineNode )
 {
-    m_renderer->FreeNodeEffectPDR_DIRTY_HACK( engineNode->GetNNodeEffect().get() );
+    m_renderer->FreeNodeEffectPDR_DIRTY_HACK( engineNode->GetNodeEffect().get() );
 }
 
 // *******************************

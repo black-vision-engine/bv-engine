@@ -11,32 +11,32 @@ namespace bv {
 namespace SerializationHelper {
 
 // FIXME: nrl - refactor effects
-std::pair< nrl::NNodeEffectType, const char* > ne2s[] = {
-    std::make_pair( nrl::NNodeEffectType::NNET_ALPHA_MASK, "alpha mask" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_BLUR, "blur" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_DEFAULT, "default" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_LIGHT_SCATTERING, "light scattering" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_MIX_CHANNELS, "mix channels" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_NODE_MASK, "node mask" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_WIREFRAME, "wireframe" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_SHADOW, "shadow" )
-	, std::make_pair( nrl::NNodeEffectType::NNET_GLOW, "glow" )
-	, std::make_pair( nrl::NNodeEffectType::NNET_SOFT_MASK, "soft mask" )
-//    , std::make_pair( nrl::NNodeEffectType::NNET_IMAGE_MASK, "image mask" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_Z_SORT, "z sort" )
-    , std::make_pair( nrl::NNodeEffectType::NNET_TOTAL, "" ) };
+std::pair< NodeEffectType, const char* > ne2s[] = {
+    std::make_pair( NodeEffectType::NET_ALPHA_MASK, "alpha mask" )
+    , std::make_pair( NodeEffectType::NET_BLUR, "blur" )
+    , std::make_pair( NodeEffectType::NET_DEFAULT, "default" )
+    , std::make_pair( NodeEffectType::NET_LIGHT_SCATTERING, "light scattering" )
+    , std::make_pair( NodeEffectType::NET_MIX_CHANNELS, "mix channels" )
+    , std::make_pair( NodeEffectType::NET_NODE_MASK, "node mask" )
+    , std::make_pair( NodeEffectType::NET_WIREFRAME, "wireframe" )
+    , std::make_pair( NodeEffectType::NET_SHADOW, "shadow" )
+	, std::make_pair( NodeEffectType::NET_GLOW, "glow" )
+	, std::make_pair( NodeEffectType::NET_SOFT_MASK, "soft mask" )
+//    , std::make_pair( NodeEffectType::NET_IMAGE_MASK, "image mask" )
+    , std::make_pair( NodeEffectType::NET_Z_SORT, "z sort" )
+    , std::make_pair( NodeEffectType::NET_TOTAL, "" ) };
 
 template<>
-std::string T2String< nrl::NNodeEffectType >( const nrl::NNodeEffectType& t )
+std::string T2String< NodeEffectType >( const NodeEffectType& t )
 {
-    return SerializationHelper::Enum2String< nrl::NNodeEffectType >( ne2s, t );
+    return SerializationHelper::Enum2String< NodeEffectType >( ne2s, t );
 }
 
 template<>
-nrl::NNodeEffectType String2T( const std::string & s, const nrl::NNodeEffectType& defaultType )
+NodeEffectType String2T( const std::string & s, const NodeEffectType& defaultType )
 {
     auto effectType = String2Enum( ne2s, s );
-    if( effectType == nrl::NNodeEffectType::NNET_TOTAL )
+    if( effectType == NodeEffectType::NET_TOTAL )
         return defaultType;
     return effectType;
 }

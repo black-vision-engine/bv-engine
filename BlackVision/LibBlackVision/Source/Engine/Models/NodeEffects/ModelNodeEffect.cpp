@@ -26,19 +26,19 @@ namespace
 {
 // ********************************
 //
-std::map< nrl::NNodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
+std::map< NodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
 {
-    std::map< nrl::NNodeEffectType, UInt32 > m;
+    std::map< NodeEffectType, UInt32 > m;
     // FIXME: nrl - fix this
-    //    m[ nrl::NNodeEffectType::NET_IMAGE_MASK ] = 1;
+    //    m[ NodeEffectType::NET_IMAGE_MASK ] = 1;
 
     return m;
 }
-static std::map< nrl::NNodeEffectType, UInt32 > effectNumRequiredAssets = EffectNumRequiredAssetsInit();
+static std::map< NodeEffectType, UInt32 > effectNumRequiredAssets = EffectNumRequiredAssetsInit();
 
 // ********************************
 //
-UInt32 GetEffectNumRequiredAssets( nrl::NNodeEffectType effectType)
+UInt32 GetEffectNumRequiredAssets( NodeEffectType effectType)
 {
     auto it = effectNumRequiredAssets.find( effectType );
 
@@ -56,7 +56,7 @@ UInt32 GetEffectNumRequiredAssets( nrl::NNodeEffectType effectType)
 
 // ********************************
 //
-ModelNodeEffect::ModelNodeEffect    ( nrl::NNodeEffectType type )
+ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type )
     : m_type( type )
     , m_paramValModel( std::make_shared< DefaultParamValModel >() )
     , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
@@ -64,7 +64,7 @@ ModelNodeEffect::ModelNodeEffect    ( nrl::NNodeEffectType type )
 
 // ***********************
 //
-ModelNodeEffect::ModelNodeEffect    ( nrl::NNodeEffectType type, DefaultParamValModelPtr model )
+ModelNodeEffect::ModelNodeEffect    ( NodeEffectType type, DefaultParamValModelPtr model )
     : m_type( type )
     , m_paramValModel( model )
     , m_assetsDescs( GetEffectNumRequiredAssets( type ) )
@@ -83,7 +83,7 @@ void                                        ModelNodeEffect::Serialize          
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
     ser.EnterChild( "effect" );
-    ser.SetAttribute( "type", SerializationHelper::T2String< nrl::NNodeEffectType >( GetType() ) );
+    ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
 
     if( context->detailedInfo )
     {
@@ -125,11 +125,11 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 {
     auto typeStr = deser.GetAttribute( "type" );
 
-    auto type = SerializationHelper::String2T< nrl::NNodeEffectType >( typeStr, nrl::NNodeEffectType::NNET_DEFAULT );
+    auto type = SerializationHelper::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
 
     auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 
-    if( type != nrl::NNodeEffectType::NNET_DEFAULT )
+    if( type != NodeEffectType::NET_DEFAULT )
     {
         auto retI = ModelNodeEffectFactory::CreateModelNodeEffect( type, "", deserContext->GetSceneTimeline() );
 
@@ -206,7 +206,7 @@ void                                        ModelNodeEffect::Update             
 
 // ********************************
 //
-nrl::NNodeEffectType                              ModelNodeEffect::GetType      () const
+NodeEffectType                              ModelNodeEffect::GetType            () const
 {
     return m_type;
 }
@@ -241,14 +241,14 @@ const std::vector< IValueConstPtr > &       ModelNodeEffect::GetValues          
 
 // ********************************
 //
-ModelNodeEffectPtr                          ModelNodeEffect::Create             ( nrl::NNodeEffectType type )
+ModelNodeEffectPtr                          ModelNodeEffect::Create             ( NodeEffectType type )
 {
     return std::make_shared< ModelNodeEffect >( type );
 }
 
 // ***********************
 //
-ModelNodeEffectPtr                          ModelNodeEffect::Create             ( nrl::NNodeEffectType type, DefaultParamValModelPtr model )
+ModelNodeEffectPtr                          ModelNodeEffect::Create             ( NodeEffectType type, DefaultParamValModelPtr model )
 {
     return std::make_shared< ModelNodeEffect >( type, model );
 }
