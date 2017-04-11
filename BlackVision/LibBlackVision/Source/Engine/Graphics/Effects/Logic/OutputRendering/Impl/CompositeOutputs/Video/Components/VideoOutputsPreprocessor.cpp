@@ -87,7 +87,9 @@ void                    VideoOutputsPreprocessor::Initialize            ( Output
 AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( RenderContext * ctx, const VideoInputChannel * vic )
 {
     if( m_currentAVFrames.find( vic ) != m_currentAVFrames.end() )
+    {
         m_avFramesBuffer[ vic ].push_back( m_currentAVFrames[ vic ] );
+    }
 
     auto avFrame = m_avFramesBuffer[ vic ].front();
     m_currentAVFrames[ vic ] = avFrame;
@@ -95,9 +97,8 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     auto videoFrame = vic->ReadColorTexture( ctx );
     avFrame->m_videoData = videoFrame->GetData();
 
-    auto aud_ = aud( ctx );
-	auto ret = aud_->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ),
-                                     vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+    auto audio = audio_renderer( ctx );
+	auto ret = audio->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ), vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
 
     return avFrame;
 }
@@ -106,9 +107,9 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
 //
 void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderContext * ctx )
 {
-    auto aud_ = aud( ctx );
+    auto audio = audio_renderer( ctx );
 
-    auto audioFrameSize = aud_->GetChannels() * aud_->GetChannelDepth() * aud_->GetFrequency() / m_lcmFPS;
+    auto audioFrameSize = audio->GetChannels() * audio->GetChannelDepth() * audio->GetFrequency() / m_lcmFPS;
 
     for( unsigned int i = 0; i < m_inputChannels.GetNumVideoInputChannels(); ++i )
     {
@@ -120,8 +121,8 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         desc.width = vic->GetWidth();
         desc.height = vic->GetHeight();
         desc.depth = TextureUtils::Channels( vic->GetFormat() );
-        desc.channels = aud_->GetChannels();
-        desc.sampleRate = aud_->GetFrequency() / m_lcmFPS;
+        desc.channels = audio->GetChannels();
+        desc.sampleRate = audio->GetFrequency() / m_lcmFPS;
 
         // FIXME: values are hardcoded.
         desc.fieldModeEnabled = true;

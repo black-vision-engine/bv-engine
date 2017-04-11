@@ -32,7 +32,7 @@ void    NodeRenderLogic::RenderAudio       ( Scene * scene, RenderContext * ctx 
 
     if( rootNode )
     {
-        RenderAudio( rootNode, aud( ctx ) );
+        RenderAudio( rootNode, audio_renderer( ctx ) );
     }
 }
 

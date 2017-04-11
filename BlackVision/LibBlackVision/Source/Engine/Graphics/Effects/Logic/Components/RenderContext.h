@@ -58,7 +58,7 @@ inline Renderer *                   renderer		( RenderContext * ctx )
 
 // *******************************
 //
-inline audio::AudioRenderer *       aud             ( RenderContext * ctx )
+inline audio::AudioRenderer *       audio_renderer  ( RenderContext * ctx )
 {
     return ctx->GetAudio();
 }
