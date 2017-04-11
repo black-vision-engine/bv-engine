@@ -104,7 +104,8 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
 
 // *********************************
 //
-void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( NRenderContext * ctx )
+void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderContext * ctx )
+{
     auto aud_ = aud( ctx );
 
     auto audioFrameSize = aud_->GetChannels() * aud_->GetChannelDepth() * aud_->GetFrequency() / m_lcmFPS;
