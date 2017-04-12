@@ -52,7 +52,7 @@ private:
 	BMDTimeScale								m_frameTimescale;
 	UInt32										m_uiTotalFrames;
 
-	UInt64										m_displayedOutputID;
+	UInt64										m_linkedVideoOutputID;
     ChannelOutputData							m_output;
     BlackMagicVCThreadUPtr						m_blackMagicVCThread;
 

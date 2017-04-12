@@ -51,7 +51,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
                         output.flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
                         output.videoMode = ConvertVideoMode( output.resolution, output.refresh, output.interlaced );
 
-						card->m_displayedOutputID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
+						card->m_linkedVideoOutputID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ) );
 
                         deser.ExitChild(); //output
 
@@ -379,7 +379,7 @@ void                    VideoCard::SetFrameProcessingCompletedCallback( FramePro
 //
 void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr & avFrame, UInt64 avOutputID )
 {
-    assert( avOutputID == m_displayedOutputID ); avOutputID;
+    assert( avOutputID == m_linkedVideoOutputID ); avOutputID;
 	if( m_output.enabled )
 	{
 		//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame called at " << Time::Now();
@@ -453,7 +453,7 @@ UInt64                          VideoCard::GetFrameTime         () const
 std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs() const
 {
 	std::set< UInt64 > ret;
-	ret.insert( m_displayedOutputID );
+	ret.insert( m_linkedVideoOutputID );
 	return ret;
 }
 

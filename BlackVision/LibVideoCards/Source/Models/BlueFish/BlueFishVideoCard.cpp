@@ -65,7 +65,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                         output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ), 0 );
                         output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ), 0 );
                         output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
-                        output->id = ( UInt32 ) SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ), 0 );
+                        output->linkedVideoOutput = ( UInt32 ) SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
 
                         //FIXME?
                         output->updateFormat = UPD_FMT_FIELD;

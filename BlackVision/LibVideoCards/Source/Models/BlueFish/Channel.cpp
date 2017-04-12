@@ -132,7 +132,7 @@ UInt64      Channel::GetOutputId                 () const
 {
     if( m_playbackData )
     {
-        return m_playbackData->id;
+        return m_playbackData->linkedVideoOutput;
     }
 
     return MAXDWORD64;

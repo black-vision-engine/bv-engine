@@ -51,7 +51,7 @@ struct ChannelOutputData
     Int32                   referenceV;
     EUpdateMethod           updateFormat;
     EMemoryFormat           memoryFormat;
-    UInt64                  id;
+    UInt64                  linkedVideoOutput;
 };
 
 DEFINE_UPTR_TYPE( ChannelOutputData )
