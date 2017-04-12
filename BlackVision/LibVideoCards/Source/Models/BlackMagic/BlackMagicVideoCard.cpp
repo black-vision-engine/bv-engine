@@ -256,6 +256,23 @@ void                    VideoCard::EnableAudioChannel  ( AudioSampleType audioSa
                                                       BMDAudioOutputStreamType::bmdAudioOutputStreamContinuous ) ) )
     {
         m_audioEnabled = true;
+
+        m_audioChannelsNum = channelCount;
+
+        switch( audioSampleType )
+        {
+        case AudioSampleType::AV_SAMPLE_FMT_U8:
+            m_audioSampleSize = 1;
+            break;
+        case AudioSampleType::AV_SAMPLE_FMT_S16:
+            m_audioSampleSize = 2;
+            break;
+        case AudioSampleType::AV_SAMPLE_FMT_S32:
+            m_audioSampleSize = 4;
+            break;
+        default:
+            assert( false );
+        }
     }
 }
 
@@ -489,7 +506,11 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
             completedFrame = completedFrame;
         }
 
-        if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(), ( unsigned long ) ( ( 2 * 48000 * m_frameDuration ) / ( 2 * m_frameTimescale ) ), 0, m_frameTimescale, NULL ) ) )
+        if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(),
+                                                                                                           ( UInt32 ) srcFrame->m_audioData->Size() / AudioFrameSizeInBytes(),
+                                                                                                           0,
+                                                                                                           m_frameTimescale,
+                                                                                                           NULL ) ) )
         {
             LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule audio frame. " << m_deviceID;
         }
@@ -500,9 +521,16 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
 
 //**************************************
 //
-UInt32              VideoCard::GetRequiredFPS  () const
+UInt32              VideoCard::GetRequiredFPS       () const
 {
-    return ( UInt32 )( m_frameTimescale / m_frameDuration );
+    return ( UInt32 )( ( m_output.interlaced ? 2 : 1 ) * m_frameTimescale / m_frameDuration );
+}
+
+//**************************************
+//
+UInt32              VideoCard::AudioFrameSizeInBytes() const
+{
+    return m_audioChannelsNum * m_audioSampleSize;
 }
 
 } //blackmagic

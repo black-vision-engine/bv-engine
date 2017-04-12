@@ -56,6 +56,9 @@ private:
     ChannelOutputData							m_output;
     BlackMagicVCThreadUPtr						m_blackMagicVCThread;
 
+    UInt32                                      m_audioChannelsNum;
+    UInt32                                      m_audioSampleSize;
+
     mutable UInt64								m_lastFrameTime;
 
     AudioVideoOutputDelegate	*				m_audioVideoOutputDelegate;
@@ -117,6 +120,8 @@ private:
 
 	void					UpdateFrameTime		( UInt64 t );
 	UInt64					GetFrameTime		() const;
+
+    UInt32                  AudioFrameSizeInBytes() const;
 
     static UInt32           EnumerateDevices    ();
 
