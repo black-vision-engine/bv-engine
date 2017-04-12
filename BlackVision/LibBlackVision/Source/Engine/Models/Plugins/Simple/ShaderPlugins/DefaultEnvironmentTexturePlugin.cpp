@@ -19,7 +19,10 @@ namespace bv { namespace model {
 
 
 const std::string        DefaultEnvironmentTexturePlugin::PARAM::Reflectivity   = "reflectivity";
-const std::string        DefaultEnvironmentTexturePlugin::PARAM::TxMat			= "txMat";
+const std::string        DefaultEnvironmentTexturePlugin::PARAM::TxMat			= "envMat";
+const std::string        DefaultEnvironmentTexturePlugin::PARAM::EnvMixMode     = "envMixMode";
+
+
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -50,6 +53,7 @@ DefaultPluginParamValModelPtr   DefaultEnvironmentTexturePluginDesc::CreateDefau
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultEnvironmentTexturePlugin::PARAM::Reflectivity, 0.5f, true );
 	helper.AddTransformParam( DefaultEnvironmentTexturePlugin::PARAM::TxMat );
+    helper.AddSimpleParam( DefaultEnvironmentTexturePlugin::PARAM::EnvMixMode, ( int )DefaultEnvironmentTexturePlugin::MixMode::Blend, true );
 
     return helper.GetModel();
 }
@@ -65,7 +69,6 @@ std::string             DefaultEnvironmentTexturePluginDesc::UID                
 // 
 std::string             DefaultEnvironmentTexturePluginDesc::TextureName            ()
 {
-    //return "Tex0";
     return "EnvMap0";
 }
 
