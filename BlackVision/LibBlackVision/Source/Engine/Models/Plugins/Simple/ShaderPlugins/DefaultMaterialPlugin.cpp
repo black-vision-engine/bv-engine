@@ -16,8 +16,6 @@
 
 namespace bv { namespace model {
 
-const std::string        DefaultMaterialPlugin::PARAM::BLEND_ENABLE  = "blend enable";
-
 const std::string        DefaultMaterialPlugin::PARAM::DIFFUSE       = "mtlDiffuse";
 const std::string        DefaultMaterialPlugin::PARAM::AMBIENT       = "mtlAmbient";
 const std::string        DefaultMaterialPlugin::PARAM::SPECULAR      = "mtlSpecular";
@@ -49,9 +47,6 @@ DefaultPluginParamValModelPtr   DefaultMaterialPluginDesc::CreateDefaultModel  (
     //Create all models
     auto model  = helper.GetModel();
 
-    helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::BLEND_ENABLE, true, true, true );
-
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::DIFFUSE, glm::vec4( 0.5f, 0.5f, 0.5f, 1.0f ), true );
     helper.AddSimpleParam( DefaultMaterialPlugin::PARAM::AMBIENT, glm::vec4( 0.2f, 0.2f, 0.2f, 1.0f ), true );
@@ -80,7 +75,6 @@ void DefaultMaterialPlugin::SetPrevPlugin( IPluginPtr prev )
     BasePlugin::SetPrevPlugin( prev );
 
 	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
-    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
     m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
 	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
@@ -94,17 +88,13 @@ DefaultMaterialPlugin::DefaultMaterialPlugin  ( const std::string & name, const 
     , m_paramValModel( model )
 { 
     m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
-
-	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM::BLEND_ENABLE );
-
 	SetPrevPlugin( prev );
 }
 
 // *************************************
 //
 DefaultMaterialPlugin::~DefaultMaterialPlugin ()
-{
-}
+{}
 
 // *************************************
 //
@@ -119,14 +109,7 @@ void                                DefaultMaterialPlugin::Update               
 {
 	BasePlugin::Update( t );
 
-    if( m_blendEnabled.Changed() )
-    {
-        auto ctx = m_pixelShaderChannel->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM::BLEND_ENABLE ) )->Evaluate();
-
-        HelperPixelShaderChannel::SetRendererContextUpdate( m_pixelShaderChannel );
-    }
-
+    HelperPixelShaderChannel::PropagateUpdate( m_pixelShaderChannel, m_prevPlugin );
     m_pixelShaderChannel->PostUpdate();
 }
 

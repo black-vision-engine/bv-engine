@@ -12,7 +12,7 @@ namespace bv { namespace model
 
 // ***********************
 //
-void        HelperVertexShaderChannel::InverseTextureMatrix        ( IPluginParamValModelPtr pluginParamValModel, const char * paramName )
+void        HelperVertexShaderChannel::InverseTextureMatrix        ( IPluginParamValModelPtr pluginParamValModel, const std::string & paramName )
 {
     auto param = QueryTypedParam< ParamTransformPtr >( pluginParamValModel->GetVertexShaderChannelModel()->GetParameter( paramName ) );
     auto transform = param->Evaluate();

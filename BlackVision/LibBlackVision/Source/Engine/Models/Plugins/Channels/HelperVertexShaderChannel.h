@@ -10,7 +10,7 @@ namespace bv { namespace model
 class HelperVertexShaderChannel
 {
 public:
-    static void         InverseTextureMatrix        ( IPluginParamValModelPtr pluginParamValModel, const char * paramName );
+    static void         InverseTextureMatrix        ( IPluginParamValModelPtr pluginParamValModel, const std::string & paramName );
 };
 
 }   // model

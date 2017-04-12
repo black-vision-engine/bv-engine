@@ -206,8 +206,8 @@ void                                TextPluginBase::SetPrevPlugin               
     ctx->depthCtx->enabled = true;
     ctx->depthCtx->writable = false;
     ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    //ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+    //ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
@@ -255,6 +255,7 @@ bool                                TextPluginBase::LoadAtlas                   
 void                                TextPluginBase::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
+	HelperPixelShaderChannel::PropagateRendererContextUpdate( m_psc, m_prevPlugin );
 }
 
 // *************************************

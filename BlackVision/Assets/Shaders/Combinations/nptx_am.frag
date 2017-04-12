@@ -13,6 +13,7 @@ uniform float alpha;
 void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
+	
 	vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
 
     FragColor = col * alphaMask.a * alpha;

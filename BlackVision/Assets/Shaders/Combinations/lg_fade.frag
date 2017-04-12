@@ -32,9 +32,13 @@ void main()
 	vec2 v1 = uvCoord - point1;
 	vec2 v2 = point2 - point1;
 
+	// Premultiply alpha before blending
+	vec4 col1 = vec4( color1.rgb * color1.a, color1.a );
+	vec4 col2 = vec4( color2.rgb * color2.a, color2.a );
+	
 	float factor = dot(v1,v2) / dot(v2, v2);
 
-	FragColor = ComputeFadeAlpha() * alpha * ( color1 * factor + color2 * (1 - factor) );
+	FragColor = ComputeFadeAlpha() * alpha * ( col1 * factor + col2 * (1 - factor) );
 }
 
 
