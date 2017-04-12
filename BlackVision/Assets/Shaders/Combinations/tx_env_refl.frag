@@ -18,12 +18,14 @@ uniform float		reflectivity;
 uniform mat4 		envMat;	
 uniform int			envMixMode;
 
-#define M_PI 3.1415926535897932384626433832795
-
 
 vec3 computeEnvironment			( vec3 reflectionVec );
 vec3 mixWithEnvironment			( vec3 color, vec3 envColor, float reflectivityFactor );
 float computeReflectivity		();
+
+#define M_PI 3.1415926535897932384626433832795
+
+
 
 
 void main()

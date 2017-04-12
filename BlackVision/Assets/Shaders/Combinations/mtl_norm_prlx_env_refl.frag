@@ -80,7 +80,7 @@ uniform int			envMixMode;
 vec3 computeReflection			( vec3 viewDir, vec3 normal );
 vec3 computeEnvironment			( vec3 reflectionVec );
 vec3 mixWithEnvironment			( vec3 color, vec3 envColor, float reflectivityFactor );
-
+float computeReflectivity		();
 
 #define M_PI 3.1415926535897932384626433832795
 
@@ -220,6 +220,12 @@ vec2 parallaxMapping			( vec3 viewDir )
     float weight = nextHeight / ( nextHeight - prevHeight );
 	
     return ( prevTex * weight + currTex * ( 1.0 - weight ) );
+}
+
+
+float computeReflectivity		()
+{
+	return reflectivity * texture( ReflectivityMap0, uvCoordReflectivityMap ).x;
 }
 
 
