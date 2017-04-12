@@ -357,6 +357,10 @@ TextAtlasPtr    FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth
 {
     auto wcharsSet = LoadUtf8FileToString( wcharsSetFile );
 
+    std::set< wchar_t > wcharsUnique( wcharsSet.begin(), wcharsSet.end() );
+
+    wcharsSet = std::wstring( wcharsUnique.begin(), wcharsUnique.end() );
+
     Int32                               spadding    = (Int32)padding;
 
     std::map< wchar_t, Glyph * >        glyphs;
@@ -422,6 +426,8 @@ TextAtlasPtr    FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth
 
     char * currAddress = atlasData;
 
+    auto git = glyphs.begin();
+
     for( UInt32 y = 0; y < atlasSize; ++y )
     {
         currAddress = ( atlasData + y * maxHeight *  altlasWidth * 4 );
@@ -429,11 +435,11 @@ TextAtlasPtr    FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth
 
         for( UInt32 x = 0; x < atlasSize; ++x )
         {
-            if( y * atlasSize + x < wcharsSet.size() )
+            if( git != glyphs.end() )
             {
                 currAddress += padding * 4;
 
-                auto ch = wcharsSet[ y * atlasSize + x ];
+                auto ch = (git++)->first;
 
                 auto & sps = spans[ ch ];
                 auto glyph = glyphs[ ch ];

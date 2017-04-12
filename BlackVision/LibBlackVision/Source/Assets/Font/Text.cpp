@@ -42,7 +42,7 @@ Text::Text( const std::wstring & supportedCharsSetFile, const std::string& fontF
     m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
 }
 
-//#define GENERATE_TEST_BMP_FILE
+#define GENERATE_TEST_BMP_FILE
 
 // *********************************
 //
