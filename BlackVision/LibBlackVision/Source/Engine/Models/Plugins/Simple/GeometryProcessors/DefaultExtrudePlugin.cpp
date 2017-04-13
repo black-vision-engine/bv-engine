@@ -15,6 +15,10 @@
 
 
 
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultExtrudePlugin::ExtrudeCurveType );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::model::DefaultExtrudePlugin::BevelCurveType );
+
+
 namespace bv { namespace model {
 
 
@@ -27,24 +31,19 @@ const std::string        DefaultExtrudePlugin::PARAMS::CURVE_SCALE              
 const std::string        DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD     = "cosinus curve period";
 const std::string        DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION      = "tesselation";
 
+const std::string        DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT             = "bevel height";
+const std::string        DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION        = "bevel tesselation";
+const std::string        DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT        = "bevel depth front";
+const std::string        DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK         = "bevel depth back";
+const std::string        DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_FRONT        = "bevel curve front";
+const std::string        DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_BACK         = "bevel curve back";
+const std::string        DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL         = "symetrical bevel";
 
-typedef ParamEnum< DefaultExtrudePlugin::ExtrudeCurveType> ParamCurveType;
 
 
-// ***********************
-//
-VoidPtr    ParamCurveType::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
+typedef ParamEnum< DefaultExtrudePlugin::ExtrudeCurveType > ParamCurveType;
+typedef ParamEnum< DefaultExtrudePlugin::BevelCurveType > ParamBevelCurveType;
 
-// ***********************
-//
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultExtrudePlugin::ExtrudeCurveType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultExtrudePlugin::ExtrudeCurveType >( name, timeline );
-}
 
 
 
@@ -79,9 +78,15 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 40, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD, 1, true, true );
 
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT, 1, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION, 1, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT, 1, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK, 1, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL, 1, true, true );
 
-    helper.AddParam< IntInterpolator, DefaultExtrudePlugin::ExtrudeCurveType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamCurveType >
-        ( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::None, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::None, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_FRONT, DefaultExtrudePlugin::BevelCurveType::None, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_BACK, DefaultExtrudePlugin::BevelCurveType::None, true, true );
 
     return model;
 }
@@ -331,7 +336,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
 
 
     // Replace edges indicies.
-    // Edges array contains closed curves. Thats mean that every index occure two times.
+    // Edges array contains closed curves. Thats mean that every index occures two times.
     // We have to replace both with new indicies, but at first we take second vertex in pair.
     for( int i = 0; i < (int)edges.size(); i += 2 )
     {

@@ -35,15 +35,31 @@ public:
         static const std::string        EXTRUDE_TESSELATION;
         static const std::string        CURVE_SCALE;
         static const std::string        COSINUS_CURVE_PERIOD;
+
+        static const std::string        BEVEL_HEIGHT;
+        static const std::string        BEVEL_TESSELATION;
+        static const std::string        BEVEL_DEPTH_FRONT;
+        static const std::string        BEVEL_DEPTH_BACK;
+        static const std::string        BEVEL_CURVE_FRONT;
+        static const std::string        BEVEL_CURVE_BACK;
+        static const std::string        SYMETRICAL_BEVEL;
     };
 
-    enum ExtrudeCurveType
+    enum class ExtrudeCurveType
     {
         None,
         Parabola,
         Cosinus,
         Gauss,
         Circle,
+
+        Total
+    };
+
+    enum class BevelCurveType
+    {
+        None,
+        Line,
 
         Total
     };
@@ -109,26 +125,8 @@ private:
 };
 
 
-// Nie patrzeæ w dó³!!! Brzydkie !!!!!!
-
-template<>
-inline bool SetParameter< DefaultExtrudePlugin::ExtrudeCurveType >( IParameterPtr param, TimeType t, const DefaultExtrudePlugin::ExtrudeCurveType & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum< DefaultExtrudePlugin::ExtrudeCurveType > ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
+DEFINE_ENUM_SET_PARAMETER( DefaultExtrudePlugin::ExtrudeCurveType );
+DEFINE_ENUM_SET_PARAMETER( DefaultExtrudePlugin::BevelCurveType );
 
 } // model
 } // bv
