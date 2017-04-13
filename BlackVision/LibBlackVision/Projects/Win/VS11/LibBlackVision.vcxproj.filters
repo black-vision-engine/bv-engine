@@ -196,9 +196,6 @@
     <Filter Include="Engine\Models\EditorVariables">
       <UniqueIdentifier>{7894fab9-865a-4c07-a90a-ddde56d8a731}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mathematics\Util">
-      <UniqueIdentifier>{ef62563e-b8be-4fae-9264-9b3c6234fc0f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Lights">
       <UniqueIdentifier>{db65c1af-2082-49de-86c2-432b5bc6149a}</UniqueIdentifier>
     </Filter>
@@ -425,9 +422,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp">
       <Filter>Application\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
-      <Filter>Mathematics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
@@ -1179,12 +1173,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp">
       <Filter>Engine\Models\EditorVariables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp">
-      <Filter>Mathematics\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
-      <Filter>Mathematics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
@@ -1973,15 +1961,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
-      <Filter>Mathematics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h">
       <Filter>Mathematics\Interpolators</Filter>
@@ -4265,9 +4244,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelState.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -4288,9 +4264,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h">
       <Filter>Engine\Models\EditorVariables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
-      <Filter>Mathematics\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>

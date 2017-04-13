@@ -617,8 +617,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\EnumsUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h" />
@@ -725,7 +723,6 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\SQTTransform.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.cpp" />
@@ -1210,9 +1207,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
@@ -1223,10 +1217,8 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\SQTTransform.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVSerializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h" />
