@@ -1,4 +1,4 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "MeshLoader.h"
 
@@ -16,6 +16,7 @@
 
 #include "Engine/Models/BVProjectEditor.h"
 
+#include "System/Path.h"
 
 namespace bv { namespace nodelogic {
 

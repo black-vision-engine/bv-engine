@@ -1,8 +1,8 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "SmoothValueSetter.h"
 
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 
 namespace bv { namespace nodelogic {

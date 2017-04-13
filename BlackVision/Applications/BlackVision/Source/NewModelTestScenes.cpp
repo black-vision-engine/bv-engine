@@ -28,7 +28,7 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultBlendTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultExtrudePlugin.h"
 
-#include "Widgets/MeshLoader/MeshLoader.h"
+#include "Engine/Models/NodeLogics/MeshLoader/MeshLoader.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 

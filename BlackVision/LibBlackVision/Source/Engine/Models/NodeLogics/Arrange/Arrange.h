@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Widgets/NodeLogicBase.h"
+#include "Engine/Models/NodeLogics/NodeLogicBase.h"
 #include "Engine/Types/Values/TypedValues.h"
 
 

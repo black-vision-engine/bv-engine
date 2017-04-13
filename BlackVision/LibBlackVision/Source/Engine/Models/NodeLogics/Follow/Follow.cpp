@@ -1,4 +1,4 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 #include "Follow.h"
 
 #include "Serialization/SerializationHelper.h"
@@ -12,7 +12,7 @@
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 
 

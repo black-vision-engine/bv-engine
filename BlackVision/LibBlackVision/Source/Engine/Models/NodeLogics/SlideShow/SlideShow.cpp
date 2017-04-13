@@ -1,4 +1,4 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 #include "SlideShow.h"
 
 #include "Serialization/SerializationHelper.h"
@@ -11,7 +11,7 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/EventManager.h"
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 #include "System/Time.h"
 

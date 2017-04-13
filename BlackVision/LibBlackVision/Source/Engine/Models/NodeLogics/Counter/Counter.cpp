@@ -1,4 +1,4 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "Counter.h"
 
@@ -6,7 +6,7 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 
 namespace bv { namespace nodelogic {

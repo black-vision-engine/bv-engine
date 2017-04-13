@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "MeshLoader.h"
+#include "MeshAssetLoader.h"
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 #include "Assets/Mesh/MeshUtils.h"
 

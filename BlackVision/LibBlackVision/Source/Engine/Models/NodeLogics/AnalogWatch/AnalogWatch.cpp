@@ -1,9 +1,9 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "AnalogWatch.h"
 
 #include "Engine/Models/BasicNode.h"
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"

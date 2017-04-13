@@ -1,4 +1,4 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "Arrange.h"
 
@@ -6,7 +6,7 @@
 
 #include "Engine/Models/BasicNode.h"
 
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 
 namespace bv {

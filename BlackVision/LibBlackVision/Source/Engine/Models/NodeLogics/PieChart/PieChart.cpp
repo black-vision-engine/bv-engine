@@ -1,4 +1,4 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "PieChart.h"
 
@@ -7,7 +7,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "Engine/Events/EventHandlerHelpers.h"
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCylinderPlugin.h"

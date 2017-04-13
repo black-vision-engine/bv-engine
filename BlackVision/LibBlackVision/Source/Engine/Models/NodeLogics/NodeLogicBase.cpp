@@ -1,11 +1,11 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "NodeLogicBase.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 
-#include "UseLoggerBVAppModule.h"
+#include "UseLoggerLibBlackVision.h"
 
 
 namespace bv { namespace model {

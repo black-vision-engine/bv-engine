@@ -22,8 +22,8 @@
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCylinderPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCogWheelPlugin.h"
-#include "Widgets/NodeReplicator/NodeReplicator.h"
-#include "Widgets/NodeReplicator/ShiftReplicationModifier.h"
+#include "Engine/Models/NodeLogics/NodeReplicator/NodeReplicator.h"
+#include "Engine/Models/NodeLogics/NodeReplicator/ShiftReplicationModifier.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -36,7 +36,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "testai/TestAIManager.h"
-#include "Widgets/Scroller/Scroller.h"
+#include "Engine/Models/NodeLogics/Scroller/Scroller.h"
 #include "Helpers/RectNodeBuilder.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"

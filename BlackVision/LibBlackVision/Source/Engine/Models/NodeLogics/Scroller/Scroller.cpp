@@ -1,8 +1,8 @@
-#include "stdafxBVApp.h"
+#include "stdafx.h"
 
 #include "Scroller.h"
 
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
