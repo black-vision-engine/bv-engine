@@ -64,8 +64,8 @@ public:
     DefaultCubePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
-DEFINE_ENUM_SET_PARAMETER( DefaultCube::Plugin::WeightCenter );
-DEFINE_ENUM_SET_PARAMETER( DefaultCube::Plugin::MappingType );
+DEFINE_ENUM_SET_PARAMETER( DefaultCubePlugin::WeightCenter );
+DEFINE_ENUM_SET_PARAMETER( DefaultCubePlugin::MappingType );
 
 } }
 
