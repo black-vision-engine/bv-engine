@@ -123,6 +123,23 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SlideShow\SlideShow.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\ParameterBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\SmoothValueSetter.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ConsoleApplication.cpp" />
@@ -163,7 +180,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\TextRepresentation.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp" />
@@ -601,9 +618,25 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\EnumsUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\IReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SlideShow\SlideShow.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\ParameterBinding.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\SmoothValueSetter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputLogicDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputStaticData.h" />
@@ -691,7 +724,6 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\SQTTransform.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.cpp" />
@@ -735,7 +767,7 @@
     <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h" />
@@ -1176,9 +1208,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
@@ -1189,10 +1218,8 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\SQTTransform.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVSerializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h" />

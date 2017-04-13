@@ -166,9 +166,14 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 
         if( animDesc != nullptr )
         {
+            auto txData = m_psc->GetTexturesDataImpl();
+            auto replacedAnim = txData->GetAnimation( 0 );
+
+            SamplerStateModelPtr newSamplerStateModel = replacedAnim != nullptr ? replacedAnim->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            animDesc->SetSamplerState( newSamplerStateModel );
             animDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
             
-            auto txData = m_psc->GetTexturesDataImpl();
             txData->SetAnimation( 0, animDesc );
             SetAsset( 0, LAsset( animDesc->GetName(), animAssetDescr, animDesc->GetSamplerState() ) );
 

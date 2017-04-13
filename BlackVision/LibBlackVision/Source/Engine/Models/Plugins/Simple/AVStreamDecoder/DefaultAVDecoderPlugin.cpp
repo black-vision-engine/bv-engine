@@ -204,9 +204,13 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 
                 if( vsDesc )
                 {
-                    vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-
                     auto txData = m_psc->GetTexturesDataImpl();
+                    auto replacedTex = txData->GetTexture( 0 );
+
+                    SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+                    vsDesc->SetSamplerState( newSamplerStateModel );
+
                     txData->SetTexture( 0, vsDesc );
 
                     SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );

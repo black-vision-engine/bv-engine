@@ -80,7 +80,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTrianglePluginDesc() );
     descriptors.push_back( new DefaultRoundedRectPluginDesc() );
     descriptors.push_back( new DefaultCone::DefaultConePluginDesc() );
-    descriptors.push_back( new DefaultCube::PluginDesc() );
+    descriptors.push_back( new DefaultCubePluginDesc() );
     descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
     descriptors.push_back( new DefaultTorus::PluginDesc() );
     descriptors.push_back( new DefaultSphere::PluginDesc() );
