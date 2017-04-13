@@ -152,10 +152,14 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 
         if( txDesc != nullptr )
         {
-            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-            
             auto txData = m_psc->GetTexturesDataImpl();
+            auto replacedTex = txData->GetTexture( 0 );
+            
+            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            txDesc->SetSamplerState( newSamplerStateModel );
+            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
             txData->SetTexture( 0, txDesc );
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 

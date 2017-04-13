@@ -59,9 +59,11 @@ ITextureDescriptorPtr                            DefaultTexturesData::GetTexture
 //
 IAnimationDescriptorPtr                          DefaultTexturesData::GetAnimation        ( unsigned int idx )
 {
-    assert( idx < m_animationDescriptors.size() );
-
-    return m_animationDescriptors[ idx ];
+    if( idx < m_animationDescriptors.size() )
+    {
+        return m_animationDescriptors[ idx ];
+    }
+    return nullptr;
 }
 
 // ******************************
