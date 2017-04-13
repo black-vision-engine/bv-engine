@@ -160,21 +160,88 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
                                                                     std::vector< IConnectedComponentPtr > & /*allComponents*/,
                                                                     PrimitiveType topology )
 {
+// ***********************
+//
     // Get parameters values.
     glm::vec3 translate     = QueryTypedValue< ValueVec3Ptr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_VECTOR ) )->GetValue();
     float cornerThreshold   = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SMOOTH_THRESHOLD_ANGLE ) )->GetValue();
     m_tesselation           = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION ) )->GetValue();
     m_curveScale            = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::CURVE_SCALE ) )->GetValue();
     m_cosinusPeriod         = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD ) )->GetValue();
-    ExtrudeCurveType curve  = QueryTypedParam< std::shared_ptr< ParamEnum< ExtrudeCurveType > > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
+    
+    ExtrudeCurveType sideCurve      = QueryTypedParam< std::shared_ptr< ParamCurveType > >( GetParameter( PARAMS::EXTRUDE_CURVE ) )->Evaluate();
+    BevelCurveType frontBevelCurve  = QueryTypedParam< std::shared_ptr< ParamBevelCurveType > >( GetParameter( PARAMS::BEVEL_CURVE_FRONT ) )->Evaluate();
+    BevelCurveType backBevelCurve   = QueryTypedParam< std::shared_ptr< ParamBevelCurveType > >( GetParameter( PARAMS::BEVEL_CURVE_BACK ) )->Evaluate();
+    
+    float bevelHeight               = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT ) )->GetValue();
+    float frontBevelDepth           = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT ) )->GetValue();
+    float backBevelDepth            = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK ) )->GetValue();
+    int frontBevelTesselation     = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
+    int backBevelTesselation      = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
+    bool symetricalBevel            = QueryTypedValue< ValueBoolPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL ) )->GetValue();
 
+
+// ***********************
+//
+// Check parameters values and set preconditions.
+
+    // Check tesselation. 
     if( m_tesselation <= 0 )
         m_tesselation = 1;
 
-    if( curve >= ExtrudeCurveType::Total )
-        curve = ExtrudeCurveType::None;
+    if( frontBevelTesselation <= 0 )
+        frontBevelTesselation = 1;
 
-    // Get previous plugin geometry channels
+    if( backBevelTesselation <= 0 )
+        backBevelTesselation = 1;
+
+    // Check curves types
+    if( sideCurve >= ExtrudeCurveType::Total )
+        sideCurve = ExtrudeCurveType::None;
+
+    if( frontBevelCurve >= BevelCurveType::Total )
+        frontBevelCurve = BevelCurveType::None;
+
+    if( backBevelCurve >= BevelCurveType::Total )
+        backBevelCurve = BevelCurveType::None;
+
+    // Check bevel height. Should be greater then zero.
+    if( bevelHeight - std::numeric_limits< float >::epsilon() < 0.0f )
+    {
+        // We don't need bevel curves. Line is enough.
+        bevelHeight = 0.0f;
+        frontBevelTesselation = 1;
+        backBevelTesselation = 1;
+
+        frontBevelCurve = BevelCurveType::Line;
+        backBevelCurve = BevelCurveType::Line;
+    }
+
+    // Check bevel depth. Should be greater then zero.
+    if( frontBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
+    {
+        frontBevelCurve = BevelCurveType::None;
+        frontBevelTesselation = 1;
+    }
+
+    if( backBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
+    {
+        backBevelCurve = BevelCurveType::None;
+        backBevelTesselation = 1;
+    }
+
+    // Apply symetry.
+    if( symetricalBevel )
+    {
+        backBevelDepth = frontBevelDepth;
+        backBevelTesselation = frontBevelTesselation;
+        backBevelCurve = frontBevelCurve;
+    }
+
+
+// ***********************
+//
+// Get previous plugin geometry channels
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
     assert( positions );    if( !positions ) return;
     
@@ -234,9 +301,9 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         FillWithNormals( mesh, normals.GetVerticies() );
     }
 
-    if( curve != ExtrudeCurveType::None )
+    if( sideCurve != ExtrudeCurveType::None )
     {
-        switch( curve )
+        switch( sideCurve )
         {
         case ExtrudeCurveType::Parabola:
             ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners );
