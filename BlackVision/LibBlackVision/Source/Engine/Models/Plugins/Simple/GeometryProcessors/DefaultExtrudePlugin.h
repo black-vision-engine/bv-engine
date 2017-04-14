@@ -99,6 +99,9 @@ private:
 
     void            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
     void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, std::vector< IndexType > & corners );
+    void            CopyTranslate           ( IndexedGeometry & mesh, glm::vec3 translate, SizeType referenceOffset, SizeType numVerticies );
+
+
     void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals );
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );

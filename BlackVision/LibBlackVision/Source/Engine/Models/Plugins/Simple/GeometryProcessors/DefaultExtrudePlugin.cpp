@@ -222,12 +222,14 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     {
         frontBevelCurve = BevelCurveType::None;
         frontBevelTesselation = 1;
+        bevelHeight = 0;
     }
 
     if( backBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
     {
         backBevelCurve = BevelCurveType::None;
         backBevelTesselation = 1;
+        bevelHeight = 0;
     }
 
     // Apply symetry.
@@ -241,7 +243,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 
 // ***********************
 //
-// Get previous plugin geometry channels
+// Get previous plugin geometry channels. Index geometry.
     auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
     assert( positions );    if( !positions ) return;
     
@@ -271,15 +273,69 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         return;
     }
 
+
+// ***********************
+//
+// Extract edges and corners from flat geometry.
     auto edges = ExtractEdges( mesh );
     auto corners = ExtractCorners( mesh, edges, cornerThreshold );
 
     //DebugPrintToFile( "ExtrudeDebug.txt", mesh.GetVerticies(), edges, corners );
 
+// ***********************
+//
+// Extrude front plane and add side planes.
     AddSymetricalPlane( mesh, translate );
     AddSidePlanes( mesh, edges, corners );
 
+    SizeType sideContourLength = edges.size() / 2 + corners.size() / 2;     // Number of verticies in one contour of side surface.
+    SizeType sidePlanesOffset = 2 * m_numUniqueExtrudedVerticies;           // First free space after symetrical planes.
+    SizeType curveOffsets[ 6 ];                                             // Offsets of start and end contours for curves.
+    SizeType curOffset = sidePlanesOffset + 2 * sideContourLength;
 
+
+    if( frontBevelCurve != BevelCurveType::None )
+    {
+        glm::vec3 translation = glm::normalize( translate ) * frontBevelDepth;
+
+        curveOffsets[ 0 ] = sidePlanesOffset;
+        curveOffsets[ 1 ] = curOffset;
+        curOffset += sideContourLength;      // We will add one contour.
+
+        // Note: we will connect first side plane with contour generated here.
+        CopyTranslate( mesh, translation, sidePlanesOffset, sideContourLength );
+    }
+
+    if( sideCurve != ExtrudeCurveType::None )
+    {
+        glm::vec3 frontTranslate = glm::normalize( translate ) * frontBevelDepth;
+        glm::vec3 backTranslate = translate - glm::normalize( translate ) * backBevelDepth;
+
+        curveOffsets[ 2 ] = curOffset;
+        curveOffsets[ 3 ] = curOffset + sideContourLength;
+        curOffset += 2 * sideContourLength;      // We will add two contours.
+
+        // Translate always relative to first side plane.
+        CopyTranslate( mesh, frontTranslate, sidePlanesOffset, sideContourLength );
+        CopyTranslate( mesh, backTranslate, sidePlanesOffset, sideContourLength );
+    }
+
+    if( backBevelCurve != BevelCurveType::None )
+    {
+        glm::vec3 backTranslate = translate - glm::normalize( translate ) * backBevelDepth;
+
+        curveOffsets[ 4 ] = curOffset;
+        curveOffsets[ 5 ] = sidePlanesOffset + sideContourLength;       // This is second side plane generated in AddSidePlanes function.
+        curOffset += sideContourLength;      // We will add one contour.
+
+        // We will connect contour generated here with back side plane.
+        // Note: we translate front side plane.
+        CopyTranslate( mesh, backTranslate, sidePlanesOffset, sideContourLength );
+    }
+
+// ***********************
+//
+// Copy normals from previous vertex attributes channel or generate defaults.
     IndexedGeometry normals;
 
     auto normChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR );
@@ -301,6 +357,10 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         FillWithNormals( mesh, normals.GetVerticies() );
     }
 
+
+// ***********************
+//
+// Generate curved side surfaces.
     if( sideCurve != ExtrudeCurveType::None )
     {
         switch( sideCurve )
@@ -451,6 +511,18 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
 
 // ***********************
 //
+void    DefaultExtrudePlugin::CopyTranslate           ( IndexedGeometry & mesh, glm::vec3 translate, SizeType referenceOffset, SizeType numVerticies )
+{
+    auto & verticies = mesh.GetVerticies();
+
+    for( SizeType i = 0; i < numVerticies; i++ )
+    {
+        verticies.push_back( verticies[ referenceOffset + i ] + translate );
+    }
+}
+
+// ***********************
+//
 void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< IndexType > & edges, std::vector< IndexType > & cornerPairs )
 {
     auto & indices = mesh.GetIndicies();
@@ -458,7 +530,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
     auto & normals = normalsVec.GetVerticies();
 
     int extrudeVertsBegin = 2 * m_numUniqueExtrudedVerticies;
-    int edgeRowLength = (int)edges.size() / 2 + (int)cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double in comparision to previous functions.
+    int edgeRowLength = (int)edges.size() / 2 + (int)cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
 
     // Merge normals for corner verticies. These normals will be recreated in next functions.
     // We need this step to make special behavior of corner verticies possible.
