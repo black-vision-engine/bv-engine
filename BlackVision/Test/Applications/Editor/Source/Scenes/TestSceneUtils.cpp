@@ -556,7 +556,7 @@ std::vector< model::IPluginDescriptor * >  TestSceneUtils::DefaultBVPluginDescri
 	descriptors.push_back( new model::DefaultCirclePluginDesc() );
 	descriptors.push_back( new model::DefaultEllipsePluginDesc() );
 	descriptors.push_back( new model::DefaultRoundedRectPluginDesc() );
-	descriptors.push_back( new model::DefaultCube::PluginDesc() );
+	descriptors.push_back( new model::DefaultCubePluginDesc() );
 	descriptors.push_back( new model::DefaultSimpleCube::PluginDesc() );
 	descriptors.push_back( new model::DefaultSphere::PluginDesc() );
 	descriptors.push_back( new model::DefaultGeosphere::PluginDesc() );

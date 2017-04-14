@@ -6,14 +6,14 @@
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
 #include "Engine/Events/EventHandlerHelpers.h"
-#include "Widgets/NodeLogicFactory.h"
+#include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 #include "Engine/Models/BasicNode.h"
 
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
-#include "Widgets/Counter/Counter.h"
+#include "Engine/Models/NodeLogics/Counter/Counter.h"
 
 namespace bv
 {
