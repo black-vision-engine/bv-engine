@@ -333,6 +333,15 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         CopyTranslate( mesh, backTranslate, sidePlanesOffset, sideContourLength );
     }
 
+    // Connect planes into triangles. We need this step for normals generation.
+    // These indicies wiil be in future replaced with curved surfaces.
+    // Note: In previous versions this step was performed by AddSidePlanes function, but only for two rows of verticies.
+    for( SizeType i = 0; i < 6; i += 2 )
+    {
+        ConnectVerticies( mesh.GetIndicies(), edges, (int)curveOffsets[ i ], (int)curveOffsets[ i + 1 ] );
+    }
+    
+
 // ***********************
 //
 // Copy normals from previous vertex attributes channel or generate defaults.
@@ -428,7 +437,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     std::vector< IndexType > cornerPairs;
     cornerPairs.resize( 2 * corners.size() );
 
-    auto & indices = mesh.GetIndicies();
+    //auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
     int numVerticies = (int)verticies.size();
 
@@ -503,7 +512,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     }
 
     // Connect all verticies into triangles.
-    ConnectVerticies( indices, edges, 0, edgeRowLength );
+    //ConnectVerticies( indices, edges, 0, edgeRowLength );
 
     // Replace content of old vector with new created corner vector.
     corners = std::move( cornerPairs );
@@ -568,7 +577,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
         }
     }
 
-    // Remove existing side plane.
+    // Remove existing side
     indices.erase( indices.begin() + ( 2 * m_numExtrudedVerticies ), indices.end() );
 
     // Connect all verticies
@@ -580,6 +589,99 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, Inde
         ConnectVerticies( indices, edges, offset1, offset2 );
     }
     ConnectVerticies( indices, edges, ( m_tesselation + 1 ) * edgeRowLength, edgeRowLength );
+}
+
+// ***********************
+//
+void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
+                                                        IndexedGeometry & mesh,
+                                                        IndexedGeometry & normalsVec,
+                                                        std::vector< IndexType >& edges,
+                                                        std::vector< IndexType >& cornerPairs,
+                                                        SizeType beginContourOffset,
+                                                        SizeType endContourOffset,
+                                                        int tesselation,
+                                                        float scaleCurve,
+                                                        float offsetCurve
+                                                      )
+{
+    auto & indices = mesh.GetIndicies();
+    auto & verticies = mesh.GetVerticies();
+    auto & normals = normalsVec.GetVerticies();
+
+    SizeType curveOffset = verticies.size();
+    int edgeRowLength = ( int )edges.size() / 2 + ( int )cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
+
+    // Merge normals for corner verticies. These normals will be recreated in next functions.
+    // We need this step to make special behavior of corner verticies possible.
+    for( UInt32 i = 0; i < ( UInt32 )cornerPairs.size(); i += 2 )
+    {
+        int idx1 = cornerPairs[ i ];
+        int idx2 = cornerPairs[ i + 1 ];
+
+        glm::vec3 v1 = normals[ idx1 ];
+        glm::vec3 v2 = normals[ idx2 ];
+
+        glm::vec3 translateNormal = glm::normalize( v1 + v2 );
+
+        float cos2Alpha = glm::dot( v1, v2 );
+        float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
+        float normalCoeff = glm::length( v1 ) / cosAlpha;
+
+        normals[ idx1 ] = normalCoeff * translateNormal;
+        normals[ idx2 ] = normals[ idx1 ];
+    }
+
+    // Add verticies between extruded planes.
+    float delta = 1.0f / ( tesselation + 1 );
+    for( int i = 1; i < tesselation + 1; ++i )
+    {
+        float division = i * delta;
+        float moveCoeff = ( this->*curve )( division ) * scaleCurve + offsetCurve;
+
+        for( int j = 0; j < edgeRowLength; j++ )
+        {
+            glm::vec3 newVertex = verticies[ beginContourOffset + j ] * ( 1.0f - division ) + verticies[ endContourOffset + j ] * division;
+            newVertex += normals[ beginContourOffset + j ] * moveCoeff;
+
+            verticies.push_back( newVertex );
+        }
+    }
+
+    // Move reference verticies of start contour and end contour.
+    // @todo 
+    if( offsetCurve > 0.0f )
+    {
+        float division = ( tesselation + 1 ) * delta;
+        float moveCoeff = ( this->*curve )( 0 ) * scaleCurve + offsetCurve;
+
+        for( SizeType i = beginContourOffset; i < beginContourOffset + edgeRowLength; i++ )
+        {
+            verticies[ i ] += normals[ i ] * moveCoeff;
+        }
+
+        moveCoeff = ( this->*curve )( division ) * scaleCurve + offsetCurve;
+
+        for( SizeType i = endContourOffset; i < endContourOffset + edgeRowLength; i++ )
+        {
+            verticies[ i ] += normals[ i ] * moveCoeff;
+        }
+    }
+
+    // Edges are already offseted relative to first contour row.
+    beginContourOffset -= m_numUniqueExtrudedVerticies;
+    endContourOffset -= m_numUniqueExtrudedVerticies;
+    curveOffset -= m_numUniqueExtrudedVerticies;
+
+    // Connect all verticies
+    ConnectVerticies( indices, edges, (int)beginContourOffset, (int)curveOffset );
+    for( int i = 2; i < tesselation + 1; ++i )
+    {
+        int offset1 = (int)curveOffset + ( i - 2 ) * edgeRowLength;
+        int offset2 = offset1 + edgeRowLength;
+        ConnectVerticies( indices, edges, offset1, offset2 );
+    }
+    ConnectVerticies( indices, edges, (int)curveOffset + ( tesselation - 1 ) * edgeRowLength, (int)endContourOffset );
 }
 
 // ***********************

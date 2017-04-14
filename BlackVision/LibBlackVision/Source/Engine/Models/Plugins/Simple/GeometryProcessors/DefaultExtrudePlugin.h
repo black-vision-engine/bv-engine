@@ -112,7 +112,20 @@ private:
                                                 std::vector< IndexType > & edges,
                                                 std::vector< IndexType > & corners
                                             );
-   
+
+
+    void            ApplyFunction           (   ExtrudeCurve curve,
+                                                IndexedGeometry & mesh,
+                                                IndexedGeometry & normalsVec,
+                                                std::vector< IndexType > & edges,
+                                                std::vector< IndexType > & corners,
+                                                SizeType beginContourOffset,
+                                                SizeType endContourOffset,
+                                                int tesselation,
+                                                float scaleCurve,
+                                                float offsetCurve
+                                            );
+
 
     int             FindEdge                ( const std::vector< IndexType > & indicies, IndexType idx1, IndexType idx2 );
     void            AddOrRemoveEdge         ( std::vector< IndexType > & edges, IndexType idx1, IndexType idx2 );
