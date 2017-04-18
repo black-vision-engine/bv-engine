@@ -74,6 +74,7 @@ void        AnalogWatch::Initialize        ()
 void        AnalogWatch::Deinitialize      ()
 {
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &AnalogWatch::NodeRemovedHandler ), NodeRemovedEvent::Type() );
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &AnalogWatch::NodeMovedHandler ), NodeMovedEvent::Type() );
 }
 
 // ***********************

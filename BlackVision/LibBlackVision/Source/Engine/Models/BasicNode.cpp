@@ -652,6 +652,8 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 //
 void			BasicNode::SetLogic					( INodeLogicPtr logic )
 {
+    RemoveLogic();
+
     m_nodeLogic = logic;
     m_nodeLogic->Initialize();
 }
@@ -660,6 +662,8 @@ void			BasicNode::SetLogic					( INodeLogicPtr logic )
 //
 void            BasicNode::RemoveLogic              ()
 {
+    if( m_nodeLogic )
+        m_nodeLogic->Deinitialize();
     m_nodeLogic = nullptr;
 }
 
