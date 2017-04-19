@@ -62,6 +62,8 @@ public:
         HalfSinus,
         InverseHalfSinus,
         Sinus,
+        Circle,
+        InverseCircle,
 
         Total
     };
@@ -103,6 +105,8 @@ private:
     float           HalfSinusCurve          ( float param );
     float           SinusCurve              ( float param );
     float           InverseHalfSinusCurve   ( float param );
+    float           CircleBevelCurve        ( float param );
+    float           InverseCircleBevelCurve ( float param );
 
 private:
 
@@ -127,6 +131,30 @@ private:
                                                 float scaleCurve,
                                                 float offsetCurve,
                                                 bool mirrorFunction = false
+                                            );
+
+    void            GenerateSideFace        (   BevelCurveType curve,
+                                                IndexedGeometry & mesh,
+                                                IndexedGeometry & normalsVec,
+                                                std::vector< IndexType > & edges,
+                                                std::vector< IndexType > & corners,
+                                                SizeType beginContourOffset,
+                                                SizeType endContourOffset,
+                                                int tesselation,
+                                                float bevelHeight,
+                                                bool backBevelFace
+                                            );
+
+    void            GenerateSideFace        (   ExtrudeCurveType curve,
+                                                IndexedGeometry & mesh,
+                                                IndexedGeometry & normalsVec,
+                                                std::vector< IndexType > & edges,
+                                                std::vector< IndexType > & corners,
+                                                SizeType beginContourOffset,
+                                                SizeType endContourOffset,
+                                                int tesselation,
+                                                float curveScale,
+                                                float bevelHeight
                                             );
 
 
