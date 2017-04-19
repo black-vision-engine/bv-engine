@@ -78,15 +78,15 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 40, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD, 1, true, true );
 
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT, 1, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT, 1.0f, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION, 1, true, true );
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT, 1, true, true );
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK, 1, true, true );
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL, 1, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT, 1.0f, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK, 1.0f, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL, false, true, true );
 
     helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::Circle, true, true );
-    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_FRONT, DefaultExtrudePlugin::BevelCurveType::SinusHalfPI, true, true );
-    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_BACK, DefaultExtrudePlugin::BevelCurveType::SinusHalfPI, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_FRONT, DefaultExtrudePlugin::BevelCurveType::HalfSinus, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_BACK, DefaultExtrudePlugin::BevelCurveType::Line, true, true );
 
     return model;
 }
@@ -302,7 +302,11 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     // Note: In previous versions this step was performed by AddSidePlanes function, but only for two rows of verticies.
     for( SizeType i = 0; i < 6; i += 2 )
     {
-        ConnectVerticies( mesh.GetIndicies(), edges, (int)curveOffsets[ i ], (int)curveOffsets[ i + 1 ] );
+        // Note: offset1 and offset2 must be relative to first side plane. Values in curveOffsets are relative to beginning of verticies vector.
+        int offset1 = int( curveOffsets[ i ] - sidePlanesOffset );
+        int offset2 = int( curveOffsets[ i + 1 ] - sidePlanesOffset );
+
+        ConnectVerticies( mesh.GetIndicies(), edges, offset1, offset2 );
     }
     
 
@@ -344,11 +348,13 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         switch( frontBevelCurve )
         {
         case DefaultExtrudePlugin::BevelCurveType::None:
+            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
             break;
         case DefaultExtrudePlugin::BevelCurveType::Line:
+            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
             break;
-        case DefaultExtrudePlugin::BevelCurveType::SinusHalfPI:
-            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
+        case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
+            ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
             break;
         default:
             assert( !"Shouldn't be here" );
@@ -385,11 +391,13 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         switch( backBevelCurve )
         {
         case DefaultExtrudePlugin::BevelCurveType::None:
+            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
             break;
         case DefaultExtrudePlugin::BevelCurveType::Line:
+            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
             break;
-        case DefaultExtrudePlugin::BevelCurveType::SinusHalfPI:
-            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
+            ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
             break;
         default:
             assert( !"Shouldn't be here" );
@@ -1010,10 +1018,17 @@ float       DefaultExtrudePlugin::CircleCurve           ( float param )
 
 // ***********************
 //
-float       DefaultExtrudePlugin::SinusHalfPICurve      ( float param )
+float       DefaultExtrudePlugin::LineCurve         ( float param )
 {
-    float arg = glm::pi< float >() / 2.0f * param;
-    return cos( arg ) - param;      // Note: Extrude functions compute weighted average verticies. Function must return value starting and ending in 0.
+    return param;
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::HalfSinusCurve      ( float param )
+{
+    float arg = 0.5f * glm::pi< float >() * param;
+    return sin( arg );// -param;      // Note: Extrude functions compute weighted average verticies. Function must return value starting and ending in 0.
 }
 
 

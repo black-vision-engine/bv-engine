@@ -60,6 +60,7 @@ public:
     {
         None,
         Line,
+        HalfSinus,
 
         Total
     };
@@ -89,11 +90,15 @@ public:
 
 private:
 
-    // Curves
+    // Curves (side face)
     float           ParabolaCurve           ( float param );
     float           PeriodicCosinusCurve    ( float param );
     float           GaussCurve              ( float param );
     float           CircleCurve             ( float param );
+
+    // Curves (bevel part)
+    float           LineCurve               ( float param );
+    float           HalfSinusCurve          ( float param );
 
 private:
 
