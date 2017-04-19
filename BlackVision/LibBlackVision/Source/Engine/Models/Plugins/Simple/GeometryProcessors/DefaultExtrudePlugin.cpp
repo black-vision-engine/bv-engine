@@ -348,10 +348,10 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         switch( frontBevelCurve )
         {
         case DefaultExtrudePlugin::BevelCurveType::None:
-            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
             break;
         case DefaultExtrudePlugin::BevelCurveType::Line:
-            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
             break;
         case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
             ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
@@ -663,9 +663,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
 
     // Move reference verticies of start contour and end contour.
     // @todo 
-    if( offsetCurve > 0.0f )
     {
-        float division = ( tesselation + 1 ) * delta;
         float moveCoeff = ( this->*curve )( 0 ) * scaleCurve + offsetCurve;
 
         for( SizeType i = beginContourOffset; i < beginContourOffset + edgeRowLength; i++ )
@@ -673,7 +671,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
             verticies[ i ] += normals[ i ] * moveCoeff;
         }
 
-        moveCoeff = ( this->*curve )( division ) * scaleCurve + offsetCurve;
+        moveCoeff = ( this->*curve )( 1.0f ) * scaleCurve + offsetCurve;
 
         for( SizeType i = endContourOffset; i < endContourOffset + edgeRowLength; i++ )
         {
