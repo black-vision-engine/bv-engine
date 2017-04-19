@@ -115,13 +115,6 @@ private:
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
 
-    void            ApplyFunction           (   ExtrudeCurve curve,
-                                                IndexedGeometry & mesh,
-                                                IndexedGeometry & normalsVec,
-                                                std::vector< IndexType > & edges,
-                                                std::vector< IndexType > & corners
-                                            );
-
 
     void            ApplyFunction           (   ExtrudeCurve curve,
                                                 IndexedGeometry & mesh,
@@ -132,7 +125,8 @@ private:
                                                 SizeType endContourOffset,
                                                 int tesselation,
                                                 float scaleCurve,
-                                                float offsetCurve
+                                                float offsetCurve,
+                                                bool mirrorFunction = false
                                             );
 
 

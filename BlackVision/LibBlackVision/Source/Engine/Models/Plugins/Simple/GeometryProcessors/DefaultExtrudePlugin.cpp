@@ -393,20 +393,20 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     switch( backBevelCurve )
     {
     case DefaultExtrudePlugin::BevelCurveType::Line:
-        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 4 ], curveOffsets[ 5 ], backBevelTesselation, bevelHeight, 0, true );
         break;
     case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
-        ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 4 ], curveOffsets[ 5 ], backBevelTesselation, bevelHeight, 0, true );
         break;
     case DefaultExtrudePlugin::BevelCurveType::InverseHalfSinus:
-        ApplyFunction( &DefaultExtrudePlugin::InverseHalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], frontBevelTesselation, bevelHeight, 0 );
+        ApplyFunction( &DefaultExtrudePlugin::InverseHalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 4 ], curveOffsets[ 5 ], frontBevelTesselation, bevelHeight, 0, true );
         break;
     case DefaultExtrudePlugin::BevelCurveType::Sinus:
-        ApplyFunction( &DefaultExtrudePlugin::SinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], frontBevelTesselation, bevelHeight, 0 );
+        ApplyFunction( &DefaultExtrudePlugin::SinusCurve, mesh, normals, edges, corners, curveOffsets[ 4 ], curveOffsets[ 5 ], frontBevelTesselation, bevelHeight, 0, true );
         break;
     default:
         assert( !"Shouldn't be here" );
-        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 4 ], curveOffsets[ 5 ], backBevelTesselation, bevelHeight, 0, true );
     }
 
 
@@ -550,67 +550,6 @@ void    DefaultExtrudePlugin::CopyTranslate           ( IndexedGeometry & mesh, 
 
 // ***********************
 //
-void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve, IndexedGeometry & mesh, IndexedGeometry & normalsVec, std::vector< IndexType > & edges, std::vector< IndexType > & cornerPairs )
-{
-    auto & indices = mesh.GetIndicies();
-    auto & verticies = mesh.GetVerticies();
-    auto & normals = normalsVec.GetVerticies();
-
-    int extrudeVertsBegin = 2 * m_numUniqueExtrudedVerticies;
-    int edgeRowLength = (int)edges.size() / 2 + (int)cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
-
-    // Merge normals for corner verticies. These normals will be recreated in next functions.
-    // We need this step to make special behavior of corner verticies possible.
-    for( UInt32 i = 0; i < ( UInt32 )cornerPairs.size(); i += 2 )
-    {
-        int idx1 = cornerPairs[ i ];
-        int idx2 = cornerPairs[ i + 1 ];
-
-        glm::vec3 v1 = normals[ idx1 ];
-        glm::vec3 v2 = normals[ idx2 ];
-
-        glm::vec3 translateNormal = glm::normalize( v1 + v2 );
-
-        float cos2Alpha = glm::dot( v1, v2 );
-        float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
-        float normalCoeff = glm::length( v1 ) / cosAlpha;
-
-        normals[ idx1 ] = normalCoeff * translateNormal;
-        normals[ idx2 ] = normals[ idx1 ];
-    }
-
-    // Add verticies between extruded planes.
-    float delta = 1.0f / ( m_tesselation + 1 );
-    for( int i = 1; i < m_tesselation + 1; ++i )
-    {
-        float division = i * delta;
-        float moveCoeff = (this->*curve)( division ) * m_curveScale;
-
-        for( int j = extrudeVertsBegin; j < extrudeVertsBegin + edgeRowLength; j++ )
-        {
-            glm::vec3 newVertex = verticies[ j ] * ( 1.0f - division ) + verticies[ j + edgeRowLength ] * division;
-            newVertex += normals[ j ] * moveCoeff;
-
-            verticies.push_back( newVertex );
-        }
-    }
-
-    // Remove existing side
-    indices.erase( indices.begin() + ( 2 * m_numExtrudedVerticies ), indices.end() );
-
-    // Connect all verticies
-    ConnectVerticies( indices, edges, 0, 2 * edgeRowLength );
-    for( int i = 2; i < m_tesselation + 1; ++i )
-    {
-        int offset1 = i * edgeRowLength;
-        int offset2 = offset1 + edgeRowLength;
-        ConnectVerticies( indices, edges, offset1, offset2 );
-    }
-    ConnectVerticies( indices, edges, ( m_tesselation + 1 ) * edgeRowLength, edgeRowLength );
-}
-
-// ***********************
-//
 void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
                                                         IndexedGeometry & mesh,
                                                         IndexedGeometry & normalsVec,
@@ -620,7 +559,8 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
                                                         SizeType endContourOffset,
                                                         int tesselation,
                                                         float scaleCurve,
-                                                        float offsetCurve
+                                                        float offsetCurve,
+                                                        bool mirrorFunction
                                                       )
 {
     auto & indices = mesh.GetIndicies();
@@ -655,7 +595,9 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
     for( int i = 1; i < tesselation + 1; ++i )
     {
         float division = i * delta;
+
         float moveCoeff = ( this->*curve )( division ) * scaleCurve + offsetCurve;
+        moveCoeff = mirrorFunction ? 1.0f - moveCoeff : moveCoeff;
 
         for( int j = 0; j < edgeRowLength; j++ )
         {
@@ -667,9 +609,9 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
     }
 
     // Move reference verticies of start contour and end contour.
-    // @todo 
     {
         float moveCoeff = ( this->*curve )( 0 ) * scaleCurve + offsetCurve;
+        moveCoeff = mirrorFunction ? 1.0f - moveCoeff : moveCoeff;
 
         for( SizeType i = beginContourOffset; i < beginContourOffset + edgeRowLength; i++ )
         {
@@ -677,6 +619,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
         }
 
         moveCoeff = ( this->*curve )( 1.0f ) * scaleCurve + offsetCurve;
+        moveCoeff = mirrorFunction ? 1.0f - moveCoeff : moveCoeff;
 
         for( SizeType i = endContourOffset; i < endContourOffset + edgeRowLength; i++ )
         {
