@@ -164,10 +164,10 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         sideCurve = ExtrudeCurveType::None;
 
     if( frontBevelCurve >= BevelCurveType::Total )
-        frontBevelCurve = BevelCurveType::None;
+        frontBevelCurve = BevelCurveType::Line;
 
     if( backBevelCurve >= BevelCurveType::Total )
-        backBevelCurve = BevelCurveType::None;
+        backBevelCurve = BevelCurveType::Line;
 
     // Check bevel height. Should be greater then zero.
     if( bevelHeight - std::numeric_limits< float >::epsilon() < 0.0f )
@@ -184,14 +184,14 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     // Check bevel depth. Should be greater then zero.
     if( frontBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
     {
-        frontBevelCurve = BevelCurveType::None;
+        frontBevelCurve = BevelCurveType::Line;
         frontBevelTesselation = 1;
         bevelHeight = 0;
     }
 
     if( backBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
     {
-        backBevelCurve = BevelCurveType::None;
+        backBevelCurve = BevelCurveType::Line;
         backBevelTesselation = 1;
         bevelHeight = 0;
     }
@@ -258,7 +258,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     SizeType curOffset = sidePlanesOffset + 2 * sideContourLength;
 
 
-    if( frontBevelCurve != BevelCurveType::None )
+    if( frontBevelCurve != BevelCurveType::Total )
     {
         glm::vec3 translation = glm::normalize( translate ) * frontBevelDepth;
 
@@ -270,7 +270,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         CopyTranslate( mesh, translation, sidePlanesOffset, sideContourLength );
     }
 
-    if( sideCurve != ExtrudeCurveType::None )
+    if( sideCurve != ExtrudeCurveType::Total )
     {
         glm::vec3 frontTranslate = glm::normalize( translate ) * frontBevelDepth;
         glm::vec3 backTranslate = translate - glm::normalize( translate ) * backBevelDepth;
@@ -284,7 +284,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         CopyTranslate( mesh, backTranslate, sidePlanesOffset, sideContourLength );
     }
 
-    if( backBevelCurve != BevelCurveType::None )
+    if( backBevelCurve != BevelCurveType::Total )
     {
         glm::vec3 backTranslate = translate - glm::normalize( translate ) * backBevelDepth;
 
@@ -343,65 +343,57 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     indicies.erase( indicies.begin() + ( 2 * m_numExtrudedVerticies ), indicies.end() );
 
 
-    if( frontBevelCurve != BevelCurveType::None )
+
+    switch( frontBevelCurve )
     {
-        switch( frontBevelCurve )
-        {
-        case DefaultExtrudePlugin::BevelCurveType::None:
-            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
-            break;
-        case DefaultExtrudePlugin::BevelCurveType::Line:
-            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
-            break;
-        case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
-            ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
-            break;
-        default:
-            assert( !"Shouldn't be here" );
-        }
-
-
+    case DefaultExtrudePlugin::BevelCurveType::Line:
+        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
+        break;
+    case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
+        ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
+        break;
+    default:
+        assert( !"Shouldn't be here" );
+        // In release mode.
+        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
     }
 
 
-    if( sideCurve != ExtrudeCurveType::None )
+
+    switch( sideCurve )
     {
-        switch( sideCurve )
-        {
-        case ExtrudeCurveType::Parabola:
-            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
-            break;
-        case ExtrudeCurveType::Cosinus:
-            ApplyFunction( &DefaultExtrudePlugin::PeriodicCosinusCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
-            break;
-        case ExtrudeCurveType::Gauss:
-            ApplyFunction( &DefaultExtrudePlugin::GaussCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
-            break;
-        case ExtrudeCurveType::Circle:
-            ApplyFunction( &DefaultExtrudePlugin::CircleCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
-            break;
-        default:
-            assert( !"Shouldn't be here" );
-        }
+    case ExtrudeCurveType::Parabola:
+        ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+        break;
+    case ExtrudeCurveType::Cosinus:
+        ApplyFunction( &DefaultExtrudePlugin::PeriodicCosinusCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+        break;
+    case ExtrudeCurveType::Gauss:
+        ApplyFunction( &DefaultExtrudePlugin::GaussCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+        break;
+    case ExtrudeCurveType::Circle:
+        ApplyFunction( &DefaultExtrudePlugin::CircleCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+        break;
+    case ExtrudeCurveType::None:
+        ApplyFunction( &DefaultExtrudePlugin::ZeroLineCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+        break;
+    default:
+        assert( !"Shouldn't be here" );
+        ApplyFunction( &DefaultExtrudePlugin::ZeroLineCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
     }
 
 
-    if( backBevelCurve != BevelCurveType::None )
+    switch( backBevelCurve )
     {
-        switch( backBevelCurve )
-        {
-        case DefaultExtrudePlugin::BevelCurveType::None:
-            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
-            break;
-        case DefaultExtrudePlugin::BevelCurveType::Line:
-            ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
-            break;
-        case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
-            ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
-            break;
-        default:
-            assert( !"Shouldn't be here" );
-        }
+    case DefaultExtrudePlugin::BevelCurveType::Line:
+        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        break;
+    case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
+        ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        break;
+    default:
+        assert( !"Shouldn't be here" );
+        ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
     }
 
 
@@ -984,6 +976,13 @@ float       DefaultExtrudePlugin::PeriodicCosinusCurve ( float param )
     float arg = 2.0f * period * glm::pi< float >() * param;
     float result = cos( arg ) / 2.0f + 0.5f;
     return 1.0f - result;
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::ZeroLineCurve         ( float /*param*/ )
+{
+    return 0.0f;
 }
 
 // ***********************

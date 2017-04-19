@@ -58,7 +58,6 @@ public:
 
     enum class BevelCurveType
     {
-        None,
         Line,
         HalfSinus,
 
@@ -91,6 +90,7 @@ public:
 private:
 
     // Curves (side face)
+    float           ZeroLineCurve           ( float param );
     float           ParabolaCurve           ( float param );
     float           PeriodicCosinusCurve    ( float param );
     float           GaussCurve              ( float param );
