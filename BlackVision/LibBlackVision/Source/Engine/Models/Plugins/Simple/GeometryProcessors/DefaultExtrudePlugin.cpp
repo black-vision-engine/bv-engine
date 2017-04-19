@@ -84,9 +84,9 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK, 1, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL, 1, true, true );
 
-    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::None, true, true );
-    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_FRONT, DefaultExtrudePlugin::BevelCurveType::None, true, true );
-    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_BACK, DefaultExtrudePlugin::BevelCurveType::None, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_CURVE, DefaultExtrudePlugin::ExtrudeCurveType::Circle, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_FRONT, DefaultExtrudePlugin::BevelCurveType::SinusHalfPI, true, true );
+    helper.AddEnumParam( DefaultExtrudePlugin::PARAMS::BEVEL_CURVE_BACK, DefaultExtrudePlugin::BevelCurveType::SinusHalfPI, true, true );
 
     return model;
 }
@@ -115,42 +115,6 @@ DefaultExtrudePlugin::~DefaultExtrudePlugin         ()
 {}
 
 // ========================================================================= //
-// Extrude curve functions
-// ========================================================================= //
-
-// ***********************
-// param is float value between 0 and 1.
-float       DefaultExtrudePlugin::PeriodicCosinusCurve ( float param )
-{
-    int period = m_cosinusPeriod;
-    float arg = 2.0f * period * glm::pi< float >() * param;
-    float result = cos( arg ) / 2.0f + 0.5f;
-    return 1.0f - result;
-}
-
-// ***********************
-//
-float       DefaultExtrudePlugin::ParabolaCurve         ( float param )
-{
-    return -param * ( param - 1.0f );
-}
-
-// ***********************
-// Gauss function with center in 0.5. Function reaches 0 near param == 0.0 and param == 1.0
-float       DefaultExtrudePlugin::GaussCurve            ( float param )
-{
-    float exponent = -( param - 0.5f ) * ( param - 0.5f ) / ( 2.0f * 0.166666f * 0.166666f );
-    return exp( exponent );
-}
-
-// ***********************
-//
-float       DefaultExtrudePlugin::CircleCurve           ( float param )
-{
-    return sqrt( 0.25f - ( param - 0.5f ) * ( param - 0.5f ) );
-}
-
-// ========================================================================= //
 // Processing
 // ========================================================================= //
 
@@ -176,8 +140,8 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     float bevelHeight               = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT ) )->GetValue();
     float frontBevelDepth           = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT ) )->GetValue();
     float backBevelDepth            = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK ) )->GetValue();
-    int frontBevelTesselation     = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
-    int backBevelTesselation      = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
+    int frontBevelTesselation       = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
+    int backBevelTesselation        = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
     bool symetricalBevel            = QueryTypedValue< ValueBoolPtr >( GetValue( DefaultExtrudePlugin::PARAMS::SYMETRICAL_BEVEL ) )->GetValue();
 
 
@@ -370,30 +334,71 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 // ***********************
 //
 // Generate curved side surfaces.
-    if( sideCurve != ExtrudeCurveType::None )
+
+    auto & indicies = mesh.GetIndicies();
+    indicies.erase( indicies.begin() + ( 2 * m_numExtrudedVerticies ), indicies.end() );
+
+
+    if( frontBevelCurve != BevelCurveType::None )
     {
-        switch( sideCurve )
+        switch( frontBevelCurve )
         {
-        case ExtrudeCurveType::Parabola:
-            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners );
+        case DefaultExtrudePlugin::BevelCurveType::None:
             break;
-        case ExtrudeCurveType::Cosinus:
-            ApplyFunction( &DefaultExtrudePlugin::PeriodicCosinusCurve, mesh, normals, edges, corners );
+        case DefaultExtrudePlugin::BevelCurveType::Line:
             break;
-        case ExtrudeCurveType::Gauss:
-            ApplyFunction( &DefaultExtrudePlugin::GaussCurve, mesh, normals, edges, corners );
-            break;
-        case ExtrudeCurveType::Circle:
-            ApplyFunction( &DefaultExtrudePlugin::CircleCurve, mesh, normals, edges, corners );
+        case DefaultExtrudePlugin::BevelCurveType::SinusHalfPI:
+            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
             break;
         default:
             assert( !"Shouldn't be here" );
         }
 
-        ClampNormVecToDefaults( normals );
-        FillWithNormals( mesh, normals.GetVerticies() );
+
     }
 
+
+    if( sideCurve != ExtrudeCurveType::None )
+    {
+        switch( sideCurve )
+        {
+        case ExtrudeCurveType::Parabola:
+            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+            break;
+        case ExtrudeCurveType::Cosinus:
+            ApplyFunction( &DefaultExtrudePlugin::PeriodicCosinusCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+            break;
+        case ExtrudeCurveType::Gauss:
+            ApplyFunction( &DefaultExtrudePlugin::GaussCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+            break;
+        case ExtrudeCurveType::Circle:
+            ApplyFunction( &DefaultExtrudePlugin::CircleCurve, mesh, normals, edges, corners, curveOffsets[ 2 ], curveOffsets[ 3 ], m_tesselation, m_curveScale, bevelHeight );
+            break;
+        default:
+            assert( !"Shouldn't be here" );
+        }
+    }
+
+
+    if( backBevelCurve != BevelCurveType::None )
+    {
+        switch( backBevelCurve )
+        {
+        case DefaultExtrudePlugin::BevelCurveType::None:
+            break;
+        case DefaultExtrudePlugin::BevelCurveType::Line:
+            break;
+        case DefaultExtrudePlugin::BevelCurveType::SinusHalfPI:
+            ApplyFunction( &DefaultExtrudePlugin::ParabolaCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+            break;
+        default:
+            assert( !"Shouldn't be here" );
+        }
+    }
+
+
+    ClampNormVecToDefaults( normals );
+    FillWithNormals( mesh, normals.GetVerticies() );
 
     converter.MakeTriangles( mesh, newPositions );
     converter.MakeTriangles( normals.GetVerticies(), mesh.GetIndicies(), normalsChannel );
@@ -669,9 +674,9 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
     }
 
     // Edges are already offseted relative to first contour row.
-    beginContourOffset -= m_numUniqueExtrudedVerticies;
-    endContourOffset -= m_numUniqueExtrudedVerticies;
-    curveOffset -= m_numUniqueExtrudedVerticies;
+    beginContourOffset -= 2 * m_numUniqueExtrudedVerticies;
+    endContourOffset -= 2 * m_numUniqueExtrudedVerticies;
+    curveOffset -= 2 * m_numUniqueExtrudedVerticies;
 
     // Connect all verticies
     ConnectVerticies( indices, edges, (int)beginContourOffset, (int)curveOffset );
@@ -961,6 +966,55 @@ void        DefaultExtrudePlugin::DebugPrint    ( std::fstream & file, glm::vec3
     file << "( " << vertex.x << ", " << vertex.y << ", " << vertex.z << " )";
 }
 
+// ========================================================================= //
+// Extrude curve functions
+// ========================================================================= //
+
+// ***********************
+// param is float value between 0 and 1.
+float       DefaultExtrudePlugin::PeriodicCosinusCurve ( float param )
+{
+    int period = m_cosinusPeriod;
+    float arg = 2.0f * period * glm::pi< float >() * param;
+    float result = cos( arg ) / 2.0f + 0.5f;
+    return 1.0f - result;
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::ParabolaCurve         ( float param )
+{
+    return -param * ( param - 1.0f );
+}
+
+// ***********************
+// Gauss function with center in 0.5. Function reaches 0 near param == 0.0 and param == 1.0
+float       DefaultExtrudePlugin::GaussCurve            ( float param )
+{
+    float exponent = -( param - 0.5f ) * ( param - 0.5f ) / ( 2.0f * 0.166666f * 0.166666f );
+    return exp( exponent );
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::CircleCurve           ( float param )
+{
+    return sqrt( 0.25f - ( param - 0.5f ) * ( param - 0.5f ) );
+}
+
+
+
+// ========================================================================= //
+// Bevel extrude curve functions
+// ========================================================================= //
+
+// ***********************
+//
+float       DefaultExtrudePlugin::SinusHalfPICurve      ( float param )
+{
+    float arg = glm::pi< float >() / 2.0f * param;
+    return cos( arg ) - param;      // Note: Extrude functions compute weighted average verticies. Function must return value starting and ending in 0.
+}
 
 
 } // model
