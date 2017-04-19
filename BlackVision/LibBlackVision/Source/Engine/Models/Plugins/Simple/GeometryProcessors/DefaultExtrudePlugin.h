@@ -60,6 +60,8 @@ public:
     {
         Line,
         HalfSinus,
+        InverseHalfSinus,
+        Sinus,
 
         Total
     };
@@ -99,6 +101,8 @@ private:
     // Curves (bevel part)
     float           LineCurve               ( float param );
     float           HalfSinusCurve          ( float param );
+    float           SinusCurve              ( float param );
+    float           InverseHalfSinusCurve   ( float param );
 
 private:
 

@@ -343,7 +343,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     indicies.erase( indicies.begin() + ( 2 * m_numExtrudedVerticies ), indicies.end() );
 
 
-
+    // Generate bevel front surface
     switch( frontBevelCurve )
     {
     case DefaultExtrudePlugin::BevelCurveType::Line:
@@ -352,6 +352,12 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
         ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
         break;
+    case DefaultExtrudePlugin::BevelCurveType::InverseHalfSinus:
+        ApplyFunction( &DefaultExtrudePlugin::InverseHalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
+        break;
+    case DefaultExtrudePlugin::BevelCurveType::Sinus:
+        ApplyFunction( &DefaultExtrudePlugin::SinusCurve, mesh, normals, edges, corners, curveOffsets[ 0 ], curveOffsets[ 1 ], frontBevelTesselation, bevelHeight, 0 );
+        break;
     default:
         assert( !"Shouldn't be here" );
         // In release mode.
@@ -359,7 +365,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     }
 
 
-
+    // Generate side surface
     switch( sideCurve )
     {
     case ExtrudeCurveType::Parabola:
@@ -383,6 +389,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     }
 
 
+    // Generate back surface
     switch( backBevelCurve )
     {
     case DefaultExtrudePlugin::BevelCurveType::Line:
@@ -390,6 +397,12 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         break;
     case DefaultExtrudePlugin::BevelCurveType::HalfSinus:
         ApplyFunction( &DefaultExtrudePlugin::HalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], backBevelTesselation, bevelHeight, 0 );
+        break;
+    case DefaultExtrudePlugin::BevelCurveType::InverseHalfSinus:
+        ApplyFunction( &DefaultExtrudePlugin::InverseHalfSinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], frontBevelTesselation, bevelHeight, 0 );
+        break;
+    case DefaultExtrudePlugin::BevelCurveType::Sinus:
+        ApplyFunction( &DefaultExtrudePlugin::SinusCurve, mesh, normals, edges, corners, curveOffsets[ 5 ], curveOffsets[ 4 ], frontBevelTesselation, bevelHeight, 0 );
         break;
     default:
         assert( !"Shouldn't be here" );
@@ -1025,7 +1038,25 @@ float       DefaultExtrudePlugin::LineCurve         ( float param )
 float       DefaultExtrudePlugin::HalfSinusCurve      ( float param )
 {
     float arg = 0.5f * glm::pi< float >() * param;
-    return sin( arg );// -param;      // Note: Extrude functions compute weighted average verticies. Function must return value starting and ending in 0.
+    return sin( arg );
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::SinusCurve            ( float param )
+{
+    float scaledParam = ( 2 * param ) - 1.0f;
+    float arg = 0.5f * glm::pi< float >() * scaledParam;
+
+    return ( sin( arg ) / 2.0f ) + 0.5f;
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::InverseHalfSinusCurve ( float param )
+{
+    float arg = 0.5f * glm::pi< float >() * ( param - 1.0f );
+    return sin( arg ) + 1.0f;
 }
 
 
