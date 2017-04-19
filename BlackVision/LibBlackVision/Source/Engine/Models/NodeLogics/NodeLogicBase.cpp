@@ -75,5 +75,15 @@ void	                                        NodeLogicBase::Update			( TimeType 
     m_paramValModel->Update();
 }
 
+// ***********************
+//
+bool                                            NodeLogicBase::ParameterChanged ( const std::string & name ) const
+{
+    auto state = m_paramValModel->GetState( name );
+    assert( state );
+    return state->StateChanged();
+
+}
+
 }   // model
 }	// bv
