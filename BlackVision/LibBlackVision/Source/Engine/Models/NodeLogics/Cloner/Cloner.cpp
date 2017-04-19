@@ -29,7 +29,6 @@ const std::string       Cloner::m_type = "Cloner";
 const std::string       Cloner::PARAMETERS::N_ROWS  = "numRows";
 const std::string       Cloner::PARAMETERS::N_COLS  = "numCols";
 const std::string       Cloner::PARAMETERS::DELTA   = "delta";
-const std::string       Cloner::PARAMETERS::SHAPE_TYPE = "shapeType";
 
 // ***********************
 //
@@ -57,7 +56,6 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddSimpleParam( PARAMETERS::N_COLS, 1, false, true );
     h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), false, true );
 
-    h.AddEnumParam< ClonerShapeType >( PARAMETERS::SHAPE_TYPE, ClonerShapeType::CST_MATRIX, false, true );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 
@@ -186,7 +184,38 @@ void                        Cloner::UpdateClones        ()
 //
 void                        Cloner::UpdatePositions     ()
 {
+    if( ParameterChanged( PARAMETERS::DELTA ) )
+    {
+        if( auto parentNode = m_parentNode.lock() )
+        {
+            if( parentNode->GetNumChildren() > 0 )
+            {
+                auto firstChild = parentNode->GetChild( 0 );
 
+                auto paramTransformFirst = firstChild->GetFinalizePlugin()->GetParamTransform();
+
+                glm::vec3 translation = glm::vec3( 0.f );
+
+                if( paramTransformFirst )
+                    translation = paramTransformFirst->GetTransform().GetTranslation( 0.f );
+
+                auto numCols = m_numCols.GetValue();
+                auto numRows = m_numRows.GetValue();
+                auto delta = m_delta.GetValue();
+
+                for( UInt32 i = 1; i < parentNode->GetNumChildren(); ++i )
+                {
+                    auto paramTransform = parentNode->GetChild( i )->GetFinalizePlugin()->GetParamTransform();
+
+                    auto r = i / numRows;
+                    auto c = i / numCols;
+
+                    if( paramTransform )
+                        paramTransform->SetTranslation( translation + glm::vec3( delta.x * c, delta.y * r, delta.z * c ), 0.f );
+                }
+            }
+        }
+    }
 }
 
 // ***********************

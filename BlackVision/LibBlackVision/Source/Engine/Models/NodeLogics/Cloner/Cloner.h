@@ -25,13 +25,6 @@ DEFINE_WEAK_PTR_TYPE( BasicNode );
 namespace nodelogic
 {
 
-enum class ClonerShapeType : int
-{
-    CST_MATRIX = 0,
-    CST_ELIPSE,
-    CST_SPHERE
-};
-
 class Cloner;
 
 DEFINE_PTR_TYPE( Cloner );
@@ -54,7 +47,6 @@ private:
         static const std::string    N_ROWS;
         static const std::string    N_COLS;
         static const std::string    DELTA;
-        static const std::string    SHAPE_TYPE;
     };
 
 private:
