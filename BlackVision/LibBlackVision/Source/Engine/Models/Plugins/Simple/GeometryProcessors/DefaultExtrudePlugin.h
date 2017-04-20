@@ -58,8 +58,12 @@ public:
 
     enum class BevelCurveType
     {
-        None,
         Line,
+        HalfSinus,
+        InverseHalfSinus,
+        Sinus,
+        Circle,
+        InverseCircle,
 
         Total
     };
@@ -89,11 +93,20 @@ public:
 
 private:
 
-    // Curves
+    // Curves (side face)
+    float           ZeroLineCurve           ( float param );
     float           ParabolaCurve           ( float param );
     float           PeriodicCosinusCurve    ( float param );
     float           GaussCurve              ( float param );
     float           CircleCurve             ( float param );
+
+    // Curves (bevel part)
+    float           LineCurve               ( float param );
+    float           HalfSinusCurve          ( float param );
+    float           SinusCurve              ( float param );
+    float           InverseHalfSinusCurve   ( float param );
+    float           CircleBevelCurve        ( float param );
+    float           InverseCircleBevelCurve ( float param );
 
 private:
 
@@ -106,13 +119,6 @@ private:
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
 
-    void            ApplyFunction           (   ExtrudeCurve curve,
-                                                IndexedGeometry & mesh,
-                                                IndexedGeometry & normalsVec,
-                                                std::vector< IndexType > & edges,
-                                                std::vector< IndexType > & corners
-                                            );
-
 
     void            ApplyFunction           (   ExtrudeCurve curve,
                                                 IndexedGeometry & mesh,
@@ -123,7 +129,32 @@ private:
                                                 SizeType endContourOffset,
                                                 int tesselation,
                                                 float scaleCurve,
-                                                float offsetCurve
+                                                float offsetCurve,
+                                                bool mirrorFunction = false
+                                            );
+
+    void            GenerateSideFace        (   BevelCurveType curve,
+                                                IndexedGeometry & mesh,
+                                                IndexedGeometry & normalsVec,
+                                                std::vector< IndexType > & edges,
+                                                std::vector< IndexType > & corners,
+                                                SizeType beginContourOffset,
+                                                SizeType endContourOffset,
+                                                int tesselation,
+                                                float bevelHeight,
+                                                bool backBevelFace
+                                            );
+
+    void            GenerateSideFace        (   ExtrudeCurveType curve,
+                                                IndexedGeometry & mesh,
+                                                IndexedGeometry & normalsVec,
+                                                std::vector< IndexType > & edges,
+                                                std::vector< IndexType > & corners,
+                                                SizeType beginContourOffset,
+                                                SizeType endContourOffset,
+                                                int tesselation,
+                                                float curveScale,
+                                                float bevelHeight
                                             );
 
 
