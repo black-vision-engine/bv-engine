@@ -13,6 +13,7 @@
 #include "Follow/Follow.h"
 #include "SlideShow/SlideShow.h"
 #include "MaxSize/MaxSize.h"
+#include "Cloner/Cloner.h"
 
 
 namespace bv {
@@ -69,6 +70,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == nodelogic::MaxSize::Type() )
     {
         return nodelogic::MaxSize::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::Cloner::Type() )
+    {
+        return nodelogic::Cloner::Create( deser, logicParent );
     }
 
     return nullptr;
