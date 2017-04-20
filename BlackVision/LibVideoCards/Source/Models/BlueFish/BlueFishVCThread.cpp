@@ -74,6 +74,8 @@ void				BlueFishVCThread::Process					()
 
 		if( processedFrame )
             m_videoChannel->FrameProcessed( processedFrame );
+        else
+            m_videoChannel->FrameProcessed( srcFrame );
 
         if( m_frameDuration > 0 )
         {

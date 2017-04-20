@@ -10,7 +10,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
-#include "Widgets/MeshLoader/MeshLoader.h"
+#include "Engine/Models/NodeLogics/MeshLoader/MeshLoader.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BoundingVolume.h"

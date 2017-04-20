@@ -146,7 +146,7 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
         do
         {
             auto rdID = deser.GetAttribute( "id" );
-            if( deser.EnterChild( "Output" ) )
+            if( deser.EnterChild( "VideoOutput" ) )
             {
                 std::hash_map< std::string, std::string > prop;
 
