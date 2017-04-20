@@ -396,6 +396,13 @@ std::set< IModelNodeConstPtr >         ModelState::GetSelectedNodes()
 
 // ***********************
 //
+const BVProject *                   ModelState::GetBVProject        () const
+{
+    return m_project;
+}
+
+// ***********************
+//
 glm::vec4                           ModelState::GetSelectedNodeColor ( IModelNodeConstPtr node )
 {
     return m_selectedNodes[ node ];
