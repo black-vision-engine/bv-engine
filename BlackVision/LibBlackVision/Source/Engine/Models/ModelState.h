@@ -48,6 +48,8 @@ public:
     void                                UnselectRecursive   ( IModelNodePtr node );
     std::set< IModelNodeConstPtr >      GetSelectedNodes    ();
 
+    const BVProject *                   GetBVProject        () const;
+
 private:
     
     std::string                         RestoreNodePath ( const IModelNode * node, std::string * sceneName ) const;

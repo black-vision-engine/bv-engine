@@ -5,6 +5,8 @@
 #include "Engine/Types/Values/TypedValues.h"
 #include "Engine/Events/Interfaces/IEvent.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 namespace bv
 {
 
@@ -42,12 +44,17 @@ private:
 
     struct PARAMETERS
     {
-        //static const std::string    PARAMETER_NAME;
+        static const std::string    N_ROWS;
+        static const std::string    N_COLS;
+        static const std::string    DELTA;
     };
 
 private:
     bv::model::BasicNodeWeakPtr			m_parentNode;
 
+    model::ValueParamState< Int32 >     m_numRows;
+    model::ValueParamState< Int32 >     m_numCols;
+    model::ValueParamState< glm::vec3 > m_delta;
 
 public:
     explicit    Cloner			( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
@@ -62,13 +69,17 @@ public:
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
-    static ClonerPtr			Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode );
+    static ClonerPtr			        Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 
 private:
-    void            NodeRemovedHandler      ( IEventPtr evt );
+    void                    NodeRemovedHandler      ( IEventPtr evt );
 
+    void                    UpdateClones            ();
+    void                    UpdatePositions         ();
+
+    void                    CloneNode               ( UInt32 clonesNum ) const;
 };
 
 
