@@ -521,12 +521,22 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
     SizeType curveOffset = verticies.size();
     int edgeRowLength = ( int )edges.size() / 2 + ( int )cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
 
-    // Merge normals for corner verticies. These normals will be recreated in next functions.
-    // We need this step to make special behavior of corner verticies possible.
+    // Edges and corners are already offseted relative to first contour row.
+    SizeType relativeBeginContourOffset = beginContourOffset - 2 * m_numUniqueExtrudedVerticies;
+    SizeType relativeEndContourOffset = endContourOffset - 2 * m_numUniqueExtrudedVerticies;
+    SizeType relativeCurveOffset = curveOffset - 2 * m_numUniqueExtrudedVerticies;
+
+
+    // Merge normals for corner verticies. We need this step to make special behavior of corner verticies possible.
+    // Verticies will be moved along these normals. Proper normals will be recreated in next functions.
     for( UInt32 i = 0; i < ( UInt32 )cornerPairs.size(); i += 2 )
     {
-        int idx1 = cornerPairs[ i ];
-        int idx2 = cornerPairs[ i + 1 ];
+        SizeType idx1 = relativeBeginContourOffset + cornerPairs[ i ];
+        SizeType idx2 = relativeBeginContourOffset + cornerPairs[ i + 1 ];
+
+        // Applies the same normals to second contour.
+        SizeType idx3 = relativeEndContourOffset + cornerPairs[ i ];
+        SizeType idx4 = relativeEndContourOffset + cornerPairs[ i + 1 ];
 
         glm::vec3 v1 = normals[ idx1 ];
         glm::vec3 v2 = normals[ idx2 ];
@@ -539,6 +549,9 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
 
         normals[ idx1 ] = normalCoeff * translateNormal;
         normals[ idx2 ] = normals[ idx1 ];
+
+        normals[ idx3 ] = normals[ idx1 ];
+        normals[ idx4 ] = normals[ idx1 ];
     }
 
     // Add verticies between extruded planes.
@@ -578,20 +591,16 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
         }
     }
 
-    // Edges are already offseted relative to first contour row.
-    beginContourOffset -= 2 * m_numUniqueExtrudedVerticies;
-    endContourOffset -= 2 * m_numUniqueExtrudedVerticies;
-    curveOffset -= 2 * m_numUniqueExtrudedVerticies;
 
     // Connect all verticies
-    ConnectVerticies( indices, edges, (int)beginContourOffset, (int)curveOffset );
+    ConnectVerticies( indices, edges, (int)relativeBeginContourOffset, (int)relativeCurveOffset );
     for( int i = 2; i < tesselation + 1; ++i )
     {
-        int offset1 = (int)curveOffset + ( i - 2 ) * edgeRowLength;
+        int offset1 = (int)relativeCurveOffset + ( i - 2 ) * edgeRowLength;
         int offset2 = offset1 + edgeRowLength;
         ConnectVerticies( indices, edges, offset1, offset2 );
     }
-    ConnectVerticies( indices, edges, (int)curveOffset + ( tesselation - 1 ) * edgeRowLength, (int)endContourOffset );
+    ConnectVerticies( indices, edges, (int)relativeCurveOffset + ( tesselation - 1 ) * edgeRowLength, (int)relativeEndContourOffset );
 }
 
 // ***********************
