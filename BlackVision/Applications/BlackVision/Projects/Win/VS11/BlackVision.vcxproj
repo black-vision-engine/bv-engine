@@ -256,23 +256,6 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Follow\Follow.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\MaxSize\MaxSize.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\SlideShow\SlideShow.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -325,24 +308,6 @@
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Follow\Follow.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\MaxSize\MaxSize.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\SlideShow\SlideShow.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />

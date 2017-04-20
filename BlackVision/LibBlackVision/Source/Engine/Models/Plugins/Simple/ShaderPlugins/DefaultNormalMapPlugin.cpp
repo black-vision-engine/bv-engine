@@ -131,10 +131,14 @@ bool                            DefaultNormalMapPlugin::LoadResource  ( AssetDes
 
         if( txDesc != nullptr )
         {
-            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            auto txData = m_psc->GetTexturesDataImpl();
+            auto replacedTex = txData->GetTexture( 0 );
+
+            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            txDesc->SetSamplerState( newSamplerStateModel );
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
-            auto txData = m_psc->GetTexturesDataImpl();
             txData->SetTexture( 0, txDesc );
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 

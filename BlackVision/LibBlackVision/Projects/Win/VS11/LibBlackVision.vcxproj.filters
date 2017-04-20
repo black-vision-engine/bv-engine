@@ -196,9 +196,6 @@
     <Filter Include="Engine\Models\EditorVariables">
       <UniqueIdentifier>{7894fab9-865a-4c07-a90a-ddde56d8a731}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mathematics\Util">
-      <UniqueIdentifier>{ef62563e-b8be-4fae-9264-9b3c6234fc0f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Lights">
       <UniqueIdentifier>{db65c1af-2082-49de-86c2-432b5bc6149a}</UniqueIdentifier>
     </Filter>
@@ -376,6 +373,42 @@
     <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Preview">
       <UniqueIdentifier>{0adcc45a-8cd4-4ce4-90b8-78952314ac76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\NodeLogics">
+      <UniqueIdentifier>{b0ee0ee1-e858-49fc-a374-b1807bccec8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Counter">
+      <UniqueIdentifier>{7676b77a-1330-4ef6-8246-9282a08c23ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\NodeReplicator">
+      <UniqueIdentifier>{63329a90-a51e-4adf-ac15-d218e6a1ec9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Scroller">
+      <UniqueIdentifier>{e73d1f3b-ebbd-4ab2-8a05-dbca94cac44f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\MeshLoader">
+      <UniqueIdentifier>{55d431f0-b95c-4a01-9126-3b1a6a53ffaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\SmoothValueSetter">
+      <UniqueIdentifier>{7193afdc-bc06-4dbf-a63a-98d0b506b8e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\PieChart">
+      <UniqueIdentifier>{08eed812-3d86-4b67-b42a-d0f12fb2e5df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\AnalogWatch">
+      <UniqueIdentifier>{63b4d4b6-b90a-4a39-a2e0-d9666d695506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Arrange">
+      <UniqueIdentifier>{7eaed3c8-da7c-406e-b414-3ea2a3fb8068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Follow">
+      <UniqueIdentifier>{b312231f-34da-4c2a-99ab-81f043f1a261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\SlideShow">
+      <UniqueIdentifier>{63cd6641-f29f-433c-811e-30f200770429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\MaxSize">
+      <UniqueIdentifier>{0aefa2d8-ec90-4d77-ad19-835588e5328d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -389,9 +422,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp">
       <Filter>Application\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
-      <Filter>Mathematics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
@@ -1144,12 +1174,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp">
       <Filter>Engine\Models\EditorVariables</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp">
-      <Filter>Mathematics\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
-      <Filter>Mathematics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
     </ClCompile>
@@ -1211,9 +1235,6 @@
       <Filter>Assets\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp">
-      <Filter>Assets\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp">
       <Filter>Assets\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp">
@@ -1876,6 +1897,60 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.cpp">
       <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Stream</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.cpp">
+      <Filter>Engine\Models\NodeLogics\Counter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.cpp">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.cpp">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.cpp">
+      <Filter>Engine\Models\NodeLogics\MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\ParameterBinding.cpp">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\SmoothValueSetter.cpp">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.cpp">
+      <Filter>Engine\Models\NodeLogics\PieChart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp">
+      <Filter>Engine\Models\NodeLogics\AnalogWatch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp">
+      <Filter>Engine\Models\NodeLogics\Arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.cpp">
+      <Filter>Engine\Models\NodeLogics\Follow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SlideShow\SlideShow.cpp">
+      <Filter>Engine\Models\NodeLogics\SlideShow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.cpp">
+      <Filter>Engine\Models\NodeLogics\MaxSize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.cpp">
+      <Filter>Assets\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1886,15 +1961,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
-      <Filter>Mathematics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h">
       <Filter>Mathematics\Interpolators</Filter>
@@ -4178,9 +4244,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelState.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -4201,9 +4264,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h">
       <Filter>Engine\Models\EditorVariables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
-      <Filter>Mathematics\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -4281,9 +4341,6 @@
       <Filter>Assets\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h">
-      <Filter>Assets\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h">
       <Filter>Assets\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h">
@@ -5041,6 +5098,63 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.h">
       <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.h">
+      <Filter>Engine\Models\NodeLogics\Counter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.h">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\IReplicationModifier.h">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.h">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.h">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.h">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.h">
+      <Filter>Engine\Models\NodeLogics\MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\ParameterBinding.h">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\SmoothValueSetter.h">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.h">
+      <Filter>Engine\Models\NodeLogics\PieChart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h">
+      <Filter>Engine\Models\NodeLogics\AnalogWatch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h">
+      <Filter>Engine\Models\NodeLogics\Arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.h">
+      <Filter>Engine\Models\NodeLogics\Follow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SlideShow\SlideShow.h">
+      <Filter>Engine\Models\NodeLogics\SlideShow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.h">
+      <Filter>Engine\Models\NodeLogics\MaxSize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.h">
+      <Filter>Assets\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

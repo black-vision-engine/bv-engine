@@ -132,7 +132,7 @@ UInt64      Channel::GetOutputId                 () const
 {
     if( m_playbackData )
     {
-        return m_playbackData->id;
+        return m_playbackData->linkedVideoOutput;
     }
 
     return MAXDWORD64;
@@ -470,7 +470,7 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
             std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
                                         playbackChannel->GoldenSize,
                                         playbackChannel->BytesPerLine,
-                                        m_odd, // FIXME: pass odd properlly.
+                                        m_odd,
                                         ( unsigned int ) frame->m_audioData->Size(),
                                         reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
                                         frame->m_TimeCode,

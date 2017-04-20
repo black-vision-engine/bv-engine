@@ -17,10 +17,10 @@
 #include "Engine/Models/ModelState.h"
 
 
-#include "Widgets/NodeLogicBase.h"
+#include "Engine/Models/NodeLogics/NodeLogicBase.h"
 #include "Engine/Models/Builder/NodeLogicHolder.h"
 #include "Engine/Models/BasicNode.h"
-#include "Widgets/NodeLogicHelper.h"
+#include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"

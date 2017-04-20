@@ -25,7 +25,7 @@
 
 #include "Assets/Mesh/MeshAssetDescriptor.h"
 #include "Assets/Mesh/MeshAsset.h"
-#include "Assets/Mesh/MeshLoader.h"
+#include "Assets/Mesh/MeshAssetLoader.h"
 
 #include "Assets/DataArray/DataArrayLoader.h"
 #include "Assets/DataArray/DataArrayAssetDescriptor.h"
