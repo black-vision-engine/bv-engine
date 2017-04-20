@@ -35,6 +35,8 @@ public:
 protected:
     template< typename EnumType >
     std::shared_ptr< ParamEnum< EnumType > >        QueryTypedEnum  ( const std::string & name );
+
+    bool                        ParameterChanged    ( const std::string & name ) const;
 };
 
 
