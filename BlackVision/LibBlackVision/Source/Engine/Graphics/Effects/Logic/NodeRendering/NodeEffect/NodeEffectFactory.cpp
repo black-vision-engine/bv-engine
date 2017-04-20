@@ -336,6 +336,13 @@ NodeEffectPtr       CreateSoftMaskNodeEffect   ()
 
 // **************************
 //
+NodeEffectPtr   CreateColorGradeEffect()
+{
+    return nullptr;
+}
+
+// **************************
+//
 NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
 {
     switch( nnodeEffectType )
@@ -360,9 +367,15 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
 			return CreateSoftMaskNodeEffect();
 		case NodeEffectType::NET_WIREFRAME:
             //return CreateWireframeNodeEffect();
+            assert( false );
+            break;
         case NodeEffectType::NET_MIX_CHANNELS:
             //return CreateMixchannelsNodeEffect();
 			//Interlace and so on
+            assert( false );
+            break;
+        case NodeEffectType::NET_COLOR_GRADE:
+            return CreateColorGradeEffect();
         default:
             assert( false );
     }
