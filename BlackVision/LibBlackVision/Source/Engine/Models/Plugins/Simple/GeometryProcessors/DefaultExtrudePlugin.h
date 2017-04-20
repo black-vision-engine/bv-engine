@@ -169,6 +169,8 @@ private:
 
     void            DebugPrintToFile        ( const std::string & fileName, const std::vector< glm::vec3 > & verticies, const std::vector< IndexType > & edges, const std::vector< IndexType > & corners );
     void            DebugPrint              ( std::fstream & file, glm::vec3 vertex );
+
+    Float3AttributeChannelPtr       CreateNormalsChannel    ( ConnectedComponentPtr & prevComponent, ConnectedComponentPtr & newComponent );
 };
 
 
