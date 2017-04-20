@@ -52,9 +52,9 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     model::ModelHelper h( timeEvaluator );
     h.SetOrCreatePluginModel();
 
-    h.AddSimpleParam( PARAMETERS::N_ROWS, 1, false, true );
-    h.AddSimpleParam( PARAMETERS::N_COLS, 1, false, true );
-    h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), false, true );
+    h.AddSimpleParam( PARAMETERS::N_ROWS, 1, true, true );
+    h.AddSimpleParam( PARAMETERS::N_COLS, 1, true, true );
+    h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), true, true );
 
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
