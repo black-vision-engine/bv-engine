@@ -208,7 +208,7 @@ void                        Cloner::UpdatePositions     ()
                     auto paramTransform = parentNode->GetChild( i )->GetFinalizePlugin()->GetParamTransform();
 
                     auto r = i / numRows;
-                    auto c = i / numCols;
+                    auto c = i % numCols;
 
                     if( paramTransform )
                         paramTransform->SetTranslation( translation + glm::vec3( delta.x * c, delta.y * r, delta.z * c ), 0.f );
