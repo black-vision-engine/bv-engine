@@ -6,6 +6,7 @@ in vec2 uvCoord;
 
 layout (binding = 0) uniform sampler2D Texture;
 
+
 void main()
 {
 	vec4 col = vec4(0.0, 0.0, 0.0, 1.0);
@@ -26,6 +27,76 @@ void main()
     FragColor = col.rgba;
 }
 
+float lin_2_sRGB    ( float val )
+{
+    const float a = 0.055;
+    
+    if ( val < 0.0031308 )
+    {
+        return 12.92 * val;
+    }
+    else
+    {
+        return ( 1.0 + a ) * pow( val, 1.0 / 2.4 ) - a;
+    }
+}
+
+float sRGB_2_lin    ( float val )
+{
+    const float a = 0.055;
+
+    if ( val <= 0.04045 )
+    {
+        return = val / 12.92;
+    }
+    else
+    {
+        return pow( ( val + a ) / ( 1.0 + a ), 2.4 );
+    }
+}
+
+vex3 lin_2_sRGB( vec3 col )
+{
+    return vec3( lin_2_sRGB( col.r ), lin_2_sRGB( col.g ), lin_2_sRGB( col.b ) );
+}
+
+vex3 sRGB_2_lin( vec3 col )
+{
+    return vec3( sRGB_2_lin( col.r ), sRGB_2_lin( col.g ), sRGB_2_lin( col.b ) );
+}
+
+vec3 rgb_2_xyz( in vec3 c )
+{
+    // Illuminant: D65
+    float xn = 0.95047;
+    float yn = 1.0;
+    float zn = 1.08883;
+
+    const mat3 RGB_to_XYZ = mat3(
+        0.4124564 / xn, 0.3575761 / xn, 0.1804375 / xn,
+        0.2126729 / yn, 0.7151522 / yn, 0.0721750 / yn,
+        0.0193339 / zn, 0.1191920 / zn, 0.9503041 / zn
+    );
+
+    return RGB_to_XYZ * sRGB_2_lin( c );
+
+}
+
+vec3 xyz_2_rgb( in vec3 c )
+{
+    // Illuminant: D65
+    float xn = 0.95047;
+    float yn = 1.0;
+    float zn = 1.08883;
+
+    const mat3 XYZ_to_RGB = mat3(
+         3.2404542 * xn,-1.5371385 * yn,-0.4985314 * zn,
+        -0.9692660 * xn, 1.8760108 * yn, 0.0415560 * zn,
+         0.0556434 * xn,-0.2040259 * yn, 1.0572252 * zn
+    );
+
+    return lin_2_sRGB( XYZ_to_RGB * c );
+}
 
 vec4 
 cdef inline color _rgb_to_xyz(double r, double g, double b):
