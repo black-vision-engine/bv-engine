@@ -56,6 +56,8 @@ private:
     model::ValueParamState< Int32 >     m_numCols;
     model::ValueParamState< glm::vec3 > m_delta;
 
+    bool                                m_updatePositionsNeeded;
+
 public:
     explicit    Cloner			( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
     ~Cloner		();

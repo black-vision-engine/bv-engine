@@ -48,6 +48,7 @@ const std::string &     Cloner::GetType             () const
 //
 Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
+    , m_updatePositionsNeeded( true )
 {
     model::ModelHelper h( timeEvaluator );
     h.SetOrCreatePluginModel();
@@ -172,11 +173,13 @@ void                        Cloner::UpdateClones        ()
     {
         if( auto parentNode = m_parentNode.lock() )
         {
-            auto missingNum = m_numCols.GetValue() * m_numRows.GetValue() - ( UInt32 )parentNode->GetNumChildren();
+            auto missingNum = m_numCols.GetValue() * m_numRows.GetValue() - ( Int32 )parentNode->GetNumChildren();
             
             if( missingNum > 0 )
                 CloneNode( missingNum );
         }
+
+        m_updatePositionsNeeded = true;
     }
 }
 
@@ -184,7 +187,7 @@ void                        Cloner::UpdateClones        ()
 //
 void                        Cloner::UpdatePositions     ()
 {
-    if( ParameterChanged( PARAMETERS::DELTA ) )
+    if( m_updatePositionsNeeded || ParameterChanged( PARAMETERS::DELTA ) )
     {
         if( auto parentNode = m_parentNode.lock() )
         {
@@ -203,18 +206,30 @@ void                        Cloner::UpdatePositions     ()
                 auto numRows = m_numRows.GetValue();
                 auto delta = m_delta.GetValue();
 
-                for( UInt32 i = 1; i < parentNode->GetNumChildren(); ++i )
-                {
-                    auto paramTransform = parentNode->GetChild( i )->GetFinalizePlugin()->GetParamTransform();
+                Int32 i = 1;
+                auto numChindren = ( Int32 ) parentNode->GetNumChildren();
+                auto numVisible = std::min( numChindren, numRows * numCols );
 
-                    auto r = i / numRows;
+                for( ;i < numVisible; ++i )
+                {
+                    auto ch = parentNode->GetChild( i );
+                    ch->SetVisible( true );
+
+                    auto paramTransform = ch->GetFinalizePlugin()->GetParamTransform();
+
+                    auto r = i / numCols;
                     auto c = i % numCols;
 
                     if( paramTransform )
                         paramTransform->SetTranslation( translation + glm::vec3( delta.x * c, delta.y * r, delta.z * c ), 0.f );
                 }
+
+                for( ; i < numChindren; ++i )
+                    parentNode->GetChild( i )->SetVisible( false );
             }
         }
+
+        m_updatePositionsNeeded = false;
     }
 }
 
