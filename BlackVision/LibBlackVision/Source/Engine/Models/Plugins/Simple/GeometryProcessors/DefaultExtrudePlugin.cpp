@@ -208,20 +208,18 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 // ***********************
 //
 // Get previous plugin geometry channels. Index geometry.
-    auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
-    assert( positions );    if( !positions ) return;
-    
-    auto posChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
-    auto newPositions = std::make_shared< model::Float3AttributeChannel >( posChannelDesc, positions->GetName(), true );
-
     auto connComp = ConnectedComponent::Create();
-    connComp->AddAttributeChannel( newPositions );
+
+    Float3AttributeChannelPtr newPositions = CreatePositionsChannel( currComponent, connComp );
+    Float3AttributeChannelPtr normalsChannel = CreateNormalsChannel( currComponent, connComp );
+    Float2AttributeChannelPtr uvsChannel = CreateUVsChannel( currComponent, connComp );
+
 
     IndexedGeometry mesh;
     IndexedGeometryConverter converter;
     converter.RememberConversionIndicies( true );   // Use this converter for other channels
 
-
+    auto positions = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
     if( topology == PrimitiveType::PT_TRIANGLE_STRIP )
     {
         mesh = converter.MakeIndexGeomFromStrips( positions );
@@ -237,6 +235,9 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         return;
     }
 
+    m_numUniqueExtrudedVerticies = ( int )mesh.GetVerticies().size();
+    m_numExtrudedVerticies = ( int )mesh.GetIndicies().size();
+
 
 // ***********************
 //
@@ -245,6 +246,27 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     auto corners = ExtractCorners( mesh, edges, cornerThreshold );
 
     //DebugPrintToFile( "ExtrudeDebug.txt", mesh.GetVerticies(), edges, corners );
+
+
+// ***********************
+//
+// Copy uvs from previous vertex attributes channel or generate defaults.
+    std::vector< glm::vec2 > uvs;
+    uvs.reserve( mesh.GetVerticies().size() );
+
+    auto prevUVs = std::static_pointer_cast< Float2AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
+    if( prevUVs )
+    {
+        uvs = converter.ConvertFromMemory( prevUVs );
+        DefaultUVs( mesh, uvs, true );
+        CopyUVsOnSideFaces( uvs, edges, corners );
+    }
+    else
+    {
+        DefaultUVs( mesh, uvs, false );
+        CopyUVsOnSideFaces( uvs, edges, corners );
+    }
+
 
 // ***********************
 //
@@ -322,8 +344,6 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 //
 // Copy normals from previous vertex attributes channel or generate defaults.
     IndexedGeometry normals;
-    Float3AttributeChannelPtr normalsChannel = CreateNormalsChannel( currComponent, connComp );
-
     normalsChannel->GetVertices().reserve( mesh.GetVerticies().size() );
 
     auto prevNormals = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_NORMAL ) );
@@ -338,6 +358,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         DefaultNormals( mesh, normals.GetVerticies(), false );
         FillWithNormals( mesh, normals.GetVerticies() );
     }
+
 
 
 // ***********************
@@ -361,8 +382,18 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     ClampNormVecToDefaults( normals );
     FillWithNormals( mesh, normals.GetVerticies() );
 
+// ***********************
+//
+// Deal with UVs
+
+    FillRestUVs( mesh, uvs );
+
+// ***********************
+//
+// Convert indexed geometry to triangles.
     converter.MakeTriangles( mesh, newPositions );
     converter.MakeTriangles( normals.GetVerticies(), mesh.GetIndicies(), normalsChannel );
+    converter.MakeTriangles( uvs, mesh.GetIndicies(), uvsChannel );
     
     m_vaChannel->AddConnectedComponent( connComp );
 }
@@ -373,19 +404,15 @@ void    DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, g
 {
     auto & vertices = mesh.GetVerticies();
     auto & indices = mesh.GetIndicies();
-    int numVerticies = (int)vertices.size();
-    auto numIndicies = (int)indices.size();
-
-    m_numUniqueExtrudedVerticies = numVerticies;
-    m_numExtrudedVerticies = (int)numIndicies;
+    auto numVerticies = vertices.size();
 
     // Add symetrical verticies
-    for( int i = 0; i < numVerticies; ++i )
+    for( int i = 0; i < m_numUniqueExtrudedVerticies; ++i )
     {
         vertices.push_back( translate + vertices[ i ] );
     }
 
-    for( int i = 0; i < numIndicies; i += 3 )
+    for( int i = 0; i < m_numExtrudedVerticies; i += 3 )
     {
         indices.push_back( indices[ i ] + (IndexType)numVerticies );
         indices.push_back( indices[ i + 2 ] + (IndexType)numVerticies );
@@ -687,6 +714,80 @@ void    DefaultExtrudePlugin::ClampNormVecToDefaults   ( IndexedGeometry & norma
 }
 
 // ***********************
+//
+void    DefaultExtrudePlugin::DefaultUVs                ( IndexedGeometry & /*mesh*/, std::vector< glm::vec2 >& uvs, bool useExisting )
+{
+    //auto & verticies = mesh.GetVerticies();
+    uvs.resize( 2 * m_numUniqueExtrudedVerticies, glm::vec2( 0.0, 0.0 ) );
+
+    if( useExisting )
+    {
+        // Normals have been copied from vertex attribute channel.
+        // Copy and negate them to fill back plane.
+        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
+        {
+            uvs[ i ] = uvs[ i - m_numUniqueExtrudedVerticies ];
+        }
+    }
+    else
+    {
+        // Temporary
+        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
+        {
+            uvs[ i ] = glm::vec2( 0.0, 0.0 );
+        }
+
+
+        //// Set default normals for both planes.
+        //for( int i = 0; i < m_numUniqueExtrudedVerticies; ++i )
+        //{
+        //    uvs[ i ] = glm::vec3( 0.0, 0.0, 1.0 );
+        //}
+
+        //for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
+        //{
+        //    uvs[ i ] = glm::vec3( 0.0, 0.0, -1.0 );
+        //}
+    }
+}
+
+// ***********************
+//
+void    DefaultExtrudePlugin::CopyUVsOnSideFaces            ( std::vector< glm::vec2 > & uvs, std::vector< IndexType > & edges, std::vector< IndexType > & corners )
+{
+    //auto first 2 * m_numUniqueExtrudedVerticies;
+
+    // First row of verticies
+    for( int i = 0; i < ( int )edges.size(); i += 2 )
+    {
+        uvs.push_back( uvs[ edges[ i ] ] );
+    }
+
+    // Duplicate corner verticies
+    for( auto corner : corners )
+    {
+        uvs.push_back( uvs[ corner ] );
+    }
+}
+
+// ***********************
+//
+void    DefaultExtrudePlugin::FillRestUVs                   ( IndexedGeometry & mesh, std::vector< glm::vec2 > & uvs )
+{
+    SizeType numRemainingUVs = mesh.GetVerticies().size() - uvs.size();
+    SizeType firstUVToCopy = 2 * m_numUniqueExtrudedVerticies;
+    SizeType numUVsInContour = uvs.size() - firstUVToCopy;
+
+    SizeType curUVIdx = 0;
+    while( curUVIdx < numRemainingUVs )
+    {
+        uvs.push_back( uvs[ firstUVToCopy + curUVIdx % numUVsInContour ] );
+
+        curUVIdx++;
+    }
+}
+
+// ***********************
 // Edge is a pair of verticies that builds only one triangle in whole mesh.
 // Note: Edges have their direction. Order of verticies counts. It's used later
 // to determine normal direction as cross product between edge vector and extrude vector.
@@ -815,6 +916,7 @@ void                                DefaultExtrudePlugin::ProcessVertexAttribute
 //    if( normalChannelDesc )
     {
         vaChannelDesc.AddAttrChannelDesc( std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_GENERATOR ) );
+        vaChannelDesc.AddAttrChannelDesc( std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR ) );
     }
 
     if( !m_vaChannel )
@@ -884,6 +986,32 @@ Float3AttributeChannelPtr           DefaultExtrudePlugin::CreateNormalsChannel  
 
     newComponent->AddAttributeChannel( normalsChannel );
     return normalsChannel;
+}
+
+// ***********************
+//
+Float3AttributeChannelPtr           DefaultExtrudePlugin::CreatePositionsChannel    ( ConnectedComponentPtr & prevComponent, ConnectedComponentPtr & newComponent )
+{
+    auto positions = std::static_pointer_cast< Float3AttributeChannel >( prevComponent->GetAttrChannel( AttributeSemantic::AS_POSITION ) );
+    assert( positions );    if( !positions ) return nullptr;
+
+    auto posChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR );
+    auto newPositions = std::make_shared< model::Float3AttributeChannel >( posChannelDesc, positions->GetName(), true );
+
+    newComponent->AddAttributeChannel( newPositions );
+
+    return newPositions;
+}
+
+// ***********************
+//
+Float2AttributeChannelPtr           DefaultExtrudePlugin::CreateUVsChannel          ( ConnectedComponentPtr & /*prevComponent*/, ConnectedComponentPtr & newComponent )
+{
+    auto uvsChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    Float2AttributeChannelPtr uvsChannel = std::make_shared< Float2AttributeChannel >( uvsChannelDesc, uvsChannelDesc->SuggestedDefaultName( 0 ), true );
+
+    newComponent->AddAttributeChannel( uvsChannel );
+    return uvsChannel;
 }
 
 

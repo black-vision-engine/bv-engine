@@ -119,6 +119,9 @@ private:
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
 
+    void            DefaultUVs              ( IndexedGeometry & mesh, std::vector< glm::vec2 > & uvs, bool useExisting );
+    void            CopyUVsOnSideFaces      ( std::vector< glm::vec2 > & uvs, std::vector< IndexType > & edges, std::vector< IndexType > & corners );
+    void            FillRestUVs             ( IndexedGeometry & mesh, std::vector< glm::vec2 > & uvs );
 
     void            ApplyFunction           (   ExtrudeCurve curve,
                                                 IndexedGeometry & mesh,
@@ -171,6 +174,8 @@ private:
     void            DebugPrint              ( std::fstream & file, glm::vec3 vertex );
 
     Float3AttributeChannelPtr       CreateNormalsChannel    ( ConnectedComponentPtr & prevComponent, ConnectedComponentPtr & newComponent );
+    Float3AttributeChannelPtr       CreatePositionsChannel  ( ConnectedComponentPtr & prevComponent, ConnectedComponentPtr & newComponent );
+    Float2AttributeChannelPtr       CreateUVsChannel        ( ConnectedComponentPtr & prevComponent, ConnectedComponentPtr & newComponent );
 };
 
 
