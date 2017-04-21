@@ -251,7 +251,7 @@ void                        Cloner::CloneNode           ( UInt32 clonesNum ) con
 
         auto numChildren = parentNode->GetNumChildren();
 
-        if( numChildren + clonesNum > HARD_CLONER_NODES_LIMIT )
+        if( numChildren + clonesNum > HARD_CLONER_NODES_LIMIT ) // Applying limit for number for cloned nodes.
             clonesNum = HARD_CLONER_NODES_LIMIT - numChildren;
 
         if( numChildren > 0 )
