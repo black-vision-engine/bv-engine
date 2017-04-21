@@ -3,6 +3,8 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/HelperIndexedGeometryConverter.h"
+#include "Engine/Models/Plugins/HelperUVGenerator.h"
+
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include <glm/gtx/vector_angle.hpp>
@@ -715,40 +717,22 @@ void    DefaultExtrudePlugin::ClampNormVecToDefaults   ( IndexedGeometry & norma
 
 // ***********************
 //
-void    DefaultExtrudePlugin::DefaultUVs                ( IndexedGeometry & /*mesh*/, std::vector< glm::vec2 >& uvs, bool useExisting )
+void    DefaultExtrudePlugin::DefaultUVs                ( IndexedGeometry & mesh, std::vector< glm::vec2 > & uvs, bool useExisting )
 {
-    //auto & verticies = mesh.GetVerticies();
+    if( !useExisting )
+    {
+        Helper::UVGenerator::GenerateUV( mesh.GetVerticies(), 0, m_numUniqueExtrudedVerticies, uvs, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+    }
+
     uvs.resize( 2 * m_numUniqueExtrudedVerticies, glm::vec2( 0.0, 0.0 ) );
-
-    if( useExisting )
+    
+    // Uvs have been copied from vertex attribute channel.
+    // Copy them to fill back plane.
+    for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
     {
-        // Normals have been copied from vertex attribute channel.
-        // Copy and negate them to fill back plane.
-        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
-        {
-            uvs[ i ] = uvs[ i - m_numUniqueExtrudedVerticies ];
-        }
+        uvs[ i ] = uvs[ i - m_numUniqueExtrudedVerticies ];
     }
-    else
-    {
-        // Temporary
-        for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
-        {
-            uvs[ i ] = glm::vec2( 0.0, 0.0 );
-        }
 
-
-        //// Set default normals for both planes.
-        //for( int i = 0; i < m_numUniqueExtrudedVerticies; ++i )
-        //{
-        //    uvs[ i ] = glm::vec3( 0.0, 0.0, 1.0 );
-        //}
-
-        //for( int i = m_numUniqueExtrudedVerticies; i < 2 * m_numUniqueExtrudedVerticies; ++i )
-        //{
-        //    uvs[ i ] = glm::vec3( 0.0, 0.0, -1.0 );
-        //}
-    }
 }
 
 // ***********************
