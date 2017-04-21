@@ -322,12 +322,9 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 //
 // Copy normals from previous vertex attributes channel or generate defaults.
     IndexedGeometry normals;
+    Float3AttributeChannelPtr normalsChannel = CreateNormalsChannel( currComponent, connComp );
 
-    auto normChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR );
-    Float3AttributeChannelPtr normalsChannel = std::make_shared< Float3AttributeChannel >( normChannelDesc, normChannelDesc->SuggestedDefaultName( 0 ), true );
     normalsChannel->GetVertices().reserve( mesh.GetVerticies().size() );
-
-    connComp->AddAttributeChannel( normalsChannel );
 
     auto prevNormals = std::static_pointer_cast< Float3AttributeChannel >( currComponent->GetAttrChannel( AttributeSemantic::AS_NORMAL ) );
     if( prevNormals )
@@ -480,9 +477,6 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
         edges[ i ] = numVerticies + i / 2;
     }
 
-    // Connect all verticies into triangles.
-    //ConnectVerticies( indices, edges, 0, edgeRowLength );
-
     // Replace content of old vector with new created corner vector.
     corners = std::move( cornerPairs );
 }
@@ -618,6 +612,7 @@ void    DefaultExtrudePlugin::ConnectVerticies        ( std::vector< IndexType >
         indicies.push_back( edges[ i + 1 ] + offset1);
     }
 }
+
 
 // ***********************
 //
@@ -878,6 +873,17 @@ void        DefaultExtrudePlugin::DebugPrintToFile  ( const std::string & fileNa
 void        DefaultExtrudePlugin::DebugPrint    ( std::fstream & file, glm::vec3 vertex )
 {
     file << "( " << vertex.x << ", " << vertex.y << ", " << vertex.z << " )";
+}
+
+// ***********************
+//
+Float3AttributeChannelPtr           DefaultExtrudePlugin::CreateNormalsChannel      ( ConnectedComponentPtr & /*prevComponent*/, ConnectedComponentPtr & newComponent )
+{
+    auto normChannelDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_NORMAL, ChannelRole::CR_PROCESSOR );
+    Float3AttributeChannelPtr normalsChannel = std::make_shared< Float3AttributeChannel >( normChannelDesc, normChannelDesc->SuggestedDefaultName( 0 ), true );
+
+    newComponent->AddAttributeChannel( normalsChannel );
+    return normalsChannel;
 }
 
 
