@@ -1037,6 +1037,9 @@ void    DefaultExtrudePlugin::GenerateSideFace      (   BevelCurveType curve,
     case DefaultExtrudePlugin::BevelCurveType::InverseCircle:
         ApplyFunction( &DefaultExtrudePlugin::InverseCircleBevelCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
         break;
+    case DefaultExtrudePlugin::BevelCurveType::Reciprocal:
+        ApplyFunction( &DefaultExtrudePlugin::ReciprocalCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
+        break;
     default:
         assert( !"Shouldn't be here" );
         ApplyFunction( &DefaultExtrudePlugin::LineCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
@@ -1174,6 +1177,27 @@ float       DefaultExtrudePlugin::CircleBevelCurve          ( float param )
 float       DefaultExtrudePlugin::InverseCircleBevelCurve   ( float param )
 {
     return 1.0f - CircleBevelCurve( 1.0f - param );
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::ReciprocalCurve           ( float param )
+{
+    float reversedParam = 1.0f - param;
+
+    // Note: recoprocal never reaches 0.0 and 1.0. But we must avoid holes.
+    if( reversedParam == 0.0f )
+        return 0.0f;
+
+    float scaledParam = reversedParam * 10.f;
+    float result = 1 / scaledParam;
+    result = result / 10.0f;
+
+    // Note: recoprocal never reaches 0.0 and 1.0. But we must avoid holes.
+    if( result > 1.0f )
+        result = 1.0f;
+
+    return result;
 }
 
 
