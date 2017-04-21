@@ -54,7 +54,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         if( it != m_tex2DCache.end() )
         {
 #ifdef PRINT_TEXTURE_CACHE_STATS
-            LOG_MESSAGE( SeverityLevel::info ) << "Reading texture [" << ( UInt32 )it->first << "] from cache.";
+            LOG_MESSAGE( SeverityLevel::debug ) << "Reading texture [" << ( UInt32 )it->first << "] from cache.";
 #endif 
             return it->second;
         }

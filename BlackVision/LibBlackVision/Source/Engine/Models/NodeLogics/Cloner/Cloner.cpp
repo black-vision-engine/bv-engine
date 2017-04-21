@@ -22,6 +22,8 @@ namespace bv
 namespace nodelogic
 {
 
+static UInt32 HARD_CLONER_NODES_LIMIT = 3000; // FIXME: Make this property setable from config.
+
 const std::string       Cloner::m_type = "Cloner";
 
 //const std::string       Cloner::ACTION::ACTION_NAME        = "ActionName";
@@ -174,7 +176,7 @@ void                        Cloner::UpdateClones        ()
         if( auto parentNode = m_parentNode.lock() )
         {
             auto missingNum = m_numCols.GetValue() * m_numRows.GetValue() - ( Int32 )parentNode->GetNumChildren();
-            
+
             if( missingNum > 0 )
                 CloneNode( missingNum );
         }
@@ -247,7 +249,12 @@ void                        Cloner::CloneNode           ( UInt32 clonesNum ) con
 
         auto projectEditor = modelState.GetBVProject()->GetProjectEditor();
 
-        if( parentNode->GetNumChildren() > 0 )
+        auto numChildren = parentNode->GetNumChildren();
+
+        if( numChildren + clonesNum > HARD_CLONER_NODES_LIMIT )
+            clonesNum = HARD_CLONER_NODES_LIMIT - numChildren;
+
+        if( numChildren > 0 )
         {
             auto firstChild = parentNode->GetChild( 0 );
 

@@ -45,7 +45,7 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
 		shaderSource = "";
     else
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "File: " << filename << " does not exist. Loading default shader.";
+        LOG_MESSAGE( SeverityLevel::debug ) << "File: " << filename << " does not exist. Loading default shader.";
 		
 		filename = m_shadersDir + "default." + m_shaderExtension;
 
