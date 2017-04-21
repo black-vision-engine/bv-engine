@@ -15,6 +15,7 @@
 #include "Engine/Models/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/SceneModel.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -259,7 +260,16 @@ BasicNodePtr					BasicNode::Clone			() const
     //FIXME: const hack
     GetAssetsWithUIDs( *assets, this, true ); // FIXME: Not needed any more. assets are stored in serialization context.
 
-    return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, nullptr ) );
+    OffsetTimeEvaluatorPtr sceneTimeline;
+    
+    auto scene = ModelState::GetInstance().QueryNodeScene( this );
+    if( scene )
+    {
+        auto timeline = TimelineManager::GetInstance()->GetTimeEvaluator( scene->GetName() );
+        sceneTimeline = std::static_pointer_cast< OffsetTimeEvaluator >( timeline );
+    }
+
+    return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, sceneTimeline ) );
 }
 
 // ********************************
