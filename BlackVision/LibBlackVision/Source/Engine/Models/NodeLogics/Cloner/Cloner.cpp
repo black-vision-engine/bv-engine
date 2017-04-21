@@ -48,6 +48,7 @@ const std::string &     Cloner::GetType             () const
 //
 Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
+    , m_updatePositionsNeeded( true )
 {
     model::ModelHelper h( timeEvaluator );
     h.SetOrCreatePluginModel();
@@ -177,6 +178,8 @@ void                        Cloner::UpdateClones        ()
             if( missingNum > 0 )
                 CloneNode( missingNum );
         }
+
+        m_updatePositionsNeeded = true;
     }
 }
 
@@ -184,7 +187,7 @@ void                        Cloner::UpdateClones        ()
 //
 void                        Cloner::UpdatePositions     ()
 {
-    if( ParameterChanged( PARAMETERS::DELTA ) )
+    if( m_updatePositionsNeeded || ParameterChanged( PARAMETERS::DELTA ) )
     {
         if( auto parentNode = m_parentNode.lock() )
         {
@@ -215,6 +218,8 @@ void                        Cloner::UpdatePositions     ()
                 }
             }
         }
+
+        m_updatePositionsNeeded = false;
     }
 }
 
