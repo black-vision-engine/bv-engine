@@ -31,6 +31,8 @@ const std::string       Cloner::m_type = "Cloner";
 const std::string       Cloner::PARAMETERS::N_ROWS  = "numRows";
 const std::string       Cloner::PARAMETERS::N_COLS  = "numCols";
 const std::string       Cloner::PARAMETERS::DELTA   = "delta";
+const std::string       Cloner::PARAMETERS::RENAME_SUBTREE = "renameSubTree";
+const std::string       Cloner::PARAMETERS::REMOVE_EXCEES = "removeExcees";
 
 // ***********************
 //
@@ -58,6 +60,8 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddSimpleParam( PARAMETERS::N_ROWS, 1, true, true );
     h.AddSimpleParam( PARAMETERS::N_COLS, 1, true, true );
     h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), true, true );
+    h.AddSimpleParam( PARAMETERS::RENAME_SUBTREE, false, true, true );
+    h.AddSimpleParam( PARAMETERS::REMOVE_EXCEES, false, true, true );
 
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
@@ -65,6 +69,8 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     m_numRows = model::GetValueParamState< Int32 >( m_paramValModel.get(), PARAMETERS::N_ROWS );
     m_numCols = model::GetValueParamState< Int32 >( m_paramValModel.get(), PARAMETERS::N_COLS );
     m_delta = model::GetValueParamState< glm::vec3 >( m_paramValModel.get(), PARAMETERS::DELTA );
+    m_renameSubtree = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::RENAME_SUBTREE );
+    m_removeExcees = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::REMOVE_EXCEES );
 }
 
 // ***********************
@@ -193,6 +199,14 @@ void                        Cloner::UpdatePositions     ()
     {
         if( auto parentNode = m_parentNode.lock() )
         {
+            auto & modelState = model::ModelState::GetInstance();
+
+            auto sceneName = modelState.QueryNodeScene( parentNode.get() )->GetName();
+
+            auto scene = modelState.GetBVProject()->GetModelScene( sceneName );
+
+            auto projectEditor = modelState.GetBVProject()->GetProjectEditor();
+
             if( parentNode->GetNumChildren() > 0 )
             {
                 auto firstChild = parentNode->GetChild( 0 );
@@ -207,6 +221,10 @@ void                        Cloner::UpdatePositions     ()
                 auto numCols = m_numCols.GetValue();
                 auto numRows = m_numRows.GetValue();
                 auto delta = m_delta.GetValue();
+                auto renameSubtree = m_renameSubtree.GetValue();
+                auto removeExcees = m_removeExcees.GetValue();
+
+                auto firstChildName = firstChild->GetName();
 
                 Int32 i = 1;
                 auto numChindren = ( Int32 ) parentNode->GetNumChildren();
@@ -222,12 +240,21 @@ void                        Cloner::UpdatePositions     ()
                     auto r = i / numCols;
                     auto c = i % numCols;
 
+                    if( renameSubtree )
+                        ch->SetName( firstChildName + "_" + std::to_string( r ) + "_" + std::to_string( c ) );
+
                     if( paramTransform )
                         paramTransform->SetTranslation( translation + glm::vec3( delta.x * c, delta.y * r, delta.z * c ), 0.f );
                 }
 
                 for( ; i < numChindren; ++i )
-                    parentNode->GetChild( i )->SetVisible( false );
+                {
+                    if( !removeExcees )
+                        parentNode->GetChild( i )->SetVisible( false );
+                    else
+                        projectEditor->DeleteChildNode( scene, parentNode, parentNode->GetChild( i ), false );
+                }
+
             }
         }
 
