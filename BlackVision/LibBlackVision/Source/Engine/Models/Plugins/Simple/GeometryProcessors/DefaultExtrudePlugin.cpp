@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include <glm/gtx/vector_angle.hpp>
+#include <cmath>
 #include <map>
 
 #include "UseLoggerLibBlackVision.h"
@@ -261,12 +262,12 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     {
         uvs = converter.ConvertFromMemory( prevUVs );
         DefaultUVs( mesh, uvs, true );
-        CopyUVsOnSideFaces( uvs, edges, corners );
+        CopyUVsOnSideFaces( uvs, edges, corners.Indicies );
     }
     else
     {
         DefaultUVs( mesh, uvs, false );
-        CopyUVsOnSideFaces( uvs, edges, corners );
+        CopyUVsOnSideFaces( uvs, edges, corners.Indicies );
     }
 
 
@@ -276,7 +277,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     AddSymetricalPlane( mesh, translate );
     AddSidePlanes( mesh, edges, corners );
 
-    SizeType sideContourLength = edges.size() / 2 + corners.size() / 2;     // Number of verticies in one contour of side surface.
+    SizeType sideContourLength = edges.size() / 2 + corners.Indicies.size() / 2;     // Number of verticies in one contour of side surface.
     SizeType sidePlanesOffset = 2 * m_numUniqueExtrudedVerticies;           // First free space after symetrical planes.
     SizeType curOffset = sidePlanesOffset + 2 * sideContourLength;
 
@@ -424,20 +425,21 @@ void    DefaultExtrudePlugin::AddSymetricalPlane      ( IndexedGeometry& mesh, g
 
 // ***********************
 // Function assumes that someone used function AddSymetricalPlane.
-void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, std::vector< IndexType > & corners )
+void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, CornersInfo & corners )
 {
     // We will create new corners vector containing indicies to new verticies which will
     // be created in this function. Because each corner will have two separate verticies
     // new vector consist of pairs of indicies.
-    std::vector< IndexType > cornerPairs;
-    cornerPairs.resize( 2 * corners.size() );
+    CornersInfo cornerPairs;
+    cornerPairs.Indicies.resize( 2 * corners.Indicies.size() );
+    cornerPairs.IsConvex.resize( 2 * corners.Indicies.size() );
 
     //auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
     int numVerticies = (int)verticies.size();
 
     int symPlaneOffset = numVerticies / 2;                  // Symmetrical plane verticies offset from beginning of vertex buffer.
-    int edgeRowLength = (int)edges.size() / 2 + (int)corners.size();  // Number of verticies in edge row.
+    int edgeRowLength = (int)edges.size() / 2 + (int)corners.Indicies.size();  // Number of verticies in edge row.
 
     // In future we must add normals. That means we must add verticies too, bacause
     // edge is sharp and normals can't be the same.
@@ -449,7 +451,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
         verticies.push_back( verticies[ edges[ i ] ] );
     }
     // Duplicate corner verticies
-    for( auto corner : corners )
+    for( auto corner : corners.Indicies )
     {
         verticies.push_back( verticies[ corner ] );
     }
@@ -460,7 +462,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
         verticies.push_back( verticies[ edges[ i ] + symPlaneOffset ] );
     }
     // Duplicate corner verticies
-    for( auto corner : corners )
+    for( auto corner : corners.Indicies )
     {
         verticies.push_back( verticies[ corner + symPlaneOffset ] );
     }
@@ -486,16 +488,19 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
 
         // Corner verticies are separated from their pairs so we must check if current index isn't
         // corner vertex and replace it if it is. We replace always second index in pair (edges are directed!).
-        for( int k = 0; k < (int)corners.size(); k++ )
+        for( int k = 0; k < (int)corners.Indicies.size(); k++ )
         {
-            if( idx == corners[ k ] )
+            if( idx == corners.Indicies[ k ] )
             {
                 // Additional corner verticies are at the end of array.
                 edges[ i + 1 ] = numVerticies + ( (int)edges.size() >> 1 ) + k;
 
                 // Here we complete new corners array.
-                cornerPairs[ ( k << 1 ) + 1 ] = edges[ i + 1 ];
-                cornerPairs[ ( k << 1 ) ] = numVerticies + j / 2;
+                cornerPairs.Indicies[ ( k << 1 ) + 1 ] = edges[ i + 1 ];
+                cornerPairs.IsConvex[ ( k << 1 ) + 1 ] = corners.IsConvex[ k ];
+                
+                cornerPairs.Indicies[ ( k << 1 ) ] = numVerticies + j / 2;
+                cornerPairs.IsConvex[ ( k << 1 ) ] = corners.IsConvex[ k ];
             }
         }
     }
@@ -527,8 +532,8 @@ void    DefaultExtrudePlugin::CopyTranslate           ( IndexedGeometry & mesh, 
 void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
                                                         IndexedGeometry & mesh,
                                                         IndexedGeometry & normalsVec,
-                                                        std::vector< IndexType >& edges,
-                                                        std::vector< IndexType >& cornerPairs,
+                                                        std::vector< IndexType > & edges,
+                                                        CornersInfo & cornerPairs,
                                                         SizeType beginContourOffset,
                                                         SizeType endContourOffset,
                                                         int tesselation,
@@ -542,7 +547,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
     auto & normals = normalsVec.GetVerticies();
 
     SizeType curveOffset = verticies.size();
-    int edgeRowLength = ( int )edges.size() / 2 + ( int )cornerPairs.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
+    int edgeRowLength = ( int )edges.size() / 2 + ( int )cornerPairs.Indicies.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
 
     // Edges and corners are already offseted relative to first contour row.
     SizeType relativeBeginContourOffset = beginContourOffset - 2 * m_numUniqueExtrudedVerticies;
@@ -552,14 +557,14 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
 
     // Merge normals for corner verticies. We need this step to make special behavior of corner verticies possible.
     // Verticies will be moved along these normals. Proper normals will be recreated in next functions.
-    for( UInt32 i = 0; i < ( UInt32 )cornerPairs.size(); i += 2 )
+    for( UInt32 i = 0; i < ( UInt32 )cornerPairs.Indicies.size(); i += 2 )
     {
-        SizeType idx1 = relativeBeginContourOffset + cornerPairs[ i ];
-        SizeType idx2 = relativeBeginContourOffset + cornerPairs[ i + 1 ];
+        SizeType idx1 = relativeBeginContourOffset + cornerPairs.Indicies[ i ];
+        SizeType idx2 = relativeBeginContourOffset + cornerPairs.Indicies[ i + 1 ];
 
         // Applies the same normals to second contour.
-        SizeType idx3 = relativeEndContourOffset + cornerPairs[ i ];
-        SizeType idx4 = relativeEndContourOffset + cornerPairs[ i + 1 ];
+        SizeType idx3 = relativeEndContourOffset + cornerPairs.Indicies[ i ];
+        SizeType idx4 = relativeEndContourOffset + cornerPairs.Indicies[ i + 1 ];
 
         glm::vec3 v1 = normals[ idx1 ];
         glm::vec3 v2 = normals[ idx2 ];
@@ -569,6 +574,12 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
         float cos2Alpha = glm::dot( v1, v2 );
         float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
         float normalCoeff = glm::length( v1 ) / cosAlpha;
+
+        if( !cornerPairs.IsConvex[ i ] )
+        {
+            if( cos2Alpha < cos( 0.9f * glm::pi< float >() ) )
+                normalCoeff = 1.0f;
+        }
 
         normals[ idx1 ] = normalCoeff * translateNormal;
         normals[ idx2 ] = normals[ idx1 ];
@@ -834,17 +845,26 @@ void                            DefaultExtrudePlugin::AddOrRemoveEdge   ( std::v
     }
 }
 
+struct EdgeInfo
+{
+    glm::vec3       EdgeVec1;
+    glm::vec3       EdgeVec2;
+    IndexType       AdjacentVertex1;
+    IndexType       AdjacentVertex2;
+};
+
 // ***********************
 //
-std::vector< IndexType >       DefaultExtrudePlugin::ExtractCorners          ( IndexedGeometry & mesh, const std::vector< IndexType > & edges, float angleThreshold )
+DefaultExtrudePlugin::CornersInfo       DefaultExtrudePlugin::ExtractCorners          ( IndexedGeometry & mesh, const std::vector< IndexType > & edges, float angleThreshold )
 {
     //float threshold = glm::radians( angleThreshold );
+    float cosThreshold = cos( angleThreshold );
 
     auto & vertices = mesh.GetVerticies();
-    std::vector< IndexType > corners;
+    CornersInfo corners;
 
     // This is very inefficeint way to do this. Map requires many memory allocations;
-    std::map< IndexType, std::pair< glm::vec3, glm::vec3 > > edgeVectors;
+    std::map< IndexType, EdgeInfo > edgeVectors;
 
     // Compute edge vectors.
     for( int i = 0; i < (int)edges.size(); i += 2 )
@@ -857,19 +877,37 @@ std::vector< IndexType >       DefaultExtrudePlugin::ExtractCorners          ( I
 
         glm::vec3 edgeVec = vert2 - vert1;
 
-        edgeVectors[ idx1 ].second = edgeVec;
-        edgeVectors[ idx2 ].first = -edgeVec;
+        edgeVectors[ idx1 ].EdgeVec2 = edgeVec;
+        edgeVectors[ idx1 ].AdjacentVertex2 = idx2;
+        edgeVectors[ idx2 ].EdgeVec1 = -edgeVec;
+        edgeVectors[ idx2 ].AdjacentVertex1 = idx1;
     }
 
     // Compute angles between edge vectors and compare with threshold.
     for( auto iter = edgeVectors.begin(); iter != edgeVectors.end(); iter++ )
     {
-        if( iter->second.first == glm::vec3( 0.0, 0.0, 0.0 ) || iter->second.second == glm::vec3( 0.0, 0.0, 0.0 ) )
+        if( iter->second.EdgeVec1 == glm::vec3( 0.0, 0.0, 0.0 ) || iter->second.EdgeVec2 == glm::vec3( 0.0, 0.0, 0.0 ) )
             continue;
 
-        float angle = glm::angle( glm::normalize( iter->second.first ), glm::normalize( iter->second.second ) );
-        if( angle < angleThreshold )
-            corners.push_back( iter->first );
+        glm::vec3 edge1 = glm::normalize( iter->second.EdgeVec1 );
+        glm::vec3 edge2 = glm::normalize( iter->second.EdgeVec2 );
+
+        float angle = glm::dot( edge1, edge2 );
+        if( angle > cosThreshold )
+        {
+            corners.Indicies.push_back( iter->first );
+
+            if( glm::cross( edge1, edge2 ).z >= 0 )
+            {
+                corners.IsConvex.push_back( false );
+                //{ corners; }
+            }
+            else
+            {
+                corners.IsConvex.push_back( true );
+                
+            }
+        }
     }
 
     return corners;
@@ -1009,8 +1047,8 @@ Float2AttributeChannelPtr           DefaultExtrudePlugin::CreateUVsChannel      
 void    DefaultExtrudePlugin::GenerateSideFace      (   BevelCurveType curve,
                                                         IndexedGeometry & mesh,
                                                         IndexedGeometry & normals,
-                                                        std::vector< IndexType >& edges,
-                                                        std::vector< IndexType >& corners,
+                                                        std::vector< IndexType > & edges,
+                                                        CornersInfo & corners,
                                                         SizeType beginContourOffset,
                                                         SizeType endContourOffset,
                                                         int tesselation,
@@ -1054,8 +1092,8 @@ void    DefaultExtrudePlugin::GenerateSideFace      (   BevelCurveType curve,
 void    DefaultExtrudePlugin::GenerateSideFace      (   ExtrudeCurveType curve,
                                                         IndexedGeometry & mesh,
                                                         IndexedGeometry & normals,
-                                                        std::vector< IndexType >& edges,
-                                                        std::vector< IndexType >& corners,
+                                                        std::vector< IndexType > & edges,
+                                                        CornersInfo & corners,
                                                         SizeType beginContourOffset,
                                                         SizeType endContourOffset,
                                                         int tesselation,
