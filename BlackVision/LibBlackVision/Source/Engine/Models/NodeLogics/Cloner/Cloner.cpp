@@ -26,13 +26,15 @@ static UInt32 HARD_CLONER_NODES_LIMIT = 3000; // FIXME: Make this property setab
 
 const std::string       Cloner::m_type = "Cloner";
 
-//const std::string       Cloner::ACTION::ACTION_NAME        = "ActionName";
+const std::string       Cloner::ACTION::REGENERATE          = "Regenerate";
+const std::string       Cloner::ACTION::REMOVE_ONLY_EXCESS  = "RemoveOnlyExcess";
+const std::string       Cloner::ACTION::REMOVE_ALL_CLONES   = "RemoveAllClones";
 
 const std::string       Cloner::PARAMETERS::N_ROWS  = "numRows";
 const std::string       Cloner::PARAMETERS::N_COLS  = "numCols";
 const std::string       Cloner::PARAMETERS::DELTA   = "delta";
 const std::string       Cloner::PARAMETERS::RENAME_SUBTREE  = "renameSubTree";
-const std::string       Cloner::PARAMETERS::REMOVE_EXCEES   = "removeExcees";
+const std::string       Cloner::PARAMETERS::REMOVE_EXCESS   = "removeExcess";
 const std::string       Cloner::PARAMETERS::PLANE_TYPE      = "planeType";
 
 // ***********************
@@ -54,6 +56,7 @@ const std::string &     Cloner::GetType             () const
 Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
     : m_parentNode( parent )
     , m_updatePositionsNeeded( true )
+    , m_updateClonesNeeded( true )
 {
     model::ModelHelper h( timeEvaluator );
     h.SetOrCreatePluginModel();
@@ -62,7 +65,7 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddSimpleParam( PARAMETERS::N_COLS, 1, true, true );
     h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), true, true );
     h.AddSimpleParam( PARAMETERS::RENAME_SUBTREE, false, true, true );
-    h.AddSimpleParam( PARAMETERS::REMOVE_EXCEES, false, true, true );
+    h.AddSimpleParam( PARAMETERS::REMOVE_EXCESS, false, true, true );
     h.AddEnumParam< ClonerPlaneType >( PARAMETERS::PLANE_TYPE, ClonerPlaneType::CPT_XY, true, true );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
@@ -71,7 +74,7 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     m_numCols = model::GetValueParamState< Int32 >( m_paramValModel.get(), PARAMETERS::N_COLS );
     m_delta = model::GetValueParamState< glm::vec3 >( m_paramValModel.get(), PARAMETERS::DELTA );
     m_renameSubtree = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::RENAME_SUBTREE );
-    m_removeExcees = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::REMOVE_EXCEES );
+    m_removeExcees = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::REMOVE_EXCESS );
     m_planeType = model::GetValueParamState< ClonerPlaneType >( m_paramValModel.get(), PARAMETERS::PLANE_TYPE );
 }
 
@@ -100,6 +103,17 @@ void        Cloner::Deinitialize      ()
 void                        Cloner::Update			( TimeType t )
 {
     NodeLogicBase::Update( t );
+
+    if( ParameterChanged( PARAMETERS::N_ROWS ) ||
+        ParameterChanged( PARAMETERS::N_COLS ) )
+    {
+        m_updatePositionsNeeded = true;
+        m_updateClonesNeeded = true;
+    }
+
+    if( ParameterChanged( PARAMETERS::DELTA ) ||
+        ParameterChanged( PARAMETERS::PLANE_TYPE ) )
+        m_updatePositionsNeeded = true;
 
     UpdateClones();
     UpdatePositions();
@@ -149,10 +163,12 @@ bool                        Cloner::HandleEvent     ( IDeserializer & eventDeser
 {
     std::string action = eventDeser.GetAttribute( "Action" );
 
-    //    if( action == Cloner::ACTION::ACTION_NAME )
-    //    {
-    //        return false
-    //    }
+    if( action == Cloner::ACTION::REGENERATE )
+        Regenerate();
+    else if( action == Cloner::ACTION::REMOVE_ONLY_EXCESS )
+        RemoveExcessNodes();
+    else if( action == Cloner::ACTION::REMOVE_ALL_CLONES )
+        RemoveClones();
 
     return false;
 }
@@ -178,8 +194,7 @@ void                        Cloner::NodeRemovedHandler  ( IEventPtr evt )
 //
 void                        Cloner::UpdateClones        ()
 {
-    if( ParameterChanged( PARAMETERS::N_ROWS ) ||
-        ParameterChanged( PARAMETERS::N_COLS ) )
+    if( m_updateClonesNeeded )
     {
         if( auto parentNode = m_parentNode.lock() )
         {
@@ -189,7 +204,7 @@ void                        Cloner::UpdateClones        ()
                 CloneNode( missingNum );
         }
 
-        m_updatePositionsNeeded = true;
+        m_updateClonesNeeded = false;
     }
 }
 
@@ -197,9 +212,7 @@ void                        Cloner::UpdateClones        ()
 //
 void                        Cloner::UpdatePositions     ()
 {
-    if( m_updatePositionsNeeded || 
-        ParameterChanged( PARAMETERS::DELTA ) ||
-        ParameterChanged( PARAMETERS::PLANE_TYPE ) )
+    if( m_updatePositionsNeeded )
     {
         if( auto parentNode = m_parentNode.lock() )
         {
@@ -315,5 +328,56 @@ glm::vec3                   Cloner::Transform2Plane     ( const glm::vec3 & v, C
     }
 }
 
-}   // nodelogic
-}	// bv
+// ***********************
+//
+void                        Cloner::RemoveClones            ()
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        auto & modelState = model::ModelState::GetInstance();
+
+        auto sceneName = modelState.QueryNodeScene( parentNode.get() )->GetName();
+
+        auto scene = modelState.GetBVProject()->GetModelScene( sceneName );
+
+        auto projectEditor = modelState.GetBVProject()->GetProjectEditor();
+
+        while( parentNode->GetNumChildren() > 1 )
+            projectEditor->DeleteChildNode( scene, parentNode, parentNode->GetChild( 1 ), false );
+    }
+}
+
+// ***********************
+//
+void                        Cloner::RemoveExcessNodes       ()
+{
+    if( auto parentNode = m_parentNode.lock() )
+    {
+        auto & modelState = model::ModelState::GetInstance();
+
+        auto sceneName = modelState.QueryNodeScene( parentNode.get() )->GetName();
+
+        auto scene = modelState.GetBVProject()->GetModelScene( sceneName );
+
+        auto projectEditor = modelState.GetBVProject()->GetProjectEditor();
+
+        auto numClones = m_numCols.GetValue() * m_numCols.GetValue();
+
+        while( numClones > 0 && ( Int32 ) parentNode->GetNumChildren() > numClones )
+            projectEditor->DeleteChildNode( scene, parentNode, parentNode->GetChild( parentNode->GetNumChildren() - 1 ), false );
+    }
+}
+
+// ***********************
+//
+void                        Cloner::Regenerate              ()
+{
+    RemoveClones();
+
+    m_updateClonesNeeded = true;
+    m_updatePositionsNeeded = true;
+}
+
+
+} // nodelogic
+} // bv

@@ -44,7 +44,9 @@ private:
 
     struct ACTION
     {
-        //static const std::string    ACTION_NAME;
+        static const std::string    REGENERATE;
+        static const std::string    REMOVE_ONLY_EXCESS;
+        static const std::string    REMOVE_ALL_CLONES;
     };
 
     struct PARAMETERS
@@ -53,7 +55,7 @@ private:
         static const std::string    N_COLS;
         static const std::string    DELTA;
         static const std::string    RENAME_SUBTREE;
-        static const std::string    REMOVE_EXCEES;
+        static const std::string    REMOVE_EXCESS;
         static const std::string    PLANE_TYPE;
     };
 
@@ -67,7 +69,8 @@ private:
     model::ValueParamState< bool >              m_removeExcees;
     model::ValueParamState< ClonerPlaneType >   m_planeType;
 
-    bool                                        m_updatePositionsNeeded;
+    bool                                        m_updateClonesNeeded; 
+    bool                                        m_updatePositionsNeeded;    
 
 public:
     explicit    Cloner			( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
@@ -95,6 +98,9 @@ private:
     void                    CloneNode               ( UInt32 clonesNum ) const;
 
     glm::vec3               Transform2Plane         ( const glm::vec3 & v, ClonerPlaneType plane ) const;
+    void                    RemoveClones            ();
+    void                    RemoveExcessNodes       ();
+    void                    Regenerate              ();
 };
 
 
