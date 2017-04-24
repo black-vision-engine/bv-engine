@@ -1199,6 +1199,13 @@ float       DefaultExtrudePlugin::HarmonicCurve             ( float param )
     float result = 1 / scaledParam;
     result = result / 10.0f;
 
+    // Make this function more convergent to 0.0.
+    if( param <= 0.5 )
+    {
+        result -= 2.0f * ( 0.5f - param ) / 100.0f;        // param * ( 1 / 100 )
+    }
+
+
     // Note: recoprocal never reaches 0.0 and 1.0. But we must avoid holes.
     if( result > 1.0f )
         result = 1.0f;
