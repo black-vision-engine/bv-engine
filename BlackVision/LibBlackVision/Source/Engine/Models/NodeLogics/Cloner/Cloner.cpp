@@ -169,8 +169,10 @@ bool                        Cloner::HandleEvent     ( IDeserializer & eventDeser
         RemoveExcessNodes();
     else if( action == Cloner::ACTION::REMOVE_ALL_CLONES )
         RemoveClones();
+    else
+        return false;
 
-    return false;
+    return true;
 }
 
 // ========================================================================= //
