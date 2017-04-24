@@ -64,7 +64,8 @@ public:
         Sinus,
         Circle,
         InverseCircle,
-        Reciprocal,
+        Harmonic,
+        InverseHarmonic,
 
         Total
     };
@@ -108,7 +109,8 @@ private:
     float           InverseHalfSinusCurve   ( float param );
     float           CircleBevelCurve        ( float param );
     float           InverseCircleBevelCurve ( float param );
-    float           ReciprocalCurve         ( float param );
+    float           HarmonicCurve           ( float param );
+    float           InverseHarmonicCurve    ( float param );
 
 private:
 

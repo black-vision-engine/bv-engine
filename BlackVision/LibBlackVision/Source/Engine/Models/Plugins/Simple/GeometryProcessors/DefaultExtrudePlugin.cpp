@@ -1037,8 +1037,11 @@ void    DefaultExtrudePlugin::GenerateSideFace      (   BevelCurveType curve,
     case DefaultExtrudePlugin::BevelCurveType::InverseCircle:
         ApplyFunction( &DefaultExtrudePlugin::InverseCircleBevelCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
         break;
-    case DefaultExtrudePlugin::BevelCurveType::Reciprocal:
-        ApplyFunction( &DefaultExtrudePlugin::ReciprocalCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
+    case DefaultExtrudePlugin::BevelCurveType::Harmonic:
+        ApplyFunction( &DefaultExtrudePlugin::HarmonicCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
+        break;
+    case DefaultExtrudePlugin::BevelCurveType::InverseHarmonic:
+        ApplyFunction( &DefaultExtrudePlugin::InverseHarmonicCurve, mesh, normals, edges, corners, beginContourOffset, endContourOffset, tesselation, bevelHeight, 0, backBevelFace );
         break;
     default:
         assert( !"Shouldn't be here" );
@@ -1181,13 +1184,16 @@ float       DefaultExtrudePlugin::InverseCircleBevelCurve   ( float param )
 
 // ***********************
 //
-float       DefaultExtrudePlugin::ReciprocalCurve           ( float param )
+float       DefaultExtrudePlugin::HarmonicCurve             ( float param )
 {
-    float reversedParam = 1.0f - param;
-
-    // Note: recoprocal never reaches 0.0 and 1.0. But we must avoid holes.
-    if( reversedParam == 0.0f )
+    // Note: reciprocal never reaches 0.0 and 1.0. But we must avoid holes.
+    if( param == 0.0f )
         return 0.0f;
+
+    if( param == 1.0f )
+        return 1.0f;
+
+    float reversedParam = 1.0f - param;
 
     float scaledParam = reversedParam * 10.f;
     float result = 1 / scaledParam;
@@ -1198,6 +1204,13 @@ float       DefaultExtrudePlugin::ReciprocalCurve           ( float param )
         result = 1.0f;
 
     return result;
+}
+
+// ***********************
+//
+float       DefaultExtrudePlugin::InverseHarmonicCurve      ( float param )
+{
+    return 1.0f - HarmonicCurve( 1.0f - param );
 }
 
 
