@@ -47,6 +47,8 @@ private:
         static const std::string    N_ROWS;
         static const std::string    N_COLS;
         static const std::string    DELTA;
+        static const std::string    RENAME_SUBTREE;
+        static const std::string    REMOVE_EXCEES;
     };
 
 private:
@@ -55,6 +57,8 @@ private:
     model::ValueParamState< Int32 >     m_numRows;
     model::ValueParamState< Int32 >     m_numCols;
     model::ValueParamState< glm::vec3 > m_delta;
+    model::ValueParamState< bool >      m_renameSubtree;
+    model::ValueParamState< bool >      m_removeExcees;
 
     bool                                m_updatePositionsNeeded;
 
