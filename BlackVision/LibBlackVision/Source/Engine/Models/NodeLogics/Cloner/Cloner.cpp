@@ -104,15 +104,15 @@ void                        Cloner::Update			( TimeType t )
 {
     NodeLogicBase::Update( t );
 
-    if( ParameterChanged( PARAMETERS::N_ROWS ) ||
-        ParameterChanged( PARAMETERS::N_COLS ) )
+    if( m_numRows.Changed() ||
+        m_numCols.Changed() )
     {
         m_updatePositionsNeeded = true;
         m_updateClonesNeeded = true;
     }
 
-    if( ParameterChanged( PARAMETERS::DELTA ) ||
-        ParameterChanged( PARAMETERS::PLANE_TYPE ) )
+    if( m_delta.Changed() ||
+        m_planeType.Changed() )
         m_updatePositionsNeeded = true;
 
     UpdateClones();

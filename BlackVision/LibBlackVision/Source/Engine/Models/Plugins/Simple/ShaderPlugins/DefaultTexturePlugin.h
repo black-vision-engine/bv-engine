@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
 namespace bv { namespace model {
@@ -44,6 +45,8 @@ protected:
 
     SizeType	                    m_textureWidth;
     SizeType	                    m_textureHeight;
+
+    model::ValueParamState< bool >  m_blendEnabled;
 
 public:
 
