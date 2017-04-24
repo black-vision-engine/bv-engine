@@ -31,8 +31,9 @@ const std::string       Cloner::m_type = "Cloner";
 const std::string       Cloner::PARAMETERS::N_ROWS  = "numRows";
 const std::string       Cloner::PARAMETERS::N_COLS  = "numCols";
 const std::string       Cloner::PARAMETERS::DELTA   = "delta";
-const std::string       Cloner::PARAMETERS::RENAME_SUBTREE = "renameSubTree";
-const std::string       Cloner::PARAMETERS::REMOVE_EXCEES = "removeExcees";
+const std::string       Cloner::PARAMETERS::RENAME_SUBTREE  = "renameSubTree";
+const std::string       Cloner::PARAMETERS::REMOVE_EXCEES   = "removeExcees";
+const std::string       Cloner::PARAMETERS::PLANE_TYPE      = "planeType";
 
 // ***********************
 //
@@ -62,7 +63,7 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), true, true );
     h.AddSimpleParam( PARAMETERS::RENAME_SUBTREE, false, true, true );
     h.AddSimpleParam( PARAMETERS::REMOVE_EXCEES, false, true, true );
-
+    h.AddEnumParam< ClonerPlaneType >( PARAMETERS::PLANE_TYPE, ClonerPlaneType::CPT_XY, true, true );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 
@@ -71,6 +72,7 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     m_delta = model::GetValueParamState< glm::vec3 >( m_paramValModel.get(), PARAMETERS::DELTA );
     m_renameSubtree = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::RENAME_SUBTREE );
     m_removeExcees = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::REMOVE_EXCEES );
+    m_planeType = model::GetValueParamState< ClonerPlaneType >( m_paramValModel.get(), PARAMETERS::PLANE_TYPE );
 }
 
 // ***********************
@@ -195,7 +197,9 @@ void                        Cloner::UpdateClones        ()
 //
 void                        Cloner::UpdatePositions     ()
 {
-    if( m_updatePositionsNeeded || ParameterChanged( PARAMETERS::DELTA ) )
+    if( m_updatePositionsNeeded || 
+        ParameterChanged( PARAMETERS::DELTA ) ||
+        ParameterChanged( PARAMETERS::PLANE_TYPE ) )
     {
         if( auto parentNode = m_parentNode.lock() )
         {
@@ -243,8 +247,10 @@ void                        Cloner::UpdatePositions     ()
                     if( renameSubtree )
                         ch->SetName( firstChildName + "_" + std::to_string( r ) + "_" + std::to_string( c ) );
 
+                    auto d = Transform2Plane( delta, m_planeType.GetValue() );
+
                     if( paramTransform )
-                        paramTransform->SetTranslation( translation + glm::vec3( delta.x * c, delta.y * r, delta.z * c ), 0.f );
+                        paramTransform->SetTranslation( translation + glm::vec3( d.x * c, d.y * r, d.z * c ), 0.f );
                 }
 
                 for( ; i < numChindren; ++i )
@@ -288,6 +294,24 @@ void                        Cloner::CloneNode           ( UInt32 clonesNum ) con
             for( UInt32 i = 0; i < clonesNum; ++i )
                 projectEditor->AddNodeCopy( scene, parentNode, scene, firstChild, false );
         }
+    }
+}
+
+// ***********************
+//
+glm::vec3                   Cloner::Transform2Plane     ( const glm::vec3 & v, ClonerPlaneType plane ) const
+{
+    switch( plane )
+    {
+    case ClonerPlaneType::CPT_XZ:
+        return glm::vec3( v.x, v.z, v.y );
+        break;
+    case ClonerPlaneType::CPT_YZ:
+        return glm::vec3( v.z, v.y, v.x );
+        break;
+    default:
+        return v;
+        break;
     }
 }
 
