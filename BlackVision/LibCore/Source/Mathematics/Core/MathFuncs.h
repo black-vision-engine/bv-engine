@@ -24,5 +24,22 @@ inline UInt32 lcm( UInt32 a, UInt32 b )
     return a * b / gcd( a, b );
 }
 
+// *************************************
+//
+template< class Type >
+inline bool IsNaN( const Type & value )
+{
+    static_assert( "Is not defined to this type." );
+};
+
+// *************************************
+//
+template<>
+inline bool IsNaN< TimeType >( const TimeType & value )
+{
+    return !(value == value);
+};
+
+
 } //mathemtics
 } //bv

@@ -56,8 +56,6 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     
     
     TimeType keyTime           = setParamEvent->Time;
-	if (keyTime != keyTime)
-		keyTime = 0.0; // hack na nan
 
     model::IParameterPtr param = nullptr;
 
@@ -104,7 +102,9 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
     bool result = false;
 
-    if( command == ParamKeyEvent::Command::AddKey )
+    bool keyTimeIsNaN = mathematics::IsNaN( keyTime );
+
+    if( !keyTimeIsNaN && command == ParamKeyEvent::Command::AddKey )
     {
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {
@@ -115,7 +115,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             result = AddParameter( param, value, keyTime );
         }
     }
-    else if( command == ParamKeyEvent::Command::RemoveKey )
+    else if( !keyTimeIsNaN && command == ParamKeyEvent::Command::RemoveKey )
     {
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) // FIXME: special case for transform param
         {
@@ -126,7 +126,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             result = RemoveParameterKey( param, keyTime );
         }
     }
-    else if( command == ParamKeyEvent::Command::MoveKey )
+    else if( !keyTimeIsNaN && command == ParamKeyEvent::Command::MoveKey )
     {
         TimeType newKeyTime = SerializationHelper::String2T( value, std::numeric_limits<TimeType>::quiet_NaN() );
 
