@@ -8,8 +8,10 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include <glm/gtx/vector_angle.hpp>
+
 #include <cmath>
 #include <map>
+#include <algorithm>
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -575,11 +577,39 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
         float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
         float normalCoeff = glm::length( v1 ) / cosAlpha;
 
-        if( !cornerPairs.IsConvex[ i ] )
-        {
-            if( cos2Alpha < cos( 0.9f * glm::pi< float >() ) )
-                normalCoeff = 1.0f;
-        }
+        //if( !cornerPairs.IsConvex[ i ] )
+        //{
+        //    SizeType adjVert1Idx = std::numeric_limits< SizeType >::max();;
+        //    SizeType adjVert2Idx = std::numeric_limits< SizeType >::max();
+
+        //    for( SizeType j = 0; j < edges.size(); ++j )
+        //    {
+        //        if( edges[ j ] == cornerPairs.Indicies[ i ] )
+        //            adjVert1Idx = j % 2 ? j - 1 : j + 1;
+
+        //        if( edges[ j ] == cornerPairs.Indicies[ i + 1 ] )
+        //            adjVert2Idx = j % 2 ? j - 1 : j + 1;
+        //    }
+
+        //    assert( adjVert1Idx < edges.size() );
+        //    assert( adjVert2Idx < edges.size() );
+
+        //    glm::vec3 & cornerVertex = verticies[ cornerPairs.Indicies[ i ] ];
+        //    glm::vec3 & adjVert1 = verticies[ adjVert1Idx ];
+        //    glm::vec3 & adjVert2 = verticies[ adjVert2Idx ];
+
+        //    float adjLength1 = glm::length( cornerVertex - adjVert1 );
+        //    float adjLength2 = glm::length( cornerVertex - adjVert2 );
+
+        //    float minLength = std::min< float >( adjLength1, adjLength2 );
+
+        //    if( minLength < normalCoeff * scaleCurve )
+        //        normalCoeff = 0.0f;
+
+        //    //normalCoeff = 1.0f;
+        //    //if( cos2Alpha < cos( 0.5f * glm::pi< float >() ) )
+        //    //    normalCoeff = 1.0f;
+        //}
 
         normals[ idx1 ] = normalCoeff * translateNormal;
         normals[ idx2 ] = normals[ idx1 ];
