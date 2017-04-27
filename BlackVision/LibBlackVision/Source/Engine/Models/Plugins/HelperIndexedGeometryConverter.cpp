@@ -215,6 +215,16 @@ void    IndexedGeometryConverter::MakeTriangles           ( const std::vector< g
     }
 }
 
+// ***********************
+//
+void    IndexedGeometryConverter::MakeTriangles             ( const std::vector< glm::vec2 > & srcUVs, const std::vector< IndexType > & indicies, Float2AttributeChannelPtr uvs )
+{
+    for( auto index : indicies )
+    {
+        uvs->AddAttribute( srcUVs[ index ] );
+    }
+}
+
 // ========================================================================= //
 // Geometry indexer
 // ========================================================================= //
