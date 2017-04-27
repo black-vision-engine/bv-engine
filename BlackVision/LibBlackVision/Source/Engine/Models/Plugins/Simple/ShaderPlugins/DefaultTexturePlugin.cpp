@@ -123,6 +123,8 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     SetPrevPlugin( prev );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM_BLEND_ENABLE );
 }
 
 // *************************************
@@ -205,10 +207,10 @@ void                                DefaultTexturePlugin::Update                
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    if( m_blendEnabled.Changed() )
     {
         auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+        ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
 
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
     }

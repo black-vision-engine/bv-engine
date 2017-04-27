@@ -1013,13 +1013,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
 
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
         newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );        
-
-        auto ex = SerializationHelper::String2T< Float32 >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ) );
-
-        if( ex.isValid )
-            newEvent->Time = ex.ham;
-        else
-            return nullptr;
+        newEvent->Time              = SerializationHelper::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
 
         return newEvent;
     }
@@ -1609,16 +1603,7 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer & deser 
     {
         TimeLineEventPtr newEvent   = std::make_shared< TimeLineEvent >();
 
-        if( deser.HasAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ) )
-        {
-            auto ex = SerializationHelper::String2T< Float32 >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ) );
-            if( ex.isValid )
-                newEvent->Time = ex.ham;
-            else
-                return nullptr;
-        }
-        else
-            newEvent->Time = 0.0;
+        newEvent->Time = SerializationHelper::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
 
         newEvent->TimelineCommand   = SerializationHelper::String2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimeLineEvent::Command::Fail );
         newEvent->TimelineName      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
