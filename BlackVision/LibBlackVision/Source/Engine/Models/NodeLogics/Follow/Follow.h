@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreDEF.h"
-#include "../NodeLogicBase.h"           // Widgets/NodeLogicBase.h doesn't work
+#include "Engine/Models/NodeLogics/NodeLogicBase.h"
 #include "Engine/Types/Values/TypedValues.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
