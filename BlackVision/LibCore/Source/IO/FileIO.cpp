@@ -16,14 +16,14 @@
 namespace bv
 {
 
-class FileImpl
+class File::Impl
 {
 private:
 
     std::fstream *      m_fileHandle;
     std::string         m_fileName;
 
-    FileImpl            ( const std::string & fileName );
+    Impl                ( const std::string & fileName );
 
 public:
 
@@ -42,11 +42,11 @@ public:
 
     void                Close       ();
 
-    virtual             ~FileImpl   ();
+    virtual             ~Impl       ();
 
     static bool         Exists      ( const std::string & fileName );
-    static FileImpl *   Open        ( const std::string & fileName, File::OpenMode openMode );
-	static FileImpl *	OpenTmp     ( std::string * name );
+    static Impl *       Open        ( const std::string & fileName, File::OpenMode openMode );
+	static Impl *	    OpenTmp     ( std::string * name );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char* out, const std::string & fileName );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
@@ -56,28 +56,28 @@ public:
 
 // *******************************
 //
-FileImpl::FileImpl   ( const std::string & fileName )
+File::Impl::Impl   ( const std::string & fileName )
     : m_fileHandle( nullptr )
     , m_fileName( fileName )
 {}
 
 // *******************************
 //
-FileImpl::~FileImpl   ()
+File::Impl::~Impl   ()
 {
     delete m_fileHandle;
 }
 
 // *******************************
 //
-SizeType    FileImpl::Read        ( std::ostream & out ) const
+SizeType    File::Impl::Read        ( std::ostream & out ) const
 {
     return Read( out, Size( m_fileName ) );
 }
 
 // *******************************
 //
-SizeType    FileImpl::Read        ( std::ostream & out, SizeType numBytes ) const
+SizeType    File::Impl::Read        ( std::ostream & out, SizeType numBytes ) const
 {
     SizeType bytesRead = 0;
 
@@ -94,7 +94,7 @@ SizeType    FileImpl::Read        ( std::ostream & out, SizeType numBytes ) cons
 
 // *******************************
 //
-SizeType    FileImpl::Read        ( char * out, SizeType numBytes ) const
+SizeType    File::Impl::Read        ( char * out, SizeType numBytes ) const
 {
     if( m_fileHandle->good() && numBytes > 0 )
     {
@@ -106,7 +106,7 @@ SizeType    FileImpl::Read        ( char * out, SizeType numBytes ) const
 
 // *******************************
 //
-bool        FileImpl::Write       ( std::istream & in )
+bool        File::Impl::Write       ( std::istream & in )
 {
     *m_fileHandle << in.rdbuf();
     return in.cur == in.end;
@@ -114,7 +114,7 @@ bool        FileImpl::Write       ( std::istream & in )
 
 // *******************************
 //
-bool        FileImpl::Write       ( std::istream & in , SizeType numBytes)
+bool        File::Impl::Write       ( std::istream & in , SizeType numBytes)
 {
     int bytesWritten = 0;
     char c;
@@ -133,35 +133,35 @@ bool        FileImpl::Write       ( std::istream & in , SizeType numBytes)
 
 // *******************************
 //
-void        FileImpl::Write       ( const char * in , SizeType numBytes)
+void        File::Impl::Write       ( const char * in , SizeType numBytes)
 {
     m_fileHandle->write( in, numBytes );
 }
 
 // *******************************
 //
-std::fstream *	FileImpl::StreamBuf()
+std::fstream *	File::Impl::StreamBuf()
 {
 	return m_fileHandle;
 }
 
 // *******************************
 //
-void        FileImpl::Write       ( const std::string & str )
+void        File::Impl::Write       ( const std::string & str )
 {
 	m_fileHandle->write( str.c_str(), str.length() );
 }
 
 // *******************************
 //
-void        FileImpl::Close       ()
+void        File::Impl::Close       ()
 {
     m_fileHandle->close();
 }
 
 // *******************************
 //
-SizeType         FileImpl::Size      ( const std::string & fileName )
+SizeType         File::Impl::Size      ( const std::string & fileName )
 {
     struct stat info;
     int ret = -1;
@@ -173,7 +173,7 @@ SizeType         FileImpl::Size      ( const std::string & fileName )
 
 // *******************************
 //
-bool        FileImpl::Exists      ( const std::string & fileName )
+bool        File::Impl::Exists      ( const std::string & fileName )
 {
     struct stat info;
     int ret = -1;
@@ -184,16 +184,16 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 
 // *******************************
 //
-bool        FileImpl::Good        () const
+bool        File::Impl::Good        () const
 {
     return m_fileHandle->good();
 }
 
 // *******************************
 //
-FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
+File::Impl *  File::Impl::Open        ( const std::string & fileName, File::OpenMode openMode )
 {
-    FileImpl * impl = new FileImpl( fileName );
+    File::Impl * impl = new File::Impl( fileName );
 
     auto parent = boost::filesystem::path( fileName ).parent_path();
 
@@ -220,7 +220,7 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
 
 // *******************************
 //
-FileImpl *	FileImpl::OpenTmp     ( std::string * name )
+File::Impl *	File::Impl::OpenTmp     ( std::string * name )
 {
 	auto p = boost::filesystem::unique_path();
 
@@ -234,7 +234,7 @@ FileImpl *	FileImpl::OpenTmp     ( std::string * name )
 
 // *******************************
 //
-SizeType    FileImpl::Read        ( std::ostream & out, const std::string & fileName )
+SizeType    File::Impl::Read        ( std::ostream & out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
     auto ret = f->Read( out );
@@ -246,10 +246,10 @@ SizeType    FileImpl::Read        ( std::ostream & out, const std::string & file
 
 // *******************************
 //
-SizeType    FileImpl::Read        ( char * out, const std::string & fileName )
+SizeType    File::Impl::Read        ( char * out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
-    auto ret = f->Read( out, FileImpl::Size( fileName ) );
+    auto ret = f->Read( out, File::Impl::Size( fileName ) );
     f->Close();
     delete f;
 
@@ -258,7 +258,7 @@ SizeType    FileImpl::Read        ( char * out, const std::string & fileName )
 
 // *******************************
 //
-SizeType    FileImpl::Write       ( std::istream & in, const std::string & fileName )
+SizeType    File::Impl::Write       ( std::istream & in, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadWrite );
     auto ret = f->Write( in );
@@ -270,17 +270,17 @@ SizeType    FileImpl::Write       ( std::istream & in, const std::string & fileN
 
 // *******************************
 //
-SizeType    FileImpl::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
+SizeType    File::Impl::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
 {
-	FileImpl * f = nullptr;
+    File::Impl * f = nullptr;
 	
 	if( append )
 	{
-		f = FileImpl::Open( fileName, File::OpenMode::FOMWriteAppend );
+		f = File::Impl::Open( fileName, File::OpenMode::FOMWriteAppend );
 	}
 	else
 	{
-		f = FileImpl::Open( fileName, File::OpenMode::FOMReadWrite );
+		f = File::Impl::Open( fileName, File::OpenMode::FOMReadWrite );
 	}
 
 	f->Write( in, size );
@@ -294,15 +294,27 @@ SizeType    FileImpl::Write       ( const char * in, SizeType size, const std::s
 
 // *******************************
 //
-File::File( FileImpl * impl )
+File::File( Impl * impl )
     : m_impl( impl )
 {}
 
 // *******************************
 //
 File::~File()
+{}
+
+// *******************************
+//
+File::File( const File & copy )
+    : m_impl( copy.m_impl )
+{}
+
+// *******************************
+//
+const File &        File::operator=   ( const File & copy )
 {
-    delete m_impl;
+    m_impl = copy.m_impl;
+    return *this;
 }
 
 // *******************************
@@ -321,56 +333,56 @@ SizeType    File::Read        ( std::ostream & out, SizeType numBytes ) const
 
 // *******************************
 //
-SizeType    File::Write       ( std::istream & in )
+SizeType    File::Write       ( std::istream & in ) const
 {
     return m_impl->Write( in );
 }
 
 // *******************************
 //
-SizeType    File::Write       ( std::istream & in , SizeType numBytes )
+SizeType    File::Write       ( std::istream & in , SizeType numBytes ) const
 {
     return m_impl->Write( in, numBytes );
 }
 
 // *******************************
 //
-void         File::Write       ( const char * in , SizeType numBytes )
+void         File::Write       ( const char * in , SizeType numBytes ) const
 {
     m_impl->Write( in, numBytes );
 }
 
 // *******************************
 //
-void		 File::Write       ( const std::string & str )
+void		 File::Write       ( const std::string & str ) const
 {
 	m_impl->Write( str );
 }
 
 // *******************************
 //
-void        File::Close       ()
+void        File::Close       () const
 {
     return m_impl->Close();
 }
 
 // *******************************
 //
-void        File::operator << ( std::istream & in )
+void        File::operator << ( std::istream & in ) const
 {
     m_impl->Write( in );
 }
 
 // *******************************
 //
-void        File::operator >> ( std::ostream & out )
+void        File::operator >> ( std::ostream & out ) const
 {
     m_impl->Read( out );
 }
 
 // *******************************
 //
-std::fstream *	File::StreamBuf	()
+std::fstream *	File::StreamBuf	() const
 {
 	return m_impl->StreamBuf();
 }
@@ -386,42 +398,42 @@ bool             File::Good      () const
 //
 SizeType    File::Size        ( const std::string & fileName )
 {
-    return FileImpl::Size( fileName );
+    return File::Impl::Size( fileName );
 }
 
 // *******************************
 //
 File        File::Open        ( const std::string & fileName, OpenMode openMode )
 {
-    return File( FileImpl::Open( fileName, openMode ) );
+    return File( File::Impl::Open( fileName, openMode ) );
 }
 
 // *******************************
 //
 File         File::OpenTmp     ( std::string * name )
 {
-	return File( FileImpl::OpenTmp( name ) );
+	return File( File::Impl::OpenTmp( name ) );
 }
 
 // *******************************
 //
 SizeType    File::Read        ( std::ostream & out, const std::string & fileName )
 {
-    return FileImpl::Read( out, fileName );
+    return File::Impl::Read( out, fileName );
 }
 
 // *******************************
 //
 SizeType    File::Read        ( char* out, const std::string & fileName )
 {
-    return FileImpl::Read( out, fileName );
+    return File::Impl::Read( out, fileName );
 }
 
 // *******************************
 //
 SizeType    File::Write       ( std::istream & in, const std::string & fileName )
 {
-    return FileImpl::Write( in, fileName );
+    return File::Impl::Write( in, fileName );
 }
 
 
@@ -429,7 +441,7 @@ SizeType    File::Write       ( std::istream & in, const std::string & fileName 
 //
 SizeType    File::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
 {
-	return FileImpl::Write( in, size, fileName, append );
+	return File::Impl::Write( in, size, fileName, append );
 }
 
 // *******************************

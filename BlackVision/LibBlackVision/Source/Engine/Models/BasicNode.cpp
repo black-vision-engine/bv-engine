@@ -15,6 +15,7 @@
 #include "Engine/Models/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/SceneModel.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -259,7 +260,16 @@ BasicNodePtr					BasicNode::Clone			() const
     //FIXME: const hack
     GetAssetsWithUIDs( *assets, this, true ); // FIXME: Not needed any more. assets are stored in serialization context.
 
-    return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, nullptr ) );
+    OffsetTimeEvaluatorPtr sceneTimeline;
+    
+    auto scene = ModelState::GetInstance().QueryNodeScene( this );
+    if( scene )
+    {
+        auto timeline = TimelineManager::GetInstance()->GetTimeEvaluator( scene->GetName() );
+        sceneTimeline = std::static_pointer_cast< OffsetTimeEvaluator >( timeline );
+    }
+
+    return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, sceneTimeline ) );
 }
 
 // ********************************
@@ -652,6 +662,8 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 //
 void			BasicNode::SetLogic					( INodeLogicPtr logic )
 {
+    RemoveLogic();
+
     m_nodeLogic = logic;
     m_nodeLogic->Initialize();
 }
@@ -660,6 +672,8 @@ void			BasicNode::SetLogic					( INodeLogicPtr logic )
 //
 void            BasicNode::RemoveLogic              ()
 {
+    if( m_nodeLogic )
+        m_nodeLogic->Deinitialize();
     m_nodeLogic = nullptr;
 }
 
@@ -724,12 +738,15 @@ mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
 
         for( UInt32 i = 0; i < m_children.size(); ++i )
         {
-            const glm::mat4 & transform = m_children[ i ]->GetFinalizePlugin()->GetTransformChannel()->GetTransformValue()->GetValue();
+            if( m_children[ i ]->IsVisible() )
+            {            
+                const glm::mat4 & transform = m_children[ i ]->GetFinalizePlugin()->GetTransformChannel()->GetTransformValue()->GetValue();
             
-            mathematics::Box childBox = m_children[ i ]->GetBoundingBoxRecursive();
-            childBox.Transform( transform );
+                mathematics::Box childBox = m_children[ i ]->GetBoundingBoxRecursive();
+                childBox.Transform( transform );
             
-            ret.Include( childBox );
+                ret.Include( childBox );
+            }
         }
     }
 

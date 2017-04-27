@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.cpp" />
@@ -621,6 +622,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.h" />

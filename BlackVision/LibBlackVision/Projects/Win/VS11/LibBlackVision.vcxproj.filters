@@ -409,6 +409,9 @@
     <Filter Include="Engine\Models\NodeLogics\MaxSize">
       <UniqueIdentifier>{0aefa2d8-ec90-4d77-ad19-835588e5328d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Cloner">
+      <UniqueIdentifier>{2389fef9-ffdf-4a95-bca5-3884dee9e704}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1950,6 +1953,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.cpp">
       <Filter>Assets\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp">
+      <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5155,6 +5161,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.h">
       <Filter>Assets\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h">
+      <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -299,7 +299,7 @@ void          PdrGLSLProgram::PostGetUniformLocationFail    ( const string & nam
 {
     if ( m_verboseLogging )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Uniform [" << name << "] not found.";
+        LOG_MESSAGE( SeverityLevel::debug ) << "Uniform [" << name << "] not found.";
     }
 }
 
