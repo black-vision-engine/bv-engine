@@ -142,7 +142,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     BevelCurveType frontBevelCurve  = QueryTypedParam< std::shared_ptr< ParamBevelCurveType > >( GetParameter( PARAMS::BEVEL_CURVE_FRONT ) )->Evaluate();
     BevelCurveType backBevelCurve   = QueryTypedParam< std::shared_ptr< ParamBevelCurveType > >( GetParameter( PARAMS::BEVEL_CURVE_BACK ) )->Evaluate();
     
-    float bevelHeight               = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT ) )->GetValue();
+    m_bevelHeight                   = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT ) )->GetValue();
     float frontBevelDepth           = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT ) )->GetValue();
     float backBevelDepth            = QueryTypedValue< ValueFloatPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK ) )->GetValue();
     int frontBevelTesselation       = QueryTypedValue< ValueIntPtr >( GetValue( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION ) )->GetValue();
@@ -175,10 +175,10 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         backBevelCurve = BevelCurveType::Line;
 
     // Check bevel height. Should be greater then zero.
-    if( bevelHeight - std::numeric_limits< float >::epsilon() < 0.0f )
+    if( m_bevelHeight - std::numeric_limits< float >::epsilon() < 0.0f )
     {
         // We don't need bevel curves. Line is enough.
-        bevelHeight = 0.0f;
+        m_bevelHeight = 0.0f;
         frontBevelTesselation = 1;
         backBevelTesselation = 1;
 
@@ -191,14 +191,14 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     {
         frontBevelCurve = BevelCurveType::Line;
         frontBevelTesselation = 1;
-        bevelHeight = 0;
+        m_bevelHeight = 0;
     }
 
     if( backBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
     {
         backBevelCurve = BevelCurveType::Line;
         backBevelTesselation = 1;
-        bevelHeight = 0;
+        m_bevelHeight = 0;
     }
 
     // Apply symetry.
@@ -375,13 +375,13 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 
 
     // Generate bevel front surface
-    GenerateSideFace( frontBevelCurve, mesh, normals, edges, corners, curveOffsets[ FrontBevel1 ], curveOffsets[ FrontBevel2 ], frontBevelTesselation, bevelHeight, false );
+    GenerateSideFace( frontBevelCurve, mesh, normals, edges, corners, curveOffsets[ FrontBevel1 ], curveOffsets[ FrontBevel2 ], frontBevelTesselation, m_bevelHeight, false );
 
     // Generate side surface
-    GenerateSideFace( sideCurve, mesh, normals, edges, corners, curveOffsets[ MiddleExtrude1 ], curveOffsets[ MiddleExtrude2 ], m_tesselation, m_curveScale, bevelHeight );
+    GenerateSideFace( sideCurve, mesh, normals, edges, corners, curveOffsets[ MiddleExtrude1 ], curveOffsets[ MiddleExtrude2 ], m_tesselation, m_curveScale, m_bevelHeight );
 
     // Generate back surface
-    GenerateSideFace( backBevelCurve, mesh, normals, edges, corners, curveOffsets[ BackBevel1 ], curveOffsets[ BackBevel2 ], backBevelTesselation, bevelHeight, true );
+    GenerateSideFace( backBevelCurve, mesh, normals, edges, corners, curveOffsets[ BackBevel1 ], curveOffsets[ BackBevel2 ], backBevelTesselation, m_bevelHeight, true );
 
 
     ClampNormVecToDefaults( normals );
@@ -568,48 +568,52 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
         SizeType idx3 = relativeEndContourOffset + cornerPairs.Indicies[ i ];
         SizeType idx4 = relativeEndContourOffset + cornerPairs.Indicies[ i + 1 ];
 
-        glm::vec3 v1 = normals[ idx1 ];
-        glm::vec3 v2 = normals[ idx2 ];
+        glm::vec3 n1 = normals[ idx1 ];
+        glm::vec3 n2 = normals[ idx2 ];
 
-        glm::vec3 translateNormal = glm::normalize( v1 + v2 );
+        glm::vec3 translateNormal = glm::normalize( n1 + n2 );
 
-        float cos2Alpha = glm::dot( v1, v2 );
+        float cos2Alpha = glm::dot( n1, n2 );
         float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
-        float normalCoeff = glm::length( v1 ) / cosAlpha;
+        float normalCoeff = glm::length( n1 ) / cosAlpha;
 
-        //if( !cornerPairs.IsConvex[ i ] )
-        //{
-        //    SizeType adjVert1Idx = std::numeric_limits< SizeType >::max();;
-        //    SizeType adjVert2Idx = std::numeric_limits< SizeType >::max();
+        if( !cornerPairs.IsConvex[ i ] )
+        {
+            SizeType adjVert1Idx = std::numeric_limits< SizeType >::max();;
+            SizeType adjVert2Idx = std::numeric_limits< SizeType >::max();
 
-        //    for( SizeType j = 0; j < edges.size(); ++j )
-        //    {
-        //        if( edges[ j ] == cornerPairs.Indicies[ i ] )
-        //            adjVert1Idx = j % 2 ? j - 1 : j + 1;
+            for( SizeType j = 0; j < edges.size(); ++j )
+            {
+                if( edges[ j ] == cornerPairs.Indicies[ i ] )
+                    adjVert1Idx = j % 2 ? edges[ j - 1 ] : edges[ j + 1 ];
 
-        //        if( edges[ j ] == cornerPairs.Indicies[ i + 1 ] )
-        //            adjVert2Idx = j % 2 ? j - 1 : j + 1;
-        //    }
+                if( edges[ j ] == cornerPairs.Indicies[ i + 1 ] )
+                    adjVert2Idx = j % 2 ? edges[ j - 1 ] : edges[ j + 1 ];
+            }
 
-        //    assert( adjVert1Idx < edges.size() );
-        //    assert( adjVert2Idx < edges.size() );
+            assert( adjVert1Idx < verticies.size() );
+            assert( adjVert2Idx < verticies.size() );
 
-        //    glm::vec3 & cornerVertex = verticies[ cornerPairs.Indicies[ i ] ];
-        //    glm::vec3 & adjVert1 = verticies[ adjVert1Idx ];
-        //    glm::vec3 & adjVert2 = verticies[ adjVert2Idx ];
+            glm::vec3 & cornerVertex = verticies[ cornerPairs.Indicies[ i ] ];
+            glm::vec3 & adjVert1 = verticies[ adjVert1Idx ];
+            glm::vec3 & adjVert2 = verticies[ adjVert2Idx ];
 
-        //    float adjLength1 = glm::length( cornerVertex - adjVert1 );
-        //    float adjLength2 = glm::length( cornerVertex - adjVert2 );
+            float adjLength1 = glm::length( cornerVertex - adjVert1 );
+            float adjLength2 = glm::length( cornerVertex - adjVert2 );
+            
+            //glm::vec3 adjEdge1 = glm::normalize( adjVert1 - cornerVertex );
+            //glm::vec3 adjEdge2 = glm::normalize( adjVert2 - cornerVertex );
 
-        //    float minLength = std::min< float >( adjLength1, adjLength2 );
+            float minLength = std::min< float >( adjLength1, adjLength2 );
 
-        //    if( minLength < normalCoeff * scaleCurve )
-        //        normalCoeff = 0.0f;
+            //if( minLength < normalCoeff * m_bevelHeight &&
+            //  ( glm::dot( n1, adjEdge1 ) < cos( glm::pi< float >() ) ||
+            //    glm::dot( n1, adjEdge2 ) < cos( glm::pi< float >() ) ) )
+            //    normalCoeff = 0.0f;
 
-        //    //normalCoeff = 1.0f;
-        //    //if( cos2Alpha < cos( 0.5f * glm::pi< float >() ) )
-        //    //    normalCoeff = 1.0f;
-        //}
+            if( minLength < normalCoeff * m_bevelHeight )
+                normalCoeff = 1.0f;
+        }
 
         normals[ idx1 ] = normalCoeff * translateNormal;
         normals[ idx2 ] = normals[ idx1 ];

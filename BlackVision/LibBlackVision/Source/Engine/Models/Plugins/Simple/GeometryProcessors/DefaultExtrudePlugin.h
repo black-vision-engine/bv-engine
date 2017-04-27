@@ -85,6 +85,7 @@ private:
     int         m_numExtrudedVerticies;
     int         m_tesselation;
     float       m_curveScale;
+    float       m_bevelHeight;
     int         m_cosinusPeriod;
 
 public:
