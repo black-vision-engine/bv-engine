@@ -118,6 +118,7 @@ bool DefaultFadePlugin::SetPrevPlugin( IPluginPtr prev )
     {
         InitVertexAttributesChannel();
         HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        return true;
     }
     else
         return false;
