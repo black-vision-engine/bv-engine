@@ -493,14 +493,19 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
                 auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( comps[ connComp ] );
                 auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
 
-                auto& verts = uvChannel->GetVertices();
+                if( uvChannel )
+                {
+                    auto& verts = uvChannel->GetVertices();
 
-				auto uvs = TextHelper::GetAtlasCoordsForGlyph( glyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
+                    auto uvs = TextHelper::GetAtlasCoordsForGlyph( glyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
 
-                verts[ 0 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y );
-                verts[ 1 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y ); 
-                verts[ 2 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y - hWH.y );
-                verts[ 3 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y - hWH.y );
+                    verts[ 0 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y );
+                    verts[ 1 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y );
+                    verts[ 2 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y - hWH.y );
+                    verts[ 3 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y - hWH.y );
+                }
+                else
+                    assert( false ); // TODO: Check when this 'else' is being reached.
             }
         }
     }

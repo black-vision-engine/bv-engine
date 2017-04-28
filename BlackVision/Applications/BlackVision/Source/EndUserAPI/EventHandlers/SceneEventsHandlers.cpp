@@ -475,7 +475,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
                         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
                 
-                        //RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
+                        RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
                     }
                     else
                     {

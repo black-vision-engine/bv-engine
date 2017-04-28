@@ -369,17 +369,16 @@ IPluginPtr							BasePlugin::GetPrevPlugin                  ()
 //
 bool								BasePlugin::SetPrevPlugin                  ( IPluginPtr plugin )
 {
-    if( plugin && plugin->GetName() != "EXPERT" )
-    {
-        m_prevPlugin = plugin;
-        return true;
-    }
-    else
+    if( plugin && plugin->GetName() == "EXPERT" )
     {
         assert( !"EXPERT plugin must be the last one, before Finaline plugin." );
         return false;
     }
-        
+    else
+    {
+        m_prevPlugin = plugin;
+        return true;
+    }        
 }
 
 
