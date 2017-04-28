@@ -8,7 +8,7 @@ namespace bv { namespace model {
 
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultNoPerspectiveTexturePluginDesc : public BasePluginDescriptor
+class DefaultNoPerspectiveTexturePluginDesc : public DefaultTexturePluginDesc
 {
 public:
 

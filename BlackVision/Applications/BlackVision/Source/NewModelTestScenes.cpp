@@ -1765,7 +1765,7 @@ model::BasicNodePtr     TestScenesFactory::BlendTextureTestScene           ( mod
     model::SetParameter( rectangle->GetParameter( "height" ), 0.0f, 4.0f );
 
     auto blendTex = rectNode->GetPlugin( "blend texture" );
-    model::SetParameter( blendTex->GetParameter( "blendingMode" ), 0.0f, (int)model::DefaultBlendTexturePlugin::BlendingMode::BM_Luminosity );
+    model::SetParameter( blendTex->GetParameter( "blendingMode" ), 0.0f, model::BlendHelper::BlendMode::BM_Luminosity );
 
     model::LoadTexture( rectNode->GetPlugin( "texture" ), "textures/poison.jpg" );
     model::LoadTexture( rectNode->GetPlugin( "blend texture" ), "textures/lens_flares/1.png" );

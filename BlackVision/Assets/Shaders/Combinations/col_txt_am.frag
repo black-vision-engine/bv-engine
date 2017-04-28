@@ -119,7 +119,7 @@ void main()
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
     
-    vec4 c = color;
+    vec4 c = vec4( color.rgb * color.a, color.a );
     vec4 oc = outlineColor;
     float a = alpha;
 

@@ -1620,7 +1620,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
-    </ClCompile>
+	</ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>

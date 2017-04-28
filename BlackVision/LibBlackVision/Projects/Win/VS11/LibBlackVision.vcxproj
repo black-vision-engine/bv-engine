@@ -543,6 +543,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAnimationPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultBlendTexturePlugin.cpp" />

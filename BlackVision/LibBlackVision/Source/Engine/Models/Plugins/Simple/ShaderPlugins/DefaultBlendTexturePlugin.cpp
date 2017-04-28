@@ -21,22 +21,9 @@
 namespace bv { namespace model {
 
 
-typedef ParamEnum< DefaultBlendTexturePlugin::BlendingMode > ParamEnumBlendingMode;
-
 const std::string        DefaultBlendTexturePlugin::PARAMS::ALPHA             = "alpha2";
-const std::string        DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE     = "blendingMode";
+const std::string        DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE     = "blendMode";
 
-
-VoidPtr    ParamEnumBlendingMode::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
-
-template<>
-static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultBlendTexturePlugin::BlendingMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultBlendTexturePlugin::BlendingMode >( name, timeline );
-}
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -72,11 +59,8 @@ DefaultPluginParamValModelPtr   DefaultBlendTexturePluginDesc::CreateDefaultMode
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::ALPHA, 1.f, true );
-    helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, (int)DefaultBlendTexturePlugin::BlendingMode::BM_Normal, true );
+	helper.AddSimpleParam( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, (int)BlendHelper::BlendMode::BM_Normal, true, true );
 
-    // In future it would be better to have enum parameter
-    //helper.AddParam< IntInterpolator, DefaultBlendTexturePlugin::BlendingMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumBlendingMode >
-    //    ( DefaultBlendTexturePlugin::PARAMS::BLENDING_MODE, DefaultBlendTexturePlugin::BlendingMode::BM_Normal, true, false );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -105,8 +89,6 @@ std::string             DefaultBlendTexturePluginDesc::TextureName              
     return "BlendTex0";
 }
 
-//FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
-//FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
 
 // ************************************************************************* PLUGIN *************************************************************************
 

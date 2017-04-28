@@ -7,7 +7,9 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
 
 
 namespace bv { namespace model {
@@ -18,6 +20,7 @@ class DefaultTexturePluginDesc : public BasePluginDescriptor
 public:
 
     DefaultTexturePluginDesc                                    ();
+	DefaultTexturePluginDesc                                    ( const std::string & uid, const std::string & defaultName, const std::string & abbrv );
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
@@ -33,8 +36,11 @@ class DefaultTexturePlugin : public BasePlugin
 {
 public:
 
-    static const std::string        PARAM_BLEND_ENABLE;
-    static const std::string        PARAM_ALPHA;
+	struct PARAM
+	{
+		static const std::string        ALPHA;
+        static const std::string		TX_MAT;
+    };
 
 protected:
 
@@ -46,7 +52,8 @@ protected:
     SizeType	                    m_textureWidth;
     SizeType	                    m_textureHeight;
 
-    model::ValueParamState< bool >  m_blendEnabled;
+	ValueParamState< bool >						m_blendEnabled;
+	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
 
 public:
 
