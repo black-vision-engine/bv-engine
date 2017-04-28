@@ -66,16 +66,20 @@ std::string             DefaultColorPluginDesc::UID                         ()
 
 // *************************************
 // 
-void DefaultColorPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultColorPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+	    auto ctx = m_pixelShaderChannel->GetRendererContext();
 
-	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
-	auto ctx = m_pixelShaderChannel->GetRendererContext();
-    ctx->cullCtx->enabled = false;
+        ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();	
+        BlendHelper::SetBlendRendererContext( m_pixelShaderChannel, m_blendMode.GetParameter() );
 
-    ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
-	BlendHelper::SetBlendRendererContext( m_pixelShaderChannel, m_blendMode.GetParameter() );
+        return true;
+    }
+    else
+        return false;
 }
 
 

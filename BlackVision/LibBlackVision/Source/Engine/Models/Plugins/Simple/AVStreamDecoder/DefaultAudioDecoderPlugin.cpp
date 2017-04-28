@@ -99,9 +99,9 @@ std::string                 DefaultAudioDecoderPluginDesc::AudioName        ()
 
 // ************************************************************************* PLUGIN *************************************************************************
 
-void					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
+bool					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    return BasePlugin::SetPrevPlugin( prev );
 }
 
 // *************************************
@@ -143,7 +143,7 @@ DefaultAudioDecoderPlugin::~DefaultAudioDecoderPlugin				        ()
 // 
 bool							DefaultAudioDecoderPlugin::IsValid          () const
 {
-    return m_prevPlugin->IsValid();
+    return GetPrevPlugin()->IsValid();
 }
 
 // *************************************

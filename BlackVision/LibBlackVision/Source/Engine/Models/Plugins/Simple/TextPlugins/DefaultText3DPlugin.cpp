@@ -128,16 +128,20 @@ std::string             DefaultText3DPluginDesc::TextureName              ()
 
 // *************************************
 // 
-void DefaultText3DPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultText3DPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-
-	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-	auto ctx = m_psc->GetRendererContext();
-	ctx->cullCtx->enabled = false;
-	ctx->alphaCtx->blendEnabled = true;
-	ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-	ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        ctx->alphaCtx->blendEnabled = true;
+        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -253,8 +257,8 @@ void                                DefaultText3DPlugin::Update                 
     }
 
     //assumption that text plugin provides vertices, so no need for backward topology propagation
-    //HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    //HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();

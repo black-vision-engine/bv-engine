@@ -96,7 +96,7 @@ public:
 	explicit                                    DefaultText3DPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 												~DefaultText3DPlugin        ();
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin );
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin );
 
 	std::wstring                                GetText                     () const;
 

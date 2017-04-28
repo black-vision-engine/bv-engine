@@ -109,7 +109,7 @@ public:
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool                                SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     virtual Float32                             BuildVACForText             ( const std::wstring & text, bool useKernin, bool useBoxg );
 

@@ -69,7 +69,7 @@ protected:
     void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, Float3AttributeChannelPtr normChannel, Float2AttributeChannelPtr uvChannel, Float4AttributeChannelPtr tangentChannel, glm::mat4 & transform, bool recursive );
     glm::mat4                                   ComputeTransform            ( MeshAssetConstPtr meshAsset );
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     void                                        AddUVChannel                ( Float2AttributeChannelPtr & uvChannel, const std::vector< glm::vec2 > & uvs, bool flipU, bool flipV );
 };

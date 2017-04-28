@@ -82,13 +82,18 @@ std::string             DefaultNormalMapPluginDesc::TextureName               ()
 
 // *************************************
 // 
-void DefaultNormalMapPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultNormalMapPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
 }
 
 // *************************************
@@ -114,7 +119,7 @@ DefaultNormalMapPlugin::~DefaultNormalMapPlugin         ()
 // 
 bool							DefaultNormalMapPlugin::IsValid     () const
 {
-    return m_prevPlugin->IsValid();
+    return GetPrevPlugin()->IsValid();
 }
 
 // *************************************
@@ -173,7 +178,7 @@ void                                DefaultNormalMapPlugin::Update              
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, PARAM::NORMAL_MAP_MAT.c_str() );
     
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_psc->PostUpdate();    
 }

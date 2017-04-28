@@ -80,21 +80,26 @@ std::string             ExpertPluginDesc::UID                       ()
 
 // *************************************
 // 
-void ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
+bool ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 
-    auto ctx = m_psc->GetRendererContext();
+        auto ctx = m_psc->GetRendererContext();
 
-    SetParameter( GetParameter( PARAMS::CULLING_ENABLE ), 0.0f, ctx->cullCtx->enabled );
-    SetParameter( GetParameter( PARAMS::CC_CULL_ORDER ), 0.0f, ctx->cullCtx->isCCWOrdered );
-    SetParameter( GetParameter( PARAMS::ENABLE_DEPTH_TEST ), 0.0f, ctx->depthCtx->enabled );
-    SetParameter( GetParameter( PARAMS::ENABLE_DEPTH_WRITE ), 0.0f, ctx->depthCtx->writable );
+        SetParameter( GetParameter( PARAMS::CULLING_ENABLE ), 0.0f, ctx->cullCtx->enabled );
+        SetParameter( GetParameter( PARAMS::CC_CULL_ORDER ), 0.0f, ctx->cullCtx->isCCWOrdered );
+        SetParameter( GetParameter( PARAMS::ENABLE_DEPTH_TEST ), 0.0f, ctx->depthCtx->enabled );
+        SetParameter( GetParameter( PARAMS::ENABLE_DEPTH_WRITE ), 0.0f, ctx->depthCtx->writable );
 
-    SetParameter( GetParameter( BlendHelper::PARAM::BLEND_ENABLE ), 0.0f, ctx->alphaCtx->blendEnabled );
+        SetParameter( GetParameter( BlendHelper::PARAM::BLEND_ENABLE ), 0.0f, ctx->alphaCtx->blendEnabled );
 
-    BlendHelper::SetBlendRendererContext( m_psc, m_colorBlendMode.GetParameter(), m_alphaBlendMode.GetParameter() );
+        BlendHelper::SetBlendRendererContext( m_psc, m_colorBlendMode.GetParameter(), m_alphaBlendMode.GetParameter() );
+
+        return true;
+    }
+    return false;
 }
 
 // *************************************
@@ -126,7 +131,7 @@ ExpertPlugin::~ExpertPlugin         ()
 // 
 bool							    ExpertPlugin::IsValid     () const
 {
-    return ( m_prevPlugin->IsValid() );
+    return ( GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -158,7 +163,7 @@ void                                ExpertPlugin::Update                      ( 
     BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_colorBlendMode, m_alphaBlendMode );
 
 
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_psc->PostUpdate();
 }
