@@ -205,8 +205,8 @@ void                                DefaultTextPlugin::Update                   
     m_scaleValue->SetValue( m_scaleMat );
 
     //assumption that text plugin provides vertices, so no need for backward topology propagation
-    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();

@@ -46,7 +46,7 @@ TriangulatePlugin::TriangulatePlugin	        ( const std::string & name, const s
 //
 void TriangulatePlugin::InitializeVertexAttributesChannel()
 {
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
 
 	VertexAttributesChannelDescriptor vaChannelDesc;
     vaChannelDesc.AddAttrChannelDesc( std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_PROCESSOR ) );
@@ -59,15 +59,15 @@ void TriangulatePlugin::InitializeVertexAttributesChannel()
 //
 void        TriangulatePlugin::ProcessVertexAttributesChannel()
 {
-    if( !( m_prevPlugin
-           && m_prevPlugin->GetVertexAttributesChannel()
-           && m_prevPlugin->GetVertexAttributesChannel()->GetPrimitiveType() == PrimitiveType::PT_LINES ) )
+    if( !( GetPrevPlugin()
+           && GetPrevPlugin()->GetVertexAttributesChannel()
+           && GetPrevPlugin()->GetVertexAttributesChannel()->GetPrimitiveType() == PrimitiveType::PT_LINES ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
 
     if( !m_vaChannel )
     {

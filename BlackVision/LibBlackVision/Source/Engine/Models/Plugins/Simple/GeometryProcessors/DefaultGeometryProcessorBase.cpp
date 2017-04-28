@@ -38,13 +38,18 @@ std::string                     DefaultGeometryProcessorDescBase::UID           
 
 // *************************************
 // 
-void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
+bool DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-    ProcessVertexAttributesChannel();
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        ProcessVertexAttributesChannel();
 
-    HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
-    HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
+        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+        HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -66,8 +71,8 @@ void                                DefaultGeometryProcessorBase::Update        
 {
     BasePlugin::Update( t );
 
-    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) ||
-        HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) ||
+        HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         ProcessVertexAttributesChannel();
     }
@@ -90,7 +95,7 @@ void                                DefaultGeometryProcessorBase::Update        
 //
 void                                DefaultGeometryProcessorBase::InitializeVertexAttributesChannel ()
 {
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
 
     VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 
@@ -101,13 +106,13 @@ void                                DefaultGeometryProcessorBase::InitializeVert
 //
 void                                DefaultGeometryProcessorBase::ProcessVertexAttributesChannel  ()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
 
 //    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 

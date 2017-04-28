@@ -90,7 +90,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
 private:
 

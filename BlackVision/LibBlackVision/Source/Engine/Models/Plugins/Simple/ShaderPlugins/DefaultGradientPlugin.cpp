@@ -103,14 +103,18 @@ std::string             DefaultGradientPluginDesc::TextureName               ()
 
 // *************************************
 // 
-void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
+bool					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    InitVertexAttributesChannel();
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    m_psc->GetRendererContext()->cullCtx->enabled = false;
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        m_psc->GetRendererContext()->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -170,13 +174,13 @@ void                                DefaultGradientPlugin::Update               
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
     }
     
-    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         InitVertexAttributesChannel();
     }
 
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
@@ -186,13 +190,13 @@ void                                DefaultGradientPlugin::Update               
 //
 void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
     
     //add gradient texture desc
     VertexAttributesChannelDescriptor vaChannelDesc( *static_cast<const VertexAttributesChannelDescriptor *>( prevGeomChannel->GetDescriptor() ) );

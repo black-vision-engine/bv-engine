@@ -298,7 +298,7 @@ void                                DefaultFinalizePlugin::Update               
 
 // *******************************
 //
-void                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginPtr plugin )
+bool                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginPtr plugin )
 {
     //assert( plugin != nullptr );
 
@@ -310,6 +310,8 @@ void                                DefaultFinalizePlugin::SetPrevPlugin        
 
     UpdatePixelShaderChannel(); //recreate pixel shader channel
     //GetPixelShaderChannel();  // GetPixelShaderChannel doesn't call UpdatePixelShaderChannel anymore.
+
+    return true;
 }
 
 // *******************************
