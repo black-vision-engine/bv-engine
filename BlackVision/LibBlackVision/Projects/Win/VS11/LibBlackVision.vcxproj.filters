@@ -412,6 +412,9 @@
     <Filter Include="Engine\Models\NodeLogics\Cloner">
       <UniqueIdentifier>{2389fef9-ffdf-4a95-bca5-3884dee9e704}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\SpecialPlugins">
+      <UniqueIdentifier>{686f0cb1-fb84-468e-9b36-fbd20c656a01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1620,7 +1623,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
@@ -1956,6 +1959,10 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5164,6 +5171,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
