@@ -17,7 +17,15 @@ namespace bv {
 namespace model {
 
 
-const std::string        ExpertPlugin::PARAMS::ALPHA = "alpha2";
+const std::string        ExpertPlugin::PARAMS::COLOR_BLENDING_MODE      = "alpha2";
+const std::string        ExpertPlugin::PARAMS::ALPHA_BLENDING_MODE      = "alpha2";
+const std::string        ExpertPlugin::PARAMS::BLEND_ENABLE             = "alpha2";
+
+const std::string        ExpertPlugin::PARAMS::CULLING_ENABLE           = "alpha2";
+const std::string        ExpertPlugin::PARAMS::CC_CULL_ORDER            = "alpha2";
+const std::string        ExpertPlugin::PARAMS::ENABLE_DEPTH_TEST        = "alpha2";
+const std::string        ExpertPlugin::PARAMS::ENABLE_DEPTH_WRITE       = "alpha2";
+const std::string        ExpertPlugin::PARAMS::FILL_MODE                = "alpha2";
 
 
 
@@ -26,7 +34,7 @@ const std::string        ExpertPlugin::PARAMS::ALPHA = "alpha2";
 // *******************************
 //
 ExpertPluginDesc::ExpertPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "EXPERT_PLUGIN", "expert" )
+    : BasePluginDescriptor( UID(), "expert" )
 {
 }
 
@@ -43,27 +51,19 @@ DefaultPluginParamValModelPtr   ExpertPluginDesc::CreateDefaultModel( ITimeEvalu
 {
     ModelHelper helper( timeEvaluator );
 
-    //Create all models
+    // Create all models
     auto model = helper.GetModel();
-    DefaultParamValModelPtr vsModel = std::make_shared< DefaultParamValModel >();
-
-    //Create all parameters and evaluators
-    SimpleTransformEvaluatorPtr trTxEvaluator = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txBlendMat", timeEvaluator );
-
     helper.SetOrCreatePluginModel();
 
-    helper.SetOrCreatePSModel();
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::ALPHA, 1.f, true );
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+    helper.AddEnumParam( BlendHelper::PARAM::COLOR_BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
+    helper.AddEnumParam( BlendHelper::PARAM::ALPHA_BLEND_MODE, BlendHelper::BlendMode::BM_None, true, true );
 
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
-
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-
-    //Set default values of all parameters
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
+    helper.AddSimpleParam( ExpertPlugin::PARAMS::CULLING_ENABLE, true, true, true );
+    helper.AddSimpleParam( ExpertPlugin::PARAMS::ENABLE_DEPTH_TEST, true, true, true );
+    helper.AddSimpleParam( ExpertPlugin::PARAMS::ENABLE_DEPTH_WRITE, true, true, true );
+    helper.AddSimpleParam( ExpertPlugin::PARAMS::CC_CULL_ORDER, true, true, true );
+    //helper.AddSimpleParam( ExpertPlugin::PARAMS::ENABLE_DEPTH_TEST, true, true, true );
 
     return model;
 }
@@ -72,16 +72,8 @@ DefaultPluginParamValModelPtr   ExpertPluginDesc::CreateDefaultModel( ITimeEvalu
 //
 std::string             ExpertPluginDesc::UID                       ()
 {
-    return "PluginUID";
+    return "EXPERT_PLUGIN";
 }
-
-// *******************************
-// 
-std::string             ExpertPluginDesc::TextureName               ()
-{
-    return "TextureName";
-}
-
 
 
 // ************************************************************************* PLUGIN *************************************************************************
@@ -91,8 +83,18 @@ std::string             ExpertPluginDesc::TextureName               ()
 void ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
-
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+
+    auto ctx = m_psc->GetRendererContext();
+
+    SetParameter( GetParameter( PARAMS::CULLING_ENABLE ), 0.0f, ctx->cullCtx->enabled );
+    SetParameter( GetParameter( PARAMS::CC_CULL_ORDER ), 0.0f, ctx->cullCtx->isCCWOrdered );
+    SetParameter( GetParameter( PARAMS::ENABLE_DEPTH_TEST ), 0.0f, ctx->depthCtx->enabled );
+    SetParameter( GetParameter( PARAMS::ENABLE_DEPTH_WRITE ), 0.0f, ctx->depthCtx->writable );
+
+    SetParameter( GetParameter( BlendHelper::PARAM::BLEND_ENABLE ), 0.0f, ctx->alphaCtx->blendEnabled );
+
+    BlendHelper::SetBlendRendererContext( m_psc, m_colorBlendMode.GetParameter(), m_alphaBlendMode.GetParameter() );
 }
 
 // *************************************
@@ -100,10 +102,17 @@ void ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
 ExpertPlugin::ExpertPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, model )
     , m_psc( nullptr )
-    , m_vsc( nullptr )
 {
-    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
-    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+    m_blendEnabled      = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+    m_colorBlendMode    = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::COLOR_BLEND_MODE );
+    m_alphaBlendMode    = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::ALPHA_BLEND_MODE );
+
+    m_cullingEnabled    = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAMS::CULLING_ENABLE );
+    m_ccCullOrder       = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAMS::CC_CULL_ORDER );
+    m_enableDepthTest   = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAMS::ENABLE_DEPTH_TEST );
+    m_enableDepthWrite  = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAMS::ENABLE_DEPTH_WRITE );
+
+    m_fillMode          = GetValueParamState< FillContext::Mode >( GetPluginParamValModel()->GetPluginModel().get(), PARAMS::FILL_MODE );
 
     SetPrevPlugin( prev );
 }
@@ -115,14 +124,14 @@ ExpertPlugin::~ExpertPlugin         ()
 
 // *************************************
 // 
-bool							ExpertPlugin::IsValid     () const
+bool							    ExpertPlugin::IsValid     () const
 {
     return ( m_prevPlugin->IsValid() );
 }
 
 // *************************************
 // 
-bool                            ExpertPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
+bool                                ExpertPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {    return false;  }
 
 
@@ -137,7 +146,7 @@ IPixelShaderChannelPtr              ExpertPlugin::GetPixelShaderChannel       ()
 // 
 IVertexShaderChannelConstPtr        ExpertPlugin::GetVertexShaderChannel      () const
 {
-    return m_vsc;
+    return GetPrevPlugin()->GetVertexShaderChannel();
 }
 
 // *************************************
@@ -146,10 +155,11 @@ void                                ExpertPlugin::Update                      ( 
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txBlendMat" );
+    BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_colorBlendMode, m_alphaBlendMode );
+
+
     HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
-    m_vsc->PostUpdate();
     m_psc->PostUpdate();
 }
 

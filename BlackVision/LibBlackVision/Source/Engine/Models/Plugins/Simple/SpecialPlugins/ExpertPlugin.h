@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+
 
 
 namespace bv {
@@ -23,9 +25,6 @@ public:
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
     static  std::string                     UID                 ();
-
-    static  std::string                     TextureName         ();
-
 };
 
 // ***************************** PLUGIN ********************************** 
@@ -35,14 +34,31 @@ public:
 
     struct PARAMS
     {
-        static const std::string        ALPHA;
-        static const std::string        BLENDING_MODE;
+        static const std::string        COLOR_BLENDING_MODE;
+        static const std::string        ALPHA_BLENDING_MODE;
+        static const std::string        BLEND_ENABLE;
+
+        static const std::string        CULLING_ENABLE;
+        static const std::string        CC_CULL_ORDER;
+        static const std::string        ENABLE_DEPTH_TEST;
+        static const std::string        ENABLE_DEPTH_WRITE;
+        static const std::string        FILL_MODE;
     };
 
 protected:
 
-    DefaultPixelShaderChannelPtr    m_psc;
-    DefaultVertexShaderChannelPtr   m_vsc;
+    DefaultPixelShaderChannelPtr        m_psc;
+
+    ValueParamState< bool >						m_blendEnabled;
+    ValueParamState< BlendHelper::BlendMode >	m_colorBlendMode;
+    ValueParamState< BlendHelper::BlendMode >	m_alphaBlendMode;
+
+    ValueParamState< bool >						m_cullingEnabled;
+    ValueParamState< bool >						m_ccCullOrder;
+    ValueParamState< bool >						m_enableDepthTest;
+    ValueParamState< bool >						m_enableDepthWrite;
+
+    ValueParamState< FillContext::Mode >	    m_fillMode;
 
 public:
 

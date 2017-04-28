@@ -14,14 +14,19 @@
 namespace bv {
 namespace model {
 
+
+
 class BlendHelper
 {
 public:
 
 	struct PARAM
 	{
+        static const std::string        BLEND_MODE;
+
 		static const std::string		BLEND_ENABLE;
-		static const std::string        BLEND_MODE;
+		static const std::string        COLOR_BLEND_MODE;
+        static const std::string        ALPHA_BLEND_MODE;
 	};
 
     enum BlendMode
@@ -65,8 +70,16 @@ public:
 
 public:
 	static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM > & param );
-	static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const ParamEnum< BlendHelper::BlendMode > * param );
+    static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM > & colorParam, const SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM > & alphaParam );
+    
+    static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const ParamEnum< BlendHelper::BlendMode > * param );
+    static void         SetBlendRendererContext		( DefaultPixelShaderChannelPtr psc, const ParamEnum< BlendHelper::BlendMode > * colorBlendParam, const ParamEnum< BlendHelper::BlendMode > * alphaBlendParam );
+
+    static void         SetBlendColorContext		( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param );
+    static void         SetBlendAlphaContext		( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param );
+
 	static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & blendMode );
+    static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & colorBlendMode, ValueParamState< BlendHelper::BlendMode > & alphaBlendMode );
 };
 
 
