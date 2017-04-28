@@ -94,7 +94,7 @@ public:
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
     virtual IPluginPtr							GetPrevPlugin               () override;
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 

@@ -38,13 +38,18 @@ std::string                     DefaultGeometryProcessorDescBase::UID           
 
 // *************************************
 // 
-void DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
+bool DefaultGeometryProcessorBase::SetPrevPlugin   ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-    ProcessVertexAttributesChannel();
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        ProcessVertexAttributesChannel();
 
-    HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
-    HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
+        HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+        HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************

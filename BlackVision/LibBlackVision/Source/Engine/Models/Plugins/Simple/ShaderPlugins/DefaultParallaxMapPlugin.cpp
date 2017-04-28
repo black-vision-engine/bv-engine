@@ -80,13 +80,17 @@ std::string             DefaultParallaxMapPluginDesc::TextureName               
 
 // *************************************
 // 
-void DefaultParallaxMapPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultParallaxMapPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************

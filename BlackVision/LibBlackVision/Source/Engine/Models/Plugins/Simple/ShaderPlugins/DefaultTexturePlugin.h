@@ -71,7 +71,7 @@ public:
 private:
     void										InitVertexAttributesChannel ();
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

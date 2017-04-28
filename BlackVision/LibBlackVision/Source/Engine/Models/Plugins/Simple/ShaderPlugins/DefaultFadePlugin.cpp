@@ -112,12 +112,16 @@ std::string             DefaultFadePluginDesc::TextureName               ()
 
 // *************************************
 // 
-void DefaultFadePlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultFadePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    }
+    else
+        return false;
 
-    InitVertexAttributesChannel();
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 }
 
 // *************************************

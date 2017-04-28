@@ -112,11 +112,17 @@ std::string             DefaultBlendTexturePluginDesc::TextureName              
 
 // *************************************
 // 
-void DefaultBlendTexturePlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultBlendTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        return true;
+    }
+    else
+        return false;
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+
 }
 
 // *************************************

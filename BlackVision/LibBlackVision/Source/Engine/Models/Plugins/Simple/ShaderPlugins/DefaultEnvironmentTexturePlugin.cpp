@@ -95,10 +95,15 @@ DefaultEnvironmentTexturePlugin::~DefaultEnvironmentTexturePlugin()
 
 // *************************************
 // 
-void DefaultEnvironmentTexturePlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultEnvironmentTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+        return true;
+    }
+    else 
+        return false;
 }
 
 // *************************************

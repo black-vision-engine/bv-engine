@@ -38,12 +38,17 @@ std::string                     DefaultGeometryPluginDescBase::UID              
 
 // *************************************
 // 
-void DefaultGeometryPluginBase::SetPrevPlugin   ( IPluginPtr prev )
+bool DefaultGeometryPluginBase::SetPrevPlugin   ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+        m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 
-    HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
-    m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
 }
 
 // *************************************

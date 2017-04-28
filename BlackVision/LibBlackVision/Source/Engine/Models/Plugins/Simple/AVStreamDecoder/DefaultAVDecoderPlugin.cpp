@@ -119,18 +119,23 @@ std::string                     DefaultAVDecoderPluginDesc::TextureName         
 
 // ************************************************************************* PLUGIN *************************************************************************
 
-void					DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
+bool					        DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    InitVertexAttributesChannel();
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        ctx->alphaCtx->blendEnabled = true;
+        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        return true;
+    }
+    else
+        return false;
+    
 }
 
 // *************************************

@@ -103,14 +103,18 @@ std::string             DefaultGradientPluginDesc::TextureName               ()
 
 // *************************************
 // 
-void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
+bool					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    InitVertexAttributesChannel();
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    m_psc->GetRendererContext()->cullCtx->enabled = false;
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        m_psc->GetRendererContext()->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************

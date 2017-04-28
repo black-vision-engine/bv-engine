@@ -79,15 +79,18 @@ std::string             DefaultMeshPluginDesc::MeshName                  ()
 
 // *************************************
 // 
-void DefaultMeshPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultMeshPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 }
-
 
 // *************************************
 // 

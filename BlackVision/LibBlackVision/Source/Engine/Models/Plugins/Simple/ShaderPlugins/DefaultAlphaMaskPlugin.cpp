@@ -86,16 +86,21 @@ std::string             DefaultAlphaMaskPluginDesc::TextureName             ()
 
 // *************************************
 // 
-void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr prev )
+bool								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-    
-    InitVertexAttributesChannel();
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        ctx->alphaCtx->blendEnabled = true;
+        return true;
+    }
+    else
+        return false;
+    
 }
 
 // *************************************

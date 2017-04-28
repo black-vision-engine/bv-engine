@@ -44,7 +44,7 @@ public:
     DefaultGeometryProcessorBase                ( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool                                SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     virtual void                                Update                      ( TimeType t );
 };

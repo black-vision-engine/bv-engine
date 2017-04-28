@@ -99,9 +99,9 @@ std::string                 DefaultAudioDecoderPluginDesc::AudioName        ()
 
 // ************************************************************************* PLUGIN *************************************************************************
 
-void					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
+bool					    DefaultAudioDecoderPlugin::SetPrevPlugin        ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    return BasePlugin::SetPrevPlugin( prev );
 }
 
 // *************************************

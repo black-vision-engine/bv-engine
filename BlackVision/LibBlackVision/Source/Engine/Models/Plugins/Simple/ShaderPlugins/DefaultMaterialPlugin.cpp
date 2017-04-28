@@ -75,14 +75,18 @@ std::string             DefaultMaterialPluginDesc::UID                         (
 
 // *************************************
 // 
-void DefaultMaterialPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultMaterialPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-
-	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
-    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
-    m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
-	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+        m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+        m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
+        //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        return true;
+    }
+    else
+        return false;
 }
 
 
