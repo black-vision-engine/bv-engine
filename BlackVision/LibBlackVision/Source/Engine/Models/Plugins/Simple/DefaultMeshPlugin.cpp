@@ -113,7 +113,7 @@ DefaultMeshPlugin::~DefaultMeshPlugin         ()
 // 
 bool							DefaultMeshPlugin::IsValid     () const
 {
-    return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && GetPrevPlugin()->IsValid() );
 }
 
 // *************************************

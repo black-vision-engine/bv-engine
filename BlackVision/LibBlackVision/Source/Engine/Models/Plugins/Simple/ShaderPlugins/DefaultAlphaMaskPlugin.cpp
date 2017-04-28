@@ -126,7 +126,7 @@ DefaultAlphaMaskPlugin::~DefaultAlphaMaskPlugin         ()
 // 
 bool						DefaultAlphaMaskPlugin::IsValid     () const
 {
-    return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -195,17 +195,17 @@ void                                DefaultAlphaMaskPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
+    if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         RecalculateUVChannel();
     }
 
-    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         InitVertexAttributesChannel();
     }
 
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -215,13 +215,13 @@ void                                DefaultAlphaMaskPlugin::Update              
 //
 void		DefaultAlphaMaskPlugin::InitVertexAttributesChannel			()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
     auto prevCC = prevGeomChannel->GetComponents();
 
     //add alpha mask texture desc

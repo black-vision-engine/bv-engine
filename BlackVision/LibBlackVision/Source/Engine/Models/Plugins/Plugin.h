@@ -24,10 +24,11 @@ namespace bv { namespace model {
 
 class BasePlugin : public IPlugin, public ISerializable
 {
-protected:
+private:
 
-    ///////////////// Previous plugin ///////////
     IPluginPtr                                  m_prevPlugin;
+
+protected:
 
     UInt32										m_id;
 

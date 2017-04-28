@@ -952,13 +952,13 @@ DefaultExtrudePlugin::CornersInfo       DefaultExtrudePlugin::ExtractCorners    
 // This is the only difference between base class function and this override.
 void                                DefaultExtrudePlugin::ProcessVertexAttributesChannel  ()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
 
     auto compVertDesc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     VertexAttributesChannelDescriptor vaChannelDesc;

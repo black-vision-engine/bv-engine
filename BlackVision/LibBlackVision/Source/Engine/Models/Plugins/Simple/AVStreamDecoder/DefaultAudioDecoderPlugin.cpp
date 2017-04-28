@@ -143,7 +143,7 @@ DefaultAudioDecoderPlugin::~DefaultAudioDecoderPlugin				        ()
 // 
 bool							DefaultAudioDecoderPlugin::IsValid          () const
 {
-    return m_prevPlugin->IsValid();
+    return GetPrevPlugin()->IsValid();
 }
 
 // *************************************

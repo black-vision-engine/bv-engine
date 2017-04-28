@@ -143,7 +143,7 @@ DefaultBlendTexturePlugin::~DefaultBlendTexturePlugin         ()
 // 
 bool							DefaultBlendTexturePlugin::IsValid     () const
 {
-    return ( m_prevPlugin->IsValid() );
+    return ( GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -206,7 +206,7 @@ void                                DefaultBlendTexturePlugin::Update           
     BasePlugin::Update( t );
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txBlendMat" );    
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    

@@ -111,7 +111,7 @@ DefaultParallaxMapPlugin::~DefaultParallaxMapPlugin         ()
 // 
 bool							DefaultParallaxMapPlugin::IsValid     () const
 {
-    return m_prevPlugin->IsValid();
+    return GetPrevPlugin()->IsValid();
 }
 
 // *************************************
@@ -161,7 +161,7 @@ void                                DefaultParallaxMapPlugin::Update            
 {
     BasePlugin::Update( t );
 
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_psc->PostUpdate();    
 }
