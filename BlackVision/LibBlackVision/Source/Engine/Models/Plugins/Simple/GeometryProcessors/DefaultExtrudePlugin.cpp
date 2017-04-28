@@ -83,7 +83,7 @@ DefaultPluginParamValModelPtr   DefaultExtrudePluginDesc::CreateDefaultModel( IT
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::EXTRUDE_TESSELATION, 40, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::COSINUS_CURVE_PERIOD, 1, true, true );
 
-    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT, 0.4f, true, true );
+    helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_HEIGHT, 0.0f, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_TESSELATION, 1, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_FRONT, 0.3f, true, true );
     helper.AddSimpleParam( DefaultExtrudePlugin::PARAMS::BEVEL_DEPTH_BACK, 0.3f, true, true );
