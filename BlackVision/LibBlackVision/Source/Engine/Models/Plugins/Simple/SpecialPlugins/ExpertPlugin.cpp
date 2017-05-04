@@ -107,16 +107,6 @@ ExpertPlugin::ExpertPlugin         ( const std::string & name, const std::string
 
     m_resetSettings     = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAMS::RESET_SETTINGS );
 
-
-    //ctx->cullCtx->enabled = m_cullingEnabled.GetValue();
-    //ctx->cullCtx->isCCWOrdered = m_ccCullOrder.GetValue();
-    //ctx->depthCtx->enabled = m_enableDepthTest.GetValue();
-    //ctx->depthCtx->writable = m_enableDepthWrite.GetValue();
-    //ctx->fillCtx->fillMode = m_fillMode.GetValue();
-    //ctx->alphaCtx->blendEnabled = m_blendEnabled.GetValue();
-
-    //BlendHelper::SetBlendRendererContext( m_psc, m_colorBlendMode.GetParameter(), m_alphaBlendMode.GetParameter() );
-
     SetPrevPlugin( prev );
 }
 
@@ -132,19 +122,7 @@ bool                ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
 {
     if( BasePlugin::SetPrevPlugin( prev ) )
     {
-        if( prev )
-        {
-            HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-
-            // We apply settings from previous plugins when ExpertPlugin is attached for the first time.
-            // When plugins list changes later, user must reset settings to previous plugin state manually.
-            if( m_firstAttach )
-            {
-                //ApplyFromPrevious();
-                m_firstAttach = false;
-            }
-        }
-
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
         return true;
     }
     return false;

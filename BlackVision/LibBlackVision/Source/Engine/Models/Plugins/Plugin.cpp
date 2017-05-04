@@ -555,10 +555,6 @@ ser.EnterChild( "plugin" );
         ser.SetAttribute( "timeline", timeline );
 
 
-        auto context = GetRendererContext();
-        if( context )
-            context->Serialize( ser );
-
         ser.EnterArray( "params" );
         {
             IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
@@ -695,27 +691,6 @@ ISerializablePtr BasePlugin::Create                              ( const IDeseri
             } while( deser.NextChild() );
 
             deser.ExitChild(); // assets
-        }
-
-        // renderer_context
-        bool rcAdded = false;
-        if( plugin->GetPixelShaderChannel() )
-        {
-            if( deser.EnterChild( "renderer_context" ) )
-            {
-                auto context = RendererContext::Create( deser );
-                deser.ExitChild();
-
-                deserContext->Push( context );
-                rcAdded = true;
-
-                plugin->SetRendererContext( context );
-            }
-        }
-
-        if( !rcAdded )
-        {
-            deserContext->Push( nullptr );
         }
     }
     else
