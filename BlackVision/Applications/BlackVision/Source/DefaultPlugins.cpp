@@ -47,6 +47,7 @@
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultExtrudePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultLineChartPlugin.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/ExpertPlugin.h"
 
 #include "UseLoggerBVAppModule.h"
 
@@ -102,6 +103,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultLineChartPluginDesc() );
     descriptors.push_back( new TriangulatePluginDesc() );
     descriptors.push_back( new DefaultText3DPluginDesc() );
+    descriptors.push_back( new ExpertPluginDesc() );
 
     for( auto descr : descriptors )
     {

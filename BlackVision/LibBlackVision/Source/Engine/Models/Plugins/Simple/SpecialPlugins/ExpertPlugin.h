@@ -43,6 +43,8 @@ public:
         static const std::string        ENABLE_DEPTH_TEST;
         static const std::string        ENABLE_DEPTH_WRITE;
         static const std::string        FILL_MODE;
+
+        static const std::string        RESET_SETTINGS;
     };
 
 protected:
@@ -60,6 +62,10 @@ protected:
 
     ValueParamState< FillContext::Mode >	    m_fillMode;
 
+    ValueParamState< bool >                     m_resetSettings;
+
+    bool                                        m_firstAttach;
+
 public:
 
     explicit                                    ExpertPlugin   ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -76,7 +82,12 @@ public:
 
 private:
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
+    void                                        ApplyFromPrevious           ();
+    void                                        UpdateContext               ();
 };
+
+DEFINE_ENUM_SET_PARAMETER( FillContext::Mode );
 
 
 } // model

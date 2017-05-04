@@ -80,6 +80,9 @@ public:
 
 	static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & blendMode );
     static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & colorBlendMode, ValueParamState< BlendHelper::BlendMode > & alphaBlendMode );
+
+    static BlendMode    ContextToColorBlendMode     ( RendererContextConstPtr & ctx );
+    static BlendMode    ContextToAlphaBlendMode     ( RendererContextConstPtr & ctx );
 };
 
 

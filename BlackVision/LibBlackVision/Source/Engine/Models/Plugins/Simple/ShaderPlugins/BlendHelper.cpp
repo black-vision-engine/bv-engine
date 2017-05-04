@@ -110,6 +110,8 @@ void        BlendHelper::SetBlendColorContext       ( RendererContextPtr & ctx, 
     }
 }
 
+// ***********************
+//
 void        BlendHelper::SetBlendAlphaContext       ( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param )
 {
     BlendHelper::BlendMode blendMode = param->Evaluate();
@@ -184,8 +186,8 @@ void		BlendHelper::UpdateBlendState			( DefaultPixelShaderChannelPtr psc,
 //
 void        BlendHelper::UpdateBlendState           (   DefaultPixelShaderChannelPtr psc,
                                                         ValueParamState< bool > & blenEnable,
-                                                        ValueParamState< BlendHelper::BlendMode > & /*colorBlendMode*/,
-                                                        ValueParamState< BlendHelper::BlendMode > & /*alphaBlendMode*/ )
+                                                        ValueParamState< BlendHelper::BlendMode > & colorBlendMode,
+                                                        ValueParamState< BlendHelper::BlendMode > & alphaBlendMode )
 {
     bool contextUpdateNeeded = false;
     auto ctx = psc->GetRendererContext();
@@ -196,25 +198,104 @@ void        BlendHelper::UpdateBlendState           (   DefaultPixelShaderChanne
 
         contextUpdateNeeded = true;
     }
-    assert( false );
 
-    //if( colorBlendMode.Changed() )
-    //{
-    //    BlendHelper::SetBlendColorContext( ctx, &colorBlendMode.GetParameter() );
-    //    contextUpdateNeeded = true;
-    //}
+    if( colorBlendMode.Changed() )
+    {
+        BlendHelper::SetBlendColorContext( ctx, static_cast< const ParamEnum< BlendHelper::BlendMode > *>( &colorBlendMode.GetParameter() ) );
+        contextUpdateNeeded = true;
+    }
 
-    //if( alphaBlendMode.Changed() )
-    //{
-    //    BlendHelper::SetBlendAlphaContext( ctx, &colorBlendMode.GetParameter() );
-    //    contextUpdateNeeded = true;
-    //}
+    if( alphaBlendMode.Changed() )
+    {
+        BlendHelper::SetBlendAlphaContext( ctx, static_cast< const ParamEnum< BlendHelper::BlendMode > *>( &colorBlendMode.GetParameter() ) );
+        contextUpdateNeeded = true;
+    }
 
 
     if( contextUpdateNeeded )
     {
         HelperPixelShaderChannel::SetRendererContextUpdate( psc );
     }
+}
+
+// ***********************
+//
+BlendHelper::BlendMode          BlendHelper::ContextToColorBlendMode        ( RendererContextConstPtr& ctx )
+{
+    if(     ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_DST_COLOR &&
+            ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ZERO )
+    {
+        return BlendHelper::BlendMode::BM_Multiply;
+    }
+    else if(    ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_ONE &&
+                ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ONE )
+    {
+        return BlendHelper::BlendMode::BM_Add;
+    }
+    else if(    ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_ONE &&
+                ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ZERO )
+    {
+        return BlendHelper::BlendMode::BM_None;
+    }
+    else if(    ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_ONE &&
+                ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA )
+    {
+        return BlendHelper::BlendMode::BM_Normal;
+    }
+    else if(    ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA &&
+                ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA )
+    {
+        return BlendHelper::BlendMode::BM_Alpha;
+    }
+    else if(    ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_CONSTANT_COLOR &&
+                ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_CONSTANT_COLOR &&
+                ctx->alphaCtx->blendColor.r == 0.5f &&
+                ctx->alphaCtx->blendColor.g == 0.5f &&
+                ctx->alphaCtx->blendColor.b == 0.5f )
+    {
+        return BlendHelper::BlendMode::BM_Average;
+    }
+
+    return BlendHelper::BlendMode::BM_Total;
+}
+
+// ***********************
+//
+BlendHelper::BlendMode          BlendHelper::ContextToAlphaBlendMode        ( RendererContextConstPtr& ctx )
+{
+    if( ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_DST_ALPHA &&
+        ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ZERO )
+    {
+        return BlendHelper::BlendMode::BM_Multiply;
+    }
+    else if( ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_ONE &&
+        ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ONE )
+    {
+        return BlendHelper::BlendMode::BM_Add;
+    }
+    else if( ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_ONE &&
+        ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ZERO )
+    {
+        return BlendHelper::BlendMode::BM_None;
+    }
+    else if( ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_ONE &&
+        ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA )
+    {
+        return BlendHelper::BlendMode::BM_Normal;
+    }
+    else if( ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA &&
+        ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA )
+    {
+        return BlendHelper::BlendMode::BM_Alpha;
+    }
+    else if( ctx->alphaCtx->srcRGBBlendMode == model::AlphaContext::SrcBlendMode::SBM_CONSTANT_ALPHA &&
+        ctx->alphaCtx->dstRGBBlendMode == model::AlphaContext::DstBlendMode::DBM_CONSTANT_ALPHA &&
+        ctx->alphaCtx->blendColor.a == 0.5f )
+    {
+        return BlendHelper::BlendMode::BM_Average;
+    }
+
+    return BlendHelper::BlendMode::BM_Total;
 }
 
 
