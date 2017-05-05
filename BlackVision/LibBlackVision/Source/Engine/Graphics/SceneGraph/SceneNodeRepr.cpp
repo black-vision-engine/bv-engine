@@ -208,7 +208,8 @@ void            SceneNodeRepr::Update               ( const Transform & parentTr
 
     for ( auto node : m_sceneNodes )
     {
-        node->Update( worldTransform );
+        if( node->IsVisible() )
+            node->Update( worldTransform );
     }
 }
 

@@ -30,7 +30,12 @@ class Cloner;
 DEFINE_PTR_TYPE( Cloner );
 DEFINE_CONST_PTR_TYPE( Cloner );
 
-
+enum class ClonerPlaneType
+{
+    CPT_XY = 0,
+    CPT_XZ,
+    CPT_YZ
+};
 
 class Cloner : public model::NodeLogicBase, public std::enable_shared_from_this< Cloner >
 {
@@ -39,7 +44,9 @@ private:
 
     struct ACTION
     {
-        //static const std::string    ACTION_NAME;
+        static const std::string    REGENERATE;
+        static const std::string    REMOVE_ONLY_EXCESS;
+        static const std::string    REMOVE_ALL_CLONES;
     };
 
     struct PARAMETERS
@@ -47,14 +54,23 @@ private:
         static const std::string    N_ROWS;
         static const std::string    N_COLS;
         static const std::string    DELTA;
+        static const std::string    RENAME_SUBTREE;
+        static const std::string    REMOVE_EXCESS;
+        static const std::string    PLANE_TYPE;
     };
 
 private:
-    bv::model::BasicNodeWeakPtr			m_parentNode;
+    bv::model::BasicNodeWeakPtr			        m_parentNode;
 
-    model::ValueParamState< Int32 >     m_numRows;
-    model::ValueParamState< Int32 >     m_numCols;
-    model::ValueParamState< glm::vec3 > m_delta;
+    model::ValueParamState< Int32 >             m_numRows;
+    model::ValueParamState< Int32 >             m_numCols;
+    model::ValueParamState< glm::vec3 >         m_delta;
+    model::ValueParamState< bool >              m_renameSubtree;
+    model::ValueParamState< bool >              m_removeExcees;
+    model::ValueParamState< ClonerPlaneType >   m_planeType;
+
+    bool                                        m_updateClonesNeeded; 
+    bool                                        m_updatePositionsNeeded;    
 
 public:
     explicit    Cloner			( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
@@ -80,6 +96,11 @@ private:
     void                    UpdatePositions         ();
 
     void                    CloneNode               ( UInt32 clonesNum ) const;
+
+    glm::vec3               Transform2Plane         ( const glm::vec3 & v, ClonerPlaneType plane ) const;
+    void                    RemoveClones            ();
+    void                    RemoveExcessNodes       ();
+    void                    Regenerate              ();
 };
 
 

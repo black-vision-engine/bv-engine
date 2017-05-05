@@ -367,9 +367,18 @@ IPluginPtr							BasePlugin::GetPrevPlugin                  ()
 
 // *******************************
 //
-void								BasePlugin::SetPrevPlugin                  ( IPluginPtr plugin )
+bool								BasePlugin::SetPrevPlugin                  ( IPluginPtr plugin )
 {
-    m_prevPlugin = plugin;
+    if( plugin && plugin->GetName() == "EXPERT" )
+    {
+        assert( !"EXPERT plugin must be the last one, before Finaline plugin." );
+        return false;
+    }
+    else
+    {
+        m_prevPlugin = plugin;
+        return true;
+    }        
 }
 
 
@@ -507,7 +516,7 @@ ITimeEvaluatorPtr GetTimeline                                               ( co
 
 // *******************************
 //
-std::vector< LAsset >    BasePlugin::GetLAssets                   () const
+std::vector< LAsset >               BasePlugin::GetLAssets                  () const
 {
     return m_assets;
 }

@@ -24,10 +24,11 @@ namespace bv { namespace model {
 
 class BasePlugin : public IPlugin, public ISerializable
 {
-protected:
+private:
 
-    ///////////////// Previous plugin ///////////
     IPluginPtr                                  m_prevPlugin;
+
+protected:
 
     UInt32										m_id;
 
@@ -93,7 +94,7 @@ public:
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
     virtual IPluginPtr							GetPrevPlugin               () override;
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 

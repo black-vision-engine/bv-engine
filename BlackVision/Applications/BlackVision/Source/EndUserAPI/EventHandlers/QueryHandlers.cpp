@@ -5,7 +5,7 @@
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
 #include "Tools/IncludeJSON.h"
-#include "PerformanceMonitor.h"
+#include "Statistics/PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Events/EventHandlerHelpers.h"

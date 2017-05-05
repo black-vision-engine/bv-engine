@@ -95,10 +95,15 @@ DefaultEnvironmentTexturePlugin::~DefaultEnvironmentTexturePlugin()
 
 // *************************************
 // 
-void DefaultEnvironmentTexturePlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultEnvironmentTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+        return true;
+    }
+    else 
+        return false;
 }
 
 // *************************************
@@ -113,7 +118,7 @@ IPixelShaderChannelPtr              DefaultEnvironmentTexturePlugin::GetPixelSha
 void                                DefaultEnvironmentTexturePlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
-    HelperPixelShaderChannel::PropagateUpdate( m_pixelShaderChannel, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_pixelShaderChannel, GetPrevPlugin() );
     m_pixelShaderChannel->PostUpdate();
 }
 

@@ -143,16 +143,25 @@ bool                    DefaultPluginListFinalized::AttachPlugin        ( IPlugi
         idx = ( UInt32 )( m_plugins.size() - 1 );
     }
 
-    for( UInt32 i = idx; i < m_plugins.size(); ++i )
+    bool noError = true;
+
+    for( UInt32 i = idx; i < m_plugins.size() && noError; ++i )
     {
         if( i == 0 )
         {
-            m_plugins[ i ]->SetPrevPlugin( nullptr );
+            noError = noError && m_plugins[ i ]->SetPrevPlugin( nullptr );
         }
         else
         {
-            m_plugins[ i ]->SetPrevPlugin( m_plugins[ i - 1 ] );
+            noError = noError && m_plugins[ i ]->SetPrevPlugin( m_plugins[ i - 1 ] );
         }
+    }
+
+    if( !noError )
+    {
+        m_plugins.erase( m_plugins.begin() + idx ); // Cleaning up.
+        LOG_MESSAGE( SeverityLevel::debug ) << "Cannot attach plugin " << plugin->GetName() << " on index " << idx;
+        return false;
     }
 
     m_finalizePlugin->SetPrevPlugin( m_plugins.back() );

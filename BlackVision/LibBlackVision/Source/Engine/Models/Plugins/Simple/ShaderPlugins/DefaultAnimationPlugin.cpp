@@ -103,19 +103,23 @@ std::string             DefaultAnimationPluginDesc::TextureName               ()
 
 // ************************************************************************* PLUGIN *************************************************************************
 
-void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr prev )
+bool								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    InitVertexAttributesChannel();
-        
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-    //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        ctx->alphaCtx->blendEnabled = true;
+        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -157,7 +161,7 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 // 
 bool							DefaultAnimationPlugin::IsValid     () const
 {
-    return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -235,13 +239,13 @@ void                                DefaultAnimationPlugin::Update              
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
     }
 
-    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         InitVertexAttributesChannel();
     }
 
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -251,13 +255,13 @@ void                                DefaultAnimationPlugin::Update              
 //
 void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
     auto prevCC = prevGeomChannel->GetComponents();
     
     //Only one texture

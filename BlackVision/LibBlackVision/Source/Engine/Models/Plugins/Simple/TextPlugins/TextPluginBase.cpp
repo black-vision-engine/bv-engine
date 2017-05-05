@@ -193,21 +193,25 @@ IVertexShaderChannelConstPtr        TextPluginBase::GetVertexShaderChannel      
 
 // *********************************
 //
-void                                TextPluginBase::SetPrevPlugin               ( IPluginPtr plugin )
+bool                                TextPluginBase::SetPrevPlugin               ( IPluginPtr plugin )
 {
-    BasePlugin::SetPrevPlugin( plugin );
+    if( BasePlugin::SetPrevPlugin( plugin ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, plugin );
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, plugin );
+        auto ctx = m_psc->GetRendererContext();
 
-    auto ctx = m_psc->GetRendererContext();
-    
-	ctx->depthCtx->enabled = false;
-    ctx->cullCtx->enabled = false;
-    ctx->depthCtx->enabled = true;
-    ctx->depthCtx->writable = false;
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        ctx->depthCtx->enabled = false;
+        ctx->cullCtx->enabled = false;
+        ctx->depthCtx->enabled = true;
+        ctx->depthCtx->writable = false;
+        ctx->alphaCtx->blendEnabled = true;
+        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
