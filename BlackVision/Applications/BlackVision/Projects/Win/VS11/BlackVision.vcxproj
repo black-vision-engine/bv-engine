@@ -204,7 +204,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
@@ -222,7 +221,6 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
-    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
@@ -230,11 +228,6 @@
     <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
     <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
-    <ClCompile Include="..\..\..\Source\MockScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp" />
-    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
-    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
-    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
@@ -255,6 +248,13 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\AnotherTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\ExampleTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\MockScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestNodes.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -280,17 +280,12 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
     <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h" />
     <ClInclude Include="..\..\..\Source\RenderMode.h" />
-    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
     <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
     <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
     <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />
-    <ClInclude Include="..\..\..\Source\MockScenes.h" />
-    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
-    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
-    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
@@ -305,6 +300,11 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ExampleTestScenes.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\MockScenes.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />

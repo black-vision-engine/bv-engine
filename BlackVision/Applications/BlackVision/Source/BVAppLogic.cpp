@@ -15,7 +15,7 @@
 #include "ProjectManager.h"
 #include "VideoCardManager.h"
 
-#include "MockScenes.h"
+#include "TestingScenes/MockScenes.h"
 #include "DefaultPlugins.h"
 #include "LibEffect.h"
 
