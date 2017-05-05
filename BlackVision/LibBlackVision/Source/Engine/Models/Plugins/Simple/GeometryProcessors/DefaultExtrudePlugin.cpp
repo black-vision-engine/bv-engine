@@ -279,7 +279,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     AddSymetricalPlane( mesh, translate );
     AddSidePlanes( mesh, edges, corners );
 
-    SizeType sideContourLength = edges.size() / 2 + corners.Indicies.size() / 2;     // Number of verticies in one contour of side surface.
+    SizeType sideContourLength = ComputeContourLength( edges, corners );     // Number of verticies in one contour of side surface.
     SizeType sidePlanesOffset = 2 * m_numUniqueExtrudedVerticies;           // First free space after symetrical planes.
     SizeType curOffset = sidePlanesOffset + 2 * sideContourLength;
 
@@ -441,7 +441,7 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     int numVerticies = (int)verticies.size();
 
     int symPlaneOffset = numVerticies / 2;                  // Symmetrical plane verticies offset from beginning of vertex buffer.
-    int edgeRowLength = (int)edges.size() / 2 + (int)corners.Indicies.size();  // Number of verticies in edge row.
+    int edgeRowLength = (int)edges.size() / 2 + 3 * (int)corners.Indicies.size();  // Number of verticies in edge row.
 
     // In future we must add normals. That means we must add verticies too, bacause
     // edge is sharp and normals can't be the same.
@@ -452,10 +452,15 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     {
         verticies.push_back( verticies[ edges[ i ] ] );
     }
-    // Duplicate corner verticies
-    for( auto corner : corners.Indicies )
+
+    for( int i = 0; i < 3; ++i )
     {
-        verticies.push_back( verticies[ corner ] );
+        // Duplicate corner verticies. We need 3 times verticies more. At first we split vertex into two seperate verticies
+        // that will be moved along normal (first row). Last two rows will create corner (we need two, because we have separate normal vector).
+        for( auto corner : corners.Indicies )
+        {
+            verticies.push_back( verticies[ corner ] );
+        }
     }
 
 // Second (translated) row of verticies
@@ -463,14 +468,20 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     {
         verticies.push_back( verticies[ edges[ i ] + symPlaneOffset ] );
     }
-    // Duplicate corner verticies
-    for( auto corner : corners.Indicies )
+
+    for( int i = 0; i < 3; ++i )
     {
-        verticies.push_back( verticies[ corner + symPlaneOffset ] );
+        // Duplicate corner verticies. We need 3 times verticies more. At first we split vertex into two seperate verticies
+        // that will be moved along normal (first row). Last two rows will create corner (we need two, because we have separate normal vector).
+        for( auto corner : corners.Indicies )
+        {
+            verticies.push_back( verticies[ corner + symPlaneOffset ] );
+        }
     }
 
 
-    // Replace edges indicies.
+    // Side plane should contain only edge. We must remove what's inside of contour.
+    // This code replaces edges indicies.
     // Edges array contains closed curves. Thats mean that every index occures two times.
     // We have to replace both with new indicies, but at first we take second vertex in pair.
     for( int i = 0; i < (int)edges.size(); i += 2 )
@@ -513,6 +524,22 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
         edges[ i ] = numVerticies + i / 2;
     }
 
+    // Add edges connecting additional corner verticies.
+    for( int i = 0; i < cornerPairs.Indicies.size(); i += 2 )
+    {
+        IndexType newCornerIdx1 = ( IndexType )numVerticies + ( IndexType )corners.Indicies.size() + i;
+        IndexType newCornerIdx2 = ( IndexType )numVerticies + 2 * ( IndexType )corners.Indicies.size() + i;
+
+        edges.push_back( newCornerIdx1 );
+        edges.push_back( cornerPairs.Indicies[ i ] );
+
+        edges.push_back( newCornerIdx2 );
+        edges.push_back( cornerPairs.Indicies[ i + 1 ] );
+
+        cornerPairs.Indicies[ i ] = newCornerIdx1;
+        cornerPairs.Indicies[ i + 1 ] = newCornerIdx2;
+    }
+
     // Replace content of old vector with new created corner vector.
     corners = std::move( cornerPairs );
 }
@@ -549,7 +576,7 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
     auto & normals = normalsVec.GetVerticies();
 
     SizeType curveOffset = verticies.size();
-    int edgeRowLength = ( int )edges.size() / 2 + ( int )cornerPairs.Indicies.size() / 2;  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
+    int edgeRowLength = ( int )ComputeContourLength( edges, cornerPairs );  // Number of verticies in single edge. Note: corner vector's size is double size in comparision to previous functions.
 
     // Edges and corners are already offseted relative to first contour row.
     SizeType relativeBeginContourOffset = beginContourOffset - 2 * m_numUniqueExtrudedVerticies;
@@ -571,7 +598,11 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
         glm::vec3 n1 = normals[ idx1 ];
         glm::vec3 n2 = normals[ idx2 ];
 
-        glm::vec3 translateNormal = glm::normalize( n1 + n2 );
+        glm::vec3 translateNormal = glm::vec3( 0.0, 0.0, 0.0 );
+        glm::vec3 n1n2Sum = n1 + n2;
+        
+        if( n1n2Sum != glm::vec3( 0.0, 0.0, 0.0 ) )
+            translateNormal = glm::normalize( n1n2Sum );
 
         float cos2Alpha = glm::dot( n1, n2 );
         float cosAlpha = glm::sqrt( 0.5f * cos2Alpha + 0.5f );
@@ -704,8 +735,13 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
         glm::vec3 extrudeDir = verticies[ indices[ i + 1 ] ] - verticies[ indices[ i ] ];
 
         glm::vec3 normal = -glm::cross( edgeDir, extrudeDir );
-        if( normal != glm::vec3( 0.0, 0.0, 0.0 ) )
+        if( normal != glm::vec3( 0.0, 0.0, 0.0 ) &&
+            !glm::isnan( normal.x ) &&
+            !glm::isnan( normal.y ) &&
+            !glm::isnan( normal.z ) )
             normal = glm::normalize( normal );
+        else
+            normal = glm::vec3( 0.0, 0.0, 0.0 );
 
         normals[ indices[ i ] ] += normal;
         normals[ indices[ i + 1 ] ] += normal;
@@ -792,10 +828,13 @@ void    DefaultExtrudePlugin::CopyUVsOnSideFaces            ( std::vector< glm::
         uvs.push_back( uvs[ edges[ i ] ] );
     }
 
-    // Duplicate corner verticies
-    for( auto corner : corners )
+    for( int i = 0; i < 3; ++i )
     {
-        uvs.push_back( uvs[ corner ] );
+        // Duplicate corner verticies
+        for( auto corner : corners )
+        {
+            uvs.push_back( uvs[ corner ] );
+        }
     }
 }
 
@@ -946,6 +985,14 @@ DefaultExtrudePlugin::CornersInfo       DefaultExtrudePlugin::ExtractCorners    
 
     return corners;
 }
+
+// ***********************
+//
+SizeType                DefaultExtrudePlugin::ComputeContourLength      ( std::vector< IndexType > & edges, CornersInfo & corners )
+{
+    return edges.size() / 2 + 3 * corners.Indicies.size() / 2;
+}
+
 
 // ========================================================================= //
 // Default Processing function override

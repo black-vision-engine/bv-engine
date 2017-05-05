@@ -122,6 +122,8 @@ private:
 
 private:
 
+    SizeType        ComputeContourLength    ( std::vector< IndexType > & edges, CornersInfo & corners );
+
     void            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
     void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, CornersInfo & corners );
     void            CopyTranslate           ( IndexedGeometry & mesh, glm::vec3 translate, SizeType referenceOffset, SizeType numVerticies );
