@@ -31,22 +31,20 @@
     <Filter Include="Initialization">
       <UniqueIdentifier>{1c718d26-7c3f-4d78-a658-5b8b9c7aeed8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestingScenes">
+      <UniqueIdentifier>{36f8e27f-2473-48d4-8494-0371669cb330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Statistics">
+      <UniqueIdentifier>{a36b9588-3e14-4ed9-b93f-54eae253e0a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
-    <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
-    <ClCompile Include="..\..\..\Source\MockScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp" />
-    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
-    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
-    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -68,8 +66,6 @@
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp">
       <Filter>VideoInput</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
       <Filter>hack_videoinput</Filter>
     </ClCompile>
@@ -138,6 +134,36 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestInnerEvents.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\AnotherTestScene.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\ExampleTestScenes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\MockScenes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestNodes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestScenes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Statistics\FrameStatsService.cpp">
+      <Filter>Statistics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Statistics\PerformanceMonitor.cpp">
+      <Filter>Statistics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Statistics\StatsFormatters.cpp">
+      <Filter>Statistics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -145,14 +171,8 @@
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
-    <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
     <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
     <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
-    <ClInclude Include="..\..\..\Source\MockScenes.h" />
-    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
-    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
-    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
-    <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -177,8 +197,6 @@
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
-    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
       <Filter>hack_videoinput</Filter>
     </ClInclude>
@@ -254,10 +272,36 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h">
       <Filter>TestAI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\ExampleTestScenes.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\MockScenes.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\NewModelTestNodes.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Statistics\FrameStatsService.h">
+      <Filter>Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Statistics\PerformanceMonitor.h">
+      <Filter>Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Statistics\StatsFormatters.h">
+      <Filter>Statistics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />
-    <None Include="..\..\..\Source\FrameStatsService.inl" />
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
+    <None Include="..\..\..\Source\Statistics\FrameStatsService.inl">
+      <Filter>Statistics</Filter>
+    </None>
   </ItemGroup>
 </Project>

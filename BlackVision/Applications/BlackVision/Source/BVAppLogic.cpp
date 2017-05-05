@@ -15,7 +15,7 @@
 #include "ProjectManager.h"
 #include "VideoCardManager.h"
 
-#include "MockScenes.h"
+#include "TestingScenes/MockScenes.h"
 #include "DefaultPlugins.h"
 #include "LibEffect.h"
 
@@ -28,7 +28,7 @@
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
 //FIXME: end of remove
 
-#include "StatsFormatters.h"
+#include "Statistics/StatsFormatters.h"
 
 #include "UseLoggerBVAppModule.h"
 

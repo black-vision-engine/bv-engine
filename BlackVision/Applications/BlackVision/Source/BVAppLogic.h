@@ -12,7 +12,7 @@
 
 #include "TestAI/TestKeyboardHandler.h"
 
-#include "FrameStatsService.h"
+#include "Statistics/FrameStatsService.h"
 
 #include "EndUserAPI/RemoteController.h"
 
