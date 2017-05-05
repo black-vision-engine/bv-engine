@@ -28,7 +28,7 @@
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
 //FIXME: end of remove
 
-#include "StatsFormatters.h"
+#include "Statistics/StatsFormatters.h"
 
 #include "UseLoggerBVAppModule.h"
 

@@ -12,7 +12,7 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Application/ApplicationContext.h"
 
-#include "StatsFormatters.h"
+#include "Statistics/StatsFormatters.h"
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
