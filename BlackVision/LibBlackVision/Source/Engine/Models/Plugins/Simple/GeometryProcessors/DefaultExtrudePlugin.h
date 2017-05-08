@@ -76,6 +76,7 @@ public:
     struct CornersInfo
     {
         std::vector< IndexType >        Indicies;
+        std::vector< glm::vec3 >        Normals;
         std::vector< bool >             IsConvex;
     };
 
@@ -122,13 +123,14 @@ private:
 
 private:
 
-    SizeType        ComputeContourLength    ( std::vector< IndexType > & edges, CornersInfo & corners );
+    SizeType        ComputeContourLength    ( const std::vector< IndexType > & edges, const CornersInfo & corners ) const;
 
     void            AddSymetricalPlane      ( IndexedGeometry & mesh, glm::vec3 translate );
     void            AddSidePlanes           ( IndexedGeometry & mesh, std::vector< IndexType > & edges, CornersInfo & corners );
     void            CopyTranslate           ( IndexedGeometry & mesh, glm::vec3 translate, SizeType referenceOffset, SizeType numVerticies );
 
 
+    void            FillCornerNormals       ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, const std::vector< IndexType > & edges, const CornersInfo & corners );
     void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals );
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
@@ -182,7 +184,7 @@ private:
 
 
     std::vector< IndexType >       ExtractEdges            ( IndexedGeometry & mesh );
-    CornersInfo                    ExtractCorners          ( IndexedGeometry & mesh, const std::vector< IndexType > & edges, float angleThreshold );
+    CornersInfo                    ExtractCorners          ( IndexedGeometry & mesh, const std::vector< IndexType > & edges, float angleThreshold, glm::vec3 & extrudeDir );
 
     void            DebugPrintToFile        ( const std::string & fileName, const std::vector< glm::vec3 > & verticies, const std::vector< IndexType > & edges, const std::vector< IndexType > & corners );
     void            DebugPrint              ( std::fstream & file, glm::vec3 vertex );
