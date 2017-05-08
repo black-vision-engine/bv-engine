@@ -525,10 +525,13 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
     }
 
     // Add edges connecting additional corner verticies.
+    IndexType numEdgesVerticies = ( IndexType )edges.size() / 2;
     for( int i = 0; i < cornerPairs.Indicies.size(); i += 2 )
     {
-        IndexType newCornerIdx1 = ( IndexType )numVerticies + ( IndexType )corners.Indicies.size() + i;
-        IndexType newCornerIdx2 = ( IndexType )numVerticies + 2 * ( IndexType )corners.Indicies.size() + i;
+        IndexType idx = i / 2;
+
+        IndexType newCornerIdx1 = ( IndexType )numVerticies + numEdgesVerticies + ( IndexType )corners.Indicies.size() + idx;
+        IndexType newCornerIdx2 = ( IndexType )numVerticies + numEdgesVerticies + 2 * ( IndexType )corners.Indicies.size() + idx;
 
         edges.push_back( newCornerIdx1 );
         edges.push_back( cornerPairs.Indicies[ i ] );
@@ -990,7 +993,7 @@ DefaultExtrudePlugin::CornersInfo       DefaultExtrudePlugin::ExtractCorners    
 //
 SizeType                DefaultExtrudePlugin::ComputeContourLength      ( std::vector< IndexType > & edges, CornersInfo & corners )
 {
-    return edges.size() / 2 + 3 * corners.Indicies.size() / 2;
+    return edges.size() / 2 + corners.Indicies.size() / 2;
 }
 
 
