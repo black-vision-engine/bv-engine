@@ -20,10 +20,13 @@
 
 namespace bv { namespace model {
 
+std::string ModelNodeEffect::EFFECT_ENABLED_PARAM_NAME = "effectIsEnabled";
+
 // ********************************
 //
 namespace 
 {
+
 // ********************************
 //
 std::map< NodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
@@ -295,6 +298,19 @@ AssetDescVec                                ModelNodeEffect::GetAssets          
 UInt32                                      ModelNodeEffect::NumRequiredAssets  () const
 {
     return GetEffectNumRequiredAssets( GetType() );
+}
+
+// ********************************
+//
+bool                                        ModelNodeEffect::IsEnabled           () const
+{
+    auto p = m_paramValModel->GetParameter( EFFECT_ENABLED_PARAM_NAME );
+
+    assert( p );
+
+    auto pTyped = QueryTypedParam< ParamBoolPtr >( p );
+
+    return pTyped->Evaluate();
 }
 
 } // model

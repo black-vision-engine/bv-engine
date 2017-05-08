@@ -173,9 +173,16 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
         if( sceneNodeEffect )
         {
-            for( auto & val : nodeEffect->GetValues() )
+            if( nodeEffect->IsEnabled() )
             {
-                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+                m_sceneNode->EnableNodeEffect();
+
+                for( auto & val : nodeEffect->GetValues() )
+                    UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+            }
+            else
+            {
+                m_sceneNode->DisableNodeEffect();
             }
         }
         else
