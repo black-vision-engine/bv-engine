@@ -72,6 +72,8 @@ void                NodeVisibility::Serialize  ( ISerializer & ser ) const
 //
 void                NodeVisibility::Update          ( TimeType )
 {
+    m_paramValModel->Update();
+
     if( m_isVisibleValParamState.Changed() )
         m_isVisible = m_isVisibleValParamState.GetValue();
 }

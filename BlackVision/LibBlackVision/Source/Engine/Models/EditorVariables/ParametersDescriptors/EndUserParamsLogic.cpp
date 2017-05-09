@@ -33,6 +33,7 @@ EndUserParamsLogic::EndUserParamsLogic  ( model::SceneModel * owner )
     ,   m_lightDescs( owner )
     ,   m_logicDescs( owner )
     ,   m_pluginDescs( owner )
+    ,   m_nodeDescs( owner )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &EndUserParamsLogic::EffectAdded ), NodeEffectAddedEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &EndUserParamsLogic::EffectRemoved ), NodeEffectRemovedEvent::Type() );
@@ -90,6 +91,8 @@ bool            EndUserParamsLogic::AddDescriptor   ( ParameterAddress && param,
             return m_logicDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         case ParameterAddress::TargetType::CameraParam:
             return m_cameraDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
+        case ParameterAddress::TargetType::NodeParam:
+            return m_nodeDescs.AddDescriptor( std::move( param ), std::move( descriptor ) );
         default:
             return false;
     }
@@ -113,6 +116,8 @@ bool            EndUserParamsLogic::RemoveDescriptor    ( const ParameterAddress
             return m_logicDescs.RemoveDescriptor( param );
         case ParameterAddress::TargetType::CameraParam:
             return m_cameraDescs.RemoveDescriptor( param );
+        case ParameterAddress::TargetType::NodeParam:
+            return m_nodeDescs.RemoveDescriptor( param );
         default:
             return false;
     }
@@ -136,6 +141,8 @@ EndUserParamDescriptor *      EndUserParamsLogic::GetDescriptor   ( const Parame
             return m_logicDescs.GetDescriptor( param );
         case ParameterAddress::TargetType::CameraParam:
             return m_cameraDescs.GetDescriptor( param );
+        case ParameterAddress::TargetType::NodeParam:
+            return m_nodeDescs.GetDescriptor( param );
     }
 
     return nullptr;

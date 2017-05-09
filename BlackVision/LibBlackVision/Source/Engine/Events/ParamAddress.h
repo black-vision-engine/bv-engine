@@ -23,6 +23,7 @@ public:
         LightParam,
         NodeLogicParam,
         CameraParam,
+        NodeParam,
         FailTarget      ///< Wrong target type
     } TargetType;
 

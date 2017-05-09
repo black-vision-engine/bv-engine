@@ -131,6 +131,10 @@ template<>
 inline ParameterAddress::TargetType                    GetParamTargetType< model::IModelNodeEffectPtr > ()
 {    return ParameterAddress::TargetType::GlobalEffectParam;    }
 
+template<>
+inline ParameterAddress::TargetType                    GetParamTargetType< model::IModelNodePtr > ()
+{    return ParameterAddress::TargetType::NodeParam;   }
+
 // ***********************
 //
 template< typename ParamContainerTypePtr >
@@ -180,7 +184,11 @@ template<>
 inline model::IModelNodeEffectPtr      GetParamContainer< model::IModelNodeEffectPtr > ( model::SceneModel * /*owner*/, model::BasicNodePtr & node, const ParameterAddress & /*param*/ )
 {    return node->GetNodeEffect();  }
 
-
+// ***********************
+//
+template<>
+inline model::IModelNodePtr             GetParamContainer< model::IModelNodePtr > ( model::SceneModel * /*owner*/, model::BasicNodePtr & node, const ParameterAddress & /*param*/ )
+{   return node;    }
 
 // ***********************
 //

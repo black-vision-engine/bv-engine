@@ -67,6 +67,8 @@ ParameterPtr    GetParameter            ( BVProjectEditor * editor, const Parame
             return GetNodeLogicParameter( editor, paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
         case ParameterAddress::TargetType::CameraParam:
             return GetCameraParameter( editor, paramAddress.SceneName, paramAddress.Index, paramAddress.ParamName );
+        case ParameterAddress::TargetType::NodeParam:
+            return GetNodeParameter( editor, paramAddress.SceneName, paramAddress.NodeName, paramAddress.ParamName );
         default:
             return nullptr;
     }
@@ -90,6 +92,8 @@ ParameterPtr    GetParameter                ( model::SceneModel * scene, const P
             return GetNodeLogicParameter( scene, paramAddress.NodeName, paramAddress.ParamName );
         case ParameterAddress::TargetType::CameraParam:
             return GetCameraParameter( scene, paramAddress.Index, paramAddress.ParamName );
+        case ParameterAddress::TargetType::NodeParam:
+            return GetNodeParameter( scene, paramAddress.NodeName, paramAddress.ParamName );
         default:
             return nullptr;
     }
@@ -317,6 +321,39 @@ ParameterPtr    GetCameraParameter          ( model::SceneModel * scene, UInt32 
 	}
 
     return nullptr;
+}
+
+
+// ***********************
+//
+ParameterPtr    GetNodeParameter        ( model::SceneModel * scene, const std::string & nodePath, const std::string & paramName )
+{
+    if( scene != nullptr )
+    {
+        auto node = scene->GetModelSceneEditor()->GetNode( nodePath );
+        if( node != nullptr )
+        {
+            auto param = node->GetVisibleParameter();
+            if( param )
+                return param;
+        }
+
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], node [" + nodePath + "],  param [" + paramName + "] not found";
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Scene: Cannot find scene.";
+    }
+
+    return nullptr;
+}
+
+// ***********************
+//
+ParameterPtr    GetNodeParameter          ( BVProjectEditor * editor, const std::string & sceneName, const std::string & nodePath, const std::string & paramName )
+{
+    auto scene = editor->GetModelScene( sceneName );
+    return GetNodeParameter( scene.get(), nodePath, paramName );
 }
 
 } //bv

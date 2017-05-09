@@ -126,7 +126,7 @@ public:
 
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
-    IParameterPtr                           GetVisibleParameter     ();
+    virtual IParameterPtr                   GetVisibleParameter     () override;
 
 public:
 

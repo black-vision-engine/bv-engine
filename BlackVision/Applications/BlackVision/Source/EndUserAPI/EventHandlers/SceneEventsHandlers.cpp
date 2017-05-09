@@ -159,6 +159,8 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
             UInt32 addIdx = 0;
             editor->AddPlugin( addedChild, plugin, addIdx );
+
+            addedChild->GetVisibleParameter()->SetTimeEvaluator( timeline );
         }
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
