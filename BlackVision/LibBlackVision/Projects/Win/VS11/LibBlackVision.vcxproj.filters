@@ -1957,6 +1957,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeVisibility.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5164,6 +5167,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeVisibility.h">
+      <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

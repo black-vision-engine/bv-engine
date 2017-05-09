@@ -11,6 +11,9 @@
 
 namespace bv { namespace model {
 
+class DefaultParamValModel;
+DEFINE_PTR_TYPE( DefaultParamValModel )
+
 class DefaultParamValModel : public IParamValModel
 {
 private:
@@ -56,9 +59,8 @@ public:
 
     const std::vector< bv::IValuePtr > &                GetValuesNC     () const;
 
+    static DefaultParamValModelPtr                      Create          ();
 };
-
-DEFINE_PTR_TYPE(DefaultParamValModel)
 
 } //model
 } //bv
