@@ -14,6 +14,8 @@
 
 #include "Engine/Models/ModelNodeEditor.h"
 
+#include "NodeVisibility.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/SceneModel.h"
 
@@ -72,7 +74,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const Plugins
     : m_name( name )
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
-    , m_visible( true )
+    , m_visible( std::make_shared< NodeVisibility >() )
     , m_modelNodeEditor ( new ModelNodeEditor( this ) )
     , m_modelNodeEffect( nullptr )
 {
@@ -119,7 +121,7 @@ void                            BasicNode::Serialize               ( ISerializer
     ser.SetAttribute( "name", GetName() );
 
     if( context->detailedInfo )
-        ser.SetAttribute( "visible", m_visible ? "true" : "false" );
+        m_visible->Serialize( ser );
 
     //if( context->detailedInfo )
     //{
@@ -177,7 +179,7 @@ BasicNodePtr BasicNode::Create( const IDeserializer& deser )
     //auto node = Create( name, nullptr );
     auto node = BasicNode::Create( name, nullptr );
 
-    node->m_visible = deser.GetAttribute( "visible" ) == "false" ? false : true;
+    node->m_visible = NodeVisibility::CreateTyped( deser );
 
 // plugins
     deserContext->ClearRendererContextes();
@@ -681,6 +683,8 @@ void            BasicNode::RemoveLogic              ()
 //
 void BasicNode::Update( TimeType t )
 {
+    m_visible->Update( t );
+
     if( IsVisible() )
     {
         if( m_nodeLogic )
@@ -757,14 +761,21 @@ mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
 //
 bool  BasicNode::IsVisible               () const
 {
-    return m_visible;
+    return m_visible->IsVisible();
 }
 
 // ********************************
 //
 void  BasicNode::SetVisible              ( bool visible )
 {
-    m_visible = visible;
+    m_visible->SetVisible( visible );
+}
+
+// ********************************
+//
+IParameterPtr BasicNode::GetVisibleParameter     ()
+{
+    return m_visible->GetVisibleParameter();
 }
 
 // ********************************

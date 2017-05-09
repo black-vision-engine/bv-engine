@@ -28,11 +28,11 @@ struct ValueParamState
 	const static ParamType PT = Value2ParamTypeTrait< T >::ParamT;
 
 	typedef typename ValueT< T >::Type																			VType;
-	typedef SimpleParameterImpl< CompositeInterpolator< TimeType,
+	typedef typename SimpleParameterImpl< CompositeInterpolator< TimeType,
 		typename Type2InterpolatorType< T >::Type >,
 		typename Type2InterpolatorType< T >::Type,
 		ParamType2ModelParamType< PT >::MPT >	PType;
-	typedef SimpleState< T >																					SType;
+	typedef typename SimpleState< T >																		    SType;
 
 	const VType *				valuePtr;
 	const PType *				paramPtr;

@@ -5,11 +5,15 @@
 namespace bv { namespace model
 {
 
+namespace
+{
+static std::string NODE_VISIBILITY_PARAM_NAME = "isVisible";
+}
+
 // ***********************
 //
 NodeVisibility::NodeVisibility  ()
     : m_paramValModel( nullptr )
-    , m_hasMoreThanOneKey( false )
 {
     InitializeVisibleParam();
 }
@@ -23,38 +27,14 @@ NodeVisibility::~NodeVisibility ()
 //
 void                NodeVisibility::SetVisible     ( bool visible )
 {
-    m_visibleParam->SetVal( visible, 0.f );
+    m_isVisible = visible;
 }
 
 // ***********************
 //
 bool                NodeVisibility::IsVisible       () const
 {
-    if( m_hasMoreThanOneKey )
-        return m_visibleParam->Evaluate();
-    else
-        return m_isVisible;
-}
-
-// ***********************
-//
-void                NodeVisibility::AddKey          ( bool val, TimeType t )
-{
-    m_visibleParam->SetVal( val, t );
-
-    m_hasMoreThanOneKey = m_visibleParam->GetNumKeys() > 1;
-
-    m_isVisible = m_visibleParam->Evaluate();
-}
-
-// ***********************
-//
-void                NodeVisibility::RemoveKey       ( TimeType t )
-{
-    m_visibleParam->RemoveVal( t );
-
-    m_hasMoreThanOneKey = m_visibleParam->GetNumKeys() > 1;
-    m_isVisible = m_visibleParam->Evaluate();
+    return m_isVisible;
 }
 
 // ***********************
@@ -63,9 +43,16 @@ void                NodeVisibility::InitializeVisibleParam  ()
 {
     m_paramValModel = DefaultParamValModel::Create();
 
-    m_visibleParam = ParametersFactory::CreateParameterBool( "isVisible", nullptr );
+    m_paramValModel->AddParameter( ParametersFactory::CreateParameterBool( NODE_VISIBILITY_PARAM_NAME, nullptr ) );
 
-    m_paramValModel->AddParameter( m_visibleParam );
+    m_isVisibleValParamState = model::GetValueParamState< bool >( m_paramValModel.get(), NODE_VISIBILITY_PARAM_NAME );
+}
+
+// ***********************
+//
+IParameterPtr       NodeVisibility::GetVisibleParameter     ()
+{
+    return m_paramValModel->GetParameter( NODE_VISIBILITY_PARAM_NAME );
 }
 
 // ***********************
@@ -74,7 +61,7 @@ void                NodeVisibility::Serialize  ( ISerializer & ser ) const
 {
     ser.EnterChild( "NodeVisibility" );
 
-    ser.SetAttribute( "isVisible", SerializationHelper::T2String( m_isVisible ) );
+    ser.SetAttribute( NODE_VISIBILITY_PARAM_NAME, SerializationHelper::T2String( m_isVisible ) );
 
     m_paramValModel->Serialize( ser );
 
@@ -83,13 +70,28 @@ void                NodeVisibility::Serialize  ( ISerializer & ser ) const
 
 // ***********************
 //
+void                NodeVisibility::Update          ( TimeType )
+{
+    if( m_isVisibleValParamState.Changed() )
+        m_isVisible = m_isVisibleValParamState.GetValue();
+}
+
+// ***********************
+//
 ISerializablePtr    NodeVisibility::Create      ( const IDeserializer & deser )
+{
+    return CreateTyped( deser );
+}
+
+// ***********************
+//
+NodeVisibilityPtr   NodeVisibility::CreateTyped ( const IDeserializer & deser )
 {
     if( deser.EnterChild( "NodeVisibility" ) )
     {
         auto ret = std::make_shared< NodeVisibility >();
 
-        ret->m_isVisible = SerializationHelper::String2T< bool >( deser.GetAttribute( "isVisible" ) );
+        ret->m_isVisible = SerializationHelper::String2T< bool >( deser.GetAttribute( NODE_VISIBILITY_PARAM_NAME ) );
 
         auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
         for( auto param : params )
