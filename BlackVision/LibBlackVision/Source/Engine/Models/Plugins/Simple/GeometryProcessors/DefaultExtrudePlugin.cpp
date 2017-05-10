@@ -515,12 +515,12 @@ void    DefaultExtrudePlugin::AddSidePlanes           ( IndexedGeometry & mesh, 
                 int cornerIdx = 2 * k + 1;
                 cornerPairs.Indicies[ cornerIdx ] = edges[ i + 1 ];
                 cornerPairs.IsConvex[ cornerIdx ] = corners.IsConvex[ k ];
-                cornerPairs.Normals[ cornerIdx ] = corners.Normals[ k ];
+                cornerPairs.Normals[ cornerIdx ] = corners.Normals[ 2 * k ];        // Note: every corner has two normals.
                 
                 cornerIdx = 2 * k;
                 cornerPairs.Indicies[ cornerIdx ] = numVerticies + j / 2;
                 cornerPairs.IsConvex[ cornerIdx ] = corners.IsConvex[ k ];
-                cornerPairs.Normals[ cornerIdx ] = corners.Normals[ k + 1 ];
+                cornerPairs.Normals[ cornerIdx ] = corners.Normals[ 2 * k + 1 ];    // Note: every corner has two normals.
             }
         }
     }
@@ -1068,11 +1068,11 @@ DefaultExtrudePlugin::CornersInfo       DefaultExtrudePlugin::ExtractCorners    
         {
             corners.Indicies.push_back( iter->first );
 
-            glm::vec3 edge1Normal = -glm::cross( edge1, extrudeDir );
-            glm::vec3 edge2Normal = -glm::cross( edge2, extrudeDir );
+            glm::vec3 edge1Normal = glm::normalize( -glm::cross( -edge1, extrudeDir ) );
+            glm::vec3 edge2Normal = glm::normalize( -glm::cross( edge2, extrudeDir ) );
             
-            corners.Normals.push_back( edge1Normal );
             corners.Normals.push_back( edge2Normal );
+            corners.Normals.push_back( edge1Normal );
 
             if( glm::cross( edge1, edge2 ).z >= 0 )
             {
