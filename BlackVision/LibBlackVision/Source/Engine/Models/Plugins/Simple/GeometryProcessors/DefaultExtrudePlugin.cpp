@@ -799,23 +799,35 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
 
     if( fillCorners )
     {
-        //// Fill corner normals. Copy normals from adjacent verticies.
-        //cornersOffset = 2 * m_numExtrudedVerticies + 3 * ( edges.size() - 2 * cornerPairs.Indicies.size() );
-        //SizeType endCornersOffset = 2 * m_numExtrudedVerticies + numEdgeRowIndicies;
+        // Fill corner normals. Copy normals from adjacent verticies.
+        cornersOffset = 2 * m_numExtrudedVerticies + 3 * ( edges.size() - 2 * cornerPairs.Indicies.size() );
+        SizeType endCornersOffset = 2 * m_numExtrudedVerticies + numEdgeRowIndicies;
+        SizeType cornerIdx = 0;
 
-        //for( SizeType i = cornersOffset; i < indices.size(); i += 6 )
-        //{
-        //    // Ignore everything what isn't corner.
-        //    if( i == endCornersOffset )
-        //    {
-        //        endCornersOffset += numEdgeRowIndicies;
-        //        i += numEdgeRowIndicies - 6;
-        //        continue;
-        //    }
+        for( SizeType i = cornersOffset; i < indices.size(); i += 6 )
+        {
+            // Ignore everything what isn't corner.
+            if( i == endCornersOffset )
+            {
+                endCornersOffset += numEdgeRowIndicies;
+                i += numEdgeRowIndicies - 6;
+                cornerIdx = 0;
+                continue;
+            }
 
-        //    normals[ indices[ i + 2 ] ] = normals[ indices[ i ] ];
-        //    normals[ indices[ i + 4 ] ] = normals[ indices[ i + 1 ] ];
-        //}
+            // Find out which vertex is corner-vertex.
+            if( indices[ i + 2 ] == cornerPairs.Indicies[ cornerIdx ] )
+            {
+                normals[ indices[ i + 2 ] ] = normals[ indices[ i ] ];
+                normals[ indices[ i + 4 ] ] = normals[ indices[ i + 1 ] ];
+            }
+            else
+            {
+                normals[ indices[ i ] ] = normals[ indices[ i + 2 ] ];
+                normals[ indices[ i + 1 ] ] = normals[ indices[ i + 4 ] ];
+            }
+            cornerIdx++;
+        }
     }
 }
 
