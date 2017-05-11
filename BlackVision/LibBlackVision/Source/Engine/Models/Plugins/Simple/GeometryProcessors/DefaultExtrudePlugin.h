@@ -131,7 +131,7 @@ private:
 
 
     void            FillCornerNormals       ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, const std::vector< IndexType > & edges, const CornersInfo & corners );
-    void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, const std::vector< IndexType > & edges, const CornersInfo & corners );
+    void            FillWithNormals         ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, const std::vector< IndexType > & edges, const CornersInfo & corners, bool fillCorners = false );
     void            DefaultNormals          ( IndexedGeometry & mesh, std::vector< glm::vec3 > & normals, bool useExisting );
     void            ClampNormVecToDefaults  ( IndexedGeometry & normals );
 
