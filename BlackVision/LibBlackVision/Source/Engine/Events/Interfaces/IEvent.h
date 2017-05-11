@@ -43,4 +43,11 @@ public:
 
 typedef fastdelegate::FastDelegate1<IEventPtr>  EventListenerDelegate;
 
+template< class EventTyped >
+std::shared_ptr< EventTyped > QueryTypedEvent( IEventPtr evt )
+{
+    assert( EventTyped::Type() == evt->GetEventType() );
+    return std::static_pointer_cast< EventTyped >( evt );
+}
+
 }
