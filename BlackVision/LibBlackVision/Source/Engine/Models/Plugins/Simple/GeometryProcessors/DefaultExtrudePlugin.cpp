@@ -240,6 +240,9 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         return;
     }
 
+    if( mesh.GetVerticies().size() == 0 )
+        return;
+
     m_numUniqueExtrudedVerticies = ( int )mesh.GetVerticies().size();
     m_numExtrudedVerticies = ( int )mesh.GetIndicies().size();
 
@@ -743,27 +746,30 @@ void    DefaultExtrudePlugin::FillCornerNormals     ( IndexedGeometry & mesh, st
 //
 void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
                                                         std::vector< glm::vec3 > & normals,
-                                                        const std::vector< IndexType > & /*edges*/,
-                                                        const CornersInfo & /*corners*/ )
+                                                        const std::vector< IndexType > & edges,
+                                                        const CornersInfo & cornerPairs )
 {
     auto & indices = mesh.GetIndicies();
     auto & verticies = mesh.GetVerticies();
 
     normals.resize( verticies.size(), glm::vec3( 0.0, 0.0, 0.0 ) );
 
-    //SizeType numEdgeRowIndicies = 6 * ComputeContourLength( edges, corners );
-    //SizeType cornersOffset = 2 * m_numExtrudedVerticies + 6 * ( ComputeContourLength( edges, corners ) - corners.Indicies.size() / 2 );
+    { cornerPairs;  }
+    { edges;  }
+
+    SizeType numEdgeRowIndicies = 6 * edges.size();
+    SizeType cornersOffset = 2 * m_numExtrudedVerticies + 3 * ( edges.size() - 2 * cornerPairs.Indicies.size() );
 
 
     for( int i = 2 * m_numExtrudedVerticies; i < (int)indices.size(); i += 6 )
     {
-        //if( i == cornersOffset )
-        //{
-        //    // Ignore corners. They will introduce artifakts.
-        //    i += 6 * ( int )corners.Indicies.size();
-        //    cornersOffset += numEdgeRowIndicies;
-        //    continue;
-        //}
+        if( i == cornersOffset )
+        {
+            // Ignore corners. They will introduce artifakts.
+            i += 6 * ( int )cornerPairs.Indicies.size() - 6;
+            cornersOffset += numEdgeRowIndicies;
+            continue;
+        }
 
         glm::vec3 edgeDir = verticies[ indices[ i + 2 ] ] - verticies[ indices[ i ] ];
         glm::vec3 extrudeDir = verticies[ indices[ i + 1 ] ] - verticies[ indices[ i ] ];
@@ -782,6 +788,26 @@ void    DefaultExtrudePlugin::FillWithNormals         ( IndexedGeometry & mesh,
         normals[ indices[ i + 2 ] ] += normal;
         normals[ indices[ i + 4 ] ] += normal;
     }
+
+
+    //// Fill remaining contours with normals copied from first contour.
+    //SizeType edgeRowLength = ComputeContourLength( edges, cornerPairs );
+    //SizeType numContours = ( verticies.size() - 2 * m_numUniqueExtrudedVerticies ) / edgeRowLength;
+
+    //for( int i = 1; i < numContours; ++i )
+    //{
+    //    for( int j = 0; j < cornerPairs.Indicies.size(); j += 2 )
+    //    {
+    //        //SizeType idx1 = cornerPairs.Normals[ j ];
+    //        //SizeType idx2 = cornerPairs.Normals[ j + 1 ];
+
+    //        SizeType idx3 = i * edgeRowLength + cornerPairs.Indicies[ j ];
+    //        SizeType idx4 = i * edgeRowLength + cornerPairs.Indicies[ j + 1 ];
+
+    //        normals[ idx3 ] = cornerPairs.Normals[ j ];
+    //        normals[ idx4 ] = cornerPairs.Normals[ j + 1 ];
+    //    }
+    //}
 
     for( auto & norm : normals )
     {
