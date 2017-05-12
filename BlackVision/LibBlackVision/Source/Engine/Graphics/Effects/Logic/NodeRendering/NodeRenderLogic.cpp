@@ -147,8 +147,9 @@ void     NodeRenderLogic::RenderImpl      ( SceneNode * node, RenderContext * ct
     }
     else 
     {
+        NodeRenderLogic::RenderRoot( node->GetRepr(), ctx );
         // FIXME: nrl - transition implementations
-        assert( false );
+        // assert( false );
     }
 }
 

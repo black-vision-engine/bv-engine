@@ -37,6 +37,8 @@ public:
     
     virtual const std::vector< IValueConstPtr > &   GetValues               () const = 0;
 
+    virtual bool                                    IsEnabled               () const = 0;
+
 };
 
 DEFINE_PTR_TYPE(IModelNodeEffect)
