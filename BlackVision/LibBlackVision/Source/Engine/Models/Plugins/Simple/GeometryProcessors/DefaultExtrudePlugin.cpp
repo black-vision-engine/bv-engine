@@ -154,6 +154,9 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 //
 // Check parameters values and set preconditions.
 
+    if( glm::length( translate ) < std::numeric_limits< float >::epsilon() )
+        return;
+
     // Check tesselation. 
     if( m_tesselation <= 0 )
         m_tesselation = 1;
