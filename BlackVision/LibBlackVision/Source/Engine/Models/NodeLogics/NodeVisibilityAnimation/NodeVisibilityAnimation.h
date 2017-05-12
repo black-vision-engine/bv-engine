@@ -62,7 +62,7 @@ public:
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
-    static NodeVisibilityAnimationPtr			Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode );
+    static NodeVisibilityAnimationPtr	Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
 

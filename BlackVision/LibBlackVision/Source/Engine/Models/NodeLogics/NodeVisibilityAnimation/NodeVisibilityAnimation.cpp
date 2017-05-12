@@ -237,7 +237,21 @@ bool                        NodeVisibilityAnimation::RegisterNodeVisibilityParam
         
         if( node )
         {
-            model::ModelHelper h( m_defaultTimeEvaluator );
+            // do not register scene root node
+            if( node == modelScene->GetRootNode() )
+                return false;
+
+            // do not register if already registered.
+            for( auto & pn : m_paramNodes )
+            {
+                if( pn.second.lock() == node )
+                    return false;
+            }
+
+            auto plParamValModel = std::make_shared< model::DefaultPluginParamValModel >( m_defaultTimeEvaluator );
+            plParamValModel->SetPluginModel( m_paramValModel );
+
+            model::ModelHelper h( m_defaultTimeEvaluator, plParamValModel );
             h.SetOrCreatePluginModel();
 
             auto paramName = NODE_VISIBILITY_PARAM_NAME_PREFIX + nodePath;
