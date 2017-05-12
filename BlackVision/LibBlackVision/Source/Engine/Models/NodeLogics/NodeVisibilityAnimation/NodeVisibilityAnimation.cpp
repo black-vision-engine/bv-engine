@@ -182,20 +182,7 @@ void                        NodeVisibilityAnimation::NodeRemovedHandler  ( IEven
     {
         auto typedEvent = QueryTypedEvent< NodeRemovedEvent >( evt );
         
-        std::string paramName = "";
-
-        for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); ++it )
-        {
-            auto node = ( *it ).second.lock();
-            if( node == typedEvent->RemovedNode )
-            {
-                paramName = ( *it ).first.GetParameter().GetName();
-                it = m_paramNodes.erase( it );
-            }
-        }
-        
-        if( !paramName.empty() )
-            m_paramValModel->RemoveParamVal( paramName );
+        RemoveNodeParam( typedEvent->RemovedNode );
     }
 }
 
@@ -223,6 +210,29 @@ void                        NodeVisibilityAnimation::NodeMovedHandler   ( IEvent
             }
         }
     }
+}
+
+// ***********************
+//
+void                        NodeVisibilityAnimation::RemoveNodeParam         ( const model::IModelNodePtr & removedNode )
+{
+    std::string paramName = "";
+
+    for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); ++it )
+    {
+        auto node = ( *it ).second.lock();
+        if( node == removedNode )
+        {
+            paramName = ( *it ).first.GetParameter().GetName();
+            it = m_paramNodes.erase( it );
+        }
+    }
+
+    if( !paramName.empty() )
+        m_paramValModel->RemoveParamVal( paramName );
+
+    for( UInt32 i = 0; i < removedNode->GetNumChildren(); ++i )
+        RemoveNodeParam( std::static_pointer_cast< model::BasicNode >( removedNode )->GetChild( i ) );
 }
 
 // ***********************

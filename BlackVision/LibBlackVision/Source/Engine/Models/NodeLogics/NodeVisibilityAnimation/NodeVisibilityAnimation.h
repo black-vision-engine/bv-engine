@@ -70,6 +70,8 @@ private:
     void            NodeRemovedHandler      ( IEventPtr evt );
     void            NodeMovedHandler        ( IEventPtr evt );
 
+    void            RemoveNodeParam         ( const model::IModelNodePtr & node );
+
     bool            RegisterNodeVisibilityParam( const std::string & sceneName, const std::string & nodePath, BVProjectEditor * editor );
 
 };
