@@ -68,7 +68,7 @@ DefaultPluginParamValModelPtr   ExpertPluginDesc::CreateDefaultModel( ITimeEvalu
     helper.AddSimpleParam( ExpertPlugin::PARAMS::CC_CULL_ORDER, true, true, true );
     helper.AddEnumParam( ExpertPlugin::PARAMS::FILL_MODE, FillContext::Mode::M_POLYGONS, true, true );
 
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::RESET_SETTINGS, false, true, true );
+    helper.AddSimpleParam( ExpertPlugin::PARAMS::RESET_SETTINGS, true, true, true );
 
     return model;
 }
