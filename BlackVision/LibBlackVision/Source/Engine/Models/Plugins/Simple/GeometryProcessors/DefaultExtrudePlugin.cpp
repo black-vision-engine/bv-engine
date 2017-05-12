@@ -159,13 +159,13 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
 
     // Check tesselation. 
     if( m_tesselation <= 0 )
-        m_tesselation = 1;
+        m_tesselation = 0;
 
     if( frontBevelTesselation <= 0 )
-        frontBevelTesselation = 1;
+        frontBevelTesselation = 0;
 
     if( backBevelTesselation <= 0 )
-        backBevelTesselation = 1;
+        backBevelTesselation = 0;
 
     // Check curves types
     if( sideCurve >= ExtrudeCurveType::Total )
@@ -182,8 +182,8 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     {
         // We don't need bevel curves. Line is enough.
         m_bevelHeight = 0.0f;
-        frontBevelTesselation = 1;
-        backBevelTesselation = 1;
+        frontBevelTesselation = 0;
+        backBevelTesselation = 0;
 
         frontBevelCurve = BevelCurveType::Line;
         backBevelCurve = BevelCurveType::Line;
@@ -193,14 +193,14 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     if( frontBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
     {
         frontBevelCurve = BevelCurveType::Line;
-        frontBevelTesselation = 1;
+        frontBevelTesselation = 0;
         m_bevelHeight = 0;
     }
 
     if( backBevelDepth - std::numeric_limits< float >::epsilon() < 0.0f )
     {
         backBevelCurve = BevelCurveType::Line;
-        backBevelTesselation = 1;
+        backBevelTesselation = 0;
         m_bevelHeight = 0;
     }
 
@@ -212,6 +212,15 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
         backBevelCurve = frontBevelCurve;
     }
 
+    // Optimize line curves
+    if( sideCurve == ExtrudeCurveType::None )
+        m_tesselation = 0;
+
+    if( backBevelCurve == BevelCurveType::Line )
+        backBevelTesselation = 0;
+
+    if( frontBevelCurve == BevelCurveType::Line )
+        frontBevelTesselation = 0;
 
 // ***********************
 //
@@ -639,14 +648,21 @@ void    DefaultExtrudePlugin::ApplyFunction           ( ExtrudeCurve curve,
 
 
     // Connect all verticies
-    ConnectVerticies( indices, edges, (int)relativeBeginContourOffset, (int)relativeCurveOffset );
-    for( int i = 2; i < tesselation + 1; ++i )
+    if( tesselation == 0 )
     {
-        int offset1 = (int)relativeCurveOffset + ( i - 2 ) * edgeRowLength;
-        int offset2 = offset1 + edgeRowLength;
-        ConnectVerticies( indices, edges, offset1, offset2 );
+        ConnectVerticies( indices, edges, ( int )relativeBeginContourOffset, ( int )relativeEndContourOffset );
     }
-    ConnectVerticies( indices, edges, (int)relativeCurveOffset + ( tesselation - 1 ) * edgeRowLength, (int)relativeEndContourOffset );
+    else
+    {
+        ConnectVerticies( indices, edges, ( int )relativeBeginContourOffset, ( int )relativeCurveOffset );
+        for( int i = 2; i < tesselation + 1; ++i )
+        {
+            int offset1 = ( int )relativeCurveOffset + ( i - 2 ) * edgeRowLength;
+            int offset2 = offset1 + edgeRowLength;
+            ConnectVerticies( indices, edges, offset1, offset2 );
+        }
+        ConnectVerticies( indices, edges, ( int )relativeCurveOffset + ( tesselation - 1 ) * edgeRowLength, ( int )relativeEndContourOffset );
+    }
 }
 
 // ***********************
