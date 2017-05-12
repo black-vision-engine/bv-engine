@@ -10,6 +10,7 @@
 
 #include "Serialization/ISerializable.h"
 
+
 namespace bv { namespace model {
 
 class PluginsManager;
@@ -23,8 +24,6 @@ typedef std::vector< BasicNodePtr > TNodeVec;
 
 class ModelNodeEditor;
 
-class NodeVisibility;
-DEFINE_PTR_TYPE( NodeVisibility )
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
@@ -34,7 +33,7 @@ private:
     std::string                     m_name;
     
     const PluginsManager *          m_pluginsManager;
-    NodeVisibilityPtr               m_visible;
+    bool                            m_visible;
 
     TNodeVec                        m_children;
 
@@ -126,7 +125,6 @@ public:
 
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
-    virtual IParameterPtr                   GetVisibleParameter     () override;
 
 public:
 

@@ -412,6 +412,9 @@
     <Filter Include="Engine\Models\NodeLogics\Cloner">
       <UniqueIdentifier>{2389fef9-ffdf-4a95-bca5-3884dee9e704}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\NodeLogics\NodeVisibilityAnimation">
+      <UniqueIdentifier>{ea278f64-cd67-4099-9ebb-61da1719ceb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1957,8 +1960,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\NodeVisibility.cpp">
-      <Filter>Engine\Models</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5168,8 +5171,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\NodeVisibility.h">
-      <Filter>Engine\Models</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.h">
+      <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

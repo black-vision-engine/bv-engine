@@ -329,16 +329,9 @@ void                                                DefaultParamValModel::AddSta
 
 // *******************************
 //
-const std::vector< bv::IValuePtr > &                DefaultParamValModel::GetValuesNC       () const
+const std::vector< bv::IValuePtr > &         DefaultParamValModel::GetValuesNC       () const
 {
     return m_valuesNC;
-}
-
-// *******************************
-//
-DefaultParamValModelPtr                             DefaultParamValModel::Create            ()
-{
-    return std::shared_ptr< DefaultParamValModel >( new DefaultParamValModel() );
 }
 
 } //model

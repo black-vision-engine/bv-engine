@@ -47,7 +47,6 @@ private:
     ParameterMapping< model::BasePluginPtr >        m_pluginDescs;
     ParameterMapping< model::INodeLogicPtr >        m_logicDescs;
     ParameterMapping< model::IModelNodeEffectPtr >  m_effectDescs;
-    ParameterMapping< model::IModelNodePtr >        m_nodeDescs;
 
 public:
     explicit                EndUserParamsLogic  ( model::SceneModel * owner );

@@ -582,18 +582,6 @@ void GetParamsOfTimelinesRecursively                ( const std::string & nodePa
         }
     }
 
-    timelineParamInfo.paramOwner = ParamOwner::PO_NodeLogic;
-
-    auto param = modelNode->GetVisibleParameter();
-    if( param != nullptr )
-    {
-        timelineParamInfo.param = param;
-
-        auto te = param->GetTimeEvaluator();
-        assert( map.find( te ) != map.end() ); // a little bit of defensive programming
-        map[ te ].push_back( timelineParamInfo );
-    }
-
     // Process node children.
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); i++ )
     {

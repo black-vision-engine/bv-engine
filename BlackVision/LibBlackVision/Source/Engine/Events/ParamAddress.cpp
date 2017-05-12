@@ -19,7 +19,6 @@ std::pair< ParameterAddress::TargetType, const char* > TargetTypeMapping[] =
     , std::make_pair( ParameterAddress::TargetType::LightParam, "LightParam" )
     , std::make_pair( ParameterAddress::TargetType::NodeLogicParam, "NodeLogicParam" )
     , std::make_pair( ParameterAddress::TargetType::CameraParam, "CameraParam" )
-    , std::make_pair( ParameterAddress::TargetType::NodeParam, "NodeParam" )
     , std::make_pair( ParameterAddress::TargetType::FailTarget, SerializationHelper::EMPTY_STRING )      // default
 };
 

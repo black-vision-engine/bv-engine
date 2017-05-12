@@ -79,8 +79,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 			param = GetResourceParameter(m_projectEditor, sceneName, nodeName, pluginName, "Tex0", paramName);
 		else if (targetType == ParameterAddress::TargetType::NodeLogicParam)
 			param = GetNodeLogicParameter(m_projectEditor, sceneName, nodeName, paramName);
-        else if( targetType == ParameterAddress::TargetType::NodeParam )
-            param = GetNodeParameter( m_projectEditor, sceneName, nodeName, paramName );
+		
     }
 
     if( !param )

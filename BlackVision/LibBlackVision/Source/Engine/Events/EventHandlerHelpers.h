@@ -85,17 +85,6 @@ ParameterPtr            GetCameraParameter      ( model::SceneModel * scene,
                                                   UInt32 cameraIndex,
                                                   const std::string & paramName );
 
-ParameterPtr            GetNodeParameter        ( BVProjectEditor * editor,
-                                                  const std::string & sceneName,
-                                                  const std::string & nodePath,
-                                                  const std::string & paramName );
-
-ParameterPtr            GetNodeParameter        ( model::SceneModel * scene,
-                                                  const std::string & nodePath,
-                                                  const std::string & paramName );
-
-
-
 
 } //bv
 

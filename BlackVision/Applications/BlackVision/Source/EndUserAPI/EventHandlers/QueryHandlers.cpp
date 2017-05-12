@@ -1076,8 +1076,6 @@ void    QueryHandlers::ListTimelinesParams     ( JsonSerializeObject & ser, IDes
                         ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::GlobalEffectParam ) );
                     else if( timelineParamInfo.paramOwner == ParamOwner::PO_NodeLogic )
                         ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::NodeLogicParam ) );
-                    else if( timelineParamInfo.paramOwner == ParamOwner::PO_Node )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::NodeParam ) );
                 
                     timelineParamInfo.param->Serialize( ser );
                 ser.ExitChild();    //  Param

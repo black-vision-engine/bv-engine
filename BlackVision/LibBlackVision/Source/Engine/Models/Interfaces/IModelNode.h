@@ -24,6 +24,7 @@ class IPluginListFinalized;
 
 class IModelNode;
 DEFINE_PTR_TYPE(IModelNode)
+DEFINE_WEAK_PTR_TYPE( IModelNode )
 DEFINE_CONST_PTR_TYPE(IModelNode)
 
 class IModelNode : public bv::IUpdatable
@@ -54,8 +55,6 @@ public:
 
     //pablito
     virtual void                                        SetVisible           ( bool visible )                                                   = 0;
-
-    virtual IParameterPtr                               GetVisibleParameter  ()                                                                 = 0;
 
     virtual                                             ~IModelNode         () {};
 

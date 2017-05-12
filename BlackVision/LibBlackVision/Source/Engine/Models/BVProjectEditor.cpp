@@ -49,6 +49,7 @@
 #include "Engine/Events/InnerEvents/Other/LightAddedEvent.h"
 #include "Engine/Events/InnerEvents/Other/LightRemovedEvent.h"
 
+#include "Engine/Models/NodeLogics/NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -2180,6 +2181,15 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
         modelSceneRootNode->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", defaultTimeline );
         scene->GetModelSceneEditor()->SetRootNode( m_rootNode, modelSceneRootNode );
     }
+
+    // add NodeVisibilityAnimation logic to the scene root node.
+    if( auto sceneRoot = scene->GetRootNode() )
+    {
+        //don't overwrite node logic if it already exists
+        if( !sceneRoot->GetLogic() )
+            sceneRoot->SetLogic( std::make_shared< nodelogic::NodeVisibilityAnimation >( sceneRoot, defaultTimeline ) );
+    }
+
 }
 
 // *******************************
