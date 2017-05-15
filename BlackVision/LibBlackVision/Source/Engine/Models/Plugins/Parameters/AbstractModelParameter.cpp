@@ -73,6 +73,13 @@ const std::string & AbstractModelParameter::GetName () const
 
 // *******************************
 //
+void                AbstractModelParameter::SetName ( const std::string & name )
+{
+    m_name = name;
+}
+
+// *******************************
+//
 ModelParamType      AbstractModelParameter::GetType () const
 {
     return m_type;

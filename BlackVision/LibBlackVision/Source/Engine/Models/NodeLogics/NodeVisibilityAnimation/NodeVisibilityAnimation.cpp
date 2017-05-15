@@ -2,7 +2,7 @@
 #include "NodeVisibilityAnimation.h"
 
 #include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
+#include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
@@ -17,6 +17,8 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelSceneEditor.h"
 #include "Engine/Models/SceneModel.h"
+
+#include "Engine/Models/ModelState.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
 
@@ -126,6 +128,22 @@ void                        NodeVisibilityAnimation::Serialize       ( ISerializ
 
 // ***********************
 //
+void                        NodeVisibilityAnimation::Deserialize     ( const IDeserializer & deser )
+{
+    // params
+    auto params = SerializationHelper::DeserializeArray< model::AbstractModelParameter >( deser, "params" );
+
+    for( auto p : params )
+    {
+        auto nodePath = p->GetName().substr( p->GetName().find_first_of( '@' ) + 1 );
+        RegisterNodeVisibilityParam( nodePath );
+
+        m_paramValModel->SetParameter( p );
+    }
+}
+
+// ***********************
+//
 NodeVisibilityAnimationPtr              NodeVisibilityAnimation::Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode )
 {
     auto timeline = SerializationHelper::GetDefaultTimeline( deser );
@@ -142,17 +160,20 @@ NodeVisibilityAnimationPtr              NodeVisibilityAnimation::Create         
 
 // ***********************
 //
-bool                        NodeVisibilityAnimation::HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor )
+bool                        NodeVisibilityAnimation::HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * )
 {
     std::string action = eventDeser.GetAttribute( "Action" );
 
     if( action == NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM )
     {
+        auto context = static_cast< BVDeserializeContext * >( eventDeser.GetDeserializeContext() );
+        auto sceneName = context->GetSceneName();
+        auto rootPath = context->GetNodePath();
         auto nodePath = eventDeser.GetAttribute( "NodePath" );
-        auto sceneName = eventDeser.GetAttribute( "SceneName" );
-        if( !nodePath.empty() && !sceneName.empty() )
+
+        if( !rootPath.empty() && !nodePath.empty() && !sceneName.empty() )
         {
-            if( RegisterNodeVisibilityParam( sceneName, nodePath, editor ) )
+            if( RegisterNodeVisibilityParam( nodePath ) )
                 return true;
             else
             {
@@ -214,6 +235,25 @@ void                        NodeVisibilityAnimation::NodeMovedHandler   ( IEvent
 
 // ***********************
 //
+void                        NodeVisibilityAnimation::UpdateParamOnNodeMoving         ( const model::IModelNodePtr & movedNode )
+{
+    for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); ++it )
+    {
+        auto node = ( *it ).second.lock();
+        if( node == movedNode )
+        {
+            auto newName = model::ModelState::GetInstance().QueryNodePath( movedNode.get() );
+            const_cast< model::ParamBool * >( ( *it ).first.paramPtr )->SetName( NODE_VISIBILITY_PARAM_NAME_PREFIX + newName );
+            ( *it ).first.valuePtr->SetName( NODE_VISIBILITY_PARAM_NAME_PREFIX + newName );
+        }
+    }
+
+    for( UInt32 i = 0; i < movedNode->GetNumChildren(); ++i )
+        UpdateParamOnNodeMoving( std::static_pointer_cast< model::BasicNode >( movedNode )->GetChild( i ) );
+}
+
+// ***********************
+//
 void                        NodeVisibilityAnimation::RemoveNodeParam         ( const model::IModelNodePtr & removedNode )
 {
     std::string paramName = "";
@@ -237,18 +277,16 @@ void                        NodeVisibilityAnimation::RemoveNodeParam         ( c
 
 // ***********************
 //
-bool                        NodeVisibilityAnimation::RegisterNodeVisibilityParam( const std::string & sceneName, const std::string & nodePath, BVProjectEditor * editor )
+bool                        NodeVisibilityAnimation::RegisterNodeVisibilityParam( const std::string & nodePath )
 {
-    auto modelScene = editor->GetModelScene( sceneName );
-
-    if( modelScene )
+    if( auto parent = m_parentNode.lock() )
     {
-        auto node = modelScene->GetModelSceneEditor()->GetNode( nodePath );
-        
+        auto node = parent->GetNode( nodePath );
+
         if( node )
         {
             // do not register scene root node
-            if( node == modelScene->GetRootNode() )
+            if( node == parent )
                 return false;
 
             // do not register if already registered.
@@ -273,7 +311,7 @@ bool                        NodeVisibilityAnimation::RegisterNodeVisibilityParam
             return true;
         }
     }
-
+    
     return false;
 }
 

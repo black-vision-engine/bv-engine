@@ -62,6 +62,7 @@ public:
     static const std::string &          Type            ();
 
     virtual void                        Serialize       ( ISerializer & ser ) const override;
+    virtual void                        Deserialize     ( const IDeserializer & deser ) override;
     static NodeVisibilityAnimationPtr	Create          ( const IDeserializer & deser, bv::model::BasicNodeWeakPtr parentNode );
 
     virtual bool                        HandleEvent     ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * editor ) override;
@@ -71,8 +72,9 @@ private:
     void            NodeMovedHandler        ( IEventPtr evt );
 
     void            RemoveNodeParam         ( const model::IModelNodePtr & node );
+    void            UpdateParamOnNodeMoving ( const model::IModelNodePtr & movedNode );
 
-    bool            RegisterNodeVisibilityParam( const std::string & sceneName, const std::string & nodePath, BVProjectEditor * editor );
+    bool            RegisterNodeVisibilityParam( const std::string & nodePath );
 
 };
 

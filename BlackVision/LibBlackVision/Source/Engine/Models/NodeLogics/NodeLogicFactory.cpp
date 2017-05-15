@@ -14,6 +14,7 @@
 #include "SlideShow/SlideShow.h"
 #include "MaxSize/MaxSize.h"
 #include "Cloner/Cloner.h"
+#include "NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 
 
 namespace bv {
@@ -74,6 +75,10 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     else if( logicType == nodelogic::Cloner::Type() )
     {
         return nodelogic::Cloner::Create( deser, logicParent );
+    }
+    else if( logicType == nodelogic::NodeVisibilityAnimation::Type() )
+    {
+        return nodelogic::NodeVisibilityAnimation::Create( deser, logicParent );
     }
 
     return nullptr;

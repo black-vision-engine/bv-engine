@@ -31,4 +31,11 @@ const std::string & NamedValue::GetName      ()  const
     return m_name;
 }
 
+// *******************************
+//
+void  NamedValue::SetName ( const std::string & name )
+{
+    m_name = name;
+}
+
 } //bv
