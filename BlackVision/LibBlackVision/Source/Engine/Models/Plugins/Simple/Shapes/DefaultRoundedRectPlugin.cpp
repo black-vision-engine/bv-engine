@@ -3,9 +3,6 @@
 #include "DefaultRoundedRectPlugin.h"
 
 #include "Mathematics/Defines.h"
-
-#include "Memory/MemoryLeaks.h"
-
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
@@ -94,10 +91,15 @@ private:
 
 public:
 
-    RoundedRectGenerator( glm::vec2 s, glm::vec4 b, int tesselation )
+    RoundedRectGenerator( glm::vec2 s, glm::vec4 b, int tesselation, float stretch, float outline, glm::vec4 clipPlanes, bool crop, bool useOutline )
         :   m_size( s )
         ,   m_bevels( b )
         ,   m_tesselation( tesselation )
+        ,   m_stretch( stretch )
+        ,   m_outlineWidth( outline )
+        ,   m_clippingPlanes( clipPlanes )
+        ,   m_crop( crop )
+        ,   m_useOutline( useOutline )
     {}
 
 private:
@@ -158,9 +160,14 @@ private:
 DefaultRoundedRectPlugin::DefaultRoundedRectPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
     : DefaultGeometryPluginBase( name, uid, prev, model )
 {
-	m_size = GetValueParamState< glm::vec2 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::SIZE );
-	m_bevels = GetValueParamState< glm::vec4 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::BEVELS );
-	m_tesselations = GetValueParamState< Int32 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::TESSELATION );
+	m_size          = GetValueParamState< glm::vec2 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::SIZE );
+	m_bevels        = GetValueParamState< glm::vec4 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::BEVELS );
+	m_tesselations  = GetValueParamState< Int32 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::TESSELATION );
+    m_cropPlanes    = GetValueParamState< glm::vec4 >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::CROP_FACES );
+    m_stretch       = GetValueParamState< float >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::STRETCH );
+    m_outline       = GetValueParamState< float >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::OUTLINE_WIDTH );
+    m_useOutline    = GetValueParamState< bool >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::USE_OUTLINE );
+    m_crop          = GetValueParamState< bool >( GetPluginParamValModel()->GetVertexAttributesChannelModel().get(), PARAMS::CROP );
 
 	InitGeometry();
 }
@@ -169,7 +176,7 @@ DefaultRoundedRectPlugin::DefaultRoundedRectPlugin( const std::string & name, co
 //
 std::vector< IGeometryGeneratorPtr >        DefaultRoundedRectPlugin::GetGenerators()
 {
-    return std::vector< IGeometryGeneratorPtr >( 1, std::make_shared< RoundedRectGenerator >( GetSize(), GetBevels(), GetTesselation() ) );
+    return std::vector< IGeometryGeneratorPtr >( 1, std::make_shared< RoundedRectGenerator >( m_size.GetValue(), m_bevels.GetValue(), m_tesselations.GetValue(), m_stretch.GetValue(), m_outline.GetValue(), m_cropPlanes.GetValue(), m_crop.GetValue(), m_useOutline.GetValue() ) );
 }
 
 // ***********************

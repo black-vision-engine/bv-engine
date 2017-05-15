@@ -49,6 +49,11 @@ private:
 	ValueParamState< glm::vec2 >		m_size;
 	ValueParamState< glm::vec4 >		m_bevels;
 	ValueParamState< Int32 >			m_tesselations;
+    ValueParamState< glm::vec4 >        m_cropPlanes;
+    ValueParamState< float >            m_stretch;
+    ValueParamState< float >            m_outline;
+    ValueParamState< bool >             m_useOutline;
+    ValueParamState< bool >             m_crop;
 
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
