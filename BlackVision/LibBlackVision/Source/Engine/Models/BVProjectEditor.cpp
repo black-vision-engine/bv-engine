@@ -39,6 +39,7 @@
 #include "Engine/Events/InnerEvents/Plugins/PluginMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeCopiedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeEffectAddedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
@@ -668,6 +669,8 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
     }
 
     AddChildNode( destScene, destParentNode, copy, enableUndo );
+
+	NotifyCopiedNode( srcNode, copy );
 
     return copy;
 }
@@ -2028,6 +2031,16 @@ void                    BVProjectEditor::NotifyMovedNode        ( model::BasicNo
     movedEvent->DstParentNode = dstParent;
 
     GetDefaultEventManager().TriggerEvent( movedEvent );
+}
+
+void					BVProjectEditor::NotifyCopiedNode		(model::BasicNodePtr  srcNode, model::BasicNodePtr  copy )
+{
+	auto movedEvent = std::make_shared< NodeCopiedEvent >();
+	movedEvent->Node = copy;
+	movedEvent->SrcNode = srcNode;
+
+	GetDefaultEventManager().TriggerEvent(movedEvent);
+
 }
 
 // ***********************

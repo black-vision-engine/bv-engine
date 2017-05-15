@@ -70,9 +70,11 @@ public:
 private:
     void            NodeRemovedHandler      ( IEventPtr evt );
     void            NodeMovedHandler        ( IEventPtr evt );
+	void            NodeCopieddHandler      ( IEventPtr evt );
 
     void            RemoveNodeParam         ( const model::IModelNodePtr & node );
     void            UpdateParamOnNodeMoving ( const model::IModelNodePtr & movedNode );
+	void            UpdateParamOnNodeCopying( const model::IModelNodePtr & copiedNode, const model::IModelNodePtr & srcNode );
 
     bool            RegisterNodeVisibilityParam( const std::string & nodePath );
 

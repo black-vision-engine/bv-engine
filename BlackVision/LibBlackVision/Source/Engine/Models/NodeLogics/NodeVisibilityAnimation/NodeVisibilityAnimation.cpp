@@ -10,6 +10,7 @@
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeCopiedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/EventManager.h"
 #include "Engine/Models/NodeLogics/NodeLogicHelper.h"
@@ -224,6 +225,23 @@ void                        NodeVisibilityAnimation::NodeMovedHandler   ( IEvent
 		UpdateParamOnNodeMoving(typedEvent->Node);
 }
 
+// ========================================================================= //
+// Handling copying of nodes
+// ========================================================================= //
+
+// ***********************
+//
+void                        NodeVisibilityAnimation::NodeCopieddHandler				( IEventPtr evt )
+{
+    if( evt->GetEventType() != NodeCopiedEvent::Type() )
+        return;
+
+	auto typedEvent = QueryTypedEvent< NodeCopiedEvent >(evt);
+
+    if( auto parentNode = m_parentNode.lock() )
+		UpdateParamOnNodeCopying( typedEvent->Node, typedEvent->SrcNode );
+}
+
 // ***********************
 //
 void                        NodeVisibilityAnimation::UpdateParamOnNodeMoving         ( const model::IModelNodePtr & movedNode )
@@ -241,6 +259,26 @@ void                        NodeVisibilityAnimation::UpdateParamOnNodeMoving    
 
     for( UInt32 i = 0; i < movedNode->GetNumChildren(); ++i )
         UpdateParamOnNodeMoving( std::static_pointer_cast< model::BasicNode >( movedNode )->GetChild( i ) );
+}
+
+// ***********************
+//
+void                        NodeVisibilityAnimation::UpdateParamOnNodeCopying         ( const model::IModelNodePtr & copiedNode, const model::IModelNodePtr & srcNode )
+{
+    for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); ++it )
+    {
+        auto node = ( *it ).second.lock();
+        if( node == srcNode )
+        {
+            auto newName = model::ModelState::GetInstance().QueryNodePath( copiedNode.get() );
+			if( RegisterNodeVisibilityParam( newName ) )
+				const_cast< model::ParamBool * >( m_paramNodes.back().first.paramPtr )->AccessInterpolator() = const_cast< model::ParamBool * >( ( *it ).first.paramPtr )->AccessInterpolator();
+       }
+    }
+
+    for( UInt32 i = 0; i < copiedNode->GetNumChildren(); ++i )
+		UpdateParamOnNodeCopying(	std::static_pointer_cast< model::BasicNode >( copiedNode )->GetChild( i ),
+									std::static_pointer_cast< model::BasicNode >( srcNode )->GetChild( i ) );
 }
 
 // ***********************

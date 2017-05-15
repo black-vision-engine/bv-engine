@@ -273,6 +273,8 @@ private:
     void                    NotifyRemovedNode   ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
     void                    NotifyAddedNode     ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode );
     void                    NotifyMovedNode     ( model::BasicNodePtr node, model::BasicNodePtr srcParent, model::BasicNodePtr dstParent );
+	void					NotifyCopiedNode	( model::BasicNodePtr  srcNode, model::BasicNodePtr  copy );
+
 
     void                    NotifyPluginAdded   ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );
     void                    NotifyPluginRemoved ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );

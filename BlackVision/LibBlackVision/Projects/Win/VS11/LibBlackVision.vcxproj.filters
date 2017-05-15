@@ -1963,6 +1963,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.cpp">
       <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5173,6 +5176,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.h">
       <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
