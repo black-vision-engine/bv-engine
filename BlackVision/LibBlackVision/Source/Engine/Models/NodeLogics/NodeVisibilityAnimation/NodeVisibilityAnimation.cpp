@@ -218,19 +218,10 @@ void                        NodeVisibilityAnimation::NodeMovedHandler   ( IEvent
     if( evt->GetEventType() != NodeMovedEvent::Type() )
         return;
 
-    if( auto parentNode = m_parentNode.lock() )
-    {
-        auto typedEvent = QueryTypedEvent< NodeMovedEvent >( evt );
+	auto typedEvent = QueryTypedEvent< NodeMovedEvent >(evt);
 
-        for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); ++it )
-        {
-            auto node = ( *it ).second.lock();
-            if( node == typedEvent->Node )
-            {
-                //( *it ).first.GetParameter().
-            }
-        }
-    }
+    if( auto parentNode = m_parentNode.lock() )
+		UpdateParamOnNodeMoving(typedEvent->Node);
 }
 
 // ***********************
