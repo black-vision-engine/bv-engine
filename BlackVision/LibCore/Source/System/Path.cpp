@@ -249,7 +249,7 @@ PathVec			Path::List				( const Path & path, bool recursive, const std::string e
         try
         {
             boost::filesystem::path cp( path.Str() ); 
-            boost::regex pattern( exp );
+            boost::regex pattern( exp, boost::regex::icase );
 
             PathVec ret;
 
