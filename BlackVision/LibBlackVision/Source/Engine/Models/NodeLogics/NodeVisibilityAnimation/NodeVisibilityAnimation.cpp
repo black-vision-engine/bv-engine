@@ -244,7 +244,7 @@ void                        NodeVisibilityAnimation::UpdateParamOnNodeMoving    
         {
             auto newName = model::ModelState::GetInstance().QueryNodePath( movedNode.get() );
             const_cast< model::ParamBool * >( ( *it ).first.paramPtr )->SetName( NODE_VISIBILITY_PARAM_NAME_PREFIX + newName );
-            ( *it ).first.valuePtr->SetName( NODE_VISIBILITY_PARAM_NAME_PREFIX + newName );
+            const_cast< ValueBool * >( ( *it ).first.valuePtr )->SetName( NODE_VISIBILITY_PARAM_NAME_PREFIX + newName );
         }
     }
 
