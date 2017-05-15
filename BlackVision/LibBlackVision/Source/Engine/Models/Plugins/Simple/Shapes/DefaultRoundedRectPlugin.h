@@ -1,8 +1,15 @@
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
+
+
+
+
 namespace bv { namespace model {
 
+
+// ***********************
+//
 class DefaultRoundedRectPluginDesc : public DefaultGeometryPluginDescBase
 {
 public:
@@ -14,12 +21,28 @@ public:
     static  std::string                     UID                 ();
 };
 
+
+
+// ***********************
+//
 class DefaultRoundedRectPlugin : public DefaultGeometryPluginBase
 {
 public:
     static const std::string PN_SIZE;
     static const std::string PN_BEVELS;
     static const std::string PN_TESSELATION;
+
+    struct PARAMS
+    {
+        static const std::string        SIZE;
+        static const std::string        BEVELS;
+        static const std::string        TESSELATION;
+        static const std::string        STRETCH;
+        static const std::string        USE_OUTLINE;
+        static const std::string        OUTLINE_WIDTH;
+        static const std::string        CROP;
+        static const std::string        CROP_FACES;
+    };
 
 private:
 
