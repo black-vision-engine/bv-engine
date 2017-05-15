@@ -104,41 +104,62 @@ public:
 
 private:
 
-    float sizeX, sizeY;
-    glm::vec3 centers[4];
+    float       sizeX;
+    float       sizeY;
+
+    glm::vec3   centers[ 4 ];
+    glm::vec4   bevels;
 
     
 public:
     void GenerateGeometryNormals( Float3AttributeChannelPtr verts, Float3AttributeChannelPtr normals )
     {
-        sizeX = m_size[ 0 ] / 2;
-        sizeY = m_size[ 1 ] / 2;
+        ValidateParams();
 
-        centers[ 0 ] = glm::vec3( sizeX - m_bevels[ 0 ], sizeY - m_bevels[ 0 ], 0 );
-        centers[ 1 ] = glm::vec3( -sizeX + m_bevels[ 1 ], sizeY - m_bevels[ 1 ], 0 );
-        centers[ 2 ] = glm::vec3( -sizeX + m_bevels[ 2 ], -sizeY + m_bevels[ 2 ], 0 );
-        centers[ 3 ] = glm::vec3( sizeX - m_bevels[ 3 ], -sizeY + m_bevels[ 3 ], 0 );
+        //sizeX = m_size[ 0 ] / 2;
+        //sizeY = m_size[ 1 ] / 2;
 
-        int nPoints = GetNPoints(), i, j;
-        for( i = 0, j = nPoints - 1; i < j; i++, j-- )
-        {
-            verts->AddAttribute( GetPoint( j ) );
-            verts->AddAttribute( GetPoint( i ) );
-        }
-        if( i == j )
-            assert( false );
+        //centers[ 0 ] = glm::vec3( sizeX - m_bevels[ 0 ], sizeY - m_bevels[ 0 ], 0 );
+        //centers[ 1 ] = glm::vec3( -sizeX + m_bevels[ 1 ], sizeY - m_bevels[ 1 ], 0 );
+        //centers[ 2 ] = glm::vec3( -sizeX + m_bevels[ 2 ], -sizeY + m_bevels[ 2 ], 0 );
+        //centers[ 3 ] = glm::vec3( sizeX - m_bevels[ 3 ], -sizeY + m_bevels[ 3 ], 0 );
 
+        //int nPoints = GetNPoints(), i, j;
+        //for( i = 0, j = nPoints - 1; i < j; i++, j-- )
+        //{
+        //    verts->AddAttribute( GetPoint( j ) );
+        //    verts->AddAttribute( GetPoint( i ) );
+        //}
+        //if( i == j )
+        //    assert( false );
+
+        //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
+
+        //return;
+
+        // New code.
+        std::vector< glm::vec3 > verticies;
+
+        GenerateContour( verticies, 0.0f );
+        if( m_useOutline )
+            GenerateContour( verticies, m_outlineWidth );
+
+        ConnectTriangles( verts, verticies );
         GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 
 private:
 
-    int GetNPoints()
+    // ***********************
+    //
+    int             GetNPoints          ()
     {
         return 4 * m_tesselation;
     }
 
-    glm::vec3 GetPoint( int i )
+    // ***********************
+    //
+    glm::vec3       GetPoint            ( int i )
     {
         assert( i < 4 * m_tesselation );
         int nCenter = i / m_tesselation;
@@ -146,11 +167,57 @@ private:
 
         double angle = ( i - nCenter ) * 2 * PI / ( ( m_tesselation - 1 ) * 4 );
 
-        return center + glm::vec3( cos( angle ), sin( angle ), 0 ) * m_bevels[ nCenter ];
+        return center + glm::vec3( cos( angle ), sin( angle ), 0 ) * bevels[ nCenter ];
+    }
+
+    // ***********************
+    //
+    void            GenerateContour     ( std::vector< glm::vec3 > & verts, float outline )
+    {
+        sizeX = m_size[ 0 ] / 2 + outline;
+        sizeY = m_size[ 1 ] / 2 + outline;
+
+        for( int i = 0; i < 4; ++i )
+            bevels[ i ] = m_bevels[ i ] + outline;
+
+        centers[ 0 ] = glm::vec3( sizeX - bevels[ 0 ], sizeY - bevels[ 0 ], 0 );
+        centers[ 1 ] = glm::vec3( -sizeX + bevels[ 1 ], sizeY - bevels[ 1 ], 0 );
+        centers[ 2 ] = glm::vec3( -sizeX + bevels[ 2 ], -sizeY + bevels[ 2 ], 0 );
+        centers[ 3 ] = glm::vec3( sizeX - bevels[ 3 ], -sizeY + bevels[ 3 ], 0 );
+
+        int nPoints = GetNPoints();
+
+        for( int i = 0; i < nPoints; i++ )
+            verts.push_back( GetPoint( i ) );
     }
 
 
-//    void            Generate
+    // ***********************
+    // Sets generator member fields to right values.
+    bool            ValidateParams      ()
+    {
+        // Implement
+        return true;
+    }
+
+    // ***********************
+    //
+    void            ConnectTriangles    ( Float3AttributeChannelPtr verts, std::vector< glm::vec3 > & verticies )
+    {
+        verts->GetVertices().reserve( verticies.size() );
+
+        SizeType numVerticies = verticies.size() / 2;
+        SizeType i = 0;
+
+        for( ; i < numVerticies - 1; ++i )
+        {
+            verts->AddAttribute( verticies[ i ] );
+            verts->AddAttribute( verticies[ i + numVerticies ] );
+        }
+
+        verts->AddAttribute( verticies[ i ] );
+        verts->AddAttribute( verticies[ i + numVerticies ] );
+    }
 
 };
 
