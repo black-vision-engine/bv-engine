@@ -334,6 +334,9 @@ bool     Renderer::DrawLines      ( Lines * lines )
         firstVertex += numVertices;
     }
 
+    // Lines width is 1.0f by default. Since we can't set this value through model, we should always set it back.
+    BVGL::bvglLineWidth( 1.0f );
+
     Disable ( vao );
 
     return true;

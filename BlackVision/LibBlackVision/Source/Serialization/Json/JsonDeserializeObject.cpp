@@ -150,12 +150,14 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
 {
     if( m_currentNode->isArray() )
     {
+        // After EnterChild we are always in first array element.
+        // Even with array is empty we should push 0.
+        m_indexStack.push( 0 );
+
         if( m_currentNode->size() == 0 )
             return false;
 
         m_nodeStack.push( m_currentNode );
-
-        m_indexStack.push( 0 );                     //After EnterChild we are always in first array element.
         m_currentNode = &( (*m_currentNode)[ 0 ] );
     }
     else

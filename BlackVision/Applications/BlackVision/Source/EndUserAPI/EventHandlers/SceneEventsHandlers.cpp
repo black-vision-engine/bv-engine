@@ -448,6 +448,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         if( saveTo.empty() || Path::IsValisPathName( saveTo ) )
         {
             auto forceSaveStr = request.GetAttribute( "forceSave" );
+            bool renameScene = SerializationHelper::String2T( request.GetAttribute( "renameScene" ), true );
 
             bool forceSave = false;
 
@@ -468,20 +469,23 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
                 if( scene != nullptr )
                 {
-                
-                    if( forceSave )
+                    if( Path::Exists( newSceneName ) && !forceSave )
                     {
-                        pm->AddScene( scene, "", newSceneName );
-
-                        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
-                
-                        RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
+                        SendSimpleErrorResponse( command, projectEvent->EventID, senderID, ( "Scene name [" + saveTo + "] already exists. Use forceSave to overwrite file." ).c_str() );
                     }
                     else
                     {
-                        SendSimpleResponse( command, projectEvent->EventID, senderID, false );
-                        assert( false );
-                        // TODO: Implement
+                        pm->AddScene( scene, "", newSceneName );
+                        
+                        if( !renameScene )
+                        {
+                            // Set previous name.
+                            m_appLogic->GetBVProject()->GetProjectEditor()->RenameScene( newSceneName, sceneName );
+                        }
+
+                        RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
+
+                        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
                     }
                 }
             }
