@@ -94,9 +94,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AVEncoder.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\AVEncoderImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AVEncoder.h" />
+    <ClInclude Include="..\..\..\Source\Impl\AVEncoderImpl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
