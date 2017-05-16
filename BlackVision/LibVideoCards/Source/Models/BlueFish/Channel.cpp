@@ -466,6 +466,11 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
     auto playbackChannel = GetPlaybackChannel();
     if( playbackChannel && !PlaythroughEnabled() )
     {
+        BVTimeCode tc; // FIXME: https://www.pivotaltracker.com/story/show/145508031
+        tc.h = 10;
+        tc.m = 22;
+        tc.s = 33;
+        tc.frame = 12;
         playbackChannel->m_pFifoBuffer->PushFrame(
             std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
                                         playbackChannel->GoldenSize,
@@ -473,7 +478,7 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
                                         m_odd,
                                         ( unsigned int ) frame->m_audioData->Size(),
                                         reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
-                                        frame->m_TimeCode,
+                                        tc,
                                         frame->m_desc
                                         ) );
 

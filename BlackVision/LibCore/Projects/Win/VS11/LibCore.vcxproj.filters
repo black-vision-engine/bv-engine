@@ -208,6 +208,9 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\AVFrame.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -309,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
       <Filter>Mathematics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

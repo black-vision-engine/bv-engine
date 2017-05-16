@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
-    <ClInclude Include="..\..\..\Source\AVFrame.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
@@ -43,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
-    <ClCompile Include="..\..\..\Source\AVFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />

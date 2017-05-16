@@ -2,14 +2,11 @@
 
 #include <hash_map>
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 
 
 namespace bv { 
-
-using videocards::AVFramePtr;
-
 
    
 class AVOutputsData

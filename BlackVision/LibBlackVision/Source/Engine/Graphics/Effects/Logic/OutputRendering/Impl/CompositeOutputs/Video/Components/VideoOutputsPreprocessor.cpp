@@ -116,7 +116,7 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         auto vic = m_inputChannels.GetVideoInputChannelAt( i );
         assert( vic->IsActive() );
 
-        videocards::AVFrameDescriptor desc;
+        AVFrameDescriptor desc;
 
         desc.width = vic->GetWidth();
         desc.height = vic->GetHeight();
@@ -124,24 +124,24 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         desc.channels = audio->GetChannels();
         desc.sampleRate = audio->GetFrequency() / m_lcmFPS;
 
-        // FIXME: values are hardcoded.
-        desc.fieldModeEnabled = true;
-        desc.timeCodePresent = true;
-        desc.autoGenerateTimecode = true;
+        // FIXME: values are hardcoded.  // FIXME: https://www.pivotaltracker.com/story/show/145508031
+        //desc.fieldModeEnabled = true;
+        //desc.timeCodePresent = true;
+        //desc.autoGenerateTimecode = true;
 
         m_avFramesBuffer[ vic ] = boost::circular_buffer< AVFramePtr >( BUFFER_SIZE );
 
         for( SizeType i = 0; i < BUFFER_SIZE; ++i )
         {
-            auto avFrame = videocards::AVFrame::Create();
+            auto avFrame = AVFrame::Create();
             avFrame->m_audioData = MemoryChunk::Create( audioFrameSize );
             avFrame->m_desc = desc;
 
-            // FIXME: values are hardcoded.
-            avFrame->m_TimeCode.h = 10;
-            avFrame->m_TimeCode.m = 22;
-            avFrame->m_TimeCode.s = 33;
-            avFrame->m_TimeCode.frame = 12;
+            // FIXME: values are hardcoded.  // FIXME: https://www.pivotaltracker.com/story/show/145508031
+            //avFrame->m_TimeCode.h = 10;
+            //avFrame->m_TimeCode.m = 22;
+            //avFrame->m_TimeCode.s = 33;
+            //avFrame->m_TimeCode.frame = 12;
 
             m_avFramesBuffer[ vic ].push_back( avFrame );
         }

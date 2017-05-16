@@ -1,9 +1,9 @@
-#include "AVFrame.h"
+#include "stdafxCore.h"
 
-#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+#include "Memory/AVFrame.h"
 
 
-namespace bv { namespace videocards {
+namespace bv {
 
 // ****************************
 //
@@ -38,5 +38,4 @@ AVFrame::~AVFrame     ()
 {
 }
 
-} //videocards
 } //bv

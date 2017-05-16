@@ -2,7 +2,7 @@
 
 #include "Threading/StoppableThread.h"
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 #include "Serialization/XML/XMLDeserializer.h"
 
