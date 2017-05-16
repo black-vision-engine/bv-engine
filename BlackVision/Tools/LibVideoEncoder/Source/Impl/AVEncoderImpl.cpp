@@ -6,11 +6,21 @@ namespace bv { namespace avencoder
 
 //**************************************
 //
-AVEncoder::Impl::Impl() {}
+AVEncoder::Impl::Impl       ()
+    : m_encoderThread( new AVEncoderThread() )
+{}
 
 //**************************************
 //
-AVEncoder::Impl::~Impl() {}
+bool            AVEncoder::Impl::OpenVideoStream     ( const std::string & /*outputFilePath*/ )
+{
+    assert( false );
+    return false;
+}
+
+//**************************************
+//
+AVEncoder::Impl::~Impl      () {}
 
 
 }

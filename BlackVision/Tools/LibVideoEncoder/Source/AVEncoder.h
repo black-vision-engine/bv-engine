@@ -18,6 +18,9 @@ class AVEncoder
 public:
     AVEncoder           ();
     virtual ~AVEncoder  ();
+
+    bool            OpenVideoStream     ( const std::string & outputFilePath );
+
 };
 
 } // videoencoder 
