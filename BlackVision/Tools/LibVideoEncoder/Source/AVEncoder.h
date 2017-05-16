@@ -19,7 +19,7 @@ public:
     AVEncoder           ();
     virtual ~AVEncoder  ();
 
-    bool            OpenVideoStream     ( const std::string & outputFilePath );
+    bool            OpenOutputStream     ( const std::string & outputFilePath );
 
 };
 

@@ -17,9 +17,9 @@ AVEncoder::~AVEncoder()
 
 //**************************************
 //
-bool            AVEncoder::OpenVideoStream     ( const std::string & outputFilePath )
+bool            AVEncoder::OpenOutputStream     ( const std::string & outputFilePath )
 {
-    return m_impl->OpenVideoStream( outputFilePath );
+    return m_impl->OpenOutputStream( outputFilePath );
 }
 
 } // videoencoder 

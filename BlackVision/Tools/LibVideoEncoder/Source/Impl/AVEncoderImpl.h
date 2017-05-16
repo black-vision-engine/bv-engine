@@ -33,7 +33,7 @@ public:
     Impl           ();
     virtual ~Impl  ();
 
-    bool            OpenVideoStream     ( const std::string & outputFilePath );
+    bool            OpenOutputStream     ( const std::string & outputFilePath, bool enableVideo = true, bool enableAudio = true);
 };
 
 } // videoencoder 

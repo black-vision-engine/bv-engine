@@ -12,7 +12,7 @@ AVEncoder::Impl::Impl       ()
 
 //**************************************
 //
-bool            AVEncoder::Impl::OpenVideoStream     ( const std::string & /*outputFilePath*/ )
+bool            AVEncoder::Impl::OpenOutputStream     ( const std::string & /*outputFilePath*/, bool /*enableVideo*/, bool /*enableAudio*/ )
 {
     assert( false );
     return false;
