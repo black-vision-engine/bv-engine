@@ -23,9 +23,9 @@ struct AVFrameDescriptor
     UInt32  depth;
     UInt32  channels;
     UInt32  sampleRate;
-    bool    timeCodePresent;
-    bool    autoGenerateTimecode;
-    bool    fieldModeEnabled;
+    //bool    timeCodePresent;
+    //bool    autoGenerateTimecode;
+    //bool    fieldModeEnabled;
     //UInt32  odd;
 };
 
@@ -40,7 +40,7 @@ public:
     MemoryChunkConstPtr     m_videoData;
     MemoryChunkConstPtr     m_audioData;
     AVFrameDescriptor       m_desc;
-    BVTimeCode              m_TimeCode;
+    //BVTimeCode              m_TimeCode;
 	
 	static AVFrameConstPtr	Create( const MemoryChunkConstPtr & videoData, const MemoryChunkConstPtr & audioData, const AVFrameDescriptor & desc );
 	static AVFramePtr	    Create();

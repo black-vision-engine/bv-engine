@@ -125,9 +125,9 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         desc.sampleRate = audio->GetFrequency() / m_lcmFPS;
 
         // FIXME: values are hardcoded.
-        desc.fieldModeEnabled = true;
-        desc.timeCodePresent = true;
-        desc.autoGenerateTimecode = true;
+        //desc.fieldModeEnabled = true;
+        //desc.timeCodePresent = true;
+        //desc.autoGenerateTimecode = true;
 
         m_avFramesBuffer[ vic ] = boost::circular_buffer< AVFramePtr >( BUFFER_SIZE );
 
@@ -138,10 +138,10 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
             avFrame->m_desc = desc;
 
             // FIXME: values are hardcoded.
-            avFrame->m_TimeCode.h = 10;
-            avFrame->m_TimeCode.m = 22;
-            avFrame->m_TimeCode.s = 33;
-            avFrame->m_TimeCode.frame = 12;
+            //avFrame->m_TimeCode.h = 10;
+            //avFrame->m_TimeCode.m = 22;
+            //avFrame->m_TimeCode.s = 33;
+            //avFrame->m_TimeCode.frame = 12;
 
             m_avFramesBuffer[ vic ].push_back( avFrame );
         }
