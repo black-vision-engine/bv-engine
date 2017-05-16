@@ -2,7 +2,8 @@
 
 #include "win_sock.h"
 #include "BlueFish/inc/BlueVelvet4.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
+#include "BVTimeCode.h"
 
 namespace bv { namespace videocards { namespace bluefish {
 

@@ -3,7 +3,7 @@
 #include <hash_map>
 #include <vector>
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/AVOutputsData.h"
 
@@ -12,10 +12,7 @@
 
 
 namespace bv { 
-    
-using videocards::AVFramePtr;
-
-
+   
 
 typedef unsigned int VideoCardID;
 

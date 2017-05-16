@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Memory/MemoryChunk.h"
+#include "MemoryChunk.h"
 #include "CoreDEF.h"
 
 
-namespace bv { namespace videocards {
+namespace bv {
 
 enum class AudioSampleType : int
 {
@@ -47,7 +47,4 @@ public:
             
 };
 
-
-
-} //videocards
 } //bv

@@ -8,7 +8,7 @@
 #include "Threading/StoppableThread.h"
 #include "DataTypes/QueueConcurrentLimited.h"
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 #include "Channel.h"
 
 #include <boost/circular_buffer.hpp>

@@ -2,7 +2,7 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 #include "Channel.h"
 
 

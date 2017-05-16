@@ -116,7 +116,7 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         auto vic = m_inputChannels.GetVideoInputChannelAt( i );
         assert( vic->IsActive() );
 
-        videocards::AVFrameDescriptor desc;
+        AVFrameDescriptor desc;
 
         desc.width = vic->GetWidth();
         desc.height = vic->GetHeight();
@@ -133,7 +133,7 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
 
         for( SizeType i = 0; i < BUFFER_SIZE; ++i )
         {
-            auto avFrame = videocards::AVFrame::Create();
+            auto avFrame = AVFrame::Create();
             avFrame->m_audioData = MemoryChunk::Create( audioFrameSize );
             avFrame->m_desc = desc;
 

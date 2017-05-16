@@ -1,7 +1,9 @@
-#include "AVFrame.h"
+#include "stdafxCore.h"
+
+#include "Memory/AVFrame.h"
 
 
-namespace bv { namespace videocards {
+namespace bv {
 
 // ****************************
 //
@@ -36,5 +38,4 @@ AVFrame::~AVFrame     ()
 {
 }
 
-} //videocards
 } //bv
