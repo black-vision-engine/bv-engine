@@ -5,10 +5,16 @@
     <ClCompile Include="..\..\..\Source\Impl\AVEncoderImpl.cpp">
       <Filter>Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Impl\AVEncoderThread.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AVEncoder.h" />
     <ClInclude Include="..\..\..\Source\Impl\AVEncoderImpl.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\AVEncoderThread.h">
       <Filter>Impl</Filter>
     </ClInclude>
   </ItemGroup>

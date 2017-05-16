@@ -1,6 +1,7 @@
 #pragma once 
 #include "CoreDEF.h"
 #include "AVEncoder.h"
+#include "Threading/StoppableThread.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4244) // warning C4244: 'return' : conversion from 'int' to 'uint8_t', possible loss of data
@@ -16,18 +17,17 @@ namespace bv
 namespace avencoder
 {
 
-class AVEncoder;
-class AVEncoder::Impl;
 
-
-class AVEncoder::Impl
+class AVEncoderThread : public StoppableThread
 {
-    Impl( const Impl & copy );
-    const AVEncoder & operator=( const Impl & copy );
+    AVEncoderThread( const AVEncoderThread & copy );
+    const AVEncoderThread & operator=( const AVEncoderThread & copy );
+
+    virtual void				Process () override;
 
 public:
-    Impl           ();
-    virtual ~Impl  ();
+    AVEncoderThread           ();
+    virtual ~AVEncoderThread  ();
 };
 
 } // videoencoder 
