@@ -26,7 +26,7 @@ struct AVFrameDescriptor
     bool    timeCodePresent;
     bool    autoGenerateTimecode;
     bool    fieldModeEnabled;
-    UInt32  odd;
+    //UInt32  odd;
 };
 
 class AVFrame;
