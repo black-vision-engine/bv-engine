@@ -17,6 +17,9 @@
     <ClInclude Include="..\..\..\Source\Impl\AVEncoderThread.h">
       <Filter>Impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\FFmpegUtils.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Impl">

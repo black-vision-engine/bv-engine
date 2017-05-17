@@ -35,7 +35,7 @@ public:
     MemoryChunkConstPtr     m_videoData;
     MemoryChunkConstPtr     m_audioData;
     AVFrameDescriptor       m_desc;
-    TimeType                m_frameTime;
+    UInt64                  m_frameTime;
     UInt64                  m_frameNum;
 	
 	static AVFrameConstPtr	Create( const MemoryChunkConstPtr & videoData, const MemoryChunkConstPtr & audioData, const AVFrameDescriptor & desc );

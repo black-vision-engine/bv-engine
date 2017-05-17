@@ -3,14 +3,6 @@
 #include "AVEncoder.h"
 #include "Threading/StoppableThread.h"
 
-#pragma warning(push)
-#pragma warning(disable : 4244) // warning C4244: 'return' : conversion from 'int' to 'uint8_t', possible loss of data
-
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
-
-#pragma warning(pop)
-
 namespace bv 
 {
 

@@ -12,6 +12,8 @@
 
 #pragma warning(pop)
 
+#include "FFmpegUtils.h"
+
 namespace bv 
 {
 
@@ -25,6 +27,11 @@ class AVEncoder::Impl;
 class AVEncoder::Impl
 {
     std::unique_ptr< AVEncoderThread > m_encoderThread;
+
+    ::AVFrame *         m_AVFrame;
+    ::AVCodecContext *  m_AVContext;
+    FILE *              m_file;
+
 
 private:
     Impl( const Impl & copy );
