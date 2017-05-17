@@ -185,6 +185,9 @@ private:
         centers[ 2 ] = glm::vec3( -sizeX + bevels[ 2 ], -sizeY + bevels[ 2 ], 0 );
         centers[ 3 ] = glm::vec3( sizeX - bevels[ 3 ], -sizeY + bevels[ 3 ], 0 );
 
+        //for( int i = 0; i < 4; ++i )
+        //    bevels[ i ] = m_bevels[ i ];
+
         int nPoints = GetNPoints();
 
         for( int i = 0; i < nPoints; i++ )
@@ -202,21 +205,33 @@ private:
 
     // ***********************
     //
-    void            ConnectTriangles    ( Float3AttributeChannelPtr verts, std::vector< glm::vec3 > & verticies, bool /*useOutline*/ )
+    void            ConnectTriangles    ( Float3AttributeChannelPtr verts, std::vector< glm::vec3 > & verticies, bool useOutline )
     {
         verts->GetVertices().reserve( verticies.size() );
 
-        SizeType numVerticies = verticies.size() / 2;
-        SizeType i = 0;
-
-        for( ; i < numVerticies - 1; ++i )
+        if( useOutline )
         {
-            verts->AddAttribute( verticies[ i ] );
-            verts->AddAttribute( verticies[ i + numVerticies ] );
-        }
+            SizeType numVerticies = verticies.size() / 2;
+            SizeType i = 0;
 
-        verts->AddAttribute( verticies[ 0 ] );
-        verts->AddAttribute( verticies[ numVerticies ] );
+            for( ; i < numVerticies - 1; ++i )
+            {
+                verts->AddAttribute( verticies[ i ] );
+                verts->AddAttribute( verticies[ i + numVerticies ] );
+            }
+
+            verts->AddAttribute( verticies[ 0 ] );
+            verts->AddAttribute( verticies[ numVerticies ] );
+        }
+        else
+        {
+            int nPoints = GetNPoints(), i, j;
+            for( i = 0, j = nPoints - 1; i < j; i++, j-- )
+            {
+                verts->AddAttribute( GetPoint( j ) );
+                verts->AddAttribute( GetPoint( i ) );
+            }
+        }
     }
 
 };
