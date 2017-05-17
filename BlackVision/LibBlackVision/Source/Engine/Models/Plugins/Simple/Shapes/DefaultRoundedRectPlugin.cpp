@@ -122,7 +122,9 @@ public:
         if( m_useOutline )
             GenerateContour( verticies, m_outlineWidth );
 
+        Stretch( verticies );
         ConnectTriangles( verts, verticies, m_useOutline );
+
         GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 
@@ -175,6 +177,25 @@ private:
     {
         // Implement
         return true;
+    }
+
+    // ***********************
+    //
+    void            Stretch             ( std::vector< glm::vec3 > & verticies )
+    {
+        if( abs( m_stretch ) > std::numeric_limits< float >::epsilon() )
+        {
+            float stretchRange = m_size[ 1 ] + 2 * m_outlineWidth;
+            float floor = -stretchRange / 2;
+
+            for( auto& vertex : verticies )
+            {
+                float stretchFactor = ( vertex.y - floor ) / stretchRange;
+                stretchFactor *= m_stretch;
+
+                vertex.x += stretchFactor;
+            }
+        }
     }
 
     // ***********************
