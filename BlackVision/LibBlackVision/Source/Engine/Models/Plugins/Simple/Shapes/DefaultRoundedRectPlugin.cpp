@@ -144,7 +144,7 @@ public:
         if( m_useOutline )
             GenerateContour( verticies, m_outlineWidth );
 
-        ConnectTriangles( verts, verticies );
+        ConnectTriangles( verts, verticies, m_useOutline );
         GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
     }
 
@@ -202,7 +202,7 @@ private:
 
     // ***********************
     //
-    void            ConnectTriangles    ( Float3AttributeChannelPtr verts, std::vector< glm::vec3 > & verticies )
+    void            ConnectTriangles    ( Float3AttributeChannelPtr verts, std::vector< glm::vec3 > & verticies, bool /*useOutline*/ )
     {
         verts->GetVertices().reserve( verticies.size() );
 
@@ -215,8 +215,8 @@ private:
             verts->AddAttribute( verticies[ i + numVerticies ] );
         }
 
-        verts->AddAttribute( verticies[ i ] );
-        verts->AddAttribute( verticies[ i + numVerticies ] );
+        verts->AddAttribute( verticies[ 0 ] );
+        verts->AddAttribute( verticies[ numVerticies ] );
     }
 
 };
