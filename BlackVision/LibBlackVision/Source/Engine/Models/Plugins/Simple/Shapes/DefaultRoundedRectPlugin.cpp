@@ -223,8 +223,8 @@ private:
             int nPoints = GetNPoints(), i, j;
             for( i = 0, j = nPoints - 1; i < j; i++, j-- )
             {
-                verts->AddAttribute( GetPoint( j ) );
-                verts->AddAttribute( GetPoint( i ) );
+                verts->AddAttribute( verticies[ j ] );
+                verts->AddAttribute( verticies[ i ] );
             }
         }
     }
