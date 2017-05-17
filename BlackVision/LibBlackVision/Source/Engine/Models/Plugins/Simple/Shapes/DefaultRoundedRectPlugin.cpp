@@ -116,28 +116,6 @@ public:
     {
         ValidateParams();
 
-        //sizeX = m_size[ 0 ] / 2;
-        //sizeY = m_size[ 1 ] / 2;
-
-        //centers[ 0 ] = glm::vec3( sizeX - m_bevels[ 0 ], sizeY - m_bevels[ 0 ], 0 );
-        //centers[ 1 ] = glm::vec3( -sizeX + m_bevels[ 1 ], sizeY - m_bevels[ 1 ], 0 );
-        //centers[ 2 ] = glm::vec3( -sizeX + m_bevels[ 2 ], -sizeY + m_bevels[ 2 ], 0 );
-        //centers[ 3 ] = glm::vec3( sizeX - m_bevels[ 3 ], -sizeY + m_bevels[ 3 ], 0 );
-
-        //int nPoints = GetNPoints(), i, j;
-        //for( i = 0, j = nPoints - 1; i < j; i++, j-- )
-        //{
-        //    verts->AddAttribute( GetPoint( j ) );
-        //    verts->AddAttribute( GetPoint( i ) );
-        //}
-        //if( i == j )
-        //    assert( false );
-
-        //GeometryGeneratorHelper::GenerateNonWeightedNormalsFromTriangleStrips( verts, normals );
-
-        //return;
-
-        // New code.
         std::vector< glm::vec3 > verticies;
 
         GenerateContour( verticies, 0.0f );
@@ -185,11 +163,7 @@ private:
         centers[ 2 ] = glm::vec3( -sizeX + bevels[ 2 ], -sizeY + bevels[ 2 ], 0 );
         centers[ 3 ] = glm::vec3( sizeX - bevels[ 3 ], -sizeY + bevels[ 3 ], 0 );
 
-        //for( int i = 0; i < 4; ++i )
-        //    bevels[ i ] = m_bevels[ i ];
-
         int nPoints = GetNPoints();
-
         for( int i = 0; i < nPoints; i++ )
             verts.push_back( GetPoint( i ) );
     }
