@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AVEncoder.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\AVEncoderImpl.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Impl\AVEncoderThread.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\AVEncoder.h" />
+    <ClInclude Include="..\..\..\Source\Impl\AVEncoderImpl.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\AVEncoderThread.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\FFmpegUtils.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Impl">
+      <UniqueIdentifier>{45ec2474-1fb9-4ce9-94c2-353d4d28e36f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

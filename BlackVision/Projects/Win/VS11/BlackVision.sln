@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
 EndProject
@@ -68,10 +68,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticTester", "..\..\..
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestBVProjectEditor", "..\..\..\Test\Tools\BVProjectEditor\Projects\Win\VS11\TestBVProjectEditor.vcxproj", "{296E3F8D-31FE-47B4-B2BE-240565A6B754}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibAVEncoder", "..\..\..\Tools\LibAVEncoder\Projects\Win\VS11\LibAVEncoder.vcxproj", "{3D46A32F-4C62-4D4A-8048-54F569123733}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestAVEncoder", "..\..\..\Test\Tools\AVEncoder\Projects\Win\VS11\TestAVEncoder.vcxproj", "{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -486,6 +487,34 @@ Global
 		{296E3F8D-31FE-47B4-B2BE-240565A6B754}.Release|Win32.Build.0 = Release|Win32
 		{296E3F8D-31FE-47B4-B2BE-240565A6B754}.Release|x64.ActiveCfg = Release|x64
 		{296E3F8D-31FE-47B4-B2BE-240565A6B754}.Release|x64.Build.0 = Release|x64
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|Win32.Build.0 = Debug|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|x64.ActiveCfg = Debug|x64
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Debug|x64.Build.0 = Debug|x64
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|Any CPU.ActiveCfg = Release|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|Win32.ActiveCfg = Release|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|Win32.Build.0 = Release|Win32
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|x64.ActiveCfg = Release|x64
+		{3D46A32F-4C62-4D4A-8048-54F569123733}.Release|x64.Build.0 = Release|x64
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|Win32.Build.0 = Debug|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|x64.ActiveCfg = Debug|x64
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Debug|x64.Build.0 = Debug|x64
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|Win32.ActiveCfg = Release|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|Win32.Build.0 = Release|Win32
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|x64.ActiveCfg = Release|x64
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -514,5 +543,7 @@ Global
 		{B73F6FD0-C1B9-4D07-B561-63D413FB8E18} = {42BED5C7-ABA5-4BFD-AC21-2356DDD56684}
 		{4F7C818B-4A2E-40C3-9036-92CCBF65C0FF} = {42BED5C7-ABA5-4BFD-AC21-2356DDD56684}
 		{296E3F8D-31FE-47B4-B2BE-240565A6B754} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{3D46A32F-4C62-4D4A-8048-54F569123733} = {7A2AC84D-DA2C-4D5A-BA2B-B5BB25F0BD81}
+		{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 EndGlobal
