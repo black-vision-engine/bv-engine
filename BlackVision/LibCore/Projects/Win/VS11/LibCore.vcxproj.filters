@@ -223,6 +223,7 @@
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h">
       <Filter>Util\FFmpeg</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\CoreEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FFmpegDef.h"
-#include "Engine/Types/Enums.h"
+#include "CoreEnums.h"
 
 
 namespace bv {
