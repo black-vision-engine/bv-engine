@@ -1,7 +1,5 @@
 #include "AVEncoderImpl.h"
 
-
-
 #include <stdio.h>
 
 namespace bv { namespace avencoder

@@ -48,7 +48,7 @@ void        LinearAllocator::AllocNewChunk()
     std::vector< MemoryChunk > newVec;
     newVec.reserve( chunkSize + 1 );
 
-    for( int i = 0; i < chunkSize; ++i )
+    for( SizeType i = 0; i < chunkSize; ++i )
     {
         newVec.push_back( std::move( m_memChunks[ i ] ) );
     }

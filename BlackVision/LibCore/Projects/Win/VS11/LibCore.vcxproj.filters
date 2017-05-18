@@ -43,6 +43,9 @@
     <Filter Include="Mathematics\Util">
       <UniqueIdentifier>{cdcfc625-fb5c-44f1-8df4-1917a89c654a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util\FFmpeg">
+      <UniqueIdentifier>{8764c851-0fbb-4183-9db8-a70287735211}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -211,6 +214,15 @@
     <ClInclude Include="..\..\..\Source\Memory\AVFrame.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -315,6 +327,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp">
+      <Filter>Util\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp">
+      <Filter>Util\FFmpeg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

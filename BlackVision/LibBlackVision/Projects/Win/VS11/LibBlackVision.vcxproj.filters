@@ -1594,12 +1594,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.cpp">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.cpp">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAsset.cpp">
       <Filter>Assets\AVStream</Filter>
     </ClCompile>
@@ -4791,15 +4785,6 @@
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegDef.h">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.h">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.h">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAsset.h">
