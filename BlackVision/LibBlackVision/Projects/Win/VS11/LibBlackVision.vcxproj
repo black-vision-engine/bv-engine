@@ -532,8 +532,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultLineChartPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.cpp" />
@@ -1116,9 +1114,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegDef.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDecoder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDefs.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h" />

@@ -4,7 +4,7 @@
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 
 #include <cassert>
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+#include "Util/FFmpeg/FFmpegUtils.h"
 
 
 namespace bv {

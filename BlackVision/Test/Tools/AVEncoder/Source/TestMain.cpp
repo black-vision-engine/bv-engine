@@ -2,6 +2,12 @@
 
 #include "AVEncoder.h"
 
+static bv::avencoder::AVEncoder enc;
+
+TEST( OpenStream, OpenStream ) 
+{
+	ASSERT_TRUE( enc.OpenOutputStream( "output.mov" ) );
+}
 
 int main( int argc, char **argv )
 {
