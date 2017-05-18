@@ -133,10 +133,19 @@ VoidConstPtr            DataArrayAssetDescriptor::QueryThis() const
 	return shared_from_this();
 }
 
+// ***********************
+//
+std::string	            DataArrayAssetDescriptor::GetKey	() const
+{
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
 
 // ***********************
 //
-std::string				DataArrayAssetDescriptor::GetKey		() const
+std::string				DataArrayAssetDescriptor::ComputeKey		() const
 {
     std::string key = uid;
     for( auto row : m_rows )

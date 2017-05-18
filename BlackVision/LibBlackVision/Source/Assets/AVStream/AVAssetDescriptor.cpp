@@ -80,9 +80,19 @@ bool					AVAssetDesc::IsCacheable	() const
 	return false;
 }
 
+// ***********************
+//
+std::string	            AVAssetDesc::GetKey	() const
+{
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
 // *******************************
 //
-std::string				AVAssetDesc::GetKey      () const
+std::string				AVAssetDesc::ComputeKey     () const
 {
     return m_streamPath + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_streamPath ) ) );
 }

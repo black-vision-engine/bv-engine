@@ -69,6 +69,12 @@ private:
     UInt32          m_outlineSize;
     bool            m_generateMipmaps;
     std::wstring    m_atlasCharSetFile;
+
+    mutable std::string                 m_key;
+
+private:
+
+    std::string                         ComputeKey          () const;
 };
 
 // ***********************

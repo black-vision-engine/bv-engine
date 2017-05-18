@@ -57,6 +57,12 @@ private:
     std::string		m_fontFileName;
     UInt32			m_fontSize;
     std::wstring	m_atlasCharSetFile;
+
+    mutable std::string                 m_key;
+
+private:
+
+    std::string                         ComputeKey          () const;
 };
 
 // ***********************

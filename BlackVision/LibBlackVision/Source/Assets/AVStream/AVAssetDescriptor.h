@@ -32,6 +32,8 @@ private:
 
     TextureFormat				m_textureFormat;
 
+    mutable std::string                 m_key;
+
 protected:
 
 
@@ -66,6 +68,9 @@ public:
     static AVAssetDescConstPtr			        Create						( const std::string & streamPath, TextureFormat textureFormat );
     static AVAssetDescConstPtr			        Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat  );
 
+private:
+
+    std::string                                 ComputeKey                  () const;
 };
 
 // ***********************

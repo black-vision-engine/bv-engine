@@ -12,8 +12,12 @@ DEFINE_CONST_PTR_TYPE( SVGAssetDescriptor );
 
 class SVGAssetDescriptor : public AssetDesc,  public std::enable_shared_from_this< AssetDesc >
 {
+private:
+    
     std::string                     m_path;
+    mutable std::string             m_key;
 
+private:
     explicit                        SVGAssetDescriptor  ( const std::string & path );
 protected:
     virtual VoidConstPtr            QueryThis	() const;
@@ -35,8 +39,9 @@ public:
 
     static SVGAssetDescriptorPtr    Create          ( const std::string & path);
 
-    //template< typename DescTypeConstPtr >
-    //friend DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc );
+private:
+
+    std::string                         ComputeKey          () const;
 };
 
 // ***********************
