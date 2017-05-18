@@ -72,6 +72,18 @@ Json::Value JsonSerializeObject::GetJson() const
 
 // ***********************
 //
+Json::Value & JsonSerializeObject::StealJson()
+{
+    m_currentNode = nullptr;
+    
+    while( !m_nodeStack.empty() )
+        m_nodeStack.pop();
+
+    return m_root;
+}
+
+// ***********************
+//
 std::string JsonSerializeObject::GetString()
 {
     return m_root.toStyledString();

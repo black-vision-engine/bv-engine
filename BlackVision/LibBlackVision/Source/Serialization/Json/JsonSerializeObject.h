@@ -12,7 +12,12 @@
 namespace bv
 {
 
+class JsonSerializeObject;
+class JsonDeserializeObject;
 
+
+// ***********************
+//
 class JsonSerializeObject : public ISerializer
 {
 private:
@@ -33,6 +38,7 @@ public:
 	void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
 	void						Save                ( std::ostream& out );
     Json::Value                 GetJson             () const;
+    Json::Value&                StealJson           ();
     std::string                 GetString           ();
 
 	void						SetAttribute        ( const std::string& name, const std::string& value ) override;
@@ -50,6 +56,7 @@ public:
 
     bool                        AttachBranch        ( const std::string & name, const ISerializer * ser ) override;
     bool                        AttachBranch        ( const std::string & name, const IDeserializer * ser ) override;
+
 };
 
 

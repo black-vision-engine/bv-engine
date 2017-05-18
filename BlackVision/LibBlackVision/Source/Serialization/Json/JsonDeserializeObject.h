@@ -10,6 +10,7 @@
 namespace bv
 {
 
+class JsonSerializeObject;
 
 
 class JsonDeserializeObject : public IDeserializer
@@ -23,8 +24,9 @@ private:
     std::unique_ptr< DeserializeContext >       m_context;
 
 public:
-    JsonDeserializeObject();
-    virtual ~JsonDeserializeObject();
+    JsonDeserializeObject               ();
+    JsonDeserializeObject               ( JsonSerializeObject && serializer );
+    virtual ~JsonDeserializeObject      ();
 
     virtual DeserializeContext* GetDeserializeContext() const;
 

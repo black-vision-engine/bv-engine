@@ -85,38 +85,38 @@ std::string     AttributeChannelDescriptor::DefaultName                         
     { type; } // FIXME: suppress unused variable
     assert( num >= 0 );
 
-    std::ostringstream oss;
+    std::string name;
     
     switch( semantic )
     {
         case AttributeSemantic::AS_POSITION:
-            oss << "pos";
+            name = "pos";
             break;
         case AttributeSemantic::AS_TEXCOORD:
-            oss << "tex";
+            name = "tex";
             break;
         case AttributeSemantic::AS_COLOR:
-            oss << "col";
+            name = "col";
             break;
         case AttributeSemantic::AS_NORMAL:
-            oss << "norm";
+            name = "norm";
             break;
         case AttributeSemantic::AS_TANGENT:
-            oss << "tang";
+            name = "tang";
             break;
         case AttributeSemantic::AS_BINORMAL:
-            oss << "binorm";
+            name = "binorm";
             break;
         case AttributeSemantic::AS_CUSTOM:
-            oss << "custom";
+            name = "custom";
             break;
         default:
             assert( false );
     }
 
-    oss << num;
+    name += SerializationHelper::T2String( num );
 
-    return oss.str();
+    return name;
 }
 
 } //model

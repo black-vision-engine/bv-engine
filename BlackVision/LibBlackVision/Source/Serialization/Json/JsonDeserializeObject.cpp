@@ -27,18 +27,34 @@ namespace bv
 
 JsonDeserializeObject::JsonDeserializeObject()
     : m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
-{
-    m_currentNode = nullptr;
-}
+    , m_currentNode( nullptr )
+{}
 
-JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
-    :   m_root( initValue ),
-        m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+// ***********************
+//
+JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && serializer )
+    :   m_root( Json::nullValue )
+    ,   m_currentNode( nullptr )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
 {
-    m_currentNode = nullptr;
+    auto & steal = serializer.StealJson();
+    m_root.swap( steal );
+
     OnRootInit();
 }
 
+// ***********************
+//
+JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
+    :   m_root( initValue )
+    ,   m_currentNode( nullptr )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+{
+    OnRootInit();
+}
+
+// ***********************
+//
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
 
