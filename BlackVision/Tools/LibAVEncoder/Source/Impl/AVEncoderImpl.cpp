@@ -1,7 +1,5 @@
 #include "AVEncoderImpl.h"
 
-
-
 #include <stdio.h>
 
 namespace bv { namespace avencoder
@@ -34,13 +32,13 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
     auto codec = avcodec_find_encoder( codec_id );
     if (!codec) {
         fprintf(stderr, "Codec not found\n");
-        exit(1);
+		return false;
     }
     auto c = avcodec_alloc_context3(codec);
     m_AVContext = c;
     if (!c) {
         fprintf(stderr, "Could not allocate video codec context\n");
-        exit(1);
+		return false;
     }
     /* put sample parameters */
     c->bit_rate = 400000;
@@ -64,17 +62,17 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
     /* open it */
     if (avcodec_open2(c, codec, NULL) < 0) {
         fprintf(stderr, "Could not open codec\n");
-        exit(1);
+		return false;
     }
      fopen_s(&m_file, outputFilePath.c_str(), "wb");
     if (!m_file) {
         fprintf(stderr, "Could not open %s\n", outputFilePath.c_str());
-        exit(1);
+		return false;
     }
     m_AVFrame = av_frame_alloc();
     if (!m_AVFrame) {
         fprintf(stderr, "Could not allocate video frame\n");
-        exit(1);
+		return false;
     }
     m_AVFrame->format = c->pix_fmt;
     m_AVFrame->width  = c->width;
@@ -85,7 +83,7 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
                          c->pix_fmt, 32);
     if (ret < 0) {
         fprintf(stderr, "Could not allocate raw picture buffer\n");
-        exit(1);
+		return false;
     }
 
 

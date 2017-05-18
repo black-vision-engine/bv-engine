@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\CoreEnums.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
@@ -74,6 +75,9 @@
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h" />
     <ClInclude Include="..\..\..\Source\Util\IObservable.h" />
     <ClInclude Include="..\..\..\Source\Util\IObserver.h" />
     <ClInclude Include="..\..\..\Source\Util\Observable.h" />
@@ -115,6 +119,8 @@
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp" />
   </ItemGroup>
   <ItemGroup>

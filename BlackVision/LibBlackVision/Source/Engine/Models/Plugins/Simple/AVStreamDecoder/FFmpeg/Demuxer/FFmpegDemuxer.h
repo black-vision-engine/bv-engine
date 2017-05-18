@@ -2,9 +2,9 @@
 
 #include <map>
 
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegDef.h"
+#include "Util/FFmpeg/FFmpegDef.h"
 #include "DataTypes/QueueConcurrentLimited.h"
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegPacket.h"
+#include "Util/FFmpeg/FFmpegPacket.h"
 
 
 namespace bv {

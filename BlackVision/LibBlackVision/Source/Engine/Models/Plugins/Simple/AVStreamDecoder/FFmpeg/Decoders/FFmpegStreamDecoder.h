@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegDef.h"
+#include "Util/FFmpeg/FFmpegDef.h"
 
 #include "DataTypes/QueueConcurrentLimited.h"
 #include "DataTypes/QueueConcurrent.h"
