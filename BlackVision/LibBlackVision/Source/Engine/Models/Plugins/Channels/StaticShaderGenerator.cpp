@@ -34,24 +34,28 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
 	if ( it != g_loadedShaderSourceCache.end() )
 	{
 		shaderSource = it->second;
-	} 
+	}
+    else if( uids.size() == 1 && uids[ 0 ] == "DEFAULT_TRANSFORM" ) // FIXME (?)
+    {
+        shaderSource = "";
+    }
 	else if( Path::Exists( filename ) )
     {
         LOG_MESSAGE( SeverityLevel::debug ) << "Loading pixel shader from: " << filename;
 		shaderSource =  ReadShaderContentsFromFile( filename );
 		g_loadedShaderSourceCache[ filename ] = shaderSource;
     }
-    else if( uids.size() == 1 && uids[ 0 ] == "DEFAULT_TRANSFORM" ) // FIXME (?)
-		shaderSource = "";
     else
     {
         LOG_MESSAGE( SeverityLevel::debug ) << "File: " << filename << " does not exist. Loading default shader.";
 		
-		filename = m_shadersDir + "default." + m_shaderExtension;
+		std::string newFilename = m_shadersDir + "default." + m_shaderExtension;
 
 		if( Path::Exists( filename ) )
 		{
 			shaderSource = ReadShaderContentsFromFile( filename );
+
+            // Note: we cache input path not default shader path. Next time we will know earlier, that we must tak default shader.
 			g_loadedShaderSourceCache[ filename ] = shaderSource;
 		}
 		else
