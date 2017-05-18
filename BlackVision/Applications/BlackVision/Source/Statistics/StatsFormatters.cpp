@@ -125,8 +125,7 @@ void ProfilerNamedPipeSender::SendSamples		()
 	CPUThreadSamples* CPUsamples =  AutoProfile::GetCPUThreadSamples( m_thread );
 	char buffer[ sizeof( ProtocolHeader ) + MAX_PROFILER_SAMPLES * sizeof( ProtocolSample ) ];
 
-	LARGE_INTEGER freq = AutoProfile::QueryCounterFrequency();
-	double freqd = (double) freq.QuadPart;
+	double freqd = (double)AutoProfile::QueryCounterFrequency();
 
 	unsigned int activeFrame = CPUsamples->m_activeFrame;
 	unsigned int framesToSend = CPUsamples->m_framesToSend;
@@ -160,7 +159,7 @@ void ProfilerNamedPipeSender::SendSamples		()
 			sample.depth = (UInt16)liveSample.depth;
 			sample.name = GetNameID( liveSample.name );
 
-			double duration = double( liveSample.timeEnd.QuadPart - liveSample.timeStart.QuadPart );
+			double duration = double( liveSample.timeEnd - liveSample.timeStart );
 			sample.durationSecs = float( duration / freqd );
 
 			++k;

@@ -15,8 +15,8 @@ inline                     AutoProfile::AutoProfile     ( const char * name, Aut
     sample.name = name;
     sample.type = type;
 	sample.depth = m_threads[ m_threadID ].m_curDepth++;
-	sample.timeEnd.QuadPart = INVALID_TIME;
-    QueryPerformanceCounter( &sample.timeStart );
+	sample.timeEnd = INVALID_TIME;
+    sample.timeStart = QueryCounter();
 }
 
 // *********************************
@@ -25,11 +25,11 @@ inline                     AutoProfile::~AutoProfile    ()
 {
 	int sampleCounter = m_threads[ m_threadID ].m_curFrame * MAX_PROFILER_SAMPLES + m_threads[ m_threadID ].m_curSample - 1;
     
-	while( m_threads[ m_threadID ].m_liveSamples[ sampleCounter ].timeEnd.QuadPart != INVALID_TIME )
+	while( m_threads[ m_threadID ].m_liveSamples[ sampleCounter ].timeEnd != INVALID_TIME )
 		--sampleCounter;
 
 	ProfilerLiveSample & sample = m_threads[ m_threadID ].m_liveSamples[ sampleCounter ];
-    QueryPerformanceCounter( &sample.timeEnd );
+    sample.timeEnd = QueryCounter();
 
 	--m_threads[ m_threadID ].m_curDepth;
 }
