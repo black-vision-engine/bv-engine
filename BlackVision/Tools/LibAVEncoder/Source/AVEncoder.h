@@ -1,5 +1,7 @@
 #pragma once 
 #include "CoreDEF.h"
+#include "Memory/AVFrame.h"
+
 
 namespace bv 
 {
@@ -19,7 +21,10 @@ public:
     AVEncoder           ();
     virtual ~AVEncoder  ();
 
-    bool            OpenOutputStream     ( const std::string & outputFilePath );
+    bool            OpenOutputStream    ( const std::string & outputFilePath );
+	bool			WriteFrame			( const AVFrameConstPtr & frame );
+
+    void            CloseStream         ();
 
 };
 
