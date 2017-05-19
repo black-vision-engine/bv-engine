@@ -14,6 +14,9 @@
 
 #include "Engine/Models/AssetTracker.h"
 
+#include "Engine/Interfaces/IConfig.h"
+
+
 
 namespace bv {
 
@@ -56,7 +59,7 @@ private:
 
 private:
 
-    explicit                    BVProject           ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    explicit                    BVProject           ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const IConfig* config );
 
     void                        RemoveNodeEffect    ( SceneNode * engineNode );
 
@@ -64,7 +67,7 @@ public:
 
                                 ~BVProject          ();
 
-    static BVProjectPtr         Create              ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    static BVProjectPtr         Create              ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const IConfig* config );
 
     model::SceneModelPtr         GetModelScene      ( const std::string & name ) const;
     model::SceneModelPtr         GetModelScene      ( UInt32 idx ) const;

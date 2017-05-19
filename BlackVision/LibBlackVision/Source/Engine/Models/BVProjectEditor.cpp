@@ -54,6 +54,7 @@
 
 #include "Application/ApplicationContext.h"
 
+
 // Undo/Redo operations
     // Nodes
 #include "Engine/Models/UndoRedo/Nodes/AddNodeOperation.h"
@@ -79,11 +80,6 @@
 
 
 
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 namespace {
@@ -99,12 +95,15 @@ model::BasicNodePtr QueryTyped( model::IModelNodePtr node )
 
 // *******************************
 //
-BVProjectEditor::BVProjectEditor                ( BVProject * project )
+BVProjectEditor::BVProjectEditor                ( BVProject * project, const IConfig* config )
     : m_project( project )
     , m_rootNode( project->GetModelSceneRoot() )
+    , m_maxHistorySize( 0 )
 {
     assert( project != nullptr );
     assert( project->m_renderer != nullptr );
+
+    m_maxHistorySize = (UInt16)SerializationHelper::String2T< UInt32 >( config->PropertyValue( "Application/HistorySize" ), 15 );
 
     project->m_engineSceneRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
     m_engineSceneEditor = new SceneEditor( project->m_renderer, project->m_engineSceneRoot );
@@ -2169,6 +2168,7 @@ void                    BVProjectEditor::NotifyLightRemoved     ( model::IModelL
 void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene )
 {
     //Set default root node & timeline & camera
+    scene->GetHistory().SetHistoryLength( m_maxHistorySize );
 
     auto defaultTimeline = GetTimeline( model::TimelineHelper::CombineTimelinePath( scene->GetName(), DEFAULT_TIMELINE_NAME ) );
     //don't add default timeline if it already exists

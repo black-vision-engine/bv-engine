@@ -26,7 +26,7 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::RegisterConsoleInitializer();
 {
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( TestSceneUtils::DefaultBVPluginDescriptors() );
 
-	m_project = BVProject::Create( m_renderer, audioRenderer );
+	m_project = BVProject::Create( m_renderer, audioRenderer, TestSceneUtils::GetConfig() );
 
 	m_scene = std::make_shared< TestScene >( m_project.get(), renderer );
 	

@@ -233,6 +233,7 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     }
     else if( command == ConfigEvent::Command::SaveConfig )
     {
+        assert( false );
         //FIXME
         //bool result = ConfigManager::SaveXMLConfig();
         //SendSimpleResponse( command, configEvent->EventID, configEvent->SocketID, result );

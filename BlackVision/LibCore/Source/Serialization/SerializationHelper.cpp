@@ -286,6 +286,7 @@ template bool           String2T        ( const std::string & s, const bool & de
 template Float32        String2T        ( const std::string & s, const Float32 & defaultVal );
 template UInt32         String2T        ( const std::string & s, const UInt32 & defaultVal );
 template Int32          String2T        ( const std::string & s, const Int32 & defaultVal );
+//template UInt16         String2T        ( const std::string & s, const UInt16 & defaultVal );
 template glm::vec2      String2T        ( const std::string & s, const glm::vec2 & defaultVal );
 template glm::vec3      String2T        ( const std::string & s, const glm::vec3 & defaultVal );
 template glm::vec4      String2T        ( const std::string & s, const glm::vec4 & defaultVal );

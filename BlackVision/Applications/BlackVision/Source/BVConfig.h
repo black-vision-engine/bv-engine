@@ -12,11 +12,13 @@
 
 #include "CoreDEF.h"
 
+#include "Engine/Interfaces/IConfig.h"
+
 
 namespace bv
 {
 
-class BVConfig
+class BVConfig : public IConfig
 {
 private:
     

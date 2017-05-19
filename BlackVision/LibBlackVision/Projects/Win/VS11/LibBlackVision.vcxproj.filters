@@ -5165,6 +5165,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\IConfig.h">
+      <Filter>Engine\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

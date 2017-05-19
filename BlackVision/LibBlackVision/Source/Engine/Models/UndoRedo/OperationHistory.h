@@ -21,6 +21,7 @@ private:
 
 public:
     explicit            OperationHistory    ();
+    explicit            OperationHistory    ( UInt16 historySize );
 
 
     void                AddOperation        ( IRevertableUPtr && operation );

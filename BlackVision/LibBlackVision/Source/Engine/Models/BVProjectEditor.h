@@ -4,6 +4,9 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
+#include "Engine/Interfaces/IConfig.h"
+
+
 
 namespace bv {
 
@@ -49,7 +52,11 @@ private:
 
 private:
 
-                            BVProjectEditor       ( BVProject * project );
+    UInt16                      m_maxHistorySize;       /// Undo/Redo initialz value
+
+private:
+
+                            BVProjectEditor       ( BVProject * project, const IConfig* config );
 
 public:
 
