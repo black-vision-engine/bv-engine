@@ -2,7 +2,7 @@
 
 #include "FFmpegUtils.h"
 
-#define STREAM_DURATION   10.0
+//#define STREAM_DURATION   10.0
 #define STREAM_FRAME_RATE 25 /* 25 images/s */
 #define SCALE_FLAGS SWS_BICUBIC
 
@@ -82,34 +82,34 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
 		avr.den = c->sample_rate;
         ost->st->time_base = avr;
         break;
-    case AVMEDIA_TYPE_VIDEO:
-        c->codec_id = codec_id;
-        c->bit_rate = 400000;
-        /* Resolution must be a multiple of two. */
-        c->width    = 1920;
-        c->height   = 1080;
-        /* timebase: This is the fundamental unit of time (in seconds) in terms
-         * of which frame timestamps are represented. For fixed-fps content,
-         * timebase should be 1/framerate and timestamp increments should be
-         * identical to 1. */
-		avr.num = 1;
-		avr.den = STREAM_FRAME_RATE;
+//    case AVMEDIA_TYPE_VIDEO:
+  //      c->codec_id = codec_id;
+  //      c->bit_rate = 400000;
+  //      /* Resolution must be a multiple of two. */
+  //      c->width    = 1920;
+  //      c->height   = 1080;
+  //      /* timebase: This is the fundamental unit of time (in seconds) in terms
+  //       * of which frame timestamps are represented. For fixed-fps content,
+  //       * timebase should be 1/framerate and timestamp increments should be
+  //       * identical to 1. */
+		//avr.num = 1;
+		//avr.den = STREAM_FRAME_RATE;
 
-        ost->st->time_base = avr;
-        c->time_base       = ost->st->time_base;
-        c->gop_size      = 12; /* emit one intra frame every twelve frames at most */
-        c->pix_fmt       = AV_PIX_FMT_YUV420P;
-        if (c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
-            /* just for testing, we also add B-frames */
-            c->max_b_frames = 2;
-        }
-        if (c->codec_id == AV_CODEC_ID_MPEG1VIDEO) {
-            /* Needed to avoid using macroblocks in which some coeffs overflow.
-             * This does not happen with normal video, it just happens here as
-             * the motion of the chroma plane does not match the luma plane. */
-            c->mb_decision = 2;
-        }
-    break;
+  //      ost->st->time_base = avr;
+  //      c->time_base       = ost->st->time_base;
+  //      c->gop_size      = 12; /* emit one intra frame every twelve frames at most */
+  //      c->pix_fmt       = AV_PIX_FMT_YUV420P;
+  //      if (c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
+  //          /* just for testing, we also add B-frames */
+  //          c->max_b_frames = 2;
+  //      }
+  //      if (c->codec_id == AV_CODEC_ID_MPEG1VIDEO) {
+  //          /* Needed to avoid using macroblocks in which some coeffs overflow.
+  //           * This does not happen with normal video, it just happens here as
+  //           * the motion of the chroma plane does not match the luma plane. */
+  //          c->mb_decision = 2;
+  //      }
+  //  break;
     default:
         break;
     }
@@ -374,6 +374,40 @@ void FFmpegUtils::close_stream      ( OutputStream * ost )
     av_frame_free(&ost->tmp_frame);
     sws_freeContext(ost->sws_ctx);
     swr_free(&ost->swr_ctx);
+}
+
+bool FFmpegUtils::configure_video_codec_context( AVCodecContext * c, OutputStream * ost, int w, int h, int64_t bit_rate, int frame_rate, AVCodecID codec_id )
+{
+    c->codec_id = codec_id;
+    c->bit_rate = bit_rate;
+    /* Resolution must be a multiple of two. */
+    c->width    = w;
+    c->height   = h;
+    /* timebase: This is the fundamental unit of time (in seconds) in terms
+        * of which frame timestamps are represented. For fixed-fps content,
+        * timebase should be 1/framerate and timestamp increments should be
+        * identical to 1. */
+
+    AVRational avr;
+    avr.num = 1;
+    avr.den = frame_rate;
+
+    ost->st->time_base = avr;
+    c->time_base       = ost->st->time_base;
+    c->gop_size      = 12; /* emit one intra frame every twelve frames at most */
+    c->pix_fmt       = AV_PIX_FMT_YUV420P;
+    if (c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
+        /* just for testing, we also add B-frames */
+        c->max_b_frames = 2;
+    }
+    if (c->codec_id == AV_CODEC_ID_MPEG1VIDEO) {
+        /* Needed to avoid using macroblocks in which some coeffs overflow.
+            * This does not happen with normal video, it just happens here as
+            * the motion of the chroma plane does not match the luma plane. */
+        c->mb_decision = 2;
+    }
+
+    return false;
 }
 
 } //avencoder

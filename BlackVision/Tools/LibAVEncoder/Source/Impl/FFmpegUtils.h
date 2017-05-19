@@ -58,6 +58,10 @@ static bool         write_video_frame( AVFormatContext * oc, OutputStream * ost,
 
 static void         close_stream( OutputStream * ost );
 
+static bool         configure_video_codec_context( AVCodecContext * c, OutputStream * ost, int w, int h, int64_t bit_rate, int frame_rate, enum AVCodecID codec_id );
+
+static bool         configure_audio_codec_context( AVCodecContext * c, AVCodec codec, int64_t bit_rate, int64_t sample_rate, enum AVCodecID codec_id );
+
 };
 
 } //avencoder
