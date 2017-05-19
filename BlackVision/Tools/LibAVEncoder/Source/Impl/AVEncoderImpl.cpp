@@ -13,10 +13,6 @@ AVEncoder::Impl::Impl       ()
 	m_encoderThread->Start();
 }
 
-namespace {
-
-}
-
 //**************************************
 //
 bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & outputFilePath, bool /*enableVideo*/, bool /*enableAudio*/ )

@@ -14,6 +14,8 @@ namespace avencoder
 
 namespace 
 {
+//**************************************
+//
 static void log_packet(const AVFormatContext *, const AVPacket *)
 {
     //AVRational *time_base = &fmt_ctx->streams[pkt->stream_index]->time_base;
@@ -25,6 +27,8 @@ static void log_packet(const AVFormatContext *, const AVPacket *)
 }
 }
 
+//**************************************
+//
 bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVFormatContext *oc, AVCodec **codec, enum AVCodecID codec_id )
 {
     AVCodecContext *c;
@@ -116,6 +120,8 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
     return true;
 }
 
+//**************************************
+//
 ::AVFrame *  FFmpegUtils::alloc_picture         ( enum AVPixelFormat pix_fmt, int width, int height )
 {
     ::AVFrame *picture;
@@ -135,6 +141,8 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
     return picture;
 }
 
+//**************************************
+//
 ::AVFrame * FFmpegUtils::alloc_audio_frame  ( enum AVSampleFormat sample_fmt, uint64_t channel_layout, int sample_rate, int nb_samples )
 {
     ::AVFrame *frame = av_frame_alloc();
@@ -157,6 +165,8 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
     return frame;
 }
 
+//**************************************
+//
 bool FFmpegUtils::open_video                ( AVCodec * codec, OutputStream * ost, AVDictionary * opt_arg )
 {
     int ret;
@@ -197,6 +207,8 @@ bool FFmpegUtils::open_video                ( AVCodec * codec, OutputStream * os
     return true;
 }
 
+//**************************************
+//
 bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost, AVDictionary * opt_arg )
 {
     AVCodecContext *c;
@@ -253,6 +265,8 @@ bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost
     return true;
 }
 
+//**************************************
+//
 int FFmpegUtils::write_frame                ( AVFormatContext * fmt_ctx, const AVRational * time_base, AVStream * st, AVPacket * pkt )
 {
     /* rescale output packet timestamp values from codec to stream timebase */
@@ -263,6 +277,8 @@ int FFmpegUtils::write_frame                ( AVFormatContext * fmt_ctx, const A
     return av_interleaved_write_frame(fmt_ctx, pkt);
 }
 
+//**************************************
+//
 bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConstPtr srcFrame )
 {
     /* when we pass a frame to the encoder, it may keep a reference to it
@@ -277,6 +293,8 @@ bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConst
     return true;
 }
 
+//**************************************
+//
 ::AVFrame * FFmpegUtils::get_video_frame    ( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
 {
     AVCodecContext *c = ost->enc;
@@ -313,6 +331,8 @@ bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConst
     return ost->frame;
 }
 
+//**************************************
+//
 bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, bv::AVFrameConstPtr bvFrame )
 {
     int ret;
@@ -345,6 +365,8 @@ bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, b
     return frame != nullptr;
 }
 
+//**************************************
+//
 void FFmpegUtils::close_stream      ( OutputStream * ost )
 {
     avcodec_free_context(&ost->enc);
