@@ -27,6 +27,20 @@ struct OutputStream {
 	float t, tincr, tincr2;
 	struct SwsContext *sws_ctx;
 	struct SwrContext *swr_ctx;
+
+    OutputStream()
+        : st( nullptr )
+        , enc( nullptr )
+        , next_pts( 0 )
+        , samples_count( 0 )
+        , frame( nullptr )
+        , tmp_frame( nullptr )
+        , t( 0.f )
+        , tincr( 0 )
+        , tincr2( 0 )
+        , sws_ctx( nullptr )
+        , swr_ctx( nullptr )
+    {}
 };
 
 class AVEncoder::Impl
@@ -51,7 +65,7 @@ public:
     bool            OpenOutputStream    ( const std::string & outputFilePath, bool enableVideo = true, bool enableAudio = true );
     void            CloseStream         ();
 
-    bool            WriteFrame          ( const AVFramePtr & frame );
+    bool            WriteFrame          ( const AVFrameConstPtr & frame );
 };
 
 } // videoencoder 

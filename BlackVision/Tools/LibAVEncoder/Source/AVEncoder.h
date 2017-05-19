@@ -22,7 +22,9 @@ public:
     virtual ~AVEncoder  ();
 
     bool            OpenOutputStream    ( const std::string & outputFilePath );
-	bool			WriteFrame			( const AVFramePtr & frame );
+	bool			WriteFrame			( const AVFrameConstPtr & frame );
+
+    void            CloseStream         ();
 
 };
 

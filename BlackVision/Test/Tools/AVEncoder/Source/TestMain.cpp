@@ -11,10 +11,10 @@ TEST( OpenStream, OpenStream )
 
 TEST( WriteFrames, WriteFrames )
 {
-	auto w = 352;
-	auto h = 288;
+	auto w = 1920;
+	auto h = 1080;
 
-	auto videoData = bv::MemoryChunk::Create( 6 * w * h );
+	auto videoData = bv::MemoryChunk::Create( 4 * w * h );
 
 	bv::AVFrameDescriptor desc;
 	desc.channels = 0;
@@ -24,8 +24,16 @@ TEST( WriteFrames, WriteFrames )
 
 	auto frame = bv::AVFrame::Create( videoData, nullptr, desc );
 	
+    
 
-	//for (auto i = 0; i < 25; i++) {
+	for (auto i = 0; i < 250; i++) {
+        memset( videoData->GetWritable(), i, videoData->Size() );
+
+
+        enc.WriteFrame( frame );
+    }
+
+    enc.CloseStream();
 	//	/* prepare a dummy image */
 	//	/* Y */
 	//	for (auto y = 0; y < 288; y++) {

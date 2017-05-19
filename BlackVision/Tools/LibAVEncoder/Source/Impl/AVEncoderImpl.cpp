@@ -268,7 +268,7 @@ static int write_frame(AVFormatContext *fmt_ctx, const AVRational *time_base, AV
     return av_interleaved_write_frame(fmt_ctx, pkt);
 }
 
-static void fill_bgra_image(::AVFrame *pict, bv::AVFramePtr srcFrame)
+static void fill_bgra_image(::AVFrame *pict, bv::AVFrameConstPtr srcFrame)
 {
 //	int x, y, i, ret;
     /* when we pass a frame to the encoder, it may keep a reference to it
@@ -294,7 +294,7 @@ static void fill_bgra_image(::AVFrame *pict, bv::AVFramePtr srcFrame)
     //}
 }
 
-static ::AVFrame *get_video_frame(OutputStream *ost, bv::AVFramePtr bvFrame)
+static ::AVFrame *get_video_frame(OutputStream *ost, bv::AVFrameConstPtr bvFrame)
 {
     AVCodecContext *c = ost->enc;
     /* check if we want to generate more frames */
@@ -309,7 +309,7 @@ static ::AVFrame *get_video_frame(OutputStream *ost, bv::AVFramePtr bvFrame)
          * to the codec pixel format if needed */
         if (!ost->sws_ctx) {
             ost->sws_ctx = sws_getContext(c->width, c->height,
-                                          AV_PIX_FMT_YUV420P,
+                                          AV_PIX_FMT_BGRA,
                                           c->width, c->height,
                                           c->pix_fmt,
                                           SCALE_FLAGS, NULL, NULL, NULL);
@@ -330,7 +330,7 @@ static ::AVFrame *get_video_frame(OutputStream *ost, bv::AVFramePtr bvFrame)
     return ost->frame;
 }
 
-static int write_video_frame(AVFormatContext *oc, OutputStream *ost, bv::AVFramePtr bvFrame)
+static int write_video_frame(AVFormatContext *oc, OutputStream *ost, bv::AVFrameConstPtr bvFrame)
 {
     int ret;
     AVCodecContext *c;
@@ -345,7 +345,7 @@ static int write_video_frame(AVFormatContext *oc, OutputStream *ost, bv::AVFrame
 
 		if( ret == 0 )
 		{
-			return ( avcodec_receive_packet( ost->enc, &pkt ) == 0 );
+			ret = avcodec_receive_packet( ost->enc, &pkt );
 		}
 		else
 		{
@@ -365,6 +365,15 @@ static int write_video_frame(AVFormatContext *oc, OutputStream *ost, bv::AVFrame
         exit(1);
     }
     return (frame) ? 0 : 1;
+}
+
+static void close_stream(AVFormatContext *, OutputStream *ost)
+{
+    avcodec_free_context(&ost->enc);
+    av_frame_free(&ost->frame);
+    av_frame_free(&ost->tmp_frame);
+    sws_freeContext(ost->sws_ctx);
+    swr_free(&ost->swr_ctx);
 }
 
 }
@@ -438,12 +447,22 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
 //
 void            AVEncoder::Impl::CloseStream            ()
 {
-
+    av_write_trailer(m_AVContext);
+        /* Close each codec. */
+   
+    close_stream(m_AVContext, &m_video_st);
+    //if (have_audio)
+    //    close_stream(oc, &audio_st);
+    if (!(m_AVContext->oformat->flags & AVFMT_NOFILE))
+        /* Close the output file. */
+        avio_closep(&m_AVContext->pb);
+    /* free the stream */
+    avformat_free_context(m_AVContext);
 }
 
 //**************************************
 //
-bool            AVEncoder::Impl::WriteFrame             ( const AVFramePtr & bvFrame )
+bool            AVEncoder::Impl::WriteFrame             ( const AVFrameConstPtr & bvFrame )
 {
 	write_video_frame( m_AVContext, &m_video_st, bvFrame );
     return true;
