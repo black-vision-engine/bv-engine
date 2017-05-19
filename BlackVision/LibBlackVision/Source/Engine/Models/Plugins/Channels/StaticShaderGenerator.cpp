@@ -49,18 +49,18 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
     {
         LOG_MESSAGE( SeverityLevel::debug ) << "File: " << filename << " does not exist. Loading default shader.";
 		
-		std::string newFilename = m_shadersDir + "default." + m_shaderExtension;
+		std::string defaultShaderFile = m_shadersDir + "default." + m_shaderExtension;
 
-		if( Path::Exists( filename ) )
+		if( Path::Exists( defaultShaderFile ) )
 		{
-			shaderSource = ReadShaderContentsFromFile( filename );
+			shaderSource = ReadShaderContentsFromFile( defaultShaderFile );
 
             // Note: we cache input path not default shader path. Next time we will know earlier, that we must tak default shader.
 			g_loadedShaderSourceCache[ filename ] = shaderSource;
 		}
 		else
 		{
-            LOG_MESSAGE( SeverityLevel::critical ) << "File: " << filename << " does not exist. Loading default shader failed!!!";
+            LOG_MESSAGE( SeverityLevel::critical ) << "File: " << defaultShaderFile << " does not exist. Loading default shader failed!!!";
 			assert( false );
 			shaderSource = "";
 		}
