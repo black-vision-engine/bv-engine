@@ -15,33 +15,7 @@ namespace avencoder
 class AVEncoder;
 class AVEncoder::Impl;
 
-// a wrapper around a single output AVStream
-struct OutputStream {
-	::AVStream *st;
-	AVCodecContext *enc;
-	/* pts of the next frame that will be generated */
-	int64_t next_pts;
-	int samples_count;
-	::AVFrame *frame;
-	::AVFrame *tmp_frame;
-	float t, tincr, tincr2;
-	struct SwsContext *sws_ctx;
-	struct SwrContext *swr_ctx;
 
-    OutputStream()
-        : st( nullptr )
-        , enc( nullptr )
-        , next_pts( 0 )
-        , samples_count( 0 )
-        , frame( nullptr )
-        , tmp_frame( nullptr )
-        , t( 0.f )
-        , tincr( 0 )
-        , tincr2( 0 )
-        , sws_ctx( nullptr )
-        , swr_ctx( nullptr )
-    {}
-};
 
 class AVEncoder::Impl
 {

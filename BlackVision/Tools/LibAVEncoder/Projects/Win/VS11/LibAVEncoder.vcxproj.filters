@@ -8,6 +8,9 @@
     <ClCompile Include="..\..\..\Source\Impl\AVEncoderThread.cpp">
       <Filter>Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Impl\FFmpegUtils.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AVEncoder.h" />
