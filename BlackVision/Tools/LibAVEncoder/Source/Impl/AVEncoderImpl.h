@@ -15,21 +15,6 @@ namespace avencoder
 class AVEncoder;
 class AVEncoder::Impl;
 
-struct VideoOptions
-{
-    Int32 width;
-    Int32 height;
-    Int64 bitRate;
-    Int32 frameRate;
-};
-
-struct AudioOptions
-{
-    Int32 numChannels;
-    Int64 bitRate;
-    bv::AudioSampleType sampleType;
-};
-
 class AVEncoder::Impl
 {
     std::unique_ptr< AVEncoderThread > m_encoderThread;

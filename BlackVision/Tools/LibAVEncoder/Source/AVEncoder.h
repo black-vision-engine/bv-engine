@@ -9,6 +9,22 @@ namespace bv
 namespace avencoder
 {
 
+struct VideoOptions
+{
+    Int32 width;
+    Int32 height;
+    Int64 bitRate;
+    Int32 frameRate;
+};
+
+struct AudioOptions
+{
+    Int32 numChannels;
+    Int64 bitRate;
+    bv::AudioSampleType sampleType;
+};
+
+
 class AVEncoder
 {
     class Impl;
@@ -21,7 +37,11 @@ public:
     AVEncoder           ();
     virtual ~AVEncoder  ();
 
-    bool            OpenOutputStream    ( const std::string & outputFilePath );
+    bool            OpenOutputStream    (   const std::string & outputFilePath,
+                                            VideoOptions vOps,
+                                            AudioOptions aOps,
+                                            bool enableVideo = true,
+                                            bool enableAudio = true  );
 	bool			WriteFrame			( const AVFrameConstPtr & frame );
 
     void            CloseStream         ();

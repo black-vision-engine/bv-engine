@@ -6,7 +6,14 @@ static bv::avencoder::AVEncoder enc;
 
 TEST( OpenStream, OpenStream ) 
 {
-	ASSERT_TRUE( enc.OpenOutputStream( "output.mov" ) );
+    bv::avencoder::VideoOptions vOps;
+    vOps.bitRate = 40000;
+    vOps.frameRate = 25;
+    vOps.width = 1920;
+    vOps.height = 1080;
+    bv::avencoder::AudioOptions aOps = bv::avencoder::AudioOptions();
+
+	ASSERT_TRUE( enc.OpenOutputStream( "output.mov", vOps, aOps ) );
 }
 
 TEST( WriteFrames, WriteFrames )
