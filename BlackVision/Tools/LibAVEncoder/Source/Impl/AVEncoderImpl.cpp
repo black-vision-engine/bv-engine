@@ -335,27 +335,36 @@ static int write_video_frame(AVFormatContext *oc, OutputStream *ost, bv::AVFrame
     int ret;
     AVCodecContext *c;
     ::AVFrame *frame;
-    int got_packet = 0;
     AVPacket pkt = { 0 };
     c = ost->enc;
     frame = get_video_frame(ost, bvFrame);
     av_init_packet(&pkt);
     /* encode the image */
-    ret = avcodec_encode_video2(c, &pkt, frame, &got_packet);
+
+	ret = avcodec_send_frame( ost->enc, frame );
+
+		if( ret == 0 )
+		{
+			return ( avcodec_receive_packet( ost->enc, &pkt ) == 0 );
+		}
+		else
+		{
+			assert(false);
+		}
+
+    //ret = avcodec_encode_video2(c, &pkt, frame, &got_packet);
     if (ret < 0) {
         //fprintf(stderr, "Error encoding video frame: %s\n", av_err2str(ret));
         exit(1);
     }
-    if (got_packet) {
+
         ret = write_frame(oc, &c->time_base, ost->st, &pkt);
-    } else {
-        ret = 0;
-    }
+
     if (ret < 0) {
         //fprintf(stderr, "Error while writing video frame: %s\n", av_err2str(ret));
         exit(1);
     }
-    return (frame || got_packet) ? 0 : 1;
+    return (frame) ? 0 : 1;
 }
 
 }
