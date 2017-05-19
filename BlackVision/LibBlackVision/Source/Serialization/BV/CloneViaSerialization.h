@@ -27,14 +27,6 @@ std::shared_ptr< T >                              Clone( const T* obj, std::stri
 
     obj->Serialize( ser );
 
-    
-
-    //std::stringstream ss;
-    //ser.Save( ss );
-
-    //ser.Save( "clone.xml" ); // for debugging only
-
-    //JsonDeserializeObject deser( ss, ( SizeType )ss.tellp(), sceneTimeline, assets );
     JsonDeserializeObject deser( std::move( ser ) );
     
     auto deserCtx = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
@@ -48,15 +40,17 @@ template< typename T >
 std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
     JsonSerializeObject ser;
-    
+
+    auto serCtx = static_cast< BVSerializeContext* >( ser.GetSerializeContext() );
+    serCtx->SetAssets( assets );
+
     obj->Serialize( ser );
 
-    std::stringstream ss;
-    ser.Save( ss );
+    JsonDeserializeObject deser( std::move( ser ) );
 
-    //ser.Save( "clone.xml" ); // for debugging only
-
-    BVXMLDeserializer deser( ss, ( SizeType )ss.tellp(), sceneTimeline, assets );
+    auto deserCtx = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+    deserCtx->SetAssets( assets );
+    deserCtx->SetSceneTimeline( sceneTimeline );
     
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling
