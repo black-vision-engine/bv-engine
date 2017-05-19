@@ -9,123 +9,110 @@ namespace bv { namespace avencoder
 //
 AVEncoder::Impl::Impl       ()
     : m_encoderThread( new AVEncoderThread() )
-{}
+{
+	m_encoderThread->Start();
+}
+
+namespace {
+
+}
 
 //**************************************
 //
 bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & outputFilePath, bool /*enableVideo*/, bool /*enableAudio*/ )
 {
+	auto have_video = 0;
+	auto have_audio	 = 0;
+	int encode_video = 0, encode_audio = 0;
+	AVCodec * audio_codec = nullptr;
+	AVCodec * video_codec = nullptr;
+	//m_video_st
+	//m_audio_st = { 0 };
+	AVDictionary *opt = NULL;
+	int ret;
+
     av_register_all();
 
-    auto fmt = av_guess_format( nullptr, outputFilePath.c_str(), nullptr );
-    if ( !fmt ) {
-        //printf("Could not deduce output format from file extension: using MPEG.\n");
-        fmt = av_guess_format( "mpeg", nullptr, nullptr );
+    /* allocate the output media context */
+    avformat_alloc_output_context2( &m_AVContext, NULL, NULL, outputFilePath.c_str());
+    if (!m_AVContext) {
+        printf("Could not deduce output format from file extension: using MPEG.\n");
+        avformat_alloc_output_context2(&m_AVContext, NULL, "mpeg", outputFilePath.c_str());
     }
-    if ( !fmt ) {
-        //fprintf(stderr, "Could not find suitable output format\n");
+    if (!m_AVContext)
+        return false;
+
+    auto fmt = m_AVContext->oformat;
+    /* Add the audio and video streams using the default format codecs
+     * and initialize the codecs. */
+    if (fmt->video_codec != AV_CODEC_ID_NONE) {
+        FFmpegUtils::add_stream(&m_video_st, m_AVContext, &video_codec, fmt->video_codec);
+        have_video = 1;
+        encode_video = 1;
+    }
+    if (fmt->audio_codec != AV_CODEC_ID_NONE) {
+        FFmpegUtils::add_stream(&m_audio_st, m_AVContext, &audio_codec, fmt->audio_codec);
+        have_audio = 1;
+        encode_audio = 1;
+    }
+    /* Now that all the parameters are set, we can open the audio and
+     * video codecs and allocate the necessary encode buffers. */
+    if (have_video)
+        FFmpegUtils::open_video(video_codec, &m_video_st, opt);
+    if (have_audio)
+        FFmpegUtils::open_audio(audio_codec, &m_audio_st, opt);
+    av_dump_format(m_AVContext, 0, outputFilePath.c_str(), 1);
+    /* open the output file, if needed */
+    if (!(fmt->flags & AVFMT_NOFILE)) {
+        ret = avio_open(&m_AVContext->pb, outputFilePath.c_str(), AVIO_FLAG_WRITE);
+        if (ret < 0) {
+            //fprintf(stderr, "Could not open '%s': %s\n", outputFilePath.c_str(),
+            //        av_err2str(ret));
+            return false;
+        }
+    }
+    /* Write the stream header, if any. */
+    ret = avformat_write_header(m_AVContext, &opt);
+    if (ret < 0) {
+        //fprintf(stderr, "Error occurred when opening output file: %s\n",
+        //        av_err2str(ret));
         return false;
     }
 
-    auto codec_id = fmt->video_codec;
-
-    auto codec = avcodec_find_encoder( codec_id );
-    if (!codec) {
-        fprintf(stderr, "Codec not found\n");
-		return false;
-    }
-    auto c = avcodec_alloc_context3(codec);
-    m_AVContext = c;
-    if (!c) {
-        fprintf(stderr, "Could not allocate video codec context\n");
-		return false;
-    }
-    /* put sample parameters */
-    c->bit_rate = 400000;
-    /* resolution must be a multiple of two */
-    c->width = 352;
-    c->height = 288;
-    /* frames per second */
-    AVRational ar = {1, 25};
-    c->time_base = ar;
-    /* emit one intra frame every ten frames
-     * check frame pict_type before passing frame
-     * to encoder, if frame->pict_type is AV_PICTURE_TYPE_I
-     * then gop_size is ignored and the output of encoder
-     * will always be I frame irrespective to gop_size
-     */
-    c->gop_size = 10;
-    c->max_b_frames = 1;
-    c->pix_fmt = AV_PIX_FMT_BGRA;
-    if (codec_id == AV_CODEC_ID_H264)
-        av_opt_set(c->priv_data, "preset", "slow", 0);
-    /* open it */
-    if (avcodec_open2(c, codec, NULL) < 0) {
-        fprintf(stderr, "Could not open codec\n");
-		return false;
-    }
-     fopen_s(&m_file, outputFilePath.c_str(), "wb");
-    if (!m_file) {
-        fprintf(stderr, "Could not open %s\n", outputFilePath.c_str());
-		return false;
-    }
-    m_AVFrame = av_frame_alloc();
-    if (!m_AVFrame) {
-        fprintf(stderr, "Could not allocate video frame\n");
-		return false;
-    }
-    m_AVFrame->format = c->pix_fmt;
-    m_AVFrame->width  = c->width;
-    m_AVFrame->height = c->height;
-    /* the image can be allocated by any means and av_image_alloc() is
-     * just the most convenient way if av_malloc() is to be used */
-    auto ret = av_image_alloc(m_AVFrame->data, m_AVFrame->linesize, c->width, c->height,
-                         c->pix_fmt, 32);
-    if (ret < 0) {
-        fprintf(stderr, "Could not allocate raw picture buffer\n");
-		return false;
-    }
-
-
-    assert( false );
-    return false;
+	return true;
 }
 
 //**************************************
 //
 void            AVEncoder::Impl::CloseStream            ()
 {
-
+    av_write_trailer(m_AVContext);
+        /* Close each codec. */
+   
+    FFmpegUtils::close_stream(&m_video_st);
+    //if (have_audio)
+    //    close_stream(oc, &audio_st);
+    if (!(m_AVContext->oformat->flags & AVFMT_NOFILE))
+        /* Close the output file. */
+        avio_closep(&m_AVContext->pb);
+    /* free the stream */
+    avformat_free_context(m_AVContext);
 }
 
 //**************************************
 //
-bool            AVEncoder::Impl::WriteFrame             ( const AVFramePtr & frame )
+bool            AVEncoder::Impl::WriteFrame             ( const AVFrameConstPtr & bvFrame )
 {
-    AVPacket pkt;
-    av_init_packet(&pkt);
-    pkt.data = NULL;    // packet data will be allocated by the encoder
-    pkt.size = 0;
-    fflush(stdout);
-    m_AVFrame->pts = frame->m_frameNum;
-    /* encode the image */
-    auto ret = avcodec_send_frame( m_AVContext, m_AVFrame );
-    if (ret < 0) {
-        fprintf(stderr, "Error encoding frame\n");
-        return false;
-    }
-    if (avcodec_receive_packet( m_AVContext, &pkt ) == 0 ) {
-        printf("Write frame %3d (size=%5d)\n", frame->m_frameNum, pkt.size);
-        fwrite(pkt.data, 1, pkt.size, m_file);
-        av_packet_unref(&pkt);
-    } 
-
-    return true;
+	return FFmpegUtils::write_video_frame( m_AVContext, &m_video_st, bvFrame );
 }
 
 //**************************************
 //
-AVEncoder::Impl::~Impl      () {}
+AVEncoder::Impl::~Impl      () 
+{
+	m_encoderThread->Kill();
+	m_encoderThread->Join();
+}
 
 
 }

@@ -4,9 +4,9 @@
 
 extern "C"
 {
-	//#ifndef __STDC_CONSTANT_MACROS
-	//#define __STDC_CONSTANT_MACROS
-	//#endif
+	#ifndef __STDC_CONSTANT_MACROS
+	#define __STDC_CONSTANT_MACROS
+	#endif
 
 #pragma warning(push)
 #pragma warning(disable : 4244)
@@ -16,6 +16,9 @@ extern "C"
     #include <libavutil/imgutils.h>
     #include <libavutil/time.h>
     #include <libswresample/swresample.h>
+	#include <libavutil/opt.h>
+	#include <libavutil/error.h>
+	//#include <libavutil/timestamp.h>
 #pragma warning(pop)
 
 }
