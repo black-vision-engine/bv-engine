@@ -22,5 +22,12 @@ bool            AVEncoder::OpenOutputStream     ( const std::string & outputFile
     return m_impl->OpenOutputStream( outputFilePath );
 }
 
+//**************************************
+//
+bool			AVEncoder::WriteFrame			( const AVFramePtr & frame )
+{
+	return m_impl->WriteFrame( frame );
+}
+
 } // videoencoder 
 } // bv
