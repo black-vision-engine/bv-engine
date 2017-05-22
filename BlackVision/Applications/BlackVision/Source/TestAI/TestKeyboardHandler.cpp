@@ -4,9 +4,9 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NRenderLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/OutputLogic.h"
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Output.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/OutputLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/Output.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -51,18 +51,18 @@ TestKeyboardHandler::~TestKeyboardHandler()
 //
 void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
-    if( c >= '1' && c <= '9' || c == '0' )
-    { 
+    //if( c >= '1' && c <= '9' || c == '0' )
+    //{ 
         //auto outputLogic = logic->GetRenderLogic()->GetOutputLogic();
 
-        //auto preview = outputLogic->GetOutput( nrl::CustomOutputType::COT_PREVIEW );
+        //auto preview = outputLogic->GetOutput( CustomOutputType::COT_PREVIEW );
         //auto & statePrev = preview->AccessOutputState();
 
-        //auto shm = outputLogic->GetOutput( nrl::CustomOutputType::COT_STREAM_SHM );
+        //auto shm = outputLogic->GetOutput( CustomOutputType::COT_STREAM_SHM );
         //auto & stateShm = shm->AccessOutputState();
 
-        switch( c )
-        {
+        //switch( c )
+        //{
         //    case '1':
         //        statePrev.SetChannelMapping( 0, 1, 2, 3 );
         //        statePrev.SetMaskState( true, false, false, false );
@@ -103,13 +103,13 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         //        stateShm.SetChannelMapping( 0, 1, 2, 3 );
         //        stateShm.SetMaskState( true, true, true, true );
         //        break;
-            case'1':
-            default:
-                assert( false );
-        }
+    //        case'1':
+    //        default:
+    //            assert( false );
+    //    }
 
-        return;
-    }
+    //    return;
+    //}
     //if( c == 's' )
     //{
     //    auto sob = new BVXMLSerializer();

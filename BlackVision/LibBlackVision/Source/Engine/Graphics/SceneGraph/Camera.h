@@ -13,8 +13,8 @@ private:
 
     bool            m_isPerspective;
 
-    unsigned int    m_viewportWidth;
-    unsigned int    m_viewportHeight;
+    float           m_viewportWidth;
+    float           m_viewportHeight;
 
     float           m_FOV;
     float           m_nearClippingPlane;
@@ -35,11 +35,11 @@ public:
     virtual             ~Camera                 ();
 
     void                SetPerspective          ( float fov, float aspectRatio,float near, float far );
-    void                SetPerspective          ( float fov, unsigned int w, unsigned int h, float near, float far );
+    void                SetPerspective          ( float fov, float w, float h, float near, float far );
     void                SetPerspective          ( float aspectRatio );
-    void                SetOrthogonal           ( unsigned int w, unsigned int h, float near, float far );
+    void                SetOrthogonal           ( float w, float h, float near, float far );
 
-    void                SetViewportSize         ( unsigned int w, unsigned int h );
+    void                SetViewportSize         ( float w, float h );
 
     void                SetFrustum              ( float left, float right, float bottom, float top, float near, float far );
 
@@ -48,8 +48,8 @@ public:
     void                SetAxes                 ( const glm::vec3 & direction, const glm::vec3 & up );
     void                SetProjectionMatrix     ( const glm::mat4 & projectionMatrix );
 
-    unsigned int        GetViewportWidth        () const;
-    unsigned int        GetViewportHeight       () const;
+    float               GetViewportWidth        () const;
+    float               GetViewportHeight       () const;
     float               GetFOV                  () const;
 
     const glm::mat4 &   GetViewMatrix           () const;

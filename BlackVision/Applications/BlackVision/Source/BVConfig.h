@@ -12,11 +12,13 @@
 
 #include "CoreDEF.h"
 
+#include "Engine/Interfaces/IConfig.h"
+
 
 namespace bv
 {
 
-class BVConfig
+class BVConfig : public IConfig
 {
 private:
     
@@ -96,6 +98,9 @@ private:
     ~BVConfig   ();
 
     void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
+    void                        SaveConfig              ( ISerializer & ser, std::string path = "" ) const;
+
+    void                        InitDefaultConfiguration();
 
 public:
 

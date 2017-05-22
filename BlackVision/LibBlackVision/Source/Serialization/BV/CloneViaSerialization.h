@@ -3,6 +3,11 @@
 #include "XML/BVXMLSerializer.h"
 #include "XML/BVXMLDeserializer.h"
 
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+
+#include "Serialization/BV/BVSerializeContext.h"
+
 #include "Serialization/SerializationHelper.h"
 #include "BVDeserializeContext.h"
 
@@ -15,16 +20,18 @@ namespace CloneViaSerialization {
 template< typename T >
 std::shared_ptr< T >                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    BVXMLSerializer ser( assets );
-    
+    JsonSerializeObject ser;
+
+    auto serCtx = static_cast< BVSerializeContext* >( ser.GetSerializeContext() );
+    serCtx->SetAssets( assets );
+
     obj->Serialize( ser );
 
-    std::stringstream ss;
-    ser.Save( ss );
-
-    //ser.Save( "clone.xml" ); // for debugging only
-
-    BVXMLDeserializer deser( ss, ( SizeType )ss.tellp(), sceneTimeline, assets );
+    JsonDeserializeObject deser( std::move( ser ) );
+    
+    auto deserCtx = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+    deserCtx->SetAssets( assets );
+    deserCtx->SetSceneTimeline( sceneTimeline );
 
     return SerializationHelper::DeserializeObject< T >( deser, name );
 }
@@ -32,16 +39,18 @@ std::shared_ptr< T >                              Clone( const T* obj, std::stri
 template< typename T >
 std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    BVXMLSerializer ser;
-    
+    JsonSerializeObject ser;
+
+    auto serCtx = static_cast< BVSerializeContext* >( ser.GetSerializeContext() );
+    serCtx->SetAssets( assets );
+
     obj->Serialize( ser );
 
-    std::stringstream ss;
-    ser.Save( ss );
+    JsonDeserializeObject deser( std::move( ser ) );
 
-    //ser.Save( "clone.xml" ); // for debugging only
-
-    BVXMLDeserializer deser( ss, ( SizeType )ss.tellp(), sceneTimeline, assets );
+    auto deserCtx = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+    deserCtx->SetAssets( assets );
+    deserCtx->SetSceneTimeline( sceneTimeline );
     
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling

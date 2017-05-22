@@ -39,6 +39,7 @@
 #include "Engine/Events/InnerEvents/Plugins/PluginMovedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeAddedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeMovedEvent.h"
+#include "Engine/Events/InnerEvents/Nodes/NodeCopiedEvent.h"
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeEffectAddedEvent.h"
 #include "Engine/Events/InnerEvents/Logics/NodeEffectRemovedEvent.h"
@@ -49,8 +50,10 @@
 #include "Engine/Events/InnerEvents/Other/LightAddedEvent.h"
 #include "Engine/Events/InnerEvents/Other/LightRemovedEvent.h"
 
+#include "Engine/Models/NodeLogics/NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 
 #include "Application/ApplicationContext.h"
+
 
 // Undo/Redo operations
     // Nodes
@@ -77,11 +80,6 @@
 
 
 
-
-#include "Memory/MemoryLeaks.h"
-
-
-
 namespace bv {
 
 namespace {
@@ -97,12 +95,15 @@ model::BasicNodePtr QueryTyped( model::IModelNodePtr node )
 
 // *******************************
 //
-BVProjectEditor::BVProjectEditor                ( BVProject * project )
+BVProjectEditor::BVProjectEditor                ( BVProject * project, const IConfig* config )
     : m_project( project )
     , m_rootNode( project->GetModelSceneRoot() )
+    , m_maxHistorySize( 0 )
 {
     assert( project != nullptr );
     assert( project->m_renderer != nullptr );
+
+    m_maxHistorySize = (UInt16)SerializationHelper::String2T< UInt32 >( config->PropertyValue( "Application/HistorySize" ), 15 );
 
     project->m_engineSceneRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
     m_engineSceneEditor = new SceneEditor( project->m_renderer, project->m_engineSceneRoot );
@@ -236,6 +237,16 @@ bool    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool 
     }
 
     return false;
+}
+
+// ***********************
+//
+void    BVProjectEditor::SetSceneOutputChannel( const std::string & sceneName, UInt32 channel )
+{
+    auto scene = m_project->GetModelScene( sceneName );
+
+    if( scene )
+        scene->SetRenderChannelIdx( channel );
 }
 
 // *******************************
@@ -657,6 +668,8 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
     }
 
     AddChildNode( destScene, destParentNode, copy, enableUndo );
+
+	NotifyCopiedNode( srcNode, copy );
 
     return copy;
 }
@@ -1308,7 +1321,7 @@ bool                        BVProjectEditor::SetLogic            ( model::BasicN
 
     if( enableUndo )
     {
-        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< AddNodeLogicOperation >( new AddNodeLogicOperation( scene, node, logic, prevLogic ) ) );
@@ -1331,7 +1344,7 @@ bool                        BVProjectEditor::RemoveLogic         ( model::BasicN
 
     if( enableUndo )
     {
-        auto sceneName = model::ModelState::GetInstance().QueryNodeScene( node.get() );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
         auto scene = GetModelScene( sceneName );
 
         scene->GetHistory().AddOperation( std::unique_ptr< RemoveNodeLogicOperation >( new RemoveNodeLogicOperation( scene, node, logic ) ) );
@@ -1366,14 +1379,19 @@ bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
 
         auto engineNode = GetEngineNode( node );
 
-        m_project->DetachEffect( engineNode );
+        m_project->RemoveNodeEffect( engineNode );
 
         BVProjectTools::UpdateSceneNodeEffect( engineNode, modelNode );
 
         if( curEffect )
+        {
             NotifyEffectRemoved( QueryTyped( node ), curEffect );
+        }
+
         if( nodeEffect )
+        {
             NotifyEffectAdded( QueryTyped( node ), nodeEffect );
+        }
 
         return true;
     }
@@ -1620,6 +1638,7 @@ bool    BVProjectEditor::IsTimelineUsed   ( model::ITimeEvaluatorPtr timeEval )
 
     return false;
 }
+
     
 // *******************************
 //
@@ -1995,7 +2014,7 @@ void                    BVProjectEditor::NotifyRemovedNode    ( model::BasicNode
 void                    BVProjectEditor::NotifyAddedNode        ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode )
 {
     auto addedEvent = std::make_shared< NodeAddedEvent >();
-    addedEvent->RemovedNode = addedNode;
+    addedEvent->AddedNode = addedNode;
     addedEvent->ParentNode = parentNode;
 
     GetDefaultEventManager().TriggerEvent( addedEvent );
@@ -2011,6 +2030,16 @@ void                    BVProjectEditor::NotifyMovedNode        ( model::BasicNo
     movedEvent->DstParentNode = dstParent;
 
     GetDefaultEventManager().TriggerEvent( movedEvent );
+}
+
+void					BVProjectEditor::NotifyCopiedNode		(model::BasicNodePtr  srcNode, model::BasicNodePtr  copy )
+{
+	auto movedEvent = std::make_shared< NodeCopiedEvent >();
+	movedEvent->Node = copy;
+	movedEvent->SrcNode = srcNode;
+
+	GetDefaultEventManager().TriggerEvent(movedEvent);
+
 }
 
 // ***********************
@@ -2139,6 +2168,7 @@ void                    BVProjectEditor::NotifyLightRemoved     ( model::IModelL
 void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene )
 {
     //Set default root node & timeline & camera
+    scene->GetHistory().SetHistoryLength( m_maxHistorySize );
 
     auto defaultTimeline = GetTimeline( model::TimelineHelper::CombineTimelinePath( scene->GetName(), DEFAULT_TIMELINE_NAME ) );
     //don't add default timeline if it already exists
@@ -2164,6 +2194,15 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
         modelSceneRootNode->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", defaultTimeline );
         scene->GetModelSceneEditor()->SetRootNode( m_rootNode, modelSceneRootNode );
     }
+
+    // add NodeVisibilityAnimation logic to the scene root node.
+    if( auto sceneRoot = scene->GetRootNode() )
+    {
+        //don't overwrite node logic if it already exists
+        if( !sceneRoot->GetLogic() )
+            sceneRoot->SetLogic( std::make_shared< nodelogic::NodeVisibilityAnimation >( sceneRoot, defaultTimeline ) );
+    }
+
 }
 
 // *******************************

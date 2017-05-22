@@ -41,6 +41,7 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
     unsigned int loopCount      = keyframeEvent->TotalLoopCount;
     std::string & triggerEvents = keyframeEvent->TriggerEvents;
 
+    bool keyTimeIsNaN           = mathematics::IsNaN( keyTime );
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
     auto timeEvaluator = editor->GetTimeEvaluator( timelinePath );
@@ -58,7 +59,7 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
     auto timeline = std::static_pointer_cast< model::DefaultTimeline >( timeEvaluator );
 
     bool result;
-    if( command == TimelineKeyframeEvent::Command::AddKeyframe )
+    if( !keyTimeIsNaN && command == TimelineKeyframeEvent::Command::AddKeyframe )
     {
         result = AddKeyframe( targetType, timeline, keyframeName, keyTime, loopCount, jumpToTime, triggerEvents );
         SendSimpleResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, result );
@@ -95,6 +96,8 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
         auto duration = timelineEvent->Duration;
         auto wrapMethod = timelineEvent->WrapMethod;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
+
+        bool timeIsNaN = mathematics::IsNaN( time );
 
         auto success = false;
 
@@ -156,7 +159,7 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
                 success = true;
             }
         }
-        else if( command == TimeLineEvent::Command::Goto )
+        else if( !timeIsNaN && command == TimeLineEvent::Command::Goto )
         {
             auto timeline = editor->GetTimeline( timelinePath );
 			if( timeline )
@@ -167,7 +170,7 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
                 success = true;
             }
         }
-        else if( command == TimeLineEvent::Command::GotoAndPlay )
+        else if( !timeIsNaN && command == TimeLineEvent::Command::GotoAndPlay )
         {
             auto timeline = editor->GetTimeline( timelinePath );
 			if( timeline )

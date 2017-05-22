@@ -172,6 +172,7 @@ const std::string & TextureAssetDesc::UID()
     return TextureAssetDesc::uid;
 }
 
+
 // ***********************
 //
 bool TextureAssetDesc::IsCacheable() const
@@ -311,26 +312,37 @@ TextureAssetLoadingType TextureAssetDesc::GetLoadingType() const
 //
 std::string				TextureAssetDesc::GetKey		() const
 {
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+
+// ***********************
+//
+std::string         TextureAssetDesc::ComputeKey() const
+{
     switch( GetLoadingType() )
     {
-        case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
-            return this->GetOrigTextureDesc()->GetKey();
-        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
-            return this->GetOrigTextureDesc()->GetKey() + "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
-        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
-        {
-            auto ret = this->GetOrigTextureDesc()->GetKey();
+    case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+        return this->GetOrigTextureDesc()->GetKey();
+    case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+        return this->GetOrigTextureDesc()->GetKey() + "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( ( int )this->GetMipMapsDesc()->GetFilter() );
+    case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+    {
+        auto ret = this->GetOrigTextureDesc()->GetKey();
 
-            for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
-                ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
+        for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
+            ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
 
-            ret += "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+        ret += "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( ( int )this->GetMipMapsDesc()->GetFilter() );
 
-            return ret;
-        }
-        default:
-            assert( !"Imposible enum value" );
-            return "";
+        return ret;
+    }
+    default:
+        assert( !"Imposible enum value" );
+        return "";
     }
 }
 

@@ -2,7 +2,7 @@
 
 #include "Memory/MemoryChunk.h"
 #include "CoreDEF.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 #include <functional>
 #include <set>
@@ -25,11 +25,14 @@ public:
 
     //TODO: handle frames from GPU
     virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID ) = 0;
-    virtual void                DisplayFrame            () const = 0;
+
+    virtual void                EnableAudioChannel      ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) = 0;
 
     virtual void                SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback  ) = 0;
 
 	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const = 0;
+
+    virtual UInt32              GetRequiredFPS          () const = 0;
 
 	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;
 	//virtual void                EnableVideoOutput       () = 0;

@@ -9,15 +9,15 @@
 namespace bv
 {
 
-class FileImpl;
-
 class File
 {
 private:
 
-    FileImpl *          m_impl;
+    class Impl;
 
-    explicit            File( FileImpl * impl );
+    std::shared_ptr< Impl >  m_impl;
+
+    explicit            File        ( Impl * impl );
 
 public:
 
@@ -28,23 +28,26 @@ public:
 		FOMWriteAppend,
     };
 
+    File                            ( const File & copy );
+    const File &        operator=   ( const File & copy );
+
     SizeType            Read        ( std::ostream & out) const;
     SizeType            Read        ( std::ostream & out, SizeType numBytes ) const;
 
-    SizeType            Write       ( std::istream & in );
-    SizeType            Write       ( std::istream & in , SizeType numBytes );
+    SizeType            Write       ( std::istream & in ) const;
+    SizeType            Write       ( std::istream & in , SizeType numBytes ) const;
     
-    void                Write       ( const char * in , SizeType numBytes );
-	void                Write       ( const std::string & str );
+    void                Write       ( const char * in , SizeType numBytes ) const;
+	void                Write       ( const std::string & str ) const;
 
-    void                Close       ();
+    void                Close       () const;
 
-    void                operator << ( std::istream & );
-    void                operator >> ( std::ostream & );
+    void                operator << ( std::istream & ) const;
+    void                operator >> ( std::ostream & ) const;
 
     bool                Good        () const;
 
-	std::fstream *		StreamBuf	();
+	std::fstream *		StreamBuf	() const;
 
     virtual             ~File       ();
 
@@ -71,9 +74,6 @@ public:
     static std::string  GetExtension( const std::string & path );
     
     static UInt64       GetSize     ( const std::string & path );
-
-    friend class FileImpl;
-
 };
 
 } //bv

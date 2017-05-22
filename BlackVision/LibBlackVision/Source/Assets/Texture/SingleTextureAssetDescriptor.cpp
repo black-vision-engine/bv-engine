@@ -67,7 +67,17 @@ bool                    SingleTextureAssetDesc::IsCacheable	() const
 //
 std::string	            SingleTextureAssetDesc::GetKey	() const
 {
-	return m_imagePath + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_imagePath ) ) );
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+// ***********************
+//
+std::string         SingleTextureAssetDesc::ComputeKey() const
+{
+    return m_imagePath + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_imagePath ) ) );
 }
 
 // ***********************

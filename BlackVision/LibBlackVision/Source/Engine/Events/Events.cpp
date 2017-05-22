@@ -209,6 +209,7 @@ std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
     , std::make_pair( SceneEvent::Command::DetachScene, "DetachScene" )
     , std::make_pair( SceneEvent::Command::MoveScene, "MoveScene" )
     , std::make_pair( SceneEvent::Command::CopyScene, "CopyScene" )
+    , std::make_pair( SceneEvent::Command::SetOutputChannel, "SetOutputChannel" )
     , std::make_pair( SceneEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -1012,11 +1013,12 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
 
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
         newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );        
-        newEvent->Time              = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->Time              = SerializationHelper::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
 
         return newEvent;
     }
-    return nullptr;    
+    else
+        return nullptr;    
 }
 
 // *************************************
@@ -1600,7 +1602,9 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer & deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         TimeLineEventPtr newEvent   = std::make_shared< TimeLineEvent >();
-        newEvent->Time              = SerializationHelper::String2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ), std::numeric_limits<float>::quiet_NaN() );
+
+        newEvent->Time = SerializationHelper::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
+
         newEvent->TimelineCommand   = SerializationHelper::String2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimeLineEvent::Command::Fail );
         newEvent->TimelineName      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         newEvent->TimelineType      = SerializationHelper::String2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_STRING ), bv::TimelineType::TT_OFFSET );

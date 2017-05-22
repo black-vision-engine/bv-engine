@@ -27,18 +27,34 @@ namespace bv
 
 JsonDeserializeObject::JsonDeserializeObject()
     : m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
-{
-    m_currentNode = nullptr;
-}
+    , m_currentNode( nullptr )
+{}
 
-JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
-    :   m_root( initValue ),
-        m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+// ***********************
+//
+JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && serializer )
+    :   m_root( Json::nullValue )
+    ,   m_currentNode( nullptr )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
 {
-    m_currentNode = nullptr;
+    auto & steal = serializer.StealJson();
+    m_root.swap( steal );
+
     OnRootInit();
 }
 
+// ***********************
+//
+JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
+    :   m_root( initValue )
+    ,   m_currentNode( nullptr )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+{
+    OnRootInit();
+}
+
+// ***********************
+//
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
 
@@ -114,6 +130,16 @@ Json::Value JsonDeserializeObject::GetJson() const
     return m_root;
 }
 
+
+// ***********************
+//
+bool JsonDeserializeObject::HasAttribute                ( const std::string& name ) const
+{
+    auto & attribute = ( *m_currentNode )[ name ];
+
+    return !attribute.isNull();
+}
+
 // ***********************
 //
 std::string JsonDeserializeObject::GetAttribute        ( const std::string& name ) const
@@ -140,12 +166,14 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
 {
     if( m_currentNode->isArray() )
     {
+        // After EnterChild we are always in first array element.
+        // Even with array is empty we should push 0.
+        m_indexStack.push( 0 );
+
         if( m_currentNode->size() == 0 )
             return false;
 
         m_nodeStack.push( m_currentNode );
-
-        m_indexStack.push( 0 );                     //After EnterChild we are always in first array element.
         m_currentNode = &( (*m_currentNode)[ 0 ] );
     }
     else
@@ -250,6 +278,12 @@ ISerializer *       JsonDeserializeObject::CreateSerializer    () const
     
     return newSer;
 }
+
+// ***********************
+//
+bool		        JsonDeserializeObject::HasAttribute        ( const std::wstring & ) const
+{ assert( !"This serializer doesn't supports wstrings" ); return false; }
+
 
 std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
 {    assert( !"This serializer doesn't supports wstrings" ); return L"";    }

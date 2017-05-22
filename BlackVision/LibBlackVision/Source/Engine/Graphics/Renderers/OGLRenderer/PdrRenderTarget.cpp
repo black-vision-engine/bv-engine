@@ -154,19 +154,23 @@ void            PdrRenderTarget::ReadColorTexture( unsigned int i, Renderer * re
             outputTex = tx;
 #endif
         }
-
-
-        //double readStart = GTimer.CurElapsed();
-        Enable( renderer );
-
-        pboMem->LockDownload();
-        PBODownloadData( i );
-        pboMem->UnlockDownload( buffer->GetWritable(), outputTex->RawFrameSize() );
-
-        Disable( renderer );
-        //double readTime = GTimer.CurElapsed() - readStart;
-        //printf( "Frame readback took %.4f ms\n", readTime * 1000.f );
     }
+    else
+    {
+        buffer = std::const_pointer_cast< MemoryChunk >( outputTex->GetData() );
+        txBufMap[ outputTex.get() ] = buffer; // FIXME: 1. remove const cast. 2. analize if attaching texture to more then one RT can cause any issue.
+    }
+
+    //double readStart = GTimer.CurElapsed();
+    Enable( renderer );
+
+    pboMem->LockDownload();
+    PBODownloadData( i );
+    pboMem->UnlockDownload( buffer->GetWritable(), outputTex->RawFrameSize() );
+
+    Disable( renderer );
+    //double readTime = GTimer.CurElapsed() - readStart;
+    //printf( "Frame readback took %.4f ms\n", readTime * 1000.f );
 }
 
 // ****************************

@@ -5,7 +5,6 @@
 #include "BVAppLogic.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
-#include "Engine/Models/NodeEffects/Effects/ModelNodeEffectMixChannels.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
@@ -372,22 +371,24 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 //
 void                    TestGlobalEfectKeyboardHandler::SetNextMixChannelsPreset()
 {
-    auto normal = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 1, 2, 3 );
+    // FIXME: nrl - remove or reimplement?
+    assert( false );
+    //auto normal = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 1, 2, 3 );
 
-    auto r_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 0, 0, 3 );
-    auto g_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 1, 1, 1, 3 );
-    auto b_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 2, 2, 2, 3 );
-    auto a_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 3, 3, 3, 3 );
+    //auto r_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 0, 0, 3 );
+    //auto g_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 1, 1, 1, 3 );
+    //auto b_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 2, 2, 2, 3 );
+    //auto a_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 3, 3, 3, 3 );
 
-    unsigned int mix_masks[]    = { normal, r_all, g_all, b_all, a_all, normal, normal, normal };
+    //unsigned int mix_masks[]    = { normal, r_all, g_all, b_all, a_all, normal, normal, normal };
 
-    auto cur_mix_mask = int(mix_masks[ m_curMixChannelsPreset ]);
+    //auto cur_mix_mask = int(mix_masks[ m_curMixChannelsPreset ]);
 
-    m_curMixChannelsPreset = ( m_curMixChannelsPreset + 1 ) % 8;
+    //m_curMixChannelsPreset = ( m_curMixChannelsPreset + 1 ) % 8;
 
-    auto paramMask = model::QueryTypedParam< model::ParamIntPtr >( m_mixChannelsEffect->GetParameter( "channelMask" ) );
+    //auto paramMask = model::QueryTypedParam< model::ParamIntPtr >( m_mixChannelsEffect->GetParameter( "channelMask" ) );
 
-    paramMask->SetVal( cur_mix_mask, 0.f );
+    //paramMask->SetVal( cur_mix_mask, 0.f );
 }
 
 // *********************************

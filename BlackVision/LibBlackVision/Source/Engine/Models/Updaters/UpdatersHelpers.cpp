@@ -11,6 +11,7 @@
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+#include "Application/ApplicationContext.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -109,14 +110,18 @@ void         UpdatersHelpers::UpdateCamera                ( Camera * camera, mod
     auto isPerspective = QueryTypedValue< ValueBoolPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::IS_PERSPECTIVE ) );
     auto far = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::FAR_CLIPPING_PLANE ) );
     auto near = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::NEAR_CLIPPING_PLANE ) );
-    auto height = QueryTypedValue< ValueIntPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) );
-    auto width = QueryTypedValue< ValueIntPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) );
+    auto size = QueryTypedValue< ValueFloatPtr >( cameraModel->GetValue( model::CameraModel::PARAMETERS::VIEWPORT_SIZE ) )->GetValue();
 
+
+    auto height = ( float )ApplicationContext::Instance().GetHeight();
+    auto width = ( float )ApplicationContext::Instance().GetWidth();
+    
+    float aspect = width / height;
 
     if( isPerspective->GetValue() )
-        camera->SetPerspective( fov->GetValue(), width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
+        camera->SetPerspective( fov->GetValue(), width, height, near->GetValue(), far->GetValue() );
     else
-        camera->SetOrthogonal( width->GetValue(), height->GetValue(), near->GetValue(), far->GetValue() );
+        camera->SetOrthogonal( aspect * size, size, near->GetValue(), far->GetValue() );
 
     camera->SetFrame( position->GetValue(), direction->GetValue(), up->GetValue() );
 }

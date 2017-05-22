@@ -373,7 +373,12 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( unsign
 {
     assert( idx < m_keyFrameEvents.size() );
 
+    auto evn = m_keyFrameEvents[ idx ];
+    if( evn.get() == m_activeEvent )
+        m_activeEvent = nullptr;
+
     m_keyFrameEvents.erase( m_keyFrameEvents.begin() + idx );
+
 
     return true;
 }
@@ -386,6 +391,11 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( const 
     {
         if ( (*it)->GetName() == name )
         {
+            auto evn = *it;
+            if( evn.get() == m_activeEvent )
+                m_activeEvent = nullptr;
+
+
             m_keyFrameEvents.erase( it );
 
             return true;

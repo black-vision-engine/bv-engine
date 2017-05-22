@@ -10,7 +10,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/VertexBuffer.h"
-#include "Engine/Graphics/Effects/GridLinesEffect.h"
+#include "Engine/Graphics/Effects/Utils/RenderableEffectFactory.h"
 
 #include "UpdatersHelpers.h"
 
@@ -57,6 +57,7 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
 //
 void                SceneUpdater::DoUpdate          ()
 {
+    m_scene->SetOutputChannelIdx( m_modelScene->GetRenderChannelIdx() );
     UpdateCamera();
     UpdateLights();
     UpdateGridLines();
@@ -114,11 +115,11 @@ void                SceneUpdater::UpdateGridLines     ()
             auto component = gridLinesLogic.BuildConnectedComponent();
             auto linesRenderable = Cast< Lines * >( BVProjectTools::BuildRenderableFromComponent( std::static_pointer_cast< model::IConnectedComponent >( component ), PrimitiveType::PT_LINES ) );
 
-            linesRenderable->SetRenderableEffect( std::make_shared< GridLinesEffect >() );
+            linesRenderable->SetRenderableEffect( RenderableEffectFactory::CreateGridLinesEffect() );
             linesRenderable->SetWidth( 1.0f );
 
             auto param = Cast< ShaderParamVec4 * >( linesRenderable->GetRenderableEffect()->GetPass( 0 )->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
-            param->SetValue( glm::vec4( 1.0, 0.7, 0.0, 0.8) );
+            param->SetValue( gridLinesLogic.GetColor() );
 
             m_scene->SetGridLinesRenderable( linesRenderable );
             m_gridLinesUpdateID = gridLinesLogic.GetUpdateID();

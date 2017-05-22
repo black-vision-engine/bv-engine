@@ -34,7 +34,9 @@ public:
         auto uid = deser.GetAttribute( "uid" );
 
         auto desc = AssetManager::GetInstance().CreateDesc( deser );
-        assert( desc );
+        
+        // Outside world is responsible for handling this.
+        //assert( desc );
         
         return std::make_shared< AssetDescWithUID >( desc, uid );
     }
@@ -106,7 +108,15 @@ AssetDescsWithUIDsPtr                          AssetDescsWithUIDs::Create       
     auto assets = AssetDescsWithUIDs::Create();
     for( auto asset : assetsWithUIDs )
     {
-        assets->AddAssetDescWithUID( asset->GetDesc(), asset->GetUID() );
+        if( asset->GetDesc() != nullptr )
+        {
+            assets->AddAssetDescWithUID( asset->GetDesc(), asset->GetUID() );
+        }
+        else
+        {
+            auto deserContext = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+            LOG_MESSAGE( SeverityLevel::warning ) << "Asset descriptor with UID: [" << asset->GetUID() << "] couldn't be created while loading scene: [" << deserContext->GetSceneName() << "].";
+        }
     }
 
     return assets;

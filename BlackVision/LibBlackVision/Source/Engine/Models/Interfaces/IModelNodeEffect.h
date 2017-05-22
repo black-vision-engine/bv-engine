@@ -1,16 +1,20 @@
 #pragma once
 
 #include "CoreDEF.h"
+
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Engine/Interfaces/IValue.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
+
 #include "Assets/AssetDescriptor.h"
+
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
+
 
 namespace bv { namespace model {
 
-class IModelNodeEffect : public bv::IUpdatable, public bv::ISerializable
+class IModelNodeEffect : public IUpdatable, public ISerializable
 {
 public:
 
@@ -32,6 +36,8 @@ public:
     virtual const std::vector< IParameterPtr > &    GetParameters           () const = 0;
     
     virtual const std::vector< IValueConstPtr > &   GetValues               () const = 0;
+
+    virtual bool                                    IsEnabled               () const = 0;
 
 };
 

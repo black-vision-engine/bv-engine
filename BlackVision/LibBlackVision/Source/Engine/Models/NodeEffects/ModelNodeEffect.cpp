@@ -20,10 +20,13 @@
 
 namespace bv { namespace model {
 
+std::string ModelNodeEffect::EFFECT_ENABLED_PARAM_NAME = "effectIsEnabled";
+
 // ********************************
 //
 namespace 
 {
+
 // ********************************
 //
 std::map< NodeEffectType, UInt32 > EffectNumRequiredAssetsInit()
@@ -255,7 +258,7 @@ ModelNodeEffectPtr                          ModelNodeEffect::Create             
 
 // ********************************
 //
-bool                                        ModelNodeEffect::AddAsset               ( const AssetDescConstPtr & assetDesc, SizeType idx )
+bool                                        ModelNodeEffect::AddAsset           ( const AssetDescConstPtr & assetDesc, SizeType idx )
 {
     if( idx < NumRequiredAssets() )
     {
@@ -270,7 +273,7 @@ bool                                        ModelNodeEffect::AddAsset           
 
 // ********************************
 //
-bool                                        ModelNodeEffect::RemoveAsset            ( SizeType idx )
+bool                                        ModelNodeEffect::RemoveAsset        ( SizeType idx )
 {
     if( idx < m_assetsDescs.size() )
     {
@@ -292,9 +295,22 @@ AssetDescVec                                ModelNodeEffect::GetAssets          
 
 // ********************************
 //
-UInt32                                      ModelNodeEffect::NumRequiredAssets   () const
+UInt32                                      ModelNodeEffect::NumRequiredAssets  () const
 {
     return GetEffectNumRequiredAssets( GetType() );
+}
+
+// ********************************
+//
+bool                                        ModelNodeEffect::IsEnabled           () const
+{
+    auto p = m_paramValModel->GetParameter( EFFECT_ENABLED_PARAM_NAME );
+
+    assert( p );
+
+    auto pTyped = QueryTypedParam< ParamBoolPtr >( p );
+
+    return pTyped->Evaluate();
 }
 
 } // model

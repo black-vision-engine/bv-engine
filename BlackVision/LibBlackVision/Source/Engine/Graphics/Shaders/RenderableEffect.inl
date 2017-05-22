@@ -1,3 +1,4 @@
+#include "RenderableEffect.h"
 namespace bv {
 
 // *********************************
@@ -6,6 +7,7 @@ inline unsigned int     RenderableEffect::NumPasses () const
 {
     return (unsigned int) m_passes.size();
 }
+
 
 // *********************************
 //

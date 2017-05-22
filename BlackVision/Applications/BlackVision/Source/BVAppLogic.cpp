@@ -2,31 +2,20 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Events/Interfaces/IEventManager.h"
-#include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Audio/AudioRenderer.h"
-#include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/BVProjectEditor.h"
-#include "Engine/Models/ModelState.h"
-
-#include "Tools/SimpleTimer.h"
-#include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Services/BVServiceProvider.h"
 
 #include "Application/ApplicationContext.h"
 
 // FIXME: nrl - render logic replacement
-//#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
-#include "ModelInteractionEvents.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogicImpl.h"
 
-#include "Widgets/NodeLogicFactory.h"
+#include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 #include "System/Env.h"
-#include "BVConfig.h"
 #include "ProjectManager.h"
 #include "VideoCardManager.h"
 
-#include "MockScenes.h"
+#include "TestingScenes/MockScenes.h"
 #include "DefaultPlugins.h"
 #include "LibEffect.h"
 
@@ -37,10 +26,9 @@
 #include "TestAI/TestInnerEvents.h"
 
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
-#include "testai/TestAIManager.h"
 //FIXME: end of remove
 
-#include "StatsFormatters.h"
+#include "Statistics/StatsFormatters.h"
 
 #include "UseLoggerBVAppModule.h"
 
@@ -63,56 +51,11 @@
 namespace bv
 {
 extern HighResolutionTimer GTimer;
-namespace
-{
-    //FIXME: temporary
-    TransformSetEventPtr  GTransformSetEvent;
-
-    void GownoWFormieKebaba( TimeType t, BVAppLogic * logic )
-    {
-        { logic; }
-        //DETERMINSTIC TIME INTERVALS
-        //static TimeType tt = TimeType( 0.0 );
-        //tt += TimeType( 0.001 );
-
-        //TEST AI
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 5, logic );
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
-        
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
-
-        //Override alpha test events
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
-
-        //Override node mask test events
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 6, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
-
-        //PRE GOWNO
-        float tx = float( sin( t ) );
-        glm::vec3 kebab( tx, 0.f, 0.f );
-
-        //gowno
-        GTransformSetEvent->SetTranslation( kebab );
-    
-        GetDefaultEventManager().QueueEvent( GTransformSetEvent );
-    }
-
-    KeyPressedEventPtr  GKeyPressedEvent;
-
-    void KeyPressedSendEvent( unsigned char c )
-    {
-        GKeyPressedEvent->SetChar( c );
-        GetDefaultEventManager().QueueEvent( GKeyPressedEvent );
-    }
-}
 
 // *********************************
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
-    : m_bvProject( BVProject::Create( renderer, audioRenderer ) )
+    : m_bvProject( BVProject::Create( renderer, audioRenderer, &DefaultConfig ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
     , m_audioRenderer( nullptr )
@@ -120,9 +63,8 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 	, m_gain( 1.f )
+    , m_videoCardManager( nullptr )
 {
-    GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
-    GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
     m_renderer = renderer;
@@ -132,10 +74,10 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
     
     // FIXME: nrl - pass all those arguments in a struct
-    // m_renderLogic = new nrl::NRenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    // m_renderLogic = new RenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
     // FIXME: prepare descriptor here
 
-    m_renderLogic = nrl::RenderLogicInitializer::CreateInstance( DefaultConfig );
+    m_renderLogic = RenderLogicInitializer::CreateInstance( DefaultConfig );
 
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
@@ -170,7 +112,7 @@ void BVAppLogic::Initialize         ()
 
     bv::effect::InitializeLibEffect( m_renderer );
 
-    SetNodeLogicFactory( new NodeLogicFactory );
+    SetNodeLogicFactory( new NodeLogicFactory() );
 
     InitializeKbdHandler();
     InitializeRemoteCommunication();
@@ -183,6 +125,7 @@ void BVAppLogic::Initialize         ()
     if( DefaultConfig.ReadbackFlag() )
     {
         //FIXME: maybe config should be read by bvconfig
+        //FIXME: move this initialization to some other place
         m_videoCardManager = new videocards::VideoCardManager();
 
         m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
@@ -190,6 +133,20 @@ void BVAppLogic::Initialize         ()
         m_videoCardManager->Start();
 
         BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
+    }
+}
+
+// *********************************
+//
+void BVAppLogic::Deinitialize    ()
+{
+    if( m_videoCardManager )
+    {
+        m_videoCardManager->Stop();
+
+        BVServiceProvider::GetInstance().UnregisterVideoCardManager();
+        delete m_videoCardManager;
+        m_videoCardManager = nullptr;
     }
 }
 
@@ -204,6 +161,13 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
         auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
         m_bvProject->GetProjectEditor()->AddScene( scene );
     }
+}
+
+// *********************************
+//
+void BVAppLogic::UnloadScenes   ()
+{
+    m_bvProject->GetProjectEditor()->RemoveAllScenes();
 }
 
 // *********************************
@@ -328,8 +292,6 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
         FRAME_STATS_FRAME();
         FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
-        GownoWFormieKebaba( time, this );
-
         {
             FRAME_STATS_SECTION( "Update Model" );
             HPROFILER_SECTION( "Update Model", PROFILER_THREAD1 );
@@ -363,7 +325,7 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
                 {
                     //printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );
                     auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
-                    LOG_MESSAGE( SeverityLevel::warning ) << 
+                    LOG_MESSAGE( SeverityLevel::info ) << 
 						"DROP: " << 
 						last_time * 1000.f << 
 						" ms, cur time: " << 
@@ -444,7 +406,8 @@ void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
     m_remoteController->DeinitializeServer();
-    m_videoCardManager->Stop();
+    if( m_videoCardManager )
+        m_videoCardManager->Stop();
 }
 
 // *********************************
@@ -474,7 +437,6 @@ void    BVAppLogic::PostFrameLogic   ()
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
         std::this_thread::sleep_for( std::chrono::milliseconds( DefaultConfig.FrameTimeMillis() - frameMillis ) );
-        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
     }
 }
 
@@ -525,7 +487,7 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-nrl::NRenderLogic *             BVAppLogic::GetRenderLogic      () const
+RenderLogic *             BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
 }

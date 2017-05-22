@@ -22,9 +22,10 @@ private:
 
 #endif // BV_TESTS
 
-    explicit                            BVServiceProvider       ();
+    explicit                            BVServiceProvider           ();
 
-    void                                RegisterVideoCardManager( videocards::VideoCardManager * vcm );
+    void                                RegisterVideoCardManager    ( videocards::VideoCardManager * vcm );
+    void                                UnregisterVideoCardManager  ();
 
 
 

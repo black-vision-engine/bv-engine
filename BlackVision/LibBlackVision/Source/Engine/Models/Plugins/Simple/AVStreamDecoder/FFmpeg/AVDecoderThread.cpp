@@ -38,7 +38,7 @@ AVDecoderThread::~AVDecoderThread				()
 //
 void				AVDecoderThread::Kill	    ()
 {
-	std::cout << "KILLING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "KILLING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
     {
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_stopped = false;
@@ -53,7 +53,7 @@ void				AVDecoderThread::Play	    ()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
 
-	std::cout << "START PLAYING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "START PLAYING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 
 	m_stopThread = false;
 	m_pauseThread = false;
@@ -69,7 +69,7 @@ void				AVDecoderThread::Restart	()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	if( m_stopped || m_paused || m_stopThread || m_pauseThread )
 	{
-		std::cout << "RESTARTING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "RESTARTING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 
 		m_paused = false;
 		m_stopThread = false;
@@ -86,7 +86,7 @@ void				AVDecoderThread::Stop		()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	if( !m_stopThread )
 	{
-		std::cout << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 		m_pauseThread = false;
 		m_paused = false;
 		m_stopThread = true;
@@ -101,7 +101,7 @@ void				AVDecoderThread::Pause		()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	if( !m_pauseThread )
 	{
-		std::cout << "PAUSING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+        LOG_MESSAGE( SeverityLevel::debug ) << "PAUSING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 		m_pauseThread = true;
 		m_cond.notify_one();
 	}
@@ -136,19 +136,38 @@ void				AVDecoderThread::Run			    ()
 
     auto duration = m_streamDecoder->GetDuration();
 
-	std::cout << "STARTING AVDecoder thread " << std::this_thread::get_id() << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "STARTING AVDecoder thread " << std::this_thread::get_id();
 
     while( m_running )
     {
+        {
+            std::unique_lock< std::mutex > lock( m_mutex );
+            if( m_stopThread && m_running )
+            {
+                m_stopped = true;
+
+                while( m_stopped )
+                {
+                    LOG_MESSAGE( SeverityLevel::debug ) << "STOPPED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
+                    m_cond.wait( lock );
+                    LOG_MESSAGE( SeverityLevel::debug ) << "STARTED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
+                }
+            }
+        }
+
         auto time = m_timer.ElapsedMillis();
         
 		m_streamDecoder->NextDataReady( time, true );
+
+        if( m_streamDecoder->IsAudio() ) 
+            while( !m_streamDecoder->IsDataQueueEmpty() && m_streamDecoder->GetCurrentPTS() < time + 50 )
+                m_streamDecoder->NextDataReady( m_streamDecoder->GetCurrentPTS(), true );
 
 		std::unique_lock< std::mutex > lock( m_mutex );
 		
 		if( time + m_streamDecoder->GetOffset() > duration || m_streamDecoder->IsFinished() )
 		{
-			std::cout << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+            LOG_MESSAGE( SeverityLevel::debug ) << "STOPPING AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 			m_stopThread = true;
 		}
 
@@ -158,26 +177,14 @@ void				AVDecoderThread::Run			    ()
 
 			while( m_paused )
 			{
-				std::cout << "PAUSED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+                LOG_MESSAGE( SeverityLevel::debug ) << "PAUSED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 				m_cond.wait( lock );
-				std::cout << "UNPAUSED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
-			}
-		}
-
-		if ( m_stopThread && m_running )
-		{
-			m_stopped = true;
-
-			while( m_stopped )
-			{	
-				std::cout << "STOPPED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
-				m_cond.wait( lock );
-				std::cout << "STARTED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id() << std::endl;
+                LOG_MESSAGE( SeverityLevel::debug ) << "UNPAUSED AVDecoder thread stream id: " << m_streamDecoder->GetStreamIdx() << " thread id: " << std::this_thread::get_id();
 			}
 		}
     }
 
-	std::cout << "DYING AVDecoder thread " << std::this_thread::get_id() << std::endl;
+    LOG_MESSAGE( SeverityLevel::debug ) << "DYING AVDecoder thread " << std::this_thread::get_id();
 }
 
 } //bv

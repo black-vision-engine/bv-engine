@@ -103,11 +103,18 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 //
 model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
 {
-    XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
+    try
+    {
+        XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
-    auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
-
-    return scene;
+        auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
+        return scene;
+    }
+    catch( const std::exception & e )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Loading scene failed. Exception: [" << e.what() << "].";
+        return nullptr;
+    }
 }
 
 // ********************************

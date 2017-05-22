@@ -23,6 +23,7 @@ UInt16  GridLinesLogic::m_sMaxGridLines = 32;
 //
 GridLinesLogic::GridLinesLogic()
     :   m_showGridLines( false )
+    ,   m_color( glm::vec4( 1.0, 0.7, 0.0, 0.8 ) )
 {
     m_horizontalGridLines.resize( m_sMaxGridLines, nullptr );
     m_verticalGridLines.resize( m_sMaxGridLines, nullptr );
@@ -211,6 +212,13 @@ ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
     }
 
     return comp;
+}
+
+// ***********************
+//
+glm::vec4       GridLinesLogic::GetColor() const
+{
+    return m_color;
 }
 
 // ***********************

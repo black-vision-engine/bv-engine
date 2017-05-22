@@ -51,7 +51,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
                         output.flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
                         output.videoMode = ConvertVideoMode( output.resolution, output.refresh, output.interlaced );
 
-						card->m_displayedOutputID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
+						card->m_linkedVideoOutputID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ) );
 
                         deser.ExitChild(); //output
 
@@ -93,9 +93,10 @@ VideoCard::VideoCard( UInt32 deviceID )
     , m_decklinkOutput( nullptr )
     , m_configuration( nullptr )
 	, m_keyer( nullptr )
-	, m_videoOutputDelegate( nullptr )
+	, m_audioVideoOutputDelegate( nullptr )
 	, m_frameQueue( 1 )
 	, m_frameNum( 0 )
+    , m_audioEnabled( false )
 {
 	InitVideoCard();
 }
@@ -118,8 +119,8 @@ VideoCard::~VideoCard       ()
     if( m_device )
         m_device->Release();
 
-	if( m_videoOutputDelegate )
-		m_videoOutputDelegate->Release();
+	if( m_audioVideoOutputDelegate )
+        m_audioVideoOutputDelegate->Release();
 }
 
 //**************************************
@@ -187,8 +188,8 @@ bool                    VideoCard::InitDevice           ()
 
 	if( success )
 	{
-		m_videoOutputDelegate = new VideoOutputDelegate( this );
-		if( !SUCCESS( m_decklinkOutput->SetScheduledFrameCompletionCallback( m_videoOutputDelegate ) ) )
+		m_audioVideoOutputDelegate = new AudioVideoOutputDelegate( this );
+		if( !SUCCESS( m_decklinkOutput->SetScheduledFrameCompletionCallback( m_audioVideoOutputDelegate ) ) )
 		{
 			LOG_MESSAGE( SeverityLevel::error ) << "SetScheduledFrameCompletionCallback returned an error";
 			success = false;
@@ -196,6 +197,15 @@ bool                    VideoCard::InitDevice           ()
 	}
 
     return success;
+}
+
+//**************************************
+//
+bool					VideoCard::RenderAudioSamples  ( bool preroll )
+{
+    
+    preroll;
+    return true;
 }
 
 //**************************************
@@ -232,8 +242,38 @@ bool                    VideoCard::InitOutput()
             }
         }
     }
-    
+
     return success;
+}
+
+//**************************************
+//
+void                    VideoCard::EnableAudioChannel  ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount )
+{
+    if( SUCCESS( m_decklinkOutput->EnableAudioOutput( ConvertSampleRate( sampleRate ),
+                                                      ConvertSampleType( audioSampleType ),
+                                                      channelCount,
+                                                      BMDAudioOutputStreamType::bmdAudioOutputStreamContinuous ) ) )
+    {
+        m_audioEnabled = true;
+
+        m_audioChannelsNum = channelCount;
+
+        switch( audioSampleType )
+        {
+        case AudioSampleType::AV_SAMPLE_FMT_U8:
+            m_audioSampleSize = 1;
+            break;
+        case AudioSampleType::AV_SAMPLE_FMT_S16:
+            m_audioSampleSize = 2;
+            break;
+        case AudioSampleType::AV_SAMPLE_FMT_S32:
+            m_audioSampleSize = 4;
+            break;
+        default:
+            assert( false );
+        }
+    }
 }
 
 //**************************************
@@ -272,6 +312,8 @@ void                    VideoCard::SetVideoOutput       ( bool enable )
 void                    VideoCard::AddOutput            ( ChannelOutputData output )
 {
 	m_output = output;
+
+    EnableAudioChannel( AudioSampleType::AV_SAMPLE_FMT_S16, 48000, 2 );
 }
 
 //**************************************
@@ -354,7 +396,7 @@ void                    VideoCard::SetFrameProcessingCompletedCallback( FramePro
 //
 void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr & avFrame, UInt64 avOutputID )
 {
-    assert( avOutputID == m_displayedOutputID );
+    assert( avOutputID == m_linkedVideoOutputID ); avOutputID;
 	if( m_output.enabled )
 	{
 		//LOG_MESSAGE( SeverityLevel::debug ) << "VideoCard::ProcessFrame called at " << Time::Now();
@@ -423,23 +465,12 @@ UInt64                          VideoCard::GetFrameTime         () const
     return m_lastFrameTime;
 }
 
-void                            VideoCard::DisplayFrame         () const
-{
-    std::unique_lock< std::mutex > lock( m_mutex );
-
-	m_frameNum++;
-
-	auto nextSync = m_lastFrameTime + 20;	
-
-	m_lastFrameTime = nextSync;
-}
-
 //**************************************
 //
 std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs() const
 {
 	std::set< UInt64 > ret;
-	ret.insert( m_displayedOutputID );
+	ret.insert( m_linkedVideoOutputID );
 	return ret;
 }
 
@@ -466,9 +497,40 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     if( !SUCCESS( m_decklinkOutput->ScheduleVideoFrame( completedFrame, ( m_uiTotalFrames * m_frameDuration ), m_frameDuration, m_frameTimescale ) ) )
     {
         LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule frame. " << m_deviceID;
+        m_decklinkOutput->FlushBufferedAudioSamples();
+    }
+    else
+    {
+        if( srcFrame && srcFrame->m_desc.channels == 0 )
+        {
+            completedFrame = completedFrame;
+        }
+
+        if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(),
+                                                                                                           ( UInt32 ) srcFrame->m_audioData->Size() / AudioFrameSizeInBytes(),
+                                                                                                           0,
+                                                                                                           m_frameTimescale,
+                                                                                                           NULL ) ) )
+        {
+            LOG_MESSAGE( SeverityLevel::info ) << "Cannot schedule audio frame. " << m_deviceID;
+        }
     }
 
     m_uiTotalFrames++;
+}
+
+//**************************************
+//
+UInt32              VideoCard::GetRequiredFPS       () const
+{
+    return ( UInt32 )( ( m_output.interlaced ? 2 : 1 ) * m_frameTimescale / m_frameDuration );
+}
+
+//**************************************
+//
+UInt32              VideoCard::AudioFrameSizeInBytes() const
+{
+    return m_audioChannelsNum * m_audioSampleSize;
 }
 
 } //blackmagic

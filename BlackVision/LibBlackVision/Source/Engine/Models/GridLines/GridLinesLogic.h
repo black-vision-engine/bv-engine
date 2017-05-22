@@ -23,6 +23,8 @@ private:
     bool                            m_showGridLines;
     UInt64                          m_gridLinesUpdateID;
 
+    glm::vec4                       m_color;
+
 public:
     GridLinesLogic();
     ~GridLinesLogic();
@@ -41,6 +43,8 @@ public:
     
     ConnectedComponentPtr   BuildConnectedComponent ();
     UInt64                  GetUpdateID             ()                  { return m_gridLinesUpdateID; }
+
+    glm::vec4               GetColor                () const;
 
 private:
 

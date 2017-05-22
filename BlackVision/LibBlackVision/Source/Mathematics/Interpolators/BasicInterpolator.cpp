@@ -489,7 +489,7 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::CalcPreT( TimeValueT t
         TimeValueT q = interval;
         TimeValueT r = std::modf( t, &q );
 
-        if( round( q ) % 2 == 0 )
+        if( mathematics::round( q ) % 2 == 0 )
         {
             return tStart + r;
         }
@@ -519,15 +519,15 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::CalcPostT( TimeValueT 
     else if( wrapPost == WrapMethod::repeat )
     {
         TimeValueT q = interval;
-        TimeValueT r = divmod( t, &q );
+        TimeValueT r = mathematics::divmod( t, &q );
         return tStart + r;
     }
     else if( wrapPost == WrapMethod::pingPong )
     {
         TimeValueT q = interval;
-        TimeValueT r = divmod(t, &q);
+        TimeValueT r = mathematics::divmod(t, &q);
 
-        if( round( q ) % 2 == 0 )
+        if( mathematics::round( q ) % 2 == 0 )
         {
             return tStart + r;
         }

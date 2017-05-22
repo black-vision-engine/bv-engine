@@ -340,8 +340,8 @@ void                                DefaultHeightMapPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     //m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 

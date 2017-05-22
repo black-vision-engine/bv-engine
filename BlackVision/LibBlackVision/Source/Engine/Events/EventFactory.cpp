@@ -69,7 +69,12 @@ IEventPtr EventFactory::DeserializeEvent         ( IDeserializer& deser ) const
     if( iter != m_eventsConverter.end() )
     {
         auto eventCreator = iter->second;
-        return eventCreator( deser );
+        auto event = eventCreator( deser );
+        
+        if( !event )
+            LOG_MESSAGE( SeverityLevel::error ) << "Cannot deserialize event: " + command;
+
+        return event;
     }
     else
     {

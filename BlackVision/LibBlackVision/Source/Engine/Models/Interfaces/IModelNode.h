@@ -24,6 +24,7 @@ class IPluginListFinalized;
 
 class IModelNode;
 DEFINE_PTR_TYPE(IModelNode)
+DEFINE_WEAK_PTR_TYPE( IModelNode )
 DEFINE_CONST_PTR_TYPE(IModelNode)
 
 class IModelNode : public bv::IUpdatable

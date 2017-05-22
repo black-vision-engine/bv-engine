@@ -119,18 +119,23 @@ std::string                     DefaultAVDecoderPluginDesc::TextureName         
 
 // ************************************************************************* PLUGIN *************************************************************************
 
-void					DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
+bool					        DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    InitVertexAttributesChannel();
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        ctx->alphaCtx->blendEnabled = true;
+        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        return true;
+    }
+    else
+        return false;
+    
 }
 
 // *************************************
@@ -141,7 +146,6 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_decoder( nullptr )
-    , m_prevOffsetCounter( 0 )
     , m_prevDecoderModeTime( 0 )
     , m_prevOffsetTime( 0 )
     , m_isFinished( false )
@@ -180,7 +184,7 @@ DefaultAVDecoderPlugin::~DefaultAVDecoderPlugin					()
 // 
 bool							DefaultAVDecoderPlugin::IsValid     () const
 {
-    return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -218,9 +222,13 @@ bool                            DefaultAVDecoderPlugin::LoadResource		( AssetDes
 
                 if( vsDesc )
                 {
-                    vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-
                     auto txData = m_psc->GetTexturesDataImpl();
+                    auto replacedTex = txData->GetTexture( 0 );
+
+                    SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+                    vsDesc->SetSamplerState( newSamplerStateModel );
+
                     txData->SetTexture( 0, vsDesc );
 
                     SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
@@ -275,12 +283,12 @@ void                                DefaultAVDecoderPlugin::Update              
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         InitVertexAttributesChannel();
     }
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     UpdateDecoder();
     UploadVideoFrame();
@@ -294,13 +302,13 @@ void                                DefaultAVDecoderPlugin::Update              
 //
 void									DefaultAVDecoderPlugin::InitVertexAttributesChannel		()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
     auto prevCC = prevGeomChannel->GetComponents();
 
     //Only one texture
@@ -378,6 +386,8 @@ void                                DefaultAVDecoderPlugin::UpdateDecoder  ()
         // send event on video finished
         if( !m_isFinished && m_decoder->IsFinished() && m_assetDesc )
         {
+            m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+
             BroadcastHasFinishedEvent();
             m_isFinished = true;
             TriggerEvent( AssetTrackerInternalEvent::Command::EOFAudio );
@@ -415,22 +425,39 @@ void                                DefaultAVDecoderPlugin::Pause               
 //
 void                                DefaultAVDecoderPlugin::HandlePerfectLoops  ()
 {
-    auto loopEnabled = m_loopEnabledParam->Evaluate();
-    auto loopCount = m_loopCountParam->Evaluate();
-    if( ParameterChanged( PARAM::LOOP_COUNT ) )
+    m_decoderMode = m_decoderModeParam->Evaluate();
+    if( m_decoderMode == DecoderMode::RESTART )
     {
-        if( loopCount == 0 )
-        {
-            loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
-        }
-        m_loopCount = loopCount;
+        UpdateDecoderState( DecoderMode::STOP );
+        m_decoderModeParam->SetVal( DecoderMode::PLAY, 0.f );
     }
-
-    if( loopEnabled && m_decoder->IsFinished() && m_loopCount > 1 )
+    else
     {
-        m_decoder->Seek( 0.f );
-		UpdateDecoderState( m_decoderMode );
-        m_loopCount--;
+        auto loopEnabled = m_loopEnabledParam->Evaluate();
+        auto loopCount = m_loopCountParam->Evaluate();
+        if( ParameterChanged( PARAM::LOOP_COUNT ) )
+        {
+            if( loopCount == 0 )
+                loopCount = std::numeric_limits< Int32 >::max(); // set 'infinite' loop
+
+            m_loopCount = loopCount;
+        }
+
+
+        if( m_decoder->IsFinished() )
+        {
+            m_decoder->Seek( 0.f );
+
+            if( loopEnabled && m_loopCount > 1 )
+                m_loopCount--;
+            else
+            {
+                m_decoderModeParam->SetVal( DecoderMode::STOP, 0.f );
+                m_decoderMode = m_decoderModeParam->Evaluate();
+            }
+
+            UpdateDecoderState( m_decoderMode );
+        }
     }
 }
 
@@ -438,6 +465,12 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
 //
 void                                DefaultAVDecoderPlugin::UpdateDecoderState          ( DecoderMode mode )
 {
+    if( mode == DecoderMode::RESTART )
+    {
+        UpdateDecoderState( DecoderMode::STOP );
+        m_decoderModeParam->SetVal( DecoderMode::PLAY, 0.f );
+    }
+
     switch( mode )
     {
         case DecoderMode::PLAY:

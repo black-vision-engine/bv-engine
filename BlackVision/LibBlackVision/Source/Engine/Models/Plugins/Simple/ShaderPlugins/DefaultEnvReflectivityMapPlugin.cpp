@@ -96,10 +96,15 @@ DefaultEnvReflectivityMapPlugin::~DefaultEnvReflectivityMapPlugin()
 
 // *************************************
 // 
-void DefaultEnvReflectivityMapPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultEnvReflectivityMapPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -114,7 +119,7 @@ IPixelShaderChannelPtr              DefaultEnvReflectivityMapPlugin::GetPixelSha
 void                                DefaultEnvReflectivityMapPlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
-    HelperPixelShaderChannel::PropagateUpdate( m_pixelShaderChannel, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_pixelShaderChannel, GetPrevPlugin() );
     m_pixelShaderChannel->PostUpdate();
 }
 
@@ -131,10 +136,14 @@ bool                            DefaultEnvReflectivityMapPlugin::LoadResource  (
 
         if( txDesc != nullptr )
         {
-            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            auto txData = m_pixelShaderChannel->GetTexturesDataImpl();
+            auto replacedTex = txData->GetTexture( 0 );
+
+            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            txDesc->SetSamplerState( newSamplerStateModel );
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
-            auto txData = m_pixelShaderChannel->GetTexturesDataImpl();
             txData->SetTexture( 0, txDesc );
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 

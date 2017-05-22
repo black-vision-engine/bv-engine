@@ -3,6 +3,7 @@
 #include <map>
 
 #include "VideoCardManagerUtils.h"
+#include "Memory/AVFrame.h"
 
 #define _WINSOCKAPI_
 #include "DeckLinkAPI_h.h"
@@ -34,6 +35,10 @@ DEFINE_UPTR_TYPE( ChannelOutputData )
 BMDDisplayMode                                          ConvertVideoMode        ( UInt32 resolution, UInt32 refresh, bool interlaced );
 std::size_t                                             VideoModeHash           ( UInt32 resolution, UInt32 refresh, bool interlaced );
 std::map< std::size_t, BMDDisplayMode >                 CreateVideoModeMap      ();
+
+BMDAudioSampleRate                                      ConvertSampleRate       ( UInt32 sampleRate );
+BMDAudioSampleType                                      ConvertSampleType       ( AudioSampleType sampleType );
+
 extern  std::map< std::size_t, BMDDisplayMode >         VideoModeMap;
 
 } //blackmagic

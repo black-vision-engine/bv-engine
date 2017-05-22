@@ -169,23 +169,26 @@ void    NodeUpdater::UpdateNodeEffect       ()
     auto nodeEffect = m_modelNode->GetNodeEffect();
     if( nodeEffect )
     {
-        auto sceneNNodeEffect = m_sceneNode->GetNNodeEffect();
+        auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-        if( sceneNNodeEffect )
+        if( sceneNodeEffect )
         {
-            for( auto & val : nodeEffect->GetValues() )
+            if( nodeEffect->IsEnabled() )
             {
-                UpdateValue( val, sceneNNodeEffect->GetValue( val->GetName() ) );
+                m_sceneNode->EnableNodeEffect();
+
+                for( auto & val : nodeEffect->GetValues() )
+                    UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+            }
+            else
+            {
+                m_sceneNode->DisableNodeEffect();
             }
         }
         else
         {
-            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-            for( auto & val : nodeEffect->GetValues() )
-            {
-                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
-            }
+            // FIXME: nrl transition
+            assert( false );
         }
     }
 }

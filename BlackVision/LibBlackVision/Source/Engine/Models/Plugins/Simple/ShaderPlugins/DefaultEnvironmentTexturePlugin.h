@@ -30,11 +30,22 @@ public:
 class DefaultEnvironmentTexturePlugin : public BasePlugin
 {
 public:
+
+    enum MixMode
+    {
+        Blend = 0,
+        Decal,
+        Modulate,
+        Add,
+        Average,
+        AddSigned
+    };
     
     struct PARAM
     {
         static const std::string        Reflectivity;
 		static const std::string        TxMat;
+        static const std::string        EnvMixMode;
     };
 
 private:
@@ -49,7 +60,7 @@ public:
 
     virtual IPixelShaderChannelPtr          GetPixelShaderChannel       () const override;
     virtual void                            Update                      ( TimeType t ) override;
-    virtual void							SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool							SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     virtual bool                            LoadResource                ( AssetDescConstPtr assetDescr ) override;
 };

@@ -56,7 +56,7 @@ private:
     bool										InitVertexAttributesChannel ( bool recursive );
     void										AddGeometry                 ( MeshAssetConstPtr meshAsset, Float3AttributeChannelPtr posChannel, bool recursive );
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

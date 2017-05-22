@@ -93,20 +93,24 @@ std::string             DefaultTexturePluginDesc::TextureName               ()
 
 // *************************************
 // 
-void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        InitVertexAttributesChannel();
 
-    InitVertexAttributesChannel();
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-    //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        ctx->alphaCtx->blendEnabled = true;
+        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -123,6 +127,8 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     SetPrevPlugin( prev );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), PARAM_BLEND_ENABLE );
 }
 
 // *************************************
@@ -135,7 +141,7 @@ DefaultTexturePlugin::~DefaultTexturePlugin         ()
 // 
 bool							DefaultTexturePlugin::IsValid     () const
 {
-    return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -152,10 +158,14 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 
         if( txDesc != nullptr )
         {
-            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-            
             auto txData = m_psc->GetTexturesDataImpl();
+            auto replacedTex = txData->GetTexture( 0 );
+            
+            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            txDesc->SetSamplerState( newSamplerStateModel );
+            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
             txData->SetTexture( 0, txDesc );
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 
@@ -201,21 +211,21 @@ void                                DefaultTexturePlugin::Update                
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
 
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    if( m_blendEnabled.Changed() )
     {
         auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+        ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
 
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
     }
 
-    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         InitVertexAttributesChannel();
     }
     
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -225,13 +235,13 @@ void                                DefaultTexturePlugin::Update                
 //
 void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 {
-    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
     {
         m_vaChannel = nullptr;
         return;
     }
 
-    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
     auto prevCC = prevGeomChannel->GetComponents();
 
     //Only one texture

@@ -80,13 +80,17 @@ std::string             DefaultParallaxMapPluginDesc::TextureName               
 
 // *************************************
 // 
-void DefaultParallaxMapPlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultParallaxMapPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
-
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        auto ctx = m_psc->GetRendererContext();
+        ctx->cullCtx->enabled = false;
+        return true;
+    }
+    else
+        return false;
 }
 
 // *************************************
@@ -111,7 +115,7 @@ DefaultParallaxMapPlugin::~DefaultParallaxMapPlugin         ()
 // 
 bool							DefaultParallaxMapPlugin::IsValid     () const
 {
-    return m_prevPlugin->IsValid();
+    return GetPrevPlugin()->IsValid();
 }
 
 // *************************************
@@ -128,10 +132,14 @@ bool                            DefaultParallaxMapPlugin::LoadResource  ( AssetD
 
         if( txDesc != nullptr )
         {
-            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            auto txData = m_psc->GetTexturesDataImpl();
+            auto replacedTex = txData->GetTexture( 0 );
+
+            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            txDesc->SetSamplerState( newSamplerStateModel );
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
-            auto txData = m_psc->GetTexturesDataImpl();
             txData->SetTexture( 0, txDesc );
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 
@@ -157,7 +165,7 @@ void                                DefaultParallaxMapPlugin::Update            
 {
     BasePlugin::Update( t );
 
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_psc->PostUpdate();    
 }

@@ -127,7 +127,7 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
 	if( out->GetType() != in->GetType() ) // FIXME: This should be checked earlier. Not here. 
 	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << ( int ) out->GetType() << " != " << ( int ) in->GetType() << "'. Check a type of param '" << in->GetName() << "'.";
+		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << SerializationHelper::T2String( out->GetType() ) << " != " << SerializationHelper::T2String( in->GetType() ) << "'. Check a type of param '" << in->GetName() << "'.";
 	}
 	else
 	{
@@ -261,7 +261,15 @@ void                                        DefaultParamValModel::SetParameter  
     std::string name = param->GetName(); // FIXME: make this an argument
 
     auto prevParam = GetParameter( name );
-    CopyParameter( prevParam, param );
+
+    if( prevParam )
+    {
+        CopyParameter( prevParam, param );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Trying to set parameter: [" << name << "] which doesn't exist.";
+    }
 }
 
 // *******************************

@@ -48,8 +48,10 @@ class PdrVertexDescriptor;
 class PdrVertexArrayObject;
 class PdrRenderTarget;
 class PdrDownloadPBO;
-class NodeEffect;
 class Scene;
+
+// FIXME: nrl - dirty hack, remove all high level rendering logic from this class
+class NodeEffect;
 
 class TransformableEntity;
 
@@ -148,6 +150,7 @@ public:
     void    SetVSync            ( bool enable, int verticalBufferFrameCount );
     void    SetFlushFinish      ( bool flush, bool finish );
 
+    //FIXME: renderer should know nothing about the scene structure (especially high level structure of scenes)
     void    EnableScene         ( Scene * scene ); // FIXME: nrl - refactor this one - its logic should be placed outside this class
 
 public:
@@ -246,7 +249,7 @@ public:
     void                        FreeEffectPDR                   ( RenderableEffect * effect );
     void                        FreeShaderPDR                   ( Shader * shader );
 
-    void                        FreeNodeEffectPDR               ( const NodeEffect * nodeEffect );
+    void                        FreeNodeEffectPDR_DIRTY_HACK    ( const NodeEffect * nodeEffect ); //FIXME: renderer should know nothing about the scene structure (especially high level structure of nodes)
 
 private:
 

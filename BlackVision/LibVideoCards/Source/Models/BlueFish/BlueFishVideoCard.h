@@ -2,7 +2,7 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 #include "Channel.h"
 
 
@@ -54,15 +54,12 @@ private:
 
 	std::vector< Channel * > m_channels;
 
-	MemoryChunkPtr			m_prevFrame;
-
-	void					RetrieveFieldFromFrame		( AVFramePtr frame, int odd );
-
 public:
 	                        VideoCard                   ( UInt32 deviceID );
 	virtual                 ~VideoCard                  () override; 
 
     bool                    AttachVideoCard             ();
+    bool                    DetachVideoCard             ();
 	void                    InitVideoCard               ();
 
     virtual void            SetVideoOutput              ( bool enable ) override;
@@ -71,28 +68,21 @@ public:
 	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
 	Channel *			    GetChannelByName			( ChannelName channelName ) const;   
 
-    void                    PreStart                    () override
-    {
-        assert( false );
-    };
-
+    void                    PreStart                    () override;
     virtual void            Start                       () override;
-
-    void                    Stop                        () override
-    {
-        assert( false );
-    };
+    void                    Stop                        () override;
 
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
-
-    virtual void            DisplayFrame                () const;
 
     std::set< UInt64 >	    GetDisplayedVideoOutputsIDs () const override;
 
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 
+    virtual void            EnableAudioChannel      ( AudioSampleType , UInt32 , UInt32 ) override {};
+
     static UInt32           EnumerateDevices            ();
 
+    UInt32                  GetRequiredFPS              () const override;
 };
 
 DEFINE_PTR_TYPE( VideoCard )

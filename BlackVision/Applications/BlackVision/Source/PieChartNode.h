@@ -2,7 +2,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "NewModelTestNodes.h"
+#include "TestingScenes/NewModelTestNodes.h"
 
 namespace bv {
 

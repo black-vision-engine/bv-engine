@@ -477,7 +477,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				ext_ltc = pFrame->m_TimeCode.GetTimeCode(true);
 				sd_vitc = pFrame->m_TimeCode.GetTimeCode(true);
 
-				if (pFrame->m_desc.autoGenerateTimecode)
+                //if (true /*pFrame->m_desc.autoGenerateTimecode*/) // FIXME: https://www.pivotaltracker.com/story/show/145508031
 				{
 					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, false, rp188_vitc, false);
 					pFrame->m_TimeCode.GenerateTimeCode(nFramesPlayed, 50, false, false, true, rp188_ltc, false);
@@ -489,13 +489,13 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				hanc_stream_info.ltc_time_code = ext_ltc.timecode_u64;			//external LTC time code
 				hanc_stream_info.sd_vitc_time_code = sd_vitc.timecode_u64;		//this field is only valid for SD video signal 
 
-				if (!pFrame->m_desc.timeCodePresent)
-				{
-					hanc_stream_info.time_code = 0LL;			//RP188 VITC time code
-					hanc_stream_info.rp188_ltc_time_code = 0LL;	//RP188 LTC time code
-					hanc_stream_info.ltc_time_code = 0LL;			//external LTC time code
-					hanc_stream_info.sd_vitc_time_code = 0LL;		//this field is only valid for SD video signal 
-				}
+				//if (false/*!pFrame->m_desc.timeCodePresent*/)  // FIXME: https://www.pivotaltracker.com/story/show/145508031
+				//{
+				//	hanc_stream_info.time_code = 0LL;			//RP188 VITC time code
+				//	hanc_stream_info.rp188_ltc_time_code = 0LL;	//RP188 LTC time code
+				//	hanc_stream_info.ltc_time_code = 0LL;			//external LTC time code
+				//	hanc_stream_info.sd_vitc_time_code = 0LL;		//this field is only valid for SD video signal 
+				//}
 
 				encode_hanc_frame_ex(nCardType,
 					&hanc_stream_info,
@@ -579,7 +579,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	pThis->m_pSDK->SetCardProperty(FORCE_SD_VBI_OUTPUT_BUFFER_TO_V210, varVal);	//when changing this property the video output mode and video output engine need to be set again manually!
 
     bool blackout = false;
-    pFrame = std::make_shared<CFrame>( 0, pThis->GoldenSize, pThis->BytesPerLine );
+    pFrame = std::make_shared<CFrame>(pThis->GoldenSize, pThis->BytesPerLine );
     while( !blackout )
     {
         if( BLUE_OK( pThis->m_pSDK->video_playback_allocate( ( void** )&NotUsedAddress, BufferId, Underrun ) ) )

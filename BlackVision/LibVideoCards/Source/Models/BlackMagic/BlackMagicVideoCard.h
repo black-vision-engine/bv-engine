@@ -3,10 +3,10 @@
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "BlackMagicUtils.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 #include "BlackMagic/DeckLinkAPI_h.h"
 #include "BlackMagicVCThread.h"
-#include "VideoOutputDelegate.h"
+#include "AudioVideoOutputDelegate.h"
 
 #include <atomic>
 #include <mutex>
@@ -52,13 +52,16 @@ private:
 	BMDTimeScale								m_frameTimescale;
 	UInt32										m_uiTotalFrames;
 
-	UInt64										m_displayedOutputID;
+	UInt64										m_linkedVideoOutputID;
     ChannelOutputData							m_output;
     BlackMagicVCThreadUPtr						m_blackMagicVCThread;
 
+    UInt32                                      m_audioChannelsNum;
+    UInt32                                      m_audioSampleSize;
+
     mutable UInt64								m_lastFrameTime;
 
-    VideoOutputDelegate	*						m_videoOutputDelegate;
+    AudioVideoOutputDelegate	*				m_audioVideoOutputDelegate;
 
     typedef QueueConcurrentLimited< AVFrameConstPtr >    FrameQueue;
     FrameQueue									m_frameQueue;
@@ -67,6 +70,8 @@ private:
     mutable std::mutex                          m_mutex;
 
 	mutable UInt64								m_frameNum;
+
+    bool                                        m_audioEnabled;
 
     FrameProcessingCompletedCallbackType        m_frameProcessingCompletedCallback;
 
@@ -94,13 +99,15 @@ public:
     virtual void            Start               () override;
     virtual void            Stop                () override;
     
+    virtual void            EnableAudioChannel  ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) override;
 
 	virtual void            ProcessFrame        ( const AVFrameConstPtr & data, UInt64 avOutputID ) override;
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
-    virtual void            DisplayFrame        () const override;
 
 	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const override;
 	
+    virtual UInt32              GetRequiredFPS  () const override;
+
 private:
 
 	bool                    InitDevice          ();
@@ -109,13 +116,17 @@ private:
 	void					FrameCompleted		( IDeckLinkVideoFrame * completedFrame );
 	void					DisplayNextFrame	( IDeckLinkVideoFrame * complitedFrame );
 
+    bool					RenderAudioSamples  ( bool preroll );
+
 	void					UpdateFrameTime		( UInt64 t );
 	UInt64					GetFrameTime		() const;
+
+    UInt32                  AudioFrameSizeInBytes() const;
 
     static UInt32           EnumerateDevices    ();
 
 	friend class BlackMagicVCThread;
-	friend class VideoOutputDelegate;
+	friend class AudioVideoOutputDelegate;
 	friend class VideoCardDesc;
 };
 

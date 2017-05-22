@@ -68,7 +68,15 @@ bool XMLDeserializer::LoadFile        ( const std::string & fileName )
 
         m_buf[ size ] = '\0';
 
-        m_rootDoc->parse< 0 >( m_buf );
+        try
+        {
+            m_rootDoc->parse< 0 >( m_buf );
+        }
+        catch( const std::exception & )
+        {
+            return false;
+        }
+
         m_doc = m_rootDoc;
 
         m_nodes.push( m_doc );
@@ -86,7 +94,15 @@ bool XMLDeserializer::Load                ( const std::string & xmlString )
     m_buf = new char[ xmlString.size() + 1 ];
     m_buf[ xmlString.size() ] = '\0';
 
-    m_rootDoc->parse< 0 >( m_buf );
+    try
+    {
+        m_rootDoc->parse< 0 >( m_buf );
+    }
+    catch( const std::exception & )
+    {
+        return false;
+    }
+
     m_doc = m_rootDoc;
 
     m_nodes.push( m_doc );
@@ -126,6 +142,21 @@ std::string                                             XMLDeserializer::GetValu
     }
 
     return node->value();
+}
+
+// *******************************
+//
+bool			                                        XMLDeserializer::HasAttribute           ( const std::string & name ) const
+{
+    return GetDoc()->first_attribute( name.c_str() ) != nullptr;
+}
+
+// *******************************
+//
+bool		                                            XMLDeserializer::HasAttribute            ( const std::wstring & ) const
+{
+    assert( !"This serializer doesn't supports wstrings" );
+    return false;
 }
 
 // *******************************

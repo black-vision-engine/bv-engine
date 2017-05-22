@@ -34,7 +34,6 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrUniformBufferObject.h"
 
 #include "Engine/Graphics/SceneGraph/Scene.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 #include "Tools/HRTimer.h"
 
@@ -147,8 +146,6 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
     SetFillState( m_currentStateInstance.GetFillState() );
     SetOffsetState( m_currentStateInstance.GetOffsetState() );
     SetStencilState( m_currentStateInstance.GetStencilState() );
-
-    m_RendererData->m_CurrentRS.UpdateState( stateInstance );
 }
 
 // *********************************
@@ -183,12 +180,23 @@ void    Renderer::FreePdrResources   ()
 // FIXME: stencil is not required here so it is just fine, glClearColor and glClearDepth should be set only once, not every buffer clear - but there is no need to optimize it
 void	Renderer::ClearBuffers		()
 {
+    auto ds = m_currentStateInstance.GetDepthState();
+    if( !ds->writable )
+    {
+        BVGL::bvglDepthMask( GL_TRUE );
+    }
+    
     //FIXME: it should be set once only, when clear color is changed
     BVGL::bvglClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //FIXME: implement
     BVGL::bvglClearDepth((GLclampd)m_ClearDepth);
     //glClearStencil((GLint)mClearStencil);
     BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    if( !ds->writable )
+    {
+        BVGL::bvglDepthMask( GL_FALSE );
+    }
 }
 
 // *********************************
@@ -325,6 +333,9 @@ bool     Renderer::DrawLines      ( Lines * lines )
 
         firstVertex += numVertices;
     }
+
+    // Lines width is 1.0f by default. Since we can't set this value through model, we should always set it back.
+    BVGL::bvglLineWidth( 1.0f );
 
     Disable ( vao );
 
@@ -537,14 +548,19 @@ void    Renderer::SetSamplerTexUnit ( int samplerLoc, int textureUnit )
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
+    bool updated = false;
 
     if( texture->GetUpdateID() > m_TextureUpdateIDMap[ texture ] )
     {
         pdrTex2D->Update( texture );
         m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
+
+        updated = true;
     }
 
-    if( !IsEnabled( texture, textureUnit ) )
+    // Note: If texture was updated it must be rebound to shader even if it was eneabled.
+    // Update process can delete texture and create new one, which caused problems in the past.
+    if( updated || !IsEnabled( texture, textureUnit ) )
     {
         pdrTex2D->Enable( this, textureUnit );
 
@@ -620,7 +636,7 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
     if( !m_PdrPBOMemTransferRT )
     {
-        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), false );
+        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
     }
 
     //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
@@ -1081,17 +1097,18 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
 
 // *********************************
 //
-void    Renderer::FreeNodeEffectPDR ( const NodeEffect * nodeEffect )
+void    Renderer::FreeNodeEffectPDR_DIRTY_HACK ( const NodeEffect * nodeEffect )
 {
-    { nodeEffect; }
     // FIXME: nrl update
-    //std::set< const RenderablePass * > passes;
-    //nodeEffect->GetRenderPasses( &passes );
+    // FIXME: reimplement this szaj
+    std::set< const RenderablePass * > passes;
+    nodeEffect->GetRenderPasses_DIRTY_HACK( &passes );
 
-    //for( auto p : passes )
-    //{
-    //    m_PdrShaderMap.erase( p );
-    //}
+    for( auto p : passes )
+    {
+        // FIXME: this does not work as expected - no resources are freed from the device - which means that this is a device resource leak !!!
+        m_PdrShaderMap.erase( p );
+    }
 }
 
 } //bv

@@ -9,14 +9,18 @@
 
 #include "CoreDEF.h"
 
+#include <atomic>
 
 namespace bv { namespace videocards { namespace bluefish {
 
+class BlueFishVCThread;
+class Channel;
 
 struct MainThreadArgs
 {
     CFifoBuffer *   pInputFifo;
     CFifoBuffer *   pOutputFifo;
+    Channel *       channel;
     BOOL            bDoRun;
 };
 
@@ -39,6 +43,16 @@ private:
     ChannelName     m_channelName;
 
     unsigned int    m_PlaythroughThreadID;
+
+    std::atomic< int >      m_odd;
+    mutable UInt64		    m_lastFrameTime;
+    mutable std::mutex      m_mutex;
+
+    BlueFishVCThread *      m_frameProcessingThread;
+
+    void                    UpdateFrameTime             ( UInt64 t );
+    UInt64                  GetFrameTime                () const;
+    void                    FrameProcessed	            ( const AVFrameConstPtr & frame );
     
 public:
 
@@ -59,6 +73,7 @@ public:
     IOType          GetOutputType       () const;
     IOType          GetInputType        () const;
 
+    UInt64          GetOutputId                 () const;
     UInt32          GetOutputChannel            () const;
     UInt32          GetEpochSDIOutput           () const;
     UInt32          GetEpochOutputMemInterface  () const;
@@ -66,6 +81,8 @@ public:
     UInt32          GetEpochSDIInput            () const;
 	UInt32			GetEpochSDIKeyOutput		() const;
     UInt32          GetEpochInputMemInterface   () const;
+
+    void            EnqueueFrame        ( const AVFrameConstPtr & frame );
 
     CFifoCapture *  GetCaptureChannel   () const;
     CFifoPlayback * GetPlaybackChannel  () const;
@@ -94,6 +111,7 @@ public:
 
     static ChannelOptionMap CreateChannelOptionMap      ();
 
+    friend class BlueFishVCThread;
 };
 
 } //bluefish

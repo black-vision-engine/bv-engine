@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\CoreEnums.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h" />
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\CircularBufferConcurrent.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\Deque.h" />
@@ -33,7 +39,9 @@
     <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
     <ClInclude Include="..\..\..\Source\IO\SharedMemoryBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
+    <ClInclude Include="..\..\..\Source\Memory\AVFrame.h" />
     <ClInclude Include="..\..\..\Source\Memory\LinearAllocator.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
@@ -67,17 +75,25 @@
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h" />
     <ClInclude Include="..\..\..\Source\Util\IObservable.h" />
     <ClInclude Include="..\..\..\Source\Util\IObserver.h" />
     <ClInclude Include="..\..\..\Source\Util\Observable.h" />
     <ClInclude Include="..\..\..\Source\win_sock.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp" />
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp" />
     <ClCompile Include="..\..\..\Source\IO\DirIO.cpp" />
     <ClCompile Include="..\..\..\Source\IO\FileIO.cpp" />
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp" />
     <ClCompile Include="..\..\..\Source\IO\SharedMemoryBuffer.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
+    <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
@@ -103,6 +119,8 @@
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp" />
   </ItemGroup>
   <ItemGroup>

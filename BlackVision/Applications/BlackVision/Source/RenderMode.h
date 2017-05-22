@@ -7,10 +7,8 @@
 namespace bv
 {
 
-namespace nrl {
-class NRenderLogic;
+class RenderLogic;
 class OutputScreenshot;
-}
 
 class Renderer;
 
@@ -27,7 +25,7 @@ class RenderMode
 {
 private:
 
-    nrl::NRenderLogic * m_renderLogic;
+    RenderLogic * m_renderLogic;
     Renderer *          m_renderer;
 
     unsigned int        m_frameNumber;
@@ -46,7 +44,7 @@ public:
     RenderMode	();
     ~RenderMode	();
 
-    void        Init                        ( nrl::NRenderLogic * logic, Renderer * renderer )      { m_renderLogic = logic; m_renderer = renderer; }
+    void        Init                        ( RenderLogic * logic, Renderer * renderer )      { m_renderLogic = logic; m_renderer = renderer; }
     void        SetStartTime                ( unsigned long time );
     
     void        SetRenderToFileMode         ( const std::string & filePath, float requestedFPS, unsigned int numFrames );
@@ -59,10 +57,6 @@ public:
     TimeType        GetFrameTime        () const    { return m_currentTime; }
     unsigned int    GetFrameNumber      () const    { return m_frameNumber; }
     TimeType        GetRealTime         () const    { return m_realTime; }
-
-private:
-
-    nrl::OutputScreenshot *     GetScreenshotLogic  ();
 
 };
 

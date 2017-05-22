@@ -96,6 +96,27 @@ public:
 	static void					GenerateCheckboardAnim				( const std::string & path, UInt32 width, UInt32 height, UInt32 animNum );
 
 	static std::vector< model::IPluginDescriptor * >  DefaultBVPluginDescriptors  ();
+
+    static const IConfig*       GetConfig                           ();
 };
 
+
+class FakeConfig : public IConfig
+{
+    friend class TestSceneUtils;
+private:
+    
+    static const std::string    EmptyString;
+    static const FakeConfig     Config;
+
+public:
+
+    const std::string &     FakeConfig::PropertyValue       ( const std::string & /*key*/ ) const
+    {
+        return EmptyString;
+    }
+};
+
+
 } // bv
+

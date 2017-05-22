@@ -8,7 +8,7 @@
 #include "Threading/StoppableThread.h"
 #include "DataTypes/QueueConcurrentLimited.h"
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 #include <boost/circular_buffer.hpp>
 
@@ -24,6 +24,8 @@ class BlackMagicVCThread : public StoppableThread
 	boost::circular_buffer< MemoryChunkPtr > m_prevFramesBuffer;
 
 	MemoryChunkPtr				m_prevFrame;
+
+    MemoryChunkPtr              m_prevAudioData;
 
 	FrameQueue					m_frameQueue;
 

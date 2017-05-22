@@ -52,7 +52,11 @@ std::vector< std::shared_ptr< T > >                         DeserializeArray( co
         do
         {
             auto obj = ISerializablePtr( T::Create( deser ) );
-            ret.push_back( std::static_pointer_cast< T >( obj ) );
+            if( obj )
+            {
+                ret.push_back( std::static_pointer_cast< T >( obj ) );
+            }
+
         }while( deser.NextChild() );
         deser.ExitChild(); // nameChild
     }

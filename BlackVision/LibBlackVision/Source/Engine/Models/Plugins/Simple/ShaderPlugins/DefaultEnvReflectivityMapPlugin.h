@@ -42,7 +42,7 @@ public:
 
     virtual IPixelShaderChannelPtr          GetPixelShaderChannel       () const override;
     virtual void                            Update                      ( TimeType t ) override;
-    virtual void							SetPrevPlugin               ( IPluginPtr plugin ) override;
+    virtual bool							SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     virtual bool                            LoadResource                ( AssetDescConstPtr assetDescr ) override;
 };

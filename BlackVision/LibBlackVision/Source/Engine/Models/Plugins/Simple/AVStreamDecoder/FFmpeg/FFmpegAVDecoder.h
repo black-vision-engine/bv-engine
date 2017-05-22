@@ -91,13 +91,20 @@ protected:
 
 private:
 
+    void					    RestartPlayer           ();
+    void                        StopPlayer              ();
+
     void                        RestartDecoding         ();
     void                        StopDecoding            ();
+
+    void                        ClearQueues             ();
 
     /** Manually seek from current keyframe to frame with at given timestamp.
     @param[time] in miliseconds
     */
 	bool						Seek				    ( FFmpegStreamDecoder * decoder, Int64 time, Int64 * nearestTimestamp );
+
+    UInt64                      GetLastPlayedFramePTS   () const;
 };
 
 } //bv

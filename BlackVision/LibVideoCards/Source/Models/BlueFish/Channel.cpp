@@ -1,5 +1,9 @@
 #include "Channel.h"
 
+#include "System/Time.h"
+
+#include "BlueFishVCThread.h"
+
 #include <process.h>
 
 
@@ -19,6 +23,8 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
     , m_playbackData( nullptr )
     , m_playbackChannel( nullptr )
     , m_playbackFifoBuffer( nullptr )
+    , m_frameProcessingThread( nullptr )
+    , m_odd( 0 )
 {
     if( input ) 
     {
@@ -29,10 +35,19 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
 
     if( output )
     {
-
         m_playbackData = std::move( output );
         m_playbackFifoBuffer = new CFifoBuffer();
         m_playbackChannel = new CFifoPlayback();
+
+        m_frameProcessingThread = new BlueFishVCThread( this, 1920 * 1080 * 4 ); // FIXME: Set frame size properly.
+
+        if( m_playbackData->interlaced )
+        {
+            m_frameProcessingThread->EnableInterlacing( true );
+            //m_frameProcessingThread->SetFrameDuration( UInt64( 1000 / ( float(output->refresh) / 100.f ) ) );
+        }
+
+        m_frameProcessingThread->Start();
     }
 }
 
@@ -56,9 +71,15 @@ Channel::~Channel()
 
     if( m_playbackChannel )
     {
-        m_playbackChannel->StopThread();
         delete m_playbackChannel;
         m_playbackChannel = nullptr;
+
+        m_frameProcessingThread->Kill();
+        m_frameProcessingThread->EnqueueEndMessage();
+        m_frameProcessingThread->Join();
+
+        delete m_frameProcessingThread;
+        m_frameProcessingThread = nullptr;
     }
 }
 
@@ -103,6 +124,18 @@ UInt32      Channel::GetOutputChannel           () const
     }
 
     return 0;
+}
+
+//**************************************
+//
+UInt64      Channel::GetOutputId                 () const
+{
+    if( m_playbackData )
+    {
+        return m_playbackData->linkedVideoOutput;
+    }
+
+    return MAXDWORD64;
 }
 
 //**************************************
@@ -301,16 +334,6 @@ UInt32          Channel::GetMemoryFormat        () const
 
     return false;
 }
-////**************************************
-////
-//bool          Channel::HasPlaythroughChannel    () const
-//{
-//    if( m_captureChannel )
-//    {
-//        m_captureChannel->
-//    }
-//    return false;
-//}
 
 //**************************************
 //
@@ -322,6 +345,7 @@ void Channel::StartThreads()
         m_PlaythroughThreadArgs.bDoRun = TRUE;
         m_PlaythroughThreadArgs.pInputFifo = m_captureFifoBuffer;
         m_PlaythroughThreadArgs.pOutputFifo = m_playbackFifoBuffer;
+        m_PlaythroughThreadArgs.channel = this;
         m_PlaythroughThreadID = 0;
         m_PlaythroughThreadHandle = ( HANDLE )_beginthreadex( NULL, 0, &PlaythroughThread, &m_PlaythroughThreadArgs, CREATE_SUSPENDED, &m_PlaythroughThreadID );
         if( !m_PlaythroughThreadHandle )
@@ -401,6 +425,13 @@ void Channel::ResumeThreads()
 
 //**************************************
 //
+void Channel::EnqueueFrame          ( const AVFrameConstPtr & frame )
+{
+    m_frameProcessingThread->EnqueueFrame( frame );
+}
+
+//**************************************
+//
 void Channel::SetVideoOutput        ( bool enable )
 {    
     if( GetPlaybackChannel() && GetPlaybackChannel()->m_pSDK )
@@ -414,12 +445,56 @@ void Channel::SetVideoOutput        ( bool enable )
 
 //**************************************
 //
+void Channel::UpdateFrameTime      ( UInt64 t )
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+    m_lastFrameTime = t;
+}
+
+//**************************************
+//
+UInt64 Channel::GetFrameTime         () const
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+    return m_lastFrameTime;
+}
+
+//**************************************
+//
+void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
+{
+    auto playbackChannel = GetPlaybackChannel();
+    if( playbackChannel && !PlaythroughEnabled() )
+    {
+        BVTimeCode tc; // FIXME: https://www.pivotaltracker.com/story/show/145508031
+        tc.h = 10;
+        tc.m = 22;
+        tc.s = 33;
+        tc.frame = 12;
+        playbackChannel->m_pFifoBuffer->PushFrame(
+            std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
+                                        playbackChannel->GoldenSize,
+                                        playbackChannel->BytesPerLine,
+                                        m_odd,
+                                        ( unsigned int ) frame->m_audioData->Size(),
+                                        reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
+                                        tc,
+                                        frame->m_desc
+                                        ) );
+
+        m_odd = ( m_odd + 1 ) % 2;
+    }
+}
+
+//**************************************
+//
 unsigned int __stdcall Channel::PlaythroughThread(void * pArg)
 {
     MainThreadArgs * pParams = ( MainThreadArgs * )pArg;
 
     while( pParams->bDoRun )
     {   
+        pParams->channel->UpdateFrameTime( Time::Now() );
         pParams->pOutputFifo->PushFrame( pParams->pInputFifo->PopFrame() );
     }
 

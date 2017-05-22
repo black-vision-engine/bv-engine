@@ -107,7 +107,7 @@ bool                        Dir::CreateDir            ( const std::string & path
 
         if( ec )
         {
-            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "[File::CreateDir] create_directory error: " << ec;
             return false;
         }
 
@@ -118,7 +118,7 @@ bool                        Dir::CreateDir            ( const std::string & path
         boost::filesystem::create_directory( path, ec );
         if( ec )
         {
-            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "[File::CreateDir] create_directory error: " << ec;
             return false;
         }
         else
@@ -141,7 +141,7 @@ bool                    Dir::RemoveDir          ( const std::string & path )
 
         if( ec )
         {
-            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "[File::CreateDir] create_directory error: " << ec;
             return false;
         }
         else
@@ -169,7 +169,7 @@ bool                    Dir::RenameDir          ( const std::string & path,const
 
         if( ec )
         {
-            std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "[File::CreateDir] create_directory error: " << ec;
             return false;
         }
         else
@@ -197,7 +197,7 @@ bool                    Dir::CopyDir            ( const std::string & path, cons
 
         if( ec )
         {
-            std::cout << "[File::CopyDir] copy_directory error: " << ec << std::endl;
+            LOG_MESSAGE( SeverityLevel::error ) << "[File::CopyDir] copy_directory error: " << ec;
             return false;
         }
         else

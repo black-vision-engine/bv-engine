@@ -467,19 +467,27 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
     auto svgDesc = QueryTypedDesc< SVGAssetDescriptorConstPtr >( desc );
     auto path = ProjectManager::GetInstance()->ToAbsPath( svgDesc->GetPath() ).Str(); // FIXME GetKey -> GetPath
     
-    auto mesh = std::make_shared< SVGAsset >( path );
-    
-    BVXMLDeserializer deser( path, nullptr, nullptr );
+    if( Path::Exists( path ) )
+    {
+        auto mesh = std::make_shared< SVGAsset >( path );
 
-    auto success = deser.EnterChild( "svg" );
+        BVXMLDeserializer deser( path, nullptr, nullptr );
 
-    if( !success )
+        auto success = deser.EnterChild( "svg" );
+
+        if( !success )
+            return nullptr;
+
+        ParsePath( deser, mesh );
+        ParseGroup( deser, mesh );
+
+        return mesh;
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Can't load SVG. Asset: [" << path.c_str() << "] doesn't exists.";
         return nullptr;
-
-    ParsePath( deser, mesh );
-    ParseGroup( deser, mesh );
-
-    return mesh;
+    }
 }
 
 // ***********************

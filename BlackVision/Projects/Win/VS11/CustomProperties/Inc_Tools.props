@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ToolsDir)\ConfigReader\Source;$(ToolsDir)\RapidXML\Source;$(ToolsDir)\TCPServer\Source;$(ToolsDir)\XMLSceneParser\Source;$(ToolsDir)\LibEffect\Source;$(ToolsDir)\LibMipMapBuilder\Source;$(ToolsDir)\LibProjectManager\Source;$(ToolsDir)\Triangulator\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ToolsDir)\ConfigReader\Source;$(ToolsDir)\RapidXML\Source;$(ToolsDir)\TCPServer\Source;$(ToolsDir)\XMLSceneParser\Source;$(ToolsDir)\LibEffect\Source;$(ToolsDir)\LibMipMapBuilder\Source;$(ToolsDir)\LibProjectManager\Source;$(ToolsDir)\Triangulator\Source;$(ToolsDir)\LibAVEncoder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

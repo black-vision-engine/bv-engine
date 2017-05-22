@@ -20,8 +20,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/AssetTracker.h"
 
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffectFactory.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -147,32 +146,17 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
 
+    // FIXME: nrl - make sure that this code works as expected
     if( modelNodeEffect )
     {
-        auto nodeEffectType = modelNodeEffect->GetType();
+        auto nNodeEffectType = modelNodeEffect->GetType();
 
-        if( nodeEffectType != NodeEffectType::NET_DEFAULT &&
-			nodeEffectType != NodeEffectType::NET_ALPHA_MASK &&
-			nodeEffectType != NodeEffectType::NET_NODE_MASK &&
-			nodeEffectType != NodeEffectType::NET_BLUR &&
-			nodeEffectType != NodeEffectType::NET_LIGHT_SCATTERING && 
-			nodeEffectType != NodeEffectType::NET_SHADOW && 
-            nodeEffectType != NodeEffectType::NET_Z_SORT &&
-			nodeEffectType != NodeEffectType::NET_GLOW && 
-			nodeEffectType != NodeEffectType::NET_SOFT_MASK )
-        {
-            node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
-        }
-        else
-        {
-            auto nNodeEffectType = nrl::NNodeEffectType( nodeEffectType );
-            node->SetNNodeEffect( nrl::CreateNodeEffect( nNodeEffectType ) );
-        }
+        node->SetNodeEffect( CreateNodeEffect( nNodeEffectType ) );
     }
     else
     {
-        auto nodeEffectType = nrl::NNodeEffectType::NNET_DEFAULT;
-        node->SetNNodeEffect( nrl::CreateNodeEffect( nodeEffectType ) );
+        auto nodeEffectType = NodeEffectType::NET_DEFAULT;
+        node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
     }
 }
 // *******************************

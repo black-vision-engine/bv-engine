@@ -18,16 +18,19 @@ class IModelNode;
 DEFINE_PTR_TYPE( IModelNode );
 DEFINE_CONST_PTR_TYPE( IModelNode );
 struct NodeState;
+class SceneModel;
+
 
 class ModelState
 {
 public:
 
-    std::string                         QueryNodeScene  ( const IModelNode * node ) const;
-    const IModelNode *                  QueryNodeParent ( const IModelNode * node ) const;
-    std::string                         QueryNodePath   ( const IModelNode * node ) const;
-    std::string                         BuildIndexPath  ( const IModelNode * node );
-    UInt32                              GetNodeIndex    ( const IModelNode * node ) const;
+    std::string                         QueryNodeSceneName  ( const IModelNode * node ) const;
+    const SceneModel *                  QueryNodeScene      ( const IModelNode * node ) const;
+    const IModelNode *                  QueryNodeParent     ( const IModelNode * node ) const;
+    std::string                         QueryNodePath       ( const IModelNode * node ) const;
+    std::string                         BuildIndexPath      ( const IModelNode * node );
+    UInt32                              GetNodeIndex        ( const IModelNode * node ) const;
 
     bool                                RegisterNode    ( const IModelNode * node, const IModelNode * parent );
     bool                                UnregisterNode  ( const IModelNode * node );
@@ -44,6 +47,8 @@ public:
     void                                UnselectAll         ();
     void                                UnselectRecursive   ( IModelNodePtr node );
     std::set< IModelNodeConstPtr >      GetSelectedNodes    ();
+
+    const BVProject *                   GetBVProject        () const;
 
 private:
     

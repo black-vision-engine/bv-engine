@@ -36,6 +36,8 @@ public:
 
     virtual AVMediaData     ConvertFrame                () override;
 
+    virtual bool            IsAudio                     () const override;
+
 };
 
 } //bv

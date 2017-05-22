@@ -2,7 +2,8 @@
 
 #include "win_sock.h"
 #include "BlueFish/inc/BlueVelvet4.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
+#include "BVTimeCode.h"
 
 namespace bv { namespace videocards { namespace bluefish {
 
@@ -10,14 +11,13 @@ class CFrame
 {
 public:
 
-    CFrame(BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
-    CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd);
-    CFrame(const BLUE_UINT8* videoBuffer, BLUE_UINT32 ID, BLUE_UINT32 videoSize, BLUE_UINT32 BytesPerLine, int odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc );
+    CFrame(BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
+    CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd);
+    CFrame(const BLUE_UINT8* videoBuffer, BLUE_UINT32 videoSize, BLUE_UINT32 BytesPerLine, int odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc );
     ~CFrame();
 
 public:
 
-    BLUE_UINT32 m_nFrameID;
     int m_FieldOdd;
 
     AVFrameDescriptor   m_desc;
@@ -34,7 +34,7 @@ public:
 
 private:
 
-    void        Init        (BLUE_UINT32 ID, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd);
+    void        Init        (BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd);
 
 };
 

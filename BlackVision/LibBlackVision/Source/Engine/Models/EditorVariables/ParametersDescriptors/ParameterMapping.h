@@ -10,6 +10,7 @@
 #include "Engine/Models/Interfaces/IModelLight.h"
 
 #include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Models/ModelState.h"
 
 #include <unordered_map>
 #include <map>
@@ -82,10 +83,19 @@ public:
 
     EndUserParamDescriptor *      GetDescriptor   ( const ParameterAddress & param );
 
+public:
+    // Tracking changes
+    void                    ContainerAdded      ( ParamContainerTypePtr & container, model::BasicNodePtr & parent );
+    void                    ContainerRemoved    ( ParamContainerTypePtr & container, model::BasicNodePtr & parent );
+    void                    ContainerMoved      ( ParamContainerTypePtr & container, model::BasicNodePtr & parent, model::BasicNodePtr & newParent );
+
+    void                    NodeAdded           ( model::BasicNodePtr & parent, model::BasicNodePtr & node );
+    void                    NodeRemoved         ( model::BasicNodePtr & parent, model::BasicNodePtr & node );
+    void                    NodeMoved           ( model::BasicNodePtr & parent, model::BasicNodePtr & newParent, model::BasicNodePtr & node );
 
 private:
     
-
+    bool                    Compare             ( const PtrParamAddress & first, const PtrParamAddress & second );
 };
 
      
@@ -220,6 +230,12 @@ inline bool             ParameterMapping< ParamContainerTypePtr >::AddDescriptor
     PtrParamAddress paramPtr = FindParameter< ParamContainerTypePtr >( m_ownerScene, param );
     if( paramPtr.Parameter != nullptr )
     {
+        if( paramPtr.Node )
+        {
+            auto nodePath = model::ModelState::GetInstance().QueryNodePath( paramPtr.Node.get() );
+            param.NodeName = nodePath;
+        }
+
         auto iter = m_paramsDescsMap.insert( std::make_pair( std::move( param ), std::move( descriptor ) ) );
 
         auto insertValue = std::make_pair( paramPtr, iter.first );
@@ -309,7 +325,7 @@ inline void             ParameterMapping< ParamContainerTypePtr >::Deserialize  
                 }
 
                 if( paramValid && descriptorValid )
-                    AddDescriptor( std::move( param  ), std::move( descriptor ) );
+                    AddDescriptor( std::move( param ), std::move( descriptor ) );
 
             } while( deser.NextChild() );
 
@@ -327,11 +343,168 @@ inline EndUserParamDescriptor *     ParameterMapping< ParamContainerTypePtr >::G
     if( !IsValidParamTargetType< ParamContainerTypePtr >( param.ParamTargetType ) )
         return nullptr;
 
-    auto result = m_paramsDescsMap.find( param );
-    if( result != m_paramsDescsMap.end() )
-        return &m_paramsDescsMap[ param ];
+    auto paramPtrAddress = FindParameter< ParamContainerTypePtr >( m_ownerScene, param );
+    auto range = m_ptr2StrAddressMap.equal_range( paramPtrAddress );
+
+    for( auto iter = range.first; iter != range.second; iter++ )
+    {
+        auto descIter = iter->second;
+        if( descIter->first.ParamSubName == param.ParamSubName )
+            return &descIter->second;
+    }
+
     return nullptr;
 }
+
+// ========================================================================= //
+// Descriptors update functions
+// ========================================================================= //
+
+
+template< typename ParamContainerTypePtr >
+inline bool                         ParameterMapping< ParamContainerTypePtr >::Compare          ( const PtrParamAddress & first, const PtrParamAddress & second )
+{
+    if( first.Node.get() < second.Node.get() )
+        return true;
+    return false;
+}
+
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerAdded   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
+{
+    // 
+    container;
+    parent;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerRemoved ( ParamContainerTypePtr & container, model::BasicNodePtr & parent )
+{
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); )
+    {
+        if( iter->first.Container == container )
+        {
+            assert( iter->first.Node == parent );   { parent;  }
+
+            auto descMapIter = iter->second;
+            m_paramsDescsMap.erase( descMapIter );
+
+            iter = m_ptr2StrAddressMap.erase( iter );
+        }
+        else
+        {
+            iter++;
+        }
+    }
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::ContainerMoved   ( ParamContainerTypePtr & container, model::BasicNodePtr & parent, model::BasicNodePtr & newParent )
+{
+    std::string newNodePath = model::ModelState::GetInstance().QueryNodePath( newParent.get() );
+
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); )
+    {
+        if( iter->first.Container == container &&
+            iter->first.Node == parent )
+        {
+            auto descsMapIter = iter->second;
+
+            ParameterAddress address = descsMapIter->first;
+            EndUserParamDescriptor desc = std::move( descsMapIter->second );
+            PtrParamAddress ptrAddress = iter->first;
+
+            m_paramsDescsMap.erase( descsMapIter );
+            address.NodeName = newNodePath;
+
+            auto result = m_paramsDescsMap.insert( std::make_pair< ParameterAddress, EndUserParamDescriptor >( std::move( address ), std::move( desc ) ) );
+            assert( result.second );
+            auto changedElementIter = result.first;
+
+            ptrAddress.Node = newParent;
+
+            iter = m_ptr2StrAddressMap.erase( iter );
+            m_ptr2StrAddressMap.insert( std::make_pair< PtrParamAddress, ParamDescriptorMap::iterator >( std::move( ptrAddress ), std::move( changedElementIter ) ) );
+        }
+        else
+        {
+            iter++;
+        }
+    }
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeAdded        ( model::BasicNodePtr & parent, model::BasicNodePtr & node )
+{
+    parent;
+    node;
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeRemoved      ( model::BasicNodePtr & /*parent*/, model::BasicNodePtr & node )
+{
+    // TODO: In future we should remember erased descriptors. User can undo removal of node.
+    // In function NodeAdded we can check if added node is re-added by comparing pointers.
+    // Attention: We shouldn't hold shared pointers, memory must be freed. Better to use weak pointers.
+    // With raw pointers there would be danger, that new added node would be allocated under the same address as previous node.
+    // We can't distinguish between undo and new allocation then.
+
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); )
+    {
+        if( iter->first.Node == node )
+        {
+            auto descMapIter = iter->second;
+            m_paramsDescsMap.erase( descMapIter );
+
+            iter = m_ptr2StrAddressMap.erase( iter );
+        }
+        else
+        {
+            iter++;
+        }
+    }
+}
+
+// ***********************
+//
+template< typename ParamContainerTypePtr >
+inline void                         ParameterMapping< ParamContainerTypePtr >::NodeMoved        ( model::BasicNodePtr &, model::BasicNodePtr &, model::BasicNodePtr & node )
+{
+    std::string newNodePath = model::ModelState::GetInstance().QueryNodePath( node.get() );
+
+    for( auto iter = m_ptr2StrAddressMap.begin(); iter != m_ptr2StrAddressMap.end(); iter++ )
+    {
+        if( iter->first.Node == node )
+        {
+            auto descsMapIter = iter->second;
+
+            ParameterAddress address = descsMapIter->first;
+            EndUserParamDescriptor desc = std::move( descsMapIter->second );
+
+            m_paramsDescsMap.erase( descsMapIter );
+            address.NodeName = newNodePath;
+
+            auto result = m_paramsDescsMap.insert( std::make_pair< ParameterAddress, EndUserParamDescriptor >( std::move( address ), std::move( desc ) ) );
+            assert( result.second );
+            auto changedElementIter = result.first;
+
+            iter->second = changedElementIter;
+        }
+    }
+}
+
+
 
 
 }	// bv

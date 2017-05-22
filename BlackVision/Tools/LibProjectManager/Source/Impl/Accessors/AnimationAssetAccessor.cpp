@@ -75,7 +75,7 @@ void				AnimationAssetAccessor::AddAsset( const Path & internalPath, const Asset
     {
         auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDesc );
 
-        auto files = Dir::ListFiles( typedDesc->GetPath(), typedDesc->GetFilter() );
+        auto files = Path::List( typedDesc->GetPath(), false, typedDesc->GetFilter() );
 
         TextureAssetDescVec framesDesc;
 
@@ -83,7 +83,7 @@ void				AnimationAssetAccessor::AddAsset( const Path & internalPath, const Asset
         {
             for( auto f : files )
             {
-                framesDesc.push_back( TextureAssetDesc::Create( f, true ) );
+                framesDesc.push_back( TextureAssetDesc::Create( f.Str(), true ) );
             }
         }
 

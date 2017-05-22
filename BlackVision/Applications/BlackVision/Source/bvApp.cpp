@@ -12,7 +12,7 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Application/ApplicationContext.h"
 
-#include "StatsFormatters.h"
+#include "Statistics/StatsFormatters.h"
 
 #ifdef BV_TESTS
 #include "BVTestAppLogic.h"
@@ -132,6 +132,8 @@ bool BlackVisionApp::OnInitialize       ()
 //
 void BlackVisionApp::OnTerminate        ()
 {
+    DeinitializeAppLogic    ();
+
     WindowedApplication::OnTerminate();
 }
 
@@ -209,6 +211,14 @@ void    BlackVisionApp::InitializeAppLogic  ()
 #endif
     m_app->Initialize();
     m_app->LoadScene();
+}
+
+// *********************************
+//
+void    BlackVisionApp::DeinitializeAppLogic()
+{
+    m_app->UnloadScenes();
+    m_app->Deinitialize();
 }
 
 // *********************************

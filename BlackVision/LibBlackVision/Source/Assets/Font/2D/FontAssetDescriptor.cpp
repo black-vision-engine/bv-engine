@@ -141,7 +141,7 @@ bool FontAssetDesc::GetGenerateMipmaps() const
 
 // ***********************
 //
-const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
+const std::wstring &    FontAssetDesc::GetAtlasCharSetFile () const
 {
     return m_atlasCharSetFile;
 }
@@ -149,7 +149,17 @@ const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
 
 // ***********************
 //
-std::string           FontAssetDesc::GetKey        () const
+std::string	            FontAssetDesc::GetKey	() const
+{
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+// ***********************
+//
+std::string             FontAssetDesc::ComputeKey           () const
 {
     return  m_fontFileName + "_" +
             std::to_string( Path::GetTimestamp( m_fontFileName ) ) + "_" +

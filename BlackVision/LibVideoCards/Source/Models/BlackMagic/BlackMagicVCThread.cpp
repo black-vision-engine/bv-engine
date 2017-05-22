@@ -70,10 +70,16 @@ void				BlackMagicVCThread::Process					()
         if( m_interlaceEnabled )
             processedFrame = InterlaceFrame( srcFrame );
         else
-            processedFrame = srcFrame;
+        {
+            processedFrame = AVFrame::Create( MemoryChunk::Create( srcFrame->m_videoData->Size() ), MemoryChunk::Create( srcFrame->m_audioData->Size() ), srcFrame->m_desc );
 
-		if( processedFrame )
-			m_videoCard->FrameProcessed( processedFrame );
+            memcpy( std::const_pointer_cast< MemoryChunk >( processedFrame->m_videoData )->GetWritable(), srcFrame->m_videoData->Get(), srcFrame->m_videoData->Size() );
+            memcpy( std::const_pointer_cast< MemoryChunk >( processedFrame->m_audioData )->GetWritable(), srcFrame->m_audioData->Get(), srcFrame->m_audioData->Size() );
+        }
+            
+
+        if( processedFrame )
+            m_videoCard->FrameProcessed( processedFrame );
 
         if( m_frameDuration > 0 )
         {
@@ -99,12 +105,20 @@ AVFrameConstPtr		BlackMagicVCThread::InterlaceFrame( const AVFrameConstPtr & fra
 		
 	m_odd = !m_odd;
 
+    if( !m_prevAudioData || m_prevAudioData->Size() != frame->m_audioData->Size() * 2 )
+    {
+        m_prevAudioData = MemoryChunk::Create( frame->m_audioData->Size() * 2 );
+    }
+
     if( !m_odd )
     {
         m_prevFrame = m_prevFramesBuffer.front();
         char * memDst = m_prevFrame->GetWritable();
 
         memcpy( memDst, memNew, size );
+
+        memcpy( m_prevAudioData->GetWritable(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+
         return nullptr;
     }
     else
@@ -119,10 +133,10 @@ AVFrameConstPtr		BlackMagicVCThread::InterlaceFrame( const AVFrameConstPtr & fra
 
         m_prevFramesBuffer.push_back( m_prevFrame );
 
-        return AVFrame::Create( m_prevFrame, frame->m_audioData, frame->m_desc );
+        memcpy( m_prevAudioData->GetWritable() + frame->m_audioData->Size(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+
+        return AVFrame::Create( m_prevFrame, m_prevAudioData, frame->m_desc );
     }
-
-
 }
 
 } // blackmagic

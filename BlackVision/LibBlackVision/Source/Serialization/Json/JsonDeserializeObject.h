@@ -10,6 +10,7 @@
 namespace bv
 {
 
+class JsonSerializeObject;
 
 
 class JsonDeserializeObject : public IDeserializer
@@ -23,8 +24,9 @@ private:
     std::unique_ptr< DeserializeContext >       m_context;
 
 public:
-    JsonDeserializeObject();
-    virtual ~JsonDeserializeObject();
+    JsonDeserializeObject               ();
+    JsonDeserializeObject               ( JsonSerializeObject && serializer );
+    virtual ~JsonDeserializeObject      ();
 
     virtual DeserializeContext* GetDeserializeContext() const;
 
@@ -41,6 +43,10 @@ public:
     bool						ExitChild           () const override;
 
     bool                        NextChild           () const override;
+
+    bool    			        HasAttribute        ( const std::string& name ) const override;
+    bool		                HasAttribute        ( const std::wstring& name ) const override;
+
 
     std::wstring	        	GetAttribute        ( const std::wstring& name ) const override;
     std::wstring	        	GetParentAttribute  ( const std::wstring& parentName, const std::wstring& attName ) const override;

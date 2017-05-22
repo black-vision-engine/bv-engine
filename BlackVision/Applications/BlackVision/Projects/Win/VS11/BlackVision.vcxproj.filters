@@ -10,9 +10,6 @@
     <Filter Include="TestAI">
       <UniqueIdentifier>{f52b80a1-39e9-49c1-bce8-68f1ab601129}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Widgets">
-      <UniqueIdentifier>{a40b34a5-8104-4523-b976-a18c9886873d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="VideoInput">
       <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
     </Filter>
@@ -21,9 +18,6 @@
     </Filter>
     <Filter Include="hack_videoinput">
       <UniqueIdentifier>{7f69fce6-91f9-48b4-b144-634e189e9d1b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\Counter">
-      <UniqueIdentifier>{a43fa586-3aea-4556-b75d-89f716af2be6}</UniqueIdentifier>
     </Filter>
     <Filter Include="EndUserAPI">
       <UniqueIdentifier>{4d25f62a-5bd7-414f-b683-53e8c1ded179}</UniqueIdentifier>
@@ -34,55 +28,23 @@
     <Filter Include="EndUserAPI\JsonCommandsListener">
       <UniqueIdentifier>{eceea615-6f9e-49bd-bfa0-e18ef67e559a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Widgets\NodeReplicator">
-      <UniqueIdentifier>{92c97574-2f51-4596-bcfa-ef1caae4425d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\Scroller">
-      <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\MeshLoader">
-      <UniqueIdentifier>{c95511b3-3c0c-485b-afed-6ccc3168883d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\SmoothValueSetter">
-      <UniqueIdentifier>{ccd4e404-2ee7-4498-922d-e72b5a4a28e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\PieChart">
-      <UniqueIdentifier>{ef5aebcb-1c90-42c6-b474-161ad97d275c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\AnalogWatch">
-      <UniqueIdentifier>{5d1ec72f-d720-4d11-9d5e-fdf7262dcc25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\Arrange">
-      <UniqueIdentifier>{8acc0a3d-f935-4d70-b0ac-0189ba17394b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\Follow">
-      <UniqueIdentifier>{80de300a-c9d5-4e35-9839-905f4667b4cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\SlideShow">
-      <UniqueIdentifier>{43392ea4-cb5a-4770-9f54-4d8e733c6365}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Widgets\MaxSize">
-      <UniqueIdentifier>{a7c544f3-6f78-4314-9a94-c8a5d4fe6966}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Initialization">
       <UniqueIdentifier>{1c718d26-7c3f-4d78-a658-5b8b9c7aeed8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestingScenes">
+      <UniqueIdentifier>{36f8e27f-2473-48d4-8494-0371669cb330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Statistics">
+      <UniqueIdentifier>{a36b9588-3e14-4ed9-b93f-54eae253e0a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
-    <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
-    <ClCompile Include="..\..\..\Source\MockScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp" />
-    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
-    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
-    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -104,13 +66,8 @@
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp">
       <Filter>VideoInput</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
       <Filter>hack_videoinput</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp">
-      <Filter>Widgets\Counter</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
@@ -149,12 +106,6 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp">
-      <Filter>Widgets\NodeReplicator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp">
-      <Filter>Widgets\NodeReplicator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
@@ -170,60 +121,48 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp">
-      <Filter>Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp">
-      <Filter>Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp">
-      <Filter>Widgets\Scroller</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp">
-      <Filter>Widgets\Scroller</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicBase.cpp">
-      <Filter>Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.cpp">
-      <Filter>Widgets\MeshLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.cpp">
-      <Filter>Widgets\SmoothValueSetter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.cpp">
-      <Filter>Widgets\SmoothValueSetter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\PieChart\PieChart.cpp">
-      <Filter>Widgets\PieChart</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.cpp">
-      <Filter>Widgets\AnalogWatch</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Arrange\Arrange.cpp">
-      <Filter>Widgets\Arrange</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
-    <ClCompile Include="..\..\..\Source\Widgets\Follow\Follow.cpp">
-      <Filter>Widgets\Follow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\SlideShow\SlideShow.cpp">
-      <Filter>Widgets\SlideShow</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\MaxSize\MaxSize.cpp">
-      <Filter>Widgets\MaxSize</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp">
       <Filter>Initialization</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestInnerEvents.cpp">
       <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\AnotherTestScene.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\ExampleTestScenes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\MockScenes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestNodes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestScenes.cpp">
+      <Filter>TestingScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Statistics\FrameStatsService.cpp">
+      <Filter>Statistics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Statistics\PerformanceMonitor.cpp">
+      <Filter>Statistics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Statistics\StatsFormatters.cpp">
+      <Filter>Statistics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVTestAppLogic.cpp" />
   </ItemGroup>
@@ -233,14 +172,8 @@
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
-    <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
     <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
     <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
-    <ClInclude Include="..\..\..\Source\MockScenes.h" />
-    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
-    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
-    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
-    <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -265,13 +198,8 @@
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
-    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
       <Filter>hack_videoinput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h">
-      <Filter>Widgets\Counter</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h">
       <Filter>TestAI</Filter>
@@ -313,15 +241,6 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h">
-      <Filter>Widgets\NodeReplicator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h">
-      <Filter>Widgets\NodeReplicator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h">
-      <Filter>Widgets\NodeReplicator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
@@ -338,39 +257,6 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h">
-      <Filter>Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h">
-      <Filter>Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h">
-      <Filter>Widgets\Scroller</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h">
-      <Filter>Widgets\Scroller</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicBase.h">
-      <Filter>Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\MeshLoader\MeshLoader.h">
-      <Filter>Widgets\MeshLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\SmoothValueSetter.h">
-      <Filter>Widgets\SmoothValueSetter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\SmoothValueSetter\ParameterBinding.h">
-      <Filter>Widgets\SmoothValueSetter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\PieChart\PieChart.h">
-      <Filter>Widgets\PieChart</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\AnalogWatch\AnalogWatch.h">
-      <Filter>Widgets\AnalogWatch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Arrange\Arrange.h">
-      <Filter>Widgets\Arrange</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
@@ -378,17 +264,8 @@
       <Filter>EndUserAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\stdafxBVApp.h" />
-    <ClInclude Include="..\..\..\Source\Widgets\Follow\Follow.h">
-      <Filter>Widgets\Follow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\SlideShow\SlideShow.h">
-      <Filter>Widgets\SlideShow</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\MaxSize\MaxSize.h">
-      <Filter>Widgets\MaxSize</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h">
       <Filter>Initialization</Filter>
@@ -397,10 +274,36 @@
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\BVTestAppLogic.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ExampleTestScenes.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\MockScenes.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestingScenes\NewModelTestNodes.h">
+      <Filter>TestingScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Statistics\FrameStatsService.h">
+      <Filter>Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Statistics\PerformanceMonitor.h">
+      <Filter>Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Statistics\StatsFormatters.h">
+      <Filter>Statistics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />
-    <None Include="..\..\..\Source\FrameStatsService.inl" />
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
+    <None Include="..\..\..\Source\Statistics\FrameStatsService.inl">
+      <Filter>Statistics</Filter>
+    </None>
   </ItemGroup>
 </Project>

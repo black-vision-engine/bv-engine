@@ -4,7 +4,7 @@
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 
 #include <cassert>
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+#include "Util/FFmpeg/FFmpegUtils.h"
 
 
 namespace bv {
@@ -112,5 +112,13 @@ Float64             FFmpegVideoStreamDecoder::GetFrameRate      () const
 {
     return m_frameRate;
 }
+
+// *******************************
+//
+bool                 FFmpegVideoStreamDecoder::IsAudio          () const
+{
+    return false;
+}
+
 
 } //bv

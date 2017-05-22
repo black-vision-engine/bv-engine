@@ -99,14 +99,26 @@ bool    PdrAudioBuffersQueue::BufferData      ()
         m_unqueuedBufferHandles.Pop();
 
         success = true;
+
+        
     }
 
-	auto enoughDataBuffers = m_unqueuedBufferHandles.Size() < QUEUE_SIZE - 1; // Start playing only if at least 2 frames are buffered.
+    //if( success )
+    //    LOG_MESSAGE( SeverityLevel::debug ) << "success:  m_unqueuedBufferHandles.size() == " << m_unqueuedBufferHandles.Size();
+    //else
+    //    LOG_MESSAGE( SeverityLevel::debug ) << "fail: m_unqueuedBufferHandles.size() == " << m_unqueuedBufferHandles.Size();
 
-	if( success && !enoughDataBuffers )
-		LOG_MESSAGE( SeverityLevel::debug ) << "Not enought audio data buffered. Starting playing will be postponed.";
+    //if( m_unqueuedBufferHandles.Size() > 13 )
+    //{
+    //    success = success;
+    //}
 
-    return success && enoughDataBuffers;
+	//auto enoughDataBuffers = m_unqueuedBufferHandles.Size() < QUEUE_SIZE - 1; // Start playing only if at least 2 frames are buffered.
+
+	//if( success && !enoughDataBuffers )
+		//LOG_MESSAGE( SeverityLevel::debug ) << "Not enought audio data buffered. Starting playing will be postponed.";
+
+    return success;// && enoughDataBuffers;
 }
 
 // *******************************
@@ -177,7 +189,7 @@ bool    PdrAudioBuffersQueue::MixBufferedData  ( MemoryChunkPtr data, bool force
         }
 
 		if( m_bufferedDataSize == 0 )
-			LOG_MESSAGE( SeverityLevel::debug ) << "m_bufferedDataSize == 0";
+			LOG_MESSAGE( SeverityLevel::debug ) << "Audio buffer data is empty.";
 
         return true;
     }

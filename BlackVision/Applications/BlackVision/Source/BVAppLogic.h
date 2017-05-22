@@ -12,7 +12,7 @@
 
 #include "TestAI/TestKeyboardHandler.h"
 
-#include "FrameStatsService.h"
+#include "Statistics/FrameStatsService.h"
 
 #include "EndUserAPI/RemoteController.h"
 
@@ -35,9 +35,7 @@ namespace audio {
     class AudioRenderer;
 }
 
-namespace nrl {
-    class NRenderLogic;
-}
+class RenderLogic;
 
 namespace videocards {
     class VideoCardManager;
@@ -74,7 +72,7 @@ protected:
     audio::AudioRenderer *          m_audioRenderer;
     
     // FIXME: nrl - render logic replacement
-    nrl::NRenderLogic *             m_renderLogic;
+    RenderLogic *                   m_renderLogic;
     //RenderLogic *                   m_renderLogic;
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
@@ -97,9 +95,11 @@ public:
                     ~BVAppLogic     ();
 
     void            Initialize      ();
+    void            Deinitialize    ();
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     virtual void    LoadScene       ( void );
+    void            UnloadScenes    ();
 
     unsigned int    StartTime       ();
     unsigned int    GetTime         () const;
@@ -131,7 +131,7 @@ public:
     //Convenience API - generalized model accessors
     BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
-    nrl::NRenderLogic *             GetRenderLogic      () const;
+    RenderLogic *             GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
 
     void                            LoadScenes          ( const PathVec & pathVec );

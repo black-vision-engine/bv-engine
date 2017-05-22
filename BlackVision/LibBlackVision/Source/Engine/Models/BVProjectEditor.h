@@ -4,6 +4,9 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
+#include "Engine/Interfaces/IConfig.h"
+
+
 
 namespace bv {
 
@@ -49,7 +52,11 @@ private:
 
 private:
 
-                            BVProjectEditor       ( BVProject * project );
+    UInt16                      m_maxHistorySize;       /// Undo/Redo initialz value
+
+private:
+
+                            BVProjectEditor       ( BVProject * project, const IConfig* config );
 
 public:
 
@@ -70,6 +77,7 @@ public:
     void                    DeleteDetachedScenes();
 
     bool                    SetSceneVisible     ( const std::string & sceneName, bool visible );
+    void                    SetSceneOutputChannel   ( const std::string & sceneName, UInt32 channel );
 
     model::SceneModelPtr    GetModelScene       ( const std::string & sceneName ) const;
 
@@ -272,6 +280,8 @@ private:
     void                    NotifyRemovedNode   ( model::BasicNodePtr removedNode, model::BasicNodePtr parentNode );
     void                    NotifyAddedNode     ( model::BasicNodePtr addedNode, model::BasicNodePtr parentNode );
     void                    NotifyMovedNode     ( model::BasicNodePtr node, model::BasicNodePtr srcParent, model::BasicNodePtr dstParent );
+	void					NotifyCopiedNode	( model::BasicNodePtr  srcNode, model::BasicNodePtr  copy );
+
 
     void                    NotifyPluginAdded   ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );
     void                    NotifyPluginRemoved ( model::BasicNodePtr parentNode, model::BasePluginPtr plugin );

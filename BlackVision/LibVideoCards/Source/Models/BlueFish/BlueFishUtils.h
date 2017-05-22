@@ -51,6 +51,7 @@ struct ChannelOutputData
     Int32                   referenceV;
     EUpdateMethod           updateFormat;
     EMemoryFormat           memoryFormat;
+    UInt64                  linkedVideoOutput;
 };
 
 DEFINE_UPTR_TYPE( ChannelOutputData )
@@ -79,24 +80,6 @@ struct ChannelOption
     UInt32          EpochOutputMemInterface;
     UInt32          EpochSDIOutput;
 	UInt32          EpochSDIKeyOutput;
-};
-
-
-//**************************************
-//
-struct blue_videomode_info
-{
-	bool			bIs3G;
-	float			fFrameAspectRatioX;
-	float			fFrameAspectRatioY;	
-	std::string		strVideoModeFriendlyName;
-	unsigned int	nVideoMode;
-	unsigned int	nHeight;
-	unsigned int	nWidth;
-	unsigned int	nFrameRate;
-	bool			bIs1001FrameRate;
-	bool			bIsProgressive;
-	unsigned int	nAudioFrameSequence[5];
 };
 
 void BlueMemCpy(void* pDst, void* pSrc, size_t size);

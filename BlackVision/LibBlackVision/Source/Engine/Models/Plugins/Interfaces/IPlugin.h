@@ -70,7 +70,7 @@ public:
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const = 0;
     virtual IPluginPtr							GetPrevPlugin				() = 0;
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) = 0;
+    virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) = 0;
 
     // axis-aligned bounding box
     virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const = 0;

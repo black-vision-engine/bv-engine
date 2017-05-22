@@ -29,6 +29,10 @@ private:
     SingleTextureAssetDescConstPtr					m_originalTextureDesc;
     MipMapAssetDescConstPtr							m_mipMapsDescs;
 
+    mutable std::string                             m_key;
+
+private:
+
     explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc );
     explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter );
     explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc );
@@ -64,6 +68,9 @@ public:
 
     static const std::string &			UID					();
 
+private:
+
+    std::string                         ComputeKey          () const;
 };
 
 class TextureAsset;

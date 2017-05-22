@@ -19,14 +19,13 @@ public:
     struct PARAMETERS
     {
         static const std::string    IS_PERSPECTIVE;
-        static const std::string    VIEWPORT_WIDTH;
-        static const std::string    VIEWPORT_HEIGHT;
         static const std::string    POSITION;
         static const std::string    DIRECTION;
         static const std::string    UP_VECTOR;
         static const std::string    FOV;
         static const std::string    NEAR_CLIPPING_PLANE;
         static const std::string    FAR_CLIPPING_PLANE;
+        static const std::string    VIEWPORT_SIZE;
     };
 
 private:

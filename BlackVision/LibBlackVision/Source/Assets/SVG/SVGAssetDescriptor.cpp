@@ -49,7 +49,17 @@ const std::string &     SVGAssetDescriptor::GetPath     () const
 
 // ***********************
 //
-std::string				SVGAssetDescriptor::GetKey		() const
+std::string	            SVGAssetDescriptor::GetKey	() const
+{
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+// ***********************
+//
+std::string             SVGAssetDescriptor::ComputeKey() const
 {
     return m_path + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_path ) ) );
 }

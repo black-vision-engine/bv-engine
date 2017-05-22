@@ -10,13 +10,15 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
 
-#include "Widgets/MeshLoader/MeshLoader.h"
+#include "Engine/Models/NodeLogics/MeshLoader/MeshLoader.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/BoundingVolume.h"
 
 #include "System/Path.h"
 #include "IO/FileIO.h"
+
+#include "Application/ApplicationContext.h"
 
 #include <limits>
 #undef LoadImageW
@@ -53,61 +55,61 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 {
     assert( evt->GetEventType() == bv::SceneEvent::Type() );
 
-    bv::SceneEventPtr sceneEvent = std::static_pointer_cast< bv::SceneEvent >( evt );
+    bv::SceneEventPtr sceneEvent = std::static_pointer_cast<bv::SceneEvent>( evt );
 
-    std::string & sceneName        = sceneEvent->SceneName;
-    std::string & newSceneName    = sceneEvent->NewSceneName;
-    auto attachIndex            = sceneEvent->AttachIndex;
-    auto command                = sceneEvent->SceneCommand;
-    auto eventID                = sceneEvent->EventID;
+    std::string & sceneName = sceneEvent->SceneName;
+    std::string & newSceneName = sceneEvent->NewSceneName;
+    auto attachIndex = sceneEvent->AttachIndex;
+    auto command = sceneEvent->SceneCommand;
+    auto eventID = sceneEvent->EventID;
 
     bool result = true;
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
-    if( command == SceneEvent::Command::AddScene )
+
+    switch( command )
     {
-        editor->AddScene( newSceneName );
-    }
-    else if( command == SceneEvent::Command::RemoveScene )
-    {
-        result = editor->RemoveScene( sceneName );
-    }
-    else if( command == SceneEvent::Command::RemoveAllScenes )
-    {
-        editor->RemoveAllScenes();
-    }
-    else if( command == SceneEvent::Command::SetSceneVisible )
-    {
-        result = editor->SetSceneVisible( sceneName, true );
-    }
-    else if( command == SceneEvent::Command::SetSceneInvisible )
-    {
-        result = editor->SetSceneVisible( sceneName, false );
-    }
-    else if( command == SceneEvent::Command::RenameScene )
-    {
-        result = editor->RenameScene( sceneName, newSceneName );
-    }
-    else if( command == SceneEvent::Command::AttachScene )
-    {
-        result = editor->AttachScene( sceneName, attachIndex );
-    }
-    else if( command == SceneEvent::Command::DetachScene )
-    {
-        result = editor->DetachScene( sceneName );
-    }
-    else if( command == SceneEvent::Command::MoveScene )
-    {
-        result = editor->MoveScene( sceneName, attachIndex );
-    }
-    else if( command == SceneEvent::Command::CopyScene )
-    {
-        auto sceneCopy = editor->AddSceneCopy( sceneName );
-        if( sceneCopy == nullptr )
+        case SceneEvent::Command::AddScene:
+            editor->AddScene( newSceneName );
+            break;
+        case SceneEvent::Command::RemoveScene:
+            result = editor->RemoveScene( sceneName );
+            break;
+        case SceneEvent::Command::RemoveAllScenes:
+            editor->RemoveAllScenes();
+            break;
+        case SceneEvent::Command::SetSceneVisible:
+            result = editor->SetSceneVisible( sceneName, true );
+            break;
+        case SceneEvent::Command::SetSceneInvisible:
+            result = editor->SetSceneVisible( sceneName, false );
+            break;
+        case SceneEvent::Command::RenameScene:
+            result = editor->RenameScene( sceneName, newSceneName );
+            break;
+        case SceneEvent::Command::AttachScene:
+            result = editor->AttachScene( sceneName, attachIndex );
+            break;
+        case SceneEvent::Command::DetachScene:
+            result = editor->DetachScene( sceneName );
+            break;
+        case SceneEvent::Command::MoveScene:
+            result = editor->MoveScene( sceneName, attachIndex );
+            break;
+        case SceneEvent::Command::CopyScene:
+        {
+            auto sceneCopy = editor->AddSceneCopy( sceneName );
+            if( sceneCopy == nullptr )
+                result = false;
+            break;
+        }
+        case SceneEvent::Command::SetOutputChannel:
+            editor->SetSceneOutputChannel( sceneName, attachIndex );
+            result = true;
+            break;
+        default:
             result = false;
     }
-    else
-        result = false;
 
     SendSimpleResponse( command, eventID, sceneEvent->SocketID, result );
 }
@@ -446,6 +448,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         if( saveTo.empty() || Path::IsValisPathName( saveTo ) )
         {
             auto forceSaveStr = request.GetAttribute( "forceSave" );
+            bool renameScene = SerializationHelper::String2T( request.GetAttribute( "renameScene" ), true );
 
             bool forceSave = false;
 
@@ -466,20 +469,23 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
                 if( scene != nullptr )
                 {
-                
-                    if( forceSave )
+                    if( Path::Exists( newSceneName ) && !forceSave )
                     {
-                        pm->AddScene( scene, "", newSceneName );
-
-                        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
-                
-                        //RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
+                        SendSimpleErrorResponse( command, projectEvent->EventID, senderID, ( "Scene name [" + saveTo + "] already exists. Use forceSave to overwrite file." ).c_str() );
                     }
                     else
                     {
-                        SendSimpleResponse( command, projectEvent->EventID, senderID, false );
-                        assert( false );
-                        // TODO: Implement
+                        pm->AddScene( scene, "", newSceneName );
+                        
+                        if( !renameScene )
+                        {
+                            // Set previous name.
+                            m_appLogic->GetBVProject()->GetProjectEditor()->RenameScene( newSceneName, sceneName );
+                        }
+
+                        RequestThumbnail( scene, newSceneName, ThumbnailType::Scene );
+
+                        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
                     }
                 }
             }
@@ -1194,11 +1200,11 @@ glm::vec3   SceneEventsHandlers::GetMeshTranslationToFitCamera            ( mode
     auto camFOV = glm::radians( model::QueryTypedParam< model::ParamFloatPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::FOV ) )->Evaluate() );
     auto camPos = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::POSITION ) )->Evaluate();
     auto camDir = model::QueryTypedParam< model::ParamVec3Ptr >( camera->GetParameter( model::CameraModel::PARAMETERS::DIRECTION ) )->Evaluate();
-    
-    auto camViewportW = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_WIDTH ) )->Evaluate();
-    auto camViewportH = model::QueryTypedParam< model::ParamIntPtr >( camera->GetParameter( model::CameraModel::PARAMETERS::VIEWPORT_HEIGHT ) )->Evaluate();
-    
-    auto ratio = ( Float32 )(std::max)( camViewportW, camViewportH ) / ( Float32 )(std::min)( camViewportW, camViewportH );
+
+    auto height = ( float )ApplicationContext::Instance().GetHeight();
+    auto width = ( float )ApplicationContext::Instance().GetWidth();
+
+    auto ratio = ( Float32 )(std::max)( width, height ) / ( Float32 )(std::min)( width, height );
 
     auto camDist = ratio * bbRadius / ( 2.f * glm::tan( camFOV / 2.0f ) );
 

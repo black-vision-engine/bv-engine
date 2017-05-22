@@ -48,6 +48,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultLineChartPlugin.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
 
+#include "UseLoggerBVAppModule.h"
+
 
 namespace bv { namespace model {
 
@@ -78,7 +80,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTrianglePluginDesc() );
     descriptors.push_back( new DefaultRoundedRectPluginDesc() );
     descriptors.push_back( new DefaultCone::DefaultConePluginDesc() );
-    descriptors.push_back( new DefaultCube::PluginDesc() );
+    descriptors.push_back( new DefaultCubePluginDesc() );
     descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
     descriptors.push_back( new DefaultTorus::PluginDesc() );
     descriptors.push_back( new DefaultSphere::PluginDesc() );
@@ -103,7 +105,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 
     for( auto descr : descriptors )
     {
-        printf( "Registered plugin desc: %s\n", descr->GetPluginTypeUID().c_str() ); 
+        LOG_MESSAGE( SeverityLevel::info ) << "Registered plugin desc: " << descr->GetPluginTypeUID();
     }
 
     return descriptors;

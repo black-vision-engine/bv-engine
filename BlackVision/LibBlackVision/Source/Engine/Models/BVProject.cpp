@@ -41,15 +41,15 @@ void                    BVProject::Serialize           ( ISerializer & ser ) con
 
 // *******************************
 //
-BVProjectPtr  BVProject::Create              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
+BVProjectPtr  BVProject::Create              ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const IConfig* config )
 {
-    struct make_shared_enabler_BVProject : public BVProject { make_shared_enabler_BVProject( Renderer * renderer, audio::AudioRenderer * audioRenderer ): BVProject( renderer, audioRenderer ){} };
-    return std::make_shared< make_shared_enabler_BVProject >( renderer, audioRenderer );
+    struct make_shared_enabler_BVProject : public BVProject { make_shared_enabler_BVProject( Renderer * renderer, audio::AudioRenderer * audioRenderer, const IConfig* config ): BVProject( renderer, audioRenderer, config ){} };
+    return std::make_shared< make_shared_enabler_BVProject >( renderer, audioRenderer, config );
 }
 
 // *******************************
 //
-BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
+BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const IConfig* config )
     : m_renderer( renderer )
     , m_audioRenderer( audioRenderer )
     , m_engineSceneRoot( nullptr )
@@ -65,10 +65,11 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
 
     m_rootNode = model::BasicNode::Create( MAIN_ROOT_NAME, m_timelineManager->GetRootTimeline() );
 
-    m_projectEditor = new BVProjectEditor( this );
+    m_projectEditor = new BVProjectEditor( this, config );
 
     m_assetTracker = std::unique_ptr< AssetTracker >( new AssetTracker( renderer, audioRenderer, m_projectEditor ) );
 }
+
 
 // *******************************
 //
@@ -194,33 +195,22 @@ SceneVec                        BVProject::GetScenes        () const
 
 // *******************************
 //
-void							BVProject::SetStartTime	( unsigned long millis )
+void							BVProject::SetStartTime	    ( unsigned long millis )
 {
     m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
 }
 
-// *******************************
+
+// ***********************
 //
-void                            BVProject::DetachEffect ( SceneNode * engineNode )
+void                            BVProject::RemoveNodeEffect ( SceneNode * engineNode )
 {
-    m_renderer->FreeNodeEffectPDR( engineNode->GetNodeEffect().get() );
-
-    //auto tEntity = engineNode->GetTransformable();
-
-    //if( tEntity != nullptr )
-    //{
-    //    if( auto rEntity = dynamic_cast< RenderableEntity * >( tEntity ) )
-    //    {
-    //        auto rEffect = rEntity->GetRenderableEffect();
-
-            
-    //    }
-    //}
+    m_renderer->FreeNodeEffectPDR_DIRTY_HACK( engineNode->GetNodeEffect().get() );
 }
 
 // *******************************
 //
-void                            BVProject::AddEngineScene       ( std::unique_ptr< Scene > scene, UInt32 idx )
+void                            BVProject::AddEngineScene   ( std::unique_ptr< Scene > scene, UInt32 idx )
 {
     if( idx < m_sceneVec.size() )
     {

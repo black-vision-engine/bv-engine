@@ -42,6 +42,7 @@ SceneModel::SceneModel	( const std::string & name )
     , m_modelSceneEditor( nullptr )
     , m_camerasLogic( m_timeline )
     , m_endUserParams( new EndUserParamsLogic( this ) )
+    , m_renderChannelIdx( 0 )
 {
     m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
@@ -63,6 +64,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
     ser.EnterChild( "scene" );
 
         ser.SetAttribute( "name", m_name );
+        ser.SetAttribute( "RenderChannelIdx", SerializationHelper::T2String( m_renderChannelIdx ) );
 
         if( context->detailedInfo )
         {
@@ -105,16 +107,19 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
 SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 {
     auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+
+    // Add scene name to context
+    auto sceneName = deser.GetAttribute( "name" );
+    bvDeserCo->SetSceneName( sceneName );
+
 // assets
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
     bvDeserCo->SetAssets( assets );
 
     //FIXME: pass nullptr as camera because we don't have camera model yet
-    auto sceneName = deser.GetAttribute( "name" );
     auto obj = SceneModel::Create( sceneName );
 
-    // Add scene name to context
-    bvDeserCo->SetSceneName( sceneName );
+    obj->SetRenderChannelIdx( SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "RenderChannelIdx" ), 0 ) );
 
 // timelines
     auto sceneTimeline = obj->GetTimeline();
@@ -322,6 +327,20 @@ SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
     //FIXME:camera can be nullptr because it's not used yet
     return SceneModel::Create( name );
+}
+
+// *******************************
+//
+void                        SceneModel::SetRenderChannelIdx     ( UInt32 channelIdx )
+{
+    m_renderChannelIdx = channelIdx;
+}
+
+// *******************************
+//
+UInt32                      SceneModel::GetRenderChannelIdx     () const
+{
+    return m_renderChannelIdx;
 }
 
 } // model

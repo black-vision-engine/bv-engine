@@ -8,10 +8,9 @@
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
 
 #include "Engine/Audio/AudioEntity.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Mathematics/Box.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/NodeRendering/NodeEffect/NNodeEffect.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 #include "SceneNodePerformance.h"
 
@@ -32,11 +31,10 @@ private:
     SceneNodeRepr *     m_repr;
 
     NodeEffectPtr       m_nodeEffect;
-    nrl::NNodeEffectPtr m_nNodeEffect;
 
     //FIXME: use some sort of caps/flag here (instead of a single flag)
     bool                m_visible;
-    bool                m_NNodeEffectEnabled;
+    bool                m_nodeEffectEnabled;
     bool                m_drawBoundingBox;
     glm::vec4           m_boundingBoxColor;
 
@@ -64,15 +62,13 @@ public:
     void                    SetAudio            ( audio::AudioEntity * audio );
    
     //FIXME: move to some wrapper class holding nnodeeffect along with node related state (right now only enabled/disabled)
-    bool                    IsNNodeEffectEnabled() const;
-    void                    EnableNNodeEffect   ();
-    void                    DisableNNodeEffect  ();
+    bool                    IsNodeEffectEnabled () const;
+    void                    EnableNodeEffect    ();
+    void                    DisableNodeEffect   ();
 
+    // FIXME: nrl - rename to GetNodeEffect during nrl -> default migration
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
-
-    nrl::NNodeEffectPtr     GetNNodeEffect      ();
-    void                    SetNNodeEffect      ( nrl::NNodeEffectPtr nNodeEffect );
 
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;

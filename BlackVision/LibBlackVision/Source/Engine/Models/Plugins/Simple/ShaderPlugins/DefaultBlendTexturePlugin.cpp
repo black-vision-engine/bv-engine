@@ -112,11 +112,17 @@ std::string             DefaultBlendTexturePluginDesc::TextureName              
 
 // *************************************
 // 
-void DefaultBlendTexturePlugin::SetPrevPlugin( IPluginPtr prev )
+bool DefaultBlendTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    BasePlugin::SetPrevPlugin( prev );
+    if( BasePlugin::SetPrevPlugin( prev ) )
+    {
+        HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+        return true;
+    }
+    else
+        return false;
 
-    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+
 }
 
 // *************************************
@@ -143,7 +149,7 @@ DefaultBlendTexturePlugin::~DefaultBlendTexturePlugin         ()
 // 
 bool							DefaultBlendTexturePlugin::IsValid     () const
 {
-    return ( m_prevPlugin->IsValid() );
+    return ( GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
@@ -160,10 +166,14 @@ bool                            DefaultBlendTexturePlugin::LoadResource  ( Asset
 
         if( txDesc != nullptr )
         {
-            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            auto txData = m_psc->GetTexturesDataImpl();
+            auto replacedTex = txData->GetTexture( 0 );
+
+            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
+            txDesc->SetSamplerState( newSamplerStateModel );
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
-            auto txData = m_psc->GetTexturesDataImpl();
             txData->SetTexture( 0, txDesc );
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 
@@ -202,7 +212,7 @@ void                                DefaultBlendTexturePlugin::Update           
     BasePlugin::Update( t );
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txBlendMat" );    
-    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    

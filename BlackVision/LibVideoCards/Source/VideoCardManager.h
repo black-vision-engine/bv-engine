@@ -11,7 +11,7 @@
 #include "DataTypes/CircularBufferConcurrent.h"
 #include "Threading/Thread.h"
 
-#include "Engine/Graphics/Effects/nrl/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/AVOutputsData.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/AVOutputsData.h"
 
 #include "Serialization/IDeserializer.h"
 
@@ -161,6 +161,7 @@ public:
 
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
+    UInt32                              GetRequiredFPS          () const;
 
    // static VideoCardManager &           Instance                ();
 

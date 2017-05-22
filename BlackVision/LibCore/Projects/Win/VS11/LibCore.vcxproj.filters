@@ -37,6 +37,15 @@
     <Filter Include="Mathematics">
       <UniqueIdentifier>{685a3969-2774-4166-8983-7caa43abd050}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mathematics\Core">
+      <UniqueIdentifier>{e6820752-5089-4e3a-92bc-a517e579bc30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mathematics\Util">
+      <UniqueIdentifier>{cdcfc625-fb5c-44f1-8df4-1917a89c654a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\FFmpeg">
+      <UniqueIdentifier>{8764c851-0fbb-4183-9db8-a70287735211}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -184,6 +193,37 @@
     <ClInclude Include="..\..\..\Source\Threading\StoppableThread.h">
       <Filter>Threading</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h">
+      <Filter>Mathematics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
+      <Filter>Mathematics\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\AVFrame.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\CoreEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -273,6 +313,27 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Threading\StoppableThread.cpp">
       <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp">
+      <Filter>Mathematics\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp">
+      <Filter>Mathematics\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
+      <Filter>Mathematics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
+      <Filter>Mathematics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp">
+      <Filter>Util\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp">
+      <Filter>Util\FFmpeg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

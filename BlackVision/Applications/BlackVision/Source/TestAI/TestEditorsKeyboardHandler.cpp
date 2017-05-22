@@ -6,7 +6,7 @@
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
-#include "MockScenes.h"
+#include "TestingScenes/MockScenes.h"
 #include "BVAppLogic.h"
 #include "BVGL.h"
 
