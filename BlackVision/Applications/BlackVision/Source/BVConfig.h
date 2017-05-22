@@ -98,6 +98,7 @@ private:
     ~BVConfig   ();
 
     void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
+    void                        SaveConfig              ( ISerializer & ser, std::string path = "" ) const;
 
     void                        InitDefaultConfiguration();
 
