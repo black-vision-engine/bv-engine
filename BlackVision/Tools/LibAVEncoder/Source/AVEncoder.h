@@ -21,6 +21,7 @@ struct AudioOptions
 {
     Int32 numChannels;
     Int64 bitRate;
+    Int32 sampleRate;
     bv::AudioSampleType sampleType;
 };
 

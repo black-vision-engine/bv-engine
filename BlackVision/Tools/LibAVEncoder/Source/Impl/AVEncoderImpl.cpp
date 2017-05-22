@@ -15,7 +15,7 @@ AVEncoder::Impl::Impl       ()
 
 //**************************************
 //
-bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & outputFilePath, VideoOptions vOps, AudioOptions /*aOps*/, bool enableVideo, bool enableAudio )
+bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & outputFilePath, VideoOptions vOps, AudioOptions aOps, bool enableVideo, bool enableAudio )
 {
 	auto have_video = 0;
 	auto have_audio	 = 0;
@@ -43,14 +43,19 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
      * and initialize the codecs. */
     if (enableVideo && fmt->video_codec != AV_CODEC_ID_NONE) {
         FFmpegUtils::add_stream(&m_video_st, m_AVContext, &video_codec, fmt->video_codec);
-        FFmpegUtils::configure_video_codec_context( m_video_st.enc, &m_video_st, vOps.width, vOps.height, vOps.bitRate, vOps.frameRate, fmt->video_codec );
-        have_video = 1;
-        encode_video = 1;
+        if( FFmpegUtils::configure_video_codec_context( &m_video_st, vOps.width, vOps.height, vOps.bitRate, vOps.frameRate, fmt->video_codec ) )
+        {
+            have_video = 1;
+            encode_video = 1;
+        }
     }
     if (enableAudio && fmt->audio_codec != AV_CODEC_ID_NONE) {
         FFmpegUtils::add_stream(&m_audio_st, m_AVContext, &audio_codec, fmt->audio_codec);
-        have_audio = 1;
-        encode_audio = 1;
+        if( FFmpegUtils::configure_audio_codec_context( &m_audio_st, audio_codec, aOps.bitRate, aOps.sampleRate ) )
+        {
+            have_audio = 1;
+            encode_audio = 1;
+        }
     }
     /* Now that all the parameters are set, we can open the audio and
      * video codecs and allocate the necessary encode buffers. */

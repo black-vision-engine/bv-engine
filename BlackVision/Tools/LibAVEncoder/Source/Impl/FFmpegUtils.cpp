@@ -53,35 +53,35 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
     }
     ost->enc = c;
 
-	AVRational avr;
+//	AVRational avr;
 
-    switch ((*codec)->type) {
-    case AVMEDIA_TYPE_AUDIO:
-        c->sample_fmt  = (*codec)->sample_fmts ?
-            (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
-        c->bit_rate    = 64000;
-        c->sample_rate = 44100;
-        if ((*codec)->supported_samplerates) {
-            c->sample_rate = (*codec)->supported_samplerates[0];
-            for (i = 0; (*codec)->supported_samplerates[i]; i++) {
-                if ((*codec)->supported_samplerates[i] == 44100)
-                    c->sample_rate = 44100;
-            }
-        }
-        c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
-        c->channel_layout = AV_CH_LAYOUT_STEREO;
-        if ((*codec)->channel_layouts) {
-            c->channel_layout = (*codec)->channel_layouts[0];
-            for (i = 0; (*codec)->channel_layouts[i]; i++) {
-                if ((*codec)->channel_layouts[i] == AV_CH_LAYOUT_STEREO)
-                    c->channel_layout = AV_CH_LAYOUT_STEREO;
-            }
-        }
-        c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
-		avr.num = 1;
-		avr.den = c->sample_rate;
-        ost->st->time_base = avr;
-        break;
+  //  switch ((*codec)->type) {
+  //  case AVMEDIA_TYPE_AUDIO:
+  //      c->sample_fmt  = (*codec)->sample_fmts ?
+  //          (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
+  //      c->bit_rate    = 64000;
+  //      c->sample_rate = 44100;
+  //      if ((*codec)->supported_samplerates) {
+  //          c->sample_rate = (*codec)->supported_samplerates[0];
+  //          for (i = 0; (*codec)->supported_samplerates[i]; i++) {
+  //              if ((*codec)->supported_samplerates[i] == 44100)
+  //                  c->sample_rate = 44100;
+  //          }
+  //      }
+  //      c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
+  //      c->channel_layout = AV_CH_LAYOUT_STEREO;
+  //      if ((*codec)->channel_layouts) {
+  //          c->channel_layout = (*codec)->channel_layouts[0];
+  //          for (i = 0; (*codec)->channel_layouts[i]; i++) {
+  //              if ((*codec)->channel_layouts[i] == AV_CH_LAYOUT_STEREO)
+  //                  c->channel_layout = AV_CH_LAYOUT_STEREO;
+  //          }
+  //      }
+  //      c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
+		//avr.num = 1;
+		//avr.den = c->sample_rate;
+  //      ost->st->time_base = avr;
+  //      break;
 //    case AVMEDIA_TYPE_VIDEO:
   //      c->codec_id = codec_id;
   //      c->bit_rate = 400000;
@@ -110,9 +110,9 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
   //          c->mb_decision = 2;
   //      }
   //  break;
-    default:
-        break;
-    }
+    //default:
+    //    break;
+    //}
     /* Some formats want stream headers to be separate. */
     if (oc->oformat->flags & AVFMT_GLOBALHEADER)
         c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
@@ -376,8 +376,11 @@ void FFmpegUtils::close_stream      ( OutputStream * ost )
     swr_free(&ost->swr_ctx);
 }
 
-bool FFmpegUtils::configure_video_codec_context( AVCodecContext * c, OutputStream * ost, int w, int h, int64_t bit_rate, int frame_rate, AVCodecID codec_id )
+//**************************************
+//
+bool FFmpegUtils::configure_video_codec_context( OutputStream * ost, int w, int h, int64_t bit_rate, int frame_rate, enum AVCodecID codec_id )
 {
+    AVCodecContext * c = ost->enc;
     c->codec_id = codec_id;
     c->bit_rate = bit_rate;
     /* Resolution must be a multiple of two. */
@@ -408,6 +411,41 @@ bool FFmpegUtils::configure_video_codec_context( AVCodecContext * c, OutputStrea
     }
 
     return false;
+}
+
+//**************************************
+//
+bool FFmpegUtils::configure_audio_codec_context( OutputStream * ost, AVCodec * codec, int64_t bit_rate, int sample_rate )
+{
+    AVCodecContext * c = ost->enc;
+    c->sample_fmt  = codec->sample_fmts ?
+        codec->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
+    c->bit_rate    = bit_rate;
+    c->sample_rate = sample_rate;
+    if (codec->supported_samplerates) {
+        c->sample_rate = codec->supported_samplerates[0];
+        for (auto i = 0; codec->supported_samplerates[i]; i++) {
+            if (codec->supported_samplerates[i] == sample_rate)
+                c->sample_rate = sample_rate;
+        }
+    }
+    c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
+    c->channel_layout = AV_CH_LAYOUT_STEREO;
+    if (codec->channel_layouts) {
+        c->channel_layout = codec->channel_layouts[0];
+        for (auto i = 0; codec->channel_layouts[i]; i++) {
+            if (codec->channel_layouts[i] == AV_CH_LAYOUT_STEREO)
+                c->channel_layout = AV_CH_LAYOUT_STEREO;
+        }
+    }
+    c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
+
+    AVRational avr;
+	avr.num = 1;
+	avr.den = c->sample_rate;
+    ost->st->time_base = avr;
+
+    return true;
 }
 
 } //avencoder
