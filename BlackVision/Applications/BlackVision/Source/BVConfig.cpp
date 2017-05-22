@@ -4,7 +4,9 @@
 
 #include <functional>
 
+#include "Serialization/XML/XMLSerializer.h"
 #include "Serialization/SerializationHelper.inl"
+
 #include "VideoCardManager.h"
 
 #include "UseLoggerBVAppModule.h"
@@ -20,7 +22,7 @@ namespace bv {
 // *********************************
 //
 const std::string   BVConfig::CONFIG_PATH = "config.xml";
-
+const std::string   EMPTY_STRING = "";
 
 // *********************************
 //
@@ -407,11 +409,37 @@ void BVConfig::LoadProperties           ( const IDeserializer & deser, std::stri
     }
 }
 
+// ***********************
+//
+void                    BVConfig::SaveConfig            ( ISerializer & /*ser*/, std::string /*path*/ ) const
+{
+    if( Path::Exists( CONFIG_PATH ) )
+    {
+        //XMLSerializer ser( nullptr );
+
+        //if( m_deserializer.EnterChild( "config" ) )
+        //{
+        //    for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
+        //    {
+
+
+        //    }
+
+        //    m_deserializer.ExitChild();  // config
+        //}
+
+        //ser.Save( CONFIG_PATH );
+    }
+}
+
 // *********************************
 //
 const std::string &     BVConfig::PropertyValue         ( const std::string & key ) const
 {
-    return m_properties.at( key );
+    auto iter = m_properties.find( key );
+    if( iter != m_properties.end() )
+        return iter->second;
+    return EMPTY_STRING;
 }
 
 // *********************************
