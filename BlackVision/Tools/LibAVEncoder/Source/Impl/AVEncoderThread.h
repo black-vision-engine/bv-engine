@@ -4,6 +4,8 @@
 #include "Threading/StoppableThread.h"
 #include "DataTypes/QueueConcurrent.h"
 
+#include <functional>
+
 struct AVFormatContext;
 
 namespace bv 
@@ -25,12 +27,14 @@ class AVEncoderThread : public StoppableThread
 
     virtual void				Process         () override;
 
+    std::function< void ( AVFrameConstPtr ) > m_frameCompleteCallback;
+
 public:
     bool                        IsEmpty         () const;
 
     void                        EnqueueFrame    ( const AVFrameConstPtr & frame );
 
-    AVEncoderThread           ( AVFormatContext * oc, OutputStream * videoOS, OutputStream * audioOS );
+    AVEncoderThread           ( AVFormatContext * oc, OutputStream * videoOS, OutputStream * audioOS, std::function< void ( const AVFrameConstPtr & ) > frameCompleteCallback );
     virtual ~AVEncoderThread  ();
 };
 

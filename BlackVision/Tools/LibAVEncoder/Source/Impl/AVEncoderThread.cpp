@@ -9,10 +9,11 @@ namespace bv { namespace avencoder
 
 //**************************************
 //
-AVEncoderThread::AVEncoderThread    ( AVFormatContext * oc, OutputStream * videoOS, OutputStream * audioOS )
+AVEncoderThread::AVEncoderThread    ( AVFormatContext * oc, OutputStream * videoOS, OutputStream * audioOS, std::function< void ( const AVFrameConstPtr & ) > frameCompleteCallback )
     : m_oc( oc )
     , m_videoOS( videoOS )
     , m_audioOS( audioOS )
+    , m_frameCompleteCallback( frameCompleteCallback )
 {}
 
 //**************************************
@@ -28,6 +29,8 @@ void AVEncoderThread::Process       ()
 
     if( frm )
         FFmpegUtils::write_video_frame( m_oc, m_videoOS, frm );
+
+    m_frameCompleteCallback( frm );
 
     // TODO: Add audio frame writing.
 }

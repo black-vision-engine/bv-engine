@@ -37,7 +37,7 @@ private:
     const AVEncoder & operator=( const Impl & copy );
 
     AVFramePtr              GetFrameBuffer  ();
-    void                    FrameWritten    ( const AVFramePtr & frame );
+    void                    FrameWritten    ( const AVFrameConstPtr & frame );
 
 public:
     Impl           ( UInt32 frameBufferSize );

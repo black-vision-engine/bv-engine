@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include <functional>
+
 namespace bv { namespace avencoder
 {
 
@@ -99,7 +101,12 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
         m_avFramesBuffer.push_back( frame );
     }
 
-    m_encoderThread = std::unique_ptr< AVEncoderThread >( new AVEncoderThread( m_AVContext, &m_video_st, &m_audio_st ) );
+    std::function<void( const AVFrameConstPtr & frame )> f = [ = ] ( const AVFrameConstPtr & frame )
+    {
+        this->FrameWritten( frame );
+    };
+
+    m_encoderThread = std::unique_ptr< AVEncoderThread >( new AVEncoderThread( m_AVContext, &m_video_st, &m_audio_st, f ) );
     m_encoderThread->Start();
 
 	return true;
@@ -149,10 +156,10 @@ AVFramePtr      AVEncoder::Impl::GetFrameBuffer         ()
 
 //**************************************
 //
-void            AVEncoder::Impl::FrameWritten           ( const AVFramePtr & frame )
+void            AVEncoder::Impl::FrameWritten           ( const AVFrameConstPtr & frame )
 {
     std::unique_lock< std::mutex > lock( m_mutex );
-    m_avFramesBuffer.push_back( frame );
+    m_avFramesBuffer.push_back( std::const_pointer_cast< AVFrame >( frame ) );
 }
 
 //**************************************
