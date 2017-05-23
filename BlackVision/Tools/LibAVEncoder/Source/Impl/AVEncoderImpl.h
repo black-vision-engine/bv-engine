@@ -6,6 +6,9 @@
 
 #include "FFmpegUtils.h"
 
+#include <boost/circular_buffer.hpp>
+#include <mutex>
+
 namespace bv 
 {
 
@@ -17,21 +20,27 @@ class AVEncoder::Impl;
 
 class AVEncoder::Impl
 {
-    std::unique_ptr< AVEncoderThread > m_encoderThread;
+    std::unique_ptr< AVEncoderThread >          m_encoderThread;
+    boost::circular_buffer< AVFramePtr >        m_avFramesBuffer;
 
     ::AVFrame *             m_AVFrame;
     ::AVFormatContext *     m_AVContext;
     FILE *                  m_file;
     OutputStream            m_video_st;
     OutputStream            m_audio_st;
+    UInt32                  m_frameBufferSize;
 
+    std::mutex              m_mutex;
 
 private:
     Impl( const Impl & copy );
     const AVEncoder & operator=( const Impl & copy );
 
+    AVFramePtr              GetFrameBuffer  ();
+    void                    FrameWritten    ( const AVFramePtr & frame );
+
 public:
-    Impl           ();
+    Impl           ( UInt32 frameBufferSize );
     virtual ~Impl  ();
 
     bool            OpenOutputStream    (   const std::string & outputFilePath,

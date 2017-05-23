@@ -32,7 +32,6 @@ static void log_packet(const AVFormatContext *, const AVPacket *)
 bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVFormatContext *oc, AVCodec **codec, enum AVCodecID codec_id )
 {
     AVCodecContext *c;
-    int i;
     /* find the encoder */
     *codec = avcodec_find_encoder(codec_id);
     if (!(*codec)) {
@@ -410,7 +409,7 @@ bool FFmpegUtils::configure_video_codec_context( OutputStream * ost, int w, int 
         c->mb_decision = 2;
     }
 
-    return false;
+    return true;
 }
 
 //**************************************

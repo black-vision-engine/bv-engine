@@ -35,7 +35,7 @@ class AVEncoder
     const AVEncoder & operator=( const AVEncoder & copy );
 
 public:
-    AVEncoder           ();
+    AVEncoder           ( UInt32 bufferSize = 128 );
     virtual ~AVEncoder  ();
 
     bool            OpenOutputStream    (   const std::string & outputFilePath,

@@ -5,8 +5,8 @@ namespace bv { namespace avencoder {
 
 //**************************************
 //
-AVEncoder::AVEncoder()
-    : m_impl( new Impl() )
+AVEncoder::AVEncoder( UInt32 bufferSize )
+    : m_impl( new Impl( bufferSize ) )
 {}
 
 //**************************************

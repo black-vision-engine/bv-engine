@@ -7,11 +7,10 @@ namespace bv { namespace avencoder
 
 //**************************************
 //
-AVEncoder::Impl::Impl       ()
-    : m_encoderThread( new AVEncoderThread() )
-{
-	m_encoderThread->Start();
-}
+AVEncoder::Impl::Impl       ( UInt32 frameBufferSize )
+    : m_encoderThread( nullptr )
+    , m_frameBufferSize( frameBufferSize )
+{}
 
 //**************************************
 //
@@ -81,6 +80,28 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
         return false;
     }
 
+    m_avFramesBuffer = boost::circular_buffer< AVFramePtr >( m_frameBufferSize );
+
+    for( UInt32 i = 0; i < m_frameBufferSize; ++i )
+    {
+        auto videoData = bv::MemoryChunk::Create( 4 * vOps.width * vOps.height );
+
+        bv::AVFrameDescriptor desc;
+        desc.channels = aOps.numChannels;
+        desc.height = vOps.height;
+        desc.width = vOps.width;
+        desc.sampleRate = aOps.sampleRate;
+
+        auto frame = bv::AVFrame::Create(); // TODO: Add audio data
+        frame->m_videoData = videoData;
+        frame->m_desc = desc;
+
+        m_avFramesBuffer.push_back( frame );
+    }
+
+    m_encoderThread = std::unique_ptr< AVEncoderThread >( new AVEncoderThread( m_AVContext, &m_video_st, &m_audio_st ) );
+    m_encoderThread->Start();
+
 	return true;
 }
 
@@ -88,6 +109,15 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
 //
 void            AVEncoder::Impl::CloseStream            ()
 {
+    if( m_encoderThread )
+    {
+        while( !m_encoderThread->IsEmpty() );
+        m_encoderThread->Kill();
+        m_encoderThread->EnqueueFrame( nullptr );
+        m_encoderThread->Join();
+        m_encoderThread = nullptr;
+    }
+
     av_write_trailer(m_AVContext);
         /* Close each codec. */
    
@@ -103,17 +133,63 @@ void            AVEncoder::Impl::CloseStream            ()
 
 //**************************************
 //
+AVFramePtr      AVEncoder::Impl::GetFrameBuffer         ()
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+    if( !m_avFramesBuffer.empty() )
+    {
+        auto frame = m_avFramesBuffer.front();
+        m_avFramesBuffer.pop_front();
+        return frame;
+    }
+    else
+        return nullptr;
+
+}
+
+//**************************************
+//
+void            AVEncoder::Impl::FrameWritten           ( const AVFramePtr & frame )
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+    m_avFramesBuffer.push_back( frame );
+}
+
+//**************************************
+//
 bool            AVEncoder::Impl::WriteFrame             ( const AVFrameConstPtr & bvFrame )
 {
-	return FFmpegUtils::write_video_frame( m_AVContext, &m_video_st, bvFrame );
+    AVFramePtr frame = nullptr;
+
+    if( frame = GetFrameBuffer() )
+    {
+        frame = GetFrameBuffer();
+        memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable(), bvFrame->m_videoData->Get(), bvFrame->m_videoData->Size() );
+    }
+    else
+    {
+        auto videoData = bv::MemoryChunk::Create( bvFrame->m_videoData->Size() );
+
+        auto frame = bv::AVFrame::Create(); // TODO: Add audio data
+        frame->m_videoData = videoData;
+        frame->m_desc = bvFrame->m_desc;
+    }
+    
+    m_encoderThread->EnqueueFrame( frame );
+
+    return true;
 }
 
 //**************************************
 //
 AVEncoder::Impl::~Impl      () 
 {
-	m_encoderThread->Kill();
-	m_encoderThread->Join();
+    if( m_encoderThread )
+    {
+        m_encoderThread->Kill();
+        m_encoderThread->EnqueueFrame( nullptr );    
+        m_encoderThread->Join();
+    }
 }
 
 
