@@ -415,6 +415,9 @@
     <Filter Include="Engine\Models\NodeLogics\NodeVisibilityAnimation">
       <UniqueIdentifier>{ea278f64-cd67-4099-9ebb-61da1719ceb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
+      <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1959,6 +1962,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5167,6 +5173,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\IConfig.h">
       <Filter>Engine\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

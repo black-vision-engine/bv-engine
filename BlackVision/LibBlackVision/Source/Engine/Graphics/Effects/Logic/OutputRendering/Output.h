@@ -10,6 +10,7 @@ enum class CustomOutputType : unsigned int
     COT_PREVIEW = 0,
     COT_VIDEO,
     COT_STREAM,
+    COT_AV_FILE,
 
     COT_TOTAL
 };

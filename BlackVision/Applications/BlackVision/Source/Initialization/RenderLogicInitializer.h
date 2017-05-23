@@ -24,6 +24,7 @@ private:
     static void             InitializeDefaultPrv( OutputDesc & desc, const BVConfig & cfg );
     static void             InitializeDefaultShm( OutputDesc & desc, const BVConfig & cfg );
     static void             InitializeDefaultVid( OutputDesc & desc, const BVConfig & cfg );
+    static void             InitializeDefaultAVFile( OutputDesc & desc, const BVConfig & cfg );
 
 };
 

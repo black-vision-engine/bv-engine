@@ -7,6 +7,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/VideoOutputFactory.h"
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/FrameDataHandlers/Preview/PreviewHandler.h"
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/FrameDataHandlers/Stream/SharedMemHandler.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/FrameDataHandlers/AVFileOutput/AVFileOutputHandler.h"
 
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/OutputInstance.h"
 
@@ -102,6 +103,18 @@ OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
 
 // *********************************
 //
+OutputInstance *    CreateAVOutput      ( const OutputDesc & desc )
+{
+    auto handler = new AVFileOutputHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
+    auto output = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler );
+
+    InitializeDefault( output, desc );
+
+    return output;
+}
+
+// *********************************
+//
 
 // *********************************
 //
@@ -124,6 +137,8 @@ Output *    OutputFactory::CreateOutput( const OutputDesc & desc )
             return CreateOutputVideo( desc );
         case CustomOutputType::COT_STREAM:
             return CreateOutputShm( desc ); // FIXME: nrl - implement generic CreateOutputStream,
+        case CustomOutputType::COT_AV_FILE:
+            return CreateAVOutput( desc );
         default:
             assert( false );
     };

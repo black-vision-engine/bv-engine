@@ -187,6 +187,9 @@
     <ProjectReference Include="..\..\..\..\..\LibVideoCards\Projects\Win\VS11\LibVideoCards.vcxproj">
       <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibAVEncoder\Projects\Win\VS11\LibAVEncoder.vcxproj">
+      <Project>{3d46a32f-4c62-4d4a-8048-54f569123733}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
       <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
     </ProjectReference>

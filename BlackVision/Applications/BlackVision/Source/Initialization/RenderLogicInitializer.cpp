@@ -70,6 +70,7 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     OutputDesc prvDesc;
     OutputDesc shmDesc;
     OutputDesc vidDesc;
+    OutputDesc avFileDesc;
 
     InitializeDefaultPrv( prvDesc, cfg );
 
@@ -77,6 +78,7 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     {
         InitializeDefaultShm( shmDesc, cfg );
         InitializeDefaultVid( vidDesc, cfg );
+        InitializeDefaultAVFile( avFileDesc, cfg );
     }
 
     desc.AppendDesc( prvDesc );
@@ -85,6 +87,7 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     {
         desc.AppendDesc( shmDesc );
         desc.AppendDesc( vidDesc );
+        desc.AppendDesc( avFileDesc );
     }
 }
 
@@ -123,6 +126,29 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
 
     // FIXME: nrl - append additional properties if necessary
 }
+
+// *********************************
+//
+void             RenderLogicInitializer::InitializeDefaultAVFile( OutputDesc & desc, const BVConfig & cfg )
+{
+    // FIXME: nrl - implement it by reading cfg instance
+    {
+        cfg;
+    }
+
+    desc.SetWidth( 1920 );
+    desc.SetHeight( 1080 );
+    // Uncomment to make it BUG crash
+    //desc.SetWidth( 1920 / 2 );
+    //desc.SetHeight( 1080 / 2 );
+    desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
+    desc.SetRepresentedOutputType( CustomOutputType::COT_AV_FILE );
+    desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
+    desc.SetEnabled( true );
+
+    // FIXME: nrl - append additional properties if necessary
+}
+
 
 // *********************************
 //

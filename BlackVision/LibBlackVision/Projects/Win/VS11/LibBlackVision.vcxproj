@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp" />
@@ -620,6 +621,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\IConfig.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h" />

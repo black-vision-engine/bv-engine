@@ -75,14 +75,17 @@ void            OutputInstance::SyncHandlerState        ()
 {
     auto state      = m_frameDataHandler->GetInternalFSEState();
     
-    auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
-    auto maskVal    = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
+    if( state )
+    {
+        auto mappingVal = state->GetValueAt( 0 ); assert( mappingVal->GetName() == "channelMapping" );
+        auto maskVal = state->GetValueAt( 1 ); assert( maskVal->GetName() == "channelMask" );
 
-    auto mapping    = m_state.GetChannelMapping();
-    auto mask       = m_state.GetChannelMask();
+        auto mapping = m_state.GetChannelMapping();
+        auto mask = m_state.GetChannelMask();
 
-    QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
-    QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
+        QueryTypedValue< ValueIntPtr >( mappingVal )->SetValue( mapping );
+        QueryTypedValue< ValueVec4Ptr >( maskVal )->SetValue( mask );
+    }
 }
 
 
