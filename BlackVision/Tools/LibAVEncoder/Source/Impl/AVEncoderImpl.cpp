@@ -159,22 +159,19 @@ void            AVEncoder::Impl::FrameWritten           ( const AVFramePtr & fra
 //
 bool            AVEncoder::Impl::WriteFrame             ( const AVFrameConstPtr & bvFrame )
 {
-    AVFramePtr frame = nullptr;
+    AVFramePtr frame = GetFrameBuffer();
 
-    if( frame = GetFrameBuffer() )
-    {
-        frame = GetFrameBuffer();
-        memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable(), bvFrame->m_videoData->Get(), bvFrame->m_videoData->Size() );
-    }
-    else
+    if( !frame )
     {
         auto videoData = bv::MemoryChunk::Create( bvFrame->m_videoData->Size() );
 
-        auto frame = bv::AVFrame::Create(); // TODO: Add audio data
+        frame = bv::AVFrame::Create(); // TODO: Add audio data
         frame->m_videoData = videoData;
         frame->m_desc = bvFrame->m_desc;
     }
-    
+
+    memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable(), bvFrame->m_videoData->Get(), bvFrame->m_videoData->Size() );
+
     m_encoderThread->EnqueueFrame( frame );
 
     return true;
