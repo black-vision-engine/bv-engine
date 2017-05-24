@@ -1550,8 +1550,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
     if( texturePlugin )
     {
-        auto width   = texturePlugin->GetTextureWidth();
-        auto height  = texturePlugin->GetTextureHeight();
+        auto width = 1024; // texturePlugin->GetTextureWidth();
+        auto height = 1024; // texturePlugin->GetTextureHeight();
 
         //float wf = float( width ) / float( height );
         //float scl = 1.f;
@@ -1660,8 +1660,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::ITimeEva
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
     if( texturePlugin )
     {
-        auto width   = texturePlugin->GetTextureWidth();
-        auto height  = texturePlugin->GetTextureHeight();
+        auto width = 1024;// texturePlugin->GetTextureWidth();
+        auto height = 1024; // texturePlugin->GetTextureHeight();
 
         //float wf = float( width ) / float( height );
         //float scl = 1.f;

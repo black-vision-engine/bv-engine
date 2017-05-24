@@ -164,9 +164,6 @@ bool                                DefaultVideoInputPlugin::LoadResource       
 
             txData->SetTexture( 0, txDesc );
 
-            m_textureWidth = txDesc->GetWidth();
-            m_textureHeight = txDesc->GetHeight();
-
             return true;
         }
     }
