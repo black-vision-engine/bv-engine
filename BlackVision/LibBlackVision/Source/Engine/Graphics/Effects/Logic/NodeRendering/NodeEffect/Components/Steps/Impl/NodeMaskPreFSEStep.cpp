@@ -28,7 +28,7 @@ const int           GDefaultFgIdx   = 1;
 
 // **************************
 //
-NodeMaskPreFSEStep::NodeMaskPreFSEStep          ( IValuePtr alphaVal, float minAlphaThreshold )
+NodeMaskPreFSEStep::NodeMaskPreFSEStep          ( IValuePtr alphaVal, IValuePtr maskPreviewVal, float minAlphaThreshold )
     : Parent( nullptr )
     , m_renderResult( 2 )
     , m_minThreshold( minAlphaThreshold )
@@ -45,6 +45,7 @@ NodeMaskPreFSEStep::NodeMaskPreFSEStep          ( IValuePtr alphaVal, float minA
     state->AppendValue( alphaVal );
     state->AppendValue( ValuesFactory::CreateValueInt( GMaskIdxValName, GDefaultMaskIdx ) );
     state->AppendValue( ValuesFactory::CreateValueInt( GFgIdxValName, GDefaultFgIdx ) );
+    state->AppendValue( maskPreviewVal );
 
     Parent::SetState( state );
 }
@@ -63,6 +64,7 @@ void                    NodeMaskPreFSEStep::ReadInputState              ()
     m_alpha     = GetAlpha();
     m_maskIdx   = GetMaskIdx();
     m_fgIdx     = GetFgIdx();
+    m_isPreview = GetIsPreview();
 
     assert( m_maskIdx == 0 || m_maskIdx == 1 );
     assert( m_fgIdx == 0 || m_fgIdx == 1 );
@@ -90,6 +92,25 @@ const RenderedData *   NodeMaskPreFSEStep::ApplyImpl                   ( SceneNo
     if( nodeRepr->NumChildNodes() < 2 )
     {
         NodeRenderLogic::Render( nodeRepr, ctx );
+    }
+    else if( m_isPreview )
+    {
+        assert( ctx->GetBoundRenderTarget() != nullptr );
+
+        // Render regular nodes.
+        NodeRenderLogic::RenderRoot( nodeRepr, ctx );
+        auto mainRT = disableBoundRT( ctx );
+
+        // Fill first render target (masked node) with ones. We need to blit only mask to screen, but we must use the same
+        // fullscreen effect as for regular NodeMask mode. So we pretend that we rendered whole screen white and mask it with second render target.
+        ctx->Enable( m_renderResult.GetEntry( 0 ) );
+        ctx->ClearBoundRT( glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+
+        // Render mask to second render target.
+        NodeRenderLogic::Render( nodeRepr->GetChild( m_maskIdx ), m_renderResult.GetEntry( 1 ), ctx );
+
+        enable( ctx, mainRT );
+        res = &m_renderResult;
     }
     else
     {
@@ -159,6 +180,15 @@ int     NodeMaskPreFSEStep::GetFgIdx                   () const
     auto val = GetState()->GetValueAt( 2 );
 
     return QueryTypedValue< ValueIntPtr >( val )->GetValue();
+}
+
+// ***********************
+//
+bool    NodeMaskPreFSEStep::GetIsPreview() const
+{
+    auto val = GetState()->GetValueAt( 3 );
+
+    return QueryTypedValue< ValueBoolPtr >( val )->GetValue();
 }
 
 

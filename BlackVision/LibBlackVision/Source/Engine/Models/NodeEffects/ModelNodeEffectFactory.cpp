@@ -39,24 +39,16 @@ IModelNodeEffectPtr         CreateAlphaMaskModelNodeEffect          ( const std:
 //
 IModelNodeEffectPtr         CreateNodeMaskModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
-    auto effect = ModelNodeEffect::Create( NodeEffectType::NET_NODE_MASK );
-
-    auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    auto maskIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskIdx", timeEvaluator );
-    auto fgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "fgIdx", timeEvaluator );
-	auto maskChannelIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskChannelIdx", timeEvaluator );
-
-    alphaEval->Parameter()->SetVal( 1.f, 0.f );
-    maskIdxEval->Parameter()->SetVal( 0, 0.f );
-    fgIdxEval->Parameter()->SetVal( 1, 0.f );
-	maskChannelIdxEval->Parameter()->SetVal( 1, 0.f );
-
-    effect->RegisterEvaluator( alphaEval );
-    effect->RegisterEvaluator( maskIdxEval );
-    effect->RegisterEvaluator( fgIdxEval );
-	effect->RegisterEvaluator( maskChannelIdxEval );
+    ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
     
-    return effect;
+    h.AddSimpleParam( "alpha", 1.0f, true );
+    h.AddSimpleParam( "maskIdx", 0, true );
+    h.AddSimpleParam( "fgIdx", 1, true );
+    h.AddSimpleParam( "maskChannelIdx", 1, true );
+    h.AddSimpleParam( "maskPreview", false, true );
+    
+    return ModelNodeEffect::Create( NodeEffectType::NET_NODE_MASK, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
 }
 
 // **************************
