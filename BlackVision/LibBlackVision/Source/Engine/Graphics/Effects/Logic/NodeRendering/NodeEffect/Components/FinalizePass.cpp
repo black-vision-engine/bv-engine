@@ -54,7 +54,7 @@ IValuePtr   FinalizePass::GetValue         ( const std::string & name ) const
 {
     IValuePtr res = nullptr;
 
-    if( m_finalizeStep )
+    if( m_finalizeStep && m_finalizeStep->GetState() )
     {
         res = m_finalizeStep->GetState()->GetValue( name );
     }
