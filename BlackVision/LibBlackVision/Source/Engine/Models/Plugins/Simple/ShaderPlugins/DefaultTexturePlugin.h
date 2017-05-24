@@ -43,9 +43,6 @@ protected:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    SizeType	                    m_textureWidth;
-    SizeType	                    m_textureHeight;
-
     model::ValueParamState< bool >  m_blendEnabled;
 
 public:
@@ -62,9 +59,6 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
-
-    SizeType									GetTextureWidth             () const;
-    SizeType									GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 

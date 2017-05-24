@@ -170,11 +170,6 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
             SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
 
             HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-
-            m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
-            m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
-
-
             return true;
         }
 
@@ -289,20 +284,6 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-}
-
-// *************************************
-// 
-SizeType									DefaultTexturePlugin::GetTextureWidth             () const
-{
-    return m_textureWidth;
-}
-
-// *************************************
-//
-SizeType									DefaultTexturePlugin::GetTextureHeight            () const
-{
-    return m_textureHeight;
 }
 
 // *************************************
