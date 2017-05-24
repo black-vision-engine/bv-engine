@@ -144,7 +144,7 @@ void             RenderLogicInitializer::InitializeDefaultAVFile( OutputDesc & d
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_AV_FILE );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetEnabled( true );
+    desc.SetEnabled( false );
 
     // FIXME: nrl - append additional properties if necessary
 }
