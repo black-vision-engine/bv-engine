@@ -23,13 +23,30 @@ AVFileOutputHandler::AVFileOutputHandler      ( unsigned int width, unsigned int
     , m_shmTexture( nullptr )
     , m_encoder( new avencoder::AVEncoder()  )
 {
+
+}
+
+// **************************
+//
+void AVFileOutputHandler::StartToAVFileRendering  ( const std::string & outputFilePath )
+{
     avencoder::VideoOptions vOps;
     vOps.frameRate = 25;
     vOps.width = 1920;
     vOps.height = 1080;
     vOps.bitRate = 40000;
-    m_encoder->OpenOutputStream( "output.mov", vOps, avencoder::AudioOptions(), true, true );
+
+    m_encoder->OpenOutputStream( outputFilePath, vOps, avencoder::AudioOptions(), true, true );
 }
+
+// **************************
+//
+void AVFileOutputHandler::StopToAVFileRendering   ()
+{
+    if( m_encoder )
+        m_encoder->CloseStream();
+}
+
 
 // **************************
 //

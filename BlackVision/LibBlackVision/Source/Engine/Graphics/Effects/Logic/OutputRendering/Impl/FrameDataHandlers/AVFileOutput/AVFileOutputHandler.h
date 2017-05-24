@@ -38,9 +38,12 @@ public:
                                                 AVFileOutputHandler    ( unsigned int width, unsigned int height );
                                                 ~AVFileOutputHandler   ();
 
-    virtual void                                HandleFrameData     ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel ) override;
+    virtual void                                HandleFrameData         ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel ) override;
 
-    virtual FullscreenEffectComponentStatePtr  GetInternalFSEState () override;
+    virtual FullscreenEffectComponentStatePtr   GetInternalFSEState     () override;
+
+    void                                        StartToAVFileRendering  ( const std::string & outputFilePath );
+    void                                        StopToAVFileRendering   ();
 
 private:
 
