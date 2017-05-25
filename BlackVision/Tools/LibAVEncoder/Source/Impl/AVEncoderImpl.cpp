@@ -123,19 +123,20 @@ void            AVEncoder::Impl::CloseStream            ()
         m_encoderThread->EnqueueFrame( nullptr );
         m_encoderThread->Join();
         m_encoderThread = nullptr;
-    }
 
-    av_write_trailer(m_AVContext);
+
+        av_write_trailer( m_AVContext );
         /* Close each codec. */
-   
-    FFmpegUtils::close_stream(&m_video_st);
-    //if (have_audio)
-    //    close_stream(oc, &audio_st);
-    if (!(m_AVContext->oformat->flags & AVFMT_NOFILE))
-        /* Close the output file. */
-        avio_closep(&m_AVContext->pb);
-    /* free the stream */
-    avformat_free_context(m_AVContext);
+
+        FFmpegUtils::close_stream( &m_video_st );
+        //if (have_audio)
+        //    close_stream(oc, &audio_st);
+        if( !( m_AVContext->oformat->flags & AVFMT_NOFILE ) )
+            /* Close the output file. */
+            avio_closep( &m_AVContext->pb );
+        /* free the stream */
+        avformat_free_context( m_AVContext );
+    }
 }
 
 //**************************************

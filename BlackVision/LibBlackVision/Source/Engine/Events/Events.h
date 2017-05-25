@@ -931,6 +931,7 @@ public:
         CloseApplication,
         LockEventQueue,
 		SetGain,
+        OutputCommand,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -944,7 +945,7 @@ public:
     Command                     RenderingCommand;
 	float						Gain;
 
-    //IDeserializer *             Request;
+    IDeserializer *             Request;
 
 public:
 

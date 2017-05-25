@@ -71,6 +71,10 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
 	{
 		m_appLogic->SetGain( gain );
 	}
+    else if( command == EngineStateEvent::Command::OutputCommand )
+    {
+        HandleOutputEvent( stateEvent );
+    }
     else
     {
         SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );
@@ -292,6 +296,28 @@ void    EngineStateHandlers::UndoRedoEvent            ( IEventPtr evt )
         SendSimpleErrorResponse( command, undoEvent->EventID, undoEvent->SocketID, "Unknown command" );
     }
 
+}
+
+// ***********************
+//
+void    EngineStateHandlers::HandleOutputEvent       ( EngineStateEventPtr evt )
+{
+    std::string action = evt->Request->GetAttribute( "Action" );
+
+    if( action == "StartAVFileRendering" )
+    {
+        auto fileName = evt->Request->GetAttribute( "OutputFileName" );
+        if( !fileName.empty() )
+        {
+            auto & renderMode = m_appLogic->GetRenderMode();
+            renderMode.StartToAVFileRendering( fileName );
+        }
+    }
+    else if( action == "StopAVFileRendering" )
+    {
+        auto & renderMode = m_appLogic->GetRenderMode();
+        renderMode.StopToAVFileRendering();
+    }
 }
 
 } //bv

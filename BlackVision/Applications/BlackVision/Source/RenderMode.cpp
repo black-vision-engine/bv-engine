@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "Engine/Graphics/Effects/Logic/OutputRendering/OutputLogic.h"
+#include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/FrameDataHandlers/AVFileOutput/AVFileOutput.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "BVConfig.h"
 
@@ -109,6 +110,42 @@ TimeType    RenderMode::StartFrame              ( unsigned long millis )
 TimeType	RenderMode::GetFramesDelta				() const
 {
 	return 1.f / (float) m_fps;
+}
+
+// ***********************
+//
+void        RenderMode::StartToAVFileRendering      ( const std::string & outputFilePath )
+{
+    if( m_renderLogic  )
+    {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
+
+        auto avfileOutput = outputLogic->GetOutput( CustomOutputType::COT_AV_FILE );
+
+        if( avfileOutput )
+        {
+            assert( dynamic_cast< AVFileOutput * >( avfileOutput ) );
+            static_cast< AVFileOutput * >( avfileOutput )->StartToAVFileRendering( outputFilePath );
+        }
+    }
+}
+
+// ***********************
+//
+void        RenderMode::StopToAVFileRendering       ()
+{
+    if( m_renderLogic  )
+    {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
+
+        auto avfileOutput = outputLogic->GetOutput( CustomOutputType::COT_AV_FILE );
+
+        if( avfileOutput )
+        {
+            assert( dynamic_cast< AVFileOutput * >( avfileOutput ) );
+            static_cast< AVFileOutput * >( avfileOutput )->StopToAVFileRendering();
+        }
+    }
 }
 
 } //bv

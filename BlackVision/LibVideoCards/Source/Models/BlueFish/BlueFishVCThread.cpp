@@ -17,7 +17,7 @@ const SizeType      BUFFER_SIZE = 10;
 BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
     : m_frameQueue( 1 )
     , m_videoChannel( vc )
-    , m_odd( true )
+    , m_odd( false )
     , m_outputFramesBuffer( BUFFER_SIZE )
     , m_frameDuration( 0 )
     , m_interlaceEnabled( false )

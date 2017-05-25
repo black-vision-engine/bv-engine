@@ -24,6 +24,9 @@ public:
     void    MouseInteraction         ( IEventPtr evt );
     void    ConfigManagment          ( IEventPtr evt );
     void    UndoRedoEvent            ( IEventPtr evt );
+
+private:
+    void    HandleOutputEvent       ( EngineStateEventPtr evt );
 };
 
 } //bv
