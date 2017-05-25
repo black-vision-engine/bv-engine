@@ -4,9 +4,9 @@
 
 #include "Application/ApplicationContext.h"
 
-#include "UnitTest++.h"
-#include "TestReporterStdout.h"
-#include "XmlTestReporter.h"
+//#include "UnitTest++.h"
+//#include "TestReporterStdout.h"
+//#include "XmlTestReporter.h"
 
 namespace bv
 {
@@ -26,21 +26,21 @@ BVTestAppLogic::~BVTestAppLogic     ()
 //
 void    BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
-    auto tl = UnitTest::Test::GetTestList();
+    //auto tl = UnitTest::Test::GetTestList();
 
-    UnitTest::TestList selectedTests;
+    //UnitTest::TestList selectedTests;
 
-    tl.GetHead()->m_nextTest = nullptr;
+    //tl.GetHead()->m_nextTest = nullptr;
 
-    selectedTests.Add( tl.GetHead() );
+    //selectedTests.Add( tl.GetHead() );
 
-    auto f = File::Open( tl.GetHead()->m_details.testName, File::OpenMode::FOMReadWrite );
+    //auto f = File::Open( tl.GetHead()->m_details.testName, File::OpenMode::FOMReadWrite );
 
-    UnitTest::XmlTestReporter reporter( *f.StreamBuf() );
-    UnitTest::TestRunner runner( reporter );
-    runner.RunTestsIf( selectedTests, 0, UnitTest::True(), 0 );
+    //UnitTest::XmlTestReporter reporter( *f.StreamBuf() );
+    //UnitTest::TestRunner runner( reporter );
+    //runner.RunTestsIf( selectedTests, 0, UnitTest::True(), 0 );
 
-    f.Close();
+    //f.Close();
 
     // Empty. Updating in test framework is called manually.
 }

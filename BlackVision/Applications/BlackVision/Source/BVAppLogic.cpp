@@ -83,7 +83,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     m_remoteController = new JsonCommandsListener;
 
     model::ModelState::GetInstance().RegisterBVProject( m_bvProject.get() );
-    BVServiceProvider::GetInstance().RegisterBVProject( m_bvProject.get() );
+    //BVServiceProvider::GetInstance().RegisterBVProject( m_bvProject.get() );
 
     //m_renderLogic = new FrameRenderLogic();
 }
