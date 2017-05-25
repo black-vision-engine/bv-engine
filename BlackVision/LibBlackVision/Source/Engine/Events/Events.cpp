@@ -531,6 +531,7 @@ std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMappi
     , std::make_pair( EngineStateEvent::Command::CloseApplication, "CloseApplication" )
     , std::make_pair( EngineStateEvent::Command::LockEventQueue, "LockEventQueue" )
 	, std::make_pair( EngineStateEvent::Command::SetGain, "SetGain" )
+    , std::make_pair( EngineStateEvent::Command::OutputCommand, "OutputCommand" )
     , std::make_pair( EngineStateEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
