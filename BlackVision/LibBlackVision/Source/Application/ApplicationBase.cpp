@@ -6,7 +6,6 @@
 
 #include "System/InitSubsystem.h"
 
-
 bv::ApplicationBase * bv::ApplicationBase::ApplicationInstance		= nullptr;
 bv::ApplicationBase::ApplicationMain bv::ApplicationBase::MainFun	= nullptr;
 
@@ -38,7 +37,6 @@ ApplicationBase::~ApplicationBase	()
 // Entry point for all applications derived from this class
 int main( int argc, char * argv[] )
 {
-
 //TODO: Initialize here all generic subsystems here (loggers, generic managers, system wide subsystems)
 //TODO: Register (and/or) initialize all (possibly already registered) components
 //TODO: Load all generic resources

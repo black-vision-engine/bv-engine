@@ -54,7 +54,7 @@ enum class BVAppState : int
 //FIXME: possibly add an interface such as IAppLogic (if necessary)
 class BVAppLogic
 {
-private:
+protected:
 
     SimpleTimer                     m_timer;
 
@@ -98,7 +98,7 @@ public:
     void            Deinitialize    ();
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
-    void            LoadScene       ( void );
+    virtual void    LoadScene       ( void );
     void            UnloadScenes    ();
 
     unsigned int    StartTime       ();

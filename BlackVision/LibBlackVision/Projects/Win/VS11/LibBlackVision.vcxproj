@@ -102,6 +102,8 @@
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalOptions>/Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions);BV_TESTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ThirdPartyDir)/unittest-cpp/include;$(BOOST_INC);$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -574,6 +576,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultWallPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp" />
