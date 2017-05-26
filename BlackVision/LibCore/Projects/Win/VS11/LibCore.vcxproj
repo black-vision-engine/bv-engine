@@ -78,6 +78,7 @@
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h" />
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h" />
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h" />
+    <ClInclude Include="..\..\..\Source\Util\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\Util\IObservable.h" />
     <ClInclude Include="..\..\..\Source\Util\IObserver.h" />
     <ClInclude Include="..\..\..\Source\Util\Observable.h" />

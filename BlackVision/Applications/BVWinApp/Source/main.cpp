@@ -1,13 +1,11 @@
 //#include "stdafx.h"
 //
 #include "Application/ApplicationBase.h"
-#include "../BlackVision/Source/bvApp.h"
+#include "bvApp.h"
 //
 #include <cassert>
 //
 #include "System/InitSubsystem.h"
-
-static bool registered = bv::BlackVisionApp::RegisterInitializer();
 
 
 // *********************************

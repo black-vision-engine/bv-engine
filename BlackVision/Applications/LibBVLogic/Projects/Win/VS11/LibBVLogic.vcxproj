@@ -63,8 +63,6 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -76,8 +74,6 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -89,8 +85,6 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -101,9 +95,6 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -285,7 +276,6 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.h" />
-    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
     <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h" />

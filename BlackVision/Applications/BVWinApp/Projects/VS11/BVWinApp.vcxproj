@@ -49,6 +49,9 @@
     <ProjectReference Include="..\..\..\..\Tools\TCPServer\Projects\Win\VS11\TCPServer.vcxproj">
       <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\LibBVLogic\Projects\Win\VS11\LibBVLogic.vcxproj">
+      <Project>{e92b5bdf-8bd5-4d22-b2cd-90d681deda85}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\main.cpp" />
