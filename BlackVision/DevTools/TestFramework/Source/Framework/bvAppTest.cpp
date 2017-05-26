@@ -24,22 +24,32 @@
 // Log initializer
 #include "bvAppLogInitializer.inl"
 
-// *********************************
-// FIXME: move it to a valid BV windowed version of engine and wrap with a macro
-void			bv::BlackVisionApp::StaticInitializer	( int, char *[] )
-{
-
-    bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
-    bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionAppFramework();
-}
-
 
 // *********************************
 // FIXME: move it to valid BV windowed version of engine and wrap with a macro
 bool			bv::BlackVisionApp::RegisterInitializer	()
 {
-    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::StaticInitializer );
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::MainInitializer );
     bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
+
+    return true;
+}
+
+
+// ***********************
+//
+void            bv::BlackVisionAppFramework::MainFrameworkInitializer       ( int , char *[] )
+{
+    bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
+    bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionAppFramework();
+}
+
+// ***********************
+//
+bool            bv::BlackVisionAppFramework::RegisterFrameworkInitializer   ()
+{
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionAppFramework::MainFrameworkInitializer );
+    RegisterLogicInitializers();
 
     return true;
 }

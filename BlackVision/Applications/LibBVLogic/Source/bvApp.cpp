@@ -24,7 +24,7 @@
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
-void			bv::BlackVisionApp::StaticInitializer	( int, char * [] )
+void			bv::BlackVisionApp::MainInitializer	( int, char * [] )
 {
     
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
@@ -36,10 +36,19 @@ void			bv::BlackVisionApp::StaticInitializer	( int, char * [] )
 // FIXME: move it to valid BV windowed version of engine and wrap with a macro
 bool			bv::BlackVisionApp::RegisterInitializer	()
 {
-    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::StaticInitializer );
-    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::MainInitializer );
+    RegisterLogicInitializers();
 
     return true;
+}
+
+// ***********************
+// Register all application logic specific initializers here. All logic stuff should be separated from
+// main function and window application initializers. This way we can easier inherit from BlackVisiobApp
+// for TestFramework for example or other future usage.
+void            bv::BlackVisionApp::RegisterLogicInitializers()
+{
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
 }
 
 namespace bv {

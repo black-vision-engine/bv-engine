@@ -35,9 +35,10 @@ public:
 
 public:
 
-    static void			StaticInitializer		( int argc, char * argv[] );
+    static void			MainInitializer		    ( int argc, char * argv[] );
     static void			LoggerInitializer		( int argc, char * argv[] );
     static bool			RegisterInitializer		();
+    static void         RegisterLogicInitializers   ();
 
 public:
 

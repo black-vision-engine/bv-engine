@@ -18,6 +18,11 @@ class BlackVisionAppFramework : public BlackVisionApp
 private:
 public:
 
+    static void			MainFrameworkInitializer        ( int argc, char * argv[] );
+    static bool			RegisterFrameworkInitializer    ();
+
+public:
+
     virtual bool    OnInitialize				() override;
 
 
