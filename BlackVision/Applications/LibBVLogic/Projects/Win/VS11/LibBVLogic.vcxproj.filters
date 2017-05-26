@@ -37,14 +37,15 @@
     <Filter Include="Statistics">
       <UniqueIdentifier>{a36b9588-3e14-4ed9-b93f-54eae253e0a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{a25574ee-09fc-4219-92e3-02d1a89c7796}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
-    <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
-    <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -165,6 +166,12 @@
       <Filter>Statistics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVTestAppLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\MainInitProcess.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -172,8 +179,6 @@
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
-    <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
-    <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -294,6 +299,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Statistics\StatsFormatters.h">
       <Filter>Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\Main.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\MainInitProcess.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\MainLoopProcess.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -47,8 +47,6 @@ bool			bv::BlackVisionApp::RegisterInitializer	()
     return true;
 }
 
-bool bv::BlackVisionApp::m_sWindowedApplicationInitialized = bv::BlackVisionApp::RegisterInitializer();
-
 namespace bv {
 
 // *********************************

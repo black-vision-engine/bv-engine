@@ -203,6 +203,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Application\MainInitProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
@@ -224,8 +226,6 @@
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp" />
-    <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
-    <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
     <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
@@ -258,6 +258,9 @@
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Application\Main.h" />
+    <ClInclude Include="..\..\..\Source\Application\MainInitProcess.h" />
+    <ClInclude Include="..\..\..\Source\Application\MainLoopProcess.h" />
     <ClInclude Include="..\..\..\Source\bvApp.h" />
     <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
@@ -282,8 +285,6 @@
     <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
-    <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
-    <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
     <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\Statistics\FrameStatsService.h" />
