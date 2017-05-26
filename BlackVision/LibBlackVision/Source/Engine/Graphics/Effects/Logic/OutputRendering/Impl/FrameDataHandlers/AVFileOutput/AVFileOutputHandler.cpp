@@ -36,7 +36,7 @@ void AVFileOutputHandler::StartToAVFileRendering  ( const std::string & outputFi
     vOps.height = 1080;
     vOps.bitRate = 40000;
 
-    m_encoder->OpenOutputStream( outputFilePath, vOps, avencoder::AudioOptions(), true, true );
+    m_encoder->OpenOutputStream( outputFilePath, vOps, avencoder::AudioOptions(), true, false );
 }
 
 // **************************

@@ -12,13 +12,20 @@ namespace bv { namespace avencoder
 AVEncoder::Impl::Impl       ( UInt32 frameBufferSize )
     : m_encoderThread( nullptr )
     , m_frameBufferSize( frameBufferSize )
+    , m_video_st( nullptr )
+    , m_audio_st( nullptr )
 {}
 
 //**************************************
 //
 bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & outputFilePath, VideoOptions vOps, AudioOptions aOps, bool enableVideo, bool enableAudio )
 {
-	auto have_video = 0;
+    if( m_encoderThread )
+    {
+        return false;
+    }
+
+    auto have_video = 0;
 	auto have_audio	 = 0;
 	int encode_video = 0, encode_audio = 0;
 	AVCodec * audio_codec = nullptr;
@@ -43,16 +50,18 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
     /* Add the audio and video streams using the default format codecs
      * and initialize the codecs. */
     if (enableVideo && fmt->video_codec != AV_CODEC_ID_NONE) {
-        FFmpegUtils::add_stream(&m_video_st, m_AVContext, &video_codec, fmt->video_codec);
-        if( FFmpegUtils::configure_video_codec_context( &m_video_st, vOps.width, vOps.height, vOps.bitRate, vOps.frameRate, fmt->video_codec ) )
+        m_video_st = new OutputStream();
+        FFmpegUtils::add_stream( m_video_st, m_AVContext, &video_codec, fmt->video_codec);
+        if( FFmpegUtils::configure_video_codec_context( m_video_st, vOps.width, vOps.height, vOps.bitRate, vOps.frameRate, fmt->video_codec ) )
         {
             have_video = 1;
             encode_video = 1;
         }
     }
     if (enableAudio && fmt->audio_codec != AV_CODEC_ID_NONE) {
-        FFmpegUtils::add_stream(&m_audio_st, m_AVContext, &audio_codec, fmt->audio_codec);
-        if( FFmpegUtils::configure_audio_codec_context( &m_audio_st, audio_codec, aOps.bitRate, aOps.sampleRate ) )
+        m_audio_st = new OutputStream();
+        FFmpegUtils::add_stream( m_audio_st, m_AVContext, &audio_codec, fmt->audio_codec);
+        if( FFmpegUtils::configure_audio_codec_context( m_audio_st, audio_codec, aOps.bitRate, aOps.sampleRate ) )
         {
             have_audio = 1;
             encode_audio = 1;
@@ -61,9 +70,9 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
     /* Now that all the parameters are set, we can open the audio and
      * video codecs and allocate the necessary encode buffers. */
     if (have_video)
-        FFmpegUtils::open_video(video_codec, &m_video_st, opt);
+        FFmpegUtils::open_video(video_codec, m_video_st, opt);
     if (have_audio)
-        FFmpegUtils::open_audio(audio_codec, &m_audio_st, opt);
+        FFmpegUtils::open_audio(audio_codec, m_audio_st, opt);
     av_dump_format(m_AVContext, 0, outputFilePath.c_str(), 1);
     /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
@@ -106,7 +115,7 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
         this->FrameWritten( frame );
     };
 
-    m_encoderThread = std::unique_ptr< AVEncoderThread >( new AVEncoderThread( m_AVContext, &m_video_st, &m_audio_st, f ) );
+    m_encoderThread = std::unique_ptr< AVEncoderThread >( new AVEncoderThread( m_AVContext, m_video_st, m_audio_st, f ) );
     m_encoderThread->Start();
 
 	return true;
@@ -124,13 +133,14 @@ void            AVEncoder::Impl::CloseStream            ()
         m_encoderThread->Join();
         m_encoderThread = nullptr;
 
-
         av_write_trailer( m_AVContext );
         /* Close each codec. */
 
-        FFmpegUtils::close_stream( &m_video_st );
-        //if (have_audio)
-        //    close_stream(oc, &audio_st);
+        if( m_video_st )
+            FFmpegUtils::close_stream( m_video_st );
+        if ( m_audio_st )
+            FFmpegUtils::close_stream( m_audio_st );
+
         if( !( m_AVContext->oformat->flags & AVFMT_NOFILE ) )
             /* Close the output file. */
             avio_closep( &m_AVContext->pb );
@@ -167,22 +177,26 @@ void            AVEncoder::Impl::FrameWritten           ( const AVFrameConstPtr 
 //
 bool            AVEncoder::Impl::WriteFrame             ( const AVFrameConstPtr & bvFrame )
 {
-    AVFramePtr frame = GetFrameBuffer();
-
-    if( !frame )
+    if( m_encoderThread )
     {
-        auto videoData = bv::MemoryChunk::Create( bvFrame->m_videoData->Size() );
+        AVFramePtr frame = GetFrameBuffer();
 
-        frame = bv::AVFrame::Create(); // TODO: Add audio data
-        frame->m_videoData = videoData;
-        frame->m_desc = bvFrame->m_desc;
+        if( !frame )
+        {
+            auto videoData = bv::MemoryChunk::Create( bvFrame->m_videoData->Size() );
+
+            frame = bv::AVFrame::Create(); // TODO: Add audio data
+            frame->m_videoData = videoData;
+            frame->m_desc = bvFrame->m_desc;
+        }
+
+        memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable(), bvFrame->m_videoData->Get(), bvFrame->m_videoData->Size() );
+
+        m_encoderThread->EnqueueFrame( frame );
+        return true;
     }
-
-    memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable(), bvFrame->m_videoData->Get(), bvFrame->m_videoData->Size() );
-
-    m_encoderThread->EnqueueFrame( frame );
-
-    return true;
+    else
+        return false;
 }
 
 //**************************************
@@ -195,6 +209,12 @@ AVEncoder::Impl::~Impl      ()
         m_encoderThread->EnqueueFrame( nullptr );    
         m_encoderThread->Join();
     }
+
+    if( m_video_st )
+        delete m_video_st;
+
+    if( m_audio_st )
+        delete m_audio_st;
 }
 
 

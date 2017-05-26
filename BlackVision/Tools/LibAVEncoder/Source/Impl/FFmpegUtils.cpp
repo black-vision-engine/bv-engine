@@ -304,6 +304,94 @@ bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, b
 
 //**************************************
 //
+::AVFrame * FFmpegUtils::get_audio_frame( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
+{
+    ::AVFrame *frame = ost->tmp_frame;
+    int16_t *q = ( int16_t* ) frame->data[ 0 ];
+
+    memcpy( q, bvFrame->m_audioData->Get(), bvFrame->m_audioData->Size() );
+
+    frame->pts = ost->next_pts;
+    ost->next_pts += frame->nb_samples;
+    return frame;
+}
+
+//**************************************
+//
+/*
+* encode one audio frame and send it to the muxer
+* return 1 when encoding is finished, 0 otherwise
+*/
+bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv::AVFrameConstPtr bvFrame )
+{
+    AVCodecContext * c = ost->enc;
+    AVPacket pkt = { 0 }; // data and size must be 0;
+    ::AVFrame *frame;
+    int ret;
+    int dst_nb_samples;
+    av_init_packet( &pkt );
+
+    frame = get_audio_frame( ost, bvFrame );
+    if( frame )
+    {
+        /* convert samples from native format to destination codec format, using the resampler */
+        /* compute destination number of samples */
+        dst_nb_samples = (int)av_rescale_rnd( swr_get_delay( ost->swr_ctx, c->sample_rate ) + frame->nb_samples,
+                                         c->sample_rate, c->sample_rate, AV_ROUND_UP );
+        assert( dst_nb_samples == frame->nb_samples );
+        /* when we pass a frame to the encoder, it may keep a reference to it
+        * internally;
+        * make sure we do not overwrite it here
+        */
+        ret = av_frame_make_writable( ost->frame );
+        if( ret < 0 )
+            return false;
+        /* convert to destination format */
+        ret = swr_convert( ost->swr_ctx,
+                           ost->frame->data, dst_nb_samples,
+                           ( const uint8_t ** ) frame->data, frame->nb_samples );
+        if( ret < 0 )
+        {
+            fprintf( stderr, "Error while converting\n" );
+            return false;
+        }
+
+        AVRational avr;
+        avr.num = 1;
+        avr.den = c->sample_rate;
+
+        frame = ost->frame;
+        frame->pts = av_rescale_q( ost->samples_count, avr, c->time_base );
+        ost->samples_count += dst_nb_samples;
+    }
+
+    ret = avcodec_send_frame( ost->enc, frame );
+
+    if( ret == 0 )
+        ret = avcodec_receive_packet( ost->enc, &pkt );
+    else
+        return false;
+
+    if( ret < 0 )
+    {
+        //fprintf(stderr, "Error encoding video frame: %s\n", av_err2str(ret));
+        return false;
+    }
+
+
+    ret = write_frame( oc, &c->time_base, ost->st, &pkt );
+    if( ret < 0 )
+    {
+        //fprintf( stderr, "Error while writing audio frame: %s\n",
+        //         av_err2str( ret ) );
+        return false;
+    }
+
+    return frame != nullptr;
+}
+
+//**************************************
+//
 void FFmpegUtils::close_stream      ( OutputStream * ost )
 {
     avcodec_free_context(&ost->enc);

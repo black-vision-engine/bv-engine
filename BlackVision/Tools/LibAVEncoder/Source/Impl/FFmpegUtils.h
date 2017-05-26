@@ -53,8 +53,10 @@ static int          write_frame     ( AVFormatContext * fmt_ctx, const AVRationa
 static bool         fill_bgra_image (::AVFrame * pict, bv::AVFrameConstPtr srcFrame );
 
 static ::AVFrame *  get_video_frame ( OutputStream * ost, bv::AVFrameConstPtr bvFrame );
+static ::AVFrame *  get_audio_frame ( OutputStream * ost, bv::AVFrameConstPtr bvFrame );
 
 static bool         write_video_frame( AVFormatContext * oc, OutputStream * ost, bv::AVFrameConstPtr bvFrame );
+static bool         write_audio_frame( AVFormatContext * oc, OutputStream * ost, bv::AVFrameConstPtr bvFrame );
 
 static void         close_stream( OutputStream * ost );
 

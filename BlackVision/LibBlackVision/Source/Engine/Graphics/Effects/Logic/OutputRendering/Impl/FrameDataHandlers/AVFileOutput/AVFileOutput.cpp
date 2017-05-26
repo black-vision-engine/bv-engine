@@ -25,6 +25,7 @@ AVFileOutput::~AVFileOutput         ()
 //
 void AVFileOutput::StartToAVFileRendering  ( const std::string & outputFilePath )
 {
+    Enable();
     m_handler->StartToAVFileRendering( outputFilePath );
 }
 
@@ -32,6 +33,7 @@ void AVFileOutput::StartToAVFileRendering  ( const std::string & outputFilePath 
 //
 void AVFileOutput::StopToAVFileRendering   ()
 {
+    Disable();
     m_handler->StopToAVFileRendering();
 }
 
