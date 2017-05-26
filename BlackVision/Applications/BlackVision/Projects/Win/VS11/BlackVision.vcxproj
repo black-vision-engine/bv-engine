@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}</ProjectGuid>
     <RootNamespace>BlackVision</RootNamespace>
+    <ProjectName>LibBVLogic</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
