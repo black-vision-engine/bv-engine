@@ -204,11 +204,15 @@ void    BlackVisionApp::InitializeAppLogic  ()
         DisableCrashReport();
     }
 
-#ifdef BV_TESTS
-    m_app = new BVTestAppLogic( m_Renderer, m_audioRenderer );
-#else 
+//
+//#ifdef BV_TESTS
+//    m_app = new BVTestAppLogic( m_Renderer, m_audioRenderer );
+//#else 
+//    m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
+//#endif
+
     m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
-#endif
+
     m_app->Initialize();
     m_app->LoadScene();
 }
