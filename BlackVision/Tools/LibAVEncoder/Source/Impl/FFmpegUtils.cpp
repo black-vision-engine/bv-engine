@@ -226,7 +226,13 @@ bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConst
     if (ret < 0)
         return false;
 
-	memcpy( pict->data[0], srcFrame->m_videoData->Get(), srcFrame->m_videoData->Size() );
+    auto numlines = srcFrame->m_desc.height;
+    auto linesize = pict->linesize[ 0 ];
+
+    for( SizeType i = 0; i < numlines; ++i )
+        memcpy( pict->data[ 0 ] + i * linesize, srcFrame->m_videoData->Get() + ( numlines - i - 1) * linesize, linesize );
+
+	//memcpy( pict->data[0], srcFrame->m_videoData->Get(), srcFrame->m_videoData->Size() );
     return true;
 }
 
