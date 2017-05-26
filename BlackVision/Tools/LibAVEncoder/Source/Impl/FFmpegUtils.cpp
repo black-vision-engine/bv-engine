@@ -2,8 +2,6 @@
 
 #include "FFmpegUtils.h"
 
-//#define STREAM_DURATION   10.0
-#define STREAM_FRAME_RATE 25 /* 25 images/s */
 #define SCALE_FLAGS SWS_BICUBIC
 
 namespace bv 
@@ -52,66 +50,6 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
     }
     ost->enc = c;
 
-//	AVRational avr;
-
-  //  switch ((*codec)->type) {
-  //  case AVMEDIA_TYPE_AUDIO:
-  //      c->sample_fmt  = (*codec)->sample_fmts ?
-  //          (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
-  //      c->bit_rate    = 64000;
-  //      c->sample_rate = 44100;
-  //      if ((*codec)->supported_samplerates) {
-  //          c->sample_rate = (*codec)->supported_samplerates[0];
-  //          for (i = 0; (*codec)->supported_samplerates[i]; i++) {
-  //              if ((*codec)->supported_samplerates[i] == 44100)
-  //                  c->sample_rate = 44100;
-  //          }
-  //      }
-  //      c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
-  //      c->channel_layout = AV_CH_LAYOUT_STEREO;
-  //      if ((*codec)->channel_layouts) {
-  //          c->channel_layout = (*codec)->channel_layouts[0];
-  //          for (i = 0; (*codec)->channel_layouts[i]; i++) {
-  //              if ((*codec)->channel_layouts[i] == AV_CH_LAYOUT_STEREO)
-  //                  c->channel_layout = AV_CH_LAYOUT_STEREO;
-  //          }
-  //      }
-  //      c->channels        = av_get_channel_layout_nb_channels(c->channel_layout);
-		//avr.num = 1;
-		//avr.den = c->sample_rate;
-  //      ost->st->time_base = avr;
-  //      break;
-//    case AVMEDIA_TYPE_VIDEO:
-  //      c->codec_id = codec_id;
-  //      c->bit_rate = 400000;
-  //      /* Resolution must be a multiple of two. */
-  //      c->width    = 1920;
-  //      c->height   = 1080;
-  //      /* timebase: This is the fundamental unit of time (in seconds) in terms
-  //       * of which frame timestamps are represented. For fixed-fps content,
-  //       * timebase should be 1/framerate and timestamp increments should be
-  //       * identical to 1. */
-		//avr.num = 1;
-		//avr.den = STREAM_FRAME_RATE;
-
-  //      ost->st->time_base = avr;
-  //      c->time_base       = ost->st->time_base;
-  //      c->gop_size      = 12; /* emit one intra frame every twelve frames at most */
-  //      c->pix_fmt       = AV_PIX_FMT_YUV420P;
-  //      if (c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
-  //          /* just for testing, we also add B-frames */
-  //          c->max_b_frames = 2;
-  //      }
-  //      if (c->codec_id == AV_CODEC_ID_MPEG1VIDEO) {
-  //          /* Needed to avoid using macroblocks in which some coeffs overflow.
-  //           * This does not happen with normal video, it just happens here as
-  //           * the motion of the chroma plane does not match the luma plane. */
-  //          c->mb_decision = 2;
-  //      }
-  //  break;
-    //default:
-    //    break;
-    //}
     /* Some formats want stream headers to be separate. */
     if (oc->oformat->flags & AVFMT_GLOBALHEADER)
         c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
@@ -361,6 +299,94 @@ bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, b
         //fprintf(stderr, "Error while writing video frame: %s\n", av_err2str(ret));
         return false;
     }
+    return frame != nullptr;
+}
+
+//**************************************
+//
+::AVFrame * FFmpegUtils::get_audio_frame( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
+{
+    ::AVFrame *frame = ost->tmp_frame;
+    int16_t *q = ( int16_t* ) frame->data[ 0 ];
+
+    memcpy( q, bvFrame->m_audioData->Get(), bvFrame->m_audioData->Size() );
+
+    frame->pts = ost->next_pts;
+    ost->next_pts += frame->nb_samples;
+    return frame;
+}
+
+//**************************************
+//
+/*
+* encode one audio frame and send it to the muxer
+* return 1 when encoding is finished, 0 otherwise
+*/
+bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv::AVFrameConstPtr bvFrame )
+{
+    AVCodecContext * c = ost->enc;
+    AVPacket pkt = { 0 }; // data and size must be 0;
+    ::AVFrame *frame;
+    int ret;
+    int dst_nb_samples;
+    av_init_packet( &pkt );
+
+    frame = get_audio_frame( ost, bvFrame );
+    if( frame )
+    {
+        /* convert samples from native format to destination codec format, using the resampler */
+        /* compute destination number of samples */
+        dst_nb_samples = (int)av_rescale_rnd( swr_get_delay( ost->swr_ctx, c->sample_rate ) + frame->nb_samples,
+                                         c->sample_rate, c->sample_rate, AV_ROUND_UP );
+        assert( dst_nb_samples == frame->nb_samples );
+        /* when we pass a frame to the encoder, it may keep a reference to it
+        * internally;
+        * make sure we do not overwrite it here
+        */
+        ret = av_frame_make_writable( ost->frame );
+        if( ret < 0 )
+            return false;
+        /* convert to destination format */
+        ret = swr_convert( ost->swr_ctx,
+                           ost->frame->data, dst_nb_samples,
+                           ( const uint8_t ** ) frame->data, frame->nb_samples );
+        if( ret < 0 )
+        {
+            fprintf( stderr, "Error while converting\n" );
+            return false;
+        }
+
+        AVRational avr;
+        avr.num = 1;
+        avr.den = c->sample_rate;
+
+        frame = ost->frame;
+        frame->pts = av_rescale_q( ost->samples_count, avr, c->time_base );
+        ost->samples_count += dst_nb_samples;
+    }
+
+    ret = avcodec_send_frame( ost->enc, frame );
+
+    if( ret == 0 )
+        ret = avcodec_receive_packet( ost->enc, &pkt );
+    else
+        return false;
+
+    if( ret < 0 )
+    {
+        //fprintf(stderr, "Error encoding video frame: %s\n", av_err2str(ret));
+        return false;
+    }
+
+
+    ret = write_frame( oc, &c->time_base, ost->st, &pkt );
+    if( ret < 0 )
+    {
+        //fprintf( stderr, "Error while writing audio frame: %s\n",
+        //         av_err2str( ret ) );
+        return false;
+    }
+
     return frame != nullptr;
 }
 

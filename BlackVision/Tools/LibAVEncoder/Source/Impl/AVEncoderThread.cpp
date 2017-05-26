@@ -28,7 +28,12 @@ void AVEncoderThread::Process       ()
     m_framesQueue.WaitAndPop( frm );
 
     if( frm )
-        FFmpegUtils::write_video_frame( m_oc, m_videoOS, frm );
+    {
+        if( m_videoOS )
+            FFmpegUtils::write_video_frame( m_oc, m_videoOS, frm );
+        if( m_audioOS )
+            FFmpegUtils::write_audio_frame( m_oc, m_audioOS, frm );
+    }
 
     m_frameCompleteCallback( frm );
 

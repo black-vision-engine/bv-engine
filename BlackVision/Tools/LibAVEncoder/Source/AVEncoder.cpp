@@ -19,7 +19,7 @@ AVEncoder::~AVEncoder()
 //
 bool            AVEncoder::OpenOutputStream     ( const std::string & outputFilePath, VideoOptions vOps, AudioOptions aOps, bool enableVideo, bool enableAudio )
 {
-    return m_impl->OpenOutputStream( outputFilePath, vOps, aOps, enableAudio, enableVideo );
+    return m_impl->OpenOutputStream( outputFilePath, vOps, aOps, enableVideo, enableAudio );
 }
 
 //**************************************
