@@ -26,8 +26,8 @@ class AVEncoder::Impl
     ::AVFrame *             m_AVFrame;
     ::AVFormatContext *     m_AVContext;
     FILE *                  m_file;
-    OutputStream            m_video_st;
-    OutputStream            m_audio_st;
+    OutputStream *          m_video_st;
+    OutputStream *          m_audio_st;
     UInt32                  m_frameBufferSize;
 
     std::mutex              m_mutex;

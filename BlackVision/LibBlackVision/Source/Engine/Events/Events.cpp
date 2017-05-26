@@ -1894,6 +1894,7 @@ IEventPtr                EngineStateEvent::Create          ( IDeserializer& dese
         newEvent->NumFrames             = SerializationHelper::String2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_STRING ), 0 );
 		newEvent->Gain					= SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::GAIN_VAL_STRING ), 1.f );
         newEvent->RenderingCommand      = SerializationHelper::String2T<EngineStateEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), EngineStateEvent::Command::Fail );
+        newEvent->Request               = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
     }
