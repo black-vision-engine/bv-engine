@@ -208,7 +208,6 @@
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
-    <ClCompile Include="..\..\..\Source\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
@@ -265,7 +264,6 @@
     <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
-    <ClInclude Include="..\..\..\Source\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />

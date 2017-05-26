@@ -14,12 +14,7 @@
 
 #include "Statistics/StatsFormatters.h"
 
-#ifdef BV_TESTS
-#include "BVTestAppLogic.h"
-#else
 #include "BVAppLogic.h"
-#endif
-
 #include "BVConfig.h"
 
 #include "Application/Win32/DisableCrashReport.h"
@@ -120,6 +115,7 @@ bool BlackVisionApp::OnInitialize       ()
     InitializeLicenses      ();
 
     InitializeConsole       ();
+    InitializeProfiling     ();
     InitializeAppLogic      ();
     InitializeSelfState     ();
 
@@ -158,7 +154,6 @@ void    BlackVisionApp::InitializeConsole   ()
     }
 }
 
-
 // *********************************
 //
 bool    BlackVisionApp::InitializeLicenses   ()
@@ -178,10 +173,9 @@ bool    BlackVisionApp::InitializeLicenses   ()
 }
 
 
-
-// *********************************
+// ***********************
 //
-void    BlackVisionApp::InitializeAppLogic  ()
+void    BlackVisionApp::InitializeProfiling()
 {
     std::wstring commandLineString = GetCommandLineW();
 
@@ -201,15 +195,14 @@ void    BlackVisionApp::InitializeAppLogic  ()
     {
         DisableCrashReport();
     }
+}
 
+
+// *********************************
 //
-//#ifdef BV_TESTS
-//    m_app = new BVTestAppLogic( m_Renderer, m_audioRenderer );
-//#else 
-//    m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
-//#endif
-
-    m_app = new BVAppLogic( m_Renderer, m_audioRenderer );
+void    BlackVisionApp::InitializeAppLogic  ()
+{
+    m_app = CreateAppLogic( m_Renderer, m_audioRenderer );
 
     m_app->Initialize();
     m_app->LoadScene();
@@ -248,6 +241,14 @@ void    BlackVisionApp::PostFrame           ()
         startMillis = millis;
     }
 #endif
+}
+
+
+// ***********************
+//
+BVAppLogic *        BlackVisionApp::CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const
+{
+    return new BVAppLogic( renderer, audioRenderer );
 }
 
 } //bv

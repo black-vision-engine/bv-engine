@@ -1,13 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 #include "Application/WindowedApplication.h"
 
 //pablito
-//#include "SocketWrapper.h"
 #include "LicenseManager.h"
 #include "VideoCardManager.h"
 
@@ -20,7 +15,7 @@ namespace model
     class ModelScene;
 }
 
-
+class Renderer;
 class SceneNode;
 class Camera;
 class MockFrameReader;
@@ -30,7 +25,7 @@ class BVAppLogic;
 
 class BlackVisionApp : public WindowedApplication
 {
-private:
+protected:
 
     BVAppLogic *                m_app;
 
@@ -58,9 +53,10 @@ public:
     virtual void    OnTerminate					() override;
     virtual void	OnResize		            ( int w, int h ) override;
 
-private:
+protected:
 
     void            InitializeConsole			();
+    void            InitializeProfiling         ();
     void            InitializeAppLogic			();
     void            DeinitializeAppLogic        ();
     void            InitializeSelfState			();
@@ -68,6 +64,9 @@ private:
     bool			InitializeLicenses          ();
 
     void            PostFrame                   ();
+
+private:
+    virtual BVAppLogic *    CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const;
 };
 
 } //bv

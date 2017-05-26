@@ -165,7 +165,6 @@
     <ClCompile Include="..\..\..\Source\Statistics\StatsFormatters.cpp">
       <Filter>Statistics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Application\MainInitProcess.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -275,7 +274,6 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h">
       <Filter>TestAI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\TestingScenes\ExampleTestScenes.h">
       <Filter>TestingScenes</Filter>
     </ClInclude>

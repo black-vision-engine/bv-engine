@@ -4,7 +4,7 @@
 #include "ApplicationBase.h"
 #include <string>
 #include "Mathematics/glm_inc.h"
-#include "win_sock.h"
+
 
 #include "Engine\Graphics\Renderers\WGLRenderer\WGLRendererInput.h"
 
