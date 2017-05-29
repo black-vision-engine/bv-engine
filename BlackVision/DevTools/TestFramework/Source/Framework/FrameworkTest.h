@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 
 #include "UnitTest++.h"
 
@@ -16,7 +17,9 @@ class FrameworkTest : public UnitTest::Test
 private:
 
     BVTestAppLogic*         m_appLogic;
+    SizeType                m_frameNum;
     bool                    m_isLastFrame;
+    bool                    m_overrideTime;
 
 public:
 
@@ -24,6 +27,8 @@ public:
         :   UnitTest::Test( testName, suiteName, filename, lineNumber )
         ,   m_appLogic( nullptr )       // This will be set in future.
         ,   m_isLastFrame( true )
+        ,   m_overrideTime( false )
+        ,   m_frameNum( 0 )
     {}
 
     virtual void        RunImpl         () const;
@@ -38,6 +43,10 @@ public:
     virtual void        PreRender           () {}
     virtual void        PostRender          () {}
 
+    virtual TimeType    ComputeFrameTime    () { return 0.0f; }
+
+
+    SizeType            GetFrameNumber      () const { return m_frameNum; }
 
 private:
 
@@ -50,6 +59,15 @@ protected:
 
     // Functions for user interaction.
     void        EndTestAfterThisFrame   ( bool value );
+    void        UseOverridenTime        ( bool value );
+
+private:
+
+    // Private internal functions.
+    TimeType    ComputeFrameTimeImpl    ();
+
+    void        PreRunImpl              ();
+    void        PostRunImpl             ();
 };
 
 }	// bv

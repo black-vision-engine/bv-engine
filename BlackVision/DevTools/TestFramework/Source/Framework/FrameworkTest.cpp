@@ -14,14 +14,16 @@ extern HighResolutionTimer GTimer;
 //
 void            FrameworkTest::RunImpl      () const
 {
+    const_cast< FrameworkTest * >( this )->PreRunImpl();
     const_cast< FrameworkTest * >( this )->RunImplNotConst();
+    const_cast< FrameworkTest * >( this )->PostRunImpl();
 }
 
 // ***********************
 //
 void            FrameworkTest::RunImplNotConst  ()
 {
-    TimeType time = m_appLogic->ComputeFrameTime();
+    TimeType time = ComputeFrameTimeImpl();
 
     // Events
     PreEvents();
@@ -54,8 +56,39 @@ void            FrameworkTest::SetAppLogic      ( BVTestAppLogic * logic )
 // ***********************
 //
 void            FrameworkTest::EndTestAfterThisFrame        ( bool value )
+{    m_isLastFrame = value;     }
+
+// ***********************
+//
+void FrameworkTest::UseOverridenTime( bool value )
+{    m_overrideTime = value;    }
+
+// ========================================================================= //
+// Internal
+// ========================================================================= //
+
+// ***********************
+//
+TimeType        FrameworkTest::ComputeFrameTimeImpl()
 {
-    m_isLastFrame = value;
+    if( m_overrideTime )
+        return ComputeFrameTime();
+    else
+        return m_appLogic->ComputeFrameTime();
+}
+
+// ***********************
+//
+void            FrameworkTest::PreRunImpl()
+{
+    // Empty for now...
+}
+
+// ***********************
+//
+void            FrameworkTest::PostRunImpl()
+{
+    m_frameNum++;
 }
 
 
