@@ -98,6 +98,11 @@ public:
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     virtual void    LoadScene       ( void );
     void            UnloadScenes    ();
+    void            ResetScene      ();
+    void            ReloadScene     ();
+
+    virtual void    ShutDown        ();
+
 
     unsigned int    StartTime       ();
     unsigned int    GetTime         () const;
@@ -106,21 +111,12 @@ public:
     virtual void    OnKey           ( unsigned char c );
     virtual void    OnMouse         ( MouseAction action, int posX, int posY );
 
-    virtual void    ShutDown        ();
-
-    void            PostFrameLogic  ();
-    void            HandleFrame     ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
-
-	FrameStatsCalculator *          GetStatsCalculator  ();
-    const FrameStatsCalculator &    FrameStats          () const;
-
-    void            ResetScene      ();
-    void            ReloadScene     ();
 
     virtual void            ChangeState     ( BVAppState state );
     virtual BVAppState      GetState        ();
 
 	void			SetGain			( Float32 gain );
+    void            PostFrameLogic  ();
 
 public:
 
@@ -132,8 +128,12 @@ public:
 
     void                            LoadScenes          ( const PathVec & pathVec );
 
+    FrameStatsCalculator *          GetStatsCalculator  ();
+    const FrameStatsCalculator &    FrameStats          () const;
+
 protected:
 
+    TimeType                        ComputeFrameTime    ();
     void                            EventsPhase         ();
     void                            ModelUpdatePhase    ( TimeType time );
     void                            RenderPhase         ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );

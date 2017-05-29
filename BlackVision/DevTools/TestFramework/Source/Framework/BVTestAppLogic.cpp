@@ -9,10 +9,6 @@
 #include "XmlTestReporter.h"
 
 
-TEST( MyTest )
-{
-
-}
 
 namespace bv
 {
@@ -30,7 +26,7 @@ BVTestAppLogic::~BVTestAppLogic     ()
 
 // *********************************
 //
-void    BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
+void            BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
     auto testList = UnitTest::Test::GetTestList();
 
@@ -54,9 +50,16 @@ void    BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 
 // *********************************
 //
-void    BVTestAppLogic::LoadScene   ()
+void            BVTestAppLogic::LoadScene   ()
 {
     // Empty. Test  Framework doesn't load any scene by default.
+}
+
+// ***********************
+//
+void            BVTestAppLogic::PostFrameLogic()
+{
+    // Empty. Test Framework doesn't compute frame statistics.
 }
 
 } //bv

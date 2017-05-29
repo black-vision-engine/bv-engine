@@ -2,8 +2,13 @@
 #include "BVTestAppLogic.h"
 
 
+
 namespace bv
 {
+
+extern HighResolutionTimer GTimer;
+
+
 
 // ***********************
 //
@@ -16,15 +21,22 @@ void            FrameworkTest::RunImpl      () const
 //
 void            FrameworkTest::RunImplNotConst  ()
 {
+    TimeType time = m_appLogic->ComputeFrameTime();
+
+    // Events
     PreEvents();
+    m_appLogic->EventsPhase();
 
+    // Model
     PreModelUpdate();
+    m_appLogic->ModelUpdatePhase( time );
 
+    // Engine
     PreRender();
-
+    m_appLogic->RenderPhase( time, m_appLogic->m_renderer, m_appLogic->m_audioRenderer );
     PostRender();
 
-    //m_appLogic->HandleFrame( 0.0f, nullptr, nullptr );
+    GTimer.StartTimer();
 }
 
 // ***********************

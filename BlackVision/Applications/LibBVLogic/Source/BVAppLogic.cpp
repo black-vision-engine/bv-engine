@@ -342,22 +342,29 @@ void                            BVAppLogic::InitializeCommandsDebugLayer()
 
 
 // *********************************
-//
+// Note: The same loop is used in test framework, so remember to modify FrameworkTest::RunImplNotConst function either.
 void            BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
-    FRAME_STATS_FRAME();
-    FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
+    //FRAME_STATS_FRAME();
+    //FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
-    m_frameStartTime = m_timer.ElapsedMillis();
-    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
+    TimeType time = ComputeFrameTime();
 
     EventsPhase();
     ModelUpdatePhase( time );
     RenderPhase( time, renderer, audioRenderer );
 
     GTimer.StartTimer();
+}
+
+// ***********************
+//
+TimeType        BVAppLogic::ComputeFrameTime    ()
+{
+    m_frameStartTime = m_timer.ElapsedMillis();
+    return m_renderMode.StartFrame( m_frameStartTime );
 }
 
 // ***********************
