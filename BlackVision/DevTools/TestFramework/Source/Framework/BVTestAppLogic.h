@@ -7,6 +7,7 @@ namespace bv {
 
 class BVTestAppLogic : public BVAppLogic
 {
+    friend class FrameworkTest;
 public:
                     BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
                     ~BVTestAppLogic     ();

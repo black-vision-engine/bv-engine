@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
+    <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\BVTestAppLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Applications\LibBVLogic\Projects\Win\VS11\LibBVLogic.vcxproj">
@@ -105,22 +107,22 @@
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;$(ThirdPartyDir)\unittest-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;$(ThirdPartyDir)\unittest-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;$(ThirdPartyDir)\unittest-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CoreLibsRootDir)\Applications\LibBVLogic\Source;$(ThirdPartyDir)\unittest-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
