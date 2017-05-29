@@ -16,12 +16,14 @@ class FrameworkTest : public UnitTest::Test
 private:
 
     BVTestAppLogic*         m_appLogic;
+    bool                    m_isLastFrame;
 
 public:
 
     explicit    FrameworkTest       ( char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0 )
-        : UnitTest::Test( testName, suiteName, filename, lineNumber )
-        , m_appLogic( nullptr )       // This will be set in future.
+        :   UnitTest::Test( testName, suiteName, filename, lineNumber )
+        ,   m_appLogic( nullptr )       // This will be set in future.
+        ,   m_isLastFrame( true )
     {}
 
     virtual void        RunImpl         () const;
@@ -40,7 +42,15 @@ public:
 
 private:
 
-    void        SetAppLogic         ( BVTestAppLogic* logic );
+    // Call only from BVTestAppLogic
+
+    void        SetAppLogic             ( BVTestAppLogic* logic );
+    bool        IsLastFrame             () const                        { return m_isLastFrame; }
+
+protected:
+
+    // Functions for user interaction.
+    void        EndTestAfterThisFrame   ( bool value );
 };
 
 }	// bv

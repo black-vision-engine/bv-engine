@@ -32,15 +32,15 @@ BVTestAppLogic::~BVTestAppLogic     ()
 //
 void    BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
-    auto tl = UnitTest::Test::GetTestList();
+    auto testList = UnitTest::Test::GetTestList();
 
     UnitTest::TestList selectedTests;
 
-    tl.GetHead()->m_nextTest = nullptr;
+    testList.GetHead()->m_nextTest = nullptr;
 
-    selectedTests.Add( tl.GetHead() );
+    selectedTests.Add( testList.GetHead() );
 
-    auto f = File::Open( tl.GetHead()->m_details.testName, File::OpenMode::FOMReadWrite );
+    auto f = File::Open( testList.GetHead()->m_details.testName, File::OpenMode::FOMReadWrite );
 
     UnitTest::XmlTestReporter reporter( *f.StreamBuf() );
     UnitTest::TestRunner runner( reporter );

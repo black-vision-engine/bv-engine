@@ -16,9 +16,17 @@ void            FrameworkTest::RunImpl      () const
 //
 void            FrameworkTest::RunImplNotConst  ()
 {
+    PreEvents();
 
+    PostEvents();
 
-    m_appLogic->HandleFrame( 0.0f, nullptr, nullptr );
+    PreModelUpdate();
+
+    PreRender();
+
+    PostRender();
+
+    //m_appLogic->HandleFrame( 0.0f, nullptr, nullptr );
 }
 
 // ***********************
@@ -26,6 +34,18 @@ void            FrameworkTest::RunImplNotConst  ()
 void            FrameworkTest::SetAppLogic      ( BVTestAppLogic * logic )
 {
     m_appLogic = logic;
+}
+
+
+// ========================================================================= //
+// User interaction functions
+// ========================================================================= //
+
+// ***********************
+//
+void            FrameworkTest::EndTestAfterThisFrame        ( bool value )
+{
+    m_isLastFrame = value;
 }
 
 
