@@ -28,6 +28,14 @@ bool            bv::BlackVisionAppFramework::RegisterFrameworkInitializer   ()
     return true;
 }
 
+// ***********************
+//
+void            bv::BlackVisionAppFramework::PostFrame()
+{
+    // Note: we ommit frame stats here.
+    m_app->PostFrameLogic();
+}
+
 
 namespace bv
 {

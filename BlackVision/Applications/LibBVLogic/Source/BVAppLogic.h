@@ -116,7 +116,7 @@ public:
     virtual BVAppState      GetState        ();
 
 	void			SetGain			( Float32 gain );
-    void            PostFrameLogic  ();
+    virtual void    PostFrameLogic  ();
 
 public:
 

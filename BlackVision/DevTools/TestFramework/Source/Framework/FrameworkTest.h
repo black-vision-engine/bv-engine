@@ -46,7 +46,7 @@ public:
 
     virtual TimeType    ComputeFrameTime    () { return 0.0f; }
 
-
+    BVTestAppLogic*     GetAppLogic         () const { return m_appLogic; }
     SizeType            GetFrameNumber      () const { return m_frameNum; }
 
 private:

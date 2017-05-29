@@ -21,6 +21,10 @@ public:
     static void			MainFrameworkInitializer        ( int argc, char * argv[] );
     static bool			RegisterFrameworkInitializer    ();
 
+protected:
+
+    virtual void        PostFrame                       () override;
+
 public:
 private:
     virtual BVAppLogic *    CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const;

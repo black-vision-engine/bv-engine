@@ -64,7 +64,7 @@ protected:
     // pablito
     bool			InitializeLicenses          ();
 
-    void            PostFrame                   ();
+    virtual void    PostFrame                   ();
 
 private:
     virtual BVAppLogic *    CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const;

@@ -27,7 +27,7 @@ public:
     virtual void    OnUpdate            ( Renderer * renderer, audio::AudioRenderer * audioRenderer ) override;
     virtual void    LoadScene           () override;
 
-    void            PostFrameLogic      ();
+    virtual void    PostFrameLogic      () override;
 
 private:
 
