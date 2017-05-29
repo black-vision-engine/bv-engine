@@ -5,7 +5,7 @@
 #include "DataTypes/QueueConcurrent.h"
 #include "Tools/Logger/LogMsgStruct.h"
 
-#include "../../Applications/BlackVision/Source/EndUserAPI/IEventServer.h"
+#include "Util/IEventServer.h"
 
 #include "CoreDEF.h"
 

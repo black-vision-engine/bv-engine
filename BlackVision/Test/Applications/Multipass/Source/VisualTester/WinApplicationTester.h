@@ -35,7 +35,7 @@
 //
 //public:
 //
-//    static void			StaticInitializer	();
+//    static void			MainInitializer	();
 //    static bool			RegisterInitializer ();
 //
 //protected:
