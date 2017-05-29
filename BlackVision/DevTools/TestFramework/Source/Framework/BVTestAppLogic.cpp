@@ -59,21 +59,4 @@ void    BVTestAppLogic::LoadScene   ()
     // Empty. Test  Framework doesn't load any scene by default.
 }
 
-// *********************************
-//
-void    BVTestAppLogic::Update      ( unsigned int millis )
-{
-    m_frameStartTime = millis;
-
-    ApplicationContext::Instance().IncrementUpdateCounter();
-
-    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
-
-    ApplicationContext::Instance().IncrementUpdateCounter();
-
-    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
-
-    HandleFrame( time, m_renderer, m_audioRenderer );
-}
-
 } //bv

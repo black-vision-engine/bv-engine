@@ -340,24 +340,6 @@ void                            BVAppLogic::InitializeCommandsDebugLayer()
 // Update and frame handling
 // ========================================================================= //
 
-//// *********************************
-////
-//void BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
-//{
-//    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
-//
-//    m_frameStartTime = m_timer.ElapsedMillis();
-//
-//    ApplicationContext::Instance().IncrementUpdateCounter();
-//
-//    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
-//
-//    ApplicationContext::Instance().IncrementUpdateCounter();
-//
-//    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
-//
-//    HandleFrame( time, renderer, audioRenderer );
-//}
 
 // *********************************
 //
@@ -463,64 +445,6 @@ void							BVAppLogic::SetGain			( Float32 gain )
     m_gain = gain;
 }
 
-// ***********************
-//
-void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer )
-{
-    assert( m_state != BVAppState::BVS_INVALID );
-
-    if( m_state == BVAppState::BVS_RUNNING )
-    {
-        FRAME_STATS_FRAME();
-        FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
-
-        {
-            FRAME_STATS_SECTION( "Update Model" );
-            HPROFILER_SECTION( "Update Model", PROFILER_THREAD1 );
-
-            m_bvProject->Update( time );
-        }
-
-        {
-            //m_bvScene->Update( t );
-            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
-            
-            {
-                HPROFILER_SECTION( "Refresh Video Input", PROFILER_THREAD1 );
-                FRAME_STATS_SECTION( "Video input" );
-                RefreshVideoInputScene();
-            }
-
-            {
-                static auto last_time = (float) time;
-
-                HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
-                FRAME_STATS_SECTION( "Render" );
-
-				audioRenderer->SetGain( m_gain );
-                m_renderLogic->HandleFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
-
-                if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
-                {
-                    //printf( "%f, %f, %f, %f, %f \n", lastTime, time, m_renderMode.GetFramesDelta(), time - lastTime, ( time - lastTime ) / m_renderMode.GetFramesDelta() );
-                    auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
-                    LOG_MESSAGE( SeverityLevel::info ) << 
-						"DROP: " << 
-						last_time * 1000.f << 
-						" ms, cur time: " << 
-						time * 1000.f << 
-						" ms, dropped " << 
-						droppedFrames << 
-						" frames";
-                }
-
-                last_time = time;
-            }
-        }
-    }
-
-    GTimer.StartTimer();
-}
 
 // *********************************
 //
