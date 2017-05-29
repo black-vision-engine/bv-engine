@@ -73,8 +73,6 @@ protected:
     
     // FIXME: nrl - render logic replacement
     RenderLogic *                   m_renderLogic;
-    //RenderLogic *                   m_renderLogic;
-    //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
     RemoteEventsHandlers *          m_remoteHandlers;
@@ -119,8 +117,6 @@ public:
     void            ResetScene      ();
     void            ReloadScene     ();
 
-	void            GrabCurrentFrame(  const std::string & path );
-
     virtual void            ChangeState     ( BVAppState state );
     virtual BVAppState      GetState        ();
 
@@ -131,10 +127,17 @@ public:
     //Convenience API - generalized model accessors
     BVProjectPtr                    GetBVProject        () const;
     const model::PluginsManager *   GetPluginsManager   () const;
-    RenderLogic *             GetRenderLogic      () const;
+    RenderLogic *                   GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
 
     void                            LoadScenes          ( const PathVec & pathVec );
+
+protected:
+
+    void                            EventsPhase         ();
+    void                            ModelUpdatePhase    ( TimeType time );
+    void                            RenderPhase         ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer );
+    void                            CheckDropFrame      ( TimeType time );
 
 private:
 
@@ -151,40 +154,4 @@ private:
 #define FRAME_STATS_FRAME()                         FrameStatsFrameScope COMBINE(stats_new_rame_,__LINE__)( &m_statsCalculator ) 
 #define FRAME_STATS_SECTION( name )                 FrameStatsSectionScope COMBINE(stats_new_section_,__LINE__)( &m_statsCalculator, name ) 
 
-//// *********************************
-////
-//void BlackVisionApp::AddCameraAnimation  ()
-//{
-//    Vec3Interpolator * position     = new Vec3Interpolator();
-//    Vec3Interpolator * direction    = new Vec3Interpolator();
-//    Vec3Interpolator * up           = new Vec3Interpolator();
-//
-//    TestParametersFactory::CameraAnimation_ver1( position, direction, up );
-//
-//    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
-//                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
-//                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
-//
-//    delete position;
-//    delete direction;
-//    delete up;
-//}
-//
-//// *********************************
-////
-//void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smieci
-//{
-//    Vec3Interpolator * position     = new Vec3Interpolator();
-//    Vec3Interpolator * direction    = new Vec3Interpolator();
-//    Vec3Interpolator * up           = new Vec3Interpolator();
-//
-//    TestParametersFactory::CameraAnimation_ver2( position, direction, up );
-//
-//    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
-//                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
-//                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
-//
-//    delete position;
-//    delete direction;
-//    delete up;
-//}
+

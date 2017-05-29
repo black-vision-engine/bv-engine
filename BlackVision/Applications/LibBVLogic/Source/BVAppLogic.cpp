@@ -84,8 +84,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 
     model::ModelState::GetInstance().RegisterBVProject( m_bvProject.get() );
     //BVServiceProvider::GetInstance().RegisterBVProject( m_bvProject.get() );
-
-    //m_renderLogic = new FrameRenderLogic();
 }
 
 // *********************************
@@ -99,6 +97,11 @@ BVAppLogic::~BVAppLogic             ()
 
     delete m_remoteController;
 }
+
+
+// ========================================================================= //
+// Initialization
+// ========================================================================= //
 
 // *********************************
 //
@@ -162,6 +165,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
         m_bvProject->GetProjectEditor()->AddScene( scene );
     }
 }
+
 
 // *********************************
 //
@@ -252,6 +256,18 @@ void BVAppLogic::LoadScene          ( void )
 
 // *********************************
 //
+std::string                     BVAppLogic::GetEnvScene()
+{
+    auto s = DefaultConfig.SceneFromEnvName();
+    if( s != "" )
+        return s;
+    else
+        return Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+}
+
+
+// *********************************
+//
 unsigned int BVAppLogic::StartTime       ()
 {
     m_timer.Start();
@@ -262,23 +278,189 @@ unsigned int BVAppLogic::StartTime       ()
     return millis;
 }
 
+
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
+void                            BVAppLogic::InitializeKbdHandler()
+{
+    auto envScene = GetEnvScene();
+
+    if( envScene == "GLOBAL_EFFECT_05" )
+    {
+        m_kbdHandler = new TestGlobalEfectKeyboardHandler();
+    }
+    else if( envScene == "SERIALIZED_TEST" )
+    {
+        m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
+    else if( envScene == "VIDEO_STREAM_TEST_SCENE" )
+    {
+        m_kbdHandler = new TestVideoStreamDecoderKeyboardHandler();
+    }
+    else if( envScene == "LIGHT_SCATTERING_EFFECT" )
+    {
+        m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
+    else if( envScene == "GLOBAL_EFFECT_VIDEO_OUTPUT" )
+    {
+        m_kbdHandler = new TestVideoOutputKeyboardHandler();
+    }
+    else if( envScene == "SCENE_STRUCTURE_INNER_EVENTS" )
+    {
+        m_kbdHandler = new TestInnerEvents();
+    }
+    else
+    {
+        m_kbdHandler = new TestKeyboardHandler();
+    }
+}
+
+// *********************************
+//
+void                            BVAppLogic::InitializeRemoteCommunication()
+{
+    m_remoteHandlers->InitializeHandlers( this );
+
+    auto editorPort = DefaultConfig.SockerServerPort();
+    m_remoteController->InitializeServer( editorPort );
+}
+
+// ***********************
+//
+void                            BVAppLogic::InitializeCommandsDebugLayer()
+{
+    if( DefaultConfig.UseDebugLayer() )
+    {
+        m_remoteController->InitializeDebugLayer( DefaultConfig.DebugFilePath() );
+    }
+}
+
+
+// ========================================================================= //
+// Update and frame handling
+// ========================================================================= //
+
+//// *********************************
+////
+//void BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
+//{
+//    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
+//
+//    m_frameStartTime = m_timer.ElapsedMillis();
+//
+//    ApplicationContext::Instance().IncrementUpdateCounter();
+//
+//    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
+//
+//    ApplicationContext::Instance().IncrementUpdateCounter();
+//
+//    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
+//
+//    HandleFrame( time, renderer, audioRenderer );
+//}
+
+// *********************************
+//
+void            BVAppLogic::OnUpdate           ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
-    m_frameStartTime = m_timer.ElapsedMillis();
+    FRAME_STATS_FRAME();
+    FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
+    m_frameStartTime = m_timer.ElapsedMillis();
+    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
+
+    EventsPhase();
+    ModelUpdatePhase( time );
+    RenderPhase( time, renderer, audioRenderer );
+
+    GTimer.StartTimer();
+}
+
+// ***********************
+//
+void            BVAppLogic::EventsPhase         ()
+{
     ApplicationContext::Instance().IncrementUpdateCounter();
 
     GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
 
     ApplicationContext::Instance().IncrementUpdateCounter();
+}
 
-    TimeType time = m_renderMode.StartFrame( m_frameStartTime );
+// ***********************
+//
+void            BVAppLogic::ModelUpdatePhase    ( TimeType time )
+{
+    assert( m_state != BVAppState::BVS_INVALID );
 
-    HandleFrame( time, renderer, audioRenderer );
+    if( m_state == BVAppState::BVS_RUNNING )
+    {
+        FRAME_STATS_SECTION( "Update Model" );
+        HPROFILER_SECTION( "Update Model", PROFILER_THREAD1 );
+
+        m_bvProject->Update( time );
+    }
+}
+
+// ***********************
+//
+void            BVAppLogic::RenderPhase         ( TimeType time, Renderer * renderer, audio::AudioRenderer * audioRenderer )
+{
+    assert( m_state != BVAppState::BVS_INVALID );
+
+    if( m_state == BVAppState::BVS_RUNNING )
+    {
+        //m_bvScene->Update( t );
+        HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
+
+        {
+            HPROFILER_SECTION( "Refresh Video Input", PROFILER_THREAD1 );
+            FRAME_STATS_SECTION( "Video input" );
+            RefreshVideoInputScene();
+        }
+
+        {
+            HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
+            FRAME_STATS_SECTION( "Render" );
+
+            audioRenderer->SetGain( m_gain );
+            m_renderLogic->HandleFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
+
+            CheckDropFrame( time );
+        }
+    }
+}
+
+// ***********************
+//
+void            BVAppLogic::CheckDropFrame      ( TimeType time )
+{
+    static auto lastTime = ( float )time;
+
+    if( time - lastTime > 1.1f * m_renderMode.GetFramesDelta() )
+    {
+        //printf( "%f, %f, %f, %f, %f \n", lastTime, time, m_renderMode.GetFramesDelta(), time - lastTime, ( time - lastTime ) / m_renderMode.GetFramesDelta() );
+        auto droppedFrames = int( ( time - lastTime ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
+        LOG_MESSAGE( SeverityLevel::info ) <<
+            "DROP: " <<
+            lastTime * 1000.f <<
+            " ms, cur time: " <<
+            time * 1000.f <<
+            " ms, dropped " <<
+            droppedFrames <<
+            " frames";
+    }
+
+    lastTime = time;
+}
+
+// *********************************
+//
+void							BVAppLogic::SetGain			( Float32 gain )
+{
+    m_gain = gain;
 }
 
 // ***********************
@@ -298,9 +480,6 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
 
             m_bvProject->Update( time );
         }
-
-        // FIXME: shouldn't it be already removed?
-        m_remoteHandlers->UpdateHM();
 
         {
             //m_bvScene->Update( t );
@@ -323,7 +502,7 @@ void BVAppLogic::HandleFrame    ( TimeType time, Renderer * renderer, audio::Aud
 
                 if( time - last_time > 1.1f * m_renderMode.GetFramesDelta() )
                 {
-                    //printf( "%f, %f, %f, %f, %f \n", last_time, time, m_renderMode.GetFramesDelta(), time - last_time, ( time - last_time ) / m_renderMode.GetFramesDelta() );
+                    //printf( "%f, %f, %f, %f, %f \n", lastTime, time, m_renderMode.GetFramesDelta(), time - lastTime, ( time - lastTime ) / m_renderMode.GetFramesDelta() );
                     auto droppedFrames = int(( time - last_time ) / m_renderMode.GetFramesDelta() - 1.0f + 0.01f );
                     LOG_MESSAGE( SeverityLevel::info ) << 
 						"DROP: " << 
@@ -359,6 +538,10 @@ void BVAppLogic::RefreshVideoInputScene()
     //    }
     //}
 }
+
+// ========================================================================= //
+// Input, state handling and post frame logic
+// ========================================================================= //
 
 // *********************************
 //
@@ -487,7 +670,7 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
-RenderLogic *             BVAppLogic::GetRenderLogic      () const
+RenderLogic *                   BVAppLogic::GetRenderLogic      () const
 {
     return m_renderLogic;
 }
@@ -499,79 +682,8 @@ RenderMode &                    BVAppLogic::GetRenderMode        ()
     return m_renderMode;
 }
 
-// *********************************
-//
-void                            BVAppLogic::InitializeKbdHandler()
-{
-    auto envScene = GetEnvScene();
 
-    if ( envScene == "GLOBAL_EFFECT_05" )
-    {
-        m_kbdHandler = new TestGlobalEfectKeyboardHandler();
-    }
-    else if( envScene == "SERIALIZED_TEST" )
-    {
-        m_kbdHandler = new TestEditorsKeyboardHandler();
-    }
-    else if( envScene == "VIDEO_STREAM_TEST_SCENE" )
-    {
-        m_kbdHandler = new TestVideoStreamDecoderKeyboardHandler();
-    }
-    else if( envScene == "LIGHT_SCATTERING_EFFECT" )
-    {
-        m_kbdHandler = new TestEditorsKeyboardHandler();
-    }
-    else if( envScene == "GLOBAL_EFFECT_VIDEO_OUTPUT" )
-    {
-        m_kbdHandler = new TestVideoOutputKeyboardHandler();
-    }
-    else if( envScene == "SCENE_STRUCTURE_INNER_EVENTS" )
-    {
-        m_kbdHandler = new TestInnerEvents();
-    }
-    else
-    {
-        m_kbdHandler = new TestKeyboardHandler();
-    }
-}
 
-// *********************************
-//
-void                            BVAppLogic::InitializeRemoteCommunication()
-{
-    m_remoteHandlers->InitializeHandlers( this );
-
-    auto editorPort = DefaultConfig.SockerServerPort();
-    m_remoteController->InitializeServer( editorPort );
-}
-
-// ***********************
-//
-void                            BVAppLogic::InitializeCommandsDebugLayer()
-{
-    if( DefaultConfig.UseDebugLayer() )
-    {
-        m_remoteController->InitializeDebugLayer( DefaultConfig.DebugFilePath() );
-    }
-}
-
-// *********************************
-//
-std::string                     BVAppLogic::GetEnvScene()
-{
-    auto s = DefaultConfig.SceneFromEnvName();
-    if( s != "" )
-        return s;
-    else
-        return Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
-}
-
-// *********************************
-//
-void							BVAppLogic::SetGain			( Float32 gain )
-{
-	m_gain = gain;
-}
 
 //// *********************************
 ////

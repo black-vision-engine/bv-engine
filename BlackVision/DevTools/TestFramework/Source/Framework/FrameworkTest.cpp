@@ -18,8 +18,6 @@ void            FrameworkTest::RunImplNotConst  ()
 {
     PreEvents();
 
-    PostEvents();
-
     PreModelUpdate();
 
     PreRender();

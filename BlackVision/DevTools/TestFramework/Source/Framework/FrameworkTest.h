@@ -34,7 +34,6 @@ public:
     // Interface for test creator.
 
     virtual void        PreEvents           () {}
-    virtual void        PostEvents          () {}
     virtual void        PreModelUpdate      () {}
     virtual void        PreRender           () {}
     virtual void        PostRender          () {}
