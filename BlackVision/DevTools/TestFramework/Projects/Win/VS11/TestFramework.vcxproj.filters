@@ -15,6 +15,9 @@
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -24,6 +27,9 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Framework\TestExecutor.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>

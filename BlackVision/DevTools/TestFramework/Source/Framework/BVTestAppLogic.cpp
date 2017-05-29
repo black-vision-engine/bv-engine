@@ -17,7 +17,11 @@ namespace bv
 //
 BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : BVAppLogic( renderer, audioRenderer )
-{}
+    , m_testExecutor( nullptr )
+    , m_testList( nullptr )
+{
+    m_testList = UnitTest::Test::GetTestList().GetHead();
+}
 
 // *********************************
 //
@@ -28,23 +32,68 @@ BVTestAppLogic::~BVTestAppLogic     ()
 //
 void            BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
-    auto testList = UnitTest::Test::GetTestList();
+    if( m_testExecutor )
+        ContinueCurrentTest();
+    else if( !BeginNewTest() )
+        EndExecution();
+}
 
-    UnitTest::TestList selectedTests;
 
-    testList.GetHead()->m_nextTest = nullptr;
+// ***********************
+//
+void            BVTestAppLogic::ContinueCurrentTest()
+{
+    if( m_testExecutor->WantContinue() )
+        m_testExecutor->Execute();
+    else
+    {
+        delete m_testExecutor;
+        m_testExecutor = nullptr;
+    }
+}
 
-    selectedTests.Add( testList.GetHead() );
+// ***********************
+//
+bool            BVTestAppLogic::BeginNewTest()
+{
+    if( m_testList == nullptr )
+        return false;
 
-    auto f = File::Open( testList.GetHead()->m_details.testName, File::OpenMode::FOMReadWrite );
+    FrameworkTest * newTest = FetchNextTest( m_testList );
 
-    UnitTest::XmlTestReporter reporter( *f.StreamBuf() );
-    UnitTest::TestRunner runner( reporter );
-    runner.RunTestsIf( selectedTests, 0, UnitTest::True(), 0 );
+    if( newTest == nullptr )
+        return false;
 
-    f.Close();
+    assert( m_testExecutor == nullptr );
+    m_testExecutor = new TestExecutor( newTest );
+    
+    // Always execute first loop. Test will decide if it needs more loops in ContinueCurrentTest function.
+    m_testExecutor->Execute();
+    return true;
+}
 
-     // Empty. Updating in test framework is called manually.
+
+// ***********************
+//
+FrameworkTest * BVTestAppLogic::FetchNextTest( UnitTest::Test * m_testsList )
+{
+    // Make dynamic cast to check if this is really FrameworkTest. This could be class derived from UnitTest::Test
+    // but not from FrameworkTest. In such a case simply ignore test and fetch next.
+    FrameworkTest * nextTest = dynamic_cast< FrameworkTest * >( m_testsList );
+    m_testList = m_testList->m_nextTest;
+
+    if( nextTest )
+        return nextTest;
+    else
+        return FetchNextTest( m_testList );
+}
+
+// ***********************
+//
+void            BVTestAppLogic::EndExecution()
+{
+    // @todo Implement
+    // This function should close application and release everything.
 }
 
 
@@ -61,5 +110,6 @@ void            BVTestAppLogic::PostFrameLogic()
 {
     // Empty. Test Framework doesn't compute frame statistics.
 }
+
 
 } //bv

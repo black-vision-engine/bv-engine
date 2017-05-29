@@ -14,6 +14,7 @@ class BVTestAppLogic;
 class FrameworkTest : public UnitTest::Test
 {
     friend class BVTestAppLogic;
+    friend class TestExecutor;
 private:
 
     BVTestAppLogic*         m_appLogic;
