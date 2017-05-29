@@ -22,10 +22,6 @@ public:
     static bool			RegisterFrameworkInitializer    ();
 
 public:
-
-    virtual bool    OnInitialize				() override;
-
-
 private:
     virtual BVAppLogic *    CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const;
 

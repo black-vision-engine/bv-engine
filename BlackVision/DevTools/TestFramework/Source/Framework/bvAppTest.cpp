@@ -5,35 +5,9 @@
 #include "bvApp.h"
 
 #include "System/InitSubsystem.h"
-#include "EndUserAPI/RemoteController.h"
-
-#include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Events/Interfaces/IEventManager.h"
-
-#include "Tools/Profiler/HerarchicalProfiler.h"
-#include "Application/ApplicationContext.h"
-
-#include "Statistics/StatsFormatters.h"
-
-
 #include "BVTestAppLogic.h"
-#include "BVConfig.h"
-
-#include "Application/Win32/DisableCrashReport.h"
-
-// Log initializer
-#include "bvAppLogInitializer.inl"
 
 
-// *********************************
-// FIXME: move it to valid BV windowed version of engine and wrap with a macro
-bool			bv::BlackVisionApp::RegisterInitializer	()
-{
-    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::MainInitializer );
-    bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
-
-    return true;
-}
 
 
 // ***********************
