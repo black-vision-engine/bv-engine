@@ -9,26 +9,26 @@ using namespace bv;
 
 // ***********************
 //
-class TestTest : public bv::FrameworkTest
+class SecondTest : public bv::FrameworkTest
 {
 private:
 public:
-    TestTest() : bv::FrameworkTest( "TestTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
-    
-    virtual void        PreEvents           () override;
-} TestTestInstance;
+    SecondTest() : bv::FrameworkTest( "SecondTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
 
-UnitTest::ListAdder adderTestTest ( UnitTest::Test::GetTestList(), &TestTestInstance );
+    virtual void        PreEvents           () override;
+} SecondTestInstance;
+
+UnitTest::ListAdder adderSecondTest ( UnitTest::Test::GetTestList(), &SecondTestInstance );
 
 
 // ***********************
 //
-void        TestTest::PreEvents     ()
+void        SecondTest::PreEvents     ()
 {
     if( GetFrameNumber() == 0 )
     {
         PathVec paths;
-        paths.push_back( Path( "witek/NodeMaskPreview.scn" ) );
+        paths.push_back( Path( "witek/ExtrudeTest.scn" ) );
 
         GetAppLogic()->LoadScenes( paths );
 

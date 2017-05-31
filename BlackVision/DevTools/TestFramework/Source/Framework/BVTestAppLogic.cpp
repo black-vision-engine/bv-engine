@@ -64,6 +64,8 @@ bool            BVTestAppLogic::BeginNewTest()
     if( newTest == nullptr )
         return false;
 
+    newTest->SetAppLogic( this );
+
     assert( m_testExecutor == nullptr );
     m_testExecutor = new TestExecutor( newTest );
     
@@ -81,19 +83,26 @@ FrameworkTest * BVTestAppLogic::FetchNextTest( UnitTest::Test * m_testsList )
     // but not from FrameworkTest. In such a case simply ignore test and fetch next.
     FrameworkTest * nextTest = dynamic_cast< FrameworkTest * >( m_testsList );
     m_testList = m_testList->m_nextTest;
+    
 
     if( nextTest )
+    {
+        nextTest->m_nextTest = nullptr;
         return nextTest;
+    }
     else
+    {
+        delete nextTest;
         return FetchNextTest( m_testList );
+    }
 }
 
 // ***********************
 //
 void            BVTestAppLogic::EndExecution()
 {
-    // @todo Implement
     // This function should close application and release everything.
+    ChangeState( BVAppState::BVS_CLOSING );
 }
 
 
