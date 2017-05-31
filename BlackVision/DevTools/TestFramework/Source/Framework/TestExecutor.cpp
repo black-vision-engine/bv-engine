@@ -25,19 +25,18 @@ TestExecutor::~TestExecutor()
 
 // ***********************
 //
-bool        TestExecutor::WantContinue      () const
+bool        TestExecutor::WantContinue      ()
 {
-    return !m_test->IsLastFrame();
+    bool failed = m_runner.GetTestResults()->GetFailedTestCount() > 0;
+
+    return !failed && !m_test->IsLastFrame();
 }
 
 // ***********************
 //
 void        TestExecutor::Execute           ()
 {
-    UnitTest::TestList selectedTests;
-
-    selectedTests.Add( m_test );
-    m_runner.RunTestsIf( selectedTests, 0, UnitTest::True(), 0 );
+    m_runner.RunSingleTest( m_test, nullptr, 0 );
 }
 
 

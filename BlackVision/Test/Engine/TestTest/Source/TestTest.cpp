@@ -35,6 +35,15 @@ void        TestTest::PreEvents     ()
         EndTestAfterThisFrame( false );
     }
 
+    if( GetFrameNumber() == 1 )
+    {
+        auto scenes = GetAppLogic()->GetBVProject()->GetScenes();
+
+        REQUIRE CHECK( scenes.size() == 1 );
+        CHECK( scenes.size() == 3 );
+        REQUIRE CHECK( scenes.size() == 2 );
+    }
+
     if( GetFrameNumber() >= 100 )
     {
         EndTestAfterThisFrame( true );

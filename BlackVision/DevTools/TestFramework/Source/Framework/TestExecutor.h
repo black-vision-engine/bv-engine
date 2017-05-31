@@ -8,7 +8,7 @@
 #include "TestReporterStdout.h"
 #include "XmlTestReporter.h"
 
-
+#include "MultiframeTestRunner.h"
 
 
 namespace bv
@@ -23,7 +23,7 @@ private:
     // Note: Members order matters. Check initialization in constructor.
     File                            m_resultFile;
     UnitTest::XmlTestReporter       m_reporter;
-    UnitTest::TestRunner            m_runner;
+    UnitTest::MultiframeTestRunner  m_runner;
 
     FrameworkTest*                  m_test;
 
@@ -33,7 +33,7 @@ public:
     ~TestExecutor       ();
 
 
-    bool        WantContinue    () const;
+    bool        WantContinue    ();
 
     void        Execute         ();
 };

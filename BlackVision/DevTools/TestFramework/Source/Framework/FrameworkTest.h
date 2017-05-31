@@ -49,12 +49,13 @@ public:
     BVTestAppLogic*     GetAppLogic         () const { return m_appLogic; }
     SizeType            GetFrameNumber      () const { return m_frameNum; }
 
+    bool                IsLastFrame         () const { return m_isLastFrame; }
+
 private:
 
     // Call only from BVTestAppLogic
 
     void        SetAppLogic             ( BVTestAppLogic* logic );
-    bool        IsLastFrame             () const                        { return m_isLastFrame; }
 
 protected:
 

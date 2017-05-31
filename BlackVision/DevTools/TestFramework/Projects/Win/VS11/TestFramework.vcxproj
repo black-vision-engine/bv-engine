@@ -22,12 +22,14 @@
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
+    <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h" />
     <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Framework\MultiframeTestRunner.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\TestExecutor.cpp" />
   </ItemGroup>
   <ItemGroup>
