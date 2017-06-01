@@ -19,38 +19,16 @@ class Timer;
 
 class UNITTEST_LINKAGE MultiframeTestRunner
 {
+private:
+
+    mutable double      m_testTimeInMs;
+
 public:
     explicit MultiframeTestRunner( TestReporter& reporter );
     ~MultiframeTestRunner();
 
 
-    bool        ContinueTest    ( Test * curTest )
-    {
-        bv::FrameworkTest * const frameworkTest = dynamic_cast< bv::FrameworkTest * const >( curTest );
-        
-        // One frame test doesn't continue.
-        if( !frameworkTest )
-            return false;
-
-        if( frameworkTest->IsLastFrame() )
-            return false;
-
-        if( m_result->GetFailureCount() > 0 )
-            return false;
-
-        return true;
-    }
-
-    int         RunSingleTest   ( Test * curTest, char const* /*suiteName*/, int maxTestTimeInMs )
-    {
-        RunTest( m_result, curTest, maxTestTimeInMs );
-
-        //if( !ContinueTest( curTest ) )
-        //    return Finish();
-
-        return m_result->GetFailureCount();
-    }
-
+    int             RunSingleTest   ( Test * curTest, char const* /*suiteName*/, int maxTestTimeInMs );
     TestResults*    GetTestResults  ();
     int             Finish          () const;
 
