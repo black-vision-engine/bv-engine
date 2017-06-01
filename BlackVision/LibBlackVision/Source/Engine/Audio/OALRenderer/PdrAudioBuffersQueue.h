@@ -23,8 +23,8 @@ private:
     Queue< ALuint >                 m_unqueuedBufferHandles;
     Queue< AudioBufferConstPtr >    m_buffers;
 
-    Deque< MemoryChunkConstPtr >    m_bufferedData;
-    SizeType                        m_bufferedDataSize;
+    //Deque< MemoryChunkConstPtr >    m_bufferedData;
+   // SizeType                        m_bufferedDataSize;
 
     ALuint                          m_sourceHandle;
 
@@ -42,8 +42,8 @@ public:
     
     bool                BufferData              ();
 
-    SizeType            GetBufferedDataSize     () const;
-    bool                MixBufferedData         ( MemoryChunkPtr data, bool force = false );
+    //SizeType            GetBufferedDataSize     () const;
+    //bool                MixBufferedData         ( MemoryChunkPtr data, bool force = false );
 
     void                ClearBuffers            ();
 

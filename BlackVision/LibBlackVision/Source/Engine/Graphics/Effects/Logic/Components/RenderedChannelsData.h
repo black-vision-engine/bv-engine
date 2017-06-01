@@ -7,7 +7,6 @@
 
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderedChannelsDataDesc.h"
 
-
 namespace bv { 
 
 class RenderTargetStackAllocator;

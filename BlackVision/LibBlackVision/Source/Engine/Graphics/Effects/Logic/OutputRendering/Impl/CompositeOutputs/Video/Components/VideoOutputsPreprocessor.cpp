@@ -97,8 +97,7 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     auto videoFrame = vic->ReadColorTexture( ctx );
     avFrame->m_videoData = videoFrame->GetData();
 
-    auto audio = audio_renderer( ctx );
-	auto ret = audio->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ), vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+    vic->GetWrappedChannel()->GetAudioRenderChannelData();
 
     return avFrame;
 }
