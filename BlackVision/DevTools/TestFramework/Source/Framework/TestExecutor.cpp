@@ -16,6 +16,7 @@ TestExecutor::TestExecutor      ( BVTestAppLogic * appLogic, UnitTest::Test * te
     ,   m_testList( test )
     ,   m_curTest( test )
     ,   m_appLogic( appLogic )
+    ,   m_failedTests( 0 )
 {}
 
 // ***********************
@@ -38,7 +39,7 @@ bool        TestExecutor::WantContinue      ( UnitTest::Test * curTest )
     if( frameworkTest->IsLastFrame() )
         return false;
 
-    if( m_runner.GetTestResults()->GetFailedTestCount() > 0 )
+    if( m_runner.GetTestResults()->GetFailedTestCount() > m_failedTests )
         return false;
 
     return true;
@@ -58,6 +59,7 @@ bool        TestExecutor::Execute           ()
         }
 
         m_curTest = FetchNextTest();
+        m_failedTests = m_runner.GetTestResults()->GetFailedTestCount();
     }
 
     m_runner.RunSingleTest( m_curTest, nullptr, 0 );
@@ -66,26 +68,20 @@ bool        TestExecutor::Execute           ()
 
 // ***********************
 //
-FrameworkTest *     TestExecutor::FetchNextTest     ()
+UnitTest::Test *    TestExecutor::FetchNextTest     ()
 {
     // Make dynamic cast to check if this is really FrameworkTest. This could be class derived from UnitTest::Test
     // but not from FrameworkTest. In such a case simply ignore test and fetch next.
+    UnitTest::Test * curTest = m_testList;
     FrameworkTest * frameworkTest = dynamic_cast< FrameworkTest * >( m_testList );
     m_testList = m_testList->m_nextTest;
 
 
     if( frameworkTest )
-    {
         frameworkTest->SetAppLogic( m_appLogic );
 
-        frameworkTest->m_nextTest = nullptr;
-        return frameworkTest;
-    }
-    else
-    {
-        delete frameworkTest;
-        return FetchNextTest();
-    }
+    curTest->m_nextTest = nullptr;
+    return curTest;
 }
 
 

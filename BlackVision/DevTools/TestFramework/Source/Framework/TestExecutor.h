@@ -30,6 +30,8 @@ private:
     UnitTest::Test *                m_testList;
     UnitTest::Test *                m_curTest;
 
+    int                             m_failedTests;
+
     BVTestAppLogic *                m_appLogic;
 
 public:
@@ -42,7 +44,7 @@ public:
 private:
 
     bool                WantContinue    ( UnitTest::Test * curTest );
-    FrameworkTest *     FetchNextTest   ();
+    UnitTest::Test *    FetchNextTest   ();
 
 };
 

@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\NonFrameworkTest.cpp" />
     <ClCompile Include="..\..\..\Source\SecondTest.cpp" />
     <ClCompile Include="..\..\..\Source\TestTest.cpp" />
   </ItemGroup>

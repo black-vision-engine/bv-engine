@@ -88,6 +88,8 @@ void MultiframeTestRunner::RunTestMulti( TestResults * const result, Test * cons
     if( curTest->m_isMockTest == false )
         CurrentTest::Results() = result;
 
+    int failedTests = result->GetFailedTestCount();
+
     Timer testTimer;
     testTimer.Start();
 
@@ -107,7 +109,7 @@ void MultiframeTestRunner::RunTestMulti( TestResults * const result, Test * cons
     }
 
     // Finish only if it was last frame.
-    if( frameworkTest->IsLastFrame() )
+    if( frameworkTest->IsLastFrame() || result->GetFailedTestCount() > failedTests )
         result->OnTestFinish( curTest->m_details, static_cast< float >( m_timer->GetTimeInMs() / 1000.0 ) );
 }
 
