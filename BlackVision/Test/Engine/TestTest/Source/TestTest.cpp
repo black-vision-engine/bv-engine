@@ -6,6 +6,9 @@
 
 using namespace bv;
 
+SUITE( FrameworkTests )
+{
+
 
 // ***********************
 //
@@ -14,7 +17,7 @@ class TestTest : public bv::FrameworkTest
 private:
 public:
     TestTest() : bv::FrameworkTest( "TestTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
-    
+
     virtual void        PreEvents           () override;
 } TestTestInstance;
 
@@ -49,4 +52,6 @@ void        TestTest::PreEvents     ()
         EndTestAfterThisFrame( true );
         GetAppLogic()->UnloadScenes();
     }
+}
+
 }

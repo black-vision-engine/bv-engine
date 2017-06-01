@@ -15,11 +15,11 @@ namespace bv
 
 // *********************************
 //
-BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
+BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const std::string & testname )
     : BVAppLogic( renderer, audioRenderer )
     , m_testExecutor( nullptr )
 {
-    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), "Test" );
+    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), testname );
 }
 
 // *********************************

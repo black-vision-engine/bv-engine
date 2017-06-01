@@ -20,7 +20,7 @@ private:
     TestExecutor *      m_testExecutor;
 
 public:
-                    BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
+                    BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const std::string & testname );
                     ~BVTestAppLogic     ();
 
     virtual void    OnUpdate            ( Renderer * renderer, audio::AudioRenderer * audioRenderer ) override;

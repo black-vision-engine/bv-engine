@@ -2,6 +2,11 @@
 
 
 
+SUITE( NonFrameworkTests )
+{
+
+
+
 TEST( NonFrameworkTest )
 {
     CHECK( 1 == 1 );
@@ -9,3 +14,5 @@ TEST( NonFrameworkTest )
 }
 
 
+
+}

@@ -7,6 +7,10 @@
 using namespace bv;
 
 
+SUITE( FrameworkTests )
+{
+
+
 // ***********************
 //
 class SecondTest : public bv::FrameworkTest
@@ -40,4 +44,7 @@ void        SecondTest::PreEvents     ()
         EndTestAfterThisFrame( true );
         GetAppLogic()->UnloadScenes();
     }
+}
+
+
 }

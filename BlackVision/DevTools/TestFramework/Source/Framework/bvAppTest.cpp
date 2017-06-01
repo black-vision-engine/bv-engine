@@ -8,6 +8,7 @@
 #include "BVTestAppLogic.h"
 
 
+#include "tclap/CmdLine.h"
 
 
 // ***********************
@@ -20,20 +21,20 @@ void            bv::BlackVisionAppFramework::MainFrameworkInitializer       ( in
 
 // ***********************
 //
-bool            bv::BlackVisionAppFramework::RegisterFrameworkInitializer   ()
+void            bv::BlackVisionAppFramework::RegisterTestParams             ( int argc, char * argv[] )
 {
-    bv::InitSubsystem::AddInitializer( bv::BlackVisionAppFramework::MainFrameworkInitializer );
-    RegisterLogicInitializers();
-
-    return true;
+    static_cast< bv::BlackVisionAppFramework * >( bv::ApplicationBase::ApplicationInstance )->ParseTestParameters( argc, argv );
 }
 
 // ***********************
 //
-void            bv::BlackVisionAppFramework::PostFrame()
+bool            bv::BlackVisionAppFramework::RegisterFrameworkInitializer   ()
 {
-    // Note: we ommit frame stats here.
-    m_app->PostFrameLogic();
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionAppFramework::MainFrameworkInitializer );
+    RegisterLogicInitializers();
+    bv::InitSubsystem::AddInitializer( bv::BlackVisionAppFramework::RegisterTestParams );
+
+    return true;
 }
 
 
@@ -42,10 +43,39 @@ namespace bv
 
 // ***********************
 //
-BVAppLogic *        BlackVisionAppFramework::CreateAppLogic( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const
+BVAppLogic *        BlackVisionAppFramework::CreateAppLogic     ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const
 {
-    return new BVTestAppLogic( renderer, audioRenderer );
+    return new BVTestAppLogic( renderer, audioRenderer, m_testName );
 }
 
+
+// ***********************
+//
+void            BlackVisionAppFramework::ParseTestParameters    ( int argc, char * argv[] )
+{
+    try
+    {
+        TCLAP::CmdLine cmd( "Black Vision Test Framework" );
+
+        TCLAP::ValueArg< std::string > testOutput( "o", "Output", "Output file", true, "", "string" );
+        cmd.add( testOutput );
+        
+        cmd.parse( argc, argv );
+
+        m_testName = testOutput.getValue();
+    }
+    catch( TCLAP::ArgException & e )
+    {
+        std::cerr << "Parsing arguments error: " << e.error() << " for arg " << e.argId() << std::endl;
+    }
+}
+
+// ***********************
+//
+void            BlackVisionAppFramework::PostFrame()
+{
+    // Note: we ommit frame stats here.
+    m_app->PostFrameLogic();
+}
 
 }	// bv
