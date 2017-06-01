@@ -9,11 +9,13 @@ namespace bv
 
 // ***********************
 // Note: initialization order matters.
-TestExecutor::TestExecutor      ( FrameworkTest * test )
-    :   m_resultFile( File::Open( test->m_details.testName, File::OpenMode::FOMReadWrite ) )
+TestExecutor::TestExecutor      ( BVTestAppLogic * appLogic, UnitTest::Test * test, const std::string& filePath )
+    :   m_resultFile( File::Open( filePath, File::OpenMode::FOMReadWrite ) )
     ,   m_reporter( *m_resultFile.StreamBuf() )
     ,   m_runner( m_reporter )
-    ,   m_test( test )
+    ,   m_testList( test )
+    ,   m_curTest( test )
+    ,   m_appLogic( appLogic )
 {}
 
 // ***********************
@@ -25,18 +27,65 @@ TestExecutor::~TestExecutor()
 
 // ***********************
 //
-bool        TestExecutor::WantContinue      ()
+bool        TestExecutor::WantContinue      ( UnitTest::Test * curTest )
 {
-    bool failed = m_runner.GetTestResults()->GetFailedTestCount() > 0;
+    bv::FrameworkTest * const frameworkTest = dynamic_cast< bv::FrameworkTest * const >( curTest );
 
-    return !failed && !m_test->IsLastFrame();
+    // One frame test doesn't continue.
+    if( !frameworkTest )
+        return false;
+
+    if( frameworkTest->IsLastFrame() )
+        return false;
+
+    if( m_runner.GetTestResults()->GetFailedTestCount() > 0 )
+        return false;
+
+    return true;
 }
 
 // ***********************
 //
-void        TestExecutor::Execute           ()
+bool        TestExecutor::Execute           ()
 {
-    m_runner.RunSingleTest( m_test, nullptr, 0 );
+    if( !WantContinue( m_curTest ) )
+    {
+        // No tests anymore.
+        if( m_testList == nullptr )
+        {
+            m_runner.Finish();
+            return false;
+        }
+
+        m_curTest = FetchNextTest();
+    }
+
+    m_runner.RunSingleTest( m_curTest, nullptr, 0 );
+    return true;
+}
+
+// ***********************
+//
+FrameworkTest *     TestExecutor::FetchNextTest     ()
+{
+    // Make dynamic cast to check if this is really FrameworkTest. This could be class derived from UnitTest::Test
+    // but not from FrameworkTest. In such a case simply ignore test and fetch next.
+    FrameworkTest * frameworkTest = dynamic_cast< FrameworkTest * >( m_testList );
+    m_testList = m_testList->m_nextTest;
+
+
+    if( frameworkTest )
+    {
+        frameworkTest->SetAppLogic( m_appLogic );
+
+        frameworkTest->m_nextTest = nullptr;
+        return frameworkTest;
+    }
+    else
+    {
+        delete frameworkTest;
+        return FetchNextTest();
+    }
 }
 
 

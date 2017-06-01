@@ -45,23 +45,24 @@ public:
     {
         RunTest( m_result, curTest, maxTestTimeInMs );
 
-        if( !ContinueTest( curTest ) )
-            return Finish();
+        //if( !ContinueTest( curTest ) )
+        //    return Finish();
 
         return m_result->GetFailureCount();
     }
 
-    TestResults* GetTestResults();
+    TestResults*    GetTestResults  ();
+    int             Finish          () const;
 
 private:
-    TestReporter* m_reporter;
-    TestResults* m_result;
-    Timer* m_timer;
 
-    int Finish() const;
-    bool IsTestInSuite( const Test* const curTest, char const* suiteName ) const;
-    void RunTest( TestResults* const result, Test* const curTest, int const maxTestTimeInMs ) const;
-    void RunTestMulti( TestResults* const result, Test* const curTest, int const maxTestTimeInMs ) const;
+    TestReporter*       m_reporter;
+    TestResults*        m_result;
+    Timer*              m_timer;
+
+    bool        IsTestInSuite   ( const Test* const curTest, char const* suiteName ) const;
+    void        RunTest         ( TestResults* const result, Test* const curTest, int const maxTestTimeInMs ) const;
+    void        RunTestMulti    ( TestResults* const result, Test* const curTest, int const maxTestTimeInMs ) const;
 };
 
 }

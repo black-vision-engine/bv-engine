@@ -17,7 +17,6 @@ class BVTestAppLogic : public BVAppLogic
     friend class FrameworkTest;
 private:
 
-    UnitTest::Test*     m_testList;
     TestExecutor *      m_testExecutor;
 
 public:
@@ -31,11 +30,7 @@ public:
 
 private:
 
-    void            ContinueCurrentTest ();
-    bool            BeginNewTest        ();
     void            EndExecution        ();
-
-    FrameworkTest * FetchNextTest       ( UnitTest::Test * m_testsList );
 };
 
 } //bv

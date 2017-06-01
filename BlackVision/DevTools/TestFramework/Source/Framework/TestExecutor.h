@@ -14,6 +14,8 @@
 namespace bv
 {
 
+class BVTestAppLogic;
+
 // ***********************
 //
 class TestExecutor
@@ -25,17 +27,23 @@ private:
     UnitTest::XmlTestReporter       m_reporter;
     UnitTest::MultiframeTestRunner  m_runner;
 
-    FrameworkTest*                  m_test;
+    UnitTest::Test *                m_testList;
+    UnitTest::Test *                m_curTest;
+
+    BVTestAppLogic *                m_appLogic;
 
 public:
 
-    TestExecutor        ( FrameworkTest* test );
+    TestExecutor        ( BVTestAppLogic * appLogic, UnitTest::Test * test, const std::string& filePath );
     ~TestExecutor       ();
 
+    bool                Execute         ();
 
-    bool        WantContinue    ();
+private:
 
-    void        Execute         ();
+    bool                WantContinue    ( UnitTest::Test * curTest );
+    FrameworkTest *     FetchNextTest   ();
+
 };
 
 
