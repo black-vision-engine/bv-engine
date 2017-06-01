@@ -224,6 +224,9 @@
       <Filter>Util\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\CoreEnums.h" />
+    <ClInclude Include="..\..\..\Source\Util\IEventServer.h">
+      <Filter>Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />

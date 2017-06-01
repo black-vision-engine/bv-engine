@@ -8,6 +8,8 @@
 #include "Engine/Audio/AudioRenderer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
+#include <Windows.h>
+
 
 LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wParam, LPARAM lParam );
 

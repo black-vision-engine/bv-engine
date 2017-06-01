@@ -5,7 +5,7 @@
 #include "SocketConnection.h"
 #include "Threading/CriticalSection.h"
 
-#include "../../Applications/BlackVision/Source/EndUserAPI/IEventServer.h"
+#include "Util/IEventServer.h"
 
 
 namespace bv {

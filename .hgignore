@@ -51,3 +51,10 @@ BlackVision/Dep/3rdParty/ftgl_ext/msvc/
 BlackVision/Projects/Win/VS11/.vs/BlackVision/v15/Solution.VC.db-wal
 BlackVision/Projects/Win/VS11/.vs/BlackVision/v15/Solution.VC.db-shm
 *.user
+
+BlackVision/Dep/3rdParty/tclap-1.2.1/docs/
+BlackVision/Dep/3rdParty/tclap-1.2.1/config/
+BlackVision/Dep/3rdParty/tclap-1.2.1/examples/
+BlackVision/Dep/3rdParty/tclap-1.2.1/msc/
+BlackVision/Dep/3rdParty/tclap-1.2.1/tests/
+
