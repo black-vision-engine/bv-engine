@@ -109,6 +109,7 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     if( !m_audioMixer )
         m_audioMixer = new audio::AudioMixer( vic->GetWrappedChannel()->GetAudioRenderChannelData() );
 
+    m_audioMixer->SetGain( audio_renderer( ctx )->Gain() );
     m_audioMixer->MixAudioBuffersVecs( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ) );
 
     return avFrame;

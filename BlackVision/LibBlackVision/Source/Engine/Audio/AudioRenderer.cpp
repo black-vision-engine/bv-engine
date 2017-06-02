@@ -245,5 +245,12 @@ void					AudioRenderer::SetGain						( Float32 gain )
 	m_gain = gain;
 }
 
+// *********************************
+//
+Float32				    AudioRenderer::Gain				            () const
+{
+    return m_gain;
+}
+
 } // audio
 } //bv

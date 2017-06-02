@@ -52,6 +52,7 @@ public:
     void                EndOfFile           ( AudioEntity * audio );
 
 	void				SetGain				( Float32 gain );
+    Float32				Gain				() const;
 
     void                DeletePDR           ( const AudioEntity * audio );
 

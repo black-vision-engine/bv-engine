@@ -23,6 +23,7 @@ public:
     static void			MixAudio16      ( char * outData, const char * inData, SizeType size );
 
 	static void			ApplyGain		( char * outData, const char * inData, SizeType size, Float32 gain );
+    static void			ApplyGain		( char * inData, SizeType size, Float32 gain );
 };
 
 } //audio

@@ -95,5 +95,27 @@ void		AudioUtils::ApplyGain		( char * outData, const char * inData, SizeType siz
 	}
 }
 
+// ****************************
+//
+void		AudioUtils::ApplyGain		( char * inData, SizeType size, Float32 gain )
+{
+    gain = std::max( gain, 0.f ); // Limit gain to range [0, 1]
+    gain = std::min( gain, 1.f );
+
+    auto inData16 = reinterpret_cast< Int16 * >( inData );
+    auto size16 = size / sizeof( Int16 );
+
+    for( SizeType i = 0; i < size16; ++i )
+    {
+        auto inVal = ( Float32 ) inData16[ i ] / ( Float32 ) SHRT_MAX;
+
+        auto outVal = inVal * gain;
+        outVal = std::min( outVal, 1.0f );
+        outVal = std::max( outVal, -1.0f );
+
+        inData16[ i ] = ( Int16 ) ( outVal * SHRT_MAX );
+    }
+}
+
 } //audio
 } //bv
