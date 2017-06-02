@@ -15,6 +15,10 @@ class Renderer;
 //
 class BlackVisionAppFramework : public BlackVisionApp
 {
+public:
+
+    static bool         m_configOverrideInitialized;
+
 private:
 
     std::string         m_testName;
@@ -33,6 +37,9 @@ protected:
     virtual void        PostFrame                       () override;
 
 public:
+
+    static bool         OverrideConfig                  ( const std::string & configPath );
+
 private:
     virtual BVAppLogic *    CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const;
 

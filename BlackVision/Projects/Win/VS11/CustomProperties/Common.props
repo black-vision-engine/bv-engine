@@ -19,6 +19,7 @@
     <ThirdPartyDir>$(DepDir)\3rdParty</ThirdPartyDir>
     <AssetsDir>$(SolutionRoot)\Assets</AssetsDir>
 	<TestAssetsDir>$(SolutionRoot)\Test\Assets</TestAssetsDir>
+	<TestConfigsDir>$(SolutionRoot)\Test\Configs</TestConfigsDir>
     <TestsResultsDir>$(SolutionRoot)\_TestsResults\</TestsResultsDir>
   </PropertyGroup>
   <PropertyGroup>

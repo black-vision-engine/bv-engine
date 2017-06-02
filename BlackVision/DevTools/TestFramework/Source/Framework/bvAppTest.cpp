@@ -7,8 +7,7 @@
 #include "System/InitSubsystem.h"
 #include "BVTestAppLogic.h"
 
-
-#include "tclap/CmdLine.h"
+#include "System/Path.h"
 
 
 // ***********************
@@ -40,6 +39,29 @@ bool            bv::BlackVisionAppFramework::RegisterFrameworkInitializer   ()
 
 namespace bv
 {
+
+
+// ***********************
+//
+bool                BlackVisionAppFramework::OverrideConfig     ( const std::string & configPath )
+{
+    Path newConfigPath( configPath );
+    Path targetConfigPath( "config.xml" );
+
+    Path::Remove( targetConfigPath );
+
+    if( Path::Exists( newConfigPath ) )
+    {
+        Path::Copy( newConfigPath, targetConfigPath );
+    }
+    else
+    {
+        Path::Copy( "TestConfigs/DefaultConfig.xml", targetConfigPath );
+    }
+
+    return true;
+}
+
 
 // ***********************
 //

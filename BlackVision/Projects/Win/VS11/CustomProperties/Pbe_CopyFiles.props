@@ -10,6 +10,7 @@
     <CustomBuildStep>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"> Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
@@ -24,6 +25,7 @@ EXIT 0
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
@@ -37,6 +39,7 @@ Robocopy $(ThirdPartyDir)\Rockey\$(PlatformName) $(OutDir) Rockey2.dll  /njh /nj
 EXIT 0</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
@@ -51,6 +54,7 @@ EXIT 0
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
 Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
 Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
