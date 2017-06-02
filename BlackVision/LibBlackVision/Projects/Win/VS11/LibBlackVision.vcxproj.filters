@@ -1972,6 +1972,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp">
+      <Filter>Engine\Audio\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5188,9 +5191,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h">
       <Filter>Engine\Audio</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

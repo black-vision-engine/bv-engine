@@ -3,6 +3,7 @@
 #include "VideoOutputsPreprocessor.h"
 
 #include "Engine/Audio/Resources/AudioUtils.h"
+#include "Engine/Audio/Resources/AudioMixer.h"
 #include "Assets/Texture/TextureUtils.h"
 
 #include "Services/BVServiceProvider.h"
@@ -22,7 +23,15 @@ const SizeType      BUFFER_SIZE = 10;
 VideoOutputsPreprocessor::VideoOutputsPreprocessor()
     : m_initialized( false )
     , m_lcmFPS( 0 )
+    , m_audioMixer( nullptr )
 {}
+
+// *********************************
+//
+VideoOutputsPreprocessor::~VideoOutputsPreprocessor   ()
+{
+    delete m_audioMixer;
+}
 
 // *********************************
 //
@@ -97,7 +106,10 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     auto videoFrame = vic->ReadColorTexture( ctx );
     avFrame->m_videoData = videoFrame->GetData();
 
-    vic->GetWrappedChannel()->GetAudioRenderChannelData();
+    if( !m_audioMixer )
+        m_audioMixer = new audio::AudioMixer( vic->GetWrappedChannel()->GetAudioRenderChannelData() );
+
+    m_audioMixer->MixAudioBuffersVecs( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ) );
 
     return avFrame;
 }
