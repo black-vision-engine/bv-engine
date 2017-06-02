@@ -347,8 +347,8 @@ void            BVAppLogic::OnUpdate           ( Renderer * renderer, audio::Aud
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
-    //FRAME_STATS_FRAME();
-    //FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
+    FRAME_STATS_FRAME();
+    FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
     TimeType time = ComputeFrameTime();
 
