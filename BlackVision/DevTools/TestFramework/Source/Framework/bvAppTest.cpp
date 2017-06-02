@@ -45,7 +45,10 @@ namespace bv
 //
 BVAppLogic *        BlackVisionAppFramework::CreateAppLogic     ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const
 {
-    return new BVTestAppLogic( renderer, audioRenderer, m_testName );
+    if( m_reportToConsole )
+        return new BVTestAppLogic( renderer, audioRenderer );
+    else
+        return new BVTestAppLogic( renderer, audioRenderer, m_testName );
 }
 
 
@@ -98,6 +101,12 @@ void            BlackVisionAppFramework::ParseTestParameters    ( int argc, char
     auto testOutIdx = FindArgument( argc, argv, "-o" );
     if( testOutIdx )
         m_testName = GetOutputFileName( argc, argv, testOutIdx );
+
+    m_reportToConsole = false;
+
+    auto reportConsoleIdx = FindArgument( argc, argv, "-ReportToConsole" );
+    if( reportConsoleIdx )
+        m_reportToConsole = true;
 }
 
 

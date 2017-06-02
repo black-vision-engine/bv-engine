@@ -19,7 +19,16 @@ BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer 
     : BVAppLogic( renderer, audioRenderer )
     , m_testExecutor( nullptr )
 {
-    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), testname, true );
+    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), testname );
+}
+
+// *********************************
+//
+BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
+    : BVAppLogic( renderer, audioRenderer )
+    , m_testExecutor( nullptr )
+{
+    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), "Test", true );
 }
 
 // *********************************

@@ -21,6 +21,7 @@ private:
 
 public:
                     BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const std::string & testname );
+                    BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer );
                     ~BVTestAppLogic     ();
 
     virtual void    OnUpdate            ( Renderer * renderer, audio::AudioRenderer * audioRenderer ) override;

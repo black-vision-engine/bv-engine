@@ -18,6 +18,7 @@ class BlackVisionAppFramework : public BlackVisionApp
 private:
 
     std::string         m_testName;
+    bool                m_reportToConsole;
 
 public:
 
