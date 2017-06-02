@@ -51,31 +51,56 @@ BVAppLogic *        BlackVisionAppFramework::CreateAppLogic     ( bv::Renderer *
 
 // ***********************
 //
-void            BlackVisionAppFramework::ParseTestParameters    ( int argc, char * argv[] )
-{
-    try
-    {
-        TCLAP::CmdLine cmd( "Black Vision Test Framework" );
-
-        TCLAP::ValueArg< std::string > testOutput( "o", "Output", "Output file", true, "", "string" );
-        cmd.add( testOutput );
-        
-        cmd.parse( argc, argv );
-
-        m_testName = testOutput.getValue();
-    }
-    catch( TCLAP::ArgException & e )
-    {
-        std::cerr << "Parsing arguments error: " << e.error() << " for arg " << e.argId() << std::endl;
-    }
-}
-
-// ***********************
-//
 void            BlackVisionAppFramework::PostFrame()
 {
     // Note: we ommit frame stats here.
     m_app->PostFrameLogic();
 }
 
+
+
+
+// ***********************
+//
+int             FindArgument            ( int argc, char * argv[], const char * searchedString, int startIdx = 1 )
+{
+    for( int i = startIdx; i < argc; ++i )
+    {
+        if( strcmp( argv[ i ], searchedString ) == 0 )
+        {
+            return i;
+        }
+    }
+    return 0;
+}
+
+
+// ***********************
+//
+std::string     GetOutputFileName       ( int argc, char * argv[], int startIdx )
+{
+    // Logger sink file name should directly follow startIdx
+    if( startIdx + 1 < argc )
+        return argv[ startIdx + 1 ];
+    else
+        return "";
+}
+
+// ***********************
+//
+void            BlackVisionAppFramework::ParseTestParameters    ( int argc, char * argv[] )
+{
+    // FIXME: It would be better to use TCLAP library for parsing command line arguments.
+    // but there's a problem - in such case we should make two fases of initialization. First would
+    // add possible cmd args to TCLAP::CmdLine object and second would take parsed values and initialize
+    // subsystems. This looks horible.
+
+    auto testOutIdx = FindArgument( argc, argv, "-o" );
+    if( testOutIdx )
+        m_testName = GetOutputFileName( argc, argv, testOutIdx );
+}
+
+
+
 }	// bv
+
