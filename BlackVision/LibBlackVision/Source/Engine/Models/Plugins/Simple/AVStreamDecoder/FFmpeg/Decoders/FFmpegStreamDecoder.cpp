@@ -130,11 +130,6 @@ bool			    FFmpegStreamDecoder::ProcessPacket      ( bool block )
         {
             auto data = ConvertFrame();
 
-			if( !data.frameData )
-			{
-				data.frameData = data.frameData;
-			}
-
             m_bufferQueue.WaitAndPush( data );
 
             return true;
