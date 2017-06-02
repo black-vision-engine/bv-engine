@@ -82,7 +82,7 @@ void                        AudioEntity::PushData       ( MemoryChunkConstPtr da
 
 // ***********************
 //
-AudioEntity::AudioBufferVec AudioEntity::PopData        ()
+AudioBufferVec AudioEntity::PopData        ()
 {
     AudioBufferVec buffers;
 

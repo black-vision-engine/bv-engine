@@ -145,5 +145,4 @@ RenderedChannelsData *  RenderedChannelsData::Create                        ( co
     return res;
 }
 
-
 } // bv

@@ -1969,6 +1969,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp">
       <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5183,6 +5186,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.h">
       <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h">
+      <Filter>Engine\Audio</Filter>
+	</ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
       <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
     </ClInclude>
