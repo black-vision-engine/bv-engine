@@ -199,44 +199,6 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
     }
 }
 
-//// *********************************
-////
-//AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data, const std::set< const audio::AudioEntity * > & audioEnts )
-//{
-//    // check whether active audio buffer exists
-//    if( IsAnySourcePlaying() )
-//    {
-//        // check whether any data needs uploading
-//        if( IsAnyBufferReady( data->Size() ) )
-//        {
-//            data->Clear();
-//        }
-//
-//        for( auto & obj : m_sources )
-//        {        
-//            if( audioEnts.find( obj.first ) != audioEnts.end() )
-//            {
-//                auto queue = m_bufferMap.at( obj.second );
-//                queue->MixBufferedData( data, obj.first->IsEOF() );
-//            }
-//        }
-//
-//		auto size = data->Size();
-//		auto outData = MemoryChunk::Create( size );
-//
-//		audio::AudioUtils::ApplyGain( outData->GetWritable(), data->Get(), size, m_gain );
-//
-//		data = outData;
-//    }
-//    else
-//    {
-//        data->Clear();
-//    }
-//
-//
-//    return audio::AudioBuffer::Create( data, m_frequency, m_format, false );
-//}
-
 // *********************************
 //
 UInt32                  AudioRenderer::GetChannels                  () const
@@ -275,45 +237,6 @@ void                    AudioRenderer::DeleteSinglePDR              ( MapType & 
         resMap.erase( it );
     }
 }
-
-// *********************************
-//
-//bool                    AudioRenderer::IsAnySourcePlaying           () const
-//{
-//    for( auto & obj : m_sources )
-//    {
-//        if( obj.first->IsPlaying() )
-//        {
-//            return true;
-//        }
-//    }
-//    return false;
-//}
-//
-//// *********************************
-////
-//bool                    AudioRenderer::IsAnyBufferReady             ( SizeType requestedBufferSize ) const
-//{
-//    for( auto & obj : m_sources )
-//    {        
-//        auto queue = m_bufferMap.at( obj.second );
-//        if( !obj.first->IsEOF() )
-//        {
-//            if( requestedBufferSize <= queue->GetBufferedDataSize() )
-//            {
-//                return true;
-//            }
-//        }
-//        else
-//        {
-//            if( queue->GetBufferedDataSize() > 0 )
-//            {
-//                return true;
-//            }
-//        }
-//    }
-//    return false;
-//}
 
 // *********************************
 //
