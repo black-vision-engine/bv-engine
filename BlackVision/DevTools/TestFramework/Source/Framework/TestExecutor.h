@@ -24,7 +24,7 @@ private:
     
     // Note: Members order matters. Check initialization in constructor.
     File                            m_resultFile;
-    UnitTest::XmlTestReporter       m_reporter;
+    UnitTest::TestReporter *        m_reporter;
     UnitTest::MultiframeTestRunner  m_runner;
 
     UnitTest::Test *                m_testList;
@@ -37,6 +37,7 @@ private:
 public:
 
     TestExecutor        ( BVTestAppLogic * appLogic, UnitTest::Test * test, const std::string& filePath );
+    TestExecutor        ( BVTestAppLogic * appLogic, UnitTest::Test * test, const std::string& filePath, bool reportStdOut );
     ~TestExecutor       ();
 
     bool                Execute         ();
