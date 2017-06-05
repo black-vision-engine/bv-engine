@@ -68,6 +68,7 @@ void AudioMixer::SetGain                    ( Float32 gain )
 void AudioMixer::MixAudioBuffers            ( const MemoryChunkPtr & output, const AudioBufferVec & audioBuffs ) const
 {
     auto rawData = output->GetWritable();
+    auto outSize = output->Size();
     SizeType rewriteSize = 0;
 
     for( auto & ab : audioBuffs )
@@ -75,10 +76,16 @@ void AudioMixer::MixAudioBuffers            ( const MemoryChunkPtr & output, con
         auto inMC = ab->GetData();
         auto inSize = inMC->Size();
         
-        AudioUtils::MixAudio16( rawData, inMC->Get(), inSize );
-        rawData += inSize;
+        auto minSize = std::min( outSize - rewriteSize, inSize );
 
-        rewriteSize += inSize;
+        AudioUtils::MixAudio16( rawData, inMC->Get(), minSize );
+
+        rawData += minSize;
+
+        rewriteSize += minSize;
+
+        if( rewriteSize == outSize )
+            break;
     }
 }
 
