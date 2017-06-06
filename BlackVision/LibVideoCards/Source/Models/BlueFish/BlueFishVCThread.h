@@ -26,6 +26,8 @@ class BlueFishVCThread : public StoppableThread
 
 	FrameQueue					m_frameQueue;
 
+    MemoryChunkPtr              m_prevAudioData;
+
 	bool						m_odd;
     bool						m_interlaceEnabled;
 

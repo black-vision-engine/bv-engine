@@ -109,11 +109,24 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
     memset( memDst, 0, size );
 
     for( int i = m_odd, j = 0; i < height; i += 2, j++ )
-    {
         memcpy( &memDst[ j*( bytes_per_line ) ], &memSrc[ i*( bytes_per_line ) ], bytes_per_line );
+
+    MemoryChunkPtr audioData = nullptr;
+
+    if( !m_prevAudioData )
+    {
+        m_prevAudioData = MemoryChunk::Create( frame->m_audioData->Size() );
+        memcpy( m_prevAudioData->GetWritable(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+    }
+    else
+    {
+        audioData = MemoryChunk::Create( frame->m_audioData->Size() + m_prevAudioData->Size() );
+        memcpy( audioData->GetWritable(), m_prevAudioData->Get(), m_prevAudioData->Size() );
+        memcpy( audioData->GetWritable() + m_prevAudioData->Size(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+        m_prevAudioData = nullptr;
     }
 
-    return AVFrame::Create( outputFrame, frame->m_audioData, frame->m_desc );
+    return AVFrame::Create( outputFrame, audioData, frame->m_desc );
 }
 
 } // blackmagic

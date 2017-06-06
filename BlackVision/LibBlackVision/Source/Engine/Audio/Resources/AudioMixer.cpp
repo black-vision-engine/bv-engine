@@ -7,14 +7,13 @@ namespace bv { namespace audio
 
 // *********************************
 //
-AudioMixer::AudioMixer      ( const audio::AudioRenderChannelData & arcd )
-    : m_arcd( arcd )
-    , m_gain( 1.f )
+AudioMixer::AudioMixer      ()
+    : m_gain( 1.f )
 {}
 
 // *********************************
 //
-bool AudioMixer::MixAudioBuffersVecs           ( const MemoryChunkPtr & output ) const
+bool AudioMixer::PopAndMixAudioData           ( const MemoryChunkPtr & output )
 {
     // check whether any data needs uploading
     if( IsAnyBufferReady( output->Size() ) )
@@ -26,8 +25,8 @@ bool AudioMixer::MixAudioBuffersVecs           ( const MemoryChunkPtr & output )
         return true;
     }
 
-    for( SizeType i = 0; i < m_arcd.NumSources(); ++i )
-        MixAudioBuffers( output, m_arcd.GetData( i ) );
+    for( SizeType i = 0; i < m_audioBuffersSources.size(); ++i )
+        MixAudioBuffers( output, i );
     
     if( m_gain < 1.f && m_gain > 0.f )
         AudioUtils::ApplyGain( output->GetWritable(), output->Size(), m_gain );
@@ -39,21 +38,48 @@ bool AudioMixer::MixAudioBuffersVecs           ( const MemoryChunkPtr & output )
 //
 bool AudioMixer::IsAnyBufferReady             ( SizeType requestedBufferSize ) const
 {
-    for( SizeType i = 0; i < m_arcd.NumSources(); ++i )
+    for( SizeType i = 0; i < m_audioBuffersSources.size(); ++i )
     {
-        if( !m_arcd.GetData( i ).back()->IsEOF() )
+        if( !m_eofVec[ i ] )
         {
-            if( requestedBufferSize <= m_arcd.DataSize( i ) )
+            if( requestedBufferSize <= m_sizes[ i ] )
                 return true;
         }
         else
         {
-            if( m_arcd.DataSize( i ) > 0 )
+            if( m_sizes[ i ] > 0 )
                 return true;
         }
     }
 
     return false;
+}
+
+// *********************************
+//
+void AudioMixer::ResizeSources          ( SizeType numSources )
+{
+    m_audioBuffersSources.resize( numSources );
+    m_eofVec.resize( numSources );
+    m_sizes.resize( numSources );
+}
+
+// *********************************
+//
+void AudioMixer::PushData                   ( SizeType sourceIdx, const AudioBufferVec & audioBuffs )
+{
+    assert( sourceIdx < m_audioBuffersSources.size() );
+
+    for( auto & ab : audioBuffs )
+    {
+        m_audioBuffersSources[ sourceIdx ].PushBack( ab->GetData() );
+        m_sizes[ sourceIdx ] += ab->GetData()->Size();
+    }
+
+    if( !audioBuffs.empty() )
+        m_eofVec[ sourceIdx ] = audioBuffs.back()->IsEOF();
+    else
+        m_eofVec[ sourceIdx ] = false;
 }
 
 // *********************************
@@ -65,45 +91,56 @@ void AudioMixer::SetGain                    ( Float32 gain )
 
 // *********************************
 //
-void AudioMixer::MixAudioBuffers            ( const MemoryChunkPtr & output, const AudioBufferVec & audioBuffs ) const
+bool AudioMixer::MixAudioBuffers            ( const MemoryChunkPtr & output, SizeType sourceIdx )
 {
+    auto dataSize = output->Size();
+    auto dataOffset = ( SizeType )0;
     auto rawData = output->GetWritable();
-    auto outSize = output->Size();
-    SizeType rewriteSize = 0;
 
-    for( auto & ab : audioBuffs )
+    bool force = m_eofVec[ sourceIdx ];
+
+    auto & bufferedDataSize = m_sizes[ sourceIdx ];
+
+    if( bufferedDataSize >= dataSize || ( bufferedDataSize > 0 && force ) )
     {
-        auto inMC = ab->GetData();
-        auto inSize = inMC->Size();
-        
-        auto minSize = std::min( outSize - rewriteSize, inSize );
+        while( dataSize && bufferedDataSize && ( bufferedDataSize >= dataSize || force ) )
+        {
+            auto chunkData = m_audioBuffersSources[ sourceIdx ].Front();
+            auto chunkRawData = chunkData->Get();
+            auto chunkDataSize = chunkData->Size();
 
-        AudioUtils::MixAudio16( rawData, inMC->Get(), minSize );
+            auto rewriteSize = ( SizeType )std::min( chunkDataSize, dataSize );
+          
+            //FIXME: assmuption that input data is always signed short (default format)
+            AudioUtils::MixAudio16( rawData + dataOffset, chunkRawData, rewriteSize );
 
-        rawData += minSize;
+            dataOffset += rewriteSize;
+            dataSize -= rewriteSize;
+            bufferedDataSize -= rewriteSize;
+            m_audioBuffersSources[ sourceIdx ].PopFront();
 
-        rewriteSize += minSize;
+            if( force )
+                return true;
 
-        if( rewriteSize == outSize )
-            break;
+            if( chunkDataSize > rewriteSize )
+            {
+                auto remainingSize = chunkDataSize - rewriteSize;
+                auto offsetChunkData = MemoryChunk::Create( remainingSize );
+                auto offsetChunkRawData = offsetChunkData->GetWritable();
+
+                memcpy( offsetChunkRawData, chunkData->Get() + rewriteSize, remainingSize );
+
+                m_audioBuffersSources[ sourceIdx ].PushFront( offsetChunkData );
+            }
+        }
+
+        //std::cout << this << "    " << sourceIdx << "    " << bufferedDataSize << std::endl;
+
+        return true;
     }
+
+    return false;
 }
-
-//// *********************************
-////
-//bool                    AudioMixer::IsAnySourcePlaying           () const
-//{
-//    for( auto & obj : m_sources )
-//    {
-//        if( obj.first->IsPlaying() )
-//        {
-//            return true;
-//        }
-//    }
-//    return false;
-//}
-
-
 
 } // audio
 } // bv

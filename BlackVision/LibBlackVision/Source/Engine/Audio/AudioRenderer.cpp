@@ -81,6 +81,10 @@ void    AudioRenderer::Proccess         ( AudioEntity * audio, AudioRenderChanne
             queue->PushData( audioData );
             arcd.PushData( audioData );
         }
+        else
+        {
+            arcd.PushData( AudioBufferVec() );
+        }
 
         if( audio->IsPlaying() && queue->BufferData() )
         {

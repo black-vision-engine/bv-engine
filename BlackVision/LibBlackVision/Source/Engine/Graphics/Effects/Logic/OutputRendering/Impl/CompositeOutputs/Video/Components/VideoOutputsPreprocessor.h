@@ -34,7 +34,7 @@ private:
     AVFrameBuffersMap           m_avFramesBuffer;
     AVFramesMap                 m_currentAVFrames;
 
-    audio::AudioMixer *         m_audioMixer;
+    std::map< const VideoInputChannel *, audio::AudioMixer * >        m_audioMixers;
 
 public:
 
