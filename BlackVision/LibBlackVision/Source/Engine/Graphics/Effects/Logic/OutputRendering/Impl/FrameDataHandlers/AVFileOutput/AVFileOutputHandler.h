@@ -16,6 +16,11 @@ namespace avencoder
 {
 class AVEncoder;
 }
+
+namespace audio
+{
+class AudioMixer;
+}
    
 class AVFileOutputHandler : public FrameDataHandler
 {
@@ -23,6 +28,10 @@ private:
 
     unsigned int                m_width;
     unsigned int                m_height;
+
+    Int32                       m_fps;
+
+    UInt64                      m_lastFrameTime;
 
     AVFramePtr                  m_avFrame;
 
@@ -32,6 +41,8 @@ private:
 
     RenderTarget *              m_shmRT;
     Texture2DPtr                m_shmTexture;
+
+    audio::AudioMixer *         m_audioMixer;
 
 public:
 
@@ -47,13 +58,11 @@ public:
 
 private:
 
-    AVFrameConstPtr PrepareFrame            ( const OutputState & state, RenderContext * ctx, const RenderChannel * inputChannel );
+    void            PrepareFrame            ( const OutputState & state, RenderContext * ctx, const RenderChannel * inputChannel );
 
-    void            ProcessFrame            ( AVFrameConstPtr frame );
+    void            ProcessFrame            ();
 
     Texture2DPtr    ReadDefaultTexture      ( RenderContext * ctx, const RenderChannel * inputChannel );
-    //Texture2DPtr    ReadMixChannelsTexture  ( RenderContext * ctx, const RenderTarget * inputRenderTarget );
-
 };
 
 

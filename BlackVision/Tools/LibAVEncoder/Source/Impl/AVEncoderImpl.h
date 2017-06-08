@@ -29,6 +29,7 @@ class AVEncoder::Impl
     OutputStream *          m_video_st;
     OutputStream *          m_audio_st;
     UInt32                  m_frameBufferSize;
+    SizeType                m_audioDataSize;
 
     std::mutex              m_mutex;
 

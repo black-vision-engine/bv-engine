@@ -9,6 +9,11 @@
 
 #include "Engine/Graphics/Effects/Logic/State/OutputState.h"
 
+#include "Engine/Audio/Resources/AudioMixer.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
+
+#include "System/Time.h"
+
 #include "AVEncoder.h"
 
 namespace bv { 
@@ -21,7 +26,9 @@ AVFileOutputHandler::AVFileOutputHandler      ( unsigned int width, unsigned int
     , m_activeRenderOutput( 1 )
     , m_shmRT( nullptr )
     , m_shmTexture( nullptr )
-    , m_encoder( new avencoder::AVEncoder()  )
+    , m_encoder( new avencoder::AVEncoder() )
+    , m_audioMixer( new audio::AudioMixer() )
+    , m_lastFrameTime( 0 )
 {
 
 }
@@ -36,7 +43,18 @@ void AVFileOutputHandler::StartToAVFileRendering  ( const std::string & outputFi
     vOps.height = 1080;
     vOps.bitRate = 40000;
 
-    m_encoder->OpenOutputStream( outputFilePath, vOps, avencoder::AudioOptions(), true, false );
+    m_fps = 25;
+
+    avencoder::AudioOptions aOps;
+    aOps.numChannels = 2;
+    aOps.sampleRate = 48000;
+    aOps.bitRate = 64000;
+    aOps.sampleType = AudioSampleType::AV_SAMPLE_FMT_S16;
+
+    m_avFrame = AVFrame::Create();
+    m_avFrame->m_audioData = MemoryChunk::Create( audio::AudioUtils::AudioDataSize( aOps.sampleRate, aOps.numChannels, ConvertAudioSampleTypeToSampleSize( aOps.sampleType ), m_fps ) );
+
+    m_encoder->OpenOutputStream( outputFilePath, vOps, aOps, true, true );
 }
 
 // **************************
@@ -45,6 +63,8 @@ void AVFileOutputHandler::StopToAVFileRendering   ()
 {
     if( m_encoder )
         m_encoder->CloseStream();
+
+    m_avFrame = nullptr;
 }
 
 
@@ -55,6 +75,8 @@ AVFileOutputHandler::~AVFileOutputHandler     ()
     if( m_encoder )
         m_encoder->CloseStream();
     delete m_encoder;
+
+    delete m_audioMixer;
 }
 
 // **************************
@@ -62,10 +84,10 @@ AVFileOutputHandler::~AVFileOutputHandler     ()
 void                                AVFileOutputHandler::HandleFrameData     ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel )
 {
     //1. Prepare memory representation of current frame
-    auto avFrame = PrepareFrame( state, ctx, channel );
+    PrepareFrame( state, ctx, channel );
 
     //2. Process memory representation of current frame
-    ProcessFrame( avFrame );
+    ProcessFrame();
 }
 
 // **************************
@@ -77,27 +99,38 @@ FullscreenEffectComponentStatePtr  AVFileOutputHandler::GetInternalFSEState     
 
 // **************************
 //
-AVFrameConstPtr    AVFileOutputHandler::PrepareFrame                                  ( const OutputState &, RenderContext * ctx, const RenderChannel * inputChannel )
+void            AVFileOutputHandler::PrepareFrame                                  ( const OutputState &, RenderContext * ctx, const RenderChannel * inputChannel )
 {
     Texture2DPtr outputFrame = ReadDefaultTexture( ctx, inputChannel );
 
-    if( !m_avFrame )
-    {
-        m_avFrame = AVFrame::Create();
-        m_avFrame->m_videoData = outputFrame->GetData();
-    }
+    m_avFrame->m_videoData = outputFrame->GetData();
 
-    //auto audio = audio_renderer( ctx );
-    //auto ret = audio->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ), vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+    m_audioMixer->ResizeSources( inputChannel->GetAudioRenderChannelData().NumSources() );
 
-    return m_avFrame;
+    for( SizeType i = 0; i < inputChannel->GetAudioRenderChannelData().NumSources(); ++i )
+        m_audioMixer->PushData( i, inputChannel->GetAudioRenderChannelData().GetData( i ) );
+
+    m_audioMixer->SetGain( audio_renderer( ctx )->Gain() );
 }
 
 // **************************
 //
-void            AVFileOutputHandler::ProcessFrame                                  ( AVFrameConstPtr frame )
+void            AVFileOutputHandler::ProcessFrame                                  ()
 {
-    m_encoder->WriteFrame( frame );
+    auto now = Time::Now();
+
+    if( m_lastFrameTime == 0 )
+        m_lastFrameTime = now;
+    else
+    {
+        if( now - m_lastFrameTime >= 1000 / m_fps )
+        {
+            m_audioMixer->PopAndMixAudioData( std::const_pointer_cast< MemoryChunk >( m_avFrame->m_audioData ) );
+            m_encoder->WriteFrame( m_avFrame );
+            m_lastFrameTime = now;
+        }
+    }
+    
 }
 
 // **************************

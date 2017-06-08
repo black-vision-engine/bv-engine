@@ -1,4 +1,5 @@
 #include "AVEncoderImpl.h"
+#include "Engine/Audio/Resources/AudioUtils.h"
 
 #include <stdio.h>
 
@@ -93,6 +94,8 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
 
     m_avFramesBuffer = boost::circular_buffer< AVFramePtr >( m_frameBufferSize );
 
+    m_audioDataSize = audio::AudioUtils::AudioDataSize( aOps.sampleRate, aOps.numChannels, ConvertAudioSampleTypeToSampleSize( aOps.sampleType ), vOps.frameRate );
+
     for( UInt32 i = 0; i < m_frameBufferSize; ++i )
     {
         auto videoData = bv::MemoryChunk::Create( 4 * vOps.width * vOps.height );
@@ -103,8 +106,10 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
         desc.width = vOps.width;
         desc.sampleRate = aOps.sampleRate;
 
+
         auto frame = bv::AVFrame::Create(); // TODO: Add audio data
         frame->m_videoData = videoData;
+        frame->m_audioData = bv::MemoryChunk::Create( m_audioDataSize );
         frame->m_desc = desc;
 
         m_avFramesBuffer.push_back( frame );
@@ -185,12 +190,17 @@ bool            AVEncoder::Impl::WriteFrame             ( const AVFrameConstPtr 
         {
             auto videoData = bv::MemoryChunk::Create( bvFrame->m_videoData->Size() );
 
-            frame = bv::AVFrame::Create(); // TODO: Add audio data
+            frame = bv::AVFrame::Create();
             frame->m_videoData = videoData;
+            frame->m_audioData = bv::MemoryChunk::Create( m_audioDataSize );
             frame->m_desc = bvFrame->m_desc;
         }
 
+        assert( frame->m_videoData->Size() == bvFrame->m_videoData->Size() );
+        assert( frame->m_audioData->Size() == bvFrame->m_audioData->Size() );
+
         memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_videoData )->GetWritable(), bvFrame->m_videoData->Get(), bvFrame->m_videoData->Size() );
+        memcpy( std::const_pointer_cast< MemoryChunk >( frame->m_audioData )->GetWritable(), bvFrame->m_audioData->Get(), bvFrame->m_audioData->Size() );
 
         m_encoderThread->EnqueueFrame( frame );
         return true;

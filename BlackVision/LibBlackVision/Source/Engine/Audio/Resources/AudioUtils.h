@@ -19,6 +19,8 @@ public:
     static Int32		ChannelsCount	( AudioFormat format );
     static Int32		ChannelDepth    ( AudioFormat format );
 
+    static SizeType     AudioDataSize   ( UInt64 sampleRate, UInt32 numChannels, UInt32 sampleSizeInBytes, UInt32 fps );
+
     /** @brief The most simple audio mixer */
     static void			MixAudio16      ( char * outData, const char * inData, SizeType size );
 

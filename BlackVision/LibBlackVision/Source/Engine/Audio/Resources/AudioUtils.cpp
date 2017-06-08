@@ -117,5 +117,13 @@ void		AudioUtils::ApplyGain		( char * inData, SizeType size, Float32 gain )
     }
 }
 
+// ****************************
+//
+SizeType     AudioUtils::AudioDataSize   ( UInt64 sampleRate, UInt32 numChannels, UInt32 sampleSizeInBytes, UInt32 fps )
+{
+    return sampleRate * numChannels * sampleSizeInBytes / fps;
+}
+
+
 } //audio
 } //bv

@@ -47,4 +47,6 @@ public:
             
 };
 
+UInt32  ConvertAudioSampleTypeToSampleSize( AudioSampleType ast );
+
 } //bv

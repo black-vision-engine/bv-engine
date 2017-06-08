@@ -161,11 +161,7 @@ bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost
         //fprintf(stderr, "Could not open audio codec: %s\n", av_err2str(ret));
         return false;
     }
-    /* init signal generator */
-    ost->t     = 0;
-    ost->tincr = 2 * float(M_PI) * 110.f / c->sample_rate;
-    /* increment frequency by 110 Hz per second */
-    ost->tincr2 = 2 * float(M_PI) * 110.f / c->sample_rate / c->sample_rate;
+
     if (c->codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
         nb_samples = 10000;
     else
@@ -173,7 +169,7 @@ bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost
     ost->frame     = alloc_audio_frame(c->sample_fmt, c->channel_layout,
                                        c->sample_rate, nb_samples);
     ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_S16, c->channel_layout,
-                                       c->sample_rate, nb_samples);
+                                       c->sample_rate, c->sample_rate / 25);
     /* copy the stream parameters to the muxer */
     ret = avcodec_parameters_from_context(ost->st->codecpar, c);
     if (ret < 0) {
@@ -315,6 +311,7 @@ bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, b
     ::AVFrame *frame = ost->tmp_frame;
     int16_t *q = ( int16_t* ) frame->data[ 0 ];
 
+    assert( bvFrame->m_audioData->Size() <= frame->linesize[ 0 ] );
     memcpy( q, bvFrame->m_audioData->Get(), bvFrame->m_audioData->Size() );
 
     frame->pts = ost->next_pts;
@@ -354,7 +351,7 @@ bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv:
             return false;
         /* convert to destination format */
         ret = swr_convert( ost->swr_ctx,
-                           ost->frame->data, dst_nb_samples,
+                           ost->frame->data, ost->frame->nb_samples,
                            ( const uint8_t ** ) frame->data, frame->nb_samples );
         if( ret < 0 )
         {

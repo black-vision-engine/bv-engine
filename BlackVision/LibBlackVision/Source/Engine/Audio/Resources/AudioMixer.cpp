@@ -111,6 +111,8 @@ bool AudioMixer::MixAudioBuffers            ( const MemoryChunkPtr & output, Siz
 
             auto rewriteSize = ( SizeType )std::min( chunkDataSize, dataSize );
           
+            assert( dataOffset + rewriteSize <= output->Size() );
+            assert( rewriteSize <= chunkData->Size() );
             //FIXME: assmuption that input data is always signed short (default format)
             AudioUtils::MixAudio16( rawData + dataOffset, chunkRawData, rewriteSize );
 
@@ -127,6 +129,8 @@ bool AudioMixer::MixAudioBuffers            ( const MemoryChunkPtr & output, Siz
                 auto remainingSize = chunkDataSize - rewriteSize;
                 auto offsetChunkData = MemoryChunk::Create( remainingSize );
                 auto offsetChunkRawData = offsetChunkData->GetWritable();
+
+                assert( remainingSize + rewriteSize <= chunkData->Size() );
 
                 memcpy( offsetChunkRawData, chunkData->Get() + rewriteSize, remainingSize );
 
