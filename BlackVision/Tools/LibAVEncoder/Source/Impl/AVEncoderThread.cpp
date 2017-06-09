@@ -1,6 +1,6 @@
 #include "AVEncoderThread.h"
 
-#include "FFmpegUtils.h"
+#include "FFmpegEncoderUtils.h"
 
 #include <thread>
 
@@ -30,9 +30,9 @@ void AVEncoderThread::Process       ()
     if( frm )
     {
         if( m_videoOS )
-            FFmpegUtils::write_video_frame( m_oc, m_videoOS, frm );
+            FFmpegEncoderUtils::write_video_frame( m_oc, m_videoOS, frm );
         if( m_audioOS )
-            FFmpegUtils::write_audio_frame( m_oc, m_audioOS, frm );
+            FFmpegEncoderUtils::write_audio_frame( m_oc, m_audioOS, frm );
     }
 
     m_frameCompleteCallback( frm );

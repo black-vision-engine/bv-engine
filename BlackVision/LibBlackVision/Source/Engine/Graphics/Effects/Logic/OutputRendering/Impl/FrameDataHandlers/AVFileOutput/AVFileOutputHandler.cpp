@@ -47,12 +47,12 @@ void AVFileOutputHandler::StartToAVFileRendering  ( const std::string & outputFi
 
     avencoder::AudioOptions aOps;
     aOps.numChannels = 2;
-    aOps.sampleRate = 48000;
+    aOps.sampleRate = 44100;
     aOps.bitRate = 64000;
     aOps.sampleType = AudioSampleType::AV_SAMPLE_FMT_S16;
 
     m_avFrame = AVFrame::Create();
-    m_avFrame->m_audioData = MemoryChunk::Create( audio::AudioUtils::AudioDataSize( aOps.sampleRate, aOps.numChannels, ConvertAudioSampleTypeToSampleSize( aOps.sampleType ), m_fps ) );
+    m_avFrame->m_audioData = MemoryChunk::Create( audio::AudioUtils::AudioDataSize( 48000, aOps.numChannels, ConvertAudioSampleTypeToSampleSize( aOps.sampleType ), m_fps ) );
 
     m_encoder->OpenOutputStream( outputFilePath, vOps, aOps, true, true );
 }

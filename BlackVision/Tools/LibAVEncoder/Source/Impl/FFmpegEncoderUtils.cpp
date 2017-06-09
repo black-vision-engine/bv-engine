@@ -1,6 +1,7 @@
 #pragma once
 
-#include "FFmpegUtils.h"
+#include "FFmpegEncoderUtils.h"
+#include "Util/FFmpeg/FFmpegUtils.h"
 
 #define SCALE_FLAGS SWS_BICUBIC
 
@@ -27,7 +28,7 @@ static void log_packet(const AVFormatContext *, const AVPacket *)
 
 //**************************************
 //
-bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVFormatContext *oc, AVCodec **codec, enum AVCodecID codec_id )
+bool FFmpegEncoderUtils::add_stream                        ( OutputStream *ost, AVFormatContext *oc, AVCodec **codec, enum AVCodecID codec_id )
 {
     AVCodecContext *c;
     /* find the encoder */
@@ -59,7 +60,7 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
 
 //**************************************
 //
-::AVFrame *  FFmpegUtils::alloc_picture         ( enum AVPixelFormat pix_fmt, int width, int height )
+::AVFrame *  FFmpegEncoderUtils::alloc_picture         ( enum AVPixelFormat pix_fmt, int width, int height )
 {
     ::AVFrame *picture;
     int ret;
@@ -80,7 +81,7 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
 
 //**************************************
 //
-::AVFrame * FFmpegUtils::alloc_audio_frame  ( enum AVSampleFormat sample_fmt, uint64_t channel_layout, int sample_rate, int nb_samples )
+::AVFrame * FFmpegEncoderUtils::alloc_audio_frame  ( enum AVSampleFormat sample_fmt, uint64_t channel_layout, int sample_rate, int nb_samples )
 {
     ::AVFrame *frame = av_frame_alloc();
     int ret;
@@ -104,7 +105,7 @@ bool FFmpegUtils::add_stream                        ( OutputStream *ost, AVForma
 
 //**************************************
 //
-bool FFmpegUtils::open_video                ( AVCodec * codec, OutputStream * ost, AVDictionary * opt_arg )
+bool FFmpegEncoderUtils::open_video                ( AVCodec * codec, OutputStream * ost, AVDictionary * opt_arg )
 {
     int ret;
     AVCodecContext *c = ost->enc;
@@ -146,7 +147,7 @@ bool FFmpegUtils::open_video                ( AVCodec * codec, OutputStream * os
 
 //**************************************
 //
-bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost, AVDictionary * opt_arg )
+bool FFmpegEncoderUtils::open_audio                ( AVCodec *codec, OutputStream * ost, AVDictionary * opt_arg )
 {
     AVCodecContext *c;
     int nb_samples;
@@ -169,7 +170,7 @@ bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost
     ost->frame     = alloc_audio_frame(c->sample_fmt, c->channel_layout,
                                        c->sample_rate, nb_samples);
     ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_S16, c->channel_layout,
-                                       c->sample_rate, c->sample_rate / 25);
+                                       48000, 48000 / 25);
     /* copy the stream parameters to the muxer */
     ret = avcodec_parameters_from_context(ost->st->codecpar, c);
     if (ret < 0) {
@@ -184,7 +185,7 @@ bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost
     }
     /* set options */
     av_opt_set_int       (ost->swr_ctx, "in_channel_count",   c->channels,       0);
-    av_opt_set_int       (ost->swr_ctx, "in_sample_rate",     c->sample_rate,    0);
+    av_opt_set_int       (ost->swr_ctx, "in_sample_rate",       48000,    0);
     av_opt_set_sample_fmt(ost->swr_ctx, "in_sample_fmt",      AV_SAMPLE_FMT_S16, 0);
     av_opt_set_int       (ost->swr_ctx, "out_channel_count",  c->channels,       0);
     av_opt_set_int       (ost->swr_ctx, "out_sample_rate",    c->sample_rate,    0);
@@ -200,7 +201,7 @@ bool FFmpegUtils::open_audio                ( AVCodec *codec, OutputStream * ost
 
 //**************************************
 //
-int FFmpegUtils::write_frame                ( AVFormatContext * fmt_ctx, const AVRational * time_base, AVStream * st, AVPacket * pkt )
+int FFmpegEncoderUtils::write_frame                ( AVFormatContext * fmt_ctx, const AVRational * time_base, AVStream * st, AVPacket * pkt )
 {
     /* rescale output packet timestamp values from codec to stream timebase */
     av_packet_rescale_ts(pkt, *time_base, st->time_base);
@@ -212,7 +213,7 @@ int FFmpegUtils::write_frame                ( AVFormatContext * fmt_ctx, const A
 
 //**************************************
 //
-bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConstPtr srcFrame )
+bool FFmpegEncoderUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConstPtr srcFrame )
 {
     /* when we pass a frame to the encoder, it may keep a reference to it
      * internally;
@@ -234,7 +235,7 @@ bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConst
 
 //**************************************
 //
-::AVFrame * FFmpegUtils::get_video_frame    ( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
+::AVFrame * FFmpegEncoderUtils::get_video_frame    ( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
 {
     AVCodecContext *c = ost->enc;
     /* check if we want to generate more frames */
@@ -272,7 +273,7 @@ bool FFmpegUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFrameConst
 
 //**************************************
 //
-bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, bv::AVFrameConstPtr bvFrame )
+bool FFmpegEncoderUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, bv::AVFrameConstPtr bvFrame )
 {
     int ret;
     AVCodecContext *c;
@@ -306,7 +307,7 @@ bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, b
 
 //**************************************
 //
-::AVFrame * FFmpegUtils::get_audio_frame( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
+::AVFrame * FFmpegEncoderUtils::get_audio_frame( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
 {
     ::AVFrame *frame = ost->tmp_frame;
     int16_t *q = ( int16_t* ) frame->data[ 0 ];
@@ -325,7 +326,7 @@ bool FFmpegUtils::write_video_frame( AVFormatContext * oc, OutputStream * ost, b
 * encode one audio frame and send it to the muxer
 * return 1 when encoding is finished, 0 otherwise
 */
-bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv::AVFrameConstPtr bvFrame )
+bool FFmpegEncoderUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv::AVFrameConstPtr bvFrame )
 {
     AVCodecContext * c = ost->enc;
     AVPacket pkt = { 0 }; // data and size must be 0;
@@ -339,8 +340,9 @@ bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv:
     {
         /* convert samples from native format to destination codec format, using the resampler */
         /* compute destination number of samples */
-        dst_nb_samples = (int)av_rescale_rnd( swr_get_delay( ost->swr_ctx, c->sample_rate ) + frame->nb_samples,
-                                         c->sample_rate, c->sample_rate, AV_ROUND_UP );
+        auto delay = swr_get_delay( ost->swr_ctx, c->sample_rate );
+        dst_nb_samples = (int)av_rescale_rnd( delay + frame->nb_samples,
+                                              c->sample_rate, c->sample_rate, AV_ROUND_UP );
         assert( dst_nb_samples == frame->nb_samples );
         /* when we pass a frame to the encoder, it may keep a reference to it
         * internally;
@@ -351,7 +353,7 @@ bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv:
             return false;
         /* convert to destination format */
         ret = swr_convert( ost->swr_ctx,
-                           ost->frame->data, ost->frame->nb_samples,
+                           ost->frame->data, dst_nb_samples,
                            ( const uint8_t ** ) frame->data, frame->nb_samples );
         if( ret < 0 )
         {
@@ -377,7 +379,8 @@ bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv:
 
     if( ret < 0 )
     {
-        //fprintf(stderr, "Error encoding video frame: %s\n", av_err2str(ret));
+        auto err = FFmpegUtils::AVErrorToString( ret );
+        err;
         return false;
     }
 
@@ -395,7 +398,7 @@ bool FFmpegUtils::write_audio_frame( AVFormatContext *oc, OutputStream *ost, bv:
 
 //**************************************
 //
-void FFmpegUtils::close_stream      ( OutputStream * ost )
+void FFmpegEncoderUtils::close_stream      ( OutputStream * ost )
 {
     avcodec_free_context(&ost->enc);
     av_frame_free(&ost->frame);
@@ -406,7 +409,7 @@ void FFmpegUtils::close_stream      ( OutputStream * ost )
 
 //**************************************
 //
-bool FFmpegUtils::configure_video_codec_context( OutputStream * ost, int w, int h, int64_t bit_rate, int frame_rate, enum AVCodecID codec_id )
+bool FFmpegEncoderUtils::configure_video_codec_context( OutputStream * ost, int w, int h, int64_t bit_rate, int frame_rate, enum AVCodecID codec_id )
 {
     AVCodecContext * c = ost->enc;
     c->codec_id = codec_id;
@@ -443,7 +446,7 @@ bool FFmpegUtils::configure_video_codec_context( OutputStream * ost, int w, int 
 
 //**************************************
 //
-bool FFmpegUtils::configure_audio_codec_context( OutputStream * ost, AVCodec * codec, int64_t bit_rate, int sample_rate )
+bool FFmpegEncoderUtils::configure_audio_codec_context( OutputStream * ost, AVCodec * codec, int64_t bit_rate, int sample_rate )
 {
     AVCodecContext * c = ost->enc;
     c->sample_fmt  = codec->sample_fmts ?

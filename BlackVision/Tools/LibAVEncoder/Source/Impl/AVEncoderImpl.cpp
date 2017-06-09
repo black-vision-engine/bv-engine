@@ -52,8 +52,8 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
      * and initialize the codecs. */
     if (enableVideo && fmt->video_codec != AV_CODEC_ID_NONE) {
         m_video_st = new OutputStream();
-        FFmpegUtils::add_stream( m_video_st, m_AVContext, &video_codec, fmt->video_codec);
-        if( FFmpegUtils::configure_video_codec_context( m_video_st, vOps.width, vOps.height, vOps.bitRate, vOps.frameRate, fmt->video_codec ) )
+        FFmpegEncoderUtils::add_stream( m_video_st, m_AVContext, &video_codec, fmt->video_codec);
+        if( FFmpegEncoderUtils::configure_video_codec_context( m_video_st, vOps.width, vOps.height, vOps.bitRate, vOps.frameRate, fmt->video_codec ) )
         {
             have_video = 1;
             encode_video = 1;
@@ -61,8 +61,8 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
     }
     if (enableAudio && fmt->audio_codec != AV_CODEC_ID_NONE) {
         m_audio_st = new OutputStream();
-        FFmpegUtils::add_stream( m_audio_st, m_AVContext, &audio_codec, fmt->audio_codec);
-        if( FFmpegUtils::configure_audio_codec_context( m_audio_st, audio_codec, aOps.bitRate, aOps.sampleRate ) )
+        FFmpegEncoderUtils::add_stream( m_audio_st, m_AVContext, &audio_codec, fmt->audio_codec);
+        if( FFmpegEncoderUtils::configure_audio_codec_context( m_audio_st, audio_codec, aOps.bitRate, aOps.sampleRate ) )
         {
             have_audio = 1;
             encode_audio = 1;
@@ -71,9 +71,9 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
     /* Now that all the parameters are set, we can open the audio and
      * video codecs and allocate the necessary encode buffers. */
     if (have_video)
-        FFmpegUtils::open_video(video_codec, m_video_st, opt);
+        FFmpegEncoderUtils::open_video(video_codec, m_video_st, opt);
     if (have_audio)
-        FFmpegUtils::open_audio(audio_codec, m_audio_st, opt);
+        FFmpegEncoderUtils::open_audio(audio_codec, m_audio_st, opt);
     av_dump_format(m_AVContext, 0, outputFilePath.c_str(), 1);
     /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
@@ -94,7 +94,7 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
 
     m_avFramesBuffer = boost::circular_buffer< AVFramePtr >( m_frameBufferSize );
 
-    m_audioDataSize = audio::AudioUtils::AudioDataSize( aOps.sampleRate, aOps.numChannels, ConvertAudioSampleTypeToSampleSize( aOps.sampleType ), vOps.frameRate );
+    m_audioDataSize = audio::AudioUtils::AudioDataSize( 48000, aOps.numChannels, ConvertAudioSampleTypeToSampleSize( aOps.sampleType ), vOps.frameRate );
 
     for( UInt32 i = 0; i < m_frameBufferSize; ++i )
     {
@@ -142,9 +142,9 @@ void            AVEncoder::Impl::CloseStream            ()
         /* Close each codec. */
 
         if( m_video_st )
-            FFmpegUtils::close_stream( m_video_st );
+            FFmpegEncoderUtils::close_stream( m_video_st );
         if ( m_audio_st )
-            FFmpegUtils::close_stream( m_audio_st );
+            FFmpegEncoderUtils::close_stream( m_audio_st );
 
         if( !( m_AVContext->oformat->flags & AVFMT_NOFILE ) )
             /* Close the output file. */

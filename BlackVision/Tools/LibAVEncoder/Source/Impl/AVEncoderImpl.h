@@ -4,7 +4,7 @@
 #include "AVEncoderThread.h"
 #include "Memory/AVFrame.h" 
 
-#include "FFmpegUtils.h"
+#include "FFmpegEncoderUtils.h"
 
 #include <boost/circular_buffer.hpp>
 #include <mutex>
