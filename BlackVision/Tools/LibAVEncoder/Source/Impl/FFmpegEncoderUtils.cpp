@@ -309,15 +309,20 @@ bool FFmpegEncoderUtils::write_video_frame( AVFormatContext * oc, OutputStream *
 //
 ::AVFrame * FFmpegEncoderUtils::get_audio_frame( OutputStream * ost, bv::AVFrameConstPtr bvFrame )
 {
-    ::AVFrame *frame = ost->tmp_frame;
-    int16_t *q = ( int16_t* ) frame->data[ 0 ];
+    if( bvFrame )
+    {
+        ::AVFrame *frame = ost->tmp_frame;
+        int16_t *q = ( int16_t* ) frame->data[ 0 ];
 
-    assert( bvFrame->m_audioData->Size() <= frame->linesize[ 0 ] );
-    memcpy( q, bvFrame->m_audioData->Get(), bvFrame->m_audioData->Size() );
+        assert( bvFrame->m_audioData->Size() <= frame->linesize[ 0 ] );
+        memcpy( q, bvFrame->m_audioData->Get(), bvFrame->m_audioData->Size() );
 
-    frame->pts = ost->next_pts;
-    ost->next_pts += frame->nb_samples;
-    return frame;
+        frame->pts = ost->next_pts;
+        ost->next_pts += frame->nb_samples;
+        return frame;
+    }
+    else
+        return nullptr;
 }
 
 //**************************************
@@ -367,30 +372,61 @@ bool FFmpegEncoderUtils::write_audio_frame( AVFormatContext *oc, OutputStream *o
 
         frame = ost->frame;
         frame->pts = av_rescale_q( ost->samples_count, avr, c->time_base );
-        ost->samples_count += dst_nb_samples;
+        ost->samples_count += frame->nb_samples;
     }
-
-    ret = avcodec_send_frame( ost->enc, frame );
-
-    if( ret == 0 )
-        ret = avcodec_receive_packet( ost->enc, &pkt );
     else
-        return false;
-
-    if( ret < 0 )
     {
-        auto err = FFmpegUtils::AVErrorToString( ret );
-        err;
-        return false;
+        auto bufferedSamples = swr_get_out_samples( ost->swr_ctx, 0 );
+
+        if( bufferedSamples > ost->frame->nb_samples )
+        {
+            ret = av_frame_make_writable( ost->frame );
+            if( ret < 0 )
+                return false;
+
+            ret = swr_convert( ost->swr_ctx,
+                               ost->frame->data, ost->frame->nb_samples,
+                               nullptr, 0 );
+            if( ret < 0 )
+            {
+                fprintf( stderr, "Error while converting\n" );
+                return false;
+            }
+
+            AVRational avr;
+            avr.num = 1;
+            avr.den = c->sample_rate;
+
+            frame = ost->frame;
+            frame->pts = av_rescale_q( ost->samples_count, avr, c->time_base );
+            ost->samples_count += frame->nb_samples;
+        }
     }
 
-
-    ret = write_frame( oc, &c->time_base, ost->st, &pkt );
-    if( ret < 0 )
+    if( frame )
     {
-        //fprintf( stderr, "Error while writing audio frame: %s\n",
-        //         av_err2str( ret ) );
-        return false;
+        ret = avcodec_send_frame( ost->enc, frame );
+
+        if( ret == 0 )
+            ret = avcodec_receive_packet( ost->enc, &pkt );
+        else
+            return false;
+
+        if( ret < 0 )
+        {
+            auto err = FFmpegUtils::AVErrorToString( ret );
+            err;
+            return false;
+        }
+
+
+        ret = write_frame( oc, &c->time_base, ost->st, &pkt );
+        if( ret < 0 )
+        {
+            //fprintf( stderr, "Error while writing audio frame: %s\n",
+            //         av_err2str( ret ) );
+            return false;
+        }
     }
 
     return frame != nullptr;

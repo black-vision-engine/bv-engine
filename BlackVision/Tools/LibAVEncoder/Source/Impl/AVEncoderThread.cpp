@@ -32,7 +32,10 @@ void AVEncoderThread::Process       ()
         if( m_videoOS )
             FFmpegEncoderUtils::write_video_frame( m_oc, m_videoOS, frm );
         if( m_audioOS )
+        {
             FFmpegEncoderUtils::write_audio_frame( m_oc, m_audioOS, frm );
+            FFmpegEncoderUtils::write_audio_frame( m_oc, m_audioOS, nullptr );
+        }
     }
 
     m_frameCompleteCallback( frm );
