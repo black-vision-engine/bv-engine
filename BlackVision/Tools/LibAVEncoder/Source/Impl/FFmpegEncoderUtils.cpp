@@ -342,8 +342,8 @@ bool FFmpegEncoderUtils::write_audio_frame( AVFormatContext *oc, OutputStream *o
         /* compute destination number of samples */
         auto delay = swr_get_delay( ost->swr_ctx, c->sample_rate );
         dst_nb_samples = (int)av_rescale_rnd( delay + frame->nb_samples,
-                                              c->sample_rate, c->sample_rate, AV_ROUND_UP );
-        assert( dst_nb_samples == frame->nb_samples );
+                                              frame->sample_rate, c->sample_rate, AV_ROUND_UP );
+        //assert( dst_nb_samples == frame->nb_samples );
         /* when we pass a frame to the encoder, it may keep a reference to it
         * internally;
         * make sure we do not overwrite it here
@@ -353,7 +353,7 @@ bool FFmpegEncoderUtils::write_audio_frame( AVFormatContext *oc, OutputStream *o
             return false;
         /* convert to destination format */
         ret = swr_convert( ost->swr_ctx,
-                           ost->frame->data, dst_nb_samples,
+                           ost->frame->data, ost->frame->nb_samples,
                            ( const uint8_t ** ) frame->data, frame->nb_samples );
         if( ret < 0 )
         {
