@@ -1,0 +1,9 @@
+SETLOCAL ENABLEEXTENSIONS
+
+SET TEST_EXECUTABLES_DIRECTORY=_Builds\x64-v110-Debug\Tests
+
+cd %TEST_EXECUTABLES_DIRECTORY%
+::pushd TEST_EXECUTABLES_DIRECTORY
+
+for /r %%g in (*.exe) do echo %%g >> test.txt
+
