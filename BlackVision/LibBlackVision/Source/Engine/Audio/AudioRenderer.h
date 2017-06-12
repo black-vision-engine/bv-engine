@@ -12,7 +12,7 @@ class PdrAudioBuffersQueue;
 class PdrListener;
 class PdrSource;
 class AudioEntity;
-
+class AudioRenderChannelData;
 
 class AudioRenderer
 {
@@ -44,7 +44,7 @@ public:
 
     void	            Terminate			();
 
-    void                Proccess            ( AudioEntity * audio );
+    void                Proccess            ( AudioEntity * audio, AudioRenderChannelData & arcd );
 
     void                Play                ( AudioEntity * audio );
     void                Pause               ( AudioEntity * audio );
@@ -52,10 +52,9 @@ public:
     void                EndOfFile           ( AudioEntity * audio );
 
 	void				SetGain				( Float32 gain );
+    Float32				Gain				() const;
 
     void                DeletePDR           ( const AudioEntity * audio );
-
-    AudioBufferConstPtr GetBufferedData     ( MemoryChunkPtr data, const std::set< const audio::AudioEntity * > & audioEnts );
 
     UInt32              GetChannels         () const;
     Int32               GetFrequency        () const;
@@ -65,9 +64,6 @@ private:
 
     PdrSource *             GetPdrSource                ( const AudioEntity * audio, bool autoCreate = true );
     PdrAudioBuffersQueue *  GetPdrAudioBuffersQueue     ( PdrSource * source, const AudioEntity * audio,  bool autoCreate = true );
-
-    bool                    IsAnySourcePlaying          () const;
-    bool                    IsAnyBufferReady            ( SizeType requestedBufferSize ) const;
 
 private:
 

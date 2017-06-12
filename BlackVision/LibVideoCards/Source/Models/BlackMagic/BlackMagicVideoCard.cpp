@@ -501,11 +501,6 @@ void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideo
     }
     else
     {
-        if( srcFrame && srcFrame->m_desc.channels == 0 )
-        {
-            completedFrame = completedFrame;
-        }
-
         if( srcFrame && srcFrame->m_desc.channels > 0 && !SUCCESS( m_decklinkOutput->ScheduleAudioSamples( ( void * ) srcFrame->m_audioData->Get(),
                                                                                                            ( UInt32 ) srcFrame->m_audioData->Size() / AudioFrameSizeInBytes(),
                                                                                                            0,

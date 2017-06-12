@@ -475,9 +475,9 @@ void Channel::FrameProcessed	    ( const AVFrameConstPtr & frame )
             std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
                                         playbackChannel->GoldenSize,
                                         playbackChannel->BytesPerLine,
-                                        m_odd,
-                                        ( unsigned int ) frame->m_audioData->Size(),
-                                        reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ),
+                                        !m_odd,
+                                        frame->m_audioData ? ( unsigned int ) frame->m_audioData->Size() : 0,
+                                        frame->m_audioData ? reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ) : nullptr,
                                         tc,
                                         frame->m_desc
                                         ) );

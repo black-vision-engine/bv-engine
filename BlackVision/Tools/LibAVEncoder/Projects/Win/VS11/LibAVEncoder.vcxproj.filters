@@ -8,7 +8,7 @@
     <ClCompile Include="..\..\..\Source\Impl\AVEncoderThread.cpp">
       <Filter>Impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Impl\FFmpegUtils.cpp">
+    <ClCompile Include="..\..\..\Source\Impl\FFmpegEncoderUtils.cpp">
       <Filter>Impl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -20,7 +20,7 @@
     <ClInclude Include="..\..\..\Source\Impl\AVEncoderThread.h">
       <Filter>Impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Impl\FFmpegUtils.h">
+    <ClInclude Include="..\..\..\Source\Impl\FFmpegEncoderUtils.h">
       <Filter>Impl</Filter>
     </ClInclude>
   </ItemGroup>

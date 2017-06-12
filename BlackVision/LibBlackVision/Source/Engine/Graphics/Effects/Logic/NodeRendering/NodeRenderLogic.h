@@ -11,6 +11,7 @@ class RenderTarget;
 namespace audio {
 
 class AudioRenderer;
+class AudioRenderChannelData;
 
 }
 
@@ -27,8 +28,8 @@ public:
 	// PUBLIC API
     static void     Clear               ( const RenderTarget * rt, RenderContext * ctx, const glm::vec4 & color = glm::vec4(0.f) );
     
-    static void     RenderAudio         ( Scene * scene, RenderContext * ctx, std::set< const audio::AudioEntity * > & audioEntities );
-    static void     RenderAudio         ( SceneNode * node, audio::AudioRenderer * renderer, std::set< const audio::AudioEntity * > & audioEntities );
+    static void     RenderAudio         ( Scene * scene, RenderContext * ctx, audio::AudioRenderChannelData & arcd );
+    static void     RenderAudio         ( SceneNode * node, audio::AudioRenderer * renderer, audio::AudioRenderChannelData & arcd );
 
     static void     RenderQueued        ( Scene * scene, const RenderTarget * output, RenderContext * ctx );
     static void     RenderQueued        ( SceneNode * node, RenderContext * ctx );

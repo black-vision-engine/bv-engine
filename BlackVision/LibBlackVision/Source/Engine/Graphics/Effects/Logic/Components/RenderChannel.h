@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
-
+#include "Engine/Audio/AudioRenderChannelData.h"
 
 namespace bv { 
 
@@ -40,6 +40,8 @@ private:
 
     bool                            m_isActive;
 
+    audio::AudioRenderChannelData   m_audioRenderChannelData;
+
 public:
 
                             RenderChannel               ( RenderTargetStackAllocator * allocator, unsigned int numTrackedRenderTargets );
@@ -60,7 +62,8 @@ public:
     Texture2DPtr            ReadColorTexture            ( Renderer * renderer ) const;
     void                    InvalidateCachedTexture     () const;
 
-    std::set< const audio::AudioEntity * > & AccessRenderChannelAudioEntities() const;
+    audio::AudioRenderChannelData & GetAudioRenderChannelData       ();
+    const audio::AudioRenderChannelData & GetAudioRenderChannelData () const;
 };
 
 } //bv

@@ -37,7 +37,7 @@ struct OutputStream {
     {}
 };
 
-struct FFmpegUtils
+struct FFmpegEncoderUtils
 {
     
 /* Add an output stream. */

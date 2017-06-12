@@ -125,6 +125,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
@@ -577,6 +579,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultWallPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <FileType>CppCode</FileType>
@@ -627,6 +630,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.h" />

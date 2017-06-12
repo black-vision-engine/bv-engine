@@ -38,4 +38,22 @@ AVFrame::~AVFrame     ()
 {
 }
 
+// ****************************
+//
+UInt32  ConvertAudioSampleTypeToSampleSize( AudioSampleType ast )
+{
+    switch( ast )
+    {
+    case AudioSampleType::AV_SAMPLE_FMT_S16:
+        return 2;
+    case AudioSampleType::AV_SAMPLE_FMT_S32:
+        return 4;
+    case AudioSampleType::AV_SAMPLE_FMT_U8:
+        return 1;
+    default:
+        assert( false );
+        return 0;
+    }
+}
+
 } //bv

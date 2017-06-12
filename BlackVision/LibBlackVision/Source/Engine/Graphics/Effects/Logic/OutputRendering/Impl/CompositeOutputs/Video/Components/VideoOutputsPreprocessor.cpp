@@ -3,6 +3,7 @@
 #include "VideoOutputsPreprocessor.h"
 
 #include "Engine/Audio/Resources/AudioUtils.h"
+#include "Engine/Audio/Resources/AudioMixer.h"
 #include "Assets/Texture/TextureUtils.h"
 
 #include "Services/BVServiceProvider.h"
@@ -23,6 +24,14 @@ VideoOutputsPreprocessor::VideoOutputsPreprocessor()
     : m_initialized( false )
     , m_lcmFPS( 0 )
 {}
+
+// *********************************
+//
+VideoOutputsPreprocessor::~VideoOutputsPreprocessor   ()
+{
+    for( auto it = m_audioMixers.begin(); it != m_audioMixers.end(); ++it )
+        delete it->second;
+}
 
 // *********************************
 //
@@ -97,8 +106,16 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     auto videoFrame = vic->ReadColorTexture( ctx );
     avFrame->m_videoData = videoFrame->GetData();
 
-    auto audio = audio_renderer( ctx );
-	auto ret = audio->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ), vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+    if( m_audioMixers.find( vic ) == m_audioMixers.end() )
+        m_audioMixers[ vic ] = new audio::AudioMixer();
+
+    m_audioMixers[ vic ]->ResizeSources( vic->GetWrappedChannel()->GetAudioRenderChannelData().NumSources() );   
+
+    for( SizeType i = 0; i < vic->GetWrappedChannel()->GetAudioRenderChannelData().NumSources(); ++i )
+        m_audioMixers[ vic ]->PushData( i, vic->GetWrappedChannel()->GetAudioRenderChannelData().GetData( i ) );
+
+    m_audioMixers[ vic ]->SetGain( audio_renderer( ctx )->Gain() );
+    m_audioMixers[ vic ]->PopAndMixAudioData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ) );
 
     return avFrame;
 }

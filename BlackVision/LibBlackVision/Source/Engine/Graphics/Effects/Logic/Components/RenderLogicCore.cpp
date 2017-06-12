@@ -65,7 +65,11 @@ void    RenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedCh
         auto outputRT = result->GetActiveRenderTarget( outputType );
 
         NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
-        NodeRenderLogic::RenderAudio( scene, ctx, result->GetRenderChannel( outputType )->AccessRenderChannelAudioEntities() );
+
+        audio::AudioRenderChannelData & arcd = const_cast< RenderChannel * >( result->GetRenderChannel( outputType ) )->GetAudioRenderChannelData();
+        arcd.ClearBuffers();
+
+        NodeRenderLogic::RenderAudio( scene, ctx, arcd );
 
         result->SetContainsValidData( outputType, true );
     }

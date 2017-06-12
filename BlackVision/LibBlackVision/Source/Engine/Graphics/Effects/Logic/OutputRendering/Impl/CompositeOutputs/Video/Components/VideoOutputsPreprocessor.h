@@ -13,6 +13,7 @@ namespace bv {
 namespace audio {
     
 class AudioRenderer;
+class AudioMixer;
 
 }
 
@@ -33,9 +34,12 @@ private:
     AVFrameBuffersMap           m_avFramesBuffer;
     AVFramesMap                 m_currentAVFrames;
 
+    std::map< const VideoInputChannel *, audio::AudioMixer * >        m_audioMixers;
+
 public:
 
-                            VideoOutputsPreprocessor();
+                            VideoOutputsPreprocessor    ();
+    virtual                 ~VideoOutputsPreprocessor   ();
 
     const AVOutputsData &   Preprocess              ( RenderContext * ctx, RenderedChannelsData * input );
 
