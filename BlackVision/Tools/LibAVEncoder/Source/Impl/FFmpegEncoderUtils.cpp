@@ -3,6 +3,8 @@
 #include "FFmpegEncoderUtils.h"
 #include "Util/FFmpeg/FFmpegUtils.h"
 
+#include <iostream>
+
 #define SCALE_FLAGS SWS_BICUBIC
 
 namespace bv 
@@ -239,12 +241,7 @@ bool FFmpegEncoderUtils::fill_bgra_image           ( ::AVFrame * pict, bv::AVFra
 {
     AVCodecContext *c = ost->enc;
     /* check if we want to generate more frames */
-    AVRational avr;
-    avr.num = 1;
-    avr.den = 1;
-    //if (av_compare_ts(ost->next_pts, c->time_base,
-    //                  (int64_t)STREAM_DURATION, avr) >= 0)
-    //    return nullptr;
+
     if (c->pix_fmt != AV_PIX_FMT_BGRA) {
         /* as we only generate a YUV420P picture, we must convert it
          * to the codec pixel format if needed */
@@ -283,6 +280,8 @@ bool FFmpegEncoderUtils::write_video_frame( AVFormatContext * oc, OutputStream *
     frame = get_video_frame(ost, bvFrame);
     av_init_packet(&pkt);
     /* encode the image */
+
+    //std::cout << "VIDEO  " << float( frame->pts ) / float( ost->enc->time_base.den ) << std::endl;
 
     ret = avcodec_send_frame( ost->enc, frame );
 
@@ -370,6 +369,7 @@ bool FFmpegEncoderUtils::write_audio_frame( AVFormatContext *oc, OutputStream *o
         avr.num = 1;
         avr.den = c->sample_rate;
 
+        //auto samples_nb = frame->nb_samples;
         frame = ost->frame;
         frame->pts = av_rescale_q( ost->samples_count, avr, c->time_base );
         ost->samples_count += frame->nb_samples;
@@ -405,6 +405,7 @@ bool FFmpegEncoderUtils::write_audio_frame( AVFormatContext *oc, OutputStream *o
 
     if( frame )
     {
+        //std::cout << "AUDIO  " << float(frame->pts) / float( ost->enc->time_base.den ) << std::endl;
         ret = avcodec_send_frame( ost->enc, frame );
 
         if( ret == 0 )

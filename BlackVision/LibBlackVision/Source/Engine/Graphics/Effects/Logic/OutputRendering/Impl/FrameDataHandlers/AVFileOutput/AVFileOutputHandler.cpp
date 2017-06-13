@@ -87,7 +87,7 @@ void                                AVFileOutputHandler::HandleFrameData     ( c
     PrepareFrame( state, ctx, channel );
 
     //2. Process memory representation of current frame
-    ProcessFrame();
+    ProcessFrame( ctx, channel );
 }
 
 // **************************
@@ -101,10 +101,6 @@ FullscreenEffectComponentStatePtr  AVFileOutputHandler::GetInternalFSEState     
 //
 void            AVFileOutputHandler::PrepareFrame                                  ( const OutputState &, RenderContext * ctx, const RenderChannel * inputChannel )
 {
-    Texture2DPtr outputFrame = ReadDefaultTexture( ctx, inputChannel );
-
-    m_avFrame->m_videoData = outputFrame->GetData();
-
     m_audioMixer->ResizeSources( inputChannel->GetAudioRenderChannelData().NumSources() );
 
     for( SizeType i = 0; i < inputChannel->GetAudioRenderChannelData().NumSources(); ++i )
@@ -115,7 +111,7 @@ void            AVFileOutputHandler::PrepareFrame                               
 
 // **************************
 //
-void            AVFileOutputHandler::ProcessFrame                                  ()
+void            AVFileOutputHandler::ProcessFrame                                  ( RenderContext * ctx, const RenderChannel * inputChannel )
 {
     auto now = Time::Now();
 
@@ -125,6 +121,10 @@ void            AVFileOutputHandler::ProcessFrame                               
     {
         if( now - m_lastFrameTime >= 1000 / m_fps )
         {
+            Texture2DPtr outputFrame = ReadDefaultTexture( ctx, inputChannel );
+
+            m_avFrame->m_videoData = outputFrame->GetData();
+
             m_audioMixer->PopAndMixAudioData( std::const_pointer_cast< MemoryChunk >( m_avFrame->m_audioData ) );
             m_encoder->WriteFrame( m_avFrame );
             m_lastFrameTime = now;

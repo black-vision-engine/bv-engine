@@ -60,7 +60,7 @@ private:
 
     void            PrepareFrame            ( const OutputState & state, RenderContext * ctx, const RenderChannel * inputChannel );
 
-    void            ProcessFrame            ();
+    void            ProcessFrame            ( RenderContext * ctx, const RenderChannel * inputChannel );
 
     Texture2DPtr    ReadDefaultTexture      ( RenderContext * ctx, const RenderChannel * inputChannel );
 };
