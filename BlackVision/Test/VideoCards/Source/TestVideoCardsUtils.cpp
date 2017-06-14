@@ -16,9 +16,6 @@ AVFramePtr   TestVideoCardsUtils::CreateTestFrame   ( int color, UInt32 w, UInt3
     desc.depth  = TextureUtils::Channels( TextureFormat::F_A8R8G8B8 );
     desc.channels = 0;
     desc.sampleRate = 0;
-    //desc.fieldModeEnabled       = true;  // FIXME: https://www.pivotaltracker.com/story/show/145508031
-    //desc.timeCodePresent        = true;
-    //desc.autoGenerateTimecode   = true;
 
     MemoryChunkPtr audioData = MemoryChunk::Create( 1 );
 
