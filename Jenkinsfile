@@ -70,7 +70,8 @@ def list_test_execs( buildDir, conf, platform ) {
 	return [    testDir + "TestAssetManager\\TestAssetManager.exe" ,
 	            testDir + "TestMipMapBuilder\\TestMipMapBuilder.exe" ,
 	            testDir + "TestMultipass\\TestMultipass.exe" ,
-	            testDir + "TestProjectManager\\TestProjectManager.exe"
+	            testDir + "TestProjectManager\\TestProjectManager.exe",
+				testDir + "TestTestFramework\\TestTestFramework.exe"
 	]
 }
 
