@@ -56,7 +56,7 @@ def make_auto_tests( buildDir, conf, platform, outputDir ) {
 def make_build( conf, platform ) {
     def info = conf + '|' + platform
     echo 'Building ' + info
-	bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=" + conf + " /maxcpucount:4 /p:Platform=\"" + platform + "\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
+	bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=\"" + conf + "\" /maxcpucount:4 /p:Platform=\"" + platform + "\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
 	echo 'Building ' + info + ' FINISHED'
 }
 
