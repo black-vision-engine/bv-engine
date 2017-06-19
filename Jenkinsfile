@@ -151,18 +151,20 @@ node {
 
   	    try {
             notifyBuild('STARTED', 'Test')
- 	        def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
+ 	        //def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
 		
-     		echo testExecsList.size() + ' tests found.'
+     		//echo testExecsList.size() + ' tests found.'
     		
-     		for( int i = 0; i < testExecsList.size(); ++i ) {
-     		    try {
-     		        bat testExecsList.get( i ) + ' -o ' + testResPath + 'TestFrameworkTest.xml -FileLog Logi/DebugLog.txt debug - DisableDefaultLog'
-     		    }
-     		    catch(err) {
-     		        echo "test fail."
-     		    }
-     		}
+     		//for( int i = 0; i < testExecsList.size(); ++i ) {
+     		//    try {
+     		//        bat testExecsList.get( i ) + ' -o ' + testResPath + '/TestFrameworkTest.xml -FileLog Logi/DebugLog.txt debug - DisableDefaultLog'
+     		//    }
+     		//    catch(err) {
+     		//        echo "test fail."
+     		//    }
+     		//}
+			
+			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v110 ' + testResPath + '/'
     		
     		//make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
     		
