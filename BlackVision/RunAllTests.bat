@@ -17,7 +17,7 @@ set TEST_EXECUTABLES_DIRECTORY=_Builds\%arch%-%toolset%-%configuration%\Tests\
 cd %TEST_EXECUTABLES_DIRECTORY%
 
 for /r %%g in (*.exe) do (
-	set fileDir=%%~pg
+	set fileDir=%%~dpg
 	set fileName=%%~ng
 	
 	cd !fileDir!
