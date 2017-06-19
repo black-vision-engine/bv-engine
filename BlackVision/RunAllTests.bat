@@ -9,6 +9,7 @@ set testOutputDir=%4
 set consoleReport=""
 
 
+cd %scriptDirectory%
 
 set TEST_EXECUTABLES_DIRECTORY=_Builds\%arch%-%toolset%-%configuration%\Tests\
 
