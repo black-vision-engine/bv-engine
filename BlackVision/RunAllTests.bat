@@ -23,7 +23,7 @@ for /r %%g in (*.exe) do (
 	cd !fileDir!
 	
 	echo Executing test: !fileName!
-	call %%g -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog
+	call %%g -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog -ReportToConsole
 	echo Execution ended
 	
 	cd %scriptDirectory%%TEST_EXECUTABLES_DIRECTORY%
