@@ -7,7 +7,7 @@
 #include "Engine/Audio/OALRenderer/PdrAudioBuffersQueue.h"
 #include "Engine/Audio/OALRenderer/PdrSource.h"
 #include "Engine/Audio/AudioEntity.h"
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 #include "Engine/Audio/AudioRenderChannelData.h"
 
 #include "Engine/Events/Events.h"

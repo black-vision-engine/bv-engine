@@ -75,6 +75,7 @@
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\Util\Audio\AudioUtils.h" />
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h" />
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h" />
     <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\Audio\AudioUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp" />
     <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Util\Observable.cpp" />

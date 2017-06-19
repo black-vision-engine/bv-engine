@@ -208,16 +208,6 @@ enum class MipMapFilterType : int
     MMFT_TOTAL
 };
 
-enum class AudioFormat : int
-{
-    MONO8 = 0,
-    STEREO8,
-    MONO16,
-    STEREO16,
-
-    AF_TOTAL
-};
-
 enum class LightType : int 
 {
     LT_DIRECTIONAL = 0,

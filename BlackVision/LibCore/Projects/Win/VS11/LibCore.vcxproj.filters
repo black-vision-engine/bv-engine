@@ -46,6 +46,9 @@
     <Filter Include="Util\FFmpeg">
       <UniqueIdentifier>{8764c851-0fbb-4183-9db8-a70287735211}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util\Audio">
+      <UniqueIdentifier>{1c391b13-e8f4-414a-9fb1-fe0b9a91ff38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -227,6 +230,9 @@
     <ClInclude Include="..\..\..\Source\Util\IEventServer.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\Audio\AudioUtils.h">
+      <Filter>Util\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -337,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp">
       <Filter>Util\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\Audio\AudioUtils.cpp">
+      <Filter>Util\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

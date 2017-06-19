@@ -1564,9 +1564,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.cpp">
-      <Filter>Engine\Audio\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
@@ -4762,9 +4759,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.h">
-      <Filter>Engine\Audio\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>

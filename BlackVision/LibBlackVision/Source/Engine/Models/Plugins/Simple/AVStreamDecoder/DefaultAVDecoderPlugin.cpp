@@ -21,7 +21,7 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Events/Events.h"
 
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 
 #include "UseLoggerLibBlackVision.h"
 

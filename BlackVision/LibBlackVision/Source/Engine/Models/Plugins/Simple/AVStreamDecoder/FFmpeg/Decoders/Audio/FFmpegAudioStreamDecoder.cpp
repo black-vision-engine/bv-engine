@@ -2,7 +2,7 @@
 
 #include "FFmpegAudioStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 
 #include "Util/FFmpeg/FFmpegUtils.h"
 

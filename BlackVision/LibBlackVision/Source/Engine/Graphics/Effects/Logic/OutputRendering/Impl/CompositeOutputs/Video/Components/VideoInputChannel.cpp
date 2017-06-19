@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoResizedInputChannel.h"
 
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 #include "Assets/Texture/TextureUtils.h"
 
 

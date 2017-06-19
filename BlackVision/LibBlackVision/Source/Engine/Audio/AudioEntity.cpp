@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "AudioEntity.h"
-#include "Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 
 
 namespace bv { namespace audio {

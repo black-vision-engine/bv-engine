@@ -10,7 +10,7 @@
 #include "Engine/Graphics/Effects/Logic/State/OutputState.h"
 
 #include "Engine/Audio/Resources/AudioMixer.h"
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 
 #include "System/Time.h"
 

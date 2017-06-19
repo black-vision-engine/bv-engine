@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Types/Enums.h"
+#include "CoreEnums.h"
 #include "CoreDEF.h"
 
 
