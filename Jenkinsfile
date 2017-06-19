@@ -67,12 +67,7 @@ def list_test_execs( buildDir, conf, platform ) {
 	
 	def testDir = get_tests_dir( buildDir, conf, platform )
 	
-	return [    testDir + "TestAssetManager\\TestAssetManager.exe" ,
-	            testDir + "TestMipMapBuilder\\TestMipMapBuilder.exe" ,
-	            testDir + "TestMultipass\\TestMultipass.exe" ,
-	            testDir + "TestProjectManager\\TestProjectManager.exe",
-				testDir + "TestTestFramework\\TestTestFramework.exe"
-	]
+	return [	testDir + "TestTestFramework\\TestTestFramework.exe"	]
 }
 
 def make_archive( buildDir, conf, platform, fEnabled ) {
@@ -162,7 +157,7 @@ node {
     		
      		for( int i = 0; i < testExecsList.size(); ++i ) {
      		    try {
-     		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
+     		        bat testExecsList.get( i ) + ' -o ' + testResPath + 'TestFrameworkTest.xml -FileLog Logi/DebugLog.txt debug - DisableDefaultLog'
      		    }
      		    catch(err) {
      		        echo "test fail."
