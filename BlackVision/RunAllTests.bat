@@ -19,12 +19,13 @@ cd %TEST_EXECUTABLES_DIRECTORY%
 for /r %%g in (*.exe) do (
 	set fileDir=%%~dpg
 	set fileName=%%~ng
+	set fileWithExt=%%~nxg
 	
 	cd !fileDir!
 	echo Working directory: !fileDir!
 	
 	echo Executing test: !fileName!
-	call %%g -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog
+	call !fileWithExt! -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog
 	echo Execution ended
 	
 	cd %scriptDirectory%%TEST_EXECUTABLES_DIRECTORY%
