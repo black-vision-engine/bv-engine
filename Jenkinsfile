@@ -146,13 +146,13 @@ node {
             notifyBuild(currentBuild.result, 'Archive')
         }
   	}
-	stage('Open BV') {
-		def bvExecutablePath = buildDir + currentPlatform + "-v110-" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
-		
-		copyFile( 'BlackVision\\Test\\Configs\\DefaultConfig.xml', get_app_dir( buildDir, currentConfiguration, currentPlatform ) + 'BlackVision\\config.xml' )
-		
-		bat bvExecutablePath
-	}
+	//stage('Open BV') {
+	//	def bvExecutablePath = buildDir + currentPlatform + "-v110-" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
+	//	
+	//	copyFile( 'BlackVision\\Test\\Configs\\DefaultConfig.xml', get_app_dir( buildDir, currentConfiguration, currentPlatform ) + 'BlackVision\\config.xml' )
+	//	
+	//	bat bvExecutablePath
+	//}
 	
     stage('Test') {
 

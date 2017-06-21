@@ -21,6 +21,7 @@ for /r %%g in (*.exe) do (
 	set fileName=%%~ng
 	
 	cd !fileDir!
+	echo Working directory: !fileDir!
 	
 	echo Executing test: !fileName!
 	call %%g -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog
