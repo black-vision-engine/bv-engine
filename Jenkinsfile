@@ -146,6 +146,11 @@ node {
             notifyBuild(currentBuild.result, 'Archive')
         }
   	}
+	stage('Open BV') {
+		def bvExecutablePath = 'BlackVision/_Builds/' + currentPlatform + "_v110_" + currentConfiguration + '/Applications/BlackVision/BlackVision.exe'
+		bat bvExecutablePath
+	}
+	
     stage('Test') {
 
 
