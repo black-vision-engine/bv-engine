@@ -114,13 +114,13 @@ node {
     def currentConfiguration = configurations[0]
     def currentPlatform = platforms[1]
     
-    stage('Clean') {
-        removeDir( buildDir )
-        removeDir( tempDir )
-        removeDir( testResPath )
-        removeDir( 'generatedJUnitFiles' )
-        removeDir( 'DefaultPMDir' )
-    }
+    //stage('Clean') {
+    //    removeDir( buildDir )
+    //    removeDir( tempDir )
+    //    removeDir( testResPath )
+    //   removeDir( 'generatedJUnitFiles' )
+    //    removeDir( 'DefaultPMDir' )
+    //}
      stage('Build') {
         try {
             notifyBuild('STARTED', 'Build')
@@ -147,7 +147,7 @@ node {
         }
   	}
 	stage('Open BV') {
-		def bvExecutablePath = 'BlackVision/_Builds/' + currentPlatform + "_v110_" + currentConfiguration + '/Applications/BlackVision/BlackVision.exe'
+		def bvExecutablePath = '/BlackVision/_Builds/' + currentPlatform + "_v110_" + currentConfiguration + '/Applications/BlackVision/BlackVision.exe'
 		bat bvExecutablePath
 	}
 	
