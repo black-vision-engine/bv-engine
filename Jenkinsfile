@@ -147,7 +147,7 @@ node {
         }
   	}
 	stage('Open BV') {
-		def bvExecutablePath = '/BlackVision/_Builds/' + currentPlatform + "_v110_" + currentConfiguration + '/Applications/BlackVision/BlackVision.exe'
+		def bvExecutablePath = buildDir + currentPlatform + "_v110_" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
 		bat bvExecutablePath
 	}
 	
