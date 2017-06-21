@@ -339,7 +339,7 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
         app->OnPreidle();
 
-        //ShowWindow	( handle, SW_SHOW );
+        ShowWindow	( handle, SW_SHOW );
         UpdateWindow( handle );
 
         app->OnIdle();
