@@ -56,7 +56,7 @@ def make_auto_tests( buildDir, conf, platform, outputDir ) {
 def make_build( conf, platform ) {
     def info = conf + '|' + platform
     echo 'Building ' + info
-	bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=" + conf + " /maxcpucount:4 /p:Platform=\"" + platform + "\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
+	bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=\"" + conf + "\" /maxcpucount:4 /p:Platform=\"" + platform + "\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
 	echo 'Building ' + info + ' FINISHED'
 }
 
@@ -67,11 +67,7 @@ def list_test_execs( buildDir, conf, platform ) {
 	
 	def testDir = get_tests_dir( buildDir, conf, platform )
 	
-	return [    testDir + "TestAssetManager\\TestAssetManager.exe" ,
-	            testDir + "TestMipMapBuilder\\TestMipMapBuilder.exe" ,
-	            testDir + "TestMultipass\\TestMultipass.exe" ,
-	            testDir + "TestProjectManager\\TestProjectManager.exe"
-	]
+	return [	testDir + "TestTestFramework\\TestTestFramework.exe"	]
 }
 
 def make_archive( buildDir, conf, platform, fEnabled ) {
@@ -118,13 +114,13 @@ node {
     def currentConfiguration = configurations[0]
     def currentPlatform = platforms[1]
     
-    stage('Clean') {
-        removeDir( buildDir )
-        removeDir( tempDir )
-        removeDir( testResPath )
-        removeDir( 'generatedJUnitFiles' )
-        removeDir( 'DefaultPMDir' )
-    }
+    //stage('Clean') {
+    //    removeDir( buildDir )
+    //    removeDir( tempDir )
+    //    removeDir( testResPath )
+    //   removeDir( 'generatedJUnitFiles' )
+    //    removeDir( 'DefaultPMDir' )
+    //}
      stage('Build') {
         try {
             notifyBuild('STARTED', 'Build')
@@ -150,23 +146,33 @@ node {
             notifyBuild(currentBuild.result, 'Archive')
         }
   	}
+	//stage('Open BV') {
+	//	def bvExecutablePath = buildDir + currentPlatform + "-v110-" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
+	//	
+	//	copyFile( 'BlackVision\\Test\\Configs\\DefaultConfig.xml', get_app_dir( buildDir, currentConfiguration, currentPlatform ) + 'BlackVision\\config.xml' )
+	//	
+	//	bat bvExecutablePath
+	//}
+	
     stage('Test') {
 
 
   	    try {
             notifyBuild('STARTED', 'Test')
- 	        def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
+ 	        //def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
 		
-     		echo testExecsList.size() + ' tests found.'
+     		//echo testExecsList.size() + ' tests found.'
     		
-     		for( int i = 0; i < testExecsList.size(); ++i ) {
-     		    try {
-     		        bat testExecsList.get( i ) + ' --gtest_output=xml:' + testResPath + '\\'
-     		    }
-     		    catch(err) {
-     		        echo "test fail."
-     		    }
-     		}
+     		//for( int i = 0; i < testExecsList.size(); ++i ) {
+     		//    try {
+     		//        bat testExecsList.get( i ) + ' -o ' + testResPath + '/TestFrameworkTest.xml -FileLog Logi/DebugLog.txt debug - DisableDefaultLog'
+     		//    }
+     		//    catch(err) {
+     		//        echo "test fail."
+     		//    }
+     		//}
+			
+			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v110 ' + testResPath + '/'
     		
     		//make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
     		
