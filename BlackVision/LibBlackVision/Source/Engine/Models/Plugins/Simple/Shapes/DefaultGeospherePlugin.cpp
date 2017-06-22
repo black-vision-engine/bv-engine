@@ -2,8 +2,6 @@
 
 #include "DefaultGeospherePlugin.h"
 
-#include "glm/gtx/vector_angle.hpp"
-
 #include "Mathematics/Defines.h"
 
 #include "Memory/MemoryLeaks.h"

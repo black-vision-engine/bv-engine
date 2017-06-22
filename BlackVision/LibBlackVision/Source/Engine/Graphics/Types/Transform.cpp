@@ -1,10 +1,7 @@
 #include "stdafx.h"
 
-#define GLM_FORCE_SSE2
-
 #include "Transform.h"
-
-#include "glm/gtx/simd_mat4.hpp"
+#include "Mathematics/glm_inc.h"
 
 
 #include "Memory/MemoryLeaks.h"

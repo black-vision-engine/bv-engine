@@ -78,9 +78,9 @@ svgtiny_code svgtiny_add_path(float *p, unsigned int n, SVGAssetPtr mesh )
 
     auto geometry = std::make_shared< SVGAsset::MeshGeometry >();
 
-    float first_x, first_y;
+    float first_x = 0.0f, first_y = 0.0f;
 
-    float x, y;
+    float x = 0.0f, y = 0.0f;
     for( unsigned int i = 0; i < n; )
         if( p[ i ] == svgtiny_PATH_MOVE )
         {

@@ -15,11 +15,6 @@
 #include "Assets/SVG/SVGAsset.h"
 #include "Assets/Asset.h"
 
-
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
-
-
 #include "Memory/MemoryLeaks.h"
 
 
