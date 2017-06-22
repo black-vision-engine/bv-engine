@@ -7,7 +7,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;$(ThirdPartyDir)\tclap-1.2.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC_1_61);$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
