@@ -19,7 +19,7 @@
 
 #include "Application/ApplicationContext.h"
 
-#include <glm/gtx/euler_angles.hpp>
+#include "Mathematics/glm_inc.h"
 
 namespace bv {
 
