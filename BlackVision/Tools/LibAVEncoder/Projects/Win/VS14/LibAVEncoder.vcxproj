@@ -19,8 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}</ProjectGuid>
-    <RootNamespace>LibMipMapBuilder</RootNamespace>
+    <ProjectGuid>{3D46A32F-4C62-4D4A-8048-54F569123733}</ProjectGuid>
+    <RootNamespace>LibAVEncoder</RootNamespace>
+    <ProjectName>LibAVEncoder</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -55,43 +56,58 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>LibMipMapBuilder</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>LibMipMapBuilder</TargetName>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>LibMipMapBuilderD</TargetName>
+    <TargetName>LibAVEncoderD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>LibMipMapBuilderD</TargetName>
+    <TargetName>LibAVEncoderD</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>LibAVEncoder</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>LibAVEncoder</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>__STDC_CONSTANT_MACROS=1;BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\MipMapBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\AVEncoder.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\AVEncoderImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\AVEncoderThread.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\FFmpegEncoderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\MipMapBuilder.h" />
+    <ClInclude Include="..\..\..\Source\AVEncoder.h" />
+    <ClInclude Include="..\..\..\Source\Impl\AVEncoderImpl.h" />
+    <ClInclude Include="..\..\..\Source\Impl\AVEncoderThread.h" />
+    <ClInclude Include="..\..\..\Source\Impl\FFmpegEncoderUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

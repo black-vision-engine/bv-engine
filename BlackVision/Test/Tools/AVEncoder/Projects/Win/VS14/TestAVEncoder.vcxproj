@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9D72E88B-3DA9-4B56-A703-29641FA82479}</ProjectGuid>
-    <RootNamespace>TestMipMapBuilder</RootNamespace>
+    <ProjectGuid>{F069A9C5-1FE9-4C30-80B9-DA0D7EABC856}</ProjectGuid>
+    <RootNamespace>TestAVEncoder</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -105,12 +105,15 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
-      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
-    </ProjectReference>
+    <ClCompile Include="..\..\..\Source\TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\TestMain.cpp" />
+    <ProjectReference Include="..\..\..\..\..\..\LibCore\Projects\Win\VS14\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\Tools\LibAVEncoder\Projects\Win\VS14\LibAVEncoder.vcxproj">
+      <Project>{3d46a32f-4c62-4d4a-8048-54f569123733}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

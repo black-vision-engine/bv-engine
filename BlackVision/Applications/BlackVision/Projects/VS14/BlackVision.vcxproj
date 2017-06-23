@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
+      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibBVAL\Projects\Win\VS14\LibBVAL.vcxproj">
+      <Project>{f07363f7-ebcf-4f56-852f-57357e2a020f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS14\LibBVGL.vcxproj">
+      <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibCore\Projects\Win\VS14\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibImage\Projects\Win\VS14\LibImage.vcxproj">
+      <Project>{33e2cc63-2591-46b1-9b24-2a284566f1d6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\ConfigReader\Projects\Win\VS14\ConfigReader.vcxproj">
+      <Project>{00218970-e820-4bcc-b1da-48348059f6fe}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\LibAVEncoder\Projects\Win\VS14\LibAVEncoder.vcxproj">
+      <Project>{3d46a32f-4c62-4d4a-8048-54f569123733}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\LibEffect\Projects\Win\VS14\LibEffect.vcxproj">
+      <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\TCPServer\Projects\Win\VS14\TCPServer.vcxproj">
+      <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LibBVLogic\Projects\Win\VS14\LibBVLogic.vcxproj">
+      <Project>{e92b5bdf-8bd5-4d22-b2cd-90d681deda85}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\main.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{22304A9C-8AF2-4374-9968-A32E985AB76F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>BVWinApp</RootNamespace>
+    <ProjectName>BlackVision</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <ProjectReference />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <ProjectReference />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ProjectReference />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ProjectReference />
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

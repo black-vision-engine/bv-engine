@@ -55,69 +55,69 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
+    <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
+    <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj">
       <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
     </ProjectReference>
   </ItemGroup>

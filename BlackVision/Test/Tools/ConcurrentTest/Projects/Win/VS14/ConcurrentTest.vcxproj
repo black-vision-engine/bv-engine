@@ -19,8 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9D72E88B-3DA9-4B56-A703-29641FA82479}</ProjectGuid>
-    <RootNamespace>TestMipMapBuilder</RootNamespace>
+    <ProjectGuid>{146BBEE1-B02E-43BF-AEB8-63F14DF32246}</ProjectGuid>
+    <RootNamespace>DefaultTest_change_this_name</RootNamespace>
+    <ProjectName>TestConcurrentQueue</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -104,13 +105,15 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\TestMain.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

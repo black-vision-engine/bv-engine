@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='ASCII'?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,11 +18,22 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVAL.cpp" />
+    <ClCompile Include="..\..\..\Source\BVALPlugins\BVALPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVALPlugins\BVALPluginFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVAL.h" />
+    <ClInclude Include="..\..\..\Source\BVALDefs.h" />
+    <ClInclude Include="..\..\..\Source\BVALPlugins\BVALPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVALPlugins\BVALPluginFactory.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{f07363f7-ebcf-4f56-852f-57357e2a020f}</ProjectGuid>
     <RootNamespace>LibBVAL</RootNamespace>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -49,33 +60,35 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props"/>
-    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
-  <PropertyGroup/>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>LibBVALD</TargetName>
   </PropertyGroup>
@@ -88,22 +101,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>LibBVAL</TargetName>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\Source\BVAL.cpp"/>
-    <ClCompile Include="..\..\..\Source\BVALPlugins\BVALPlugin.cpp"/>
-    <ClCompile Include="..\..\..\Source\BVALPlugins\BVALPluginFactory.cpp"/>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Source\BVAL.h"/>
-    <ClInclude Include="..\..\..\Source\BVALDefs.h"/>
-    <ClInclude Include="..\..\..\Source\BVALPlugins\BVALPlugin.h"/>
-    <ClInclude Include="..\..\..\Source\BVALPlugins\BVALPluginFactory.h"/>
-  </ItemGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
 </Project>

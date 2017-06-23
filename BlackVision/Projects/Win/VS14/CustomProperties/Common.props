@@ -18,6 +18,8 @@
     <TestDir>$(SolutionRoot)\Test</TestDir>
     <ThirdPartyDir>$(DepDir)\3rdParty</ThirdPartyDir>
     <AssetsDir>$(SolutionRoot)\Assets</AssetsDir>
+	<TestAssetsDir>$(SolutionRoot)\Test\Assets</TestAssetsDir>
+	<TestConfigsDir>$(SolutionRoot)\Test\Configs</TestConfigsDir>
     <TestsResultsDir>$(SolutionRoot)\_TestsResults\</TestsResultsDir>
   </PropertyGroup>
   <PropertyGroup>
@@ -31,6 +33,14 @@
       <PreprocessorDefinitions Condition="'$(Configuration)'=='Release'">_VARIADIC_MAX=10;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
+  
+  <ItemDefinitionGroup Label="VS14Upgrade">
+    <ClCompile>
+      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  
   <ItemDefinitionGroup>
     <ClCompile>
       <SDLCheck>false</SDLCheck>
