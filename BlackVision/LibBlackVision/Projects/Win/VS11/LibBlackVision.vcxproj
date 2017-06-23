@@ -103,7 +103,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalOptions>/Zm250 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions);BV_TESTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ThirdPartyDir)/unittest-cpp/include;$(BOOST_INC);$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ThirdPartyDir)/unittest-cpp/include;$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
